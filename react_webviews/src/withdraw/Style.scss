@@ -48,6 +48,10 @@
     align-items: center;
   }
 
+  .withdrawable-tile .tile .tile-text {
+    width: 10ch;
+  }
+
   .withdrawable-tile .tile .tile-text,
   .withdrawable-tile .tile-amount {
     text-align: center;

@@ -26,7 +26,6 @@ const AmountDialog = ({ open, close, disableBackdropClick,title, id, placeholder
             onChange={handleChange}
             error={error}
             helperText={helperText}
-            autoComplete={false}
           />
           <div className="flex-between">
             <Button color="primary" onClick={close} className="cancel-btn">

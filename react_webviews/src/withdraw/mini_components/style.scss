@@ -103,6 +103,33 @@
   .fund-name {
     margin-left: 10px;
   }
+
+  .summary-bottom-info {
+    background-color: var(--highlight);
+    padding: 10px;
+    font-size: 10px;
+  }
+
+  .summary-bottom-info .MuiButton-label {
+    font-size: 10px;
+    color: #3792FC;
+  }
+
+  .summary-bottom-info .know-more .MuiButton-root {
+    padding: 0px;
+    min-height: auto;
+    min-width: auto;
+  }
+
+  .summary-bottom-info .icon {
+    width: 14px;
+  }
+
+  .summary-bottom-info .content {
+    font-size: 12px;
+    font-weight: 300;
+    margin-left: 8px;
+  }
 }
 
 .withdraw-tax-summary:nth-last-child(1) .item {

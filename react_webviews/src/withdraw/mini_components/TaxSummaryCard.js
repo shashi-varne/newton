@@ -1,17 +1,25 @@
+import { Button } from '@material-ui/core'
 import React from 'react'
+import { getConfig } from '../../utils/functions'
 
 const TaxSummaryCard = ({
-  openCard,
-  onClick,
-  hideIcon = false,
+  open = true,
+  handleToggle,
+  handleKnowMore,
+  stcg_tax,
+  ltcg_tax,
+  stcg_percent,
+  ltcg_percent,
+  total_tax_liability,
+  withdrawal_amount,
+  friendly_name,
   amc_logo_small,
   exit_load,
-  friendly_name,
-  ltcg_tax,
-  stcg_tax,
-  withdrawal_amount,
+  isin,
+  hideIcon = false,
+  know_how_msg = 'You can avoid short term taxes by holding your investments for 3 years',
 }) => {
-  const total_tax_liability = Math.ceil(ltcg_tax) + Math.ceil(stcg_tax)
+  const productName = getConfig().productName
   return (
     <section className="withdraw-tax-summary">
       <div className="top flex-between-center">
@@ -19,41 +27,39 @@ const TaxSummaryCard = ({
           <img className="fund-image" src={amc_logo_small} alt="" />
           <div className="fund-name">{friendly_name}</div>
         </div>
-
-        {openCard && !hideIcon && (
+        {open && !hideIcon && (
           <img
             className="icon"
             role="button"
             src={require(`assets/minus_icon.svg`)}
-            onClick={onClick}
+            onClick={handleToggle}
           />
         )}
-
-        {!openCard && !hideIcon && (
+        {!open && !hideIcon && (
           <img
             className="icon"
             role="button"
             src={require(`assets/plus_icon.svg`)}
-            onClick={onClick}
+            onClick={handleToggle}
           />
         )}
       </div>
-      {openCard && (
-        <div className={!openCard ? 'item item_hide' : 'item'}>
+      {open && (
+        <div className={!open ? 'item item_hide' : 'item'}>
           <div className="tile flex-between-center">
             <div className="name">Withdraw Amount</div>
             <div className="value">₹ {withdrawal_amount}</div>
           </div>
           <div className="tile flex-between-center">
             <div className="name">Total tax liability</div>
-            <div className="value">₹ {total_tax_liability}</div>
+            <div className="value">₹ {Math.ceil(stcg_tax) + Math.ceil(ltcg_tax)}</div>
           </div>
           <div className="tile tile2 flex-between-center">
-            <div className="name">Equity STCG tax @15%</div>
+            <div className="name">Equity STCG tax @{stcg_percent}</div>
             <div className="value">₹ {Math.ceil(stcg_tax)}</div>
           </div>
           <div className="tile tile2 flex-between-center">
-            <div className="name">Equity LTCG tax @10%</div>
+            <div className="name">Equity LTCG tax @{ltcg_percent}%</div>
             <div className="value">₹ {Math.ceil(ltcg_tax)}</div>
           </div>
           <div className="tile flex-between-center">
@@ -61,6 +67,23 @@ const TaxSummaryCard = ({
             <div className="value">₹ {exit_load}</div>
           </div>
         </div>
+      )}
+      {know_how_msg && (
+        <footer className="summary-bottom-info flex-between">
+          <div className="flex-center">
+            <img
+              className="icon"
+              src={require(`assets/${productName}/info_icon.svg`)}
+              alt=""
+            />
+            <div className="content">Avoid taxes for better returns!</div>
+          </div>
+          <div className="know-more">
+            <Button type="text" color="primary" onClick={handleKnowMore}>
+              {know_how_msg}
+            </Button>
+          </div>
+        </footer>
       )}
     </section>
   )
