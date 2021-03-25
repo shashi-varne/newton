@@ -62,10 +62,17 @@ const NRIAddressDetails2 = (props) => {
       return;
     }
 
+    let userKycDetails = {...kyc};
+    userKycDetails.nri_address.meta_data.city = form_data.city;
+    userKycDetails.nri_address.meta_data.state = form_data.state;
+    userKycDetails.nri_address.meta_data.country = form_data.country;
+    userKycDetails.nri_address.meta_data.pincode = form_data.nri_pincode;
+    userKycDetails.nri_address.meta_data.addressline = form_data.addressline;
+
     try {
       let item = {
         kyc: {
-          nri_address: kyc?.nri_address.meta_data,
+          nri_address: userKycDetails.nri_address.meta_data,
         },
       };
       setIsApiRunning("button");
