@@ -298,7 +298,7 @@ export const kycStatusMapper = {
     color: "#ffa60b",
     popup_header: "Congratulations! KYC verified",
     popup_message: "You're ready to invest in Mutual Funds",
-    button_text: "Start Investing",
+    button_text: "START INVESTING",
     icon: "ic_popup_kyc_verified.svg",
     next_state: "/invest",
   },

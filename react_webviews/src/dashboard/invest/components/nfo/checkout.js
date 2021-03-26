@@ -57,15 +57,7 @@ class Checkout extends Component {
         fundsData.forEach(() => form_data.push({}));
         this.setState(
           { fundsData: fundsData, form_data: form_data, ctc_title },
-          () =>
-            this.getNfoPurchaseLimit({
-              investType: "sip",
-              isins: fund.isin,
-            }),
-          this.getNfoPurchaseLimit({
-            investType: "onetime",
-            isins: fund.isin,
-          })
+          () => this.getPurchaseLimit(fund.isin)
         );
       } else {
         this.props.history.goBack();
@@ -74,14 +66,16 @@ class Checkout extends Component {
     } else if (type === "diy") {
       let schemeType = storageService().get(CATEGORY) || "";
       let categoryName = storageService().get(SUBCATEGORY) || "";
-      fundsData = !storageService().getObject(CART)
+      const fundInfo = storageService().getObject("diystore_fundInfo")
         ? [storageService().getObject("diystore_fundInfo")]
+        : false;
+      fundsData = !storageService().getObject(CART)
+        ? fundInfo
         : storageService().getObject(CART);
 
-      if(!fundsData || fundsData?.length < 1) {
-        //this.props.history.goBack(); -> flashing the current page and then going back.
+      if (!fundsData || fundsData?.length < 1) {
         return;
-      };
+      }
       fundsData.forEach(() => form_data.push({}));
       let fundsArray = storageService().getObject(FUNDSLIST);
       let isins = this.getIsins(fundsData);
@@ -100,16 +94,30 @@ class Checkout extends Component {
           renderData: renderData,
           ctc_title: ctc_title,
         },
-        () =>
-          this.getDiyPurchaseLimit({
-            investType: "sip",
-            isins: isins,
-          }),
-        this.getDiyPurchaseLimit({
-          investType: "onetime",
-          isins: isins,
-        })
+        () => this.getPurchaseLimit(isins)
       );
+    }
+  };
+
+  getPurchaseLimit = async (isins) => {
+    if (this.props.type === "diy") {
+      await this.getDiyPurchaseLimit({
+        investType: "sip",
+        isins: isins,
+      });
+      await this.getDiyPurchaseLimit({
+        investType: "onetime",
+        isins: isins,
+      });
+    } else {
+      await this.getNfoPurchaseLimit({
+        investType: "sip",
+        isins: isins,
+      });
+      await this.getNfoPurchaseLimit({
+        investType: "onetime",
+        isins: isins,
+      });
     }
   };
 
