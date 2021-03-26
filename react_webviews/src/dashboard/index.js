@@ -27,7 +27,9 @@ import MyAccount from './components/my_account';
 import Notification from './components/notification';
 import PaymentCallback from "./invest/components/PaymentCallback";
 import SipPaymentCallback from "./invest/components/SipPaymentCallback";
-
+import PageCallback from "./invest/components/PageCallback";
+import PaymentOptions from "./invest/components/PaymentOptions";
+import DigilockerCallback from "../kyc/digilocker/digilockercallback";
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: "f",
@@ -92,6 +94,16 @@ const Invest = (props) => {
 
           <Route path={`${url}payment/callback/:status/:message`} component={PaymentCallback} />
           <Route path={`${url}sip/payment/callback/:status/:message`} component={SipPaymentCallback} />
+          <Route path={`${url}payment/options`} component={PaymentOptions} />
+          <Route
+            path={[
+              `${url}page/callback/:investment_type/:investment_amount`,
+              `${url}page/callback/:investment_type/:investment_amount/:status`,
+              `${url}page/callback/:investment_type/:investment_amount/:status/:message`,
+            ]}
+            component={PageCallback}
+          />
+          <Route exact path={`${url}digilocker/callback`} component={DigilockerCallback} /> 
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

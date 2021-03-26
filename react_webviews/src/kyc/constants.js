@@ -24,6 +24,8 @@ export const getPathname = {
   journey: '/kyc/journey',
   compliantPersonalDetails1: '/kyc/compliant-personal-details',
   compliantPersonalDetails2: '/kyc/compliant-personal-details2',
+  compliantPersonalDetails3: '/kyc/compliant-personal-details3',
+  compliantPersonalDetails4: '/kyc/compliant-personal-details4',
   confirmPan: '/kyc/compliant-confirm-pan',
   compliantKycComplete: '/kyc/compliant-report-complete',
   compliantReport: '/kyc/compliant-report-details',
@@ -45,7 +47,7 @@ export const getPathname = {
   nriAddressDetails1: '/kyc/nri-address-details1',
   nriAddressDetails2: '/kyc/nri-address-details2',
   uploadPan: '/kyc/upload/pan',
-  kycEsign: '/kyc/esign',
+  kycEsign: '/kyc-esign/info',
   uploadAddress: '/kyc/upload/address',
   uploadNriAddress: '/kyc/upload/address-nri',
   uploadSelfie: '/kyc/upload/selfie',
@@ -69,6 +71,12 @@ export const docMapper = {
   UTILITY_BILL: "Gas receipt",
   LAT_BANK_PB: "Passbook",
 };
+
+export const nriDocMapper = {
+  DL: "Driving license",
+  UTILITY_BILL: "Gas receipt",
+  LAT_BANK_PB: "Passbook",
+}
 
 export const occupationOptions = [
   {

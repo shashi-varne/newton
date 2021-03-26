@@ -27,7 +27,7 @@ const PaymentCallback = (props) => {
   return (
     <Container
       buttonTitle="Done"
-      hideInPageTitle
+      hidePageTitle
       handleClick={() => handleClick()}
     >
       <section className="invest-payment-callback">

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import Container from '../../../fund_details/common/Container'
+import Container from '../../common/Container'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import RatingStar from '../../../fund_details/common/RatingStar'
+import Button from 'common/ui/Button'
 import './style.scss'
 import { storageService } from '../../../utils/validators'
+import { getConfig } from 'utils/functions'
 
 import { navigate as navigateFunc } from '../../invest/common/commonFunction'
 
@@ -50,6 +52,7 @@ const FundList = (props) => {
 
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [showLoader, setShowLoader] = useState(false)
+  const productType = getConfig().productName
   const handleChange = (_, value) => {
     setValue(value)
   }
@@ -58,7 +61,13 @@ const FundList = (props) => {
     const { key, type } = match.params
     const category = storageService().get(CATEGORY)
     const subCategory = storageService().get(SUBCATEGORY)
-    if (!category || !subCategory || category !== type || subCategory !== key || fundsList.length === 0) {
+    if (
+      !category ||
+      !subCategory ||
+      category !== type ||
+      subCategory !== key ||
+      fundsList.length === 0
+    ) {
       fetchFunds({ key, type })
     }
   }, [])
@@ -67,7 +76,13 @@ const FundList = (props) => {
     const { key, type } = match.params
     const category = storageService().get(CATEGORY)
     const subCategory = storageService().get(SUBCATEGORY)
-    if (!category || !subCategory || category !== type || subCategory !== key || fundsList.length === 0) {
+    if (
+      !category ||
+      !subCategory ||
+      category !== type ||
+      subCategory !== key ||
+      fundsList.length === 0
+    ) {
       fetchFunds({ key, type })
     }
   }, [match.params.key, match.params.type])
@@ -104,17 +119,49 @@ const FundList = (props) => {
     }
   }
 
+  const funds = fundsList
+    .filter((item) => {
+      if (!fundHouse) {
+        return (
+          item.hasOwnProperty(returnField[value]) &&
+          item.three_year_return !== null &&
+          item.growth_or_dividend === fundOption &&
+          item.sip === true
+        )
+      }
+
+      return (
+        item.hasOwnProperty(returnField[value]) &&
+        item.three_year_return !== null &&
+        item.growth_or_dividend === fundOption &&
+        item.sip === true &&
+        item.fund_house === fundHouse
+      )
+    })
+    .sort((a, b) => {
+      if (sortFilter === 'returns') {
+        return Number(b[returnField[value]]) - Number(a[returnField[value]]) > 0
+          ? 1
+          : -1
+      }
+      if (sortFilter === 'rating') {
+        return Number(b.morning_star_rating) - Number(a.morning_star_rating) > 0
+          ? 1
+          : -1
+      }
+      if (sortFilter === 'fundsize') {
+        return Number(b.aum) - Number(a.aum) > 0 ? 1 : -1
+      }
+    })
+
   return (
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      helpContact
-      hideInPageTitle
-      title={
-        match.params.type.charAt(0).toUpperCase() + match.params.type.slice(1)
-      }
-      showLoader={showLoader}
-      classOverRideContainer="pr-containe>r"
+      hidePageTitle
+      title={match.params?.key?.replace(/_/g, ' ') || ''}
+      skelton={showLoader}
+      classOverRideContainer="pr-container"
       id="diy-fundlist-container"
     >
       <div className="diy-tab-container">
@@ -140,43 +187,18 @@ const FundList = (props) => {
           <Tab label="5Y" />
         </Tabs>
         <TabContainer>
-          {fundsList
-            .filter((item) => {
-              if (!fundHouse) {
-                return (
-                  item.hasOwnProperty(returnField[value]) &&
-                  item.three_year_return !== null &&
-                  item.growth_or_dividend === fundOption &&
-                  item.sip === true
-                )
-              }
+          {funds.length === 0 ? (
+            <div className="fund-change-message">
+              We are sorry! There are no funds that match your requirements
+            </div>
+          ) : (
+            <div className="fund-change-message">
+              Sorted on {sortFilter}, filtered for {fundOption} option
+            </div>
+          )}
 
-              return (
-                item.hasOwnProperty(returnField[value]) &&
-                item.three_year_return !== null &&
-                item.growth_or_dividend === fundOption &&
-                item.sip === true &&
-                item.fund_house === fundHouse
-              )
-            })
-            .sort((a, b) => {
-              if (sortFilter === 'returns') {
-                return Number(b[returnField[value]]) -
-                  Number(a[returnField[value]]) >
-                  0
-                  ? 1
-                  : -1
-              }
-              if (sortFilter === 'rating') {
-                return Number(b.morning_star_rating) - Number(a.morning_star_rating) > 0
-                  ? 1
-                  : -1
-              }
-              if (sortFilter === 'fundsize') {
-                return Number(b.aum) - Number(a.aum) > 0 ? 1 : -1
-              }
-            })
-            .map((item) => (
+          {funds.length > 0 &&
+            funds.map((item) => (
               <DiyFundCard
                 key={item.isin}
                 {...item}
@@ -188,20 +210,22 @@ const FundList = (props) => {
             ))}
         </TabContainer>
       </div>
-      <CartFooter
-        cart={cart}
-        fundsList={fundsList}
-        setCart={setCart}
-        setFundsList={setFundsList}
-        sortFilter={sortFilter}
-        fundHouse={fundHouse}
-        fundOption={fundOption}
-        setSortFilter={setSortFilter}
-        setFundHouse={setFundHouse}
-        setFundsList={setFundOption}
-        setFundOption={setFundOption}
-        {...parentProps}
-      />
+      {productType !== 'finity' && (
+        <CartFooter
+          cart={cart}
+          fundsList={fundsList}
+          setCart={setCart}
+          setFundsList={setFundsList}
+          sortFilter={sortFilter}
+          fundHouse={fundHouse}
+          fundOption={fundOption}
+          setSortFilter={setSortFilter}
+          setFundHouse={setFundHouse}
+          setFundsList={setFundOption}
+          setFundOption={setFundOption}
+          {...parentProps}
+        />
+      )}
     </Container>
   )
 }
@@ -215,9 +239,13 @@ const DiyFundCard = ({
   parentProps,
   ...props
 }) => {
-  const handleClick = () => {
+  const productType = getConfig().productName
+
+  const handleClick = (data) => {
     const navigate = navigateFunc.bind(parentProps)
-    console.log(parentProps.location.search + '&isins=' + props.isin)
+    let dataCopy = Object.assign({}, data)
+    dataCopy.diy_type = 'categories'
+    storageService().setObject('diystore_fundInfo', dataCopy)
     navigate(
       `/fund-details`,
       {
@@ -226,6 +254,11 @@ const DiyFundCard = ({
       true
     )
   }
+  const handleInvest = () => {
+    storageService().setObject('diystore_cart', [props])
+    const navigate = navigateFunc.bind(parentProps)
+    navigate('/diy/invest', null, true, parentProps.location.search)
+  }
   return (
     <div className="diy-fund-card">
       <div className="diy-fund-card-img">
@@ -233,11 +266,11 @@ const DiyFundCard = ({
           src={props.amc_logo_small}
           alt="some"
           width="90"
-          onClick={handleClick}
+          onClick={() => handleClick(props)}
         />
       </div>
       <div className="diy-fund-card-details">
-        <div className="diy-fund-card-name" onClick={handleClick}>
+        <div className="diy-fund-card-name" onClick={() => handleClick(props)}>
           {props.legal_name}
         </div>
         <div className="diy-fund-card-info-container">
@@ -248,22 +281,36 @@ const DiyFundCard = ({
             </p>
             <RatingStar value={props.morning_star_rating} />
           </div>
-          <div
-            className={
-              addedToCart
-                ? 'diy-fund-card-button diy-fund-card-added'
-                : 'diy-fund-card-button'
-            }
-            role="button"
-            onClick={handleCart(props)}
-          >
-            <img
-              src={addedToCart ? remove_cart_icon : add_cart_icon}
-              alt={addedToCart ? 'Add to Cart' : 'Remove from cart'}
-              width="20"
+          {productType !== 'finity' ? (
+            <div
+              className={
+                addedToCart
+                  ? 'diy-fund-card-button diy-fund-card-added'
+                  : 'diy-fund-card-button'
+              }
+              role="button"
+              onClick={handleCart(props)}
+            >
+              <img
+                src={addedToCart ? remove_cart_icon : add_cart_icon}
+                alt={addedToCart ? 'Add to Cart' : 'Remove from cart'}
+                width="20"
+              />
+              <div className="action">{!addedToCart ? '+' : '-'}</div>
+            </div>
+          ) : (
+            <Button
+              buttonTitle="Invest"
+              style={{
+                height: '20px',
+                color: '#fff',
+                borderRadius: '4px',
+                backgroundColor: '#35cb5d',
+                width: '90px',
+              }}
+              onClick={handleInvest}
             />
-            <div className="action">{!addedToCart ? '+' : '-'}</div>
-          </div>
+          )}
         </div>
       </div>
     </div>

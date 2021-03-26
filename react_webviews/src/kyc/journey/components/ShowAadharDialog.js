@@ -1,15 +1,13 @@
 import React from 'react'
 import Dialog from '../../../common/ui/Dialog'
-
 import { getConfig } from 'utils/functions'
 import { Button } from '@material-ui/core'
 
-const ShowAadharDialog = ({ open, onClose }) => {
+const ShowAadharDialog = ({ open, onClose, redirect }) => {
   const productName = getConfig().productName
   
-  
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} id='kyc-bottom-dialog' >
       <section className="kyc-show-aadhar">
         <header className="header">
           <h1>Aadhar KYC</h1>
@@ -26,6 +24,7 @@ const ShowAadharDialog = ({ open, onClose }) => {
             <img
               src={require(`assets/${productName}/ic_instant.svg`)}
               className="icon"
+              alt=""
             />
             <div className="title">Instant Investment</div>
           </div>
@@ -33,11 +32,12 @@ const ShowAadharDialog = ({ open, onClose }) => {
             <img
               src={require(`assets/${productName}/ic_no_doc.svg`)}
               className="icon"
+              alt=""
             />
             <div className="title">No document asked</div>
           </div>
         </main>
-        <Button variant="contained" fullWidth className="action-btn">
+        <Button variant="contained" fullWidth className="action-btn" onClick={redirect}>
           <span className="btn-text">connect digilocker</span>
         </Button>
       </section>

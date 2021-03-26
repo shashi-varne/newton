@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../../../common/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 
@@ -11,10 +10,12 @@ import {
   validateOtAmount,
   validateSipAmount,
   selectTitle,
+  convertInrAmountToNumber,
 } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
 
 import './style.scss';
+import { formatAmountInr } from '../../../../utils/validators';
 const date = new Date();
 
 const InvestAmount = (props) => {
@@ -35,10 +36,12 @@ const InvestAmount = (props) => {
   }, []);
 
   const handleChange = (e) => {
+    let value = e.target.value || "";
+    value = convertInrAmountToNumber(value);
     // eslint-disable-next-line radix
-    if (!isNaN(parseInt(e.target.value))) {
+    if (!isNaN(parseInt(value))) {
       // eslint-disable-next-line radix
-      setAmount(parseInt(e.target.value));
+      setAmount(parseInt(value));
     } else {
       setAmount('');
       setCorpus(0);
@@ -57,10 +60,10 @@ const InvestAmount = (props) => {
     if(error){
       setError(false);
     }
-    if(goalRecommendation.itype !== 'saveforgoal'){
+    if(goalRecommendation.itype !== "saveforgoal"){
 
       let result;
-      if (investTypeDisplay === 'sip') {
+      if (investTypeDisplay === "sip") {
         result = validateSipAmount(amount);
       } else {
         result = validateOtAmount(amount);
@@ -73,7 +76,7 @@ const InvestAmount = (props) => {
         setError(false);
       }
     }
-    if (goalRecommendation.id === 'savetax') {
+    if (goalRecommendation.id === "savetax") {
       calculateTax(graphData?.corpus);
     } else {
       const valueOfCorpus = corpusValue(
@@ -93,8 +96,8 @@ const InvestAmount = (props) => {
         amount,
         type: investType,
       };
-      setLoader(true);
-      if (investType === 'saveforgoal') {
+      setLoader("button");
+      if (investType === "saveforgoal") {
         params.subtype = graphData?.subtype;
         params.term = graphData?.term;
       } else if (investType === 'investsurplus') {
@@ -127,7 +130,7 @@ const InvestAmount = (props) => {
       duration = 1;
     }
     let tempAmount = 0;
-    if (investType === 'savetaxsip') {
+    if (investType === "savetaxsip") {
       tempAmount = amount;
       tempAmount = tempAmount * duration;
     } else {
@@ -142,12 +145,11 @@ const InvestAmount = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
-      helpContact
-      hideInPageTitle
+      buttonTitle='NEXT'
       hidePageTitle
-      disable={error || loader}
+      title={graphData.name}
+      disable={error}
+      showLoader={loader}
       title={title}
       handleClick={goNext}
       classOverRideContainer='pr-container'
@@ -159,7 +161,7 @@ const InvestAmount = (props) => {
             <Input
               id='invest-amount'
               class='invest-amount-num'
-              value={amount}
+              value={amount ? formatAmountInr(amount) : ""}
               onChange={handleChange}
               type='text'
               error={error}
@@ -169,14 +171,15 @@ const InvestAmount = (props) => {
               pattern='[0-9]*'
             />
           </div>
-          {goalRecommendation.id === 'investsurplus' || investTypeDisplay !== 'sip' || goalRecommendation.itype !== 'saveforgoal' ? (
-            <p className='invest-amount-input-duration'>from my savings</p>
-          ) : (
+          { investTypeDisplay === "sip" || goalRecommendation.itype === "saveforgoal" ? (
             <p className='invest-amount-input-duration'>per month</p>
-          )}
+            ) : (
+            <p className='invest-amount-input-duration'>from my savings</p>
+            )
+          }
         </div>
         <div className='invest-amount-corpus'>
-          {goalRecommendation.id === 'savetax' ? (
+          {goalRecommendation.id === "savetax" ? (
             <div className='invest-amount-corpus-duration'>
               till Mar {date.getFullYear()} to save tax upto:
             </div>

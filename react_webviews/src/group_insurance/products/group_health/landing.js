@@ -18,7 +18,7 @@ import down_arrow from "assets/down_arrow.svg";
 import up_arrow from "assets/up_arrow.svg";
 import scrollIntoView from 'scroll-into-view-if-needed';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { openInBrowser } from "./common_data";
+import { openInBrowser, openPdf } from "./common_data";
 import ReactResponsiveCarousel from "../../../common/ui/carousel";
 import { getGhProviderConfig } from "./constants";
 import {  setLocalProviderData } from "./common_data";
@@ -28,7 +28,7 @@ class GroupHealthLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       productName: getConfig().productName,
       provider: this.props.match.params.provider,
       checked: true,
@@ -41,9 +41,11 @@ class GroupHealthLanding extends Component {
       selectedIndex: 0,
       providerConfig: getGhProviderConfig(this.props.match.params.provider),
       card_swipe_count: 0,
-      tncChecked: false
+      tncChecked: false,
+      isiOS: false,
     };
     this.openInBrowser = openInBrowser.bind(this);
+    this.openPdf = openPdf.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
   }
   componentWillMount() {
@@ -71,6 +73,7 @@ class GroupHealthLanding extends Component {
         },
       ],
     };
+
     this.setState({
       stepsContentMapper: stepsContentMapper,
       offerImageData: screenData.offerImageData,
@@ -80,7 +83,47 @@ class GroupHealthLanding extends Component {
       openModuleData: openModuleData,
     });
   }
+
+  setErrorData = (type) => {
+
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Dismiss'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
+
   async componentDidMount() {
+   this.onload()
+  }
+
+  onload = async() =>{
+    this.setErrorData("onload");
+    this.setState({ skelton: true });
+    let error = "";
+    let errorType = "";
     let openModuleData = this.state.openModuleData || {};
     const provider =  this.state.providerConfig.provider_api
     const body = {"provider": provider};
@@ -89,24 +132,23 @@ class GroupHealthLanding extends Component {
         `api/insurancev2/api/insurance/health/quotation/account_summary`,
         body
       );
-        if (!openModuleData.sub_module) {
-        this.setState({ 
-          show_loader: false,
-        });
-      }
+        
       let resultData =  res.pfwresponse.result;
       resultData['details_doc'] = res.pfwresponse.result.policy_brochure
       resultData['tnc'] = res.pfwresponse.result.terms_and_condition
       let lead = {};
-      if (res.pfwstatus_code === 200) {
+      if (res.pfwresponse.status_code === 200) {
         lead = resultData.quotation || {};
     
         lead.member_base = [];
         if (resultData.quotation.id  !== undefined) { 
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
         }
+        this.setState({
+            skelton: false,
+          });
       } else {
-        toast(resultData.error || resultData.message || "Something went wrong");
+        error = resultData.error || resultData.message || true;
       }
       this.setState(
         {
@@ -117,7 +159,7 @@ class GroupHealthLanding extends Component {
         () => {
           if (openModuleData.sub_module === "click-resume") {
             if (!this.state.quoteResume || !this.state.quoteResume.id) {
-              this.setState({ show_loader: false });
+              this.setState({ skelton: false });
             } else {
               this.handleResume();
             }
@@ -125,12 +167,21 @@ class GroupHealthLanding extends Component {
         }
       );
     } catch (err) {
-      this.setState({
-        show_loader: false,
-      });
-      toast("Something went wrong");
+      error = true;
+      errorType = "crash";
     }
+    if (error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+            type: errorType
+          },
+          showError: "page",
+        });
+      }
   }
+
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
@@ -260,7 +311,9 @@ class GroupHealthLanding extends Component {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}        
         title={this.state.providerConfig.title}
         fullWidthButton={true}
         buttonTitle={
@@ -469,13 +522,11 @@ class GroupHealthLanding extends Component {
           </div>
           <div className="generic-hr" style={{ margin: "0px 0 40px 0" }}></div>
 
-          <div
+            <div
             className="accident-plan-read"
             style={{ padding: 0, margin: "20px 0 10px 0" }}
-            onClick={() =>
-              this.openInBrowser(this.state.common.details_doc, "read_document")
-            }
-          >
+            onClick={() =>this.openPdf(this.state.common.details_doc, "read_document")}
+            >
             <img
               className="accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/ic_read.svg`)}
@@ -508,15 +559,15 @@ class GroupHealthLanding extends Component {
               <Grid item xs={11}>
                 <div className="accident-plan-terms-text" style={{}}>
                   I agree to the{" "}
-                  <span
+                   <span
                     onClick={() =>
-                      this.openInBrowser(this.state.common.tnc, "tnc")
+                      this.openPdf(this.state.common.tnc, "tnc")
                     }
                     className="accident-plan-terms-bold"
                     style={{ color: getConfig().primary }}
                   >
                     Terms and conditions
-                  </span>
+                  </span> 
                 </div>
               </Grid>
             </Grid>

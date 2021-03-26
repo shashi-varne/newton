@@ -41,7 +41,7 @@ const CartDialog = ({
           </main>
         </section>
       </DialogContent>
-      <DialogActions>
+      <DialogActions className='action'>
         <Button
           variant="contained"
           fullWidth

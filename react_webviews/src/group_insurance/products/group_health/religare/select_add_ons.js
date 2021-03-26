@@ -9,7 +9,6 @@ import Grid from 'material-ui/Grid';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
 import { initialize, updateBottomPremium, updateBottomPremiumAddOns } from '../common_data';
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 import { compact } from 'lodash';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
@@ -20,7 +19,7 @@ class GroupHealthPlanAddOns extends Component {
         this.state = {
             ctaWithProvider: true,
             add_ons_data: [],
-            show_loader: true,
+            skelton:true,
             screen_name: 'add_ons_screen',
             total_add_on_premiums: 0
         }
@@ -33,9 +32,45 @@ class GroupHealthPlanAddOns extends Component {
     componentWillMount() {
         this.initialize();
     }
+    setErrorData = (type) => {
 
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Retry',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    
+      }
     async componentDidMount() {
+        this.onload();        
+    }
 
+    onload =async()=>{
+        this.setErrorData("onload");
+        
+        let error = "";
+        let errorType = "";
         let post_body = this.state.groupHealthPlanData.post_body;
 
         let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];
@@ -56,12 +91,11 @@ class GroupHealthPlanAddOns extends Component {
             try {
                 const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_add_ons/religare', body);
 
-                this.setState({
-                    show_loader: false
-                });
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
-                    
+                    this.setState({
+                        skelton: false
+                    });
                     add_ons_data = resultData.compulsary.concat(resultData.optional)  || [];
 
                     
@@ -96,20 +130,31 @@ class GroupHealthPlanAddOns extends Component {
                     add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].name;
                     
                 } else {
-                    toast(resultData.error || resultData.message
-                        || 'Something went wrong');
+                    error=resultData.error || resultData.message
+                        || true;
                 }
             } catch (err) {
                 console.log(err)
                 this.setState({
-                    show_loader: false
+                    skelton: false
                 });
-                toast('Something went wrong');
+                error=true;
+                errorType="crash";
             }
+            if (error) {
+                this.setState({
+                  errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                  },
+                  showError: "page",
+                });
+              }
 
         } else {
             this.setState({
-                show_loader: false
+                skelton: false
             })
         }
 
@@ -119,7 +164,6 @@ class GroupHealthPlanAddOns extends Component {
         }, () => {
             this.updateCtaPremium()
         })
-        
     }
 
     updateCtaPremium = () => {
@@ -313,7 +357,9 @@ class GroupHealthPlanAddOns extends Component {
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title='Select add-ons'
                 buttonTitle="CONTINUE"
                 withProvider={true}

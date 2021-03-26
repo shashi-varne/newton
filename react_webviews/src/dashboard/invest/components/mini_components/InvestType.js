@@ -30,7 +30,7 @@ const InvestType = (props) => {
               >
                 <img
                   src={require(`assets/${productName}/${data.icon}`)}
-                  alt="sip"
+                  alt=""
                 />
                 <div className="text">{data.text}</div>
               </div>

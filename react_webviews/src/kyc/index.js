@@ -12,7 +12,6 @@ import { ToastContainer } from 'react-toastify'
 import NotFound from '../common/components/NotFound'
 
 import Journey from './journey'
-import Upload from './upload'
 import Intro from './upload/intro'
 import Progress from './upload/progress'
 import Pan from './upload/pan'
@@ -34,6 +33,8 @@ import BankDetails from './bank/BankDetails'
 
 import CompliantPersonalDetails1 from './compliant/PersonalDetails1'
 import CompliantPersonalDetails2 from './compliant/PersonalDetails2'
+import CompliantPersonalDetails3 from './compliant/PersonalDetails3'
+import CompliantPersonalDetails4 from './compliant/PersonalDetails4'
 import ConfirmPan from './compliant/ConfirmPan'
 import KycComplete from './compliant/Complete'
 import CompliantReport from './compliant/Report'
@@ -51,19 +52,19 @@ import PersonalDetails3 from './personal_details/Screen3'
 import PersonalDetails4 from './personal_details/Screen4'
 import KycUploadDocuments from './bank-kyc/KycUploadDocuments'
 import SampleDocuments from './bank-kyc/SampleDocuments'
-import Esign from './esign'
 import AddressDetails2 from './address/AddressDetails2'
 import AddressDetails1 from './address/screen1'
-import DigilockerPersonalDetails1 from './digilocker/components/screen1'
+import DigilockerPersonalDetails1 from './digilocker/screen1'
 import ChangeAddressDetails1 from './address/change_address/ChangeAddressDetails1'
 import NriAddressDetails1 from './address/nri/NRIAddressDetails1'
 import NRIAddressDetails2 from './address/nri/NRIAddressDetails2'
-import Success from './digilocker/components/success'
-import Failed from './digilocker/components/failed'
+import Success from './digilocker/success'
+import Failed from './digilocker/failed'
 import Sign from './upload/sign'
 import Selfie from './upload/selfie'
 import IpvVideo from './upload/ipv_video'
-import DigilockerCallback from './digilocker/components/digilockercallback'
+import NRIAddressUpload from './upload/nri_address'
+import ChangeAddressDetails2 from './address/change_address/ChangeAddressDetails2'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -114,10 +115,14 @@ const Kyc = (props) => {
           />
           <Route
             exact
+            path={`${url}/change-address-details2`}
+            component={ChangeAddressDetails2}
+          />
+          <Route
+            exact
             path={`${url}/nri-address-details1`}
             component={NriAddressDetails1}
           />
-          <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/upload/intro`} component={Intro} />
           <Route exact path={`${url}/upload/progress`} component={Progress} />
           <Route exact path={`${url}/upload/pan`} component={Pan} />
@@ -129,6 +134,11 @@ const Kyc = (props) => {
             path={`${url}/upload/address`}
             component={AddressUpload}
           />
+          <Route
+            exact
+            path={`${url}/upload/address-nri`}
+            component={NRIAddressUpload}
+          />
           <Route exact path={`${url}/home`} component={Home} />
           <Route
             exact
@@ -136,17 +146,6 @@ const Kyc = (props) => {
             component={Nominee}
           />
           <Route exact path={`${url}/report`} component={Report} />
-          {/* <Route exact path={`${url}/aadhar`} component={Aadhar} />
-          <Route
-            exact
-            path={`${url}/aadhar/confirmation`}
-            component={AadharConfirmation}
-          />
-          <Route
-            exact
-            path={`${url}/aadhar/callback/:error`}
-            component={AadharCallback}
-          /> */}
           <Route
             exact
             path={`${url}/compliant-personal-details`}
@@ -156,6 +155,16 @@ const Kyc = (props) => {
             exact
             path={`${url}/compliant-personal-details2`}
             component={CompliantPersonalDetails2}
+          />
+          <Route
+            exact
+            path={`${url}/compliant-personal-details3`}
+            component={CompliantPersonalDetails3}
+          />
+          <Route
+            exact
+            path={`${url}/compliant-personal-details4`}
+            component={CompliantPersonalDetails4}
           />
           <Route
             exact
@@ -219,7 +228,6 @@ const Kyc = (props) => {
             path={`${url}/sample-documents`}
             component={SampleDocuments}
           />
-          <Route exact path={`${url}/esign`} component={Esign} />
           <Route
             exact
             path={`${url}/address-details2`}
@@ -246,7 +254,6 @@ const Kyc = (props) => {
           />
           <Route exact path={`${url}/digilocker/success`} component={Success} />
           <Route exact path={`${url}/digilocker/failed`} component={Failed} />
-          <Route exact path={`${url}/digilocker/callback/:status`} component={DigilockerCallback} />
           <Route
             exact
             path={`${url}/nri-address-details1`}

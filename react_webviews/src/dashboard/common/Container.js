@@ -1,222 +1,138 @@
-import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router';
-
-import Header from './Header';
-import Footer from './footer';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
-import { nativeCallback } from 'utils/native_callback';
-import Button from '@material-ui/core/Button';
-import {
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-} from '@material-ui/core';
+import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router";
+import {didMount, commonRender} from '../../common/components/container_functions';
+import { nativeCallback } from "utils/native_callback";
 import '../../utils/native_listner';
-import { getConfig, setHeights } from 'utils/functions';
-import { isFunction } from '../../utils/validators';
+// import {checkStringInString} from 'utils/validators';
+// import { goBackMap} from '../constants';
 
+class Container extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openDialog: false,
+      openPopup: false,
+      popupText: "",
+      callbackType: "",
+      inPageTitle: true,
+      force_hide_inpage_title: this.props.hidePageTitle,
+      new_header: true,
+      project: 'landing' ,//to use in common functions
+      
+    };
+    this.historyGoBack = this.historyGoBack.bind(this);
+    this.handleTopIcon = this.handleTopIcon.bind(this);
 
-const Container = (props) => {
-  const [openDialog, setOpenDialog] = useState(props?.showDialog || false);
-  const x = React.useRef(true);
-  const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
-  const inPageTitle = true;
-
-  const historyGoBack = (backData) => {
-    let { params } = props.location;
-
-    if (params && params.disableBack) {
-      nativeCallback({ action: 'exit' });
-      return;
-    }
-
-    if (isFunction(props.goBack)) {
-      return props.goBack(params);
-    }
-    nativeCallback({ events: getEvents('back') });
-    props.history.goBack();
-  };
-  useEffect(() => {
-    setHeights({ header: true, container: false });
-    if (x.current) {
-      x.current = false;
-    } else {
-      if (getConfig().generic_callback) {
-        window.callbackWeb.addEventListener({
-          type: 'back_pressed',
-          go_back: () => historyGoBack(),
-        });
-      } else {
-        window.PlutusSdk.addEventListener({
-          type: 'back_pressed',
-          go_back: () => historyGoBack(),
-        });
-      }
-    }
-  }, []);
-
-  const getEvents = (user_action) => {
-    if (!this || !props || !props.events) {
-      return;
-    }
-    let events = props.events;
-    events.properties.user_action = user_action;
-    return events;
-  };
-
-  const handleClose = () => {
-    setOpenDialog(false);
-  };
-
-  const renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={openDialog}
-        onClose={handleClose}
-        aria-labelledby='responsive-dialog-title'
-      >
-        <DialogTitle id='form-dialog-title'>No Internet Found</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Check your connection and try again.</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button className='DialogButtonFullWidth' onClick={handleClose} color='default' autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
-  const renderPageLoader = () => {
-    if (props.showLoader) {
-      return (
-        <div className={`Loader ${props.loaderData ? props.loaderData.loaderClass : ''}`}>
-          <div className='LoaderOverlay'>
-            <img src={loaderMain} alt='' />
-            {props.loaderData && props.loaderData.loadingText && (
-              <div className='LoaderOverlayText'>{props.loaderData.loadingText}</div>
-            )}
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  };
-
-  const headerGoBack = () => {
-    historyGoBack({ fromHeader: true });
-  };
-
-  let steps = [];
-  for (var i = 0; i < props.total; i++) {
-    if (props.current > i) {
-      steps.push(<span className='active' key={i}></span>);
-    } else {
-      steps.push(<span key={i}></span>);
-    }
+    this.didMount = didMount.bind(this);
+    this.commonRender =  commonRender.bind(this);
   }
 
-  return (
-    <div
-      className={`ContainerWrapper   ${props.classOverRide}  ${
-        getConfig().productName !== 'fisdom' ? 'blue' : ''
-      }`}
-    >
-      {/* Header Block */}
-      {!props.noHeader && !getConfig().hide_header && (
-        <Header
-          disableBack={props.disableBack}
-          title={props.title}
-          smallTitle={props.smallTitle}
-          provider={props.provider}
-          count={props.count}
-          total={props.total}
-          current={props.current}
-          goBack={headerGoBack}
-          edit={props.edit}
-          type={getConfig().productName}
-          rightIcon={props.rightIcon}
-          handleRightIconClick={props.handleRightIconClick}
-          inPageTitle={inPageTitle}
-          force_hide_inpage_title={props.hideInPageTitle}
-          style={props.styleHeader}
-          className={props.classHeader}
-          headerData={props.headerData}
-        />
-      )}
+  componentDidMount() {
+    this.didMount();
+  }
 
-      {/* Below Header Block */}
-      <div id='HeaderHeight' style={{ top: 56 }}>
-        {/* Loader Block */}
-        {renderPageLoader()}
-      </div>
+  componentWillUnmount() {
+    this.unmount();
+  }
 
-      {/*  */}
+  handleTopIcon = () => {
+    this.props.handleTopIcon();
+  }
 
-      {!props.hideInPageTitle && (
-        <div
-          id='header-title-page'
-          style={Object.assign(props.styleHeader || {}, {
-            padding: '0 20px',
-          })}
-          className={`header-title-page ${props.classHeader}`}
-        >
-          {inPageTitle && (
-            <div
-              className={`header-title-text-hni ${inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
-              style={{ width: props.count ? '75%' : '' }}
-            >
-              {props.title}
-            </div>
-          )}
+  historyGoBack = (backData) => {
+    
+    if (this.getEvents("back")) {
+      nativeCallback({ events: this.getEvents("back") });
+    }
 
-          {inPageTitle && props.count && (
-            <span
-              color='inherit'
-              className={`${inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
-              style={{ fontSize: 10 }}
-            >
-              <span style={{ fontWeight: 600 }}>{props.current}</span>/<span>{props.total}</span>
-            </span>
-          )}
-        </div>
-      )}
 
-      {/* Children Block */}
-      <div
-        style={props.styleContainer}
-        className={`
-            Container 
-            ${props.classOverRideContainer}
-            ${props.noPadding ? 'no-padding' : ''}
-          `}
-      >
-        {props.children}
-      </div>
+    if(this.props.headerData && this.props.headerData.goBack) {
+      this.props.headerData.goBack();
+      return;
+    }
+    
+    // let pathname = this.props.history.location.pathname;
 
-      {/* Footer Block */}
-      {!props.noFooter && (
-        <Footer
-          noFooter={props.noFooter}
-          fullWidthButton={props.fullWidthButton}
-          buttonTitle={props.buttonTitle}
-          handleClick={props.handleClick}
-          handleClick2={props.handleClick2}
-          onlyButton={props.onlyButton}
-          disable={props.disable}
-          buttonData={props.buttonData}
-        />
-      )}
-      {/* No Internet */}
-      {renderDialog()}
-    </div>
-  );
-};
+    // if (checkStringInString(pathname, "form-summary")) {
+    //   this.setState({
+    //     callbackType: 'loan_home',
+    //     openPopup: true,
+    //     popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
+    //   })
+    //   return;
+    // }
+
+    // if (checkStringInString(pathname, "instant-kyc") && !checkStringInString(pathname, "instant-kyc-status")) {
+    //   this.setState({
+    //     callbackType: 'loan_journey',
+    //     openPopup: true,
+    //     popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
+    //   })
+    //   return;
+    // }
+
+    // if (checkStringInString(pathname, "loan-summary")) {
+    //   this.setState({
+    //     callbackType: 'loan_home',
+    //     openPopup: true,
+    //     popupText: 'You are just one steps  away from getting money in your account. Do you really want to exit?'
+    //   })
+    //   return;
+    // }
+
+    // if(goBackMap(pathname)) {
+    //   this.navigate(goBackMap(pathname));
+    //   return;
+    // }
+
+
+    // switch (pathname) {
+    //   case "/loan/home":
+    //   case "/loan/report":
+    //   case "/loan/app-update":
+    //     nativeCallback({ action: "native_back"});
+    //     break;
+    //   default:
+        this.props.history.goBack();
+    // }
+  };
+
+  componentDidUpdate(prevProps) {
+    this.didupdate();
+  }
+
+  // handleClose = () => {
+  //   this.setState({
+  //     openPopup: false
+  //   });
+  // }
+
+  // handlePopup = () => {
+  
+  //   this.setState({
+  //     openPopup: false
+  //   });
+
+  //   if(this.state.callbackType === 'loan_home') {
+  //     this.navigate('/loan/home');
+  //   } else if(this.state.callbackType === 'loan_journey') {
+  //     this.navigate('/loan/journey');
+  //   } else {
+  //     nativeCallback({ action: this.state.callbackType });
+  //   }
+
+  // }
+
+   render() {
+    let props_base = {
+      classOverRide : 'loanMainContainer'
+    }
+    return(
+      <Fragment>
+      {this.commonRender(props_base)}
+      </Fragment>
+    )
+  }
+}
 
 export default withRouter(Container);

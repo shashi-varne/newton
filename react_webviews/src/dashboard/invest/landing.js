@@ -106,16 +106,16 @@ class Landing extends Component {
     } = invest_show_data;
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         noFooter={true}
-        hideInPageTitle
+        title='Start Investing'
         loaderData={{
           loadingText,
         }}
       >
         <div className="invest-landing">
-          <div className="main-top-title">Start Investing</div>
-          <div className="main-top-subtitle landing-subtitle">
+          {/* <div className="main-top-title">Start Investing</div> */}
+          <div className="main-top-subtitle">
             {isReadyToInvestBase
               ? " Your KYC is verified, You’re ready to invest"
               : "Invest in your future"}

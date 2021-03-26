@@ -14,14 +14,6 @@ import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
-  //   let isLoggedIn = storageService().get("currentUser");
-
-  //   if (!isLoggedIn) {
-  //     this.props.history.push({
-  //       pathname: "login",
-  //       search: getConfig().searchParams,
-  //     });
-  //   }
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
   this.setInvestCardsData = setInvestCardsData.bind(this);
@@ -456,7 +448,6 @@ export function corpusValue(data) {
   let corpus_value = 0;
   for (var i = 0; i < data.term; i++) {
     if (this.state.isRecurring || data.investType === "buildwealth") {
-      // isRecurring not initialised
       let n = (i + 1) * 12;
       let mr = getRateOfInterest(data) / 12 / 100;
       corpus_value = (data.amount * (Math.pow(1 + mr, n) - 1)) / mr;
@@ -475,7 +466,7 @@ export async function getRecommendedPlans(amount) {
       type: this.state.investType,
       amount: amount,
       term: this.state.term,
-      subType: this.state.subType, // not initailised
+      subType: this.state.subType,
       equity: this.state.stockSplit,
       debt: this.state.bondSplit,
     });
@@ -487,10 +478,10 @@ export async function getRecommendedPlans(amount) {
         amount: result.amount,
         term: this.state.term,
         investType: this.state.investType,
-        name: this.state.investName, // not initailised
+        name: this.state.investName,
         subType: this.state.subType,
         graphType: this.state.investType,
-        investTypeDisplay: this.state.investTypeDisplay, // not initailised
+        investTypeDisplay: this.state.investTypeDisplay,
         stock: this.state.stockSplit,
         bond: this.state.bondSplit,
       };
@@ -728,6 +719,9 @@ export async function getNfoRecommendation() {
         cartCount: cartCount,
         showFunds: showFunds,
       });
+    }  else {
+      this.setState({ show_loader: false });
+      toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -743,11 +737,11 @@ export async function getNfoPurchaseLimit(data) {
       `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
     );
     const { result, status_code: status } = res.pfwresponse;
-    let { fundsData } = this.state;
+    let { fundsData, purchaseLimitData } = this.state;
     if (status === 200) {
-      let purchaseLimitData = result.funds_data;
+      purchaseLimitData[data.investType] = result.funds_data;
       let disableInputSummary = true;
-      if (purchaseLimitData[0].ot_sip_flag) {
+      if (purchaseLimitData[data.investType][0].ot_sip_flag) {
         fundsData[0].allow_purchase = true;
         disableInputSummary = false;
       }
@@ -757,6 +751,9 @@ export async function getNfoPurchaseLimit(data) {
         purchaseLimitData: purchaseLimitData,
         disableInputSummary: disableInputSummary,
       });
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -772,10 +769,10 @@ export async function getDiyPurchaseLimit(data) {
       `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
     );
     const { result, status_code: status } = res.pfwresponse;
-    let { fundsData } = this.state;
+    let { fundsData, purchaseLimitData } = this.state;
     if (status === 200) {
-      let purchaseLimitData = result.funds_data;
-      purchaseLimitData = purchaseLimitData.map((dict) => {
+      purchaseLimitData[data.investType] = result.funds_data;
+      purchaseLimitData[data.investType] = purchaseLimitData[data.investType].map((dict) => {
         var results = fundsData.filter((obj) => {
           if (obj.isin === dict["isin"]) {
             obj["allow_purchase"] = dict["ot_sip_flag"];
@@ -790,13 +787,16 @@ export async function getDiyPurchaseLimit(data) {
         return dict;
       });
 
-      let isDisabledFundCount = 0;
+      // let isDisabledFundCount = 0;
       this.setState({
         show_loader: false,
         fundsData: fundsData,
         purchaseLimitData: purchaseLimitData,
-        isDisabledFundCount: isDisabledFundCount,
+        // isDisabledFundCount: isDisabledFundCount,
       });
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -826,8 +826,9 @@ export function checkLimit(amount, index) {
     disableInputSummary,
     disableInput,
     fundsData,
+    investType,
   } = this.state;
-  let limitData = purchaseLimitData.find(
+  let limitData = purchaseLimitData[investType].find(
     (data) => data.isin === fundsData[index].isin
   );
   if (!limitData) return;
@@ -866,14 +867,14 @@ export function checkLimit(amount, index) {
   });
 }
 
-function isInvestRefferalRequired(partner_code) {
+export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
     return true;
   }
   return false;
 }
 
-export async function proceedInvestment(event, isReferralGiven) {
+export async function proceedInvestment(investReferralData, isReferralGiven) {
   let {
     partner_code,
     fundsData,
@@ -882,8 +883,7 @@ export async function proceedInvestment(event, isReferralGiven) {
     totalAmount,
   } = this.state;
   if (isInvestRefferalRequired(partner_code) && !isReferralGiven) {
-    // let investCtaEvents = event;
-    // $rootScope.openPopupInvestReferral(refOnKey);
+    this.handleDialogStates("openInvestReferral", true);
     return;
   }
 
@@ -891,7 +891,7 @@ export async function proceedInvestment(event, isReferralGiven) {
   fundsData
     .filter((data) => data.allow_purchase)
     .forEach((fund) => {
-      let limitData = purchaseLimitData.find(
+      let limitData = purchaseLimitData[investType].find(
         (element) => element.isin === fund.isin
       );
       if (!limitData) return;
@@ -916,7 +916,7 @@ export async function proceedInvestment(event, isReferralGiven) {
   }
 
   let paymentRedirectUrl = encodeURIComponent(
-    `${window.location.protocol}//${window.location.host}/page/callback/${investment_type}/${investment.amount}`
+    `${window.location.origin}/page/callback/${investment_type}/${investment.amount}`
   );
 
   investment.allocations = allocations;
@@ -925,20 +925,24 @@ export async function proceedInvestment(event, isReferralGiven) {
     {
       investment_type: investment_type,
       paymentRedirectUrl: paymentRedirectUrl,
+      investReferralData: investReferralData,
     },
-    () => this.makeInvestment(event, investment, isReferralGiven)
+    () => this.makeInvestment(investment, isReferralGiven)
   );
 }
 
-export async function makeInvestment(event, investment, isReferralGiven) {
+export async function makeInvestment(investment, isReferralGiven) {
   let {
     isRedirectToPayment,
     investment_type,
-    invRefData,
     totalAmount,
     type,
     currentUser,
     partner_code,
+    paymentRedirectUrl,
+    userKyc,
+    isSipDatesScreen,
+    investReferralData,
   } = this.state;
 
   isRedirectToPayment = true;
@@ -962,44 +966,71 @@ export async function makeInvestment(event, investment, isReferralGiven) {
     type === "diy"
   ) {
     this.navigate("/invest-journey");
+    return
   }
 
-  if (isReferralGiven && invRefData.code) {
-    body.referral_code = invRefData.code;
+  if (isReferralGiven && investReferralData.code) {
+    body.referral_code = investReferralData.code;
   }
-  this.setState(
-    {
-      isApiRunning: true,
-      sipOrOnetime: investment_type,
-      body: body,
-      isRedirectToPayment: isRedirectToPayment,
-      investmentEventData: investmentEventData,
-    },
-    () => this.proceedInvestmentChild(event)
-  );
 
-  // $broadcast ('parentChildCommunication', {key: 'proceedInvestmentChild'});
+  this.setState({
+    sipOrOnetime: investment_type,
+    body: body,
+    isRedirectToPayment: isRedirectToPayment,
+    investmentEventData: investmentEventData,
+  });
+  this.proceedInvestmentChild({
+    userKyc: userKyc,
+    sipOrOnetime: investment_type,
+    body: body,
+    investmentEventData: investmentEventData,
+    paymentRedirectUrl: paymentRedirectUrl,
+    isSipDatesScreen: isSipDatesScreen,
+    isInvestJourney: this.state.isInvestJourney,
+    history: this.props.history,
+    handleDialogStates: this.handleDialogStates,
+    handleApiRunning: this.handleApiRunning,
+  });
 }
 
-export async function proceedInvestmentChild(ev) {
-  if (this.state.isKycNeeded) {
-    // this.state.redirectToKyc();
+export async function proceedInvestmentChild(data) {
+  let userKyc = data.userKyc || storageService().getObject("kyc") || {};
+  const kycJourneyStatus = getKycAppStatus(userKyc).status;
+  let {
+    sipOrOnetime,
+    isSipDatesScreen,
+    investmentEventData,
+    body,
+    paymentRedirectUrl,
+    history,
+    handleApiRunning,
+    handleDialogStates,
+  } = data;
+
+  let isKycNeeded = false;
+  if (
+    (getConfig().partner.code === "bfdlmobile" && !data.isInvestJourney) ||
+    data.isInvestJourney ||
+    data.isSipDatesScreen
+  ) {
+    isKycNeeded = !canDoInvestment(userKyc);
+  }
+
+  if (isKycNeeded) {
+    redirectToKyc(kycJourneyStatus, history);
     return;
   }
-  if (this.state.sipOrOnetime === "sip" && !this.state.isSipDatesScreen) {
-    storageService().setObject("investmentObjSipDates", this.state.body);
-    this.navigate("/sipdates");
+
+  if (sipOrOnetime === "sip" && !isSipDatesScreen) {
+    storageService().setObject("investmentObjSipDates", body);
+    navigation(history, "/sipdates");
   } else {
-    let { investmentEventData } = this.state;
-    if (investmentEventData) {
+    if (!investmentEventData) {
       investmentEventData = storageService().getObject("mf_invest_data") || {};
     }
-
+    handleApiRunning("button");
     try {
-      const res = await Api.post(
-        apiConstants.triggerInvestment,
-        this.state.body
-      );
+      const res = await Api.post(apiConstants.triggerInvestment, body);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
         // eslint-disable-next-line
@@ -1008,27 +1039,83 @@ export async function proceedInvestmentChild(ev) {
           // eslint-disable-next-line
           (pgLink.match(/[\?]/g) ? "&" : "?") +
           "redirect_url=" +
-          this.state.paymentRedirectUrl;
+          paymentRedirectUrl +
+          getConfig().searchParams;
 
         investmentEventData["payment_id"] = result.investments[0].id;
         storageService().setObject("mf_invest_data", investmentEventData);
 
-        // if (this.state.isSipDatesScreen) {
-        //   $scope.successDialog(ev);
-        //   $scope.$parent.investResponse = data;
-        //   return;
-        // }
-
-        //  handle callbackWeb.isWeb()
+        if (isSipDatesScreen) {
+          this.setState({ openSuccessDialog: true, investResponse: result, isApiRunning: false });
+          return;
+        }
+        if (getConfig().Web) {
+          // handleIframe
+          window.location.href = pgLink;
+        } else {
+          if (result.rta_enabled) {
+            navigation(history, "/payment/options", {
+              state: {
+                pg_options: result.pg_options,
+                consent_bank: result.consent_bank,
+                investment_type: result.investments[0].order_type,
+                remark: result.investments[0].remark_investment,
+                investment_amount: result.investments[0].amount,
+                redirect_url: paymentRedirectUrl,
+              },
+            });
+          } else {
+            navigation(history, "/kyc/journey");
+          }
+        }
       } else {
-        // handle error
+        let errorMessage = result.error || result.message || "Error";
+        storageService().setObject("is_debit_enabled", result.is_debit_enabled);
+        switch (status) {
+          case 301:
+            redirectToKyc(kycJourneyStatus, history);
+            break;
+          case 302:
+            redirectToKyc(kycJourneyStatus, history);
+            break;
+          case 305:
+            handleDialogStates("openPennyVerificationPending", true);
+            break;
+          default:
+            handleDialogStates("openInvestError", true, errorMessage);
+            break;
+        }
       }
+      handleApiRunning(false);
     } catch (error) {
       console.log(error);
-      this.setState({ show_loader: false });
-      toast(errorMessage);
+      handleApiRunning(false);
+      toast("Something went wrong!");
     }
   }
+}
+
+export function canDoInvestment(kyc) {
+  if (kyc.kyc_allow_investment_status === "INVESTMENT_ALLOWED") {
+    return true;
+  }
+  return false;
+}
+
+export function redirectToKyc(kycJourneyStatus, history) {
+  if (kycJourneyStatus === "ground") {
+    navigation(history, "/kyc/home");
+  } else {
+    navigation(history, "/kyc/journey");
+  }
+}
+
+function navigation(history, pathname, data = {}) {
+  history.push({
+    pathname: pathname,
+    search: getConfig().searchParams,
+    state: data.state,
+  });
 }
 
 export function initilizeKyc() {
@@ -1054,6 +1141,7 @@ export function initilizeKyc() {
     userKyc,
     kycJourneyStatus,
     isReadyToInvestBase,
+    getKycAppStatusData,
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
@@ -1144,6 +1232,10 @@ export function openKyc() {
   } else {
     if (kycJourneyStatus === "ground") {
       this.navigate("/kyc/home");
+    } else if (kycJourneyStatus === "ground_pan") {
+      this.navigate('/kyc/journey', { state: {
+        show_aadhaar: true, fromState: "invest" }
+      });
     } else {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },

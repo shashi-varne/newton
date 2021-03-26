@@ -1,45 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Container from "../common/Container";
 import UploadCard from "./UploadCard";
-import { getDocuments, initData } from "../services";
-import { isEmpty, storageService } from "utils/validators";
-import { getPathname, storageConstants } from "../constants";
-import toast from "common/ui/Toast";
+import { getDocuments } from "../services";
+import { isEmpty } from "utils/validators";
+import { getPathname } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const Progress = (props) => {
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  );
-  const [loading, setLoading] = useState(false);
+  const {kyc, isLoading} = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
-
-  useEffect(() => {
-    if (isEmpty(kyc)) {
-      initialize();
-    }
-  }, []);
-
-  const initialize = async () => {
-    try {
-      setLoading(true);
-      await initData();
-      const kyc = storageService().getObject(storageConstants.KYC);
-      setKyc(kyc);
-    } catch (err) {
-      console.error(err);
-      toast(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   let documents = [];
   let totalDocs = 0;
   let canGoNext = false;
 
-  if (!isEmpty(kyc) && !loading) {
+  if (!isEmpty(kyc) && !isLoading) {
     documents = getDocuments(kyc);
     for (let document of documents) {
       if (
@@ -61,7 +38,9 @@ const Progress = (props) => {
       nriaddress: getPathname.uploadNriAddress,
       selfie: getPathname.uploadSelfie,
       selfie_video: getPathname.uploadSelfieVideo,
-      bank: `/kyc/${kyc.kyc_status}/bank-details`,
+      bank: `/kyc/${
+        kyc.kyc_status === "compliant" ? "compliant" : "non-compliant"
+      }/bank-details`,
       sign: getPathname.uploadSign,
     };
 
@@ -70,20 +49,18 @@ const Progress = (props) => {
 
   return (
     <Container
-      hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       noFooter={disableNext}
-      disable={loading || !canGoNext}
+      disable={!canGoNext}
       classOverRideContainer="pr-container"
-      showSkelton={loading}
+      skelton={isLoading}
       skeltonType="p"
-      fullWidthButton={true}
       handleClick={() => {
         navigate(getPathname.journey);
       }}
+      title="Upload documents"
     >
       <section id="kyc-upload-progress">
-        <div className="header">Upload documents</div>
         <main className="documents">
           {documents.map((document, index) => (
             <div key={index} className="document">

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
 import { initialize } from "../../functions";
 import Input from "common/ui/Input";
@@ -9,6 +9,10 @@ import toast from "common/ui/Toast";
 import { nfoData } from "../../constants";
 import TermsAndCond from "../../../mini-components/TermsAndCond";
 import { CATEGORY, FUNDSLIST, SUBCATEGORY, CART } from "../../../diy/constants";
+import PennyVerificationPending from "../mini_components/PennyVerificationPending";
+import InvestError from "../mini_components/InvestError";
+import InvestReferralDialog from "../mini_components/InvestReferralDialog";
+import { convertInrAmountToNumber } from "../../common/commonFunction";
 
 class Checkout extends Component {
   constructor(props) {
@@ -18,13 +22,15 @@ class Checkout extends Component {
       screenName: "nfo_checkout",
       ctc_title: "INVEST",
       form_data: [],
-      investType: "onetime",
+      investType: props.type === "diy" ? "sip" : "onetime",
       partner_code: getConfig().partner_code,
       disableInput: [],
       fundsData: [],
       renderData: nfoData.checkoutInvestType,
       type: props.type,
       currentUser: storageService().getObject("user") || {},
+      dialogStates: {},
+      purchaseLimitData: {},
     };
     this.initialize = initialize.bind(this);
   }
@@ -41,18 +47,17 @@ class Checkout extends Component {
       partner_code,
       ctc_title,
       type,
-      currentUser,
+      investType,
     } = this.state;
+    ctc_title = this.getButtonText(investType);
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
         fundsData.push(fund);
         fundsData.forEach(() => form_data.push({}));
-        this.setState({ fundsData: fundsData, form_data: form_data }, () =>
-          this.getNfoPurchaseLimit({
-            investType: this.state.investType,
-            isins: fund.isin,
-          })
+        this.setState(
+          { fundsData: fundsData, form_data: form_data, ctc_title },
+          () => this.getPurchaseLimit(fund.isin)
         );
       } else {
         this.props.history.goBack();
@@ -60,11 +65,17 @@ class Checkout extends Component {
       }
     } else if (type === "diy") {
       let schemeType = storageService().get(CATEGORY) || "";
-      let categoryName =
-        storageService().get(SUBCATEGORY) || "";
-      fundsData = !storageService().getObject(CART)
+      let categoryName = storageService().get(SUBCATEGORY) || "";
+      const fundInfo = storageService().getObject("diystore_fundInfo")
         ? [storageService().getObject("diystore_fundInfo")]
+        : false;
+      fundsData = !storageService().getObject(CART)
+        ? fundInfo
         : storageService().getObject(CART);
+
+      if (!fundsData || fundsData?.length < 1) {
+        return;
+      }
       fundsData.forEach(() => form_data.push({}));
       let fundsArray = storageService().getObject(FUNDSLIST);
       let isins = this.getIsins(fundsData);
@@ -73,8 +84,6 @@ class Checkout extends Component {
           (data) => (data.selected_icon = "bfdl_selected.png")
         );
       }
-      if (!currentUser.active_investment && partner_code !== "bfdlmobile")
-        ctc_title = "HOW IT WORKS?";
       this.setState(
         {
           fundsData: fundsData,
@@ -85,13 +94,46 @@ class Checkout extends Component {
           renderData: renderData,
           ctc_title: ctc_title,
         },
-        () =>
-          this.getDiyPurchaseLimit({
-            investType: this.state.investType,
-            isins: isins,
-          })
+        () => this.getPurchaseLimit(isins)
       );
     }
+  };
+
+  getPurchaseLimit = async (isins) => {
+    if (this.props.type === "diy") {
+      await this.getDiyPurchaseLimit({
+        investType: "sip",
+        isins: isins,
+      });
+      await this.getDiyPurchaseLimit({
+        investType: "onetime",
+        isins: isins,
+      });
+    } else {
+      await this.getNfoPurchaseLimit({
+        investType: "sip",
+        isins: isins,
+      });
+      await this.getNfoPurchaseLimit({
+        investType: "onetime",
+        isins: isins,
+      });
+    }
+  };
+
+  getButtonText = (investType) => {
+    let { type, currentUser, partner_code } = this.state;
+    if (
+      !currentUser.active_investment &&
+      partner_code !== "bfdlmobile" &&
+      type === "diy"
+    ) {
+      return "HOW IT WORKS?";
+    }
+    if (investType === "sip") {
+      return "SELECT SIP DATE";
+    }
+    return "INVEST";
   };
 
   getIsins = (fundsData) => {
@@ -118,7 +160,7 @@ class Checkout extends Component {
       }
     });
     if (submit) {
-      this.setState({ totalAmount: totalAmount }, () =>
+      this.setState({ totalAmount: totalAmount, isApiRunning: true }, () =>
         this.proceedInvestment()
       );
     } else {
@@ -127,43 +169,46 @@ class Checkout extends Component {
     }
   };
 
+  handleDialogStates = (key, value, errorMessage) => {
+    let dialog_states = { ...this.state.dialogStates };
+    dialog_states[key] = value;
+    if (errorMessage) dialog_states["errorMessage"] = errorMessage;
+    this.setState({ dialogStates: dialog_states });
+    this.handleApiRunning(false);
+  };
+
+  handleApiRunning = (isApiRunning) => {
+    this.setState({ isApiRunning: isApiRunning });
+  };
+
   handleChange = (name, index = 0) => async (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
-    let { form_data, ctc_title, fundsData, investType, type } = this.state;
+    let { form_data, ctc_title, fundsData, investType } = this.state;
     if (id === "sip" || id === "onetime") {
       if (id === investType) return;
       investType = id;
-      if (id === "sip") {
-        ctc_title = "SELECT SIP DATE";
-      } else {
-        ctc_title = "INVEST";
-      }
-      this.setState({
-        form_data: form_data,
-        ctc_title: ctc_title,
-        investType: investType,
-      });
-      if (type === "nfo") {
-        await this.getNfoPurchaseLimit({
-          investType: id,
-          isins: fundsData[index].isin,
-        });
-      } else {
-        let isins = this.getIsins(fundsData);
-        await this.getDiyPurchaseLimit({
-          investType: id,
-          isins: isins,
-        });
-      }
-      fundsData.forEach((fund, index) => {
-        if (fund.amount) {
-          this.checkLimit(fundsData[index].amount, index);
+      ctc_title = this.getButtonText(investType);
+      this.setState(
+        {
+          form_data: form_data,
+          ctc_title: ctc_title,
+          investType: investType,
+        },
+        () => {
+          fundsData.forEach((fund, index) => {
+            if (fund.amount) {
+              this.checkLimit(fundsData[index].amount, index);
+            }
+          });
         }
-      });
+      );
     } else if (name) {
-      if (!isNaN(parseInt(value, 10))) {
-        fundsData[index].amount = parseInt(value, 10);
+      value = convertInrAmountToNumber(value);
+      // eslint-disable-next-line
+      if (!isNaN(parseInt(value))) {
+        // eslint-disable-next-line
+        fundsData[index].amount = parseInt(value);
         this.setState({ form_data: form_data, fundsData: fundsData });
         this.checkLimit(fundsData[index].amount, index);
       } else {
@@ -181,22 +226,22 @@ class Checkout extends Component {
       ctc_title,
       fundsData,
       disableInputSummary,
-      loadingText,
+      isApiRunning,
       type,
       renderData,
+      dialogStates,
     } = this.state;
-    if (fundsData && fundsData.length === 0) ctc_title = "BACK";
+    let allowedFunds = fundsData.filter((data) => data.allow_purchase) || [];
+    if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         buttonTitle={ctc_title}
         handleClick={this.handleClick}
         disable={disableInputSummary}
-        hideInPageTitle
         title="Your Mutual Fund Plan"
-        loaderData={{
-          loadingText,
-        }}
+        hidePageTitle
+        showLoader={isApiRunning}
       >
         <div className="nfo-checkout">
           <div className="checkout-invest-type">
@@ -265,12 +310,9 @@ class Checkout extends Component {
                         name="amount"
                         id="amount"
                         class="input"
-                        value={fund.amount || ""}
+                        value={fund.amount ? formatAmountInr(fund.amount) : ""}
                         error={form_data[index].amount_error ? true : false}
-                        helperText={
-                          form_data[index].amount_error ||
-                          formatAmountInr(fund.amount)
-                        }
+                        helperText={form_data[index].amount_error}
                         onChange={this.handleChange("amount", index)}
                         inputMode="numeric"
                         pattern="[0-9]*"
@@ -286,6 +328,21 @@ class Checkout extends Component {
               })}
           </div>
           <TermsAndCond />
+          <PennyVerificationPending
+            isOpen={dialogStates.openPennyVerificationPending}
+            handleClick={() => this.navigate("/kyc/add-bank")}
+          />
+          <InvestError
+            isOpen={dialogStates.openInvestError}
+            errorMessage={dialogStates.errorMessage}
+            handleClick={() => this.navigate("/invest")}
+            close={() => this.handleDialogStates("openInvestError", false)}
+          />
+          <InvestReferralDialog
+            isOpen={dialogStates.openInvestReferral}
+            proceedInvestment={this.proceedInvestment}
+            close={() => this.handleDialogStates("openInvestReferral", false)}
+          />
         </div>
       </Container>
     );

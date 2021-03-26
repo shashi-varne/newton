@@ -1,40 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { storageService, isEmpty } from "../../utils/validators";
+import { isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
-import { storageConstants, getPathname } from "../constants";
+import { getPathname } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
-import { initData } from "../services";
 import { getConfig } from "../../utils/functions";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const RegistrationSuccess = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(false);
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
-  const [userKyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
   const [isCompliant, setIsCompliant] = useState();
   const [buttonTitle, setButtonTitle] = useState();
 
+  const {kyc, user, isLoading} = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userKyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      setShowLoader(true);
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setUserKyc(userkycDetails);
-      setCurrentUser(user);
-      setShowLoader(false);
-    }
-    let is_compliant = userkycDetails.kyc_status === "compliant" ? true : false;
+    let is_compliant = kyc.kyc_status === "compliant" ? true : false;
     setIsCompliant(is_compliant);
     let title = "GOT IT!";
     if (is_compliant) title = "START INVESTING";
@@ -54,7 +40,7 @@ const RegistrationSuccess = (props) => {
   };
 
   const checkNPSAndProceed = () => {
-    if (currentUser.nps_investment) {
+    if (user.nps_investment) {
       if (!getConfig().isIframe) {
         navigate(getPathname.reports);
       }
@@ -65,13 +51,12 @@ const RegistrationSuccess = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
-      hideInPageTitle
+      skelton={isLoading}
       id="registration-success"
       buttonTitle={buttonTitle}
       title="KYC Submitted"
-      disable={showLoader}
       handleClick={handleClick}
+      force_hide_inpage_title={true}
     >
       <div className="kyc-registration-success">
         <img src={require(`assets/thumpsup.png`)} alt="Success" />

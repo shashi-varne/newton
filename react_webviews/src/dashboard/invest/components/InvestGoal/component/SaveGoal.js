@@ -50,6 +50,7 @@ const SaveGoal = (props) => {
         term,
         investType: 'saveforgoal',
         isRecurring: recurring,
+        name:"Saving for goal"
       };
       storageService().setObject('goalRecommendations', recommendation.goal);
       storageService().setObject('graphData', graphData);
@@ -81,15 +82,12 @@ const SaveGoal = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
-      helpContact
-      hideInPageTitle
       hidePageTitle
       title='Save for a Goal'
       handleClick={goNext}
       noFooter
       classOverRideContainer='pr-container'
-      showLoader={loader}
+      skelton={loader}
     >
       <section className='invest-goal-save-container'>
         <div className='invest-goal-save-header'>

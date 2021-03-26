@@ -1,41 +1,40 @@
-import { Button } from '@material-ui/core'
-
-import React from 'react'
-import { getConfig } from '../../utils/functions'
-import SlideBottomDialog from '../mini_components/SlideBottomDialog'
+import React from "react";
+import { Button } from "@material-ui/core";
+import { getConfig } from "../../utils/functions";
+import Dialog, { DialogContent } from "material-ui/Dialog";
 
 const PendingBankVerificationDialog = (props) => {
-  const { title, description, label, close, open, proceed, id } = props
-  const productName = getConfig().productName
+  const { title, description, label, close, open, proceed } = props;
+  const productName = getConfig().productName;
   const handleProceed = () => {
-    close()
-    proceed()
-  }
+    close();
+    proceed();
+  };
   return (
-    <SlideBottomDialog close={close} open={open} id={id}>
-      <section className="pending-bank-verification">
-        <div className="flex flex-between">
-          <div className="title">{title}</div>
+    <Dialog
+      open={open}
+      aria-labelledby="kyc-dialog"
+      keepMounted
+      aria-describedby="kyc-dialog"
+      className="kyc-penny-failed-dialog"
+      id="kyc-bottom-dialog"
+    >
+      <DialogContent className="penny-failed-dialog-content">
+        <div className="title">
+          <div className="text">{title}</div>
           <img
             src={require(`assets/${productName}/ic_bank_partial_added.svg`)}
-            alt="Bank Verification Pending"
+            alt=""
+            className="img"
           />
         </div>
-        <div className="description">{description}</div>
-        <footer className="footer">
-          <Button
-            variant="raised"
-            color="secondary"
-            fullWidth
-            onClick={handleProceed}
-            className="continue-btn"
-          >
-            {label}
-          </Button>
-        </footer>
-      </section>
-    </SlideBottomDialog>
-  )
-}
+        <div className="subtitle">{description}</div>
+        <Button className="button bg-full" onClick={handleProceed}>
+          {label}
+        </Button>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
-export default PendingBankVerificationDialog
+export default PendingBankVerificationDialog;

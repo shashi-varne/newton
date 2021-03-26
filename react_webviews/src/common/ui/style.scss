@@ -12,8 +12,8 @@
   color: #fff;
   border: 1px solid;
 }
-.MuiDialogContent-root:first-child {
-  padding-top: 24px !important;
+.MuiDialogContent-root {
+  padding: 20px !important;
 }
 .RadioButton label.professional {
   padding: 8px;
@@ -155,9 +155,6 @@
 }
 .MuiDialog-paper {
   margin: 0 20px 0px 20px !important;
-}
-.MuiDialogContent-root {
-  padding: 0 14px 24px 14px !important;
 }
 .spinner {
   width: 70px;
@@ -337,6 +334,84 @@ input.default-otp-input {
 }
 .right-arrow img {
   width: 20px;
+}
+
+.input-prefix-character{
+  color: #160D2E;
+  position: absolute;
+  font-size: 15px;
+  top: 26.5px;
+  left: 2px;
+}
+
+.status-bar-container{
+  margin: 0px -20px 0 -20px;
+  padding: 0 20px;  
+
+  .status-bar-heading-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .status-bar-heading{
+      font-size: 16px;
+      color: #160D2E;
+      font-weight: 600;
+    }
+    .status-bar-tag{
+      font-size: 9px;
+      background-color: #4F2DA7;
+      color: white;
+      border-radius: 3px;
+      padding: 2px 6px;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+  }
+
+  .status-bar{
+    // @keyframes filler {
+    //   0%{width: 0px}
+    // }
+    color: #767E86;
+    .status-bar-background{
+      position: relative;
+      height: 5px;
+      border-radius: 999px;
+    }
+    .status-bar-progress{
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 5px;
+      // animation: filler 2s 1;
+    }
+    .status-bar-numbers{
+      margin-top: -8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  .status-bar-info-container{
+    color: #767E86;
+    .status-bar-info{
+      display: flex;
+      align-items: center;
+      margin-top: -8px;
+      .status-bar-info-bar{
+        width: 12px;
+        height: 4px;
+        border-radius: 100px;
+      }
+      .status-bar-info-text{
+        margin: 0 0 0 10px;
+        span{
+          color: #160D2E;
+        }
+        }
+    }
+  }
 }
 
 .MuiInput-underline.MuiInput-disabled:before {
@@ -565,12 +640,19 @@ body[data-device="mobile"] {
   margin: 0 0 10px -10px;
 }
 
+
 .generic-bottomsheet {
   .top {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     margin: 0 0 10px 0;
+
+    .t-left {
+      margin: 0 15px 0 0;
+    }
+    .t-right {
+      margin: 0 0px 0 0;
+    }
   }
 
   div#alert-dialog-description {
@@ -578,16 +660,22 @@ body[data-device="mobile"] {
   }
 
   .header_title {
-    color: #0a1d32;
-    font-size: 16px;
-    font-weight: 600;
+    color: #160D2E;
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 27px;
+    margin: 20px 0px 5px 0;
   }
 
   .content {
-    color: #767e86;
-    font-size: 14px;
-    line-height: 1.6;
-    font-weight: 400;
+    color: #767E86;
+    font-size: 13px;
+    line-height: 21px;
+    text-align: left;
+  }
+  .top-right-image {
+    width: 110px !important;
+    height: 75px !important;
   }
 }
 
@@ -726,7 +814,7 @@ body[data-device="mobile"] {
   padding: 20px;
   margin: 20px 0 0 0;
   background: #fff;
-  height: 100%;
+  height: auto;
 
   .single-full-image-skelton {
     border-radius: 6px;
@@ -806,4 +894,86 @@ body[data-device="mobile"] {
     }
 
   }
+}
+
+
+
+/**
+ * ==============================================
+ * Dot Flashing
+ * ==============================================
+ */
+
+ .dot-flashing-parent {
+  min-height: 22px;
+  display: flex;
+  align-items: center;
+ }
+ .dot-flashing {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #fff;
+  animation: dotFlashing 1s infinite linear alternate;
+  animation-delay: .5s;
+}
+
+.dot-flashing::before, .dot-flashing::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
+.dot-flashing::before {
+  left: -15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #fff;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.dot-flashing::after {
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #fff;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    background-color: #fff;
+  }
+  50%,
+  100% {
+    background-color: #119A4B;
+    opacity: 0.7;
+  }
+}
+
+.generic-button-outlined {
+  color: var(--secondary) !important;
+  background-color: white !important;
+  border: 1px solid var(--secondary) !important;
+}
+.generic-button-textonly {
+  color: var(--secondary) !important;
+  background-color: white !important;
+  font-weight: bold !important;
+  width: fit-content !important;
+  justify-content: end !important;
+}
+
+.generic-button-raised {
+  color: white;
+  background-color: var(--secondary);
 }

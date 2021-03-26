@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini_components/Alert'
-import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants, docMapper } from '../../constants'
 import { upload } from '../../common/api'
-import { getConfig } from '../../../utils/functions'
+import { getBase64, getConfig } from '../../../utils/functions'
+import toast from '../../../common/ui/Toast'
+import { combinedDocBlob } from '../../common/functions'
+import { navigate as navigateFunc } from '../../common/functions'
+import useUserKycHook from '../../common/hooks/userKycHook'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -44,114 +47,258 @@ const MessageComponent = (kyc) => {
   )
 }
 
-const AddressUpload = () => {
+const AddressUpload = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
-  const [loading, setLoading] = useState(false)
+
+  const [file, setFile] = useState(null)
+
+  const [state, setState] = useState({})
+  const {kyc: kycData, isLoading} = useUserKycHook();
   const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
+    kycData
   )
 
-  const cameraFrontDoc = useRef(null)
-  const galleryFrontDoc = useRef(null)
-  const cameraBackDoc = useRef(null)
-  const galleryBackDoc = useRef(null)
-
   useEffect(() => {
-    if (isEmpty(kyc)) {
-      initialize()
-    }
-  }, [])
+    setKyc(kycData)
+  }, [kycData])
 
-  const initialize = async () => {
-    try {
-      setLoading(true)
-      await initData()
-      const kyc = storageService().getObject(storageConstants.KYC)
-      setKyc(kyc)
-    } catch (err) {
-      console.error(err)
-    } finally {
-      console.log('Finally')
-      setLoading(false)
+  const frontDocRef = useRef(null)
+  const backDocRef = useRef(null)
+
+  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
+    if (getConfig().generic_callback) {
+      window.callbackWeb[method_name]({
+        type: 'doc',
+        doc_type: doc_type,
+        doc_name: doc_name,
+        doc_side: doc_side,
+        // callbacks from native
+        upload: function upload(file) {
+          try {
+            setState({
+              ...state,
+              docType: doc_type,
+              docName: doc_name,
+              doc_side: doc_side,
+              show_loader: true,
+            })
+            if (doc_side === 'back') {
+              setFrontDoc(file)
+            } else {
+              setBackDoc(file)
+            }
+            switch (file.type) {
+              case 'image/jpeg':
+              case 'image/jpg':
+              case 'image/png':
+              case 'image/bmp':
+                mergeDocs(file, doc_side)
+                break
+              default:
+                toast('Please select image file')
+                setState({
+                  ...state,
+                  docType: doc_type,
+                  show_loader: false,
+                })
+            }
+          } catch (e) {
+            //
+          }
+        },
+      })
+
+      window.callbackWeb.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
+          setState({
+            ...state,
+            show_loader: true,
+          })
+        },
+      })
     }
   }
+
   const handleChange = (type) => (event) => {
     console.log(event.target.files)
+    const uploadedFile = event.target.files[0]
+    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
+
+    if (acceptedType.indexOf(uploadedFile.type) === -1) {
+      toast('Please select image file only')
+      return
+    }
+
     if (type === 'front') {
-      setFrontDoc(event.target.files[0])
+      if (getConfig().html_camera) {
+        native_call_handler('open_camera', 'address', 'front.jpg', 'front')
+      } else {
+        setFrontDoc(uploadedFile)
+        mergeDocs(uploadedFile, 'front')
+      }
     } else if (type === 'back') {
-      setBackDoc(event.target.files[0])
+      if (getConfig().html_camera) {
+        native_call_handler('open_camera', 'address', 'back.jpg', 'back')
+      } else {
+        setBackDoc(uploadedFile)
+        mergeDocs(uploadedFile, 'back')
+      }
     }
   }
 
-  const handleUpload = (ref) => () => {
-    ref.current.click()
+  const mergeDocs = (file, type) => {
+    if (type === 'front') {
+      setFrontDoc(file)
+    } else {
+      setBackDoc(file)
+    }
+
+    getBase64(file, function (img) {
+      if (type === 'front') {
+        setState({
+          ...state,
+          frontFileShow: img,
+        })
+      } else {
+        setState({
+          ...state,
+          backFileShow: img,
+        })
+      }
+    })
+  }
+
+  const handleUpload = (type) => () => {
+    if (type === 'front') {
+      frontDocRef.current.click()
+    } else {
+      backDocRef.current.click()
+    }
   }
 
   const handleImageLoad = (event) => {
-    URL.revokeObjectURL(event.target.src)
+    const fr = new Image()
+    const bc = new Image()
+    if (state.frontFileShow && state.backFileShow) {
+      fr.src = state.frontFileShow
+      bc.src = state.backFileShow
+      const blob = combinedDocBlob(fr, bc, 'address')
+      console.log(blob)
+      setFile(blob)
+    }
   }
 
-  // const handleSubmit = async () => {
-  //   try {
-  //     setIsApiRunning(true)
-  //     const result = await upload(file, 'address')
-  //     console.log(result)
-  //     setKyc(result.kyc)
-  //     storageService().setObject(storageConstants.KYC, result.kyc)
-  //   } catch (err) {
-  //     console.error(err)
-  //   } finally {
-  //     console.log('uploaded')
-  //     setIsApiRunning(false)
-  //   }
-  // }
+  const handleSubmit = async () => {
+    const navigate = navigateFunc.bind(props)
+    try {
+      setIsApiRunning("button")
+      let result
+      if (onlyFrontDocRequired) {
+        result = await upload(frontDoc, 'address', {
+          address_proof_key: addressProofKey,
+        })
+      } else {
+        result = await upload(file, 'address', {
+          address_proof_key: addressProofKey,
+        })
+      }
+      console.log(result)
+      setKyc(result.kyc)
+      storageService().setObject(storageConstants.KYC, result.kyc)
+      navigate('/kyc/upload/progress')
+    } catch (err) {
+      console.error(err)
+    } finally {
+      console.log('uploaded')
+      setIsApiRunning(false)
+    }
+  }
 
-  const addressProofKey = kyc?.address?.meta_data?.is_nri ? 'passport' : kyc?.address_doc_type
-  const addressProof = kyc?.address?.meta_data?.is_nri ? 'Passport' : docMapper[kyc?.address_doc_type]
-  const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(addressProofKey)
+  const setComma = (addressLine) => {
+    if (addressLine !== '') {
+      return (addressLine += ', ')
+    }
+    return addressLine
+  }
+
+  var addressProofKey = kyc?.address?.meta_data?.is_nri
+    ? 'passport'
+    : kyc?.address_doc_type
+  var addressProof = kyc?.address?.meta_data?.is_nri
+    ? 'Passport'
+    : docMapper[kyc?.address_doc_type]
+  const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
+    addressProofKey
+  )
+
+  const getFullAddress = () => {
+    let addressFull = ''
+
+    if (kyc?.address?.meta_data?.addressline) {
+      addressFull += setComma(kyc?.address?.meta_data?.addressline)
+    }
+
+    if (kyc?.address?.meta_data?.city) {
+      addressFull += setComma(kyc?.address?.meta_data?.city)
+    }
+
+    if (kyc?.address?.meta_data?.state) {
+      addressFull += setComma(kyc?.address?.meta_data?.state)
+    }
+
+    if (kyc?.address?.meta_data?.country) {
+      addressFull += setComma(kyc?.address?.meta_data?.country)
+    }
+
+    if (kyc?.address?.meta_data?.pincode) {
+      addressFull += setComma(kyc?.address?.meta_data?.pincode)
+    }
+
+    return addressFull
+  }
+
+  const isWeb = getConfig().isWebCode
 
   return (
     <Container
-      hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      classOverRideContainer="pr-container"
-      fullWidthButton={true}
-      showSkelton={loading}
-      // handleClick={handleSubmit}
-      // disable={!file || isApiRunning}
-      isApiRunning={isApiRunning}
+      skelton={isLoading}
+      handleClick={handleSubmit}
+      disable={!frontDoc && !backDoc}
+      showLoader={isApiRunning}
+      title="Upload address proof"
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          <div className="title">Upload address proof</div>
+          <div className="sub-title">{getFullAddress()}</div>
           <Alert
             variant="attention"
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
           />
-          {getConfig().isMobileDevice && (
+          {!isWeb && (
             <div className="kyc-doc-upload-container">
-              {frontDoc && (
+              {frontDoc && state.frontFileShow && (
                 <img
-                  src={URL.createObjectURL(frontDoc)}
-                  className="preview"
-                  alt="Uploaded PAN Card"
+                  src={state.frontFileShow}
                   onLoad={handleImageLoad}
+                  className="preview"
+                  alt=""
                 />
               )}
               {!frontDoc && (
                 <div className="caption">
-                  Upload front side of Address Document
+                  Upload front side of {addressProof}
                 </div>
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
                   <div className="open-camera">
                     <input
-                      ref={cameraFrontDoc}
+                      ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
                       onChange={handleChange('front')}
@@ -160,7 +307,7 @@ const AddressUpload = () => {
                     />
                     <button
                       data-click-type="camera-front"
-                      onClick={handleUpload(cameraFrontDoc)}
+                      onClick={handleUpload('front')}
                       className="kyc-upload-button"
                     >
                       {!frontDoc && (
@@ -181,13 +328,13 @@ const AddressUpload = () => {
                   </div>
                   <div className="open-gallery">
                     <input
-                      ref={galleryFrontDoc}
+                      ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
                       onChange={handleChange('front')}
                     />
                     <button
-                      onClick={handleUpload(galleryFrontDoc)}
+                      onClick={handleUpload('front')}
                       className="kyc-upload-button"
                     >
                       {!frontDoc && (
@@ -210,11 +357,11 @@ const AddressUpload = () => {
               </div>
             </div>
           )}
-          {!getConfig().isMobileDevice && (
+          {isWeb && (
             <div className="kyc-doc-upload-container">
-              {frontDoc && (
+              {frontDoc && state.frontFileShow && (
                 <img
-                  src={URL.createObjectURL(backDoc)}
+                  src={state.frontFileShow}
                   className="preview"
                   alt="Uploaded PAN Card"
                   onLoad={handleImageLoad}
@@ -222,18 +369,18 @@ const AddressUpload = () => {
               )}
               {!frontDoc && (
                 <div className="caption">
-                  Upload front side of Address Document
+                  Upload front side of {addressProof}
                 </div>
               )}
               <div className="kyc-upload-doc-actions">
                 <input
-                  ref={galleryBackDoc}
+                  ref={frontDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('back')}
+                  onChange={handleChange('front')}
                 />
                 <button
-                  onClick={handleUpload(galleryBackDoc)}
+                  onClick={handleUpload('front')}
                   className="kyc-upload-button"
                 >
                   {!frontDoc && (
@@ -254,11 +401,11 @@ const AddressUpload = () => {
               </div>
             </div>
           )}
-          {getConfig().isMobileDevice && !onlyFrontDocRequired && (
+          {!isWeb && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
-              {backDoc && (
+              {backDoc && state.backFileShow && (
                 <img
-                  src={URL.createObjectURL(backDoc)}
+                  src={state.backFileShow}
                   className="preview"
                   alt="Uploaded PAN Card"
                   onLoad={handleImageLoad}
@@ -266,14 +413,14 @@ const AddressUpload = () => {
               )}
               {!backDoc && (
                 <div className="caption">
-                  Upload front side of Address Document
+                  Upload back side of {addressProof}
                 </div>
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
                   <div className="open-camera">
                     <input
-                      ref={cameraBackDoc}
+                      ref={backDocRef}
                       type="file"
                       className="kyc-upload"
                       onChange={handleChange('back')}
@@ -282,7 +429,7 @@ const AddressUpload = () => {
                     />
                     <button
                       data-click-type="camera-front"
-                      onClick={handleUpload(cameraBackDoc)}
+                      onClick={handleUpload('back')}
                       className="kyc-upload-button"
                     >
                       {!backDoc && (
@@ -303,13 +450,13 @@ const AddressUpload = () => {
                   </div>
                   <div className="open-gallery">
                     <input
-                      ref={galleryBackDoc}
+                      ref={backDocRef}
                       type="file"
                       className="kyc-upload"
                       onChange={handleChange('back')}
                     />
                     <button
-                      onClick={handleUpload(galleryBackDoc)}
+                      onClick={handleUpload('back')}
                       className="kyc-upload-button"
                     >
                       {!backDoc && (
@@ -332,28 +479,30 @@ const AddressUpload = () => {
               </div>
             </div>
           )}
-          {!getConfig().isMobileDevice && !onlyFrontDocRequired && (
+          {isWeb && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
-              {backDoc && (
+              {backDoc && state.backFileShow && (
                 <img
-                  src={URL.createObjectURL(backDoc)}
+                  src={state.backFileShow}
                   className="preview"
-                  alt="Uploaded PAN Card"
+                  alt="Uploaded Addres  s Document"
                   onLoad={handleImageLoad}
                 />
               )}
               {!backDoc && (
-                <div className="caption">Back side of Address Document</div>
+                <div className="caption">
+                  Upload back side of {addressProof}
+                </div>
               )}
               <div className="kyc-upload-doc-actions">
                 <input
-                  ref={galleryBackDoc}
+                  ref={backDocRef}
                   type="file"
                   className="kyc-upload"
                   onChange={handleChange('back')}
                 />
                 <button
-                  onClick={handleUpload(galleryBackDoc)}
+                  onClick={handleUpload('back')}
                   className="kyc-upload-button"
                 >
                   {!backDoc && (
@@ -376,6 +525,7 @@ const AddressUpload = () => {
           )}
         </section>
       )}
+      {/* {!isEmpty(file) && <img src={URL.createObjectURL(file)} alt="preview" />} */}
     </Container>
   )
 }

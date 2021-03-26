@@ -122,3 +122,39 @@ export const getCampaign = async () => {
       throw result.error || result.message || genericErrMsg
   }
 }
+
+export const getbankInvestment = async (data) => {
+  const res = await Api.get(data.url)
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrMsg
+  }
+  const { result, status_code: status } = res.pfwresponse
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrMsg
+  }
+}
+
+export const verifyCode = async (data) => {
+  const res = await Api.get(apiConstants.verifyCode, data)
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrMsg
+  }
+  const { result, status_code: status } = res.pfwresponse
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrMsg
+  }
+}

@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import Container from '../../../common/Container'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -106,13 +106,12 @@ const FundType = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      helpContact
-      hideInPageTitle
-      title="Explore All Mutual Funds"
+      hidePageTitle
+      title={props.match.params?.type || ""}
       classOverRideContainer="pr-container"
     >
       <section id="invest-explore-fund-type">
-        <h6 className="heading">Top trending {type} funds</h6>
+        <h6 className="heading top-title">Top trending {type} funds</h6>
         <div className="scroll">
           {trendingFunds[type]?.map((fund, idx) => (
             <TrendingCard key={idx} cart={cart} setCart={setCart} type={type} {...fund} parentProps={props} />
