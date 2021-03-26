@@ -86,7 +86,7 @@ class DigiStatus extends Component {
           status === 'success' ? 'eSign KYC completed' : 'eSign KYC failed'
         }
         handleClick={status === 'success' ? this.handleClick : this.retry}
-        buttonTitle="OKAY"
+        buttonTitle={status === 'success' ? 'OKAY' : 'RETRY E-SIGN'}
         headerData={headerData}
       >
         {/* <div className="nsdl-status">
@@ -106,12 +106,12 @@ class DigiStatus extends Component {
           }
         </div> */}
         {status === 'success' ? (
+          <Complete />
+        ) : (
           <Fragment>
             <Failed />
             <ContactUs />
           </Fragment>
-        ) : (
-          <Complete />
         )}
         {/* <ContactUs /> */}
       </Container>
