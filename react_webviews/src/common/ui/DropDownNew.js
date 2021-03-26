@@ -1,9 +1,8 @@
-import React, { useCallback, useRef } from 'react'
+import React from 'react'
 import { findDOMNode } from 'react-dom';
 import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
-import { isMobile } from 'utils/functions';
 import './style.scss';
 class SelectDropDown2 extends React.Component {
   constructor(props) {
@@ -34,24 +33,14 @@ class SelectDropDown2 extends React.Component {
     });
   }
 
-  handleFocus = element => {
-    // if (this.state.value) {
-    //   this.select.state.inputValue = this.state.value.label;
-    // }
-  };
-
-
   handleMenuClose = () => {
-    // this.select.blur();
     this.setState({ shrink: false })
-    enableBodyScroll(targetElement);
     window.removeEventListener('resize', this.determineDropUp);
     window.removeEventListener('scroll', this.determineDropUp);
   };
 
   onMenuOpen = () => {
-    this.setState({ shrink: true })
-    disableBodyScroll(targetElement);
+    this.setState({ shrink: true }) 
     this.determineDropUp(this.props);
     window.addEventListener('resize', this.determineDropUp);
     window.addEventListener('scroll', this.determineDropUp);
@@ -77,18 +66,6 @@ class SelectDropDown2 extends React.Component {
       , value: selectedOption, inputValue: selectedOption ? selectedOption.label : ""
     })
     this.props.onChange(selectedOption ? selectedOption.value : '');
-
-    // if (selectedOption) {
-    //   if (selectedOption.value && (selectedOption.value + "").length) {
-    //     this.props.onChange(selectedOption.value);
-    //     // eslint-disable-next-line
-    //   } else if (selectedOption && selectedOption.label && selectedOption.value && (!!selectedOption.value + "").length || selectedOption && selectedOption.isArray) {
-    //     this.props.onChange(selectedOption.label);
-    //   }
-    // } 
-    // else {
-    //   this.props.onChange('');
-    // }
   }
 
 
@@ -127,7 +104,7 @@ class SelectDropDown2 extends React.Component {
             ref={element => {
               if (element && isLableOpen) {
                 element.style.setProperty('margin-top', '6px', 'important');
-                element.style.setProperty('margin-left', '13px', 'important');
+                element.style.setProperty('margin-left', '11px', 'important');
               } else if (element && !isLableOpen) {
                 element.style.setProperty('margin-top', '-7px', 'important');
                 element.style.setProperty('margin-left', '12px', 'important');
@@ -142,24 +119,15 @@ class SelectDropDown2 extends React.Component {
             {this.props.label}</div></InputLabel>)}
           <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
             <Select
-              // ref={ref => { this.select = ref }}
               ref={inst => (this.selectInst = inst)}
               blurInputOnSelect={false}
               onBlurResetsInput={true}
               openMenuOnClick={true}
-              onInputChange={value => {
-                this.selectInst.select.getNextFocusedOption = () => null
-              }}
               className='react-select-container'
               classNamePrefix="react-select"
-              // menuShouldBlockScroll={true}
               // menuPosition="fixed"
               // portalPlacement="auto"
-
               // defaultValue={value}
-              // isDisabled={this.state.isLoading}
-              // isLoading={this.state.isLoading}
-              // onCreateOption={this.handleCreate}
               onFocus={this.onMenuOpen}
               getOptionLabel={option => option.name}
               getOptionValue={option => option.value}
@@ -170,7 +138,8 @@ class SelectDropDown2 extends React.Component {
               isSearchable={this.props.options.length <= 6 ? false : true}
               value={value || ''}
               menuPlacement={this.state.dropUp ? 'top' : 'bottom'}
-              menuPortalTarget={document.querySelector('body')}
+              // menuPortalTarget={document.getElementById('root')}
+              // document.querySelector('body')
               textFieldProps={{
                 label: 'Label',
                 InputLabelProps: {
@@ -298,10 +267,6 @@ const ClearIndicator = (props) => {
   );
 }
 
-const bodyScrollLock = require('body-scroll-lock');
-const disableBodyScroll = bodyScrollLock.disableBodyScroll;
-const enableBodyScroll = bodyScrollLock.enableBodyScroll;
-const targetElement = document.getElementById('root');
 const MAX_MENU_HEIGHT = 256;
 const AVG_OPTION_HEIGHT = 41;
 const ErrorMessageStyle = {

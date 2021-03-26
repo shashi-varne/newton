@@ -950,36 +950,19 @@ body[data-device="mobile"] {
 .label{
   position: relative;
 }
-//-------------------------------------------------------------------------------------------------
 
-
-.css-2b097c-container{
+.react-select-container{
   border: none !important;
   border-bottom: 1px solid #D6D6D6 !important;
 }
-.css-yk16xz-control{
-  background: rgba(238, 238, 238, 0.3) !important;
-  min-height: 51px !important;
-  border: none !important;
-}
-.css-1pahdxg-control{  // for the Box DrodownBox hover
+.react-select__control{
   background: rgba(238, 238, 238, 0.3) !important;
   min-height: 51px !important;
   border: none !important;
   box-shadow: none !important;
-  // border-bottom: 1px solid #4F2DA7 !important;
   border-radius: 0px !important;
 }
-.css-1n7v3ny-option{
-  display: flex !important;  
-  align-items: flex-start;
-  background-color: white !important;
-  font-size: 13px !important;
-  line-height: 21px;
-  color: #161A2E !important;
-  min-height: 41px !important;
-}
-.css-yt9ioa-option{
+.react-select__option{
   align-items: flex-start;
   font-size: 13px !important;
   // font-weight: normal;
@@ -989,8 +972,9 @@ body[data-device="mobile"] {
   display: flex !important;
   align-items: flex-start;
 }
-.css-1uccc91-singleValue{
+.react-select__single-value{
   margin-top: 2px !important;
+  margin-left: 0 !important;
   font-size: 13px;
   line-height: 21px;
   display: inline-block !important;
@@ -998,10 +982,10 @@ body[data-device="mobile"] {
   position: absolute;
   left: 10px;
 }
- .css-g1d714-ValueContainer .css-1uccc91-singleValue{
+ .react-select__value-container .react-select__single-value{
   flex-direction: row !important;
 }
-.css-g1d714-ValueContainer{
+.react-select__value-container{
   margin-top: 8px;
   font-size: 13px;
   line-height: 21px;
@@ -1022,31 +1006,17 @@ body[data-device="mobile"] {
   top: auto;
   bottom: 100%;
 }
-.css-b8ldur-Input{
-  margin: 4px !important;
-  margin-top: 8px !important;
+.react-select__input{
+  padding: 0 !important;
+  margin-top: 5px !important;
 }
-.css-1rhbuit-multiValue {  //Multi-select Box Container:
+.css-1rhbuit-multiValue {
   background: rgba(238, 238, 238, 0.3) !important;
   margin-top: 12px !important;
   border: 1px solid #D6D6D6;
   height: 18px !important;
   line-height: 17px !important;
   font-size: 13px !important;
-}
-.css-12jo7m5{  // Content Box
-  padding: 0 !important;
-  margin-left: 4px ;
-}
-.css-26l3qy-menu{
-  margin-top: 2px !important;
-  margin-bottom: 0px !important;
-  // height: 100px !important;
-}
-#react-select-2-input{
-  font-size: 13px !important;
-  line-height: 21px;
-  color: #161A2E !important;
 }
 .css-xb97g8{
   margin-top: 3px;
@@ -1062,12 +1032,17 @@ body[data-device="mobile"] {
   color: #767E86 !important;
   padding: 0 !important;
 }
-.css-gg45go-NoOptionsMessage, .css-1gl4k7y{
+.react-select__menu-notice{
   text-align:left !important;
   color: #767E86 !important;
   font-size: 13px !important;
   padding-top: 13px !important;
   height: 41px !important;
+}
+.react-select__menu{
+  margin: 0 !important;
+  margin-top: 3px !important;
+  border-radius: 0 0 4px 4px !important;
 }
 .MuiInputLabel-shrink{
   font-size: 11px !important;
@@ -1078,6 +1053,6 @@ label{
 .MuiFormLabel-root {
   line-height: 2 !important;
 }
-.css-1hb7zxy-IndicatorsContainer{
+.react-select__indicators{
 padding-right: 14px !important;
 }
