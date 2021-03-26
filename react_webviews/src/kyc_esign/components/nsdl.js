@@ -1,9 +1,16 @@
-import React, { Component } from 'react';
-import Container from '../common/Container';
-import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
-import { getUrlParams } from 'utils/validators';
-import ContactUs from '../../common/components/contact_us';
+import React, { Fragment, Component } from "react";
+import Container from "../common/Container";
+import { nativeCallback } from "utils/native_callback";
+import { getConfig } from "utils/functions";
+import { getUrlParams } from "utils/validators";
+import ContactUs from "../../common/components/contact_us";
+import Failed from "./failed";
+import Complete from "./complete";
+import toast from "../../common/ui/Toast";
+import Api from "../../utils/api";
+import { getUserKycFromSummary } from "../../kyc/common/api";
+import { storageService } from "../../utils/validators";
+import { isEmpty } from "../../utils/validators";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -11,35 +18,125 @@ class DigiStatus extends Component {
     this.state = {
       show_loader: false,
       productName: getConfig().productName,
-      params: getUrlParams()
-    }
+      params: getUrlParams(),
+      skelton: true,
+    };
   }
+
+  componentDidMount = () => {
+    this.initialize();
+  };
+
+  initialize = async () => {
+    await getUserKycFromSummary();
+    const kyc = storageService().getObject("kyc");
+    const user = storageService().getObject("user");
+    let dl_flow = false;
+    let show_note = false;
+    if (!isEmpty(kyc) && !isEmpty(user)) {
+      if (
+        kyc.kyc_status !== "compliant" &&
+        !kyc.address.meta_data.is_nri &&
+        kyc.dl_docs_status !== "" &&
+        kyc.dl_docs_status !== "init" &&
+        kyc.dl_docs_status !== null
+      ) {
+        dl_flow = true;
+      }
+
+      if (
+        user.kyc_registration_v2 === "submitted" &&
+        kyc.sign_status === "signed" &&
+        kyc.bank.meta_data_status !== "approved"
+      ) {
+        show_note = true;
+      }
+    }
+
+    this.setState({ skelton: false, dl_flow, show_note });
+  };
+
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: getConfig().searchParams,
+    });
+  };
 
   handleClick = () => {
     // nativeCallback({ action: 'exit_web' });
-    this.props.history.push({
-      pathname: '/invest',
-      search:  getConfig().searchParams
-    })
-  }
+    this.navigate("/invest");
+  };
+
+  navigateToReports = () => {
+    this.navigate("/kyc/report");
+  };
+
+  retry = async () => {
+    const redirectUrl = encodeURIComponent(
+      window.location.origin + "/kyc-esign/nsdl" + getConfig().searchParams
+    );
+
+    this.setState({ show_loader: "button" });
+
+    try {
+      let res = await Api.get(
+        `/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`
+      );
+      let resultData = res.pfwresponse.result;
+      if (resultData && !resultData.error) {
+        if (getConfig().app === "ios") {
+          nativeCallback({
+            action: "show_top_bar",
+            message: {
+              title: "eSign KYC",
+            },
+          });
+        }
+        nativeCallback({
+          action: "take_control",
+          message: {
+            back_text: "You are almost there, do you really want to go back?",
+          },
+        });
+        window.location.href = resultData.esign_link;
+      } else {
+        toast(
+          resultData.error || resultData.message || "Something went wrong",
+          "error"
+        );
+      }
+
+      this.setState({ show_loader: false });
+    } catch (err) {
+      this.setState({
+        show_loader: false,
+      });
+      toast("Something went wrong");
+    }
+  };
+
 
   render() {
-    const { show_loader, productName } = this.state;
+    let { show_loader, skelton, dl_flow, show_note } = this.state;
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
-      goBack: this.handleClick
-    }
+      goBack: this.handleClick,
+    };
 
     return (
       <Container
         showLoader={show_loader}
-        title={status === "success" ? 'eSign KYC completed' : 'eSign KYC failed'}
-        handleClick={this.handleClick}
-        buttonTitle='OKAY'
+        title={
+          status === "success" ? "eSign KYC completed" : "eSign KYC failed"
+        }
+        handleClick={status === "success" ? this.handleClick : this.retry}
+        buttonTitle={status === "success" ? "OKAY" : "RETRY E-SIGN"}
         headerData={headerData}
+        skelton={skelton}
       >
-        <div className="nsdl-status">
+        {/* <div className="nsdl-status">
           <img
             src={require(`assets/${productName}/ils_esign_${status}.svg`)}
             style={{ width: "100%" }}
@@ -54,8 +151,19 @@ class DigiStatus extends Component {
               Sorry! the eSign verification is failed. Please try again.
             </div>
           }
-        </div>
-        <ContactUs />
+        </div> */}
+        {status === "success" ? (
+          <Complete
+            navigateToReports={this.navigateToReports}
+            dl_flow={dl_flow}
+            show_note={show_note}
+          />
+        ) : (
+          <Fragment>
+            <Failed />
+            <ContactUs />
+          </Fragment>
+        )}
       </Container>
     );
   }

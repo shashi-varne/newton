@@ -207,7 +207,6 @@ const Home = (props) => {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
-      console.log(response)
       if (!response) return;
       let { result, status_code } = response;
       let { different_login, auth_ids} = result;

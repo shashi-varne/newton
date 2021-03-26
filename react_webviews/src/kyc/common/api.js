@@ -49,6 +49,7 @@ export const logout = async () => {
     const result = handleApi(res);
     if(result) {
       storageService().clear();
+      window.localStorage.clear();
       return result
     }
   } catch (err) {
