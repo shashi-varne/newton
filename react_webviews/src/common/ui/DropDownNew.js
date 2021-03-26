@@ -1,9 +1,13 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
 import { isMobile } from 'utils/functions';
 import './style.scss';
+
+const MAX_MENU_HEIGHT = 246;
+const AVG_OPTION_HEIGHT = 41;
 class SelectDropDown2 extends React.Component {
   constructor(props) {
     super(props);
@@ -12,9 +16,26 @@ class SelectDropDown2 extends React.Component {
       options: this.props.options,
       multi: this.props.multi,
       value: this.props.value,
+      dropUp: false,
     };
+    this.determineDropUp = this.determineDropUp.bind(this);
   }
 
+
+  determineDropUp(props = {}) {
+    const options = props.options || this.props.options || [];
+    const node = findDOMNode(this.selectInst);
+
+    if (!node) return;
+
+    const windowHeight = window.innerHeight;
+    const menuHeight = Math.min(MAX_MENU_HEIGHT, (options.length * AVG_OPTION_HEIGHT));
+    const instOffsetWithMenu = node.getBoundingClientRect().bottom + menuHeight;
+
+    this.setState({
+      dropUp: instOffsetWithMenu >= windowHeight,
+    });
+  }
 
   handleFocus = element => {
     // if (this.state.value) {
@@ -24,12 +45,17 @@ class SelectDropDown2 extends React.Component {
 
 
   handleMenuClose = () => {
-    this.select.blur();
+    // this.select.blur();
     this.setState({ shrink: false })
+    window.removeEventListener('resize', this.determineDropUp);
+    window.removeEventListener('scroll', this.determineDropUp);
   };
 
   onMenuOpen = () => {
     this.setState({ shrink: true })
+    this.determineDropUp(this.props);
+    window.addEventListener('resize', this.determineDropUp);
+    window.addEventListener('scroll', this.determineDropUp);
   }
 
   handleCreate = (inputValue) => {
@@ -74,12 +100,12 @@ class SelectDropDown2 extends React.Component {
   }
 
 
-  render() {
+  render() {                               
     let components;
     if (this.state.multi) {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
     } else {
-      components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator: () => null }
+      components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator: () => null,  }
     };
     const options = this.props.options.map((ele, index) => {
       if (ele.name) {
@@ -117,15 +143,16 @@ class SelectDropDown2 extends React.Component {
             {this.props.label}</div></InputLabel>)}
           <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
             <Select
-              ref={ref => {
-                this.select = ref;
-              }}
+              // ref={ref => { this.select = ref }}
+              ref={inst => (this.selectInst = inst)}
               blurInputOnSelect={false}
               onBlurResetsInput={true}
               openMenuOnClick={false}
-              menuShouldBlockScroll={true}
-              menuPosition="fixed"
-              portalPlacement="auto"
+
+              // menuShouldBlockScroll={true}
+              // menuPosition="fixed"
+              // portalPlacement="auto"
+
               // defaultValue={value}
               // isDisabled={this.state.isLoading}
               // isLoading={this.state.isLoading}
@@ -140,7 +167,7 @@ class SelectDropDown2 extends React.Component {
               isClearable={true}
               isSearchable={this.props.options.length <= 6 ? false : true}
               value={value || ''}
-              menuPlacement="auto"
+              menuPlacement={this.state.dropUp ? 'top' : 'bottom'}
               menuPortalTarget={document.querySelector('body')}
               textFieldProps={{
                 label: 'Label',
@@ -171,7 +198,12 @@ class SelectDropDown2 extends React.Component {
                   },
                   "::-webkit-scrollbar-thumb:hover": {
                     background: "#C4C4C4",
-                  }
+                  },
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                  marginTop: 0,
+                  borderRadius: '0px 0xp 4px 4px',
+                  maxHeight: '246px',
                 }),
                 option: (styles, { data, isDisabled, isFocused, isSelected }) => {
                   return {
@@ -186,6 +218,8 @@ class SelectDropDown2 extends React.Component {
                     padding: '10px',
                     paddingTop: '13px',
                     paddingLeft: '12px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
                     ':active': {
                       backgroundColor: "#EEEEEE"
                     }
@@ -244,11 +278,11 @@ const createOption = (label) => ({
 
 const DropdownIndicator = (props) => {
   return (
-      <components.DropdownIndicator {...props}>
-        <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 1L7 7L13 1" stroke="#767E86" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </components.DropdownIndicator>
+    <components.DropdownIndicator {...props}>
+      <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1L7 7L13 1" stroke="#767E86" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </components.DropdownIndicator>
   );
 };
 
