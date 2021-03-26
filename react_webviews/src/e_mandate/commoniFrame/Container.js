@@ -298,7 +298,7 @@ class Container extends Component {
         {/* Footer Block */}
 
       <div className='footer-iframe'>
-        {!this.props.noFooter && this.props.iframeIcon &&
+        {!this.props.noFooter &&
           <Footer
             iframe={true}
             fullWidthButton={this.props.fullWidthButton}  

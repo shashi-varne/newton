@@ -2,11 +2,9 @@ import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
-import restart from 'assets/restart_nav_icn.svg';
-import back_arrow from 'assets/back_white.svg';
-import close from 'assets/close_white.svg';
-import close_blue from 'assets/close_blue.svg';
-import back_blue from 'assets/back_blue.svg';
+import back_arrow from 'assets/back_arrow.svg';
+import close_icn from 'assets/close_icn.svg';
+import SVG from 'react-inlinesvg';
 import { getConfig } from 'utils/functions';
 
 const Header = ({ classes, width, goBack, resetpage, handleReset, disableBack }) => {
@@ -26,12 +24,20 @@ const Header = ({ classes, width, goBack, resetpage, handleReset, disableBack })
               width: '100%',
             }}
           >
-            <div onClick={goBack}>
-              {!disableBack && <img src={back_arrow} alt='back' style={{ cursor: 'pointer' }} />}
-              {(disableBack === true || disableBack === 'summary') && (
-                <img src={close} alt='close' style={{ cursor: 'pointer' }} />
+            <div onClick={goBack} style={{ cursor: 'pointer',marginLeft:"10px" }}>
+              {disableBack || disableBack === 'summary' ? (
+                <SVG
+                  preProcessor={(code) => code.replace(/fill=".*?"/g, (s) => 'fill=white')}
+                  src={close_icn}
+                />
+              ) : (
+                <SVG
+                  preProcessor={(code) => code.replace(/fill=".*?"/g, (s) => 'fill=white')}
+                  src={back_arrow}
+                />
               )}
             </div>
+
             <img
               src={require(`assets/finity/moneycontrol_logo.svg`)}
               className={classes.img}
@@ -45,14 +51,20 @@ const Header = ({ classes, width, goBack, resetpage, handleReset, disableBack })
                 alt=''
               />
             }
-            {resetpage && <img onClick={handleReset} alt='' width={20} src={restart} />}
           </div>
         </Toolbar>
       ) : (
-        <div onClick={goBack} style={{ marginLeft: '-7px' }}>
-          {!disableBack && <img src={back_blue} alt='back' style={{ cursor: 'pointer' }} />}
-          {(disableBack === true || disableBack === 'summary') && (
-            <img src={close_blue} alt='close' style={{ cursor: 'pointer' }} />
+        <div onClick={goBack}>
+          {disableBack || disableBack === 'summary' ? (
+            <SVG
+              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=#3792FC')}
+              src={close_icn}
+            />
+          ) : (
+            <SVG
+              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=#3792FC')}
+              src={back_arrow}
+            />
           )}
         </div>
       )}
@@ -109,6 +121,7 @@ const styles = function () {
         height: '60px',
         border: '1px solid white',
         paddingLeft: '3%',
+        justifyContent: 'center',
       },
       NavigateBeforeIcon: {
         color: '#3792FC',
