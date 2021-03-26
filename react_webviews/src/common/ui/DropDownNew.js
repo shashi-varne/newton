@@ -5,9 +5,6 @@ import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
 import { isMobile } from 'utils/functions';
 import './style.scss';
-
-const MAX_MENU_HEIGHT = 256;
-const AVG_OPTION_HEIGHT = 41;
 class SelectDropDown2 extends React.Component {
   constructor(props) {
     super(props);
@@ -47,12 +44,14 @@ class SelectDropDown2 extends React.Component {
   handleMenuClose = () => {
     // this.select.blur();
     this.setState({ shrink: false })
+    enableBodyScroll(targetElement);
     window.removeEventListener('resize', this.determineDropUp);
     window.removeEventListener('scroll', this.determineDropUp);
   };
 
   onMenuOpen = () => {
     this.setState({ shrink: true })
+    disableBodyScroll(targetElement);
     this.determineDropUp(this.props);
     window.addEventListener('resize', this.determineDropUp);
     window.addEventListener('scroll', this.determineDropUp);
@@ -296,6 +295,12 @@ const ClearIndicator = (props) => {
   );
 }
 
+const bodyScrollLock = require('body-scroll-lock');
+const disableBodyScroll = bodyScrollLock.disableBodyScroll;
+const enableBodyScroll = bodyScrollLock.enableBodyScroll;
+const targetElement = document.getElementById('root');
+const MAX_MENU_HEIGHT = 256;
+const AVG_OPTION_HEIGHT = 41;
 const ErrorMessageStyle = {
   lineHeight: '18px',
   fontSize: '11px',
