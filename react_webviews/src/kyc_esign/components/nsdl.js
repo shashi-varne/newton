@@ -8,6 +8,8 @@ import Failed from './failed'
 import Complete from './complete'
 import toast from '../../common/ui/Toast'
 import Api from '../../utils/api'
+import { getUserKycFromSummary } from '../../kyc/common/api'
+import { storageService } from '../../utils/validators'
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -16,15 +18,35 @@ class DigiStatus extends Component {
       show_loader: false,
       productName: getConfig().productName,
       params: getUrlParams(),
+      skelton: true,
     }
+  }
+
+  componentDidMount = () => {
+    this.initialize();
+  }
+
+  initialize = async() => {
+    await getUserKycFromSummary();
+    const kyc = storageService().getObject('kyc')
+    const user = storageService().getObject('user')
+    this.setState({skelton: false, kyc, user});
+  }
+
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: getConfig().searchParams,
+    })
   }
 
   handleClick = () => {
     // nativeCallback({ action: 'exit_web' });
-    this.props.history.push({
-      pathname: '/invest',
-      search: getConfig().searchParams,
-    })
+    this.navigate("/invest")
+  }
+
+  navigateToReports = () => {
+    this.navigate("/kyc/reports")
   }
 
   retry = async () => {
@@ -72,7 +94,7 @@ class DigiStatus extends Component {
   }
 
   render() {
-    const { show_loader, productName } = this.state
+    let { show_loader, skelton, kyc, user } = this.state
     const { status = 'failed' } = this.state.params
     const headerData = {
       icon: 'close',
@@ -88,6 +110,7 @@ class DigiStatus extends Component {
         handleClick={status === 'success' ? this.handleClick : this.retry}
         buttonTitle="OKAY"
         headerData={headerData}
+        skelton={skelton}
       >
         {/* <div className="nsdl-status">
           <img
@@ -111,7 +134,7 @@ class DigiStatus extends Component {
             <ContactUs />
           </Fragment>
         ) : (
-          <Complete />
+          <Complete navigateToReports={this.navigateToReports} kyc={kyc} user={user} />
         )}
         {/* <ContactUs /> */}
       </Container>
