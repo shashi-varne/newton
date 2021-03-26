@@ -5,7 +5,7 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { storageService, inrFormatDecimal2 } from 'utils/validators';
 import { gold_providers } from '../../constants';
 import {Imgc} from '../../../common/ui/Imgc';
@@ -116,12 +116,13 @@ class DeliveryOrder extends Component {
     this.setState({
       show_loader: true
     })
+    let basepath = getBasePath();
 
-    let nativeRedirectUrl = window.location.origin +
+    let nativeRedirectUrl = basepath +
       '/gold/' + this.state.provider + '/gold-delivery-order' + getConfig().searchParams;
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/gold/' + this.state.provider + '/delivery/payment' + getConfig().searchParams
+      basepath + '/gold/' + this.state.provider + '/delivery/payment' + getConfig().searchParams
     );
 
     var pgLink = this.state.redeem_body.payment_link;

@@ -222,7 +222,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if(name === 'weight'){
       value = event.target ? event.target.value.substr(0,3) : event;
-      if(parseInt(value, 10) <= 0) return;
+      // eslint-disable-next-line
+      if(parseInt(value) <= 0) return;
     }
 
     if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
