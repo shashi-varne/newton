@@ -1,114 +1,138 @@
-import React, { Fragment, Component } from 'react'
-import Container from '../common/Container'
-import { nativeCallback } from 'utils/native_callback'
-import { getConfig } from 'utils/functions'
-import { getUrlParams } from 'utils/validators'
-import ContactUs from '../../common/components/contact_us'
-import Failed from './failed'
-import Complete from './complete'
-import toast from '../../common/ui/Toast'
-import Api from '../../utils/api'
-import { getUserKycFromSummary } from '../../kyc/common/api'
-import { storageService } from '../../utils/validators'
+import React, { Fragment, Component } from "react";
+import Container from "../common/Container";
+import { nativeCallback } from "utils/native_callback";
+import { getConfig } from "utils/functions";
+import { getUrlParams } from "utils/validators";
+import ContactUs from "../../common/components/contact_us";
+import Failed from "./failed";
+import Complete from "./complete";
+import toast from "../../common/ui/Toast";
+import Api from "../../utils/api";
+import { getUserKycFromSummary } from "../../kyc/common/api";
+import { storageService } from "../../utils/validators";
+import { isEmpty } from "../../utils/validators";
 
 class DigiStatus extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       show_loader: false,
       productName: getConfig().productName,
       params: getUrlParams(),
       skelton: true,
-    }
+    };
   }
 
   componentDidMount = () => {
     this.initialize();
-  }
+  };
 
-  initialize = async() => {
+  initialize = async () => {
     await getUserKycFromSummary();
-    const kyc = storageService().getObject('kyc')
-    const user = storageService().getObject('user')
-    this.setState({skelton: false, kyc, user});
-  }
+    const kyc = storageService().getObject("kyc");
+    const user = storageService().getObject("user");
+    let dl_flow = false;
+    let show_note = false;
+    if (!isEmpty(kyc) && !isEmpty(user)) {
+      if (
+        kyc.kyc_status !== "compliant" &&
+        !kyc.address.meta_data.is_nri &&
+        kyc.dl_docs_status !== "" &&
+        kyc.dl_docs_status !== "init" &&
+        kyc.dl_docs_status !== null
+      ) {
+        dl_flow = true;
+      }
+
+      if (
+        user.kyc_registration_v2 === "submitted" &&
+        kyc.sign_status === "signed" &&
+        kyc.bank.meta_data_status !== "approved"
+      ) {
+        show_note = true;
+      }
+    }
+
+    this.setState({ skelton: false, dl_flow, show_note });
+  };
 
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams,
-    })
-  }
+    });
+  };
 
   handleClick = () => {
     // nativeCallback({ action: 'exit_web' });
-    this.navigate("/invest")
-  }
+    this.navigate("/invest");
+  };
 
   navigateToReports = () => {
-    this.navigate("/kyc/reports")
-  }
+    this.navigate("/kyc/report");
+  };
 
   retry = async () => {
     const redirectUrl = encodeURIComponent(
-      window.location.origin + '/kyc-esign/nsdl' + getConfig().searchParams
-    )
+      window.location.origin + "/kyc-esign/nsdl" + getConfig().searchParams
+    );
 
-    this.setState({ show_loader: 'button' })
+    this.setState({ show_loader: "button" });
 
     try {
       let res = await Api.get(
         `/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`
-      )
-      let resultData = res.pfwresponse.result
+      );
+      let resultData = res.pfwresponse.result;
       if (resultData && !resultData.error) {
-        if (getConfig().app === 'ios') {
+        if (getConfig().app === "ios") {
           nativeCallback({
-            action: 'show_top_bar',
+            action: "show_top_bar",
             message: {
-              title: 'eSign KYC',
+              title: "eSign KYC",
             },
-          })
+          });
         }
         nativeCallback({
-          action: 'take_control',
+          action: "take_control",
           message: {
-            back_text: 'You are almost there, do you really want to go back?',
+            back_text: "You are almost there, do you really want to go back?",
           },
-        })
-        window.location.href = resultData.esign_link
+        });
+        window.location.href = resultData.esign_link;
       } else {
         toast(
-          resultData.error || resultData.message || 'Something went wrong',
-          'error'
-        )
+          resultData.error || resultData.message || "Something went wrong",
+          "error"
+        );
       }
 
-      this.setState({ show_loader: false })
+      this.setState({ show_loader: false });
     } catch (err) {
       this.setState({
         show_loader: false,
-      })
-      toast('Something went wrong')
+      });
+      toast("Something went wrong");
     }
-  }
+  };
+
 
   render() {
-    let { show_loader, skelton, kyc, user } = this.state
-    const { status = 'failed' } = this.state.params
+    let { show_loader, skelton, dl_flow, show_note } = this.state;
+    const { status = "failed" } = this.state.params;
     const headerData = {
-      icon: 'close',
+      icon: "close",
       goBack: this.handleClick,
-    }
+    };
 
     return (
       <Container
         showLoader={show_loader}
         title={
-          status === 'success' ? 'eSign KYC completed' : 'eSign KYC failed'
+          status === "success" ? "eSign KYC completed" : "eSign KYC failed"
         }
-        handleClick={status === 'success' ? this.handleClick : this.retry}
-        buttonTitle="OKAY"
+        handleClick={status === "success" ? this.handleClick : this.retry}
+        buttonTitle={status === "success" ? "OKAY" : "RETRY E-SIGN"}
         headerData={headerData}
         skelton={skelton}
       >
@@ -128,18 +152,21 @@ class DigiStatus extends Component {
             </div>
           }
         </div> */}
-        {status === 'success' ? (
+        {status === "success" ? (
+          <Complete
+            navigateToReports={this.navigateToReports}
+            dl_flow={dl_flow}
+            show_note={show_note}
+          />
+        ) : (
           <Fragment>
             <Failed />
             <ContactUs />
           </Fragment>
-        ) : (
-          <Complete navigateToReports={this.navigateToReports} kyc={kyc} user={user} />
         )}
-        {/* <ContactUs /> */}
       </Container>
-    )
+    );
   }
 }
 
-export default DigiStatus
+export default DigiStatus;

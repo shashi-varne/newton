@@ -1,30 +1,8 @@
 import React from "react";
 import { getConfig } from "utils/functions";
-import { isEmpty } from "../../utils/validators";
 
-const Complete = ({ navigateToReports, kyc, user }) => {
+const Complete = ({ navigateToReports, dl_flow, show_note }) => {
   const productName = getConfig().productName;
-  let dl_flow = false;
-  let show_note = false;
-  if (!isEmpty(kyc) && !isEmpty(user)) {
-    if (
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
-      dl_flow = true;
-    }
-
-    if (
-      user.kyc_registration_v2 === "submitted" &&
-      kyc.sign_status === "signed" &&
-      kyc.bank.meta_data_status !== "approved"
-    ) {
-      show_note = true;
-    }
-  }
 
   return (
     <div className="kyc-esign-complete">
