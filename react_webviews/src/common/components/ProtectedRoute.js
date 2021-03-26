@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { initData } from "./kyc/services";
-import { storageService } from "./utils/validators";
+import { initData } from "../../kyc/services";
+import { storageService } from "utils/validators";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
-import UiSkelton from "./common/ui/Skelton";
+import UiSkelton from "../ui/Skelton";
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   let current_user = storageService().get("currentUser");
   let user = storageService().get("user") || {};
   let kyc = storageService().get("kyc") || {};
-  let show_loader =
-    current_user && !isEmpty(kyc) && !isEmpty(user) ? false : true;
+  let show_loader = current_user && !isEmpty(kyc) && !isEmpty(user) ? false : true;
   const [showLoader, setShowLoader] = useState(show_loader);
   const [showComponent, setShowComponent] = useState(!show_loader);
   const fetch = async () => {
     await initData();
-    console.log("inside the protected routes");
     current_user = storageService().get("currentUser");
     user = storageService().get("user") || {};
     kyc = storageService().get("kyc") || {};
@@ -55,4 +53,4 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     />
   );
 };
-export default ProtectedRoute
+export default ProtectedRoute;

@@ -1,6 +1,6 @@
 import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
-
+import toast from "../common/ui/Toast"
 const docMapper = {
   DL: 'Driving license',
   PASSPORT: 'Passport',
@@ -23,13 +23,22 @@ export async function getAccountSummary(params = {}) {
       referral: ['subbroker', 'p2p'],
     }
   }
-  const response = await Api.post(url, params)
-  if (
-    response?.pfwresponse?.status_code === 200
-  ) {
-    return response?.pfwresponse?.result
-  } else {
-    throw new Error(response.pfwresponse.result.message)
+  try {
+    const response = await Api.post(url, params);
+    if (
+      response.pfwstatus_code !== 200 ||
+      !response.pfwresponse ||
+      isEmpty(response.pfwresponse)
+    ) {
+      throw new Error( response?.pfwmessage || "Something went wrong!");
+    }
+    if (response?.pfwresponse?.status_code === 200) {
+      return response?.pfwresponse?.result;
+    } else {
+      throw new Error(response?.pfwresponse?.result?.message);
+    }
+  } catch (err) {
+    toast(err.message || "Something went wrong!");
   }
 }
 
@@ -59,6 +68,7 @@ export async function initData() {
         referral: ['subbroker', 'p2p'],
       }
       const result = await getAccountSummary(queryParams)
+      if(!result) return;
       storageService().set('dataSettedInsideBoot', true)
       setSDKSummaryData(result)
     }
@@ -73,6 +83,7 @@ export async function initData() {
       referral: ['subbroker', 'p2p'],
     }
     const result = await getAccountSummary(queryParams)
+    if(!result) return;
     storageService().set('dataSettedInsideBoot', true)
     setSummaryData(result)
   }
