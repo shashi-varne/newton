@@ -84,7 +84,7 @@ class DigiStatus extends Component {
     ) {
       if (dl_flow) {
         this.navigate("/kyc/journey", {
-          searchParams: `${getConfig().searchParams}&show_aadhar=true`,
+          searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
         });
       } else {
         this.navigate("/kyc/journey");
