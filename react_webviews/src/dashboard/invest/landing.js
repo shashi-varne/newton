@@ -37,12 +37,12 @@ class Landing extends Component {
   };
 
   addBank = () => {
-    this.navigate("/add-bank");
+    const userKyc = this.state.userKyc || {};
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
   };
 
   updateDocument = () => {
-    const userKyc = this.state.userKyc || {};
-    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+    this.navigate("/kyc/add-bank");
   };
 
   closeVerificationFailed = () => {
