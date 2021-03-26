@@ -11,6 +11,7 @@ import {
 import { ToastContainer } from 'react-toastify';
 import FundDetails from './components/FundDetails';
 import { themeConfig } from 'utils/constants';
+import { Fragment } from 'react';
 
 const theme = createMuiTheme(themeConfig);
 
@@ -24,14 +25,11 @@ const jss = create(jssPreset());
 const FundInfo = (props) => {
   const { url } = props.match;
   return (
-    <JssProvider jss={jss} generateClassName={generateClassName}>
-      <MuiThemeProvider theme={theme}>
-        <ToastContainer autoClose={3000} />
+        <Fragment>
         <Switch>
           <Route path={url} exact component={FundDetails} />
         </Switch>
-      </MuiThemeProvider>
-    </JssProvider>
+        </Fragment>
   );
 };
 

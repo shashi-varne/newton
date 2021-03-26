@@ -36,7 +36,7 @@ const FundDetails = ({ classes, history }) => {
   const [selectedIsin, setSelectedIsin] = useState(0);
   const productType = getConfig().productName;
   const [open, setOpen] = useState(false);
-  const iframe = isIframe() || true;
+  const iframe = isIframe();
   const isMobile = getConfig().isMobileDevice;
   const { isins, selected_isin } = getUrlParams();
 
@@ -102,7 +102,7 @@ const FundDetails = ({ classes, history }) => {
     );
     let openWebModule = getConfig().isWebCode;
     if(openWebModule) {
-      const url =  `http://localhost:3002/#!/diy/invest`;
+      const url =  `http://localhost:3002/#!/diy/invest`; // has to be removed
       console.log(url); 
       window.location.href = url;
     }
