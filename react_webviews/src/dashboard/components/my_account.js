@@ -141,9 +141,9 @@ class MyAccount extends Component {
     let bank = userKyc.bank || {};
     return (
       <Container
-        hideInPageTitle
+        hidePageTitle
         noFooter={true}
-        showLoader={this.state.showLoader}
+        skelton={this.state.showLoader}
         title="My Account"
       >
         <div className="my-account">

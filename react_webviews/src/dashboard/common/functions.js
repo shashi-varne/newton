@@ -281,11 +281,11 @@ export function getRedirectionUrlWebview(
 ) {
   let webRedirectionUrl = url;
   let is_secure = storageService().get("is_secure");
-  let plutus_redirect_url = window.location.href;
+  let plutus_redirect_url = `${window.location.origin}/`;
   if (redirect_path) {
     plutus_redirect_url += redirect_path;
   }
-  plutus_redirect_url += "?is_secure=" + is_secure;
+  plutus_redirect_url += `${getConfig().searchParams}&is_secure=${is_secure}`;
   plutus_redirect_url = encodeURIComponent(plutus_redirect_url);
   if (redirect_url) {
     webRedirectionUrl +=

@@ -269,9 +269,7 @@ class Register extends Component {
               </div>
             </div>
             <div className="footer" onClick={() => this.navigate("login")}>
-              <span href="#!/login">
-                EXISTING USER? <span>LOGIN</span>
-              </span>
+              EXISTING USER? <span>LOGIN</span>
             </div>
             <div className="agree-terms">
               By signing in, you agree to fisdom's{" "}

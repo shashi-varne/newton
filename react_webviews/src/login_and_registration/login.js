@@ -196,9 +196,7 @@ class Login extends Component {
             </div>
             {productName !== "finity" && (
               <div className="footer" onClick={() => this.navigate("register")}>
-                <span href="#!/register">
-                  NEW USER? <span>REGISTER</span>
-                </span>
+                NEW USER? <span>REGISTER</span>
               </div>
             )}
             {productName === "finity" && (
