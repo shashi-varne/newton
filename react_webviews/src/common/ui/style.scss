@@ -947,155 +947,9 @@ body[data-device="mobile"] {
   }
 }
 
-// --------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// .react-dropdown-select-option-label{
-//   height: 18px;
-//   color: black;
-//   display: inline-flex;
-//   align-items: center;
-//   white-space: nowrap;
-// }
-// .react-dropdown-select-option{
-//   border: 1px solid #D6D6D6;
-//   width: fit-content;
-//   height: 23px;
-//   padding-top: 1px !important;
-// }
-// .react-dropdown-select-option-remove{
-//   color: white;
-//   margin-left: 2px !important;
-//   margin-right: 1px !important;
-//   background-color: #D6D6D6;
-//   border-radius: 50%  !important;
-//   width: 17px !important;
-//   height: 19px !important;
-// }
-
-// .react-dropdown-select{
-//   background: rgba(238, 238, 238, 0.3) !important;
-//   min-height: 51px !important;
-//   border: none;
-// }
-
 .label{
   position: relative;
 }
-
-
-// .css-ge5lft-ReactDropdownSelect{
-//   border: none !important;
-//   border-bottom: 1px solid #D6D6D6 !important;
-// }
-
-// .react-dropdown-select-dropdown{
-//   display: flex;
-//   align-items: flex-start;
-// }
-
-// .react-dropdown-select-item{
-//   color: black !important;
-//   padding: 10px !important;
-//   width: 100%;
-// }
-
-// .react-dropdown-select-content{  
-//   font-size: 13px;
-//   margin-bottom: -25px;
-//   line-height: 21px;
-//   font-weight: normal;
-//   color: #161A2E;
-//   max-width: 80%;
-//   height: 33px !important;
-//   overflow-x: auto;
-//   overflow-y: hidden;
-//   display: inline-flex !important;
-//   flex-direction: column;
-//   align-content: flex-start
-// }
-
-// .react-dropdown-select-dropdown-handle{
-//   margin-right: 5px !important;
-//   position: absolute;
-//   max-height: 500px !important;
-//   right: 10px
-// }
-
-// .react-dropdown-select-input{
-//   font-size: 13px !important;
-//   font-weight: normal;
-//   line-height: 21px !important;
-//   color: #161A2E;
-//   margin-top: 5px;
-//   margin-left: 0px !important;
-// }
-
-// .react-dropdown-select-clear{
-//   position: absolute;
-//   right: 35px;
-//   color: black !important;
-//   margin-top: 5px !important;
-// }
-
-// .css-s60fer-OptionComponent{
-//   margin: 3px 0px 0px 5px !important;
-// }
-
-// .css-163mfpo-ItemComponent{
-//   background-color: white !important;
-//   color: #767E86 !important;
-// }
-
-// .colorbackground{
-//   display: flex;
-//   align-items: flex-start;
-//   padding: 10px;
-// }
-// .colorbackground2{
-//   background-color: #EEEEEE;
-//   color: #161A2E;
-//   width: 100%;
-// }
-
-// .css-ge5lft-ReactDropdownSelect:hover{
-//   border-bottom: 1px solid #D6D6D6 !important;;
-// }
-
-// .css-ge5lft-ReactDropdownSelect:focus-within {
-//   border-bottom: 1px solid #4F2DA7 !important;
-// }
-
-// .react-dropdown-select-type-single {
-//   display: inline-block !important;
-//   white-space: nowrap;
-//   overflow: hidden;
-//   margin-left: 5px;
-//   margin-top: -8px;
-//   font-size: 13px;
-//   line-height: 21px;
-// } 
-
-// ::-webkit-scrollbar {
-//   -webkit-appearance: none;
-// }
-// ::-webkit-scrollbar:vertical {
-//   width: 3px;
-// }
-// ::-webkit-scrollbar:horizontal {
-//   height: 3px;
-//   margin-top:  10px;
-//   overflow-x: hidden;
-// }
-// ::-webkit-scrollbar-thumb {
-//   background-color: #d8d8d8;
-//   border-radius: 1px;
-//   display: none; 
-// }
-// ::-webkit-scrollbar-track {
-//   border-radius: 10px;
-//   background-color: #ffffff;
-// }
-
 //-------------------------------------------------------------------------------------------------
 
 
@@ -1103,14 +957,11 @@ body[data-device="mobile"] {
   border: none !important;
   border-bottom: 1px solid #D6D6D6 !important;
 }
-
-
 .css-yk16xz-control{
   background: rgba(238, 238, 238, 0.3) !important;
   min-height: 51px !important;
   border: none !important;
 }
-
 .css-1pahdxg-control{  // for the Box DrodownBox hover
   background: rgba(238, 238, 238, 0.3) !important;
   min-height: 51px !important;
@@ -1119,8 +970,6 @@ body[data-device="mobile"] {
   // border-bottom: 1px solid #4F2DA7 !important;
   border-radius: 0px !important;
 }
-
-
 .css-1n7v3ny-option{
   display: flex !important;  
   align-items: flex-start;
@@ -1130,7 +979,6 @@ body[data-device="mobile"] {
   color: #161A2E !important;
   min-height: 41px !important;
 }
-
 .css-yt9ioa-option{
   align-items: flex-start;
   font-size: 13px !important;
@@ -1141,8 +989,6 @@ body[data-device="mobile"] {
   display: flex !important;
   align-items: flex-start;
 }
-
-
 .css-1uccc91-singleValue{
   margin-top: 2px !important;
   font-size: 13px;
@@ -1152,11 +998,9 @@ body[data-device="mobile"] {
   position: absolute;
   left: 10px;
 }
-
  .css-g1d714-ValueContainer .css-1uccc91-singleValue{
   flex-direction: row !important;
 }
-
 .css-g1d714-ValueContainer{
   margin-top: 8px;
   font-size: 13px;
@@ -1174,7 +1018,6 @@ body[data-device="mobile"] {
   flex-wrap: wrap;
   align-items: center;
 }
-
 .drop-up .Select-menu-outer {
   top: auto;
   bottom: 100%;
@@ -1183,7 +1026,6 @@ body[data-device="mobile"] {
   margin: 4px !important;
   margin-top: 8px !important;
 }
-
 .css-1rhbuit-multiValue {  //Multi-select Box Container:
   background: rgba(238, 238, 238, 0.3) !important;
   margin-top: 12px !important;
@@ -1196,19 +1038,16 @@ body[data-device="mobile"] {
   padding: 0 !important;
   margin-left: 4px ;
 }
-
 .css-26l3qy-menu{
   margin-top: 2px !important;
   margin-bottom: 0px !important;
   // height: 100px !important;
 }
-
 #react-select-2-input{
   font-size: 13px !important;
   line-height: 21px;
   color: #161A2E !important;
 }
-
 .css-xb97g8{
   margin-top: 3px;
   border-radius: 50% !important;
@@ -1223,30 +1062,22 @@ body[data-device="mobile"] {
   color: #767E86 !important;
   padding: 0 !important;
 }
-
 .css-gg45go-NoOptionsMessage, .css-1gl4k7y{
   text-align:left !important;
   color: #767E86 !important;
   font-size: 13px !important;
+  padding-top: 13px !important;
+  height: 41px !important;
 }
-
 .MuiInputLabel-shrink{
   font-size: 11px !important;
 }
-
 label{
   font-size: 13px !important;
 }
-
 .MuiFormLabel-root {
   line-height: 2 !important;
 }
-
 .css-1hb7zxy-IndicatorsContainer{
 padding-right: 14px !important;
 }
-// .css-nidneu-MenuList, .css-nidneu-MenuList, .css-feio4e-MenuList{
-//   padding-bottom : 0px !important;
-//   max-height: 246px !important;
-//   padding-top: 0px !important;
-// }
