@@ -1104,6 +1104,11 @@ $header-title-font-size: 20px;
   display: flex;
   flex-direction: column;
 }
+.flex-justify-center {
+  display: flex;
+  justify-content: center;
+}
+
 .generic-hr {
   border-top: 1px solid #ededed;
 }
