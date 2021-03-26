@@ -64,7 +64,10 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    // nativeCallback({ action: 'exit_web' });
+    /**
+     * Need to handle this
+     */
+    // nativeCallback({ action: 'exit_web' }); 
     this.navigate("/invest");
   };
 
@@ -116,7 +119,6 @@ class DigiStatus extends Component {
     }
   };
 
-
   render() {
     let { show_loader, skelton, dl_flow, show_note } = this.state;
     const { status = "failed" } = this.state.params;
@@ -132,7 +134,7 @@ class DigiStatus extends Component {
           status === "success" ? "eSign KYC completed" : "eSign KYC failed"
         }
         handleClick={status === "success" ? this.handleClick : this.retry}
-        buttonTitle={status === "success" ? "OKAY" : "RETRY E-SIGN"}
+        buttonTitle={status === "success" ? (dl_flow && !show_note ? "START INVESTING" : "OKAY") : "RETRY E-SIGN"}
         headerData={headerData}
         skelton={skelton}
       >
