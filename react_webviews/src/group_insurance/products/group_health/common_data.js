@@ -238,7 +238,9 @@ export async function initialize() {
                 { 'name': 'Total', 'value': inrFormatDecimal(total_amount) }
             ],
             title_left: individual_sum_insured, //sum_assured
-            title_right: tenure > 1 ? `${tenure} years` : `${tenure} year` //tenure
+            heading_left: 'Sum insured:',
+            title_right: tenure > 1 ? `${tenure} years` : `${tenure} year`, //tenure
+            heading_right: 'Cover period',
         }
         if(provider === 'RELIGARE') {
             if(lead.add_ons && !isEmpty(lead.add_ons)){
