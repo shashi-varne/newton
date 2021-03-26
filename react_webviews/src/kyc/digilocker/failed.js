@@ -5,6 +5,8 @@ import { navigate as navigateFunc } from "../common/functions";
 import Button from "@material-ui/core/Button";
 import AadhaarDialog from "../mini_components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { setKycType } from "../common/api";
+import toast from "common/ui/Toast";
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
@@ -17,9 +19,14 @@ const Failed = (props) => {
     setOpen(true);
   };
 
-  const manual = () => {
+  const manual = async () => {
     const navigate = navigateFunc.bind(props);
-    navigate("/kyc/journey");
+    try {
+      const result = setKycType("manual");
+      navigate("/kyc/journey", {state: {fromState: 'digilocker-failed'}});
+    } catch (err) {
+      toast(err.message);
+    }
   };
 
   const {kyc, isLoading} = useUserKycHook();

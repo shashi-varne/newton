@@ -719,6 +719,9 @@ export async function getNfoRecommendation() {
         cartCount: cartCount,
         showFunds: showFunds,
       });
+    }  else {
+      this.setState({ show_loader: false });
+      toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -748,6 +751,9 @@ export async function getNfoPurchaseLimit(data) {
         purchaseLimitData: purchaseLimitData,
         disableInputSummary: disableInputSummary,
       });
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -788,6 +794,9 @@ export async function getDiyPurchaseLimit(data) {
         purchaseLimitData: purchaseLimitData,
         // isDisabledFundCount: isDisabledFundCount,
       });
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -1222,6 +1231,10 @@ export function openKyc() {
   } else {
     if (kycJourneyStatus === "ground") {
       this.navigate("/kyc/home");
+    } else if (kycJourneyStatus === "ground_pan") {
+      this.navigate('/kyc/journey', { state: {
+        show_aadhaar: true, fromState: "invest" }
+      });
     } else {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },
