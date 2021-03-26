@@ -124,6 +124,8 @@ class SelectDropDown2 extends React.Component {
               onBlurResetsInput={true}
               openMenuOnClick={false}
               menuShouldBlockScroll={true}
+              menuPosition="fixed"
+              portalPlacement="auto"
               // defaultValue={value}
               // isDisabled={this.state.isLoading}
               // isLoading={this.state.isLoading}
@@ -242,11 +244,11 @@ const createOption = (label) => ({
 
 const DropdownIndicator = (props) => {
   return (
-    <components.DropdownIndicator {...props}>
-      <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M1 1L7 7L13 1" stroke="#767E86" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </components.DropdownIndicator>
+      <components.DropdownIndicator {...props}>
+        <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1L7 7L13 1" stroke="#767E86" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </components.DropdownIndicator>
   );
 };
 
