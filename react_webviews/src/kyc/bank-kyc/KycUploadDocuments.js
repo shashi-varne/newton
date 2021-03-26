@@ -8,6 +8,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig } from "../../utils/functions";
+import { getPathname } from "../constants";
 
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -103,11 +104,13 @@ const KycUploadDocuments = (props) => {
         if (isEdit) {
           navigate("/kyc/journey");
         } else {
-          navigate("/kyc/upload/sign", {
-            state: {
-              backToJourney: true,
-            },
-          });
+          if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+            navigate(getPathname.uploadSign, {
+              state: {
+                backToJourney: true,
+              },
+            });
+          } else navigate("/kyc/journey");
         }
       } else {
         if (dlFlow) {

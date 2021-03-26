@@ -139,12 +139,15 @@ const KycBankVerify = (props) => {
   const handleSuccess = () => {
     if (userType === "compliant") {
       if (isEdit) goToJourney();
-      else
-        navigate(getPathname.uploadSign, {
-          state: {
-            backToJorney: true,
-          },
-        });
+      else {
+        if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+          navigate(getPathname.uploadSign, {
+            state: {
+              backToJourney: true,
+            },
+          });
+        } else goToJourney();
+      }
     } else {
       if (dl_flow) {
         if (
