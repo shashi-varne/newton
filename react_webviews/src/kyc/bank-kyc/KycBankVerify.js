@@ -148,9 +148,10 @@ const KycBankVerify = (props) => {
     } else {
       if (dl_flow) {
         if (
-          kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
           kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed"
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+          kyc.pan.doc_status !== "approved"
         ) {
           navigate(getPathname.uploadPan);
         } else navigate(getPathname.kycEsign);

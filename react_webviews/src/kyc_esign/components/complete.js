@@ -1,7 +1,7 @@
 import React from 'react'
 import { getConfig } from 'utils/functions'
 
-const Complete = () => {
+const Complete = ({ }) => {
   const productName = getConfig().productName
   return (
     <div className="nsdl-status">

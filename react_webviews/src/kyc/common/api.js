@@ -49,6 +49,7 @@ export const logout = async () => {
     const result = handleApi(res);
     if(result) {
       storageService().clear();
+      window.localStorage.clear();
       return result
     }
   } catch (err) {
@@ -252,6 +253,22 @@ export const getIpvCode = async () => {
   const res = await Api.get(url)
   if (res.pfwresponse.status_code === 200) {
     return res.pfwresponse.result
+  }
+  throw new Error(
+    res?.pfwresponse?.result?.message ||
+      res?.pfwresponse?.result?.error ||
+      genericErrorMessage
+  )
+}
+
+export const setKycType = async (type) => {
+  const url = `api/kyc/user/set_kyc_type?kyc_type=${type}`;
+  const res = await Api.get(url);
+  if (res.pfwresponse.status_code === 200) {
+    const result = res.pfwresponse.result;
+    storageService().setObject('kyc', result.kyc);
+    storageService().setObject('user', result.user);
+    return result;
   }
   throw new Error(
     res?.pfwresponse?.result?.message ||

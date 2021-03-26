@@ -28,8 +28,8 @@ const Home = (props) => {
   const [authIds, setAuthIds] = useState({});
   const stateParams = props.match.state || {};
   const isPremiumFlow = stateParams.isPremiumFlow || false;
-
-  const {kyc, user, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
+  const [userName, setUserName] = useState('')
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -76,7 +76,7 @@ const Home = (props) => {
         "As per Govt norm. you need to do a one-time registration process to complete KYC.",
     },
     success: {
-      title: `Hey ${user.name},`,
+      title: `Hey ${userName},`,
       subtitle: "You’re investment ready and eligible for premium onboarding.",
     },
   };
@@ -97,6 +97,7 @@ const Home = (props) => {
       if (!isStartKyc) {
         if (skipApiCall) {
           setIsStartKyc(true);
+          setUserName(kyc?.pan?.meta_data?.name)
           if (kyc?.kyc_status === "compliant") {
             setIsUserCompliant(true);
             setButtonTitle("CONTINUE");
@@ -134,7 +135,8 @@ const Home = (props) => {
         accountMerge
       );
       if (isEmpty(result)) return;
-      setIsStartKyc(true);
+        setUserName(result.kyc.name);
+        setIsStartKyc(true);
       if (result?.kyc?.status) {
         setIsUserCompliant(true);
         setButtonTitle("CONTINUE");
