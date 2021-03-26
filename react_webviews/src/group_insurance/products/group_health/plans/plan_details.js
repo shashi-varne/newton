@@ -335,12 +335,13 @@ class GroupHealthPlanDetails extends Component {
                       plan_selected.recommedation_tag === "Recommended"
                         ? "#E86364"
                         : "",
+                    marginTop: this.state.provider === 'HDFCERGO' ? '18px'   : ''  
                   }}
                 >
                   {plan_selected.recommedation_tag}
                 </div>
               )}
-              <div className="copay-info">
+              <div className="copay-info" style={{marginTop: this.state.provider === 'STAR' ? '16px' : ''}}>
                 <div className="ci-left">
                   0% copay, assured 100% cashless treatment
                 </div>
