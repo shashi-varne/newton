@@ -36,7 +36,7 @@ const FundDetails = ({ classes, history }) => {
   const [selectedIsin, setSelectedIsin] = useState(0);
   const productType = getConfig().productName;
   const [open, setOpen] = useState(false);
-  const iframe = isIframe();
+  const iframe = isIframe() || true; // for testing
   const isMobile = getConfig().isMobileDevice;
   const { isins, selected_isin } = getUrlParams();
 
