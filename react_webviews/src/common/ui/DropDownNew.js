@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react'
 import { findDOMNode } from 'react-dom';
 import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
@@ -146,8 +146,12 @@ class SelectDropDown2 extends React.Component {
               ref={inst => (this.selectInst = inst)}
               blurInputOnSelect={false}
               onBlurResetsInput={true}
-              openMenuOnClick={false}
-
+              openMenuOnClick={true}
+              onInputChange={value => {
+                this.selectInst.select.getNextFocusedOption = () => null
+              }}
+              className='react-select-container'
+              classNamePrefix="react-select"
               // menuShouldBlockScroll={true}
               // menuPosition="fixed"
               // portalPlacement="auto"
@@ -156,10 +160,9 @@ class SelectDropDown2 extends React.Component {
               // isDisabled={this.state.isLoading}
               // isLoading={this.state.isLoading}
               // onCreateOption={this.handleCreate}
-              // onFocus={this.handleFocus}
+              onFocus={this.onMenuOpen}
               getOptionLabel={option => option.name}
               getOptionValue={option => option.value}
-              className={this.state.error ? "" : ''}
               onMenuOpen={this.onMenuOpen}
               onMenuClose={this.handleMenuClose}
               placeholder={''}
