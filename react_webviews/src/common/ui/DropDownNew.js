@@ -6,7 +6,7 @@ import { InputLabel } from 'material-ui/Input';
 import { isMobile } from 'utils/functions';
 import './style.scss';
 
-const MAX_MENU_HEIGHT = 246;
+const MAX_MENU_HEIGHT = 256;
 const AVG_OPTION_HEIGHT = 41;
 class SelectDropDown2 extends React.Component {
   constructor(props) {
