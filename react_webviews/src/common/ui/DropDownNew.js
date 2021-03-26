@@ -146,7 +146,7 @@ class SelectDropDown2 extends React.Component {
               ref={inst => (this.selectInst = inst)}
               blurInputOnSelect={false}
               onBlurResetsInput={true}
-              openMenuOnClick={false}
+              openMenuOnClick={true}
 
               // menuShouldBlockScroll={true}
               // menuPosition="fixed"
@@ -156,7 +156,7 @@ class SelectDropDown2 extends React.Component {
               // isDisabled={this.state.isLoading}
               // isLoading={this.state.isLoading}
               // onCreateOption={this.handleCreate}
-              // onFocus={this.handleFocus}
+              onFocus={this.onMenuOpen}
               getOptionLabel={option => option.name}
               getOptionValue={option => option.value}
               className={this.state.error ? "" : ''}
