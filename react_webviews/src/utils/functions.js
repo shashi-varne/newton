@@ -679,6 +679,7 @@ export const getConfig = () => {
   let searchParamsMustAppend = ``;
 
 
+  base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
   if(!base_url_default) {
     searchParams += getParamsMark(searchParams) + `base_url=${base_url}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `base_url=${base_url}`;
@@ -932,6 +933,13 @@ export function capitalize(string) {
   });
 }
 
+export function isIframe() {
+  if (window.top !== window.self) {
+    return true;
+  } else {
+    return false;
+  }
+}
 export function getBasePath() {
   var basename = window.sessionStorage.getItem('base_href') || '';
   if(basename && basename.indexOf('appl/webview') !== -1) {

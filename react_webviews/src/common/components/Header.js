@@ -48,12 +48,12 @@ const Header = ({ classes, title, count, total, current, goBack,
         </div>
       </div>
       {resetpage &&
-        <img onClick={handleReset}
-          alt=""
-          width={20}
-          src={restart}
-          style={{marginLeft: 'auto'}}
-        />
+        <SVG
+        style={{marginLeft: 'auto', width:20}}
+        onClick={handleReset}
+        preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
+        src={restart}
+      />
       }
       {topIcon === 'close' && <Close style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
     </Toolbar>
@@ -69,7 +69,7 @@ const styles = {
     textAlign: '-webkit-center'
   },
   menuButton: {
-    marginLeft: -12,
+    marginLeft: "-12px !important",
     // marginRight: 20,
   },
 };
