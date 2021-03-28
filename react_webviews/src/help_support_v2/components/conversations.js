@@ -33,7 +33,6 @@ class TicketConversations extends Component {
       splitIndex: 5,
       old_ticket_reference_id: '',
       fromTicket: '',
-      fromScreen: ''
     };
     this.initialize = initialize.bind(this);
     this.getTicketConversations = getTicketConversations.bind(this);
@@ -47,11 +46,9 @@ class TicketConversations extends Component {
 
   onload = async () => {
     let ticket = this.props.location.state.ticket;
-    let fromScreen = this.props.location.state.fromScreen || '';
 
     this.setState({
       ticket: ticket,
-      fromScreen: fromScreen,
       skelton: true,
     });
 
@@ -196,14 +193,9 @@ class TicketConversations extends Component {
   goBack = () => {
     this.sendEvents("back");
 
-    let { fromTicket, ticket, oldReferenceClicked, fromScreen } = this.state;
+    let { fromTicket, ticket, oldReferenceClicked } = this.state;
 
-    if (fromScreen) {
-      this.props.history.push(
-        { pathname: "send-query", search: getConfig().searchParams },
-        { ticket: this.state.ticket }
-      );
-    } else if (oldReferenceClicked) {
+    if (oldReferenceClicked) {
       ticket.ticket_id = fromTicket;
 
       this.setState({
@@ -231,7 +223,6 @@ class TicketConversations extends Component {
       skelton: true,
       oldReferenceClicked: true,
       fromTicket: fromTicket,
-      fromScreen: ''
     })
 
     this.onload();

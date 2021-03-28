@@ -181,13 +181,6 @@ class SendQuery extends Component {
     });
   };
 
-  redirectOldTicket = (ticket) => {
-    this.props.history.push(
-      { pathname: "conversation", search: getConfig().searchParams },
-      { ticket: ticket, fromScreen: 'send-query' }
-    );
-  };
-
   render() {
     let { ticket, category, sub_category, documents } = this.state;
 
@@ -209,7 +202,6 @@ class SendQuery extends Component {
           {ticket && (
             <div
               className="ticket-id"
-              onClick={() => this.redirectOldTicket(ticket)}
             >
               Old Ticket: {ticket.ticket_id}
             </div>
