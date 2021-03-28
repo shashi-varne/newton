@@ -14,20 +14,18 @@ class SelectDropDown2 extends React.Component {
       value: this.props.value,
       dropUp: false,
     };
+    this.myRef = React.createRef();
     this.determineDropUp = this.determineDropUp.bind(this);
   }
 
 
   determineDropUp(props = {}) {
     const options = props.options || this.props.options || [];
-    const node = findDOMNode(this.selectInst);
-
+    const node = findDOMNode( this.myRef);
     if (!node) return;
-
     const windowHeight = window.innerHeight;
     const menuHeight = Math.min(MAX_MENU_HEIGHT, (options.length * AVG_OPTION_HEIGHT));
     const instOffsetWithMenu = node.getBoundingClientRect().bottom + menuHeight;
-
     this.setState({
       dropUp: instOffsetWithMenu >= windowHeight,
     });
@@ -40,25 +38,11 @@ class SelectDropDown2 extends React.Component {
   };
 
   onMenuOpen = () => {
-    this.setState({ shrink: true }) 
+    this.setState({ shrink: true })
     this.determineDropUp(this.props);
     window.addEventListener('resize', this.determineDropUp);
     window.addEventListener('scroll', this.determineDropUp);
   }
-
-  handleCreate = (inputValue) => {
-    this.setState({ isLoading: true });
-    setTimeout(() => {
-      const { options } = this.state;
-      const newOption = createOption(inputValue);
-      this.setState({
-        isLoading: false,
-        options: [...options, newOption],
-        value: newOption
-      });
-    }, 1000);
-  };
-
 
   handleChange = selectedOption => {
     this.setState({
@@ -76,14 +60,14 @@ class SelectDropDown2 extends React.Component {
   }
 
 
-  render() {                               
+  render() {
     let components;
     if (this.state.multi) {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
     } else {
       components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator: () => null,  }
     };
-    const options = this.props.options.map((ele, index) => {
+    var options = this.props.options.map((ele, index) => {
       if (ele.name) {
         return ({
           'value': ele.value, 'name': ele.name
@@ -92,9 +76,8 @@ class SelectDropDown2 extends React.Component {
         'value': ele, 'name': ele
       })
     });
-
     const OptionPresent = this.state.selectedOption ? !!this.state.selectedOption.length : false
-    const value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
+    var value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     let isLableOpen = (!!value || (OptionPresent) || this.state.shrink) || (OptionPresent && this.props.multi);
     isLableOpen = !!isLableOpen;
     return (
@@ -119,19 +102,27 @@ class SelectDropDown2 extends React.Component {
             {this.props.label}</div></InputLabel>)}
           <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
             <Select
-              ref={inst => (this.selectInst = inst)}
+              ref={inst => (this.myRef = inst)}
               blurInputOnSelect={false}
               onBlurResetsInput={true}
               openMenuOnClick={true}
               className='react-select-container'
               classNamePrefix="react-select"
-              // menuPosition="fixed"
-              // portalPlacement="auto"
-              // defaultValue={value}
+              menuPosition="absolute"
+              defaultValue={value}
               onFocus={this.onMenuOpen}
               getOptionLabel={option => option.name}
               getOptionValue={option => option.value}
               onMenuOpen={this.onMenuOpen}
+              onMenuOpen={() => {
+                this.onMenuOpen
+                setTimeout(() => {
+                  this.myRef.select.scrollToFocusedOptionOnUpdate = true;
+                  this.myRef.select.setState({
+                    focusedOption: value
+                  });
+                }, 0);
+              }}
               onMenuClose={this.handleMenuClose}
               placeholder={''}
               isClearable={true}
@@ -139,6 +130,7 @@ class SelectDropDown2 extends React.Component {
               value={value || ''}
               menuPlacement={this.state.dropUp ? 'top' : 'bottom'}
               // menuPortalTarget={document.getElementById('root')}
+              // menuPortalTarget={document.getElementsByClassName("Container")[0]}
               // document.querySelector('body')
               textFieldProps={{
                 label: 'Label',
@@ -232,21 +224,12 @@ const Option = props => {
     </div>
   );
 };
-
 const MultiValue = props => (
   <components.MultiValue {...props}>
     <span>{props.data.name}</span>
   </components.MultiValue>
 );
 const Input = (props) => <components.Input {...props} isHidden={false} />;
-
-
-
-const createOption = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, "")
-});
-
 const DropdownIndicator = (props) => {
   return (
     <components.DropdownIndicator {...props}>
@@ -256,7 +239,6 @@ const DropdownIndicator = (props) => {
     </components.DropdownIndicator>
   );
 };
-
 const ClearIndicator = (props) => {
   return (
     <components.ClearIndicator {...props}>
@@ -266,7 +248,6 @@ const ClearIndicator = (props) => {
     </components.ClearIndicator>
   );
 }
-
 const MAX_MENU_HEIGHT = 256;
 const AVG_OPTION_HEIGHT = 41;
 const ErrorMessageStyle = {

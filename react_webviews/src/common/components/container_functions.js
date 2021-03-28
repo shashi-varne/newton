@@ -101,7 +101,7 @@ export function commonRender(props_base) {
     if (this.state.mounted) {
         return (
 
-   <div className={this.addContainerClass(props_base)}  style={{height: '300vh'}}>
+   <div className={this.addContainerClass(props_base)}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && <Header

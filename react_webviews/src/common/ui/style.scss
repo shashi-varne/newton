@@ -963,14 +963,15 @@ body[data-device="mobile"] {
   border-radius: 0px !important;
 }
 .react-select__option{
-  align-items: flex-start;
+  // padding-top: 13px !important;
+  // padding-left: 12px !important;
+  padding: 10px 0px 0px 12px !important;
   font-size: 13px !important;
-  // font-weight: normal;
   line-height: 21px !important;
   color: #161A2E !important;
   min-height: 41px !important;
   display: flex !important;
-  align-items: flex-start;
+  align-items: flex-start !important;
 }
 .react-select__single-value{
   margin-top: 2px !important;
@@ -1043,6 +1044,7 @@ body[data-device="mobile"] {
   margin: 0 !important;
   margin-top: 3px !important;
   border-radius: 0 0 4px 4px !important;
+  max-height: 246px !important;
 }
 .MuiInputLabel-shrink{
   font-size: 11px !important;
