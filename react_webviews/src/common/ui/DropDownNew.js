@@ -28,17 +28,18 @@ class SelectDropDown2 extends React.Component {
     const instOffsetWithMenu = node.getBoundingClientRect().bottom + menuHeight;
     this.setState({
       dropUp: instOffsetWithMenu >= windowHeight,
+      shrink: true
     });
   }
 
   handleMenuClose = () => {
-    this.setState({ shrink: false })
-    window.removeEventListener('resize', this.determineDropUp);
-    window.removeEventListener('scroll', this.determineDropUp);
-  };
+  this.setState({ shrink: false })
+  window.removeEventListener('resize', this.determineDropUp);
+  window.removeEventListener('scroll', this.determineDropUp);
+  this.myRef.select.blur()
+};
 
   onMenuOpen = () => {
-    this.setState({ shrink: true })
     this.determineDropUp(this.props);
     window.addEventListener('resize', this.determineDropUp);
     window.addEventListener('scroll', this.determineDropUp);
@@ -60,7 +61,7 @@ class SelectDropDown2 extends React.Component {
   }
 
 
-  render() {
+  render() { console.log(this, ' this ?')
     let components;
     if (this.state.multi) {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
@@ -113,15 +114,15 @@ class SelectDropDown2 extends React.Component {
               onFocus={this.onMenuOpen}
               getOptionLabel={option => option.name}
               getOptionValue={option => option.value}
-              onMenuOpen={this.onMenuOpen}
+              buildMenuOptions
+              autoBlur
               onMenuOpen={() => {
-                this.onMenuOpen
-                setTimeout(() => {
-                  this.myRef.select.scrollToFocusedOptionOnUpdate = true;
-                  this.myRef.select.setState({
-                    focusedOption: value
-                  });
-                }, 0);
+              setTimeout(() => { 
+              this.myRef.select.scrollToFocusedOptionOnUpdate = true;
+              this.myRef.select.setState({
+                  focusedOption: value,
+                });
+              }, 0);
               }}
               onMenuClose={this.handleMenuClose}
               placeholder={''}
