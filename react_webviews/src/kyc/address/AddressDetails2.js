@@ -15,7 +15,7 @@ import { validateNumber } from "utils/validators";
 
 const AddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const [form_data, setFormData] = useState({
     pincode: "",
   });
@@ -108,7 +108,8 @@ const AddressDetails2 = (props) => {
     const value = event.target.value;
     if (
       name === "pincode" &&
-      ((value && value.length > 6) || !validateNumber(value))
+      value &&
+      (value.length > 6 || !validateNumber(value))
     )
       return;
     let formData = { ...form_data };

@@ -7,9 +7,11 @@ import AadhaarDialog from "../mini_components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "common/ui/Toast";
+import DotDotLoaderNew from '../../common/ui/DotDotLoaderNew';
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
+  const [isApiRunning, setIsApiRunning] = useState(false);
 
   const close = () => {
     setOpen(false);
@@ -22,10 +24,13 @@ const Failed = (props) => {
   const manual = async () => {
     const navigate = navigateFunc.bind(props);
     try {
-      const result = setKycType("manual");
+      setIsApiRunning(true);
+      const result = await setKycType("manual");
       navigate("/kyc/journey", {state: {fromState: 'digilocker-failed'}});
     } catch (err) {
       toast(err.message);
+    } finally {
+      setIsApiRunning(false);
     }
   };
 
@@ -66,7 +71,14 @@ const Failed = (props) => {
               className="outlined"
               onClick={manual}
             >
-              CONTINUE WITH MANUAL KYC
+              {!isApiRunning && 'CONTINUE WITH MANUAL KYC'}
+              {isApiRunning && 
+                <div className="flex-justify-center">
+                  <DotDotLoaderNew
+                    styleBounce={{backgroundColor:'white'}}
+                  />
+                </div>
+              }
             </Button>
           </footer>
         )}

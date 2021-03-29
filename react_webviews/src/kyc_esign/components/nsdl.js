@@ -53,13 +53,13 @@ class DigiStatus extends Component {
       }
     }
 
-    this.setState({ skelton: false, dl_flow, show_note });
+    this.setState({ skelton: false, dl_flow, show_note, kyc });
   };
 
-  navigate = (pathname) => {
+  navigate = (pathname, data = {}) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams,
+      search: data?.searchParams || getConfig().searchParams,
     });
   };
 
@@ -67,7 +67,7 @@ class DigiStatus extends Component {
     /**
      * Need to handle this
      */
-    // nativeCallback({ action: 'exit_web' }); 
+    // nativeCallback({ action: 'exit_web' });
     this.navigate("/invest");
   };
 
@@ -76,6 +76,21 @@ class DigiStatus extends Component {
   };
 
   retry = async () => {
+    let { kyc, dl_flow } = this.state;
+    if (
+      kyc.application_status_v2 !== "init" &&
+      kyc.application_status_v2 !== "submitted" &&
+      kyc.application_status_v2 !== "complete"
+    ) {
+      if (dl_flow) {
+        this.navigate("/kyc/journey", {
+          searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+        });
+      } else {
+        this.navigate("/kyc/journey");
+      }
+      return;
+    }
     const redirectUrl = encodeURIComponent(
       window.location.origin + "/kyc-esign/nsdl" + getConfig().searchParams
     );
@@ -134,7 +149,13 @@ class DigiStatus extends Component {
           status === "success" ? "eSign KYC completed" : "eSign KYC failed"
         }
         handleClick={status === "success" ? this.handleClick : this.retry}
-        buttonTitle={status === "success" ? (dl_flow && !show_note ? "START INVESTING" : "OKAY") : "RETRY E-SIGN"}
+        buttonTitle={
+          status === "success"
+            ? dl_flow && !show_note
+              ? "START INVESTING"
+              : "OKAY"
+            : "RETRY E-SIGN"
+        }
         headerData={headerData}
         skelton={skelton}
       >
