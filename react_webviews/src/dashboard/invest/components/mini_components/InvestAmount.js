@@ -13,14 +13,16 @@ import {
   selectTitle,
 } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
+import { isArray } from 'lodash';
 
 import './style.scss';
+import { getConfig } from '../../../../utils/functions';
 const date = new Date();
 
 const InvestAmount = (props) => {
   const graphData = storageService().getObject('graphData');
   const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { investType, year, stockSplit, term, isRecurring, investTypeDisplay,...moreData } = graphData;
+  const { investType, year, stockSplit, term, isRecurring, investTypeDisplay, ...moreData } = graphData;
   const [amount, setAmount] = useState(graphData?.amount || '');
   const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
@@ -57,7 +59,7 @@ const InvestAmount = (props) => {
       setError(false);
     }
     if(goalRecommendation.itype !== 'saveforgoal'){
-
+      // ? Shouldn't this check be made even for 'parkmymoney'
       let result;
       if (investTypeDisplay === 'sip') {
         result = validateSipAmount(amount);
@@ -91,20 +93,43 @@ const InvestAmount = (props) => {
       const params = {
         amount,
         type: investType,
+        term: graphData?.term,
+        rp_enabled: getConfig().riskEnabledFunnels,
       };
       setLoader(true);
       if (investType === 'saveforgoal') {
         params.subtype = graphData?.subtype;
-        params.term = graphData?.term;
+        delete params.amount;
       } else if (investType === 'investsurplus') {
         graphData['term'] = 3;
-        params.term = 3; //  has to be modified (temp value)
+        params.term = 3; // TODO: Remove hardcoding later
       }
-      await get_recommended_funds(params);
-      storageService().setObject('graphData', { ...graphData, amount });
+      const data = await get_recommended_funds(params);
       setLoader(false);
-      navigate(`${goalRecommendation.id}/funds`, { ...graphData, amount });
+      
+      if (!data.recommendation) {
+        // RP enabled flow, when user has no risk profile
+        storageService().remove('userSelectedRisk');
+        if (data.msg_code === 0) {
+          navigate(`${goalRecommendation.id}/risk-select`);
+        } else if (data.msg_code === 1) {
+          navigate(`${goalRecommendation.id}/risk-select-skippable`);
+        }
+        return;
+      }
+      
+      storageService().setObject('graphData', {...graphData, ...data, amount});
+      
+      if (isArray(data.recommendation)) {
+        // RP enabled flow, when user has risk profile and recommendations fetched successfully
+        storageService().setObject('userSelectedRisk', data.rp_indicator);
+        navigate('recommendations');
+      } else {
+        // RP disabled flow
+        navigate(`${goalRecommendation.id}/funds`, { ...graphData, amount });
+      }
     } catch (err) {
+      console.log(err);
       setLoader(false);
       toast(err)
     }

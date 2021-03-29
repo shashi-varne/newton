@@ -1,0 +1,37 @@
+.fselect-container {
+  margin: 0 -15px 30px -20px;
+
+  .fselect-item {
+    font-size: 16px;
+    color: rgb(122, 118, 118);
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+
+    &.selected {
+      background: linear-gradient(to right, #f4f4f4, white);
+    }
+    
+    .fselect-item-content {
+      flex-basis: 90%;
+    }
+
+    .fselect-item-title {
+      color: #0a1c32;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+  
+    .fselect-selected-icon {
+      width: 14px;
+      margin: 4px 0 0 8px;
+      vertical-align: middle;
+    }
+  }
+
+}

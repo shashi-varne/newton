@@ -23,6 +23,7 @@ import Recommendations from "../Recommendation";
 import EditFunds from "../Recommendation/EditFunds"
 import AlternateFunds from "../Recommendation/ReplaceFunds"
 import Target from "./components/InvestGoal/component/Target";
+import RiskSelection from "./components/riskSelection/riskSelection";
 
 const Invest = (props) => {
   const { url } = props.match;
@@ -43,6 +44,15 @@ const Invest = (props) => {
       <Route path={`${url}/instaredeem/amount/:investType`} component={Amount} />
       <Route exact path={`${url}/savegoal`} component={InvestGoal} />
       <Route path={[`${url}/:type/amount`,`${url}/savegoal/:subtype/amount`]} component={InvestAmount} />
+      <Route path={`${url}/:type/risk-select`} component={RiskSelection} />
+      <Route
+        path={`${url}/:type/risk-select-skippable`}
+        render={(props) => <RiskSelection canSkip {...props} />}
+      />
+      <Route
+        path={`${url}/:type/risk-modify`}
+        render={(props) => <RiskSelection modifyRisk {...props} />}
+      />
       <Route path={`${url}/:type/funds`} component={InvestedAmount} />
       <Route exact path={`${url}/savegoal/:subtype`} component={GoalType} />
       <Route exact path={`${url}/savegoal/:subtype/target`} component={Target} />
