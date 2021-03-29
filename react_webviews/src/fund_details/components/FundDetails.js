@@ -38,7 +38,7 @@ const FundDetails = ({ classes, history }) => {
   const [open, setOpen] = useState(false);
   const iframe = isIframe();
   const isMobile = getConfig().isMobileDevice;
-  const { isins, selected_isin } = getUrlParams();
+  const { isins, selected_isin, type } = getUrlParams();
 
   useEffect(() => {
     (async () => {
@@ -93,7 +93,11 @@ const FundDetails = ({ classes, history }) => {
     setFundDetails(reports[el]);
   };
   const goBack = () => {
-    history.goBack();
+    if(type === 'diy'){
+      handleInvest();
+    } else {
+      history.goBack();
+    }
   };
 
   const handleInvest = () => {
@@ -427,7 +431,7 @@ const FundDetails = ({ classes, history }) => {
           noPadding
           fullWidthButton
           handleClick={goBack}
-          buttonTitle={productType === 'finity' ? 'INVEST' : 'OK'}
+          buttonTitle={type === 'diy' ? 'INVEST' : 'OK'}
           showLoader={isLoading}
           classOverRideContainer='fd-container'
         >
