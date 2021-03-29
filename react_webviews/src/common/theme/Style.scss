@@ -224,6 +224,10 @@ body[data-device="web"] {
  
 }
 
+body[data-device="web"] .Container {
+  z-index: 200;
+  position: relative;
+}
 .Container .container-padding {
   padding: 20px 15px;
 }
