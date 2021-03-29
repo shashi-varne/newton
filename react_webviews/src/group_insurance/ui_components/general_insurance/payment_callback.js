@@ -3,7 +3,7 @@ import Container from '../../common/Container';
 import '../../common/Style.css';
 import failed_fisdom from 'assets/error_illustration_fisdom.svg';
 import failed_myway from 'assets/error_illustration_myway.svg';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { insuranceStateMapper } from '../../constants';
 import Api from 'utils/api';
@@ -124,14 +124,14 @@ class PaymentCallbackClass extends Component {
 
       
       if (res2.pfwresponse.status_code === 200) {
-
-        let current_url =  window.location.origin + '/group-insurance/' + 
+        let basepath = getBasePath();
+        let current_url =  basepath + '/group-insurance/' + 
         insuranceStateMapper[this.props.parent.state.product_key] + '/summary' + getConfig().searchParams
 
         let nativeRedirectUrl = current_url;
 
         let paymentRedirectUrl = encodeURIComponent(
-          window.location.origin + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/payment'
+          basepath + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/payment'
         );
 
         var payment_link = res2.pfwresponse.result.payment_link;

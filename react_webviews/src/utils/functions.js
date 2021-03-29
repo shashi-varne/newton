@@ -679,6 +679,7 @@ export const getConfig = () => {
   let searchParamsMustAppend = ``;
 
 
+  base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
   if(!base_url_default) {
     searchParams += getParamsMark(searchParams) + `base_url=${base_url}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `base_url=${base_url}`;
