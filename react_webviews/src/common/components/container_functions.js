@@ -381,7 +381,6 @@ export function renderPopup() {
 
 export function renderGenericError() {
 
-
     let errorData = this.props.errorData || {};
     let { title1, title2, button_text1, button_text2,
         handleClick2, handleClick1 } = errorData;
@@ -472,6 +471,14 @@ export function renderGenericError() {
             //             {genericErrorActions()}
             //         </div>
 
+        //             {getConfig().project !== 'loan' && <div className="help" onClick={() => this.redirectToHelp()}>GET HELP</div>}
+        //             {genericErrorActions()}
+        //         </div>
+        //             </div>                    
+        //         </div>
+        //     </DialogContent>
+        // </Dialog >
+            
         );
     } if (this.props.showError === 'page') {
 
@@ -484,7 +491,7 @@ export function renderGenericError() {
 
                     <div className="title2 title2-page">{title2 || 'Sorry, we could not process your request'}</div>
 
-                    <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>
+                    {getConfig().project !== 'loan' && <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>}
                     {genericErrorActionsPage()}
                 </div>
             </div>
