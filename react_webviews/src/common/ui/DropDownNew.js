@@ -21,7 +21,7 @@ class SelectDropDown2 extends React.Component {
 
   determineDropUp(props = {}) {
     const options = props.options || this.props.options || [];
-    const node = findDOMNode( this.myRef);
+    const node = findDOMNode(this.myRef);
     if (!node) return;
     const windowHeight = window.innerHeight;
     const menuHeight = Math.min(MAX_MENU_HEIGHT, (options.length * AVG_OPTION_HEIGHT));
@@ -33,11 +33,11 @@ class SelectDropDown2 extends React.Component {
   }
 
   handleMenuClose = () => {
-  this.setState({ shrink: false })
-  window.removeEventListener('resize', this.determineDropUp);
-  window.removeEventListener('scroll', this.determineDropUp);
-  this.myRef.select.blur()
-};
+    this.setState({ shrink: false })
+    window.removeEventListener('resize', this.determineDropUp);
+    window.removeEventListener('scroll', this.determineDropUp);
+    this.myRef.select.blur()
+  };
 
   onMenuOpen = () => {
     this.determineDropUp(this.props);
@@ -46,9 +46,17 @@ class SelectDropDown2 extends React.Component {
   }
 
   handleChange = selectedOption => {
+    let OptionSelected = ''
+    if (selectedOption) {
+      if (selectedOption.value + '') {
+        OptionSelected = selectedOption.value
+      }
+      else {
+        OptionSelected = selectedOption
+      }
+    }
     this.setState({
-      selectedOption: selectedOption ? selectedOption.value ? selectedOption.value : selectedOption : ''
-      , value: selectedOption, inputValue: selectedOption ? selectedOption.label : ""
+      selectedOption: OptionSelected,
     })
     this.props.onChange(selectedOption ? selectedOption.value : '');
   }
@@ -66,7 +74,7 @@ class SelectDropDown2 extends React.Component {
     if (this.state.multi) {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
     } else {
-      components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator: () => null,  }
+      components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator: () => null, }
     };
     var options = this.props.options.map((ele, index) => {
       if (ele.name) {
@@ -77,8 +85,8 @@ class SelectDropDown2 extends React.Component {
         'value': ele, 'name': ele
       })
     });
-    const OptionPresent = this.state.selectedOption ? !!this.state.selectedOption.length : false
-    var value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
+    const OptionPresent = this.state.selectedOption ? !!this.state.selectedOption.length : false;// eslint-disable-next-line
+    var value = options.find(opt => opt.value == this.state.selectedOption || opt.name === this.state.selectedOption);
     let isLableOpen = (!!value || (OptionPresent) || this.state.shrink) || (OptionPresent && this.props.multi);
     isLableOpen = !!isLableOpen;
     return (
@@ -117,12 +125,12 @@ class SelectDropDown2 extends React.Component {
               buildMenuOptions
               autoBlur
               onMenuOpen={() => {
-              setTimeout(() => { 
-              this.myRef.select.scrollToFocusedOptionOnUpdate = true;
-              this.myRef.select.setState({
-                  focusedOption: value,
-                });
-              }, 0);
+                setTimeout(() => {
+                  this.myRef.select.scrollToFocusedOptionOnUpdate = true;
+                  this.myRef.select.setState({
+                    focusedOption: value,
+                  });
+                }, 0);
               }}
               onMenuClose={this.handleMenuClose}
               placeholder={''}
@@ -130,9 +138,6 @@ class SelectDropDown2 extends React.Component {
               isSearchable={this.props.options.length <= 6 ? false : true}
               value={value || ''}
               menuPlacement={this.state.dropUp ? 'top' : 'bottom'}
-              // menuPortalTarget={document.getElementById('root')}
-              // menuPortalTarget={document.getElementsByClassName("Container")[0]}
-              // document.querySelector('body')
               textFieldProps={{
                 label: 'Label',
                 InputLabelProps: {
