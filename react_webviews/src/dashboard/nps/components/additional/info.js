@@ -206,11 +206,6 @@ class NpsInfo extends Component {
                 monthly pension of the subscriber and the balance is paid as a
                 lump sum to the subscriber.
               </div>
-
-              {/* <!-- commenting obc specific nps flow obc_nps_flow -->
-              <!-- <p ng-if="partner.code == 'obc'">
-                d) Once invested in NPS, you won't be able to change pension fund house.
-              </div> --> */}
             </div>
           </div>
         )}
