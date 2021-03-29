@@ -149,7 +149,7 @@
   min-height: 1em;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   line-height: 1em;
-  color: #D0021B;
+  color: #f44336;
   position: relative;
   top: 5px;
 }
@@ -640,19 +640,12 @@ body[data-device="mobile"] {
   margin: 0 0 10px -10px;
 }
 
-
 .generic-bottomsheet {
   .top {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 0 0 10px 0;
-
-    .t-left {
-      margin: 0 15px 0 0;
-    }
-    .t-right {
-      margin: 0 0px 0 0;
-    }
   }
 
   div#alert-dialog-description {
@@ -660,22 +653,16 @@ body[data-device="mobile"] {
   }
 
   .header_title {
-    color: #160D2E;
-    font-size: 17px;
-    font-weight: bold;
-    line-height: 27px;
-    margin: 20px 0px 5px 0;
+    color: #0a1d32;
+    font-size: 16px;
+    font-weight: 600;
   }
 
   .content {
-    color: #767E86;
-    font-size: 13px;
-    line-height: 21px;
-    text-align: left;
-  }
-  .top-right-image {
-    width: 110px !important;
-    height: 75px !important;
+    color: #767e86;
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 400;
   }
 }
 
@@ -814,7 +801,7 @@ body[data-device="mobile"] {
   padding: 20px;
   margin: 20px 0 0 0;
   background: #fff;
-  height: auto;
+  height: 100%;
 
   .single-full-image-skelton {
     border-radius: 6px;
@@ -960,237 +947,35 @@ body[data-device="mobile"] {
   }
 }
 
-// --------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-.react-dropdown-select-option-label{
-  height: 18px;
-  color: black;
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-}
-.react-dropdown-select-option{
-  border: 1px solid #D6D6D6;
-  width: fit-content;
-  height: 23px;
-  padding-top: 1px !important;
-}
-.react-dropdown-select-option-remove{
-  color: white;
-  margin-left: 2px !important;
-  margin-right: 1px !important;
-  background-color: #D6D6D6;
-  border-radius: 50%  !important;
-  width: 17px !important;
-  height: 19px !important;
-}
-
-.react-dropdown-select{
-  background: rgba(238, 238, 238, 0.3) !important;
-  min-height: 51px !important;
-  border: none;
-}
-
 .label{
   position: relative;
 }
 
-.label2{
-  position: absolute;
-  font-size: 11px;
-  font-weight: normal;
-  line-height: 18px;
-  top: -2px;
-  left: 10px;
-  color: #767E86;
-}
-
- .label3{
-  margin-top: 18px;
-  position: absolute;
-  font-size: 13px;
-  line-height: 21px;
-}
-
-.css-ge5lft-ReactDropdownSelect{
+.react-select-container{
   border: none !important;
   border-bottom: 1px solid #D6D6D6 !important;
 }
-
-.react-dropdown-select-dropdown{
-  display: flex;
-  align-items: flex-start;
-}
-
-.react-dropdown-select-item{
-  color: black !important;
-  padding: 10px !important;
-  width: 100%;
-}
-
-.react-dropdown-select-content{  
-  font-size: 13px;
-  margin-bottom: -25px;
-  line-height: 21px;
-  font-weight: normal;
-  color: #161A2E;
-  max-width: 80%;
-  height: 33px !important;
-  overflow-x: auto;
-  overflow-y: hidden;
-  display: inline-flex !important;
-  flex-direction: column;
-  align-content: flex-start
-}
-
-.react-dropdown-select-dropdown-handle{
-  margin-right: 5px !important;
-  position: absolute;
-  max-height: 500px !important;
-  right: 10px
-}
-
-.react-dropdown-select-input{
-  font-size: 13px !important;
-  font-weight: normal;
-  line-height: 21px !important;
-  color: #161A2E;
-  margin-top: 5px;
-  margin-left: 0px !important;
-}
-
-.react-dropdown-select-clear{
-  position: absolute;
-  right: 35px;
-  color: black !important;
-  margin-top: 5px !important;
-}
-
-.css-s60fer-OptionComponent{
-  margin: 3px 0px 0px 5px !important;
-}
-
-.css-163mfpo-ItemComponent{
-  background-color: white !important;
-  color: #767E86 !important;
-}
-
-.colorbackground{
-  display: flex;
-  align-items: flex-start;
-  padding: 10px;
-}
-.colorbackground2{
-  background-color: #EEEEEE;
-  color: #161A2E;
-  width: 100%;
-}
-
-.css-ge5lft-ReactDropdownSelect:hover{
-  border-bottom: 1px solid #D6D6D6 !important;;
-}
-
-.css-ge5lft-ReactDropdownSelect:focus-within {
-  border-bottom: 1px solid #4F2DA7 !important;
-}
-
-.react-dropdown-select-type-single {
-  display: inline-block !important;
-  white-space: nowrap;
-  overflow: hidden;
-  margin-left: 5px;
-  margin-top: -8px;
-  font-size: 13px;
-  line-height: 21px;
-} 
-
-// ::-webkit-scrollbar {
-//   -webkit-appearance: none;
-// }
-// ::-webkit-scrollbar:vertical {
-//   width: 3px;
-// }
-// ::-webkit-scrollbar:horizontal {
-//   height: 3px;
-//   margin-top:  10px;
-//   overflow-x: hidden;
-// }
-// ::-webkit-scrollbar-thumb {
-//   background-color: #d8d8d8;
-//   border-radius: 1px;
-//   display: none; 
-// }
-// ::-webkit-scrollbar-track {
-//   border-radius: 10px;
-//   background-color: #ffffff;
-// }
-
-//-------------------------------------------------------------------------------------------------
-
-
-.css-2b097c-container{
-  border: none !important;
-  border-bottom: 1px solid #D6D6D6 !important;
-}
-
-
-.css-yk16xz-control{
-  background: rgba(238, 238, 238, 0.3) !important;
-  min-height: 51px !important;
-  border: none !important;
-}
-
-.css-1pahdxg-control{  // for the Box DrodownBox hover
+.react-select__control{
   background: rgba(238, 238, 238, 0.3) !important;
   min-height: 51px !important;
   border: none !important;
   box-shadow: none !important;
-  // border-bottom: 1px solid #4F2DA7 !important;
   border-radius: 0px !important;
 }
-
-.css-9gakcf-option{
- background-color: #EEEEEE !important;
- color: black !important;
- display: flex !important;
- align-items: flex-start;
- min-height: 41px !important;
- font-size: 13px !important;
- font-weight: normal;
- line-height: 21px !important;
- color: #161A2E;
-}
-
-.css-1n7v3ny-option{
-  display: flex !important;  
-  align-items: flex-start;
-  background-color: white !important;
+.react-select__option{
+  // padding-top: 13px !important;
+  // padding-left: 12px !important;
+  padding: 10px 0px 0px 10px !important;
   font-size: 13px !important;
-  line-height: 21px;
-  color: #161A2E !important;
-  min-height: 41px !important;
-}
-.css-1g6gooi{
-  margin-top: 6px !important;
-  font-size: 13px !important;
-  line-height: 21px;
-}
-
-.css-yt9ioa-option{
-  align-items: flex-start;
-  font-size: 13px !important;
-  // font-weight: normal;
   line-height: 21px !important;
   color: #161A2E !important;
   min-height: 41px !important;
   display: flex !important;
-  align-items: flex-start;
+  align-items: flex-start !important;
 }
-
-
-.css-1uccc91-singleValue{
+.react-select__single-value{
   margin-top: 2px !important;
-  margin-left: 0px !important;
+  margin-left: -1px !important;
   font-size: 13px;
   line-height: 21px;
   display: inline-block !important;
@@ -1198,26 +983,18 @@ body[data-device="mobile"] {
   position: absolute;
   left: 10px;
 }
-.MuiInputLabel-shrink{
-  margin-top: 8px !important;
-  font-size: 11px !important;
-  line-height: 18px !important;
-}
-
-
- .css-g1d714-ValueContainer .css-1uccc91-singleValue{
+ .react-select__value-container .react-select__single-value{
   flex-direction: row !important;
 }
-
-.css-g1d714-ValueContainer{
+.react-select__value-container{
+  margin-top: 8px;
   font-size: 13px;
   line-height: 21px;
   font-weight: normal;
   color: #161A2E;
   max-width: 80%;
   height: 33px !important;
-  overflow-x: auto !important;
-  overflow-y: hidden;
+  overflow: hidden;
   display: inline-flex !important;
   flex-direction: column;
   align-content: flex-start;
@@ -1226,39 +1003,23 @@ body[data-device="mobile"] {
   flex-wrap: wrap;
   align-items: center;
 }
-
 .drop-up .Select-menu-outer {
   top: auto;
   bottom: 100%;
 }
-.css-b8ldur-Input{
-  margin: 4px !important;
-  margin-top: 8px !important;
+.react-select__input{
+  padding: 0 !important;
+  margin-left: -1PX !important;
+  margin-top: 5px !important;
 }
-
-.css-1rhbuit-multiValue {  //Multi-select Box Container:
+.css-1rhbuit-multiValue {
   background: rgba(238, 238, 238, 0.3) !important;
-  margin-top: 8px !important;
+  margin-top: 12px !important;
   border: 1px solid #D6D6D6;
   height: 18px !important;
   line-height: 17px !important;
   font-size: 13px !important;
 }
-.css-12jo7m5{  // Content Box
-  padding: 0 !important;
-  margin-left: 4px ;
-}
-
-.css-26l3qy-menu{
-  margin-top: 2px !important;
-}
-
-#react-select-2-input{
-  font-size: 13px !important;
-  line-height: 21px;
-  color: #161A2E !important;
-}
-
 .css-xb97g8{
   margin-top: 3px;
   border-radius: 50% !important;
@@ -1273,94 +1034,28 @@ body[data-device="mobile"] {
   color: #767E86 !important;
   padding: 0 !important;
 }
-
-
-/********************  TEXT FEILD NEW DESIGN CHANGES  ***************/
-.MuiInput-root{
-  background: rgba(238, 238, 238, 0.3);
-  height: 53px !important;
-  }
-  
-  .MuiInput-underline:before {
-  background-color: #D6D6D6 !important;
-  height: 1px !important;
-  }
-  
-  .MuiInput-underline.MuiInput-error:after{
-  background-color: #D0021B !important;
-  }
-
-  .MuiFormLabel-root.MuiFormLabel-error{
-    color:  #D0021B !important;
-  }
-
-  .MuiFormHelperText-root.MuiFormHelperText-error{
-    color:  #D0021B !important;
-    font-size: 11px;
-    line-height: 18px;
-    margin-top: 2px;
-  }
-  
-  
-  .MuiInput-underline:after {
-  height: 1px !important;
-  }
-  
-  .MuiInput-underline:hover:not(.MuiInput-disabled):before {
-  background-color: #878787 !important;
-  height: 1px !important;
-  }
-  
-  .MuiInput-input{
-    padding-left:  10px !important;
-    color: #161A2E  !important;
-    font-size: 13px  !important;
-    padding-top: 14px !important;
-    line-height: 21px  !important;
-  }
-
-  .MuiFormLabel-root{
-    line-height: 0 !important;
-  }
- 
-  .MuiFormHelperText-error{
-  margin-left: 10px !important;
-  }
-  
-  label + .MuiInput-formControl {
-  margin-top: -10px !important;
-  }
-
-
-  .MuiInput-inputType{
-    height: 2.1875em !important;
-  }
-  .css-1hwfws3{
-    align-items: center;
-    display: inline-flex !important;
-    flex-direction: column;
-    align-content: flex-start;
-    overflow-x: auto !important;
-    height: 33px !important;
-  }
-  
-  .css-1hb7zxy-IndicatorsContainer{
-    margin-right: 14px !important;
-  }
-  .input-value{
-    margin-left: 10px;
-  }
-  
-  .MuiInputLabel-animated{
-    top: -8px !important;
-    left:10px !important;
-    font-size: 13px !important;
-  }
-  
-   /*----------------- Auto FILL Background Color  ----------------------*/
-  
-  input:-webkit-autofill {
-    -webkit-text-fill-color: transparent;
-    transition: background-color 5000s ease-in-out 0s;
-    -webkit-text-fill-color: rgb(51, 51, 51) !important;
-  } 
+.react-select__menu-notice{
+  text-align:left !important;
+  color: #767E86 !important;
+  font-size: 13px !important;
+  padding-top: 13px !important;
+  height: 41px !important;
+}
+.react-select__menu{
+  margin: 0 !important;
+  margin-top: 2px !important;
+  border-radius: 0 0 4px 4px !important;
+  max-height: 246px !important;
+}
+.MuiInputLabel-shrink{
+  font-size: 11px !important;
+}
+label{
+  font-size: 13px !important;
+}
+.MuiFormLabel-root {
+  line-height: 2 !important;
+}
+.react-select__indicators{
+padding-right: 14px !important;
+}

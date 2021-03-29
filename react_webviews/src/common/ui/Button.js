@@ -31,6 +31,30 @@ class CustomButton extends Component {
     }
 
     const { button: buttonClass, ...classes } = props.classes || {};
+
+      if(props.iframe){
+        return(
+          <div>
+          <Button
+            fullWidth={(props.reset || props.type === 'summary') ? true : false}
+            variant="raised"
+            size="large"
+            color="secondary"
+            style={{backgroundColor: getConfig().secondary, color: 'white', width: '310px' , height: '50px'}}
+            className={buttonClass}
+            classes={classes}
+            disabled={props.disable}
+          >
+            {props.buttonTitle}
+            {
+              props.arrow &&
+              <img alt="" src={arrow} width={20} className="FooterButtonArrow" />
+            }
+          </Button>
+        </div>
+        )
+      }
+
     if (props.twoButton && props.dualbuttonwithouticon) {
       return (
         <div className="FlexButton">

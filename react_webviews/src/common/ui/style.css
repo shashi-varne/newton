@@ -133,16 +133,16 @@
   height: auto;
 }
 .error-radiogrp {
-  margin: 0;
+  /* margin: 0; */
   font-size: 0.75rem;
   text-align: left;
-  margin-top: 8px;
+  /* margin-top: 8px; */
   min-height: 1em;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   line-height: 1em;
   color: #D0021B;
   position: relative;
-  top: 5px;
+  /* top: 5px; */
 }
 .MuiDialog-paper {
   margin: 0 20px 0px 20px !important;

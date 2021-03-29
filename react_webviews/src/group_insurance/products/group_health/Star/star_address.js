@@ -115,14 +115,14 @@ class StarAddress extends Component {
       value = event.target ? event.target.value.substr(0, 240) : event;
     }
 
-    if (name === 'city_id') {
+    if (name === 'city_id' && value) {
       form_data.city_id = value;
       form_data.city_id_error = '';
       form_data.area_id = '';
       form_data.area_id_error = '';
       form_data.city = this.state.cityList.find(city => city.value === value).name;
       this.fetchAreaList(form_data);
-    } else if (name === 'area_id') {
+    } else if (name === 'area_id' && value) {
       form_data.area_id = value;
       form_data.area_id_error = '';
       form_data.area = this.state.areaList.find(area => area.value === value).name;
