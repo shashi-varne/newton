@@ -61,7 +61,7 @@ class SelectDropDown2 extends React.Component {
   }
 
 
-  render() { console.log(this, ' this ?')
+  render() {
     let components;
     if (this.state.multi) {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
