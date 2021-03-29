@@ -36,7 +36,7 @@ const FundDetails = ({ classes, history }) => {
   const [selectedIsin, setSelectedIsin] = useState(0);
   const productType = getConfig().productName;
   const [open, setOpen] = useState(false);
-  const iframe = isIframe() || true; // for testing
+  const iframe = isIframe();
   const isMobile = getConfig().isMobileDevice;
   const { isins, selected_isin } = getUrlParams();
 
@@ -97,15 +97,7 @@ const FundDetails = ({ classes, history }) => {
   };
 
   const handleInvest = () => {
-    let webview_redirect_url = encodeURIComponent(
-      window.location.origin + `/diy/fundinfo/${isins?.length === 1 ? isins : selectedIsin}` + getConfig().searchParams
-    );
-    let openWebModule = getConfig().isWebCode;
-    if(openWebModule) {
-      const url =  `http://localhost:3002/#!/diy/invest`; // has to be removed
-      console.log(url); 
-      window.location.href = url;
-    }
+    window.location.href =  getConfig().webAppUrl + 'diy/invest';
   }
 
   const ContainerData = () => (
