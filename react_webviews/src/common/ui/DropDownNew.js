@@ -88,10 +88,10 @@ class SelectDropDown2 extends React.Component {
             ref={element => {
               if (element && isLableOpen) {
                 element.style.setProperty('margin-top', '6px', 'important');
-                element.style.setProperty('margin-left', '11px', 'important');
+                element.style.setProperty('margin-left', '10px', 'important');
               } else if (element && !isLableOpen) {
                 element.style.setProperty('margin-top', '-7px', 'important');
-                element.style.setProperty('margin-left', '12px', 'important');
+                element.style.setProperty('margin-left', '10px', 'important');
               }
             }}
             style={{

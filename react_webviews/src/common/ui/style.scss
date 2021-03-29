@@ -965,7 +965,7 @@ body[data-device="mobile"] {
 .react-select__option{
   // padding-top: 13px !important;
   // padding-left: 12px !important;
-  padding: 10px 0px 0px 12px !important;
+  padding: 10px 0px 0px 10px !important;
   font-size: 13px !important;
   line-height: 21px !important;
   color: #161A2E !important;
@@ -975,7 +975,7 @@ body[data-device="mobile"] {
 }
 .react-select__single-value{
   margin-top: 2px !important;
-  margin-left: 0 !important;
+  margin-left: -1px !important;
   font-size: 13px;
   line-height: 21px;
   display: inline-block !important;
@@ -1009,6 +1009,7 @@ body[data-device="mobile"] {
 }
 .react-select__input{
   padding: 0 !important;
+  margin-left: -1PX !important;
   margin-top: 5px !important;
 }
 .css-1rhbuit-multiValue {
