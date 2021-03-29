@@ -1940,11 +1940,13 @@
   }
 
   .footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    margin: 10px;
+    margin: 0 auto;
+    max-width: var(--desktop-width);
+    padding: 10px;
   }
 
   .footer .raised {
