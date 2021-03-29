@@ -28,7 +28,6 @@ const InvestAmount = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [loader, setLoader] = useState(false);
   const navigate = navigateFunc.bind(props);
-
   useEffect(() => {
     const investTitle = selectTitle(investType);
     setTitle(investTitle);
@@ -139,6 +138,7 @@ const InvestAmount = (props) => {
     let taxsaved = tempAmount * 0.303;
     setCorpus(taxsaved);
   };
+
   return (
     <Container
       classOverRide='pr-error-container'
@@ -169,20 +169,22 @@ const InvestAmount = (props) => {
               pattern='[0-9]*'
             />
           </div>
-          {goalRecommendation.id === 'investsurplus' || investTypeDisplay !== 'sip' || goalRecommendation.itype !== 'saveforgoal' ? (
-            <p className='invest-amount-input-duration'>from my savings</p>
-          ) : (
-            <p className='invest-amount-input-duration'>per month</p>
-          )}
+          <p className='invest-amount-input-duration'>
+            {(
+              goalRecommendation.id === 'investsurplus' ||
+              investTypeDisplay !== 'sip' ||
+              goalRecommendation.itype !== 'saveforgoal'
+             ) ? 
+              'from my savings' : 'per month'
+            }
+          </p>
         </div>
         <div className='invest-amount-corpus'>
-          {goalRecommendation.id === 'savetax' ? (
-            <div className='invest-amount-corpus-duration'>
-              till Mar {date.getFullYear()} to save tax upto:
-            </div>
-          ) : (
-            <div className='invest-amount-corpus-duration'>Corpus in {year}:</div>
-          )}
+          <div className='invest-amount-corpus-duration'>
+            {goalRecommendation.id === 'savetax' ?
+              'till Mar {date.getFullYear()} to save tax upto:' : `Corpus in ${year}`
+            }
+          </div>
           <div className='invest-amount-corpus-amount'>{numDifferentiationInr(corpus)}</div>
         </div>
       </section>

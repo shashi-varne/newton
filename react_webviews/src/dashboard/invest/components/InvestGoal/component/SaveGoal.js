@@ -51,7 +51,6 @@ const SaveGoal = (props) => {
         investType: 'saveforgoal',
         isRecurring: recurring,
       };
-      storageService().setObject('goalRecommendations', recommendation.goal);
       storageService().setObject('graphData', graphData);
       setLoader(false);
       goNext();

@@ -10,12 +10,12 @@ import monthly_sip_icon_dark from 'assets/monthly_sip_icon_dark.png';
 import one_time_icon_dark from 'assets/one_time_icon_dark.png';
 
 import { storageService, formatAmountInr } from 'utils/validators';
-import { navigate as navigateFunc, selectTitle } from '../../common/commonFunction';
+import { getReturnRates, navigate as navigateFunc, selectTitle } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
 import './style.scss';
 
-const stockReturns = 15;
-const bondReturns = 8;
+const { stockReturns, bondReturns } = getReturnRates();
+
 const InvestedAmount = (props) => {
   let graphData = storageService().getObject('graphData');
   const goalRecommendation = storageService().getObject('goalRecommendations');

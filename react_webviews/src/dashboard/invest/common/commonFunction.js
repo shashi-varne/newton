@@ -1,6 +1,7 @@
 import { storageService, formatAmountInr } from 'utils/validators';
 import { getConfig } from "utils/functions";
-export function navigate(pathname, data, redirect) {console.log(getConfig().searchParams)
+export function navigate(pathname, data, redirect) {
+  console.log(getConfig().searchParams)
   if (redirect) {
     this.history.push({
       pathname: pathname,
@@ -38,6 +39,10 @@ export const isRecurring = (investType) => {
   }
 };
 
+export const getReturnRates = () => {
+  return storageService().getObject('investReturnRates') || {};
+};
+
 export const corpusValue = (stockSplitVal, amount, investtype, isRecurring, term) => {
   let principle = amount;
   var corpus_value = 0;
@@ -71,8 +76,8 @@ export const getPotentialValue = (amount, term, isRecurring) => {
   return corpus_value;
 };
 export const getRateOfInterest = (stockSplitVal) => {
-  const stockReturns = 15;
-  const bondReturns = 8;
+  const { stockReturns, bondReturns } = getReturnRates();
+  // TODO: Handle edge cases / negative scenarios
   var range = Math.abs(stockReturns - bondReturns);
   if (stockSplitVal < 1) {
     return bondReturns;

@@ -207,7 +207,7 @@ const Recommendations = (props) => {
   };
 
   const navigate = navigateFunc.bind(props);
-  const EditFund = () => {
+  const editFund = () => {
     navigate("recommendations/edit-funds");
   };
 
@@ -238,7 +238,7 @@ const Recommendations = (props) => {
         <div className='recommendations-header'>
           <div>Our Recommendation</div>
           {investType !== 'insta-redeem' && (
-            <div onClick={EditFund} className='edit-recommendation-funds'>
+            <div onClick={editFund} className='edit-recommendation-funds'>
               Edit
             </div>
           )}

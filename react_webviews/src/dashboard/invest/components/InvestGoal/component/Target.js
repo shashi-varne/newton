@@ -89,7 +89,6 @@ const Target = (props) => {
         isRecurring: recurring,
         investTypeDisplay:"sip"
       };
-      storageService().setObject('goalRecommendations', recommendation.goal);
       storageService().setObject('graphData', graphData);
       setLoader(false);
       navigate(`savegoal/${subtype}/amount`, true);

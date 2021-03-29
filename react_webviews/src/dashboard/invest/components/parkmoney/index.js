@@ -52,7 +52,6 @@ const Landing = (props) => {
         isRecurring: recurring,
         investTypeDisplay,
       };
-      storageService().setObject('goalRecommendations', data.recommendation.goal);
       storageService().setObject('graphData', graphData);
       setLoader(false);
       goNext();

@@ -50,7 +50,6 @@ const Landing = (props) => {
     };
     setLoader(true);
     try {
-      const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
       const graphData = {
         recommendation: data.recommendation,
@@ -65,7 +64,6 @@ const Landing = (props) => {
         isRecurring: investTypeDisplay === 'sip' ? true : false,
         investTypeDisplay,
       };
-      storageService().setObject('goalRecommendations', data.recommendation.goal);
       storageService().setObject('graphData', graphData);
       setData(graphData);
       setLoader(false);
