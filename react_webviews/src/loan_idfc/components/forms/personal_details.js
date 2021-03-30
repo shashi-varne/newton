@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropDownNew from "../../../common/ui/DropDownNew";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
 import { capitalizeFirstLetter, timeStampToDate } from "utils/validators";
@@ -390,7 +390,7 @@ class PersonalDetails extends Component {
             </div>
 
             <div className="InputField">
-              <DropdownWithoutIcon
+              <DropDownNew
                 width="40"
                 options={this.state.screenData.maritalOptions}
                 id="marital_status"
@@ -472,7 +472,7 @@ class PersonalDetails extends Component {
             )}
 
             <div className="InputField">
-              <DropdownWithoutIcon
+              <DropDownNew
                 width="40"
                 options={this.state.screenData.religionOptions}
                 id="religion"
