@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import InvestType from '../mini_components/InvestType';
 import toast from 'common/ui/Toast';
 
@@ -46,9 +45,9 @@ const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedFunds = async () => {
     const params = {
-      type: 'buildwealth',
+      type: investTypeDisplay === "sip" ? 'buildwealth' : 'buildwealthot',
     };
-    setLoader(true);
+    setLoader("button");
     try {
       const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
@@ -64,6 +63,7 @@ const Landing = (props) => {
         bondSplit: data.recommendation.debt,
         isRecurring: investTypeDisplay === 'sip' ? true : false,
         investTypeDisplay,
+        name: 'Wealth building'
       };
       storageService().setObject('goalRecommendations', data.recommendation.goal);
       storageService().setObject('graphData', graphData);
@@ -86,16 +86,11 @@ const Landing = (props) => {
 
   return (
     <Container
-      classOverRide='pr-error-container'
-      fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
-      helpContact
-      disable={loader}
-      hideInPageTitle
+      buttonTitle='NEXT'
       hidePageTitle
       title='Build Wealth'
       handleClick={fetchRecommendedFunds}
-      classOverRideContainer='pr-container'
+      showLoader={loader}
     >
       <section className='invest-amount-common'>
         <InvestType

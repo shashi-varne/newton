@@ -5,48 +5,43 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   occupationTypeOptions,
   incomeOptions,
-  storageConstants,
   getPathname,
 } from "../constants";
-import { initData } from "../services";
-import { storageService, isEmpty } from "../../utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { savePanData } from "../common/api";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
+import { kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
+import useUserKycHook from "../common/hooks/userKycHook";
+import { isEmpty } from "../../utils/validators";
 
 const PersonalDetails3 = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
+  const [oldState, setOldState] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
   let title = "Professional details";
   if (isEdit) {
     title = "Edit professional details";
   }
   const type = props.type || "";
 
+  const {kyc, isLoading} = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) initialize();
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    if (isEmpty(userkycDetails)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC) || {};
-      setUserKyc(userkycDetails);
-    }
     let formData = {
-      income:
-        userkycDetails.identification?.meta_data?.gross_annual_income || "",
-      occupation: userkycDetails.identification?.meta_data?.occupation || "",
+      income: kyc.identification?.meta_data?.gross_annual_income || "",
+      occupation: kyc.identification?.meta_data?.occupation || "",
     };
-    setShowLoader(false);
     setFormData({ ...formData });
+    setOldState(formData);
   };
 
   const handleClick = () => {
@@ -57,43 +52,52 @@ const PersonalDetails3 = (props) => {
       setFormData(data);
       return;
     }
-    let userkycDetails = { ...userkyc };
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      handleNavigation();
+      return;
+    }
+    let userkycDetails = { ...kyc };
     userkycDetails.identification.meta_data.gross_annual_income =
       form_data.income;
     userkycDetails.identification.meta_data.occupation = form_data.occupation;
-    userkycDetails.identification.politically_exposed = "NOT APPLICABLE";
-    userkycDetails.identification.fatca_declaration = true;
+    userkycDetails.identification.meta_data.politically_exposed =
+      "NOT APPLICABLE";
+    userkycDetails.identification.meta_data.fatca_declaration = true;
     savePersonalDetails3(userkycDetails);
   };
 
   const savePersonalDetails3 = async (userKyc) => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
       let item = {
         kyc: {
-          identification: userKyc.identification,
+          identification: userKyc.identification.meta_data,
         },
       };
-      const submitResult = await savePanData(item);
+      const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      if (type === "digilocker") {
-        if (isEdit) {
-          navigate(getPathname.journey);
-        } else {
-          navigate(getPathname.digilockerPersonalDetails3);
-        }
-      } else {
-        navigate(getPathname.personalDetails4, {
-          state: {
-            isEdit: isEdit,
-          },
-        });
-      }
+      handleNavigation();
     } catch (err) {
       console.log(err);
-      toast(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
+    }
+  };
+
+  const handleNavigation = () => {
+    if (type === "digilocker") {
+      if (isEdit) {
+        navigate(getPathname.journey);
+      } else {
+        navigate(getPathname.digilockerPersonalDetails3);
+      }
+    } else {
+      navigate(getPathname.personalDetails4, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
     }
   };
 
@@ -110,18 +114,19 @@ const PersonalDetails3 = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
+      showSkelton={isLoading}
       id="kyc-personal-details3"
       hideInPageTitle
       buttonTitle="CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
       handleClick={handleClick}
+      skelton={isLoading}
+      showLoader={isApiRunning}
+      title={title}
+      count={type === "digilocker" ? 2 : 3}
+      current={type === "digilocker" ? 2 : 3}
+      total="4"
     >
       <div className="kyc-complaint-personal-details">
-        <div className="kyc-main-title">
-          {title} <span>{type === "digilocker" ? 2 : 3}/4</span>
-        </div>
         <main>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

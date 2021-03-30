@@ -147,8 +147,28 @@
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <base id="myBaseHref"  />
+
+    <script>
+      var myBaseHref =  document.getElementById('myBaseHref');
+      var pathname = window.location.pathname;
+
+      if(pathname.indexOf('appl/webview') !== -1) {
+        var myBaseHrefUrl = '/appl/webview/' + window.location.pathname.split('/')[3] +'/' ;
+        myBaseHref.href = myBaseHrefUrl;
+        window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+      }
+      
+      if(pathname.indexOf('plutus-webview') !== -1) {
+        var myBaseHrefUrl = '/plutus-webview' + window.location.pathname.split('/')[2] + '/' ;
+        myBaseHref.href = myBaseHrefUrl;
+        window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+      }
+
+    </script>
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
   <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.

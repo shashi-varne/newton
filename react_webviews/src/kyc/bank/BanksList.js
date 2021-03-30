@@ -53,20 +53,18 @@ const BanksList = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
-      hideInPageTitle
+      skelton={showLoader}
       id="banks-list"
       buttonTitle="ADD ANOTHER BANK"
       handleClick={handleClick}
-      disable={showLoader}
       noFooter={
         changeRequest.add_bank_enabled &&
         ((config.web && !config.isIframe) || config.native)
       }
       buttonClassName="bank-list-footer"
+      title="Bank accounts"
     >
       <div className="banks-list">
-        <div className="kyc-main-title">Bank accounts</div>
         {banks.map((bank, index) => {
           return (
             <div

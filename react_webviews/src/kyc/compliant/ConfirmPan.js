@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
 import { navigate as navigateFunc, panUiSet } from "../common/functions";
-import { getPathname, storageConstants } from "../constants";
-import { storageService, isEmpty } from "utils/validators";
-import { initData } from "../services";
+import { getPathname } from "../constants";
 import toast from "common/ui/Toast";
-import { savePanData } from "../common/api";
+import { kycSubmit } from "../common/api";
 import { getConfig } from "../../utils/functions";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const ConfirmPan = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -15,9 +14,7 @@ const ConfirmPan = (props) => {
   const kycConfirmPanScreen = true;
   const isUserCompliant = "";
   const isPremiumFlow = "";
-  const [userKyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
+  const {kyc, isLoading} = useUserKycHook();
 
   const handleClick = () => {
     navigate(getPathname.homeKyc, {
@@ -30,20 +27,20 @@ const ConfirmPan = (props) => {
 
   const handleClick2 = async () => {
     try {
-      let dob = userKyc.pan.meta_data.dob;
-      let pan = userKyc.pan?.meta_data?.pan_number;
-      let oldObject = userKyc.pan.meta_data;
+      let dob = kyc.pan.meta_data.dob;
+      let pan = kyc.pan?.meta_data?.pan_number;
+      let oldObject = kyc.pan.meta_data;
       let newObject = { ...oldObject };
       newObject.dob = dob;
       newObject.pan_number = pan;
       let body = {
         kyc: {
           pan: newObject,
-          address: userKyc.address.meta_data,
+          address: kyc.address.meta_data,
         },
       };
-      setIsApiRunning(true);
-      let result = await savePanData(body);
+      setIsApiRunning("button");
+      let result = await kycSubmit(body);
       if (!result) return;
       if (
         (isUserCompliant || result.kyc.kyc_status === "compliant") &&
@@ -54,7 +51,7 @@ const ConfirmPan = (props) => {
         if (isUserCompliant || result.kyc.kyc_status === "compliant") {
           navigate(getPathname.journey);
         } else {
-          if (userKyc.address.meta_data.is_nri) {
+          if (kyc.address.meta_data.is_nri) {
             navigate(`${getPathname.journey}`, {
               searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
             });
@@ -73,44 +70,31 @@ const ConfirmPan = (props) => {
     }
   };
 
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    let userkycDetails = { ...userKyc };
-    if (isEmpty(userkycDetails)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      setUserKyc(userkycDetails);
-    }
-  };
-
   return (
     <Container
-      hideInPageTitle
       id="confirm-pan"
-      buttonTitle="EDIT PAN"
-      buttonTitle2="CONFIRM PAN"
-      isApiRunning2={isApiRunning}
-      disable2={isApiRunning}
-      handleClick={handleClick}
-      handleClick2={handleClick2}
+      buttonOneTitle="EDIT PAN"
+      buttonTwoTitle="CONFIRM PAN"
+      skelton={isLoading}
+      showLoader={isApiRunning}
+      handleClickOne={handleClick}
+      handleClickTwo={handleClick2}
       twoButton={true}
       buttonClassName="confirm-pan-button1"
+      title='Confirm PAN'
+      dualbuttonwithouticon={true}
     >
       <div className="kyc-compliant-confirm-pan">
-        <div className="kyc-main-title">Confirm PAN</div>
         <div className="kyc-main-subtitle">
           Confirm your PAN to unlock premium onboarding
         </div>
         <main>
           <img alt="" src={require(`assets/crd_pan.png`)} />
-          {userKyc && (
+          {kyc && (
             <div className="pan-block-on-img">
-              <div className="user-name">{userKyc.pan?.meta_data?.name}</div>
+              <div className="user-name">{kyc.pan?.meta_data?.name}</div>
               <div className="pan-number">
-                PAN: <span>{panUiSet(userKyc.pan?.meta_data?.pan_number)}</span>
+                PAN: <span>{panUiSet(kyc.pan?.meta_data?.pan_number)}</span>
               </div>
             </div>
           )}

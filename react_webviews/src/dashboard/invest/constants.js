@@ -6,6 +6,7 @@ export const apiConstants = {
   getNfoRecommendation: "/api/invest/nfo/recommendations",
   getPurchaseLimit: "/api/mf/funddata/",
   triggerInvestment: "/api/invest",
+  verifyCode: "/api/checkpromocode",
 };
 
 export const investCardsBase = {
@@ -297,7 +298,7 @@ export const kycStatusMapper = {
     color: "#ffa60b",
     popup_header: "Congratulations! KYC verified",
     popup_message: "You're ready to invest in Mutual Funds",
-    button_text: "Start Investing",
+    button_text: "START INVESTING",
     icon: "ic_popup_kyc_verified.svg",
     next_state: "/invest",
   },
@@ -324,6 +325,13 @@ export const kycStatusMapperInvest = {
     subtitle: "No documentation  |  Instant investment",
     button_text: "COMPLETE NOW",
     next_state: "/kyc/journey",
+  },
+  ground_pan: {
+    icon: "ic_card_kyc_default.svg",
+    title: "Complete your KYC",
+    subtitle: "Don’t miss out good returns by Delaying",
+    button_text: "COMPLETE NOW",
+    next_state: "/kyc/journey"
   },
   ground_aadhaar: {
     icon: "ic_card_kyc_default.svg",

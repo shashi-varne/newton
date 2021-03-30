@@ -18,7 +18,7 @@ const GoalType = (props) => {
   const graphData = storageService().getObject("graphData")
 
   const goNext = () => {
-    storageService().setObject("graphData",{...graphData,year})
+    storageService().setObject("graphData",{...graphData,name:"Saving for goal", year})
     if (subtype === 'other') {
       navigate(`savegoal/${subtype}/target`);
     } else {
@@ -43,23 +43,23 @@ const GoalType = (props) => {
       if (currentYear >= year) {
         setError(true);
         setErrorMsg('The year should be more than the current year');
+      } else if(year > (currentYear + 100)){
+        setError(true);
+        setErrorMsg(`The max year you can invest for is ${currentYear+100} years`);
       } else {
         setError(false);
         setErrorMsg('');
       }
     } else {
       setError(true);
-      setErrorMsg('Incorrect year');
+      setErrorMsg('Please enter a valid year');
     }
   };
   
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
-      buttonTitle='Next'
-      helpContact
-      hideInPageTitle
+      buttonTitle='NEXT'
       hidePageTitle
       title='Save for a Goal'
       handleClick={goNext}

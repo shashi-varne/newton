@@ -1,5 +1,6 @@
 import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
+import toast from '../common/ui/Toast'
 
 const docMapper = {
   DL: 'Driving license',
@@ -23,25 +24,36 @@ export async function getAccountSummary(params = {}) {
       referral: ['subbroker', 'p2p'],
     }
   }
-  const response = await Api.post(url, params)
-  if (
-    response?.pfwresponse?.status_code === 200
-  ) {
-    return response?.pfwresponse?.result
-  } else {
-    throw new Error(response.pfwresponse.result.message)
+  try {
+    const response = await Api.post(url, params);
+    if (
+      response.pfwstatus_code !== 200 ||
+      !response.pfwresponse ||
+      isEmpty(response.pfwresponse)
+    ) {
+      throw new Error( response?.pfwmessage || "Something went wrong!");
+    }
+    if (response?.pfwresponse?.status_code === 200) {
+      return response?.pfwresponse?.result;
+    } else {
+      throw new Error(response?.pfwresponse?.result?.message);
+    }
+  } catch (err) {
+    toast(err.message || "Something went wrong!");
   }
 }
 
 export async function getNPSInvestmentStatus() {
   const url = '/api/nps/invest/status/v2'
   const response = await Api.get(url)
-  if (
-    response.pfwresponse.status_code === 200
-  ) {
-    return response.pfwresponse.result
-  } else {
-    throw new Error(response.pfwresponse.result.message)
+  try {
+    if (response.pfwresponse.status_code === 200) {
+      return response.pfwresponse.result;
+    } else {
+      throw new Error(response?.pfwresponse?.result?.message);
+    }
+  } catch (err) {
+    toast(err.message || "Something went wrong!");
   }
 }
 
@@ -59,6 +71,7 @@ export async function initData() {
         referral: ['subbroker', 'p2p'],
       }
       const result = await getAccountSummary(queryParams)
+      if(!result) return
       storageService().set('dataSettedInsideBoot', true)
       setSDKSummaryData(result)
     }
@@ -73,6 +86,7 @@ export async function initData() {
       referral: ['subbroker', 'p2p'],
     }
     const result = await getAccountSummary(queryParams)
+    if(!result) return
     storageService().set('dataSettedInsideBoot', true)
     setSummaryData(result)
   }
@@ -134,6 +148,7 @@ async function setNpsData(result) {
     result?.data?.nps?.nps_user?.data?.is_doc_required
   ) {
     const data = await getNPSInvestmentStatus()
+    if(!data) return
     if (!data.registration_details.additional_details_status) {
       storageService().set('nps_additional_details_required', true)
     } else {
@@ -145,114 +160,134 @@ async function setNpsData(result) {
 }
 
 export function getKycAppStatus(kyc) {
-  let rejected = 0
-  let metaRejected = 0
-  let docRejected = 0
-  let rejectedItems = []
-  let fieldsToCheck = []
-  if (kyc?.kyc_status === 'compliant') {
-    fieldsToCheck = [
-      { name: 'pan', keys: ['meta_data_status'] },
-      { name: 'bank', keys: ['meta_data_status'] },
-      { name: 'identification', keys: ['meta_data_status'] },
-      { name: 'nomination', keys: ['meta_data_status'] },
-      { name: 'sign', keys: ['doc_status'] },
-    ]
+  var rejected = 0;
+  var metaRejected = 0;
+  var docRejected = 0;
+  var rejectedItems = [];
+  if (kyc.kyc_status === "compliant") {
+    var fieldsToCheck = [
+      { name: "pan", keys: ["meta_data_status"] },
+      { name: "bank", keys: ["meta_data_status"] },
+      { name: "identification", keys: ["meta_data_status"] },
+      { name: "nomination", keys: ["meta_data_status"] },
+      { name: "sign", keys: ["doc_status"] }
+    ];
   } else {
-    fieldsToCheck = [
-      { name: 'pan', keys: ['doc_status', 'meta_data_status'] },
-      { name: 'address', keys: ['doc_status', 'meta_data_status'] },
-      { name: 'bank', keys: ['meta_data_status'] },
-      { name: 'identification', keys: ['doc_status', 'meta_data_status'] },
-      { name: 'nomination', keys: ['doc_status', 'meta_data_status'] },
-      { name: 'sign', keys: ['doc_status'] },
-      { name: 'ipvvideo', keys: ['doc_status'] },
-    ]
-  }
-  if (kyc?.address?.meta_data?.is_nri) {
-    fieldsToCheck.push({
-      name: 'nri_address',
-      keys: ['doc_status', 'meta_data_status'],
-    })
+    var fieldsToCheck = [
+      { name: "pan", keys: ["doc_status", "meta_data_status"] },
+      { name: "address", keys: ["doc_status", "meta_data_status"] },
+      { name: "bank", keys: ["meta_data_status"] },
+      { name: "identification", keys: ["doc_status", "meta_data_status"] },
+      { name: "nomination", keys: ["doc_status", "meta_data_status"] },
+      { name: "sign", keys: ["doc_status"] },
+      { name: "ipvvideo", keys: ["doc_status"] }
+    ];
   }
 
-  fieldsToCheck.forEach((field) => {
-    const { name, keys } = field
-    const objRej = {
-      name,
-      keys: [],
-    }
-    keys.forEach((key) => {
-      if (kyc[name][key] === 'rejected') {
-        if (key === 'meta_data_status') {
-          ++metaRejected
+  if (kyc.address.meta_data.is_nri) {
+    var obj = {
+      name: "nri_address",
+      keys: ["doc_status", "meta_data_status"]
+    };
+
+    fieldsToCheck.push(obj);
+  }
+
+  for (var i = 0; i < fieldsToCheck.length; i++) {
+    var objRej = {
+      name: fieldsToCheck[i].name,
+      keys: []
+    };
+    for (var j = 0; j < fieldsToCheck[i].keys.length; j++) {
+      var k = fieldsToCheck[i].keys[j];
+      if (kyc[fieldsToCheck[i].name][k] === "rejected") {
+        if (k === "meta_data_status") {
+          metaRejected++;
         }
-        if (key === 'doc_status') {
-          ++docRejected
+        if (k === "doc_status") {
+          docRejected++;
         }
-        objRej.keys.push(key)
-        ++rejected
+        objRej.keys.push(k);
+        rejected++;
       }
-    })
-    if (objRej.keys.length !== 0) {
-      rejectedItems.push(objRej)
     }
-  })
-  let status = ''
+
+    if (objRej.keys.length !== 0) {
+      rejectedItems.push(objRej);
+    }
+  }
+
+  var status;
   if (rejected > 0) {
-    status = 'rejected'
+    status = "rejected";
   } else {
-    status = kyc.application_status_v2
+    status = kyc.application_status_v2;
   }
 
-  if (
-    !kyc.pan.meta_data.pan_number ||
-    (kyc.pan.meta_data.pan_number && kyc.customer_verified !== 'VERIFIED')
-  ) {
-    status = 'ground'
+  if (!kyc.pan.meta_data.pan_number || (kyc.pan.meta_data.pan_number &&
+    kyc.customer_verified !== 'VERIFIED')) {
+    status = 'ground';
   }
 
-  if (
-    kyc?.kyc_status === 'compilant' &&
-    kyc?.application_status_v2 !== 'submitted' &&
-    kyc?.customer_vrified !== 'VERIFIED'
-  ) {
-    status = 'ground'
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.customer_verified === 'UNVERIFIED' && kyc.kyc_type === "init") {
+    status = 'ground_pan';
   }
 
-  if (kyc?.kyc_status === 'compilant' && (kyc?.application_status_v2 !== 'submitted' && kyc?.application_status_v2 !== 'complete') && kyc?.customer_verified === 'UNVERIFIED') {
-    status = 'ground_premium'
+  if (kyc.kyc_status === 'compliant' && (kyc.application_status_v2 !== 'submitted' &&
+    kyc.application_status_v2 !== 'complete') && kyc.customer_verified === 'UNVERIFIED') {
+    status = 'ground_premium';
   }
 
-  if (!kyc?.address.meta_data?.is_nri && kyc?.kyc_status !== 'comliant' && kyc?.dl_docs_status !== '' && kyc?.dl_docs_status !== 'init' && kyc?.dl_docs_status !== null) {
-    status = 'ground_aadhar'
+  if (!kyc.address.meta_data.is_nri && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 !== 'init' && kyc.application_status_v2 !== 'submitted' &&
+    kyc.application_status_v2 !== 'complete') && kyc.dl_docs_status !== null) {
+    status = 'ground_aadhaar';
   }
 
-  if (kyc?.application_status_v2 === 'init' && kyc?.pan.meta_data.pan_number && kyc?.customer_verified === 'VERIFIED' && (kyc?.dl_docs_status === '' || kyc?.dl_docs_status === 'init' || kyc?.dl_docs_status === null)) {
-    status = 'incomplete'
-  }
-
-  if (kyc?.kyc_status !== 'compliant' && (kyc?.dl_docs_status === '' || kyc?.dl_docs_status === 'init' || kyc?.dl_docs_status === null) && (kyc?.application_status_v2 === 'submitted' || kyc?.application_status_v2 === 'complete') && kyc?.sign_status !== 'signed') {
+  if (kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number &&
+    kyc.customer_verified === 'VERIFIED' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
     status = 'incomplete';
   }
 
-  return {
-    status,
-    metaRejected,
-    docRejected,
-    rejectedItems
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 == 'init' && kyc.pan.meta_data.pan_number &&
+      kyc.kyc_type === "manual" && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
+      status = 'incomplete';
+    }
+
+  if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
+    status = 'incomplete';
   }
+
+  var result = {
+    status: status,
+    metaRejected: metaRejected,
+    docRejected: docRejected,
+    rejectedItems: rejectedItems
+  };
+
+  return result;
 }
 
 export function getDocuments(userKyc) {
-  return [
+  if(userKyc.kyc_status === 'compliant') {
+    return [
+      {
+        key: "sign",
+        title: "Signature",
+        doc_status: userKyc.sign.doc_status,
+        default_image: "sign_default.svg",
+        approved_image: "sign_approved.svg",
+      }
+    ];
+  }
+
+  let documents =  [
     {
       key: "pan",
       title: "PAN card",
       subtitle: userKyc.pan.meta_data.pan_number,
       doc_status: userKyc.pan.doc_status,
       default_image: 'pan_default.svg',
-      // approved_image: partner.assets.pan_approved
+      approved_image: "pan_approved.svg",
     },
 
     {
@@ -261,7 +296,7 @@ export function getDocuments(userKyc) {
       subtitle: getAddressProof(userKyc),
       doc_status: userKyc.address.doc_status,
       default_image: 'regi_default.svg',
-      // approved_image: partner.assets.regi_approved
+      approved_image: "regi_approved.svg",
     },
 
     {
@@ -269,7 +304,7 @@ export function getDocuments(userKyc) {
       title: "Selfie",
       doc_status: userKyc.identification.doc_status,
       default_image: 'selfie_default.svg',
-      // approved_image: partner.assets.selfie_approved
+      approved_image: "selfie_approved.svg",
     },
 
     {
@@ -277,7 +312,7 @@ export function getDocuments(userKyc) {
       title: "Selfie video (IPV)",
       doc_status: userKyc.ipvvideo.doc_status,
       default_image: 'video_default.svg',
-      // approved_image: partner.assets.video_approved
+      approved_image: "video_approved.svg",
     },
 
     {
@@ -285,7 +320,7 @@ export function getDocuments(userKyc) {
       title: "Bank details",
       doc_status: userKyc.bank.meta_data_status,
       default_image: 'default.svg',
-      // approved_image: partner.assets.approved
+      approved_image: "approved.svg",
     },
 
     {
@@ -293,9 +328,23 @@ export function getDocuments(userKyc) {
       title: "Signature",
       doc_status: userKyc.sign.doc_status,
       default_image: 'sign_default.svg',
-      // approved_image: partner.assets.sign_approved
+      approved_image: "sign_approved.svg",
     }
-  ]
+  ];
+
+  if(userKyc.address.meta_data.is_nri) {
+    const data = {
+      key: "nriaddress",
+      title: "Foreign Address proof",
+      subtitle: docMapper[userKyc.address_doc_type],
+      doc_status: userKyc.nri_address.doc_status,
+      default_image: "regi_default.svg",
+      approved_image:"regi_approved.svg",
+    };
+
+    documents.splice(2, 0, data);
+  }
+  return documents;
 }
 
 function getAddressProof(userKyc) {

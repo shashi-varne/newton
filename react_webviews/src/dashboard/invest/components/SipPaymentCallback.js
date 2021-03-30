@@ -10,12 +10,13 @@ import { initData } from "../../../kyc/services";
 const SipPaymentCallback = (props) => {
   const params = props.match.params || {};
   const status = params.status || "";
-  const message = params.message || "";
+  let message = params.message || "";
   const [campaign, setCampaign] = useState({});
   const [currentUser, setCurrentUser] = useState(
     storageService().getObject("user") || {}
   );
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [skelton, setSkelton] = useState(true);
 
   resetRiskProfileJourney();
   const config = getConfig();
@@ -45,8 +46,8 @@ const SipPaymentCallback = (props) => {
         campaignData =
           userCampaign.find((obj) => {
             return (
-              obj.campaign.name == "auto_debit_campaign" ||
-              obj.campaign.name == "enach_mandate_campaign" ||
+              obj.campaign.name === "auto_debit_campaign" ||
+              obj.campaign.name === "enach_mandate_campaign" ||
               obj.campaign.name === "indb_mandate_campaign"
             );
           }) || {};
@@ -62,6 +63,8 @@ const SipPaymentCallback = (props) => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setSkelton(false)
     }
   };
 
@@ -88,7 +91,7 @@ const SipPaymentCallback = (props) => {
         !isEmpty(campaign) &&
         campaign.notification_visual_data.target
       ) {
-        setIsApiRunning(true);
+        setIsApiRunning("button");
         campaign.notification_visual_data.target.forEach((target) => {
           if (
             (campaign.campaign.name === "auto_debit_campaign" ||
@@ -98,6 +101,7 @@ const SipPaymentCallback = (props) => {
           ) {
             let auto_debit_campaign_url = target.url;
             auto_debit_campaign_url +=
+              // eslint-disable-next-line
               (auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?") +
               "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
@@ -114,6 +118,7 @@ const SipPaymentCallback = (props) => {
           ) {
             let url = campaign.notification_visual_data.target[0].url;
             url +=
+              // eslint-disable-next-line
               (url.match(/[\?]/g) ? "&" : "?") +
               "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
@@ -138,14 +143,15 @@ const SipPaymentCallback = (props) => {
     <Container
       buttonTitle={buttonTitle}
       hideInPageTitle
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
       handleClick={() => handleClick()}
-      disable={isApiRunning}
+      title='Congratulations! Order placed'
+      skelton={skelton}
     >
       <section className="invest-sip-payment-callback">
         {!paymentError && (
           <div className="content">
-            <div className="title">Congratulations! Order placed</div>
+            {/* <div className="title">Congratulations! Order placed</div> */}
             <Imgc
               src={require(`assets/${config.productName}/congratulations_illustration.svg`)}
               alt=""

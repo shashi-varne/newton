@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { initialize } from "../../functions";
 import DropdownInModal from "common/ui/DropdownInModal";
-import Button from "material-ui/Button";
-import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
-import { dateOrdinal, storageService, formatAmountInr } from "utils/validators";
+import {
+  dateOrdinal,
+  storageService,
+  formatAmountInr,
+  isEmpty,
+} from "utils/validators";
+import SuccessDialog from "../mini_components/SuccessDialog";
+import InvestError from "../mini_components/InvestError";
+import PennyVerificationPending from "../mini_components/PennyVerificationPending";
 
 class SipDates extends Component {
   constructor(props) {
@@ -14,6 +20,7 @@ class SipDates extends Component {
       show_loader: false,
       productName: getConfig().productName,
       screenName: "sip_dates",
+      dialogStates: {},
       isSipDatesScreen: true,
     };
     this.initialize = initialize.bind(this);
@@ -24,7 +31,16 @@ class SipDates extends Component {
   }
 
   onload = () => {
-    let sipBaseData = storageService().getObject("investmentObjSipDates");
+    let sipBaseData = storageService().getObject("investmentObjSipDates") || {};
+    if (
+      isEmpty(sipBaseData) ||
+      isEmpty(sipBaseData.investment) ||
+      sipBaseData.investment?.allocations?.length === 0
+    ) {
+      this.navigate("/");
+      return;
+    }
+
     let orderType = sipBaseData.investment.type;
     let sipOrOnetime = "sip";
 
@@ -48,24 +64,79 @@ class SipDates extends Component {
     let buttonTitle =
       finalPurchases.length === 1 ? "CONFIRM DATE" : "CONFIRM DATES";
 
+    const paymentRedirectUrl = encodeURIComponent(
+      `${window.location.origin}/page/callback/sip/${
+        sipBaseData.investment.amount
+      }${getConfig().searchParams}`
+    );
+
     this.setState({
       form_data: form_data,
       sips: finalPurchases,
       orderType: orderType,
       sipOrOnetime: sipOrOnetime,
       buttonTitle: buttonTitle,
+      sipBaseData: sipBaseData,
+      paymentRedirectUrl: paymentRedirectUrl,
+      props: this.props,
     });
   };
 
   handleClick = () => {
-    this.setState({
-      openDialog: true,
+    let {
+      sipBaseData,
+      sips,
+      userKyc,
+      isSipDatesScreen,
+      paymentRedirectUrl,
+    } = this.state;
+    sips.forEach((sip, index) => {
+      sipBaseData.investment.allocations[index].sip_date = sip.sip_date;
+    });
+
+    window.localStorage.setItem("investment", JSON.stringify(sipBaseData));
+
+    this.proceedInvestmentChild({
+      userKyc: userKyc,
+      sipOrOnetime: "sip",
+      body: sipBaseData,
+      paymentRedirectUrl: paymentRedirectUrl,
+      isSipDatesScreen: isSipDatesScreen,
+      history: this.props.history,
+      handleApiRunning: this.handleApiRunning,
+      handleDialogStates: this.handleDialogStates,
     });
   };
 
-  handleClose = () => {
+  handleSuccessDialog = () => {
+    let { investResponse, paymentRedirectUrl } = this.state;
+    let pgLink = investResponse.investments[0].pg_link;
+    pgLink +=
+      // eslint-disable-next-line
+      (pgLink.match(/[\?]/g) ? "&" : "?") +
+      "redirect_url=" +
+      paymentRedirectUrl;
+    if (getConfig().Web) {
+      // handleIframe
+      window.location.href = pgLink;
+    } else {
+      if (investResponse.rta_enabled) {
+        this.navigate("/payment/options", {
+          state: {
+            pg_options: investResponse.pg_options,
+            consent_bank: investResponse.consent_bank,
+            investment_type: investResponse.investments[0].order_type,
+            remark: investResponse.investments[0].remark_investment,
+            investment_amount: investResponse.investments[0].amount,
+            redirect_url: paymentRedirectUrl,
+          },
+        });
+      } else {
+        this.navigate("/kyc/journey");
+      }
+    }
     this.setState({
-      openDialog: false,
+      openSuccessDialog: false,
     });
   };
 
@@ -79,65 +150,36 @@ class SipDates extends Component {
     });
   };
 
-  renderDialog = () => {
-    let { sips } = this.state;
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-        className="invest-redeem-dialog"
-      >
-        <DialogContent className="dialog-content">
-          <div className="head-bar">
-            <div className="text-left">Dates confirmed</div>
-            <img
-              src={require(`assets/${this.state.productName}/ic_date_confirmed.svg`)}
-              alt=""
-            />
-          </div>
-          <div className="subtitle text">
-            Your monthly SIP investment
-            {sips.length !== 1 && <span>s</span>} date
-            {sips.length !== 1 && <span>s</span>}
-            <span>{sips.length === 1 ? " is " : " are "}</span>
-            {sips.map((sip, index) => {
-              return (
-                <span key={index}>
-                  {index === sips.length - 1 && index !== 0 && (
-                    <span>&nbsp;and</span>
-                  )}
-                  <b>&nbsp;{dateOrdinal(sip.sip_date)}</b>
-                  {sips.length > 1 &&
-                    index !== sips.length - 1 &&
-                    index !== sips.length - 2 && <span>, </span>}
-                </span>
-              );
-            })}
-            &nbsp;of every month. Automate your SIP registration with easySIP.
-          </div>
-        </DialogContent>
-        <DialogActions className="action">
-          <Button onClick={this.handleClose} className="button">
-            OKAY
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+  handleDialogStates = (key, value, errorMessage) => {
+    let dialog_states = { ...this.state.dialogStates };
+    dialog_states[key] = value;
+    if (errorMessage) dialog_states["errorMessage"] = errorMessage;
+    this.setState({ dialogStates: dialog_states });
+    this.handleApiRunning(false);
+  };
+
+  handleApiRunning = (isApiRunning) => {
+    this.setState({ isApiRunning: isApiRunning });
   };
 
   render() {
-    let { sips, form_data, buttonTitle } = this.state;
+    let {
+      sips,
+      form_data,
+      buttonTitle,
+      openSuccessDialog,
+      isApiRunning,
+      dialogStates,
+    } = this.state;
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         handleClick={this.handleClick}
         buttonTitle={buttonTitle}
-        hideInPageTitle
+        title="Select investment date"
+        showLoader={isApiRunning}
       >
         <div className="sip-dates">
-          <div className="main-top-title">Select investment date</div>
           {sips &&
             sips.map((sip, index) => {
               let options = [];
@@ -169,7 +211,22 @@ class SipDates extends Component {
                 </div>
               );
             })}
-          {this.renderDialog()}
+          <SuccessDialog
+            isOpen={openSuccessDialog}
+            sips={sips}
+            handleClick={this.handleSuccessDialog}
+            close={() => this.setState({openSuccessDialog : false})}
+          />
+          <PennyVerificationPending
+            isOpen={dialogStates.openPennyVerificationPending}
+            handleClick={() => this.navigate("/kyc/add-bank")}
+          />
+          <InvestError
+            isOpen={dialogStates.openInvestError}
+            errorMessage={dialogStates.errorMessage}
+            handleClick={() => this.navigate("/invest")}
+            close={() => this.handleDialogStates('openInvestError', false)}
+          />
         </div>
       </Container>
     );

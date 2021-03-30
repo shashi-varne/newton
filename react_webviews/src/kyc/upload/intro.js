@@ -1,30 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 
 import { navigate as navigateFunc } from '../common/functions'
 
 const Intro = (props) => {
-  const [loading, setLoading] = useState(false)
   let productName = getConfig().productName
   if (productName !== 'finity') {
     productName = 'fisdom'
   }
+  const navigate = navigateFunc.bind(props)
   const handleClick = () => {
-    const navigate = navigateFunc.bind(props)
     navigate('/kyc/upload/progress')
   }
   return (
     <Container
-      hideInPageTitle
       buttonTitle="CONTINUE"
-      disable={loading}
       title="Intro"
-      classOverRideContainer="pr-container"
-      showSkelton={loading}
-      skeltonType="p"
-      fullWidthButton={true}
       handleClick={handleClick}
+      title='Upload documents'
     >
       <section id="kyc-upload-intro">
         <div className="banner">

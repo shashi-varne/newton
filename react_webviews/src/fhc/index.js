@@ -1,21 +1,14 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 import {
   Route,
   Switch
 } from 'react-router-dom';
-import { withRouter } from "react-router";
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import '../common/theme/Style.scss';
-import { themeConfig } from 'utils/constants';
-import { ToastContainer } from 'react-toastify';
 
 import './common/Style.css';
 import "./components/Style.scss";
 import NotFound from '../common/components/NotFound';
 import Landing from './home/landing';
-import { create } from 'jss';
-import JssProvider from 'react-jss/lib/JssProvider';
-import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 
 
 import PersonalDetails1 from './components/personal-details/screen1';
@@ -38,38 +31,13 @@ import InvestmentDetails4 from './components/investment-details/screen4';
 import InvestSuccess from './components/investment-details/success';
 import Report from './components/result/report';
 
-const generateClassName = createGenerateClassName({
-  dangerouslyUseGlobalCSS: true,
-  productionPrefix: 'f',
-});
-const jss = create(jssPreset());
-// We define a custom insertion point that JSS will look for injecting the styles in the DOM.
-// jss.options.insertionPoint = 'jss-insertion-point';
 
-const theme = createMuiTheme(themeConfig);
-
-const ScrollToTop = withRouter(
-  class ScrollToTopWithoutRouter extends Component {
-    componentDidUpdate(prevProps) {
-      if (this.props.location !== prevProps.location) {
-        window.scrollTo(0, 0)
-      }
-    }
-
-    render() {
-      return null;
-    }
-  }
-);
 
 const Insurance = (props) => {
   const { url } = props.match;
 
   return (
-    <JssProvider jss={jss} generateClassName={generateClassName}>
-      <MuiThemeProvider theme={theme}>
-        <ScrollToTop />
-        <ToastContainer autoClose={3000} />
+      <Fragment>
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
           <Route path={`${url}/landing`} component={Landing} />
@@ -105,8 +73,7 @@ const Insurance = (props) => {
           {/* Catch-all */}
           <Route component={NotFound} />
         </Switch>
-      </MuiThemeProvider>
-    </JssProvider>
+      </Fragment>
   );
 };
 

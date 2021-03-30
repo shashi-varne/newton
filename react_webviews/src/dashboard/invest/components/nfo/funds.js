@@ -44,9 +44,9 @@ class NfoFunds extends Component {
     let { nfoFunds, showFunds } = this.state;
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         noFooter={true}
-        hideInPageTitle
+        hidePageTitle
         title="NFO Funds"
       >
         <div className="nfo-funds">

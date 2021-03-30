@@ -11,9 +11,9 @@ import {
 import ContactUs from "../mini_components/ContactUs";
 import { navigate as navigateFunc } from "../common/functions";
 import { storageService, isEmpty } from "../../utils/validators";
-import { initData } from "../services";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const Report = (props) => {
   const productName = getConfig().productName;
@@ -22,16 +22,11 @@ const Report = (props) => {
   const [openIndex, setOpenIndex] = useState(-1);
   const [isCompliant, setIsCompliant] = useState();
   const [is_nri, setIsNri] = useState();
-  const [userKyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const [topTitle, setTopTitle] = useState("KYC status");
-  const [appText, setAppText] = useState("Your application is submitted.");
-  const [buttonTitle, setButtonTitle] = useState("OK");
   const [addressProof, setAddressProof] = useState({});
+  const [buttonTitle, setButtonTitle] = useState("OK");
+  const appText = "Your application is submitted.";
+  const goBackPage = props.location.state?.goBack || "";
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
@@ -48,21 +43,16 @@ const Report = (props) => {
     else setOpenIndex(index);
   };
 
-  useEffect(() => {
-    initialize();
-  }, []);
+  const {kyc, user} = useUserKycHook();
 
-  const initialize = async () => {
-    let userkycDetails = { ...userKyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setUserKyc(userkycDetails);
-      setCurrentUser(user);
+  useEffect(() => {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
+      initialize();
     }
-    let is_compliant = userkycDetails.kyc_status === "compliant" ? true : false;
+  }, [kyc, user]);
+
+  const initialize = () => {
+    let is_compliant = kyc.kyc_status === "compliant" ? true : false;
     setIsCompliant(is_compliant);
     if (
       is_compliant &&
@@ -74,12 +64,12 @@ const Report = (props) => {
 
     let address_proof = "";
     let address_proof_nri = "";
-    const isNri = userkycDetails.address.meta_data.is_nri;
+    const isNri = kyc.address.meta_data.is_nri;
     if (isNri) {
       address_proof = "Passport";
-      address_proof_nri = kycDocNameMapper[userkycDetails.address_doc_type];
+      address_proof_nri = kycDocNameMapper[kyc.address_doc_type];
     } else {
-      address_proof = kycDocNameMapper[userkycDetails.address_doc_type];
+      address_proof = kycDocNameMapper[kyc.address_doc_type];
     }
 
     setAddressProof({
@@ -88,10 +78,7 @@ const Report = (props) => {
     });
 
     if (is_compliant) {
-      setButtonTitle("Invest Now");
-      setAppText(
-        "Your application is submitted. After BSE (Bombay stock exchange) verification, you can see your investment growth in Portfolio."
-      );
+      setButtonTitle("INVEST NOW");
     }
 
     let reportCards = [...reportCardDetails];
@@ -104,7 +91,7 @@ const Report = (props) => {
         reportCards.splice(3, 1); //remove docs
       }
     }
-    if (userkycDetails.nomination.nominee_optional) {
+    if (kyc.nomination.nominee_optional) {
       if (is_compliant && !isNri) {
         reportCards.splice(1, 1);
       } else {
@@ -142,7 +129,7 @@ const Report = (props) => {
   };
 
   const checkNPSAndProceed = () => {
-    if (currentUser.nps_investment) {
+    if (user.nps_investment) {
       if (!getConfig().isIframe) {
         navigate(getPathname.reports);
       }
@@ -162,13 +149,11 @@ const Report = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{userKyc.pan.meta_data.name}</div>
+        <div className="unzipped-title">{kyc.pan.meta_data.name}</div>
         {isCompliant && (
           <div className="unzipped-box">
             <div className="title">Email</div>
-            <div className="subtitle">
-              {userKyc.identification.meta_data.email}
-            </div>
+            <div className="subtitle">{kyc.identification.meta_data.email}</div>
           </div>
         )}
         <div className="row-align">
@@ -176,13 +161,13 @@ const Report = (props) => {
             <div className="unzipped-box">
               <div className="title">Gender</div>
               <div className="subtitle">
-                {userKyc.identification.meta_data.gender}
+                {kyc.identification.meta_data.gender}
               </div>
             </div>
           )}
           <div className="unzipped-box">
             <div className="title">Dob</div>
-            <div className="subtitle">{userKyc.pan.meta_data.dob}</div>
+            <div className="subtitle">{kyc.pan.meta_data.dob}</div>
           </div>
         </div>
         {!isCompliant && (
@@ -190,20 +175,16 @@ const Report = (props) => {
             <div className="unzipped-box">
               <div className="title">Marital Status</div>
               <div className="subtitle">
-                {userKyc.identification.meta_data.marital_status}
+                {kyc.identification.meta_data.marital_status}
               </div>
             </div>
             <div className="unzipped-box">
               <div className="title">Father’s name</div>
-              <div className="subtitle">
-                {userKyc.pan.meta_data.father_name}
-              </div>
+              <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
             </div>
             <div className="unzipped-box">
               <div className="title">Mother’s name</div>
-              <div className="subtitle">
-                {userKyc.pan.meta_data.mother_name}
-              </div>
+              <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
             </div>
           </>
         )}
@@ -211,7 +192,7 @@ const Report = (props) => {
           <div className="unzipped-box">
             <div className="title">Mobile</div>
             <div className="subtitle">
-              {userKyc.identification.meta_data.mobile_number}
+              {kyc.identification.meta_data.mobile_number}
             </div>
           </div>
         )}
@@ -230,11 +211,9 @@ const Report = (props) => {
                 {addressProof.address_proof}
               </div>
               <div className="subtitle">
-                {userKyc.address.meta_data.addressline},
-                {userKyc.address.meta_data.city},
-                {userKyc.address.meta_data.state},
-                {userKyc.address.meta_data.country},
-                {userKyc.address.meta_data.pincode}
+                {kyc.address.meta_data.addressline},{kyc.address.meta_data.city}
+                ,{kyc.address.meta_data.state},{kyc.address.meta_data.country},
+                {kyc.address.meta_data.pincode}
               </div>
             </div>
             {is_nri && (
@@ -243,11 +222,10 @@ const Report = (props) => {
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
                 <div className="subtitle">
-                  {userKyc.address.meta_data.addressline},
-                  {userKyc.address.meta_data.city},
-                  {userKyc.address.meta_data.state},
-                  {userKyc.address.meta_data.country},
-                  {userKyc.address.meta_data.pincode}
+                  {kyc.address.meta_data.addressline},
+                  {kyc.address.meta_data.city},{kyc.address.meta_data.state},
+                  {kyc.address.meta_data.country},
+                  {kyc.address.meta_data.pincode}
                 </div>
               </div>
             )}
@@ -257,11 +235,10 @@ const Report = (props) => {
           <div className="unzipped-box">
             <div className="title">Foreign Address</div>
             <div className="subtitle">
-              {userKyc.nri_address.meta_data.addressline},
-              {userKyc.nri_address.meta_data.city},
-              {userKyc.nri_address.meta_data.state},
-              {userKyc.nri_address.meta_data.country},
-              {userKyc.nri_address.meta_data.pincode}
+              {kyc.nri_address.meta_data.addressline},
+              {kyc.nri_address.meta_data.city},{kyc.nri_address.meta_data.state}
+              ,{kyc.nri_address.meta_data.country},
+              {kyc.nri_address.meta_data.pincode}
             </div>
           </div>
         )}
@@ -272,20 +249,18 @@ const Report = (props) => {
   const nomineeDetails = () => {
     return (
       <>
-        <div className="unzipped-title">
-          {userKyc.nomination.meta_data.name}
-        </div>
+        <div className="unzipped-title">{kyc.nomination.meta_data.name}</div>
         <div className="row-align">
           <div className="unzipped-box">
             <div className="title">Relationship</div>
             <div className="subtitle">
-              {userKyc.nomination.meta_data.relationship}
+              {kyc.nomination.meta_data.relationship}
             </div>
           </div>
 
           <div className="unzipped-box">
             <div className="title">Dob</div>
-            <div className="subtitle">{userKyc.nomination.meta_data.dob}</div>
+            <div className="subtitle">{kyc.nomination.meta_data.dob}</div>
           </div>
         </div>
       </>
@@ -295,16 +270,14 @@ const Report = (props) => {
   const bankDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{userKyc.bank.meta_data.bank_name}</div>
+        <div className="unzipped-title">{kyc.bank.meta_data.bank_name}</div>
         <div className="unzipped-box">
           <div className="title">A/C number</div>
-          <div className="subtitle">
-            {userKyc.bank.meta_data.account_number}
-          </div>
+          <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
         </div>
         <div className="unzipped-box">
           <div className="title">IFSC</div>
-          <div className="subtitle">{userKyc.bank.meta_data.ifsc_code}</div>
+          <div className="subtitle">{kyc.bank.meta_data.ifsc_code}</div>
         </div>
       </>
     );
@@ -325,15 +298,26 @@ const Report = (props) => {
     }
   };
 
+  const goBack = () => {
+    if (goBackPage) {
+      navigate(goBackPage);
+    } else {
+      props.history.goBack();
+    }
+  }
+
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       id="kyc-home"
       buttonTitle={buttonTitle}
       handleClick={handleClick}
+      title={topTitle}
+      noFooter={isEmpty(cardDetails)}
+      headerData={{goBack}}
     >
       <div className="kyc-report">
-        <div className="kyc-main-title">{topTitle}</div>
+        {/* <div className="kyc-main-title">{topTitle}</div> */}
         <main>
           <Imgc
             src={require(`assets/${productName}/congratulations_illustration.svg`)}

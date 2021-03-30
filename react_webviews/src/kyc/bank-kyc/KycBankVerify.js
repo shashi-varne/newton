@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Alert from "../mini_components/Alert";
-import { storageService, isEmpty } from "utils/validators";
-import { storageConstants, getPathname } from "../constants";
+import { isEmpty } from "utils/validators";
+import { getPathname } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "common/ui/Toast";
@@ -11,62 +11,57 @@ import PennyFailedDialog from "../mini_components/PennyFailedDialog";
 import PennySuccessDialog from "../mini_components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
-import { initData } from "../services";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
-  const [showLoader, setShowLoader] = useState(true);
   const [countdownInterval, setCountdownInterval] = useState();
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isPennyOpen, setIsPennyOpen] = useState(false);
   const [isPennyFailed, setIsPennyFailed] = useState(false);
   const [isPennySuccess, setIsPennySuccess] = useState(false);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const [userKyc, setUserKyc] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const params = props.match.params || {};
   const userType = params.userType || "";
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
+  const {kyc} = useUserKycHook();
 
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc]);
 
   const initialize = async () => {
-    let kycDetails = { ...userKyc };
-    if (isEmpty(kycDetails)) {
-      await initData();
-      kycDetails = storageService().getObject(storageConstants.KYC);
-      setUserKyc(kycDetails);
-    }
     if (
-      kycDetails.kyc_status !== "compliant" &&
-      !kycDetails.address.meta_data.is_nri &&
-      kycDetails.dl_docs_status !== "" &&
-      kycDetails.dl_docs_status !== "init" &&
-      kycDetails.dl_docs_status !== null
+      kyc.kyc_status !== "compliant" &&
+      !kyc.address.meta_data.is_nri &&
+      kyc.dl_docs_status !== "" &&
+      kyc.dl_docs_status !== "init" &&
+      kyc.dl_docs_status !== null
     ) {
       setDlFlow(true);
     }
-    setShowLoader(false);
-    setBankData({ ...kycDetails.bank.meta_data });
+    setBankData({ ...kyc.bank.meta_data });
   };
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bankData.bank_id });
       if (!result) return;
       if (result.code === "ERROR") {
         toast(result.message);
-      } else if (userKyc.address.meta_data.is_nri) {
+      } else if (kyc.address.meta_data.is_nri) {
         uploadDocuments();
       } else {
         pennyLoader();
       }
     } catch (err) {
+      console.log(err);
     } finally {
       setIsApiRunning(false);
     }
@@ -144,18 +139,22 @@ const KycBankVerify = (props) => {
   const handleSuccess = () => {
     if (userType === "compliant") {
       if (isEdit) goToJourney();
-      else
-        navigate(getPathname.uploadSign, {
-          state: {
-            backToJorney: true,
-          },
-        });
+      else {
+        if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+          navigate(getPathname.uploadSign, {
+            state: {
+              backToJourney: true,
+            },
+          });
+        } else goToJourney();
+      }
     } else {
       if (dl_flow) {
         if (
-          userKyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          userKyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          userKyc.all_dl_doc_statuses.pan_fetch_status === "failed"
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+          kyc.pan.doc_status !== "approved"
         ) {
           navigate(getPathname.uploadPan);
         } else navigate(getPathname.kycEsign);
@@ -171,21 +170,20 @@ const KycBankVerify = (props) => {
 
   return (
     <Container
-      hideInPageTitle
       id="kyc-bank-verify"
       buttonTitle="VERIFY BANK ACCOUNT"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      showLoader={isApiRunning}
+      noFooter={isEmpty(bankData)}
       handleClick={handleClick}
+      title="Verify your bank account"
     >
       <div className="kyc-approved-bank-verify">
-        <div className="kyc-main-title">Verify your bank account</div>
         <Alert
           variant="info"
           title="Important"
           message="We will credit ₹1 to your bank account for verification."
         />
-        {showLoader && (
+        {isEmpty(bankData) && (
           <>
             <SkeltonRect className="verify-skelton" />
             <SkeltonRect className="verify-skelton" />
@@ -193,7 +191,7 @@ const KycBankVerify = (props) => {
             <SkeltonRect className="verify-skelton" />
           </>
         )}
-        {!showLoader && (
+        {!isEmpty(bankData) && (
           <>
             <div className="item">
               <div className="flex">

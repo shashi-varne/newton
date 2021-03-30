@@ -1,257 +1,211 @@
-import TextField from '@material-ui/core/TextField'
-import React, { useState, useEffect } from 'react'
-import Toast from '../../common/ui/Toast'
-import { getUrlParams, isEmpty, storageService } from 'utils/validators'
-import { getPinCodeData, submit } from '../common/api'
-import Container from '../common/Container'
-import { storageConstants, kycDocNameMapper } from '../constants'
-import { initData } from '../services'
-import { navigate as navigateFunc } from '../common/functions'
+import TextField from "@material-ui/core/TextField";
+import React, { useState, useEffect } from "react";
+import Toast from "../../common/ui/Toast";
+import { isEmpty } from "utils/validators";
+import { getPinCodeData, submit } from "../common/api";
+import Container from "../common/Container";
+import { kycDocNameMapper } from "../constants";
+import {
+  compareObjects,
+  navigate as navigateFunc,
+  validateFields,
+} from "../common/functions";
+import useUserKycHook from "../common/hooks/userKycHook";
+import { validateNumber } from "utils/validators";
 
 const AddressDetails2 = (props) => {
-  const [showSkelton, setShowSkelton] = useState(false)
-  const [isApiRunning, setIsApiRunning] = useState(false)
-  const [pinTouched, setPinTouched] = useState(false)
-  const [showError, setShowError] = useState(false)
+  const [isApiRunning, setIsApiRunning] = useState(false);
+  const { kyc, isLoading } = useUserKycHook();
+  const [form_data, setFormData] = useState({
+    pincode: "",
+  });
+  const [oldState, setOldState] = useState({});
+  const navigate = navigateFunc.bind(props);
 
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
+  useEffect(() => {
+    if (!isEmpty(kyc)) initialize();
+  }, [kyc]);
 
-  const getHelperText = (pincode) => {
-    if (typeof pincode === 'string') {
-      if (pincode.length === 0) {
-        return 'This is required'
-      }
-      if (pincode.length < 6) {
-        return 'Minlength is 6'
-      }
-      if (pincode.length > 6) {
-        return 'Maxlength is 6'
-      }
-    }
-  }
+  const initialize = () => {
+    let formData = {};
+    formData.pincode = kyc?.address?.meta_data?.pincode || "";
+    formData.addressline = kyc?.address?.meta_data?.addressline || "";
+    formData.state = kyc?.address?.meta_data?.state.toUpperCase() || "";
+    formData.city = kyc?.address?.meta_data?.city?.toUpperCase() || "";
+    formData.country = kyc?.address?.meta_data?.country || "INDIA";
+    setFormData({ ...formData });
+    setOldState({ ...formData });
+  };
 
   const handleSubmit = async () => {
-    const navigate = navigateFunc.bind(props)
+    let keysToCheck = ["pincode", "addressline", "state", "city"];
+
+    let result = validateFields(form_data, keysToCheck);
+    if (!result.canSubmit) {
+      let data = { ...result.formData };
+      setFormData(data);
+      return;
+    }
+
+    if (form_data.pincode_error) {
+      return;
+    }
+
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      handleNavigation();
+      return;
+    }
+
+    let userKycDetails = { ...kyc };
+    userKycDetails.address.meta_data.state = form_data.state;
+    userKycDetails.address.meta_data.city = form_data.city;
+    userKycDetails.address.meta_data.pincode = form_data.pincode;
+    userKycDetails.address.meta_data.addressline = form_data.addressline;
+
     try {
       let item = {
         kyc: {
-          address: kyc.address.meta_data,
-          nomination: kyc?.nomination?.meta_data,
+          address: userKycDetails.address.meta_data,
+          nomination: userKycDetails?.nomination?.meta_data,
         },
-      }
-      const nomination_address = kyc?.nomination?.meta_data?.nominee_address
-      item.kyc.nomination.address = nomination_address
-      setIsApiRunning(true)
-      const result = await submit(item)
-      setKyc(result.kyc)
-      if (backToJourney !== null) {
-        navigate('/kyc/upload/address')
-      } else {
-        if (kyc?.address?.meta_data?.is_nri) {
-          navigate('/kyc/nri-address-details-1', {
-            isEdit,
-          })
-        } else {
-          navigate('/kyc/journey')
-        }
-      }
+      };
+      userKycDetails.nomination.meta_data.nominee_address.state =
+        form_data.state;
+      userKycDetails.nomination.meta_data.nominee_address.city = form_data.city;
+      userKycDetails.nomination.meta_data.nominee_address.pincode =
+        form_data.pincode;
+      userKycDetails.nomination.meta_data.nominee_address.addressline =
+        form_data.addressline;
+      const nomination_address =
+        userKycDetails.nomination.meta_data.nominee_address;
+      item.kyc.nomination.address = nomination_address;
+      setIsApiRunning("button");
+      await submit(item);
+      handleNavigation();
     } catch (err) {
-      setShowError(err.message)
-      Toast(err.message, 'error')
+      Toast(err.message, "error");
     } finally {
-      setIsApiRunning(false)
-      setShowError(false)
+      setIsApiRunning(false);
     }
-  }
+  };
+
+  const handleNavigation = () => {
+    if (backToJourney !== null) {
+      navigate("/kyc/upload/address");
+    } else {
+      if (kyc?.address?.meta_data?.is_nri) {
+        navigate("/kyc/nri-address-details1", {
+          isEdit,
+        });
+      } else {
+        navigate("/kyc/journey");
+      }
+    }
+  };
 
   const handleChange = (event) => {
-    const name = event.target.name
-    const value = event.target.value
-    switch (name) {
-      case 'pincode':
-        if (value.length <= 6) {
-          if (!pinTouched) {
-            setPinTouched(true)
-          }
-          setKyc((kyc) => ({
-            ...kyc,
-            address: {
-              ...kyc?.address,
-              meta_data: {
-                ...kyc?.address?.meta_data,
-                [name]: value,
-              },
-            },
-          }))
-          setNomineeData(name, value)
-        }
-        break
-      case 'addressline':
-        setKyc((kyc) => ({
-          ...kyc,
-          address: {
-            ...kyc?.address,
-            meta_data: {
-              ...kyc?.address?.meta_data,
-              [name]: value,
-            },
-          },
-        }))
-        setNomineeData(name, value)
-        break
-      default:
-        break
-    }
-  }
+    const name = event.target.name;
+    const value = event.target.value;
+    if (
+      name === "pincode" &&
+      value &&
+      (value.length > 6 || !validateNumber(value))
+    )
+      return;
+    let formData = { ...form_data };
+    formData[name] = value;
+    if (!value) {
+      formData[`${name}_error`] = "This is required";
+    } else formData[`${name}_error`] = "";
+    setFormData({ ...formData });
+  };
 
   const fetchPincodeData = async () => {
+    let formData = { ...form_data };
     try {
-      const data = await getPinCodeData(pincode)
-      if (data.length === 0) {
-        setKyc((userKyc) => ({
-          ...userKyc,
-          address: {
-            ...userKyc.address,
-            meta_data: {
-              ...userKyc?.address?.meta_data,
-              city: '',
-              state: '',
-              country: '',
-            },
-          },
-        }))
+      const data = await getPinCodeData(form_data.pincode);
+      if (data && data.length === 0) {
+        formData["pincode_error"] = "Please enter valid pincode";
+        formData.city = "";
+        formData.state = "";
       } else {
-        setKyc((userKyc) => ({
-          ...userKyc,
-          address: {
-            ...userKyc.address,
-            meta_data: {
-              ...userKyc?.address?.meta_data,
-              city: data[0].district_name,
-              state: data[0].state_name,
-              country: 'INDIA',
-            },
-          },
-        }))
+        formData.city = data[0].district_name?.toUpperCase();
+        formData.state = data[0].state_name?.toUpperCase();
       }
     } catch (err) {
-      Toast(err.message, 'error')
+      console.error(err);
     }
-  }
+    setFormData({ ...formData });
+  };
 
-  const setNomineeData = (name, value) => {
-    setKyc((kyc) => ({
-      ...kyc,
-      nomination: {
-        ...kyc?.nomination,
-        meta_data: {
-          ...kyc?.nomination.address?.meta_data,
-          nominee_address: {
-            ...kyc?.nomination?.address?.meta_data?.nominee_address,
-            [name]: value,
-          }
-        },
-      },
-    }))
-  }
+  useEffect(() => {
+    if (form_data.pincode.length === 6) {
+      fetchPincodeData();
+    }
+  }, [form_data.pincode]);
 
-  const urlParams = getUrlParams(props?.location?.search)
+  const stateParams = props.location?.state || {};
 
-  const isEdit = urlParams?.isEdit
-  const backToJourney = urlParams?.backToJourney
-  let title = ''
+  const isEdit = stateParams?.isEdit || "";
+  const backToJourney = stateParams?.backToJourney || null;
+  let title = "";
 
   if (kyc?.address?.meta_data?.is_nri) {
     if (isEdit) {
-      title = 'Edit indian address details'
+      title = "Edit indian address details";
     } else {
-      title = 'Indian address details'
+      title = "Indian address details";
     }
   } else {
     if (isEdit) {
-      title = 'Edit address details'
+      title = "Edit address details";
     } else {
-      title = 'Address details'
+      title = "Address details";
     }
   }
 
   const getTotalPages = (userKyc) =>
-    userKyc?.address?.meta_data?.is_nri ? 4 : 2
+    userKyc?.address?.meta_data?.is_nri ? 4 : 2;
 
   const getAddressProof = (userKyc) => {
-    const isNri = userKyc?.address?.meta_data?.is_nri
+    const isNri = userKyc?.address?.meta_data?.is_nri;
     if (isNri) {
-      return 'Passport'
+      return "Passport";
     }
-    return kycDocNameMapper[kyc?.address_doc_type]
-  }
-
-  const initialize = async () => {
-    try {
-      setShowSkelton(true)
-      const result = await initData()
-      setKyc(result.kyc)
-    } catch (err) {
-      setShowError(true)
-    } finally {
-      setShowSkelton(false)
-    }
-  }
-
-  useEffect(() => {
-    if (!kyc || isEmpty(kyc)) {
-      initialize()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (kyc?.address?.meta_data?.pincode?.length === 6) {
-      fetchPincodeData()
-    }
-  }, [kyc?.address?.meta_data?.pincode])
-
-  const pincode = kyc?.address?.meta_data?.pincode || ''
-  const addressline = kyc?.address?.meta_data?.addressline || ''
-  const state = kyc?.address?.meta_data?.state || ''
-  const city = kyc?.address?.meta_data?.city || ''
-  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning
+    return kycDocNameMapper[kyc?.address_doc_type];
+  };
 
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      showSkelton={showSkelton}
-      disable={isDisabled}
-      hideInPageTitle
+      skelton={isLoading}
       handleClick={handleSubmit}
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
+      title={title}
+      current={2}
+      count={2}
+      total={getTotalPages(kyc)}
     >
       <section id="kyc-bank-kyc-address-details-2" className="page-body-kyc">
-        <div className="flex-between flex-center">
-          <div className="title">{title}</div>
-          <div className="pageno">2/{getTotalPages(kyc)}</div>
-        </div>
         <div className="sub-title">Address as per {getAddressProof(kyc)}</div>
         <form className="form-container">
           <TextField
             label="Pincode"
             name="pincode"
             className=""
-            value={pincode}
+            value={form_data.pincode}
             onChange={handleChange}
             margin="normal"
-            helperText={pinTouched && getHelperText(pincode)}
-            inputProps={{ minLength: 6, maxLength: 6 }}
-            error={pinTouched && pincode.length !== 6}
-            size="6"
-            required
+            helperText={form_data.pincode_error || ""}
+            error={form_data.pincode_error ? true : false}
           />
           <TextField
             label="Address"
             name="addressline"
             className=""
-            value={addressline}
+            value={form_data.addressline}
+            helperText={form_data.addressline_error || ""}
+            error={form_data.addressline_error ? true : false}
             onChange={handleChange}
             margin="normal"
             multiline
@@ -260,22 +214,28 @@ const AddressDetails2 = (props) => {
             label="City"
             name="city"
             className=""
-            value={city}
+            value={form_data.city}
+            helperText={form_data.city_error || ""}
+            error={form_data.city_error ? true : false}
             margin="normal"
+            onChange={handleChange}
             disabled
           />
           <TextField
             label="State"
             name="state"
             className=""
-            value={state}
+            value={form_data.state}
+            helperText={form_data.state_error || ""}
+            error={form_data.state_error ? true : false}
             margin="normal"
+            onChange={handleChange}
             disabled
           />
         </form>
       </section>
     </Container>
-  )
-}
+  );
+};
 
-export default AddressDetails2
+export default AddressDetails2;

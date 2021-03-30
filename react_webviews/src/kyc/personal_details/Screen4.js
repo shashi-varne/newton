@@ -1,57 +1,46 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import {
-  storageService,
-  dobFormatTest,
-  formatDate,
-  isEmpty,
-} from "utils/validators";
+import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import { relationshipOptions, getPathname } from "../constants";
 import {
-  storageConstants,
-  relationshipOptions,
-  getPathname,
-} from "../constants";
-import { initData } from "../services";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { savePanData } from "../common/api";
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
+import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "common/ui/Toast";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
+  const [oldState, setOldState] = useState({});
   let title = "Nominee detail";
   if (isEdit) {
     title = "Edit nominee detail";
   }
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
   const type = props.type || "";
+  const keysToCheck = ["dob", "name", "relationship"];
+
+  const { kyc, isLoading  } = useUserKycHook();
 
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) initialize();
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    if (isEmpty(userkycDetails)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      setUserKyc(userkycDetails);
-    }
     let is_checked = false;
     if (
-      userkycDetails.nomination.nominee_optional ||
-      (userkycDetails.nomination.meta_data_status !== "submitted" &&
-        userkycDetails.nomination.meta_data_status !== "approved")
+      kyc.nomination.nominee_optional ||
+      (kyc.nomination.meta_data_status !== "submitted" &&
+        kyc.nomination.meta_data_status !== "approved")
     ) {
       is_checked = true;
     }
@@ -59,16 +48,15 @@ const PersonalDetails4 = (props) => {
     setIsChecked(is_checked);
 
     let formData = {
-      name: userkycDetails.nomination?.meta_data?.name || "",
-      dob: userkycDetails.nomination?.meta_data?.dob || "",
-      relationship: userkycDetails.nomination?.meta_data?.relationship || "",
+      name: kyc.nomination?.meta_data?.name || "",
+      dob: kyc.nomination?.meta_data?.dob || "",
+      relationship: kyc.nomination?.meta_data?.relationship || "",
     };
-    setShowLoader(false);
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const handleClick = () => {
-    let keysToCheck = ["dob", "name", "relationship"];
     if (!isChecked) {
       let result = validateFields(form_data, keysToCheck);
       if (!result.canSubmit) {
@@ -77,10 +65,18 @@ const PersonalDetails4 = (props) => {
         return;
       }
     }
-    let userkycDetails = { ...userkyc };
-    userkycDetails.nomination.meta_data.dob = form_data.dob;
-    userkycDetails.nomination.meta_data.name = form_data.name;
-    userkycDetails.nomination.meta_data.relationship = form_data.relationship;
+
+    if (isChecked) {
+      if (kyc.nomination.nominee_optional) {
+        handleNavigation();
+        return;
+      }
+    } else if (compareObjects(keysToCheck, oldState, form_data)) {
+      handleNavigation();
+      return;
+    }
+
+    let userkycDetails = { ...kyc };
     let body = { kyc: {} };
     if (isChecked) {
       userkycDetails.nomination.nominee_optional = true;
@@ -88,6 +84,9 @@ const PersonalDetails4 = (props) => {
         nomination: userkycDetails.nomination,
       };
     } else {
+      userkycDetails.nomination.meta_data.dob = form_data.dob;
+      userkycDetails.nomination.meta_data.name = form_data.name;
+      userkycDetails.nomination.meta_data.relationship = form_data.relationship;
       body.kyc = {
         nomination: userkycDetails.nomination.meta_data,
       };
@@ -97,25 +96,36 @@ const PersonalDetails4 = (props) => {
 
   const savePersonalDetails4 = async (body) => {
     try {
-      setIsApiRunning(true);
-      const submitResult = await savePanData(body);
+      setIsApiRunning("button");
+      const submitResult = await kycSubmit(body);
       if (!submitResult) return;
-      if (type === "digilocker") {
-        navigate(getPathname.uploadSign);
-      } else {
-        navigate(getPathname.journey);
-      }
+      handleNavigation();
     } catch (err) {
       console.log(err);
-      toast(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
+    }
+  };
+
+  const handleNavigation = () => {
+    if (type === "digilocker") {
+      navigate(getPathname.uploadSign);
+    } else {
+      navigate(getPathname.journey);
     }
   };
 
   const handleChange = (name) => (event) => {
     if (name === "checkbox") {
       setIsChecked(!isChecked);
+      let formData = { ...form_data };
+      keysToCheck.forEach((element) => {
+        formData[`${element}_error`] = "";
+      });
+      setFormData({
+        ...formData,
+      });
       return;
     }
 
@@ -137,19 +147,19 @@ const PersonalDetails4 = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
+      showSkelton={isLoading}
       hideInPageTitle
       id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
       handleClick={handleClick}
+      skelton={isLoading}
+      showLoader={isApiRunning}
+      title={title}
+      count={type === "digilocker" ? 3 : 4}
+      current={type === "digilocker" ? 3 : 4}
+      total="4"
     >
       <div className="kyc-nominee">
-        <div className="kyc-main-title">
-          {title}
-          <span>{type === "digilocker" ? 3 : 4}/4</span>
-        </div>
         <main>
           <div className="nominee-checkbox">
             <Checkbox

@@ -1,79 +1,70 @@
 import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
-import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import {
-  occupationOptions,
-  incomeOptions,
-  residentialOptions,
-  storageConstants,
-  getPathname,
-} from "../constants";
+import { genderOptions, residentialOptions, getPathname } from "../constants";
 import CompliantHelpDialog from "../mini_components/CompliantHelpDialog";
-import { initData } from "../services";
 import {
-  storageService,
   formatDate,
   dobFormatTest,
   isEmpty,
   validateNumber,
-} from "../../utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { getCVL, savePanData } from "../common/api";
+} from "utils/validators";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
+import useUserKycHook from "../common/hooks/userKycHook";
+import { kycSubmit } from "../common/api";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
-  let title = "Basic details";
+  const [oldState, setOldState] = useState({});
+  let title = "Personal details";
   const [is_nri, setIsNri] = useState();
   if (isEdit) {
-    title = "Edit basic details";
+    title = "Edit personal details";
   }
 
+  const {kyc, user, isLoading} = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
-    let isNri = userkycDetails.address.meta_data.is_nri;
+    let isNri = kyc.address.meta_data.is_nri;
     let selectedIndexResidentialStatus = 0;
     if (isNri) {
       selectedIndexResidentialStatus = 1;
     }
+    let mobile_number = kyc.identification.meta_data.mobile_number || "";
+    let country_code = "";
+    if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
+      country_code = mobile_number.split("|")[0];
+      mobile_number = mobile_number.split("|")[1];
+    }
     let formData = {
-      pan: userkycDetails.pan.meta_data.pan_number,
-      dob: userkycDetails.pan.meta_data.dob,
-      email: userkycDetails.address.meta_data.email,
-      mobile: userkycDetails.identification.meta_data.mobile_number,
-      occupation: userkycDetails.identification.meta_data.occupation,
-      income: userkycDetails.identification.meta_data.gross_annual_income,
+      pan: kyc.pan.meta_data.pan_number,
+      dob: kyc.pan.meta_data.dob,
+      email: kyc.address.meta_data.email,
+      mobile: mobile_number,
+      country_code: country_code,
       residential_status:
         residentialOptions[selectedIndexResidentialStatus].value,
-      tin_number: userkycDetails.nri_address.tin_number,
+      tin_number: kyc.nri_address.tin_number,
+      gender: kyc.identification.meta_data.gender || "",
     };
-    setShowLoader(false);
     setIsNri(isNri);
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const close = () => {
@@ -81,84 +72,61 @@ const PersonalDetails1 = (props) => {
   };
 
   const handleClick = () => {
-    let keysToCheck = [
-      "dob",
-      "mobile",
-      "occupation",
-      "income",
-      "residential_status",
-    ];
+    let keysToCheck = ["dob", "residential_status", "gender"];
     if (is_nri) keysToCheck.push("tin_number");
-    if (currentUser.email === null) keysToCheck.push("email");
+    if (user.email === null) keysToCheck.push("email");
+    if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
       return;
     }
-    let userkycDetails = { ...userkyc };
+    let userkycDetails = { ...kyc };
+    let mobile_number = form_data.mobile;
+    if (form_data.country_code) {
+      mobile_number = form_data.country_code + "|" + mobile_number;
+    }
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.address.meta_data.email = form_data.email;
-    userkycDetails.identification.meta_data.mobile_number = form_data.mobile;
-    userkycDetails.identification.meta_data.occupation = form_data.occupation;
-    userkycDetails.identification.meta_data.gross_annual_income =
-      form_data.income;
+    userkycDetails.identification.meta_data.mobile_number = mobile_number;
+    userkycDetails.identification.meta_data.gender = form_data.gender;
+    userkycDetails.address.meta_data.is_nri = is_nri;
     let tin_number = form_data.tin_number;
-    let body = {
-      pan_number: form_data.pan.toUpperCase(),
-      dob: form_data.dob,
-      mobile_number: form_data.mobile,
-      email: form_data.email,
+    let item = {
+      kyc: {
+        pan: userkycDetails.pan.meta_data,
+        address: userkycDetails.address.meta_data,
+        identification: userkycDetails.identification.meta_data,
+      },
     };
-    let data = {
-      tin_number,
-      userKyc: userkycDetails,
-    };
-    saveCompliantPersonalDetails1(body, data);
+    if (is_nri) {
+      item.kyc.nri_address = {
+        tin_number: tin_number || "",
+      };
+    }
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.compliantPersonalDetails2, {
+        state: { isEdit: isEdit },
+      });
+      return;
+    }
+    saveCompliantPersonalDetails1(item);
   };
 
-  const saveCompliantPersonalDetails1 = async (body, data) => {
-    setIsApiRunning(true);
-    let { userKyc, tin_number } = data;
+  const saveCompliantPersonalDetails1 = async (data) => {
+    setIsApiRunning("button");
     try {
-      const result = await getCVL(body);
-      if (!result) return;
-      userKyc.identification.politically_exposed = "NOT APPLICABLE";
-      userKyc.address.meta_data.is_nri = is_nri;
-      let item = {
-        kyc: {
-          pan: userKyc.pan.meta_data,
-          address: userKyc.address.meta_data,
-          identification: userKyc.identification,
-        },
-      };
-      if (is_nri) {
-        item.kyc.nri_address = {
-          tin_number: tin_number || "",
-        };
+      const submitResult = await kycSubmit(data);
+      if (!submitResult) {
+        setIsApiRunning(false);
+        return;
       }
-      const submitResult = await savePanData(item);
-      if (!submitResult) return;
-      if (is_nri) {
-        let toState = "kyc-bank-details";
-        if (isEdit) {
-          toState = "kyc-journey";
-        }
-        navigate(getPathname.nriAddressDetails2, {
-          state: {
-            toState: toState,
-            userType: "compliant",
-          },
-        });
-      } else {
-        if (isEdit) {
-          navigate(getPathname.journey);
-        } else {
-          navigate(getPathname.compliantPersonalDetails2);
-        }
-      }
+      navigate(getPathname.compliantPersonalDetails2, {
+        state: { isEdit: isEdit },
+      });
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -172,7 +140,8 @@ const PersonalDetails1 = (props) => {
       formData[name] = residentialOptions[value].value;
       if (value === 1) setIsNri(true);
       else setIsNri(false);
-    } else if (name === "dob") {
+    } else if (name === "gender") formData[name] = genderOptions[value].value;
+    else if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
       }
@@ -187,16 +156,17 @@ const PersonalDetails1 = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
-      hideInPageTitle
+      skelton={isLoading}
       id="kyc-personal-details1"
       buttonTitle="CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      showLoader={isApiRunning}
       handleClick={handleClick}
+      title={title}
+      count={1}
+      current={1}
+      total={3}
     >
       <div className="kyc-complaint-personal-details">
-        <div className="kyc-main-title">{title}</div>
         <div className="kyc-main-subtitle">
           <div>
             <div>Share your date of birth as per PAN:</div>
@@ -206,7 +176,7 @@ const PersonalDetails1 = (props) => {
             HELP
           </div>
         </div>
-        {!showLoader && (
+        {!isLoading && (
           <main>
             <Input
               label="Date of birth(DD/MM/YYYY)"
@@ -220,7 +190,7 @@ const PersonalDetails1 = (props) => {
               id="dob"
               disabled={isApiRunning}
             />
-            {currentUser && currentUser.email === null && (
+            {user && user.email === null && (
               <Input
                 label="Email"
                 class="input"
@@ -232,7 +202,7 @@ const PersonalDetails1 = (props) => {
                 disabled={isApiRunning}
               />
             )}
-            {currentUser && currentUser.mobile === null && (
+            {user && user.mobile === null && (
               <Input
                 label="Mobile number"
                 class="input"
@@ -245,32 +215,20 @@ const PersonalDetails1 = (props) => {
                 disabled={isApiRunning}
               />
             )}
-            <div className="input">
-              <DropdownWithoutIcon
-                error={form_data.occupation_error ? true : false}
-                helperText={form_data.occupation_error || ""}
-                options={occupationOptions}
-                id="occupation"
-                label="Occupation"
-                isAOB={true}
-                value={form_data.occupation || ""}
-                name="occupation"
-                onChange={handleChange("occupation")}
+            <div className={`input ${isApiRunning && `disabled`}`}>
+              <RadioWithoutIcon
+                error={form_data.gender_error ? true : false}
+                helperText={form_data.gender_error}
+                width="40"
+                label="Gender:"
+                class="gender"
+                options={genderOptions}
+                id="account_type"
+                value={form_data.gender || ""}
+                onChange={handleChange("gender")}
                 disabled={isApiRunning}
               />
             </div>
-            <DropdownWithoutIcon
-              error={form_data.income_error ? true : false}
-              helperText={form_data.income_error || ""}
-              options={incomeOptions}
-              id="income"
-              label="Income range"
-              isAOB={true}
-              value={form_data.income || ""}
-              name="income"
-              onChange={handleChange("income")}
-              disabled={isApiRunning}
-            />
             <div className={`input ${isApiRunning && `disabled`}`}>
               <RadioWithoutIcon
                 error={form_data.resident_error ? true : false}
@@ -299,10 +257,6 @@ const PersonalDetails1 = (props) => {
                 disabled={isApiRunning}
               />
             )}
-            <footer>
-              By tapping ‘save and continue’ I agree that I am not a
-              PEP(politically exposed person)
-            </footer>
           </main>
         )}
         {isOpen && (

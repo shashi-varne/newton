@@ -7,7 +7,7 @@ import { resetRiskProfileJourney } from "../functions";
 const PaymentCallback = (props) => {
   const params = props.match.params || {};
   const status = params.status || "";
-  const message = params.message || "";
+  let message = params.message || "";
   resetRiskProfileJourney()
   const config = getConfig();
   let paymentError = false;
@@ -27,7 +27,7 @@ const PaymentCallback = (props) => {
   return (
     <Container
       buttonTitle="Done"
-      hideInPageTitle
+      hidePageTitle
       handleClick={() => handleClick()}
     >
       <section className="invest-payment-callback">

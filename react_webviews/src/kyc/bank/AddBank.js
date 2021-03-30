@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { storageService, validateNumber, isEmpty } from "utils/validators";
+import { validateNumber, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
-  storageConstants,
   bankAccountTypeOptions,
   getPathname,
   getIfscCodeError,
@@ -13,20 +12,17 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini_components/Alert";
 import { navigate as navigateFunc, validateFields } from "../common/functions";
-import { initData } from "../services";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
 import { getIFSC, addAdditionalBank } from "../common/api";
 import toast from "common/ui/Toast";
 import { getConfig } from "utils/functions";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const AddBank = (props) => {
   const genericErrorMessage = "Something Went wrong!";
   const partner = getConfig().partner;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const [userKyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
   const bank_id = props.location.state?.bank_id || "";
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
@@ -44,26 +40,22 @@ const AddBank = (props) => {
       "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
     variant: "info",
   });
-  const [showLoader, setShowLoader] = useState(true);
+
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc]);
 
   let initialize = async () => {
-    let kycDetails = { ...userKyc };
-    if (isEmpty(kycDetails)) {
-      await initData();
-      kycDetails = storageService().getObject(storageConstants.KYC);
-      setUserKyc(kycDetails);
-    }
-    setName(kycDetails.pan.meta_data.name || "");
+    setName(kyc.pan.meta_data.name || "");
     let data = { ...bankData };
     if (bank_id) {
       data =
-        kycDetails.additional_approved_banks.find(
-          (obj) => obj.bank_id === bank_id
-        ) || {};
+        kyc.additional_approved_banks.find((obj) => obj.bank_id === bank_id) ||
+        {};
       data.c_account_number = data.account_number;
       if (data.user_rejection_attempts === 0) {
         setIsPennyExhausted(true);
@@ -81,15 +73,15 @@ const AddBank = (props) => {
         });
       }
     }
-    setShowLoader(false);
     setBankData({ ...data });
+    setBankIcon(data.ifsc_image || '')
     setAccountTypes([
-      ...bankAccountTypeOptions(kycDetails?.address?.meta_data?.is_nri || ""),
+      ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
     ]);
   };
 
   const uploadDocuments = () => {
-    navigate(`/kyc/${userKyc.kyc_status}/upload-documents`, {
+    navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
       searchParams: `${
         getConfig().searchParams
       }&additional=true&bank_id=${bank_id}`,
@@ -135,7 +127,7 @@ const AddBank = (props) => {
 
   const saveBankData = async (data) => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const result = await addAdditionalBank(data);
       if (!result) return;
       if (result.bank.bank_status === "approved") {
@@ -145,7 +137,7 @@ const AddBank = (props) => {
         navigate(`${getPathname.addBankVerify}${result.bank.bank_id}`);
       }
     } catch (err) {
-      toast(err || genericErrorMessage);
+      toast(err.message || genericErrorMessage);
     } finally {
       setIsApiRunning(false);
     }
@@ -200,7 +192,7 @@ const AddBank = (props) => {
         partner.code !== "cub" &&
         partner.code !== "ippb")
     ) {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
@@ -230,17 +222,18 @@ const AddBank = (props) => {
 
   return (
     <Container
-      hideInPageTitle
-      showSkelton={showLoader}
+      // hideInPageTitle
+      skelton={isLoading}
       id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      showLoader={isApiRunning}
+      disable={isLoading}
       handleClick={handleClick}
+      title="Enter bank account details"
     >
       <div className="kyc-approved-bank">
-        <div className="kyc-main-title">Enter bank account details</div>
-        {!showLoader && (
+        {/* <div className="kyc-main-title">Enter bank account details</div> */}
+        {!isLoading && (
           <>
             <Alert
               variant={note.variant}
