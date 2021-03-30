@@ -1,0 +1,36 @@
+.iframe-child{
+  padding-left: 80px;
+  padding-right: 80px;
+  margin-top: 80px;
+  padding-bottom: 120px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.fd-container-iframe{
+  .footer-iframe{
+    position: fixed;
+    width: 100%;
+    #iframeFooter{
+      margin-bottom: 0px !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px){
+  .iframe-child{
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 60px;
+    padding-bottom: 70px;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+  .fd-container-iframe{
+    .footer-iframe{
+      #iframeFooter{
+        margin-bottom: 10px !important;
+      }
+    }
+  }
+}

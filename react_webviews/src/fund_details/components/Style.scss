@@ -366,16 +366,3 @@
     margin-right: 13px;
   }
 }
-.fd-container-iframe{
-  width: 100% !important;
-  max-width: 85% !important;
-  padding-bottom: 50px !important;
-}
-
-@media only screen and (max-width: 500px){
-  .fd-container-iframe{
-    max-width: 100% !important;
-    margin-top: 60px !important;
-    padding-bottom: 80px !important;
-  }
-}
