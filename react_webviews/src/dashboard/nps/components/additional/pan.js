@@ -122,12 +122,12 @@ class PanDetails extends Component {
       canSubmit = false;
     }
 
-    if (currentUser.mobile === null && !form_data.mobile_number.length !== 10) {
-      form_data.mobile_number_error = "invalid mobile_number";
+    if (!currentUser.mobile && form_data.mobile_number.toString().length !== 10) {
+      form_data.mobile_number_error = "invalid mobile number";
       canSubmit = false;
     }
 
-    if (currentUser.email === null && !validateEmail(form_data.email)) {
+    if (!currentUser.email && !validateEmail(form_data.email)) {
       form_data.email_error = "invalid email";
       canSubmit = false;
     }
@@ -247,7 +247,7 @@ class PanDetails extends Component {
         goBack={this.goBack}
       >
         <div className="pan-details">
-          <div className="top-title">Your Details</div>
+          {/* <div className="top-title">Your Details</div> */}
           <FormControl fullWidth>
             <div className="InputField">
               <InputWithIcon

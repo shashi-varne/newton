@@ -101,7 +101,7 @@ export async function get_recommended_funds(params) {
   let pran = storageService().get('nps-pran_number')
   try {
     this.setState({
-      show_loader: true,
+      show_loader: "button",
     });
     const res = await Api.get(`api/nps/invest/recommend?amount=${params}${pran ? `&pran=${pran}` : ''}`);
     if (
@@ -118,8 +118,15 @@ export async function get_recommended_funds(params) {
     // } else {
     //   throw result.error || result.message || genericErrMsg;
     // }
+    this.setState({
+      show_loader: false,
+    });
     return result;
   } catch (err) {
+    this.setState({
+      show_loader: false,
+      skelton: false
+    });
     throw err;
   }
 }
@@ -127,7 +134,7 @@ export async function get_recommended_funds(params) {
 export async function kyc_submit(params) {
   try {
     this.setState({
-      show_loader: true,
+      show_loader: "button",
     });
     const res = await Api.post("api/kyc/v2/mine", params);
     if (
@@ -238,7 +245,7 @@ export async function updateMeta(params, next_state) {
 export async function getInvestmentData(params) {
   try {
     this.setState({
-      show_loader: true,
+      show_loader: 'button',
     });
 
     const res = await Api.post(`api/nps/invest/v2?app_version=1`, params);
@@ -251,6 +258,11 @@ export async function getInvestmentData(params) {
     }
     const { result, status_code: status } = res.pfwresponse;
 
+    this.setState({
+      show_loader: false,
+      skelton: false
+    });
+
     if (status === 200) {
       storageService().set("npsInvestId", result.id);
       return result;
@@ -258,6 +270,9 @@ export async function getInvestmentData(params) {
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
+    this.setState({
+      show_loader: false,
+    });
     throw err;
   }
 }
@@ -297,7 +312,7 @@ export async function submitPran(params) {
 
 export async function getNPSInvestmentStatus() {
   this.setState({
-    show_loader: true
+    show_loader: 'button'
   })
   try {
     const res = await Api.get(`/api/nps/invest/status/v2`);
@@ -344,7 +359,7 @@ export async function accountMerge() {
 
 export async function checkMerge(pan_number) {
   this.setState({
-    show_loader: true
+    show_loader: "button"
   })
 
   try {

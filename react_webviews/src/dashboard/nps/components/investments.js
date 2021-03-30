@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../common/Container";
 import { initialize } from "../common/commonFunctions";
 import Api from "utils/api";
 import toast from "common/ui/Toast";
@@ -14,7 +14,8 @@ class NpsInvestments extends Component {
       nps_data: '',
       currentUser: '',
       npscampaign: false,
-      npsCampActionUrl: ''
+      npsCampActionUrl: '',
+      skelton: 'g'
     };
     this.initialize = initialize.bind(this);
   }
@@ -59,7 +60,7 @@ class NpsInvestments extends Component {
     
     try {
       this.setState({
-        show_loader: true,
+        skelton: true,
       });
       const res = await Api.get(`/api/nps/summary`);
 
@@ -70,7 +71,7 @@ class NpsInvestments extends Component {
       storageService().set('nps_pran', result.pran);
 
       this.setState({
-        show_loader: false,
+        skelton: false,
       });
 
       if (status === 200) {
@@ -86,7 +87,7 @@ class NpsInvestments extends Component {
 
     } catch (err) {
       this.setState({
-        show_loader: false,
+        skelton: false,
       });
       throw err;
     }
@@ -128,7 +129,7 @@ class NpsInvestments extends Component {
       cardClicked: cardClicked
     })
 
-    this.navigate(route);
+    this.navigate('/kyc/kyc-journey', '', true);
   }
 
   investMore = () => {
@@ -138,15 +139,12 @@ class NpsInvestments extends Component {
   render() {
     return (
       <Container
-        classOverRide="pr-error-container"
         fullWidthButton
         buttonTitle="INVEST MORE"
-        hideInPageTitle
-        hidePageTitle
         title="NPS Investments"
         showLoader={this.state.show_loader}
         handleClick={this.investMore}
-        classOverRideContainer="pr-container"
+        skelton={this.state.skelton}
       >
         <section className="page invest nps">
           <div className="nps-investments">

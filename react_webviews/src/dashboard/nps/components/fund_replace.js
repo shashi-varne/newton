@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../common/Container";
 import Radio from "@material-ui/core/Radio";
 import { initialize } from "../common/commonFunctions";
 import { storageService } from "utils/validators";
@@ -12,6 +12,7 @@ class ReplaceFund extends Component {
       recommended: "",
       show_loader: false,
       selectedValue: '',
+      skelton: "g"
     };
     this.initialize = initialize.bind(this);
   }
@@ -26,7 +27,7 @@ class ReplaceFund extends Component {
 
   fetchRecommendedFunds = async () => {
       this.setState({
-        show_loader: true,
+        skelton: true
       });
 
       let amount = storageService().get('npsAmount')
@@ -65,15 +66,12 @@ class ReplaceFund extends Component {
     let { pension_houses, recommended } = this.state;
     return (
       <Container
-        classOverRide="pr-error-container"
         fullWidthButton
-        hideInPageTitle
-        hidePageTitle
         title="Replace Fund"
+        skelton={this.state.skelton}
         showLoader={this.state.show_loader}
         buttonTitle="APPLY"
         handleClick={() => this.handleClick()}
-        classOverRideContainer="pr-container"
       >
         <section className="page invest nps">
           <div className="container-padding invest-body">

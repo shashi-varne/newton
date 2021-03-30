@@ -3,6 +3,7 @@ import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
 import { initialize } from "../../common/commonFunctions";
 import { getConfig } from "utils/functions";
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 class NpsInfo extends Component {
   constructor(props) {
@@ -22,27 +23,45 @@ class NpsInfo extends Component {
   }
 
   onload = () => {
-    let currentUser = storageService().getObject("user")
+    let currentUser = storageService().getObject("user");
     let npsUser = storageService().get("npsUser") || {};
 
     this.setState({
       currentUser: currentUser,
-      npsUser: npsUser
+      npsUser: npsUser,
+    });
+  };
+
+  handleScroll = (name) => {
+    let element = document.getElementById(`nps-${name}`);
+    if (!element || element === null) {
+      return;
+    }
+
+    scrollIntoView(element, {
+      block: "start",
+      inline: "nearest",
+      behavior: "smooth",
     });
   };
 
   handleClick = (name) => {
     if (name) {
-      this.setState({
-        [name]: true,
-      });
+      this.setState(
+        {
+          [name]: true,
+        },
+        () => this.handleScroll(name)
+      );
     } else {
       if (this.state.currentUser.nps_investment) {
         this.props.history.push(
           { pathname: `amount/one-time`, search: getConfig().searchParams },
-          { state: {
-            pran_number: this.state.npsUser.pran
-          } }
+          {
+            state: {
+              pran_number: this.state.npsUser.pran,
+            },
+          }
         );
       } else {
         this.navigate("pan");
@@ -57,11 +76,10 @@ class NpsInfo extends Component {
         classOverRIde="pr-error-container"
         buttonTitle="CONTINUE"
         classOverRideContainer="pr-container"
-        hideInPageTitle
+        title="Why NPS?"
         handleClick={this.handleClick}
       >
         <div className="nps-info">
-          <div className="main-top-title">Why NPS?</div>
           <ul>
             <li>
               <div className="icon">
@@ -138,7 +156,7 @@ class NpsInfo extends Component {
           </div>
         )}
         {benefits && (
-          <div className="nps-know-more">
+          <div className="nps-know-more" id="nps-benefits">
             <div className="detail">
               <div className="head">Exclusive tax benefits in NPS:</div>
               <div className="statement">
@@ -171,9 +189,11 @@ class NpsInfo extends Component {
           </div>
         )}
         {withdraw && (
-          <div className="nps-know-more">
+          <div className="nps-know-more" id="nps-withdraw">
             <div className="detail">
-              <div className="head">Withdrawal:</div>
+              <div className="head">
+                Withdrawal:
+              </div>
               <div className="statement">
                 As per Pension Fund Regulatory & Development Authority (PFRDA)
                 Exit Rules, following Withdrawal categories are allowed:

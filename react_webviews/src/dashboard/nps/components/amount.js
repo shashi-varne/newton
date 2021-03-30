@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../common/Container";
 import Input from "../../../common/ui/Input";
 import { initialize } from "../common/commonFunctions";
 import { formatAmountInr, storageService, formatAmount } from "utils/validators";

@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { initialize } from "../common/commonFunctions";
-import Container from "fund_details/common/Container";
+import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "utils/validators";
-import { getUrlParams } from "utils/validators";
 
 class NpsPaymentCallback extends Component {
   constructor(props) {
@@ -33,36 +32,35 @@ class NpsPaymentCallback extends Component {
   };
 
   handleClick = async () => {
-    const result = await this.getNPSInvestmentStatus();
-    storageService().set('nps_additional_details_required', true);
-
-    let currentUser = storageService().get("currentUser");
-
-    if (result.registration_details.additional_details_status) {
-      if (currentUser.kyc_registration_v2 == 'init') {
-        this.navigate('/home-kyc');
-      } else if (currentUser.kyc_registration_v2 == 'incomplete') {
-        this.navigate('/kyc-journey');
-      } else {
-        this.navigate('identity');
-      }
+    if (this.state.status !== 'success') {
+      this.navigate('/invest', '', true)
     } else {
-      this.navigate('investments');
+      const result = await this.getNPSInvestmentStatus();
+      storageService().set('nps_additional_details_required', true);
+  
+      let currentUser = storageService().get("currentUser");
+  
+      if (result.registration_details.additional_details_status) {
+        if (currentUser.kyc_registration_v2 == 'init') {
+          this.navigate('/home-kyc');
+        } else if (currentUser.kyc_registration_v2 == 'incomplete') {
+          this.navigate('/kyc-journey', '', true);
+        } else {
+          this.navigate('identity');
+        }
+      } else {
+        this.navigate('investments');
+      }
     }
   };
 
   render() {
     return (
       <Container
-        classOverRIde="pr-error-container"
         showLoader={this.state.show_loader}
         buttonTitle="OK"
-        hideInPageTitle
-        hidePageTitle
         title="Payment Status"
-        classOverRideContainer="pr-container"
         handleClick={this.handleClick}
-        classOverRideContainer="pr-container"
       >
         <div className="nps-payment-callback">
           <div
@@ -78,9 +76,9 @@ class NpsPaymentCallback extends Component {
                 Payment of <b>{formatAmountInr(this.state.amount)}</b> towards NPS is successful
               </div>
             </div>}
-            {this.state.status !== 'success' && <div className="invest-error" ng-show="paymentError == true">
+            {this.state.status !== 'success' && <div className="invest-error">
               <h2>Error</h2>
-              <p>{"{paymentMessage}"}</p>
+              <p>Payment Failed</p>
             </div>}
           </div>
         </div>

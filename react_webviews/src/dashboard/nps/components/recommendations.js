@@ -34,12 +34,13 @@ class Recommendations extends Component {
       all_charges: "",
       openDialog: false,
       openInvestmentSummary: true,
-      risk: "",
+      risk: "high",
       graphData: [],
       display_summary_only: false,
       amount: "",
       url: "",
       pension_house: {},
+      skelton: 'g'
     };
     this.initialize = initialize.bind(this);
   }
@@ -73,7 +74,7 @@ class Recommendations extends Component {
   fetchRecommendedFunds = async () => {
     try {
       this.setState({
-        show_loader: true,
+        skelton: true,
       });
 
       let amount = storageService().get("npsAmount");
@@ -81,7 +82,7 @@ class Recommendations extends Component {
       const res = await this.get_recommended_funds(amount);
       let data = res.result;
 
-      if (res.status_code === 200 && !this.state.display_summary_only) {
+      if (res.status_code === 200) {
         let recommendations = data.recommended[0];
         let graphData = [
           {
@@ -114,18 +115,18 @@ class Recommendations extends Component {
           recommendations: recommendations,
           all_charges: data.all_charges,
           payment_details: data.payment_breakup,
-          show_loader: false,
+          skelton: this.state.display_summary_only,
           risk: recommendations.risk,
           graphData: graphData,
+        }, () => {
+          this.state.display_summary_only && this.handleClick();
         });
       } else {
         toast("something went wrong");
       }
-
-      if (this.state.display_summary_only) this.handleClick();
     } catch (err) {
       this.setState({
-        show_loader: false,
+        skelton: false,
       });
       console.log(err);
       toast("something went wrong");
@@ -353,21 +354,20 @@ class Recommendations extends Component {
       all_charges,
       graphData,
       display_summary_only,
+      url
     } = this.state;
 
     return (
       <Container
-        classOverRide="pr-error-container"
         fullWidthButton
         buttonTitle="PROCEED"
-        hideInPageTitle
-        hidePageTitle
+        title="Recommended fund"
         noFooter={display_summary_only}
         title="Recommended fund"
         showLoader={show_loader}
         handleClick={this.handleClick}
         goBack={this.goBack}
-        classOverRideContainer="pr-container"
+        skelton={this.state.skelton}
       >
         {!display_summary_only && (
           <div>
@@ -558,7 +558,7 @@ class Recommendations extends Component {
             {this.renderDialog()}
           </div>
         )}
-        {this.state.display_summary_only && this.renderInvestmentSummary()}
+        {this.state.display_summary_only && url && this.renderInvestmentSummary()}
       </Container>
     );
   }
