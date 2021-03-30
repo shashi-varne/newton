@@ -965,7 +965,7 @@ body[data-device="mobile"] {
 .react-select__option{
   // padding-top: 13px !important;
   // padding-left: 12px !important;
-  padding: 10px 0px 0px 10px !important;
+  // padding: 10px 0px 0px 10px !important;
   font-size: 13px !important;
   line-height: 21px !important;
   color: #161A2E !important;
@@ -993,15 +993,13 @@ body[data-device="mobile"] {
   font-weight: normal;
   color: #161A2E;
   max-width: 80%;
-  height: 33px !important;
   overflow: hidden;
-  display: inline-flex !important;
-  flex-direction: column;
-  align-content: flex-start;
   position: relative;
-  justify-content: center;
   flex-wrap: wrap;
   align-items: center;
+}
+.react-select__multi-value__label{
+   padding : 0 2px 2px 4px !important
 }
 .drop-up .Select-menu-outer {
   top: auto;
@@ -1012,15 +1010,15 @@ body[data-device="mobile"] {
   margin-left: -1PX !important;
   margin-top: 5px !important;
 }
-.css-1rhbuit-multiValue {
+.react-select__multi-value{
   background: rgba(238, 238, 238, 0.3) !important;
-  margin-top: 12px !important;
   border: 1px solid #D6D6D6;
   height: 18px !important;
   line-height: 17px !important;
   font-size: 13px !important;
+  margin: 10px 5px 0px 0px !important;
 }
-.css-xb97g8{
+.react-select__multi-value__remove{
   margin-top: 3px;
   border-radius: 50% !important;
   margin-left: 6px !important;
@@ -1032,6 +1030,10 @@ body[data-device="mobile"] {
 }
 .css-6q0nyr-Svg{
   color: #767E86 !important;
+  padding: 0 !important;
+}
+.css-6q0nyr-Svg:hover{
+  color: #4A4A4A !important;
   padding: 0 !important;
 }
 .react-select__menu-notice{

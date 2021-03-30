@@ -46,6 +46,12 @@ class SelectDropDown2 extends React.Component {
   }
 
   handleChange = selectedOption => {
+    if (this.state.multi) {
+      this.setState({
+        selectedOption: selectedOption,
+      })
+      return;
+    }
     let OptionSelected = ''
     if (selectedOption) {
       if (selectedOption.value + '') {
@@ -60,8 +66,6 @@ class SelectDropDown2 extends React.Component {
     })
     this.props.onChange(selectedOption ? selectedOption.value : '');
   }
-
-
 
   componentDidUpdate(prevState) {
     if (prevState.value !== this.props.value && this.props.value) { this.setState({ selectedOption: this.props.value }) }
@@ -136,7 +140,7 @@ class SelectDropDown2 extends React.Component {
               placeholder={''}
               isClearable={true}
               isSearchable={this.props.options.length <= 6 ? false : true}
-              value={value || ''}
+              value={this.state.multi ? value : (value || '')}
               menuPlacement={this.state.dropUp ? 'top' : 'bottom'}
               textFieldProps={{
                 label: 'Label',
