@@ -294,7 +294,8 @@ class PaymentOption extends React.Component {
       showCancelModal: false,
       showDebitLoader: false,
       showBilldeskLoader: false,
-      skelton: true
+      skelton: true,
+      productName: getConfig().productName
     };
 
     this.goToBank = this.goToBank.bind(this);
@@ -675,28 +676,42 @@ class PaymentOption extends React.Component {
         header={true}
         noFooter={true}
         page="pg_option"
-        title="Select payment method"
+        title="Payment modes"
         buttonTitle='Continue'
       >
         {(this.state.selectedBank && store.banks && store.banks.length) &&
           <div>
-            <div className="block-padding bold payment-option-sub">Payable amount: ₹ {store.amount.toLocaleString()}</div>
+            {/* <div className="block-padding bold payment-option-sub">Payable amount: ₹ {store.amount.toLocaleString()}</div> */}
             <div className="block-padding">
               {this.state.selectedBank &&
-                <div className="selectedBank selected-bank" onClick={() => this.openModal('bank')}>
-                  <div className="flex">
-                    <div className="icon" ><img src={this.state.selectedBank.image} width="36" alt="bank" /></div>
-                    <div>
-                      <div className="banktext-header">PAY FROM</div>
-                      <div className="banktext-subheader">{this.state.selectedBank.bank_name} - {this.state.selectedBank.obscured_account_number}</div>
+                <div>
+                  <div className="selectedBank selected-bank" style={{ border: 'unset' }}
+                    onClick={() => this.openModal('bank')}>
+                    <div className="flex">
+                      <div className="icon" ><img src={this.state.selectedBank.image} width="36" alt="bank" /></div>
+                      <div>
+                        <div className="banktext-header">{this.state.selectedBank.bank_name} - {this.state.selectedBank.obscured_account_number}</div>
+                        <div className="banktext-subheader">{this.state.selectedBank.is_primary_bank ? 'Primary bank account' : 'Bank account'}</div>
+                      </div>
+                    </div>
+                    {store.banks.length > 1 && <div className="change">CHANGE</div>}
+                  </div>
+
+                  <div style={{ marginTop: '15px', display: 'flex', padding: '5px 15px 10px 15px' }}
+                    className="highlight-text highlight-color-info">
+                    <div className="highlight-text1">
+                      <img className="highlight-text11"
+                        src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="info" />
+                    </div>
+                    <div className="highlight-text2" style={{ color: '#767E86' }}>
+                      Make payment via UPI or net banking using your {this.state.selectedBank.bank_name} account ending with {(this.state.selectedBank.obscured_account_number || '').replace(/\x/g, '')}
                     </div>
                   </div>
-                  {store.banks.length > 1 && <div className="change">CHANGE</div>}
                 </div>
               }
             </div>
             <div className="block-padding payusing">
-              Pay using
+              Pay ₹ {store.amount.toLocaleString()} using
           </div>
             <div className="tabs">
               {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported &&
