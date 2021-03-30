@@ -11,7 +11,7 @@ import {
   numDifferentiationInr,
   formatAmount,
 } from "utils/validators";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropDownNew from "../../../common/ui/DropDownNew";
 
 class LoanBtDetails extends Component {
   constructor(props) {
@@ -318,7 +318,7 @@ class LoanBtDetails extends Component {
                   <div className="head">Personal loan {index+1}</div>
                   <FormControl fullWidth>
                     <div className="InputField">
-                      <DropdownWithoutIcon
+                      <DropDownNew
                         width="40"
                         options={this.state.screenData.bankOptions}
                         label="Financer name"

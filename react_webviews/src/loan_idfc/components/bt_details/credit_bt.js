@@ -15,7 +15,7 @@ import {
   IsFutureMonthYear,
 } from "utils/validators";
 import toast from "../../../common/ui/Toast";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropDownNew from "../../../common/ui/DropDownNew";
 
 class LoanBtDetails extends Component {
   constructor(props) {
@@ -359,7 +359,7 @@ class LoanBtDetails extends Component {
                   <div className="head">Card with limit of ₹40 lakhs</div>
                   <FormControl fullWidth>
                     <div className="InputField">
-                      <DropdownWithoutIcon
+                      <DropDownNew
                         width="40"
                         options={this.state.screenData.bankOptions}
                         label="Financer name"
