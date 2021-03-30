@@ -154,10 +154,10 @@ const KycBankDetails = (props) => {
       if (!["incomplete", "submitted"].includes(bankData.bank_status)) {
         data.bank_id = "";
       }
-      if(compareObjects(keysToCheck, oldState ,bankData)) {
-        handleNavigation();
-        return
-      }
+      // if(compareObjects(keysToCheck, oldState ,bankData)) {
+      //   navigate(`/kyc/${userType}/bank-verify`)
+      //   return
+      // }
       saveBankData(data);
     }
   };
