@@ -787,12 +787,10 @@ export async function getDiyPurchaseLimit(data) {
         return dict;
       });
 
-      // let isDisabledFundCount = 0;
       this.setState({
         show_loader: false,
         fundsData: fundsData,
         purchaseLimitData: purchaseLimitData,
-        // isDisabledFundCount: isDisabledFundCount,
       });
     } else {
       this.setState({ show_loader: false });

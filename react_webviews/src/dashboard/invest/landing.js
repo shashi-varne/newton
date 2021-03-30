@@ -109,12 +109,8 @@ class Landing extends Component {
         skelton={this.state.show_loader}
         noFooter={true}
         title='Start Investing'
-        loaderData={{
-          loadingText,
-        }}
       >
         <div className="invest-landing">
-          {/* <div className="main-top-title">Start Investing</div> */}
           <div className="main-top-subtitle">
             {isReadyToInvestBase
               ? " Your KYC is verified, You’re ready to invest"

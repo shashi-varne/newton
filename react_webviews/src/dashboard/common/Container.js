@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
-import {didMount, commonRender} from '../../common/components/container_functions';
+import {
+  didMount,
+  commonRender,
+} from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
-import '../../utils/native_listner';
-// import {checkStringInString} from 'utils/validators';
-// import { goBackMap} from '../constants';
+import "../../utils/native_listner";
 
 class Container extends Component {
   constructor(props) {
@@ -17,14 +18,13 @@ class Container extends Component {
       inPageTitle: true,
       force_hide_inpage_title: this.props.hidePageTitle,
       new_header: true,
-      project: 'landing' ,//to use in common functions
-      
+      project: "landing", //to use in common functions
     };
     this.historyGoBack = this.historyGoBack.bind(this);
     this.handleTopIcon = this.handleTopIcon.bind(this);
 
     this.didMount = didMount.bind(this);
-    this.commonRender =  commonRender.bind(this);
+    this.commonRender = commonRender.bind(this);
   }
 
   componentDidMount() {
@@ -37,101 +37,30 @@ class Container extends Component {
 
   handleTopIcon = () => {
     this.props.handleTopIcon();
-  }
+  };
 
   historyGoBack = (backData) => {
-    
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
 
-
-    if(this.props.headerData && this.props.headerData.goBack) {
+    if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
       return;
     }
-    
-    // let pathname = this.props.history.location.pathname;
 
-    // if (checkStringInString(pathname, "form-summary")) {
-    //   this.setState({
-    //     callbackType: 'loan_home',
-    //     openPopup: true,
-    //     popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
-    //   })
-    //   return;
-    // }
-
-    // if (checkStringInString(pathname, "instant-kyc") && !checkStringInString(pathname, "instant-kyc-status")) {
-    //   this.setState({
-    //     callbackType: 'loan_journey',
-    //     openPopup: true,
-    //     popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
-    //   })
-    //   return;
-    // }
-
-    // if (checkStringInString(pathname, "loan-summary")) {
-    //   this.setState({
-    //     callbackType: 'loan_home',
-    //     openPopup: true,
-    //     popupText: 'You are just one steps  away from getting money in your account. Do you really want to exit?'
-    //   })
-    //   return;
-    // }
-
-    // if(goBackMap(pathname)) {
-    //   this.navigate(goBackMap(pathname));
-    //   return;
-    // }
-
-
-    // switch (pathname) {
-    //   case "/loan/home":
-    //   case "/loan/report":
-    //   case "/loan/app-update":
-    //     nativeCallback({ action: "native_back"});
-    //     break;
-    //   default:
-        this.props.history.goBack();
-    // }
+    this.props.history.goBack();
   };
 
   componentDidUpdate(prevProps) {
     this.didupdate();
   }
 
-  // handleClose = () => {
-  //   this.setState({
-  //     openPopup: false
-  //   });
-  // }
-
-  // handlePopup = () => {
-  
-  //   this.setState({
-  //     openPopup: false
-  //   });
-
-  //   if(this.state.callbackType === 'loan_home') {
-  //     this.navigate('/loan/home');
-  //   } else if(this.state.callbackType === 'loan_journey') {
-  //     this.navigate('/loan/journey');
-  //   } else {
-  //     nativeCallback({ action: this.state.callbackType });
-  //   }
-
-  // }
-
-   render() {
+  render() {
     let props_base = {
-      classOverRide : 'loanMainContainer'
-    }
-    return(
-      <Fragment>
-      {this.commonRender(props_base)}
-      </Fragment>
-    )
+      classOverRide: "loanMainContainer",
+    };
+    return <Fragment>{this.commonRender(props_base)}</Fragment>;
   }
 }
 
