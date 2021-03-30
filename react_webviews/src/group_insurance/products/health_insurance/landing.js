@@ -17,9 +17,11 @@ import ic_hospicash_finity from '../../../assets/ic_hospicash_myway.svg'
 import icn_diseases_insurance_fisdom from '../../../assets/fisdom/icn_diseases_insurance.svg'
 import icn_diseases_insurance_finity from '../../../assets/finity/icn_diseases_insurance.svg'
 
-import HealthInsuranceEntry from '../group_health/plans/entry'
 import DiseasesSpecificPlan from '../health_insurance/diseases_specific_plan'
 
+import hdfc_logo from '../../../../src/assets/ic_hdfc_logo.svg';
+import religare_logo from '../../../../src/assets/ic_care.svg';
+import star_logo from '../../../../src/assets/ic_star_health.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -72,8 +74,36 @@ class HealthInsuranceLanding extends Component {
         icon: health_suraksha_icon,
         dropdown : back_nav_bar_icon,
         uparrow : back_nav_bar_icon_up,
-        component: HealthInsuranceEntry,
-        type: 'drop-down'
+        component: [{
+          key: 'GMC',
+          title: 'Care Health',
+          subtitle: 'fisdom Care Health+',
+          Product_name : 'care_plus',
+          icon: religare_logo
+        },
+        {
+          key: 'HDFCERGO',
+          title: 'HDFC ERGO',
+          subtitle: 'my: health Suraksha',
+          Product_name : 'Health_Suraksha',
+          icon: hdfc_logo
+        },
+        {
+          key: 'RELIGARE',
+          title: 'Care Health',
+          subtitle: 'Care',
+          Product_name : 'Care',
+          icon: religare_logo
+        },
+        {
+          key: 'STAR',
+          title: 'Star',
+          subtitle: 'Family health optima',
+          Product_name : 'Star',
+          icon: star_logo
+        }],
+        type: 'drop-down',
+        formate: 'object'
       },
       {
         key: 'DISEASE_SPECIFIC_PLANS',
@@ -83,7 +113,8 @@ class HealthInsuranceLanding extends Component {
         dropdown : back_nav_bar_icon,
         uparrow : back_nav_bar_icon_up,
         component : DiseasesSpecificPlan,
-        type: 'drop-down'
+        type: 'drop-down',
+        formate: 'component'
       },
       {
         key: 'HEALTH_SUPER_TOPUP',
@@ -447,7 +478,7 @@ class HealthInsuranceLanding extends Component {
           <div>
             <p style={{ fontSize: '20px', marginBottom: '24px', fontWeight: '700' }}>Health Insurance</p>
           </div>
-          <MenuListDropDown insuranceProducts={this.state.insuranceProducts} parent={this} />
+          <MenuListDropDown insuranceProducts={this.state.insuranceProducts} parent={this} title='Explore best plans for your health' />
         </div>
       </Container>
     );

@@ -8,6 +8,28 @@ class MenuListDropDownClass extends Component {
             value: this.props.parent.state.value
         }
         this.renderPorducts = this.renderPorducts.bind(this);
+        this.renderPorductList = this.renderPorductList.bind(this)
+    }
+
+    renderPorductList(props, index, array) {
+        if (!props.disabled) {
+            return (
+                <div className='insurance_plans' style={{ width: '100%' }} key={index + 7} onClick={() => this.props.parent.handleClickEntry(props)}>
+                    <div className='insurance_plans_types' style={{ width: '100%', padding: '0px' }}>
+                        <img src={props.icon} alt="" className="insurance_plans_logos_small" />
+                        <div style={{
+                            borderBottomWidth: '1px', width: array.length - 1 !== index ? `calc(100% - 85px)` : '100%',
+                            borderBottomColor: '#EFEDF2', borderBottomStyle: 'solid', paddingTop: '20px', paddingBottom: array.length - 1 !== index ? '20px' : '40px',
+                            justifyContent: 'space-between', cursor: 'pointer'
+                        }}>
+                            <div className='insurance_plans_logos_text' style={{ fontWeight: '400', fontSize: '13px', marginBottom: '5px', lineHeight: '15.41px', width: '100%' }}>{props.title} {props.key === 'GMC' && <span className="recommended-tag">Recommended</span>}</div>
+                            <div className='insurance_plans_logos_subtext' style={{ fontWeight: '300' }}>{props.subtitle}</div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        return null;
     }
 
     renderPorducts(props, index) {
@@ -32,13 +54,18 @@ class MenuListDropDownClass extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div style={{ display: 'flex', width: '100%' }}>
                     {props.type === 'drop-down' && this.props.parent.state.value === index &&
                         <div
                             onClick={() => this.props.parent.handleClick(props.key, props.title)} style={{ width: '100%' }}>
-                                {props.type === 'drop-down' && < props.component onSelectEvent={this.props.parent.handleEvent} parent={this.props.parent} />} </div>
-                    }
+                            {props.formate === 'component' && < props.component onSelectEvent={this.props.parent.handleEvent} parent={this.props.parent} />}
+                            {props.formate === 'object' &&
+                                <div className="group-health-insurance-entry" style={{ width: '100%' }}>
+                                    <div className='products' style={{ width: '100%', marginTop: '-8px' }}>
+                                        {props.component.map(this.renderPorductList)}
+                                    </div>
+                                </div>}
+                        </div>}
                 </div>
             </div>
         )
@@ -49,11 +76,10 @@ class MenuListDropDownClass extends Component {
         return (
             <Fragment>
                 <div className='products' style={{ marginTop: '10px' }}>
-                    <h1 className='header-title' >Explore best plans for your health</h1>
+                    <h1 className='header-title' >{this.props.title}</h1>
                     {this.state.insuranceProducts.map(this.renderPorducts)}
                 </div>
             </Fragment >
-            
         )
     }
 }

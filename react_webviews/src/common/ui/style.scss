@@ -1042,3 +1042,57 @@ body[data-device="mobile"] {
   line-height: 20.15px;
   margin-bottom: 15px;
  }
+ 
+.group-health-insurance-entry{
+  .insurance_plans{
+    display:flex;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color:#EFEDF2 ;
+    justify-content: space-between;
+    cursor: pointer;
+    .recommended-tag{
+      font-size: 9px;
+      display: inline-block;
+      margin-left: 5px;
+      background-color: #5240A7;
+      color: white;
+      padding: 0.1px 4px;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transform: translateY(-2px);
+    }
+  }
+    .insurance_plans_types{
+      display: flex;
+      padding: 0 10px;
+    }
+    .insurance_plans_logos{
+      margin-right:25px;
+      width: 40px;
+      height: 40px;
+      border-radius: 2px;
+    }
+    .insurance_plans_logos_small{
+      margin-right:25px;
+      width: 40px;
+      height: 40px;
+      border-radius: 2px;
+      margin-top: 20px;
+      margin-left: 3px;
+      padding-left: 3px;
+      padding-right: 3px;
+    }
+    .insurance_plans_logos_text{
+      color: #160d2e;
+      font-size:16px;
+      margin-bottom: 5px; 
+      font-weight: 500;
+    } 
+    .insurance_plans_logos_subtext{
+     color: #757474;
+     font-weight: 400; 
+     font-size: 13.6px;
+    }
+  }
