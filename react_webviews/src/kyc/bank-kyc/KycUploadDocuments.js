@@ -8,6 +8,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig } from "../../utils/functions";
+import { getPathname } from "../constants";
 
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -16,7 +17,7 @@ const KycUploadDocuments = (props) => {
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (
@@ -98,32 +99,36 @@ const KycUploadDocuments = (props) => {
     const navigate = navigateFunc.bind(props);
     if (additional) {
       navigate("/kyc/add-bank");
-    } else if (userType === "compliant") {
-      if (isEdit) {
-        navigate("/kyc/journey");
-      } else {
-        navigate("/kyc/upload/sign", {
-          state: {
-            backToJourney: true,
-          },
-        });
-      }
     } else {
-      if (dlFlow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
-          kyc.pan.doc_status !== "submitted"
-        ) {
-          navigate("/kyc/upload/pan");
+      if (userType === "compliant") {
+        if (isEdit) {
+          navigate("/kyc/journey");
         } else {
-          navigate("/kyc-esign/info");
+          if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+            navigate(getPathname.uploadSign, {
+              state: {
+                backToJourney: true,
+              },
+            });
+          } else navigate("/kyc/journey");
         }
       } else {
-        navigate("/kyc/upload/progress");
+        if (dlFlow) {
+          if (
+            (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
+            kyc.pan.doc_status !== "approved"
+          ) {
+            navigate("/kyc/upload/pan");
+          } else {
+            navigate("/kyc-esign/info");
+          }
+        } else {
+          navigate("/kyc/upload/progress");
+        }
       }
-    }
+    } 
   };
 
   const selectedDocValue =

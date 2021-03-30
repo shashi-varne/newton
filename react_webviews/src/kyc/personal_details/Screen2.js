@@ -3,7 +3,11 @@ import Container from "../common/Container";
 import Input from "common/ui/Input";
 import { getPathname } from "../constants";
 import { isEmpty, validateAlphabets } from "../../utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
 import { kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -13,12 +17,13 @@ const PersonalDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
+  const [oldState, setOldState] = useState({});
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -32,6 +37,7 @@ const PersonalDetails2 = (props) => {
       spouse_name: kyc.identification.meta_data.spouse_name || "",
     };
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const handleClick = () => {
@@ -49,6 +55,15 @@ const PersonalDetails2 = (props) => {
     if (form_data.marital_status === "MARRIED")
       userkycDetails.identification.meta_data.spouse_name =
         form_data.spouse_name;
+
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.personalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
+      return;
+    }
     savePersonalDetails2(userkycDetails);
   };
 

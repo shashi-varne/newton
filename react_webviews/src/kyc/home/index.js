@@ -28,8 +28,8 @@ const Home = (props) => {
   const [authIds, setAuthIds] = useState({});
   const stateParams = props.match.state || {};
   const isPremiumFlow = stateParams.isPremiumFlow || false;
-
-  const [kyc, user, isLoading] = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
+  const [userName, setUserName] = useState('')
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -76,25 +76,51 @@ const Home = (props) => {
         "As per Govt norm. you need to do a one-time registration process to complete KYC.",
     },
     success: {
-      title: `Hey ${user.name},`,
+      title: `Hey ${userName},`,
       subtitle: "You’re investment ready and eligible for premium onboarding.",
     },
   };
 
-  const handleClick = () => {
-    if (pan.length !== 10) {
-      setPanError("Minimum length is 10");
-      return;
-    }
+  const handleClick = async () => {
+    try {
+      if (pan.length !== 10) {
+        setPanError("Minimum length is 10");
+        return;
+      }
 
-    if (!validatePan(pan)) {
-      setPanError("Invalid PAN number");
-      return;
-    }
+      if (!validatePan(pan)) {
+        setPanError("Invalid PAN number");
+        return;
+      }
 
-    if (!isStartKyc) checkCompliant();
-    else if (!isUserCompliant) setOpenResident(true);
-    else savePan(kyc.address?.meta_data?.is_nri || false);
+      const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
+      if (!isStartKyc) {
+        if (skipApiCall) {
+          setIsStartKyc(true);
+          setUserName(kyc?.pan?.meta_data?.name)
+          if (kyc?.kyc_status === "compliant") {
+            setIsUserCompliant(true);
+            setButtonTitle("CONTINUE");
+          } else {
+            setButtonTitle("START KYC");
+            setIsUserCompliant(false);
+          }
+          return;
+        }
+        await checkCompliant();
+      } else if (!isUserCompliant) setOpenResident(true);
+      else {
+        if (skipApiCall) {
+          handleNavigation(
+            kyc.address?.meta_data?.is_nri || false,
+            kyc?.kyc_status
+          );
+        }
+        savePan(kyc.address?.meta_data?.is_nri || false);
+      }
+    } catch (err) {
+      toast(err.message || genericErrorMessage);
+    }
   };
 
   const checkCompliant = async () => {
@@ -108,9 +134,10 @@ const Home = (props) => {
         },
         accountMerge
       );
-      if (!result) return;
-      setIsStartKyc(true);
-      if (result.kyc.status) {
+      if (isEmpty(result)) return;
+        setUserName(result.kyc.name);
+        setIsStartKyc(true);
+      if (result?.kyc?.status) {
         setIsUserCompliant(true);
         setButtonTitle("CONTINUE");
       } else {
@@ -118,14 +145,15 @@ const Home = (props) => {
         setIsUserCompliant(false);
       }
     } catch (err) {
-      toast(err.message || genericErrorMessage);
+      console.log(err);
+      throw new Error(err.message);
     } finally {
       setShowLoader(false);
     }
   };
 
   const handleChange = (event) => {
-    let value = event.target ? event.target.value : event;
+    let value = event.target ? event.target.value.trim() : event;
     setPan(value);
     if (value) setPanError("");
     else setPanError("This is required");
@@ -158,7 +186,7 @@ const Home = (props) => {
       storageService().setObject(storageConstants.AUTH_IDS, authIds);
       navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
     } else {
-      if (getConfig().web) {
+      if (getConfig().Web) {
         let result = await logout();
         if (!result) return;
         navigate("/login");
@@ -174,15 +202,16 @@ const Home = (props) => {
     let email = config.partner.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
-    const message = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
+    const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
     if (config.isIframe) {
-      toast(message);
+      toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
       if (!response) return;
       let { result, status_code } = response;
+      let { different_login, auth_ids} = result;
       if (status_code === 200) {
-        setAuthIds(result.auth_ids);
+        setAuthIds(auth_ids);
         setAccountMergeData({
           title: "PAN Already Exists",
           subtitle:
@@ -191,18 +220,16 @@ const Home = (props) => {
           step: "STEP1",
         });
         setOpenAccountMerge(true);
+      } else if (different_login) {
+        setAccountMergeData({
+          title: "PAN Is already registered",
+          subtitle: result?.message,
+          buttonTitle: "SIGN OUT",
+          step: "STEP2",
+        });
+        setOpenAccountMerge(true);
       } else {
-        if (result.different_login) {
-          setAccountMergeData({
-            title: "PAN Is already registered",
-            subtitle: result.error,
-            buttonTitle: "SIGN OUT",
-            step: "STEP2",
-          });
-          setOpenAccountMerge(true);
-        } else {
-          toast(message);
-        }
+        toast(toastMessage);
       }
     }
   };
@@ -228,32 +255,35 @@ const Home = (props) => {
       };
       let result = await kycSubmit(body);
       if (!result) return;
-      user.name = result.kyc.pan.meta_data.name;
-      if (
-        (isUserCompliant || result.kyc.kyc_status === "compliant") &&
-        (homeData.kycConfirmPanScreen || isPremiumFlow)
-      ) {
-        navigate(getPathname.compliantPersonalDetails1);
-      } else {
-        if (isUserCompliant || result.kyc.kyc_status === "compliant") {
-          navigate(getPathname.journey);
-        } else {
-          if (is_nri) {
-            navigate(`${getPathname.journey}`, {
-              searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
-            });
-          } else {
-            navigate(`${getPathname.journey}`, {
-              searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
-            });
-          }
-        }
-      }
+      handleNavigation(is_nri, result.kyc.kyc_status);
     } catch (err) {
       console.log(err);
       toast(err.message || genericErrorMessage);
     } finally {
       setShowLoader(false);
+    }
+  };
+
+  const handleNavigation = (is_nri, kyc_status) => {
+    if (
+      (isUserCompliant || kyc_status === "compliant") &&
+      (homeData.kycConfirmPanScreen || isPremiumFlow)
+    ) {
+      navigate(getPathname.compliantPersonalDetails1);
+    } else {
+      if (isUserCompliant || kyc_status === "compliant") {
+        navigate(getPathname.journey);
+      } else {
+        if (is_nri) {
+          navigate(`${getPathname.journey}`, {
+            searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
+          });
+        } else {
+          navigate(`${getPathname.journey}`, {
+            searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+          });
+        }
+      }
     }
   };
 
@@ -263,23 +293,21 @@ const Home = (props) => {
       id="kyc-home"
       buttonTitle={buttonTitle}
       showLoader={showLoader}
-      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
       title={homeData.title}
     >
       {!isEmpty(homeData) && (
         <div className="kyc-home">
-          {/* <div className="kyc-main-title">{homeData.title}</div> */}
           <div className="kyc-main-subtitle">{homeData.subtitle}</div>
           <main>
             <Input
               label="Enter PAN"
               class="input"
-              value={pan}
+              value={pan.toUpperCase()}
               error={panError ? true : false}
               helperText={panError || ""}
               onChange={handleChange}
-              maxLength={10}
+              maxLength={11}
               type="text"
               disabled={showLoader}
             />

@@ -935,6 +935,13 @@ export function capitalize(string) {
   });
 }
 
+export function isIframe() {
+  if (window.top !== window.self) {
+    return true;
+  } else {
+    return false;
+  }
+}
 export function getBasePath() {
   var basename = window.sessionStorage.getItem('base_href') || '';
   if(basename && basename.indexOf('appl/webview') !== -1) {

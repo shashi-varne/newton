@@ -32,7 +32,7 @@ const BankDetails = (props) => {
     }
   };
 
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     initialize();

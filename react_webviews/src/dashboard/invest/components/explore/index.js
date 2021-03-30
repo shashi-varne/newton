@@ -5,7 +5,6 @@ import diy_equity_icon from 'assets/diy_equity_icon.svg'
 import diy_debt_icon from 'assets/diy_debt_icon.svg'
 import diy_hybrid_icon from 'assets/diy_hybrid_icon.svg'
 import diy_goal_icon from 'assets/diy_goal_icon.svg'
-import search from "assets/search.png";
 import { navigate as navigateFunc } from '../../common/commonFunction'
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
@@ -77,16 +76,16 @@ const InvestExplore = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      helpContact
-      hideInPageTitle
+      hidePageTitle
       title="Explore All Mutual Funds"
       classOverRideContainer="pr-container"
       handleClick={goNext}
-      showLoader={loader}
-      rightIcon={search}
-      handleRightIconClick={handleRightIconClick}
+      skelton={loader}
+      rightIcon="search"
+      handleTopIcon={handleRightIconClick}
     >
       <section className="invest-explore-cards" id="invest-explore">
+        <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (
           <div key={title} onClick={goNext(title)}>
             <InvestExploreCard

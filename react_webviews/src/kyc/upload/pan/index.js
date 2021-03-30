@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini_components/Alert'
-import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants } from '../../constants'
 import { upload } from '../../common/api'
@@ -52,15 +51,10 @@ const Pan = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const [loading, setLoading] = useState(false)
   const [subTitle, setSubTitle] = useState('')
   const [title, setTitle] = useState('')
   const [showLoader, setShowLoader] = useState(false)
-  // const [kyc, setKyc] = useState(
-  //   storageService().getObject(storageConstants.KYC) || null
-  // )
-
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   
   const inputEl = useRef(null)
 
@@ -100,26 +94,7 @@ const Pan = (props) => {
       })
     }
   }
-
-  // useEffect(() => {
-  //   if (isEmpty(kyc)) {
-  //     initialize()
-  //   }
-  // }, [])
-
-  // const initialize = async () => {
-  //   try {
-  //     setLoading(true)
-  //     await initData()
-  //     const kyc = storageService().getObject(storageConstants.KYC)
-  //     setKyc(kyc)
-  //   } catch (err) {
-  //     console.error(err)
-  //   } finally {
-  //     console.log('Finally')
-  //     setLoading(false)
-  //   }
-  // }
+  
   const handleChange = (event) => {
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
@@ -147,16 +122,11 @@ const Pan = (props) => {
     try {
       setIsApiRunning("button")
       const result = await upload(file, 'pan')
-      // console.log(result)
-      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       if (
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
         (result.error && !result.ocr_pan_kyc_matches)
       ) {
-        // $scope.sub_title = 'Photo of PAN should be clear and it should not have the exposure of flash light';
-        // $scope.title = 'PAN mismatch!';
-        // $scope.icon = 'assets/img/alert_icon.svg';
         setSubTitle(
           'Photo of PAN should be clear and it should not have the exposure of flash light'
         )
@@ -185,11 +155,9 @@ const Pan = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      // fullWidthButton={true}
-      skelton={isLoading}
+      skelton={isLoading || showLoader}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
@@ -197,7 +165,6 @@ const Pan = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan" className="page-body-kyc">
-          {/* <div className="title">Upload PAN</div> */}
           <div className="sub-title">
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>

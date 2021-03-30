@@ -4,7 +4,7 @@ import Alert from '../../mini_components/Alert'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants, docMapper } from '../../constants'
 import { upload } from '../../common/api'
-import { getBase64, getConfig, isMobile } from '../../../utils/functions'
+import { getBase64, getConfig } from '../../../utils/functions'
 import toast from '../../../common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
@@ -55,7 +55,7 @@ const AddressUpload = (props) => {
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
-  const [kycData, , isLoading] = useUserKycHook();
+  const {kyc: kycData, isLoading} = useUserKycHook();
   const [kyc, setKyc] = useState(
     kycData
   )
@@ -264,10 +264,7 @@ const AddressUpload = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      classOverRideContainer="pr-container"
-      // fullWidthButton={true}
       skelton={isLoading}
       handleClick={handleSubmit}
       disable={!frontDoc && !backDoc}
@@ -276,7 +273,6 @@ const AddressUpload = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          {/* <div className="title">Upload address proof</div> */}
           <div className="sub-title">{getFullAddress()}</div>
           <Alert
             variant="attention"

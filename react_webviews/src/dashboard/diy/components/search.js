@@ -61,7 +61,7 @@ const Search = (props) => {
   };
 
   return (
-    <Container noFooter helpContact hideInPageTitle title="Search">
+    <Container noFooter hidePageTitle title="Search">
       <div className="diy-search">
         <div className="search-content">
           <div className="search-option">

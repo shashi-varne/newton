@@ -8,6 +8,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import { formatAmountInr } from "utils/validators";
 import { investRedeemData } from "../../constants";
+import { convertInrAmountToNumber } from "../../common/commonFunction";
 
 class InvestAmount extends Component {
   constructor(props) {
@@ -43,11 +44,14 @@ class InvestAmount extends Component {
     this.getRecommendation();
   };
 
-  handleChange = (name) => (event) => {
+  handleChange = () => (event) => {
     let value = event.target.value;
+    value = convertInrAmountToNumber(value);
     let { amount_error, amount } = this.state;
-    if (!isNaN(parseInt(value, 10))) {
-      amount = parseInt(value, 10);
+    // eslint-disable-next-line
+    if (!isNaN(parseInt(value))) {
+      // eslint-disable-next-line
+      amount = parseInt(value);
       this.validateAmount(amount);
       this.setState({ amount: amount });
     } else {
@@ -73,7 +77,7 @@ class InvestAmount extends Component {
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
         disable={amount_error ? true : false}
-        hideInPageTitle
+        hidePageTitle
       >
         <div className="insta-redeem-invest-amount">
           <div className="header">
@@ -92,7 +96,7 @@ class InvestAmount extends Component {
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
-              value={amount}
+              value={amount ? formatAmountInr(amount) : ""}
               error={amount_error ? true : false}
               onChange={this.handleChange("amount")}
               endAdornment={
@@ -101,14 +105,16 @@ class InvestAmount extends Component {
                 )
               }
             />
-            <div
-              className="helper-text"
-              style={{
-                color: amount_error && "red",
-              }}
-            >
-              {amount_error || formatAmountInr(amount)}
-            </div>
+            {amount_error && (
+              <div
+                className="helper-text"
+                style={{
+                  color: amount_error && "red",
+                }}
+              >
+                {amount_error}
+              </div>
+            )}
           </FormControl>
           <div className="tags">
             {tags &&

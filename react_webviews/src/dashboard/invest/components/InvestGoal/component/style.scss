@@ -4,6 +4,14 @@
     flex-direction: column;
 }
 
+.invest-goal-container {
+    .title {
+        font-weight: 600;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+}
+
 .invest-goal-list-item{
     display: flex;
     padding:10px;

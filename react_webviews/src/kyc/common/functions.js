@@ -1,6 +1,5 @@
 import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
-import { getBase64 } from 'utils/functions'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -72,6 +71,12 @@ export const validateFields = (formData, keyToCheck) => {
         case 'email':
           if (!validateEmail(value)) {
             formData[`${key}_error`] = 'Invalid email'
+            canSubmit = false
+          }
+          break
+        case 'pincode':
+          if(value.length !== 6) {
+            formData[`${key}_error`] = 'Minimum length is 6'
             canSubmit = false
           }
           break
@@ -149,3 +154,24 @@ export const combinedDocBlob = (fr, bc, docName) => {
   let blob = blobToFile(combined_image, docName)
   return blob
 }
+
+
+export function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i')
+  var separator = uri.indexOf('?') !== -1 ? '&' : '?'
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + '=' + value + '$2')
+  } else {
+    return uri + separator + key + '=' + value
+  }
+}
+
+export const compareObjects = (keysToCheck, oldState, newState) => {
+  let compare = true;
+  keysToCheck.forEach((key) => {
+    if (oldState[key] !== newState[key]) {
+      compare = false;
+    }
+  });
+  return compare;
+};

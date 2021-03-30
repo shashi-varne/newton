@@ -12,7 +12,7 @@ import useUserKycHook from "../../common/hooks/userKycHook";
 const ChangeAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [form_data, setFormData] = useState({});
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   const [title, setTitle] = useState("");
 
   useEffect(() => {
@@ -68,9 +68,7 @@ const ChangeAddressDetails1 = (props) => {
     <Container
       skelton={isLoading}
       id="kyc-change-address-details1"
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      // disable={isLoading}
       handleClick={handleClick}
       title={title}
       count={1}
@@ -78,9 +76,6 @@ const ChangeAddressDetails1 = (props) => {
       total={4}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>1/4</span>
-        </div> */}
         <main>
           <div className={`input ${disabled && `disabled`}`}>
             <RadioWithoutIcon

@@ -14,14 +14,6 @@ import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
-  //   let isLoggedIn = storageService().get("currentUser");
-
-  //   if (!isLoggedIn) {
-  //     this.props.history.push({
-  //       pathname: "login",
-  //       search: getConfig().searchParams,
-  //     });
-  //   }
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
   this.setInvestCardsData = setInvestCardsData.bind(this);
@@ -727,6 +719,9 @@ export async function getNfoRecommendation() {
         cartCount: cartCount,
         showFunds: showFunds,
       });
+    }  else {
+      this.setState({ show_loader: false });
+      toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -742,11 +737,11 @@ export async function getNfoPurchaseLimit(data) {
       `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
     );
     const { result, status_code: status } = res.pfwresponse;
-    let { fundsData } = this.state;
+    let { fundsData, purchaseLimitData } = this.state;
     if (status === 200) {
-      let purchaseLimitData = result.funds_data;
+      purchaseLimitData[data.investType] = result.funds_data;
       let disableInputSummary = true;
-      if (purchaseLimitData[0].ot_sip_flag) {
+      if (purchaseLimitData[data.investType][0].ot_sip_flag) {
         fundsData[0].allow_purchase = true;
         disableInputSummary = false;
       }
@@ -756,6 +751,9 @@ export async function getNfoPurchaseLimit(data) {
         purchaseLimitData: purchaseLimitData,
         disableInputSummary: disableInputSummary,
       });
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -771,10 +769,10 @@ export async function getDiyPurchaseLimit(data) {
       `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
     );
     const { result, status_code: status } = res.pfwresponse;
-    let { fundsData } = this.state;
+    let { fundsData, purchaseLimitData } = this.state;
     if (status === 200) {
-      let purchaseLimitData = result.funds_data;
-      purchaseLimitData = purchaseLimitData.map((dict) => {
+      purchaseLimitData[data.investType] = result.funds_data;
+      purchaseLimitData[data.investType] = purchaseLimitData[data.investType].map((dict) => {
         var results = fundsData.filter((obj) => {
           if (obj.isin === dict["isin"]) {
             obj["allow_purchase"] = dict["ot_sip_flag"];
@@ -789,13 +787,14 @@ export async function getDiyPurchaseLimit(data) {
         return dict;
       });
 
-      let isDisabledFundCount = 0;
       this.setState({
         show_loader: false,
         fundsData: fundsData,
         purchaseLimitData: purchaseLimitData,
-        isDisabledFundCount: isDisabledFundCount,
       });
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || errorMessage);
     }
   } catch (error) {
     console.log(error);
@@ -825,8 +824,9 @@ export function checkLimit(amount, index) {
     disableInputSummary,
     disableInput,
     fundsData,
+    investType,
   } = this.state;
-  let limitData = purchaseLimitData.find(
+  let limitData = purchaseLimitData[investType].find(
     (data) => data.isin === fundsData[index].isin
   );
   if (!limitData) return;
@@ -889,7 +889,7 @@ export async function proceedInvestment(investReferralData, isReferralGiven) {
   fundsData
     .filter((data) => data.allow_purchase)
     .forEach((fund) => {
-      let limitData = purchaseLimitData.find(
+      let limitData = purchaseLimitData[investType].find(
         (element) => element.isin === fund.isin
       );
       if (!limitData) return;
@@ -964,6 +964,7 @@ export async function makeInvestment(investment, isReferralGiven) {
     type === "diy"
   ) {
     this.navigate("/invest-journey");
+    return
   }
 
   if (isReferralGiven && investReferralData.code) {
@@ -1025,7 +1026,7 @@ export async function proceedInvestmentChild(data) {
     if (!investmentEventData) {
       investmentEventData = storageService().getObject("mf_invest_data") || {};
     }
-    handleApiRunning(true);
+    handleApiRunning("button");
     try {
       const res = await Api.post(apiConstants.triggerInvestment, body);
       const { result, status_code: status } = res.pfwresponse;
@@ -1043,7 +1044,7 @@ export async function proceedInvestmentChild(data) {
         storageService().setObject("mf_invest_data", investmentEventData);
 
         if (isSipDatesScreen) {
-          this.setState({ openSuccessDialog: true, investResponse: result });
+          this.setState({ openSuccessDialog: true, investResponse: result, isApiRunning: false });
           return;
         }
         if (getConfig().Web) {
@@ -1083,6 +1084,7 @@ export async function proceedInvestmentChild(data) {
             break;
         }
       }
+      handleApiRunning(false);
     } catch (error) {
       console.log(error);
       handleApiRunning(false);
@@ -1227,6 +1229,10 @@ export function openKyc() {
   } else {
     if (kycJourneyStatus === "ground") {
       this.navigate("/kyc/home");
+    } else if (kycJourneyStatus === "ground_pan") {
+      this.navigate('/kyc/journey', { state: {
+        show_aadhaar: true, fromState: "invest" }
+      });
     } else {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },

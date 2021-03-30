@@ -1,5 +1,4 @@
 import React from "react";
-import Container from "../../common/Container";
 import { navigate as navigateFunc } from "../common/commonFunction";
 
 const PageCallback = (props) => {
@@ -18,7 +17,7 @@ const PageCallback = (props) => {
       navigate("/invest", null, true);
     }
   }
-  return <Container hideInPageTitle noFooter={true}></Container>;
+  return <div></div>;
 };
 
 export default PageCallback;

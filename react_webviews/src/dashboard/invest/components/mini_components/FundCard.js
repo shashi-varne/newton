@@ -1,25 +1,28 @@
 import React from 'react';
 import { formatAmountInr } from 'utils/validators';
 import RatingStar from '../../../../fund_details/common/RatingStar';
-const FundCard = ({ classOverRide, fund,history,graph,isins }) => {
+import { navigate as navigateFunc } from '../../common/commonFunction';
+const FundCard = ({ classOverRide, fund ,graph, isins, parentProps }) => {
   const {
     amount,
     mf: { mfname, rating, isin, amc_logo_small,mftype_name },
   } = fund;
+  const navigate = navigateFunc.bind(parentProps);
   const handleGraph = () => {
-    if (!graph) return;
-    
-    return history.push({
-      pathname: '/fund-details',
-      search: `?isins=${isins}&selected_isin=${isin}`,
-      state:{flow:"mf journey"}
-    })
-    // return <Redirect
-    //   to={{
-    //     pathname: '/invest-amount',
-    //     //search: `?isin=${isin}`,
-    //   }}
-    // />;
+    navigate(
+      `/fund-details`,
+      {
+        searchParams: `${parentProps.location.search}&isins=${isins}&selected_isin=${isin}`,
+        state:{flow:"mf journey"}
+      },
+      true
+    )
+    return;
+      // return history.push({
+      //   pathname: '/fund-details',
+      //   search: `?isins=${isins}&selected_isin=${isin}`,
+      //   state:{flow:"mf journey"}
+      // })
   };
   return (
     <div className={`recommendations-funds-item ${classOverRide}`} onClick={handleGraph}>

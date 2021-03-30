@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../../../common/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 
@@ -11,12 +10,14 @@ import {
   validateOtAmount,
   validateSipAmount,
   selectTitle,
+  convertInrAmountToNumber,
 } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
 import { isArray } from 'lodash';
 
 import './style.scss';
 import { getConfig } from '../../../../utils/functions';
+import { formatAmountInr } from '../../../../utils/validators';
 const date = new Date();
 
 const InvestAmount = (props) => {
@@ -36,10 +37,12 @@ const InvestAmount = (props) => {
   }, []);
 
   const handleChange = (e) => {
+    let value = e.target.value || "";
+    value = convertInrAmountToNumber(value);
     // eslint-disable-next-line radix
-    if (!isNaN(parseInt(e.target.value))) {
+    if (!isNaN(parseInt(value))) {
       // eslint-disable-next-line radix
-      setAmount(parseInt(e.target.value));
+      setAmount(parseInt(value));
     } else {
       setAmount('');
       setCorpus(0);
@@ -58,10 +61,10 @@ const InvestAmount = (props) => {
     if(error){
       setError(false);
     }
-    if(goalRecommendation.itype !== 'saveforgoal'){
+    if(goalRecommendation.itype !== "saveforgoal"){
       // ? Shouldn't this check be made even for 'parkmymoney'
       let result;
-      if (investTypeDisplay === 'sip') {
+      if (investTypeDisplay === "sip") {
         result = validateSipAmount(amount);
       } else {
         result = validateOtAmount(amount);
@@ -74,7 +77,7 @@ const InvestAmount = (props) => {
         setError(false);
       }
     }
-    if (goalRecommendation.id === 'savetax') {
+    if (goalRecommendation.id === "savetax") {
       calculateTax(graphData?.corpus);
     } else {
       const valueOfCorpus = corpusValue(
@@ -96,8 +99,8 @@ const InvestAmount = (props) => {
         term: graphData?.term,
         rp_enabled: getConfig().riskEnabledFunnels,
       };
-      setLoader(true);
-      if (investType === 'saveforgoal') {
+      setLoader("button");
+      if (investType === "saveforgoal") {
         params.subtype = graphData?.subtype;
         delete params.amount;
       } else if (investType === 'investsurplus') {
@@ -151,7 +154,7 @@ const InvestAmount = (props) => {
       duration = 1;
     }
     let tempAmount = 0;
-    if (investType === 'savetaxsip') {
+    if (investType === "savetaxsip") {
       tempAmount = amount;
       tempAmount = tempAmount * duration;
     } else {
@@ -167,13 +170,11 @@ const InvestAmount = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
-      helpContact
-      hideInPageTitle
+      buttonTitle='NEXT'
       hidePageTitle
-      disable={error || loader}
-      title={title}
+      title={graphData.name}
+      disable={error}
+      showLoader={loader}
       handleClick={goNext}
       classOverRideContainer='pr-container'
     >
@@ -184,7 +185,7 @@ const InvestAmount = (props) => {
             <Input
               id='invest-amount'
               class='invest-amount-num'
-              value={amount}
+              value={amount ? formatAmountInr(amount) : ""}
               onChange={handleChange}
               type='text'
               error={error}
@@ -196,7 +197,6 @@ const InvestAmount = (props) => {
           </div>
           <p className='invest-amount-input-duration'>
             {(
-              goalRecommendation.id === 'investsurplus' ||
               investTypeDisplay !== 'sip' ||
               goalRecommendation.itype !== 'saveforgoal'
              ) ? 

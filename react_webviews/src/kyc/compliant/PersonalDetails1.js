@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import {
-  genderOptions,
-  residentialOptions,
-  getPathname,
-} from "../constants";
+import { genderOptions, residentialOptions, getPathname } from "../constants";
 import CompliantHelpDialog from "../mini_components/CompliantHelpDialog";
 import {
   formatDate,
@@ -14,7 +10,11 @@ import {
   isEmpty,
   validateNumber,
 } from "utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { kycSubmit } from "../common/api";
 
@@ -24,13 +24,14 @@ const PersonalDetails1 = (props) => {
   const [form_data, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const isEdit = props.location.state?.isEdit || false;
+  const [oldState, setOldState] = useState({});
   let title = "Personal details";
   const [is_nri, setIsNri] = useState();
   if (isEdit) {
     title = "Edit personal details";
   }
 
-  const [kyc, user, isLoading] = useUserKycHook();
+  const {kyc, user, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -44,8 +45,7 @@ const PersonalDetails1 = (props) => {
     if (isNri) {
       selectedIndexResidentialStatus = 1;
     }
-    let mobile_number =
-      kyc.identification.meta_data.mobile_number || "";
+    let mobile_number = kyc.identification.meta_data.mobile_number || "";
     let country_code = "";
     if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
       country_code = mobile_number.split("|")[0];
@@ -64,6 +64,7 @@ const PersonalDetails1 = (props) => {
     };
     setIsNri(isNri);
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const close = () => {
@@ -104,6 +105,12 @@ const PersonalDetails1 = (props) => {
         tin_number: tin_number || "",
       };
     }
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.compliantPersonalDetails2, {
+        state: { isEdit: isEdit },
+      });
+      return;
+    }
     saveCompliantPersonalDetails1(item);
   };
 
@@ -115,7 +122,6 @@ const PersonalDetails1 = (props) => {
         setIsApiRunning(false);
         return;
       }
-
       navigate(getPathname.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
       });
@@ -151,7 +157,6 @@ const PersonalDetails1 = (props) => {
   return (
     <Container
       skelton={isLoading}
-      // hideInPageTitle
       id="kyc-personal-details1"
       buttonTitle="CONTINUE"
       showLoader={isApiRunning}
@@ -162,9 +167,6 @@ const PersonalDetails1 = (props) => {
       total={3}
     >
       <div className="kyc-complaint-personal-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>1/3</span>
-        </div> */}
         <div className="kyc-main-subtitle">
           <div>
             <div>Share your date of birth as per PAN:</div>

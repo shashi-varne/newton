@@ -3,7 +3,11 @@ import Container from "../common/Container";
 import Input from "common/ui/Input";
 import { getPathname, maritalStatusOptions } from "../constants";
 import { isEmpty, validateAlphabets } from "utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
 import { kycSubmit } from "../common/api";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import toast from "common/ui/Toast";
@@ -14,12 +18,13 @@ const PersonalDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
+  const [oldState, setOldState] = useState({});
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -34,6 +39,7 @@ const PersonalDetails2 = (props) => {
       spouse_name: kyc.identification.meta_data.spouse_name || "",
     };
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const handleClick = () => {
@@ -50,13 +56,22 @@ const PersonalDetails2 = (props) => {
       form_data.marital_status;
     userkycDetails.pan.meta_data.mother_name = form_data.mother_name;
     if (form_data.marital_status === "MARRIED")
-      userkycDetails.identification.meta_data.spouse_name = form_data.spouse_name;
+      userkycDetails.identification.meta_data.spouse_name =
+        form_data.spouse_name;
     let item = {
       kyc: {
         pan: userkycDetails.pan.meta_data,
         identification: userkycDetails.identification.meta_data,
       },
     };
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.compliantPersonalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
+      return;
+    }
     savePersonalDetails2(item);
   };
 
@@ -95,11 +110,9 @@ const PersonalDetails2 = (props) => {
   return (
     <Container
       skelton={isLoading}
-      // hideInPageTitle
       id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
-      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
       title={title}
       count={2}
@@ -107,9 +120,6 @@ const PersonalDetails2 = (props) => {
       total={3}
     >
       <div className="kyc-complaint-personal-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>2/3</span>
-        </div> */}
         {!isLoading && (
           <main>
             <div className={`input ${isApiRunning && `disabled`}`}>

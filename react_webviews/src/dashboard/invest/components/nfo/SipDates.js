@@ -64,6 +64,12 @@ class SipDates extends Component {
     let buttonTitle =
       finalPurchases.length === 1 ? "CONFIRM DATE" : "CONFIRM DATES";
 
+    const paymentRedirectUrl = encodeURIComponent(
+      `${window.location.origin}/page/callback/sip/${
+        sipBaseData.investment.amount
+      }${getConfig().searchParams}`
+    );
+
     this.setState({
       form_data: form_data,
       sips: finalPurchases,
@@ -71,19 +77,22 @@ class SipDates extends Component {
       sipOrOnetime: sipOrOnetime,
       buttonTitle: buttonTitle,
       sipBaseData: sipBaseData,
+      paymentRedirectUrl: paymentRedirectUrl,
       props: this.props,
     });
   };
 
   handleClick = () => {
-    let { sipBaseData, sips, userKyc, isSipDatesScreen } = this.state;
+    let {
+      sipBaseData,
+      sips,
+      userKyc,
+      isSipDatesScreen,
+      paymentRedirectUrl,
+    } = this.state;
     sips.forEach((sip, index) => {
       sipBaseData.investment.allocations[index].sip_date = sip.sip_date;
     });
-
-    let paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/sip/${sipBaseData.investment.amount}`
-    );
 
     window.localStorage.setItem("investment", JSON.stringify(sipBaseData));
 
@@ -93,12 +102,13 @@ class SipDates extends Component {
       body: sipBaseData,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: isSipDatesScreen,
+      history: this.props.history,
       handleApiRunning: this.handleApiRunning,
       handleDialogStates: this.handleDialogStates,
     });
   };
 
-  handleClose = () => {
+  handleSuccessDialog = () => {
     let { investResponse, paymentRedirectUrl } = this.state;
     let pgLink = investResponse.investments[0].pg_link;
     pgLink +=
@@ -145,6 +155,7 @@ class SipDates extends Component {
     dialog_states[key] = value;
     if (errorMessage) dialog_states["errorMessage"] = errorMessage;
     this.setState({ dialogStates: dialog_states });
+    this.handleApiRunning(false);
   };
 
   handleApiRunning = (isApiRunning) => {
@@ -162,14 +173,13 @@ class SipDates extends Component {
     } = this.state;
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         handleClick={this.handleClick}
         buttonTitle={buttonTitle}
-        hideInPageTitle
-        isApiRunning={isApiRunning}
+        title="Select investment date"
+        showLoader={isApiRunning}
       >
         <div className="sip-dates">
-          <div className="main-top-title">Select investment date</div>
           {sips &&
             sips.map((sip, index) => {
               let options = [];
@@ -204,7 +214,8 @@ class SipDates extends Component {
           <SuccessDialog
             isOpen={openSuccessDialog}
             sips={sips}
-            handleClick={() => this.handleClose()}
+            handleClick={this.handleSuccessDialog}
+            close={() => this.setState({openSuccessDialog : false})}
           />
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPending}
@@ -214,6 +225,7 @@ class SipDates extends Component {
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
+            close={() => this.handleDialogStates('openInvestError', false)}
           />
         </div>
       </Container>

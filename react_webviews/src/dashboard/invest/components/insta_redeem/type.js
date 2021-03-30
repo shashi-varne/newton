@@ -21,8 +21,6 @@ class Type extends Component {
     this.initialize();
   }
 
-  onload = () => {};
-
   handleClick = () => {
     this.navigate(`amount/${this.state.investType}`);
   };
@@ -38,15 +36,13 @@ class Type extends Component {
         showLoader={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
-        hideInPageTitle
+        hidePageTitle
       >
-        <div className="insta-redeem-invest-type">
-          <InvestType
-            baseData={investRedeemData.investTypeData}
-            selected={investType}
-            handleChange={this.handleChange}
-          />
-        </div>
+        <InvestType
+          baseData={investRedeemData.investTypeData}
+          selected={investType}
+          handleChange={this.handleChange}
+        />
       </Container>
     );
   }

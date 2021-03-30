@@ -37,12 +37,12 @@ class Landing extends Component {
   };
 
   addBank = () => {
-    this.navigate("/add-bank");
+    const userKyc = this.state.userKyc || {};
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
   };
 
   updateDocument = () => {
-    const userKyc = this.state.userKyc || {};
-    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+    this.navigate("/kyc/add-bank");
   };
 
   closeVerificationFailed = () => {
@@ -106,15 +106,11 @@ class Landing extends Component {
     } = invest_show_data;
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         noFooter={true}
-        hideInPageTitle
-        loaderData={{
-          loadingText,
-        }}
+        title='Start Investing'
       >
         <div className="invest-landing">
-          <div className="main-top-title">Start Investing</div>
           <div className="main-top-subtitle">
             {isReadyToInvestBase
               ? " Your KYC is verified, You’re ready to invest"

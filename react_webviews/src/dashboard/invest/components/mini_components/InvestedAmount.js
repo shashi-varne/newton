@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../../../common/Container';
 import Slider from 'common/ui/Slider';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import toast from 'common/ui/Toast'
 
 import withdraw_anytime_icon from 'assets/withdraw_anytime_icon.png';
@@ -53,10 +52,10 @@ const InvestedAmount = (props) => {
       params.subtype = graphData?.subtype;
     }
     try {
-      setLoader(true);
+      setLoader("button");
       const data = await get_recommended_funds(params);
       console.log("data is", data);
-      graphData = { ...graphData, ...data, amount};
+      graphData = { ...graphData, ...data};
       storageService().setObject('graphData', graphData);
       setLoader(false);
       navigate(`recommendations`);
@@ -125,17 +124,12 @@ const InvestedAmount = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
-      buttonTitle={
-        loader ? <CircularProgress size={22} thickness={4} /> : 'Show My Funds'
-      }
-      helpContact
-      hideInPageTitle
+      buttonTitle='SHOW MY FUNDS'
       hidePageTitle
       title={title}
       handleClick={showFunds}
       classOverRideContainer='pr-container'
-      disable={loader}
+      showLoader={loader}
     >
       <section className='invested-amount-common-container'>
         <div className='invested-amount-display'>

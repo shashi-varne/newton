@@ -41,6 +41,7 @@ const FundDetails = ({ classes, history }) => {
   const FUND_ADDED = 'FUND_ADDED';
   const ADD_CART = '+ Add to Cart';
   const ENTER_AMOUNT = 'Enter Amount';
+  const INVEST = 'INVEST';
   const CART_LIMIT = 24;
 
   const funds = storageService().getObject('diystore_cart') || [];
@@ -53,8 +54,13 @@ const FundDetails = ({ classes, history }) => {
         currentStatus = FUND_ADDED;
       }
     });
-    currentTitle = ADD_CART;
+    if( productType === 'finity' ) {
+      currentTitle = INVEST;
+    } else {
+      currentTitle = ADD_CART;
+    }
   }
+
   const [cart, setCart] = useState([...funds])
   const [isOpen, setIsOpen] = useState(false)
   const [status, setStatus] = useState(currentStatus)
@@ -88,8 +94,9 @@ const FundDetails = ({ classes, history }) => {
   };
   
   useEffect(() => {
-    if(status === FUND_ADDED && type === 'diy') 
+    if(status === FUND_ADDED && type === 'diy' && productType !== 'finity') {
       setButtonTitle(buttonData(cart.length));
+    } 
     (async () => {
       try {
         setLoading(true);
@@ -148,6 +155,11 @@ const FundDetails = ({ classes, history }) => {
   };
 
   const handleClick = () => {
+    if( productType === 'finity' && type === "diy"){
+      storageService().setObject("diystore_cart", [fund]);
+      handleClick2();
+      return;
+    }
     if (type === "diy") {
       let stage = status;
       switch (stage) {
@@ -195,8 +207,8 @@ const FundDetails = ({ classes, history }) => {
         buttonTitle={buttonTitle}
         showLoader={isLoading}
         classOverRideContainer='fd-container'
-        twoButton= {status === 'FUND_ADDED'}
-        buttonTitle2={ENTER_AMOUNT}
+        twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
+        buttonTitle2={ ENTER_AMOUNT }
         handleClick2={handleClick2}
       >
         {fundDetails && (

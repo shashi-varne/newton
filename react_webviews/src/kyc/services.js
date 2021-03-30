@@ -1,5 +1,6 @@
 import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
+import toast from '../common/ui/Toast'
 
 const docMapper = {
   DL: 'Driving license',
@@ -23,25 +24,36 @@ export async function getAccountSummary(params = {}) {
       referral: ['subbroker', 'p2p'],
     }
   }
-  const response = await Api.post(url, params)
-  if (
-    response?.pfwresponse?.status_code === 200
-  ) {
-    return response?.pfwresponse?.result
-  } else {
-    throw new Error(response.pfwresponse.result.message)
+  try {
+    const response = await Api.post(url, params);
+    if (
+      response.pfwstatus_code !== 200 ||
+      !response.pfwresponse ||
+      isEmpty(response.pfwresponse)
+    ) {
+      throw new Error( response?.pfwmessage || "Something went wrong!");
+    }
+    if (response?.pfwresponse?.status_code === 200) {
+      return response?.pfwresponse?.result;
+    } else {
+      throw new Error(response?.pfwresponse?.result?.message);
+    }
+  } catch (err) {
+    toast(err.message || "Something went wrong!");
   }
 }
 
 export async function getNPSInvestmentStatus() {
   const url = '/api/nps/invest/status/v2'
   const response = await Api.get(url)
-  if (
-    response.pfwresponse.status_code === 200
-  ) {
-    return response.pfwresponse.result
-  } else {
-    throw new Error(response.pfwresponse.result.message)
+  try {
+    if (response.pfwresponse.status_code === 200) {
+      return response.pfwresponse.result;
+    } else {
+      throw new Error(response?.pfwresponse?.result?.message);
+    }
+  } catch (err) {
+    toast(err.message || "Something went wrong!");
   }
 }
 
@@ -59,6 +71,7 @@ export async function initData() {
         referral: ['subbroker', 'p2p'],
       }
       const result = await getAccountSummary(queryParams)
+      if(!result) return
       storageService().set('dataSettedInsideBoot', true)
       setSDKSummaryData(result)
     }
@@ -73,6 +86,7 @@ export async function initData() {
       referral: ['subbroker', 'p2p'],
     }
     const result = await getAccountSummary(queryParams)
+    if(!result) return
     storageService().set('dataSettedInsideBoot', true)
     setSummaryData(result)
   }
@@ -134,6 +148,7 @@ async function setNpsData(result) {
     result?.data?.nps?.nps_user?.data?.is_doc_required
   ) {
     const data = await getNPSInvestmentStatus()
+    if(!data) return
     if (!data.registration_details.additional_details_status) {
       storageService().set('nps_additional_details_required', true)
     } else {
@@ -149,7 +164,7 @@ export function getKycAppStatus(kyc) {
   var metaRejected = 0;
   var docRejected = 0;
   var rejectedItems = [];
-  if (kyc.kyc_status == "compliant") {
+  if (kyc.kyc_status === "compliant") {
     var fieldsToCheck = [
       { name: "pan", keys: ["meta_data_status"] },
       { name: "bank", keys: ["meta_data_status"] },
@@ -214,8 +229,12 @@ export function getKycAppStatus(kyc) {
     status = 'ground';
   }
 
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.customer_verified === 'UNVERIFIED' && kyc.kyc_type === "init") {
+    status = 'ground_pan';
+  }
+
   if (kyc.kyc_status === 'compliant' && (kyc.application_status_v2 !== 'submitted' &&
-    kyc.application_status_v2 !== 'complete') && kyc.customer_verified == 'UNVERIFIED') {
+    kyc.application_status_v2 !== 'complete') && kyc.customer_verified === 'UNVERIFIED') {
     status = 'ground_premium';
   }
 
@@ -224,10 +243,15 @@ export function getKycAppStatus(kyc) {
     status = 'ground_aadhaar';
   }
 
-  if (kyc.application_status_v2 == 'init' && kyc.pan.meta_data.pan_number &&
-    kyc.customer_verified == 'VERIFIED' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
+  if (kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number &&
+    kyc.customer_verified === 'VERIFIED' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
     status = 'incomplete';
   }
+
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 == 'init' && kyc.pan.meta_data.pan_number &&
+      kyc.kyc_type === "manual" && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
+      status = 'incomplete';
+    }
 
   if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';

@@ -8,15 +8,15 @@ import single_star from 'assets/single_star.png';
 import morning_text from 'assets/morning_text.png';
 
 import { getConfig } from 'utils/functions';
-import { storageService, formatAmountInr,isEmpty } from 'utils/validators';
+import { storageService, formatAmountInr } from 'utils/validators';
 import { navigate as navigateFunc } from '../invest/common/commonFunction';
 
 import './style.scss';
-import { initData } from '../../kyc/services';
 import { isInvestRefferalRequired, proceedInvestmentChild } from '../invest/functions';
 import PennyVerificationPending from '../invest/components/mini_components/PennyVerificationPending';
 import InvestError from '../invest/components/mini_components/InvestError';
 import InvestReferralDialog from '../invest/components/mini_components/InvestReferralDialog';
+import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 
 const Recommendations = (props) => {
   const graphData = storageService().getObject("graphData") || {};
@@ -33,18 +33,13 @@ const Recommendations = (props) => {
     type,
     term,
     name,
-    graphType,
+    subtype,
   } = graphData;
   const state = props.location.state || {};
   const [isins, setIsins] = useState("");
   const [isApiRunning, setIsApiRunning] = useState(false);
   const partner_code = getConfig().partner_code;
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject("user") || {}
-  );
-  const [userKyc, setUserKyc] = useState(
-    storageService().getObject("kyc") || {}
-  );
+  const {kyc: userKyc, user: currentUser, isLoading} = useUserKycHook();
   const partner = getConfig().partner;
   const sipTypesKeys = [
     "buildwealth",
@@ -93,7 +88,7 @@ const Recommendations = (props) => {
       investmentObject.amount = amount;
       investmentObject.term = term;
       investmentObject.type = investType;
-      investmentObject.subtype = graphType;
+      investmentObject.subtype = subtype;
       investmentObject.allocations = allocations;
 
     } else {
@@ -188,6 +183,7 @@ const Recommendations = (props) => {
     if(errorMessage)
     dialog_states['errorMessage'] = errorMessage;
     setDialogStates({...dialog_states});
+    handleApiRunning(false);
   }
 
   useEffect(() => {
@@ -195,16 +191,8 @@ const Recommendations = (props) => {
       return el.mf.isin;
     });
     setIsins(isinsVal?.join(","));
-    if (isEmpty(currentUser) || isEmpty(userKyc)) {
-      initialize();
-    }
   }, []);
 
-  const initialize = async () => {
-    await initData();
-    setCurrentUser(storageService().getObject("user") || {});
-    setUserKyc(storageService().getObject("kyc") || {});
-  };
 
   const navigate = navigateFunc.bind(props);
   const editFund = () => {
@@ -217,8 +205,6 @@ const Recommendations = (props) => {
 
   return (
     <Container
-      classOverRide='pr-error-container'
-      fullWidthButton
       buttonTitle={
         currentUser &&
         !currentUser.active_investment &&
@@ -226,13 +212,11 @@ const Recommendations = (props) => {
           ? "HOW IT WORKS?"
           : investCtaText
       }
-      helpContact
-      hideInPageTitle
       hidePageTitle
+      skelton={isLoading}
       title='Recommended Funds'
       handleClick={goNext}
-      classOverRideContainer='pr-container'
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
     >
       <section className='recommendations-common-container'>
         <div className='recommendations-header'>
@@ -246,7 +230,7 @@ const Recommendations = (props) => {
         <div className='recommendations-funds-lists'>
           {recommendation &&
             recommendation?.map((el, idx) => (
-              <FundCard isins={isins} graph key={idx} fund={el} history={props.history} />
+              <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
             ))}
         </div>
         <div className='recommendations-total-investment'>
@@ -277,6 +261,7 @@ const Recommendations = (props) => {
           isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
           handleClick={() => navigate("/invest")}
+          close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog
           isOpen={dialogStates.openInvestReferral}

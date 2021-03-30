@@ -17,7 +17,7 @@ const AddressDetails1 = (props) => {
   const [form_data, setFormData] = useState({});
   const state = props.location?.state || {};
   const isEdit = state.isEdit || false;
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   const [title, setTitle] = useState("");
 
   const residentialOptions = [
@@ -57,9 +57,9 @@ const AddressDetails1 = (props) => {
       selectedIndexResidentialStatus = 1;
     }
     let address_doc_type =
-      selectedIndexResidentialStatus === 1 ? "PASSPORT" : "";
+      selectedIndexResidentialStatus === 1 ? "PASSPORT" : kyc.address_doc_type;
     let formData = {
-      address_doc_type: kyc.address?.address_doc_type || address_doc_type,
+      address_doc_type: address_doc_type,
       residential_status:
         residentialOptions[selectedIndexResidentialStatus].value || "",
     };
@@ -74,20 +74,32 @@ const AddressDetails1 = (props) => {
       setFormData(data);
       return;
     }
+    const is_nri = form_data.residential_status === "NRI";
+    if (
+      is_nri === kyc.address.meta_data.is_nri &&
+      kyc.address_doc_type === form_data.address_doc_type
+    ) {
+      navigate(getPathname.addressDetails2, {
+        state: {
+          isEdit: isEdit,
+          backToJourney: state.backToJourney,
+        },
+      });
+      return;
+    }
     let userkycDetails = { ...kyc };
-    userkycDetails.nri_address.meta_data.mobile_number =
-      form_data.mobile_number;
-    userkycDetails.nri_address.meta_data.address_doc_type =
+    userkycDetails.address.meta_data.address_doc_type =
       form_data.address_doc_type;
-    saveNriAddressDetails1(userkycDetails);
+    userkycDetails.address.meta_data.is_nri = is_nri;
+    saveAddressDetails1(userkycDetails);
   };
 
-  const saveNriAddressDetails1 = async (userKyc) => {
+  const saveAddressDetails1 = async (userKyc) => {
     setIsApiRunning("button");
     try {
       let item = {
         kyc: {
-          nri_address: userKyc.nri_address.meta_data,
+          address: userKyc.address.meta_data,
         },
       };
       const submitResult = await kycSubmit(item);
@@ -134,7 +146,6 @@ const AddressDetails1 = (props) => {
     <Container
       skelton={isLoading}
       id="kyc-address-details1"
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       disable={isLoading}
       handleClick={handleClick}
@@ -145,9 +156,6 @@ const AddressDetails1 = (props) => {
       total={getTotalPages(form_data.residential_status)}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>1/{getTotalPages()}</span>
-        </div> */}
         <main>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

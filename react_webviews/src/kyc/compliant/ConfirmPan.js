@@ -14,6 +14,7 @@ const ConfirmPan = (props) => {
   const kycConfirmPanScreen = true;
   const isUserCompliant = "";
   const isPremiumFlow = "";
+  const {kyc, isLoading} = useUserKycHook();
 
   const handleClick = () => {
     navigate(getPathname.homeKyc, {
@@ -69,19 +70,13 @@ const ConfirmPan = (props) => {
     }
   };
 
-  const [kyc, ,isLoading] = useUserKycHook();
-
   return (
     <Container
-      // hideInPageTitle
       id="confirm-pan"
       buttonOneTitle="EDIT PAN"
       buttonTwoTitle="CONFIRM PAN"
-      // isApiRunning2={isApiRunning}
-      // disable2={isApiRunning}
       skelton={isLoading}
       showLoader={isApiRunning}
-      // disable={isApiRunning}
       handleClickOne={handleClick}
       handleClickTwo={handleClick2}
       twoButton={true}
@@ -90,7 +85,6 @@ const ConfirmPan = (props) => {
       dualbuttonwithouticon={true}
     >
       <div className="kyc-compliant-confirm-pan">
-        {/* <div className="kyc-main-title">Confirm PAN</div> */}
         <div className="kyc-main-subtitle">
           Confirm your PAN to unlock premium onboarding
         </div>

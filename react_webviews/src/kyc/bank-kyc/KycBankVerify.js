@@ -27,7 +27,7 @@ const KycBankVerify = (props) => {
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -139,18 +139,22 @@ const KycBankVerify = (props) => {
   const handleSuccess = () => {
     if (userType === "compliant") {
       if (isEdit) goToJourney();
-      else
-        navigate(getPathname.uploadSign, {
-          state: {
-            backToJorney: true,
-          },
-        });
+      else {
+        if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+          navigate(getPathname.uploadSign, {
+            state: {
+              backToJourney: true,
+            },
+          });
+        } else goToJourney();
+      }
     } else {
       if (dl_flow) {
         if (
-          kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
           kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed"
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+          kyc.pan.doc_status !== "approved"
         ) {
           navigate(getPathname.uploadPan);
         } else navigate(getPathname.kycEsign);
@@ -166,7 +170,6 @@ const KycBankVerify = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       id="kyc-bank-verify"
       buttonTitle="VERIFY BANK ACCOUNT"
       showLoader={isApiRunning}
@@ -175,7 +178,6 @@ const KycBankVerify = (props) => {
       title="Verify your bank account"
     >
       <div className="kyc-approved-bank-verify">
-        {/* <div className="kyc-main-title">Verify your bank account</div> */}
         <Alert
           variant="info"
           title="Important"

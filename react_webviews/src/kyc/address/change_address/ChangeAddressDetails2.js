@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini_components/Alert'
 import { storageService, isEmpty } from '../../../utils/validators'
@@ -56,7 +56,7 @@ const ChangeAddressDetails2 = (props) => {
 
   const [state, setState] = useState({})
 
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -199,7 +199,6 @@ const ChangeAddressDetails2 = (props) => {
           addressProofKey,
         })
       }
-      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/upload/progress')
     } catch (err) {
@@ -261,23 +260,17 @@ const ChangeAddressDetails2 = (props) => {
     <Container
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      classOverRideContainer="pr-container"
-      // fullWidthButton={true}
       skelton={isLoading}
       handleClick={handleSubmit}
       disable={(!frontDoc && !backDoc)}
       showLoader={isApiRunning}
+      title={title}
+      count={1}
+      current={1}
+      total={4}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          <div className="flex-between">
-            <div className="title">{title}</div>
-            <div className="kyc-main-title">
-              <span>1/4</span>
-            </div>
-          </div>
-          {/* <div className="sub-title">{getFullAddress()}</div> */}
-
           <Alert
             variant="attention"
             title="Note"
@@ -529,7 +522,6 @@ const ChangeAddressDetails2 = (props) => {
           )}
         </section>
       )}
-      {/* {!isEmpty(file) && <img src={URL.createObjectURL(file)} alt="preview" />} */}
     </Container>
   )
 }

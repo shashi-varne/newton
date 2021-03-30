@@ -3,7 +3,7 @@ import Dialog from '../../../common/ui/Dialog'
 import { getConfig } from 'utils/functions'
 import { Button } from '@material-ui/core'
 
-const ShowAadharDialog = ({ open, onClose, connectDigiLocker }) => {
+const ShowAadharDialog = ({ open, onClose, redirect }) => {
   const productName = getConfig().productName
   
   return (
@@ -24,6 +24,7 @@ const ShowAadharDialog = ({ open, onClose, connectDigiLocker }) => {
             <img
               src={require(`assets/${productName}/ic_instant.svg`)}
               className="icon"
+              alt=""
             />
             <div className="title">Instant Investment</div>
           </div>
@@ -31,11 +32,12 @@ const ShowAadharDialog = ({ open, onClose, connectDigiLocker }) => {
             <img
               src={require(`assets/${productName}/ic_no_doc.svg`)}
               className="icon"
+              alt=""
             />
             <div className="title">No document asked</div>
           </div>
         </main>
-        <Button variant="contained" fullWidth className="action-btn" onClick={connectDigiLocker}>
+        <Button variant="contained" fullWidth className="action-btn" onClick={redirect}>
           <span className="btn-text">connect digilocker</span>
         </Button>
       </section>

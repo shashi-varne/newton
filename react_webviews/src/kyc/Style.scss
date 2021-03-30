@@ -398,6 +398,14 @@
     justify-self: flex-end;
     cursor: pointer;
   }
+
+  .field_key {
+    color: #160d2e;
+  }
+
+  .field_value {
+    margin-left: 10px;
+  }
 }
 
 .kyc-journey .steps-container .step .disc {
@@ -1202,6 +1210,10 @@
   }
 }
 
+#kyc-upload-address {
+  padding-bottom: 30px;
+}
+
 .kyc-doc-upload-container {
   margin-top: 20px;
   border: 1px dashed var(--skelton-color);
@@ -1928,11 +1940,13 @@
   }
 
   .footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    margin: 10px;
+    margin: 0 auto;
+    max-width: var(--desktop-width);
+    padding: 10px;
   }
 
   .footer .raised {
@@ -2049,5 +2063,22 @@
       color: white;
       background-color: var(--secondary);
     }
+  }
+}
+
+#kyc-journey-back {
+  .text {
+    margin: 10px 0;
+    color: #160d2e;
+    font-size: 16px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .MuiButton-label {
+    font-weight: bold;
   }
 }

@@ -35,10 +35,10 @@ const ReplaceFunds = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
+      // fullWidthButton
       buttonTitle='Done'
-      helpContact
-      hideInPageTitle
+      // helpContact
+      // hideInPageTitle
       hidePageTitle
       title='Replace fund'
       handleClick={replaceFund}

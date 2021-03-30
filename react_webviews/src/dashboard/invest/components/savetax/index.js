@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import InvestType from '../mini_components/InvestType';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import toast from 'common/ui/Toast';
 
 import { storageService } from 'utils/validators';
@@ -53,7 +52,7 @@ const Landing = (props) => {
       params.type = 'savetax';
     }
     try {
-      setLoader(true);
+      setLoader("button");
       const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
       const graphData = {
@@ -68,6 +67,7 @@ const Landing = (props) => {
         bondSplit: data.recommendation.debt,
         isRecurring: recurring,
         investTypeDisplay,
+        name:'Tax saving'
       };
       storageService().setObject('graphData', graphData);
       setData(graphData);
@@ -89,15 +89,12 @@ const Landing = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
-      helpContact
-      disable={loader}
-      hideInPageTitle
+      buttonTitle='NEXT'
       hidePageTitle
       title='Save Tax'
       handleClick={fetchRecommendedFunds}
       classOverRideContainer='pr-container'
+      showLoader={loader}
     >
       <section className='invest-amount-common'>
         <InvestType

@@ -10,7 +10,6 @@ const SampleDocument = () => {
   return (
     <Container noFooter title="Sample bank documents">
       <section id="kyc-bank-sample-docs" className="page-body-kyc">
-        {/* <div className="title">Sample bank documents</div> */}
         <div className="description">
           Please ensure that the documents you are uploading must have your
           name, account number and IFSC code

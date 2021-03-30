@@ -24,7 +24,7 @@ class NfoScheme extends Component {
       <Container
         showLoader={this.state.show_loader}
         noFooter={true}
-        hideInPageTitle
+        hidePageTitle
         title="Select Scheme"
       >
         <div className="nfo-scheme">

@@ -89,24 +89,18 @@ class InstaRedeem extends Component {
   };
 
   render() {
-    let { partner, productName, instaRecommendation, loadingText } = this.state;
+    let { partner, productName, instaRecommendation } = this.state;
     let { benefits, faqData } = investRedeemData;
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         buttonTitle="START INVESTING"
         handleClick={this.handleClick}
-        hideInPageTitle
-        loaderData={{
-          loadingText,
-        }}
+        title={
+          partner.code === "bfdlmobile" ? "Money +" : "Insta redemption fund"
+        }
       >
         <div className="invest-redeem">
-          <div className="main-top-title">
-            {partner.code === "bfdlmobile"
-              ? "Money +"
-              : "Insta redemption fund"}
-          </div>
           <div className="main-top-subtitle">
             Instant withdrawal facility with superior return compared to savings
             bank account
