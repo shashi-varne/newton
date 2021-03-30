@@ -76,10 +76,10 @@ class ConfirmDialogClass extends Component {
                        <div style={{ marginRight: '15px'}}>  
                         <div className="content-top flex-between" style={{ margin: '0 0 20px 0' }}>
                             <div className='ct-left'>
-                                <span style={{ fontWeight: 600 }}>Sum assured:</span> {numDifferentiationInr(confirmDialogData.title_left)}
+                                <span style={{ fontWeight: 600 }}>{confirmDialogData.heading_left}</span> {numDifferentiationInr(confirmDialogData.title_left)}
                             </div>
                             <div className='ct-right'>
-                                <span style={{ fontWeight: 600 }}>Cover period:</span> {confirmDialogData.title_right}
+                                <span style={{ fontWeight: 600 }}>{confirmDialogData.heading_right}</span> {confirmDialogData.title_right}
                     </div>
                         </div>
 

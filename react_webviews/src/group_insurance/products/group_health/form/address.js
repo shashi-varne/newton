@@ -659,7 +659,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                     onChange={this.handlePincodeReligare('p_pincode')} />
                             </div>
 
-                            <div className="InputField">
+                            <div className="InputField" style={{marginBottom: '-14px'}}>
                                 <DropdownWithoutIcon
                                     width="40"
                                     dataType="AOB"
@@ -794,7 +794,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
                     {(this.state.provider === 'RELIGARE' || this.state.provider === 'GMC') &&
 
-                        <div>
+                        <div style={{marginBottom: '-14px'}}>
                             <div className="InputField">
                                 <Input
                                     type="number"

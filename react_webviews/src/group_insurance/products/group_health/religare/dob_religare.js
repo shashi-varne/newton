@@ -91,7 +91,7 @@ class GroupHealthPlanDobReligare extends Component {
                 "user_action": user_action,
                 "screen_name": "enter birthday",
                 "flow": this.state.insured_account_type || '',
-                product: 'religare',
+                product: this.state.providerConfig.provider_api,
                 is_dob_entered: this.state.eldest_dob ? 'yes' : 'no',
                 eldest_member: this.state.eldest_member,
             }

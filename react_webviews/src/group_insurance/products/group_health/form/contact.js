@@ -162,8 +162,8 @@ class GroupHealthPlanContactDetails extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'contact details',
-                'email': this.state.form_data.email,
-                'mobile_number': this.state.form_data.phone_number,
+                'email': this.state.form_data.email || '',
+                'mobile_number': this.state.form_data.phone_number || '',
                 'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };
