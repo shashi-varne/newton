@@ -153,7 +153,6 @@ const CompliantReport = (props) => {
   return (
     <Container id="kyc-home" noFooter={true} title={topTitle}>
       <div className="kyc-report">
-        {/* <div className="kyc-main-title">{topTitle}</div> */}
         <main>
           <section>
             {cardDetails &&

@@ -1168,6 +1168,11 @@
     margin-top: 20px;
   }
 
+  .sub-title {
+    margin-top: -18px;
+    font-size: 13px;
+  }
+
   .pan-alert {
     width: 100%;
     margin-top: 2px;
@@ -1212,6 +1217,18 @@
 
 #kyc-upload-address {
   padding-bottom: 30px;
+
+  .sub-title {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 10px;
+
+    .edit {
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 800;
+    }
+  }
 }
 
 .kyc-doc-upload-container {
