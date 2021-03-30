@@ -579,7 +579,6 @@ class PaymentOption extends React.Component {
         }
       };
       pushEvent(eventObj);
-      toast('Pay using bank a/c - ' + this.state.selectedBank.obscured_account_number + ' only');
       this.setState({ show_loader: 'page' });
       let that = this;
       Api.get(store.intent_url + '?bank_id=' + this.state.selectedBank.bank_id + `&gateway_type=UPI`).then(data => {
