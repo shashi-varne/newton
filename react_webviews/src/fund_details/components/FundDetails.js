@@ -443,7 +443,7 @@ const FundDetails = ({ classes, history }) => {
           noPadding
           fullWidthButton
           handleClick={handleInvest}
-          buttonTitle={'INVEST'}
+          buttonTitle={'INVEST NOW'}
           showLoader={isLoading}
           classOverRideContainer='fd-container-iframe'
         >

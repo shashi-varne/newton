@@ -9,8 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = {
   primary: {
     color: '#878787',
-    fontSize: '13px',
-    fontWeight: '400 ',
+    fontSize: '15px',
+    fontWeight: '500 ',
   },
   root: {
     paddingLeft: '0px',
