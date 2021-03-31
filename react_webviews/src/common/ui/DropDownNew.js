@@ -70,7 +70,7 @@ class SelectDropDown2 extends React.Component {
   }
 
   componentDidUpdate(prevState) {
-    if (prevState.value !== this.props.value && this.props.value) { this.setState({ selectedOption: this.props.value }) }
+    if (prevState.value !== this.props.value && (this.props.value + '')) { this.setState({ selectedOption: this.props.value}) }
     if (prevState.options !== this.props.options && this.props.options) { this.setState({ options: this.props.options }) }
   }
 
@@ -92,7 +92,7 @@ class SelectDropDown2 extends React.Component {
       })
     });
     const OptionPresent = this.state.selectedOption ? !!this.state.selectedOption.length : false;// eslint-disable-next-line
-    var value = options.find(opt => opt.value == this.state.selectedOption || opt.name === this.state.selectedOption);
+    var value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     let isLableOpen = (!!value || (OptionPresent) || this.state.shrink) || (OptionPresent && this.props.multi);
     isLableOpen = !!isLableOpen;
     return (
