@@ -4,7 +4,7 @@ import qs from 'qs';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
 import info_icon_myway from 'assets/info_icon_myway.svg'
 import Container from '../../common/Container';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 import top_icon_fisdom from 'assets/esign_intro_illustration_fisdom.svg';
@@ -140,7 +140,8 @@ class About extends Component {
 
     }
     let redirect_url = getConfig().redirect_url;
-    let current_url = window.location.origin + '/e-mandate/enps/redirection' + getConfig().searchParams;
+    let basepath = getBasePath()
+    let current_url = basepath + '/e-mandate/enps/redirection' + getConfig().searchParams;
     var pgLink = getConfig().base_url + '/page/nps/user/esign/' + this.state.pc_urlsafe;
     if (!redirect_url) {
       if (getConfig().app === 'ios') {
