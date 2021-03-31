@@ -963,9 +963,7 @@ body[data-device="mobile"] {
   border-radius: 0px !important;
 }
 .react-select__option{
-  // padding-top: 13px !important;
-  // padding-left: 12px !important;
-  padding: 10px 0px 10px 10px !important;
+  padding: 10px 20px 10px 10px !important;
   font-size: 13px !important;
   line-height: 21px !important;
   color: #161A2E !important;
@@ -1016,7 +1014,7 @@ body[data-device="mobile"] {
   height: 18px !important;
   line-height: 17px !important;
   font-size: 13px !important;
-  margin: 10px 5px 0px 0px !important;
+  margin: 14px 5px 3px 0px !important;
 }
 .react-select__multi-value__remove{
   margin-top: 3px;
@@ -1028,7 +1026,7 @@ body[data-device="mobile"] {
   width: 10px !important;
   padding: 0 !important;
 }
-.css-6q0nyr-Svg{
+.css-6q0nyr-Svg, .css-19bqh2r{
   color: #767E86 !important;
   padding: 0 !important;
 }
