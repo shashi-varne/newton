@@ -1635,12 +1635,11 @@ $header-title-font-size: 20px;
 
   .wic-title {
     font-size: 13px;
-    font-weight: 500;
     font-weight: bold;
   }
   
   .content {
-    margin: 20px 20px 0 20px;
+    margin: 20px 30px 0 20px;
     padding-left: 0;
   }
 
@@ -1653,8 +1652,8 @@ $header-title-font-size: 20px;
     font-size: 12px;
       font-weight: 400;
       .circle {
-        width: 8px;
-        height: 8px;
+        min-width: 8px;
+        min-height: 8px;
         border-radius: 999px;
         background-color: #161A2E;
       }
@@ -1665,11 +1664,8 @@ $header-title-font-size: 20px;
         color: #161A2E;
       }
   }
-  
-  .wic-tile-right {
-    margin: 0 0 0 5px;
-    font-size: 13px;
-    text-align: left;
+  .svg-img{
+    margin-right: 5px;
   }
 }
 // --Iframe Container CSS Below--:
