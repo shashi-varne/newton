@@ -1021,6 +1021,8 @@ input#pan {
   padding: 10px 0px 0 0px;
 }
 
+$header-title-font-size: 20px;
+
 .header-title-page {
   background: white;
   color: #0A1C32;
@@ -1028,9 +1030,14 @@ input#pan {
   display: flex;
   align-items: flex-end;
   padding: 0 20px 0 20px;
-  font-size: 20px;
+  font-size: $header-title-font-size;
   transition: 0.3s transform ease-in-out;
   justify-content: space-between;
+
+  .header-title-page-count-text {
+    font-size: 10px;
+    line-height: $header-title-font-size;
+  }
 }
 
 .header-title-page-text {
