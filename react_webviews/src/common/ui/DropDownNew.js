@@ -4,6 +4,8 @@ import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
 import './style.scss';
+import SVG from 'react-inlinesvg';
+import check_icon from 'assets/check_icon.svg'
 class SelectDropDown2 extends React.Component {
   constructor(props) {
     super(props);
@@ -224,12 +226,15 @@ const Option = props => {
   return (
     <div>
       <components.Option {...props}>
-        <input
-          type="checkbox"
-          checked={props.isSelected}
-          onChange={() => null}
-        />{" "}
+        <div className="multi-checkbox-container">
+        <div className="multi-checkbox" style={{backgroundColor: props.isSelected ? "#3792FC" : "#fff"}}>
+        <SVG className="tickmark-img"
+             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#fff')}
+             src={check_icon}
+        />
+        </div>
         <span style={{ marginLeft: '10px', marginTop: '-1px' }}>{props.label}</span>
+        </div>
       </components.Option>
     </div>
   );

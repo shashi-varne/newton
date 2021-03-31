@@ -99,6 +99,18 @@
 .Dropdown {
   width: 100%;
 }
+.multi-checkbox-container, .multi-checkbox{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.multi-checkbox{
+  height: 14px;
+  width: 14px;
+  border-radius: 3px;
+  border: 1px solid #D6D6D6; 
+}
+
 .RadioGrpGrid {
   flex-basis: unset;
   max-width: 100%;
