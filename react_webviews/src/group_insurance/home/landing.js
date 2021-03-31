@@ -238,7 +238,7 @@ class Landing extends Component {
         'banner_clicked' : banner_clicked ? true : false,
         'callback_clicked' : callback_clicked ?  true : false,
         'advisory_card_cta' : this.state.advisory_button_text,
-        'insurance_advisory_card_clicked': advisory_clicked
+        'insurance_advisory_card_clicked': advisory_clicked ? true : false
       }
     };
 
@@ -250,7 +250,6 @@ class Landing extends Component {
   }
 
   goToAdvisory = (e) =>{
-    // console.log('go go')
     e.preventDefault();
     this.sendEvents('next', "", "", "", true);
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
