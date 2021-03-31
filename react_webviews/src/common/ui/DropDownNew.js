@@ -95,7 +95,7 @@ class SelectDropDown2 extends React.Component {
     isLableOpen = !!isLableOpen;
     return (
       <div>
-        <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ marginTop: '5px' }}>
+        <FormControl className="Dropdown label" disabled={this.props.disabled}>
           {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id} style={{ color: isLableOpen ? '' : '#767E86' }}><div
             ref={element => {
               if (element && isLableOpen) {
@@ -265,5 +265,5 @@ const ErrorMessageStyle = {
   fontSize: '11px',
   color: '#D0021B',
   marginLeft: '10px',
-  marginTop: '5px'
+  marginTop: '0px'
 }
