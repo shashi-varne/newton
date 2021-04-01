@@ -5,7 +5,7 @@ import Banner from 'common/ui/Banner';
 import UiSkelton from 'common/ui/Skelton';
 import Footer from 'common/components/footer';
 import Header from 'common/components/Header';
-
+import IframeHeader from 'common/components/Iframe/Header';
 import React from "react";
 
 import Button from "material-ui/Button";
@@ -80,7 +80,8 @@ export function headerGoBack() {
 }
 
 function addContainerClass (props_base){
-    return `ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
+    const containerClass = false ? 'ContainerWrapper' : 'iframeContainerWrapper';
+    return `${containerClass} ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
 }
 
 export function commonRender(props_base) {
@@ -105,7 +106,7 @@ export function commonRender(props_base) {
    <div className={this.addContainerClass(props_base)} >
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && <Header
+                && !this.props.showLoaderModal && false && <Header
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
@@ -132,6 +133,34 @@ export function commonRender(props_base) {
                     hideBack={this.props.hideBack}
           
                 />
+                }
+                {
+                    <IframeHeader
+                        disableBack={this.props.disableBack}
+                        title={this.props.title}
+                        smallTitle={this.props.smallTitle}
+                        provider={this.props.provider}
+                        count={this.props.count}
+                        total={this.props.total}
+                        current={this.props.current}
+                        edit={this.props.edit}
+                        noBack={this.props.noBack}
+                        type={getConfig().productName}
+                        resetpage={this.props.resetpage}
+                        handleReset={this.props.handleReset}
+                        topIcon={this.props.topIcon || this.props.rightIcon}
+                        handleTopIcon={this.handleTopIcon}
+                        inPageTitle={this.state.inPageTitle}
+                        force_hide_inpage_title={this.state.force_hide_inpage_title}
+                        style={this.props.styleHeader}
+                        className={this.props.classHeader}
+                        headerData={this.props.headerData}
+                        new_header={this.state.new_header || this.state.project === 'help'}
+                        goBack={this.headerGoBack || this.historyGoBack}
+                        filterPage={this.props.filterPage}
+                        handleFilter={this.props.handleFilter} 
+                        hideBack={this.props.hideBack}
+                    />
                 }
                 {/* Below Header Block */}
                 <div id="HeaderHeight" style={{ top: 56 }}>
@@ -167,7 +196,7 @@ export function commonRender(props_base) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`Container  ${this.props.background || ''} 
+                    className={`${false ? 'Container' : 'IframeContainer'}  ${this.props.background || ''} 
                     ${props_base && props_base.classOverRideContainer ? props_base.classOverRideContainer : ''} 
                     ${this.props.classOverRideContainer || '' } 
                     ${this.props.noPadding ? "no-padding" : ""}`}>
@@ -177,6 +206,12 @@ export function commonRender(props_base) {
                     >
                         {this.props.children}
                     </div>
+                    {
+                        true && 
+                        <div className='iframe-right-content'>
+                            <h1>I am the right side</h1>
+                        </div>
+                    }
                 </div>
 
                 {/* Footer Block */}
@@ -270,7 +305,8 @@ export function check_hide_header_title() {
 }
 
 export function getHeightFromTop() {
-    var el = document.getElementsByClassName('Container')[0];
+    const Container = false ? 'Container' : 'IframeContainer';
+    var el = document.getElementsByClassName(Container)[0];
     var height = el.getBoundingClientRect().top;
     return height;
 }

@@ -80,6 +80,54 @@ body[data-device="web"] {
     overflow: auto;
   }
 
+
+  //////////// Iframe Css /////////////////
+  .iframeContainerWrapper{
+    background-color: white;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    padding: 80px;
+    padding-bottom: 0px;
+    .header-title-page{
+      padding-left: 0px;
+    }
+    .Loader {
+      max-width: 100%;
+    }
+    .Footer{
+      position: fixed !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0px;
+      padding:10px 0px 20px 0px;
+      display: flex;
+      justify-content: center;
+
+      & > div {
+        max-width: fit-content;
+      }
+    }
+  }
+
+  .IframeContainer{
+    display: flex;
+    overflow: hidden;
+    overflow-y: auto;
+    .fadein-animation{
+      margin-top: 20px;
+      flex: 1 1 55%;
+    }
+
+    .iframe-right-content{
+      display: grid;
+      place-items: center;
+      height: 60vh;
+      flex:1 1 45%;
+    }
+  }
+////////////End of Iframe Css /////////////////
+
   .Step {
     max-width: var(--desktop-width);
     margin: 0 auto;
