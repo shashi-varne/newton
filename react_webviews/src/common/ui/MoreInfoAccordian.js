@@ -45,11 +45,11 @@ class MoreInfoAccordian extends Component {
                 >
                   <div className="top">
                     <div className="wic-title">{this.props.title}</div>
-                    <div className="">
+                    <div className="svg-img">
                       <SVG
                         className="text-block-2-img"
                         preProcessor={(code) =>
-                          code.replace(/fill=".*?"/g, "fill=#595959")
+                          code.replace(/fill=".*?"/g, `fill=${this.state.productName === 'fisdom' ? '#4F2DA7' : '#3792FC'}`)
                         }
                         src={this.state[`${key}_open`] ? up_arrow : down_arrow}
                       />
