@@ -238,7 +238,6 @@ export default withRouter(Container);
 // import { nativeCallback } from "utils/native_callback";
 // import "../../utils/native_listner";
 // import "./Style.scss"
-// import { getConfig, setHeights } from "../../utils/functions";
 // import { isFunction } from "../../utils/validators";
 
 // class Container extends Component {
@@ -253,7 +252,6 @@ export default withRouter(Container);
 //       force_hide_inpage_title: this.props.hidePageTitle,
 //       new_header: true,
 //       project: "fund-details", //to use in common functions
-//       x: React.createRef(true),
 //     };
 //     this.historyGoBack = this.historyGoBack.bind(this);
 //     this.handleTopIcon = this.handleTopIcon.bind(this);
@@ -265,28 +263,6 @@ export default withRouter(Container);
 
 //   componentDidMount() {
 //     this.didMount();
-//     this.initialize();
-//   }
-
-//   initialize = () => {
-//     let x = this.state.x;
-//     setHeights({ header: true, container: false });
-//     console.log(window)
-//     if (x.current) {
-//       x.current = false;
-//     } else {
-//       if (getConfig().generic_callback) {
-//         // window.callbackWeb.addEventListener({
-//         //   type: 'back_pressed',
-//         //   go_back: () => {this.historyGoBack()},
-//         // });
-//       } else {
-//         // window.PlutusSdk.addEventListener({
-//         //   type: 'back_pressed',
-//         //   go_back: () => {this.historyGoBack()},
-//         // });
-//       }
-//     }
 //   }
 
 //   historyGoBack = (backData) => {
@@ -306,53 +282,12 @@ export default withRouter(Container);
 //     this.props.history.goBack();
 //   };
 
-//   getEvents = (user_action) => {
-//     if (!this || !this.props || !this.props.events) {
-//       return;
-//     }
-//     let events = this.props.events;
-//     events.properties.user_action = user_action;
-//     return events;
-//   };
-
-//   // useEffect(() => {
-//   //   setHeights({ header: true, container: false });
-//   //   if (x.current) {
-//   //     x.current = false;
-//   //   } else {
-//   //     if (getConfig().generic_callback) {
-//   //       window.callbackWeb.addEventListener({
-//   //         type: 'back_pressed',
-//   //         go_back: () => historyGoBack(),
-//   //       });
-//   //     } else {
-//   //       window.PlutusSdk.addEventListener({
-//   //         type: 'back_pressed',
-//   //         go_back: () => historyGoBack(),
-//   //       });
-//   //     }
-//   //   }
-//   // }, []);
-
 //   componentWillUnmount() {
 //     this.unmount();
 //   }
 
 //   handleTopIcon = () => {
 //     this.props.handleTopIcon();
-//   };
-
-//   historyGoBack = (backData) => {
-//     if (this.getEvents("back")) {
-//       nativeCallback({ events: this.getEvents("back") });
-//     }
-
-//     if (this.props.headerData && this.props.headerData.goBack) {
-//       this.props.headerData.goBack();
-//       return;
-//     }
-
-//     this.props.history.goBack();
 //   };
 
 //   componentDidUpdate(prevProps) {
