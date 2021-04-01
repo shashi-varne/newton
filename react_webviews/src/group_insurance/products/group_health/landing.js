@@ -198,7 +198,7 @@ class GroupHealthLanding extends Component {
   };
   handleClick = () => {
     if(!this.state.tncChecked){
-      toast('Please Agree to the Terms and Conditions');
+      toast('Please agree to the Terms and conditions');
       this.handleScroll();
       return;
     }

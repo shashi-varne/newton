@@ -989,3 +989,10 @@ body[data-device="mobile"] {
   background-color: var(--secondary);
 }
 
+.Toastify__toast{
+  min-height: 40px !important;
+  margin: 0 20px;
+  border-radius: 20px !important;
+  bottom: 120px !important;
+  text-align: center;
+}
