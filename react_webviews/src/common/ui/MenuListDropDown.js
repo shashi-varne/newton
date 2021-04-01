@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
-
+import { getConfig } from 'utils/functions';
 class MenuListDropDownClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
             insuranceProducts: props.insuranceProducts,
-            value: this.props.parent.state.value
+            value: this.props.parent.state.value,
+            type: getConfig().productName,
         }
         this.renderPorducts = this.renderPorducts.bind(this);
         this.renderPorductList = this.renderPorductList.bind(this)
@@ -16,13 +17,16 @@ class MenuListDropDownClass extends Component {
             return (
                 <div className='insurance_plans' style={{ width: '100%' }} key={index + 7} onClick={() => this.props.parent.handleClickEntry(props)}>
                     <div className='insurance_plans_types' style={{ width: '100%', padding: '0px' }}>
-                        <img src={props.icon} alt="" className="insurance_plans_logos_small" />
+                        <img src={props.icon}  className="insurance_plans_logos_small"  alt=""/>
                         <div style={{
                             borderBottomWidth: '1px', width: array.length - 1 !== index ? `calc(100% - 85px)` : '100%',
                             borderBottomColor: '#EFEDF2', borderBottomStyle: 'solid', paddingTop: '20px', paddingBottom: array.length - 1 !== index ? '20px' : '40px',
                             justifyContent: 'space-between', cursor: 'pointer'
                         }}>
-                            <div className='insurance_plans_logos_text' style={{ fontWeight: '400', fontSize: '13px', marginBottom: '5px', lineHeight: '15.41px', width: '100%' }}>{props.title} {props.key === 'GMC' && <span className="recommended-tag">Recommended</span>}</div>
+                            <div className='insurance_plans_logos_text' style={{ fontWeight: '400', fontSize: '13px', marginBottom: '5px', lineHeight: '15.41px', width: '100%' }}>{props.title} {props.key === 'GMC' && <span className="recommended-tag">Recommended</span>}
+                              {props.resume_flag && <span style={{background: '#ff6868', letterSpacing: 0.1, fontSize : '8px', lineHeight : '10.06px', position : 'relative', top:'-3px',
+                                borderRadius: 7 , padding: '2px 4px', marginTop : '-30px' , color : 'white', fontWeight : '700' , width :'40px' , left:'6px', height:'14px', 
+                               }}>Resume</span>}</div>
                             <div className='insurance_plans_logos_subtext' style={{ fontWeight: '300' }}>{props.subtitle}</div>
                         </div>
                     </div>

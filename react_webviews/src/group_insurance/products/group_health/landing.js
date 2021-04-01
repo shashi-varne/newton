@@ -52,7 +52,7 @@ class GroupHealthLanding extends Component {
   componentWillMount() {
     let { params } = this.props.location || {};
     let openModuleData = params ? params.openModuleData : {};
-    let screenData = this.state.providerConfig[screen_name];
+    let screenData = ''  // this.state.providerConfig[screen_name];
     nativeCallback({ action: "take_control_reset" });
     let stepsContentMapper = {
       title: `Get insured with ease`,
