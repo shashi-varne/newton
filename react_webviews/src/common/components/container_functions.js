@@ -1,6 +1,6 @@
 
 import { getConfig, setHeights } from 'utils/functions';
-// import { nativeCallback } from "utils/native_callback";
+import { nativeCallback } from "utils/native_callback";
 import Banner from 'common/ui/Banner';
 import UiSkelton from 'common/ui/Skelton';
 import Footer from 'common/components/footer';
@@ -244,7 +244,10 @@ export function didupdate() {
     setHeights({ 'header': true, 'container': false });
 }
 
-export function navigate(pathname) {
+export function navigate(pathname, user_action) {
+
+    let action = user_action ? user_action : this.props.disableBack ? 'close' : 'back';
+    nativeCallback({ events: this.getEvents(action) });
     this.props.history.push({
         pathname: pathname,
         search: this.props.location.search
@@ -580,8 +583,7 @@ export function new_header_scroll() {
 
             {this.state.inPageTitle && this.props.count &&
                 <span color="inherit"
-                    className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
-                    style={{ fontSize: 10 }}>
+                    className={`header-title-page-count-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
                     <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
                 </span>}
         </div>

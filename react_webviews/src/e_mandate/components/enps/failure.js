@@ -5,7 +5,7 @@ import sip_resumed_fisdom from 'assets/ils_esign_failed_fisdom.svg';
 import sip_resumed_myway from 'assets/ils_esign_failed_myway.svg';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { inrFormatDecimal } from '../../../utils/validators';
 import ContactUs from '../../../common/components/contact_us';
@@ -56,7 +56,8 @@ class EnpsSuccess extends Component {
   handleClick = () => {
     this.sendEvents('retry');
     let redirect_url = getConfig().redirect_url;
-    let current_url = window.location.origin + '/e-mandate/enps/redirection' + getConfig().searchParams;
+    let basepath = getBasePath()
+    let current_url = basepath + '/e-mandate/enps/redirection' + getConfig().searchParams;
     var pgLink = getConfig().base_url + '/page/nps/user/esign/' + this.state.pc_urlsafe;
     if (!redirect_url) {
       if (getConfig().app === 'ios') {
