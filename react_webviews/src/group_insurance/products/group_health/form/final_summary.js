@@ -7,7 +7,7 @@ import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
     numDifferentiationInr, inrFormatDecimal,
-    capitalizeFirstLetter, storageService, dateOrdinal
+    capitalizeFirstLetter, storageService, dateOrdinal, getUrlParams
 } from 'utils/validators';
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
@@ -83,6 +83,10 @@ class GroupHealthPlanFinalSummary extends Component {
       }
  
     onload = () => {
+        const queryParams = getUrlParams();
+        if(queryParams.pgReached){
+            storageService().setObject(`${this.state.provider}_pgReached`, true)
+        }        
         let { lead, provider } = this.state;  
 
         let insured_people_details = lead.insured_people_details;
@@ -594,8 +598,8 @@ class GroupHealthPlanFinalSummary extends Component {
         if (getConfig().generic_callback) {
             pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
-
-
+        nativeRedirectUrl += '&pgReached=true';
+        
         if (getConfig().app === 'ios') {
             nativeCallback({
                 action: 'show_top_bar', message: {

@@ -4,13 +4,13 @@ import { initialize, updateBottomPremium } from '../common_data';
 import Checkbox from '../../../../common/ui/Checkbox';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import toast from "../../../../common/ui/Toast";
 
 class GroupHealthPlanGoodHealthDeclaration extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            buttonDisabled: true,
             checked: false,            
         }
 
@@ -24,23 +24,18 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
     componentDidMount(){
         var groupHealthPlanData = this.state.groupHealthPlanData;
         var checked = groupHealthPlanData['goodHDec'] || false;
-        var buttonDisabled = checked ? false : true;
         this.setState({
             checked,
-            buttonDisabled
         })
         this.setLocalProviderData(groupHealthPlanData);
     }
 
     
     handleCheckbox = () =>{
-        var buttonDisabled = this.state.buttonDisabled;
         var checked = !this.state.checked;
-        buttonDisabled = checked ? false : true 
 
         this.setState({
             checked : checked,
-            buttonDisabled: buttonDisabled
         });
     }
 
@@ -52,7 +47,8 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
     }
     
     handleClick = () =>{
-        if(this.state.buttonDisabled){
+        if(!this.state.checked){
+            toast('Please agree to the health declaration')
             return;
         }
         this.sendEvents('next');
@@ -94,7 +90,6 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
             buttonTitle="CONTINUE"
             onlyButton={true}
             handleClick={() => this.handleClick()}
-            buttonDisabled={this.state.buttonDisabled}
           >
             <div>
             <div className="common-top-page-subtitle flex-between-center">

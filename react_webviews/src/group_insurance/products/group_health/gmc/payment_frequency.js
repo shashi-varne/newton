@@ -7,6 +7,7 @@ import { nativeCallback } from 'utils/native_callback';
 import ValueSelector from '../../../../common/ui/ValueSelector';
 import Checkbox from '../../../../common/ui/Checkbox';
 import { getConfig } from 'utils/functions';
+import toast from "../../../../common/ui/Toast";
 import { inrFormatDecimal } from 'utils/validators';
 
 var getFrequency = {
@@ -21,7 +22,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             selectedIndex : 0,
             ctaWithProvider: true,
             checked: false,
-            buttonDisabled: true,
             screen_name: 'plan_payment_frequency'            
         }
 
@@ -104,12 +104,10 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
              var selectedIndex = freqSelected === 'YEARLY' ? 1 : 0;
             var checked = this.state.checked;
             checked = freqSelected === 'MONTHLY' ? true : false;
-            var buttonDisabled = freqSelected === 'MONTHLY' && !checked ? true : false
              
             this.setState({
                 selectedIndex: selectedIndex,
                 payment_frequency : payment_frequency,
-                buttonDisabled: buttonDisabled,
                 postfix: freqSelected === 'YEARLY' ? 'year': 'month',
                 checked
             }, () => {
@@ -120,13 +118,10 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
     
 
     choosePlan = (index, props) => {
-        var buttonDisabled = this.state.buttonDisabled;
         var checked = this.state.checked;
-        buttonDisabled = props.frequency === 'month' && !checked ? true : false;
         var payment_frequency = this.state.premium_details[index].payment_frequency;
         this.setState({
             selectedIndex: index,
-            buttonDisabled: buttonDisabled,
             checked: checked,
             payment_frequency: payment_frequency,
             postfix: payment_frequency === 'YEARLY' ? 'year' : 'month'
@@ -137,14 +132,11 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
     
     handleCheckbox = () =>{
         var checked = this.state.checked; 
-        var buttonDisabled = this.state.buttonDisabled;
 
         checked = !this.state.checked
-        buttonDisabled = checked ? false : true 
 
         this.setState({
             checked : checked,
-            buttonDisabled: buttonDisabled
         });
     }
     
@@ -156,7 +148,8 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
     }
 
     handleClick = async () =>{
-        if(this.state.buttonDisabled && !this.state.checked){
+        if(this.state.payment_frequency === 'MONTHLY' && !this.state.checked){
+            toast('Please agree to the auto-debit statement')
             return;
         }
 
@@ -267,7 +260,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             withProvider={true}
             buttonData={this.state.bottomButtonData}
             handleClick={() => this.handleClick()}
-            buttonDisabled={this.state.buttonDisabled}
             provider={this.state.providerConfig.key}
           >
             <div className="common-top-page-subtitle flex-between-center">

@@ -344,7 +344,6 @@ export async function updateLead( body, quote_id) {
 
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
-                console.log('if');
             } else {
                 this.navigate(this.state.next_state);
             }

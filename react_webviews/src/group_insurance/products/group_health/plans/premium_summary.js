@@ -185,7 +185,7 @@ class GroupHealthPlanPremiumSummary extends Component {
         properties.payment_frequency = groupHealthPlanDataProp.plan_selected_final.payment_frequency;
       }
     }
-
+    storageService().remove(`${this.props.provider}_pgReached`);
     properties.total_discount = properties.discount_amount;
     this.setState({ properties: properties });
   };
