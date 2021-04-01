@@ -36,6 +36,7 @@ import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 import Kyc from './kyc'
 import Landing from "./dashboard"
+import Report from "./reports";
 
 import Tooltip from 'common/ui/Tooltip';
 import 'common/theme/Style.scss';
@@ -105,6 +106,7 @@ class App extends Component {
               <Route path='/fund-details' component={FundDetails} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/kyc' component={Kyc} />
+              <Route path='/reports' component={Report} />
               <Route path='/' component={Landing}/>
               <Route component={NotFound} />
             </Switch>

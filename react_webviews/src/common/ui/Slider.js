@@ -7,13 +7,14 @@ import { getConfig } from 'utils/functions';
 const CustomizedSlider = (props) => {
 
   const handleChange = (e) => {
-    props.onChange(e)
-  }
+    if (!props.disabled) props.onChange(e);
+  };
 
   return (
     <div className="slider">
       <Slider
         defaultValue={Number(props.default)}
+        value={Number(props.value)}
         min={Number(props.min)}
         max={Number(props.max)}
         onChange={handleChange}
