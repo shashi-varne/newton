@@ -253,7 +253,7 @@ export async function getDocumentList() {
     const { result } = res.pfwresponse;
 
     if (!result.doclist_required) {
-      this.navigate('reports')
+      this.navigate('final-offer')
     } else {
       this.setState(
         {
