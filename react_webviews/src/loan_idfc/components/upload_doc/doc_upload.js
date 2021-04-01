@@ -628,7 +628,7 @@ class DocumentUpload extends Component {
         buttonTitle="CONTINUE"
         disable={disableButton}
         handleClick={this.handleClick}
-        hidePageTitle={this.state.skelton}
+        // hidePageTitle={this.state.skelton}
         headerData={{
           goBack: this.goBack,
         }}

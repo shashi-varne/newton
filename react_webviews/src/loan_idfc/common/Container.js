@@ -105,7 +105,6 @@ class Container extends Component {
     let props_base = {
       classOverRide : 'loanMainContainer'
     }
-    console.log(this.props)
     return(
       <Fragment>
         {this.commonRender(props_base)}
