@@ -34,7 +34,7 @@ const getTitleList = ({ kyc }) => {
 }
 
 const MessageComponent = (kyc) => {
-  const [titleList, setTitleList] = useState(getTitleList(kyc))
+  const [titleList] = useState(getTitleList(kyc))
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
@@ -48,6 +48,7 @@ const MessageComponent = (kyc) => {
 }
 
 const AddressUpload = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
@@ -192,7 +193,6 @@ const AddressUpload = (props) => {
   }
 
   const handleSubmit = async () => {
-    const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
       let result
@@ -260,6 +260,14 @@ const AddressUpload = (props) => {
     return addressFull
   }
 
+  const editAddress = () => {
+    navigate("/kyc/address-details1", {
+      state: {
+        backToJourney: true,
+      },
+    });
+  };
+  
   const isWeb = getConfig().isWebCode
 
   return (
@@ -273,7 +281,14 @@ const AddressUpload = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          <div className="sub-title">{getFullAddress()}</div>
+          <div className="sub-title">
+            {getFullAddress()}
+            {getFullAddress() && (
+              <div className="edit" onClick={editAddress}>
+                EDIT
+              </div>
+            )}
+          </div>
           <Alert
             variant="attention"
             title="Note"
@@ -525,7 +540,6 @@ const AddressUpload = (props) => {
           )}
         </section>
       )}
-      {/* {!isEmpty(file) && <img src={URL.createObjectURL(file)} alt="preview" />} */}
     </Container>
   )
 }

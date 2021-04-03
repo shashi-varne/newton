@@ -266,6 +266,15 @@
 
 ////// DIY SEARCH START //////
 
+.diy-search-container {
+  height: 100%;
+  background-color: #fafafa;
+
+  .diy-search-container-main {
+    height: calc(100% - 56px)
+  }
+}
+
 .diy-search {
   margin: -20px -20px -56px -20px;
   background-color: #fafafa;

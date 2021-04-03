@@ -190,7 +190,6 @@ const Home = (props) => {
         let result = await logout();
         if (!result) return;
         navigate("/login");
-        // $state.go('logout')
       } else {
         // callbackWeb.logout();
       }

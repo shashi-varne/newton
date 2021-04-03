@@ -151,7 +151,6 @@ const SipPaymentCallback = (props) => {
       <section className="invest-sip-payment-callback">
         {!paymentError && (
           <div className="content">
-            {/* <div className="title">Congratulations! Order placed</div> */}
             <Imgc
               src={require(`assets/${config.productName}/congratulations_illustration.svg`)}
               alt=""

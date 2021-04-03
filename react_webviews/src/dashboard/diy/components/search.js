@@ -61,7 +61,13 @@ const Search = (props) => {
   };
 
   return (
-    <Container noFooter hidePageTitle title="Search">
+    <Container
+      noFooter
+      hidePageTitle
+      title="Search"
+      classOverRideContainer="diy-search-container-main"
+      classOverRide="diy-search-container"
+    >
       <div className="diy-search">
         <div className="search-content">
           <div className="search-option">

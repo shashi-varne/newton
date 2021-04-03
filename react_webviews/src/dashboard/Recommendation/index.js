@@ -72,7 +72,7 @@ const Recommendations = (props) => {
     }
   }
 
-  const proceedInvestment = (investReferralData, isReferralGiven) => {
+  const proceedInvestment = (investReferralData, isReferralGiven, handleGraph) => {
     let investmentObject = {};
     if (type !== "riskprofile") {
       var allocations = [];
@@ -124,6 +124,10 @@ const Recommendations = (props) => {
     }
 
     storageService().setObject("mf_invest_data", investmentEventData);
+
+    if(handleGraph) {
+      return
+    }
 
     if (!currentUser.active_investment && partner.code !== "bfdlmobile") {
       navigate(

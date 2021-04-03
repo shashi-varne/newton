@@ -1120,11 +1120,11 @@
   .categories-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
   }
 
   .categories-container .card {
-    flex-basis: 45%;
+    flex: 0 45%;
+    margin: 10px 0 10px 10px;
   }
   .categories-container .card:nth-child(even) {
     margin-left: 10px;

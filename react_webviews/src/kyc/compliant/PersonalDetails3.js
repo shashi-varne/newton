@@ -130,10 +130,8 @@ const PersonalDetails3 = (props) => {
     <Container
       skelton={isLoading}
       id="kyc-personal-details3"
-      // hideInPageTitle
       buttonTitle="CONTINUE"
       showLoader={isApiRunning}
-      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
       title={title}
       count={3}
@@ -141,9 +139,6 @@ const PersonalDetails3 = (props) => {
       total={3}
     >
       <div className="kyc-complaint-personal-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>3/3</span>
-        </div> */}
         <main>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
