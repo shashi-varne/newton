@@ -12,6 +12,7 @@ import { storageService, formatAmountInr } from 'utils/validators';
 import { getReturnRates, navigate as navigateFunc, selectTitle } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
 import './style.scss';
+import PeriodWiseReturns from '../../../mini-components/PeriodWiseReturns';
 
 const { stockReturns, bondReturns } = getReturnRates();
 
@@ -20,24 +21,18 @@ const InvestedAmount = (props) => {
   const goalRecommendation = storageService().getObject('goalRecommendations');
   const { amount, investType, term, stockSplit, isRecurring, investTypeDisplay } = graphData;
   const [stockSplitVal, setStockSplitVal] = useState(stockSplit || 0);
-  const [termYear, setTermYear] = useState(term || '');
-  const [potentialValue, setPotentialValue] = useState(0);
-  const [investedValue, setInvestedValue] = useState(0);
   const [risk, setRisk] = useState('');
   const [loader, setLoader] = useState(false);
   const [title, setTitle] = useState('');
   const navigate = navigateFunc.bind(props);
   useEffect(() => {
-    getPotentialValue(termYear);
-    getInvestedValue(termYear);
-    getRiskTitle();
-  }, [stockSplitVal, termYear]);
-  useEffect(() => {
     const investTitle = selectTitle(investType);
     setTitle(investTitle);
   }, []);
+
   const handleChange = (value) => {
     setStockSplitVal(value);
+    getRiskTitle()
   };
 
   const fetchRecommendedFunds = async () => {
@@ -46,7 +41,7 @@ const InvestedAmount = (props) => {
       type: investType,
       equity: stockSplitVal,
       debt: 100 - stockSplitVal,
-      term: termYear,
+      term: term,
     };
     if (investType === 'saveforgoal') {
       params.subtype = graphData?.subtype;
@@ -69,35 +64,6 @@ const InvestedAmount = (props) => {
     fetchRecommendedFunds();
   };
 
-  const getPotentialValue = (term) => {
-    let principle = amount;
-    var corpus_value = 0;
-    for (var i = 0; i < term; i++) {
-      if (isRecurring) {
-        var n = (i + 1) * 12;
-        var mr = getRateOfInterest() / 12 / 100;
-        corpus_value = (amount * (Math.pow(1 + mr, n) - 1)) / mr;
-      } else {
-        var currInterest = (principle * getRateOfInterest()) / 100;
-        corpus_value = principle + currInterest;
-        principle += currInterest;
-      }
-    }
-    setPotentialValue(corpus_value);
-  };
-
-  const getRateOfInterest = () => {
-    var range = Math.abs(stockReturns - bondReturns);
-    if (stockSplitVal < 1) {
-      return bondReturns;
-    } else if (stockSplitVal > 99) {
-      return stockReturns;
-    } else {
-      var rateOffset = (range * stockSplitVal) / 100;
-      return bondReturns + rateOffset;
-    }
-  };
-
   const getRiskTitle = () => {
     if (investType === 'arbitrage') {
       setRisk("'Moderate risk (Moderately high returns)'");
@@ -110,15 +76,6 @@ const InvestedAmount = (props) => {
         setRisk('High risk (High returns)');
       }
     }
-  };
-
-  const getInvestedValue = (term) => {
-    const value = isRecurring ? amount * 12 * term : amount;
-    setInvestedValue(value);
-  };
-
-  const handlePotentialValue = (val) => (e) => {
-    setTermYear(val);
   };
 
   return (
@@ -148,39 +105,14 @@ const InvestedAmount = (props) => {
           </div>
         </div>
 
-        <div className='invested-amount-return-container'>
-          <div className='invested-amount-return-text'>Expected returns:</div>
-          <div className='invested-amount-year-tabs'>
-            <span className={termYear === 1 ? 'selected' : ''} onClick={handlePotentialValue(1)}>
-              1Y
-            </span>
-            <span className={termYear === 3 ? 'selected' : ''} onClick={handlePotentialValue(3)}>
-              3Y
-            </span>
-            <span className={termYear === 5 ? 'selected' : ''} onClick={handlePotentialValue(5)}>
-              5Y
-            </span>
-            <span className={termYear === 10 ? 'selected' : ''} onClick={handlePotentialValue(10)}>
-              10Y
-            </span>
-            <span className={termYear === 15 ? 'selected' : ''} onClick={handlePotentialValue(15)}>
-              15Y
-            </span>
-            <span className={termYear === 20 ? 'selected' : ''} onClick={handlePotentialValue(20)}>
-              20Y
-            </span>
-          </div>
-          <div className='invested-amount-corpus-values'>
-            <div className='invested-amount-corpus-invested'>
-              <div>Invested Value</div>
-              <div>{formatAmountInr(investedValue)}</div>
-            </div>
-            <div className='invested-amount-corpus-projected'>
-              <div>Projected Value</div>
-              <div>{formatAmountInr(potentialValue)}</div>
-            </div>
-          </div>
-        </div>
+        <PeriodWiseReturns
+          initialTerm={term}
+          stockSplit={stockSplitVal}
+          stockReturns={stockReturns}
+          bondReturns={bondReturns}
+          principalAmount={amount}
+          isRecurring={isRecurring}
+        />
 
         <div className='invested-amount-placeholder-icons'>
           <div className='invested-amount-placeholder-left'>

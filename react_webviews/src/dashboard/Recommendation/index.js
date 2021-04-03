@@ -17,14 +17,11 @@ import PennyVerificationPending from '../invest/components/mini_components/Penny
 import InvestError from '../invest/components/mini_components/InvestError';
 import InvestReferralDialog from '../invest/components/mini_components/InvestReferralDialog';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
+import PeriodWiseReturns from '../mini-components/PeriodWiseReturns';
+import { isEmpty } from '../../utils/validators';
 
 const Recommendations = (props) => {
-  const graphData = storageService().getObject("graphData") || {};
-  const [dialogStates, setDialogStates] = useState({
-    openPennyVerificationPendind: false,
-    openInvestError: false,
-    errorMessage: '',
-  })
+  let graphData = storageService().getObject("graphData") || {};
   const {
     recommendation,
     amount,
@@ -36,11 +33,17 @@ const Recommendations = (props) => {
     subtype,
   } = graphData;
   const state = props.location.state || {};
+  const partnerCode = getConfig().partnerCode;
+  const partner = getConfig().partner;
+  
+  const [dialogStates, setDialogStates] = useState({
+    openPennyVerificationPendind: false,
+    openInvestError: false,
+    errorMessage: '',
+  });
   const [isins, setIsins] = useState("");
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const partner_code = getConfig().partner_code;
   const {kyc: userKyc, user: currentUser, isLoading} = useUserKycHook();
-  const partner = getConfig().partner;
   const sipTypesKeys = [
     "buildwealth",
     "savetaxsip",
@@ -217,59 +220,123 @@ const Recommendations = (props) => {
       title='Recommended Funds'
       handleClick={goNext}
       showLoader={isApiRunning}
-    >
-      <section className='recommendations-common-container'>
-        <div className='recommendations-header'>
-          <div>Our Recommendation</div>
-          {investType !== 'insta-redeem' && (
-            <div onClick={editFund} className='edit-recommendation-funds'>
-              Edit
-            </div>
-          )}
-        </div>
-        <div className='recommendations-funds-lists'>
-          {recommendation &&
-            recommendation?.map((el, idx) => (
-              <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
-            ))}
-        </div>
-        <div className='recommendations-total-investment'>
-          <div>Total Investment</div>
-
-          <div>{recommendation?.length > 0 ? formatAmountInr(amount) : '₹0'}</div>
-        </div>
-        <div>
-          <div className="recommendations-disclaimer-morning">
-            <img alt="single_star" src={single_star} />
-            {partner_code !== "hbl" ? (
-              <img alt="morning_star" width="100" src={morning_text} />
-            ) : (
-              <div>BL Portfolio Star Track MF Ratings</div>
+    > 
+      <div style={{ margin: '0 -20px'}}>
+        <RecommendationTopCard
+          showRiskCard={userRiskProfile}
+          showTaxCard={investType === 'savetax'}
+        />
+        <PeriodWiseReturns
+          initialTerm={term}
+          stockSplit={graphData.stockSplit}
+          stockReturns={graphData.stockReturns}
+          bondReturns={graphData.bondReturns}
+          principalAmount={graphData.amount}
+          // isRecurring={isRecurring}
+        />
+        <section className='recommendations-common-container'>
+          <div className='recommendations-header'>
+            <div>Our Recommendation</div>
+            {investType !== 'insta-redeem' && (
+              <div onClick={editFund} className='edit-recommendation-funds'>
+                Edit
+              </div>
             )}
           </div>
-          <TermsAndCond />
-        </div>
-        <div className='recommendations-trust-icons'>
-          <div>Investments with fisdom are 100% secure</div>
-          <img alt='trust_sebi_secure' src={trust_icons} />
-        </div>
-        <PennyVerificationPending
-          isOpen={dialogStates.openPennyVerificationPendind}
-          handleClick={() => navigate("/kyc/add-bank")}
-        />
-        <InvestError
-          isOpen={dialogStates.openInvestError}
-          errorMessage={dialogStates.errorMessage}
-          handleClick={() => navigate("/invest")}
-          close={() => handleDialogStates("openInvestError", false)}
-        />
-        <InvestReferralDialog
-          isOpen={dialogStates.openInvestReferral}
-          proceedInvestment={proceedInvestment}
-          close={() => handleDialogStates("openInvestReferral", false)}
-        />
-      </section>
+          <div className='recommendations-funds-lists'>
+            {recommendation &&
+              recommendation?.map((el, idx) => (
+                <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
+              ))}
+          </div>
+          <div className='recommendations-total-investment'>
+            <div>Total Investment</div>
+
+            <div>{recommendation?.length > 0 ? formatAmountInr(amount) : '₹0'}</div>
+          </div>
+          <div>
+            <div className="recommendations-disclaimer-morning">
+              <img alt="single_star" src={single_star} />
+              {partnerCode !== "hbl" ? (
+                <img alt="morning_star" width="100" src={morning_text} />
+              ) : (
+                <div>BL Portfolio Star Track MF Ratings</div>
+              )}
+            </div>
+            <TermsAndCond />
+          </div>
+          <div className='recommendations-trust-icons'>
+            <div>Investments with fisdom are 100% secure</div>
+            <img alt='trust_sebi_secure' src={trust_icons} />
+          </div>
+          <PennyVerificationPending
+            isOpen={dialogStates.openPennyVerificationPendind}
+            handleClick={() => navigate("/kyc/add-bank")}
+          />
+          <InvestError
+            isOpen={dialogStates.openInvestError}
+            errorMessage={dialogStates.errorMessage}
+            handleClick={() => navigate("/invest")}
+            close={() => handleDialogStates("openInvestError", false)}
+          />
+          <InvestReferralDialog
+            isOpen={dialogStates.openInvestReferral}
+            proceedInvestment={proceedInvestment}
+            close={() => handleDialogStates("openInvestReferral", false)}
+          />
+        </section>
+      </div>
     </Container>
   );
 };
 export default Recommendations;
+
+const RecommendationTopCard = ({
+  showRiskCard,
+  showTaxCard,
+  cardDetails,
+}) => {
+  const renderContent = () => {
+    if (showRiskCard) {
+      const { userRiskProfile, stockSplit, bondSplit } = riskDetails;
+      
+      return (
+        <div class="risk-profile-card">
+          <img alt="" class="left-img" />
+          <div class="risk-details">
+            {userRiskProfile ?
+              <>
+                <div class="header" onClick="showRiskInfo()">
+                  Risk profile
+                  <img src="assets/img/info_icon.svg" class="info-icn" />
+                </div>
+                <div class="risk-type">{{ userRiskProfile }}</div>
+                <div class="risk-distribution">{{ stockSplit }}% Equity | {{ bondSplit }}% Debt</div>
+              </> :
+              <>
+                <div class="risk-type" ng-if="showStartRiskProfile">Select risk profile</div>
+                <div class="desc" ng-if="showStartRiskProfile">Get better fund recommendations</div>
+              </>
+            }
+          </div>
+          <div class="button" ng-click="modifyRiskProfile()">
+            {isEmpty(cardDetails) ? "Select": "Change"}
+          </div>
+        </div>
+      );
+    } else if (showTaxCard) {
+      return (
+        <div class="tax-card" ng-show="investType === 'savetax' || investType === 'savetaxsip'">
+          <img src="assets/img/sale.svg" alt="" />
+          <div class="text">Tax savings for {{ taxPeriodText }}</div>
+          <div class="amount">{formatAmountInr(cardDetails.corpus)}</div>
+        </div>
+      );
+    }
+  }
+  return (
+    <div class="recommendation-top-section">
+      {renderContent()}
+    </div>
+  );
+}
