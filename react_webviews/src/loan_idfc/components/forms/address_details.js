@@ -7,6 +7,7 @@ import { FormControl } from "material-ui/Form";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
 import scrollIntoView from "scroll-into-view-if-needed";
+import { storageService } from "utils/validators";
 import Api from "utils/api";
 
 const yesOrNo_options = [
@@ -53,8 +54,12 @@ class AddressDetails extends Component {
       ],
     };
 
+    let ckyc_state = storageService().get('ckyc_state') || false;
+    let confirm_details = ckyc_state === "success";
+
     this.setState({
       progressHeaderData: progressHeaderData,
+      confirm_details: confirm_details
     });
   }
 
@@ -66,16 +71,10 @@ class AddressDetails extends Component {
     }
 
     let lead = this.state.lead || {};
-    // let personal_info = lead.personal_info || {};
-    let vendor_info = lead.vendor_info || {};
     let current_address_data = lead.current_address_data || {};
     let permanent_address_data = lead.permanent_address_data || {};
     let { confirm_details } = this.state;
     let { form_data } = this.state;
-
-    if (vendor_info.ckyc_state === "success") {
-      confirm_details = true;
-    }
 
     let loaderData = {
       title: `Hang on while we create loan application`,
@@ -457,7 +456,6 @@ class AddressDetails extends Component {
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
         } address details`}
-        hidePageTitle={this.state.skelton}
         buttonTitle={this.state.confirm_details ? "CONFIRM & SUBMIT" : "SUBMIT"}
         handleClick={this.handleClick}
         loaderWithData={this.state.loaderWithData}

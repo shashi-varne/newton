@@ -252,9 +252,7 @@ export async function getDocumentList() {
     );
     const { result } = res.pfwresponse;
 
-    if (!result.doclist_required) {
-      this.navigate('final-offer')
-    } else {
+    if (result.doclist_required) {
       this.setState(
         {
           docList: result.doc_list,
@@ -265,6 +263,8 @@ export async function getDocumentList() {
           this.onload();
         }
       );
+    } else {
+      this.navigate('final-offer')
     }
   } catch (err) {
     console.log(err);
@@ -272,7 +272,6 @@ export async function getDocumentList() {
       show_loader: false,
       skelton: false
     });
-    // toast("Something went wrong");
     error = true;
     errorType = "crash";
   }
