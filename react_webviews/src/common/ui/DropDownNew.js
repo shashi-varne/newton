@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
+import { toCamelCase } from 'utils/validators';
 import './style.scss';
 import SVG from 'react-inlinesvg';
 import check_icon from 'assets/check_icon.svg'
@@ -28,6 +29,7 @@ class SelectDropDown2 extends React.Component {
     const windowHeight = window.innerHeight;
     const menuHeight = Math.min(MAX_MENU_HEIGHT, (options.length * AVG_OPTION_HEIGHT));
     const instOffsetWithMenu = node.getBoundingClientRect().bottom + menuHeight;
+    document.getElementsByClassName("Container")[0].style.height =  '100%'
     this.setState({
       dropUp: instOffsetWithMenu >= windowHeight,
       shrink: true
@@ -35,6 +37,7 @@ class SelectDropDown2 extends React.Component {
   }
 
   handleMenuClose = () => {
+    document.getElementsByClassName("Container")[0].style.height =  '100%'
     this.setState({ shrink: false })
     window.removeEventListener('resize', this.determineDropUp);
     window.removeEventListener('scroll', this.determineDropUp);
@@ -85,10 +88,10 @@ class SelectDropDown2 extends React.Component {
     var options = this.props.options.map((ele, index) => {
       if (ele.name) {
         return ({
-          'value': ele.value, 'name': ele.name
+          'value': ele.value, 'name': toCamelCase(ele.name)
         })
       } else return ({
-        'value': ele, 'name': ele
+        'value': ele, 'name': toCamelCase(ele)
       })
     });
     const OptionPresent = this.state.selectedOption ? !!this.state.selectedOption.length : false;// eslint-disable-next-line
@@ -233,7 +236,7 @@ const Option = props => {
              src={check_icon}
         />
         </div>
-        <span style={{ marginLeft: '10px', marginTop: '-1px' }}>{props.label}</span>
+        <span style={{ marginLeft: '10px', marginTop: '-1px' }}>{toCamelCase(props.label)}</span>
         </div>
       </components.Option>
     </div>
@@ -270,5 +273,6 @@ const ErrorMessageStyle = {
   fontSize: '11px',
   color: '#D0021B',
   marginLeft: '10px',
-  marginTop: '0px'
+  marginTop: '0px',
+  paddingBottom : '5px'
 }
