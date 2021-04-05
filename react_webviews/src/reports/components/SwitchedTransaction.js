@@ -39,13 +39,13 @@ const SwitchedTransaction = (props) => {
               <div className="purchased" key={index}>
                 <div className="switch-head">
                   <div className="switch-step">
-                    <div><div className="circle"></div></div>
+                    <div className="outline"><div className="circle"></div></div>
                     <div className="mf-name">{switched.from_mf.friendly_name}</div>
                   </div>
                   <div className="switch-step-2">All units</div>
                   <div className="switch-step completed-switch">
                     <div><div className="circle"></div></div>
-                    <div className="mf-name">{switched.to_mf.friendly_name}</div>
+                    <div>{switched.to_mf.friendly_name}</div>
                   </div>
                 </div>
                 <div className="progress-bar">

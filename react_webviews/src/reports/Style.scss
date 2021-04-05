@@ -728,17 +728,22 @@
         column-gap: 10px;
         position: relative;
 
+        .outline {
+          position: absolute;
+          padding-top: 5px;
+          background: white;
+        }
+
         .circle {
           width: 12px;
           height: 12px;
           border-radius: 50%;
           border: 1px solid var(--primary);
           background-color: white;
-          position: absolute;
         }
 
         .mf-name {
-          margin-left: -4px;
+          margin-left: 6px;
           padding-left: 15px;
           border-left: 1px dashed var(--primary);
         }
