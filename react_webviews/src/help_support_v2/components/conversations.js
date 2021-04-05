@@ -182,6 +182,7 @@ class TicketConversations extends Component {
   };
 
   handleDelete = (index) => {
+    console.log(index)
     let { documents } = this.state;
 
     documents.splice(index, 1);
@@ -358,7 +359,7 @@ class TicketConversations extends Component {
               save={this.save}
               value={this.state.value}
               documents={this.state.documents}
-              handleDelete={this.handleDelete}
+              onDelete={this.handleDelete}
             />
           )}
           <div id="viewScroll"></div>
