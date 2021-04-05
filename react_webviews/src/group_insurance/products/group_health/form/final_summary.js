@@ -85,7 +85,7 @@ class GroupHealthPlanFinalSummary extends Component {
     onload = () => {
         const queryParams = getUrlParams();
         if(queryParams.pgReached){
-            storageService().setObject(`${this.state.provider}_pgReached`, true)
+            this.setState({pgReached : true})
         }        
         let { lead, provider } = this.state;  
 
@@ -980,6 +980,7 @@ class GroupHealthPlanFinalSummary extends Component {
             onlyButton={true}
             buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
             handleClick={() => this.handleClick()}
+            pgReached={this.state.pgReached}
         >
 
             <div className="group-health-final-summary">

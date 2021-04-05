@@ -728,10 +728,6 @@ class GroupHealthPlanAddressDetails extends Component {
                 <div className="common-top-page-subtitle">
                     {this.state.provider==='RELIGARE' || this.state.provider === 'GMC' ?' Policy will be delivered to the current address':'Policy will be delivered to this address'}
                 </div>
-                {this.state.provider==='RELIGARE'&&
-                <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px', marginBottom: '20px' }}>
-                    Current Address
-                </div>}
                 <FormControl fullWidth>
                 <div style={{ color: '#000000', fontSize: 13, fontWeight: 300, marginBottom: '20px' }}>
                                 Current Address

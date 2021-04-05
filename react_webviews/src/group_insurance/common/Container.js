@@ -164,11 +164,9 @@ class Container extends Component {
         return;
       }
 
-      if(this.checkStringInString('final-summary')){
-        var pgReached = storageService().getObject(`${this.props.provider}_pgReached`);
-        if(pgReached){
+      if(this.checkStringInString('final-summary') && this.props.pgReached){
           this.navigate(group_health_landing);
-        }
+          return;
       }
 
       if(this.checkStringInString('insure-type') || this.checkStringInString('payment')) {
