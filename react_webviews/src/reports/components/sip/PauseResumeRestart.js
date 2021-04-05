@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { initData } from "../../services";
 import { navigate as navigateFunc } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import { postSipAction } from "../../common/api";
@@ -20,14 +19,6 @@ const PauseResumeRestart = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   let title = `${action.charAt(0).toUpperCase()}${action.slice(1)} SIP`;
-
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = () => {
-    initData();
-  };
 
   const handleClick = async () => {
     setIsApiRunning(true);

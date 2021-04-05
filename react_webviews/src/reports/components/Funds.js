@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
-import Button from "@material-ui/core/Button";
 import { getPathname } from "../constants";
-import { initData } from "../services";
 import { getFunds, getFundMf } from "../common/api";
 import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
 import FundNotAvailable from "./mini_components/FundNotAvailable";
 import AskInvestType from "./mini_components/AskInvestType";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "../../common/ui/Button";
 
 const Funds = (props) => {
   const params = props?.match?.params || {};
@@ -60,7 +58,6 @@ const Funds = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     const result = await getFunds({
       itype,
       subtype,
@@ -86,7 +83,7 @@ const Funds = (props) => {
   };
 
   const getMfDetails = async (fund) => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
       const result = await getFundMf({
         mfid: fund.mf.amfi,
@@ -184,7 +181,7 @@ const Funds = (props) => {
   };
 
   return (
-    <Container hideInPageTitle={true} noFooter={true} skelton={showSkelton}>
+    <Container hidePageTitle={true} noFooter={true} skelton={showSkelton}>
       <div className="reports-funds">
         {!showSkelton &&
           !isEmpty(funds) &&
@@ -287,17 +284,10 @@ const Funds = (props) => {
                       </div>
                     </div>
                     <Button
+                      buttonTitle="INVEST MORE"
+                      showLoader={isApiRunning}
                       onClick={() => getMfDetails(fund)}
-                      disabled={isApiRunning}
-                      className={`${isApiRunning && "disabled"}`}
-                    >
-                      INVEST MORE
-                      {isApiRunning && (
-                        <div className="loader">
-                          <CircularProgress size={20} thickness={5} />
-                        </div>
-                      )}
-                    </Button>
+                    />
                   </>
                 )}
               </div>

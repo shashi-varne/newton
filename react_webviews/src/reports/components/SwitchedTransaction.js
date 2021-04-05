@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { getPurchaseProcessData } from "../constants";
-import { initData } from "../services";
 import { getSummaryV2 } from "../common/api";
 import Process from "./mini_components/Process";
 
@@ -17,7 +16,6 @@ const SwitchedTransaction = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     const result = await getSummaryV2();
     if (!result) {
       setShowSkelton(false);
@@ -33,12 +31,7 @@ const SwitchedTransaction = (props) => {
   };
 
   return (
-    <Container
-      hideInPageTitle={true}
-      noFooter={true}
-      skelton={showSkelton}
-      headerTitle="Pending Switch"
-    >
+    <Container noFooter={true} skelton={showSkelton} title="Pending Switch">
       <div className="report-purchase">
         {!showSkelton &&
           !isEmpty(transactions) &&

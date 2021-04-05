@@ -3,7 +3,6 @@ import Container from "../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import Button from "material-ui/Button";
 import { getPathname, storageConstants } from "../constants";
-import { initData } from "../services";
 import {
   getAvailableFundsForSwitch,
   getFundDetailsForSwitch,
@@ -48,7 +47,6 @@ const SwitchFund = (props) => {
   }, []);
 
   const initialize = async () => {
-    await initData();
     try {
       const result = await getAvailableFundsForSwitch({
         amfi,
@@ -102,12 +100,7 @@ const SwitchFund = (props) => {
   };
 
   return (
-    <Container
-      headerTitle="Available Funds"
-      hideInPageTitle={true}
-      noFooter={true}
-      skelton={showSkelton}
-    >
+    <Container title="Available Funds" noFooter={true} skelton={showSkelton}>
       <div className="reports-switch">
         {!showSkelton && !isEmpty(fundDetails) && (
           <>

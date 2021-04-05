@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { initData } from "../../services";
 import { navigate as navigateFunc } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import { getSipNote, postSipAction } from "../../common/api";
@@ -30,7 +29,6 @@ const PauseCancelDetail = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     try {
       const result = await getSipNote({
         key: sip.key,
@@ -77,7 +75,6 @@ const PauseCancelDetail = (props) => {
   return (
     <Container
       title={title}
-      headerTitle={title}
       buttonTitle="CONTINUE"
       handleClick={() => handleClick()}
       skelton={showSkelton}

@@ -16,16 +16,13 @@ import {
   getAmountInInr,
 } from "../common/functions";
 import { getPathname, storageConstants } from "../constants";
-import { initData } from "../services";
 import { getSummaryV2 } from "../common/api";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 
 const Summary = (props) => {
   const productName = getConfig().productName;
   const partner = getConfig().partner;
   const navigate = navigateFunc.bind(props);
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const [report, setReportData] = useState({});
   const [current, setCurrent] = useState(true);
   const [invest_data, setInvestData] = useState({
@@ -36,6 +33,7 @@ const Summary = (props) => {
   });
   const [data, setData] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
+  const { user: currentUser, isLoading } = useUserKycHook();
 
   useEffect(() => {
     initialize();
@@ -77,12 +75,6 @@ const Summary = (props) => {
       reportData.sips.active_sips.length > 0 ? true : false;
     Data.showTransactions = reportData.current.current > 0 ? true : false;
     setData({ ...Data });
-    let user = { ...currentUser };
-    if (isEmpty(user)) {
-      await initData();
-      user = storageService().getObject(storageConstants.USER) || {};
-      setCurrentUser(user);
-    }
     setShowSkelton(false);
   };
 
@@ -133,10 +125,9 @@ const Summary = (props) => {
 
   return (
     <Container
-      headerTitle="My Money"
-      hideInPageTitle={true}
+      title="My Money"
       noFooter={true}
-      skelton={showSkelton}
+      skelton={showSkelton || isLoading}
     >
       <div className="reports">
         {!showSkelton && !isEmpty(report) && (

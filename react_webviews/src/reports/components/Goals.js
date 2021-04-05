@@ -4,7 +4,6 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import Button from "@material-ui/core/Button";
 import Slider from "common/ui/Slider";
 import { getPathname } from "../constants";
-import { initData } from "../services";
 import { getReportGoals } from "../common/api";
 import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
 
@@ -22,7 +21,6 @@ const Goals = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     const result = await getReportGoals();
     if (!result) {
       setShowSkelton(false);
@@ -88,7 +86,7 @@ const Goals = (props) => {
   };
 
   return (
-    <Container hideInPageTitle={true} noFooter={true} skelton={showSkelton}>
+    <Container hidePageTitle={true} noFooter={true} skelton={showSkelton}>
       <div className="report-goals">
         {!showSkelton &&
           !isEmpty(goals) &&

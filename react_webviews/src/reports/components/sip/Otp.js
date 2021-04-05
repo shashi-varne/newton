@@ -5,7 +5,7 @@ import toast from "common/ui/Toast";
 import { getConfig } from "utils/functions";
 import { storageService, isEmpty } from "../../../utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { initData } from "../../services";
+import { initData } from "../../../kyc/services";
 import { resendOtp, submitOtp } from "../../common/api";
 
 class Otp extends Component {

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { initData } from "../../services";
 import { getSummaryV2, getSipAction } from "../../common/api";
 import {
   navigate as navigateFunc,
@@ -59,7 +58,6 @@ const SipDetails = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     const result = await getSummaryV2();
     if (!result) {
       setShowSkelton(false);
@@ -131,23 +129,19 @@ const SipDetails = (props) => {
 
   return (
     <Container
-      hideInPageTitle={true}
+      hidePageTitle={true}
       headerTitle="SIP Details"
       noFooter={buttonTitle ? false : true}
       twoButton={sip_mandate_created.includes(report.friendly_status)}
       buttonTitle={buttonTitle}
-      buttonTitle2="PAUSE SIP"
+      buttonOneTitle={buttonTitle}
+      buttonTwoTitle="PAUSE SIP"
       skelton={showSkelton}
-      buttonClassName={
-        sip_mandate_created.includes(report.friendly_status)
-          ? "reports-sip-details-footer-button"
-          : ""
-      }
-      buttonClassName2="reports-sip-details-footer-button"
-      handleClick={handleClick("FIRST")}
-      handleClick2={handleClick("SECOND")}
+      handleClickOne={handleClick("FIRST")}
+      handleClickTwo={handleClick("SECOND")}
       isApiRunning={isApiRunning}
       disable={isApiRunning || showSkelton}
+      dualbuttonwithouticon
     >
       <div className="reports-sip-details">
         {!showSkelton && !isEmpty(report) && (

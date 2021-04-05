@@ -1,5 +1,5 @@
 .reports {
-  margin: -20px -20px -56px -20px;
+  margin: 0 -20px -56px -20px;
   header {
     background-color: var(--primary);
     color: white;
@@ -483,7 +483,6 @@
 }
 
 .reports-fundswise-summary {
-  margin-top: -20px;
   line-height: 1.5;
   color: #333333;
 
@@ -627,7 +626,6 @@
 .reports-fundswise-transactions {
   line-height: 1.5;
   color: #333333;
-  margin: -20px 0;
 
   p {
     font-size: 14px;
@@ -1004,7 +1002,7 @@
 
 .reports-switch {
   line-height: 1.5;
-  margin: -20px -20px -56px -20px;
+  margin: 0 -20px -56px -20px;
   padding: 20px 20px 40px 20px;
   color: #333333;
   background: #f1f1f1;
@@ -1142,7 +1140,7 @@
 .reports-switch-now {
   color: #333333;
   line-height: 1.5;
-  margin: -20px -20px -56px -20px;
+  margin: 0px -20px -56px -20px;
   padding-bottom: 56px;
   background: #f1f1f1;
 
@@ -1702,6 +1700,10 @@
     font-size: 14px;
     padding-top: 10px;
     text-align: left;
+  }
+
+  input {
+    font-size: 30px;
   }
 
   .margin {

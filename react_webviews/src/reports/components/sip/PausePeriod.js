@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { initData } from "../../services";
 import {
   navigate as navigateFunc,
   dateOrdinalSuffix,
@@ -22,14 +21,6 @@ const PausePeriod = (props) => {
   const navigate = navigateFunc.bind(props);
   const [period, setPeriod] = useState(sliderValues.value);
 
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    initData();
-  };
-
   const handleClick = () => () => {
     navigate(`${getPathname.pauseCancelDetail}pause/${period}`);
   };
@@ -39,7 +30,6 @@ const PausePeriod = (props) => {
   return (
     <Container
       title="Select a Period"
-      headerTitle="Select a Period"
       buttonTitle="CONTINUE"
       handleClick={handleClick()}
       classOverRideContainer="reports-sip-pause-period-main"

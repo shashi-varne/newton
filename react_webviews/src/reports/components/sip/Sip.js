@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { initData } from "../../services";
 import { getSummaryV2 } from "../../common/api";
 import {
   navigate as navigateFunc,
@@ -21,7 +20,6 @@ const Sip = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     storageService().remove(storageConstants.PAUSE_SIP);
     storageService().remove(storageConstants.SELECTED_SIP);
     storageService().remove(storageConstants.PAUSE_REQUEST_DATA);
@@ -48,12 +46,7 @@ const Sip = (props) => {
   };
 
   return (
-    <Container
-      title="Existing SIPs"
-      headerTitle="Existing SIPs"
-      noFooter={true}
-      skelton={showSkelton}
-    >
+    <Container title="Existing SIPs" noFooter={true} skelton={showSkelton}>
       <div className="reports-sip">
         {!showSkelton &&
           !isEmpty(report) &&

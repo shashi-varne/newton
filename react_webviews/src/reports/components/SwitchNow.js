@@ -8,7 +8,6 @@ import {
 } from "utils/validators";
 import Button from "material-ui/Button";
 import { getPathname, storageConstants } from "../constants";
-import { initData } from "../services";
 import {
   getFundDetailsForSwitch,
   postSwitchRecommendation,
@@ -37,7 +36,6 @@ const SwitchNow = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     try {
       const data = await getFundDetailsForSwitch({
         amfi,
@@ -122,8 +120,7 @@ const SwitchNow = (props) => {
 
   return (
     <Container
-      headerTitle="Available Funds"
-      hideInPageTitle={true}
+      title="Available Funds"
       skelton={showSkelton}
       buttonTitle="SWITCH NOW"
       handleClick={handleClick}

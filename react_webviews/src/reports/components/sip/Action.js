@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Container from "../../common/Container";
 import { isEmpty } from "utils/validators";
 import { getPathname } from "../../constants";
-import { initData } from "../../services";
 import { navigate as navigateFunc } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import { Imgc } from "common/ui/Imgc";
@@ -17,14 +16,6 @@ const Action = (props) => {
   const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
 
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    initData();
-  };
-
   const handleClick = () => {
     if (action === "cancel") {
       navigate(`${getPathname.pauseCancelDetail}${action}/0`);
@@ -38,14 +29,13 @@ const Action = (props) => {
 
   return (
     <Container
-      hideInPageTitle={true}
+      hidePageTitle={true}
       twoButton={true}
-      buttonTitle="YES"
-      buttonTitle2="NO"
-      buttonClassName="reports-sip-action-footer-button"
-      buttonClassName2="reports-sip-action-footer-button2"
-      handleClick={() => handleClick()}
-      handleClick2={() => goBack()}
+      buttonOneTitle="YES"
+      buttonTwoTitle="NO"
+      handleClickOne={() => handleClick()}
+      handleClickTwo={() => goBack()}
+      dualbuttonwithouticon
     >
       <div className="reports-sip-action">
         <Imgc

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPathname } from "../../constants";
-import { initData } from "../../services";
 import { getFunds, getFundDetailsForSwitch } from "../../common/api";
 import {
   navigate as navigateFunc,
@@ -24,7 +23,6 @@ const FundswiseSummary = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     const result = await getFunds();
     if (!result) {
       setShowSkelton(false);
@@ -73,12 +71,7 @@ const FundswiseSummary = (props) => {
   };
 
   return (
-    <Container
-      hideInPageTitle={true}
-      headerTitle="Funds"
-      noFooter={true}
-      skelton={showSkelton}
-    >
+    <Container title="Funds" noFooter={true} skelton={showSkelton}>
       <div className="reports-fundswise-summary">
         {!showSkelton &&
           !isEmpty(funds) &&

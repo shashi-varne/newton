@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Container from "../../common/Container";
 import { isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { initData } from "../../services";
 import { navigate as navigateFunc } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import { Imgc } from "common/ui/Imgc";
@@ -16,21 +15,13 @@ const Request = (props) => {
     navigate(getPathname.reports);
   }
 
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = () => {
-    initData();
-  };
-
   const handleClick = () => {
     navigate(getPathname.reportsSip);
   };
 
   return (
     <Container
-      hideInPageTitle={true}
+      hidePageTitle={true}
       buttonTitle="OK"
       handleClick={() => handleClick()}
     >

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
-import { initData } from "../../services";
 import { getFunds } from "../../common/api";
 
 const FundswiseDetails = (props) => {
@@ -17,7 +16,6 @@ const FundswiseDetails = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     const result = await getFunds();
     if (!result) {
       setShowSkelton(false);
@@ -37,12 +35,7 @@ const FundswiseDetails = (props) => {
   };
 
   return (
-    <Container
-      hideInPageTitle={true}
-      headerTitle="Transactions"
-      noFooter={true}
-      skelton={showSkelton}
-    >
+    <Container title="Transactions" noFooter={true} skelton={showSkelton}>
       <div className="reports-fundswise-details">
         {!showSkelton && !isEmpty(fund) && (
           <>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
-import { initData } from "../../services";
 import { getTransactions, getNextTransactions } from "../../common/api";
 
 const FundswiseTransactions = (props) => {
@@ -18,7 +17,6 @@ const FundswiseTransactions = (props) => {
   }, []);
 
   const initialize = async () => {
-    initData();
     const data = await getTransactions({ amfi });
     if (!data) {
       setShowSkelton(false);
@@ -61,8 +59,7 @@ const FundswiseTransactions = (props) => {
 
   return (
     <Container
-      hideInPageTitle={true}
-      headerTitle="Transactions"
+      title="Transactions"
       noFooter={!reportData.more}
       buttonTitle="SHOW MORE"
       handleClick={() => handleClick()}

@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
-import {
-  isEmpty,
-  storageService,
-  validateNumber,
-  formatAmountInr,
-} from "utils/validators";
+import { isEmpty, storageService, formatAmountInr } from "utils/validators";
 import { getPathname, storageConstants } from "../constants";
-import { initData } from "../services";
 import { navigate as navigateFunc } from "../common/functions";
 import Input from "common/ui/Input";
 import { Checkbox } from "material-ui";
 import { Imgc } from "common/ui/Imgc";
+import { proceedInvestmentChild } from "../../dashboard/invest/functions";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import PennyVerificationPending from "../../dashboard/invest/components/mini_components/PennyVerificationPending";
+import InvestError from "../../dashboard/invest/components/mini_components/InvestError";
+import InvestReferralDialog from "../../dashboard/invest/components/mini_components/InvestReferralDialog";
+import { convertInrAmountToNumber } from "../../dashboard/invest/common/commonFunction";
 
 const InvestMore = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -27,21 +27,22 @@ const InvestMore = (props) => {
   const [schemeCheck, setSchemeCheck] = useState(false);
   const [isReadyToPayment, setIsReadyToPayment] = useState(false);
   const [form_data, setFormData] = useState({ amount: "", amount_error: "" });
-
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = () => {
-    initData();
-  };
+  const { kyc: userKyc, isLoading } = useUserKycHook();
+  const [dialogStates, setDialogStates] = useState({
+    openPennyVerificationPendind: false,
+    openInvestError: false,
+    openInvestReferral: false,
+    errorMessage: "",
+  });
+  const [isApiRunning, setIsApiRunning] = useState(false);
 
   const handleAmount = () => (event) => {
     let value = event.target ? event.target.value : event;
-    if (!validateNumber(value) & value) return;
+    // eslint-disable-next-line
+    value = parseInt(convertInrAmountToNumber(value) || "");
     let formData = { ...form_data };
     formData.amount = value;
-    if (!value) formData.amount_error = "This is required";
+    if (isNaN(value)) formData.amount_error = "This is required";
     else if (value < investBody.min)
       formData.amount_error = `Minimum investment amount is ${investBody.min}`;
     else if (value % investBody.mul !== 0)
@@ -52,7 +53,7 @@ const InvestMore = (props) => {
     setFormData({ ...formData });
   };
 
-  const handleClick = () => {
+  const handleClick = (investReferralData, isReferralGiven) => {
     setIsReadyToPayment(true);
     let investmentObj = {
       investment: {
@@ -72,6 +73,10 @@ const InvestMore = (props) => {
       },
     };
 
+    let paymentRedirectUrl = encodeURIComponent(
+      `${window.location.origin}/page/callback/${sipOrOnetime}/${investmentObj.investment.amount}`
+    );
+
     let investmentEventData = {
       amount: form_data.amount,
       investment_type: investBody.type,
@@ -87,11 +92,39 @@ const InvestMore = (props) => {
     const body = {
       investment: investmentObj.investment,
     };
+
+    if (isReferralGiven && investReferralData.code) {
+      body.referral_code = investReferralData.code;
+    }
+
+    proceedInvestmentChild({
+      userKyc: userKyc,
+      sipOrOnetime: sipOrOnetime,
+      body: body,
+      investmentEventData: investmentEventData,
+      paymentRedirectUrl: paymentRedirectUrl,
+      isSipDatesScreen: false,
+      history: props.history,
+      handleApiRunning: handleApiRunning,
+      handleDialogStates: handleDialogStates,
+    });
+  };
+
+  const handleApiRunning = (result) => {
+    setIsApiRunning(result);
+  };
+
+  const handleDialogStates = (key, value, errorMessage) => {
+    let dialog_states = { ...dialogStates };
+    dialog_states[key] = value;
+    if (errorMessage) dialog_states["errorMessage"] = errorMessage;
+    setDialogStates({ ...dialog_states });
+    handleApiRunning(false);
   };
 
   return (
     <Container
-      hideInPageTitle={true}
+      hidePageTitle={true}
       buttonTitle={title}
       handleClick={() => handleClick()}
       noFooter={isReadyToPayment}
@@ -100,6 +133,8 @@ const InvestMore = (props) => {
           ? false
           : true
       }
+      showLoader={isApiRunning}
+      skelton={isLoading}
     >
       <div className="reports-invest-more">
         {!isReadyToPayment && (
@@ -107,14 +142,12 @@ const InvestMore = (props) => {
             <div className="text">I would like to invest</div>
             <Input
               error={form_data.amount_error ? true : false}
-              helperText={
-                form_data.amount_error || formatAmountInr(form_data.amount)
-              }
-              type="number"
+              helperText={form_data.amount_error || ""}
+              type="text"
               width="40"
               id="amount"
               name="amount"
-              value={form_data.amount || ""}
+              value={formatAmountInr(form_data.amount) || ""}
               onChange={handleAmount()}
             />
             <div className="text margin">
@@ -151,6 +184,21 @@ const InvestMore = (props) => {
                 </a>
               </div>
             </div>
+            <PennyVerificationPending
+              isOpen={dialogStates.openPennyVerificationPendind}
+              handleClick={() => navigate("/kyc/add-bank")}
+            />
+            <InvestError
+              isOpen={dialogStates.openInvestError}
+              errorMessage={dialogStates.errorMessage}
+              handleClick={() => navigate("/invest")}
+              close={() => handleDialogStates("openInvestError", false)}
+            />
+            <InvestReferralDialog
+              isOpen={dialogStates.openInvestReferral}
+              proceedInvestment={handleClick}
+              close={() => handleDialogStates("openInvestReferral", false)}
+            />
           </>
         )}
         {isReadyToPayment && (
