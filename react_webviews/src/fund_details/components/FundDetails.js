@@ -337,7 +337,7 @@ const FundDetails = ({ classes, history }) => {
             <Divider classes={{ root: classes.root }} />
 
             <Accordian title='Returns'>
-              <Returns returnsData={fundDetails.performance.returns} />
+              <Returns returnsData={fundDetails.performance.returns} iframe={iframe}/>
             </Accordian>
             <Divider classes={{ root: classes.root }} />
             <Accordian title="Fund's Info">
