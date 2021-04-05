@@ -21,8 +21,6 @@ export default function PieChart (props) {
       className="animated animatedFadeInUp fadeInUp">
       <ResponsivePie
         data={data}
-        // height={height}
-        // width={width}
         innerRadius={0.6}
         enableRadialLabels={false}
         enableSlicesLabels={false}

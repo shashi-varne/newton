@@ -129,7 +129,7 @@ class NpsInvestments extends Component {
       cardClicked: cardClicked
     })
 
-    this.navigate('/kyc/kyc-journey', '', true);
+    this.navigate(route, '', true);
   }
 
   investMore = () => {
@@ -186,7 +186,7 @@ class NpsInvestments extends Component {
             this.state.currentUser.kyc_registration_v2 === 'incomplete') &&
               <div
                 className="list"
-                onClick={() => this.optionClicked('kyc/kyc-journey', 'complete nps transaction')}
+                onClick={() => this.optionClicked('/kyc/journey', 'complete nps transaction')}
               >
                 <div className="icon">
                   <img

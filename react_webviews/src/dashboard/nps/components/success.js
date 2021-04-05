@@ -44,15 +44,11 @@ class NpsSuccess extends Component {
   render() {
     return (
       <Container
-        classOverRide="pr-error-container"
-        fullWidthButton
         buttonTitle="CONTINUE"
         hideInPageTitle
         hidePageTitle
-        title="Confirm Delivery Details"
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
-        classOverRideContainer="pr-container"
       >
         <div>
           <section className="page invest nps">
@@ -86,7 +82,7 @@ class NpsSuccess extends Component {
                 <div className="contact container-padding">
                   <p>For any query, reach us at</p>
                   <div className="flex-box">
-                    <div className="item">+80-30-408363</div>
+                    <div className="item">{getConfig().mobile}</div>
                     <div className="item">{getConfig().askEmail}</div>
                   </div>
                 </div>

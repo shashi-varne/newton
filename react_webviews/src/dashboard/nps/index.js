@@ -19,6 +19,7 @@ import NpsInvestType from "./components/investType";
 import "../../common/theme/Style.scss";
 import "./style.scss";
 import NpsPaymentRedirect from "./components/redirect";
+import NotFound from 'common/components/NotFound'
 
 const Nps = (props) => {
   const { url } = props.match;
@@ -42,6 +43,7 @@ const Nps = (props) => {
       <Route exact path={`${url}/redirect`} component={NpsPaymentRedirect} />
       <Route exact path={`${url}/invest-type`} component={NpsInvestType} />
       <Route exact path={`${url}/payment/callback/:type/:status`} component={NpsPaymentCallback} />
+      <Route component={NotFound} />
     </Switch>
   );
 };

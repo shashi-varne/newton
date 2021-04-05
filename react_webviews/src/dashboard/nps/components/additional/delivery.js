@@ -12,6 +12,7 @@ class NpsDelivery extends Component {
     this.state = {
       show_loader: false,
       canSubmit: true,
+      skelton: 'g',
       form_data: {},
       screen_name: "nps_delivery",
       uploaded: '',
@@ -42,6 +43,7 @@ class NpsDelivery extends Component {
       nps_details: nps_details,
       address: address,
       form_data: form_data,
+      skelton: false
     });
   };
 
@@ -117,15 +119,15 @@ class NpsDelivery extends Component {
     let { form_data } = this.state;
     return (
       <Container
-        classOverRide="pr-error-container"
-        fullWidthButton
         buttonTitle="CONTINUE"
         showLoader={this.state.show_loader}
-        hideInPageTitle
+        skelton={this.state.skelton}
         hidePageTitle
+        new_header={true}
         title="Confirm Delivery Details"
         handleClick={this.handleClick}
-        classOverRideContainer="pr-container"
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="page-heading">
           <img src={require("assets/hand_icon.png")} alt="" width="50" />

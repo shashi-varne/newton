@@ -3,7 +3,6 @@ import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
 import { initialize } from "../../common/commonFunctions";
 import { getConfig } from "utils/functions";
-import scrollIntoView from 'scroll-into-view-if-needed';
 
 class NpsInfo extends Component {
   constructor(props) {
@@ -32,27 +31,12 @@ class NpsInfo extends Component {
     });
   };
 
-  handleScroll = (name) => {
-    let element = document.getElementById(`nps-${name}`);
-    if (!element || element === null) {
-      return;
-    }
-
-    scrollIntoView(element, {
-      block: "start",
-      inline: "nearest",
-      behavior: "smooth",
-    });
-  };
-
   handleClick = (name) => {
     if (name) {
       this.setState(
         {
           [name]: true,
-        },
-        () => this.handleScroll(name)
-      );
+        });
     } else {
       if (this.state.currentUser.nps_investment) {
         this.props.history.push(

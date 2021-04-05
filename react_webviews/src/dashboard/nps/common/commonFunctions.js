@@ -23,6 +23,8 @@ export async function initialize() {
   this.openInBrowser = openInBrowser.bind(this);
   this.openInTabApp = openInTabApp.bind(this);
   this.uploadDocs = uploadDocs.bind(this);
+  this.setErrorData = setErrorData.bind(this);
+  this.handleError = handleError.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -36,11 +38,65 @@ export async function initialize() {
   );
 }
 
+export function setErrorData(type) {
+  this.setState({
+    showError: false,
+  });
+  if (type) {
+    let mapper = {
+      onload: {
+        handleClick1: this.onload,
+        title1: this.state.title1,
+        button_text1: "Retry",
+      },
+      upldateFeedback: {
+        handleClick1: () => {
+          this.setState({
+            showError: false,
+          });
+        },
+        title1: this.state.title1,
+        button_text1: "Dismiss",
+      },
+      submit: {
+        handleClick1: this.handleClick,
+        button_text1: "Retry",
+        title1: this.state.title1,
+        handleClick2: () => {
+          this.setState({
+            showError: false,
+          });
+        },
+        button_text2: "Edit",
+      },
+    };
+
+    this.setState({
+      errorData: { ...mapper[type], setErrorData: this.setErrorData },
+    });
+  }
+}
+
+export function handleError(error, errorType, fullScreen = true) {
+  this.setState({
+    show_loader: false,
+    skelton: false,
+    isApiRunning: false,
+    errorData: {
+      ...this.state.errorData,
+      title2: error,
+      type: errorType,
+    },
+    showError: fullScreen ? "page" : true,
+  });
+}
+
 export function navigate(pathname, data = {}, redirect) {
   if (redirect) {
     this.props.history.push({
       pathname: pathname,
       search: data.searchParams || getConfig().searchParams,
+      state: data,
     });
   } else {
     this.props.history.push({
@@ -97,37 +153,49 @@ export function formCheckUpdate(keys_to_check, form_data) {
   return canSubmit;
 }
 
-export async function get_recommended_funds(params) {
+export async function get_recommended_funds(params, pageError = false) {
+  let error = "";
+  let errorType = "";
+
   let pran = storageService().get('nps-pran_number')
   try {
     this.setState({
       show_loader: "button",
+      showError: false
     });
     const res = await Api.get(`api/nps/invest/recommend?amount=${params}${pran ? `&pran=${pran}` : ''}`);
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
-      throw genericErrMsg;
-    }
-    let result = res.pfwresponse;
 
-    // if (status === 200) {
-    //   return result;
-    // } else {
-    //   throw result.error || result.message || genericErrMsg;
-    // }
-    this.setState({
-      show_loader: false,
-    });
-    return result;
-  } catch (err) {
+    let { result, status_code: status } = res.pfwresponse;
+
     this.setState({
       show_loader: false,
       skelton: false
     });
-    throw err;
+
+    if (status === 200) {
+      return result;
+    } else {
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+
+      if (pageError) {
+        this.setErrorData("onload");
+      } else {
+        this.setErrorData("submit");
+      }
+      
+      throw error;
+    }
+  } catch (err) {
+    console.log(err);
+    error = true;
+    errorType = "form";
+  }
+
+  if (error) {
+    this.handleError(error, errorType, pageError);
   }
 }
 
@@ -137,13 +205,7 @@ export async function kyc_submit(params) {
       show_loader: "button",
     });
     const res = await Api.post("api/kyc/v2/mine", params);
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
-      throw genericErrMsg;
-    }
+
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
@@ -168,47 +230,59 @@ export async function kyc_submit(params) {
 }
 
 export async function nps_register(params, next_state, body = "") {
-  console.log(body);
+  let error = "";
+  let errorType = "";
+ 
   try {
     this.setState({
-      show_loader: true,
+      show_loader: 'button',
+      showError: false
     });
     const res = await Api.post(`api/nps/register/update/v2?${params}`, body);
 
     const { result, status_code: status } = res.pfwresponse;
 
-    if (status === 200) {
-      this.navigate(next_state);
-    } else {
-      this.setState({
-        show_loader: false,
-      });
-      throw result.error || result.message || genericErrMsg;
-    }
-  } catch (err) {
     this.setState({
       show_loader: false,
     });
+
+    if (status === 200) {
+      this.navigate(next_state);
+    } else {
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+      this.setErrorData("submit");
+      throw error;
+    }
+  } catch (err) {
     console.log(err);
-    toast("something went wrong");
+    error = true;
+    errorType = "form";
+  }
+
+  if (error) {
+    this.handleError(error, errorType, false);
   }
 }
 
 export async function updateMeta(params, next_state) {
+  let error = "";
+  let errorType = "";
+
   try {
     this.setState({
-      show_loader: true,
+      show_loader: "button",
+      showError: false
     });
     const res = await Api.post(`api/nps/invest/updatemeta`, params);
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
-      throw genericErrMsg;
-    }
+
     const { result, status_code: status } = res.pfwresponse;
 
+    this.setState({
+      show_loader: false,
+    });
     if (status === 200) {
       let nps_additional_details =
         storageService().getObject("nps_additional_details") || {};
@@ -229,23 +303,32 @@ export async function updateMeta(params, next_state) {
         this.navigate(next_state);
       }
     } else {
+      let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
-        show_loader: false,
+        title1: title1,
       });
-      throw result.error || result.message || genericErrMsg;
+      this.setErrorData("submit");
+      throw error;
     }
   } catch (err) {
-    this.setState({
-      show_loader: false,
-    });
-    throw err;
+    console.log(err);
+    error = true;
+    errorType = "form";
+  }
+
+  if (error) {
+    this.handleError(error, errorType, false);
   }
 }
 
-export async function getInvestmentData(params) {
+export async function getInvestmentData(params, pageError = false) {
+  let error = "";
+  let errorType = "";
+
   try {
     this.setState({
-      show_loader: 'button',
+      skelton: true,
+      showError: false
     });
 
     const res = await Api.post(`api/nps/invest/v2?app_version=1`, params);
@@ -267,13 +350,22 @@ export async function getInvestmentData(params) {
       storageService().set("npsInvestId", result.id);
       return result;
     } else {
-      throw result.error || result.message || genericErrMsg;
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+      
+      this.setErrorData("submit");
+      throw error;
     }
   } catch (err) {
-    this.setState({
-      show_loader: false,
-    });
-    throw err;
+    console.log(err);
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    this.handleError(error, errorType, pageError);
   }
 }
 
@@ -419,13 +511,17 @@ export function openInTabApp(data = {}) {
 ///api/invest/folio/import/image
 export async function uploadDocs(file) {
   this.setState({
-    show_loader: true
+    show_loader: "button",
+    showError: false
   })
 
   var uploadurl = '/api/invest/folio/import/image';
   const data = new FormData()
   data.append('res', file);
   data.append('doc_type', file.doc_type);
+
+  let error = "";
+  let errorType = "";
 
   try {
     const res = await Api.post(uploadurl, data);
@@ -435,24 +531,27 @@ export async function uploadDocs(file) {
     if (res.pfwresponse.status_code === 200 && resultData.message) {
 
       if (this.state.screen_name === 'nps-identity') {
-        return res.pfwresponse
+        return resultData
       } else {
         this.navigate('success');
       }
 
     } else {
-
+      let title1 = resultData.error || resultData.message || "Something went wrong!";
       this.setState({
-        show_loader: false
+        title1: title1,
       });
-
-      toast(resultData.error || 'Something went wrong');
+      
+      this.setErrorData("submit");
+      throw error;
     }
   } catch (err) {
     console.log(err);
-    this.setState({
-      show_loader: false
-    });
-    toast('Something went wrong');
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    this.handleError(error, errorType, false);
   }
 }

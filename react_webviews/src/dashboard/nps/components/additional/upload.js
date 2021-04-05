@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import { initialize } from "../../common/commonFunctions";
 import SelectWithoutIcon from "common/ui/SelectWithoutIcon";
 import { storageService } from "utils/validators";
@@ -21,6 +21,7 @@ class uploadAddressProof extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       proof_type: "",
       address: "",
       isSelected: false,
@@ -45,6 +46,7 @@ class uploadAddressProof extends Component {
 
     this.setState({
       // address: address || '',
+      skelton: false
     });
   };
 
@@ -277,14 +279,11 @@ class uploadAddressProof extends Component {
     } else {
       await this.uploadDocs(this.state.Front_file);
     }
-
-    this.navigate('success');
   }
 
   render() {
     return (
       <Container
-        classOverRide="pr-error-container"
         fullWidthButton
         buttonTitle="PROCEED"
         hideInPageTitle
@@ -292,7 +291,8 @@ class uploadAddressProof extends Component {
         title="Upload Address Proof"
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
-        classOverRideContainer="pr-container"
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="page-heading">
           <img src={require("assets/hand_icon.png")} alt="" width="50" />

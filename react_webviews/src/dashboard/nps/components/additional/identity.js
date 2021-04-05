@@ -26,10 +26,11 @@ class NpsIdentity extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       screen_name: 'nps-identity',
       form_data: {},
       nps_details: {},
-      selfie_needed: "",
+      selfie_needed: false,
       uploaded: false,
       canSubmit: false,
       img: "",
@@ -92,11 +93,20 @@ class NpsIdentity extends Component {
     let nps_additional_details = storageService().getObject(
       "nps_additional_details"
     );
-    let { nps_details, selfie_needed } = nps_additional_details;
+    let { nps_details, selfie_needed, mother_name, is_married, spouse_name } = nps_additional_details;
+    let { form_data } = this.state;
+
+    form_data = {
+      mother_name: mother_name || '',
+      marital_status: is_married || '',
+      spouse_name: spouse_name || ''
+    }
 
     this.setState({
       nps_details: nps_details,
-      selfie_needed: !selfie_needed,
+      selfie_needed: selfie_needed,
+      skelton: false,
+      form_data: form_data,
     });
   };
 
@@ -130,10 +140,11 @@ class NpsIdentity extends Component {
           : ""
         }`;
 
-      if (!this.state.selfie_needed) {
-        await this.uploadDocs(this.state.file);
+      if (this.state.selfie_needed) {
+        let result = await this.uploadDocs(this.state.file);
 
-        this.nps_register(queryParams, "nominee");
+        if (result)
+          this.nps_register(queryParams, "nominee");
 
       } else {
         this.nps_register(queryParams, "nominee");
@@ -241,15 +252,14 @@ class NpsIdentity extends Component {
 
     return (
       <Container
-        classOverRide="pr-error-container"
-        fullWidthButton
-        buttonTitle="PROCEED"
-        hideInPageTitle
         hidePageTitle
+        buttonTitle="PROCEED"
         title="Additional Details"
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={this.handleClick}
-        classOverRideContainer="pr-container"
         disable={(selfie_needed && !uploaded) ? true : false}
       >
         <div className="page-heading">

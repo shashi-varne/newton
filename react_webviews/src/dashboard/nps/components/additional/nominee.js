@@ -20,6 +20,7 @@ class NpsNominee extends Component {
       nps_details: {},
       canSubmit: true,
       screen_name: "nps_nominee",
+      skelton: 'g'
     };
     this.initialize = initialize.bind(this);
   }
@@ -44,6 +45,7 @@ class NpsNominee extends Component {
     this.setState({
       nps_details: nps_details,
       form_data: form_data,
+      skelton: false
     });
   };
 
@@ -88,15 +90,15 @@ class NpsNominee extends Component {
     let { form_data } = this.state;
     return (
       <Container
-        classOverRide="pr-error-container"
-        fullWidthButton
         hideInPageTitle
         hidePageTitle
         title="Nominee Details"
         buttonTitle="SAVE AND CONTINUE"
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
-        classOverRideContainer="pr-container"
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="page-heading">
           <img src={require("assets/hand_icon.png")} alt="" width="50" />

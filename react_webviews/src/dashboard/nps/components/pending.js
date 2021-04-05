@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../common/Container";
 import { initialize } from "../common/commonFunctions";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "utils/validators";
@@ -29,14 +29,9 @@ class NpsPending extends Component {
   render() {
     return (
       <Container
-        classOverRide="pr-error-container"
-        fullWidthButton
-        hideInPageTitle
-        hidePageTitle
         noFooter
         title="Pending Orders"
         showLoader={this.state.show_loader}
-        classOverRideContainer="pr-container"
       >
         <section className="page nps">
           <div className="pending container-padding">

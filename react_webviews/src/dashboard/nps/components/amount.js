@@ -3,7 +3,6 @@ import Container from "../../common/Container";
 import Input from "../../../common/ui/Input";
 import { initialize } from "../common/commonFunctions";
 import { formatAmountInr, storageService, formatAmount } from "utils/validators";
-// import { storageService } from "utils/validators";
 
 class EnterAmount extends Component {
   constructor(props) {
@@ -49,29 +48,22 @@ class EnterAmount extends Component {
       storageService().set('npsAmount', amount);
       let res = await this.get_recommended_funds(amount);
 
-      if (res.status_code === 200) {
+      if (res) {
         this.navigate('recommendation/one-time', {amount: this.state.amount})
       }
     }
   };
 
-  // if ($scope.stateParams.type == 'sip') {
-  // $scope.taxSaved = Math.min($scope.amount * getMonthsRemaining() * 0.309, 61800);
-  // } else if ($scope.stateParams.type == 'one_time') {
-  // $scope.taxSaved = Math.min($scope.amount * 0.309, 61800);
-  // }
-
   render() {
     return (
       <Container
-        classOverRIde="pr-error-container"
         buttonTitle="SHOW FUNDS"
         showLoader={this.state.show_loader}
         title="Enter Amount"
-        classOverRideContainer="pr-container"
         handleClick={this.handleClick}
         disable={!this.state.amount}
-        classOverRideContainer="pr-container"
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="enter-amount">
           <section className="page nps">

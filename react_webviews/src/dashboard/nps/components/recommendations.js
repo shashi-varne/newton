@@ -40,7 +40,7 @@ class Recommendations extends Component {
       amount: "",
       url: "",
       pension_house: {},
-      skelton: 'g'
+      skelton: "g",
     };
     this.initialize = initialize.bind(this);
   }
@@ -59,8 +59,11 @@ class Recommendations extends Component {
     }
 
     let amount = storageService().get("npsAmount");
-    let prevpath = storageService().get('nps-prevpath') || '';
-    let pension_house = prevpath === 'fund-replace' ? storageService().getObject("nps-recommend") : {};
+    let prevpath = storageService().get("nps-prevpath") || "";
+    let pension_house =
+      prevpath === "fund-replace"
+        ? storageService().getObject("nps-recommend")
+        : {};
 
     this.setState({
       display_summary_only: display_summary_only,
@@ -72,64 +75,57 @@ class Recommendations extends Component {
   };
 
   fetchRecommendedFunds = async () => {
-    try {
-      this.setState({
-        skelton: true,
-      });
+    this.setState({
+      skelton: true,
+    });
 
-      let amount = storageService().get("npsAmount");
+    let amount = storageService().get("npsAmount");
 
-      const res = await this.get_recommended_funds(amount);
-      let data = res.result;
+    const res = await this.get_recommended_funds(amount, true);
+    let data = res;
 
-      if (res.status_code === 200) {
-        let recommendations = data.recommended[0];
-        let graphData = [
-          {
-            id: "E",
-            label: "E",
-            value: recommendations.e_allocation,
-            color: "hsl(227, 70%, 50%)",
-          },
-          {
-            id: "G",
-            label: "G",
-            value: recommendations.g_allocation,
-            color: "hsl(316, 70%, 50%)",
-          },
-          {
-            id: "C",
-            label: "C",
-            value: recommendations.c_allocation,
-            color: "hsl(291, 70%, 50%)",
-          },
-          {
-            id: "A",
-            label: "A",
-            value: recommendations.a_allocation,
-            color: "hsl(262, 70%, 50%)",
-          },
-        ];
+    if (data) {
+      let recommendations = data.recommended[0];
+      let graphData = [
+        {
+          id: "E",
+          label: "E",
+          value: recommendations.e_allocation,
+          color: "hsl(227, 70%, 50%)",
+        },
+        {
+          id: "G",
+          label: "G",
+          value: recommendations.g_allocation,
+          color: "hsl(316, 70%, 50%)",
+        },
+        {
+          id: "C",
+          label: "C",
+          value: recommendations.c_allocation,
+          color: "hsl(291, 70%, 50%)",
+        },
+        {
+          id: "A",
+          label: "A",
+          value: recommendations.a_allocation,
+          color: "hsl(262, 70%, 50%)",
+        },
+      ];
 
-        this.setState({
+      this.setState(
+        {
           recommendations: recommendations,
           all_charges: data.all_charges,
           payment_details: data.payment_breakup,
           skelton: this.state.display_summary_only,
           risk: recommendations.risk,
           graphData: graphData,
-        }, () => {
+        },
+        () => {
           this.state.display_summary_only && this.handleClick();
-        });
-      } else {
-        toast("something went wrong");
-      }
-    } catch (err) {
-      this.setState({
-        skelton: false,
-      });
-      console.log(err);
-      toast("something went wrong");
+        }
+      );
     }
   };
 
@@ -319,32 +315,35 @@ class Recommendations extends Component {
       risk: this.state.risk,
     };
 
-    let result = await this.getInvestmentData(data);
-    let pgLink = result.investments.pg_link;
+    let result = await this.getInvestmentData(data, true);
 
-    let plutus_redirect_url = encodeURIComponent(
-      window.location.origin + `/nps/redirect` + getConfig().searchParams
-    );
+    if (result) {
+      let pgLink = result.investments.pg_link;
 
-    pgLink +=
-      (pgLink.match(/[\?]/g) ? "&" : "?") +
-      "plutus_redirect_url=" +
-      plutus_redirect_url;
+      let plutus_redirect_url = encodeURIComponent(
+        window.location.origin + `/nps/redirect` + getConfig().searchParams
+      );
 
-    if (this.state.display_summary_only) {
-      this.setState({
-        url: pgLink,
-        show_loader: false,
-        openInvestmentSummary: true,
-      });
-    } else {
-      window.location.href = pgLink;
+      pgLink +=
+        (pgLink.match(/[\?]/g) ? "&" : "?") +
+        "plutus_redirect_url=" +
+        plutus_redirect_url;
+
+      if (this.state.display_summary_only) {
+        this.setState({
+          url: pgLink,
+          show_loader: false,
+          openInvestmentSummary: true,
+        });
+      } else {
+        window.location.href = pgLink;
+      }
     }
   };
 
   goBack = () => {
-    this.navigate('amount/one-time')
-  }
+    this.navigate("amount/one-time");
+  };
 
   render() {
     let {
@@ -354,7 +353,7 @@ class Recommendations extends Component {
       all_charges,
       graphData,
       display_summary_only,
-      url
+      url,
     } = this.state;
 
     return (
@@ -368,6 +367,8 @@ class Recommendations extends Component {
         handleClick={this.handleClick}
         goBack={this.goBack}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         {!display_summary_only && (
           <div>
@@ -558,7 +559,9 @@ class Recommendations extends Component {
             {this.renderDialog()}
           </div>
         )}
-        {this.state.display_summary_only && url && this.renderInvestmentSummary()}
+        {this.state.display_summary_only &&
+          url &&
+          this.renderInvestmentSummary()}
       </Container>
     );
   }

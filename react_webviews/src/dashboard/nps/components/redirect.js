@@ -30,10 +30,10 @@ export default class NpsPaymentRedirect extends Component {
     }
 
     let data = {
-        searchParams: getConfig().searchParams + '&generic_callback=true'
+      searchParams: getConfig().searchParams + '&generic_callback=true'
     }
 
-    this.navigate(`payment/callback/one-time/${payment_status}`, data)
+    this.navigate(`payment/callback/one-time/${payment_status}`)
   };
 
   render() {
