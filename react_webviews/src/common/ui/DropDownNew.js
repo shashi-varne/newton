@@ -115,7 +115,7 @@ class SelectDropDown2 extends React.Component {
               fontSize: isLableOpen ? '11px' : '13px', lineHeight: isLableOpen ? '18px' : '21px',
             }}>
             {this.props.label}</div></InputLabel>)}
-          <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
+          <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : '1px solid #D6D6D6' }}>
             <Select
               ref={inst => (this.myRef = inst)}
               blurInputOnSelect={false}
@@ -227,7 +227,7 @@ const Option = props => {
     <div>
       <components.Option {...props}>
         <div className="multi-checkbox-container">
-        <div className="multi-checkbox" style={{backgroundColor: props.isSelected ? "#3792FC" : "#fff"}}>
+        <div className="multi-checkbox" style={{backgroundColor: props.isSelected ? "#3792FC" : "#fff" , border: 'none'}}>
         <SVG className="tickmark-img"
              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#fff')}
              src={check_icon}
