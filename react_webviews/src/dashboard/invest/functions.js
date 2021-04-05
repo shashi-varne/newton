@@ -11,6 +11,7 @@ import {
   premiumBottomSheetMapper,
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
+import { isFunction } from "../../utils/validators";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -1004,6 +1005,7 @@ export async function proceedInvestmentChild(data) {
     history,
     handleApiRunning,
     handleDialogStates,
+    handleIsRedirectToPayment,
   } = data;
 
   let isKycNeeded = false;
@@ -1072,6 +1074,9 @@ export async function proceedInvestmentChild(data) {
           }
         }
       } else {
+        if(isFunction(handleIsRedirectToPayment)) {
+          handleIsRedirectToPayment(false)
+        }
         let errorMessage = result.error || result.message || "Error";
         storageService().setObject("is_debit_enabled", result.is_debit_enabled);
         switch (status) {

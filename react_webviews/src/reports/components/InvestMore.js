@@ -107,6 +107,7 @@ const InvestMore = (props) => {
       history: props.history,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
+      handleIsRedirectToPayment,
     });
   };
 
@@ -121,6 +122,10 @@ const InvestMore = (props) => {
     setDialogStates({ ...dialog_states });
     handleApiRunning(false);
   };
+
+  const handleIsRedirectToPayment = (result) => {
+    setIsReadyToPayment(result)
+  }
 
   return (
     <Container
