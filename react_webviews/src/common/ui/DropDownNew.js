@@ -227,7 +227,7 @@ const Option = props => {
     <div>
       <components.Option {...props}>
         <div className="multi-checkbox-container">
-        <div className="multi-checkbox" style={{backgroundColor: props.isSelected ? "#3792FC" : "#fff" , border: 'none'}}>
+        <div className="multi-checkbox" style={{backgroundColor: props.isSelected ? "#4F2DA7" : "#fff", border: props.isSelected ? 'none' : '' }}>
         <SVG className="tickmark-img"
              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#fff')}
              src={check_icon}
