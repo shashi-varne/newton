@@ -135,7 +135,23 @@ class Result extends Component {
     if (openWebModule) {
       window.location.href = this.redirectUrlBuilder();
     } else {
-      nativeCallback({ action: 'exit' });
+      const entryParams = this.state.params;
+      let messageBody = pick(
+        entryParams,
+        ['amount', 'flow', 'term', 'type', 'year', 'subType']
+      );
+
+      if (entryParams.type === 'saveforgoal') {
+        const monthlyAmount = this.calculateMonthlyAmount(
+          parseInt(entryParams.year - new Date().getFullYear(), 10),
+          entryParams.amount
+        );
+        messageBody.monthlyAmount = monthlyAmount;
+      }
+      nativeCallback({
+        action: 'on_success',
+        message: messageBody,
+      });
     }
   }
 
@@ -167,11 +183,6 @@ class Result extends Component {
 
   redirectUrlBuilder = () => {
     const entryParams = this.state.params;
-    // const webview_redirect_url = encodeURIComponent(
-    //   window.location.origin +
-    //   '/risk/recommendation' +
-    //   getConfig().searchParams
-    // );
     let webPath = '';
 
     if (entryParams.type === 'saveforgoal') {
@@ -200,7 +211,6 @@ class Result extends Component {
       '&term=' + entryParams.term +
       '&flow=' + entryParams.flow +
       '&fromRisk=true';
-      // '&webview_redirect_url=' + webview_redirect_url;
   }
 
   renderDialog = () => {
