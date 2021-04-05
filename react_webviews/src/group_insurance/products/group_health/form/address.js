@@ -815,7 +815,8 @@ class GroupHealthPlanAddressDetails extends Component {
                                             <DotDotLoader className="insurance-dot-loader" /> :
                                             this.state.form_data.city_error
                                     }
-                                    value={this.state.form_data.city || ''}
+                                    // value={this.state.form_data.city || ''}
+                                    value={this.state.form_data.pincode ? this.state.form_data.pincode.length === 6 ? this.state.form_data.city:undefined : undefined}
                                     onChange={this.handleChange('city')}
                                 />
                             </div>
