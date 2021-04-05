@@ -37,7 +37,7 @@ const FundswiseDetails = (props) => {
   return (
     <Container title="Transactions" noFooter={true} skelton={showSkelton}>
       <div className="reports-fundswise-details">
-        {!showSkelton && !isEmpty(fund) && (
+        {!isEmpty(fund) && (
           <>
             <h5>{fund.mf.friendly_name}</h5>
             <div className="folio-number">Folio Number: {folio_number}</div>

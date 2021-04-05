@@ -4,7 +4,7 @@ import { isEmpty, storageService, formatAmountInr } from "utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import Input from "common/ui/Input";
-import { Checkbox } from "material-ui";
+import Checkbox from "common/ui/Checkbox";
 import { Imgc } from "common/ui/Imgc";
 import { proceedInvestmentChild } from "../../dashboard/invest/functions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
@@ -38,17 +38,22 @@ const InvestMore = (props) => {
 
   const handleAmount = () => (event) => {
     let value = event.target ? event.target.value : event;
-    // eslint-disable-next-line
-    value = parseInt(convertInrAmountToNumber(value) || "");
+    value = Number(convertInrAmountToNumber(value) || "");
     let formData = { ...form_data };
     formData.amount = value;
-    if (isNaN(value)) formData.amount_error = "This is required";
+    if (!value) formData.amount_error = "This is required";
     else if (value < investBody.min)
-      formData.amount_error = `Minimum investment amount is ${investBody.min}`;
+      formData.amount_error = `Minimum investment amount is ${formatAmountInr(
+        investBody.min
+      )}`;
     else if (value % investBody.mul !== 0)
-      formData.amount_error = `Amount should be multiple of ${investBody.mul}`;
+      formData.amount_error = `Amount should be multiple of ${formatAmountInr(
+        investBody.mul
+      )}`;
     else if (value > investBody.max)
-      formData.amount_error = `Maximum investment amount is ${investBody.max}`;
+      formData.amount_error = `Maximum investment amount is ${formatAmountInr(
+        investBody.max
+      )}`;
     else formData.amount_error = "";
     setFormData({ ...formData });
   };
@@ -124,8 +129,8 @@ const InvestMore = (props) => {
   };
 
   const handleIsRedirectToPayment = (result) => {
-    setIsReadyToPayment(result)
-  }
+    setIsReadyToPayment(result);
+  };
 
   return (
     <Container
@@ -160,30 +165,33 @@ const InvestMore = (props) => {
             </div>
             <div className="terms padding">
               <Checkbox
-                className="checkbox"
-                color="primary"
+                class="checkbox"
                 checked={termsCheck}
-                onChange={() => setTermsCheck(!termsCheck)}
+                handleChange={() => setTermsCheck(!termsCheck)}
               />
               <div>
                 I have read and accepted the{" "}
-                <a href="https://www.fisdom.com/terms/" target="_blank">
+                <a
+                  href="https://www.fisdom.com/terms/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   terms and conditions
                 </a>
               </div>
             </div>
             <div className="terms">
               <Checkbox
-                className="checkbox"
-                color="primary"
+                class="checkbox"
                 checked={schemeCheck}
-                onChange={() => setSchemeCheck(!schemeCheck)}
+                handleChange={() => setSchemeCheck(!schemeCheck)}
               />
               <div>
                 I have read and understood the{" "}
                 <a
                   href="https://www.fisdom.com/scheme-offer-documents/"
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   scheme offer documents
                 </a>

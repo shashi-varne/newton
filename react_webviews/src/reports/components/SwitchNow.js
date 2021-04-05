@@ -4,7 +4,6 @@ import {
   formatAmountInr,
   isEmpty,
   storageService,
-  validateNumber,
 } from "utils/validators";
 import Button from "material-ui/Button";
 import { getPathname, storageConstants } from "../constants";
@@ -16,6 +15,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import toast from "common/ui/Toast";
+import { convertInrAmountToNumber } from "../../dashboard/invest/common/commonFunction";
 
 const SwitchNow = (props) => {
   const params = props?.match?.params || {};
@@ -86,7 +86,7 @@ const SwitchNow = (props) => {
     }
 
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const result = await postSwitchRecommendation({
         switch_orders: dataToSend,
       });
@@ -111,8 +111,8 @@ const SwitchNow = (props) => {
   };
 
   const handleAmount = (index) => (event) => {
-    const value = event.target ? event.target.value : event;
-    if (!validateNumber(value)) return;
+    let value = event.target ? event.target.value : event;
+    value = convertInrAmountToNumber(value);
     let fundInfo = { ...fundDetails };
     fundInfo.folio_wise_details[index].switchAmount = Number(value);
     setFundDetails({ ...fundInfo });
@@ -120,12 +120,11 @@ const SwitchNow = (props) => {
 
   return (
     <Container
-      title="Available Funds"
+      title="Switch Fund"
       skelton={showSkelton}
       buttonTitle="SWITCH NOW"
       handleClick={handleClick}
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showSkelton}
+      showLoader={isApiRunning}
     >
       <div className="reports-switch-now">
         {!isEmpty(fundDetails) && (
@@ -179,10 +178,11 @@ const SwitchNow = (props) => {
                                 </InputAdornment>
                               ),
                             }}
-                            helperText={
-                              formatAmountInr(folio.switchAmount) || ""
+                            value={
+                              folio.switchAmount
+                                ? formatAmountInr(folio.switchAmount)
+                                : ""
                             }
-                            value={folio.switchAmount || ""}
                             onChange={handleAmount(index)}
                             disabled={isApiRunning}
                           />

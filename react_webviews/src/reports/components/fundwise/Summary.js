@@ -73,8 +73,7 @@ const FundswiseSummary = (props) => {
   return (
     <Container title="Funds" noFooter={true} skelton={showSkelton}>
       <div className="reports-fundswise-summary">
-        {!showSkelton &&
-          !isEmpty(funds) &&
+        {!isEmpty(funds) &&
           funds.map((fund, index) => {
             return (
               <div className="fund" key={index}>
@@ -93,7 +92,7 @@ const FundswiseSummary = (props) => {
                   <div className="head">
                     <span>Units: {fund.units.toFixed(4)}</span>
                     <span className="margin-left">
-                      Nav: {formatAmountInr(fund.mf.curr_nav.toFixed(4))}
+                      Nav: ₹ {fund.mf.curr_nav.toFixed(4)}
                     </span>
                   </div>
                   <div className="fundswise-summary-details">

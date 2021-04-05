@@ -117,8 +117,7 @@ class Otp extends Component {
     return (
       <Container
         skelton={showSkelton}
-        title="Enter OTP to confirm"
-        headerTitle="Enter OTP"
+        title="Enter OTP"
         buttonTitle="CONTINUE"
         showLoader={isApiRunning}
         handleClick={() => this.handleClick()}

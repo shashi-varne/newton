@@ -68,55 +68,49 @@ const FundswiseTransactions = (props) => {
       disable={isApiRunning || showSkelton}
     >
       <div className="reports-fundswise-transactions">
-        {!showSkelton && (
-          <>
-            {!isEmpty(transactions) &&
-              transactions.map((transaction, index) => {
-                return (
-                  <div key={index} className="transaction">
-                    <div className="folio-no">
-                      <span>Folio No: {transaction.folio_number}</span>
-                      <span
-                        className={`text ${
-                          transaction.ttype === "purchase" && "green"
-                        } ${transaction.ttype === "redemption" && "red"}`}
-                      >
-                        {transaction.ttype}
-                      </span>
-                    </div>
-                    <div className="transaction-header">
-                      {transaction.mf_name}
-                    </div>
-                    <div className="details">
-                      <div className="content">
-                        <div className="text">Date</div>
-                        <h5 className="fund-info">{transaction.tdate}</h5>
-                      </div>
-                      <div className="content">
-                        <div className="text">Units</div>
-                        <h5 className="fund-info">
-                          {transaction.units.toFixed(4)}
-                        </h5>
-                      </div>
-                      <div className="content">
-                        <div className="text">Nav</div>
-                        <h5 className="fund-info">
-                          ₹ {transaction.nav.toFixed(4)}
-                        </h5>
-                      </div>
-                      <div className="content">
-                        <div className="text">Amount</div>
-                        <h5 className="fund-info">
-                          {formatAmountInr(transaction.amount)}
-                        </h5>
-                      </div>
-                    </div>
+        {!isEmpty(transactions) &&
+          transactions.map((transaction, index) => {
+            return (
+              <div key={index} className="transaction">
+                <div className="folio-no">
+                  <span>Folio No: {transaction.folio_number}</span>
+                  <span
+                    className={`text ${
+                      transaction.ttype === "purchase" && "green"
+                    } ${transaction.ttype === "redemption" && "red"}`}
+                  >
+                    {transaction.ttype}
+                  </span>
+                </div>
+                <div className="transaction-header">{transaction.mf_name}</div>
+                <div className="details">
+                  <div className="content">
+                    <div className="text">Date</div>
+                    <h5 className="fund-info">{transaction.tdate}</h5>
                   </div>
-                );
-              })}
-            {isEmpty(transactions) && <p>No transactions to show</p>}
-          </>
-        )}
+                  <div className="content">
+                    <div className="text">Units</div>
+                    <h5 className="fund-info">
+                      {transaction.units.toFixed(4)}
+                    </h5>
+                  </div>
+                  <div className="content">
+                    <div className="text">Nav</div>
+                    <h5 className="fund-info">
+                      ₹ {transaction.nav.toFixed(4)}
+                    </h5>
+                  </div>
+                  <div className="content">
+                    <div className="text">Amount</div>
+                    <h5 className="fund-info">
+                      {formatAmountInr(transaction.amount)}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        {isEmpty(transactions) && <p>No transactions to show</p>}
       </div>
     </Container>
   );

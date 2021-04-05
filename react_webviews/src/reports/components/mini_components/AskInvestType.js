@@ -2,7 +2,7 @@ import React from "react";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import Button from "@material-ui/core/Button";
 
-const AskInvestType = ({ isOpen, data, handleClick1, handleClick2 }) => {
+const AskInvestType = ({ isOpen, data }) => {
   return (
     <Dialog
       open={isOpen}

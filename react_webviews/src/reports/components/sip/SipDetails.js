@@ -102,8 +102,7 @@ const SipDetails = (props) => {
 
   return (
     <Container
-      hidePageTitle={true}
-      headerTitle="SIP Details"
+      title="SIP Details"
       noFooter={buttonTitle ? false : true}
       twoButton={sip_mandate_created.includes(report.friendly_status)}
       buttonTitle={buttonTitle}

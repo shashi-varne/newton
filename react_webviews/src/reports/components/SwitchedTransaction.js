@@ -101,7 +101,7 @@ const SwitchedTransaction = (props) => {
                 </div>
                 <div className="check-process">
                   <div className="text" onClick={() => handleProcess(switched)}>
-                    View Details
+                    VIEW DETAILS
                   </div>
                 </div>
               </div>

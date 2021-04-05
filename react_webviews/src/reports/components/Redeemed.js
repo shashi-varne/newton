@@ -41,7 +41,7 @@ const Redeemed = (props) => {
           transactions.map((redeemed, index) => {
             return (
               <div className="purchased" key={index}>
-                <div className="head">
+                <div className="redeemed-head head">
                   <div>{redeemed.mfname}</div>
                   {redeemed.status === "upcoming" && (
                     <img src={require(`assets/auto_debit.png`)} alt="" />
@@ -50,7 +50,7 @@ const Redeemed = (props) => {
                 <div className="head-info">
                   <div className="content">
                     <img alt="" src={require(`assets/invested_amount.png`)} />
-                    <div className="text">
+                    <div className="text redeemed-text">
                       <h4>Withdraw amount</h4>
                       <div>{formatAmountInr(redeemed.amount)}</div>
                     </div>
@@ -58,7 +58,7 @@ const Redeemed = (props) => {
                   {!redeemed.bank_account_no && (
                     <div className="content">
                       <img alt="" src={require(`assets/date.png`)} />
-                      <div className="text">
+                      <div className="text redeemed-text">
                         <h4>Redeemed on</h4>
                         <div>{redeemed.tran_date}</div>
                       </div>
@@ -186,7 +186,7 @@ const Redeemed = (props) => {
                 )}
                 <div className="check-process">
                   <div className="text" onClick={() => handleProcess(redeemed)}>
-                    View Details
+                    VIEW DETAILS
                   </div>
                 </div>
               </div>
