@@ -33,8 +33,7 @@ const Purchase = (props) => {
   return (
     <Container noFooter={true} skelton={showSkelton} title="Pending Purchase">
       <div className="report-purchase">
-        {!showSkelton &&
-          !isEmpty(transactions) &&
+        {!isEmpty(transactions) &&
           transactions.map((purchased, index) => {
             return (
               <div className="purchased" key={index}>

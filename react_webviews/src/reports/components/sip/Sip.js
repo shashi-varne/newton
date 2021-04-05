@@ -48,9 +48,8 @@ const Sip = (props) => {
   return (
     <Container title="Existing SIPs" noFooter={true} skelton={showSkelton}>
       <div className="reports-sip">
-        {!showSkelton &&
-          !isEmpty(report) &&
-          report.sips.active_sips.map((sip, index) => {
+        {!isEmpty(report) &&
+          report?.sips?.active_sips?.map((sip, index) => {
             return (
               <div key={index} className="sip" onClick={() => showDetail(sip)}>
                 <div

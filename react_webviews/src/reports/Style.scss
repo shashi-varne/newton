@@ -41,7 +41,7 @@
   }
 
   main {
-    padding: 15px;
+    padding: 15px 15px 30px 15px;
     background-color: #f1f1f1;
     line-height: 1.5;
 
@@ -1522,6 +1522,10 @@
 
   .reports-sip-pause-period-main {
     height: calc(100% - 106px);
+
+    .fadein-animation {
+      height: 100%;
+    }
 
     .reports-sip-pause-period {
       height: 100%;

@@ -128,7 +128,7 @@ const SwitchNow = (props) => {
       disable={isApiRunning || showSkelton}
     >
       <div className="reports-switch-now">
-        {!showSkelton && !isEmpty(fundDetails) && (
+        {!isEmpty(fundDetails) && (
           <>
             <header>
               <div className="content">
@@ -143,8 +143,7 @@ const SwitchNow = (props) => {
               </div>
             </header>
             <main>
-              {fundDetails &&
-                fundDetails.folio_wise_details &&
+              {fundDetails.folio_wise_details &&
                 fundDetails.folio_wise_details.map((folio, index) => {
                   return (
                     <Fragment key={index}>

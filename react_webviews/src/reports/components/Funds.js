@@ -183,8 +183,7 @@ const Funds = (props) => {
   return (
     <Container hidePageTitle={true} noFooter={true} skelton={showSkelton}>
       <div className="reports-funds">
-        {!showSkelton &&
-          !isEmpty(funds) &&
+        {!isEmpty(funds) &&
           funds.map((fund, index) => {
             return (
               <div className="fund" key={index}>

@@ -130,7 +130,7 @@ const Summary = (props) => {
       skelton={showSkelton || isLoading}
     >
       <div className="reports">
-        {!showSkelton && !isEmpty(report) && (
+        {!isEmpty(report) && (
           <>
             <header>
               {current && (

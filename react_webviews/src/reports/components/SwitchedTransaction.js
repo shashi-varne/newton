@@ -33,8 +33,7 @@ const SwitchedTransaction = (props) => {
   return (
     <Container noFooter={true} skelton={showSkelton} title="Pending Switch">
       <div className="report-purchase">
-        {!showSkelton &&
-          !isEmpty(transactions) &&
+        {!isEmpty(transactions) &&
           transactions.map((switched, index) => {
             return (
               <div className="purchased" key={index}>

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { getSummaryV2, getSipAction } from "../../common/api";
+import { getSipAction } from "../../common/api";
 import {
   navigate as navigateFunc,
   dateOrdinalSuffix,
@@ -12,21 +12,21 @@ import toast from "common/ui/Toast";
 
 const SipDetails = (props) => {
   const productName = getConfig().productName;
-  const selected_sip = Number(
-    storageService().get(storageConstants.SELECTED_SIP) || ""
-  );
-  if (!selected_sip) props.history.goBack();
   const navigate = navigateFunc.bind(props);
-  const [report, setreport] = useState({});
-  const [showSkelton, setShowSkelton] = useState(true);
-  const [buttonTitle, setButtonTitle] = useState("");
+  const report = storageService().getObject(storageConstants.PAUSE_SIP) || {};
+  if (isEmpty(report)) props.history.goBack();
   const [isApiRunning, setIsApiRunning] = useState(false);
   const sip_mandate_created = ["init", "mandate_approved", "active"];
   const mandate_approved = ["mandate_approved", "active"];
   const requested_pause = ["pause_requested", "paused"];
   const requested_cancel = ["cancellation_requested", "cancelled"];
-  //   const requested_resume = ["resume_requested"];
-  //   const requested_restart = ["restart_requested"];
+  let buttonTitle = "";
+  if (sip_mandate_created.includes(report.friendly_status))
+    buttonTitle = "CANCEL SIP";
+  else if (requested_pause.includes(report.friendly_status))
+    buttonTitle = "RESUME SIP";
+  else if (requested_cancel.includes(report.friendly_status))
+    buttonTitle = "RESTART SIP";
 
   const getStatusName = (status) => {
     switch (status) {
@@ -51,32 +51,6 @@ const SipDetails = (props) => {
       default:
         return "";
     }
-  };
-
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    const result = await getSummaryV2();
-    if (!result) {
-      setShowSkelton(false);
-      return;
-    }
-    const reportData =
-      result.report.sips.active_sips.find((o) => {
-        return o.id === selected_sip;
-      }) || {};
-    setreport(reportData);
-    let title = "";
-    if (sip_mandate_created.includes(reportData.friendly_status))
-      title = "CANCEL SIP";
-    else if (requested_pause.includes(reportData.friendly_status))
-      title = "RESUME SIP";
-    else if (requested_cancel.includes(reportData.friendly_status))
-      title = "RESTART SIP";
-    setButtonTitle(title);
-    setShowSkelton(false);
   };
 
   const formatName = (name) => {
@@ -106,8 +80,7 @@ const SipDetails = (props) => {
   };
 
   const nextStep = async (action) => {
-    setIsApiRunning(true);
-    storageService().setObject(storageConstants.PAUSE_SIP, report);
+    setIsApiRunning("button");
     try {
       const result = await getSipAction({
         key: report.key,
@@ -136,15 +109,14 @@ const SipDetails = (props) => {
       buttonTitle={buttonTitle}
       buttonOneTitle={buttonTitle}
       buttonTwoTitle="PAUSE SIP"
-      skelton={showSkelton}
+      handleClick={handleClick("FIRST")}
       handleClickOne={handleClick("FIRST")}
       handleClickTwo={handleClick("SECOND")}
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showSkelton}
+      showLoader={isApiRunning}
       dualbuttonwithouticon
     >
       <div className="reports-sip-details">
-        {!showSkelton && !isEmpty(report) && (
+        {!isEmpty(report) && (
           <>
             <div
               className={`status ${

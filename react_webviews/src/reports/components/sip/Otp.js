@@ -15,6 +15,7 @@ class Otp extends Component {
       otp: "",
       timeAvailable: 30,
       totalTime: 30,
+      showSkelton: true,
     };
   }
 
@@ -39,13 +40,13 @@ class Otp extends Component {
       await initData();
       userKyc = storageService().getObject(storageConstants.KYC);
     }
-    this.setState({ userKyc, urls, action, title });
+    this.setState({ userKyc, urls, action, title, showSkelton: false });
   };
 
   handleClick = async () => {
     let { urls, otp, action, title } = this.state;
     if (urls && urls.api_submit_otp) {
-      this.setState({ isApiRunning: true });
+      this.setState({ isApiRunning: "button" });
       try {
         const result = await submitOtp({
           url: urls.api_submit_otp,
@@ -93,7 +94,7 @@ class Otp extends Component {
     this.setState({ otp: "" });
     let { urls } = this.state;
     if (urls && urls.api_resend_otp) {
-      this.setState({ isApiRunning: true });
+      this.setState({ isApiRunning: "button" });
       try {
         const result = await resendOtp({
           url: urls.api_resend_otp,
@@ -119,15 +120,15 @@ class Otp extends Component {
         title="Enter OTP to confirm"
         headerTitle="Enter OTP"
         buttonTitle="CONTINUE"
-        isApiRunning={isApiRunning}
+        showLoader={isApiRunning}
         handleClick={() => this.handleClick()}
-        disable={otp.length !== 4 || isApiRunning || showSkelton}
+        disable={otp.length !== 4}
       >
         <div className="reports-sip-otp">
           <div className="title">
             {userKyc &&
-              (userKyc.identification.meta_data.mobile_number ||
-                userKyc.identification.meta_data.email)}
+              (userKyc?.identification?.meta_data?.mobile_number ||
+                userKyc?.identification?.meta_data?.email)}
           </div>
           <OtpDefault parent={this} isDisabled={isApiRunning} />
           {otp_error && <div className="otp-error">{otp_error}</div>}

@@ -48,7 +48,7 @@ const PauseCancelDetail = (props) => {
   };
 
   const handleClick = async () => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
       const result = await postSipAction({
         key: sip.key,
@@ -78,8 +78,7 @@ const PauseCancelDetail = (props) => {
       buttonTitle="CONTINUE"
       handleClick={() => handleClick()}
       skelton={showSkelton}
-      disable={showSkelton || isApiRunning}
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
     >
       {!isEmpty(sip) && (
         <div className="reports-sip-pause-cancel-detail">

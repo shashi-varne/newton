@@ -88,8 +88,7 @@ const Goals = (props) => {
   return (
     <Container hidePageTitle={true} noFooter={true} skelton={showSkelton}>
       <div className="report-goals">
-        {!showSkelton &&
-          !isEmpty(goals) &&
+        {!isEmpty(goals) &&
           goals.map((goal, index) => {
             return (
               <div className="goal" key={index}>

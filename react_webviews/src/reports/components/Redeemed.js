@@ -31,10 +31,13 @@ const Redeemed = (props) => {
   };
 
   return (
-    <Container noFooter={true} skelton={showSkelton} title="Pending withdrawals">
+    <Container
+      noFooter={true}
+      skelton={showSkelton}
+      title="Pending withdrawals"
+    >
       <div className="report-purchase">
-        {!showSkelton &&
-          !isEmpty(transactions) &&
+        {!isEmpty(transactions) &&
           transactions.map((redeemed, index) => {
             return (
               <div className="purchased" key={index}>

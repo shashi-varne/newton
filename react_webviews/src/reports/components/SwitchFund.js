@@ -102,7 +102,7 @@ const SwitchFund = (props) => {
   return (
     <Container title="Available Funds" noFooter={true} skelton={showSkelton}>
       <div className="reports-switch">
-        {!showSkelton && !isEmpty(fundDetails) && (
+        {!isEmpty(fundDetails) && (
           <>
             <header>
               <h4>{fundDetails.mf.friendly_name}</h4>

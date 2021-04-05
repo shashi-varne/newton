@@ -21,7 +21,7 @@ const PauseResumeRestart = (props) => {
   let title = `${action.charAt(0).toUpperCase()}${action.slice(1)} SIP`;
 
   const handleClick = async () => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
       const result = await postSipAction({
         key: sip.key,
@@ -57,8 +57,7 @@ const PauseResumeRestart = (props) => {
       title={title}
       buttonTitle="CONTINUE"
       handleClick={() => handleClick()}
-      disable={isApiRunning}
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
     >
       {!isEmpty(sip) && (
         <div className="reports-sip-pause-cancel-detail">
