@@ -3,7 +3,7 @@ import { findDOMNode } from 'react-dom';
 import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
-import { toCamelCase } from 'utils/validators';
+import { Casesensitivity } from 'utils/validators';
 import './style.scss';
 import SVG from 'react-inlinesvg';
 import check_icon from 'assets/check_icon.svg'
@@ -94,10 +94,10 @@ class SelectDropDown2 extends React.Component {
     var options = this.props.options.map((ele, index) => {
       if (ele.name) {
         return ({
-          'value': ele.value, 'name': toCamelCase(ele.name)
+          'value': ele.value, 'name': Casesensitivity(ele.name)
         })
       } else return ({
-        'value': ele, 'name': toCamelCase(ele)
+        'value': ele, 'name': Casesensitivity(ele)
       })
     }); setTimeout(() => {
       document.getElementsByClassName("Container")[0].style.height =  '100%'
@@ -244,7 +244,7 @@ const Option = props => {
              src={check_icon}
         />
         </div>
-        <span style={{ marginLeft: '10px', marginTop: '-1px' }}>{toCamelCase(props.label)}</span>
+        <span style={{ marginLeft: '10px', marginTop: '-1px' }}>{Casesensitivity(props.label)}</span>
         </div>
       </components.Option>
     </div>

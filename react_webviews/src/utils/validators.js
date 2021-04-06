@@ -1017,8 +1017,6 @@ export function numberToSentence(num){ //9 digit limit
   }
 }
 
-export function toCamelCase(str){
-  return str.split(' ').map(function(word,index){
-    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() + "";
-  }).join(' ')
+export function Casesensitivity(str){ console.log(str)
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() + "";
 }
