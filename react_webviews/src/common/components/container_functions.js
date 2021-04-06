@@ -79,7 +79,7 @@ export function headerGoBack() {
 }
 
 function addContainerClass (props_base){
-    return `ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
+    return `ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""} ${this.props.changeBackground ? 'idfc-container' : ''}`;
 }
 
 export function commonRender(props_base) {
