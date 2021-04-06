@@ -71,7 +71,7 @@ export async function initData() {
         referral: ['subbroker', 'p2p'],
       }
       const result = await getAccountSummary(queryParams)
-      if(!result) return
+      if(!result) return;
       storageService().set('dataSettedInsideBoot', true)
       setSDKSummaryData(result)
     }
@@ -86,7 +86,7 @@ export async function initData() {
       referral: ['subbroker', 'p2p'],
     }
     const result = await getAccountSummary(queryParams)
-    if(!result) return
+    if(!result) return;
     storageService().set('dataSettedInsideBoot', true)
     setSummaryData(result)
   }
