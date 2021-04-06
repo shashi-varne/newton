@@ -164,7 +164,7 @@ class GroupHealthPayment extends Component {
           var plan_name = '';
           if(this.state.provider === 'GMC'){
             var postfix = lead.payment_frequency === 'YEARLY' ? ' for a year' : ' for 1st month'   
-            plan_name = 'fisdom Care Health+'         
+            plan_name = 'fisdom HealthProtect'         
           }else if(this.state.provider === 'RELIGARE'){
             plan_name = 'Care'
           }else if(this.state.provider === 'HDFCERGO'){

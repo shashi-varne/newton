@@ -164,12 +164,12 @@ class Container extends Component {
         return;
       }
 
-      // if(this.checkStringInString('group-insurance/group-health')) {
-      //   this.navigate(`/group-insurance/group-health/${this.props.provider}/plan-select-sum-assured`);
-      //   return;
-      // }
-      if(this.checkStringInString('insure-type') || this.checkStringInString('payment') || 
-      this.checkStringInString('final-summary')) {
+      if(this.checkStringInString('final-summary') && this.props.pgReached){
+          this.navigate(group_health_landing);
+          return;
+      }
+
+      if(this.checkStringInString('insure-type') || this.checkStringInString('payment')) {
         this.navigate(group_health_landing);
         return;
       }
