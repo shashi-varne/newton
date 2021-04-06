@@ -38,6 +38,9 @@ class SelectDropDown2 extends React.Component {
 
   handleMenuClose = () => {
     document.getElementsByClassName("Container")[0].style.height =  '100%'
+    setTimeout(() => {
+      document.getElementsByClassName("Container")[0].style.height =  '100%'
+    }, 1000);
     this.setState({ shrink: false })
     window.removeEventListener('resize', this.determineDropUp);
     window.removeEventListener('scroll', this.determineDropUp);
@@ -48,6 +51,9 @@ class SelectDropDown2 extends React.Component {
     this.determineDropUp(this.props);
     window.addEventListener('resize', this.determineDropUp);
     window.addEventListener('scroll', this.determineDropUp);
+    setTimeout(() => {
+      document.getElementsByClassName("Container")[0].style.height =  '100%'
+    }, 1000);
   }
 
   handleChange = selectedOption => {
@@ -95,7 +101,7 @@ class SelectDropDown2 extends React.Component {
       })
     }); setTimeout(() => {
       document.getElementsByClassName("Container")[0].style.height =  '100%'
-    }, 1000);
+    }, 2000);
     const OptionPresent = this.state.selectedOption ? !!this.state.selectedOption.length : false;// eslint-disable-next-line
     var value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     let isLableOpen = (!!value || (OptionPresent) || this.state.shrink) || (OptionPresent && this.props.multi);
