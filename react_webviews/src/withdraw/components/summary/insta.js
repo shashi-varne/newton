@@ -7,6 +7,7 @@ import Disclaimer from './Disclaimer'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { formatAmountInr, isEmpty } from '../../../utils/validators'
+import { getConfig } from '../../../utils/functions'
 
 const Insta = (props) => {
   const [taxes, setTaxes] = useState(taxes)
@@ -14,7 +15,7 @@ const Insta = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
 
   if (!props?.location?.state?.amounts) {
-    return <Redirect to="/withdraw" />
+    return <Redirect to={`/withdraw${getConfig().searchParams}`} />
   }
 
   const handleClick = async () => {
