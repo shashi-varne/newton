@@ -45,6 +45,10 @@ class Otp extends Component {
 
   handleClick = async () => {
     let { urls, otp, action, title } = this.state;
+    if (otp.length !== 4) {
+      toast("You have entered invalid OTP.");
+      return;
+    }
     if (urls && urls.api_submit_otp) {
       this.setState({ isApiRunning: "button" });
       try {
@@ -113,15 +117,14 @@ class Otp extends Component {
   };
 
   render() {
-    let { userKyc, showSkelton, isApiRunning, otp, otp_error } = this.state;
+    let { userKyc, showSkelton, isApiRunning, otp_error } = this.state;
     return (
       <Container
         skelton={showSkelton}
         title="Enter OTP"
-        buttonTitle="CONTINUE"
+        buttonTitle="SUBMIT"
         showLoader={isApiRunning}
         handleClick={() => this.handleClick()}
-        disable={otp.length !== 4}
       >
         <div className="reports-sip-otp">
           <div className="title">

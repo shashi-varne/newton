@@ -424,11 +424,11 @@ const Summary = (props) => {
                         />
                       </div>
                       <div className="invested-slider-range">
-                        <div className="invested-slider-left">1Y</div>
+                        <div className="invested-slider-left">1 Y</div>
                         <div className="invested-slider-ratio-text">
                           <span>Slide to change time</span>
                         </div>
-                        <div className="invested-slider-right">20Y</div>
+                        <div className="invested-slider-right">20 Y</div>
                       </div>
                     </div>
                     <div className="report-result-tile">
