@@ -27,7 +27,7 @@ class HealthInsuranceEntry extends Component {
       {
         key: 'GMC',
         title: 'Care Health',
-        subtitle: 'fisdom Care Health+',
+        subtitle: 'fisdom HealthProtect',
         Product_name : 'care_plus',
         icon: religare_logo
       },

@@ -193,7 +193,7 @@ export async function initialize() {
             }else if(provider === 'STAR'){
                 leftTitle = 'Star health'
             }else{
-                leftTitle = 'fisdom Care Health+'
+                leftTitle = 'fisdom HealthProtect'
             }
 
 

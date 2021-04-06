@@ -86,7 +86,7 @@ class GroupHealthPlanDetails extends Component {
         }else if(provider === 'GMC'){
           post_body.plan_id = "fisdom_care_health_plus";
           var plan_selected = {};
-          plan_selected['plan_title'] = 'fisdom Care Health+'
+          plan_selected['plan_title'] = 'fisdom HealthProtect'
           plan_selected['copay'] = '0% copay is applicable only where insured age is less than 60 yrs, there will be 20% copay for insured whose age at the time of entry is 61 yrs and above';
           
           this.setState({

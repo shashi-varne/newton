@@ -539,8 +539,8 @@ export const gmc = {
     key: 'GMC',
     provider_api: 'care_plus',
     title: 'Care Health',
-    title2: 'fisdom Care Health+',
-    subtitle: 'fisdom Care Health+',
+    title2: 'fisdom HealthProtect',
+    subtitle: 'fisdom HealthProtect',
     address_field_max_length: 60,
     logo: 'ic_religare_logo.svg',
     logo_card: 'ic_religare_logo_card.svg',
@@ -648,7 +648,7 @@ export const gmc = {
         }
     },
     insure_type_screen: {
-        bottom_info_text : 'Medical expenses are unpredictable - protect yourself with fisdom Care Health+',
+        bottom_info_text : 'Medical expenses are unpredictable - protect yourself with fisdom HealthProtect',
         account_type_options: [
             {
                 'name': 'Self',
