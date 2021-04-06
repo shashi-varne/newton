@@ -520,41 +520,15 @@ class Recommendations extends Component {
                   apply on your investment.
                 </div>
               </div>
-              {/* <div className="terms">
-            <img src="../assets/img/terms_agree.png" alt="" width="25" />
-            <div ng-if="!finity && isWeb">
-              By tapping on proceed, I agree that I have read the <br />
-              <a href="https://www.fisdom.com/terms/" target="_blank">
+              <div className="terms">
+            <img src={require("assets/terms_agree.png")} alt="" width="25" />
+            <div>
+              By tapping on proceed, I agree that I have read the {" "}
+              <span onClick={() => this.openInBrowser("https://www.fisdom.com")} style={{textDecoration:'underline', cursor:'pointer'}}>
                 terms & conditions
-              </a>
-              .
+              </span>
             </div>
-            <div ng-if="!finity && !isWeb">
-              By tapping on proceed, I agree that I have read the <br />
-              <a ng-click="native_Intent('https://www.fisdom.com/terms/')">
-                terms & conditions
-              </a>
-              .
-            </div>
-            <div ng-if="finity">
-              By tapping on accept, I agree that I have read the <br />
-              <a
-                ng-className="{'button-loading' : showTncLoader}"
-                style={{ textDecoration: "underline" }}
-                ng-click="showTnC($event)"
-              >
-                terms & conditions.
-              </a>
-              By tapping on proceed, I agree that I have read the <br />
-              <a
-                ng-className="{'button-loading' : showTncLoader}"
-                style={{ textDecoration: "underline" }}
-                ng-click="showTnC($event)"
-              >
-                terms & conditions.
-              </a>
-            </div>
-          </div> */}
+          </div>
             </div>
             {this.renderDialog()}
           </div>
