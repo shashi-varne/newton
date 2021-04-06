@@ -217,9 +217,17 @@ export function getKycAppStatus(kyc) {
     }
   }
 
+  var result = {
+    metaRejected: metaRejected,
+    docRejected: docRejected,
+    rejectedItems: rejectedItems
+  };
+
   var status;
   if (rejected > 0) {
     status = "rejected";
+    result.status = status;
+    return result;
   } else {
     status = kyc.application_status_v2;
   }
@@ -257,12 +265,7 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
-  var result = {
-    status: status,
-    metaRejected: metaRejected,
-    docRejected: docRejected,
-    rejectedItems: rejectedItems
-  };
+  result.status = status;
 
   return result;
 }

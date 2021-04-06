@@ -119,10 +119,25 @@ class DigiStatus extends Component {
         });
         window.location.href = resultData.esign_link;
       } else {
-        toast(
-          resultData.error || resultData.message || "Something went wrong",
-          "error"
-        );
+        if (resultData && resultData.error === "all documents are not submitted") {
+          toast("Document pending, redirecting to kyc");
+          setTimeout(() => {
+            if (dl_flow) {
+              this.navigate('/kyc/journey', {
+                state: {
+                  show_aadhaar: true,
+                }
+              });
+            } else {
+              this.navigate('/kyc/journey');
+            }
+          }, 3000)
+        } else {
+          toast(
+            resultData.error || resultData.message || "Something went wrong",
+            "error"
+          );
+        }
       }
 
       this.setState({ show_loader: false });
