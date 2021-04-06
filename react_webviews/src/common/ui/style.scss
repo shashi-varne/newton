@@ -1020,13 +1020,16 @@ body[data-device="mobile"] {
   margin-left: -1PX !important;
   margin-top: 5px !important;
 }
+.css-b8ldur-Input{
+  margin: 0px 2px 0 2px !important;
+}
 .react-select__multi-value{
   background: rgba(238, 238, 238, 0.3) !important;
   border: 1px solid #D6D6D6;
   height: 18px !important;
   line-height: 17px !important;
   font-size: 13px !important;
-  margin: 11px 5px 6px 0px !important;
+  margin: 10px 5px 5px 0px !important;
 }
 .react-select__value-container--is-multi{
   margin-top: 13px !important;
