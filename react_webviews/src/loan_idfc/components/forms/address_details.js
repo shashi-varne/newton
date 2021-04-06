@@ -54,12 +54,8 @@ class AddressDetails extends Component {
       ],
     };
 
-    let ckyc_state = storageService().get('ckyc_state') || false;
-    let confirm_details = ckyc_state === "success";
-
     this.setState({
       progressHeaderData: progressHeaderData,
-      confirm_details: confirm_details
     });
   }
 
@@ -73,8 +69,13 @@ class AddressDetails extends Component {
     let lead = this.state.lead || {};
     let current_address_data = lead.current_address_data || {};
     let permanent_address_data = lead.permanent_address_data || {};
+    let vendor_info = lead.vendor_info || {};
     let { confirm_details } = this.state;
     let { form_data } = this.state;
+
+    if (vendor_info.ckyc_state === 'success') {
+      confirm_details = true
+    }
 
     let loaderData = {
       title: `Hang on while we create loan application`,
@@ -453,6 +454,7 @@ class AddressDetails extends Component {
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
+        force_hide_inpage_title={this.state.skelton}
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
         } address details`}

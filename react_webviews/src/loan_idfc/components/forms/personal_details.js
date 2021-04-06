@@ -62,12 +62,8 @@ class PersonalDetails extends Component {
       ],
     };
 
-    let ckyc_state = storageService().get('ckyc_state') || false;
-    let confirm_details = ckyc_state === "success";
-
     this.setState({
       progressHeaderData: progressHeaderData,
-      confirm_details: confirm_details
     });
   }
 
@@ -80,7 +76,12 @@ class PersonalDetails extends Component {
 
     let lead = this.state.lead || {};
     let personal_info = lead.personal_info || {};
+    let vendor_info = lead.vendor_info || {};
     let { confirm_details } = this.state;
+
+    if (vendor_info.ckyc_state === 'success') {
+      confirm_details = true
+    }
 
     let gender = genderMapper[capitalizeFirstLetter(personal_info.gender)];
 
@@ -274,6 +275,7 @@ class PersonalDetails extends Component {
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
+        force_hide_inpage_title={this.state.skelton}
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
         }  personal details`}
