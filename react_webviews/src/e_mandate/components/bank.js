@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import qs from 'qs';
-import { getConfig } from 'utils/functions';
-import Container from '../common/Container';
+import { getConfig , isIframe, getBasePath} from 'utils/functions';
+// import Container from '../common/Container';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
 import info_icon_myway from 'assets/info_icon_myway.svg'
 import trust_icon from 'assets/trust_icons_emandate.svg';
@@ -9,6 +9,7 @@ import select_icon from 'assets/completed_step.svg';
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
+import bank_building from 'assets/finity/bank_building.svg'
 
 
 class SelectBank extends Component {
@@ -20,6 +21,8 @@ class SelectBank extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       info_icon: getConfig().productName !== 'fisdom' ? info_icon_myway : info_icon_fisdom,
       selected_bank: {},
+      iframeIcon: bank_building,
+      iframe: isIframe(),
       pc_urlsafe: getConfig().pc_urlsafe
     }
   }
@@ -152,11 +155,11 @@ class SelectBank extends Component {
     try {
       let bank_data = { selected_bank: this.state.selected_bank };
       const res = await Api.post('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe, bank_data);
-      
+      let basepath = getBasePath();
       
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let paymentRedirectUrl = encodeURIComponent(
-          window.location.origin + '/e-mandate/redirection'
+          basepath + '/e-mandate/redirection'
         );
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
@@ -228,7 +231,16 @@ class SelectBank extends Component {
     }
   }
 
+  loadComponent() {
+    if (this.state.iframe) {
+      return require(`../commoniFrame/Container`).default;
+    } else {
+      return require(`../common/Container`).default;
+    }
+  }
+
   render() {
+    const Container = this.loadComponent();
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -237,6 +249,7 @@ class SelectBank extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="AUTHORISE E-MANDATE"
+        iframeIcon={this.state.iframeIcon}
       >
         <div className="infocard">
           <div className="title">

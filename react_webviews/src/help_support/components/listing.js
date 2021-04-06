@@ -170,7 +170,7 @@ class Listing extends Component {
         noBack={ !(getConfig().isWebCode) && getConfig().app === 'android' }
         events={this.backButtonEvent()}
       >
-        <div className="Help pad20">
+        <div className="Help pad20">  
           <div className="section-head">
             <div className="main-title">
               Category you need help with

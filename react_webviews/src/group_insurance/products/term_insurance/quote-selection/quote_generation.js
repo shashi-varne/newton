@@ -945,7 +945,7 @@ class QuoteGeneration extends Component {
         buttonTitle="Save & Continue"
         fullWidthButton={true}
         onlyButton={true}
-        filterPgae={true}
+        filterPage={true}
         handleFilter={this.openFilter}
         closePopup={this.handleClose}
       >

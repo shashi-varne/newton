@@ -1,24 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
-import { getConfig, manageDialog, setHeights } from 'utils/functions';
-import Header from './Header';
-import Footer from './footer';
-import Banner from '../../common/ui/Banner';
+import { getConfig, manageDialog } from 'utils/functions';
 
 import { nativeCallback, openModule } from 'utils/native_callback';
-import Button from 'material-ui/Button';
-import Dialog, {
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
 import '../../utils/native_listner';
 import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
-import { renderPageLoader, renderGenericError } from '../../common/components/container_functions';
-import UiSkelton from '../../common/ui/Skelton';
-
+import { storageService } from '../../utils/validators';
+import {didMount ,commonRender} from '../../common/components/container_functions';
 
 class Container extends Component {
 
@@ -31,14 +20,19 @@ class Container extends Component {
       callbackType: '',
       productName: getConfig().productName,
       inPageTitle: false,
-      force_hide_inpage_title: false
+      force_hide_inpage_title: false,
+      project: 'group-insurance',
     }
     this.historyGoBack = this.historyGoBack.bind(this);
-    this.renderPageLoader = renderPageLoader.bind(this);
-    this.renderGenericError = renderGenericError.bind(this);
+
+    this.didMount = didMount.bind(this);
+    this.commonRender =  commonRender.bind(this);
   }
 
   componentDidMount() {
+
+    this.didMount();
+
 
     window.addEventListener("scroll", this.onScroll, false);
     let pathname = this.props.history.location.pathname;
@@ -49,7 +43,15 @@ class Container extends Component {
        || pathname.includes('/group-insurance/group-health')
        || pathname === '/group-insurance/group-insurance/add-policy' 
        || pathname === '/group-insurance/health/landing'
-       || pathname === '/group-insurance/call-back-details') {
+       || pathname === '/group-insurance/advisory/landing'
+       || pathname === '/group-insurance/advisory/basic-details'
+       || pathname === '/group-insurance/advisory/income-details'
+       || pathname === '/group-insurance/advisory/liability-details'
+       || pathname === '/group-insurance/advisory/asset-details'
+       || pathname === '/group-insurance/advisory/recommendations'
+       || pathname === '/group-insurance/advisory/email-report'
+       || pathname === '/group-insurance/call-back-details'
+       ) {
       this.setState({
         new_header: true,
         inPageTitle: true,
@@ -63,23 +65,7 @@ class Container extends Component {
       })
     }
 
-    setHeights({ 'header': true, 'container': false });
-    let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    } else {
-      window.PlutusSdk.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    }
+    
   }
 
   checkStringInString = (string) => {
@@ -90,76 +76,10 @@ class Container extends Component {
 
   componentWillUnmount() {
   
-    if (getConfig().generic_callback) {
-      window.callbackWeb.remove_listener({});
-    } else {
-      window.PlutusSdk.remove_listener({});
-    }
-
-    window.removeEventListener("scroll", this.onScroll, false);
+    this.unmount();
   }
 
-  getHeightFromTop() {
-    var el = document.getElementsByClassName('Container')[0];
-    var height = el.getBoundingClientRect().top;
-    return height;
-  }
 
-  check_hide_header_title() {
-    let force_hide_inpage_title;
-    let restrict_in_page_titles = [];
-    if(restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
-      force_hide_inpage_title = true;
-    }
-
-    this.setState({
-      force_hide_inpage_title: force_hide_inpage_title || false
-    })
-
-    if(this.props.updateChild) {
-      this.props.updateChild('inPageTitle', force_hide_inpage_title);
-    }
-
-  }
-
-  onScroll = () => {
-   
-    if(!this.state.new_header) {
-      this.setState({
-        inPageTitle: false
-      })
-      return;
-    }
-    let inPageTitle = this.state.inPageTitle;
-    if (this.getHeightFromTop() >= 56) {
-      //show down
-      inPageTitle = true;
-
-    } else {
-      //show up
-      inPageTitle = false;
-    }
-
-    if(this.state.force_show_inpage_title) {
-      inPageTitle = true;
-      let that = this;
-      setTimeout(function(){ 
-        that.setState({
-          force_show_inpage_title: false
-        })
-     }, 100);
-      
-    }
-
-    this.setState({
-      inPageTitle: inPageTitle
-    })
-
-    if(this.props.updateChild) {
-      this.props.updateChild('inPageTitle', inPageTitle);
-    }
-
-  };
 
   navigate = (pathname, user_action) => {
 
@@ -171,14 +91,6 @@ class Container extends Component {
     });
   }
 
-  getEvents(user_action) {
-    if (!this || !this.props || !this.props.events) {
-      return;
-    }
-    let events = this.props.events;
-    events.properties.user_action = user_action;
-    return events;
-  }
 
   backMapperBharti(path) {
     let backMapperBharti = {
@@ -211,6 +123,24 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
+    
+    if(this.checkStringInString('/group-insurance/advisory/basic-details')){
+      let resume_case = storageService().getObject('advisory_resume_present');
+      if(resume_case){
+        this.navigate('/group-insurance');
+      }else{
+        this.navigate('/group-insurance/advisory/landing')
+      }  
+      return;
+    }
+
+    let from_advisory = storageService().getObject('from_advisory')
+    let advisory_paths = ['/group-insurance/health/critical_illness/plan', '/group-insurance/group-health/RELIGARE/landing', '/group-insurance/corona/plan','/group-insurance/life-insurance/term/landing'];
+    if(from_advisory && advisory_paths.indexOf(pathname) >= 0){
+      
+      this.navigate('/group-insurance/advisory/recommendations')
+      return;
+    }
 
       if (this.checkStringInString('/group-insurance/other-insurance/entry')) {
         this.navigate('/group-insurance');
@@ -402,55 +332,16 @@ class Container extends Component {
         this.navigate(back_button_mapper[pathname]);
         break;
       default:
+        nativeCallback({ events: this.getEvents('back') });
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
           this.navigate(back_button_mapper[pathname]);
         } else {
-          nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         }
     }
   }
 
-  handleClose = () => {
-    this.setState({
-      openDialog: false,
-      openPopup: false
-    });
 
-    // if (this.state.callbackType === 'show_quotes') {
-    //   let eventObj = {
-    //     "event_name": 'exit_from_payment',
-    //     "properties": {
-    //       "user_action": 'no',
-    //       "source": 'summary'
-    //     }
-    //   };
-    //   nativeCallback({ events: eventObj });
-    // }
-  }
-
-  renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Check your connection and try again.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="secondary" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
 
   handlePopup = () => {
     this.setState({
@@ -480,164 +371,18 @@ class Container extends Component {
     nativeCallback({ action: this.state.callbackType });
   }
 
-  renderPopup = () => {
-    if (getConfig().insurance_v2) {
-      return (
-        <Dialog
-          fullScreen={false}
-          open={this.state.openPopup}
-          onClose={this.handleClose}
-          aria-labelledby="responsive-dialog-title"
-        >
-          {/* <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle> */}
-          <DialogContent>
-            <DialogContentText>
-              {this.state.popupText}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="default">
-              No
-            </Button>
-            <Button onClick={this.handlePopup} color="default" autoFocus>
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
-      );
-    }
-    return null;
-  }
-
+  
   componentDidUpdate(prevProps) {
-    setHeights({ 'header': true, 'container': false });
+    this.didupdate();
   }
 
   render() {
-    let steps = [];
-    for (var i = 0; i < this.props.total; i++) {
-      if (this.props.current > i) {
-        steps.push(<span className='active'
-          style={{ background: getConfig().primary }} key={i}></span>);
-      } else {
-        steps.push(<span key={i}></span>);
-      }
-    }
 
-    return (
-      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
-        {/* Header Block */}
-        {!this.props.hide_header && this.props.showLoader !== true && !this.props.showLoaderModal && <Header
-          disableBack={this.props.disableBack}
-          title={this.props.title}
-          smallTitle={this.props.smallTitle}
-          provider={this.props.provider}
-          count={this.props.count}
-          total={this.props.total}
-          current={this.props.current}
-          goBack={this.historyGoBack}
-          edit={this.props.edit}
-          type={getConfig().productName}
-          resetpage={this.props.resetpage}
-          inPageTitle={this.state.inPageTitle}
-          force_hide_inpage_title={this.state.force_hide_inpage_title}
-          handleReset={this.props.handleReset}
-          filterPgae={this.props.filterPgae}
-          handleFilter={this.props.handleFilter} 
-          new_header={this.state.new_header} 
-          headerData={this.props.headerData}
-        />}
-
-        {/* Below Header Block */}
-        <div id="HeaderHeight" style={{ top: 56 }}>
-
-
-          {/* Loader Block covering entire screen*/}
-          {this.renderPageLoader()}
-
-          {/* Error Block */}
-          {this.renderGenericError()}
-
-          {!this.props.showLoader && !this.props.showLoaderModal && steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
-            {steps}
-          </div>}
-
-          {/* Banner Block */}
-          {!this.props.showLoaderModal && this.props.banner && <Banner text={this.props.bannerText} />}
-
-        </div>
-
-        {!this.state.force_hide_inpage_title && this.state.new_header &&
-          <div 
-            id="header-title-page"
-            style={this.props.styleHeader} 
-            className={`header-title-page  ${this.props.classHeader}`}
-            >
-               <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
-                 {this.props.title}
-              </div>
-              {this.state.inPageTitle && this.props.count &&
-                <span color="inherit" 
-                className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
-                style={{ fontSize: 10 }}>
-                  <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
-                </span>}
-          </div>
-         }
-
-          { this.props.skelton && 
-            <UiSkelton 
-            type={this.props.skelton}
-            />
-          }
-
-
-        {/* Children Block */}
-        <div 
-        style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': 'initial'}}
-        className={`Container ${this.props.classOverRideContainer}`}>
-           <div 
-            className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
-            style={{display: this.props.skelton ? 'none': ''}}
-            > {this.props.children}
-             </div>
-        </div>
-
-        {/* Footer Block */}
-        {!this.props.noFooter && !this.props.skelton &&
-          <Footer
-            dualbuttonwithouticon={this.props.dualbuttonwithouticon}
-            fullWidthButton={this.props.fullWidthButton}
-            twoButtons={this.props.twoButtons}
-            logo={this.props.logo}
-            buttonTitle={this.props.buttonTitle}
-            buttonDisabled={this.props.buttonDisabled}
-            buttonOneTitle={this.props.buttonOneTitle}
-            buttonTwoTitle={this.props.buttonTwoTitle}
-            provider={this.props.provider}
-            premium={this.props.premium}
-            paymentFrequency={this.props.paymentFrequency}
-            edit={this.props.edit}
-            resetpage={this.props.resetpage}
-            handleClick={this.props.handleClick}
-            handleClick2={this.props.handleClick2}
-            handleClickOne={this.props.handleClickOne}
-            handleClickTwo={this.props.handleClickTwo}
-            handleReset={this.props.handleReset}
-            onlyButton={this.props.onlyButton}
-            showDotDot={this.props.showDotDot}
-            noFooter={this.props.noFooter}
-            withProvider={this.props.withProvider}
-            buttonData={this.props.buttonData}
-            showLoader={this.props.showLoader}
-            {...this.props}
-             />
-        }
-        {/* No Internet */}
-        {this.renderDialog()}
-        {this.renderPopup()}
-      </div>
-    );
+    return(
+      <Fragment>
+      {this.commonRender()}
+      </Fragment>
+    )
   }
 };
 

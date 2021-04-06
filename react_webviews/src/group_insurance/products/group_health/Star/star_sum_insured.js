@@ -29,8 +29,45 @@ class GroupHealthPlanStarSumInsured extends Component {
     componentWillMount() {
         this.initialize();
     }
+    setErrorData = (type) => {
+
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Retry',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
     
+      }
     async componentDidMount() {
+        this.onload();
+    }
+
+    onload = async() =>{
+        let error="";
+        let errorType="";
+        this.setErrorData("onload");
+
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
 
@@ -41,7 +78,7 @@ class GroupHealthPlanStarSumInsured extends Component {
         }
         body['si'] = '300000';
         this.setState({
-            show_loader: true,
+            skelton: true,
             loadingPremium: true
         });
 
@@ -58,27 +95,40 @@ class GroupHealthPlanStarSumInsured extends Component {
                     plan_selected_final: resultData.premium_details,
                     loadingPremium: false
                 });
+                this.setState({
+                    skelton: false
+                });
             } else {
                 this.setState({
                     premiumAmt: '--',
                     apiError :true
                 })
-                toast(resultData.error || 'Something went wrong! Please try again.');
+                error=resultData.error || resultData.message || true;
+                
             }
-           this.setState({
-                show_loader: false
-            });
+           
 
         } catch (err) {
             console.log(err);
-            toast('Something went wrong');
+            error=true;
+            errorType="crash";
             this.setState({
                 premiumAmt: '--',
                 loadingPremium: false,
-                apiError :true
+                apiError :true,
+                skelton:false
             });
         }
-
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type:errorType
+              },
+              showError: "page",
+            });
+          }
         let dob_data = {};
         groupHealthPlanData.final_dob_data.forEach(item => {
             dob_data[item.backend_key] = {
@@ -217,6 +267,9 @@ class GroupHealthPlanStarSumInsured extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title="Select sum insured"
                 buttonTitle="CONTINUE"
                 buttonDisabled={this.state.loadingPremium || this.state.apiError}
