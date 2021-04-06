@@ -93,7 +93,9 @@ class SelectDropDown2 extends React.Component {
       } else return ({
         'value': ele, 'name': toCamelCase(ele)
       })
-    });
+    }); setTimeout(() => {
+      document.getElementsByClassName("Container")[0].style.height =  '100%'
+    }, 1000);
     const OptionPresent = this.state.selectedOption ? !!this.state.selectedOption.length : false;// eslint-disable-next-line
     var value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     let isLableOpen = (!!value || (OptionPresent) || this.state.shrink) || (OptionPresent && this.props.multi);
