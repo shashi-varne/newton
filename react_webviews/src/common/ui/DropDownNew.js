@@ -40,7 +40,7 @@ class SelectDropDown2 extends React.Component {
     document.getElementsByClassName("Container")[0].style.height =  '100%'
     setTimeout(() => {
       document.getElementsByClassName("Container")[0].style.height =  '100%'
-    }, 1000);
+    }, 3000);
     this.setState({ shrink: false })
     window.removeEventListener('resize', this.determineDropUp);
     window.removeEventListener('scroll', this.determineDropUp);
