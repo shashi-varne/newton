@@ -6,7 +6,7 @@ import { disclaimers } from '../../constants'
 import Disclaimer from './Disclaimer'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
-import { isEmpty } from '../../../utils/validators'
+import { formatAmountInr, isEmpty } from '../../../utils/validators'
 
 const Insta = (props) => {
   const [taxes, setTaxes] = useState(taxes)
@@ -19,7 +19,7 @@ const Insta = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       const itype = props?.location?.state?.itype
       const subtype = props?.location?.state?.subtype
       const name = props?.location?.state?.name
@@ -74,12 +74,17 @@ const Insta = (props) => {
       fullWidthButton
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      hideInPageTitle
-      handleClick2={handleClick}
-      showSkelton={isEmpty(taxes)}
-      twoButton={true}
-      footerText1={getTotalAmount()}
-      isApiRunning={isApiRunning}
+      hidePageTitle
+      handleClick={handleClick}
+      skelton={isEmpty(taxes)}
+      // twoButton={true}
+      // footerText1={getTotalAmount()}
+      showLoader={isApiRunning}
+      buttonData={{
+        leftTitle: "Withdraw amount",
+        leftSubtitle: formatAmountInr(getTotalAmount()),
+      }}
+      type="withProvider"
     >
       {!isEmpty(taxes) && (
         <>

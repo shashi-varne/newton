@@ -7,6 +7,7 @@ import { Redirect } from 'react-router-dom'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { isEmpty } from 'utils/validators'
+import { formatAmountInr } from '../../../utils/validators'
 
 const TaxLiability = (props) => {
   const { stcg, ltcg } = props
@@ -55,7 +56,7 @@ const SelfSummary = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       const itype = props?.location?.state?.itype
       const subtype = props?.location?.state?.subtype
       const name = props?.location?.state?.name
@@ -109,12 +110,18 @@ const SelfSummary = (props) => {
       fullWidthButton
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      hideInPageTitle
-      handleClick2={handleClick}
-      showSkelton={isEmpty(taxes)}
-      twoButton={true}
-      footerText1={getTotalAmount()}
-      isApiRunning={isApiRunning}
+      hidePageTitle
+      handleClick={handleClick}
+      skelton={isEmpty(taxes)}
+      // twoButton={true}
+      // footerText1={getTotalAmount()}
+      // isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
+      buttonData={{
+        leftTitle: "Withdraw amount",
+        leftSubtitle: formatAmountInr(getTotalAmount()),
+      }}
+      type="withProvider"
     >
       {!isEmpty(taxes) && (
         <section id="withdraw-system-summary">

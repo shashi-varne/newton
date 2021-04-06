@@ -71,12 +71,12 @@ const Balance = (props) => {
   }
   return (
     <Container
-      hideInPageTitle
+      title="Withdraw"
       noFooter
       noPadding
       classOverRideContainer="withdraw-background-override"
-      showSkelton={isEmpty(balance)}
-      noHeader={isEmpty(balance)}
+      skelton={isEmpty(balance)}
+      // noHeader={isEmpty(balance)}
     >
       {!isEmpty(balance) && (
         <>

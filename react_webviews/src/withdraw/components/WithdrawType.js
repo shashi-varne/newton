@@ -7,6 +7,7 @@ import { navigate as navigateFunc } from '../common/commonFunction'
 import toast from 'common/ui/Toast'
 import Typography from '@material-ui/core/Typography'
 import { getConfig } from 'utils/functions'
+import { formatAmountInr } from '../../utils/validators'
 
 const Landing = (props) => {
   const { type } = props.match?.params
@@ -131,20 +132,39 @@ const Landing = (props) => {
   const checkError = (err) => {
     setError(err)
   }
+
+  const getTitle = () => {
+    switch(type) {
+      case "systematic": 
+        return "System withdraw";
+      case "insta-redeem": 
+        return "Instant withdraw";
+      case "self":
+        return "Manual withdraw";
+      default:
+        return "Withdraw";
+    }
+  }
   return (
     <Container
       buttonTitle={buttonTitle}
       fullWidthButton
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      hideInPageTitle
-      disable={type === 'insta-redeem' ? limitCrossed || error : true}
-      handleClick2={handleClick}
+      // hideInPageTitle
+      disable={type === 'insta-redeem' ? (limitCrossed || error) : error}
+      // handleClick2={handleClick}
       handleClick={handleClick}
-      showSkelton={isEmpty(recommendedFunds) && showSkeltonLoader}
-      twoButton={type !== 'insta-redeem'}
-      footerText1={totalAmount}
-      disable2={error}
+      skelton={isEmpty(recommendedFunds) && showSkeltonLoader}
+      // twoButton={type !== 'insta-redeem'}
+      // footerText1={totalAmount}
+      // disable2={error}
+      buttonData={{
+        leftTitle: "Withdraw amount",
+        leftSubtitle: formatAmountInr(totalAmount),
+      }}
+      type={type !== 'insta-redeem' ? "withProvider" : ''}
+      title={getTitle()}
     >
       {recommendedFunds?.allocations && (
         <>

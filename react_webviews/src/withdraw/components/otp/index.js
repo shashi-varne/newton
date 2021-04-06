@@ -88,7 +88,7 @@ const Otp = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      hidePageTitle
       buttonTitle="VERIFY"
       disable={state.otp.length !== 4}
       handleClick={verifyOtp}

@@ -29,7 +29,7 @@ const WithdrawRemark = ({ location, ...props }) => {
 
   const sendWithdrawReason = async (param) => {
     try {
-      setIsLoading(true);
+      setIsLoading("button");
       await postWithdrawReasons(param);
       navigate('');
     } catch (err) {
@@ -98,10 +98,11 @@ const WithdrawRemark = ({ location, ...props }) => {
     <Container
       buttonTitle='Continue'
       fullWidthButton
-      hideInPageTitle
+      // hideInPageTitle
+      title="Withdraw"
       noPadding
       handleClick={handleClick}
-      showSkelton={isLoading}
+      showLoader={isLoading}
     >
       {!isEmpty(subQstn?.action) && (
         <section className='withdraw-remark'>
