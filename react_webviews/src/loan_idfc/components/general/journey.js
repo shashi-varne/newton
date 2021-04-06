@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import { formatAmountInr, storageService } from "utils/validators";
+import { formatAmountInr } from "utils/validators";
 import JourneySteps from "../../../common/ui/JourneySteps";
 const journeyMapper2 = {
   basic_details_uploaded: {

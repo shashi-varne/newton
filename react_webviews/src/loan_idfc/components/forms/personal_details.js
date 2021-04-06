@@ -7,7 +7,7 @@ import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
-import { capitalizeFirstLetter, timeStampToDate, storageService } from "utils/validators";
+import { capitalizeFirstLetter, timeStampToDate } from "utils/validators";
 import scrollIntoView from "scroll-into-view-if-needed";
 
 const gender_options = [

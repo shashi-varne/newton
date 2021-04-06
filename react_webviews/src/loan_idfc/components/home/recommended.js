@@ -33,11 +33,8 @@ class Recommended extends Component {
     let amount_input = ['loan_amount_required', 'monthly_salary']
     if (amount_input.includes(name)) {
       let amt = (value.match(/\d+/g) || "").toString();
-      if (amt) {
-        value = amt.replaceAll(",", "");
-      } else {
-        value = amt;
-      }
+
+      value = amt.split(',').join('');
     }
 
     if (id === "Salaried" || id === "Self_employed") {
@@ -168,8 +165,7 @@ class Recommended extends Component {
               <Input
                 error={!!this.state.form_data.loan_amount_required_error}
                 helperText={
-                  this.state.form_data.loan_amount_required_error || 
-                  numDifferentiationInr((this.state.form_data.loan_amount_required || '').toString().replaceAll(',', ''))
+                  this.state.form_data.loan_amount_required_error || numDifferentiationInr(this.state.form_data.loan_amount_required || 0)
                 }
                 inputMode="numeric"
                 width="40"
@@ -227,8 +223,7 @@ class Recommended extends Component {
                   <Input
                     error={!!this.state.form_data.monthly_salary_error}
                     helperText={
-                      this.state.form_data.monthly_salary_error ||
-                      numDifferentiationInr((this.state.form_data.monthly_salary || '').toString().replaceAll(',', ''))
+                      this.state.form_data.monthly_salary_error || numDifferentiationInr(this.state.form_data.monthly_salary || 0)
                     }
                     inputMode="numeric"
                     width="40"

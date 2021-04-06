@@ -131,11 +131,7 @@ class ProfessionalDetails extends Component {
 
     if (name === 'net_monthly_salary') {
       let amt = (value.match(/\d+/g) || "").toString();
-      if (amt) {
-        value = amt.replaceAll(",", "");
-      } else {
-        value = amt;
-      }
+      value = amt.split(',').join('');
     }
 
     if (name) {
@@ -281,8 +277,7 @@ class ProfessionalDetails extends Component {
                 <Input
                   error={!!this.state.form_data.net_monthly_salary_error}
                   helperText={
-                    this.state.form_data.net_monthly_salary_error ||
-                    numDifferentiationInr((this.state.form_data.net_monthly_salary || '').toString().replaceAll(',', ''))
+                    this.state.form_data.net_monthly_salary_error || numDifferentiationInr(this.state.form_data.net_monthly_salary || 0)
                   }
                   // type="number"
                   width="40"

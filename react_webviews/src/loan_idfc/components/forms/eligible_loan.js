@@ -95,11 +95,7 @@ class EligibleLoan extends Component {
 
     if (name === "amount_required") {
       let amt = (value.match(/\d+/g) || "").toString();
-      if (amt) {
-        value = amt.replaceAll(",", "");
-      } else {
-        value = amt;
-      }
+      value = amt.split(',').join('');
     }
 
     let emi_amount = value;
@@ -307,14 +303,8 @@ class EligibleLoan extends Component {
                           helperText={
                             this.state.form_data.amount_required_error ||
                             (this.state.form_data.amount_required &&
-                              numDifferentiationInr(
-                                (this.state.form_data.amount_required || "")
-                                  .toString()
-                                  .replaceAll(",", "")
-                              )) ||
-                            `Min ₹1 lakh to max ₹${changeNumberFormat(
-                              vendor_info.displayOffer || "0"
-                            )}`
+                              numDifferentiationInr(this.state.form_data.amount_required  || 0)) ||
+                            `Min ₹1 lakh to max ₹${changeNumberFormat(vendor_info.displayOffer || "0")}`
                           }
                           // type="number"
                           inputMode="numeric"

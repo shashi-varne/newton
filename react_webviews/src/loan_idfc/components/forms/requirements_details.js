@@ -72,11 +72,7 @@ class LoanRequirementDetails extends Component {
 
     if (name === "amount_required") {
       let amt = (value.match(/\d+/g) || "").toString();
-      if (amt) {
-        value = amt.replaceAll(",", "");
-      } else {
-        value = amt;
-      }
+      value = amt.split(',').join('');
     }
 
     if (name) {
@@ -150,8 +146,7 @@ class LoanRequirementDetails extends Component {
               <Input
                 error={!!this.state.form_data.amount_required_error}
                 helperText={
-                  this.state.form_data.amount_required_error ||
-                  numDifferentiationInr((this.state.form_data.amount_required || "").toString().replaceAll(',', ''))
+                  this.state.form_data.amount_required_error || numDifferentiationInr(this.state.form_data.monthly_salary || 0)
                 }
                 width="40"
                 inputMode="numeric"

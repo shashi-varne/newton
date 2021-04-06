@@ -7,7 +7,6 @@ import { FormControl } from "material-ui/Form";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
 import scrollIntoView from "scroll-into-view-if-needed";
-import { storageService } from "utils/validators";
 import Api from "utils/api";
 
 const yesOrNo_options = [
@@ -615,9 +614,9 @@ class AddressDetails extends Component {
 
               <div className="InputField">
                 <Input
-                  error={!!this.state.form_data.permanent_address1_error}
+                  error={(this.state.form_data.permanent_address1_error && !this.state.form_data.permanent_address1) || false}
                   helperText={
-                    this.state.form_data.permanent_address1_error ||
+                    !this.state.form_data.permanent_address1 ? this.state.form_data.permanent_address1_error :
                     this.state.form_data.permanent_address1_helper
                   }
                   type="text"
@@ -634,9 +633,9 @@ class AddressDetails extends Component {
 
               <div className="InputField">
                 <Input
-                  error={!!this.state.form_data.permanent_address2_error}
+                  error={(this.state.form_data.permanent_address2_error && !this.state.form_data.permanent_address2) || false}
                   helperText={
-                    this.state.form_data.permanent_address2_error ||
+                    !this.state.form_data.permanent_address2 ? this.state.form_data.permanent_address2_error :
                     this.state.form_data.permanent_address2_helper
                   }
                   type="text"
@@ -654,9 +653,9 @@ class AddressDetails extends Component {
               {this.state.confirm_details && (
                 <div className="InputField">
                   <Input
-                    error={!!this.state.form_data.permanent_address3_error}
+                    error={(this.state.form_data.permanent_address3_error && !this.state.form_data.permanent_address3) || false}
                     helperText={
-                      this.state.form_data.permanent_address3_error ||
+                      !this.state.form_data.permanent_address3 ? this.state.form_data.permanent_address3_error :
                       this.state.form_data.permanent_address3_helper
                     }
                     type="text"
@@ -674,8 +673,8 @@ class AddressDetails extends Component {
 
               <div className="InputField">
                 <Input
-                  error={!!this.state.form_data.permanent_landmark_error}
-                  helperText={this.state.form_data.permanent_landmark_error}
+                  error={(this.state.form_data.permanent_landmark_error && !this.state.form_data.permanent_landmark) || false}
+                  helperText={this.state.form_data.permanent_landmark ? this.state.form_data.permanent_landmark_error : ''}
                   type="text"
                   width="40"
                   label="Landmark"
@@ -690,9 +689,9 @@ class AddressDetails extends Component {
 
               <div className="InputField">
                 <Input
-                  error={!!this.state.form_data.permanent_pincode_error}
+                  error={(this.state.form_data.permanent_pincode_error && !this.state.form_data.permanent_pincode) || false}
                   helperText={
-                    this.state.form_data.permanent_pincode_error ||
+                    !this.state.form_data.permanent_pincode ? this.state.form_data.permanent_pincode_error :
                     this.state.form_data.permanent_pincode_helper
                   }
                   type="number"
@@ -709,9 +708,9 @@ class AddressDetails extends Component {
 
               <div className="InputField">
                 <Input
-                  error={!!this.state.form_data.permanent_city_error}
+                  error={(this.state.form_data.permanent_city_error && !this.state.form_data.permanent_city) || false}
                   helperText={
-                    this.state.form_data.permanent_city_error ||
+                    !this.state.form_data.permanent_city ? this.state.form_data.permanent_city_error :
                     this.state.form_data.permanent_city_helper
                   }
                   type="text"
@@ -731,9 +730,9 @@ class AddressDetails extends Component {
                 className="InputField"
               >
                 <Input
-                  error={!!this.state.form_data.permanent_state_error}
+                  error={(this.state.form_data.permanent_state_error && !this.state.form_data.permanent_state) || false}
                   helperText={
-                    this.state.form_data.permanent_state_error ||
+                    !this.state.form_data.permanent_state ? this.state.form_data.permanent_state_error :
                     this.state.form_data.permanent_state_helper
                   }
                   type="text"
