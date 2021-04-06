@@ -693,7 +693,7 @@ class DocumentUpload extends Component {
                         src={require("assets/tool.svg")}
                         alt=""
                       />
-                      {item.name}
+                      <span style={{wordBreak: 'break-all', width:'70%'}}>{item.name}</span>
                       {item.id && !item.show_loader ? <span
                         style={{ float: "right" }}
                         onClick={() => this.deleteDocument(index, item)}

@@ -640,7 +640,7 @@ class UploadBank extends Component {
                     src={require("assets/tool.svg")}
                     alt=""
                   />
-                  {item.name}
+                  <span style={{wordBreak: 'break-all', width:'70%'}}>{item.name}</span>
                   <span className="bytes">{bytesToSize(item.size)}</span>
                 </div>
 
