@@ -408,7 +408,6 @@ class AdvisoryBasicDetails extends Component {
               helperText={this.state.form_data.age_error}
               name="age"
               value={this.state.form_data.age || ''}
-              multi={true}
               onChange={this.handleChange("age")}
             />
             </div>
