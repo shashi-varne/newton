@@ -7,8 +7,8 @@ import { getConfig } from 'utils/functions';
 const CustomizedSlider = (props) => {
 
   const handleChange = (e) => {
-    if (!props.disabled) props.onChange(e);
-  };
+    props.onChange(e)
+  }
 
   return (
     <div className="slider">
