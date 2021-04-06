@@ -175,7 +175,7 @@ class GroupHealthPlanDobReligare extends Component {
             post_body.eldest_dob = this.state.eldest_dob;
             
             if(this.state.provider === 'GMC'){
-                post_body.plan_id = 'fisdom_care_health_plus'
+                post_body.plan_id = 'fisdom_health_protect'
             }
             groupHealthPlanData.post_body = post_body;
             this.setLocalProviderData(groupHealthPlanData);
