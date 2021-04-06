@@ -409,6 +409,7 @@ class AdvisoryBasicDetails extends Component {
               name="age"
               value={this.state.form_data.age || ''}
               onChange={this.handleChange("age")}
+              multi={true}
             />
             </div>
              <div className="InputField">
