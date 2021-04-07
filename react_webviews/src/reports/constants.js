@@ -48,7 +48,7 @@ export const getPathname = {
   reportsFundswiseTransactions: "/reports/transactions/",
   reportsFundswiseDetails: "/reports/fundswise/details/",
   reportsSwitchNow: "/reports/fundswise/switch-now/",
-  otpSwitch: "/switch/verify",
+  otpSwitch: "/withdraw/switch/verify",
   sipDetails: "/reports/sip/details",
   pauseAction: "/reports/sip/pause-action/",
   pauseResumeRestart: "/reports/sip/pause-resume-restart/",
