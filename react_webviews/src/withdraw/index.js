@@ -18,6 +18,7 @@ import Insta from "./components/summary/insta";
 import Otp from "./components/otp";
 import Success from "./components/otp/success";
 import Failed from "./components/otp/failed";
+import OtpSwitch from './components/otp/otpSwitch'
 
 const Withdraw = ({ match }) => {
   const { url } = match;
@@ -25,13 +26,14 @@ const Withdraw = ({ match }) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}`} component={Landing} />
+        <Route exact path={`${url}/switch/verify`} component={OtpSwitch} />
         <Route exact path={`${url}/system/summary`} component={SystemSummary} />
-        <Route path={`${url}/self/summary`} component={SelfSummary} />
-        <Route path={`${url}/systematic/summary`} component={SystemSummary} />
+        <Route exact path={`${url}/self/summary`} component={SelfSummary} />
+        <Route exact path={`${url}/systematic/summary`} component={SystemSummary} />
         <Route path={`${url}/insta-redeem/summary`} component={Insta} />
         <Route path={`${url}/reason`} component={WithdrawReason} />
         <Route path={`${url}/remark`} component={WithdrawRemark} />
-        <Route path={`${url}/switch`} component={WithdrawSwitch} />
+        <Route exact path={`${url}/switch`} component={WithdrawSwitch} />
         <Route path={`${url}/verify`} component={Otp} />
         <Route path={`${url}/otp/success`} component={Success} />
         <Route path={`${url}/otp/failed`} component={Failed} />

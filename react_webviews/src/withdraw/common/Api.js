@@ -162,12 +162,12 @@ export const getBalance = async () => {
 export const redeemOrders = async (type, params) => {
   const url = `api/invest/redeem/orderv3/mine/${type}`
   const res = await Api.post(url, params)
-  if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+  if (res.pfwstatus_code >= 400 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
     throw new Error(genericErrMsg)
   }
   const { result, status_code: status } = res.pfwresponse
 
-  if (status === 200) {
+  if (status === 200 || status === 202) {
     return result
   } else {
     throw new Error(result.error || result.message || genericErrMsg)

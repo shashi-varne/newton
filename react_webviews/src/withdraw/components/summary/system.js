@@ -66,18 +66,18 @@ const SelfSummary = (props) => {
   const handleClick = async () => {
     try {
       setIsApiRunning("button")
-      const itype = props?.location?.state?.itype
-      const subtype = props?.location?.state?.subtype
-      const name = props?.location?.state?.name
-      const allocations = Object.keys(props?.location?.state?.amounts).reduce(
-        (acc, cur) => {
-          return [
-            ...acc,
-            { mfid: cur, amount: props?.location?.state?.amounts[cur] },
-          ]
-        },
-        []
-      )
+      // const itype = props?.location?.state?.itype
+      // const subtype = props?.location?.state?.subtype
+      // const name = props?.location?.state?.name
+      // const allocations = Object.keys(props?.location?.state?.amounts).reduce(
+      //   (acc, cur) => {
+      //     return [
+      //       ...acc,
+      //       { mfid: cur, amount: props?.location?.state?.amounts[cur] },
+      //     ]
+      //   },
+      //   []
+      // )
       const result = await redeemOrders('system', {
         investments: [{ ...props.location.state }],
       })
@@ -118,6 +118,7 @@ const SelfSummary = (props) => {
   useEffect(() => {
     fetchTaxes()
   }, [])
+  console.log(taxes)
   return (
     <Container
       buttonTitle={'CONTINUE'}
@@ -139,7 +140,7 @@ const SelfSummary = (props) => {
     >
       {!isEmpty(taxes) && (
         <section id="withdraw-system-summary">
-          <TaxLiability stcg={taxes.ltcg_tax} ltcg={taxes.ltcg_tax} />
+          <TaxLiability stcg={taxes?.stcg_tax} ltcg={taxes?.ltcg_tax} />
           <ExitLoad exit_load={taxes.ltcg} />
           <div className="tax-summary">Tax Summary</div>
           <main className="fund-list">
