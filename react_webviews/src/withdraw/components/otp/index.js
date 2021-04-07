@@ -31,7 +31,7 @@ const Otp = (props) => {
   const [state, setState] = useState({
     otp: '',
     totalTime: 5,
-    timeAvailable: 5,
+    timeAvailable: 30,
   })
 
   const stateParams = props?.location?.state
