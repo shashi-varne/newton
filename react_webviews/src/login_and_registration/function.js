@@ -534,7 +534,7 @@ export function redirectAfterLogin(data, user) {
     !kyc_login.pan.meta_data.pan_number &&
     user.kyc_registration_v2 === "init"
   ) {
-    this.navigate("/home-kyc");
+    this.navigate("/kyc/home");
   } else if (user.active_investment) {
     this.navigate("/landing");
   } else {

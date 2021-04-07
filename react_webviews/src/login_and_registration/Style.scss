@@ -12,10 +12,11 @@
     left: 0;
     right: 0;
     top: 0;
+    min-height: 56px;
 
     img {
       height: 30px;
-      margin: 13px 20px 13px 26px;
+      margin-left: 26px;
     }
   }
 
@@ -36,7 +37,6 @@
     .login-form {
       background-color: #ffffff;
       width: 380px;
-      padding: 0 20px;
 
       .header-text {
         font-weight: bold;
@@ -52,7 +52,8 @@
         display: flex;
         -ms-flex-pack: center;
         justify-content: center;
-        padding: 10px;
+        column-gap: 36px;
+        padding: 10px 10px 10px 0;
         margin-bottom: 20px;
         cursor: pointer;
 
@@ -64,8 +65,7 @@
         }
 
         .text {
-          font-size: 16px;
-          padding: 0 18px;
+          font-size: 14px;
           color: var(--primary);
         }
       }
@@ -84,17 +84,21 @@
           .country-code {
             width: fit-content;
             margin-bottom: -20px;
+
+            .MuiSelect-root {
+              margin-bottom: 1px;
+            }
           }
 
           .input {
             width: 100%;
           }
 
-          .mobile-number {
-            .MuiInput-underline:before {
-              margin-bottom: 1px;
-            }
-          }
+          // .mobile-number {
+          //   .MuiInput-underline:before {
+          //     margin-bottom: 1px;
+          //   }
+          // }
         }
 
         .referral-code-input {
@@ -380,11 +384,40 @@
   }
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 960px) {
   .login {
     .login-details {
       .left-image {
         display: none;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .login {
+    .header {
+      img {
+        height: 20px;
+        margin-left: 20px;
+      }
+    }
+
+    .login-details {
+      .login-form {
+        padding: 0 20px;
+
+        .header-text {
+          text-align: left;
+        }
+
+        .login-type {
+          justify-content: flex-start;
+
+          .underline {
+            margin: 5px 0;
+          }
+        }
       }
     }
   }

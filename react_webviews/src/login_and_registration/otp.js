@@ -6,8 +6,7 @@ import { initialize } from "./function";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import { validateNumber } from "../utils/validators";
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -42,7 +41,7 @@ class Otp extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (value.length > 4) return;
+    if(value && (!validateNumber(value) || value.length > 4)) return;
     let { otp, otp_error } = this.state;
     otp = value;
     otp_error = "";
@@ -67,7 +66,6 @@ class Otp extends Component {
     let disabled = isApiRunning || otp.length !== 4;
     return (
       <div className="login otp">
-        <ToastContainer autoClose={3000} />
         {!isMobileView && (
           <div className="header">
             <img
@@ -93,7 +91,7 @@ class Otp extends Component {
             <div className="otp-text">Enter OTP</div>
             <Input
               error={otp_error ? true : false}
-              type="number"
+              type="text"
               value={otp}
               helperText={otp_error || ""}
               class="input"
