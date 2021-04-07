@@ -42,7 +42,7 @@ class CommonLanding extends Component {
             'gold-locker': '/gold/gold-locker',
             'gold-sell': '/gold/sell',
             'gold-delivery': '/gold/delivery',
-            'loan': '/loan/home',
+            'loan': '/loan/dmi/loan-know-more',
             'health-insurance-landing': '/group-insurance/health/landing',
             'health-insurance-hdfcergo': '/group-insurance/group-health/HDFCERGO/landing',
             'health-insurance-religare': '/group-insurance/group-health/RELIGARE/landing',
