@@ -99,6 +99,7 @@ class InvestAmount extends Component {
               value={amount ? formatAmountInr(amount) : ""}
               error={amount_error ? true : false}
               onChange={this.handleChange("amount")}
+              autoFocus
               endAdornment={
                 investType === "sip" && (
                   <InputAdornment position="end">per month</InputAdornment>

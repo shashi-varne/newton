@@ -308,7 +308,6 @@ const Report = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       id="kyc-home"
       buttonTitle={buttonTitle}
       handleClick={handleClick}
@@ -317,7 +316,6 @@ const Report = (props) => {
       headerData={{goBack}}
     >
       <div className="kyc-report">
-        {/* <div className="kyc-main-title">{topTitle}</div> */}
         <main>
           <Imgc
             src={require(`assets/${productName}/congratulations_illustration.svg`)}

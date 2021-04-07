@@ -6,6 +6,8 @@ import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
 import { navigate as navigateFunc } from '../common/functions'
 import ConfirmBackModal from './confirm_back'
+import { storageService } from "../../utils/validators";
+import { isEmpty } from "../../utils/validators";
 
 class ESignInfo extends Component {
   constructor(props) {
@@ -14,8 +16,31 @@ class ESignInfo extends Component {
       show_loader: false,
       productName: getConfig().productName,
       backModal: false,
+      dl_flow: false
     }
+
+    this.navigate = navigateFunc.bind(this.props);
   }
+
+  componentDidMount = () => {
+    this.initialize();
+  };
+
+  initialize = async () => {
+    const kyc = storageService().getObject("kyc");
+    const user = storageService().getObject("user");
+    if (!isEmpty(kyc)) {
+      if (
+        kyc.kyc_status !== "compliant" &&
+        !kyc.address.meta_data.is_nri &&
+        kyc.dl_docs_status !== "" &&
+        kyc.dl_docs_status !== "init" &&
+        kyc.dl_docs_status !== null
+      ) {
+        this.setState({ dl_flow: true });
+      }
+    }
+  };
 
   handleBack = () => {
     this.setState({ backModal: true })
@@ -55,8 +80,23 @@ class ESignInfo extends Component {
         });
         window.location.href = resultData.esign_link;
       } else {
-        toast(resultData.error ||
-          resultData.message || 'Something went wrong', 'error');
+        if (resultData && resultData.error === "all documents are not submitted") {
+          toast("Document pending, redirecting to kyc");
+          setTimeout(() => {
+            if (this.state.dl_flow) {
+              this.navigate('/kyc/journey', {
+                state: {
+                  show_aadhaar: true,
+                }
+              });
+            } else {
+              this.navigate('/kyc/journey');
+            }
+          }, 3000)
+        } else {
+          toast(resultData.error ||
+            resultData.message || 'Something went wrong', 'error');
+        }
       }
 
       this.setState({ show_loader: false });

@@ -2,17 +2,18 @@ import React from 'react';
 import { formatAmountInr } from 'utils/validators';
 import RatingStar from '../../../../fund_details/common/RatingStar';
 import { navigate as navigateFunc } from '../../common/commonFunction';
-const FundCard = ({ classOverRide, fund ,graph, isins, parentProps }) => {
+const FundCard = ({ classOverRide, fund ,graph, isins, proceedInvestment, parentProps }) => {
   const {
     amount,
     mf: { mfname, rating, isin, amc_logo_small,mftype_name },
   } = fund;
   const navigate = navigateFunc.bind(parentProps);
   const handleGraph = () => {
+    proceedInvestment({}, "", true)
     navigate(
       `/fund-details`,
       {
-        searchParams: `${parentProps.location.search}&isins=${isins}&selected_isin=${isin}`,
+        searchParams: `${parentProps.location.search}&isins=${isins}&selected_isin=${isin}&type=mf`,
         state:{flow:"mf journey"}
       },
       true

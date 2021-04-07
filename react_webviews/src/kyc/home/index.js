@@ -190,7 +190,6 @@ const Home = (props) => {
         let result = await logout();
         if (!result) return;
         navigate("/login");
-        // $state.go('logout')
       } else {
         // callbackWeb.logout();
       }
@@ -310,6 +309,7 @@ const Home = (props) => {
               maxLength={11}
               type="text"
               disabled={showLoader}
+              autoFocus
             />
             {isStartKyc && isUserCompliant && (
               <Alert

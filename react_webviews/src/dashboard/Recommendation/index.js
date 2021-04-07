@@ -69,7 +69,7 @@ const Recommendations = (props) => {
     }
   }
 
-  const proceedInvestment = (investReferralData, isReferralGiven) => {
+  const proceedInvestment = (investReferralData, isReferralGiven, handleGraph) => {
     let investmentObject = {};
     if (type !== "riskprofile") {
       var allocations = [];
@@ -121,6 +121,10 @@ const Recommendations = (props) => {
     }
 
     storageService().setObject("mf_invest_data", investmentEventData);
+
+    if(handleGraph) {
+      return
+    }
 
     if (!currentUser.active_investment && partner.code !== "bfdlmobile") {
       navigate(
@@ -230,7 +234,7 @@ const Recommendations = (props) => {
         <div className='recommendations-funds-lists'>
           {recommendation &&
             recommendation?.map((el, idx) => (
-              <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
+              <FundCard isins={isins} graph key={idx} fund={el} proceedInvestment={proceedInvestment} parentProps={props} />
             ))}
         </div>
         <div className='recommendations-total-investment'>

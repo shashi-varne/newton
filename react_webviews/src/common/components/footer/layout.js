@@ -188,6 +188,36 @@ export class FooterLayoutBase extends Component {
     )
   }
 
+  fundDetailsDualButton = (props) => {
+    return (
+      <div className="FooterTwoButtonLayout">
+        <div style={{ display: "flex", width: "100%" }}>
+          <Button
+            buttonTitle={props.buttonOneTitle}
+            style={{
+              backgroundColor: "#73C555",
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+              width: "20%",
+              padding: "0px !important",
+            }}
+            onClick={props.handleClickOne}
+          />
+          <Button
+            buttonTitle={props.buttonTwoTitle}
+            style={{
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              width: "80%",
+            }}
+            onClick={props.handleClickTwo}
+          />
+        </div>
+        {this.renderDialog()}
+      </div>
+    );
+  };
+
 WithProviderLayoutGold = (props) => {
   const leftArrowMapper = {
     'up': up_arrow,
@@ -264,7 +294,8 @@ WithProviderLayoutGold = (props) => {
         'withProviderInsurance': this.WithProviderLayoutInsurance,
         'insuranceDefault': this.insuranceDefault,
         'default': this.renderDefaultLayout,
-        'withProviderGold': this.WithProviderLayoutGold
+        'withProviderGold': this.WithProviderLayoutGold,
+        'fundDetailsDualButton': this.fundDetailsDualButton,
     }
 
     let renderFunction = renderMapper[type] || renderMapper['default'];

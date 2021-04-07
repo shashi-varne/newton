@@ -556,9 +556,8 @@ export function showFundInfo(data) {
   dataCopy.diy_type = "recommendation";
   dataCopy.invest_type_from = "instaredeem";
   storageService().setObject("diystore_fundInfo", dataCopy);
-  this.props.history.push({
-    pathname: "/fund-details",
-    search: `${getConfig().searchParams}&isins=${data.isin}`,
+  this.navigate("/fund-details", {
+    searchParams: `${getConfig().searchParams}&isins=${data.isin}`,
   });
 }
 
@@ -720,7 +719,7 @@ export async function getNfoRecommendation() {
         cartCount: cartCount,
         showFunds: showFunds,
       });
-    }  else {
+    } else {
       this.setState({ show_loader: false });
       toast(result.message || result.error || errorMessage);
     }
@@ -773,7 +772,9 @@ export async function getDiyPurchaseLimit(data) {
     let { fundsData, purchaseLimitData } = this.state;
     if (status === 200) {
       purchaseLimitData[data.investType] = result.funds_data;
-      purchaseLimitData[data.investType] = purchaseLimitData[data.investType].map((dict) => {
+      purchaseLimitData[data.investType] = purchaseLimitData[
+        data.investType
+      ].map((dict) => {
         var results = fundsData.filter((obj) => {
           if (obj.isin === dict["isin"]) {
             obj["allow_purchase"] = dict["ot_sip_flag"];
@@ -788,12 +789,10 @@ export async function getDiyPurchaseLimit(data) {
         return dict;
       });
 
-      // let isDisabledFundCount = 0;
       this.setState({
         show_loader: false,
         fundsData: fundsData,
         purchaseLimitData: purchaseLimitData,
-        // isDisabledFundCount: isDisabledFundCount,
       });
     } else {
       this.setState({ show_loader: false });
@@ -967,7 +966,7 @@ export async function makeInvestment(investment, isReferralGiven) {
     type === "diy"
   ) {
     this.navigate("/invest-journey");
-    return
+    return;
   }
 
   if (isReferralGiven && investReferralData.code) {
@@ -1047,7 +1046,11 @@ export async function proceedInvestmentChild(data) {
         storageService().setObject("mf_invest_data", investmentEventData);
 
         if (isSipDatesScreen) {
-          this.setState({ openSuccessDialog: true, investResponse: result, isApiRunning: false });
+          this.setState({
+            openSuccessDialog: true,
+            investResponse: result,
+            isApiRunning: false,
+          });
           return;
         }
         if (getConfig().Web) {
@@ -1134,6 +1137,7 @@ export function initilizeKyc() {
   }
   let isReadyToInvestBase = isReadyToInvest();
   let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
+
   this.setState({
     isCompliant,
     kycStatusData,
@@ -1233,8 +1237,11 @@ export function openKyc() {
     if (kycJourneyStatus === "ground") {
       this.navigate("/kyc/home");
     } else if (kycJourneyStatus === "ground_pan") {
-      this.navigate('/kyc/journey', { state: {
-        show_aadhaar: true, fromState: "invest" }
+      this.navigate("/kyc/journey", {
+        state: {
+          show_aadhaar: true,
+          fromState: "invest",
+        },
       });
     } else {
       this.navigate(kycStatusData.next_state, {

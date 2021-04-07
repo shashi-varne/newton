@@ -10,7 +10,7 @@ import FundPortfolio from './FundPortfolio';
 import Returns from './Returns';
 import FundInfo from './FundInfo';
 import RiskDetails from './RiskDetails';
-import { getUrlParams } from '../../utils/validators';
+import { getUrlParams, isEmpty } from '../../utils/validators';
 import FundCarousel from './FundCarousel';
 import FundChart from './FundChart';
 import RatingStar from '../common/RatingStar';
@@ -23,6 +23,13 @@ import { storageService } from 'utils/validators';
 import CartDialog from './CartDialog';
 
 import './Style.scss';
+import { isInvestRefferalRequired, proceedInvestmentChild } from '../../dashboard/invest/functions';
+import useUserKycHook from '../../kyc/common/hooks/userKycHook';
+import PennyVerificationPending from '../../dashboard/invest/components/mini_components/PennyVerificationPending';
+import InvestError from '../../dashboard/invest/components/mini_components/InvestError';
+import InvestReferralDialog from '../../dashboard/invest/components/mini_components/InvestReferralDialog';
+import { SkeltonRect } from '../../common/ui/Skelton';
+
 const styles = {
   root: {
     margin: '10px',
@@ -48,32 +55,48 @@ const FundDetails = ({ classes, history }) => {
   const fund = storageService().getObject('diystore_fundInfo') || {};
   let currentStatus = type === 'diy' ? EMPTY_CART : '';
   let currentTitle = 'Ok';
-  if (type === "diy") {
-    funds.forEach((item) => {
-      if (item.isin === fund.isin) {
-        currentStatus = FUND_ADDED;
+
+  const investment = JSON.parse(window.localStorage.getItem("investment")) || {};
+
+  switch (type) {
+    case "diy" :
+      funds.forEach((item) => {
+        if (item.isin === fund.isin) {
+          currentStatus = FUND_ADDED;
+        }
+      });
+      if( productType === 'finity' ) {
+        currentTitle = INVEST;
+      } else {
+        currentTitle = ADD_CART;
       }
-    });
-    if( productType === 'finity' ) {
+    break;
+    case "mf": 
+      if(isEmpty(investment)) {
+        history.goBack();
+      }
       currentTitle = INVEST;
-    } else {
-      currentTitle = ADD_CART;
-    }
+      break;
+    default:
+      break;
   }
 
   const [cart, setCart] = useState([...funds])
   const [isOpen, setIsOpen] = useState(false)
   const [status, setStatus] = useState(currentStatus)
   const [buttonTitle, setButtonTitle] = useState(currentTitle);
+  const { kyc, isLoading: loading } = useUserKycHook();
+  const [dialogStates, setDialogStates] = useState({});
+  const [isApiRunning, setIsApiRunning] = useState(false);
   
   const buttonData = (length) => {
     return (
-      <div className="content">
+      <div className="fund-details-dual-button-content">
         <div className="cart-content">
           <img alt="" src={require(`assets/add_cart_icon.png`)} />
           <span>{length}</span>
         </div>
-        <span>funds in cart</span>
+        <span>funds <br/> in cart</span>
       </div>
     );
   };
@@ -155,33 +178,41 @@ const FundDetails = ({ classes, history }) => {
   };
 
   const handleClick = () => {
-    if( productType === 'finity' && type === "diy"){
+    if (productType === "finity" && type === "diy") {
       storageService().setObject("diystore_cart", [fund]);
       handleClick2();
       return;
     }
-    if (type === "diy") {
-      let stage = status;
-      switch (stage) {
-        case "EMPTY_CART":
-          if(cart.length >= CART_LIMIT) {
-            toast(`You can only invest in ${CART_LIMIT} funds at a time. Please change one of the funds.`);
-            return
-          }
-          let updatedList = [...cart, fund];
-          setCart(updatedList);
-          storageService().setObject("diystore_cart", updatedList);
-          setButtonTitle(buttonData(updatedList.length));
-          setStatus(FUND_ADDED);
-          break;
-        case "FUND_ADDED":
-          setIsOpen(true);
-          break;
-        default:
-          break;
-      }
-    } else {
-      history.goBack();
+    switch (type) {
+      case "diy":
+        let stage = status;
+        switch (stage) {
+          case "EMPTY_CART":
+            if (cart.length >= CART_LIMIT) {
+              toast(
+                `You can only invest in ${CART_LIMIT} funds at a time. Please change one of the funds.`
+              );
+              return;
+            }
+            let updatedList = [...cart, fund];
+            setCart(updatedList);
+            storageService().setObject("diystore_cart", updatedList);
+            setButtonTitle(buttonData(updatedList.length));
+            setStatus(FUND_ADDED);
+            break;
+          case "FUND_ADDED":
+            setIsOpen(true);
+            break;
+          default:
+            break;
+        }
+        break;
+      case "mf":
+        proceedInvestment()
+        break;
+      default:
+        history.goBack();
+        break;
     }
   };
 
@@ -190,26 +221,103 @@ const FundDetails = ({ classes, history }) => {
   }
 
   const handleClick2 = () => {
-    history.push({
-      pathname: "diy/invest",
-      search: getConfig().searchParams,
+    navigate("/diy/invest")
+  };
+
+  const proceedInvestment = (investReferralData, isReferralGiven) => {
+    const sipTypesKeys = [
+      "buildwealth",
+      "savetaxsip",
+      "saveforgoal",
+      "indexsip",
+      "shariahsip",
+      "sectoralsip",
+      "midcapsip",
+      "balancedsip",
+      "goldsip",
+      "diysip",
+    ];
+    let sipOrOneTime = "";
+    if ((investment.type !== "riskprofile") & (investment.type !== "insta-redeem")) {
+      sipOrOneTime = "onetime";
+      if (sipTypesKeys.indexOf(investment.type) !== -1) {
+        sipOrOneTime = "sip";
+      }
+    } else {
+      sipOrOneTime = investment.order_type;
+    }
+    let paymentRedirectUrl = encodeURIComponent(
+      `${window.location.origin}/page/callback/${sipOrOneTime}/${investment.amount}`
+    );
+
+    if (
+      isInvestRefferalRequired(getConfig().partner.code) &&
+      !isReferralGiven
+    ) {
+      handleDialogStates("openInvestReferral", true);
+      return;
+    }
+
+    let body = {
+      investment: investment,
+    };
+
+    if (isReferralGiven && investReferralData.code) {
+      body.referral_code = investReferralData.code;
+    }
+
+    proceedInvestmentChild({
+      sipOrOnetime: sipOrOneTime,
+      body: body,
+      paymentRedirectUrl: paymentRedirectUrl,
+      isSipDatesScreen: false,
+      history: history,
+      userKyc: kyc,
+      handleApiRunning: handleApiRunning,
+      handleDialogStates: handleDialogStates,
     });
   };
+
+  const handleApiRunning = (result) => {
+    setIsApiRunning(result);
+  };
+
+  const handleDialogStates = (key, value, errorMessage) => {
+    let dialog_states = { ...dialogStates };
+    dialog_states[key] = value;
+    if (errorMessage) dialog_states["errorMessage"] = errorMessage;
+    setDialogStates({ ...dialog_states });
+    handleApiRunning(false)
+  };
+
+  const navigate = (pathname) => {
+    history.push({
+      pathname: pathname,
+      search: getConfig().searchParams,
+    })
+  }
 
   return (
     <div>
       <Container
         title={fundDetails?.performance?.friendly_name}
+        hidePageTitle={true}
         hideInPageTitle={true}
         noPadding
-        fullWidthButton
+        // fullWidthButton
         handleClick={handleClick}
+        handleClickOne={handleClick}
         buttonTitle={buttonTitle}
-        showLoader={isLoading}
+        buttonOneTitle={buttonTitle}
+        skelton={isLoading || loading}
         classOverRideContainer='fd-container'
         twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
-        buttonTitle2={ ENTER_AMOUNT }
-        handleClick2={handleClick2}
+        buttonTwoTitle={ ENTER_AMOUNT }
+        handleClickTwo={handleClick2}
+        handleClick2={handleClick2} // old container field
+        buttonTitle2={ENTER_AMOUNT} // old container field
+        showLoader={isApiRunning}
+        type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
       >
         {fundDetails && (
           <>
@@ -331,16 +439,13 @@ const FundDetails = ({ classes, history }) => {
                 {graph ? (
                   <FundChart graphData={graph} />
                 ) : (
-                  <div
+                  <SkeltonRect 
                     style={{
-                      width: '100%',
-                      height: '100%',
-                      display: 'grid',
-                      placeItems: 'center',
-                    }}
-                  >
-                    <CircularProgress size={50} style={{ color: '#878787' }} />
-                  </div>
+                        width: 'calc(100% - 30px)',
+                        height: '100%',
+                        margin: "0 15px",
+                      }} 
+                  />
                 )}
               </section>
 
@@ -417,6 +522,30 @@ const FundDetails = ({ classes, history }) => {
             handleRemoveFromCart={handleRemoveFromCart}
             handleClick={handleClick2}
           />
+        )}
+        {type === "mf" && (
+          <>
+            {dialogStates.openPennyVerificationPendind && (
+              <PennyVerificationPending
+                isOpen={dialogStates.openPennyVerificationPendind}
+                handleClick={() => navigate("/kyc/add-bank")}
+              />
+            )}
+            {dialogStates.openInvestError && (
+              <InvestError
+                isOpen={dialogStates.openInvestError}
+                errorMessage={dialogStates.errorMessage}
+                handleClick={() => navigate("/invest")}
+                close={() => handleDialogStates("openInvestError", false)}
+              />
+            )}
+            {dialogStates.openInvestReferral && (
+              <InvestReferralDialog
+                isOpen={dialogStates.openInvestReferral}
+                proceedInvestment={proceedInvestment}
+              />
+            )}
+          </>
         )}
       </Container>
     </div>

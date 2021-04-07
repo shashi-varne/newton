@@ -48,6 +48,7 @@ const MessageComponent = (kyc) => {
 }
 
 const NRIAddressUpload = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
@@ -183,7 +184,6 @@ const NRIAddressUpload = (props) => {
   }
 
   const handleSubmit = async () => {
-    const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
       let result
@@ -226,28 +226,36 @@ const NRIAddressUpload = (props) => {
   const getFullAddress = () => {
     let addressFull = ''
 
-    if (kyc?.address?.meta_data?.addressline) {
-      addressFull += setComma(kyc?.address?.meta_data?.addressline)
+    if (kyc?.nri_address?.meta_data?.addressline) {
+      addressFull += setComma(kyc?.nri_address?.meta_data?.addressline)
     }
 
-    if (kyc?.address?.meta_data?.city) {
-      addressFull += setComma(kyc?.address?.meta_data?.city)
+    if (kyc?.nri_address?.meta_data?.city) {
+      addressFull += setComma(kyc?.nri_address?.meta_data?.city)
     }
 
-    if (kyc?.address?.meta_data?.state) {
-      addressFull += setComma(kyc?.address?.meta_data?.state)
+    if (kyc?.nri_address?.meta_data?.state) {
+      addressFull += setComma(kyc?.nri_address?.meta_data?.state)
     }
 
-    if (kyc?.address?.meta_data?.country) {
-      addressFull += setComma(kyc?.address?.meta_data?.country)
+    if (kyc?.nri_address?.meta_data?.country) {
+      addressFull += setComma(kyc?.nri_address?.meta_data?.country)
     }
 
-    if (kyc?.address?.meta_data?.pincode) {
-      addressFull += setComma(kyc?.address?.meta_data?.pincode)
+    if (kyc?.nri_address?.meta_data?.pincode) {
+      addressFull += setComma(kyc?.nri_address?.meta_data?.pincode)
     }
 
     return addressFull
   }
+
+  const editAddress = () => {
+    navigate("/kyc/nri-address-details1", {
+      state: {
+        backToJourney: true,
+      },
+    });
+  };
 
   const isWeb = getConfig().isWebCode
 
@@ -258,11 +266,18 @@ const NRIAddressUpload = (props) => {
       handleClick={handleSubmit}
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
-      title="Upload address proof"
+      title="Upload foreign address proof"
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          <div className="sub-title">{getFullAddress()}</div>
+          <div className="sub-title">
+            {getFullAddress()}
+            {getFullAddress() && (
+              <div className="edit" onClick={editAddress}>
+                EDIT
+              </div>
+            )}
+          </div>
           <Alert
             variant="attention"
             title="Note"

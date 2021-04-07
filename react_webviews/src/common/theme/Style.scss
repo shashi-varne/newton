@@ -1583,6 +1583,37 @@ $header-title-font-size: 20px;
   object-fit: cover;
 }
 
+.fund-details-dual-button-content {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 18px;
+  font-size: 13px;
+  text-transform: lowercase;
+  min-width: 100px;
+  padding: 4px 10px;
+  margin: -10px 0;
+
+  .cart-content {
+    display: flex;
+    position: relative;
+
+    img {
+      width: 20px;
+      height: 38px;
+    }
+
+    span {
+      position: absolute;
+      border-radius: 50%;
+      background-color: #477d3c;
+      padding: 3px 7px 2px 7px;
+      right: -15px;
+      top: -4px;
+      font-size: 14px;
+    }
+  }
+}
+
 // --Iframe Container CSS Below--:
 .childblockiframe{
   display: flex;
