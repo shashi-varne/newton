@@ -80,7 +80,7 @@ class InvestAmount extends Component {
         hidePageTitle
       >
         <div className="insta-redeem-invest-amount">
-          <div className="header">
+          <div className="invest-header">
             <div className="main-top-title">How would you like to invest?</div>
             <div className="step">
               <span className="count">2</span>
