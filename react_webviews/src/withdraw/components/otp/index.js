@@ -64,16 +64,16 @@ const Otp = (props) => {
       if (!isEmpty(stateParams?.verification_link) && !isEmpty(state?.otp)) {
         result = await verify(stateParams?.verification_link, state?.otp)
       }
-      navigate('/withdraw/success', {
+      navigate('/withdraw/otp/success', {
         type: stateParams?.type,
         message: result?.message,
-      }, true)
+      }, null, true)
     } catch (err) {
       toast(err.message)
-      navigate('/withdraw/failed', {
+      navigate('/withdraw/otp/failed', {
         type: stateParams?.type,
         message: err.message,
-      }, true)
+      }, null, true)
     } finally {
     }
   }

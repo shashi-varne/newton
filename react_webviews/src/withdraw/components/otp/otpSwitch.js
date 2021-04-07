@@ -57,7 +57,7 @@ const OtpSwitch = (props) => {
         result = await verify(stateParams?.verification_link, otp)
       }
       navigate(
-        '/withdraw/success',
+        '/withdraw/otp/success',
         {
           type: stateParams?.type,
           message: result?.message,
@@ -67,7 +67,7 @@ const OtpSwitch = (props) => {
     } catch (err) {
       toast(err.message)
       navigate(
-        '/withdraw/failed',
+        '/withdraw/otp/failed',
         {
           type: stateParams?.type,
           message: err.message,

@@ -9,9 +9,9 @@ const Success = (props) => {
   const goTo = () => {
     const navigate = navigateFunc.bind(props)
     if (type === 'switch') {
-      navigate('/reports/switched-transaction')
+      navigate('/reports/switched-transaction', null, null, true)
     } else {
-      navigate('/reports/redeemed-transaction')
+      navigate('/reports/redeemed-transaction', null, null, true)
     }
   }
   return (
