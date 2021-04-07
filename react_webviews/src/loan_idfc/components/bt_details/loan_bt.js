@@ -126,12 +126,7 @@ class LoanBtDetails extends Component {
 
     if (name === "principalOutstanding") {
       let amt = (value.match(/\d+/g) || "").toString();
-      if (amt) {
-        // value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
-        value = amt.replaceAll(",", "")
-      } else {
-        value = amt;
-      }
+      value = amt.split(',').join('');
     }
 
     form_data[index][name] = value;
@@ -344,14 +339,16 @@ class LoanBtDetails extends Component {
                         helperText={
                           this.state.form_data[index]
                             .principalOutstanding_error ||
-                          numDifferentiationInr(
-                            (
-                              this.state.form_data[index]
-                                .principalOutstanding || ""
-                            )
-                              .toString()
-                              .replaceAll(",", "")
-                          )
+                            numDifferentiationInr(this.state.form_data[index]
+                              .principalOutstanding || 0)
+                          // numDifferentiationInr(
+                          //   (
+                          //     this.state.form_data[index]
+                          //       .principalOutstanding || ""
+                          //   )
+                          //     .toString()
+                          //     .replaceAll(",", "")
+                          // )
                         }
                         // type="number"
                         inputMode="numeric"

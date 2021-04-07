@@ -147,7 +147,6 @@ class Home extends Component {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
-        // showLoader={this.state.show_loader}
         title="Loans"
         noFooter={true}
         skelton={this.state.skelton}
@@ -180,9 +179,6 @@ class Home extends Component {
           {ongoing_loan_details && ongoing_loan_details.length !== 2 && (
             <div className="block2-info">
               <div className="top-title">
-                {/* {ongoing_loan_details && ongoing_loan_details.length !== 0
-                  ? "Start a new application"
-                  : "What are you looking for ?"} */}
                 Get started
               </div>
               <Card className="card-lending" onClick={() => this.handleClick()}>

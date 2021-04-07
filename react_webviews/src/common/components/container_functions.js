@@ -97,7 +97,26 @@ export function commonRender(props_base) {
         }
     }
 
-    
+    const renderPageLoader2 = (data) => {
+        if (this.props.showLoader) {
+          return (
+            <div
+              className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ""
+                }`}
+            >
+              <div className="LoaderOverlay">
+                <div className="LoaderOverlay-title">
+                  {data.title}
+                </div>
+                <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
+                <div className="LoaderOverlay-subtitle" >{data.subtitle}</div>
+              </div>
+            </div>
+          );
+        } else {
+          return null;
+        }
+    };
 
     if (this.state.mounted) {
         return (
@@ -105,7 +124,7 @@ export function commonRender(props_base) {
    <div className={this.addContainerClass(props_base)}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && <Header
+                && !this.props.showLoaderModal && !this.props.loaderWithData && <Header
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
@@ -137,7 +156,10 @@ export function commonRender(props_base) {
                 <div id="HeaderHeight" style={{ top: 56 }}>
 
                     {/* Loader Block covering entire screen*/}
-                    {this.renderPageLoader()}
+                    {/* {this.renderPageLoader()} */}
+                    {this.props.loaderWithData
+                        ? renderPageLoader2(this.props.loaderData)
+                        : this.renderPageLoader()}
 
                     {/* Error Block */}
                     {this.renderGenericError()}
@@ -472,6 +494,7 @@ export function renderGenericError() {
             //             {genericErrorActions()}
             //         </div>
 
+<<<<<<< HEAD
         //             {getConfig().project !== 'loan' && <div className="help" onClick={() => this.redirectToHelp()}>GET HELP</div>}
         //             {genericErrorActions()}
         //         </div>
@@ -480,6 +503,8 @@ export function renderGenericError() {
         //     </DialogContent>
         // </Dialog >
             
+=======
+>>>>>>> WVFIS-814-new-loader-changes-idfc
         );
     } if (this.props.showError === 'page') {
 

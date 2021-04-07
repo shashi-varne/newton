@@ -804,31 +804,31 @@
   }
 }
 
-.FooterDefaultLayout {
-  .not-now {
-    .MuiButton-raised {
-      background-color: #f7f6fc !important;
-      color: var(--secondary) !important;
-      border: 1px solid var(--secondary);
-    }
-    width: 100%;
-  }
+// .FooterDefaultLayout {
+//   .not-now {
+//     .MuiButton-raised {
+//       background-color: #f7f6fc !important;
+//       color: var(--secondary) !important;
+//       border: 1px solid var(--secondary);
+//     }
+//     width: 100%;
+//   }
 
-  .MuiButton-raised {
-    padding: 16px 0 !important;
-    width: 90%;
-    border-radius: 6px;
-    font-size: 16px !important;
-    font-weight: 600;
-  }
+//   .MuiButton-raised {
+//     padding: 16px 0 !important;
+//     width: 90%;
+//     border-radius: 6px;
+//     font-size: 16px !important;
+//     font-weight: 600;
+//   }
 
-  .button {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    background-color: transparent;
-  }
-}
+//   .button {
+//     display: flex;
+//     justify-content: space-between;
+//     width: 100%;
+//     background-color: transparent;
+//   }
+// }
 
 .idfc-faqs {
   .render-faqs-title {

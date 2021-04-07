@@ -131,11 +131,7 @@ class LoanBtDetails extends Component {
 
     if (name === "principalOutstanding") {
       let amt = (value.match(/\d+/g) || "").toString();
-      if (amt) {
-        value = amt.replaceAll(",", "")
-      } else {
-        value = amt;
-      }
+      value = amt.split(',').join('');
     }
 
     if (name === "creditCardNumber") {
@@ -218,13 +214,6 @@ class LoanBtDetails extends Component {
             "please enter valid credit card expiry date";
           submit_details = false;
         }
-
-        // if (data.principalOutstanding) {
-        //   form_data[index][
-        //     "principalOutstanding"
-        //     // eslint-disable-next-line
-        //   ] = parseInt((data["principalOutstanding"] || '').replaceAll(',', ''))
-        // }
       }
     });
 
@@ -431,14 +420,8 @@ class LoanBtDetails extends Component {
                         helperText={
                           this.state.form_data[index]
                             .principalOutstanding_error ||
-                          numDifferentiationInr(
-                            (
-                              this.state.form_data[index]
-                                .principalOutstanding || ""
-                            )
-                              .toString()
-                              .replaceAll(",", "")
-                          )
+                            numDifferentiationInr(this.state.form_data[index]
+                              .principalOutstanding || 0)
                         }
                         // type="number"
                         inputMode="numeric"

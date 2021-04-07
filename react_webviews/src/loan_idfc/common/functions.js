@@ -244,7 +244,7 @@ export async function getDocumentList() {
   let errorType = "";
   try {
     this.setState({
-      show_loader: true,
+      skelton: true,
     });
 
     const res = await Api.get(
@@ -252,13 +252,7 @@ export async function getDocumentList() {
     );
     const { result } = res.pfwresponse;
 
-    let status = ["idfc_1.7_accepted", "idfc_1.7_submitted"];
-    if (
-      result.doc_list.length === 0 &&
-      status.includes(this.state.lead.vendor_info.idfc_loan_status)
-    ) {
-      this.submitApplication({}, "four", "", "final-offer");
-    } else {
+    if (result.doclist_required) {
       this.setState(
         {
           docList: result.doc_list,
@@ -269,13 +263,15 @@ export async function getDocumentList() {
           this.onload();
         }
       );
+    } else {
+      this.navigate('final-offer')
     }
   } catch (err) {
     console.log(err);
     this.setState({
       show_loader: false,
+      skelton: false
     });
-    // toast("Something went wrong");
     error = true;
     errorType = "crash";
   }

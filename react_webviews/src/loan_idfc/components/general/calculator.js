@@ -88,6 +88,7 @@ class Calculator extends Component {
         styleContainer={{
           backgroundColor: "var(--highlight)",
         }}
+        background="idfc-container"
         noPadding={true}
         changeBackground={true}
         handleClick={this.handleClick}

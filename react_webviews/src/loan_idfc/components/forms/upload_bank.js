@@ -222,6 +222,8 @@ class UploadBank extends Component {
 
     let file = e.target.files[0];
 
+    if (!file) return
+
     if (file.size >= 600000) {
       toast("Please select pdf file less than 6 MB only");
       return;
@@ -264,6 +266,7 @@ class UploadBank extends Component {
 
   save(file) {
     let acceptedType = ["application/pdf"];
+    if (!file) return
 
     if (file.size >= 6000000) {
       toast("Please select pdf file less than 6 MB only");
@@ -379,6 +382,8 @@ class UploadBank extends Component {
           },
           () => this.handleScroll("upload")
         );
+      } else {
+        throw result.error || result.message || "Something went wrong"
       }
     } catch (err) {
       console.log(err);
@@ -635,7 +640,7 @@ class UploadBank extends Component {
                     src={require("assets/tool.svg")}
                     alt=""
                   />
-                  {item.name}
+                  <span style={{wordBreak: 'break-all', width:'70%'}}>{item.name}</span>
                   <span className="bytes">{bytesToSize(item.size)}</span>
                 </div>
 

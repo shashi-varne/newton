@@ -79,8 +79,8 @@ class PersonalDetails extends Component {
     let vendor_info = lead.vendor_info || {};
     let { confirm_details } = this.state;
 
-    if (vendor_info.ckyc_state === "success") {
-      confirm_details = true;
+    if (vendor_info.ckyc_state === 'success') {
+      confirm_details = true
     }
 
     let gender = genderMapper[capitalizeFirstLetter(personal_info.gender)];
@@ -275,10 +275,10 @@ class PersonalDetails extends Component {
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
+        force_hide_inpage_title={this.state.skelton}
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
         }  personal details`}
-        hidePageTitle={this.state.skelton}
         buttonTitle={this.state.confirm_details ? "CONFIRM & SUBMIT" : "SUBMIT"}
         handleClick={this.handleClick}
         headerData={{
