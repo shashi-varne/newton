@@ -274,7 +274,7 @@ class Landing extends Component {
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
            <div onClick={this.policymove}>
-           <img style={{ margin: '-15px 5px 30px 0', width: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
+           <img style={{ margin: '-15px 5px 30px 0', width: '100%', cursor: 'pointer' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
