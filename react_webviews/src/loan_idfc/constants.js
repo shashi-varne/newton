@@ -846,7 +846,7 @@ export const idfc_config = {
             subtitle: "Should at least be 25 years of age",
           },
           {
-            icon: "icn_b3_m",
+            icon: "ic_input_65",
             subtitle:
               "Maximum age at the time of loan maturity should not be >65 years",
           },

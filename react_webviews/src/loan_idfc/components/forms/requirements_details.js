@@ -146,7 +146,7 @@ class LoanRequirementDetails extends Component {
               <Input
                 error={!!this.state.form_data.amount_required_error}
                 helperText={
-                  this.state.form_data.amount_required_error || numDifferentiationInr(this.state.form_data.monthly_salary || 0)
+                  this.state.form_data.amount_required_error || numDifferentiationInr(this.state.form_data.amount_required || 0)
                 }
                 width="40"
                 inputMode="numeric"
