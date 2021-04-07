@@ -1065,7 +1065,7 @@ export function numberToSentence(num){ //9 digit limit
 }
 
 export function Casesensitivity(str){
-  if(!str || isNaN(str)){
+  if(!str || !isNaN(str)){
     return str
   }
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() + "";
