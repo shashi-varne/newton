@@ -221,6 +221,7 @@ class GroupHealthPlanPremiumSummary extends Component {
     this.setErrorData("submit",true)
     let error="";
     let errorType="";
+    let { groupHealthPlanData } = this.state;
       try {
         this.setState({
           show_loader: "button",
@@ -231,8 +232,6 @@ class GroupHealthPlanPremiumSummary extends Component {
         if(this.state.get_lead){
           post_body['quotation_id'] = storageService().get('ghs_ergo_quote_id');
         }else{
-      
-          let { groupHealthPlanData } = this.state;
           let body = groupHealthPlanData.post_body;
           post_body['quotation_id'] = body.quotation_id;
         }
@@ -251,7 +250,11 @@ class GroupHealthPlanPremiumSummary extends Component {
           let lead = resultData.quotation_details;
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
           let application_id = resultData.application_details.id;
+
           storageService().set('health_insurance_application_id', application_id);
+          groupHealthPlanData.application_form_data = resultData;
+          this.setLocalProviderData(groupHealthPlanData);
+
           this.navigate("personal-details/" + lead.member_base[0].key);
         } else {
           this.setState({

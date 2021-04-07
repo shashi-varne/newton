@@ -82,10 +82,11 @@ export async function initialize() {
             let application_id = storageService().get('health_insurance_application_id');
             let url;
   
+            var resultData = {}
             if (resume && !application_id) {
                 url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
                 const res = await Api.get(url);
-                var resultData = res.pfwresponse.result;
+                resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
                     
                     lead = resultData;
@@ -105,20 +106,41 @@ export async function initialize() {
                         true;
                 }
                 
-            } else if(application_id) {
-                url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
-   
-                if (this.state.screen_name === 'final_summary_screen') {
-                    url += `&form_submitted=true`;
-                }
-                const res = await Api.get(url);
-                // eslint-disable-next-line
-                var resultData = res.pfwresponse.result;
-
+            } else if(application_id && this.state.screen_name !== 'final_summary_screen') {
+                var application_form_data = groupHealthPlanData.application_form_data;
                
+                // if (res.pfwresponse.status_code === 200) {
+                    lead = application_form_data.quotation_details;
+                    
+                    var member_base = ghGetMember(lead, providerConfig);
+                                   
+                    this.setState({
+                        lead: application_form_data || {},
+                        member_base: member_base,
+                        quotation: application_form_data.quotation_details || {},
+                        common_data: {
+                            ...application_form_data.common,
+                            tnc: application_form_data.common.tnc || application_form_data.tnc
+                        },
+                        insured_account_type: lead.insurance_type || ''
+                    }, () => {
+                        if (this.onload && !this.state.ctaWithProvider) {
+                            this.onload();
+                        }
+
+                    })
+                    this.setState({
+                        skelton: false
+                    });
+            }else if(application_id && this.state.screen_name === 'final_summary_screen'){
+                url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}&form_submitted=true`;
+                
+                const res = await Api.get(url);
+                resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
                     lead = resultData.quotation_details;
-                    var member_base = ghGetMember(lead, this.state.providerConfig);
+                    
+                    var member_base = ghGetMember(lead, providerConfig);
                                    
                     this.setState({
                         lead: resultData || {},
@@ -138,11 +160,10 @@ export async function initialize() {
                     this.setState({
                         skelton: false
                     });
-
-                } else {
-                    error=resultData.error || resultData.message ||
-                        true;
+                }else{
+                    error=resultData.error || resultData.message ||true;
                 }
+                
             }
         } catch (err) {
             console.log(err);
@@ -322,6 +343,11 @@ export async function updateLead( body, quote_id) {
 
         const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
         var resultData = res.pfwresponse.result;
+
+        var groupHealthPlanData = this.state.groupHealthPlanData;
+        groupHealthPlanData.application_form_data = resultData;
+        this.setLocalProviderData(groupHealthPlanData);
+
         if (res.pfwresponse.status_code === 200) {
             this.setState({
                 show_loader: false
