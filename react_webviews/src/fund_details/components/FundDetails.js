@@ -14,7 +14,6 @@ import { getUrlParams, isEmpty } from '../../utils/validators';
 import FundCarousel from './FundCarousel';
 import FundChart from './FundChart';
 import RatingStar from '../common/RatingStar';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import toast from '../../common/ui/Toast';
 import morning_star_logo from 'assets/morning_star_logo.png';
 import { getConfig } from 'utils/functions';
@@ -309,14 +308,15 @@ const FundDetails = ({ classes, history }) => {
         handleClickOne={handleClick}
         buttonTitle={buttonTitle}
         buttonOneTitle={buttonTitle}
-        skelton={isLoading || loading}
+        skelton={isLoading || loading} // new container field
         classOverRideContainer='fd-container'
         twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
         buttonTwoTitle={ ENTER_AMOUNT }
         handleClickTwo={handleClick2}
         handleClick2={handleClick2} // old container field
         buttonTitle2={ENTER_AMOUNT} // old container field
-        showLoader={isApiRunning}
+        // showLoader={isApiRunning} // new container field
+        showLoader={isLoading || loading} // old container field
         type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
       >
         {fundDetails && (

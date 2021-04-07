@@ -115,7 +115,7 @@ class App extends Component {
               <Route path='/mobile/verify' component={Otp} />
               <Route path='/forgot-password' component={ForgotPassword} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
-              <Route path='/kyc' component={Kyc} />
+              <ProtectedRoute path='/kyc' component={Kyc} />
               <ProtectedRoute path='/' component={Landing}/>
               <Route component={NotFound} />
             </Switch>

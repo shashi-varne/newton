@@ -90,7 +90,6 @@ class Landing extends Component {
       invest_show_data,
       partner,
       render_cards,
-      loadingText,
       kycStatusData,
       verificationFailed,
       openKycStatusDialog,

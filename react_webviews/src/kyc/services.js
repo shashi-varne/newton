@@ -256,7 +256,7 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
-  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 == 'init' && kyc.pan.meta_data.pan_number &&
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number &&
       kyc.kyc_type === "manual" && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
       status = 'incomplete';
     }
