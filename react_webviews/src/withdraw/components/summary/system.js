@@ -6,6 +6,8 @@ import { Redirect } from 'react-router-dom'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { isEmpty } from 'utils/validators'
+import { getConfig } from 'utils/functions'
+import { navigate as navigateFunc } from '../../common/commonFunction'
 
 const TaxLiability = (props) => {
   const { stcg, ltcg } = props
@@ -15,17 +17,17 @@ const TaxLiability = (props) => {
       <main className="breakdown">
         <div className="item flex-between-center">
           <div className="name">STCG tax**</div>
-          <div className="value">₹ {stcg || 4}</div>
+          <div className="value">₹ {stcg}</div>
         </div>
         <div className="item flex-between-center">
           <div className="name">LTCG tax**</div>
-          <div className="value">₹ {ltcg || 0}</div>
+          <div className="value">₹ {ltcg}</div>
         </div>
       </main>
       <hr className="ruler" />
       <footer className="total flex-between-center">
         <div className="name">Total tax</div>
-        <div className="value">₹ {stcg + ltcg || 4}</div>
+        <div className="value">₹ {stcg + ltcg}</div>
       </footer>
     </section>
   )
@@ -44,33 +46,39 @@ const ExitLoad = ({ exit_load }) => {
 }
 
 const SelfSummary = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [taxes, setTaxes] = useState(taxes)
   const [open, setOpen] = useState({})
   const [isApiRunning, setIsApiRunning] = useState(false)
 
   if (!props?.location?.state?.amounts) {
-    return <Redirect to="/withdraw" />
+    return (
+      <Redirect
+        to={{
+          pathname: '/withdraw',
+          search: getConfig().searchParams,
+        }}
+      />
+    )
   }
 
   const handleClick = async () => {
     try {
       setIsApiRunning(true)
-      const itype = props?.location?.state?.itype
-      const subtype = props?.location?.state?.subtype
-      const name = props?.location?.state?.name
-      const allocations = Object.keys(props?.location?.state?.amounts).reduce(
-        (acc, cur) => {
-          return [
-            ...acc,
-            { mfid: cur, amount: props?.location?.state?.amounts[cur] },
-          ]
-        },
-        []
-      )
+      // const itype = props?.location?.state?.itype
+      // const subtype = props?.location?.state?.subtype
+      // const name = props?.location?.state?.name
+      // const allocations = props?.location?.state?.allocations
+      // console.log(allocations)
       const result = await redeemOrders('system', {
-        investments: [{ itype, name, subtype, allocations }],
+        investments: [{ ...props.location.state }],
       })
+      console.log(result)
 
+      if (result?.resend_redeem_otp_link && result?.verification_link) {
+        navigate('verify', { ...result })
+        return
+      }
     } catch (err) {
       toast(err.message, 'error')
     } finally {

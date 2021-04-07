@@ -4,6 +4,7 @@ import OtpDefault from 'common/ui/otp'
 import { navigate as navigateFunc } from '../../common/commonFunction'
 import toast from 'common/ui/Toast'
 import { isEmpty } from '../../../utils/validators'
+import { verify, resend } from '../../common/Api'
 
 function useInterval(callback, delay) {
   const savedCallback = useRef()
@@ -26,6 +27,7 @@ function useInterval(callback, delay) {
 }
 
 const Otp = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [state, setState] = useState({
     otp: '',
     totalTime: 5,
@@ -33,6 +35,7 @@ const Otp = (props) => {
   })
 
   const stateParams = props?.location?.state
+  console.log(stateParams)
 
   useInterval(() => {
     setState((state) => {
@@ -44,11 +47,10 @@ const Otp = (props) => {
   }, 1000)
 
   const resendOtp = async () => {
-    const navigate = navigateFunc.bind(props)
     try {
-      let result
-      if (!isEmpty(stateParams?.url)) {
-        const result = await resendOtp(stateParams?.url)
+      if (!isEmpty(stateParams?.resend_redeem_otp_link)) {
+        const result = await resend(stateParams?.resend_redeem_otp_link)
+        toast(result?.message)
       }
     } catch (err) {
       toast(err.message)
@@ -57,22 +59,21 @@ const Otp = (props) => {
   }
 
   const verifyOtp = async () => {
-    const navigate = navigateFunc.bind(props)
     try {
       let result
-      if (!isEmpty(stateParams?.url) && !isEmpty(stateParams?.otp)) {
-        result = await verifyOtp(stateParams?.url, stateParams?.otp)
+      if (!isEmpty(stateParams?.verification_link) && !isEmpty(state?.otp)) {
+        result = await verify(stateParams?.verification_link, state?.otp)
       }
       navigate('/withdraw/success', {
         type: stateParams?.type,
         message: result?.message,
-      })
+      }, true)
     } catch (err) {
       toast(err.message)
       navigate('/withdraw/failed', {
         type: stateParams?.type,
         message: err.message,
-      })
+      }, true)
     } finally {
     }
   }
@@ -96,7 +97,7 @@ const Otp = (props) => {
       <section id="withdraw-verify" className="withdraw-verification">
         <div className="header">Enter OTP to verify</div>
         <div className="info">
-          OTP has been sent to <strong>+91|6261410669</strong>, please enter it
+          OTP has been sent to <strong>{stateParams?.mobile}</strong>, please enter it
           below
         </div>
         <OtpDefault parent={{ state, handleOtp, resendOtp }} class1="center" />

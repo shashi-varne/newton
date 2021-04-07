@@ -86,8 +86,8 @@ export const postSwitchOrders = async (params) => {
 
 export const getRecommendedSwitch = async (amount) => {
   try {
-    // const res = await Api.get(`api/invest/switch/systematic/recommend?amount=${amount}`);
-    const res = switchFunds
+    const res = await Api.get(`api/invest/switch/systematic/recommend?amount=${amount}`);
+    // const res = switchFunds
     if (
       res.pfwstatus_code !== 200 ||
       !res.pfwresponse ||
@@ -114,13 +114,13 @@ export const getRecommendedFund = async (type, amount = null) => {
       api += `?amount=${amount}`
     }
     let res = await Api.get(api)
-    if (type === 'insta-redeem') {
-      res = insta
-    } else if (type === 'self') {
-      res = self
-    } else if (type === 'systematic') {
-      res = systematic
-    }
+    // if (type === 'insta-redeem') {
+    //   res = insta
+    // } else if (type === 'self') {
+    //   res = self
+    // } else if (type === 'systematic') {
+    //   res = systematic
+    // }
     if (
       !res?.pfwresponse || res.pfwresponse.status_code !== 200 ||
       !res.pfwresponse ||
@@ -174,7 +174,7 @@ export const redeemOrders = async (type, params) => {
   }
 }
 
-const otpVerification = async (url, otp) => {
+export const verify = async (url, otp) => {
   const res = await Api.post(`${url}?otp=${otp}`)
   if (
     res.pfwstatus_code !== 200 ||
@@ -191,8 +191,8 @@ const otpVerification = async (url, otp) => {
   }
 }
 
-const resendOtp = async (url) => {
-  const res = await Api.post(url)
+export const resend = async (url) => {
+  const res = await Api.get(url)
   if (
     res.pfwstatus_code !== 200 ||
     !res.pfwresponse ||

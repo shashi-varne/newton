@@ -112,18 +112,16 @@ const Landing = (props) => {
         return
       }
       if (type === 'manual') {
+        console.log(recommendedFunds)
         navigate(`self/summary`, {
           amounts: value,
-          itype: recommendedFunds?.itype,
-          name: recommendedFunds?.name,
-          subtype: recommendedFunds?.subtype,
+          ...recommendedFunds,
         })
       } else {
+        console.log(recommendedFunds)
         navigate(`${type}/summary`, {
           amounts: value,
-          itype: recommendedFunds?.itype,
-          name: recommendedFunds?.name,
-          subtype: recommendedFunds?.subtype,
+          ...recommendedFunds,
         })
       }
     }
