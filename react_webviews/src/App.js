@@ -22,6 +22,7 @@ import HNI from './external_portfolio';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
+import Withdraw from './withdraw'
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 import Fhc from './fhc';
@@ -116,6 +117,7 @@ class App extends Component {
               <Route path='/mobile/verify' component={Otp} />
               <Route path='/forgot-password' component={ForgotPassword} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <ProtectedRoute path='/withdraw' component={Withdraw} />
               <ProtectedRoute path='/reports' component={Report} />
               <ProtectedRoute path='/kyc' component={Kyc} />
               <ProtectedRoute path='/' component={Landing}/>
