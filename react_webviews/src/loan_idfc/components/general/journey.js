@@ -107,7 +107,22 @@ const journeyMapper2 = {
   },
   application_submitted: {
     index: "4",
-  }
+  },
+  underwriting: {
+    index: "4",
+  },
+  verification: {
+    index: "4",
+  },
+  sanctioned: {
+    index: "4",
+  },
+  pre_disbursal_stage: {
+    index: "4",
+  },
+  disbursal: {
+    index: "4",
+  },
 };
 class JourneyMap extends Component {
   constructor(props) {
