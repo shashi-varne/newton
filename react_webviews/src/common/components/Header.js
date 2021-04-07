@@ -101,7 +101,7 @@ const styles = {
     textAlign: '-webkit-center'
   },
   menuButton: {
-    marginLeft: -12,
+    marginLeft: "-12px !important",
     // marginRight: 20,
   },
   headerWithData: {

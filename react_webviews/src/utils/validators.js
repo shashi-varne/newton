@@ -1063,3 +1063,7 @@ export function numberToSentence(num){ //9 digit limit
     return capitalizeFirstLetter(str);
   }
 }
+
+export function Casesensitivity(str){
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() + "";
+}

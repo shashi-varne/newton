@@ -4,7 +4,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import next_arrow from 'assets/next_arrow.svg';
 import SVG from 'react-inlinesvg';
-import { getConfig } from "utils/functions";
+import { getConfig, getBasePath } from "utils/functions";
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import completed_step from "assets/completed_step.svg";
@@ -79,7 +79,7 @@ class InstantKycHome extends Component {
 
           let okyc_id = resultData.okyc_id;
           storageService().set('loan_okyc_id', okyc_id);
-
+          let basepath = getBasePath();
           let paymentRedirectUrl = encodeURIComponent(
             window.location.origin + `/loan/dmi/redirection-status/kyc` + getConfig().searchParams
           );

@@ -3,7 +3,10 @@ import { findDOMNode } from 'react-dom';
 import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
+import { Casesensitivity } from 'utils/validators';
 import './style.scss';
+import SVG from 'react-inlinesvg';
+import check_icon from 'assets/check_icon.svg'
 class SelectDropDown2 extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +29,7 @@ class SelectDropDown2 extends React.Component {
     const windowHeight = window.innerHeight;
     const menuHeight = Math.min(MAX_MENU_HEIGHT, (options.length * AVG_OPTION_HEIGHT));
     const instOffsetWithMenu = node.getBoundingClientRect().bottom + menuHeight;
+    document.getElementsByClassName("Container")[0].style.height =  '100%'
     this.setState({
       dropUp: instOffsetWithMenu >= windowHeight,
       shrink: true
@@ -33,6 +37,10 @@ class SelectDropDown2 extends React.Component {
   }
 
   handleMenuClose = () => {
+    document.getElementsByClassName("Container")[0].style.height =  '100%'
+    setTimeout(() => {
+      document.getElementsByClassName("Container")[0].style.height =  '100%'
+    }, 3000);
     this.setState({ shrink: false })
     window.removeEventListener('resize', this.determineDropUp);
     window.removeEventListener('scroll', this.determineDropUp);
@@ -43,9 +51,18 @@ class SelectDropDown2 extends React.Component {
     this.determineDropUp(this.props);
     window.addEventListener('resize', this.determineDropUp);
     window.addEventListener('scroll', this.determineDropUp);
+    setTimeout(() => {
+      document.getElementsByClassName("Container")[0].style.height =  '100%'
+    }, 1000);
   }
 
   handleChange = selectedOption => {
+    if (this.state.multi) {
+      this.setState({
+        selectedOption: selectedOption,
+      })
+      return;
+    }
     let OptionSelected = ''
     if (selectedOption) {
       if (selectedOption.value + '') {
@@ -61,10 +78,8 @@ class SelectDropDown2 extends React.Component {
     this.props.onChange(selectedOption ? selectedOption.value : '');
   }
 
-
-
   componentDidUpdate(prevState) {
-    if (prevState.value !== this.props.value && this.props.value) { this.setState({ selectedOption: this.props.value }) }
+    if (prevState.value !== this.props.value && (this.props.value + '')) { this.setState({ selectedOption: this.props.value}) }
     if (prevState.options !== this.props.options && this.props.options) { this.setState({ options: this.props.options }) }
   }
 
@@ -79,19 +94,21 @@ class SelectDropDown2 extends React.Component {
     var options = this.props.options.map((ele, index) => {
       if (ele.name) {
         return ({
-          'value': ele.value, 'name': ele.name
+          'value': ele.value, 'name': Casesensitivity(ele.name)
         })
       } else return ({
-        'value': ele, 'name': ele
+        'value': ele, 'name': Casesensitivity(ele)
       })
-    });
+    }); setTimeout(() => {
+      document.getElementsByClassName("Container")[0].style.height =  '100%'
+    }, 2000);
     const OptionPresent = this.state.selectedOption ? !!this.state.selectedOption.length : false;// eslint-disable-next-line
-    var value = options.find(opt => opt.value == this.state.selectedOption || opt.name === this.state.selectedOption);
+    var value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     let isLableOpen = (!!value || (OptionPresent) || this.state.shrink) || (OptionPresent && this.props.multi);
     isLableOpen = !!isLableOpen;
     return (
       <div>
-        <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ marginTop: '5px' }}>
+        <FormControl className="Dropdown label" disabled={this.props.disabled}>
           {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id} style={{ color: isLableOpen ? '' : '#767E86' }}><div
             ref={element => {
               if (element && isLableOpen) {
@@ -106,10 +123,10 @@ class SelectDropDown2 extends React.Component {
               position: 'absolute',
               minWidth: '300px',
               color: this.props.error ? '#D0021B' : '',
-              fontSize: isLableOpen ? '11px' : '13px', lineHeight: isLableOpen ? '18px' : '21px',
+              fontSize: isLableOpen ? '' : '13px', lineHeight: isLableOpen ? '18px' : '21px',
             }}>
             {this.props.label}</div></InputLabel>)}
-          <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
+          <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : '1px solid #D6D6D6' }}>
             <Select
               ref={inst => (this.myRef = inst)}
               blurInputOnSelect={false}
@@ -136,7 +153,7 @@ class SelectDropDown2 extends React.Component {
               placeholder={''}
               isClearable={true}
               isSearchable={this.props.options.length <= 6 ? false : true}
-              value={value || ''}
+              value={this.state.multi ? value : (value || '')}
               menuPlacement={this.state.dropUp ? 'top' : 'bottom'}
               textFieldProps={{
                 label: 'Label',
@@ -220,12 +237,15 @@ const Option = props => {
   return (
     <div>
       <components.Option {...props}>
-        <input
-          type="checkbox"
-          checked={props.isSelected}
-          onChange={() => null}
-        />{" "}
-        <span style={{ marginLeft: '10px', marginTop: '-1px' }}>{props.label}</span>
+        <div className="multi-checkbox-container">
+        <div className="multi-checkbox" style={{backgroundColor: props.isSelected ? "#4F2DA7" : "#fff", border: props.isSelected ? 'none' : '' }}>
+        <SVG className="tickmark-img"
+             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=#fff')}
+             src={check_icon}
+        />
+        </div>
+        <span style={{ marginLeft: '10px', marginTop: '-1px' }}>{Casesensitivity(props.label)}</span>
+        </div>
       </components.Option>
     </div>
   );
@@ -261,5 +281,6 @@ const ErrorMessageStyle = {
   fontSize: '11px',
   color: '#D0021B',
   marginLeft: '10px',
-  marginTop: '5px'
+  marginTop: '0px',
+  paddingBottom : '5px'
 }

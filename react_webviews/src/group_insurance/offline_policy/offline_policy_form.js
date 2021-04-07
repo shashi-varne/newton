@@ -92,11 +92,11 @@ handleChange = name => event => {
   if (!name) {
     return
   }
-
+  let form_data = this.state.form_data
   if(name === 'number'){
     var value = event ? event.target.value : event;
+    form_data.name_error = ''
   }
-  let form_data = this.state.form_data
   form_data.title = 'CONTINUE'
   form_data.notfound = false
   form_data.found = false
@@ -104,6 +104,7 @@ handleChange = name => event => {
     // eslint-disable-next-line
     var value = event
     form_data.index = event
+    form_data.name_error2 = ''
   };
   form_data[name] = value;
   form_data[name + '_error'] = '';

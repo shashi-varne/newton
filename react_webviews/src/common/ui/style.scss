@@ -99,6 +99,18 @@
 .Dropdown {
   width: 100%;
 }
+.multi-checkbox-container, .multi-checkbox{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.multi-checkbox{
+  height: 14px;
+  width: 14px;
+  border-radius: 3px;
+  border: 1px solid #D6D6D6; 
+}
+
 .RadioGrpGrid {
   flex-basis: unset;
   max-width: 100%;
@@ -261,13 +273,13 @@
 }
 input.default-otp-input {
   width: 33px !important;
-  height: 20px;
+  height: auto;
   border-bottom: 2px solid var(--primary) !important;
   border: none;
   margin: 0 10px 0 0;
   width: 20%;
   text-align: center;
-  padding: 5px 0px;
+  padding: 0px;
   outline: none;
   background: transparent;
   color: black;
@@ -1095,7 +1107,7 @@ input.default-otp-input {
 
 .react-select-container{
   border: none !important;
-  border-bottom: 1px solid #D6D6D6 !important;
+  // border-bottom: 1px solid #D6D6D6 !important;
 }
 .react-select__control{
   background: rgba(238, 238, 238, 0.3) !important;
@@ -1105,9 +1117,7 @@ input.default-otp-input {
   border-radius: 0px !important;
 }
 .react-select__option{
-  // padding-top: 13px !important;
-  // padding-left: 12px !important;
-  padding: 10px 0px 0px 10px !important;
+  padding: 10px 20px 10px 10px !important;
   font-size: 13px !important;
   line-height: 21px !important;
   color: #161A2E !important;
@@ -1135,15 +1145,13 @@ input.default-otp-input {
   font-weight: normal;
   color: #161A2E;
   max-width: 80%;
-  height: 33px !important;
   overflow: hidden;
-  display: inline-flex !important;
-  flex-direction: column;
-  align-content: flex-start;
   position: relative;
-  justify-content: center;
   flex-wrap: wrap;
   align-items: center;
+}
+.react-select__multi-value__label{
+   padding : 0 2px 2px 4px !important
 }
 .drop-up .Select-menu-outer {
   top: auto;
@@ -1154,15 +1162,21 @@ input.default-otp-input {
   margin-left: -1PX !important;
   margin-top: 5px !important;
 }
-.css-1rhbuit-multiValue {
+.css-b8ldur-Input{
+  margin: 0px 2px 0 2px !important;
+}
+.react-select__multi-value{
   background: rgba(238, 238, 238, 0.3) !important;
-  margin-top: 12px !important;
   border: 1px solid #D6D6D6;
   height: 18px !important;
   line-height: 17px !important;
-  font-size: 13px !important;
+  font-size: 13px !important; 
+  margin: 9px 5px 4px 0px !important;
 }
-.css-xb97g8{
+.react-select__value-container--is-multi{
+  margin-top: 14px !important;
+}
+.react-select__multi-value__remove{
   margin-top: 3px;
   border-radius: 50% !important;
   margin-left: 6px !important;
@@ -1172,8 +1186,12 @@ input.default-otp-input {
   width: 10px !important;
   padding: 0 !important;
 }
-.css-6q0nyr-Svg{
-  color: #767E86 !important;
+.css-6q0nyr-Svg, .css-19bqh2r{
+  color: rgba(238, 238, 238 , 1) !important;
+  padding: 0 !important;
+}
+.css-6q0nyr-Svg:hover,  .css-19bqh2r:hover{
+  color: #4A4A4A !important;
   padding: 0 !important;
 }
 .react-select__menu-notice{
@@ -1185,19 +1203,21 @@ input.default-otp-input {
 }
 .react-select__menu{
   margin: 0 !important;
-  margin-top: 2px !important;
+  margin-top: 1px !important;
   border-radius: 0 0 4px 4px !important;
   max-height: 246px !important;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 2px rgba(0, 0, 0, 0.05) !important;
+  background: #FFFFFF !important;
 }
-.MuiInputLabel-shrink{
-  font-size: 11px !important;
-}
+// .MuiInputLabel-shrink{
+//   // font-size: 11px !important;
+// }
 label{
   font-size: 13px !important;
 }
-.MuiFormLabel-root {
-  line-height: 2 !important;
-}
+// .MuiFormLabel-root {
+//   // line-height: 2 !important;
+// }
 .react-select__indicators{
 padding-right: 14px !important;
 }

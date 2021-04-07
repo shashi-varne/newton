@@ -666,7 +666,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                             <DotDotLoader className="insurance-dot-loader" /> :
                                             this.state.form_data.p_city_error
                                     }
-                                    value={this.state.form_data.p_city || ''}
+                                    value={this.state.form_data.p_city || undefined}
                                     onChange={this.handleChange('p_city')}
                                 />
                             </div>
@@ -815,7 +815,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                             <DotDotLoader className="insurance-dot-loader" /> :
                                             this.state.form_data.city_error
                                     }
-                                    value={this.state.form_data.city || ''}
+                                    value={this.state.form_data.city || undefined}
                                     onChange={this.handleChange('city')}
                                 />
                             </div>
