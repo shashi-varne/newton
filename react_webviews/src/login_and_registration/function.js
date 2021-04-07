@@ -131,7 +131,6 @@ export async function emailLogin(body) {
     const res = await Api.post(`/api/user/login`, body);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      this.setState({ isApiRunning: false });
       // if (getConfig().redirect_url !== undefined) {
       //   window.location.href = getConfig().redirect_url;
       //   return;
@@ -166,6 +165,7 @@ export async function emailLogin(body) {
       this.setState({
         currentUser: true,
         "user-data": userData,
+        isApiRunning: false,
       });
       if (storageService().get("deeplink_url")) {
         window.location.href = decodeURIComponent(
@@ -193,7 +193,6 @@ export async function mobileLogin(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      this.setState({ isApiRunning: false });
       toast("OTP is sent successfully to your mobile number.");
       if (this.state.referrer) {
         let item = {
@@ -213,6 +212,7 @@ export async function mobileLogin(body) {
           ? getConfig().redirect_url
           : false;
 
+      this.setState({ isApiRunning: false });
       this.props.history.push(
         {
           pathname: "mobile/verify",
@@ -243,7 +243,6 @@ export async function emailRegister(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      this.setState({ isApiRunning: false });
       // if (getConfig().redirect_url !== undefined) {
       //   window.location.href = getConfig().redirect_url;
       //   return;
@@ -259,7 +258,7 @@ export async function emailRegister(body) {
       toast(
         "Please click on the verification link sent to your email account."
       );
-      this.setState({ resendVerification: true });
+      this.setState({ resendVerification: true, isApiRunning: false });
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
@@ -345,7 +344,6 @@ export async function otpVerification(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      this.setState({ isApiRunning: false });
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);
@@ -380,6 +378,7 @@ export async function otpVerification(body) {
       this.setState({
         currentUser: true,
         "user-data": userData,
+        isApiRunning: false,
       });
       if (storageService().get("deeplink_url")) {
         window.location.href = decodeURIComponent(
