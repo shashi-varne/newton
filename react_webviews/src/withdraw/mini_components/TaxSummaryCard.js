@@ -17,7 +17,7 @@ const TaxSummaryCard = ({
   exit_load,
   isin,
   hideIcon = false,
-  know_how_msg = 'You can avoid short term taxes by holding your investments for 3 years',
+  know_how_msg,
 }) => {
   const productName = getConfig().productName
   return (
@@ -80,7 +80,7 @@ const TaxSummaryCard = ({
           </div>
           <div className="know-more">
             <Button type="text" color="primary" onClick={handleKnowMore}>
-              {know_how_msg}
+              KNOW MORE
             </Button>
           </div>
         </footer>
