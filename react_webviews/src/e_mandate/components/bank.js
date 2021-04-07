@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import qs from 'qs';
-import { getConfig , isIframe} from 'utils/functions';
+import { getConfig , isIframe, getBasePath} from 'utils/functions';
 // import Container from '../common/Container';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
 import info_icon_myway from 'assets/info_icon_myway.svg'
@@ -155,11 +155,11 @@ class SelectBank extends Component {
     try {
       let bank_data = { selected_bank: this.state.selected_bank };
       const res = await Api.post('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe, bank_data);
-      
+      let basepath = getBasePath();
       
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let paymentRedirectUrl = encodeURIComponent(
-          window.location.origin + '/e-mandate/redirection'
+          basepath + '/e-mandate/redirection'
         );
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;

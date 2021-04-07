@@ -16,7 +16,7 @@ import {
   validateEmail, validateNumber, numberShouldStartWith,
   validateEmpty, open_browser_web
 } from 'utils/validators';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback, openPdfCall } from 'utils/native_callback';
 
 import LoaderModal from '../../../common/Modal';
@@ -55,7 +55,8 @@ class PersonalDetails1 extends Component {
     }
 
     let provider = this.state.params.provider;
-    let current_url = window.location.origin + '/group-insurance/life-insurance/term/landing' + getConfig().searchParams;
+    let basepath = getBasePath();
+    let current_url = basepath + '/group-insurance/life-insurance/term/landing' + getConfig().searchParams;
     this.setState({
       current_url: current_url,
       provider: provider,

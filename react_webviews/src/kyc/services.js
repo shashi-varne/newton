@@ -217,9 +217,17 @@ export function getKycAppStatus(kyc) {
     }
   }
 
+  var result = {
+    metaRejected: metaRejected,
+    docRejected: docRejected,
+    rejectedItems: rejectedItems
+  };
+
   var status;
   if (rejected > 0) {
     status = "rejected";
+    result.status = status;
+    return result;
   } else {
     status = kyc.application_status_v2;
   }
@@ -248,7 +256,7 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
-  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 == 'init' && kyc.pan.meta_data.pan_number &&
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number &&
       kyc.kyc_type === "manual" && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
       status = 'incomplete';
     }
@@ -257,12 +265,7 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
-  var result = {
-    status: status,
-    metaRejected: metaRejected,
-    docRejected: docRejected,
-    rejectedItems: rejectedItems
-  };
+  result.status = status;
 
   return result;
 }

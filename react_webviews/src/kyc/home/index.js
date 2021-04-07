@@ -309,6 +309,7 @@ const Home = (props) => {
               maxLength={11}
               type="text"
               disabled={showLoader}
+              autoFocus
             />
             {isStartKyc && isUserCompliant && (
               <Alert
