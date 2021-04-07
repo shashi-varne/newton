@@ -110,59 +110,9 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
     }
     handleClick = async () => {
         this.sendEvents('next');
-        this.setErrorData("submit");
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
         let plan_selected_final = this.state.premium_data[this.state.selectedIndex];
-        
-
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'plan_id', 'member_details', 'si', 'floater_type'];
-        let body = {};
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
-        }
-        body['tenure'] = plan_selected_final.tenure;
-        body['add_ons'] = post_body.add_ons_array;
-
-        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
-            body['floater_type'] = 'non_floater';
-        }
-
-        let error = "";
-        let errorType ="";
-        this.setState({
-            show_loader: "button"
-        });
-
-        try{
-            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`, body);
-            if (res.pfwresponse.status_code === 200){
-                var resultData = res.pfwresponse.result;
-                plan_selected_final = resultData.premium_details;
-            }else{
-                error = res.pfwresponse.result.error || res.pfwresponse.result.message
-                    || true;
-            }
-            
-        }catch(err){
-            console.log(err);
-            this.setState({
-                show_loader: false
-            });
-            error = true;
-            errorType = "crash"
-        }
-        if (error) {
-            this.setState({
-              errorData: {
-                ...this.state.errorData,
-                title2: error,
-                type: errorType
-              },
-              showError:true,
-              show_loader:false,
-            });
-          }
         groupHealthPlanData.plan_selected_final = plan_selected_final;
         
         var add_ons_final = {}
@@ -203,9 +153,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         if(storageService().getObject('applicationPhaseReached')){
             delete groupHealthPlanData.post_body['quotation_id'];
         }
-
         this.setLocalProviderData(groupHealthPlanData);
-        if(!error)
         this.navigate('plan-premium-summary');
     }
 
