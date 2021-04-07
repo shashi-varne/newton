@@ -494,17 +494,6 @@ export function renderGenericError() {
             //             {genericErrorActions()}
             //         </div>
 
-<<<<<<< HEAD
-        //             {getConfig().project !== 'loan' && <div className="help" onClick={() => this.redirectToHelp()}>GET HELP</div>}
-        //             {genericErrorActions()}
-        //         </div>
-        //             </div>                    
-        //         </div>
-        //     </DialogContent>
-        // </Dialog >
-            
-=======
->>>>>>> WVFIS-814-new-loader-changes-idfc
         );
     } if (this.props.showError === 'page') {
 

@@ -1,12 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 
-<<<<<<< HEAD
-import Header from "../../common/components/Header";
-import { didMount } from "../../common/components/container_functions";
-=======
 import {didMount, commonRender} from "../../common/components/container_functions";
->>>>>>> WVFIS-814-new-loader-changes-idfc
 import { renderPageLoader, renderGenericError } from '../../common/components/container_functions';
 
 import { nativeCallback } from "utils/native_callback";
@@ -27,11 +22,7 @@ class Container extends Component {
       project: "lending", //to use in common functions
     };
 
-<<<<<<< HEAD
-    this.didmount = didMount.bind(this);
-=======
     this.didMount = didMount.bind(this);
->>>>>>> WVFIS-814-new-loader-changes-idfc
     this.renderPageLoader = renderPageLoader.bind(this);
     this.renderGenericError = renderGenericError.bind(this);
     this.commonRender =  commonRender.bind(this);

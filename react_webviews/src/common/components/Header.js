@@ -16,29 +16,6 @@ const headerIconMapper = {
   close: close_icn
 }
 
-<<<<<<< HEAD
-const Header = ({ classes, title, count, total, current, goBack,
-  edit, type, resetpage, handleReset, smallTitle, disableBack, provider,
-  inPageTitle, force_hide_inpage_title, className, style, headerData = {} }) => (
-    <AppBar position="fixed" color="primary"
-      className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'} ${className}`}
-      style={style}
-    >
-      <Toolbar
-        className={headerData.progressHeaderData && classes.headerWithData}
-      >
-        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={headerData.goBack ||
-          goBack}>
-          {!disableBack && !headerData.hide_icon &&
-            <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
-              src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
-            />
-          }
-          {(disableBack === true) && !headerData.hide_icon &&
-            <Close />}
-        </IconButton>
-=======
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title,topIcon, handleTopIcon, 
@@ -60,7 +37,6 @@ const Header = ({ classes, title, count, total, current, goBack,
         {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
          <Close />}
       </IconButton>
->>>>>>> WVFIS-814-new-loader-changes-idfc
 
       <div className="toolbar-title">
           {headerData.progressHeaderData && <div className="progress-bar">
@@ -127,16 +103,10 @@ const Header = ({ classes, title, count, total, current, goBack,
             {topIcon === 'close' && <Close style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
           </>}
         </div>
-<<<<<<< HEAD
-      </Toolbar>
-    </AppBar >
-  );
-=======
 
     </Toolbar>
   </AppBar >
 );
->>>>>>> WVFIS-814-new-loader-changes-idfc
 
 const styles = {
   root: {
