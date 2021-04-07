@@ -942,6 +942,53 @@ export function containsSpecialCharactersAndNumbers(value){
   return format.test(value);
 }
 
+export function bytesToSize(bytes, decimals = 2) {
+  if (bytes === 0) return "0 Bytes";
+
+  const k = 1000;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+}
+
+export function timeStampToDate(timestamp) {
+  let date = timestamp.substring(0, 10);
+
+  let new_date = date.split('-').reverse().join('/')
+  return new_date
+}
+
+export function changeNumberFormat(number, decimals, recursiveCall) {
+  const decimalPoints = decimals || 2;
+  const noOfLakhs = number / 100000;
+  let displayStr;
+  let isPlural;
+
+  // Rounds off digits to decimalPoints decimal places
+  function roundOf(integer) {
+      return +integer.toLocaleString(undefined, {
+          minimumFractionDigits: decimalPoints,
+          maximumFractionDigits: decimalPoints,
+      });
+  }
+
+  if (noOfLakhs >= 1 && noOfLakhs <= 99) {
+      const lakhs = roundOf(noOfLakhs);
+      isPlural = lakhs > 1 && !recursiveCall;
+      displayStr = `${lakhs} lakh${isPlural ? 's' : ''}`;
+  } else if (noOfLakhs >= 100) {
+      const crores = roundOf(noOfLakhs / 100);
+      const crorePrefix = crores >= 100000 ? changeNumberFormat(crores, decimals, true) : crores;
+      isPlural = crores > 1 && !recursiveCall;
+      displayStr = `${crorePrefix} crore${isPlural ? 's' : ''}`;
+  } else {
+      displayStr = roundOf(+number);
+  }
+
+  return displayStr;
+}
+
 export function countChars(line) {
   return line.split(' ').filter(word => !isEmpty(word)).reduce((acc, cur) => acc += cur.length, 0)
 }
