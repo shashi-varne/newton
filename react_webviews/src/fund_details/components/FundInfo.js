@@ -2,19 +2,20 @@ import React, { memo } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { nonRoundingToFixed } from 'utils/validators';
 const valueStyle = {
-  fontSize: '14px',
+  fontSize: '15px',
   color: '#878787',
-  fontWeight: '300',
+  fontWeight: '400',
+  marginTop: '5px'
 };
 
 const titleStyle = {
   fontSize: '13px',
   color: '#4A4A4A',
-  fontWeight: '500',
+  fontWeight: '700',
 };
 const FundInfo = ({ title, content }) => {
   return (
-    <div style={{ padding: '1em 15px' }}>
+    <div style={{ padding: '10px 15px' }}>
       <Typography style={titleStyle}>{title}</Typography>
       {Array.isArray(content) ? (
         content.map((item, index) => {
