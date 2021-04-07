@@ -125,8 +125,7 @@ class CustomButton extends Component {
       return (
         // <div>
           <Button
-            // fullWidth={(props.reset || props.type === 'summary') ? true : false}
-            fullWidth={false}
+            fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"
             size="large"
             color="secondary"
