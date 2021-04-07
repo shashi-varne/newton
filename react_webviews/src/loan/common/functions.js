@@ -495,12 +495,12 @@ export async function redirectMandate() {
     if (res.pfwresponse.status_code === 200 && !resultData.error) {
         let basepath = getBasePath();
         let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/loan/dmi/redirection-status/mandate` + getConfig().searchParams
+            basepath + `/loan/dmi/redirection-status/mandate` + getConfig().searchParams
         );
 
 
         let back_url = encodeURIComponent(
-            window.location.origin + `/loan/dmi/mandate-status` + getConfig().searchParams
+            basepath + `/loan/dmi/mandate-status` + getConfig().searchParams
         );
 
         // for web no issue
