@@ -103,7 +103,7 @@ export function formCheckFields(
     redirect_url: redirectUrl,
   };
 
-  this.setState({ isApiRunning: true });
+  this.setState({ isApiRunning: "button" });
   if (loginType === "email" && userAction === "LOGIN") {
     body.email = form_data["email"];
     body.password = form_data["password"];
@@ -131,6 +131,7 @@ export async function emailLogin(body) {
     const res = await Api.post(`/api/user/login`, body);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       // if (getConfig().redirect_url !== undefined) {
       //   window.location.href = getConfig().redirect_url;
       //   return;
@@ -180,6 +181,7 @@ export async function emailLogin(body) {
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -191,6 +193,7 @@ export async function mobileLogin(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       toast("OTP is sent successfully to your mobile number.");
       if (this.state.referrer) {
         let item = {
@@ -224,10 +227,10 @@ export async function mobileLogin(body) {
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -240,6 +243,7 @@ export async function emailRegister(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       // if (getConfig().redirect_url !== undefined) {
       //   window.location.href = getConfig().redirect_url;
       //   return;
@@ -259,10 +263,10 @@ export async function emailRegister(body) {
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -334,13 +338,14 @@ export async function resendVerificationLink() {
 }
 
 export async function otpVerification(body) {
-  this.setState({ isApiRunning: true });
+  this.setState({ isApiRunning: "button" });
   try {
     const res = await Api.post(
       `/api/mobile/login?mobile_number=${body.mobile_number}&otp=${body.otp}`
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);
@@ -386,10 +391,10 @@ export async function otpVerification(body) {
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -412,19 +417,20 @@ export async function applyCode(user) {
 }
 
 export async function resendOtp() {
-  this.setState({ isApiRunning: true });
+  this.setState({ isApiRunning: "button" });
   try {
     const res = await Api.get(`/api/resendotp`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       toast(result.message || "Success!");
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -435,6 +441,7 @@ export async function forgotPassword(body) {
     const { result, status_code: status } = res.pfwresponse;
     let { loginType } = this.state;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       if (loginType === "email") toast(`A link has been sent to ${body.email}`);
       else {
         this.props.history.push(
@@ -455,25 +462,27 @@ export async function forgotPassword(body) {
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
 
 export async function verifyForgotOtp(body) {
-  this.setState({ isApiRunning: true });
+  this.setState({ isApiRunning: "button" });
   try {
     const res = await Api.post(`/api/user/verifymobile?otp=${body.otp}`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       toast("Login to continue");
       this.navigate("/login");
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }

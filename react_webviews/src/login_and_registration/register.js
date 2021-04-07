@@ -3,7 +3,6 @@ import "./Style.scss";
 import { getConfig } from "utils/functions";
 import { countries } from "./constants";
 import Input from "common/ui/Input";
-import Button from "material-ui/Button";
 import Checkbox from "common/ui/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
 import InputUI from "material-ui/Input";
@@ -13,6 +12,7 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { initialize } from "./function";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { validateNumber } from "utils/validators";
+import Button from "../common/ui/Button";
 
 class Register extends Component {
   constructor(props) {
@@ -232,17 +232,16 @@ class Register extends Component {
                 <div>I have a referral/promo/partner code</div>
               </div>
               <Button
-                className={isApiRunning ? "disabled" : "button"}
-                disabled={isApiRunning}
-                onClick={() => this.handleClick()}
-              >
-                REGISTER
-                {isApiRunning && (
-                  <div className="loader">
-                    <CircularProgress size={20} thickness={3} />
-                  </div>
-                )}
-              </Button>
+                buttonTitle="REGISTER"
+                onClick={this.handleClick}
+                showLoader={isApiRunning}
+                style={{
+                  width: "100%",
+                  letterSpacing: "2px",
+                  minHeight: "42px",
+                  borderRadius: "2px",
+                }}
+              />
               {this.state.resendVerification && (
                 <div
                   className="resend-verification"

@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import "./Style.scss";
 import Input from "common/ui/Input";
-import Button from "@material-ui/core/Button";
 import { initialize } from "./function";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { validateNumber } from "../utils/validators";
+import Button from "../common/ui/Button";
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -63,7 +62,7 @@ class Otp extends Component {
 
   render() {
     let { isApiRunning, otp, otp_error } = this.state;
-    let disabled = isApiRunning || otp.length !== 4;
+    let disabled = otp.length !== 4;
     return (
       <div className="login otp">
         {!isMobileView && (
@@ -101,17 +100,18 @@ class Otp extends Component {
               Resend OTP
             </div>
             <Button
-              className={disabled ? "disabled" : "button"}
-              disabled={disabled}
-              onClick={() => this.handleClick()}
-            >
-              VERIFY{" "}
-              {isApiRunning && (
-                <div className="loader">
-                  <CircularProgress size={20} thickness={3} />
-                </div>
-              )}
-            </Button>
+                buttonTitle="VERIFY"
+                onClick={this.handleClick}
+                showLoader={isApiRunning}
+                disable={disabled}
+                style={{
+                  maxWidth: "180px",
+                  minWidth: "180px",
+                  letterSpacing: "2px",
+                  minHeight: "42px",
+                  borderRadius: "2px",
+                }}
+              />
           </div>
         </div>
       </div>
