@@ -22,6 +22,8 @@ const styles = (theme) => ({
     padding: '1em 0',
     '&:last-child': {
       paddingRight: '0px',
+      borderRight: 'none !important'
+
     },
   },
 });
@@ -50,6 +52,8 @@ const TableData = ({
   isSector,
   isTopHolding,
   isReturn,
+  iframe,
+  isRiskMeasure
 }) => {
   return (
     <Table className={classes.table}>
@@ -65,7 +69,7 @@ const TableData = ({
                 }}
                 key={index}
               >
-                <div className={isReturn ? 'return-table-header' : null}>{heading}</div>
+                <div className={isReturn ? `return-table-header ${iframe && 'iframe-table-data-head'}` : null}>{heading}</div>
               </TableCell>
             ))}
           </TableRow>
@@ -83,15 +87,16 @@ const TableData = ({
                           color: '#4A4A4A',
                           lineHeight: '22px !important',
                           fontWeight: '500',
+                          marginBottom: '5px'
                         }}
                       >
                         {row.name}
                       </Typography>
                       <span
                         style={{
-                          fontSize: '14px',
-                          color: isTopHolding ? '#878787' : '#4A4A4A',
-                          fontWeight: '300',
+                          fontSize: '13px',
+                          color: '#767E86',
+                          fontWeight: '400',
                         }}
                       >
                         {row?.global_industry || row?.value || null}
@@ -105,9 +110,9 @@ const TableData = ({
                       component='th'
                       scope='row'
                       style={{
-                        color: '#4A4A4A',
-                        fontSize: '14px',
-                        fontWeight: '300',
+                        color: '#767E86',
+                        fontSize: '13px',
+                        fontWeight: '400',
                       }}
                     >
                       <div style={{ paddingRight: '15px' }}>{row.weighting}%</div>
@@ -135,10 +140,11 @@ const TableData = ({
                     component='th'
                     scope='row'
                     style={{
-                      fontSize: '13px',
-                      fontWeight: '400',
+                      fontSize: '12px',
+                      fontWeight: '700',
                       borderRight: isReturn && '1px solid rgb(226 226 226)',
                       width: isReturn && '50%',
+                      textAlign: iframe && 'center'
                     }}
                   >
                     <div style={{ paddingLeft: '15px' }}>{row.name}</div>
@@ -147,9 +153,9 @@ const TableData = ({
                     classes={{ root: classes.root }}
                     component='th'
                     scope='row'
-                    style={{ fontSize: '14px', fontWeight: '300' }}
+                    style={{ fontSize: '13px', fontWeight: '400', color: '#767E86' }}
                   >
-                    <div style={{ paddingLeft: isReturn && '15px' }}>
+                    <div style={{ paddingLeft: isReturn && '15px', textAlign: iframe && 'center'}} className={isRiskMeasure ? 'risk-measure-table' : ''}>
                       {row.display_value ? row.display_value : row.value}
                     </div>
                   </TableCell>
