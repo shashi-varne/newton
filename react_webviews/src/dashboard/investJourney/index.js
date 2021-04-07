@@ -25,7 +25,7 @@ const InvestJourney = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const [dialogStates, setDialogStates] = useState({
-    openPennyVerificationPendind: false,
+    openPennyVerificationPending: false,
     openInvestError: false,
     errorMessage: "",
   });
@@ -159,7 +159,7 @@ const InvestJourney = (props) => {
           </div>
         </div>
         <PennyVerificationPending
-          isOpen={dialogStates.openPennyVerificationPendind}
+          isOpen={dialogStates.openPennyVerificationPending}
           handleClick={() => navigate("/kyc/add-bank", null, true)}
         />
         <InvestError

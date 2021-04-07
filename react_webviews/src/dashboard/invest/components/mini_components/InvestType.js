@@ -4,7 +4,7 @@ let productName = getConfig().productName;
 const InvestType = (props) => {
   return (
     <div className="invest-type">
-      <div className="header">
+      <div className="invest-header">
         <div className="main-top-title">{props.baseData.title}</div>
         {props.baseData.count && props.baseData.total && (
           <div className="step">
