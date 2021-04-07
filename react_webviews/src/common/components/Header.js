@@ -38,8 +38,9 @@ const Header = ({ classes, title, count, total, current, goBack,
          <Close />}
       </IconButton>
 
-      <div className="toolbar-title">
-          {headerData.progressHeaderData && <div className="progress-bar">
+        {headerData.progressHeaderData && 
+          <div className="toolbar-title">
+           <div className="progress-bar">
             <div className="head">
               {headerData.progressHeaderData.title}
             </div>
@@ -48,16 +49,6 @@ const Header = ({ classes, title, count, total, current, goBack,
               {headerData.progressHeaderData.steps.map((step, index) => (
                 <div className="journey-header-progress" key={index}>
                   <div className="indicator">
-                    {/* <div className  = {index === 0 ? 'tiny-hr' : index === headerData.progressHeaderData.steps.length - 1 ? 'large-hr' : 'hr'} >
-                      <hr className={`${index === 0 ? 'invisible-line' :
-                      `line line-${headerData.progressHeaderData.steps[index - 1].status}`
-                      }`} /></div>
-                    <span className={`dot ${step.status}`}></span>
-                    <div className={index === 0 ? 'large-hr' : index === headerData.progressHeaderData.steps.length - 1 ? 'tiny-hr' : 'hr'} 
-                      
-                      ><hr className={`${index === headerData.progressHeaderData.steps.length - 1 ? 'invisible-line' :
-                      `line line-${headerData.progressHeaderData.steps[index].status}`
-                      }`}  /></div> */}
                     <div className  = {index === 0 ? 'tiny-hr' : index === headerData.progressHeaderData.steps.length - 1 ? 'large-hr' : 'hr'} >
                       <div className={`${index === 0 ? 'invisible-line' :
                       `line line-${headerData.progressHeaderData.steps[index - 1].status}`
@@ -78,7 +69,9 @@ const Header = ({ classes, title, count, total, current, goBack,
                 </div>
               ))}
             </div>
-          </div>}
+          </div>
+        </div>
+      }
 
 
           {!headerData.progressHeaderData && 
@@ -102,7 +95,6 @@ const Header = ({ classes, title, count, total, current, goBack,
             }
             {topIcon === 'close' && <Close style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
           </>}
-        </div>
 
     </Toolbar>
   </AppBar >
