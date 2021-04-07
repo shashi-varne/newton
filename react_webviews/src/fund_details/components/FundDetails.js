@@ -35,6 +35,7 @@ const FundDetails = ({ classes, history }) => {
   const [graph, setGraph] = useState(null);
   const [selectedIsin, setSelectedIsin] = useState(0);
   const productType = getConfig().productName;
+  const partnerCode = getConfig().partner_code;
   const [open, setOpen] = useState(false);
   const iframe = isIframe();
   const isMobile = getConfig().isMobileDevice;
@@ -424,7 +425,7 @@ const FundDetails = ({ classes, history }) => {
 
   return (
     <div>
-      {!iframe ? (
+      {!iframe && partnerCode !== 'moneycontrol' ? (
         <Container
           title={fundDetails?.performance?.friendly_name}
           hideInPageTitle={true}
