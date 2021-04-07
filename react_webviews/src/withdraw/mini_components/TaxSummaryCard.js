@@ -1,6 +1,7 @@
 import { Button } from '@material-ui/core'
-import React from 'react'
+import React, { useState } from 'react'
 import { getConfig } from '../../utils/functions'
+import KnowMoreDialog from '../mini_components/KnowMoreDialog'
 
 const TaxSummaryCard = ({
   open = true,
@@ -19,6 +20,13 @@ const TaxSummaryCard = ({
   hideIcon = false,
   know_how_msg,
 }) => {
+  const [showKnowMoreDialog, setShowKnowMoreDialog] = useState(false)
+  const closeDialog = () => {
+    setShowKnowMoreDialog(false)
+  }
+  const openDialog = () => {
+    setShowKnowMoreDialog(true)
+  }
   const productName = getConfig().productName
   return (
     <section className="withdraw-tax-summary">
@@ -79,12 +87,13 @@ const TaxSummaryCard = ({
             <div className="content">Avoid taxes for better returns!</div>
           </div>
           <div className="know-more">
-            <Button type="text" color="primary" onClick={handleKnowMore}>
+            <Button type="text" color="primary" onClick={openDialog}>
               KNOW MORE
             </Button>
           </div>
         </footer>
       )}
+      <KnowMoreDialog onClose={closeDialog} open={showKnowMoreDialog} message={know_how_msg} />
     </section>
   )
 }
