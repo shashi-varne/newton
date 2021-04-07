@@ -318,7 +318,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
          if ((member_data.life_style_question_exists === 'Yes' ||
              member_data.life_style_question_exists === true) && !none_option_selected) {
-              let date =  member_data.life_style_question.start_date.split('/'); console.log(date,'date')
+              let date =  member_data.life_style_question.start_date.split('/');
               if(isNaN(date[1]) || date[1].length < 4){
               toast('Enter Valid date');
               return;
@@ -374,7 +374,10 @@ class GroupHealthPlanLifestyleDetail extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Lifestyle details"
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        title={this.setEditTitle('Lifestyle details')}
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}

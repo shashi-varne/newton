@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import ContactUs from '../../common/components/contact_us'
 import qs from 'qs'; 
-
+import Api from "utils/api";
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import '../common/Style.scss';
+import {storageService} from "utils/validators";
+import { setRecommendationData } from '../advisory/common_data'
 import '../common/Style.scss'
 import { isEmpty } from 'utils/validators';
 
@@ -14,9 +17,11 @@ class Landing extends Component {
     super(props);
     this.state = {
       // skelton: 'p',
+      skelton: true,
       type: getConfig().productName,
       insuranceProducts: [],
-      params: qs.parse(props.history.location.search.slice(1)) 
+      params: qs.parse(props.history.location.search.slice(1)),
+      advisory_button_text: "LET'S FIND OUT" 
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -62,6 +67,110 @@ class Landing extends Component {
       insuranceProducts: insuranceProducts,
       openModuleData : openModuleData
     })
+  }
+
+  setErrorData = (type) => {
+
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClick,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+  }
+
+  componentDidMount(){
+    this.onload();
+  }
+
+  onload = async() => {
+    storageService().remove('from_advisory')
+    this.setErrorData('onload')
+    this.setState({
+      skelton: true,
+    })
+    let error = ''
+    let errorType = ''
+    try{
+      var res = await Api.get(`api/insurancev2/api/insurance/advisory/resume/check`);
+        var resultData = res.pfwresponse.result;
+
+        if (res.pfwresponse.status_code === 200) {
+
+          this.setState({
+            skelton: false,
+          })
+          
+          var advisory_resume_present = resultData.resume_present;
+          var advisory_resume_status = resultData.insurance_advisory.status;
+          var advisory_id = resultData.insurance_advisory.id;
+
+          var next_advisory_page = 'landing';
+          var advisory_button_text = this.state.advisory_button_text
+          if(advisory_resume_present && advisory_resume_status === 'incomplete'){
+            advisory_button_text = "RESUME";
+            storageService().setObject('advisory_resume_present', true)
+            storageService().setObject("advisory_id", advisory_id)
+            next_advisory_page = 'basic-details';
+          }else if(advisory_resume_present && advisory_resume_status === 'complete'){
+            storageService().setObject("advisory_id", advisory_id)
+            var advisory_data = storageService().getObject('advisory_data') || {};
+            var recommendation_data = resultData.coverage_gap_dict;
+            var user_data = resultData.insurance_advisory;
+            setRecommendationData(advisory_data, recommendation_data, user_data) 
+            
+            advisory_button_text = "VIEW REPORT";
+            next_advisory_page = 'recommendations';
+          }
+
+          this.setState({
+            advisory_button_text: advisory_button_text,
+            next_advisory_page: next_advisory_page, 
+            advisory_id: advisory_id
+          })
+        } else {
+          error = resultData.error || resultData.message || true;
+      }
+    }catch(err){
+      this.setState({
+        show_loader: false,
+        showError: true,
+      });
+      errorType = 'crash';
+      error = true;
+    }
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError: 'page',
+      })
+    }
   }
 
 
@@ -119,7 +228,7 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked) {
+  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked, advisory_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -127,7 +236,9 @@ class Landing extends Component {
         "screen_name": 'insurance',
         "insurance_type": insurance_type ? insurance_type : '',
         'banner_clicked' : banner_clicked ? true : false,
-        'callback_clicked' : callback_clicked ?  true : false
+        'callback_clicked' : callback_clicked ?  true : false,
+        'advisory_card_cta' : this.state.advisory_button_text,
+        'insurance_advisory_card_clicked': advisory_clicked
       }
     };
 
@@ -138,6 +249,13 @@ class Landing extends Component {
     }
   }
 
+  goToAdvisory = (e) =>{
+    // console.log('go go')
+    e.preventDefault();
+    this.sendEvents('next', "", "", "", true);
+    this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
+    return;
+  }
   callBackScreen = () =>{
     this.sendEvents('next', "", "", true);
     this.navigate('/group-insurance/call-back-details');
@@ -151,13 +269,21 @@ class Landing extends Component {
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         skelton={this.state.skelton}
+        showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
            <div onClick={this.policymove}>
-           <img style={{ margin: '-15px 5px 30px 0', width: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
+           <img style={{ margin: '-15px 5px 30px 0', width: '100%', cursor: 'pointer' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
+            <div className="advisory-entry-container" onClick={(e)=>this.goToAdvisory(e)}>  
+              <img className="advisory-entry" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt=""/>
+              <p className="adivsory-card-heading">Do you have adequate insurance coverage?</p>
+              <button className="advisory-entry-button">{this.state.advisory_button_text}</button>
+            </div>
             <div style={{ margin: "18px 0 26px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px', color: '#160d2e' }}> Get Insured with ease </div>
           <div className="his">
             <div className="horizontal-images-scroll">

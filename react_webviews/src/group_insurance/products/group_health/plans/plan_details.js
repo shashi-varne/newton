@@ -4,10 +4,9 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-import {initialize} from '../common_data';
+import {initialize, openPdf} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import {formatAmount} from '../../../../utils/validators';
@@ -28,13 +27,14 @@ class GroupHealthPlanDetails extends Component {
                 waiting_period: []
             },
             premiums_to_show: [],
-            show_loader: true,
+            skelton: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
             ic_hs_main_benefits: ic_hs_main_benefits,
             screen_name: 'plan_details_screen'
         }
 
         this.initialize = initialize.bind(this);
+        this.openPdf = openPdf.bind(this);
     }
 
     componentWillMount() {
@@ -43,7 +43,14 @@ class GroupHealthPlanDetails extends Component {
     }
 
     async componentDidMount() {
+        this.onload();
+    }
 
+    onload = async() =>{
+        this.setErrorData("onload",true);
+        this.setState({ skelton:true});
+        let error = "";
+        let errorType = "";
         let {provider} = this.state;
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
@@ -93,27 +100,38 @@ class GroupHealthPlanDetails extends Component {
         try {
 
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,body);
-            this.setState({
-                show_loader: false
-            });
+            
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
             
                 this.setState({
                   plan_data : resultData,
-                  benefits: resultData.benefits
+                  benefits: resultData.benefits,
+                  skelton: false
                 })
+                
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error = resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
         }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: "page",
+            });
+          }
     }
 
     navigateBenefits = (type) => {
@@ -249,8 +267,10 @@ class GroupHealthPlanDetails extends Component {
 
     render() {
         const {
-            show_loader,
+            skelton,
             benefits,
+            showError,
+            errorData,
             plan_selected,
             providerData,
             productName,
@@ -260,7 +280,9 @@ class GroupHealthPlanDetails extends Component {
         return (
           <Container
             events={this.sendEvents("just_set_events")}
-            showLoader={show_loader}
+            skelton={skelton}
+            showError={showError}
+            errorData={errorData}
             title="Plan details"
             fullWidthButton={true}
             buttonTitle="SELECT SUM INSURED"
@@ -390,7 +412,7 @@ class GroupHealthPlanDetails extends Component {
                   <span
                     style={{ color: getConfig().primary }}
                     onClick={() =>
-                      this.openInBrowser(
+                      this.openPdf(
                         this.state.plan_data.policy_prospectus,
                         "read_document"
                       )

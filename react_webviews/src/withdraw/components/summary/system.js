@@ -8,6 +8,7 @@ import { getTaxes, redeemOrders } from '../../common/Api'
 import { isEmpty } from 'utils/validators'
 import { getConfig } from 'utils/functions'
 import { navigate as navigateFunc } from '../../common/commonFunction'
+import { formatAmountInr } from '../../../utils/validators'
 
 const TaxLiability = (props) => {
   const { stcg, ltcg } = props
@@ -64,12 +65,19 @@ const SelfSummary = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true)
-      // const itype = props?.location?.state?.itype
-      // const subtype = props?.location?.state?.subtype
-      // const name = props?.location?.state?.name
-      // const allocations = props?.location?.state?.allocations
-      // console.log(allocations)
+      setIsApiRunning("button")
+      const itype = props?.location?.state?.itype
+      const subtype = props?.location?.state?.subtype
+      const name = props?.location?.state?.name
+      const allocations = Object.keys(props?.location?.state?.amounts).reduce(
+        (acc, cur) => {
+          return [
+            ...acc,
+            { mfid: cur, amount: props?.location?.state?.amounts[cur] },
+          ]
+        },
+        []
+      )
       const result = await redeemOrders('system', {
         investments: [{ ...props.location.state }],
       })
@@ -116,12 +124,18 @@ const SelfSummary = (props) => {
       fullWidthButton
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      hideInPageTitle
-      handleClick2={handleClick}
-      showSkelton={isEmpty(taxes)}
-      twoButton={true}
-      footerText1={getTotalAmount()}
-      isApiRunning={isApiRunning}
+      hidePageTitle
+      handleClick={handleClick}
+      skelton={isEmpty(taxes)}
+      // twoButton={true}
+      // footerText1={getTotalAmount()}
+      // isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
+      buttonData={{
+        leftTitle: "Withdraw amount",
+        leftSubtitle: formatAmountInr(getTotalAmount()),
+      }}
+      type="withProvider"
     >
       {!isEmpty(taxes) && (
         <section id="withdraw-system-summary">

@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 
 import Api from "utils/api";
 import toast from "../../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, getBasePath } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import {fyntuneConstants} from './constants';
@@ -38,7 +38,7 @@ class FyntuneLanding extends Component {
     });
   };
 
-  setErrorData = (type) => {
+  setErrorData = (type, cb) => {
     this.setState({
       showError: false
     });
@@ -47,6 +47,11 @@ class FyntuneLanding extends Component {
         'onload':  {
           handleClick1: this.onload,
           button_text1: 'Retry',
+          title1: ''
+        },
+        'onload_provider_error':  {
+          handleClick1: this.handleProviderError,
+          button_text1: 'Okay',
           title1: ''
         },
         'submit': {
@@ -63,6 +68,11 @@ class FyntuneLanding extends Component {
       };
       this.setState({
         errorData: {...mapper[type], setErrorData : this.setErrorData}
+      }, () => {
+        if(typeof cb === 'function') {
+          return cb();
+        }
+        
       })
     }
   }
@@ -75,12 +85,12 @@ class FyntuneLanding extends Component {
     nativeCallback({ action: 'take_control_reset' });
     this.setState({
       skelton: true,
-      openDialogRefresh: false
+      openDialogRefresh: false,
+      providerError: ''
     })
     //resume api
     try{
       var res = await Api.get(`api/ins_service/api/insurance/fyntune/get/resumelist`);
-      
       var resultData = res.pfwresponse.result;
 
       if (res.pfwresponse.status_code === 200) {
@@ -98,7 +108,19 @@ class FyntuneLanding extends Component {
         this.setState({
           skelton: false
         })
-        // error = res.pfwresponse.result.error || res.pfwresponse.result.message || true
+
+        let providerErrors = ["Network error",
+        "Network error call status not in 200",
+        "Error in ref id creation"];
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message || true;
+
+        if(providerErrors.indexOf(error) !== -1) {
+          error = '';
+          this.setErrorData('onload_provider_error');
+          this.setState({
+            providerError: "Something's not right. Retry in a while"
+          })
+        }
       }
     } catch (err) {
       this.setState({
@@ -167,6 +189,12 @@ class FyntuneLanding extends Component {
     this.onload();
   }
 
+  handleProviderError = () => {
+    this.setState({
+      showError: false
+    })
+  }
+
   renderDialog = () => {
     return (
         <Dialog
@@ -192,15 +220,15 @@ class FyntuneLanding extends Component {
     if (!this.state.resume_data.resume_present) {
       return;
     }
-
+    let basepath = getBasePath();
     this.sendEvents("next", {resume_clicked: "yes"});
     var resume_redirection_url = this.state.resume_data.redirection_url;
     var redirectToHDFC = this.state.resume_data.chrome_tab_enable;
 
     let intermediateScreenURL = encodeURIComponent(
-      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
+      basepath + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
     );
-    let landingScreenURL = window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
+    let landingScreenURL = basepath + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
     
     var journeyURL = resume_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
 
@@ -262,15 +290,30 @@ class FyntuneLanding extends Component {
 
   handleClick = async () => {
     this.sendEvents("next");
+
+    if(this.state.providerError) {
+      this.setErrorData('onload_provider_error',() => {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: this.state.providerError
+          },
+          showError: true
+        })
+      });
+      
+
+      return;
+    }
     this.setErrorData('submit');
     let error = '';
     let errorType = '';
     var body = {}
-    
-    let landingScreenURL = window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
+    let basepath = getBasePath();
+    let landingScreenURL = basepath + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
     
     let intermediateScreenURL = encodeURIComponent(
-      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
+      basepath + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
     );
     
     
@@ -417,8 +460,8 @@ class FyntuneLanding extends Component {
           )}
         <div>
           <p className="fyntune-heading">What is Insurance Savings Plan?</p>
-          <p className="fyntune-info" style={{textAlign: 'justify'}}>
-            This is a plan for your investment cum insurance needs. Sanchay Plus from HDFC Life is one such product which provides you with a chance to create wealth and even gives financial security to your loved ones in case of any unforseen event.
+          <p className="fyntune-info">
+          This is a plan for your investment cum insurance needs which provides you with a chance to create wealth and even gives financial security to your loved ones in case of any unforeseen event.
           </p>
         </div>
 

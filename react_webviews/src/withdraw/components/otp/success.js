@@ -15,7 +15,7 @@ const Success = (props) => {
     }
   }
   return (
-    <Container hideInpageTitle buttonTitle="Okay" handleClick={goTo}>
+    <Container hidepageTitle buttonTitle="Okay" handleClick={goTo}>
       <section id="withdraw-otp-success">
         <img
           className="thumb-img"

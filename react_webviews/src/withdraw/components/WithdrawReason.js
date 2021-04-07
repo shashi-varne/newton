@@ -99,7 +99,14 @@ const Landing = (props) => {
   };
 
   return (
-    <Container buttonTitle='Continue' fullWidthButton hideInPageTitle noPadding noFooter showSkelton={isLoading}>
+    <Container 
+      buttonTitle='Continue' 
+      fullWidthButton       
+      title="Withdraw"
+      noPadding 
+      noFooter 
+      skelton={isLoading}
+    >
       {!isEmpty(reasons) && (
         <section className='withdraw-reasons'>
           <div className='withdraw-reason-title'>{reasons?.title}</div>

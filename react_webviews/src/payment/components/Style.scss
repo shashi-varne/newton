@@ -43,7 +43,6 @@
     }
     
     .bold {
-      font-family: 'RobotoB';
     }
     
     .blue {
@@ -132,7 +131,6 @@
     #payment {
       margin: 0;
       padding: 0;
-      font-family: 'RobotoR';
       max-width: 767px;
       margin: 0 auto;
       overflow-y: scroll;
@@ -159,7 +157,6 @@
     header p {
       margin: 0;
       line-height: normal;
-      font-family: 'RobotoL';
       font-style: italic;
     }
     
@@ -254,7 +251,6 @@
     
     .add-button button, .footer button, .upi-button button {
       width: 100%;
-      font-family: 'RobotoB';
       background: #35cb5d;
       border-radius: 5px;
       padding: 15px;
@@ -271,7 +267,6 @@
     
     .upi-button button {
       width: 100%;
-      font-family: 'RobotoB';
       background: #b5b5b5;
       border-radius: 5px;
       padding: 15px;
@@ -334,6 +329,9 @@
         font-size: 15px;
         line-height: 18px;
         padding-bottom: 20px;
+        border-top: 1px solid #ededed;
+        margin-top: 5px;
+        padding-bottom: 20px;
     }
     
     .card-footer-images {
@@ -349,7 +347,6 @@
     
     .card-footer-images .more {
       color: #b0b0b0;
-      font-family: 'RobotoB';
       font-size: 18px;
     }
     
@@ -481,8 +478,9 @@
       padding: 10px;
       margin: 0;
     }
-    .footer.old-ios {
+    .footer.ios {
       position: relative !important;
+      margin-top: 50px;
     }
     .consent {
       color: #878787;
@@ -850,7 +848,6 @@
       border: 1px solid #35cb5d;
       background: #fff;
       padding: 15px;
-      font-family: 'RobotoB';
       font-size: 16px;
     }
     

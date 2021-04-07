@@ -4,6 +4,7 @@
   overflow-y: auto;
 }
 #withdraw-balance {
+  padding-top: 20px;
   .report-header {
     background-color: var(--primary);
     color: #ffffff;
@@ -194,7 +195,7 @@
 
 #withdraw-insta-summary {
   .title {
-    margin: 40px 0 10px 0;
+    margin: 0 0 10px 0;
     font-size: 20px;
     color: #0a1c32;
     font-weight: 600;

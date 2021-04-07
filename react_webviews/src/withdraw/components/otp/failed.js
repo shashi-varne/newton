@@ -15,7 +15,7 @@ const Failed = (props) => {
   }
 
   return (
-    <Container hideInPageTitle buttonTitle="RETRY" handleClick={goTo}>
+    <Container hidePageTitle buttonTitle="RETRY" handleClick={goTo}>
       <section id="withdraw-otp-failed">
         {partnerCode === 'bfdlmobile' && (
           <div className="header">Money + Withdraw</div>

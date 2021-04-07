@@ -5,7 +5,6 @@ import { getConfig } from 'utils/functions';
 import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation, calculateAge } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 import { childeNameMapper } from '../../../constants';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 class GroupHealthPlanSelectFloater extends Component {
@@ -14,7 +13,7 @@ class GroupHealthPlanSelectFloater extends Component {
         this.state = {
             ctaWithProvider: true,
             premium_data_floater: [],
-            show_loader: true,
+            skelton: true,
             disableFloaterOption: false,
             screen_name: 'cover_type_screen'
         }
@@ -25,103 +24,124 @@ class GroupHealthPlanSelectFloater extends Component {
         this.initialize();
     }
     async componentDidMount() {
-        let {groupHealthPlanData} = this.state;
-        groupHealthPlanData.add_ons_data = [];
-        groupHealthPlanData.post_body.add_ons_json = {};
-        let post_body = groupHealthPlanData.post_body;
-        let selectedIndex = groupHealthPlanData.selectedIndexFloater || 0;
-        let total_member = post_body.adults + post_body.children;
-        this.setState({
-            selectedIndex: selectedIndex,
-            sum_assured: groupHealthPlanData.sum_assured || post_body.sum_assured, 
-            total_member: total_member,
-            show_ind_mem_premium: this.state.providerConfig.show_ind_mem_premium
-        });
-        if(post_body.children > 0){
-            for(var key in post_body.member_details){
-                    if(key.includes('child') && calculateAge(post_body.member_details[key].dob, false) < 5 && this.state.providerConfig.key === 'RELIGARE'){
-                        this.setState({disableFloaterOption: true });
-                    }
-            }
-        }
-        
-        if(post_body.floater_type){
-            delete post_body['floater_type'];
+            this.onload();
         }
 
-        let total_number = post_body.adults + post_body.children;
-
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','si'];
-        let body = {};
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
-        }
-
-
-        try {
-            
-            const res2 = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
-                body);
+        onload = async() =>{
+            let error="";
+            let errorType="";
+            this.setErrorData("onload");
+            let {groupHealthPlanData} = this.state;
+            groupHealthPlanData.add_ons_data = [];
+            groupHealthPlanData.post_body.add_ons_json = {};
+            let post_body = groupHealthPlanData.post_body;
+            let selectedIndex = groupHealthPlanData.selectedIndexFloater || 0;
+            let total_member = post_body.adults + post_body.children;
             this.setState({
-                show_loader: false
+                selectedIndex: selectedIndex,
+                sum_assured: groupHealthPlanData.sum_assured || post_body.sum_assured, 
+                total_member: total_member,
+                show_ind_mem_premium: this.state.providerConfig.show_ind_mem_premium
             });
-            var resultData = res2.pfwresponse.result;
-            if (res2.pfwresponse.status_code === 200) {
-                let premium_data_wf = resultData.premium_details['floater'][0];
-                let premium_data_nf = resultData.premium_details['non_floater'][0];
-                
-                let premium_data_floater = [{
-                        'title': `${numDifferentiationInr(this.state.sum_assured)} for entire family`,
-                        'premium': premium_data_wf.premium,
-                        'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.premium),
-                        'discount': premium_data_wf.discount.family[0] ? parseFloat(premium_data_wf.discount.family[0]) : '',
-                        'key': 'floater'
-                    },
-                    {
-                        'title': `${numDifferentiationInr(this.state.sum_assured)} for each member`,
-                        'premium': premium_data_nf.premium,
-                        'subtitle': `${numDifferentiationInr(this.state.sum_assured * total_number)}
-                                    sum insured in ${inrFormatDecimal(premium_data_nf.premium)} `,
-                        'discount': premium_data_nf.discount.family[0] ? parseFloat(premium_data_nf.discount.family[0]) : '',
-                        'key': 'non_floater'
-                    }
-                ];
-                
-
-                let ind_pre_data = [];
-                let final_dob_data = this.state.groupHealthPlanData.final_dob_data;
-                
-                var individual_premiums = premium_data_nf.insured_individual_premium;
-                for (var i in final_dob_data) {
-                    let mem = final_dob_data[i];
-                    if (premium_data_nf['floater_type']) {
-                        let obj = {
-                            name: numDifferentiation(this.state.sum_assured) + ' for ' + childeNameMapper(mem.key).toLowerCase(),
-                            value: inrFormatDecimal(individual_premiums[mem['backend_key']])
-                        };
-                        ind_pre_data.push(obj);
-                    }
+            if(post_body.children > 0){
+                for(var key in post_body.member_details){
+                        if(key.includes('child') && calculateAge(post_body.member_details[key].dob, false) < 5 && this.state.providerConfig.key === 'RELIGARE'){
+                            this.setState({disableFloaterOption: true });
+                        }
                 }
-                this.updateBottomPremium(premium_data_floater[selectedIndex].premium);
+            }
+            
+            if(post_body.floater_type){
+                delete post_body['floater_type'];
+            }
+
+            let total_number = post_body.adults + post_body.children;
+
+            let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','si'];
+            let body = {};
+            for(let key of allowed_post_body_keys){
+                body[key] = post_body[key];
+            }
+
+
+            try {
+                
+                const res2 = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
+                    body);
+                
+                var resultData = res2.pfwresponse.result;
+                if (res2.pfwresponse.status_code === 200) {
+                    let premium_data_wf = resultData.premium_details['floater'][0];
+                    let premium_data_nf = resultData.premium_details['non_floater'][0];
+                    
+                    let premium_data_floater = [{
+                            'title': `${numDifferentiationInr(this.state.sum_assured)} for entire family`,
+                            'premium': premium_data_wf.premium,
+                            'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.premium),
+                            'discount': premium_data_wf.discount.family[0] ? parseFloat(premium_data_wf.discount.family[0]) : '',
+                            'key': 'floater'
+                        },
+                        {
+                            'title': `${numDifferentiationInr(this.state.sum_assured)} for each member`,
+                            'premium': premium_data_nf.premium,
+                            'subtitle': `${numDifferentiationInr(this.state.sum_assured * total_number)}
+                                        sum insured in ${inrFormatDecimal(premium_data_nf.premium)} `,
+                            'discount': premium_data_nf.discount.family[0] ? parseFloat(premium_data_nf.discount.family[0]) : '',
+                            'key': 'non_floater'
+                        }
+                    ];
+                    
+
+                    let ind_pre_data = [];
+                    let final_dob_data = this.state.groupHealthPlanData.final_dob_data;
+                    
+                    var individual_premiums = premium_data_nf.insured_individual_premium;
+                    for (var i in final_dob_data) {
+                        let mem = final_dob_data[i];
+                        if (premium_data_nf['floater_type']) {
+                            let obj = {
+                                name: numDifferentiation(this.state.sum_assured) + ' for ' + childeNameMapper(mem.key).toLowerCase(),
+                                value: inrFormatDecimal(individual_premiums[mem['backend_key']])
+                            };
+                            ind_pre_data.push(obj);
+                        }
+                    }
+                    this.updateBottomPremium(premium_data_floater[selectedIndex].premium);
+                    this.setState({
+                        premium_data_floater: premium_data_floater,
+                        ind_pre_data: ind_pre_data,
+                        premium_data_nf: premium_data_nf,
+                        premium_data_wf: premium_data_wf,
+                        premium_base: resultData.premium_details
+                    })
+                    this.setState({
+                        skelton: false
+                    });
+                } else {
+                    error= resultData.error || resultData.message ||
+                        true;
+                }
+            } catch (err) {
+                console.log(err)
                 this.setState({
-                    premium_data_floater: premium_data_floater,
-                    ind_pre_data: ind_pre_data,
-                    premium_data_nf: premium_data_nf,
-                    premium_data_wf: premium_data_wf,
-                    premium_base: resultData.premium_details
-                })
-            } else {
-                toast(resultData.error || resultData.message ||
-                    'Something went wrong');
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                show_loader: false
-            });
-            toast('Something went wrong');
-            }
+                    skelton: false
+                });
+                error = true;
+                errorType = "crash"
+                }
+                if(error)
+                {
+                    this.setState({
+                        errorData: {
+                        ...this.state.errorData,
+                        title2: error,
+                        type: errorType
+                        },
+                        showError: "page",
+                    });
+                }
         }
+
        sendEvents(user_action) {
            let eventObj = {
                "event_name": 'health_insurance',
@@ -234,6 +254,9 @@ class GroupHealthPlanSelectFloater extends Component {
              <Container
                events={this.sendEvents("just_set_events")}
                showLoader={this.state.show_loader}
+               skelton={this.state.skelton}
+               showError={this.state.showError}
+               errorData={this.state.errorData}
                title={"Select cover type"}
                buttonTitle="CONTINUE"
                withProvider={true}

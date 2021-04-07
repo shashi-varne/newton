@@ -78,10 +78,11 @@ const WithdrawSwitch = (props) => {
   return (
     <Container
       buttonTitle={`SWITCH: ${inrFormatDecimal(switchFunds?.total_switched_amount)}`}
-      showSkelton={isLoading}
+      skelton={isLoading}
       fullWidthButton
-      hideInPageTitle
+      // hideInPageTitle
       handleClick={handleClick}
+      title="Switch Recommendations"
     >
       {!isEmpty(switchFunds?.recommendations) && (
         <section>

@@ -4,7 +4,6 @@ import { nativeCallback } from 'utils/native_callback';
 import { inrFormatDecimal } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import { getConfig } from 'utils/functions';
 import { storageService } from '../../../../utils/validators';
@@ -14,7 +13,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         this.state = {
             ctaWithProvider: true,
             premium_data: [],
-            show_loader: true
+            skelton: true
         }
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
@@ -23,7 +22,14 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         this.initialize();
     }
     async componentDidMount() {
+        this.onload();
+    }
 
+    onload = async() =>{
+        this.setErrorData("onload");
+        this.setState({ skelton: true });
+        let error = "";
+        let errorType = "";
         this.setState({
             selectedIndex: this.state.groupHealthPlanData.selectedIndexCover || 0,
             add_on_title : this.state.providerConfig.add_on_title
@@ -45,9 +51,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
            
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
             body);
-            this.setState({
-                show_loader: false
-            });
+            
             var resultData = res.pfwresponse.result;
             
             if (res.pfwresponse.status_code === 200){
@@ -58,18 +62,33 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 }, () => {
                     this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium || this.state.premium_data[0].premium);
                 })
+                this.setState({
+                    skelton: false
+                });
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error = resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
         }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: "page",
+            });
+          }
     }
+
     sendEvents(user_action) {
         let cover_period = ((this.state.premium_data || [])[(this.state.selectedIndex || 0)] || {}).tenure + ' year' || '';
         cover_period = cover_period > 1 ? cover_period + ' years': cover_period;  
@@ -91,6 +110,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
     }
     handleClick = async () => {
         this.sendEvents('next');
+        this.setErrorData("submit");
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
         let plan_selected_final = this.state.premium_data[this.state.selectedIndex];
@@ -108,28 +128,41 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             body['floater_type'] = 'non_floater';
         }
 
+        let error = "";
+        let errorType ="";
         this.setState({
-            show_loader: true
+            show_loader: "button"
         });
 
         try{
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`, body);
-
             if (res.pfwresponse.status_code === 200){
                 var resultData = res.pfwresponse.result;
                 plan_selected_final = resultData.premium_details;
             }else{
-                toast(res.pfwresponse.result.error || res.pfwresponse.results.message
-                    || 'Something went wrong');
+                error = res.pfwresponse.result.error || res.pfwresponse.result.message
+                    || true;
             }
+            
         }catch(err){
             console.log(err);
             this.setState({
                 show_loader: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash"
         }
-
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError:true,
+              show_loader:false,
+            });
+          }
         groupHealthPlanData.plan_selected_final = plan_selected_final;
         
         var add_ons_final = {}
@@ -172,6 +205,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         }
 
         this.setLocalProviderData(groupHealthPlanData);
+        if(!error)
         this.navigate('plan-premium-summary');
     }
 
@@ -225,7 +259,10 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         return (
           <Container
             events={this.sendEvents("just_set_events")}
+            skelton={this.state.skelton}
             showLoader={this.state.show_loader}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             title="Select cover period"
             buttonTitle="CONTINUE"
             withProvider={true}

@@ -88,6 +88,7 @@ body[data-device="web"] {
 
   .Banner {
     max-width: var(--desktop-width);
+    margin-top: 9px;
   }
 
   .header-annual-inc-info {
@@ -122,8 +123,11 @@ body[data-device="web"] {
     height: 47px;
   }
 
-  #root > div:nth-child(2) {
+  #root > div:nth-child(1) {
     height: 100%;
+  }
+  .Toastify {
+    height: auto !important;
   }
 
   .Loader {
@@ -421,6 +425,12 @@ button {
   text-align: center;
 }
 
+.FlexButtonGenericColor{
+  background-color: rgb(53, 203, 93);
+  color: white;
+  border-radius: 6px;
+}
+
 .FooterTwoButtonLayout button.borderButton {
   background: #fff;
   border: 1px solid;
@@ -456,7 +466,7 @@ button {
   color: #8d918e;
   font-size: 15px;
   line-height: 24px;
-  padding-right: 20px;
+  text-align: left;
 }
 
 .fyntune-faq {
@@ -488,7 +498,7 @@ button {
   border-radius: 999px;
   top: 50%;
   transform: translateY(-50%);
-  left: -18px;
+  left: -17px;
   color: #5D44AE;
   border: 2px #5D44AE solid;
 }
@@ -674,7 +684,7 @@ input#pan {
 .generic-page-loader {
   width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -1006,6 +1016,8 @@ input#pan {
   padding: 10px 0px 0 0px;
 }
 
+$header-title-font-size: 20px;
+
 .header-title-page {
   background: white;
   color: #0A1C32;
@@ -1013,9 +1025,14 @@ input#pan {
   display: flex;
   align-items: flex-end;
   padding: 0 20px 0 20px;
-  font-size: 20px;
+  font-size: $header-title-font-size;
   transition: 0.3s transform ease-in-out;
   justify-content: space-between;
+
+  .header-title-page-count-text {
+    font-size: 10px;
+    line-height: $header-title-font-size;
+  }
 }
 
 .header-title-page-text {
@@ -1035,10 +1052,20 @@ input#pan {
   font-weight: 400 !important;
 }
 
-.main-top-title-header {
+@mixin main-top-title-header-base {
   font-size: 16px !important;
   color: #160d2e;
   font-weight: 400 !important;
+}
+
+.main-top-title-header {
+  @include main-top-title-header-base();
+  color: #160d2e;
+}
+
+.main-top-title-header-old {
+  @include main-top-title-header-base();
+  color: white;
 }
 
 .slide-fade {
@@ -1326,6 +1353,23 @@ input#pan {
   width: 40px;
 }
 
+// Withdraw provider //
+.withdraw-footer-layout {
+  padding: 10px;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  line-height: 1.5;
+
+  .FlexItem1-withProvider-footer {
+    .text-block-1 {
+      font-weight: 500;
+    }
+  }
+
+  .FlexItem2-withProvider-footer {
+    margin: 0;
+  }  
+}
+
 #bottom-popup .MuiDialog-paper {
   position: fixed;
   width: 100%;
@@ -1333,6 +1377,18 @@ input#pan {
   left: -20px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+}
+
+#bottom-popup {
+  .content-button {
+    margin: 0 20px 20px 20px;
+    display: flex;
+    width: auto;
+    justify-content: center;
+  }
+  button {
+    margin: 0px;
+  }
 }
 
 /* autosuggest */
@@ -1537,4 +1593,92 @@ input#pan {
 .callback-button-container img{
   width: 100%;
   object-fit: cover;
+}
+
+// --Iframe Container CSS Below--:
+.childblockiframe{
+  display: flex;
+  flex-direction: row;
+  overflow: scroll ;
+  padding-top: 100px;
+  overflow-x: hidden;
+  height: 100%;
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+.childblockiframe-element-one{
+  height: auto;
+  text-align: left !important;
+  position: relative;
+  flex: 1 1 55%;
+}
+
+.imgiframe{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+  .childblockiframe-element-img{ 
+    margin-bottom: 30%;
+  }
+
+.footer-iframe{
+  background-color:  white;
+  bottom: 0%;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+@media (max-width: 900px) {
+  .childblockiframe-element-one{
+    width: 50%;
+  }
+}
+
+@media (max-width: 425px) {
+  .childblockiframe {
+    flex-direction: column-reverse;
+    height: auto;
+    padding: 52px 0px 52px 0px;
+  }
+  .childblockiframe-element-one{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  .childblockiframe-element-img{
+    width: 200%;
+    padding-top: 30%;
+    margin-left: 100% !important;
+    margin-bottom: 30px !important;
+  }
+
+  #iframeFooter{
+    position: fixed !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+}
+
+#iframeFooter{
+  position: relative;
+  margin: 0 auto;
+  margin-bottom: 13px !important;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.Loaderiframe {
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
 }
