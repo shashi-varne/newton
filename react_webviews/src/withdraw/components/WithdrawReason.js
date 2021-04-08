@@ -112,8 +112,8 @@ const Landing = (props) => {
           <div className='withdraw-reason-title'>{reasons?.title}</div>
 
           <div className='withdraw-reason-list'>
-            {reasons?.options?.map((el) => (
-              <div className='withdraw-reason-items' onClick={getSubQuestions(el)}>
+            {reasons?.options?.map((el, idx) => (
+              <div className='withdraw-reason-items' onClick={getSubQuestions(el)} key={idx}>
                 <div>{el?.title}</div>
                 <KeyboardArrowRightIcon />
               </div>
