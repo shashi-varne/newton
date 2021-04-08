@@ -55,15 +55,19 @@ const Summary = (props) => {
     Data.gold_details = reportData.gold_details;
     storageService().setObject(
       storageConstants.PENDING_PURCHASE,
-      reportData.pending.invested_transactions
+      reportData?.pending?.invested_transactions
     );
     storageService().setObject(
       storageConstants.PENDING_REDEMPTION,
-      reportData.pending.redeemed_transactions
+      reportData?.pending?.redeemed_transactions
     );
     storageService().setObject(
       storageConstants.SIPS,
-      reportData.sips.active_sips
+      reportData?.sips?.active_sips
+    );
+    storageService().setObject(
+      storageConstants.PENDING_SWITCH,
+      reportData?.pending?.switch_transactions
     );
     Data.showTrackGoals = reportData.current.invested > 0 ? true : false;
     Data.showPendingPurchase = reportData.pending.invested > 0 ? true : false;

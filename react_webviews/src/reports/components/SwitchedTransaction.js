@@ -1,29 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
-import { getPurchaseProcessData } from "../constants";
-import { getSummaryV2 } from "../common/api";
+import { getPurchaseProcessData, storageConstants } from "../constants";
 import Process from "./mini_components/Process";
+import { storageService } from "../../utils/validators";
 
 const SwitchedTransaction = (props) => {
-  const [transactions, setTransactions] = useState({});
-  const [showSkelton, setShowSkelton] = useState(true);
+  const transactions = storageService().getObject(
+    storageConstants.PENDING_SWITCH
+  );
+  if (!transactions) {
+    props.history.goBack();
+  }
   const [openProcess, setOpenProcess] = useState(false);
   const [selectedSwitch, setSelectedSwitch] = useState({});
-
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    const result = await getSummaryV2();
-    if (!result) {
-      setShowSkelton(false);
-      return;
-    }
-    setTransactions(result.report?.pending?.switch_transactions || []);
-    setShowSkelton(false);
-  };
 
   const handleProcess = (switched) => {
     setSelectedSwitch(switched);
@@ -31,7 +21,7 @@ const SwitchedTransaction = (props) => {
   };
 
   return (
-    <Container noFooter={true} skelton={showSkelton} title="Pending Switch">
+    <Container noFooter={true} title="Pending Switch">
       <div className="report-purchase">
         {!isEmpty(transactions) &&
           transactions.map((switched, index) => {
@@ -39,12 +29,18 @@ const SwitchedTransaction = (props) => {
               <div className="purchased" key={index}>
                 <div className="switch-head">
                   <div className="switch-step">
-                    <div className="outline"><div className="circle"></div></div>
-                    <div className="mf-name">{switched.from_mf.friendly_name}</div>
+                    <div className="outline">
+                      <div className="circle"></div>
+                    </div>
+                    <div className="mf-name">
+                      {switched.from_mf.friendly_name}
+                    </div>
                   </div>
                   <div className="switch-step-2">All units</div>
                   <div className="switch-step completed-switch">
-                    <div><div className="circle"></div></div>
+                    <div>
+                      <div className="circle"></div>
+                    </div>
                     <div>{switched.to_mf.friendly_name}</div>
                   </div>
                 </div>
