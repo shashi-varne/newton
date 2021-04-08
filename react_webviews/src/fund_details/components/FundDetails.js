@@ -534,7 +534,7 @@ const FundDetails = ({ classes, history }) => {
                     style={{
                         width: 'calc(100% - 30px)',
                         height: '100%',
-                        margin: "0 15px",
+                        // margin: "0 15px",
                       }}
               />
             </div>
@@ -669,14 +669,33 @@ const FundDetails = ({ classes, history }) => {
     <div>
       {!iframe && partnerCode !== 'moneycontrol' ? (
         <Container
+          // title={fundDetails?.performance?.friendly_name}
+          // hideInPageTitle={true}
+          // noPadding
+          // fullWidthButton
+          // handleClick={handleClick}
+          // buttonTitle={buttonTitle}
+          // showLoader={isLoading}
+          // classOverRideContainer='fd-container'
           title={fundDetails?.performance?.friendly_name}
+          hidePageTitle={true}
           hideInPageTitle={true}
           noPadding
-          fullWidthButton
+          // fullWidthButton
           handleClick={handleClick}
+          handleClickOne={handleClick}
           buttonTitle={buttonTitle}
-          showLoader={isLoading}
+          buttonOneTitle={buttonTitle}
+          skelton={isLoading || loading} // new container field
           classOverRideContainer='fd-container'
+          twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
+          buttonTwoTitle={ ENTER_AMOUNT }
+          handleClickTwo={handleClick2}
+          handleClick2={handleClick2} // old container field
+          buttonTitle2={ENTER_AMOUNT} // old container field
+          // showLoader={isApiRunning} // new container field
+          showLoader={isLoading || loading} // old container field
+          type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
         >
           {fundDetails && ContainerData()}
         </Container>
