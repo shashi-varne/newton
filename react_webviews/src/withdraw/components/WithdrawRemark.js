@@ -109,8 +109,8 @@ const WithdrawRemark = ({ location, ...props }) => {
           <div className='withdraw-remark-title'>{subQstn?.action?.sub_question?.title}</div>
           {subQstn?.tag !== 'app_concerns' ? (
             <div className='withdraw-remark-list'>
-              {subQstn?.action?.sub_question?.options?.map((el) => (
-                <div className='withdraw-remark-items'>
+              {subQstn?.action?.sub_question?.options?.map((el, idx) => (
+                <div className='withdraw-remark-items' key={idx}>
                   <FiberManualRecordIcon color='primary' />
                   <div>{el.title}</div>
                 </div>
