@@ -208,6 +208,9 @@ export async function kyc_submit(params) {
 
     const { result, status_code: status } = res.pfwresponse;
 
+    this.setState({
+      show_loader: false,
+    });
     if (status === 200) {
       this.navigate("amount/one-time");
     } else {
@@ -459,9 +462,11 @@ export async function checkMerge(pan_number) {
 
     const { result, status_code: status } = res.pfwresponse;
 
+    this.setState({
+      show_loader: false,
+    });
     if (status === 200) {
       this.setState({
-        show_loader: false,
         openDialog: true,
         title: 'PAN Already Exists',
         subtitle: 'Sorry! this PAN is already registered with another account.',
@@ -470,7 +475,6 @@ export async function checkMerge(pan_number) {
     } else {
       if (result.different_login) {
         this.setState({
-          show_loader: false,
           openDialog: true,
           title: 'PAN Is already registered',
           subtitle: result.error || result.message,

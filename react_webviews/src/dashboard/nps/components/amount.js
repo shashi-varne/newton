@@ -23,7 +23,6 @@ class EnterAmount extends Component {
 
   handleChange = name => (event) => {
     let value = (name === "custom-amt") ? event.target.id : event.target.value;
-    let taxSaved = Math.min(value * 0.309, 61800);
 
     if (name === 'amount') {
       let amt = (value.match(/\d+/g) || "").toString();
@@ -34,9 +33,11 @@ class EnterAmount extends Component {
       }
     }
 
+    let taxSaved = Math.min(value * 0.309, 61800);
+
     this.setState({
       amount: value,
-      amount_error: value < parseInt(500) ? "Minimum amount is ₹500" : "",
+      amount_error: value < parseInt(500) ? "Minimum amount is ₹500" : value > parseInt(500000) ? "Maximum amount is ₹500000" : "",
       taxsaved: taxSaved,
     });
   };
@@ -61,7 +62,7 @@ class EnterAmount extends Component {
         showLoader={this.state.show_loader}
         title="Enter Amount"
         handleClick={this.handleClick}
-        disable={!this.state.amount}
+        disable={this.state.amount < 500 || this.state.amount > 500000}
         showError={this.state.showError}
         errorData={this.state.errorData}
       >
