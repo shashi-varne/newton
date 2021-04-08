@@ -5,6 +5,7 @@ import { getConfig,
 import { ghGetMember } from '../../constants';
 import Api from 'utils/api';
 import {  openPdfCall } from 'utils/native_callback';
+import isEqual from 'lodash/isEqual';
 import { nativeCallback } from 'utils/native_callback';
 import {isEmpty} from '../../../utils/validators';
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
@@ -16,6 +17,7 @@ export async function initialize() {
     this.setEditTitle = setEditTitle.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
     this.memberKeyMapper = memberKeyMapper.bind(this);
+    this.getApplicationDetails = getApplicationDetails.bind(this);
     
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     
@@ -90,7 +92,7 @@ export async function initialize() {
                 if (res.pfwresponse.status_code === 200) {
                     
                     lead = resultData;
-                    lead.member_base = ghGetMember(lead, this.state.providerConfig);               
+                    lead.member_base = ghGetMember(lead, providerConfig);               
                     this.setState({
                         lead: resultData || {},
                     }, () => {
@@ -106,14 +108,13 @@ export async function initialize() {
                         true;
                 }
                 
+            }else if(isEmpty(groupHealthPlanData.application_form_data)){
+                this.getApplicationDetails(application_id, providerConfig);
             } else if(application_id && this.state.screen_name !== 'final_summary_screen') {
                 var application_form_data = groupHealthPlanData.application_form_data;
-               
-                // if (res.pfwresponse.status_code === 200) {
+                console.log('from SESSION')
                     lead = application_form_data.quotation_details;
-                    
                     var member_base = ghGetMember(lead, providerConfig);
-                                   
                     this.setState({
                         lead: application_form_data || {},
                         member_base: member_base,
@@ -133,37 +134,7 @@ export async function initialize() {
                         skelton: false
                     });
             }else if(application_id && this.state.screen_name === 'final_summary_screen'){
-                url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}&form_submitted=true`;
-                
-                const res = await Api.get(url);
-                resultData = res.pfwresponse.result;
-                if (res.pfwresponse.status_code === 200) {
-                    lead = resultData.quotation_details;
-                    
-                    var member_base = ghGetMember(lead, providerConfig);
-                                   
-                    this.setState({
-                        lead: resultData || {},
-                        member_base: member_base,
-                        quotation: resultData.quotation_details || {},
-                        common_data: {
-                            ...resultData.common,
-                            tnc: resultData.common.tnc || resultData.tnc
-                        },
-                        insured_account_type: lead.insurance_type || ''
-                    }, () => {
-                        if (this.onload && !this.state.ctaWithProvider) {
-                            this.onload();
-                        }
-
-                    })
-                    this.setState({
-                        skelton: false
-                    });
-                }else{
-                    error=resultData.error || resultData.message ||true;
-                }
-                
+                this.getApplicationDetails(application_id, providerConfig);
             }
         } catch (err) {
             console.log(err);
@@ -203,7 +174,7 @@ export async function initialize() {
             net_premium = lead.total_premium - lead.gst;
             
             if(provider === 'HDFCERGO'){
-                leftTitle = this.state.providerConfig.hdfc_plan_title_mapper[lead.plan_id];
+                leftTitle = providerConfig.hdfc_plan_title_mapper[lead.plan_id];
             }else if(provider === 'RELIGARE'){
                 leftTitle = 'Care'
             }else{
@@ -326,7 +297,99 @@ export function updateBottomPremiumAddOns(premium) {
     }
 }
 
+export async function getApplicationDetails(application_id, providerConfig) {
+    let error="";
+    let errorType="";
+    this.setErrorData("submit")
+
+    this.setState({
+        skelton: true
+    });
+    try{
+        var url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}&form_submitted=true`;
+        const res = await Api.get(url);
+        var resultData = res.pfwresponse.result;
+        if (res.pfwresponse.status_code === 200) {
+            var lead = resultData.quotation_details;
+            
+            var member_base = ghGetMember(lead, providerConfig);
+                           
+            this.setState({
+                lead: resultData || {},
+                member_base: member_base,
+                quotation: resultData.quotation_details || {},
+                common_data: {
+                    ...resultData.common,
+                    tnc: resultData.common.tnc || resultData.tnc
+                },
+                insured_account_type: lead.insurance_type || ''
+            }, () => {
+                if (this.onload && !this.state.ctaWithProvider) {
+                    this.onload();
+                }
+    
+            })
+            this.setState({
+                skelton: false
+            });
+        }else{
+            error=resultData.error || resultData.message ||true;
+        }
+    }catch(err){
+        console.log(err)
+        this.setState({
+            show_loader: false
+        });
+        error=true;
+        errorType="crash";
+    }
+    if(error)
+    {
+        this.setState({
+            errorData: {
+              ...this.state.errorData,
+              title2: error,
+              type: errorType
+            },
+            showError: true,
+          });
+    }
+    
+}
 export async function updateLead( body, quote_id) {
+
+    var groupHealthPlanData = this.state.groupHealthPlanData;
+    var current_form_data = this.state.form_data;
+    var prev_form_data = groupHealthPlanData.prev_form_data;
+    
+    
+        if (current_form_data['dt_created']) delete current_form_data['dt_created'];
+        if (current_form_data['dt_updated'])  delete current_form_data['dt_updated'];
+        if(prev_form_data){
+            if (prev_form_data['dt_created']) delete prev_form_data['dt_created'];
+            if (prev_form_data['dt_updated']) delete prev_form_data['dt_updated'];
+        }
+        
+        for(var val in current_form_data){
+            if(val.includes('_error')){
+                delete current_form_data[`${val}`]
+            }
+        }
+        for(var val in prev_form_data){
+            if(val.includes('_error')){
+                delete current_form_data[`${val}`]
+            }
+        }
+        console.log({current_form_data, prev_form_data})
+        groupHealthPlanData['prev_form_data'] = this.state.form_data;
+        this.setLocalProviderData(groupHealthPlanData)
+        console.log('euqal??', isEqual(prev_form_data, current_form_data))
+        var isFormDataChanged = isEqual(prev_form_data, current_form_data)
+        if(isFormDataChanged){
+            this.navigate(this.state.next_state);
+            return;
+    }
+
     let error="";
     let errorType="";
     this.setErrorData("submit")

@@ -130,7 +130,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         if(isValidDate(value) && !IsFutureDate(value) && name !== 'appointeedob'){
             const { age } = calculateAge(value, 'byMonth');
-            form_data[name + '_age'] = age;
+            // form_data[name + '_age'] = age;
 
             this.setState({
                 form_data: form_data,

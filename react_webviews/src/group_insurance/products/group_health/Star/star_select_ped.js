@@ -239,7 +239,12 @@ class GroupHealthStarPlanSelectPed extends Component {
        }
      }
      body.insured_people_details = insured_people_details;
-     this.updateLead(body);
+     this.setState({
+       form_data: body
+     },()=>{
+      this.updateLead(body);
+     })
+     
    }
    };
 

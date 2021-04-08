@@ -4,7 +4,6 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
-
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
 import {validateEmail, numberShouldStartWith, validateNumber} from 'utils/validators';
 import Input from '../../../../common/ui/Input';
@@ -149,6 +148,7 @@ class GroupHealthPlanContactDetails extends Component {
                     "email": this.state.form_data.email,
                 }
             }
+
             this.updateLead(body);
         }
     }

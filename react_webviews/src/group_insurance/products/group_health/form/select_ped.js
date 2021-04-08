@@ -358,7 +358,12 @@ class GroupHealthPlanSelectPed extends Component {
                 lead: lead
             })
 
-            this.updateLead(body);
+            this.setState({
+                form_data: body
+            }, ()=>{
+                this.updateLead(body);
+            })
+            
         }
     }
 
