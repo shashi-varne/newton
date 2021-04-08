@@ -5,15 +5,13 @@ import { getConfig } from 'utils/functions';
 import {validateNumber, validateLengthDynamic, charsNotAllowedHDFC } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
-
+import {  yesNoOptions } from '../../../constants';
 import Input from '../../../../common/ui/Input';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
-
-import Checkbox from 'material-ui/Checkbox';
-import Grid from 'material-ui/Grid';
+import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 
@@ -34,7 +32,7 @@ class GroupHealthPlanAddressDetails extends Component {
             get_lead: true,
             next_state: 'nominee',
             screen_name: 'address_screen',
-            checked: false,
+            same_address: '',
             sameAddressCheck: false
         }
         this.initialize = initialize.bind(this);
@@ -63,7 +61,8 @@ class GroupHealthPlanAddressDetails extends Component {
 
         let correspondence_address = lead.address_details.correspondence_address || {};
         let permanent_address = lead.address_details.permanent_address || {};
-        if (this.state.provider === 'RELIGARE') {
+        var same_address = this.state.same_address;
+        if (this.state.provider === 'RELIGARE' || this.state.provider === 'GMC') {
             form_data = {
                 ...this.state.form_data,
                 addr_line1: correspondence_address.addr_line1 || '',
@@ -81,6 +80,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 p_country: permanent_address.country || '',
 
             };
+            same_address = lead.buyer_details.perm_addr_correspondence_addr_same ? "YES" : "NO";
 
             if(form_data.pincode) {
                 this.getCityListReligare({form_data, name: 'pincode'});
@@ -102,6 +102,7 @@ class GroupHealthPlanAddressDetails extends Component {
         this.setState({
             form_data: form_data,
             lead: lead,
+            same_address: same_address
         })
 
 
@@ -221,7 +222,7 @@ class GroupHealthPlanAddressDetails extends Component {
             return;
         }
 
-        let { provider, form_data, checked } = this.state;
+        let { provider, form_data, same_address } = this.state;
 
         this.sendEvents('next');
         let keysMapper = {
@@ -236,8 +237,8 @@ class GroupHealthPlanAddressDetails extends Component {
         }
 
         let keys_to_check = ['addr_line1', 'addr_line2', 'pincode'];
-        if (provider === 'RELIGARE') {
-            if (checked) {
+        if (provider === 'RELIGARE' || provider === 'GMC') {
+            if (same_address === 'YES') {
                 form_data.p_pincode_error = '';
                 form_data.p_city_error = '';
                 form_data.p_addr_line1_error = '';
@@ -259,8 +260,17 @@ class GroupHealthPlanAddressDetails extends Component {
         }
 
         let canSubmitForm = true;
+
         let address_field_max_length = this.state.providerConfig.address_field_max_length;
         
+        if((this.state.provider === 'GMC' || this.state.provider === 'RELIGARE') && same_address === '' ){
+            this.setState({
+                same_address_error: 'Choose an option'
+            })
+            canSubmitForm = false
+        }
+
+
         let address_key_check = ['addr_line1', 'addr_line2', 'p_addr_line1', 'p_addr_line2'];
         for(let i = 0; i < address_key_check.length; i++){
             if(this.state.provider === 'HDFCERGO'){
@@ -284,7 +294,7 @@ class GroupHealthPlanAddressDetails extends Component {
             form_data['pincode_error'] = 'Please enter valid pincode';
         }
 
-        if (provider === 'RELIGARE' && !this.state.checked && (form_data.p_pincode.length !== 6 || !validateNumber(form_data.p_pincode) || 
+        if (provider === 'RELIGARE' && this.state.same_address === 'NO' && (form_data.p_pincode.length !== 6 || !validateNumber(form_data.p_pincode) || 
         form_data.p_pincode_error)) {
             form_data['p_pincode_error'] = 'Please enter valid pincode';
         }
@@ -320,7 +330,6 @@ class GroupHealthPlanAddressDetails extends Component {
         this.setState({
             form_data: form_data
         });
-
         if (canSubmitForm) {
             let body = {};
             if (provider === 'HDFCERGO') {
@@ -340,7 +349,7 @@ class GroupHealthPlanAddressDetails extends Component {
             }
 
 
-            if (provider === 'RELIGARE') {
+            if (provider === 'RELIGARE' || provider === 'GMC') {
                 body = {
                     
                     "address_details": {
@@ -351,13 +360,13 @@ class GroupHealthPlanAddressDetails extends Component {
                             "addr_line2": form_data.addr_line2,
                             "city": form_data.city
                         },
-                        "correspondence_addr_same": checked ? 'y' : 'n',
+                        "correspondence_addr_same": this.state.same_address === 'YES' ? 'y' : 'n',
                         "permanent_address": { 
-                            "state": checked ? form_data.state : form_data.p_state,
-                            "addr_line1": checked ? form_data.addr_line1 : form_data.p_addr_line1,
-                            "pincode":checked ? form_data.pincode : form_data.p_pincode,
-                            "addr_line2":  checked ? form_data.addr_line2 : form_data.p_addr_line2,
-                            "city": checked ? form_data.city : form_data.p_city
+                            "state": same_address === 'YES' ? form_data.state : form_data.p_state,
+                            "addr_line1": same_address === 'YES' ? form_data.addr_line1 : form_data.p_addr_line1,
+                            "pincode":same_address === 'YES' ? form_data.pincode : form_data.p_pincode,
+                            "addr_line2":  same_address === 'YES' ? form_data.addr_line2 : form_data.p_addr_line2,
+                            "city": same_address === 'YES' ? form_data.city : form_data.p_city
                         }
                     }
                 }
@@ -378,7 +387,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 "screen_name": 'address details',
                 'from_edit': this.props.edit ? 'yes' : 'no',
                 'address_entered': this.state.form_data.addr_line1 ? 'yes' : 'no',
-                "permanent_current_same": this.state.checked ? 'yes' : 'no',
+                "permanent_current_same": this.state.same_address === "YES" ? 'yes' : 'no',
                 "permanent_address_entered": this.state.form_data.p_addr_line1 ? 'yes' : 'no',
             }
         };
@@ -544,7 +553,7 @@ class GroupHealthPlanAddressDetails extends Component {
     }
 
     setPermAddress = () => {
-        if (!this.state.checked) {
+        if (this.state.same_address === "NO") {
             this.handleScroll();
         }
     }
@@ -565,68 +574,53 @@ class GroupHealthPlanAddressDetails extends Component {
         }, 50);
     }
 
-    handleCheckBox = name => event => {
+    handleChangeRadio = name => event => {
+
+        let options = yesNoOptions;
         this.setState({
-            [name]: event.target.checked,
-            sameAddressCheck: !this.state.sameAddressCheck
+            [name]: options[event] ? options[event].value : '',
+            [name + '_error']: ''
         }, () => {
-            this.setPermAddress();
-        })
+            if(this.state.same_address === 'NO'){
+                this.setPermAddress();
+            }
+        });
 
     };
 
-    renderReligareAddress() {
-        if (this.state.provider === 'RELIGARE') {
+    renderReligareGmcAddress() {
+        if (this.state.provider === 'RELIGARE' || this.state.provider === 'GMC') {
             return (
 
                 <div>
                     <div className="InputField" style={{ marginBottom: '0px !important' }}>
-                        <div className="CheckBlock2" style={{ margin: '10px 0' }}>
-                            <Grid container spacing={16} alignItems="center">
-                                <Grid item xs={1} className="TextCenter">
-                                    <Checkbox
-                                        defaultChecked
-                                        checked={this.state.checked}
-                                        color="default"
-                                        // value={this.state.checked || false}
-                                        name="checked"
-                                        onChange={this.handleCheckBox('checked')}
-                                        className="Checkbox" />
-                                </Grid>
-                                <Grid item xs={11}>
-                                    <div className="checkbox-text">Is permanent address same as current address?
-                                </div>
-                                </Grid>
-                            </Grid>
+                        <div className="InputField same_address">
+                            <RadioWithoutIcon
+                              label="Is permanent address same as current address?"
+                              class="same_address religare care"
+                              options={yesNoOptions}
+                              width="40"
+                              id="same_address"
+                              name="same_address"
+                              error={!!this.state.same_address}
+                              helperText={this.state.same_address_error}
+                              value={this.state.same_address || ""}
+                              onChange={this.handleChangeRadio("same_address")}
+                            />
                         </div>
                     </div>
 
-                    {!this.state.checked &&
+                    {this.state.same_address === 'NO' &&
 
                         <div>
-                            <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginBottom: '20px' }}>
+                            <div style={{ color: '#000000', fontSize: 13, fontWeight: 300, marginBottom: '20px' }}>
                                 Permanent Address
                             </div>
 
                             <div className="InputField">
                                 <Input
-                                    type="number"
-                                    width="40"
-                                    disabled={this.state.checked}
-                                    label="Pincode"
-                                    id="p_pincode"
-                                    name="p_pincode"
-                                    maxLength="6"
-                                    error={(this.state.form_data.p_pincode_error) ? true : false}
-                                    helperText={this.state.form_data.p_pincode_error}
-                                    value={this.state.form_data.p_pincode || ''}
-                                    onChange={this.handlePincodeReligare('p_pincode')} />
-                            </div>
-
-                            <div className="InputField">
-                                <Input
                                     type="text"
-                                    disabled={this.state.checked}
+                                    disabled={this.state.same_address === 'YES'}
                                     id="p_addr_line1"
                                     label="Address line 1"
                                     name="p_addr_line1"
@@ -640,7 +634,7 @@ class GroupHealthPlanAddressDetails extends Component {
                             <div className="InputField">
                                 <Input
                                     type="text"
-                                    disabled={this.state.checked}
+                                    disabled={this.state.same_address === 'YES'}
                                     id="p_addr_line2"
                                     label="Address line 2"
                                     name="p_addr_line2"
@@ -650,8 +644,22 @@ class GroupHealthPlanAddressDetails extends Component {
                                     value={this.state.form_data.p_addr_line2 || ''}
                                     onChange={this.handleChange()} />
                             </div>
-
                             <div className="InputField">
+                                <Input
+                                    type="number"
+                                    width="40"
+                                    disabled={this.state.same_address === 'YES'}
+                                    label="Pincode"
+                                    id="p_pincode"
+                                    name="p_pincode"
+                                    maxLength="6"
+                                    error={(this.state.form_data.p_pincode_error) ? true : false}
+                                    helperText={this.state.form_data.p_pincode_error}
+                                    value={this.state.form_data.p_pincode || ''}
+                                    onChange={this.handlePincodeReligare('p_pincode')} />
+                            </div>
+
+                            <div className="InputField" style={{marginBottom: '-14px'}}>
                                 <DropdownWithoutIcon
                                     width="40"
                                     dataType="AOB"
@@ -716,16 +724,14 @@ class GroupHealthPlanAddressDetails extends Component {
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
-
+                <div className="insurance-address-container">
                 <div className="common-top-page-subtitle">
-                    {this.state.provider==='RELIGARE'?' Policy will be delivered to the current address':'Policy will be delivered to this address'}
+                    {this.state.provider==='RELIGARE' || this.state.provider === 'GMC' ?' Policy will be delivered to the current address':'Policy will be delivered to this address'}
                 </div>
-                {this.state.provider==='RELIGARE'&&
-                <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px', marginBottom: '20px' }}>
-                    Current Address
-                </div>}
                 <FormControl fullWidth>
-
+                <div style={{ color: '#000000', fontSize: 13, fontWeight: 300, marginBottom: '20px' }}>
+                                Current Address
+                </div>
                     <div className="InputField">
                         <Input
                             type="text"
@@ -782,9 +788,9 @@ class GroupHealthPlanAddressDetails extends Component {
                         </div>
                     }
 
-                    {this.state.provider === 'RELIGARE' &&
+                    {(this.state.provider === 'RELIGARE' || this.state.provider === 'GMC') &&
 
-                        <div>
+                        <div style={{marginBottom: '-14px'}}>
                             <div className="InputField">
                                 <Input
                                     type="number"
@@ -835,10 +841,11 @@ class GroupHealthPlanAddressDetails extends Component {
                         />
                     </div>
 
-                    {this.renderReligareAddress()}
+                    {this.renderReligareGmcAddress()}
                 </FormControl>
 
                 <ConfirmDialog parent={this} />
+            </div>
             </Container>
         );
     }

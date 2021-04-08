@@ -23,7 +23,7 @@ class HowToStepsClass extends Component {
         <div className="content content_step">
           {this.state.baseData.show_index && <span> {index + 1}. </span>}
           <div className="content content_step">
-            {option.title && <div className="content-title">{option.title}</div>}
+            {option.title && <div className="content-title" style={{fontSize: '15px', fontWeight: '500'}}>{option.title}</div>}
             {option.subtitle && <div className="content-subtitle">{option.subtitle}</div>}
           </div>
         </div>
