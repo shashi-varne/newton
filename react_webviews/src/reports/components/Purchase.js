@@ -1,29 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
-import { getPurchaseProcessData } from "../constants";
-import { getSummaryV2 } from "../common/api";
+import { getPurchaseProcessData, storageConstants } from "../constants";
 import Process from "./mini_components/Process";
+import { storageService } from "../../utils/validators";
 
 const Purchase = (props) => {
-  const [transactions, setTransactions] = useState({});
-  const [showSkelton, setShowSkelton] = useState(true);
+  const transactions = storageService().getObject(
+    storageConstants.PENDING_PURCHASE
+  );
+  if (!transactions) {
+    props.history.goBack();
+  }
   const [openProcess, setOpenProcess] = useState(false);
   const [selectedPurchase, setSelectedPurchase] = useState({});
-
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    const result = await getSummaryV2();
-    if (!result) {
-      setShowSkelton(false);
-      return;
-    }
-    setTransactions(result.report.pending.invested_transactions);
-    setShowSkelton(false);
-  };
 
   const handleProcess = (purchased) => {
     setSelectedPurchase(purchased);
@@ -31,7 +21,7 @@ const Purchase = (props) => {
   };
 
   return (
-    <Container noFooter={true} skelton={showSkelton} title="Pending Purchase">
+    <Container noFooter={true} title="Pending Purchase">
       <div className="report-purchase">
         {!isEmpty(transactions) &&
           transactions.map((purchased, index) => {
