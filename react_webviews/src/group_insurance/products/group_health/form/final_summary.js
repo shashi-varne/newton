@@ -38,6 +38,7 @@ class GroupHealthPlanFinalSummary extends Component {
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
             screen_name:'final_summary_screen',
+            pgReached: getUrlParams().pgReached ? true : false
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -83,10 +84,6 @@ class GroupHealthPlanFinalSummary extends Component {
       }
  
     onload = () => {
-        const queryParams = getUrlParams();
-        if(queryParams.pgReached){
-            this.setState({pgReached : true})
-        }        
         let { lead, provider } = this.state;  
 
         let insured_people_details = lead.insured_people_details;
