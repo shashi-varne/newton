@@ -169,16 +169,16 @@
   }
   
   .error-radiogrp {
-    margin: 0;
+    /* margin: 0; */
     font-size: 0.75rem;
     text-align: left;
-    margin-top: 8px;
+    /* margin-top: 8px; */
     min-height: 1em;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     line-height: 1em;
-    color: #f44336;
+    color: #D0021B;
     position: relative;
-    top: 5px;
+    /* top: 5px; */
   }
   .payment-dialog {
     font-size: 1rem;

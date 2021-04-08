@@ -99,6 +99,18 @@
 .Dropdown {
   width: 100%;
 }
+.multi-checkbox-container, .multi-checkbox{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.multi-checkbox{
+  height: 14px;
+  width: 14px;
+  border-radius: 3px;
+  border: 1px solid #D6D6D6; 
+}
+
 .RadioGrpGrid {
   flex-basis: unset;
   max-width: 100%;
@@ -640,19 +652,12 @@ body[data-device="mobile"] {
   margin: 0 0 10px -10px;
 }
 
-
 .generic-bottomsheet {
   .top {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 0 0 10px 0;
-
-    .t-left {
-      margin: 0 15px 0 0;
-    }
-    .t-right {
-      margin: 0 0px 0 0;
-    }
   }
 
   div#alert-dialog-description {
@@ -660,22 +665,16 @@ body[data-device="mobile"] {
   }
 
   .header_title {
-    color: #160D2E;
-    font-size: 17px;
-    font-weight: bold;
-    line-height: 27px;
-    margin: 20px 0px 5px 0;
+    color: #0a1d32;
+    font-size: 16px;
+    font-weight: 600;
   }
 
   .content {
-    color: #767E86;
-    font-size: 13px;
-    line-height: 21px;
-    text-align: left;
-  }
-  .top-right-image {
-    width: 110px !important;
-    height: 75px !important;
+    color: #767e86;
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 400;
   }
 }
 
@@ -956,7 +955,7 @@ body[data-device="mobile"] {
   padding: 20px;
   margin: 20px 0 0 0;
   background: #fff;
-  height: auto;
+  height: 100%;
 
   .single-full-image-skelton {
     border-radius: 6px;
@@ -1102,20 +1101,123 @@ body[data-device="mobile"] {
   }
 }
 
-.generic-button-outlined {
-  color: var(--secondary) !important;
-  background-color: white !important;
-  border: 1px solid var(--secondary) !important;
-}
-.generic-button-textonly {
-  color: var(--secondary) !important;
-  background-color: white !important;
-  font-weight: bold !important;
-  width: fit-content !important;
-  justify-content: end !important;
+.label{
+  position: relative;
 }
 
-.generic-button-raised {
-  color: white;
-  background-color: var(--secondary);
+.react-select-container{
+  border: none !important;
+  // border-bottom: 1px solid #D6D6D6 !important;
+}
+.react-select__control{
+  background: rgba(238, 238, 238, 0.3) !important;
+  min-height: 51px !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0px !important;
+}
+.react-select__option{
+  padding: 10px 20px 10px 10px !important;
+  font-size: 13px !important;
+  line-height: 21px !important;
+  color: #161A2E !important;
+  min-height: 41px !important;
+  display: flex !important;
+  align-items: flex-start !important;
+}
+.react-select__single-value{
+  margin-top: 2px !important;
+  margin-left: -1px !important;
+  font-size: 13px;
+  line-height: 21px;
+  display: inline-block !important;
+  flex-direction: row !important;
+  position: absolute;
+  left: 10px;
+}
+ .react-select__value-container .react-select__single-value{
+  flex-direction: row !important;
+}
+.react-select__value-container{
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 21px;
+  font-weight: normal;
+  color: #161A2E;
+  max-width: 80%;
+  overflow: hidden;
+  position: relative;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.react-select__multi-value__label{
+   padding : 0 2px 2px 4px !important
+}
+.drop-up .Select-menu-outer {
+  top: auto;
+  bottom: 100%;
+}
+.react-select__input{
+  padding: 0 !important;
+  margin-left: -1PX !important;
+  margin-top: 5px !important;
+}
+.css-b8ldur-Input{
+  margin: 0px 2px 0 2px !important;
+}
+.react-select__multi-value{
+  background: rgba(238, 238, 238, 0.3) !important;
+  border: 1px solid #D6D6D6;
+  height: 18px !important;
+  line-height: 17px !important;
+  font-size: 13px !important; 
+  margin: 9px 5px 4px 0px !important;
+}
+.react-select__value-container--is-multi{
+  margin-top: 14px !important;
+}
+.react-select__multi-value__remove{
+  margin-top: 3px;
+  border-radius: 50% !important;
+  margin-left: 6px !important;
+  margin-right: 6px !important;
+  background-color: #D6D6D6 !important;
+  height: 10px !important;
+  width: 10px !important;
+  padding: 0 !important;
+}
+.css-6q0nyr-Svg, .css-19bqh2r{
+  color: rgba(238, 238, 238 , 1) !important;
+  padding: 0 !important;
+}
+.css-6q0nyr-Svg:hover,  .css-19bqh2r:hover{
+  color: #4A4A4A !important;
+  padding: 0 !important;
+}
+.react-select__menu-notice{
+  text-align:left !important;
+  color: #767E86 !important;
+  font-size: 13px !important;
+  padding-top: 13px !important;
+  height: 41px !important;
+}
+.react-select__menu{
+  margin: 0 !important;
+  margin-top: 1px !important;
+  border-radius: 0 0 4px 4px !important;
+  max-height: 246px !important;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 2px rgba(0, 0, 0, 0.05) !important;
+  background: #FFFFFF !important;
+}
+// .MuiInputLabel-shrink{
+//   // font-size: 11px !important;
+// }
+label{
+  font-size: 13px !important;
+}
+// .MuiFormLabel-root {
+//   // line-height: 2 !important;
+// }
+.react-select__indicators{
+padding-right: 12px !important;
 }

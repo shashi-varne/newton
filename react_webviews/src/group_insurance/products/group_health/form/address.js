@@ -17,7 +17,7 @@ import Grid from 'material-ui/Grid';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 
-import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../../common/ui/DropDownNew'
 import DotDotLoader from '../../../../common/ui/DotDotLoader';
 
 class GroupHealthPlanAddressDetails extends Component {
@@ -652,7 +652,7 @@ class GroupHealthPlanAddressDetails extends Component {
                             </div>
 
                             <div className="InputField">
-                                <DropdownWithoutIcon
+                                <DropDownNew
                                     width="40"
                                     dataType="AOB"
                                     options={this.state.form_data.p_city_list}
@@ -666,7 +666,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                             <DotDotLoader className="insurance-dot-loader" /> :
                                             this.state.form_data.p_city_error
                                     }
-                                    value={this.state.form_data.p_city || ''}
+                                    value={this.state.form_data.p_city || undefined}
                                     onChange={this.handleChange('p_city')}
                                 />
                             </div>
@@ -801,7 +801,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
                             <div className="InputField">
-                                <DropdownWithoutIcon
+                                <DropDownNew
                                     width="40"
                                     dataType="AOB"
                                     options={this.state.form_data.city_list}
@@ -815,7 +815,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                             <DotDotLoader className="insurance-dot-loader" /> :
                                             this.state.form_data.city_error
                                     }
-                                    value={this.state.form_data.city || ''}
+                                    value={this.state.form_data.city || undefined}
                                     onChange={this.handleChange('city')}
                                 />
                             </div>

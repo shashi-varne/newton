@@ -213,6 +213,7 @@ body[data-device="web"] {
 
 .Container {
   padding: 20px 20px;
+  overflow: visible !important;  //For Drop-down to appear this changes was done as the container was hiding the drop-down
   /* margin-bottom: 60px;
   padding-bottom: 20px !important;  */
   background-color: #fff;
@@ -223,6 +224,10 @@ body[data-device="web"] {
  
 }
 
+body[data-device="web"] .Container {
+  z-index: 200;
+  position: relative;
+}
 .Container .container-padding {
   padding: 20px 15px;
 }
@@ -647,7 +652,7 @@ input#pan {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 200;
+  z-index: 250;
 }
 
 .LoaderOverlay {
