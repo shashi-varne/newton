@@ -259,6 +259,10 @@ class GroupHealthPlanPremiumSummary extends Component {
 
           storageService().set('health_insurance_application_id', application_id);
           groupHealthPlanData.application_form_data = resultData;
+          var application_data = {
+            'personal_details_screen': {}
+          }
+          groupHealthPlanData.application_data = application_data;
           this.setLocalProviderData(groupHealthPlanData);
 
           this.navigate("personal-details/" + lead.member_base[0].key);

@@ -206,7 +206,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     this.initialize()
   }
 
-
   handleChange = name => event => {
 
     var input = document.getElementById('dob');
@@ -485,7 +484,6 @@ class GroupHealthPlanPersonalDetails extends Component {
           } 
         }
       }
-
       this.updateLead(body);
     }
   }
