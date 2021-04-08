@@ -1,8 +1,17 @@
 .return-table-header {
   padding-left: 15px;
-  font-weight: 300;
-  font-size: 11px;
+  font-weight: 700;
+  font-size: 12px;
   text-transform: uppercase;
+}
+
+.iframe-table-data-head{
+  text-align: center;
+}
+
+.risk-measure-table{
+  padding-right: 20px;
+  text-align: end;
 }
 
 // Report Page
@@ -33,3 +42,70 @@
   transform: rotate(180deg);
   margin-left: auto;
 }
+
+/////// Fund Details Two Button Footer Start ///////
+
+.fund-detail-two-button {
+  display: flex;
+  align-items: center;
+
+  .button {
+    background-color: var(--secondary);
+    color: #ffffff;
+    min-height: 55px;
+    font-size: 14px;
+  }
+
+  .button:hover, .button:focus {
+    background-color: var(--secondary);
+  }
+
+  .button1 {
+    background-color: #73C555;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    text-transform: lowercase;
+
+    .fund-details-dual-button-content {
+      display: flex;
+      justify-content: space-between;
+      column-gap: 18px;
+      font-size: 13px;
+      text-transform: lowercase;
+      min-width: 100px;
+      padding: 0 10px;
+
+      .cart-content {
+        display: flex;
+        position: relative;
+  
+        img {
+          width: 20px;
+        }
+  
+        span {
+          position: absolute;
+          border-radius: 50%;
+          background-color: #477D3C;
+          padding: 4px 8px 3px 8px;
+          right: -15px;
+          top: -5px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .button1:hover, .button1:focus {
+    background-color: #73C555;
+  }
+
+  .button2 {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 100%;
+  }
+
+}
+
+/////// Fund Details Two Button Footer End ///////

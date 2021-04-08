@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="60px" viewBox="0 0 70 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>70x60_icons/others/sign_icon/default</title>
+    <desc>Created with Sketch.</desc>
+    <g id="70x60_icons/others/sign_icon/default" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="base" x="0" y="0" width="70" height="60"></rect>
+        <g id="70x60_icons" transform="translate(15.000000, 10.000000)">
+            <g id="sign_icon">
+                <path d="M20.5,4 C21.8807119,4 23,5.11928813 23,6.5 L23,29.6 L18,29.6 L18,6.5 C18,5.11928813 19.1192881,4 20.5,4 Z M18,30.88 L23,30.88 L20.5,36 L18,30.88 Z" id="Combined-Shape" fill="#94C5FF" transform="translate(20.500000, 20.000000) rotate(45.000000) translate(-20.500000, -20.000000) "></path>
+                <path d="M2,0 L8,0 L8,2 L2,2 L2,8 L0,8 L0,0 L2,0 Z M38,0 L40,0 L40,8 L38,8 L38,2 L32,2 L32,0 L38,0 Z M2,38 L8,38 L8,40 L2,40 L0,40 L0,32 L2,32 L2,38 Z M38,38 L38,32 L40,32 L40,40 L38,40 L32,40 L32,38 L38,38 Z" id="Combined-Shape" fill="#D3DBE4"></path>
+            </g>
+        </g>
+    </g>
+</svg>

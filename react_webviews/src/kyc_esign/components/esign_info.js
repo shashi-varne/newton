@@ -4,6 +4,10 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig, getBasePath } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
+import { navigate as navigateFunc } from '../common/functions'
+import ConfirmBackModal from './confirm_back'
+import { storageService } from "../../utils/validators";
+import { isEmpty } from "../../utils/validators";
 
 class ESignInfo extends Component {
   constructor(props) {
@@ -11,11 +15,44 @@ class ESignInfo extends Component {
     this.state = {
       show_loader: false,
       productName: getConfig().productName,
+      backModal: false,
+      dl_flow: false
     }
+
+    this.navigate = navigateFunc.bind(this.props);
   }
 
+  componentDidMount = () => {
+    this.initialize();
+  };
+
+  initialize = async () => {
+    const kyc = storageService().getObject("kyc");
+    const user = storageService().getObject("user");
+    if (!isEmpty(kyc)) {
+      if (
+        kyc.kyc_status !== "compliant" &&
+        !kyc.address.meta_data.is_nri &&
+        kyc.dl_docs_status !== "" &&
+        kyc.dl_docs_status !== "init" &&
+        kyc.dl_docs_status !== null
+      ) {
+        this.setState({ dl_flow: true });
+      }
+    }
+  };
+
   handleBack = () => {
-    nativeCallback({ action: 'exit_web' });
+    this.setState({ backModal: true })
+  }
+
+  confirm = () => {
+    const navigate = navigateFunc.bind(this.props);
+    navigate('/kyc/journey');
+  }
+
+  cancel = () => {
+    this.setState({ backModal: false })
   }
 
   handleClick = async () => {
@@ -24,7 +61,7 @@ class ESignInfo extends Component {
       basepath + '/kyc-esign/nsdl' + getConfig().searchParams
     );
 
-    this.setState({ show_loader: true });
+    this.setState({ show_loader: "button" });
 
     try {
       let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
@@ -44,8 +81,23 @@ class ESignInfo extends Component {
         });
         window.location.href = resultData.esign_link;
       } else {
-        toast(resultData.error ||
-          resultData.message || 'Something went wrong', 'error');
+        if (resultData && resultData.error === "all documents are not submitted") {
+          toast("Document pending, redirecting to kyc");
+          setTimeout(() => {
+            if (this.state.dl_flow) {
+              this.navigate('/kyc/journey', {
+                state: {
+                  show_aadhaar: true,
+                }
+              });
+            } else {
+              this.navigate('/kyc/journey');
+            }
+          }, 3000)
+        } else {
+          toast(resultData.error ||
+            resultData.message || 'Something went wrong', 'error');
+        }
       }
 
       this.setState({ show_loader: false });
@@ -117,6 +169,7 @@ class ESignInfo extends Component {
             </div>
           </div>
         </div>
+        <ConfirmBackModal id="kyc-esign-confirm-modal" open={this.state.backModal} cancel={this.cancel} confirm={this.confirm} />
       </Container>
     );
   };

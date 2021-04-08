@@ -17,6 +17,7 @@ const CustomizedSlider = (props) => {
         min={Number(props.min)}
         max={Number(props.max)}
         onChange={handleChange}
+        disabled={props.disabled}
         trackStyle={{
           background: getConfig().primary
         }}

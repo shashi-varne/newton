@@ -1,0 +1,18 @@
+.t_and_c_title {
+  background-color: var(--primary);
+  h2 {
+    color: white;
+  }
+}
+.tc_link {
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--primary);
+}
+
+.tc-dialog-loader {
+  height: 40vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}

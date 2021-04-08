@@ -146,8 +146,8 @@ class GroupHealthPlanPersonalDetails extends Component {
       })
       
       let occupationIndex = '';
-      occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
-      form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
+      occupationIndex = occupation !== null ? occupationOptions.findIndex(item => item.name === occupation || item.value === occupation) : '';
+      form_data.occupation = (occupationIndex.toString() && occupationIndex !== -1) ? occupationOptions[occupationIndex].value : '';
     };
 
     var selectedIndex = 123;

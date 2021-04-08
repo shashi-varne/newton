@@ -96,6 +96,7 @@ class Report extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         resetpage={true}
+        topIcon="restart"
         handleReset={this.restartFHC}
         noFooter={true}
         classOverRideContainer="bg-grey"

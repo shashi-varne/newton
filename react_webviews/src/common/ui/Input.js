@@ -50,10 +50,12 @@ const Input = (props) => {
         onKeyPress={props.onKeyChange}
         inputProps={{
           maxLength: props.maxLength,
-          inputMode: props.inputMode
+          inputMode: props.inputMode,
+          pattern:props.pattern,
         }}
         onClick={props.onClick}
         autoComplete={props.autoComplete}
+        autoFocus={props.autoFocus}
       />
     );
   }

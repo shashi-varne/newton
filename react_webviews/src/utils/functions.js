@@ -484,7 +484,7 @@ function getPartnerConfig(partner_code) {
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity') {
+  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
     productType = 'finity';
   }
 
@@ -808,7 +808,8 @@ export const getConfig = () => {
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
   returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
-
+  returnConfig.partner = partnersConfigBase[partner_code] || partnersConfigBase['fisdom'];
+  
   return returnConfig;
 };
 
