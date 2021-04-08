@@ -197,6 +197,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   async componentDidUpdate(prevState) {
     if (this.state.member_key && this.state.member_key !== this.props.member_key) {
       this.onload();
+      this.initialize();
     }
     storageService().setObject('applicationPhaseReached', true);
   }
@@ -484,6 +485,7 @@ class GroupHealthPlanPersonalDetails extends Component {
           } 
         }
       }
+      console.log(this.state.groupHealthPlanData)
       this.updateLead(body);
     }
   }

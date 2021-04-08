@@ -375,20 +375,14 @@ export async function updateLead( body, quote_id) {
     var groupHealthPlanData = this.state.groupHealthPlanData;
 
     var current_form_data = this.state.form_data || {};
-    
     if(this.state.screen_name === 'personal_details_screen'){
         console.log(groupHealthPlanData)
         var prev_form_data = groupHealthPlanData['application_data']['personal_details_screen'][`${this.state.member_key}`] || {};
     }else{
         var prev_form_data = groupHealthPlanData.application_data ? groupHealthPlanData.application_data[this.state.screen_name] : {};
     }
-    console.log('member', this.state.member_key)
-    console.log('prev', prev_form_data)
-    console.log('curr', current_form_data)
-    
-    
         if (current_form_data['dt_created']) delete current_form_data['dt_created'];
-        if (current_form_data['dt_updated'])  delete current_form_data['dt_updated'];
+        if (current_form_data['dt_updated']) delete current_form_data['dt_updated'];
         if(prev_form_data){
             if (prev_form_data['dt_created']) delete prev_form_data['dt_created'];
             if (prev_form_data['dt_updated']) delete prev_form_data['dt_updated'];
@@ -409,21 +403,16 @@ export async function updateLead( body, quote_id) {
         if(isFormDataSame){
             this.navigate(this.state.next_state);
             return;
-        }
-
-        
-        if(this.state.screen_name === 'personal_details_screen'){
-            var personal_details_screen = groupHealthPlanData['application_data']['personal_details_screen'];
-            personal_details_screen[`${this.state.member_key}`] = current_form_data; 
-            groupHealthPlanData.personal_details_screen = personal_details_screen;   
         }else{
-            groupHealthPlanData['application_data'][`${this.state.screen_name}`] = current_form_data;    
-        }
-        
-        this.setLocalProviderData(groupHealthPlanData)
-        
-        
-
+            if(this.state.screen_name === 'personal_details_screen'){
+                var personal_details_screen = groupHealthPlanData['application_data']['personal_details_screen'];
+                personal_details_screen[`${this.state.member_key}`] = current_form_data; 
+                groupHealthPlanData.personal_details_screen = personal_details_screen;   
+            }else{
+                groupHealthPlanData['application_data'][`${this.state.screen_name}`] = current_form_data;    
+            }
+            this.setLocalProviderData(groupHealthPlanData)
+        }    
     let error="";
     let errorType="";
     this.setErrorData("submit")
