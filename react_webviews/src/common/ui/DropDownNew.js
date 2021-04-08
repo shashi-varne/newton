@@ -17,7 +17,6 @@ class SelectDropDown2 extends React.Component {
       multi: this.props.multi,
       value: this.props.value,
       dropUp: false,
-      productName: getConfig().productName,
     };
     this.myRef = React.createRef();
     this.determineDropUp = this.determineDropUp.bind(this);
@@ -87,7 +86,6 @@ class SelectDropDown2 extends React.Component {
 
 
   render() {
-    let BrandColor = this.state.productName === 'fisdom' ? '#4F2DA7' : '#3792FC'
     let components;
     if (this.state.multi) {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
@@ -129,11 +127,11 @@ class SelectDropDown2 extends React.Component {
               fontSize: isLableOpen ? '' : '13px', lineHeight: isLableOpen ? '18px' : '21px',
             }}>
             {this.props.label}</div></InputLabel>)}
-          <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? `1px solid ${BrandColor}` : '1px solid #D6D6D6' }}>
+          <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? `1px solid ${getConfig().primary}` : '1px solid #D6D6D6' }}>
             <Select
               ref={inst => (this.myRef = inst)}
               blurInputOnSelect={false}
-              BrandColor={BrandColor}
+              BrandColor={getConfig().primary}
               onBlurResetsInput={true}
               openMenuOnClick={true}
               className='react-select-container'
