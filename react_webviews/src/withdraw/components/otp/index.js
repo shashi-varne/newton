@@ -30,7 +30,7 @@ const Otp = (props) => {
   const navigate = navigateFunc.bind(props)
   const [state, setState] = useState({
     otp: '',
-    totalTime: 5,
+    totalTime: 30,
     timeAvailable: 30,
   })
 
