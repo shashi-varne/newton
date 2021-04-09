@@ -254,6 +254,7 @@ class GroupHealthLanding extends Component {
         resume_clicked: true,
       },
       () => {
+        storageService().remove('paymentFailed');
         this.sendEvents("next");
         let quoteResume = this.state.quoteResume;
         storageService().set("ghs_ergo_quote_id", quoteResume.id);
