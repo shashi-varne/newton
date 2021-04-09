@@ -703,23 +703,23 @@ export function getCssMapperReport(policy) {
 
   let cssMapper = {
     'init': {
-      color: 'yellow',
-      disc: 'Policy Pending'
+      color: '#f7b500',
+      disc: 'Pending'
     },
     'request_pending': {
-      color: 'yellow',
+      color: '#f7b500',
       disc: 'Status awaited from'
     },
     'Issued': {
-      color: 'green',
+      color: '#35CB5D',
       disc: 'Issued'
     },
     'Pending': {
-      color: 'yellow',
+      color: '#f7b500',
       disc: 'Pending'
     },
     'In_Process': {
-      color: 'yellow',
+      color: '#f7b500',
       disc: 'In process'
     },
     'Rejected': {
@@ -735,43 +735,43 @@ export function getCssMapperReport(policy) {
       disc: 'Cancelled'
     },
     'incomplete': {
-      color: 'yellow',
-      disc: 'Policy Pending'
+      color: '#f7b500',
+      disc: 'Pending'
     },
     'policy_issued': {
-      color: 'green',
-      disc: 'Policy Issued'
+      color: '#35CB5D',
+      disc: 'Issued'
     }, 
     'success': {
-      color: 'green',
-      disc: 'Policy Issued'
+      color: '#35CB5D',
+      disc: 'Issued'
     },
     'complete': {
-      color: 'green',
-      disc: 'Policy Issued'
+      color: '#35CB5D',
+      disc: 'Issued'
     },
     'policy_expired': {
       color: 'red',
-      disc: 'Policy Expired'
+      disc: 'Expired'
     },
     'expired': {
       color: 'red',
-      disc: 'Policy Expired'
+      disc: 'Expired'
     },
     'rejected': {
       color: 'red',
-      disc: 'Policy Rejected'
+      disc: 'Rejected'
     },
     'failed': {
       color: 'red',
-      disc: 'Policy Failed'
+      disc: 'Failed'
     },
     'cancelled': {
       color: 'red',
-      disc: 'Policy Cancelled'
+      disc: 'Cancelled'
     },
     'pending_from_vendor': {
-      color: 'yellow',
+      color: '#f7b500',
       disc: 'Status awaited from star health'
     }
   }
@@ -816,6 +816,7 @@ export function getCssMapperReport(policy) {
 }
 
 export function childeNameMapper(name) {
+  
   let mapper = {
     'son1': '1st Son',
     'son2': '2nd Son',
@@ -830,9 +831,8 @@ export function childeNameMapper(name) {
     'father_in_law': 'father in law',
     'mother_in_law': 'mother in law'
   };
-
-  return mapper[name] || name;
   
+  return (mapper[name] || name).toLowerCase();
 }
 
 export function TitleMaper(name){

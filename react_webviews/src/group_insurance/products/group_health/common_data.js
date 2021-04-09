@@ -168,7 +168,7 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) { 
-        let leftTitle, leftSubtitle, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
+        let leftTitle, leftSubtitle, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, payment_frequency, postfix = '', gst = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
             // eslint-disable-next-line 
@@ -181,12 +181,19 @@ export async function initialize() {
             gst = lead.gst;
             net_premium = lead.total_premium - lead.gst;
             
+            if(this.state.provider === 'GMC'){
+                payment_frequency = lead.payment_frequency;
+                postfix = payment_frequency === 'MONTHLY' ? '/month' : '/year';
+            }
+            
             if(provider === 'HDFCERGO'){
                 leftTitle = this.state.providerConfig.hdfc_plan_title_mapper[lead.plan_id];
             }else if(provider === 'RELIGARE'){
                 leftTitle = 'Care'
-            }else{
+            }else if(provider === 'STAR'){
                 leftTitle = 'Star health'
+            }else{
+                leftTitle = 'fisdom HealthProtect'
             }
 
 
@@ -204,10 +211,10 @@ export async function initialize() {
             }
 
         }
-
+        
         let bottomButtonData = {
             leftTitle: leftTitle,
-            leftSubtitle: inrFormatDecimal(leftSubtitle),
+            leftSubtitle: inrFormatDecimal(leftSubtitle) + postfix,
             leftSubtitleUnformatted: leftSubtitle,
             leftArrow: 'up',
             provider: providerConfig.key,
@@ -215,6 +222,7 @@ export async function initialize() {
         }
 
         let confirmDialogData = {
+            conten1_title: 'Premium details',
             buttonData: {
                 ...bottomButtonData,
                 leftArrow: 'down'
@@ -229,8 +237,10 @@ export async function initialize() {
             content2: [
                 { 'name': 'Total', 'value': inrFormatDecimal(total_amount) }
             ],
-            sum_assured: individual_sum_insured,
-            tenure: tenure
+            title_left: individual_sum_insured, //sum_assured
+            heading_left: 'Sum insured:',
+            title_right: tenure > 1 ? `${tenure} years` : `${tenure} year`, //tenure
+            heading_right: 'Cover period',
         }
         if(provider === 'RELIGARE') {
             if(lead.add_ons && !isEmpty(lead.add_ons)){
@@ -283,12 +293,16 @@ export async function initialize() {
 }
 
 
-export function updateBottomPremium(premium) {
+export function updateBottomPremium(premium, postfix) {
     if(this.state.premium_data){
+        var value = inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium || '');
+        if(this.state.provider  === 'GMC'){
+            value += postfix;
+        }
         this.setState({
             bottomButtonData: {
                 ...this.state.bottomButtonData,
-                leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium || '')
+                leftSubtitle: value
             }
         })    
     }
@@ -338,7 +352,6 @@ export async function updateLead( body, quote_id) {
                 return}
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
-                console.log('if');
             } else {
                 this.navigate(this.state.next_state);
             }
@@ -448,11 +461,15 @@ export async function resetQuote() {
         if (res.pfwresponse.status_code === 200) {
             
             let next_state = `/group-insurance/group-health/${this.state.provider}/insure-type`;
+            if(this.state.provider === 'GMC'){
+                var groupHealthPlanData = this.state.groupHealthPlanData || {};
+                groupHealthPlanData['goodHDec'] = false;
+                this.setLocalProviderData(groupHealthPlanData)
+            }
             this.navigate(next_state);
             this.setState({
                 resultData: resultData
             })
-
         } else {
             error = resultData.error || resultData.message
                 || true;
