@@ -1,6 +1,6 @@
 
 import { getConfig, setHeights } from 'utils/functions';
-import { nativeCallback } from "utils/native_callback";
+// import { nativeCallback } from "utils/native_callback";
 import Banner from 'common/ui/Banner';
 import UiSkelton from 'common/ui/Skelton';
 import Footer from 'common/components/footer';
@@ -267,10 +267,7 @@ export function didupdate() {
     setHeights({ 'header': true, 'container': false });
 }
 
-export function navigate(pathname, user_action) {
-
-    let action = user_action ? user_action : this.props.disableBack ? 'close' : 'back';
-    nativeCallback({ events: this.getEvents(action) });
+export function navigate(pathname) {
     this.props.history.push({
         pathname: pathname,
         search: this.props.location.search
