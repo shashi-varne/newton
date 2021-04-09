@@ -19,6 +19,7 @@ import '../../utils/native_listner';
 import { Imgc } from '../../common/ui/Imgc';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
+import { isFunction } from 'lodash';
 
 let start_time = '';
 
@@ -555,6 +556,10 @@ export function renderPageLoader() {
 }
 
 export function handleClose() {
+    if (isFunction(this.handleCloseCallback)) {
+        this.handleCloseCallback();
+    }
+
     this.setState({
         openDialog: false,
         openPopup: false

@@ -276,3 +276,8 @@ export const setKycType = async (type) => {
       genericErrorMessage
   )
 }
+
+export const getMerge = async (pan_number) => {
+  const res = await Api.post(`${apiConstants.getMerge}${pan_number}`)
+  return handleApi(res);
+}

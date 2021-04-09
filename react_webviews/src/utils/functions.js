@@ -486,7 +486,7 @@ function getPartnerConfig(partner_code) {
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity') {
+  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
     productType = 'finity';
   }
 
@@ -681,6 +681,7 @@ export const getConfig = () => {
   let searchParamsMustAppend = ``;
 
 
+  base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
   if(!base_url_default) {
     searchParams += getParamsMark(searchParams) + `base_url=${base_url}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `base_url=${base_url}`;

@@ -261,13 +261,13 @@
 }
 input.default-otp-input {
   width: 33px !important;
-  height: 20px;
+  height: auto;
   border-bottom: 2px solid var(--primary) !important;
   border: none;
   margin: 0 10px 0 0;
   width: 20%;
   text-align: center;
-  padding: 5px 0px;
+  padding: 0px;
   outline: none;
   background: transparent;
   color: black;

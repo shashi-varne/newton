@@ -123,7 +123,9 @@ class RadioButtonsGroup extends Component {
 
     return (
       <FormControl component="fieldset" className={styles.formControl} >
-        <FormLabel component="legend">{this.props.label}</FormLabel>
+        <FormLabel component="legend" classes={this.props.labelClasses || {}}>
+          {this.props.label}
+        </FormLabel>
         <RadioGroup
           aria-label={this.props.label}
           name="gender1"

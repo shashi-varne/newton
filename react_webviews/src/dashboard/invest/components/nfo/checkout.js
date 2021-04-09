@@ -174,7 +174,6 @@ class Checkout extends Component {
     dialog_states[key] = value;
     if (errorMessage) dialog_states["errorMessage"] = errorMessage;
     this.setState({ dialogStates: dialog_states });
-    this.handleApiRunning(false);
   };
 
   handleApiRunning = (isApiRunning) => {

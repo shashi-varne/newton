@@ -8,6 +8,7 @@ export const apiConstants = {
   pennyVerification: '/api/account/add-bank/penny-verification',
   getBankStatus: '/api/account/penny-verification-status-check',
   getCVL: '/api/kyc/updatecvl/mine',
+  getMerge: '/api/user/account/merge?pan_number=',
 }
 
 export const getPathname = {

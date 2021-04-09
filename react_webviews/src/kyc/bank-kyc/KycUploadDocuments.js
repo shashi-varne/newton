@@ -122,7 +122,11 @@ const KycUploadDocuments = (props) => {
           ) {
             navigate("/kyc/upload/pan");
           } else {
-            navigate("/kyc-esign/info");
+            if (kyc.sign_status !== 'signed') {
+              navigate("/kyc-esign/info");
+            } else {
+              navigate("/kyc/journey");
+            }
           }
         } else {
           navigate("/kyc/upload/progress");

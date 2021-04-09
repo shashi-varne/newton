@@ -11,7 +11,11 @@ import {
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini_components/Alert";
-import { compareObjects, navigate as navigateFunc, validateFields } from "../common/functions";
+import {
+  // compareObjects,
+  navigate as navigateFunc,
+  validateFields,
+} from "../common/functions";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
@@ -34,7 +38,7 @@ const KycBankDetails = (props) => {
     account_type: "",
     ifsc_code: "",
   });
-  const [oldState, setOldState] = useState({});
+  // const [oldState, setOldState] = useState({});
   const [bankIcon, setBankIcon] = useState("");
   const [accountTypes, setAccountTypes] = useState([]);
   const [name, setName] = useState("");
@@ -52,7 +56,7 @@ const KycBankDetails = (props) => {
   });
   const [dl_flow, setDlFlow] = useState(false);
 
-  const {kyc, user, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -109,8 +113,8 @@ const KycBankDetails = (props) => {
       });
     }
     setBankData({ ...data });
-    setOldState({...data})
-    setBankIcon(data.ifsc_image || '')
+    // setOldState({...data})
+    setBankIcon(data.ifsc_image || "");
     setAccountTypes([
       ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
     ]);
@@ -175,8 +179,8 @@ const KycBankDetails = (props) => {
       if (dl_flow) {
         if (
           (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
+            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
           kyc.pan.doc_status !== "approved"
         )
           navigate(getPathname.uploadPan);
