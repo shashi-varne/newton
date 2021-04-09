@@ -1111,6 +1111,22 @@ body[data-device="mobile"] {
     opacity: 0.7;
   }
 }
+.generic-button-outlined {
+  color: var(--secondary) !important;
+  background-color: white !important;
+  border: 1px solid var(--secondary) !important;
+}
+.generic-button-raised {
+  color: white;
+  background-color: var(--secondary);
+}
+.generic-button-textonly {
+  color: var(--secondary) !important;
+  background-color: white !important;
+  font-weight: bold !important;
+  width: fit-content !important;
+  justify-content: end !important;
+}
 
 .label{
   position: relative;
