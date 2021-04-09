@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
-import { getConfig, getBasePath } from 'utils/functions';
+import { getConfig, getBasePath, getParamsMark } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
@@ -595,7 +595,7 @@ class GroupHealthPlanFinalSummary extends Component {
         if (getConfig().generic_callback) {
             pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
-        nativeRedirectUrl += '&pgReached=true';
+        nativeRedirectUrl += getParamsMark(nativeRedirectUrl) + 'pgReached=true';
         
         if (getConfig().app === 'ios') {
             nativeCallback({

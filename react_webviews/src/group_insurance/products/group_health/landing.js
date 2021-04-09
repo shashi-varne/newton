@@ -434,7 +434,7 @@ class GroupHealthLanding extends Component {
             data={this.state.whats_not_covered}
           />
           
-          <GenericImageSlider title="Key benefits" image_list={this.state.screenData.image_list}/>
+          <GenericImageSlider title="Key benefits" image_list={this.state.screenData.image_list[this.state.productName]}/>
 
           <HowToSteps
             style={{ margin: "20px 0px 0px 0px" }}

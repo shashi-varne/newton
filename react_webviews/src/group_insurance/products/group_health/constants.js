@@ -41,7 +41,10 @@ export const hdfc = {
         'hdfc_ergo_platinum_smart' : 'Platinum Smart Plan'
     },
     landing_screen: {
-        image_list: ['ic_why_hs.svg','ic_why_hs_gmc_3.svg', 'ic_why_hs3.svg', 'ic_why_hs4.svg'],
+        image_list:{
+            fisdom:  ['fisdom/ic_why_hs.svg','fisdom/ic_why_hs_gmc_3.svg', 'fisdom/ic_why_hs3.svg', 'fisdom/ic_why_hs4.svg'],
+            finity: ['finity/ic_why_hs.svg','finity/ic_why_hs_gmc_3.svg', 'finity/ic_why_hs3.svg', 'finity/ic_why_hs4.svg'],
+        },
         offerImageData: [
             { src: 'hdfc_icn_landing_card_1.png' },
             { src: 'hdfc_icn_landing_card_2.png' },
@@ -260,7 +263,10 @@ export const religare = {
         ncb: 'No Claim Bonus Super'
     },
     landing_screen: {
-        image_list: ['ic_why_hs.svg','ic_why_hs_gmc_3.svg', 'ic_why_hs3.svg', 'ic_why_hs4.svg'],
+        image_list: {
+            fisdom:['fisdom/ic_why_hs.svg','fisdom/ic_why_hs_gmc_3.svg', 'fisdom/ic_why_hs3.svg', 'fisdom/ic_why_hs4.svg'],
+            finity:['finity/ic_why_hs.svg','finity/ic_why_hs_gmc_3.svg', 'finity/ic_why_hs3.svg', 'finity/ic_why_hs4.svg'],
+        },
         offerImageData: [
             { src: 'religare_icn_landing_card_1.png' },
             { src: 'religare_icn_landing_card_2.png' },
@@ -589,7 +595,10 @@ export const gmc = {
         ncb: 'No Claim Bonus Super'
     },
     landing_screen: {
-        image_list: ['ic_why_hs_gmc_1.svg', 'ic_why_hs_gmc_3.svg', 'ic_why_hs_gmc_2.svg'],
+        image_list:{
+            fisdom:['fisdom/ic_why_hs_gmc_1.svg', 'fisdom/ic_why_hs_gmc_3.svg', 'fisdom/ic_why_hs_gmc_2.svg'],
+            finity:['finity/ic_why_hs_gmc_1.svg', 'finity/ic_why_hs_gmc_3.svg', 'finity/ic_why_hs_gmc_2.svg'],
+        },
         offerImageData: [
             { src: 'gmc_icn_landing_card_3.svg' },
             { src: 'gmc_icn_landing_card_2.svg' },
@@ -901,7 +910,10 @@ export const star = {
         ]
     },
     landing_screen: {
-        image_list: ['ic_why_hs.svg','ic_why_hs_gmc_3.svg', 'ic_why_hs3.svg', 'ic_why_hs4.svg'],
+        image_list:{
+            fisdom: ['fisdom/ic_why_hs.svg','fisdom/ic_why_hs_gmc_3.svg', 'fisdom/ic_why_hs3.svg', 'fisdom/ic_why_hs4.svg'],
+            finity: ['finity/ic_why_hs.svg','finity/ic_why_hs_gmc_3.svg', 'finity/ic_why_hs3.svg', 'finity/ic_why_hs4.svg'],
+        },
         offerImageData: [
             { src: 'star_icn_landing_card_1.svg' },
             { src: 'star_icn_landing_card_2.svg' },
