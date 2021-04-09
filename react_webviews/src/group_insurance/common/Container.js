@@ -168,6 +168,10 @@ class Container extends Component {
           this.navigate(group_health_landing);
           return;
       }
+      if(this.checkStringInString('final-summary') && storageService().getObject('paymentFailed')){
+        this.navigate(group_health_landing);
+        return;
+      }
 
       if(this.checkStringInString('insure-type') || this.checkStringInString('payment')) {
         this.navigate(group_health_landing);
