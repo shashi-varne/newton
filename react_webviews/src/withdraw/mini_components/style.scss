@@ -135,3 +135,72 @@
 .withdraw-tax-summary:nth-last-child(1) .item {
   border-bottom: none;
 }
+
+.withdraw-explore-investment-options {
+  margin: 0 auto;
+  background-color: #ededed;
+  padding-bottom: 100%;
+
+  .main {
+    background-color: white;
+    padding: 8px;
+    margin-bottom: 22px;
+    border: 1px solid #ede9e9;
+  }
+  .top-text {
+    text-align: center;
+    margin-top: 11px;
+    font-size: 18px;
+    color: black;
+    font-weight: 500;
+  }
+
+  .report-details-img {
+    display: block;
+    margin: 0 auto;
+    width: 107px;
+    margin-top: 6px;
+  }
+
+  .cta-button {
+    margin: 6px auto;
+    width: 80%;
+    background-color: var(--secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .cta-button .cta-button-text {
+    text-transform: uppercase;
+    color: white;
+    text-align: center;
+  }
+
+  .cta-button svg {
+    fill: white;
+  }
+
+  .tiles {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .tiles .tile {
+    margin: 15px;
+    flex-basis: calc(50% - 30px);
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .tiles .tile .label {
+    color: #c2b1e7;
+    font-size: 14px;
+  }
+}

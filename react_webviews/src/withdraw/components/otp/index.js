@@ -50,10 +50,10 @@ const Otp = (props) => {
     try {
       if (!isEmpty(stateParams?.resend_redeem_otp_link)) {
         const result = await resend(stateParams?.resend_redeem_otp_link)
-        toast(result?.message)
+        toast(result?.message, 'success')
       }
     } catch (err) {
-      toast(err.message)
+      toast(err.message, 'error')
     } finally {
     }
   }
@@ -69,7 +69,7 @@ const Otp = (props) => {
         message: result?.message,
       }, null, true)
     } catch (err) {
-      toast(err.message)
+      toast(err.message, 'error')
       navigate('/withdraw/otp/failed', {
         type: stateParams?.type,
         message: err.message,

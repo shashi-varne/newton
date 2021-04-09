@@ -7,6 +7,7 @@ import Dialog from '../../mini_components/Dialog'
 import { getBalance } from '../../common/Api'
 import toast from 'common/ui/Toast'
 import { isEmpty } from '../../../utils/validators'
+import Explore from '../../mini_components/Explore'
 
 const Balance = (props) => {
   const [open, setOpen] = useState(false)
@@ -69,16 +70,20 @@ const Balance = (props) => {
     }
     return
   }
+  console.log(balance)
+  const noInvestments = isEmpty(balance?.balance) || balance?.balance === 0
   return (
     <Container
-      title="Withdraw"
+      title={noInvestments ? '' : 'Withdraw'}
       noFooter
       noPadding
+      noHeader={noInvestments}
+      noInvestments={noInvestments}
       classOverRideContainer="withdraw-background-override"
       skelton={isEmpty(balance)}
       // noHeader={isEmpty(balance)}
     >
-      {!isEmpty(balance) && (
+      {!isEmpty(balance) && !isEmpty(balance.balance) && balance.balance > 0 && (
         <>
           <section id="withdraw-balance">
             <div className="report-header">
@@ -161,6 +166,9 @@ const Balance = (props) => {
             helperText={error ? 'Please enter the amount' : ''}
           />
         </>
+      )}
+      {noInvestments && (
+        <Explore {...props} />
       )}
     </Container>
   )
