@@ -32,3 +32,29 @@
     text-align: center;
   }
 }
+
+.account-merge-linked {
+  line-height: 1.5;
+  color: #333333;
+  text-align: center;
+
+  .outline {
+    padding: 50px;
+    .img {
+      width: 100%;
+    }
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0px;
+    text-align: left;
+    padding-bottom: 20px;
+  }
+
+  p {
+    color: #767e86;
+  }
+}
