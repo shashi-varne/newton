@@ -17,8 +17,8 @@ const RiskCustomize = (props) => {
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
   const navigate = navigateFunc.bind(props);
-  const [stockSplit, setStockSplit] = useState(graphData.stockSplit || 0);
-  const [bondSplit, setBondSplit] = useState(100 - stockSplit);
+  const [equity, setEquity] = useState(graphData.equity || 0);
+  const [debt, setDebt] = useState(100 - equity);
 
   // useEffect(() => {
   //   const investTitle = selectTitle(graphData.investType);
@@ -31,8 +31,8 @@ const RiskCustomize = (props) => {
       amount,
       term,
       type,
-      equity: stockSplit,
-      debt: bondSplit,
+      equity: equity,
+      debt: debt,
       rp_enabled: true,
     };
 
@@ -43,8 +43,6 @@ const RiskCustomize = (props) => {
       storageService().setObject('graphData', {
         ...graphData,
         ...res,
-        stockSplit: stockSplit,
-        bondSplit: bondSplit
       });
       storageService().set('userSelectedRisk', 'Custom');
 
@@ -68,8 +66,8 @@ const RiskCustomize = (props) => {
   };
 
   const handleChange = (value) => {
-    setStockSplit(value);
-    setBondSplit(100 - value);
+    setEquity(value);
+    setDebt(100 - value);
   };
 
   return (
@@ -97,7 +95,7 @@ const RiskCustomize = (props) => {
           </div>
         </InfoBox>
         <EquityDebtSlider
-          stockSplit={stockSplit}
+          equity={equity}
           onChange={handleChange}
         />
       </>

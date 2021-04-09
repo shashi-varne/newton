@@ -92,8 +92,8 @@ const Recommendations = (props) => {
         showRiskCard: true,
         cardDetails: {
           userRiskProfile: userRiskProfile,
-          stockSplit: graphData.stockSplit,
-          bondSplit: graphData.bondSplit,
+          equity: graphData.equity,
+          debt: graphData.debt,
           type: goalRecommendation.id,
         }
       }
@@ -264,7 +264,7 @@ const Recommendations = (props) => {
         }
         <PeriodWiseReturns
           initialTerm={term}
-          stockSplit={graphData.stockSplit}
+          equity={graphData.equity}
           stockReturns={graphData.stockReturns}
           bondReturns={graphData.bondReturns}
           principalAmount={graphData.amount}
@@ -288,7 +288,7 @@ const Recommendations = (props) => {
           <div className='recommendations-total-investment'>
             <div>Total Investment</div>
 
-            <div>{recommendation?.length > 0 ? formatAmountInr(amount) : '₹0'}</div>
+            <div>{recommendation?.length > 0 ? formatAmountInr(recommendedTotalAmount) : '₹0'}</div>
           </div>
           <div>
             <div className="recommendations-disclaimer-morning">
@@ -336,7 +336,7 @@ const RecommendationTopCard = ({
   const navigate = navigateFunc.bind(parentProps);
   const renderContent = () => {
     if (showRiskCard) {
-      const { userRiskProfile, stockSplit, bondSplit, type } = cardDetails;
+      const { userRiskProfile, equity, debt, type } = cardDetails;
       
       return (
         <div className="risk-profile-card">
@@ -349,7 +349,7 @@ const RecommendationTopCard = ({
                   <img src={require('assets/info_icon_grey.svg')} className="info-icn" alt="i" />
                 </div>
                 <div className="risk-type">{userRiskProfile}</div>
-                <div className="risk-distribution">{stockSplit}% Equity | {bondSplit }% Debt</div>
+                <div className="risk-distribution">{equity}% Equity | {debt }% Debt</div>
               </> :
               <>
                 <div className="risk-type" ng-if="showStartRiskProfile">Select risk profile</div>

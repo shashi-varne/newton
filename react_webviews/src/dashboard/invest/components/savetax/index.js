@@ -63,8 +63,8 @@ const Landing = (props) => {
         year: parseInt(date.getFullYear() + term),
         corpus: 150000,
         investType: params.type,
-        stockSplit: data.recommendation.equity,
-        bondSplit: data.recommendation.debt,
+        equity: data.recommendation.equity,
+        debt: data.recommendation.debt,
         isRecurring: recurring,
         investTypeDisplay,
         name:'Tax saving'

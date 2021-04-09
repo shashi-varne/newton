@@ -6,19 +6,9 @@ import toast from 'common/ui/Toast';
 import { storageService } from 'utils/validators';
 import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
+import moment from 'moment';
 
-const term = 15;
-const date = new Date();
-const month = date.getMonth();
-const currentMonth = month + 1;
-let currentYear = date.getFullYear();
-if (currentMonth > 3) {
-  currentYear = currentYear + 1;
-}
-let duration = currentMonth > 3 ? 15 - currentMonth : 3 - currentMonth;
-if (duration === 0) {
-  duration = 1;
-}
+const term = 5;
 
 const renderData = {
   title: 'How would you like to invest?',
@@ -56,11 +46,11 @@ const Landing = (props) => {
         amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
         term,
         // eslint-disable-next-line radix
-        year: parseInt(date.getFullYear() + term),
+        year: parseInt(moment().year() + term),
         corpus: otiAmount,
         investType: params.type,
-        stockSplit: data.recommendation.equity,
-        bondSplit: data.recommendation.debt,
+        equity: data.recommendation.equity,
+        debt: data.recommendation.debt,
         isRecurring: investTypeDisplay === 'sip' ? true : false,
         investTypeDisplay,
         name: 'Wealth building'

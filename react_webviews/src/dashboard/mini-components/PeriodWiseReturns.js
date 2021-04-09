@@ -18,7 +18,7 @@ import { formatAmountInr } from '../../utils/validators';
 const PeriodWiseReturns = ({
   title,
   initialTerm = 3,
-  stockSplit,
+  equity,
   stockReturns = 10,
   bondReturns = 6.5,
   principalAmount = 0,
@@ -33,7 +33,7 @@ const PeriodWiseReturns = ({
   useEffect(() => {
     getPotentialValue();
     calculateInvestedVal();
-  }, [stockSplit, currentTerm]);
+  }, [equity, currentTerm]);
 
   const getPotentialValue = () => {
     let principle = principalAmount;
@@ -54,12 +54,12 @@ const PeriodWiseReturns = ({
 
   const getRateOfInterest = () => {
     var range = Math.abs(stockReturns - bondReturns);
-    if (stockSplit < 1) {
+    if (equity < 1) {
       return bondReturns;
-    } else if (stockSplit > 99) {
+    } else if (equity > 99) {
       return stockReturns;
     } else {
-      var rateOffset = (range * stockSplit) / 100;
+      var rateOffset = (range * equity) / 100;
       return bondReturns + rateOffset;
     }
   };

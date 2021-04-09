@@ -83,7 +83,7 @@ const Target = (props) => {
         year,
         amount: monthlyAmount,
         corpus: amount,
-        stockSplit: recommendation.equity,
+        equity: recommendation.equity,
         subtype,
         term,
         investType: 'saveforgoal',

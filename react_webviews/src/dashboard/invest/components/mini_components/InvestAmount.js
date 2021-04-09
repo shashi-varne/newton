@@ -23,7 +23,7 @@ const date = new Date();
 const InvestAmount = (props) => {
   const graphData = storageService().getObject('graphData');
   const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { investType, year, stockSplit, term, isRecurring, investTypeDisplay, ...moreData } = graphData;
+  const { investType, year, equity, term, isRecurring, investTypeDisplay, ...moreData } = graphData;
   const [amount, setAmount] = useState(graphData?.amount || '');
   const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
@@ -81,7 +81,7 @@ const InvestAmount = (props) => {
       calculateTax(graphData?.corpus);
     } else {
       const valueOfCorpus = corpusValue(
-        stockSplit,
+        equity,
         amount,
         goalRecommendation.id,
         isRecurring,
@@ -121,11 +121,13 @@ const InvestAmount = (props) => {
         return;
       }
       
-      storageService().setObject('graphData', {...graphData, ...data, amount});
+      storageService().setObject('graphData', {
+        ...graphData, ...data, amount, recommendedTotalAmount: data.amount
+      });
       
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully
-        storageService().setObject('userSelectedRisk', data.rp_indicator);
+        storageService().set('userSelectedRisk', data.rp_indicator);
         navigate('recommendations');
       } else {
         // RP disabled flow

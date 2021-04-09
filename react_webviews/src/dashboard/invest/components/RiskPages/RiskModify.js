@@ -71,8 +71,8 @@ const RiskModify = ({
     riskOptions.push({
       rp_indicator: 'Custom',
       subtitle: 'User created equity to debt distribution',
-      equity: graphData.stockSplit,
-      debt: graphData.bondSplit
+      equity: graphData.equity,
+      debt: graphData.debt
     })
   }
 

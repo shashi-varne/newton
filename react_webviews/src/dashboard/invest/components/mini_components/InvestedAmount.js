@@ -19,8 +19,8 @@ const { stockReturns, bondReturns } = getReturnRates();
 const InvestedAmount = (props) => {
   let graphData = storageService().getObject('graphData');
   const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { amount, investType, term, stockSplit: stockSplitCache, isRecurring, investTypeDisplay } = graphData;
-  const [stockSplitVal, setStockSplitVal] = useState(stockSplitCache || 0);
+  const { amount, investType, term, equity, isRecurring, investTypeDisplay } = graphData;
+  const [stockSplitVal, setStockSplitVal] = useState(equity || 0);
   const [loader, setLoader] = useState(false);
   const [title, setTitle] = useState('');
   const navigate = navigateFunc.bind(props);
@@ -44,14 +44,12 @@ const InvestedAmount = (props) => {
     if (investType === 'saveforgoal') {
       params.subtype = graphData?.subtype;
     }
-    const bondSplit = 100 - stockSplitVal;
-    const stockSplit = stockSplitVal;
     try {
       setLoader("button");
       const data = await get_recommended_funds(params);
       storageService().set('userSelectedRisk', data.rp_indicator);
       const recommendedTotalAmount = data?.amount;
-      graphData = { ...graphData, ...data, amount, recommendedTotalAmount, stockSplit, bondSplit };
+      graphData = { ...graphData, ...data, amount, recommendedTotalAmount};
       storageService().setObject('graphData', graphData);
       setLoader(false);
       navigate(`recommendations`);
@@ -95,7 +93,7 @@ const InvestedAmount = (props) => {
 
         <PeriodWiseReturns
           initialTerm={term}
-          stockSplit={stockSplitVal}
+          equity={stockSplitVal}
           stockReturns={stockReturns}
           bondReturns={bondReturns}
           principalAmount={amount}
@@ -121,7 +119,7 @@ const InvestedAmount = (props) => {
           </div>
         </div>
         <EquityDebtSlider
-          stockSplit={stockSplitVal}
+          equity={stockSplitVal}
           disabled={goalRecommendation.id === 'savetax'}
           onChange={handleChange}
           fixedRiskTitle={

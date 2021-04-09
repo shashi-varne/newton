@@ -46,8 +46,8 @@ const Landing = (props) => {
         // eslint-disable-next-line radix
         year: investTypeDisplay === '3Y' ? parseInt(currentYear + term) : parseInt(currentYear + 1),
         investType: params.type,
-        stockSplit: data.recommendation.equity,
-        bondSplit: data.recommendation.debt,
+        equity: data.recommendation.equity,
+        debt: data.recommendation.debt,
         isRecurring: recurring,
         investTypeDisplay,
         name: 'Wealth building'
