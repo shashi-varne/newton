@@ -97,15 +97,34 @@ export function commonRender(props_base) {
         }
     }
 
-    
+    const renderPageLoader2 = (data) => {
+        if (this.props.showLoader) {
+          return (
+            <div
+              className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ""
+                }`}
+            >
+              <div className="LoaderOverlay">
+                <div className="LoaderOverlay-title">
+                  {data.title}
+                </div>
+                <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
+                <div className="LoaderOverlay-subtitle" >{data.subtitle}</div>
+              </div>
+            </div>
+          );
+        } else {
+          return null;
+        }
+    };
 
     if (this.state.mounted) {
         return (
 
-   <div className={this.addContainerClass(props_base)} >
+   <div className={this.addContainerClass(props_base)}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && <Header
+                && !this.props.showLoaderModal && !this.props.loaderWithData && <Header
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
@@ -137,7 +156,10 @@ export function commonRender(props_base) {
                 <div id="HeaderHeight" style={{ top: 56 }}>
 
                     {/* Loader Block covering entire screen*/}
-                    {this.renderPageLoader()}
+                    {/* {this.renderPageLoader()} */}
+                    {this.props.loaderWithData
+                        ? renderPageLoader2(this.props.loaderData)
+                        : this.renderPageLoader()}
 
                     {/* Error Block */}
                     {this.renderGenericError()}
@@ -385,7 +407,6 @@ export function renderPopup() {
 
 export function renderGenericError() {
 
-
     let errorData = this.props.errorData || {};
     let { title1, title2, button_text1, button_text2,
         handleClick2, handleClick1 } = errorData;
@@ -488,7 +509,7 @@ export function renderGenericError() {
 
                     <div className="title2 title2-page">{title2 || 'Sorry, we could not process your request'}</div>
 
-                    <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>
+                    {getConfig().project !== 'loan' && <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>}
                     {genericErrorActionsPage()}
                 </div>
             </div>

@@ -245,13 +245,13 @@ class SelectBank extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title="Select bank"
+        title={this.state.iframe ? "" : "Select bank"}
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="AUTHORISE E-MANDATE"
         iframeIcon={this.state.iframeIcon}
       >
-        <div className="infocard">
+        <div className="infocard" style={{marginTop: this.state.iframe ? '0px' : '20px'}}>
           <div className="title">
             Select bank account
         </div>

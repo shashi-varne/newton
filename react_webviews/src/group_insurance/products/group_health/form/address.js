@@ -15,7 +15,7 @@ import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 
-import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../../common/ui/DropDownNew'
 import DotDotLoader from '../../../../common/ui/DotDotLoader';
 
 class GroupHealthPlanAddressDetails extends Component {
@@ -645,22 +645,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                     onChange={this.handleChange()} />
                             </div>
                             <div className="InputField">
-                                <Input
-                                    type="number"
-                                    width="40"
-                                    disabled={this.state.same_address === 'YES'}
-                                    label="Pincode"
-                                    id="p_pincode"
-                                    name="p_pincode"
-                                    maxLength="6"
-                                    error={(this.state.form_data.p_pincode_error) ? true : false}
-                                    helperText={this.state.form_data.p_pincode_error}
-                                    value={this.state.form_data.p_pincode || ''}
-                                    onChange={this.handlePincodeReligare('p_pincode')} />
-                            </div>
-
-                            <div className="InputField" style={{marginBottom: '-14px'}}>
-                                <DropdownWithoutIcon
+                                <DropDownNew
                                     width="40"
                                     dataType="AOB"
                                     options={this.state.form_data.p_city_list}
@@ -674,7 +659,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                             <DotDotLoader className="insurance-dot-loader" /> :
                                             this.state.form_data.p_city_error
                                     }
-                                    value={this.state.form_data.p_city || ''}
+                                    value={this.state.form_data.p_city || undefined}
                                     onChange={this.handleChange('p_city')}
                                 />
                             </div>
@@ -807,7 +792,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
                             <div className="InputField">
-                                <DropdownWithoutIcon
+                                <DropDownNew
                                     width="40"
                                     dataType="AOB"
                                     options={this.state.form_data.city_list}
@@ -821,7 +806,7 @@ class GroupHealthPlanAddressDetails extends Component {
                                             <DotDotLoader className="insurance-dot-loader" /> :
                                             this.state.form_data.city_error
                                     }
-                                    value={this.state.form_data.city || ''}
+                                    value={this.state.form_data.city || undefined}
                                     onChange={this.handleChange('city')}
                                 />
                             </div>

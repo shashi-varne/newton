@@ -104,7 +104,6 @@ import LifeInsuranceEntry from './products/life_insurance/entry';
 
 /******************************* Other Insurnace ******************/
 import OtherInsuranceEntry from './products/other_insurance/entry';
-
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
 
@@ -533,6 +532,7 @@ const Insurance = (props) => {
 
             { /********** Other Insurance-page **********/}
             <Route path={`${url}/other-insurance/entry`} component={OtherInsuranceEntry} />
+
 
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />
