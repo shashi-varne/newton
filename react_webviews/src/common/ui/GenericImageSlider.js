@@ -19,7 +19,7 @@ class CheckBox extends Component {
                         {this.props.image_list.map((item, index) =>{
                             return <img
                                     className="image"
-                                    src={require(`assets/${this.state.productName}/${item}`)}
+                                    src={require(`assets/${item}`)}
                                     alt=""
                                 />
                         })}

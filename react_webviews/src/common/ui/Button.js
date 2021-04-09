@@ -132,7 +132,7 @@ class CustomButton extends Component {
             style={props.style}
             className={`${buttonClass} ${typeToClass[props.type || ''] || ''}`}
             classes={classes}
-            disabled={props.buttonDisabled}
+            disabled={props.buttonDisabled || props.disable}
             onClick={props.onClick}
           >
             {!showLoader && props.buttonTitle}
