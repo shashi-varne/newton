@@ -27,7 +27,7 @@ const Recommendations = (props) => {
   })
   const {
     recommendation,
-    amount,
+    recommendedTotalAmount,
     investType,
     order_type,
     type,
@@ -85,7 +85,7 @@ const Recommendations = (props) => {
       }
       investmentObject.name = name;
       investmentObject.bondstock = state.bond + ":" + state.stock;
-      investmentObject.amount = amount;
+      investmentObject.amount = recommendedTotalAmount;
       investmentObject.term = term;
       investmentObject.type = investType;
       investmentObject.subtype = subtype;
@@ -106,14 +106,14 @@ const Recommendations = (props) => {
 
     if (type === "riskprofile") {
       investmentEventData = {
-        amount: amount,
+        amount: recommendedTotalAmount,
         investment_type: type,
         journey_name: "mf",
         investment_subtype: graphData.subtype,
       };
     } else {
       investmentEventData = {
-        amount: amount,
+        amount: recommendedTotalAmount,
         investment_type: investType,
         journey_name: "mf",
         investment_subtype: graphData.subtype,
@@ -239,7 +239,7 @@ const Recommendations = (props) => {
         <div className='recommendations-total-investment'>
           <div>Total Investment</div>
 
-          <div>{recommendation?.length > 0 ? formatAmountInr(amount) : '₹0'}</div>
+          <div>{recommendation?.length > 0 ? formatAmountInr(recommendedTotalAmount) : '₹0'}</div>
         </div>
         <div>
           <div className="recommendations-disclaimer-morning">

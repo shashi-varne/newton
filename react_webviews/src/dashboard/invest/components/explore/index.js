@@ -12,6 +12,7 @@ import { getConfig } from "utils/functions";
 
 import { getTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../diy/constants'
+import isEmpty from 'lodash/isEmpty';
 export const exploreMFMappings = [
   {
     title: 'Equity',
@@ -48,13 +49,14 @@ const InvestExplore = (props) => {
 
   const fetchTrendingFunds = async () => {
     try {
-      const data = await getTrendingFunds()
-      const categories = await getSubCategories()
-      storageService().setObject('diystore_trending', data.trends)
-      storageService().setObject('diystore_categoryList', categories.result)
-      setLoader(false)
-      console.log('data is', data.trends)
-      
+      const categoryList = storageService().getObject('diystore_categoryList')
+      if(isEmpty(categoryList)) {
+        const data = await getTrendingFunds()
+        const categories = await getSubCategories()
+        storageService().setObject('diystore_trending', data.trends)
+        storageService().setObject('diystore_categoryList', categories.result)
+      }
+      setLoader(false)        
     } catch (err) {
       setLoader(false)
       console.log('the error is', err)

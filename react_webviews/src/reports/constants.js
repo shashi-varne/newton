@@ -63,6 +63,7 @@ export const storageConstants = {
   KYC: "kyc",
   PENDING_PURCHASE: "pending_purchase",
   PENDING_REDEMPTION: "pending_redemption",
+  PENDING_SWITCH: "pending_switch",
   SIPS: "sips",
   DIYSTORE_FUNDINFO: "diystore_fundInfo",
   REPORTS_SWITCH_FUND_TO: "reports_switch_fund_to",

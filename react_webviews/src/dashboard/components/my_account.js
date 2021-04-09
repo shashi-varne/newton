@@ -38,7 +38,7 @@ class MyAccount extends Component {
         this.navigate("kyc/change-address-details1");
         break;
       case "add-bank":
-        this.navigate("add-bank");
+        this.navigate("kyc/add-bank");
         break;
       case "capital-gain":
         this.navigate("capital-gain");
