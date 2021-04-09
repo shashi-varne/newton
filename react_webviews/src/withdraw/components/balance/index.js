@@ -22,6 +22,7 @@ const Balance = (props) => {
       const result = await getBalance()
       setBalance(result.balance)
     } catch (err) {
+      setBalance(0)
       toast(err.message, 'error')
     }
   }
@@ -70,20 +71,18 @@ const Balance = (props) => {
     }
     return
   }
-  console.log(balance)
-  const noInvestments = isEmpty(balance?.balance) || balance?.balance === 0
+  const noInvestments = isEmpty(balance?.balance) || balance === 0
   return (
     <Container
       title={noInvestments ? '' : 'Withdraw'}
       noFooter
       noPadding
-      noHeader={noInvestments}
       noInvestments={noInvestments}
       classOverRideContainer="withdraw-background-override"
       skelton={isEmpty(balance)}
       // noHeader={isEmpty(balance)}
     >
-      {!isEmpty(balance) && !isEmpty(balance.balance) && balance.balance > 0 && (
+      {!isEmpty(balance) && !noInvestments && (
         <>
           <section id="withdraw-balance">
             <div className="report-header">
