@@ -81,25 +81,25 @@
 
 }
 
-.invested-amount-slider-container {
+.invest-slider-container {
     display: flex;
     flex-direction: column;
     padding:0px 20px;
 
-    .invested-amount-slider-head {
+    .invest-slider-head {
         font-size: 16px;
         margin-bottom: 10px;
     }
 
-    .invested-amount-slider-range {
+    .invest-slider-range {
         display: flex;
         padding: 10px 0px 20px 0px;
-        .invested-amount-slider-stock {
+        .invest-slider-stock {
             flex:1 1 30%;
             text-align: center;
             font-size: 16px;
         }
-        .invested-amount-slider-ratio-text {
+        .invest-slider-ratio-text {
             flex:1 1 40%;
             text-align: center;
             font-size: 12px;
@@ -108,7 +108,7 @@
             flex-direction: column;
             justify-content: center;
         }
-        .invested-amount-slider-bond {
+        .invest-slider-bond {
             flex:1 1 30%;
             text-align: center;
             font-size: 16px;

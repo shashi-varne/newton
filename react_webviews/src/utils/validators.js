@@ -1016,3 +1016,16 @@ export function numberToSentence(num){ //9 digit limit
     return capitalizeFirstLetter(str);
   }
 }
+
+export function getFinancialYear() {
+  let currentMonth = moment().month() + 1;
+  let currentFinYear = moment().year();
+  let nextFinYear = currentFinYear;
+  // If current month is past March, new financial year
+  if (currentMonth > 3) {
+    nextFinYear += 1;
+  } else {
+    currentFinYear -= 1;
+  }
+  return 'FY ' + currentFinYear + '-' + nextFinYear.toString().slice(-2);
+}

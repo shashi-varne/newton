@@ -18,7 +18,10 @@ import InvestError from '../invest/components/mini_components/InvestError';
 import InvestReferralDialog from '../invest/components/mini_components/InvestReferralDialog';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 import PeriodWiseReturns from '../mini-components/PeriodWiseReturns';
-import { isEmpty } from '../../utils/validators';
+import { getFinancialYear } from '../../utils/validators';
+import { isEmpty } from 'lodash';
+
+const platform = getConfig().productName;
 
 const Recommendations = (props) => {
   let graphData = storageService().getObject("graphData") || {};
@@ -32,6 +35,8 @@ const Recommendations = (props) => {
     name,
     subtype,
   } = graphData;
+  const goalRecommendation = storageService().getObject('goalRecommendations');
+  const userRiskProfile = storageService().get('userSelectedRisk') || '';
   const state = props.location.state || {};
   const partnerCode = getConfig().partnerCode;
   const partner = getConfig().partner;
@@ -71,6 +76,35 @@ const Recommendations = (props) => {
       investCtaText += "S";
     }
   }
+
+  const [topCardProps, setTopCardProps] = useState({});
+  const initialiseTopCardProps = () => {
+    let cardProps = {};
+    if (investType === 'savetax') {
+      cardProps = {
+        showTaxCard: true,
+        cardDetails: {
+          corpus: graphData.corpus
+        }
+      };
+    } else if (userRiskProfile) {
+      cardProps = {
+        showRiskCard: true,
+        cardDetails: {
+          userRiskProfile: userRiskProfile,
+          stockSplit: graphData.stockSplit,
+          bondSplit: graphData.bondSplit,
+          type: goalRecommendation.id,
+        }
+      }
+    }
+    Object.assign(cardProps, { parentProps: props });
+    setTopCardProps(cardProps);
+  };
+  
+  useEffect(() => {
+    initialiseTopCardProps(); // TODO: Move this function within a hook
+  }, [isLoading]);
 
   const proceedInvestment = (investReferralData, isReferralGiven, handleGraph) => {
     let investmentObject = {};
@@ -226,10 +260,9 @@ const Recommendations = (props) => {
       showLoader={isApiRunning}
     > 
       <div style={{ margin: '0 -20px'}}>
-        <RecommendationTopCard
-          showRiskCard={userRiskProfile}
-          showTaxCard={investType === 'savetax'}
-        />
+        {!isEmpty(topCardProps) &&
+          <RecommendationTopCard {...topCardProps} />
+        }
         <PeriodWiseReturns
           initialTerm={term}
           stockSplit={graphData.stockSplit}
@@ -298,48 +331,52 @@ export default Recommendations;
 const RecommendationTopCard = ({
   showRiskCard,
   showTaxCard,
-  cardDetails,
+  cardDetails = {},
+  parentProps
 }) => {
+  const navigate = navigateFunc.bind(parentProps);
   const renderContent = () => {
     if (showRiskCard) {
-      const { userRiskProfile, stockSplit, bondSplit } = riskDetails;
+      const { userRiskProfile, stockSplit, bondSplit, type } = cardDetails;
       
       return (
-        <div class="risk-profile-card">
-          <img alt="" class="left-img" />
-          <div class="risk-details">
+        <div className="risk-profile-card">
+          <img src={require(`assets/${platform}/risk_profile.svg`)} alt="" className="left-img" />
+          <div className="risk-details">
             {userRiskProfile ?
               <>
-                <div class="header" onClick="showRiskInfo()">
+                <div className="risk-details-header">
                   Risk profile
-                  <img src="assets/img/info_icon.svg" class="info-icn" />
+                  <img src={require('assets/info_icon_grey.svg')} className="info-icn" alt="i" />
                 </div>
-                <div class="risk-type">{{ userRiskProfile }}</div>
-                <div class="risk-distribution">{{ stockSplit }}% Equity | {{ bondSplit }}% Debt</div>
+                <div className="risk-type">{userRiskProfile}</div>
+                <div className="risk-distribution">{stockSplit}% Equity | {bondSplit }% Debt</div>
               </> :
               <>
-                <div class="risk-type" ng-if="showStartRiskProfile">Select risk profile</div>
-                <div class="desc" ng-if="showStartRiskProfile">Get better fund recommendations</div>
+                <div className="risk-type" ng-if="showStartRiskProfile">Select risk profile</div>
+                <div className="desc" ng-if="showStartRiskProfile">Get better fund recommendations</div>
               </>
             }
           </div>
-          <div class="button" ng-click="modifyRiskProfile()">
-            {isEmpty(cardDetails) ? "Select": "Change"}
+          <div
+            className="risk-profile-change-btn"
+            onClick={() => navigate(`${type}/risk-${userRiskProfile ? 'modify' : 'select'}`)}>
+            {userRiskProfile ? "Change" : "Select"}
           </div>
         </div>
       );
     } else if (showTaxCard) {
       return (
-        <div class="tax-card" ng-show="investType === 'savetax' || investType === 'savetaxsip'">
+        <div className="tax-card">
           <img src="assets/img/sale.svg" alt="" />
-          <div class="text">Tax savings for {{ taxPeriodText }}</div>
-          <div class="amount">{formatAmountInr(cardDetails.corpus)}</div>
+          <div className="text">Tax savings for {getFinancialYear()}</div>
+          <div className="amount">{formatAmountInr(cardDetails.corpus)}</div>
         </div>
       );
     }
   }
   return (
-    <div class="recommendation-top-section">
+    <div className="recommendation-top-section">
       {renderContent()}
     </div>
   );

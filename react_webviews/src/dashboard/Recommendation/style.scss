@@ -154,6 +154,105 @@
     width: 25px;
   }
 }
+
+.recommendation-top-section {
+  padding: 0 20px;
+  margin-bottom: 40px;
+  
+  .top-section-card {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-radius: 6px;
+  }
+
+  .risk-profile-card {
+    @extend .top-section-card;
+    background-color: white;
+    box-shadow: 0 1px 7px 0 rgba(black, 0.1);
+
+    img.left-img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+    
+    .risk-details {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      
+      .risk-details-header {
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: normal;
+        margin-bottom: 2px;
+        
+        img.info-icn {
+          margin-left: 6px;
+          margin-bottom: 2px;
+        }
+      }
+
+      .risk-type {
+        color: #0A1D32;
+        font-size: 15px;
+        font-weight: 600;
+      }
+      
+      .risk-distribution {
+        color: #767E86;
+        font-size: 9px;
+        line-height: 12px;
+        letter-spacing: 1.13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 5px;
+      }
+
+      .desc {
+        font-size: 11px;
+        line-height: 21px;
+        color: black;
+        margin-top: 5px;
+      }  
+    }
+    
+    .risk-profile-change-btn {
+      color: var(--secondary);
+      text-transform: uppercase;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-left: auto;
+      cursor: pointer;
+    }
+  }
+
+  .tax-card {
+    @extend .top-section-card;
+    background-color: #F6FFED;
+    font-size: 13px;
+
+    img {
+      height: 14px;
+      width: 14px;
+      margin-right: 16px;
+    }
+
+    .text {
+      color: #0A1D32;
+      font-weight: 600;
+    }
+
+    .amount {
+      color: #7ED321;
+      font-weight: bold;
+      margin-left: auto;
+    }
+  }
+}
 ///// End of Recommendation Edit //////
 
 // Alternate-funds //////////////

@@ -22,7 +22,8 @@ const PeriodWiseReturns = ({
   stockReturns = 10,
   bondReturns = 6.5,
   principalAmount = 0,
-  isRecurring
+  isRecurring,
+  showInfo
 }) => {
   const [potentialValue, setPotentialValue] = useState(0);
   const [investedValue, setInvestedValue] = useState(0);
@@ -68,12 +69,17 @@ const PeriodWiseReturns = ({
     setInvestedValue(value);
   };
 
+  const openInfoSheet = () => {
+    
+  };
+
   return (
     <div className='invested-amount-return-container'>
       <div className='invested-amount-return-text'>{title || 'Expected returns'}</div>
       <div className='invested-amount-year-tabs'>
         {termOptions.map((termOpt, idx) => (
           <span
+            key={idx}
             className={
               // Check "Explanation" above
               currentTerm >= termOpt && currentTerm < (termOptions[idx + 1] || 100) ?
@@ -86,17 +92,27 @@ const PeriodWiseReturns = ({
       </div>
       <div className='invested-amount-corpus-values'>
         <div className='invested-amount-corpus-invested'>
-          <div class="color-box"></div>
-          <div class="text">
+          <div className="color-box"></div>
+          <div className="text">
             <h1>Invested value</h1>
             <div>{formatAmountInr(investedValue)}</div>
           </div>
         </div>
-        <div class="invested-amount-corpus-divider"></div>
+        <div className="invested-amount-corpus-divider"></div>
         <div className='invested-amount-corpus-projected'>
-          <div class="color-box"></div>
-          <div class="text">
-            <h1>Projected Value</h1>
+          <div className="color-box"></div>
+          <div className="text">
+            <h1>
+              Projected Value
+              {showInfo &&
+                <img
+                  alt="i"
+                  src={require('assets/info_icon_grey.svg')}
+                  class="info-icn"
+                  onClick={openInfoSheet}
+                />
+              }
+            </h1>
             <div>{formatAmountInr(potentialValue)}</div>
           </div>
         </div>

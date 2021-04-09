@@ -43,6 +43,7 @@ const Landing = (props) => {
   const otiAmount = 50000;
   const sipAmount = 5000;
   const navigate = navigateFunc.bind(props);
+  
   const fetchRecommendedFunds = async () => {
     const params = {
       type: investTypeDisplay === "sip" ? 'buildwealth' : 'buildwealthot',

@@ -1,30 +1,29 @@
 import { CircularProgress } from 'material-ui';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
 import { navigate as navigateFunc, selectTitle } from '../../common/commonFunction';
 import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
-import './riskSelection.scss';
+import './RiskPages.scss';
 
-const RiskSelection = ({
+const RiskSelect = ({
   canSkip,
-  modifyRisk,
   ...otherProps
 }) => {
 
   const sessionStoredRisk = storageService().get('userSelectedRisk') || '';
   const graphData = storageService().getObject('graphData');
   const [loader, setLoader] = useState(false);
-  const [title, setTitle] = useState('');
+  // const [title, setTitle] = useState('');
   const [selectedRisk, selectRisk] = useState(sessionStoredRisk);
   const navigate = navigateFunc.bind(otherProps);
 
-  useEffect(() => {
-    const investTitle = selectTitle(graphData.investType);
-    setTitle(investTitle);
-  }, []);
+  // useEffect(() => {
+  //   const investTitle = selectTitle(graphData.investType);
+  //   setTitle(investTitle);
+  // }, []);
 
   const updateRiskAndFetchRecommendations = async (skipRiskUpdate) => {
     const { amount, investType: type, term } = graphData;
@@ -35,7 +34,7 @@ const RiskSelection = ({
       rp_enabled: true,
     };
 
-    if (type === 'saveforgoal' && modifyRisk) {
+    if (type === 'saveforgoal') {
       delete params.amount;
     }
 
@@ -60,21 +59,14 @@ const RiskSelection = ({
     }
   }
 
-  const redirectToNextScreen = () => {
-    let state = 'recommendations';
+  const goNext = async (skipRiskUpdate) => {
+    await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
-    if (graphData.investType === 'saveforgoal' && !modifyRisk) {
+    let state = 'recommendations';
+    if (graphData.investType === 'saveforgoal') {
       state = `savegoal/${graphData.subtype}/target`;
     }
-
     navigate(state);
-  };
-
-  const goNext = async (skipRiskUpdate) => {
-    if (selectedRisk !== 'Custom' && selectedRisk !== sessionStoredRisk) {
-      await updateRiskAndFetchRecommendations(skipRiskUpdate);
-    }
-    redirectToNextScreen();
   };
 
   return (
@@ -84,21 +76,24 @@ const RiskSelection = ({
       buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
       helpContact
       disable={loader}
-      title={title}
+      title='Please select your Risk Profile'
       handleClick={goNext}
       classOverRideContainer='pr-container'
     >
-      <FSelect
-        options={riskProfiles}
-        indexBy='name'
-        renderItem={riskOpt => <RiskOption data={riskOpt} />}
-        onChange={risk => selectRisk(risk.name)}
-      />
+      <div style={{ marginTop: '10px' }}>
+        <FSelect
+          preselectFirst
+          options={riskProfiles}
+          indexBy='name'
+          renderItem={riskOpt => <RiskOption data={riskOpt} />}
+          onChange={risk => selectRisk(risk.name)}
+        />
+      </div>
     </Container>
   );
 }
 
-export default RiskSelection;
+export default RiskSelect;
 
 const RiskOption = ({ data }) => {
   return [

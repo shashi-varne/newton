@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../../../common/Container';
-import Slider from 'common/ui/Slider';
 import toast from 'common/ui/Toast'
 
 import withdraw_anytime_icon from 'assets/withdraw_anytime_icon.png';
@@ -13,6 +12,7 @@ import { getReturnRates, navigate as navigateFunc, selectTitle } from '../../com
 import { get_recommended_funds } from '../../common/api';
 import './style.scss';
 import PeriodWiseReturns from '../../../mini-components/PeriodWiseReturns';
+import EquityDebtSlider from './EquityDebtSlider';
 
 const { stockReturns, bondReturns } = getReturnRates();
 
@@ -21,7 +21,6 @@ const InvestedAmount = (props) => {
   const goalRecommendation = storageService().getObject('goalRecommendations');
   const { amount, investType, term, stockSplit, isRecurring, investTypeDisplay } = graphData;
   const [stockSplitVal, setStockSplitVal] = useState(stockSplit || 0);
-  const [risk, setRisk] = useState('');
   const [loader, setLoader] = useState(false);
   const [title, setTitle] = useState('');
   const navigate = navigateFunc.bind(props);
@@ -32,7 +31,6 @@ const InvestedAmount = (props) => {
 
   const handleChange = (value) => {
     setStockSplitVal(value);
-    getRiskTitle()
   };
 
   const fetchRecommendedFunds = async () => {
@@ -49,7 +47,7 @@ const InvestedAmount = (props) => {
     try {
       setLoader("button");
       const data = await get_recommended_funds(params);
-      console.log("data is", data);
+      storageService().set('userSelectedRisk', data.rp_indicator);
       graphData = { ...graphData, ...data};
       storageService().setObject('graphData', graphData);
       setLoader(false);
@@ -64,19 +62,6 @@ const InvestedAmount = (props) => {
     fetchRecommendedFunds();
   };
 
-  const getRiskTitle = () => {
-    if (investType === 'arbitrage') {
-      setRisk("'Moderate risk (Moderately high returns)'");
-    } else {
-      if (stockSplitVal <= 50) {
-        setRisk('Low risk (Moderate returns)');
-      } else if (stockSplitVal > 50 && stockSplitVal <= 70) {
-        setRisk('Moderate risk (Moderately high returns)');
-      } else {
-        setRisk('High risk (High returns)');
-      }
-    }
-  };
 
   return (
     <Container
@@ -132,31 +117,15 @@ const InvestedAmount = (props) => {
             </p>
           </div>
         </div>
-
-        <div className='invested-amount-slider-container'>
-          <div className='invested-amount-slider-head'>{risk}</div>
-          <div className='invested-amount-slider'>
-            <Slider
-              label='Net monthly income'
-              val='Net_monthly_Income'
-              default={stockSplitVal}
-              value={stockSplitVal}
-              min='0'
-              max='100'
-              minValue='0'
-              disabled={goalRecommendation.id === 'savetax'}
-              maxValue='₹ 10 Lacs'
-              onChange={handleChange}
-            />
-          </div>
-          <div className='invested-amount-slider-range'>
-            <div className='invested-amount-slider-stock'>{stockSplitVal}% Stocks</div>
-            <div className='invested-amount-slider-ratio-text'>
-              <span>slide to change</span> <span>ratio</span>
-            </div>
-            <div className='invested-amount-slider-bond'>{100 - stockSplitVal}% Bonds</div>
-          </div>
-        </div>
+        <EquityDebtSlider
+          stockSplit={stockSplitVal}
+          disabled={goalRecommendation.id === 'savetax'}
+          onChange={handleChange}
+          fixedRiskTitle={
+            investType === 'arbitrage' ?
+            "Moderate risk (Moderately high returns)" : ""
+          }
+        />
       </section>
     </Container>
   );

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import completed_step from "assets/completed_step.svg";
 import './FSelect.scss';
+import { findIndex, isFunction } from 'lodash';
+
 const FSelect = ({
+  preselectFirst,
   options,
   indexBy,
   value,
@@ -9,18 +12,29 @@ const FSelect = ({
   onChange,
   renderItem,
 }) => {
-  const [selectedOpt, selectOpt] = useState(value || {});
+  const [selectedOpt, setSelectedOpt] = useState(value || {});
 
-  const changeOpt = (index) => {
+  const selectOpt = (index) => {
     const oldOpt = selectedOpt;
     const newOpt = options[index];
     if (oldOpt[indexBy] === newOpt[indexBy]) return;
-    selectOpt(newOpt);
+    setSelectedOpt(newOpt);
   };
 
   useEffect(() => {
-    onChange?.(selectedOpt);
+    if (isFunction(onChange)) {
+      onChange(selectedOpt);
+    }
   }, [selectedOpt]);
+  
+  useEffect(() => {
+    if (preselectFirst) {
+      selectOpt(0);
+    }
+    if (value) {
+      selectOpt(findIndex(options, { [indexBy]: value }));
+    }
+  }, []);
 
   if (!indexBy) {
     return (
@@ -31,7 +45,7 @@ const FSelect = ({
   const renderOptionProps = {
     titleProp,
     renderItem,
-    onClick: changeOpt
+    onClick: selectOpt
   };
   return (
     <div className="fselect-container">

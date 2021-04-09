@@ -1,0 +1,48 @@
+.risk-opt-title {
+  color: #160D2E;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.risk-opt-desc {
+  color: #767E86;
+  line-height: 21px;
+  margin-bottom: 5px;
+}
+.risk-opt-split {
+  color: #767E86;
+  line-height: 21px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+
+  span {
+    font-weight: 500;
+  }
+}
+.risk-customize-cta {
+  margin-top: 30px;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 21px;
+  color: var(--secondary);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.risk-info {
+  margin-bottom: 30px;
+
+  .risk-info-title {
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 22px;
+    text-transform: uppercase;
+  }
+
+  .risk-info-desc {
+    font-size: 13px;
+    line-height: 21px;
+    color: #767E86;
+    width: 90%;
+  }
+}
