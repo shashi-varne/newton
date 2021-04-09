@@ -7,7 +7,7 @@ import Api from 'utils/api';
 import { numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
-
+import ValueSelector from '../../../../common/ui/ValueSelector';
 
 class GroupHealthPlanSelectSumAssured extends Component {
 
@@ -60,8 +60,18 @@ class GroupHealthPlanSelectSumAssured extends Component {
             groupHealthPlanData.plan_selected.premium_data = resultData.premium_details;
             this.setLocalProviderData(groupHealthPlanData);
                 
+            var optionsList = []
+            for(var x of resultData.premium_details){
+                var temp = {
+                    'value': numDifferentiationInr(x.sum_insured),
+                    'premium': x.premium 
+                }
+                optionsList.push(temp)
+            }
+
             this.setState({
               premium_data: resultData.premium_details,
+              optionsList: optionsList,
               skelton: false
             })
 
@@ -91,7 +101,11 @@ class GroupHealthPlanSelectSumAssured extends Component {
         this.setState({
             selectedIndex: this.state.groupHealthPlanData.selectedIndexSumAssured || 0
         }, () => {
-            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium);
+            var postfix = ''
+            if(this.state.provider === 'GMC'){
+                postfix = '/year';
+            }
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium, postfix);
         })
         }
     }
@@ -150,7 +164,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         }
         groupHealthPlanData.add_ons_data = [];
         groupHealthPlanData.post_body.add_ons_json = {};
-
+        
         this.setLocalProviderData(groupHealthPlanData);
 
         if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
@@ -169,31 +183,15 @@ class GroupHealthPlanSelectSumAssured extends Component {
         this.setState({
             selectedIndex: index
         }, () => {
-            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium);
+            var postfix = ''
+            if(this.state.provider === 'GMC'){
+                postfix = '/year';
+            }
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium, postfix);
         });
     }
 
-    renderPlans = (props, index) => {
-        return (
-            <div onClick={() => this.choosePlan(index, props)}
-                className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
-                <div className="select-tile">
-                    <div className="name">
-                        {numDifferentiationInr(props.sum_insured)}
-                    </div>
-                    <div className="completed-icon">
-                        {index === this.state.selectedIndex &&
-                            <img src={require(`assets/completed_step.svg`)} alt="" />}
-                    </div>
-                </div>
-            </div >
-        )
-    }
-
-
-
     render() {
-
         return (
           <Container
             events={this.sendEvents("just_set_events")}
@@ -215,7 +213,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             </div>
             <div className="group-health-plan-select-sum-assured">
               <div className="generic-choose-input">
-                {this.state.premium_data && this.state.premium_data.map(this.renderPlans)}
+                <ValueSelector optionsList={this.state.optionsList} selectedIndex={this.state.selectedIndex} handleSelect={this.choosePlan} />
               </div>
             </div>
           </Container>

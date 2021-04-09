@@ -24,6 +24,13 @@ class HealthInsuranceEntry extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let insuranceProducts = [
+      // {
+      //   key: 'GMC',
+      //   title: 'Care Health',
+      //   subtitle: 'fisdom HealthProtect',
+      //   Product_name : 'care_plus',
+      //   icon: religare_logo
+      // },
       {
         key: 'HDFCERGO',
         title: 'HDFC ERGO',
@@ -80,7 +87,7 @@ class HealthInsuranceEntry extends Component {
             <div style={{ borderBottomWidth: '1px', width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%',
                   borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: this.state.insuranceProducts.length - 1 !== index ? '20px' : '40px',
                   justifyContent: 'space-between', cursor: 'pointer' }}>
-              <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', marginBottom :'5px' , lineHeight : '15.41px', width : '100%'}}>{props.title}</div>
+              <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', marginBottom :'5px' , lineHeight : '15.41px', width : '100%'}}>{props.title} {props.key === 'GMC' && <span className="recommended-tag">Recommended</span>}</div> 
               <div className='insurance_plans_logos_subtext' style={{fontWeight: '300'}}>{props.subtitle}</div>
             </div>
           </div>
