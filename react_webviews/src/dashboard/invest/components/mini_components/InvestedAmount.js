@@ -18,8 +18,8 @@ const bondReturns = 8;
 const InvestedAmount = (props) => {
   let graphData = storageService().getObject('graphData');
   const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { amount, investType, term, stockSplit, isRecurring, investTypeDisplay } = graphData;
-  const [stockSplitVal, setStockSplitVal] = useState(stockSplit || 0);
+  const { amount, investType, term, stockSplit: stockSplitCache, isRecurring, investTypeDisplay } = graphData;
+  const [stockSplitVal, setStockSplitVal] = useState(stockSplitCache || 0);
   const [termYear, setTermYear] = useState(term || '');
   const [potentialValue, setPotentialValue] = useState(0);
   const [investedValue, setInvestedValue] = useState(0);
@@ -51,11 +51,13 @@ const InvestedAmount = (props) => {
     if (investType === 'saveforgoal') {
       params.subtype = graphData?.subtype;
     }
+    const bondSplit = 100 - stockSplitVal;
+    const stockSplit = stockSplitVal;
     try {
       setLoader("button");
       const data = await get_recommended_funds(params);
       const recommendedTotalAmount = data?.amount;
-      graphData = { ...graphData, ...data, amount, recommendedTotalAmount };
+      graphData = { ...graphData, ...data, amount, recommendedTotalAmount, stockSplit, bondSplit };
       storageService().setObject('graphData', graphData);
       setLoader(false);
       navigate(`recommendations`);
