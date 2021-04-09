@@ -3,6 +3,7 @@ import { getConfig, isIframe } from "utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import toast from "../../common/ui/Toast";
 import { logout } from "../../login_and_registration/function";
+import { storageService } from "../../utils/validators";
 import Container from "../common/Container";
 import { navigate as navigateFunc } from "../invest/common/commonFunction";
 import "./style.scss";
@@ -20,6 +21,8 @@ const AccountLinked = (props) => {
       } else {
         setIsApiRunning("button");
         try {
+          storageService().clear();
+          window.localStorage.clear();
           await logout();
           navigate("/login", null, true);
         } catch (err) {

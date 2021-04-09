@@ -70,10 +70,11 @@ class AccountMergeOtp extends Component {
         );
       }
     } catch (err) {
+      toast("Something went wrong");
+    } finally {
       this.setState({
         isApiRunning: false,
       });
-      toast("Something went wrong");
     }
   };
 
@@ -91,7 +92,7 @@ class AccountMergeOtp extends Component {
         isApiRunning: false,
       });
       if (res.pfwresponse.status_code === 200) {
-        this.props.push({
+        this.props.history.push({
           pathname: "/account/merge/linked/success",
           search: getConfig().searchParams,
         });
