@@ -24,13 +24,13 @@ class HealthInsuranceEntry extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let insuranceProducts = [
-      {
-        key: 'GMC',
-        title: 'Care Health',
-        subtitle: 'fisdom HealthProtect',
-        Product_name : 'care_plus',
-        icon: religare_logo
-      },
+      // {
+      //   key: 'GMC',
+      //   title: 'Care Health',
+      //   subtitle: 'fisdom HealthProtect',
+      //   Product_name : 'care_plus',
+      //   icon: religare_logo
+      // },
       {
         key: 'HDFCERGO',
         title: 'HDFC ERGO',
