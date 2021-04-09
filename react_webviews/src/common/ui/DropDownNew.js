@@ -34,9 +34,11 @@ class SelectDropDown2 extends React.Component {
       dropUp: instOffsetWithMenu >= windowHeight,
       shrink: true,
       containerHeight: document.getElementsByClassName("Container")[0].offsetHeight,
-    }, () =>  {
+    }, () =>  { 
       if(!this.state.dropUp && open ){
-        document.getElementsByClassName("Container")[0].style.height = ((document.getElementsByClassName("Container")[0].offsetHeight)  + 246) + 'px';
+        if((this.state.containerHeight  - instOffsetWithMenu) <= 0 ) {
+          document.getElementsByClassName("Container")[0].style.setProperty('height',((document.getElementsByClassName("Container")[0].offsetHeight)  + 246) + 'px', 'important');
+        }
       }
     });
   }
@@ -46,17 +48,12 @@ class SelectDropDown2 extends React.Component {
     window.removeEventListener('resize', this.determineDropUp);
     window.removeEventListener('scroll', this.determineDropUp);
     this.myRef.select.blur()
-    if(document.getElementsByClassName("Container")[0].offsetHeight  > this.state.containerHeight && !this.state.dropUp ){
-      document.getElementsByClassName("Container")[0].style.height = ((document.getElementsByClassName("Container")[0].offsetHeight)  - 246) + 'px';
-      // setTimeout(()=>{
-      //   document.getElementsByClassName("Container")[0].style.height = ((document.getElementsByClassName("Container")[0].offsetHeight)  - 246) + 'px';
-      // } , 1000)
-    }
+    document.getElementsByClassName("Container")[0].style.setProperty('height', 'auto', 'important');
   };
 
   onMenuOpen = () => {
-    this.determineDropUp(this.props);
-    window.addEventListener('resize', this.determineDropUp(  '', true));
+    this.determineDropUp(this.props , true);
+    window.addEventListener('resize', this.determineDropUp);
     window.addEventListener('scroll', this.determineDropUp);
   }
 
