@@ -18,3 +18,17 @@
     }
   }
 }
+
+.account-merge-otp {
+  line-height: 1.5;
+  color: #333333;
+
+  p {
+    font-size: 16px;
+  }
+
+  .otp-input {
+    margin-top: 10px;
+    text-align: center;
+  }
+}
