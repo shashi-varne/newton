@@ -34,6 +34,10 @@ class SelectDropDown2 extends React.Component {
       dropUp: instOffsetWithMenu >= windowHeight,
       shrink: true,
       containerHeight: document.getElementsByClassName("Container")[0].offsetHeight,
+    }, () =>  {
+      if(!this.state.dropUp){
+        document.getElementsByClassName("Container")[0].style.height = ((document.getElementsByClassName("Container")[0].offsetHeight)  + 246) + 'px';
+      }
     });
   }
 
@@ -43,7 +47,7 @@ class SelectDropDown2 extends React.Component {
     window.removeEventListener('scroll', this.determineDropUp);
     this.myRef.select.blur()
 
-    if(document.getElementsByClassName("Container")[0].offsetHeight  === this.state.containerHeight){
+    if(document.getElementsByClassName("Container")[0].offsetHeight  === this.state.containerHeight && !this.state.dropUp ){
       document.getElementsByClassName("Container")[0].style.height = ((document.getElementsByClassName("Container")[0].offsetHeight)  - 246) + 'px';
       // setTimeout(()=>{
       //   document.getElementsByClassName("Container")[0].style.height = ((document.getElementsByClassName("Container")[0].offsetHeight)  - 246) + 'px';
@@ -52,13 +56,9 @@ class SelectDropDown2 extends React.Component {
   };
 
   onMenuOpen = () => {
-    document.getElementsByClassName("Container")[0].style.height = ((document.getElementsByClassName("Container")[0].offsetHeight)  + 246) + 'px';
     this.determineDropUp(this.props);
     window.addEventListener('resize', this.determineDropUp);
     window.addEventListener('scroll', this.determineDropUp);
-    // setTimeout(()=>{
-      // document.getElementsByClassName("Container")[0].style.height = ((document.getElementsByClassName("Container")[0].offsetHeight)  + 246) + 'px';
-    // } , 1000)
   }
 
   handleChange = selectedOption => {
@@ -141,6 +141,7 @@ class SelectDropDown2 extends React.Component {
               menuPosition="absolute"
               defaultValue={value}
               onFocus={this.onMenuOpen}
+              onBlur={this.handleMenuClose}
               getOptionLabel={option => option.name}
               getOptionValue={option => option.value}
               buildMenuOptions
