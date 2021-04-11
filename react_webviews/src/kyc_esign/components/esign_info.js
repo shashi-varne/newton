@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
 import { navigate as navigateFunc } from '../common/functions'
@@ -56,8 +56,9 @@ class ESignInfo extends Component {
   }
 
   handleClick = async () => {
+    let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
-      window.location.origin + '/kyc-esign/nsdl' + getConfig().searchParams
+      basepath + '/kyc-esign/nsdl' + getConfig().searchParams
     );
 
     this.setState({ show_loader: "button" });

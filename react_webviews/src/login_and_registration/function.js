@@ -3,9 +3,10 @@ import toast from "common/ui/Toast";
 import Api from "utils/api";
 import { storageService, getUrlParams } from "utils/validators";
 import { getConfig } from "utils/functions";
+import { isEmpty } from "../utils/validators";
 
 const isMobileView = getConfig().isMobileDevice;
-
+const errorMessage = "Something went wrong!";
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.emailLogin = emailLogin.bind(this);
@@ -103,7 +104,7 @@ export function formCheckFields(
     redirect_url: redirectUrl,
   };
 
-  this.setState({ isApiRunning: true });
+  this.setState({ isApiRunning: "button" });
   if (loginType === "email" && userAction === "LOGIN") {
     body.email = form_data["email"];
     body.password = form_data["password"];
@@ -165,6 +166,7 @@ export async function emailLogin(body) {
       this.setState({
         currentUser: true,
         "user-data": userData,
+        isApiRunning: false,
       });
       if (storageService().get("deeplink_url")) {
         window.location.href = decodeURIComponent(
@@ -174,12 +176,13 @@ export async function emailLogin(body) {
         this.redirectAfterLogin(result, user);
       }
     } else {
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || errorMessage);
     }
     this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(error || errorMessage);
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -210,24 +213,21 @@ export async function mobileLogin(body) {
           ? getConfig().redirect_url
           : false;
 
-      this.props.history.push(
-        {
-          pathname: "mobile/verify",
-          search: getConfig().searchParams,
-        },
-        {
+      this.setState({ isApiRunning: false });
+      this.navigate("mobile/verify", {
+        state: {
           mobile_number: body.mobile_number,
           rebalancing_redirect_url: rebalancing_redirect_url,
           forgot: false,
-        }
-      );
+        },
+      });
     } else {
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || errorMessage);
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(errorMessage);
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -255,14 +255,14 @@ export async function emailRegister(body) {
       toast(
         "Please click on the verification link sent to your email account."
       );
-      this.setState({ resendVerification: true });
+      this.setState({ resendVerification: true, isApiRunning: false });
     } else {
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || errorMessage);
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(errorMessage);
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -293,11 +293,11 @@ export async function verifyCode(form_data) {
         promo_status: "Invalid",
         isPromoApiRunning: false,
       });
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(errorMessage);
     this.setState({ isPromoApiRunning: false });
   }
 }
@@ -323,18 +323,18 @@ export async function resendVerificationLink() {
         "Please click on the verification link sent to your email account."
       );
     } else {
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || errorMessage);
     }
     this.setState({ resendVerificationApi: false });
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(errorMessage);
     this.setState({ resendVerificationApi: false });
   }
 }
 
 export async function otpVerification(body) {
-  this.setState({ isApiRunning: true });
+  this.setState({ isApiRunning: "button" });
   try {
     const res = await Api.post(
       `/api/mobile/login?mobile_number=${body.mobile_number}&otp=${body.otp}`
@@ -375,6 +375,7 @@ export async function otpVerification(body) {
       this.setState({
         currentUser: true,
         "user-data": userData,
+        isApiRunning: false,
       });
       if (storageService().get("deeplink_url")) {
         window.location.href = decodeURIComponent(
@@ -384,12 +385,12 @@ export async function otpVerification(body) {
         this.redirectAfterLogin(result, user);
       }
     } else {
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || errorMessage);
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(errorMessage);
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -412,19 +413,20 @@ export async function applyCode(user) {
 }
 
 export async function resendOtp() {
-  this.setState({ isApiRunning: true });
+  this.setState({ isApiRunning: "button" });
   try {
     const res = await Api.get(`/api/resendotp`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       toast(result.message || "Success!");
     } else {
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || errorMessage);
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(errorMessage);
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
@@ -435,66 +437,67 @@ export async function forgotPassword(body) {
     const { result, status_code: status } = res.pfwresponse;
     let { loginType } = this.state;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       if (loginType === "email") toast(`A link has been sent to ${body.email}`);
       else {
-        this.props.history.push(
-          {
-            pathname: "mobile/verify",
-            search: getConfig().searchParams,
-          },
-          {
+        this.navigate("mobile/verify", {
+          state: {
             mobile_number: body.mobile_number,
             forgot: true,
-          }
-        );
+          },
+        });
       }
     } else {
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || errorMessage);
     }
     this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(errorMessage);
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
 
 export async function verifyForgotOtp(body) {
-  this.setState({ isApiRunning: true });
+  this.setState({ isApiRunning: "button" });
   try {
     const res = await Api.post(`/api/user/verifymobile?otp=${body.otp}`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.setState({ isApiRunning: false });
       toast("Login to continue");
       this.navigate("/login");
     } else {
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || errorMessage);
     }
-    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(errorMessage);
+  } finally {
     this.setState({ isApiRunning: false });
   }
 }
 
 export function navigate(pathname, data = {}) {
-  if (this.props.edit || data.edit) {
+  if (data.edit) {
     this.props.history.replace({
       pathname: pathname,
       search: getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
     });
   } else {
     this.props.history.push({
       pathname: pathname,
       search: data.searchParams || getConfig().searchParams,
       params: data.params || {},
+      state: data.state || {},
     });
   }
 }
 
 export async function getKycFromSummary() {
-  const errorMessage = "Something went wrong!";
   const res = await Api.post(`/api/user/account/summary`, {
     kyc: ["kyc"],
     user: ["user"],
@@ -534,10 +537,37 @@ export function redirectAfterLogin(data, user) {
     !kyc_login.pan.meta_data.pan_number &&
     user.kyc_registration_v2 === "init"
   ) {
-    this.navigate("/home-kyc");
+    this.navigate("/kyc/home");
   } else if (user.active_investment) {
     this.navigate("/landing");
   } else {
     this.navigate("/");
   }
 }
+
+export const logout = async () => {
+  try {
+    const res = await Api.get("api/logout");
+
+    if (
+      res.pfwstatus_code !== 200 ||
+      !res.pfwresponse ||
+      isEmpty(res.pfwresponse)
+    ) {
+      throw res?.pfwmessage || errorMessage;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      storageService().clear();
+      window.localStorage.clear();
+      return result;
+    } else {
+      throw result.error || result.message || errorMessage;
+    }
+  } catch (e) {
+    console.log(e);
+    toast(e);
+  }
+};

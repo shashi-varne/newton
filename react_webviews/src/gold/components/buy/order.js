@@ -5,7 +5,7 @@ import Container from '../../common/Container';
 import stopwatch from 'assets/stopwatch.png';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 
 class BuyOrder extends Component {
   constructor(props) {
@@ -75,12 +75,13 @@ class BuyOrder extends Component {
     this.setState({
       show_loader: true,
     });
+   let basepath = getBasePath();
 
     let nativeRedirectUrl =
-      window.location.origin + '/gold/buy-gold-order' + getConfig().searchParams;
+      basepath + '/gold/buy-gold-order' + getConfig().searchParams;
 
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/gold/buy/payment' + getConfig().searchParams
+      basepath + '/gold/buy/payment' + getConfig().searchParams
     );
 
     var pgLink = this.state.buyData.payment_link;

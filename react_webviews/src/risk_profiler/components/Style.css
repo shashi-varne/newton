@@ -1,14 +1,14 @@
 .result-container-risk {
   background-color: #155acf !important;
   /* autoprefixer: off */
-  height: -webkit-fill-available; 
+  height: -webkit-fill-available;
   margin-bottom: 0px;
   padding-bottom: 0;
   overflow-y: hidden;
 }
 .ui-tabs {
   display: flex;
-  box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60,64,67,0.149);
+  box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60, 64, 67, 0.149);
 }
 .ui-tab.configPrimaryColorClass {
   cursor: unset;
@@ -39,14 +39,14 @@
 }
 .meter-img {
   text-align: center;
-    margin-top: 50px;
+  margin-top: 50px;
 }
 .fund-details {
   cursor: pointer;
   display: flex;
   padding: 10px 10px 10px 10px;
   margin-bottom: 15px;
-  box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60,64,67,0.149);
+  box-shadow: 0 1px 2px 0 #11000000, 0 1px 3px 1px rgba(60, 64, 67, 0.149);
 }
 .fund-details-head {
   color: #4a4a4a;
@@ -77,4 +77,54 @@
 }
 .question-container {
   margin-top: 20px;
+}
+
+.risk_profiler-intro {
+  margin-top: 4px;
+}
+.risk_profiler-intro-heading {
+  font-weight: 700;
+  color: #0a1d32;
+  font-size: 20px;
+  margin: 13px 0 0 0;
+  line-height: 23.7px;
+}
+.risk_profiler-intro-image {
+  margin: 20px 0 0 2px;
+  width: 100%;
+}
+.risk_profiler-intro-des {
+  margin: 20px 4px 0 4px;
+  color: #767e86;
+  line-height: 20px;
+  font-size: 13px;
+}
+.risk_profiler-benefit-outer {
+  margin: 30px 4px 0 2px;
+}
+.risk_profiler-benefit-heading {
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 500;
+  color: #0a1d32;
+  margin: 0;
+}
+.risk_profiler-benefitList {
+  display: flex;
+  margin-bottom: 25.72px;
+}
+.risk_profiler-benefitList-img {
+  margin-right: 20px;
+}
+.risk_profiler-benefitList-des {
+  margin: 0;
+  color: #767e86;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
+}
+.risk-question {
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  margin-bottom: 10px;
 }
