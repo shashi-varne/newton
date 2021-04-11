@@ -24,12 +24,13 @@ import EditFunds from "../Recommendation/EditFunds"
 import AlternateFunds from "../Recommendation/ReplaceFunds"
 import Target from "./components/InvestGoal/component/Target";
 
+import { isIframe } from 'utils/functions';
 const Invest = (props) => {
   const { url } = props.match;
 
   return (
     <Switch>
-      <Route exact path={`${url}`} component={Landing} />
+      <Route exact path={`${url}`} component={isIframe() && true ? ExploreFunds : Landing} />
       <Route exact path={`${url}/instaredeem`} component={InstaRedeem} />
       <Route exact path={`${url}/savetax`} component={SaveTax} />
       <Route exact path={`${url}/buildwealth`} component={BuildWealth} />

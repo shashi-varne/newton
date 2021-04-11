@@ -239,7 +239,7 @@ class Checkout extends Component {
         handleClick={this.handleClick}
         disable={disableInputSummary}
         title="Your Mutual Fund Plan"
-        hidePageTitle
+        //hidePageTitle
         showLoader={isApiRunning}
       >
         <div className="nfo-checkout">

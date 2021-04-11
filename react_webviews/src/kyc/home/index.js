@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { storageService, validatePan, isEmpty } from "utils/validators";
+import { storageService, validatePan } from "utils/validators";
 import Input from "common/ui/Input";
 import { checkMerge, getPan, logout, kycSubmit } from "../common/api";
 import { getPathname, storageConstants } from "../constants";
@@ -9,8 +9,11 @@ import ResidentDialog from "./residentDialog";
 import Alert from "../mini_components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini_components/AccountMerge";
-import { getConfig } from "../../utils/functions";
+// import DialogPageContainer from "../mini_components/DialogPageContainer";
+import { getConfig, isIframe } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import isEmpty from 'lodash/isEmpty';
+import internalStorage from './InternalStorage';
 
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -29,14 +32,26 @@ const Home = (props) => {
   const stateParams = props.match.state || {};
   const isPremiumFlow = stateParams.isPremiumFlow || false;
   const { kyc, user, isLoading } = useUserKycHook();
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState('');
+  const iFrame = isIframe();
+  // const [navigateTo, setNavigateTo] = useState('');
+  // const [x,setX] = useState(false);
+
+  const savedPan = storageService().get('pan');
+  useEffect(() => {
+    setPan(savedPan);
+  },[])
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
   }, [kyc, user]);
 
   const initialize = () => {
-    setPan(kyc.pan?.meta_data?.pan_number || "");
+    if(isEmpty(savedPan)){
+      setPan(kyc.pan?.meta_data?.pan_number || "");
+    } else{
+      storageService().remove('pan');
+    }
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
@@ -196,6 +211,10 @@ const Home = (props) => {
     }
   };
 
+  const reEnterPan = () => {
+    navigate('home');
+  }
+
   const accountMerge = async () => {
     let config = getConfig();
     let email = config.partner.email;
@@ -210,23 +229,49 @@ const Home = (props) => {
       let { result, status_code } = response;
       let { different_login, auth_ids} = result;
       if (status_code === 200) {
-        setAuthIds(auth_ids);
-        setAccountMergeData({
+        const accountDetail = {
           title: "PAN Already Exists",
-          subtitle:
-            "Sorry! this PAN is already registered with another account.",
-          buttonTitle: "LINK ACCOUNT",
+          message: "Sorry! this PAN is already registered with another account.",
           step: "STEP1",
-        });
-        setOpenAccountMerge(true);
+        };
+        setAuthIds(auth_ids);
+        // setAccountMergeData(accountDetail);
+        if (iFrame) {
+          // setNavigateTo('pan-status');
+          const newData = {
+            buttonOneTitle: 'RE-ENTER PAN',
+            buttonTwoTitle: 'LINK ACCOUNT',
+            twoButton: true,
+          }
+          storageService().set('pan',pan);
+          internalStorage.setData('handleClickOne', reEnterPan);
+          internalStorage.setData('handleClickTwo', handleMerge);
+          navigate('pan-status',{state:{...accountDetail, ...newData}});
+        } else { 
+          setAccountMergeData({...accountDetail, buttonTitle:'LINK ACCOUNT' });
+          setOpenAccountMerge(true);
+        }
       } else if (different_login) {
-        setAccountMergeData({
+        const accountDetail = {
           title: "PAN Is already registered",
-          subtitle: result?.message,
-          buttonTitle: "SIGN OUT",
+          message: result?.message,
           step: "STEP2",
-        });
-        setOpenAccountMerge(true);
+        };
+        if (iFrame) {
+          // setNavigateTo('pan-status');
+          const newData = {
+            buttonOneTitle: 'RE-ENTER PAN',
+            buttonTwoTitle: 'SIGN OUT',
+            twoButton: true,
+          }
+          storageService().set('pan',pan);
+          internalStorage.setData('handleClickOne', reEnterPan);
+          internalStorage.setData('handleClickTwo', handleMerge);
+          navigate('pan-status',{state:{...accountDetail, ...newData}});
+        } else { 
+          setAccountMergeData({...accountDetail,buttonTitle:'SIGN OUT'});
+          setOpenAccountMerge(true);
+        }
       } else {
         toast(toastMessage);
       }
@@ -332,6 +377,19 @@ const Home = (props) => {
             cancel={cancel}
             aadhaarKyc={aadharKyc}
           />
+          {/* {
+            (x || openAccountMerge)  &&
+            <DialogPageContainer 
+              isOpen={openAccountMerge}
+              close={closeAccountMerge}
+              data={accountMergeData}
+              handleClick={handleMerge}
+              component={AccountMerge}
+              isDialog={isDialog}
+              navigateTo={navigateTo}
+              {...props}
+            />
+          } */}
           <AccountMerge
             isOpen={openAccountMerge}
             close={closeAccountMerge}

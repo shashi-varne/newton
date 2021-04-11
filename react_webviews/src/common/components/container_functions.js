@@ -1,5 +1,5 @@
 
-import { getConfig, setHeights } from 'utils/functions';
+import { getConfig, setHeights, isIframe } from 'utils/functions';
 // import { nativeCallback } from "utils/native_callback";
 import Banner from 'common/ui/Banner';
 import UiSkelton from 'common/ui/Skelton';
@@ -106,7 +106,7 @@ export function commonRender(props_base) {
    <div className={this.addContainerClass(props_base)} >
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && false && <Header
+                && !this.props.showLoaderModal && !isIframe && <Header
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
@@ -135,6 +135,7 @@ export function commonRender(props_base) {
                 />
                 }
                 {
+                    isIframe &&
                     <IframeHeader
                         disableBack={this.props.disableBack}
                         title={this.props.title}
@@ -196,7 +197,7 @@ export function commonRender(props_base) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`${false ? 'Container' : 'IframeContainer'}  ${this.props.background || ''} 
+                    className={`${!isIframe ? 'Container' : 'IframeContainer'}  ${this.props.background || ''} 
                     ${props_base && props_base.classOverRideContainer ? props_base.classOverRideContainer : ''} 
                     ${this.props.classOverRideContainer || '' } 
                     ${this.props.noPadding ? "no-padding" : ""}`}>
@@ -207,7 +208,7 @@ export function commonRender(props_base) {
                         {this.props.children}
                     </div>
                     {
-                        true && 
+                        false && 
                         <div className='iframe-right-content'>
                             <h1>I am the right side</h1>
                         </div>

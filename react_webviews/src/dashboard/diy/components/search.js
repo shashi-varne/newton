@@ -4,10 +4,12 @@ import { getConfig } from "utils/functions";
 import Close from "@material-ui/icons/Close";
 import SearchIcon from "@material-ui/icons/Search";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import IframeSearch from './iframeSearch';
 import { storageService } from "utils/validators";
 import "./style.scss";
 import { querySearch } from "../../invest/common/api";
 import debounce from "lodash/debounce";
+import {isIframe} from 'utils/functions';
 
 const Search = (props) => {
   const [value, setValue] = useState("");
@@ -15,8 +17,10 @@ const Search = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showNoFundmessage, setShowNoFundmessage] = useState(false);
+  const iframe = isIframe();
 
   const handleChange = (event) => {
+    console.log("hello");
     let value = event.target.value || "";
     setValue(value);
     if (!value) setShowErrorMessage(false);
@@ -68,7 +72,10 @@ const Search = (props) => {
       classOverRideContainer="diy-search-container-main"
       classOverRide="diy-search-container"
     >
-      <div className="diy-search">
+        <div className="diy-search">
+      {
+        iframe ? < IframeSearch value={value} handleChange={handleChange} />
+        :
         <div className="search-content">
           <div className="search-option">
             <div className="search-input">
@@ -76,10 +83,10 @@ const Search = (props) => {
                 placeholder="Fund Search..."
                 value={value}
                 onChange={handleChange}
-              />
+                />
               {value && value.length !== 0 && (
                 <Close
-                  className="close-icon"
+                className="close-icon"
                   onClick={() => {
                     setValue("");
                     setShowNoFundmessage(false);
@@ -96,12 +103,13 @@ const Search = (props) => {
               <SearchIcon className="search-icon" />
             </div>
           </div>
-          {showErrorMessage && (
-            <div className="error-message message">
-              Minimum 4 characters required
-            </div>
-          )}
         </div>
+      }
+      {showErrorMessage && (
+        <div className="error-message message">
+          Minimum 4 characters required
+        </div>
+      )}
         {showLoader && (
           <div className="search-loader">
             <CircularProgress
@@ -118,7 +126,7 @@ const Search = (props) => {
                 {fundResult.map((fund, index) => {
                   return (
                     <div
-                      key={index}
+                    key={index}
                       className="text"
                       onClick={() => showFundInfo(fund)}
                     >

@@ -24,7 +24,7 @@ const AccountMerge = ({ isOpen, close, data, handleClick }) => {
             className="img"
           />
         </div>
-        <div className="subtitle">{data.subtitle}</div>
+        <div className="subtitle">{data.message}</div>
         <div className="action">
           <Button className="button no-bg" onClick={() => close()}>
             RE-ENTER PAN

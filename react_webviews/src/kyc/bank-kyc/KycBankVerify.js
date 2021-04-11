@@ -12,9 +12,11 @@ import PennySuccessDialog from "../mini_components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { isIframe } from "utils/functions";
+import internalStorage from '../home/InternalStorage';
 
 const KycBankVerify = (props) => {
-  const [count, setCount] = useState(20);
+  const [count, setCount] = useState(2);
   const [countdownInterval, setCountdownInterval] = useState();
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isPennyOpen, setIsPennyOpen] = useState(false);
@@ -27,6 +29,7 @@ const KycBankVerify = (props) => {
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
+  const iframe = isIframe();
   const {kyc} = useUserKycHook();
 
   useEffect(() => {
@@ -87,6 +90,42 @@ const KycBankVerify = (props) => {
     setCountdownInterval(intervalId);
   };
 
+  const handlePennySuccess = () => {
+    const pennyDetails = {
+      title : 'Bank is added!',
+      message : "Hurrah! Your bank account is added. Invest securely and safely with us.",
+      buttonTitle: 'CONTINUE',
+    }
+    internalStorage.setData('handleClick', handleSuccess);
+    navigate('/kyc/penny-status',{state:pennyDetails});
+  }
+
+  const handlePennyExhaust = () => {
+    const pennyDetails = {
+      title : 'Unable to add bank!',
+      message : "Oops! You have exhausted all the 3 attempts. Continue by uploading your documents or check back later",
+      buttonOneTitle: 'TRY AGAIN LATER',
+      buttonTwoTitle: 'UPLOAD BANK DOCUMENTS',
+      twoButton: true,
+    }
+    internalStorage.setData('handleClickOne', goToJourney);
+    internalStorage.setData('handleClickTwo', uploadDocuments);
+    navigate('/kyc/penny-status',{state:pennyDetails});
+  }
+
+  const handlePennyFailed = () => {
+    const pennyDetails = {
+      title : 'Unable to add bank!',
+      message : "Bank account verification failed! No worries, please check if you've entered correct details.",
+      buttonOneTitle: 'UPLOAD BANK DOCUMENTS',
+      buttonTwoTitle: 'CHECK BANK DETAILS',
+      twoButton: true
+    }
+    internalStorage.setData('handleClickOne', uploadDocuments);
+    internalStorage.setData('handleClickTwo', checkBankDetails);
+    navigate('/kyc/penny-status',{state:pennyDetails});
+  }
+
   const checkBankStatusStep1 = async () => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
@@ -94,17 +133,29 @@ const KycBankVerify = (props) => {
       if (result.records.PBI_record.bank_status === "verified") {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
-        setIsPennyOpen(false);
-        setIsPennySuccess(true);
+        if(iframe) {
+          handlePennySuccess();
+        } else {
+          setIsPennyOpen(false);
+          setIsPennySuccess(true);
+        }
       }
       if (result.records.PBI_record.bank_status === "rejected") {
         setCountdownInterval(null);
         setIsPennyOpen(false);
         if (result.records.PBI_record.user_rejection_attempts === 0) {
-          setIsPennyExhausted(true);
+          if(iframe) {
+            handlePennyExhaust();
+          } else {
+            setIsPennyExhausted(true);
+          }
         } else {
-          setIsPennyFailed(true);
-        }
+            if(iframe) {
+              handlePennyFailed();
+            } else {
+              setIsPennyFailed(true);
+            }
+          }
       }
     } catch (err) {
       console.log(err);
@@ -117,11 +168,23 @@ const KycBankVerify = (props) => {
       setIsPennyOpen(false);
       if (!result) return;
       if (result.records.PBI_record.bank_status === "verified") {
-        setIsPennySuccess(true);
-      } else if (result.records.PBI_record.user_rejection_attempts === 0) {
-        setIsPennyExhausted(true);
+        if(iframe) {
+          handlePennySuccess();
+        } else {
+          setIsPennySuccess(true);
+        }
+      } else if (result.records.PBI_record.user_rejection_attempts !== 0) {
+        if(iframe) {
+          handlePennyExhaust();
+        } else {
+          setIsPennyExhausted(true);
+        }
       } else {
-        setIsPennyFailed(true);
+        if(iframe) {
+          handlePennyFailed();
+        } else {
+          setIsPennyFailed(true);
+        }
       }
     } catch (err) {
       console.log(err);

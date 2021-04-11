@@ -935,6 +935,7 @@ export function capitalize(string) {
 }
 
 export function isIframe() {
+  return true;
   if (window.top !== window.self) {
     return true;
   } else {

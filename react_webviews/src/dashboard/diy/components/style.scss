@@ -410,3 +410,33 @@
 }
 
 ////// DIY SEARCH END //////
+
+///// DIY IFRAME SEARCH /////
+.diy-iframe-search-input{
+  position: relative;
+  .diy-iframe-search-icon{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    svg{
+      cursor: text !important;
+    }
+  }
+  .diy-fund-search{
+    border: 1px solid #979797 !important;
+    border-radius: 10px !important;
+    padding: 20px 16px !important;
+
+    .MuiInput-underline:before,.MuiInput-underline:after{
+      background-color: transparent;
+    }
+    .MuiInput-underline:hover:not(.MuiInput-disabled):before{
+      background-color: transparent !important;
+    }
+    input {
+      padding: 0px !important;
+    }
+  }
+}
+///// End of DIY IFRAME SEARCH /////

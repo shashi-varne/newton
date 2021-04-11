@@ -1,14 +1,19 @@
 import React,{useState,useEffect} from 'react'
 import Container from '../../../common/Container'
+import IframeView from './iframeView'
 
 import diy_equity_icon from 'assets/diy_equity_icon.svg'
 import diy_debt_icon from 'assets/diy_debt_icon.svg'
 import diy_hybrid_icon from 'assets/diy_hybrid_icon.svg'
 import diy_goal_icon from 'assets/diy_goal_icon.svg'
+import equity_icon from 'assets/finity/equity_icon.svg';
+import debt_icon from 'assets/finity/debt_icon.svg';
+import hybrid_icon from 'assets/finity/hybrid_icon.svg';
+import goal_icon from 'assets/finity/goal_icon.svg';
 import { navigate as navigateFunc } from '../../common/commonFunction'
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
-import { getConfig } from "utils/functions";
+import { getConfig, isIframe } from "utils/functions";
 
 import { getTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../diy/constants'
@@ -17,28 +22,28 @@ export const exploreMFMappings = [
   {
     title: 'Equity',
     description: 'Invest in large, mid and small-sized companies',
-    src: diy_equity_icon,
+    src: isIframe() ? equity_icon : diy_equity_icon,
   },
   {
     title: 'Debt',
     description: 'Stable returns with bonds and securities',
-    src: diy_debt_icon,
+    src: isIframe() ? debt_icon : diy_debt_icon,
   },
   {
     title: 'Hybrid',
     description: 'Perfect balance of equity and debt',
-    src: diy_hybrid_icon,
+    src: isIframe() ? hybrid_icon : diy_hybrid_icon,
   },
   {
     title: 'Goal Oriented',
     description: 'Align investments with your life goals',
-    src: diy_goal_icon,
+    src: isIframe() ? goal_icon : diy_goal_icon,
   },
 ]
 
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
-
+  const iframe = isIframe();
   useEffect(() => {
     storageService().remove(FUNDSLIST)
     storageService().remove(CART)
@@ -82,10 +87,12 @@ const InvestExplore = (props) => {
       title="Explore All Mutual Funds"
       classOverRideContainer="pr-container"
       handleClick={goNext}
-      skelton={loader}
+      skelton={false}
       rightIcon="search"
       handleTopIcon={handleRightIconClick}
     >
+      {
+        iframe ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
       <section className="invest-explore-cards" id="invest-explore">
         <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (
@@ -94,13 +101,14 @@ const InvestExplore = (props) => {
               title={title}
               description={description}
               src={src}
-            />
+              />
           </div>
         ))}
         <article className="invest-explore-quote">
           "When you invest you are buying a day you don’t have to work"
         </article>
       </section>
+  }
     </Container>
   )
 }
