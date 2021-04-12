@@ -142,7 +142,6 @@ const SipPaymentCallback = (props) => {
   return (
     <Container
       buttonTitle={buttonTitle}
-      hideInPageTitle
       showLoader={isApiRunning}
       handleClick={() => handleClick()}
       title='Congratulations! Order placed'

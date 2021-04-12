@@ -1,15 +1,8 @@
-.main-top-title {
+.invest-main-top-title {
   font-size: 20px;
   color: #160d2e;
   font-weight: 600;
   line-height: 1.5;
-}
-
-.main-top-subtitle {
-  font-size: 13px;
-  color: #767e86;
-  line-height: 1.5;
-  margin-top: -20px;
 }
 
 .secure-invest-bottom {
@@ -33,7 +26,7 @@
 .invest-landing {
   padding-bottom: 20px;
 
-  .main-top-subtitle {
+  .generic-page-subtitle {
     margin: -20px 0 20px 0;
   }
 
@@ -226,6 +219,10 @@
 
 .invest-redeem {
   padding-bottom: 30px;
+
+  .generic-page-subtitle {
+    margin: -20px 0 20px 0;
+  }
 
   .title {
     margin-top: 30px;
@@ -443,6 +440,12 @@
   }
 }
 
+.invest-amount-common {
+  .generic-page-subtitle {
+    margin-top: -20px;
+  }
+}
+
 .invest-header {
   display: flex;
   justify-content: space-between;
@@ -500,7 +503,7 @@
 .insta-redeem-invest-amount {
   .form-field {
     background-color: #f8f8f8;
-    margin-top: 30px;
+    margin-top: 10px;
     padding: 0 10px;
 
     label {
@@ -532,7 +535,7 @@
 
   .bg-image {
     background-repeat: no-repeat;
-    margin: -20px;
+    margin: 0 -20px -20px -20px;
     background-position: center top;
     height: 150px;
   }
@@ -1064,7 +1067,7 @@
   }
 
   .top-title {
-    margin:-10px 0 20px 0;
+    margin: 0 0 20px 0;
   }
 
   .scroll {

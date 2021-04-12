@@ -78,7 +78,6 @@ const InvestExplore = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      hidePageTitle
       title="Explore All Mutual Funds"
       classOverRideContainer="pr-container"
       handleClick={goNext}

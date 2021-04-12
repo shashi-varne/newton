@@ -107,7 +107,6 @@ const InvestJourney = (props) => {
     <Container
       classOverRide="pr-error-container"
       buttonTitle={ctcTitle}
-      hidePageTitle
       title="How it works"
       classOverRideContainer="pr-container"
       handleClick={proceedInvestment}

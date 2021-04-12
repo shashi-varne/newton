@@ -158,7 +158,6 @@ const FundList = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      hidePageTitle
       title={match.params?.key?.replace(/_/g, ' ') || ''}
       skelton={showLoader}
       classOverRideContainer="pr-container"

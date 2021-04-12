@@ -106,7 +106,6 @@ const FundType = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      hidePageTitle
       title={props.match.params?.type || ""}
       classOverRideContainer="pr-container"
     >

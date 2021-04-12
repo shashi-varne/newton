@@ -77,16 +77,12 @@ class InvestAmount extends Component {
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
         disable={amount_error ? true : false}
-        hidePageTitle
+        title="How would you like to invest?"
+        count="2"
+        current="2"
+        total="2"
       >
         <div className="insta-redeem-invest-amount">
-          <div className="invest-header">
-            <div className="main-top-title">How would you like to invest?</div>
-            <div className="step">
-              <span className="count">2</span>
-              <span className="total">/2</span>
-            </div>
-          </div>
           <FormControl className="form-field">
             <InputLabel htmlFor="standard-adornment-password">
               Enter amount

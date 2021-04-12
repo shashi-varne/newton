@@ -165,7 +165,6 @@ const PaymentOptions = (props) => {
 
   return (
     <Container
-      hidePageTitle
       noFooter={true}
       showLoader={show_skelton}
       title="Select Payment Option"

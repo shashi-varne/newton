@@ -82,7 +82,6 @@ const SaveGoal = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      hidePageTitle
       title='Save for a Goal'
       handleClick={goNext}
       noFooter

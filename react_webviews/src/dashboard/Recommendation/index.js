@@ -215,7 +215,6 @@ const Recommendations = (props) => {
           ? "HOW IT WORKS?"
           : investCtaText
       }
-      hidePageTitle
       skelton={isLoading}
       title='Recommended Funds'
       handleClick={goNext}

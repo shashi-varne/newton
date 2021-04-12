@@ -101,7 +101,7 @@ class InstaRedeem extends Component {
         }
       >
         <div className="invest-redeem">
-          <div className="main-top-subtitle">
+          <div className="generic-page-subtitle">
             Instant withdrawal facility with superior return compared to savings
             bank account
           </div>

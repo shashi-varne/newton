@@ -403,7 +403,8 @@ export async function getRecommendationApi(amount) {
         recommendation: result.recommendation,
         amount: data.amount,
         term: data.term,
-        year: parseInt(date.getFullYear() + data.term, 10),
+        // eslint-disable-next-line
+        year: parseInt(date.getFullYear() + data.term),
         corpus: this.corpusValue(data),
         investType: data.investType,
         investTypeDisplay: "sip",
@@ -574,7 +575,8 @@ export async function getRecommendation() {
     name: "Insta Redeem",
     investTypeDisplay: investType,
     bondstock: "",
-    amount: parseInt(amount, 10),
+    // eslint-disable-next-line
+    recommendedTotalAmount: parseInt(amount),
     type: "insta-redeem",
     order_type: investType,
     subtype: "",

@@ -12,7 +12,7 @@ const date = new Date();
 let currentYear = date.getFullYear();
 
 const renderData = {
-  title: 'I will likely need the money',
+  subtitle: 'I will likely need the money',
   options: [
     {
       text: 'Within a year',
@@ -73,7 +73,6 @@ const Landing = (props) => {
     <Container
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
-      hidePageTitle
       showLoader={loader}
       title='Park Money'
       handleClick={fetchRecommendedFunds}

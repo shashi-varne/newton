@@ -46,7 +46,6 @@ class NfoFunds extends Component {
       <Container
         skelton={this.state.show_loader}
         noFooter={true}
-        hidePageTitle
         title="NFO Funds"
       >
         <div className="nfo-funds">
