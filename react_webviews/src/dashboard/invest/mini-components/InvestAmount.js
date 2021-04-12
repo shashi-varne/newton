@@ -15,7 +15,7 @@ import {
 import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
 
-import './style.scss';
+import './mini-components.scss';
 import { getConfig } from '../../../utils/functions';
 import { formatAmountInr } from '../../../utils/validators';
 const date = new Date();

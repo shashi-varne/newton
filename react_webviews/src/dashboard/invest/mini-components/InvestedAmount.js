@@ -10,7 +10,7 @@ import one_time_icon_dark from 'assets/one_time_icon_dark.png';
 import { storageService, formatAmountInr } from 'utils/validators';
 import { getReturnRates, navigate as navigateFunc, selectTitle } from '../common/commonFunction';
 import { get_recommended_funds } from '../common/api';
-import './style.scss';
+import './mini-components.scss';
 import PeriodWiseReturns from '../../mini-components/PeriodWiseReturns';
 import EquityDebtSlider from './EquityDebtSlider';
 
