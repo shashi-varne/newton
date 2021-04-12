@@ -18,29 +18,39 @@ import InvestError from '../invest/components/mini_components/InvestError';
 import InvestReferralDialog from '../invest/components/mini_components/InvestReferralDialog';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 import PeriodWiseReturns from '../mini-components/PeriodWiseReturns';
-import { getFinancialYear } from '../../utils/validators';
-import { isEmpty } from 'lodash';
-
-const platform = getConfig().productName;
+import { get, isArray } from 'lodash';
+import { get_recommended_funds } from '../invest/common/api';
+import RecommendationTopCard from './RecommendationTopCard';
+const sipTypesKeys = [
+  "buildwealth",
+  "savetaxsip",
+  "saveforgoal",
+  "indexsip",
+  "shariahsip",
+  "sectoralsip",
+  "midcapsip",
+  "balancedsip",
+  "goldsip",
+  "diysip",
+];
 
 const Recommendations = (props) => {
-  let graphData = storageService().getObject("graphData") || {};
-  const {
-    recommendation,
-    recommendedTotalAmount,
-    investType,
-    order_type,
-    type,
-    term,
-    name,
-    subtype,
-  } = graphData;
-  const goalRecommendation = storageService().getObject('goalRecommendations');
-  const userRiskProfile = storageService().get('userSelectedRisk') || '';
-  const state = props.location.state || {};
-  const partnerCode = getConfig().partnerCode;
+  const routeState = get(props, 'location.state', {});
+  const [graphData, setGraphData] = useState(storageService().getObject('graphData') || {});
+  const [recommendations, setRecommendations] = useState([]);
+  const [userRiskProfile, setUserRiskProfile] = useState(storageService().get('userSelectedRisk') || '');
+  const [renderTopCard, setRenderTopCard] = useState(false);
+
+  useEffect(() => {
+    if (isArray(graphData.recommendation)) {
+      setRecommendations(graphData.recommendation);
+    }
+    if (graphData.investType === 'savetax' || userRiskProfile) {
+      setRenderTopCard(true);
+    }
+  }, [graphData]);
+
   const partner = getConfig().partner;
-  
   const [dialogStates, setDialogStates] = useState({
     openPennyVerificationPendind: false,
     openInvestError: false,
@@ -49,83 +59,79 @@ const Recommendations = (props) => {
   const [isins, setIsins] = useState("");
   const [isApiRunning, setIsApiRunning] = useState(false);
   const {kyc: userKyc, user: currentUser, isLoading} = useUserKycHook();
-  const sipTypesKeys = [
-    "buildwealth",
-    "savetaxsip",
-    "saveforgoal",
-    "indexsip",
-    "shariahsip",
-    "sectoralsip",
-    "midcapsip",
-    "balancedsip",
-    "goldsip",
-    "diysip",
-  ];
   let sipOrOneTime = "";
-  if ((type !== "riskprofile") & (type !== "insta-redeem")) {
+  if ((graphData.type !== "riskprofile") & (graphData.type !== "insta-redeem")) {
     sipOrOneTime = "onetime";
-    if (sipTypesKeys.indexOf(investType) !== -1) sipOrOneTime = "sip";
+    if (sipTypesKeys.indexOf(graphData.investType) !== -1) sipOrOneTime = "sip";
   } else {
-    sipOrOneTime = order_type;
+    sipOrOneTime = graphData.order_type;
   }
 
   let investCtaText = "INVEST";
   if (sipOrOneTime === "sip") {
     investCtaText = "SELECT SIP DATE";
-    if (recommendation.length !== 1) {
+    if (recommendations.length !== 1) {
       investCtaText += "S";
     }
   }
 
-  const [topCardProps, setTopCardProps] = useState({});
-  const initialiseTopCardProps = () => {
-    let cardProps = {};
-    if (investType === 'savetax') {
-      cardProps = {
-        showTaxCard: true,
-        cardDetails: {
-          corpus: graphData.corpus
-        }
-      };
-    } else if (userRiskProfile) {
-      cardProps = {
-        showRiskCard: true,
-        cardDetails: {
-          userRiskProfile: userRiskProfile,
-          equity: graphData.equity,
-          debt: graphData.debt,
-          type: goalRecommendation.id,
-        }
+  const getRecommendations = async () => {
+    const { amount, investType: type, term } = storageService().getObject('graphData');
+    var params = {
+      amount,
+      term,
+      type,
+      rp_enabled: true,
+    };
+
+    try {
+      setIsApiRunning(true);
+      const res = await get_recommended_funds(params);
+
+      if (res.rp_indicator) {
+        storageService().set('userSelectedRisk', res.rp_indicator);
+        setUserRiskProfile(res.rp_indicator);
       }
+      storageService().setObject('graphData', {
+        ...graphData,
+        ...res,
+        recommendedTotalAmount: res.amount
+      });
+      setGraphData(storageService().getObject('graphData'));
+
+      setIsApiRunning(false);
+    } catch (err) {
+      console.log(err);
+      
     }
-    Object.assign(cardProps, { parentProps: props });
-    setTopCardProps(cardProps);
   };
-  
+
   useEffect(() => {
-    initialiseTopCardProps(); // TODO: Move this function within a hook
-  }, [isLoading]);
+    if (routeState.fromRiskProfiler) {
+      getRecommendations();
+    }
+  }, []);
 
   const proceedInvestment = (investReferralData, isReferralGiven, handleGraph) => {
     let investmentObject = {};
-    if (type !== "riskprofile") {
+    if (graphData.type !== "riskprofile") {
       var allocations = [];
-      for (let data of recommendation) {
+      for (let data of recommendations) {
         let allocation = {};
         allocation = data.mf;
         allocation.amount = data.amount;
         allocations.push(allocation);
       }
 
-      if (type === "insta-redeem") {
-        investmentObject.order_type = order_type;
+      if (graphData.type === "insta-redeem") {
+        investmentObject.order_type = graphData.order_type;
       }
-      investmentObject.name = name;
-      investmentObject.bondstock = state.bond + ":" + state.stock;
-      investmentObject.amount = recommendedTotalAmount;
-      investmentObject.term = term;
-      investmentObject.type = investType;
-      investmentObject.subtype = subtype;
+      investmentObject.name = graphData.name;
+      investmentObject.bondstock = routeState.bond + ":" + routeState.stock;
+      investmentObject.amount = graphData.recommendedTotalAmount;
+      investmentObject.term = graphData.term;
+      investmentObject.type = graphData.investType;
+      investmentObject.subtype = graphData.subtype;
       investmentObject.allocations = allocations;
 
     } else {
@@ -141,17 +147,17 @@ const Recommendations = (props) => {
 
     let investmentEventData = {};
 
-    if (type === "riskprofile") {
+    if (graphData.type === "riskprofile") {
       investmentEventData = {
-        amount: recommendedTotalAmount,
-        investment_type: type,
+        amount: graphData.recommendedTotalAmount,
+        investment_type: graphData.type,
         journey_name: "mf",
         investment_subtype: graphData.subtype,
       };
     } else {
       investmentEventData = {
-        amount: recommendedTotalAmount,
-        investment_type: investType,
+        amount: graphData.recommendedTotalAmount,
+        investment_type: graphData.investType,
         journey_name: "mf",
         investment_subtype: graphData.subtype,
       };
@@ -172,7 +178,7 @@ const Recommendations = (props) => {
       return;
     } else if (sipOrOneTime === "onetime") {
       storageService().set("came_from_risk_webview", "");
-      if (type === "riskprofile") {
+      if (graphData.type === "riskprofile") {
         if (!storageService().get("firsttime_from_risk_webview_invest")) {
           storageService().set("firsttime_from_risk_webview_invest", true);
         } else {
@@ -227,7 +233,7 @@ const Recommendations = (props) => {
   }
 
   useEffect(() => {
-    const isinsVal = recommendation?.map((el) => {
+    const isinsVal = recommendations?.map((el) => {
       return el.mf.isin;
     });
     setIsins(isinsVal?.join(","));
@@ -259,11 +265,17 @@ const Recommendations = (props) => {
       showLoader={isApiRunning}
     > 
       <div style={{ margin: '0 -20px'}}>
-        {!isEmpty(topCardProps) &&
-          <RecommendationTopCard {...topCardProps} />
+        {renderTopCard &&
+          <RecommendationTopCard
+            data={{
+              userRiskProfile,
+              graphData
+            }}
+            parentProps={props}
+          />
         }
         <PeriodWiseReturns
-          initialTerm={term}
+          initialTerm={graphData.term}
           equity={graphData.equity}
           stockReturns={graphData.stockReturns}
           bondReturns={graphData.bondReturns}
@@ -273,27 +285,27 @@ const Recommendations = (props) => {
         <section className='recommendations-common-container'>
           <div className='recommendations-header'>
             <div>Our Recommendation</div>
-            {investType !== 'insta-redeem' && (
+            {graphData.investType !== 'insta-redeem' && (
               <div onClick={editFund} className='edit-recommendation-funds'>
                 Edit
               </div>
             )}
           </div>
           <div className='recommendations-funds-lists'>
-            {recommendation &&
-              recommendation?.map((el, idx) => (
+            {recommendations &&
+              recommendations?.map((el, idx) => (
                 <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
               ))}
           </div>
           <div className='recommendations-total-investment'>
             <div>Total Investment</div>
 
-            <div>{recommendation?.length > 0 ? formatAmountInr(recommendedTotalAmount) : '₹0'}</div>
+            <div>{recommendations?.length ? formatAmountInr(graphData.recommendedTotalAmount) : '₹0'}</div>
           </div>
           <div>
             <div className="recommendations-disclaimer-morning">
               <img alt="single_star" src={single_star} />
-              {partnerCode !== "hbl" ? (
+              {partner.code !== "hbl" ? (
                 <img alt="morning_star" width="100" src={morning_text} />
               ) : (
                 <div>BL Portfolio Star Track MF Ratings</div>
@@ -326,57 +338,3 @@ const Recommendations = (props) => {
   );
 };
 export default Recommendations;
-
-const RecommendationTopCard = ({
-  showRiskCard,
-  showTaxCard,
-  cardDetails = {},
-  parentProps
-}) => {
-  const navigate = navigateFunc.bind(parentProps);
-  const renderContent = () => {
-    if (showRiskCard) {
-      const { userRiskProfile, equity, debt, type } = cardDetails;
-      
-      return (
-        <div className="risk-profile-card">
-          <img src={require(`assets/${platform}/risk_profile.svg`)} alt="" className="left-img" />
-          <div className="risk-details">
-            {userRiskProfile ?
-              <>
-                <div className="risk-details-header">
-                  Risk profile
-                  <img src={require('assets/info_icon_grey.svg')} className="info-icn" alt="i" />
-                </div>
-                <div className="risk-type">{userRiskProfile}</div>
-                <div className="risk-distribution">{equity}% Equity | {debt }% Debt</div>
-              </> :
-              <>
-                <div className="risk-type" ng-if="showStartRiskProfile">Select risk profile</div>
-                <div className="desc" ng-if="showStartRiskProfile">Get better fund recommendations</div>
-              </>
-            }
-          </div>
-          <div
-            className="risk-profile-change-btn"
-            onClick={() => navigate(`${type}/risk-${userRiskProfile ? 'modify' : 'select'}`)}>
-            {userRiskProfile ? "Change" : "Select"}
-          </div>
-        </div>
-      );
-    } else if (showTaxCard) {
-      return (
-        <div className="tax-card">
-          <img src="assets/img/sale.svg" alt="" />
-          <div className="text">Tax savings for {getFinancialYear()}</div>
-          <div className="amount">{formatAmountInr(cardDetails.corpus)}</div>
-        </div>
-      );
-    }
-  }
-  return (
-    <div className="recommendation-top-section">
-      {renderContent()}
-    </div>
-  );
-}

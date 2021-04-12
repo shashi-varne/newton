@@ -38,13 +38,12 @@ const InvestAmount = (props) => {
 
   const handleChange = (e) => {
     let value = e.target.value || "";
-    value = convertInrAmountToNumber(value);
     // eslint-disable-next-line radix
-    if (!isNaN(parseInt(value))) {
-      // eslint-disable-next-line radix
-      setAmount(parseInt(value));
+    value = parseInt(convertInrAmountToNumber(value));
+    if (!isNaN(value)) {
+      setAmount(value);
     } else {
-      setAmount('');
+      setAmount(''); // TODO: are we sure we want to send empty string here?
       setCorpus(0);
     }
   };

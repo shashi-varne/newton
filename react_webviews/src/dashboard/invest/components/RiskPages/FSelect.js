@@ -65,29 +65,33 @@ const FSelect = ({
 const RenderOption = (props) => {
   const { opt, idx, selected, titleProp, onClick, renderItem } = props;
 
-  return (
-    <div
-      className={`fselect-item ${selected ? 'selected' : ''}`}
-      key={idx}
-      onClick={() => onClick?.(idx)}
-    >
-      <div className="fselect-item-content">
-      {
-        renderItem?.(opt) || 
-        <div className="fselect-item-title">
-          {opt[titleProp] || '--'}
+  if (isFunction(renderItem) && renderItem(opt)) {
+    return (
+      <div
+        className={`fselect-item ${selected ? 'selected' : ''}`}
+        key={idx}
+        onClick={() => onClick?.(idx)}
+      >
+        <div className="fselect-item-content">
+          {
+            renderItem(opt)
+          }
+          {/* <div className="fselect-item-title">
+              {opt[titleProp] || '--'}
+            </div> */}
         </div>
-      }
+        {selected &&
+          <img
+            className="fselect-selected-icon"
+            src={completed_step}
+            alt="Check"
+          />
+        }
       </div>
-      {selected &&
-        <img
-          className="fselect-selected-icon"
-          src={completed_step}
-          alt="Check"
-        />
-      }
-    </div>
-  );
+    );
+  }
+
+  return '';
 }
 
 export default FSelect;

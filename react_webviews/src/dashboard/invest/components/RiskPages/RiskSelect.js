@@ -1,5 +1,6 @@
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
+import { getConfig } from '../../../../utils/functions';
 import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
@@ -7,12 +8,12 @@ import { navigate as navigateFunc, selectTitle } from '../../common/commonFuncti
 import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
 import './RiskPages.scss';
+const { productName } = getConfig();
 
 const RiskSelect = ({
   canSkip,
   ...otherProps
 }) => {
-
   const sessionStoredRisk = storageService().get('userSelectedRisk') || '';
   const graphData = storageService().getObject('graphData');
   const [loader, setLoader] = useState(false);
@@ -69,6 +70,23 @@ const RiskSelect = ({
     navigate(state);
   };
 
+  const gotToRiskProfiler = () => {
+    navigate('/risk/result-new', {
+      state: {
+        hideRPReset: true,
+        hideClose: true,
+        fromExternalSrc: true,
+        internalRedirect: true,
+        flow: graphData.flow,
+        amount: graphData.amount,
+        type: graphData.investType,
+        subType: graphData.subType, // only applicable for 'saveforgoal'
+        year: graphData.year, // only applicable for 'saveforgoal'
+        term: graphData.term
+      }
+    }, true);
+  };
+
   return (
     <Container
       classOverRide='pr-error-container'
@@ -85,8 +103,16 @@ const RiskSelect = ({
           preselectFirst
           options={riskProfiles}
           indexBy='name'
-          renderItem={riskOpt => <RiskOption data={riskOpt} />}
+          renderItem={riskOpt =>
+            riskOpt.name === 'Custom' ? '' : <RiskOption data={riskOpt} />
+          }
           onChange={risk => selectRisk(risk.name)}
+        />
+        <img
+          src={require(`assets/${productName}/rp_entry_banner.svg`)}
+          alt="rp_entry"
+          width="100%"
+          onClick={gotToRiskProfiler}
         />
       </div>
     </Container>
