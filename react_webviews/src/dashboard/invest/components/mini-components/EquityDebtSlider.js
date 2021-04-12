@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Slider from 'common/ui/Slider';
-import { debounce } from 'lodash';
 
 const EquityDebtSlider = ({
   equity = 0,

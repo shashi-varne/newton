@@ -4,7 +4,7 @@ import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
 import { navigate as navigateFunc, selectTitle } from '../../common/commonFunction';
-import EquityDebtSlider from '../mini_components/EquityDebtSlider';
+import EquityDebtSlider from '../mini-components/EquityDebtSlider';
 import toast from 'common/ui/Toast'
 import './RiskPages.scss';
 import InfoBox from '../../../../common/ui/F-InfoBox';

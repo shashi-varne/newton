@@ -13,8 +13,8 @@ import SaveTax from "./components/savetax";
 import ParkMoney from "./components/parkmoney";
 import BuildWealth from "./components/buildwealth";
 import InvestGoal from "./components/InvestGoal";
-import InvestAmount from "./components/mini_components/InvestAmount";
-import InvestedAmount from "./components/mini_components/InvestedAmount";
+import InvestAmount from "./components/mini-components/InvestAmount";
+import InvestedAmount from "./components/mini-components/InvestedAmount";
 import GoalType from "./components/InvestGoal/component/GoalType";
 import SaveGoal from "./components/InvestGoal/component/SaveGoal";
 import ExploreFunds from  "./components/explore"

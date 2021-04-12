@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Container from '../common/Container';
-import FundCard from '../invest/components/mini_components/FundCard';
+import FundCard from '../invest/components/mini-components/FundCard';
 import Button from '@material-ui/core/Button';
 import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
 

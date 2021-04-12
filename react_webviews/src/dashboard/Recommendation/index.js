@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../common/Container';
-import FundCard from '../invest/components/mini_components/FundCard';
+import FundCard from '../invest/components/mini-components/FundCard';
 import TermsAndCond from "../mini-components/TermsAndCond"
 
 import trust_icons from 'assets/trust_icons.svg';
@@ -13,9 +13,9 @@ import { navigate as navigateFunc } from '../invest/common/commonFunction';
 
 import './style.scss';
 import { isInvestRefferalRequired, proceedInvestmentChild } from '../invest/functions';
-import PennyVerificationPending from '../invest/components/mini_components/PennyVerificationPending';
-import InvestError from '../invest/components/mini_components/InvestError';
-import InvestReferralDialog from '../invest/components/mini_components/InvestReferralDialog';
+import PennyVerificationPending from '../invest/components/mini-components/PennyVerificationPending';
+import InvestError from '../invest/components/mini-components/InvestError';
+import InvestReferralDialog from '../invest/components/mini-components/InvestReferralDialog';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 import PeriodWiseReturns from '../mini-components/PeriodWiseReturns';
 import { get, isArray } from 'lodash';

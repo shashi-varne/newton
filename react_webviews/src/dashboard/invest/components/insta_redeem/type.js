@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import { initialize } from "../../functions";
-import InvestType from "../mini_components/InvestType";
+import InvestType from "../mini-components/InvestType";
 import { investRedeemData } from "../../constants";
 
 class Type extends Component {
