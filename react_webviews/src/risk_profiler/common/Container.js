@@ -2,7 +2,7 @@ import React, { Component , Fragment } from 'react';
 import { withRouter } from 'react-router';
 
 import { nativeCallback } from 'utils/native_callback';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 
 

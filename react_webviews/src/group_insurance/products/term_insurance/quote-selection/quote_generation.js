@@ -21,7 +21,7 @@ import {
 } from '../../../../utils/validators';
 import RadioOptions from '../../../../common/ui/RadioOptions';
 import { FormControl } from 'material-ui/Form';
-import '../../../../utils/native_listner_otm';
+import '../../../../utils/native_listener';
 
 import { payFreqOptionInsurance, ridersOptionInsurance, quotePoints, all_providers } from '../../../constants';
 

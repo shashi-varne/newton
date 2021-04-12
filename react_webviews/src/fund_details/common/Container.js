@@ -14,7 +14,7 @@ import {
   DialogContent,
   DialogContentText,
 } from '@material-ui/core';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { getConfig, setHeights } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
 import { isFunction } from '../../utils/validators';

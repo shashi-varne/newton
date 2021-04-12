@@ -15,7 +15,7 @@ import Dialog, {
     DialogContent,
     DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { Imgc } from '../../common/ui/Imgc';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';

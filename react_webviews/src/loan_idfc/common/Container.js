@@ -5,7 +5,7 @@ import {didMount, commonRender} from "../../common/components/container_function
 import { renderPageLoader, renderGenericError } from '../../common/components/container_functions';
 
 import { nativeCallback } from "utils/native_callback";
-import "../../utils/native_listner";
+import "../../utils/native_listener";
 import { goBackMap } from "../constants";
 
 class Container extends Component {

@@ -12,7 +12,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { getConfig, setHeights } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
 import { isEmpty, isFunction } from "../../utils/validators";

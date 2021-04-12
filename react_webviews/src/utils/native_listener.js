@@ -197,5 +197,4 @@ import { getConfig } from './functions';
       }
     }
   }
-
 })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));

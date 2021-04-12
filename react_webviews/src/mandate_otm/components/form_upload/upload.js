@@ -9,7 +9,7 @@ import gallery_green from 'assets/go_to_gallery_green.svg';
 import gallery_grey from 'assets/go_to_gallery_grey.svg';
 import correct from 'assets/correct_otm_sample_image.svg';
 import incorrect from 'assets/incorrect_otm_sample_image.svg';
-import '../../../utils/native_listner_otm';
+import '../../../utils/native_listener';
 import $ from 'jquery';
 
 import Dialog, {
