@@ -238,7 +238,6 @@ class GroupHealthPlanAddMembers extends Component {
                 adult_total++;
             }
         }
-
         let total_insured = adult_total + child_total;
 
         let post_body = this.state.groupHealthPlanData.post_body || {};
@@ -432,7 +431,7 @@ class GroupHealthPlanAddMembers extends Component {
               <div className="InputField">
                 <RadioWithoutIcon
                   width="40"
-                  label="Gender"
+                  label="Your gender"
                   class="Gender:"
                   options={genderOptions}
                   id="self_gender"
@@ -469,12 +468,12 @@ class GroupHealthPlanAddMembers extends Component {
                 </div>
 
                 <div className="plus-minus-input-label">
-                  Children (upto {this.state.total_plus_minus_max})
+                  Children (up to {this.state.total_plus_minus_max})
                 </div>
                 <div className="generic-hr"></div>
-                <PlusMinusInput name="son" parent={this} />
-                <div className="generic-hr"></div>
                 <PlusMinusInput name="daughter" parent={this} />
+                <div className="generic-hr"></div>
+                <PlusMinusInput name="son" parent={this} />
                 <div className="generic-hr"></div>
               </div>
             )}

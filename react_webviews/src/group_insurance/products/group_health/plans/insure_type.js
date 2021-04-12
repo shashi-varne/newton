@@ -5,6 +5,7 @@ import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { initialize } from '../common_data';
+import { storageService } from "utils/validators";
 
 class GroupHealthSelectInsureType extends Component {
 
@@ -18,6 +19,8 @@ class GroupHealthSelectInsureType extends Component {
 
   componentWillMount() {
     this.initialize();
+    storageService().setObject("resumeToPremiumHealthInsurance", false)
+    storageService().remove('paymentFailed');
   }
 
 
@@ -26,7 +29,7 @@ class GroupHealthSelectInsureType extends Component {
     this.setState({
       account_type: this.state.groupHealthPlanData.account_type || '',
       account_type_name: this.state.groupHealthPlanData.account_type_name || '',
-      account_type_options: this.state.screenData.account_type_options
+      account_type_options: this.state.screenData.account_type_options,
     })
 
   }
@@ -147,7 +150,7 @@ class GroupHealthSelectInsureType extends Component {
             value={this.state.account_type || ''}
             onChange={this.handleChangeRadio('account_type')} />
         </div>
-        <BottomInfo baseData={{ 'content': 'Pro Tip: The first step to get financial stability is to be medically insured along with your family' }} />
+        <BottomInfo baseData={{ 'content': this.state.screenData.bottom_info_text }} />
       </Container>
     );
   }
