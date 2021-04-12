@@ -6,6 +6,7 @@ import { getCampaignBySection, resetRiskProfileJourney } from "../functions";
 import { getCampaign } from "../common/api";
 import { isEmpty, storageService } from "utils/validators";
 import { initData } from "../../../kyc/services";
+import { getBasePath } from "../../../utils/functions";
 
 const SipPaymentCallback = (props) => {
   const params = props.match.params || {};
@@ -17,6 +18,7 @@ const SipPaymentCallback = (props) => {
   );
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [skelton, setSkelton] = useState(true);
+  const basePath = getBasePath();
 
   resetRiskProfileJourney();
   const config = getConfig();
@@ -64,7 +66,7 @@ const SipPaymentCallback = (props) => {
     } catch (err) {
       console.log(err);
     } finally {
-      setSkelton(false)
+      setSkelton(false);
     }
   };
 
@@ -105,7 +107,7 @@ const SipPaymentCallback = (props) => {
               (auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?") +
               "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
-                window.location.origin +
+                basePath +
                   "/" +
                   "?is_secure=" +
                   storageService().get("is_secure")
@@ -122,7 +124,7 @@ const SipPaymentCallback = (props) => {
               (url.match(/[\?]/g) ? "&" : "?") +
               "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
-                window.location.origin +
+                basePath +
                   "/" +
                   "?base_url=" +
                   config.base_url +
@@ -144,7 +146,7 @@ const SipPaymentCallback = (props) => {
       buttonTitle={buttonTitle}
       showLoader={isApiRunning}
       handleClick={() => handleClick()}
-      title='Congratulations! Order placed'
+      title="Congratulations! Order placed"
       skelton={skelton}
     >
       <section className="invest-sip-payment-callback">

@@ -11,6 +11,7 @@ import {
   premiumBottomSheetMapper,
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
+import { getBasePath } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -917,7 +918,7 @@ export async function proceedInvestment(investReferralData, isReferralGiven) {
   }
 
   let paymentRedirectUrl = encodeURIComponent(
-    `${window.location.origin}/page/callback/${investment_type}/${investment.amount}`
+    `${getBasePath()}/page/callback/${investment_type}/${investment.amount}`
   );
 
   investment.allocations = allocations;

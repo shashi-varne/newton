@@ -17,6 +17,7 @@ import PennyVerificationPending from '../invest/components/mini_components/Penny
 import InvestError from '../invest/components/mini_components/InvestError';
 import InvestReferralDialog from '../invest/components/mini_components/InvestReferralDialog';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
+import { getBasePath } from '../../utils/functions';
 
 const Recommendations = (props) => {
   const graphData = storageService().getObject("graphData") || {};
@@ -97,7 +98,7 @@ const Recommendations = (props) => {
 
     let 
     paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/${sipOrOneTime}/${investmentObject.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investmentObject.amount}`
     );
 
     window.localStorage.setItem("investment", JSON.stringify(investmentObject));

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getConfig, isMobile } from "utils/functions";
 import { isEmpty, storageService } from "utils/validators";
+import { getBasePath } from "../../../utils/functions";
 import Container from "../../common/Container";
 import { getbankInvestment } from "../common/api";
 
@@ -15,6 +16,7 @@ const PaymentOptions = (props) => {
     investment_amount,
     remark,
   } = state;
+  const basePath = getBasePath();
 
   let pg_link = "";
   if (!pg_options || isEmpty(pg_options)) props.history.goBack();
@@ -41,7 +43,7 @@ const PaymentOptions = (props) => {
         }
         let redirectData = {
           redirect_url: encodeURIComponent(
-            `${window.location.origin}/sdk/page/callback${
+            `${basePath}/sdk/page/callback${
               getConfig().searchParams
             }&is_secure=${storageService().get("is_secure")}`
           ),
@@ -73,9 +75,7 @@ const PaymentOptions = (props) => {
               action_text: "Yes",
               action_type: "redirect",
               redirect_url: encodeURIComponent(
-                `${
-                  window.location.origin
-                }/page/callback/${investment_type}/${investment_amount}${
+                `${basePath}/page/callback/${investment_type}/${investment_amount}${
                   getConfig().searchParams
                 }&is_secure=${storageService().get("is_secure")}`
               ),
@@ -109,9 +109,7 @@ const PaymentOptions = (props) => {
             (pg_link.match(/[\?]/g) ? "&" : "?") +
             "plutus_redirect_url=" +
             encodeURIComponent(
-              `${
-                window.location.origin
-              }/page/callback/${investment_type}/${investment_amount}${
+              `${basePath}/page/callback/${investment_type}/${investment_amount}${
                 getConfig().searchParams
               }&is_secure=${storageService().get("is_secure")}`
             ) +
@@ -123,9 +121,7 @@ const PaymentOptions = (props) => {
             (pg_link.match(/[\?]/g) ? "&" : "?") +
             "plutus_redirect_url=" +
             encodeURIComponent(
-              `${
-                window.location.origin
-              }/page/callback/${investment_type}/${investment_amount}${
+              `${basePath}/page/callback/${investment_type}/${investment_amount}${
                 getConfig().searchParams
               }&is_secure=${storageService().get("is_secure")}`
             );
@@ -137,9 +133,7 @@ const PaymentOptions = (props) => {
             (pg_link.match(/[\?]/g) ? "&" : "?") +
             "redirect_url=" +
             encodeURIComponent(
-              `${
-                window.location.origin
-              }/page/callback/${investment_type}/${investment_amount}${
+              `${basePath}/page/callback/${investment_type}/${investment_amount}${
                 getConfig().searchParams
               }&is_secure=${storageService().get("is_secure")}`
             ) +
@@ -151,9 +145,7 @@ const PaymentOptions = (props) => {
             (pg_link.match(/[\?]/g) ? "&" : "?") +
             "redirect_url=" +
             encodeURIComponent(
-              `${
-                window.location.origin
-              }/page/callback/${investment_type}/${investment_amount}${
+              `${basePath}/page/callback/${investment_type}/${investment_amount}${
                 getConfig().searchParams
               }&is_secure=${storageService().get("is_secure")}`
             );

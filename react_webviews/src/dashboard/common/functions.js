@@ -3,6 +3,7 @@ import { storageService, isEmpty } from "utils/validators";
 import toast from "common/ui/Toast";
 import { getConfig } from "utils/functions";
 import { isReadyToInvest, initData } from "../../kyc/services";
+import { getBasePath } from "../../utils/functions";
 
 export async function initialize() {
   let isLoggedIn = storageService().get("currentUser");
@@ -281,7 +282,7 @@ export function getRedirectionUrlWebview(
 ) {
   let webRedirectionUrl = url;
   let is_secure = storageService().get("is_secure");
-  let plutus_redirect_url = `${window.location.origin}/`;
+  let plutus_redirect_url = `${getBasePath()}/`;
   if (redirect_path) {
     plutus_redirect_url += redirect_path;
   }
