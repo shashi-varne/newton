@@ -57,9 +57,7 @@ class NpsInfo extends Component {
     let { benefits, withdraw } = this.state;
     return (
       <Container
-        classOverRIde="pr-error-container"
         buttonTitle="CONTINUE"
-        classOverRideContainer="pr-container"
         title="Why NPS?"
         handleClick={this.handleClick}
       >

@@ -56,6 +56,8 @@ const Input = (props) => {
         onClick={props.onClick}
         autoComplete={props.autoComplete}
         autoFocus={props.autoFocus}
+        multiline={props.multiline}
+        rowsMax="3"
       />
     );
   }

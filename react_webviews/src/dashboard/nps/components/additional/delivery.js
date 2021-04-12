@@ -4,7 +4,7 @@ import InputWithIcon from "common/ui/InputWithIcon";
 import person from "assets/location.png";
 import Api from "utils/api";
 import { initialize } from "../../common/commonFunctions";
-import { storageService, capitalize } from "utils/validators";
+import { storageService } from "utils/validators";
 
 class NpsDelivery extends Component {
   constructor(props) {
@@ -26,21 +26,19 @@ class NpsDelivery extends Component {
   }
 
   onload = () => {
-    let nps_additional_details = storageService().getObject(
-      "nps_additional_details"
+    let kyc_app = storageService().getObject(
+      "kyc_app"
     );
-    let { nps_details } = nps_additional_details;
+    let { address } = kyc_app;
 
     let { form_data } = this.state;
-    let { address } = nps_details;
 
-    form_data.pincode = address.pincode || "";
-    form_data.addressline = address.addressline || "";
-    form_data.city = address.city || address.district || "";
-    form_data.state = address.state || "";
+    form_data.pincode = address.meta_data.pincode || "";
+    form_data.addressline = address.meta_data.addressline || "";
+    form_data.city = address.meta_data.city || address.meta_data.district || "";
+    form_data.state = address.meta_data.state || "";
 
     this.setState({
-      nps_details: nps_details,
       address: address,
       form_data: form_data,
       skelton: false
@@ -115,6 +113,14 @@ class NpsDelivery extends Component {
     }
   };
 
+  bannerText = () => {
+    return (
+      <span>
+        You will get the <span className="bold">PRAN</span> card delivered to this address
+      </span>
+    );
+  }
+
   render() {
     let { form_data } = this.state;
     return (
@@ -128,15 +134,9 @@ class NpsDelivery extends Component {
         handleClick={this.handleClick}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        banner={true}
+        bannerText={this.bannerText()}
       >
-        <div className="page-heading">
-          <img src={require("assets/hand_icon.png")} alt="" width="50" />
-          <div className="text">
-            You will get the <span className="bold">PRAN</span> card delivered
-            to this address
-          </div>
-        </div>
-
         <div className="nps-delivery-details">
           <div className="title">PRAN delivery address</div>
 
@@ -165,6 +165,7 @@ class NpsDelivery extends Component {
               helperText={form_data.addressline_error}
               value={form_data.addressline || ""}
               onChange={this.handleChange("addressline")}
+              multiline={true}
             />
           </div>
 

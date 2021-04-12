@@ -37,15 +37,13 @@ class uploadAddressProof extends Component {
   }
 
   onload = () => {
-    let nps_additional_details = storageService().getObject(
-      "nps_additional_details"
+    let kyc_app = storageService().getObject(
+      "kyc_app"
     );
-    // let { nps_details } = nps_additional_details;
-
-    // let { address } = nps_details;
+    let { address } = kyc_app;
 
     this.setState({
-      // address: address || '',
+      address: address.meta_data || '',
       skelton: false
     });
   };
@@ -281,29 +279,31 @@ class uploadAddressProof extends Component {
     }
   }
 
+  bannerText = () => {
+    return (
+      <span>
+        Please upload the <span className="bold">proof</span> for updated
+            address: <br />
+            <span>
+              <b>Address:</b> {this.state.address.addressline}
+            </span>
+      </span>
+    );
+  }
+
   render() {
     return (
       <Container
         fullWidthButton
         buttonTitle="PROCEED"
-        hideInPageTitle
-        hidePageTitle
         title="Upload Address Proof"
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        banner={true}
+        bannerText={this.bannerText()}
       >
-        <div className="page-heading">
-          <img src={require("assets/hand_icon.png")} alt="" width="50" />
-          <div className="text">
-            Please upload the <span className="bold">proof</span> for updated
-            address: <br />
-            <span>
-              <b>Address:</b> {this.state.address.addressline}
-            </span>
-          </div>
-        </div>
 
         <div className="nps-upload">
           <div className="InputField">
