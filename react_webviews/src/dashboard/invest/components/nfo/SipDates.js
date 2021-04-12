@@ -9,9 +9,9 @@ import {
   formatAmountInr,
   isEmpty,
 } from "utils/validators";
-import SuccessDialog from "../mini-components/SuccessDialog";
-import InvestError from "../mini-components/InvestError";
-import PennyVerificationPending from "../mini-components/PennyVerificationPending";
+import SuccessDialog from "../../mini-components/SuccessDialog";
+import InvestError from "../../mini-components/InvestError";
+import PennyVerificationPending from "../../mini-components/PennyVerificationPending";
 
 class SipDates extends Component {
   constructor(props) {

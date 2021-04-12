@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatAmountInr } from 'utils/validators';
-import RatingStar from '../../../../fund_details/common/RatingStar';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import RatingStar from '../../../fund_details/common/RatingStar';
+import { navigate as navigateFunc } from '../common/commonFunction';
 const FundCard = ({ classOverRide, fund ,graph, isins, proceedInvestment, parentProps }) => {
   const {
     amount,

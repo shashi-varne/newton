@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Container from '../../../common/Container';
+import Container from '../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 
@@ -11,13 +11,13 @@ import {
   validateSipAmount,
   selectTitle,
   convertInrAmountToNumber,
-} from '../../common/commonFunction';
-import { get_recommended_funds } from '../../common/api';
+} from '../common/commonFunction';
+import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
 
 import './style.scss';
-import { getConfig } from '../../../../utils/functions';
-import { formatAmountInr } from '../../../../utils/validators';
+import { getConfig } from '../../../utils/functions';
+import { formatAmountInr } from '../../../utils/validators';
 const date = new Date();
 
 const InvestAmount = (props) => {

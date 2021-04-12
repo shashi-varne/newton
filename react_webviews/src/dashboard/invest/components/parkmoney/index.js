@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
-import InvestType from '../mini-components/InvestType';
+import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast'
 
 import { storageService } from 'utils/validators';
