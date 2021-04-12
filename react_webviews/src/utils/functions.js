@@ -587,16 +587,14 @@ export function getParamsMark(data) {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-
-
   let { base_url } = main_query_params;
-
   let origin = window.location.origin;
+  let generic_callback = true;
 
   let isProdFisdom = origin.indexOf('wv.fisdom.com') >= 0;
   let isProdFinity = origin.indexOf('wv.mywaywealth.com') >= 0;
 
-  var base_href = window.sessionStorage.getItem('base_href') || '';
+  let base_href = window.sessionStorage.getItem('base_href') || '';
   let base_url_default = '';
 
   if(base_href) {
@@ -613,13 +611,10 @@ export const getConfig = () => {
     }
   }
   
-
   if(base_url_default) {
     base_url = base_url_default;
   }
 
-
-  let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
@@ -629,7 +624,6 @@ export const getConfig = () => {
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
     project = 'group-insurance';
-    generic_callback = 'true';
     project_child = 'bhartiaxa';
     if (main_pathname.indexOf('term') >= 0) {
       project_child = 'term';
@@ -642,7 +636,6 @@ export const getConfig = () => {
     project = 'mandate-otm';
   } else if (main_pathname.indexOf('e-mandate') >= 0) {
     project = 'e-mandate';
-    generic_callback = 'true';
   } else if (main_pathname.indexOf('mandate') >= 0) {
     project = 'mandate';
   } else if (main_pathname.indexOf('gold') >= 0) {
@@ -653,7 +646,6 @@ export const getConfig = () => {
     project = 'referral';
   } else if (main_pathname.indexOf('help') >= 0) {
     project = 'help';
-    generic_callback = 'true';
   } else if (main_pathname.indexOf('loan') >= 0) {
     project = 'loan';
   } else if (main_pathname.indexOf('w-report') >= 0) {
@@ -662,16 +654,11 @@ export const getConfig = () => {
     project = 'kyc-esign';
   } else if (main_pathname.indexOf('pg') >= 0) {
     project = 'pg';
-    generic_callback = 'true';
   } else if (main_pathname.indexOf('portfolio-rebalancing') >= 0) {
     project = 'portfolio-rebalancing';
-    generic_callback = 'true';
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
   }
-
-  let search = window.location.search;
-  const insurance_v2 = generic_callback === 'true' ? true : search.indexOf('insurance_v2') >= 0;
 
   let returnConfig = getPartnerConfig(partner_code);
 
@@ -722,12 +709,11 @@ export const getConfig = () => {
   }
 
   if (project === 'insurance' || project_child === 'term') {
-    let insurance_v2 = generic_callback === 'true' ? true : main_query_params.insurance_v2;
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
 
-    searchParams += getParamsMark(searchParams) + 'insurance_id=' + insurance_id + '&insurance_v2=' + insurance_v2;
-    searchParamsMustAppend += getParamsMark(searchParams) + 'insurance_v2=' + insurance_v2;
+    searchParams += getParamsMark(searchParams) + 'insurance_id=' + insurance_id;
+    searchParamsMustAppend += getParamsMark(searchParams);
 
     if (checkValidString(isJourney)) {
       searchParams += getParamsMark(searchParams) + 'isJourney=' + isJourney;
@@ -756,24 +742,18 @@ export const getConfig = () => {
     returnConfig.Web = true;
   }
 
-  if (insurance_v2) {
-    returnConfig.insurance_v2 = true;
-  }
-
   if (project === 'mandate-otm') {
     let { key } = main_query_params;
     let { name } = main_query_params;
     let { email } = main_query_params;
-    let campaign_version = generic_callback === 'true' ? 1 : main_query_params.campaign_version;
     let { html_camera } = main_query_params;
     searchParams += getParamsMark(searchParams) + 
-      'key=' + key + '&name=' + name + '&email=' + email + '&campaign_version=' + campaign_version;
+      'key=' + key + '&name=' + name + '&email=' + email;
 
     // eslint-disable-next-line
-    returnConfig.campaign_version = parseInt(campaign_version);
     returnConfig.html_camera =
-      (returnConfig.iOS || returnConfig.Web) && returnConfig.campaign_version ? true : html_camera;
-    if (returnConfig.iOS && !returnConfig.campaign_version) {
+      (returnConfig.iOS || returnConfig.Web) && html_camera;
+    if (returnConfig.iOS) {
       returnConfig.hide_header = true;
     }
   }
@@ -784,12 +764,10 @@ export const getConfig = () => {
   }
 
   if (project === 'isip') {
-    let campaign_version = generic_callback === 'true' ? 1 : main_query_params.campaign_version;
-    searchParams += getParamsMark(searchParams) + 'campaign_version=' + campaign_version;
+    searchParams += getParamsMark(searchParams);
 
     // eslint-disable-next-line
-    returnConfig.campaign_version = parseInt(campaign_version);
-    if (returnConfig.iOS && !returnConfig.campaign_version) {
+    if (returnConfig.iOS) {
       returnConfig.hide_header = true;
     }
   }

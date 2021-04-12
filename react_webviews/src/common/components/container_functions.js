@@ -61,13 +61,6 @@ export function didMount() {
                 that.historyGoBack();
             }
         });
-    } else {
-        window.PlutusSdk.add_listener({
-            type: 'back_pressed',
-            go_back: function () {
-                that.historyGoBack();
-            }
-        });
     }
 
     window.addEventListener("scroll", this.onScroll, true);
@@ -246,14 +239,6 @@ export function commonRender(props_base) {
 export function unmount() {
     if (getConfig().generic_callback || this.state.project === 'help') {
         window.callbackWeb.remove_listener({});
-    } else {
-        if (window.PlutusSdk) {
-            window.PlutusSdk.remove_listener({})
-        }
-
-        if (window.PaymentCallback) {
-            window.PaymentCallback.remove_listener({})
-        }
     }
 
     window.removeEventListener("scroll", this.onScroll, false);

@@ -48,17 +48,10 @@ const Container = (props) => {
     if (x.current) {
       x.current = false;
     } else {
-      if (getConfig().generic_callback) {
-        window.callbackWeb.addEventListener({
-          type: 'back_pressed',
-          go_back: () => historyGoBack(),
-        });
-      } else {
-        window.PlutusSdk.addEventListener({
-          type: 'back_pressed',
-          go_back: () => historyGoBack(),
-        });
-      }
+      window.callbackWeb.addEventListener({
+        type: 'back_pressed',
+        go_back: () => historyGoBack(),
+      });
     }
   }, []);
 

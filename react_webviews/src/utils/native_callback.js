@@ -155,58 +155,45 @@ export const nativeCallback = async ({ action = null, message = null, events = n
         return;
       }
 
-      let campaign_version = getConfig().campaign_version;
-
-      if (campaign_version >= 1) {
-        if (isMobile.Android() && action) {
-          if (typeof window.Android !== 'undefined') {
-            if (action === 'show_toast') {
-              window.Android.performAction('show_toast', message.message);
-              return;
-            }
-
-            if (action === 'open_in_browser') {
-              window.Android.performAction('open_in_browser', message.url);
-              return;
-            }
-
-            if (action === 'native_back') {
-              nativeCallbackOld(400);
-              return;
-            }
-
-            if (action === 'exit') {
-              nativeCallbackOld(200);
-              return;
-            }
-
-            // window.Android.performAction('close_webview', null);
-            // return;
+      if (isMobile.Android() && action) {
+        if (typeof window.Android !== 'undefined') {
+          if (action === 'show_toast') {
+            window.Android.performAction('show_toast', message.message);
+            return;
           }
-        }
 
-        if (isMobile.iOS() && action) {
-          if (typeof window.webkit !== 'undefined') {
-            window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+          if (action === 'open_in_browser') {
+            window.Android.performAction('open_in_browser', message.url);
+            return;
           }
-          return;
-        }
-      } else {
-        if (action === 'show_toast' || action === 'open_in_browser') {
-          return;
-        }
 
-        if (action) {
-          nativeCallbackOld(200)
+          if (action === 'native_back') {
+            nativeCallbackOld(400);
+            return;
+          }
+
+          if (action === 'exit') {
+            nativeCallbackOld(200);
+            return;
+          }
+
+          // window.Android.performAction('close_webview', null);
+          // return;
         }
+      }
+
+      if (isMobile.iOS() && action) {
+        if (typeof window.webkit !== 'undefined') {
+          window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+        }
+        return;
       }
 
       return;
     }
 
-    let insurance_v2 = getConfig().insurance_v2;
 
-    if (!insurance_v2 && project === 'insurance') {
+    if ( project === 'insurance') {
 
       let notInInsuranceV2 = ['take_control', 'take_control_reset'];
       if (notInInsuranceV2.indexOf(action) !== -1) {
