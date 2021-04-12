@@ -29,9 +29,9 @@ const AccountMerge = (props) => {
         <p>We need to verify your account credentials to link account.</p>
         <div className="auth-info">
           {auth_id.type === "mobile" ? (
-            <img src={require(`assets/${productName}/ic_mobile.svg`)} />
+            <img src={require(`assets/${productName}/ic_mobile.svg`)} alt="" />
           ) : (
-            <img src={require(`assets/${productName}/ic_email.svg`)} />
+            <img src={require(`assets/${productName}/ic_email.svg`)} alt="" />
           )}
           <div>
             <div>
