@@ -22,7 +22,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import { getConfig } from '../../../../utils/functions';
+import { getConfig, getBasePath } from '../../../../utils/functions';
 
 class Journey extends Component {
   constructor(props) {
@@ -106,8 +106,8 @@ class Journey extends Component {
   }
 
   componentWillMount() {
-
-    let current_url = window.location.origin + '/group-insurance/term/journey' + getConfig().searchParams;
+    let basepath = getBasePath();
+    let current_url = basepath + '/group-insurance/term/journey' + getConfig().searchParams;
     this.setState({
       current_url: current_url
     });
@@ -164,9 +164,9 @@ class Journey extends Component {
     this.setState({
       show_loader: true
     });
-
+    let basepath = getBasePath();
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/group-insurance/term/payment/' + this.state.params.insurance_id
+      basepath + '/group-insurance/term/payment/' + this.state.params.insurance_id
     );
 
     var pgLink = payment_link;

@@ -238,7 +238,7 @@ class Landing extends Component {
         'banner_clicked' : banner_clicked ? true : false,
         'callback_clicked' : callback_clicked ?  true : false,
         'advisory_card_cta' : this.state.advisory_button_text,
-        'insurance_advisory_card_clicked': advisory_clicked
+        'insurance_advisory_card_clicked': advisory_clicked ? true : false
       }
     };
 
@@ -250,7 +250,6 @@ class Landing extends Component {
   }
 
   goToAdvisory = (e) =>{
-    // console.log('go go')
     e.preventDefault();
     this.sendEvents('next', "", "", "", true);
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
@@ -275,7 +274,7 @@ class Landing extends Component {
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
            <div onClick={this.policymove}>
-           <img style={{ margin: '-15px 5px 30px 0', width: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
+           <img style={{ margin: '-15px 5px 30px 0', width: '100%', cursor: 'pointer' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>

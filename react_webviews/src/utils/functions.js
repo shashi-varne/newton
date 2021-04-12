@@ -424,7 +424,7 @@ function getPartnerConfig(partner_code) {
       default: '#4a4a4a',
       highlight_color: '#f6f2ff',
       skelton_color: '#E7E7E7',
-      label: '#a2a2a2',
+      label: '#767E86',
       type: 'fisdom',
       // inputFocusedColor: '#4f2da7',
       productName: 'fisdom',
@@ -444,7 +444,7 @@ function getPartnerConfig(partner_code) {
       default: '#4a4a4a',
       highlight_color: '#F0F7FF',
       skelton_color: '#E7E7E7',
-      label: '#a2a2a2',
+      label: '#767E86',
       type: 'finity',
       // inputFocusedColor: '#3792fc',
       productName: 'finity',
@@ -463,7 +463,7 @@ function getPartnerConfig(partner_code) {
       secondary: '#35cb5d',
       default: '#4a4a4a',
       highlight_color: '#f6f2ff',
-      label: '#a2a2a2',
+      label: '#767E86',
       type: 'minvest',
       productName: 'minvest',
       appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
@@ -484,7 +484,7 @@ function getPartnerConfig(partner_code) {
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity') {
+  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
     productType = 'finity';
   }
 
@@ -679,6 +679,7 @@ export const getConfig = () => {
   let searchParamsMustAppend = ``;
 
 
+  base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
   if(!base_url_default) {
     searchParams += getParamsMark(searchParams) + `base_url=${base_url}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `base_url=${base_url}`;

@@ -141,7 +141,6 @@ class Container extends Component {
       this.navigate('/group-insurance/advisory/recommendations')
       return;
     }
-
       if (this.checkStringInString('/group-insurance/other-insurance/entry')) {
         this.navigate('/group-insurance');
         return;
@@ -155,15 +154,26 @@ class Container extends Component {
       }
      
     if(this.checkStringInString('group-health')) {
-
       // #TODO need to handle back accoridng to entry/landing
       let group_health_landing = '/group-insurance/group-health/landing';
       if(this.props.provider) {
         group_health_landing = `/group-insurance/group-health/${this.props.provider}/landing`;
       }
+      if(this.checkStringInString('group-insurance/group-health') && this.checkStringInString('plan-select-payment-frequency')) {
+        this.navigate(`/group-insurance/group-health/${this.props.provider}/plan-select-sum-assured`);
+        return;
+      }
 
-      if(this.checkStringInString('insure-type') || this.checkStringInString('payment') || 
-      this.checkStringInString('final-summary')) {
+      if(this.checkStringInString('final-summary') && this.props.pgReached){
+          this.navigate(group_health_landing);
+          return;
+      }
+      if(this.checkStringInString('final-summary') && storageService().getObject('paymentFailed')){
+        this.navigate(group_health_landing);
+        return;
+      }
+
+      if(this.checkStringInString('insure-type') || this.checkStringInString('payment')) {
         this.navigate(group_health_landing);
         return;
       }
@@ -178,7 +188,7 @@ class Container extends Component {
         this.navigate('/group-insurance/health/landing');
         return;
       }
-      
+     
     }
 
     if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0 && ( pathname === '/group-insurance/accident/payment-success' || 
