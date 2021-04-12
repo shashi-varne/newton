@@ -362,9 +362,7 @@ class Report extends Component {
                   {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
                 </div>
                 {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}
-                  {props.key !== 'TERM_INSURANCE' &&
-                    ' annually' 
-                  }
+                {props.key !== 'TERM_INSURANCE' ? ` ${props.frequency || 'annually'}` : ''}
                 </div>}
                 {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' && props.frequency !== 'Single' &&
