@@ -148,8 +148,8 @@ class GroupHealthPlanContactDetails extends Component {
                     "email": this.state.form_data.email,
                 }
             }
-
-            this.updateLead(body);
+            
+            this.updateLead(body, '', {...body.buyer_details});
         }
     }
 

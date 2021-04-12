@@ -1036,3 +1036,14 @@ export function convertDateFormat(inputFormat) {
   var d = new Date(inputFormat)
   return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
 }
+
+
+export const compareObjects = (keysToCheck, oldState, newState) => {
+  let compare = true;
+  keysToCheck.forEach((key) => {
+    if (oldState[key].toString().trim() !== newState[key].toString().trim()) {
+      compare = false;
+    }
+  });
+  return compare;
+};

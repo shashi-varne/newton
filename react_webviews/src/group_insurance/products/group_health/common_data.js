@@ -1,11 +1,10 @@
-import { storageService, inrFormatDecimal, getEditTitle } from 'utils/validators';
+import { storageService, inrFormatDecimal, getEditTitle, compareObjects } from 'utils/validators';
 import { getConfig, 
     // isFeatureEnabled
  } from 'utils/functions';
 import { ghGetMember } from '../../constants';
 import Api from 'utils/api';
 import {  openPdfCall } from 'utils/native_callback';
-import isEqual from 'lodash/isEqual';
 import { nativeCallback } from 'utils/native_callback';
 import {isEmpty} from '../../../utils/validators';
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
@@ -370,49 +369,36 @@ export async function getApplicationDetails(application_id, providerConfig) {
     }
     
 }
-export async function updateLead( body, quote_id) {
-
+export async function updateLead( body, quote_id, current_state) {
+    
     var groupHealthPlanData = this.state.groupHealthPlanData;
-
-    var current_form_data = this.state.form_data || {};
+    var current_form_data = current_state || {};
     if(this.state.screen_name === 'personal_details_screen'){
-        console.log(groupHealthPlanData)
         var prev_form_data = groupHealthPlanData['application_data']['personal_details_screen'][`${this.state.member_key}`] || {};
     }else{
         var prev_form_data = groupHealthPlanData.application_data ? groupHealthPlanData.application_data[this.state.screen_name] : {};
     }
-        if (current_form_data['dt_created']) delete current_form_data['dt_created'];
-        if (current_form_data['dt_updated']) delete current_form_data['dt_updated'];
-        if(prev_form_data){
-            if (prev_form_data['dt_created']) delete prev_form_data['dt_created'];
-            if (prev_form_data['dt_updated']) delete prev_form_data['dt_updated'];
-        }
-        
-        for(var val in current_form_data){
-            if(val.includes('_error')){
-                delete current_form_data[`${val}`]
-            }
-        }
-        for(var val in prev_form_data){
-            if(val.includes('_error')){
-                delete current_form_data[`${val}`]
-            }
-        }
-        var isFormDataSame = isEqual(prev_form_data, current_form_data);
-        console.log('equal??', isEqual(prev_form_data, current_form_data))
-        if(isFormDataSame){
-            this.navigate(this.state.next_state);
-            return;
+    console.log({prev_form_data, current_form_data})
+
+    var isFormDataSame = false;
+    if(!isEmpty(prev_form_data)){
+        var isFormDataSame = compareObjects(Object.keys(current_form_data), prev_form_data, current_form_data);
+    }
+    console.log("SAME?", isFormDataSame)
+    if(isFormDataSame){
+        this.navigate(this.state.next_state);
+        return;
+    }else{
+        if(this.state.screen_name === 'personal_details_screen'){
+            var personal_details_screen = groupHealthPlanData['application_data']['personal_details_screen'];
+            personal_details_screen[`${this.state.member_key}`] = current_form_data; 
+            groupHealthPlanData.personal_details_screen = personal_details_screen;   
         }else{
-            if(this.state.screen_name === 'personal_details_screen'){
-                var personal_details_screen = groupHealthPlanData['application_data']['personal_details_screen'];
-                personal_details_screen[`${this.state.member_key}`] = current_form_data; 
-                groupHealthPlanData.personal_details_screen = personal_details_screen;   
-            }else{
-                groupHealthPlanData['application_data'][`${this.state.screen_name}`] = current_form_data;    
-            }
-            this.setLocalProviderData(groupHealthPlanData)
-        }    
+            groupHealthPlanData['application_data'][`${this.state.screen_name}`] = current_form_data;    
+        }
+        this.setLocalProviderData(groupHealthPlanData)
+    }   
+
     let error="";
     let errorType="";
     this.setErrorData("submit")

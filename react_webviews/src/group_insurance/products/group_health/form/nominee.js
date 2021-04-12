@@ -289,7 +289,8 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }        
             
-            this.updateLead(body);     
+            
+            this.updateLead(body, '', {'name': this.state.form_data.name, 'relation': this.state.form_data.relation});     
         }
     }
 

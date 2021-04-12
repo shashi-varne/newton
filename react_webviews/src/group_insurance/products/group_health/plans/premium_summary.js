@@ -12,6 +12,7 @@ import ReligarePremium from "../religare/religare_premium";
 import HDFCPremium from "../hdfc/hdfc_premium";
 import StarPremium from "../Star/star_premium";
 import GMCPremium from "../gmc/gmc_premium";
+import { isEmpty } from "../../../../utils/validators";
 
 class GroupHealthPlanPremiumSummary extends Component {
   constructor(props) {
@@ -258,9 +259,11 @@ class GroupHealthPlanPremiumSummary extends Component {
           let application_id = resultData.application_details.id;
 
           storageService().set('health_insurance_application_id', application_id);
+          //for form prefilling
           groupHealthPlanData.application_form_data = resultData;
+          //for optimising APIs in form
           var application_data = {
-            'personal_details_screen': {}
+            'personal_details_screen': groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.personal_details_screen) ? groupHealthPlanData.application_data.personal_details_screen : {}
           }
           groupHealthPlanData.application_data = application_data;
           this.setLocalProviderData(groupHealthPlanData);

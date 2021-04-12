@@ -380,8 +380,9 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let weight_limit = form_data.weight ? form_data.weight.toString() : ''
-    // .weight.toString()
-
+    if(form_data.weight){
+      form_data.weight = form_data.weight.toString();
+    }
     if(weight_limit.length > 3){
       form_data.weight_error = "Invalid weight";
     }
@@ -485,8 +486,18 @@ class GroupHealthPlanPersonalDetails extends Component {
           } 
         }
       }
-      console.log(this.state.groupHealthPlanData)
-      this.updateLead(body);
+      //for api optimization
+      var current_state = {};
+      var keys_to_add = ['name', 'dob', 'gender', 'height', 'weight', 'pan_no', 'occupation']
+      var current_member = body.insured_people_details[0];
+
+      for(var x in current_member){
+        if(keys_to_add.indexOf(x) >= 0){
+          current_state[x] = current_member[x];
+        }
+      }
+
+      this.updateLead(body, '', current_state );
     }
   }
 
