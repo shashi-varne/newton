@@ -491,7 +491,6 @@ function getPartnerConfig(partner_code) {
   if (isminvest) {
     productType = 'minvest';
   }
-  productType = 'finity';
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
