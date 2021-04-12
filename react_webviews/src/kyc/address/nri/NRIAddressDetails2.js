@@ -11,6 +11,7 @@ import {
 } from "../../common/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
+import { getConfig } from "utils/functions";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -20,6 +21,7 @@ const NRIAddressDetails2 = (props) => {
   });
   const [oldState, setOldState] = useState({});
   const navigate = navigateFunc.bind(props);
+  const productName = getConfig().productName;
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -144,6 +146,7 @@ const NRIAddressDetails2 = (props) => {
       current={4}
       count={4}
       total={4}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <section id="kyc-address-details-2" className="page-body-kyc">
         <div className="sub-title">Address as per {address_proof}</div>

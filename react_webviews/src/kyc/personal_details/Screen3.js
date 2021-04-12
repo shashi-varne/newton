@@ -15,7 +15,8 @@ import {
 import { kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { isEmpty } from "../../utils/validators";
+import { isEmpty } from "utils/validators";
+import { getConfig } from "utils/functions";
 
 const PersonalDetails3 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -24,6 +25,7 @@ const PersonalDetails3 = (props) => {
   const [oldState, setOldState] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   let title = "Professional details";
+  const productName = getConfig().productName;
   if (isEdit) {
     title = "Edit professional details";
   }
@@ -125,6 +127,7 @@ const PersonalDetails3 = (props) => {
       count={type === "digilocker" ? 2 : 3}
       current={type === "digilocker" ? 2 : 3}
       total="4"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-complaint-personal-details">
         <main>

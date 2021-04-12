@@ -91,6 +91,8 @@ body[data-device="web"] {
     padding-bottom: 0px;
     .header-title-page{
       padding-left: 0px;
+      min-height: auto;
+      padding-top: 20px;
     }
     .Loader {
       max-width: 100%;
@@ -148,6 +150,7 @@ body[data-device="web"] {
       padding:10px 0px 20px 0px;
       display: flex;
       justify-content: center;
+      border-radius: 0px;
 
       .FooterTwoButtonLayout,.FooterDefaultLayout{
         button{
@@ -159,16 +162,85 @@ body[data-device="web"] {
         }
       }
     }
+
+    .kyc-compliant-complete,.kyc-esign-complete{
+      header{
+        text-align: left;
+      }
+    }
+
+    .kyc-esign-complete{
+      header{
+        margin-top: 120px;
+      }
+      .text {
+        text-align: left;
+        justify-content: left;
+      }
+    }
+
+    .kyc-compliant-complete{
+    
+      .kyc-compliant-complete-msg{
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 21px;
+        letter-spacing: 0px;
+        text-align: left;
+        color: #767E86;
+        margin-top: 125px;
+        span{
+          font-size: 13px;
+          font-weight: 500;
+          line-height: 21px;
+          letter-spacing: 0px;
+          text-align: left;
+        }
+      }
+    }
+
+    .nsdl-status{
+      .nsdl-status-text{
+        margin-top: 120px;
+      }
+    }
+
+    .success-bottom {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .kyc-report{
+      main{
+        .congrats,.text,.text.message{
+          text-align: left;
+        }
+        .text.message{
+          justify-content: left;
+        }
+      }
+    }
   }
 
+  .IframeContainer.iframe-bottom-padding{
+    padding-bottom: 100px !important;
+  }
   .IframeContainer{
     display: flex;
     overflow: hidden;
     overflow-y: auto;
+    padding-bottom: 0px !important;
     .fadein-animation{
       margin-top: 20px;
       flex: 1 1 55%;
-      padding-bottom: 100px;
+      overflow: hidden;
+      // padding-bottom: 100px;
+
+      .diy-tab-container{
+        margin: 0px !important;
+      }
     }
 
     .iframe-right-content{
@@ -176,6 +248,9 @@ body[data-device="web"] {
       place-items: center;
       height: 60vh;
       flex:1 1 45%;
+    }
+    #invest-explore-fund-type .top-title{
+      margin-top: 0px;
     }
   }
 ////////////End of Iframe Css /////////////////

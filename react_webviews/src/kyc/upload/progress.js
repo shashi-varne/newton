@@ -6,11 +6,13 @@ import { isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { getConfig } from 'utils/functions'
 
 const Progress = (props) => {
   const {kyc, isLoading} = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
+  const productName = getConfig().productName;
 
   let documents = [];
   let totalDocs = 0;
@@ -59,6 +61,7 @@ const Progress = (props) => {
         navigate(getPathname.journey);
       }}
       title="Upload documents"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <section id="kyc-upload-progress">
         <main className="documents">

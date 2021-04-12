@@ -57,9 +57,8 @@ const AddressUpload = (props) => {
 
   const [state, setState] = useState({})
   const {kyc: kycData, isLoading} = useUserKycHook();
-  const [kyc, setKyc] = useState(
-    kycData
-  )
+  const [kyc, setKyc] = useState(kycData);
+  const productName = getConfig().productName;
 
   useEffect(() => {
     setKyc(kycData)
@@ -278,6 +277,7 @@ const AddressUpload = (props) => {
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
       title="Upload address proof"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">

@@ -12,6 +12,7 @@ import {
 import { kycSubmit } from "../../common/api";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../../common/hooks/userKycHook";
+import { getConfig } from "utils/functions";
 
 const NriAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -20,6 +21,7 @@ const NriAddressDetails1 = (props) => {
   const state = props.location.state || {};
   const isEdit = state.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const productName = getConfig().productName;
   let title = "Foreign address details";
   if (isEdit) {
     title = "Edit foreign address details";
@@ -128,6 +130,7 @@ const NriAddressDetails1 = (props) => {
       current={3}
       count={3}
       total={4}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">
         <main>

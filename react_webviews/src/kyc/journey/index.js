@@ -17,7 +17,8 @@ import { isMobile } from 'utils/functions'
 import { nativeCallback } from 'utils/native_callback'
 import AadhaarDialog from '../mini_components/AadhaarDialog'
 import KycBackModal from '../mini_components/KycBack'
-
+import { isIframe } from '../../utils/functions'
+const iframe = isIframe();
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -679,6 +680,7 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
+      iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
         <div className="kyc-journey">
@@ -714,11 +716,13 @@ const Journey = (props) => {
                   </div>
                 </div>
               </div>
-
+            {
+              !isIframe() &&
               <img
-                src={require(`assets/${productName}/ic_premium_onboarding_mid.svg`)}
-                alt="Premium Onboarding"
+              src={require(`assets/${productName}/ic_premium_onboarding_mid.svg`)}
+              alt="Premium Onboarding"
               />
+            }
             </div>
           )}
           {show_aadhaar && (
@@ -816,7 +820,9 @@ const Journey = (props) => {
                     {item?.value && (
                       <span className="field_value"> {item?.value}</span>
                     )}
+                    
                   </div>
+                  
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span

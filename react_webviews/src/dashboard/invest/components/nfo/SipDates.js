@@ -177,6 +177,7 @@ class SipDates extends Component {
         buttonTitle={buttonTitle}
         title="Select investment date"
         showLoader={isApiRunning}
+        iframeRightContent={require(`assets/${this.state.productName}/sip_date.svg`)}
       >
         <div className="sip-dates">
           {sips &&

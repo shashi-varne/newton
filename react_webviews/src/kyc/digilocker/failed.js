@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
+import { getConfig, isIframe } from "utils/functions";
 import { navigate as navigateFunc } from "../common/functions";
 import Button from "@material-ui/core/Button";
 import AadhaarDialog from "../mini_components/AadhaarDialog";
@@ -8,7 +8,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "common/ui/Toast";
 import DotDotLoaderNew from '../../common/ui/DotDotLoaderNew';
-
+const iframe = isIframe();
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -38,13 +38,21 @@ const Failed = (props) => {
 
   const productName = getConfig().productName;
   return (
-    <Container title="Aadhaar KYC Failed !" noFooter skelton={isLoading}>
+    <Container 
+      title="Aadhaar KYC Failed !" 
+      noFooter 
+      skelton={isLoading}
+      iframeRightContent={require(`assets/${productName}/digilocker_failed.svg`)}
+    >
       <section id="digilocker-failed">
-        <img
-          className="digi-image"
-          alt=""
-          src={require(`assets/${productName}/ils_digilocker_failed.svg`)}
-        />
+        {
+          !iframe &&
+          <img
+            className="digi-image"
+            alt=""
+            src={require(`assets/${productName}/ils_digilocker_failed.svg`)}
+          />
+        }
         <div className="body-text1">
           Aadhaar KYC has been failed because we were not able to connect to
           your Digilocker.

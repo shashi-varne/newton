@@ -55,7 +55,7 @@ const NRIAddressUpload = (props) => {
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
   const {kyc, isLoading} = useUserKycHook();
-
+  const productName = getConfig().productName;
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
 
@@ -267,6 +267,7 @@ const NRIAddressUpload = (props) => {
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">

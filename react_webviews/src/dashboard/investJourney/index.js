@@ -31,6 +31,7 @@ const InvestJourney = (props) => {
   });
   const {kyc: userKyc, isLoading} = useUserKycHook()
   const state = props.location.state || {};
+  const productName = getConfig().productName;
   const investment =
     JSON.parse(window.localStorage.getItem("investment")) ||
     JSON.parse(state.investment);
@@ -113,6 +114,7 @@ const InvestJourney = (props) => {
       handleClick={proceedInvestment}
       showLoader={isApiRunning}
       skelton={isLoading}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <section className="invest-journey-container">
         <div className="invest-journey-header">

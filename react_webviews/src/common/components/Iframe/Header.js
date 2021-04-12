@@ -7,40 +7,68 @@ import SVG from 'react-inlinesvg';
 import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
 import '../../theme/Style.scss';
-import './style.scss'
+import './style.scss';
 const headerIconMapper = {
   back: back_arrow,
-  close: close_icn
-}
+  close: close_icn,
+};
 
-const Header = ({ classes, title, count, total, current, goBack, 
-  edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title,topIcon, handleTopIcon, 
-  className ,style, headerData={}, new_header}) => (
-  <AppBar position="fixed" color="primary" classes={{root:classes.root}}>
-    <Toolbar classes={{root:classes.toolbarRoot}}>
-      <div className='iframe-top-action-button' color="inherit" aria-label="Menu" 
-      onClick={headerData.goBack ||
-         goBack}>
-        {!disableBack && !headerData.hide_icon &&
-        <SVG
-          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=white')}
-          src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
+const Header = ({
+  classes,
+  title,
+  count,
+  total,
+  current,
+  goBack,
+  edit,
+  type,
+  resetpage,
+  handleReset,
+  smallTitle,
+  disableBack,
+  provider,
+  inPageTitle,
+  force_hide_inpage_title,
+  topIcon,
+  handleTopIcon,
+  className,
+  style,
+  headerData = {},
+  new_header,
+}) => (
+  <AppBar position='fixed' color='primary' classes={{ root: classes.root }}>
+    <Toolbar classes={{ root: classes.toolbarRoot }}>
+      <div
+        className='iframe-top-action-button'
+        color='inherit'
+        aria-label='Menu'
+        onClick={headerData.goBack || goBack}
+      >
+        {!disableBack && !headerData.hide_icon && (
+          <SVG
+            preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=white')}
+            src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
+          />
+        )}
+        {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon && <Close />}
+      </div>
+
+      <div>
+        <img
+          src={require(`assets/finity/moneycontrol_logo.svg`)}
+          className={classes.img}
+          alt='moneycontrol'
         />
-        }
-        {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
-         <Close />}
       </div>
 
       <div>
-        <h1>Partner Name</h1>
-      </div>
-
-      <div>
-        <h1>Optional name</h1>
+        <img
+          src={require(`assets/finity_white_logo_2.png`)}
+          alt=''
+        />
       </div>
     </Toolbar>
-  </AppBar >
+  </AppBar>
 );
 
 const styles = {
@@ -51,10 +79,10 @@ const styles = {
   },
   flex: {
     flex: 1,
-    textAlign: '-webkit-center'
+    textAlign: '-webkit-center',
   },
   menuButton: {
-    marginLeft: "-12px !important",
+    marginLeft: '-12px !important',
     // marginRight: 20,
   },
   toolbarRoot: {
@@ -63,8 +91,8 @@ const styles = {
     paddingRight: '80px !important',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '100%'
-  }
+    height: '100%',
+  },
 };
 
 export default withStyles(styles)(Header);

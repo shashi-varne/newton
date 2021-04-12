@@ -12,7 +12,7 @@ import PennySuccessDialog from "../mini_components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { isIframe } from "utils/functions";
+import { isIframe, getConfig } from "utils/functions";
 import internalStorage from '../home/InternalStorage';
 
 const KycBankVerify = (props) => {
@@ -23,6 +23,7 @@ const KycBankVerify = (props) => {
   const [isPennyFailed, setIsPennyFailed] = useState(false);
   const [isPennySuccess, setIsPennySuccess] = useState(false);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
+  const productName = getConfig().productName;
   const isEdit = props.location.state?.isEdit || false;
   const params = props.match.params || {};
   const userType = params.userType || "";
@@ -95,6 +96,7 @@ const KycBankVerify = (props) => {
       title : 'Bank is added!',
       message : "Hurrah! Your bank account is added. Invest securely and safely with us.",
       buttonTitle: 'CONTINUE',
+      status: 'pennySuccess'
     }
     internalStorage.setData('handleClick', handleSuccess);
     navigate('/kyc/penny-status',{state:pennyDetails});
@@ -107,6 +109,7 @@ const KycBankVerify = (props) => {
       buttonOneTitle: 'TRY AGAIN LATER',
       buttonTwoTitle: 'UPLOAD BANK DOCUMENTS',
       twoButton: true,
+      status: 'pennyExhausted'
     }
     internalStorage.setData('handleClickOne', goToJourney);
     internalStorage.setData('handleClickTwo', uploadDocuments);
@@ -119,7 +122,8 @@ const KycBankVerify = (props) => {
       message : "Bank account verification failed! No worries, please check if you've entered correct details.",
       buttonOneTitle: 'UPLOAD BANK DOCUMENTS',
       buttonTwoTitle: 'CHECK BANK DETAILS',
-      twoButton: true
+      twoButton: true,
+      status: 'pennyFailed'
     }
     internalStorage.setData('handleClickOne', uploadDocuments);
     internalStorage.setData('handleClickTwo', checkBankDetails);
@@ -239,6 +243,7 @@ const KycBankVerify = (props) => {
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
       title="Verify your bank account"
+      iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
     >
       <div className="kyc-approved-bank-verify">
         <Alert

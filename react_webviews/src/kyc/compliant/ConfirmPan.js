@@ -15,6 +15,7 @@ const ConfirmPan = (props) => {
   const isUserCompliant = "";
   const isPremiumFlow = "";
   const {kyc, isLoading} = useUserKycHook();
+  const productName = getConfig().productName;
 
   const handleClick = () => {
     navigate(getPathname.homeKyc, {
@@ -83,6 +84,7 @@ const ConfirmPan = (props) => {
       buttonClassName="confirm-pan-button1"
       title='Confirm PAN'
       dualbuttonwithouticon={true}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-compliant-confirm-pan">
         <div className="kyc-main-subtitle">

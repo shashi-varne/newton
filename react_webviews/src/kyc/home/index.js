@@ -34,6 +34,7 @@ const Home = (props) => {
   const { kyc, user, isLoading } = useUserKycHook();
   const [userName, setUserName] = useState('');
   const iFrame = isIframe();
+  let config = getConfig();
   // const [navigateTo, setNavigateTo] = useState('');
   // const [x,setX] = useState(false);
 
@@ -123,7 +124,21 @@ const Home = (props) => {
           return;
         }
         await checkCompliant();
-      } else if (!isUserCompliant) setOpenResident(true);
+      } else if (!isUserCompliant) {
+        if(iFrame) {
+          const residentData = {
+            title: 'Are you an Indian resident?',
+            buttonOneTitle: 'NO',
+            buttonTwoTitle: 'YES',
+            twoButton: true
+          }
+          internalStorage.setData('handleClickOne', cancel);
+          internalStorage.setData('handleClickTwo', aadharKyc);
+          navigate('residence-status',{state:residentData});
+        } else {
+          setOpenResident(true);
+        }
+      }
       else {
         if (skipApiCall) {
           handleNavigation(
@@ -216,12 +231,12 @@ const Home = (props) => {
   }
 
   const accountMerge = async () => {
-    let config = getConfig();
+    
     let email = config.partner.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (config.isIframe) {
+    if (config.isIframe && false) {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
@@ -242,6 +257,7 @@ const Home = (props) => {
             buttonOneTitle: 'RE-ENTER PAN',
             buttonTwoTitle: 'LINK ACCOUNT',
             twoButton: true,
+            status: 'linkAccount'
           }
           storageService().set('pan',pan);
           internalStorage.setData('handleClickOne', reEnterPan);
@@ -263,6 +279,7 @@ const Home = (props) => {
             buttonOneTitle: 'RE-ENTER PAN',
             buttonTwoTitle: 'SIGN OUT',
             twoButton: true,
+            status: 'signOut'
           }
           storageService().set('pan',pan);
           internalStorage.setData('handleClickOne', reEnterPan);
@@ -339,6 +356,7 @@ const Home = (props) => {
       showLoader={showLoader}
       handleClick={handleClick}
       title={homeData.title}
+      iframeRightContent={require(`assets/${config.productName}/kyc_illust.svg`)}
     >
       {!isEmpty(homeData) && (
         <div className="kyc-home">

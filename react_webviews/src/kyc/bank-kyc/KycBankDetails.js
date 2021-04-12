@@ -25,6 +25,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
   const partner = getConfig().partner;
+  const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
   const params = props.match.params || {};
@@ -292,6 +293,7 @@ const KycBankDetails = (props) => {
       skelton={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
     >
       <div className="kyc-approved-bank">
         {!isLoading && (

@@ -7,8 +7,10 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isIframe } from "../../utils/functions";
 import { getPathname } from "../constants";
+import InternalStorage from "../home/InternalStorage";
+import { navigate } from "../../common/components/container_functions";
 
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -18,6 +20,9 @@ const KycUploadDocuments = (props) => {
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
   const {kyc, isLoading} = useUserKycHook();
+  const navigate = navigateFunc.bind(props);
+  const productName = getConfig().productName;
+  const iframe = isIframe();
 
   useEffect(() => {
     if (
@@ -68,6 +73,17 @@ const KycUploadDocuments = (props) => {
     URL.revokeObjectURL(event.target.src);
   };
 
+  const bankUploadStatus = () => {
+    const bankStatus = {
+      title : 'Bank Verification Pending!',
+      message: 'We’ve added your bank account details. The verification is in progress, meanwhile you can continue with KYC.',
+      buttonTitle: 'CONTINUE WITH KYC',
+      status: 'bankVerificationPending'
+    }
+    InternalStorage.setData('handleClick',proceed);
+    navigate('bank-status',{state: bankStatus})
+  }
+
   const handleSubmit = async () => {
     if (selected === null || !file) return;
     try {
@@ -77,26 +93,31 @@ const KycUploadDocuments = (props) => {
         verificationDocOptions[selected].value,
         bank_id
       );
-      setShowPendingModal(true);
+      if(iframe) {
+        bankUploadStatus();
+      } else {
+        setShowPendingModal(true);
+      }
     } catch (err) {
-      setShowPendingModal(true);
+      if(iframe) {
+        bankUploadStatus();
+      } else {
+        setShowPendingModal(true);
+      }
     } finally {
       setIsApiRunning(false);
     }
   };
 
   const handleEdit = () => {
-    const navigate = navigateFunc.bind(props);
     navigate(`/kyc/${userType}/bank-details`);
   };
 
   const handleSampleDocument = () => {
-    const navigate = navigateFunc.bind(props);
     navigate("/kyc/sample-documents");
   };
 
   const proceed = () => {
-    const navigate = navigateFunc.bind(props);
     if (additional) {
       navigate("/kyc/add-bank");
     } else {
@@ -146,6 +167,7 @@ const KycUploadDocuments = (props) => {
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title="Upload documents"
+      iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
     >
       <section id="kyc-bank-kyc-upload-docs" className="page-body-kyc">
         {/* <div className="title">Upload documents</div> */}

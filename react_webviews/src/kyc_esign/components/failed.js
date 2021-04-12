@@ -1,16 +1,20 @@
 import React from 'react'
-import { getConfig } from 'utils/functions'
+import { getConfig, isIframe } from 'utils/functions'
 
 const Failed = () => {
-  const productName = getConfig().productName
+  const productName = getConfig().productName;
+  const iframe = isIframe();
 
   return (
     <div className="nsdl-status">
-      <img
+      {
+        !iframe &&
+        <img
         src={require(`assets/${productName}/ils_esign_failed.svg`)}
         style={{ width: '100%' }}
         alt="Nsdl Status"
-      />
+        />
+      }
       <div className="nsdl-status-text">
         Sorry! the eSign verification is failed. Please try again.
       </div>

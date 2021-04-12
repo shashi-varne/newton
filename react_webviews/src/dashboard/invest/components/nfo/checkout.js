@@ -31,6 +31,7 @@ class Checkout extends Component {
       currentUser: storageService().getObject("user") || {},
       dialogStates: {},
       purchaseLimitData: {},
+      productType : getConfig().productName
     };
     this.initialize = initialize.bind(this);
   }
@@ -241,6 +242,7 @@ class Checkout extends Component {
         title="Your Mutual Fund Plan"
         //hidePageTitle
         showLoader={isApiRunning}
+        iframeRightContent={require(`assets/${this.state.productType}/invest_fund.svg`)}
       >
         <div className="nfo-checkout">
           <div className="checkout-invest-type">

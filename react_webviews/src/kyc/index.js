@@ -112,7 +112,7 @@ const Kyc = (props) => {
           component={NRIAddressUpload}
         />
         <Route exact path={`${url}/home`} component={Home} />
-        <Route exact path={[`${url}/penny-status`,`${url}/pan-status`]} component={DialogAsPage} />
+        <Route exact path={[`${url}/penny-status`,`${url}/pan-status`,`${url}/residence-status`,`${url}/:userType/bank-status`]} component={DialogAsPage} />
         <Route
           exact
           path={`${url}/:userType/nominee-details`}

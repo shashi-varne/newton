@@ -22,6 +22,7 @@ import { disableBodyTouch } from 'utils/validators';
 import { isFunction } from 'lodash';
 
 let start_time = '';
+const iframe = isIframe();
 
 export function didMount() {
     start_time = new Date();
@@ -80,7 +81,7 @@ export function headerGoBack() {
 }
 
 function addContainerClass (props_base){
-    const containerClass = false ? 'ContainerWrapper' : 'iframeContainerWrapper';
+    const containerClass = !iframe ? 'ContainerWrapper' : 'iframeContainerWrapper';
     return `${containerClass} ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
 }
 
@@ -106,7 +107,7 @@ export function commonRender(props_base) {
    <div className={this.addContainerClass(props_base)} >
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && !isIframe && <Header
+                && !this.props.showLoaderModal && !iframe && <Header
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
@@ -135,7 +136,7 @@ export function commonRender(props_base) {
                 />
                 }
                 {
-                    isIframe &&
+                    iframe &&
                     <IframeHeader
                         disableBack={this.props.disableBack}
                         title={this.props.title}
@@ -197,10 +198,12 @@ export function commonRender(props_base) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`${!isIframe ? 'Container' : 'IframeContainer'}  ${this.props.background || ''} 
+                    className={`${!iframe ? 'Container' : 'IframeContainer'}  ${this.props.background || ''} 
                     ${props_base && props_base.classOverRideContainer ? props_base.classOverRideContainer : ''} 
                     ${this.props.classOverRideContainer || '' } 
-                    ${this.props.noPadding ? "no-padding" : ""}`}>
+                    ${this.props.noPadding ? "no-padding" : ""}
+                    ${!this.props.noFooter ? "iframe-bottom-padding": ''}`}
+                    >
                     <div
                         className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
                         style={{ display: this.props.skelton ? 'none' : '' }}
@@ -208,9 +211,9 @@ export function commonRender(props_base) {
                         {this.props.children}
                     </div>
                     {
-                        false && 
+                        this.props.iframeRightContent &&  iframe &&
                         <div className='iframe-right-content'>
-                            <h1>I am the right side</h1>
+                            <img src={this.props.iframeRightContent} alt="right_img" />
                         </div>
                     }
                 </div>
@@ -306,7 +309,7 @@ export function check_hide_header_title() {
 }
 
 export function getHeightFromTop() {
-    const Container = false ? 'Container' : 'IframeContainer';
+    const Container = !iframe ? 'Container' : 'IframeContainer';
     var el = document.getElementsByClassName(Container)[0];
     var height = el.getBoundingClientRect().top;
     return height;

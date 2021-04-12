@@ -1,16 +1,20 @@
 import React from "react";
-import { getConfig } from "utils/functions";
+import { getConfig, isIframe } from "utils/functions";
 
 const Complete = ({ navigateToReports, dl_flow, show_note }) => {
   const productName = getConfig().productName;
+  const iframe = isIframe();
 
   return (
     <div className="kyc-esign-complete">
       <header>
-        <img
+        {
+          !iframe && 
+          <img
           src={require(`assets/${productName}/ic_process_done.svg`)}
           alt=""
-        />
+          />
+        }
         {dl_flow && !show_note && (
           <div className="title">Kudos, KYC is completed!</div>
         )}

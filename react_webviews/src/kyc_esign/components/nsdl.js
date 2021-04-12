@@ -173,6 +173,7 @@ class DigiStatus extends Component {
         }
         headerData={headerData}
         skelton={skelton}
+        iframeRightContent={require(`assets/${this.state.productName}/${status === "success" ? 'kyc_complete.svg': 'esign_kyc_fail.svg'}`)}
       >
         {/* <div className="nsdl-status">
           <img

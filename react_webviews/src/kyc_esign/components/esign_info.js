@@ -8,13 +8,14 @@ import { navigate as navigateFunc } from '../common/functions'
 import ConfirmBackModal from './confirm_back'
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
+import { isIframe } from '../../utils/functions';
 
 class ESignInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      productName: getConfig().productName,
+      productName: 'fisdom' || getConfig().productName,
       backModal: false,
       dl_flow: false
     }
@@ -123,14 +124,18 @@ class ESignInfo extends Component {
         handleClick={this.handleClick}
         buttonTitle='PROCEED'
         headerData={headerData}
+        iframeRightContent={require(`assets/finity/esign-kyc.svg`)}
       >
-        <div className="esign-image">
+        {
+          !isIframe() &&
+          <div className="esign-image">
           <img
             src={require(`assets/${productName}/ils_esign_kyc.svg`)}
             style={{ width: "100%" }}
             alt="eSign KYC icon"
-          />
+            />
         </div>
+        }
         <div className="esign-desc">
           eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
         </div>

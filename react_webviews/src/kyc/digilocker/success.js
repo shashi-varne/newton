@@ -5,13 +5,18 @@ import { dlDocs } from '../constants'
 import { navigate as navigateFunc } from '../common/functions'
 
 const Success = (props) => {
-  const productName = getConfig().productName
+  const productName = getConfig().productName;
   const proceed = () => {
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
   }
   return (
-    <Container title="Share Details" buttonTitle="PROCEED" handleClick={proceed}>
+    <Container 
+      title="Share Details" 
+      buttonTitle="PROCEED" 
+      handleClick={proceed} 
+      iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
+    >
       <section id="digilocker-success">
         <div className="page-desc">
           Tap on Proceed to allow fisdom to access your following documents

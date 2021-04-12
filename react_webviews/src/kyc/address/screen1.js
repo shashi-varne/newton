@@ -19,6 +19,7 @@ const AddressDetails1 = (props) => {
   const isEdit = state.isEdit || false;
   const {kyc, isLoading} = useUserKycHook();
   const [title, setTitle] = useState("");
+  const productName = getConfig().productName;
 
   const residentialOptions = [
     {
@@ -154,6 +155,7 @@ const AddressDetails1 = (props) => {
       current={1}
       count={1}
       total={getTotalPages(form_data.residential_status)}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">
         <main>

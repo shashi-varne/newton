@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { Imgc } from "common/ui/Imgc";
-import { getConfig } from "utils/functions";
+import { getConfig, isIframe } from "utils/functions";
 import {
   getPathname,
   kycDocNameMapper,
@@ -15,6 +15,7 @@ import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
+
 const Report = (props) => {
   const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
@@ -27,6 +28,7 @@ const Report = (props) => {
   const [buttonTitle, setButtonTitle] = useState("OK");
   const appText = "Your application is submitted.";
   const goBackPage = props.location.state?.goBack || "";
+  const iframe = isIframe();
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
@@ -314,14 +316,18 @@ const Report = (props) => {
       title={topTitle}
       noFooter={isEmpty(cardDetails)}
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
     >
       <div className="kyc-report">
         <main>
-          <Imgc
+          {
+            !iframe &&
+            <Imgc
             src={require(`assets/${productName}/congratulations_illustration.svg`)}
             alt="img"
             className="img"
-          />
+            />
+          }
           <div className="congrats">Congratulations!</div>
           <div className="text">{appText}</div>
           <div className="text message">

@@ -14,6 +14,7 @@ import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { getConfig } from "utils/functions";
 
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -22,6 +23,7 @@ const PersonalDetails4 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const productName = getConfig().productName;
   let title = "Nominee detail";
   if (isEdit) {
     title = "Edit nominee detail";
@@ -158,6 +160,7 @@ const PersonalDetails4 = (props) => {
       count={type === "digilocker" ? 3 : 4}
       current={type === "digilocker" ? 3 : 4}
       total="4"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-nominee">
         <main>
