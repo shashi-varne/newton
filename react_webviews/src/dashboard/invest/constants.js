@@ -190,9 +190,6 @@ export const investRedeemData = {
     ],
   },
   investTypeData: {
-    title: "How would you like to invest?",
-    count: "1",
-    total: "2",
     options: [
       {
         text: "SIP",

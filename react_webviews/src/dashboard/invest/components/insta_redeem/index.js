@@ -8,6 +8,8 @@ import { investRedeemData } from "../../constants";
 import Button from "material-ui/Button";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import HowToSteps from "common/ui/HowToSteps";
+import { SkeltonRect } from "../../../../common/ui/Skelton";
+import { isEmpty } from "../../../../utils/validators";
 
 class InstaRedeem extends Component {
   constructor(props) {
@@ -89,11 +91,10 @@ class InstaRedeem extends Component {
   };
 
   render() {
-    let { partner, productName, instaRecommendation } = this.state;
+    let { partner, productName, instaRecommendation, show_loader } = this.state;
     let { benefits, faqData } = investRedeemData;
     return (
       <Container
-        skelton={this.state.show_loader}
         buttonTitle="START INVESTING"
         handleClick={this.handleClick}
         title={
@@ -101,7 +102,7 @@ class InstaRedeem extends Component {
         }
       >
         <div className="invest-redeem">
-          <div className="main-top-subtitle">
+          <div className="generic-page-subtitle">
             Instant withdrawal facility with superior return compared to savings
             bank account
           </div>
@@ -124,59 +125,56 @@ class InstaRedeem extends Component {
               </div>
             );
           })}
-          {instaRecommendation && (
-            <>
-              <div className="title">Money will be deposited in</div>
-              <div
-                className="card fund-card"
-                onClick={() => this.showFundInfo(instaRecommendation)}
-              >
-                <div className="text">
-                  <h1>{instaRecommendation.mfname}</h1>
-                  <div className="flex">
-                    <div className="common-badge bond">
-                      {instaRecommendation.mftype_name}
+          <div className="title">Money will be deposited in</div>
+          {!isEmpty(instaRecommendation) && !show_loader && (
+            <div
+              className="card fund-card"
+              onClick={() => this.showFundInfo(instaRecommendation)}
+            >
+              <div className="text">
+                <h1>{instaRecommendation.mfname}</h1>
+                <div className="flex">
+                  <div className="common-badge bond">
+                    {instaRecommendation.mftype_name}
+                  </div>
+                  {partner.code !== "hbl" && instaRecommendation.rating > 0 && (
+                    <div className="common-badge rating">
+                      <div className="img">
+                        <img src={require(`assets/ic_star.svg`)} alt="" />
+                      </div>
+                      <div className="value">{instaRecommendation.rating}</div>
                     </div>
-                    {partner.code !== "hbl" && instaRecommendation.rating > 0 && (
+                  )}
+                  {partner.code === "hbl" &&
+                    instaRecommendation.the_hindu_rating > 0 && (
                       <div className="common-badge rating">
                         <div className="img">
                           <img src={require(`assets/ic_star.svg`)} alt="" />
                         </div>
                         <div className="value">
-                          {instaRecommendation.rating}
+                          {instaRecommendation.the_hindu_rating}
                         </div>
                       </div>
                     )}
-                    {partner.code === "hbl" &&
-                      instaRecommendation.the_hindu_rating > 0 && (
-                        <div className="common-badge rating">
-                          <div className="img">
-                            <img src={require(`assets/ic_star.svg`)} alt="" />
-                          </div>
-                          <div className="value">
-                            {instaRecommendation.the_hindu_rating}
-                          </div>
-                        </div>
+                  <div className="returns">
+                    {instaRecommendation.returns &&
+                      instaRecommendation.returns.five_year && (
+                        <span className="highlight-return">
+                          {instaRecommendation.returns.five_year.toFixed(2)}%
+                        </span>
                       )}
-                    <div className="returns">
-                      {instaRecommendation.returns &&
-                        instaRecommendation.returns.five_year && (
-                          <span className="highlight-return">
-                            {instaRecommendation.returns.five_year.toFixed(2)}%
-                          </span>
-                        )}
-                      in 5yrs
-                    </div>
+                    in 5yrs
                   </div>
                 </div>
-                <img
-                  className="icon"
-                  src={instaRecommendation.amc_logo_small}
-                  alt="logo"
-                />
               </div>
-            </>
+              <img
+                className="icon"
+                src={instaRecommendation.amc_logo_small}
+                alt="logo"
+              />
+            </div>
           )}
+          {show_loader && <SkeltonRect className="skelton-loader" />}
           <div className="title">Frequently asked questions</div>
           <div className="generic-render-faqs">
             <Faqs options={faqData} />

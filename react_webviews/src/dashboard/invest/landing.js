@@ -107,10 +107,10 @@ class Landing extends Component {
       <Container
         skelton={this.state.show_loader}
         noFooter={true}
-        title='Start Investing'
+        title="Start Investing"
       >
         <div className="invest-landing">
-          <div className="main-top-subtitle">
+          <div className="generic-page-subtitle">
             {isReadyToInvestBase
               ? " Your KYC is verified, You’re ready to invest"
               : "Invest in your future"}
@@ -145,7 +145,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {our_recommendations && (
                         <>
-                          <div className="main-top-title">
+                          <div className="invest-main-top-title">
                             Our recommendations
                           </div>
                           {our_recommendations.map((item, index) => {
@@ -168,7 +168,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {diy && (
                         <>
-                          <div className="main-top-title">Do it yourself</div>
+                          <div className="invest-main-top-title">Do it yourself</div>
                           {diy.map((item, index) => {
                             return (
                               <InvestCard
@@ -238,7 +238,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {partner.invest_screen_cards &&
                         partner.invest_screen_cards.risk_profile && (
-                          <div className="main-top-title">Financial tools</div>
+                          <div className="invest-main-top-title">Financial tools</div>
                         )}
                       {partner.invest_screen_cards &&
                         (partner.invest_screen_cards.risk_profile ||
@@ -272,9 +272,7 @@ class Landing extends Component {
                                   onClick={() => this.clickCard("risk_profile")}
                                 >
                                   <div className="content">
-                                    <div className="title">
-                                      Invest for a goal
-                                    </div>
+                                    <div className="title">Risk profiler</div>
                                     <img
                                       src={require(`assets/${productName}/ic_fin_tools_risk.svg`)}
                                       alt=""
@@ -297,7 +295,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {popular_cards && (
                         <>
-                          <div className="main-top-title">
+                          <div className="invest-main-top-title">
                             More investment options
                           </div>
                           <div className="bottom-scroll-cards">

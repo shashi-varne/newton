@@ -12,6 +12,7 @@ import {
 import SuccessDialog from "../../mini-components/SuccessDialog";
 import InvestError from "../../mini-components/InvestError";
 import PennyVerificationPending from "../../mini-components/PennyVerificationPending";
+import { getBasePath } from "../../../../utils/functions";
 
 class SipDates extends Component {
   constructor(props) {
@@ -65,7 +66,7 @@ class SipDates extends Component {
       finalPurchases.length === 1 ? "CONFIRM DATE" : "CONFIRM DATES";
 
     const paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/sip/${
+      `${getBasePath()}/page/callback/sip/${
         sipBaseData.investment.amount
       }${getConfig().searchParams}`
     );

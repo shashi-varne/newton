@@ -36,7 +36,11 @@ class Type extends Component {
         showLoader={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
-        hidePageTitle
+        // hidePageTitle
+        title="How would you like to invest?"
+        count="1"
+        total="2"
+        current="1"
       >
         <InvestType
           baseData={investRedeemData.investTypeData}

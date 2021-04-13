@@ -7,7 +7,7 @@ import trust_icons from 'assets/trust_icons.svg';
 import single_star from 'assets/single_star.png';
 import morning_text from 'assets/morning_text.png';
 
-import { getConfig } from 'utils/functions';
+import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
 import { navigate as navigateFunc } from '../invest/common/commonFunction';
 
@@ -140,7 +140,7 @@ const Recommendations = (props) => {
 
     let 
     paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/${sipOrOneTime}/${investmentObject.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investmentObject.amount}`
     );
 
     window.localStorage.setItem("investment", JSON.stringify(investmentObject));
@@ -258,7 +258,6 @@ const Recommendations = (props) => {
           ? "HOW IT WORKS?"
           : investCtaText
       }
-      hidePageTitle
       skelton={isLoading}
       title='Recommended Funds'
       handleClick={goNext}

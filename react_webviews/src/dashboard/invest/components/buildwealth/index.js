@@ -11,7 +11,7 @@ import moment from 'moment';
 const term = 5;
 
 const renderData = {
-  title: 'How would you like to invest?',
+  subtitle: 'How would you like to invest?',
   options: [
     {
       text: 'SIP',
@@ -76,7 +76,6 @@ const Landing = (props) => {
   return (
     <Container
       buttonTitle='NEXT'
-      hidePageTitle
       title='Build Wealth'
       handleClick={fetchRecommendedFunds}
       showLoader={loader}

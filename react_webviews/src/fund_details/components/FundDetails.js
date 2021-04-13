@@ -30,6 +30,7 @@ import PennyVerificationPending from '../../dashboard/invest/mini-components/Pen
 import InvestError from '../../dashboard/invest/mini-components/InvestError';
 import InvestReferralDialog from '../../dashboard/invest/mini-components/InvestReferralDialog';
 import { SkeltonRect } from '../../common/ui/Skelton';
+import { getBasePath } from '../../utils/functions';
 
 const styles = {
   root: {
@@ -253,7 +254,7 @@ const FundDetails = ({ classes, history }) => {
       sipOrOneTime = investment.order_type;
     }
     let paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/${sipOrOneTime}/${investment.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}`
     );
 
     if (
