@@ -81,9 +81,9 @@ class Checkout extends Component {
       let fundsArray = storageService().getObject(FUNDSLIST);
       let isins = this.getIsins(fundsData);
       if (partner_code === "bfdlmobile") {
-        renderData = renderData.map(
-          (data) => (data.selected_icon = "bfdl_selected.png")
-        );
+        renderData = renderData.map((data) => {
+          return { ...data, selected_icon: "bfdl_selected.png" };
+        });
       }
       this.setState(
         {
@@ -239,13 +239,18 @@ class Checkout extends Component {
         buttonTitle={ctc_title}
         handleClick={this.handleClick}
         disable={disableInputSummary}
-        title="Your Mutual Fund Plan"
-        //hidePageTitle
+        title={"Your Mutual Fund Plan"}
+        //hidePageTitle={type !== "nfo"}
         showLoader={isApiRunning}
         iframeRightContent={require(`assets/${this.state.productType}/invest_fund.svg`)}
       >
         <div className="nfo-checkout">
-          <div className="checkout-invest-type">
+          <div
+            className="checkout-invest-type"
+            style={{
+              marginTop: type === "nfo" && "0",
+            }}
+          >
             {renderData.map((data, index) => {
               return (
                 <div

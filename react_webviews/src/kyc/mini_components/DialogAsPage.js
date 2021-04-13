@@ -43,7 +43,7 @@ const DialogAsPage = (props) => {
       buttonTwoTitle={state?.buttonTwoTitle}
       twoButton={state?.twoButton}
       handleClickOne={handleClickOne}
-      handleClickTwo={handleClickTwo}
+      handleClickTwo={state?.status === 'linkAccount' ? () => handleClickTwo(state?.step) :handleClickTwo }
       buttonTitle={state?.buttonTitle}
       handleClick={handleClick}
       title={state?.title}

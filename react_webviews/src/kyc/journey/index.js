@@ -18,15 +18,19 @@ import { nativeCallback } from 'utils/native_callback'
 import AadhaarDialog from '../mini_components/AadhaarDialog'
 import KycBackModal from '../mini_components/KycBack'
 import { isIframe } from '../../utils/functions'
-const iframe = isIframe();
+import { getBasePath } from '../../utils/functions'
+
+
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [aadhaarLinkDialog, setAadhaarLinkDialog] = useState(false)
+  const iframe = isIframe();
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
+  const basePath = getBasePath()
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -533,7 +537,7 @@ const Journey = (props) => {
   const productName = getConfig().productName
 
   const redirectUrl = encodeURIComponent(
-    `${window.location.origin}/digilocker/callback${
+    `${basePath}/digilocker/callback${
       getConfig().searchParams
     }&is_secure=${storageService().get('is_secure')}`
   )
@@ -552,7 +556,7 @@ const Journey = (props) => {
 
   const connectDigiLocker = () => {
     const data = {
-      url: `${window.location.origin}/kyc/journey${
+      url: `${basePath}/kyc/journey${
         getConfig().searchParams
       }&show_aadhaar=true&is_secure=
         ${storageService().get('is_secure')}`,
@@ -578,7 +582,7 @@ const Journey = (props) => {
               action_text: 'Yes',
               action_type: 'redirect',
               redirect_url: encodeURIComponent(
-                `${window.location.origin}/kyc/journey${
+                `${basePath}/kyc/journey${
                   getConfig().searchParams
                 }&show_aadhaar=true&is_secure=
                   ${storageService().get('is_secure')}`
@@ -717,7 +721,7 @@ const Journey = (props) => {
                 </div>
               </div>
             {
-              !isIframe() &&
+              !iframe &&
               <img
               src={require(`assets/${productName}/ic_premium_onboarding_mid.svg`)}
               alt="Premium Onboarding"

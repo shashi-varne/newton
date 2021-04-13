@@ -34,7 +34,6 @@ const InvestGoal = (props) => {
     <Container
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
-      hidePageTitle
       title="Save for a Goal"
       noFooter
       classOverRideContainer='pr-container'

@@ -6,17 +6,19 @@ import { nativeCallback } from "utils/native_callback";
 import { storageService } from "utils/validators";
 import { updateQueryStringParameter } from "../common/functions";
 import { storageConstants } from "../constants";
+import { getBasePath } from "../../utils/functions";
 
 const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
   const productName = getConfig().productName;
+  const basePath = getBasePath();
   const handleProceed = () => {
     const redirect_url = encodeURIComponent(
-      `${window.location.origin}/digilocker/callback${
+      `${basePath}/digilocker/callback${
         getConfig().searchParams
       }&is_secure=${storageService().get("is_secure")}`
     );
     const data = {
-      url: `${window.location.origin}/kyc/journey${
+      url: `${basePath}/kyc/journey${
         getConfig().searchParams
       }&show_aadhaar=true&is_secure=
         ${storageService().get("is_secure")}`,
@@ -42,7 +44,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
               action_text: "Yes",
               action_type: "redirect",
               redirect_url: encodeURIComponent(
-                `${window.location.origin}/kyc/journey${
+                `${basePath}/kyc/journey${
                   getConfig().searchParams
                 }&show_aadhaar=true&is_secure=
                   ${storageService().get("is_secure")}`

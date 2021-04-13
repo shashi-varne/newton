@@ -67,8 +67,7 @@ const Search = (props) => {
   return (
     <Container
       noFooter
-      hidePageTitle
-      title="Search"
+      title={iframe ? '' : "Search"}
       classOverRideContainer="diy-search-container-main"
       classOverRide="diy-search-container"
     >

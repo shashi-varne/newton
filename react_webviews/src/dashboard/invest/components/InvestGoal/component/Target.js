@@ -108,7 +108,6 @@ const Target = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      hidePageTitle
       title='Save for a Goal'
       buttonTitle='NEXT'
       handleClick={goNext}

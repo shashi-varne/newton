@@ -46,11 +46,7 @@ const EditFunds = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      // fullWidthButton
       buttonTitle='Done'
-      // helpContact
-      // hideInPageTitle
-      hidePageTitle
       title='Edit Funds'
       handleClick={goBack}
       classOverRideContainer='pr-container'

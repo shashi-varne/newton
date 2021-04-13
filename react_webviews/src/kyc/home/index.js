@@ -243,7 +243,7 @@ const Home = (props) => {
       if (!response) return;
       let { result, status_code } = response;
       let { different_login, auth_ids} = result;
-      if (status_code === 200) {
+      if (status_code !== 200) {
         const accountDetail = {
           title: "PAN Already Exists",
           message: "Sorry! this PAN is already registered with another account.",

@@ -222,6 +222,34 @@ body[data-device="web"] {
         }
       }
     }
+
+    .account-merge-linked{
+      text-align: left;
+      margin-top: 125px;
+    }
+
+    .invest-sip-payment-callback{
+      
+      .content {
+        margin-top: 60px;
+        text-align: left;
+        .subtitle {
+          font-size: 18px;
+          font-weight: 500;
+          line-height: 21px;
+          letter-spacing: 0px;
+          margin-top: 10px;
+          margin-bottom: 20px;
+        }
+
+        .message{
+          justify-content: left;
+        }
+      }
+      .content-iframe-style{
+        margin-top: 140px;
+      }
+    }
   }
 
   .IframeContainer.iframe-bottom-padding{

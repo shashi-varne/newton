@@ -43,7 +43,6 @@ class FundDetail extends Component {
       <Container
         showLoader={this.state.show_loader}
         noFooter={true}
-        hidePageTitle
         title="Fund Details"
       >
         {fund && (

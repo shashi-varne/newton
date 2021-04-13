@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getConfig } from "utils/functions";
+import { getConfig, isIframe } from "utils/functions";
 import Container from "../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { getCampaignBySection, resetRiskProfileJourney } from "../functions";
 import { getCampaign } from "../common/api";
 import { isEmpty, storageService } from "utils/validators";
 import { initData } from "../../../kyc/services";
+import { getBasePath } from "../../../utils/functions";
 
 const SipPaymentCallback = (props) => {
   const params = props.match.params || {};
@@ -17,9 +18,11 @@ const SipPaymentCallback = (props) => {
   );
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [skelton, setSkelton] = useState(true);
+  const basePath = getBasePath();
 
   resetRiskProfileJourney();
   const config = getConfig();
+  const iframe = isIframe();
   let paymentError = false;
   if (status === "error" || status === "failed") {
     paymentError = true;
@@ -28,7 +31,7 @@ const SipPaymentCallback = (props) => {
   }
 
   const [buttonTitle, setButtonTitle] = useState(paymentError ? "OK" : "DONE");
-
+  const hideImage = iframe && !config.isMobileDevice;
   useEffect(() => {
     initialize();
   }, []);
@@ -64,7 +67,7 @@ const SipPaymentCallback = (props) => {
     } catch (err) {
       console.log(err);
     } finally {
-      setSkelton(false)
+      setSkelton(false);
     }
   };
 
@@ -105,7 +108,7 @@ const SipPaymentCallback = (props) => {
               (auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?") +
               "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
-                window.location.origin +
+                basePath +
                   "/" +
                   "?is_secure=" +
                   storageService().get("is_secure")
@@ -122,7 +125,7 @@ const SipPaymentCallback = (props) => {
               (url.match(/[\?]/g) ? "&" : "?") +
               "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
-                window.location.origin +
+                basePath +
                   "/" +
                   "?base_url=" +
                   config.base_url +
@@ -142,22 +145,26 @@ const SipPaymentCallback = (props) => {
   return (
     <Container
       buttonTitle={buttonTitle}
-      hideInPageTitle
       showLoader={isApiRunning}
       handleClick={() => handleClick()}
-      title='Congratulations! Order placed'
+      title="Payment Successful!"
       skelton={skelton}
+      iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'payment_failed' : 'payment_success'}.svg`)}
     >
       <section className="invest-sip-payment-callback">
         {!paymentError && (
           <div className="content">
-            <Imgc
+            {
+              !hideImage &&
+              <Imgc
               src={require(`assets/${config.productName}/congratulations_illustration.svg`)}
               alt=""
               className="img"
-            />
-            <h4>Payment successful</h4>
-            <p>You are one step closer to your financial freedom</p>
+              />
+            }
+            <div className="subtitle">Order placed</div>
+            {/* <h4>Payment successful</h4> */}
+            <p>You're now one step closer to achieving your financial goals.</p>
             <div className="message">
               <img
                 src={require(`assets/eta_icon.png`)}
@@ -166,17 +173,36 @@ const SipPaymentCallback = (props) => {
               />
               <div>Units will be allotted by next working day</div>
             </div>
+            {
+              true && 
+              <div className='important-message'>
+              <div className='info-icon'>
+                <img src={require(`assets/${config.productName}/info_icon.svg`)} alt="" />
+              </div>
+              <div className='info-msg'>
+                  <div className='info-head'>Important</div>
+                  <div className='info-msg-content'>
+                    The Mutual Fund(s) will reflect in your Moneycontrol Portfolio
+                    once units are allocated by the AMC(s). Check the <span>‘Pending Transaction’</span>
+                    tab under ‘Portfolio’ to know more.
+                  </div>
+              </div>
+            </div>
+            }
           </div>
         )}
         {paymentError && (
-          <div className="content">
-            <div className="title">Payment failed</div>
+          <div className={`content ${iframe && 'content-iframe-style'}`}>
+            {/* <div className="title">Payment failed</div> */}
+          {
+            !hideImage &&
             <Imgc
-              src={require(`assets/${config.productName}/error_illustration.svg`)}
-              alt=""
-              className="img"
+            src={require(`assets/${config.productName}/error_illustration.svg`)}
+            alt=""
+            className="img"
             />
-            <p>{message}</p>
+          }
+            <p>{message ? message : 'Something went wrong, please retry with correct details'}</p>
           </div>
         )}
       </section>

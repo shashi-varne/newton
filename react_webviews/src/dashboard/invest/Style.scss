@@ -1,15 +1,8 @@
-.main-top-title {
+.invest-main-top-title {
   font-size: 20px;
   color: #160d2e;
   font-weight: 600;
   line-height: 1.5;
-}
-
-.main-top-subtitle {
-  font-size: 13px;
-  color: #767e86;
-  line-height: 1.5;
-  margin-top: -20px;
 }
 
 .secure-invest-bottom {
@@ -33,7 +26,7 @@
 .invest-landing {
   padding-bottom: 20px;
 
-  .main-top-subtitle {
+  .generic-page-subtitle {
     margin: -20px 0 20px 0;
   }
 
@@ -227,6 +220,10 @@
 .invest-redeem {
   padding-bottom: 30px;
 
+  .generic-page-subtitle {
+    margin: -20px 0 20px 0;
+  }
+
   .title {
     margin-top: 30px;
     color: #160d2e;
@@ -259,6 +256,10 @@
         cursor: pointer;
       }
     }
+  }
+
+  .skelton-loader {
+    height: 80px !important;
   }
 
   .fund-card {
@@ -443,6 +444,12 @@
   }
 }
 
+.invest-amount-common {
+  .generic-page-subtitle {
+    margin-top: -20px;
+  }
+}
+
 .invest-header {
   display: flex;
   justify-content: space-between;
@@ -500,7 +507,7 @@
 .insta-redeem-invest-amount {
   .form-field {
     background-color: #f8f8f8;
-    margin-top: 30px;
+    margin-top: 10px;
     padding: 0 10px;
 
     label {
@@ -532,7 +539,7 @@
 
   .bg-image {
     background-repeat: no-repeat;
-    margin: -20px;
+    margin: 0 -20px -20px -20px;
     background-position: center top;
     height: 150px;
   }
@@ -1064,7 +1071,7 @@
   }
 
   .top-title {
-    margin:-10px 0 20px 0;
+    margin: 0 0 20px 0;
   }
 
   .scroll {
@@ -1397,6 +1404,49 @@
         margin-right: 3px;
       }
     }
+  }
+
+  .important-message{
+    display: flex;
+    background: #F0F7FF;
+    border-radius: 4px;
+    padding: 16px 15px;
+    margin-top: 30px;
+    .info-icon {
+      margin-right: 10px;
+    }
+
+    .info-msg{
+      .info-head{
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 15px;
+        letter-spacing: 0px;
+        text-align: left;
+        margin-bottom: 10px;
+      }
+
+      .info-msg-content{
+        color: #767E86;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 21px;
+        letter-spacing: 0px;
+        text-align: left;
+
+        span{
+          font-size: 13px;
+          font-weight: 700;
+          line-height: 21px;
+          letter-spacing: 0px;
+          text-align: left;
+        }
+          
+
+      }
+    }
+
+
   }
 }
 

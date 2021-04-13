@@ -25,7 +25,6 @@ class NfoInfo extends Component {
         skelton={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
-        hidePageTitle
         title='Invest in NFO'
       >
         <div className="nfo-info">

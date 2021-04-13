@@ -60,7 +60,6 @@ const GoalType = (props) => {
     <Container
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
-      hidePageTitle
       title='Save for a Goal'
       handleClick={goNext}
       classOverRideContainer='pr-container'
