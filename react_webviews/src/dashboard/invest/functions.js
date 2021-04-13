@@ -531,7 +531,7 @@ export function initializeInstaRedeem() {
 }
 
 export async function getInstaRecommendation() {
-  this.setState({ show_loader: true, loadingText: "Please wait..." });
+  this.setState({ show_loader: true });
   try {
     const res = await Api.get(apiConstants.getInstaRecommendation);
     const { result, status_code: status } = res.pfwresponse;
