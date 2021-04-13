@@ -56,131 +56,50 @@
 
 
 ////////Invested Amount /////////////////
-.invested-amount-common-container{
-    margin: 0 -20px -20px -20px;
-}
-.invested-amount-display{
-    background-color: #ececec;
-    padding:0px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 5px;
-
-    .invested-amount-display-left{
-        display: flex;
-        flex-direction: column;
-        padding:15px 0px;
-        flex:5;
-
-        .invested-amount-display-left-text{
-            font-size: 16px;
-            margin-bottom: 7px;
-        }
-        .invested-amount-display-left-val{
-            font-size: 20px;
-        }
-    }
-    .invested-amount-display-right{
-    flex:1;
-    }
-}
-
-.invested-amount-return-container{
-    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
-    padding:0px 20px;
-    .invested-amount-return-text{
-        font-size: 15px;
-        padding:20px 0px;
-        border-bottom: 1px solid #f4f5f6;
-    }
-}
-
-.invested-amount-year-tabs{
-    padding:10px 0px;
-    display: flex;
-    span{
-        flex-basis: 100%;
-        text-align: center;
-        padding:6px 10px;
-        font-size: 14px;
-        color: var(--secondary);
-        cursor: pointer;
-    }
-    span.selected{
-        background-color: var(--secondary);
-        border-radius: 100px;
-        color:white
-    }
-}
-
-.invested-amount-corpus-values{
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    padding:10px 0px 20px 0px;
-    &>div{
-        flex-basis: 100%;
-    }
-    .invested-amount-corpus-invested,.invested-amount-corpus-projected{
-        text-align: center;
-        &>div:nth-child(1){
-            font-size: 16px;
-        }
-        &>div:nth-child(2){
-            font-size: 20px;
-        }
-    }
-
-    .invested-amount-corpus-invested{
-        border-right: 2px solid #b2b2b2;        
-    }
-}
-
-.invested-amount-placeholder-icons{
+.invested-amount-placeholder-icons {
     display: flex;
     padding:15px 0px;
-    &>div{
+    &>div {
         flex-basis: 100%;
         text-align: center;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        img{
+        img {
             width: 50px;
         }
-        p{
+        p {
             font-size: 14px;
             color: #d4c5ff;
         }
 
-        &:first-child{
+        &:first-child {
             border-right: 1px solid #e8e8e8;
         }
     }
 
 }
 
-.invested-amount-slider-container{
+.invest-slider-container {
     display: flex;
     flex-direction: column;
     padding:0px 20px;
 
-    .invested-amount-slider-head{
+    .invest-slider-head {
         font-size: 16px;
         margin-bottom: 10px;
     }
 
-    .invested-amount-slider-range{
+    .invest-slider-range {
         display: flex;
         padding: 10px 0px 20px 0px;
-        .invested-amount-slider-stock{
+        .invest-slider-stock {
             flex:1 1 30%;
             text-align: center;
             font-size: 16px;
         }
-        .invested-amount-slider-ratio-text{
+        .invest-slider-ratio-text {
             flex:1 1 40%;
             text-align: center;
             font-size: 12px;
@@ -189,7 +108,7 @@
             flex-direction: column;
             justify-content: center;
         }
-        .invested-amount-slider-bond{
+        .invest-slider-bond {
             flex:1 1 30%;
             text-align: center;
             font-size: 16px;

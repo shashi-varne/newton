@@ -1,95 +1,137 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../common/Container';
-import FundCard from '../invest/components/mini_components/FundCard';
+import FundCard from '../invest/mini-components/FundCard';
 import TermsAndCond from "../mini-components/TermsAndCond"
 
 import trust_icons from 'assets/trust_icons.svg';
 import single_star from 'assets/single_star.png';
 import morning_text from 'assets/morning_text.png';
 
-import { getConfig } from 'utils/functions';
+import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
 import { navigate as navigateFunc } from '../invest/common/commonFunction';
 
 import './style.scss';
 import { isInvestRefferalRequired, proceedInvestmentChild } from '../invest/functions';
-import PennyVerificationPending from '../invest/components/mini_components/PennyVerificationPending';
-import InvestError from '../invest/components/mini_components/InvestError';
-import InvestReferralDialog from '../invest/components/mini_components/InvestReferralDialog';
+import PennyVerificationPending from '../invest/mini-components/PennyVerificationPending';
+import InvestError from '../invest/mini-components/InvestError';
+import InvestReferralDialog from '../invest/mini-components/InvestReferralDialog';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
-import { getBasePath } from '../../utils/functions';
+import PeriodWiseReturns from '../mini-components/PeriodWiseReturns';
+import { get, isArray } from 'lodash';
+import { get_recommended_funds } from '../invest/common/api';
+import RecommendationTopCard from './RecommendationTopCard';
+const sipTypesKeys = [
+  "buildwealth",
+  "savetaxsip",
+  "saveforgoal",
+  "indexsip",
+  "shariahsip",
+  "sectoralsip",
+  "midcapsip",
+  "balancedsip",
+  "goldsip",
+  "diysip",
+];
 
 const Recommendations = (props) => {
-  const graphData = storageService().getObject("graphData") || {};
+  const routeState = get(props, 'location.state', {});
+  const [graphData, setGraphData] = useState(storageService().getObject('graphData') || {});
+  const [recommendations, setRecommendations] = useState([]);
+  const [userRiskProfile, setUserRiskProfile] = useState(storageService().get('userSelectedRisk') || '');
+  const [renderTopCard, setRenderTopCard] = useState(false);
+
+  useEffect(() => {
+    if (isArray(graphData.recommendation)) {
+      setRecommendations(graphData.recommendation);
+    }
+    if (graphData.investType === 'savetax' || userRiskProfile) {
+      setRenderTopCard(true);
+    }
+  }, [graphData]);
+
+  const partner = getConfig().partner;
   const [dialogStates, setDialogStates] = useState({
     openPennyVerificationPendind: false,
     openInvestError: false,
     errorMessage: '',
-  })
-  const {
-    recommendation,
-    recommendedTotalAmount,
-    investType,
-    order_type,
-    type,
-    term,
-    name,
-    subtype,
-  } = graphData;
-  const state = props.location.state || {};
+  });
   const [isins, setIsins] = useState("");
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const partner_code = getConfig().partner_code;
   const {kyc: userKyc, user: currentUser, isLoading} = useUserKycHook();
-  const partner = getConfig().partner;
-  const sipTypesKeys = [
-    "buildwealth",
-    "savetaxsip",
-    "saveforgoal",
-    "indexsip",
-    "shariahsip",
-    "sectoralsip",
-    "midcapsip",
-    "balancedsip",
-    "goldsip",
-    "diysip",
-  ];
   let sipOrOneTime = "";
-  if ((type !== "riskprofile") & (type !== "insta-redeem")) {
+  if ((graphData.type !== "riskprofile") & (graphData.type !== "insta-redeem")) {
     sipOrOneTime = "onetime";
-    if (sipTypesKeys.indexOf(investType) !== -1) sipOrOneTime = "sip";
+    if (sipTypesKeys.indexOf(graphData.investType) !== -1) sipOrOneTime = "sip";
   } else {
-    sipOrOneTime = order_type;
+    sipOrOneTime = graphData.order_type;
   }
 
   let investCtaText = "INVEST";
   if (sipOrOneTime === "sip") {
     investCtaText = "SELECT SIP DATE";
-    if (recommendation.length !== 1) {
+    if (recommendations.length !== 1) {
       investCtaText += "S";
     }
   }
 
+  const getRecommendations = async () => {
+    const { amount, investType: type, term } = storageService().getObject('graphData');
+    var params = {
+      amount,
+      term,
+      type,
+      rp_enabled: true,
+    };
+
+    try {
+      setIsApiRunning(true);
+      const res = await get_recommended_funds(params);
+
+      if (res.rp_indicator) {
+        storageService().set('userSelectedRisk', res.rp_indicator);
+        setUserRiskProfile(res.rp_indicator);
+      }
+      storageService().setObject('graphData', {
+        ...graphData,
+        ...res,
+        recommendedTotalAmount: res.amount
+      });
+      setGraphData(storageService().getObject('graphData'));
+
+      setIsApiRunning(false);
+    } catch (err) {
+      console.log(err);
+      
+    }
+  };
+
+  useEffect(() => {
+    if (routeState.fromRiskProfiler) {
+      getRecommendations();
+    }
+  }, []);
+
   const proceedInvestment = (investReferralData, isReferralGiven, handleGraph) => {
     let investmentObject = {};
-    if (type !== "riskprofile") {
+    if (graphData.type !== "riskprofile") {
       var allocations = [];
-      for (let data of recommendation) {
+      for (let data of recommendations) {
         let allocation = {};
         allocation = data.mf;
         allocation.amount = data.amount;
         allocations.push(allocation);
       }
 
-      if (type === "insta-redeem") {
-        investmentObject.order_type = order_type;
+      if (graphData.type === "insta-redeem") {
+        investmentObject.order_type = graphData.order_type;
       }
-      investmentObject.name = name;
-      investmentObject.bondstock = state.bond + ":" + state.stock;
-      investmentObject.amount = recommendedTotalAmount;
-      investmentObject.term = term;
-      investmentObject.type = investType;
-      investmentObject.subtype = subtype;
+      investmentObject.name = graphData.name;
+      investmentObject.bondstock = routeState.bond + ":" + routeState.stock;
+      investmentObject.amount = graphData.recommendedTotalAmount;
+      investmentObject.term = graphData.term;
+      investmentObject.type = graphData.investType;
+      investmentObject.subtype = graphData.subtype;
       investmentObject.allocations = allocations;
 
     } else {
@@ -105,17 +147,17 @@ const Recommendations = (props) => {
 
     let investmentEventData = {};
 
-    if (type === "riskprofile") {
+    if (graphData.type === "riskprofile") {
       investmentEventData = {
-        amount: recommendedTotalAmount,
-        investment_type: type,
+        amount: graphData.recommendedTotalAmount,
+        investment_type: graphData.type,
         journey_name: "mf",
         investment_subtype: graphData.subtype,
       };
     } else {
       investmentEventData = {
-        amount: recommendedTotalAmount,
-        investment_type: investType,
+        amount: graphData.recommendedTotalAmount,
+        investment_type: graphData.investType,
         journey_name: "mf",
         investment_subtype: graphData.subtype,
       };
@@ -136,7 +178,7 @@ const Recommendations = (props) => {
       return;
     } else if (sipOrOneTime === "onetime") {
       storageService().set("came_from_risk_webview", "");
-      if (type === "riskprofile") {
+      if (graphData.type === "riskprofile") {
         if (!storageService().get("firsttime_from_risk_webview_invest")) {
           storageService().set("firsttime_from_risk_webview_invest", true);
         } else {
@@ -191,7 +233,7 @@ const Recommendations = (props) => {
   }
 
   useEffect(() => {
-    const isinsVal = recommendation?.map((el) => {
+    const isinsVal = recommendations?.map((el) => {
       return el.mf.isin;
     });
     setIsins(isinsVal?.join(","));
@@ -199,7 +241,7 @@ const Recommendations = (props) => {
 
 
   const navigate = navigateFunc.bind(props);
-  const EditFund = () => {
+  const editFund = () => {
     navigate("recommendations/edit-funds");
   };
 
@@ -220,58 +262,78 @@ const Recommendations = (props) => {
       title='Recommended Funds'
       handleClick={goNext}
       showLoader={isApiRunning}
-    >
-      <section className='recommendations-common-container'>
-        <div className='recommendations-header'>
-          <div>Our Recommendation</div>
-          {investType !== 'insta-redeem' && (
-            <div onClick={EditFund} className='edit-recommendation-funds'>
-              Edit
-            </div>
-          )}
-        </div>
-        <div className='recommendations-funds-lists'>
-          {recommendation &&
-            recommendation?.map((el, idx) => (
-              <FundCard isins={isins} graph key={idx} fund={el} proceedInvestment={proceedInvestment} parentProps={props} />
-            ))}
-        </div>
-        <div className='recommendations-total-investment'>
-          <div>Total Investment</div>
-
-          <div>{recommendation?.length > 0 ? formatAmountInr(recommendedTotalAmount) : '₹0'}</div>
-        </div>
-        <div>
-          <div className="recommendations-disclaimer-morning">
-            <img alt="single_star" src={single_star} />
-            {partner_code !== "hbl" ? (
-              <img alt="morning_star" width="100" src={morning_text} />
-            ) : (
-              <div>BL Portfolio Star Track MF Ratings</div>
+    > 
+      <div style={{ margin: '0 -20px'}}>
+        {renderTopCard &&
+          <RecommendationTopCard
+            data={{
+              userRiskProfile,
+              graphData
+            }}
+            parentProps={props}
+          />
+        }
+        <PeriodWiseReturns
+          initialTerm={graphData.term}
+          equity={graphData.equity}
+          stockReturns={graphData.stockReturns}
+          bondReturns={graphData.bondReturns}
+          principalAmount={graphData.amount}
+          showInfo
+          // isRecurring={isRecurring}
+        />
+        <section className='recommendations-common-container'>
+          <div className='recommendations-header'>
+            <div>Our Recommendation</div>
+            {graphData.investType !== 'insta-redeem' && (
+              <div onClick={editFund} className='edit-recommendation-funds'>
+                Edit
+              </div>
             )}
           </div>
-          <TermsAndCond />
-        </div>
-        <div className='recommendations-trust-icons'>
-          <div>Investments with fisdom are 100% secure</div>
-          <img alt='trust_sebi_secure' src={trust_icons} />
-        </div>
-        <PennyVerificationPending
-          isOpen={dialogStates.openPennyVerificationPendind}
-          handleClick={() => navigate("/kyc/add-bank")}
-        />
-        <InvestError
-          isOpen={dialogStates.openInvestError}
-          errorMessage={dialogStates.errorMessage}
-          handleClick={() => navigate("/invest")}
-          close={() => handleDialogStates("openInvestError", false)}
-        />
-        <InvestReferralDialog
-          isOpen={dialogStates.openInvestReferral}
-          proceedInvestment={proceedInvestment}
-          close={() => handleDialogStates("openInvestReferral", false)}
-        />
-      </section>
+          <div className='recommendations-funds-lists'>
+            {recommendations &&
+              recommendations?.map((el, idx) => (
+                <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
+              ))}
+          </div>
+          <div className='recommendations-total-investment'>
+            <div>Total Investment</div>
+
+            <div>{recommendations?.length ? formatAmountInr(graphData.recommendedTotalAmount) : '₹0'}</div>
+          </div>
+          <div>
+            <div className="recommendations-disclaimer-morning">
+              <img alt="single_star" src={single_star} />
+              {partner.code !== "hbl" ? (
+                <img alt="morning_star" width="100" src={morning_text} />
+              ) : (
+                <div>BL Portfolio Star Track MF Ratings</div>
+              )}
+            </div>
+            <TermsAndCond />
+          </div>
+          <div className='recommendations-trust-icons'>
+            <div>Investments with fisdom are 100% secure</div>
+            <img alt='trust_sebi_secure' src={trust_icons} />
+          </div>
+          <PennyVerificationPending
+            isOpen={dialogStates.openPennyVerificationPendind}
+            handleClick={() => navigate("/kyc/add-bank")}
+          />
+          <InvestError
+            isOpen={dialogStates.openInvestError}
+            errorMessage={dialogStates.errorMessage}
+            handleClick={() => navigate("/invest")}
+            close={() => handleDialogStates("openInvestError", false)}
+          />
+          <InvestReferralDialog
+            isOpen={dialogStates.openInvestReferral}
+            proceedInvestment={proceedInvestment}
+            close={() => handleDialogStates("openInvestReferral", false)}
+          />
+        </section>
+      </div>
     </Container>
   );
 };

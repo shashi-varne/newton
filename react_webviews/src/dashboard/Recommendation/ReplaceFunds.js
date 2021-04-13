@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Container from '../common/Container';
 import { FormControl, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';
-import FundCard from '../invest/components/mini_components/FundCard';
+import FundCard from '../invest/mini-components/FundCard';
 
 import { storageService } from 'utils/validators';
 

@@ -977,3 +977,33 @@ body[data-device="mobile"] {
   color: white;
   background-color: var(--secondary);
 }
+
+
+#f-info-box {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background: var(--highlight);
+
+  #f-info-box-img {
+    margin-right: 16px;
+  }
+
+  #f-info-box-body {
+    flex-basis: 60%;
+    word-break: break-word;
+    flex: 1;
+  }
+
+  #f-info-box-ctrl {
+    font-size: 12px;
+    letter-spacing: 1px;;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-left: 16px;
+  }
+}

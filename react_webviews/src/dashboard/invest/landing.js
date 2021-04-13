@@ -3,11 +3,11 @@ import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import { initialize } from "./functions";
-import InvestCard from "./components/mini_components/InvestCard";
-import SecureInvest from "./components/mini_components/SecureInvest";
-import VerificationFailedDialog from "./components/mini_components/VerificationFailedDialog";
-import KycStatusDialog from "./components/mini_components/KycStatusDialog";
-import KycPremiumLandingDialog from "./components/mini_components/KycPremiumLandingDialog";
+import InvestCard from "./mini-components/InvestCard";
+import SecureInvest from "./mini-components/SecureInvest";
+import VerificationFailedDialog from "./mini-components/VerificationFailedDialog";
+import KycStatusDialog from "./mini-components/KycStatusDialog";
+import KycPremiumLandingDialog from "./mini-components/KycPremiumLandingDialog";
 
 class Landing extends Component {
   constructor(props) {

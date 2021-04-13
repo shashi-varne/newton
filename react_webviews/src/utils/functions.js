@@ -437,6 +437,7 @@ function getPartnerConfig(partner_code) {
       configPrimaryBackgroundColorClass: 'fisdomBackColor',
       webAppUrl: 'https://app.fisdom.com/#!/',
       email_domain: 'fisdom.com',
+      riskEnabledFunnels: false,
     },
     finity: {
       primary: '#3792fc',
@@ -457,6 +458,7 @@ function getPartnerConfig(partner_code) {
       configPrimaryBackgroundColorClass: 'mywayBackColor',
       webAppUrl: 'https://app.mywaywealth.com/#!/',
       email_domain: 'finity.in',
+      riskEnabledFunnels: true,
     },
     minvest: {
       primary: '#FF5C34',

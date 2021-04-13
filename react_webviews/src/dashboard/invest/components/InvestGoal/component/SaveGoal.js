@@ -45,14 +45,13 @@ const SaveGoal = (props) => {
         year,
         amount: monthlyAmount,
         corpus: amount,
-        stockSplit: recommendation.equity,
+        equity: recommendation.equity,
         subtype,
         term,
         investType: 'saveforgoal',
         isRecurring: recurring,
         name:"Saving for goal"
       };
-      storageService().setObject('goalRecommendations', recommendation.goal);
       storageService().setObject('graphData', graphData);
       setLoader(false);
       goNext();

@@ -1,6 +1,8 @@
 import Api from 'utils/api';
 import { isEmpty } from 'utils/validators';
+import { storageService } from '../../../utils/validators';
 import { apiConstants } from '../constants';
+import { isArray } from 'lodash';
 const genericErrMsg = 'Something went wrong';
 
 export const get_recommended_funds = async (params) => {
@@ -13,6 +15,20 @@ export const get_recommended_funds = async (params) => {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
+      if (result.recommendation && !isArray(result.recommendation)) {
+        if (result.recommendation.goal) {
+          storageService().setObject('goalRecommendations', result.recommendation.goal);
+          storageService().setObject('investReturnRates', {
+            stockReturns: result.recommendation.expected_return_eq || 10,
+            bondReturns: result.recommendation.expected_return_debt || 6.5
+          });
+        } else {
+          storageService().setObject('investReturnRates', {
+            stockReturns: result.expected_return_eq || 10,
+            bondReturns: result.expected_return_debt || 6.5
+          });
+        }
+      }
       return result;
     } else {
       throw result.error || result.message || genericErrMsg;

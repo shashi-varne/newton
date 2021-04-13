@@ -388,3 +388,23 @@ export const premiumBottomSheetMapper = {
     icon: "ic_popup_premium_onboarding_big.svg",
   },
 };
+
+export const riskProfiles = [{
+  name: 'Aggressive',
+  desc: 'Willing to take significant risk for high growth',
+}, {
+  name: 'Moderately Aggressive',
+  desc: 'Fair risk in exchange for significant growth',
+}, {
+  name: 'Moderate',
+  desc: 'Want balance between growth and risk',
+}, {
+  name: 'Moderately Conservative',
+  desc: 'Focused on modest growth with low risk',
+}, {
+  name: 'Conservative',
+  desc: 'Risk averse. Focused on Capital Preservation',
+}, {
+  name: 'Custom',
+  desc: 'User created equity to debt distribution',
+}];

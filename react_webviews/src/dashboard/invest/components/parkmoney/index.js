@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
-import InvestType from '../mini_components/InvestType';
+import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast'
 
 import { storageService } from 'utils/validators';
@@ -46,13 +46,12 @@ const Landing = (props) => {
         // eslint-disable-next-line radix
         year: investTypeDisplay === '3Y' ? parseInt(currentYear + term) : parseInt(currentYear + 1),
         investType: params.type,
-        stockSplit: data.recommendation.equity,
-        bondSplit: data.recommendation.debt,
+        equity: data.recommendation.equity,
+        debt: data.recommendation.debt,
         isRecurring: recurring,
         investTypeDisplay,
         name: 'Wealth building'
       };
-      storageService().setObject('goalRecommendations', data.recommendation.goal);
       storageService().setObject('graphData', graphData);
       setLoader(false);
       goNext();

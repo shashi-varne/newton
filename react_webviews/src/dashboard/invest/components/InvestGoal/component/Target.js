@@ -79,11 +79,11 @@ const Target = (props) => {
       const recurring = isRecurring('saveforgoal');
       const { recommendation } = await get_recommended_funds(params);
       const monthlyAmount = getMonthlyCommitmentNew(amount, recommendation.equity);
-      const graphsData = {
+      const updatedGraphData = {
         year,
         amount: monthlyAmount,
         corpus: amount,
-        stockSplit: recommendation.equity,
+        equity: recommendation.equity,
         subtype,
         term,
         investType: 'saveforgoal',
@@ -91,8 +91,7 @@ const Target = (props) => {
         investTypeDisplay:"sip",
         name:"Saving for goal"
       };
-      storageService().setObject('goalRecommendations', recommendation.goal);
-      storageService().setObject('graphData', graphsData);
+      storageService().setObject('graphData', updatedGraphData);
       setLoader(false);
       navigate(`savegoal/${subtype}/amount`, true);
     } catch (err) {

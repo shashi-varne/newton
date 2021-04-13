@@ -396,9 +396,9 @@ export async function getRecommendationApi(amount) {
     });
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      data.stockSplit = result.recommendation.equity;
-      data.bondSplit = result.recommendation.debt;
-      this.setState({ stockSplit: data.stockSplit, bondSplit: data.bondSplit });
+      data.equity = result.recommendation.equity;
+      data.debt = result.recommendation.debt;
+      this.setState({ equity: data.equity, debt: data.debt });
       let date = new Date();
       let graphdata = {
         recommendation: result.recommendation,
@@ -411,8 +411,8 @@ export async function getRecommendationApi(amount) {
         investTypeDisplay: "sip",
         name: "Wealth building",
         isSliderEditable: result.recommendation.editable,
-        stockSplit: result.recommendation.equity,
-        bondSplit: result.recommendation.debt,
+        equity: result.recommendation.equity,
+        debt: result.recommendation.debt,
         graphType: data.investType,
       };
       storageService().setObject("graphData", graphdata);
@@ -435,12 +435,12 @@ export async function getRecommendationApi(amount) {
 
 function getRateOfInterest(data) {
   let range = Math.abs(data.stockReturns - data.bondReturns);
-  if (data.stockSplit < 1) {
+  if (data.equity < 1) {
     return data.bondReturns;
-  } else if (data.stockSplit > 99) {
+  } else if (data.equity > 99) {
     return data.stockReturns;
   } else {
-    let rateOffset = (range * data.stockSplit) / 100;
+    let rateOffset = (range * data.equity) / 100;
     return data.bondReturns + rateOffset;
   }
 }
@@ -469,8 +469,8 @@ export async function getRecommendedPlans(amount) {
       amount: amount,
       term: this.state.term,
       subType: this.state.subType,
-      equity: this.state.stockSplit,
-      debt: this.state.bondSplit,
+      equity: this.state.equity,
+      debt: this.state.debt,
     });
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
@@ -484,8 +484,8 @@ export async function getRecommendedPlans(amount) {
         subType: this.state.subType,
         graphType: this.state.investType,
         investTypeDisplay: this.state.investTypeDisplay,
-        stock: this.state.stockSplit,
-        bond: this.state.bondSplit,
+        stock: this.state.equity,
+        bond: this.state.debt,
       };
       storageService().setObject("graphData", graphdata);
       this.navigate("/invest/recommendations");

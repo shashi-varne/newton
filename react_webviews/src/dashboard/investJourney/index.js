@@ -14,10 +14,10 @@ import {
   isInvestRefferalRequired,
   proceedInvestmentChild,
 } from "../invest/functions";
-import PennyVerificationPending from "../invest/components/mini_components/PennyVerificationPending";
-import InvestError from "../invest/components/mini_components/InvestError";
+import PennyVerificationPending from "../invest/mini-components/PennyVerificationPending";
+import InvestError from "../invest/mini-components/InvestError";
 import { getBasePath, getConfig } from "../../utils/functions";
-import InvestReferralDialog from "../invest/components/mini_components/InvestReferralDialog";
+import InvestReferralDialog from "../invest/mini-components/InvestReferralDialog";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { formatAmountInr } from "../../utils/validators";
 
