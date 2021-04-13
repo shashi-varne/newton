@@ -68,7 +68,6 @@ const InvestedAmount = (props) => {
     <Container
       classOverRide='pr-error-container'
       buttonTitle='SHOW MY FUNDS'
-      hidePageTitle
       title={title}
       handleClick={showFunds}
       classOverRideContainer='pr-container'
