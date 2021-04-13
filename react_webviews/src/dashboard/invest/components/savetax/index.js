@@ -21,7 +21,7 @@ if (currentMonth > 3) {
 }
 
 const renderData = {
-  title: 'How would you like to invest?',
+  subtitle: 'How would you like to invest?',
   options: [
     {
       text: 'SIP',
@@ -91,7 +91,6 @@ const Landing = (props) => {
     <Container
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
-      hidePageTitle
       title='Save Tax'
       handleClick={fetchRecommendedFunds}
       classOverRideContainer='pr-container'

@@ -11,6 +11,7 @@ import {
   premiumBottomSheetMapper,
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
+import { getBasePath } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -404,7 +405,8 @@ export async function getRecommendationApi(amount) {
         recommendation: result.recommendation,
         amount: data.amount,
         term: data.term,
-        year: parseInt(date.getFullYear() + data.term, 10),
+        // eslint-disable-next-line
+        year: parseInt(date.getFullYear() + data.term),
         corpus: this.corpusValue(data),
         investType: data.investType,
         investTypeDisplay: "sip",
@@ -530,7 +532,7 @@ export function initializeInstaRedeem() {
 }
 
 export async function getInstaRecommendation() {
-  this.setState({ show_loader: true, loadingText: "Please wait..." });
+  this.setState({ show_loader: true });
   try {
     const res = await Api.get(apiConstants.getInstaRecommendation);
     const { result, status_code: status } = res.pfwresponse;
@@ -575,7 +577,8 @@ export async function getRecommendation() {
     name: "Insta Redeem",
     investTypeDisplay: investType,
     bondstock: "",
-    amount: parseInt(amount, 10),
+    // eslint-disable-next-line
+    recommendedTotalAmount: parseInt(amount),
     type: "insta-redeem",
     order_type: investType,
     subtype: "",
@@ -916,7 +919,7 @@ export async function proceedInvestment(investReferralData, isReferralGiven) {
   }
 
   let paymentRedirectUrl = encodeURIComponent(
-    `${window.location.origin}/page/callback/${investment_type}/${investment.amount}`
+    `${getBasePath()}/page/callback/${investment_type}/${investment.amount}`
   );
 
   investment.allocations = allocations;

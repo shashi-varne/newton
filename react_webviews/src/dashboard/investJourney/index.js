@@ -16,7 +16,7 @@ import {
 } from "../invest/functions";
 import PennyVerificationPending from "../invest/components/mini_components/PennyVerificationPending";
 import InvestError from "../invest/components/mini_components/InvestError";
-import { getConfig } from "../../utils/functions";
+import { getBasePath, getConfig } from "../../utils/functions";
 import InvestReferralDialog from "../invest/components/mini_components/InvestReferralDialog";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { formatAmountInr } from "../../utils/validators";
@@ -59,7 +59,7 @@ const InvestJourney = (props) => {
 
   const proceedInvestment = (investReferralData, isReferralGiven) => {
     let paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/${sipOrOneTime}/${investment.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}`
     );
 
     if (
@@ -107,7 +107,6 @@ const InvestJourney = (props) => {
     <Container
       classOverRide="pr-error-container"
       buttonTitle={ctcTitle}
-      hidePageTitle
       title="How it works"
       classOverRideContainer="pr-container"
       handleClick={proceedInvestment}

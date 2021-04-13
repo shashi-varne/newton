@@ -268,21 +268,20 @@
 
 .diy-search-container {
   height: 100%;
-  background-color: #fafafa;
 
   .diy-search-container-main {
-    height: calc(100% - 56px)
+    height: calc(100% - 106px)
   }
 }
 
 .diy-search {
-  margin: -20px -20px -56px -20px;
+  margin: 0 -20px -56px -20px;
   background-color: #fafafa;
-  padding: 20px 20px 56px 20px;
-  height: calc(100vh - 70px);
+  padding: 0 20px 56px 20px;
+  height: calc(100vh - 120px);
 
   .search-content {
-    padding-bottom: 20px;
+    padding: 20px 0;
     .search-option {
       display: flex;
       align-items: center;
@@ -381,7 +380,7 @@
 }
 
 .diy-tab-container {
-  margin: -20px;
+  margin: 0 -20px -20px -20px;
   .MuiTabs-flexContainer {
     justify-content: flex-start;
     background-color: rgb(250,250,250)
