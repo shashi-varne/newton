@@ -3,19 +3,6 @@ import { getConfig } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
 
-export const nativeCallbackOld = (status_code, message, action) => {
-  if (!message) {
-    message = null;
-  }
-  if (!status_code) {
-    status_code = 200;
-  }
-  let url = 'http://app.fisdom.com/page/invest/campaign/callback?name=mandate-otm&message=' +
-    message + '&code=' + status_code + '&destination=' + null;
-  window.location.replace(url);
-};
-
-
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let callbackData = {};
   let project = getConfig().project;
@@ -164,16 +151,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
           if (action === 'open_in_browser') {
             window.Android.performAction('open_in_browser', message.url);
-            return;
-          }
-
-          if (action === 'native_back') {
-            nativeCallbackOld(400);
-            return;
-          }
-
-          if (action === 'exit') {
-            nativeCallbackOld(200);
             return;
           }
 
