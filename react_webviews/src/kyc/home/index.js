@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
-import { checkMerge, getPan, logout, kycSubmit } from "../common/api";
+import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 import ResidentDialog from "./residentDialog";
@@ -186,13 +186,7 @@ const Home = (props) => {
       storageService().setObject(storageConstants.AUTH_IDS, authIds);
       navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
     } else {
-      if (getConfig().Web) {
-        let result = await logout();
-        if (!result) return;
-        navigate("/login");
-      } else {
-        // callbackWeb.logout();
-      }
+      navigate("/logout")
     }
   };
 

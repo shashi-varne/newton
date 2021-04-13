@@ -43,20 +43,6 @@ export const getUserKycFromSummary = async () => {
   }
 }
 
-export const logout = async () => {
-  try {
-    const res = await Api.get('api/logout')
-    const result = handleApi(res);
-    if(result) {
-      storageService().clear();
-      window.localStorage.clear();
-      return result
-    }
-  } catch (err) {
-    toast(err.message || genericErrorMessage)
-  }
-}
-
 export const getPan = async (data, accountMerge) => {
   const res = await Api.post(apiConstants.getPan, data)
   if (
