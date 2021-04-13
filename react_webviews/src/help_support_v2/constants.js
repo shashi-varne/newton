@@ -27,7 +27,7 @@ export const categories = {
     '17000083288': {
         catgory_name: 'Accounts',
         tag_name: 'Accounts',
-        icon: "account.svg",
+        icon: "account1.svg",
     },
     '17000083287': {
         catgory_name: 'Payments',
