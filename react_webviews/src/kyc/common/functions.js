@@ -142,7 +142,6 @@ export const dataURLtoBlob = (dataurl) => {
 export const combinedDocBlob = (fr, bc, docName) => {
   let canvas = document.createElement('canvas')
   let context = canvas.getContext('2d')
-  console.log(fr)
   canvas.width = fr.width > bc.width ? fr.width : bc.width
   canvas.height = fr.height + bc.height
   context.fillStyle = 'rgba(255, 255, 255, 0.5)'
