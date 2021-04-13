@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { toast } from "react-toastify";
+import toast from "common/ui/Toast";
 import OtpDefault from "../../common/ui/otp";
 import { getMerge } from "../../kyc/common/api";
 import Api from "../../utils/api";
@@ -70,10 +70,11 @@ class AccountMergeOtp extends Component {
         );
       }
     } catch (err) {
+      toast("Something went wrong");
+    } finally {
       this.setState({
         isApiRunning: false,
       });
-      toast("Something went wrong");
     }
   };
 
@@ -85,14 +86,13 @@ class AccountMergeOtp extends Component {
     this.setState({
       isApiRunning: "button",
     });
-
     try {
       const res = await Api.get(`${otpData.verify_url}?otp=${otp}`);
       this.setState({
         isApiRunning: false,
       });
       if (res.pfwresponse.status_code === 200) {
-        this.props.push({
+        this.props.history.push({
           pathname: "/account/merge/linked/success",
           search: getConfig().searchParams,
         });
@@ -120,7 +120,7 @@ class AccountMergeOtp extends Component {
         handleClick={this.handleClick}
         title="Enter OTP to verify"
         disable={otp.length !== 4}
-        show_loader={isApiRunning}
+        showLoader={isApiRunning}
       >
         {!isEmpty(otpData) && (
           <div className="account-merge-otp">
@@ -130,7 +130,7 @@ class AccountMergeOtp extends Component {
               {auth_id.auth_id}
             </p>
             <div className="otp-input">
-              <OtpDefault parent={this} />
+              <OtpDefault parent={this} isDisabled={isApiRunning} />
             </div>
           </div>
         )}
