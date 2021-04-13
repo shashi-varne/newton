@@ -13,7 +13,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner_otm';
+import '../../utils/native_listener';
 import { getConfig, setHeights } from 'utils/functions';
 
 import "./Style.scss"
