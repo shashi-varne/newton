@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BottomSheet from '../../common/ui/BottomSheet';
 import { formatAmountInr } from '../../utils/validators';
 
 /*
@@ -28,6 +29,7 @@ const PeriodWiseReturns = ({
   const [potentialValue, setPotentialValue] = useState(0);
   const [investedValue, setInvestedValue] = useState(0);
   const [currentTerm, setCurrentTerm] = useState(initialTerm);
+  const [openInfoSheet, setOpenInfoSheet] = useState(false);
   const termOptions = [1, 3, 5, 10, 15, 20];
 
   useEffect(() => {
@@ -69,9 +71,7 @@ const PeriodWiseReturns = ({
     setInvestedValue(value);
   };
 
-  const openInfoSheet = () => {
-    
-  };
+  const toggleInfoSheet = () => setOpenInfoSheet(!openInfoSheet);
 
   return (
     <div className='invested-amount-return-container'>
@@ -108,13 +108,36 @@ const PeriodWiseReturns = ({
                 <img
                   alt="i"
                   src={require('assets/info_icon_grey.svg')}
-                  class="info-icn"
-                  onClick={openInfoSheet}
+                  className="info-icn"
+                  onClick={toggleInfoSheet}
                 />
               }
             </h1>
             <div>{formatAmountInr(potentialValue)}</div>
           </div>
+          <BottomSheet
+            open={openInfoSheet}
+            data={{
+              header_title: 'Expected returns',
+              button_text1: 'Okay',
+              handleClick1: toggleInfoSheet,
+              handleClose: toggleInfoSheet,
+            }}
+          >
+            <>
+              <div className="avg-return-ror">
+                <span className="value">{getRateOfInterest()}%*</span>
+                <span className="text">is the Rate of Return (RoR) used to estimate projected returns.</span>
+              </div>
+              <div className="avg-return-content">
+                Rate of return is dependent on the component of debt & equity in recommended funds for this investment
+              </div>
+              <div className="avg-return-breakup">
+                * Rate of return assumed for debt is {bondReturns}% and
+                rate of return assumed for equity is {stockReturns}%
+              </div>
+            </>
+          </BottomSheet>
         </div>
       </div>
     </div>

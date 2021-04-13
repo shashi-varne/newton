@@ -17,9 +17,12 @@
   place-items: center;
 }
 
+// PeriodWiseReturns styling ---------
+
 .invested-amount-common-container{
     margin:-20px;
 }
+
 .invested-amount-display {
     background-color: #ececec;
     padding:0px 20px;
@@ -133,7 +136,6 @@
 
           .info-icn {
               margin-left: 5px;
-              margin-bottom: 2px;
           }
       }
   }
@@ -143,3 +145,42 @@
       height: 40px;
   }
 }
+
+.avg-return-ror {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #EEEEEE;
+  padding-bottom: 10px;
+
+  .value {
+    font-size: 26px;
+    line-height: 24px;
+    font-weight: 700;
+    margin-right: 18px;
+    color: var(--primary);
+  }
+
+  .text {
+    font-size: 15px;
+    line-height: 24px;
+    color: #767E86;
+  }
+}
+
+.avg-return-content {
+  margin-top: 20px;
+  font-size: 14px;
+  line-height: 21px;
+  color: #767E86;
+}
+
+.avg-return-breakup {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--primary);
+}
+
+// PeriodWiseReturns styling END -------

@@ -9,6 +9,7 @@ import toast from 'common/ui/Toast'
 import './RiskPages.scss';
 import InfoBox from '../../../../common/ui/F-InfoBox';
 import { getConfig } from '../../../../utils/functions';
+import BottomSheet from '../../../../common/ui/BottomSheet';
 
 const { productName } = getConfig();
 
@@ -19,6 +20,8 @@ const RiskCustomize = (props) => {
   const navigate = navigateFunc.bind(props);
   const [equity, setEquity] = useState(graphData.equity || 0);
   const [debt, setDebt] = useState(100 - equity);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
 
   // useEffect(() => {
   //   const investTitle = selectTitle(graphData.investType);
@@ -70,6 +73,8 @@ const RiskCustomize = (props) => {
     setDebt(100 - value);
   };
 
+  const toggleConfirmDialog = () => setShowConfirmDialog(!showConfirmDialog);
+
   return (
     <Container
       classOverRide='pr-error-container'
@@ -78,7 +83,7 @@ const RiskCustomize = (props) => {
       helpContact
       disable={loader}
       title='Customise Equity-Debt distribution'
-      handleClick={goNext}
+      handleClick={toggleConfirmDialog}
       classOverRideContainer='pr-container'
     >
       <>
@@ -97,6 +102,19 @@ const RiskCustomize = (props) => {
         <EquityDebtSlider
           equity={equity}
           onChange={handleChange}
+        />
+        <BottomSheet
+          open={showConfirmDialog}
+          data={{
+            header_title: 'Save changes',
+            content: 'Are you sure you want to change your equity to debt distribution for your investment profile?',
+            src: require(`assets/${productName}/ic_save.svg`),
+            button_text1: 'Confirm',
+            handleClick1: goNext,
+            button_text2: 'Cancel',
+            handleClick2: toggleConfirmDialog,
+            handleClose: toggleConfirmDialog,
+          }}
         />
       </>
     </Container>

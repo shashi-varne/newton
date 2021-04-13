@@ -280,6 +280,7 @@ const Recommendations = (props) => {
           stockReturns={graphData.stockReturns}
           bondReturns={graphData.bondReturns}
           principalAmount={graphData.amount}
+          showInfo
           // isRecurring={isRecurring}
         />
         <section className='recommendations-common-container'>

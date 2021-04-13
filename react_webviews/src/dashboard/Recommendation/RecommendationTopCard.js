@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import BottomSheet from '../../common/ui/BottomSheet';
 import { getConfig } from '../../utils/functions';
 import { formatAmountInr, getFinancialYear } from '../../utils/validators';
 import { navigate as navigateFunc } from '../invest/common/commonFunction';
@@ -11,10 +12,12 @@ const RecommendationTopCard = ({
 }) => {
   const navigate = navigateFunc.bind(parentProps);
   const { userRiskProfile, graphData } = data;
+  const [showRiskInfo, setShowRiskInfo] = useState(false);
 
   const renderContent = () => {
     if (userRiskProfile) {
       const { equity, debt, investType } = graphData;
+      const toggleRiskInfoDialog = () => setShowRiskInfo(!showRiskInfo);
 
       return (
         <div className="risk-profile-card">
@@ -24,7 +27,12 @@ const RecommendationTopCard = ({
               <>
                 <div className="risk-details-header">
                   Risk profile
-                  <img src={require('assets/info_icon_grey.svg')} className="info-icn" alt="i" />
+                  <img
+                    onClick={toggleRiskInfoDialog}
+                    src={require('assets/info_icon_grey.svg')}
+                    className="info-icn"
+                    alt="i"
+                  />
                 </div>
                 <div className="risk-type">{userRiskProfile}</div>
                 <div className="risk-distribution">{equity}% Equity | {debt}% Debt</div>
@@ -40,6 +48,16 @@ const RecommendationTopCard = ({
             onClick={() => navigate(`${investType}/risk-${userRiskProfile ? 'modify' : 'select'}`)}>
             {userRiskProfile ? "Change" : "Select"}
           </div>
+          <BottomSheet
+            open={showRiskInfo}
+            data={{
+              header_title: 'Risk Profile',
+              content: 'According to your risk profile, your money will be invested in a combination of equity and debt funds',
+              button_text1: 'Okay',
+              handleClick1: toggleRiskInfoDialog,
+              handleClose: toggleRiskInfoDialog,
+            }}
+          />
         </div>
       );
     } else if (graphData.investType === 'savetax') {

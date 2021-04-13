@@ -1,5 +1,5 @@
 import { CircularProgress } from 'material-ui';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import InfoBox from '../../../../common/ui/F-InfoBox';
 import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
@@ -8,6 +8,7 @@ import { navigate as navigateFunc, selectTitle } from '../../common/commonFuncti
 import FSelect from './FSelect';
 import './RiskPages.scss';
 import { getConfig } from '../../../../utils/functions';
+import BottomSheet from '../../../../common/ui/BottomSheet';
 
 const { productName } = getConfig();
 
@@ -22,7 +23,7 @@ const RiskModify = ({
   const graphData = storageService().getObject('graphData');
   let riskOptions = graphData.rp_meta;
   const [loader, setLoader] = useState(false);
-  // const [title, setTitle] = useState('');
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [selectedRisk, selectRisk] = useState(sessionStoredRisk);
   const navigate = navigateFunc.bind(otherProps);
 
@@ -59,13 +60,14 @@ const RiskModify = ({
     }
   }
 
-
   const goNext = async () => {
     if (selectedRisk !== 'Custom' && selectedRisk !== sessionStoredRisk) {
       await updateRiskAndFetchRecommendations();
     }
     navigate('recommendations');
   };
+
+  const toggleConfirmDialog = () => setShowConfirmDialog(!showConfirmDialog);
 
   if (sessionStoredRisk === 'Custom') {
     riskOptions.push({
@@ -84,7 +86,7 @@ const RiskModify = ({
       helpContact
       disable={loader}
       title='Change risk profile'
-      handleClick={goNext}
+      handleClick={toggleConfirmDialog}
       classOverRideContainer='pr-container'
     >
       <div style={{ marginTop: '10px' }}>
@@ -114,6 +116,19 @@ const RiskModify = ({
           onClick={() => navigate(`${goalRecommendation.id}/risk-customize`)}>
           Customise EQUITY to DEBT DISTRIBUTION
         </div>
+        <BottomSheet
+          open={showConfirmDialog}
+          data={{
+            header_title: 'Save changes',
+            content: 'Are you sure you want to change your risk profile?',
+            src: require(`assets/${productName}/ic_save.svg`),
+            button_text1: 'Confirm',
+            handleClick1: goNext,
+            button_text2: 'Cancel',
+            handleClick2: toggleConfirmDialog,
+            handleClose: toggleConfirmDialog,
+          }}
+        />
       </div>
     </Container>
   );
