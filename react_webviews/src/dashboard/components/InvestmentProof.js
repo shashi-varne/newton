@@ -2,20 +2,35 @@ import React, { useState } from "react";
 import Container from "../common/Container";
 import { storageService } from "../../utils/validators";
 import { Button } from "@material-ui/core";
-import { send80cInvest } from "../common/functions";
+import { send80cInvest, sendCapitalgain } from "../common/functions";
 import toast from "common/ui/Toast";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import "./MyAccount.scss";
 
 const InvestmentProof = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const user80cInvestment = storageService().getObject("elss") || [];
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+  const type = props.type || "";
+
+  const investmentDataMapper = {
+    "investment-proof": {
+      investedYears: storageService().getObject("elss") || [],
+      title: "80C Investment Proof",
+      emailMe: send80cInvest,
+    },
+    "capital-gain": {
+      investedYears: storageService().getObject("capitalgain") || [2020, 2021],
+      title: "Capital Gain",
+      emailMe: sendCapitalgain,
+    },
+  };
+
+  const investmentData = investmentDataMapper[type] || {};
   const emailMe = async (year) => {
     setIsApiRunning(true);
     try {
-      const result = await send80cInvest(year);
+      const result = await investmentData.emailMe(year);
       if (!result) return;
       setDialogMessage(result.message);
       console.log(result);
@@ -49,11 +64,11 @@ const InvestmentProof = (props) => {
 
   return (
     <Container
-      title="80C Investment Proof"
+      title={investmentData.title}
       skelton={isApiRunning}
       noFooter={true}
     >
-      {user80cInvestment.map((year, index) => {
+      {investmentData.investedYears.map((year, index) => {
         return (
           <div className="investment-proof" key={index}>
             <div>

@@ -343,3 +343,20 @@ export async function send80cInvest(data) {
     throw new Error( result.error || result.message || genericErrorMessage );
   }
 }
+
+export async function sendCapitalgain(data) {
+  const res = await Api.get(`/api/invest/taxstatement?year=${data}`)
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw new Error( res?.pfwmessage || genericErrorMessage);
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    return result;
+  } else {
+    throw new Error( result.error || result.message || genericErrorMessage );
+  }
+}
