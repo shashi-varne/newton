@@ -26,6 +26,7 @@ import DigilockerCallback from "../kyc/digilocker/digilockercallback";
 import AccountMerge from "./account-merge";
 import AccountMergeOtp from "./account-merge/otp";
 import AccountLinked from "./account-merge/linked";
+import InvestmentProof from "./components/InvestmentProof";
 
 const Invest = (props) => {
   const { url } = props.match;
@@ -87,6 +88,7 @@ const Invest = (props) => {
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
         <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />
         <Route exact path={`${url}account/merge/linked/success`} component={AccountLinked} />
+        <Route exact path={`${url}investment-proof`} component={InvestmentProof} />
         <Route component={NotFound} />
       </Switch>
     </Fragment>

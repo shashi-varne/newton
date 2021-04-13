@@ -1,0 +1,39 @@
+.investment-proof {
+  color: #333333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  line-height: 1.5;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 15px 0;
+
+  .button {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4) !important;
+    background-color: rgb(250, 250, 250) !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+  }
+
+  .button:hover {
+    background-color: rgb(250, 250, 250) !important;
+  }
+}
+
+.investment-proof-dialog {
+  line-height: 1.5;
+  color: #333333;
+
+  .action {
+    display: flex;
+    justify-content: flex-end;    
+    margin: 0;
+    padding: 0 20px 20px 20px;
+
+    .button {
+      background-color: var(--secondary);
+      color: white;
+      padding: 10px 32px;
+    }
+  }
+}

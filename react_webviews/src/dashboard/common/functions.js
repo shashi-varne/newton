@@ -5,6 +5,7 @@ import { getConfig } from "utils/functions";
 import { isReadyToInvest, initData } from "../../kyc/services";
 import { getBasePath } from "../../utils/functions";
 
+const genericErrorMessage = "Something went wrong!"
 export async function initialize() {
   this.getMyAccount = getMyAccount.bind(this);
   this.getNotifications = getNotifications.bind(this);
@@ -149,12 +150,12 @@ export async function getMyAccount() {
         isReadyToInvestBase,
       });
     } else {
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || genericErrorMessage);
     }
     this.setState({ showLoader: false });
   } catch (error) {
     console.log(error);
-    toast("Something went wrong!");
+    toast(genericErrorMessage);
     this.setState({ showLoader: false });
   }
 }
@@ -177,12 +178,12 @@ export async function getNotifications() {
       storageService().set("campaign", notifications);
     } else {
       this.setState({ showLoader: false });
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || genericErrorMessage);
     }
   } catch (error) {
     console.log(error);
     this.setState({ showLoader: false });
-    toast("Something went wrong!");
+    toast(genericErrorMessage);
   }
 }
 
@@ -256,12 +257,12 @@ export async function authenticate() {
         window.location.href = pgLink;
       } else {
         this.setState({ showLoader: false });
-        toast(result.message || result.error || "Something went wrong!");
+        toast(result.message || result.error || genericErrorMessage);
       }
     } catch (error) {
       console.log(error);
       this.setState({ showLoader: false });
-      toast("Something went wrong!");
+      toast(genericErrorMessage);
     }
   }
 }
@@ -317,11 +318,28 @@ export async function exportTransactions() {
       });
     } else {
       this.setState({ showLoader: false });
-      toast(result.message || result.error || "Something went wrong!");
+      toast(result.message || result.error || genericErrorMessage);
     }
   } catch (error) {
     console.log(error);
     this.setState({ showLoader: false });
-    toast("Something went wrong!");
+    toast(genericErrorMessage);
+  }
+}
+
+export async function send80cInvest(data) {
+  const res = await Api.get(`/api/invest/elssstatement?year=${data}`)
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw new Error( res?.pfwmessage || genericErrorMessage);
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    return result;
+  } else {
+    throw new Error( result.error || result.message || genericErrorMessage );
   }
 }
