@@ -70,7 +70,6 @@ class SearchInput extends Component {
                 position="end"
                 className={this.props.classes.InputAdornmentPosition}
                 onClick={this.focusTextInput}
-                id={'icon'}
               >
                 <img
                   src={require(`assets/${this.state.productName}/${

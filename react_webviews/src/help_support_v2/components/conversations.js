@@ -182,7 +182,6 @@ class TicketConversations extends Component {
   };
 
   handleDelete = (index) => {
-    console.log(index)
     let { documents } = this.state;
 
     documents.splice(index, 1);
@@ -207,7 +206,12 @@ class TicketConversations extends Component {
       })
       this.onload();
     } else {
-      this.navigate("queries");
+      // this.navigate("queries");
+
+      this.props.history.push(
+        { pathname: "queries", search: getConfig().searchParams },
+        { status: ticket.status }
+      );
     }
   };
 

@@ -36,7 +36,7 @@ class OpenTickets extends Component {
       {
         index: index,
       },
-      () => this.handleScroll()
+      // () => this.handleScroll()
     );
   };
 

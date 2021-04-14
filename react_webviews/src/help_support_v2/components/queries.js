@@ -50,10 +50,19 @@ class Queries extends Component {
 
   onload = () => {
     let fromScreen = this.props.location.state?.fromScreen || "/help";
+
+    let status = this.props.location?.state?.status;
+
     this.setState({
       fromScreen: fromScreen,
+      value: status === 'closed' ? 1 : 0
     });
-    this.getTickets("open")
+
+    if (status === 'closed') {
+      this.getTickets("closed")
+    } else {
+      this.getTickets("open")
+    }
   };
 
   getTickets = async (value) => {
