@@ -263,6 +263,10 @@ class GroupHealthPayment extends Component {
 
   render() {
     let {policy_data, screenData, provider} = this.state;
+    
+    if(this.state.commonMapper.button_title === 'RETRY'){
+      storageService().setObject('paymentFailed', true);
+    }
     return (
       <Container
         provider={this.state.provider}

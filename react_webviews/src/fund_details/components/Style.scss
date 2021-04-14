@@ -134,9 +134,10 @@
   display: flex;
   flex-wrap: wrap;
   padding: 0 15px;
-}
-.fd-asset-container > div {
-  flex: 0 50%;
+
+  & > div{
+    flex-basis: 33%;
+  }
 }
 .fd-asset-item {
   display: flex;
@@ -266,5 +267,111 @@
   .fd-risk-divider {
     //border: 10px solid green;
     margin: 10px;
+  }
+}
+
+
+///iframe fund-info ////
+.fundinfo-iframe{
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 15px;
+
+  .fundinfo-iframe-details{
+    display: flex;
+    flex: 1 1 68%;
+    flex-direction: column;
+  }
+
+  .fundinfo-button{
+    justify-content: flex-end;
+    flex: 1 1 16%;
+    display: flex;
+    align-items: baseline;
+  }
+  .fundinfo-iframe-head{
+    display: flex;
+    align-items: center;
+  }
+  .fundinfo-iframe-name{
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: left;
+  }
+  .fundinfo-iframe-data{
+    margin-left: 60px;
+    .fund-value-star,.fund-value-star-section{
+      all: unset;
+    }
+
+    .fund-value-star{
+      display: flex;
+      align-items: center;
+    }
+    .fundinfo-iframe-divider{
+      border-left: 1px solid rgb(230, 233, 230);
+      margin: 0px 25px;
+      height: 25px;
+    }
+  }
+  .fundinfo-iframe-status{
+    display: flex;
+    margin-bottom: 20px;
+    margin-left: 60px;
+    .fund-badge-cat,.fund-badge-risk{
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 14px;
+      letter-spacing: 1px;
+      text-align: center;
+      text-transform: uppercase;
+      height: 16px;
+      margin-right: 20px;
+    }
+    .fund-badge-cat{
+      background-color: #FFF6CE;
+      color:#B39712;
+    }
+    .fund-badge-risk{
+      background-color: #F0F7FF;
+      color: #767E86;
+    }
+  
+    .fundinfo-iframe-return{
+      .fundinfo-iframe-return-year{
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 14px;
+        letter-spacing: 0px;
+        text-align: left;
+      }
+      
+      .fundinfo-iframe-return-per{
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 19px;
+        letter-spacing: 0px;
+        text-align: left;
+        color: #7ED321;
+      }
+    }
+  }
+  
+  .fund-info--iframe-icon{
+    margin-right: 13px;
+  }
+}
+
+@media only screen and (max-width: 650px){
+  .fd-asset-container {
+    & > div{
+      flex-basis: 50%;
+    }
   }
 }

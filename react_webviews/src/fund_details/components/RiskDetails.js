@@ -29,7 +29,7 @@ const RiskDetails = ({
           <Divider className='fd-risk-divider' />
           <Report title='Risk Measures'>
             {risk_measures.length > 0 ? (
-              <TableData data={risk_measures} />
+              <TableData data={risk_measures} isRiskMeasure/>
             ) : (
               <Typography style={{ color: '#878787', fontSize: '14px', paddingLeft: '15px' }}>
                 N/A

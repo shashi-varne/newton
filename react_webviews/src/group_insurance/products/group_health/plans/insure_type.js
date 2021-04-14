@@ -20,6 +20,7 @@ class GroupHealthSelectInsureType extends Component {
   componentWillMount() {
     this.initialize();
     storageService().setObject("resumeToPremiumHealthInsurance", false)
+    storageService().remove('paymentFailed');
   }
 
 

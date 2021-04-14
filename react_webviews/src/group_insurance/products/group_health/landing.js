@@ -254,6 +254,7 @@ class GroupHealthLanding extends Component {
         resume_clicked: true,
       },
       () => {
+        storageService().remove('paymentFailed');
         this.sendEvents("next");
         let quoteResume = this.state.quoteResume;
         storageService().set("ghs_ergo_quote_id", quoteResume.id);
@@ -433,7 +434,7 @@ class GroupHealthLanding extends Component {
             data={this.state.whats_not_covered}
           />
           
-          <GenericImageSlider title="Key benefits" image_list={this.state.screenData.image_list}/>
+          <GenericImageSlider title="Key benefits" image_list={this.state.screenData.image_list[this.state.productName]}/>
 
           <HowToSteps
             style={{ margin: "20px 0px 0px 0px" }}
