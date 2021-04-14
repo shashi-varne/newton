@@ -215,7 +215,7 @@ class CategoryList extends Component {
   };
 
   handleBlankSearch = async (e) => {
-    let { componentClicked } = this.state;
+    let { componentClicked, faqList } = this.state;
     if (!e.target.id) componentClicked = false;
     else componentClicked = true;
 
@@ -223,11 +223,13 @@ class CategoryList extends Component {
       componentClicked: componentClicked,
     });
 
-    let result = await this.SearchFaq("");
-    let list = result ? result.faqs : [];
-    this.setState({
-      faqList: list,
-    });
+    if (componentClicked && faqList.length === 0) {
+      let result = await this.SearchFaq("");
+      let list = result ? result.faqs : [];
+      this.setState({
+        faqList: list,
+      });
+    }
   };
 
   render() {
@@ -264,7 +266,8 @@ class CategoryList extends Component {
 
           <div id="categoryList"></div>
           {faqList.length > 0 &&
-            !isApiRunning && componentClicked &&
+            !isApiRunning &&
+            componentClicked &&
             // searchInput.length !== 0 &&
             faqList.map((item, index) => (
               <div

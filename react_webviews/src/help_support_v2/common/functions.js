@@ -258,7 +258,7 @@ export async function getAllfaqs(sub_category_id) {
     if (status === 200) {
       return result;
     } else {
-      let title1 = result.error || result.message || "Something went wrong!";
+      let title1 = result.message || result.error || "Something went wrong!";
       this.setState({
         title1: title1,
       });
@@ -298,7 +298,7 @@ export async function getFaqDescription(faq_id) {
     if (status === 200) {
       return result;
     } else {
-      let title1 = result.error || result.message || "Something went wrong!";
+      let title1 = result.message || result.error || "Something went wrong!";
       this.setState({
         title1: title1,
       });
@@ -371,7 +371,7 @@ export async function getUserTickets(params) {
     if (status === 200) {
       return result;
     } else {
-      let title1 = result.error || result.message || "Something went wrong!";
+      let title1 = result.message || result.error || "Something went wrong!";
       this.setState({
         title1: title1,
       });
@@ -410,7 +410,7 @@ export async function getTicketConversations(ticket_id) {
     if (status === 200) {
       return result.response;
     } else {
-      let title1 = result.error || result.message || "Something went wrong!";
+      let title1 = result.message || result.error || "Something went wrong!";
       this.setState({
         title1: title1,
       });
@@ -451,7 +451,7 @@ export async function createTicket(body = {}) {
     if (status === 200) {
       return result;
     } else {
-      let title1 = result.error || "Something went wrong!";
+      let title1 = result.message || result.error || "Something went wrong!";
       this.setState({
         title1: title1,
       });
