@@ -9,7 +9,6 @@ import { Imgc } from "common/ui/Imgc";
 import { SkeltonRect } from "common/ui/Skelton";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
-import scrollIntoView from "scroll-into-view-if-needed";
 
 function TabContainer({ children, dir }) {
   return (
@@ -56,13 +55,13 @@ class Queries extends Component {
 
     this.setState({
       fromScreen: fromScreen,
-      value: status === 'closed' ? 1 : 0
+      value: status === "closed" ? 1 : 0,
     });
 
-    if (status === 'closed') {
-      this.getTickets("closed")
+    if (status === "closed") {
+      this.getTickets("closed");
     } else {
-      this.getTickets("open")
+      this.getTickets("open");
     }
   };
 
@@ -75,7 +74,7 @@ class Queries extends Component {
     this.setState({
       tickets: tickets,
     });
-  }
+  };
 
   handleChangeIndex = (index) => {
     this.setState({ value: index });
@@ -86,12 +85,6 @@ class Queries extends Component {
     } else {
       !tickets.open && this.getTickets("open");
     }
-    
-    let element = document.getElementById("viewScroll");
-    scrollIntoView(element, {
-      block: "start",
-      inline: "nearest",
-    });
   };
 
   renderTicketError = () => {};
@@ -141,7 +134,6 @@ class Queries extends Component {
 
     return (
       <Container
-        // skelton={this.state.skelton}
         events={this.sendEvents("just_set_events")}
         showError={this.state.showError}
         errorData={this.state.errorData}
@@ -170,7 +162,7 @@ class Queries extends Component {
             <div className="generic-hr"></div>
             <div
               className="generic-hr hr"
-              style={{ left: `${value === 1 ? "50" : '0'}%` }}
+              style={{ left: `${value === 1 ? "50" : "0"}%` }}
             ></div>
 
             <SwipeableViews
@@ -182,15 +174,11 @@ class Queries extends Component {
               }}
               style={{ height: "80vh" }}
               enableMouseEvents
-              // animateHeight={value === 0}
             >
               <TabContainer dir={"ltr"}>
                 <div id="viewScroll"></div>
                 {tickets.open && tickets.open.length > 0 && (
-                  <Tickets
-                    tickets={tickets.open}
-                    onClick={this.handleClick}
-                  />
+                  <Tickets tickets={tickets.open} onClick={this.handleClick} />
                 )}
                 {!tickets.open && (
                   <SkeltonRect

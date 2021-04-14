@@ -264,6 +264,10 @@
     margin: -24px 0 20px;
   }
 
+  .react-swipeable-view-container {
+    max-block-size: -webkit-fill-available !important;
+  }
+
   .nav-bar {
     height: 100%;
     padding-top: 10px;
@@ -315,7 +319,7 @@
 
 .help-tickets {
   line-height: 20px;
-  margin: 0 -20px;
+  margin: 0 -20px 60px;
 
   .ticket {
     cursor: pointer;
