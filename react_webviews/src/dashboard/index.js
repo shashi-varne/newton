@@ -4,37 +4,37 @@ import "../common/theme/Style.scss";
 
 import NotFound from "../common/components/NotFound";
 
-import "./invest/Style.scss";
-import Landing from "./invest";
+import "./Invest/Style.scss";
+import Invest from "./Invest";
 
-import NfoInfo from "./invest/components/nfo";
-import NfoScheme from "./invest/components/nfo/scheme";
-import NfoFunds from "./invest/components/nfo/funds";
-import NfoFundDetail from "./invest/components/nfo/FundDetail";
-import NfoCheckout from "./invest/components/nfo/checkout";
-import SipDates from "./invest/components/nfo/SipDates";
-import InvestJourney from "./investJourney";
-import DIY from "./diy";
+import NfoInfo from "./Invest/components/NFO";
+import NfoScheme from "./Invest/components/NFO/Scheme";
+import NfoFunds from "./Invest/components/NFO/Funds";
+import NfoFundDetail from "./Invest/components/NFO/FundDetail";
+import NfoCheckout from "./Invest/components/NFO/Checkout";
+import SipDates from "./Invest/components/NFO/SipDates";
+import InvestJourney from "./InvestJourney";
+import DIY from "./DIY";
 
 import MyAccount from "./components/my_account";
 import Notification from "./components/notification";
-import PaymentCallback from "./invest/components/PaymentCallback";
-import SipPaymentCallback from "./invest/components/SipPaymentCallback";
-import PageCallback from "./invest/components/PageCallback";
-import PaymentOptions from "./invest/components/PaymentOptions";
+import PaymentCallback from "./Invest/components/PaymentCallback";
+import SipPaymentCallback from "./Invest/components/SipPaymentCallback";
+import PageCallback from "./Invest/components/pageCallback";
+import PaymentOptions from "./Invest/components/PaymentOptions";
 import DigilockerCallback from "../kyc/digilocker/digilockercallback";
-import AccountMerge from "./account-merge";
-import AccountMergeOtp from "./account-merge/otp";
-import AccountLinked from "./account-merge/linked";
+import AccountMerge from "./AccountMerge";
+import AccountMergeOtp from "./AccountMerge/Otp";
+import AccountLinked from "./AccountMerge/Linked";
 
-const Invest = (props) => {
+const Home = (props) => {
   const { url } = props.match;
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}`} component={Landing} />
-        <Route path={`${url}invest`} component={Landing} />
-        <Route path={`${url}landing`} component={Landing} />
+        <Route exact path={`${url}`} component={Invest} />
+        <Route path={`${url}invest`} component={Invest} />
+        <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
         <Route
@@ -93,4 +93,4 @@ const Invest = (props) => {
   );
 };
 
-export default Invest;
+export default Home;

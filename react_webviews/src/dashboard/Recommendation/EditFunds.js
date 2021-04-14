@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import Container from '../common/Container';
-import FundCard from '../invest/mini-components/FundCard';
+import FundCard from '../Invest/mini-components/FundCard';
 import Button from '@material-ui/core/Button';
 import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
 
 import replaceFund from 'assets/replace_bfdl.png';
 
 import { storageService } from 'utils/validators';
-import { navigate as navigateFunc } from '../invest/common/commonFunction';
+import { navigate as navigateFunc } from '../Invest/common/commonFunction';
 import isEmpty from 'lodash/isEmpty';
 
-import './style.scss';
+import './EditFunds.scss';
 
 const EditFunds = (props) => {
   const [open, setOpen] = useState(false);

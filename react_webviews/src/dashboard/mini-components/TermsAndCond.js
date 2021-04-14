@@ -10,10 +10,10 @@ import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import check_mark from 'assets/check_mark.png';
 
-import { getTerms } from '../invest/common/api';
+import { getTerms } from '../Invest/common/api';
 import { getConfig } from 'utils/functions';
 
-import './style.scss';
+import './mini-components.scss';
 
 const TermsAndCond = () => {
   const [open, setOpen] = useState(false);

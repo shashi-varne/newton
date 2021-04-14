@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { formatAmountInr } from '../../utils/validators';
+import './mini-components.scss';
 
 /*
   Explanation:
