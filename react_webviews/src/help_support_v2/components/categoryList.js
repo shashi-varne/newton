@@ -30,6 +30,7 @@ class CategoryList extends Component {
       categoryList: "",
       screen_name: "category-list",
       isApiRunning: false,
+      componentClicked: false,
     };
     this.initialize = initialize.bind(this);
     this.getAllCategories = getAllCategories.bind(this);
@@ -213,8 +214,30 @@ class CategoryList extends Component {
     );
   };
 
+  handleBlankSearch = async (e) => {
+    let { componentClicked } = this.state;
+    if (!e.target.id) componentClicked = false;
+    else componentClicked = true;
+
+    this.setState({
+      componentClicked: componentClicked,
+    });
+
+    let result = await this.SearchFaq("");
+    let list = result ? result.faqs : [];
+    this.setState({
+      faqList: list,
+    });
+  };
+
   render() {
-    let { faqList, searchInput, categoryList, isApiRunning } = this.state;
+    let {
+      faqList,
+      searchInput,
+      categoryList,
+      isApiRunning,
+      componentClicked,
+    } = this.state;
 
     return (
       <Container
@@ -222,7 +245,7 @@ class CategoryList extends Component {
         errorData={this.state.errorData}
         events={this.sendEvents("just_set_events")}
         styleHeader={{
-          display: !this.state.showError ? "none" : 'inherit',
+          display: !this.state.showError ? "none" : "inherit",
         }}
         noFooter
       >
@@ -234,13 +257,15 @@ class CategoryList extends Component {
               search={true}
               value={this.state.searchInput}
               onChange={this.handleChange}
+              onSearch={this.handleBlankSearch}
+              componentClicked={componentClicked}
             />
           </div>
 
           <div id="categoryList"></div>
           {faqList.length > 0 &&
-            !isApiRunning &&
-            searchInput.length !== 0 &&
+            !isApiRunning && componentClicked &&
+            // searchInput.length !== 0 &&
             faqList.map((item, index) => (
               <div
                 className="search-inputs"
@@ -259,11 +284,11 @@ class CategoryList extends Component {
             faqList.length === 0 &&
             !isApiRunning && <div className="no-result">No result found</div>}
 
-          {searchInput.length !== 0 && isApiRunning && <CustomSkelton />}
+          {componentClicked && isApiRunning && <CustomSkelton />}
 
           {this.state.skelton && <CustomSkelton />}
 
-          {!this.state.skelton && searchInput.length === 0 && categoryList && (
+          {!this.state.skelton && !componentClicked && categoryList && (
             <div className="fade-in">
               <div className="title">Category</div>
 

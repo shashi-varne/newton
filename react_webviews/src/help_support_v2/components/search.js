@@ -43,11 +43,15 @@ class SearchInput extends Component {
   focusTextInput = () => {
     // Explicitly focus the text input using the raw DOM API
     // Note: we're accessing "current" to get the DOM node
-    this.textInput.current.focus();
+    // this.textInput.current.focus();
     if (this.props.value.length > 0) {
       this.props.onChange("");
     }
   };
+
+  handleClick = (e) => {
+    this.props.onSearch(e)
+  }
 
   render() {
     return (
@@ -56,6 +60,7 @@ class SearchInput extends Component {
           id="input-with-icon-textfield"
           placeholder="Search for the issue"
           onChange={(value) => this.props.onChange(value)}
+          onClick={(e) => this.handleClick(e)}
           inputRef={this.textInput}
           value={this.props.value}
           autoComplete="off"
@@ -65,10 +70,11 @@ class SearchInput extends Component {
                 position="end"
                 className={this.props.classes.InputAdornmentPosition}
                 onClick={this.focusTextInput}
+                id={'icon'}
               >
                 <img
                   src={require(`assets/${this.state.productName}/${
-                    this.props.value.length > 0 ? "cross" : "search"
+                    this.props.componentClicked ? "cross" : "search"
                   }.svg`)}
                   alt=""
                   width="13"
