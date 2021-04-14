@@ -436,6 +436,21 @@
 .accident-plan-read-icon {
   margin-right: 10px;
 }
+.imgc-box-big-img{
+  width: 100px !important;
+  height: 80px !important;
+  margin-right: 0px !important;
+}
+.imgc-box-freq-img{
+  width:  30px !important;
+  height: 30px !important;
+  margin-right: 0px !important;
+}
+.imgc-box-plandeatils{
+  width:  80px !important;
+  height: 60px !important;
+  margin-right: 0px !important;
+}
 .accident-plan-read-text {
   font-size: 13px;
   line-height: 20px;
@@ -1154,23 +1169,39 @@
   }
   
   .insurance_plans_logos{
-    margin-right:25px;
-    width: 40px;
-    height: 40px;
+    margin-right:25px !important;
+    width:  40px !important;
+    height: 40px !important;
     border-radius: 2px;
   }
 
   .insurance_plans_logos_small{
-    margin-right:25px;
-    width: 40px;
-    height: 40px;
+    margin-right:25px !important;
+    width: 40px !important;
+    height: 40px !important;
     border-radius: 2px;
     margin-top: 20px;
     margin-left: 3px;
     padding-left: 3px;
     padding-right: 3px;
   }
-  
+
+  .dplan{
+    margin: 18px 26px 0px 8px !important;
+    width: 40px !important; 
+    height: 40px !important;
+  }
+
+  .imgc-box{
+    margin-right:25px !important;
+    width:  40px !important;
+    height: 40px !important;
+  }
+  // .imgc-box-bigframe{
+  //   margin-right:55px !important;
+  //   width:  50px !important;
+  //   height: 50px !important;
+  // }
   .insurance_plans_logos_text{
     color: #160d2e;
     font-size:16px;

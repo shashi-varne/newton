@@ -3,6 +3,7 @@ import Container from  '../../common/Container';
 
 import { getConfig } from '../../../utils/functions';
 import { nativeCallback } from '../../../utils/native_callback'
+import {Imgc} from   '../../../common/ui/Imgc'
 
 
 
@@ -79,7 +80,7 @@ class LifeInsuranceEntry extends Component {
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
         style={{ width : '100%'}}>   
           <div className='insurance_plans_types' style={{width : '100%'}}>
-       <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" style={{marginTop: '20px', marginBottom : '15px'}} />
+       <Imgc src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" style={{marginTop: '20px', marginBottom : '15px'}} />
             <div    style={{ width : '100%',  cursor: 'pointer',  borderBottomWidth: '1px',
            borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px', paddingBottom : '20px',   borderBottomColor: '#EFEDF2'}}>
               <div className='insurance_plans_logos_text'

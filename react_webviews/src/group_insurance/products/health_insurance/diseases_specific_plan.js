@@ -6,6 +6,7 @@ import { getConfig } from 'utils/functions';
 import { getBhartiaxaStatusToState } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import '../../common/Style.scss'
+import { Imgc } from '../../../common/ui/Imgc';
 
 class DiseasesSpecificPlan extends Component {
 
@@ -143,7 +144,8 @@ class DiseasesSpecificPlan extends Component {
         display: 'flex', alignItems: 'center', width : '100%'
       }}>
         <div style={{ display: 'flex' , width : '100%'}}>
-          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : props.key === 'CORONA' ? '-18px 26px 0px 8px' : '0px 26px 0px 8px'}}/>
+          <Imgc src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt=""   className='dplan' style={{ width: '40px', height: '40px' , marginTop: '18px' }}/>
+          <div style={{ marginRight: '25px'}}  />
           <div style={{ borderBottomWidth: '1px',
                   borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: this.state.insuranceProducts.length - 1 !== index ? '20px' : '40px',
                   justifyContent: 'space-between', cursor: 'pointer' , width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%' }}>

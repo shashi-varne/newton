@@ -1232,6 +1232,17 @@ $header-title-font-size: 20px;
   }
 }
 
+.Imgc-title-img{
+  height: 100px !important;
+  width: 100px !important;
+  margin-right: 45px !important;
+}
+
+.Imgc-title-img2{
+  height: 112px !important;
+  width: 172px !important;
+}
+
 .generic-page-title {
   color: #0a1d32;
   font-size: 16px;
@@ -1300,7 +1311,9 @@ $header-title-font-size: 20px;
     }
   }
 }
-
+.imgc-space{
+  margin-right: 0 !important;
+}
 
 .common-faqs {
   .common-faqs-tile {

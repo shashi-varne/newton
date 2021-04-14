@@ -22,6 +22,7 @@ import { insuranceProductTitleMapper } from '../../constants';
 import {
   inrFormatDecimal, calculateAge
 } from 'utils/validators';
+import {Imgc} from '../../../common/ui/Imgc'
 
 const coverAmountMapper = {
   'PERSONAL_ACCIDENT': {
@@ -356,7 +357,8 @@ class PlanDetailsClass extends Component {
     return (
       <div key={index} className={`plan-details-item ${(props.isDisabled) ? 'disabled' : ''}`}
       >
-        <img className="plan-details-icon" src={props.icon} alt="" />
+        <Imgc className="imgc-box-plandeatils plan-details-icon" src={props.icon} alt="" />
+        <div style={{marginRight: '10px'}} />
         <div>
           <div className="plan-details-text">{props.disc}</div>
           {((props.isDisabled && props.disc2) ||
@@ -374,7 +376,8 @@ class PlanDetailsClass extends Component {
         display: 'flex', alignItems: 'center', borderTop: index === 0 ? '1px solid #EFEDF2' : '', borderBottom: '1px solid #EFEDF2', paddingTop: '15px',
         paddingBottom: '15px', cursor: 'pointer'
       }}>
-        <img className="plan-details-icon" src={props.icon} alt="" />
+        <Imgc className="plan-details-icon" src={props.icon} alt="" style={{width: '30px' , height: '30px' }} />
+        <div style={{marginRight: '10px'}} />
         <div>
           <div className="plan-details-text">{props.disc} ?</div>
         </div>
@@ -669,7 +672,7 @@ class PlanDetailsClass extends Component {
               <h1  style={{fontWeight:'bold'}} className="accident-plan-title">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line} 
               <span style={{fontWeight:'400'}}>{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line2}</span> </h1>
             }
-            <img src={this.state.quoteData.logo || bhartiaxa_logo} alt="" />
+            <Imgc style={{width:'79px', height:'56px' }} src={this.state.quoteData.logo || bhartiaxa_logo} alt="" />
           </div>
           <div className="accident-plan-subtitle">
             {this.props.parent.state.plan_data.product_tag_line}
@@ -681,7 +684,7 @@ class PlanDetailsClass extends Component {
               fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
               display: 'flex', width: 'fit-content', background: '#ede9f5', padding: '0px 10px 0 10px'
             }}>
-              <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
+              <Imgc style={{ margin: '0px 5px 0 0', width: '10px', minHeight: '23px' }} src={this.state.instant_icon} alt="" />
               instant policy issuance
               </div>
           </div>}
@@ -714,7 +717,8 @@ class PlanDetailsClass extends Component {
           <div style={{ marginTop: '40px', padding: '0 15px' }}>
             <div style={{ color: '#160d2e', fontSize: '16px', fontWeight: '500', marginBottom: '10px' }}>Diseases covered</div>
             <div className="plan-details-item" >
-              <img className="plan-details-icon" src={this.state.ic_ci_d1_icon} alt="" />
+              <Imgc className="imgc-box-plandeatils plan-details-icon" src={this.state.ic_ci_d1_icon} alt="" />
+              <div style={{marginRight: '10px'}} />
               <div>
                 <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.length} life-threatening diseases covered</div>
                 <div onClick={() => this.openDiseases()} className="round-visible-button">
@@ -784,7 +788,7 @@ class PlanDetailsClass extends Component {
         }
         {this.props.parent.state.product_key !== 'CORONA' &&
           <div className="accident-plan-claim">
-            <img className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
+            <Imgc style={{width: '20px', height:'20px' }} className=" accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
             <div>
               <div className="accident-plan-claim-title">Claim assistance</div>
               <div className="accident-plan-claim-subtitle">{this.state.quoteData.claim_assistance_line ||
@@ -795,7 +799,7 @@ class PlanDetailsClass extends Component {
         {this.props.parent.state.provider !== 'hdfcergo' &&
           <div className="accident-plan-read"
             onClick={() => this.openInBrowser(this.state.quoteData.read_document, 'read_document')}>
-            <img className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
+            <Imgc style={{width: '20px', height:'20px' }} className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
             <div className="accident-plan-read-text" style={styles.color}>Read Detailed Document</div>
           </div>}
 

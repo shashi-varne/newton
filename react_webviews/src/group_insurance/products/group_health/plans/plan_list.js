@@ -8,6 +8,7 @@ import ReactTooltip from "react-tooltip";
 import { initialize } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import {formatAmount} from '../../../../utils/validators';
+import {Imgc} from '../../../../common/ui/Imgc'
 
 
 class GroupHealthPlanList extends Component {
@@ -167,10 +168,10 @@ class GroupHealthPlanList extends Component {
                         <div className="tc-subtitle">{this.state.provider === 'HDFCERGO' ? this.state.providerConfig.hdfc_plan_title_mapper[props.plan_id] : plan_data.plan_name}</div>
                     </div>
                     <div className="tc-right">
-                        <img
+                        <Imgc
                             src={require(`assets/${this.state.providerData.logo_card}`)}
                             alt=""
-                            style={{ maxWidth: '140px' }} />
+                            style={{ maxWidth: '140px', width: '50px' , height: '50px' }} />
                     </div>
                 </div>
 

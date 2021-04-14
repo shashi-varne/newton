@@ -10,6 +10,7 @@ import {initialize, openPdf} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import {formatAmount} from '../../../../utils/validators';
+import {Imgc} from '../../../../common/ui/Imgc'
 
 class GroupHealthPlanDetails extends Component {
 
@@ -269,7 +270,8 @@ class GroupHealthPlanDetails extends Component {
     renderSteps = (option, index) => {
         return (
             <div key={index} className="tile">
-                <img className="icon"
+                <Imgc className="icon"
+                style={{width: '80px' , height: '50px' }}
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">
@@ -315,10 +317,10 @@ class GroupHealthPlanDetails extends Component {
                 </div>
 
                 <div className="tc-right">
-                  <img
+                  <Imgc
                     src={require(`assets/${providerData.logo_card}`)}
                     alt=""
-                    style={{ maxWidth: "140px" }}
+                    style={{ maxWidth: '140px', width: '50px' , height: '50px' }}
                   />
                 </div>
               </div>
@@ -381,7 +383,7 @@ class GroupHealthPlanDetails extends Component {
                     backgroundImage: `url(${this.state.ic_hs_special_benefits})`,
                   }}
                 >
-                  <img
+                  <Imgc
                     className="special-benefit-img"
                     src={require(`assets/ic_hs_special.svg`)}
                     alt=""
@@ -398,7 +400,7 @@ class GroupHealthPlanDetails extends Component {
                     backgroundImage: `url(${this.state.ic_hs_main_benefits})`,
                   }}
                 >
-                  <img
+                  <Imgc
                     className="special-benefit-img"
                     src={require(`assets/ic_hs_main.svg`)}
                     alt=""
@@ -444,7 +446,7 @@ class GroupHealthPlanDetails extends Component {
                   className="bd-tile"
                   onClick={() => this.navigateBenefits("whats_included")}
                 >
-                  <img
+                  <Imgc
                     className="bf-img"
                     src={require(`assets/${productName}/ic_whats_covered.svg`)}
                     alt=""
@@ -455,7 +457,7 @@ class GroupHealthPlanDetails extends Component {
                   className="bd-tile"
                   onClick={() => this.navigateBenefits("whats_not_included")}
                 >
-                  <img
+                  <Imgc
                     className="bf-img"
                     src={require(`assets/${productName}/ic_whats_not_covered.svg`)}
                     alt=""
@@ -466,7 +468,7 @@ class GroupHealthPlanDetails extends Component {
                   className="bd-tile"
                   onClick={() => this.navigateBenefits("how_to_claim")}
                 >
-                  <img
+                  <Imgc
                     className="bf-img"
                     src={require(`assets/${productName}/ic_how_to_claim.svg`)}
                     alt=""
