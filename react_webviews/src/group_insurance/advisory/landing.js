@@ -6,6 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import StepsToFollow from '../../common/ui/stepsToFollow';
 import { advisoryConstants } from './constants';
 import {storageService} from "utils/validators";
+import {Imgc} from '../../common/ui/Imgc'
 
 class AdvisoryLanding extends Component {
 
@@ -139,7 +140,7 @@ class AdvisoryLanding extends Component {
             >
             <div className="advisory-landing-container">
 
-              <img className="advisory-entry-hero" alt="" src={require(`assets/${this.state.type}/advisory_entry_hero.svg`)}/>
+              <Imgc style={{minHeight: '140px'}} className="advisory-entry-hero" alt="" src={require(`assets/${this.state.type}/advisory_entry_hero.svg`)}/>
               <p className="advisory-hero-desc">We'll recommend insurance coverage options that work for you, based on your profile</p>
             <p className="" style={{marginBottom: '20px', color: 'black', fontWeight: '600', fontSize: '16px' }}>Find the right coverage in 5 easy steps</p>
               <div className="steps-to-follow-container">
