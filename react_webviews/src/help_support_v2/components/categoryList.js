@@ -97,7 +97,7 @@ class CategoryList extends Component {
       searchInput: value,
     });
 
-    if (!value) {
+    if (!this.state.isApiRunning) {
       this.setState({ faqList: [] });
       let element = document.getElementById("categoryList");
       if (!element || element === null) {
@@ -107,7 +107,6 @@ class CategoryList extends Component {
       scrollIntoView(element, {
         block: "end",
       });
-      return;
     }
 
     if (value[value.length - 1] === " ") {
