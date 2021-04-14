@@ -13,13 +13,13 @@ import { get_recommended_funds } from '../common/api';
 import './mini-components.scss';
 import PeriodWiseReturns from '../../mini-components/PeriodWiseReturns';
 import EquityDebtSlider from './EquityDebtSlider';
+import useFunnelDataHook from '../common/funnelDataHook';
 
 const { stockReturns, bondReturns } = getReturnRates();
 
 const InvestedAmount = (props) => {
-  let graphData = storageService().getObject('graphData');
-  const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { amount, investType, term, equity, isRecurring, investTypeDisplay } = graphData;
+  const { funnelData, funnelGoalData, updateFunnelData } = useFunnelDataHook();
+  const { amount, investType, term, equity, isRecurring, investTypeDisplay } = funnelData;
   const [stockSplitVal, setStockSplitVal] = useState(equity || 0);
   const [loader, setLoader] = useState(false);
   const [title, setTitle] = useState('');
@@ -42,15 +42,14 @@ const InvestedAmount = (props) => {
       term: term,
     };
     if (investType === 'saveforgoal') {
-      params.subtype = graphData?.subtype;
+      params.subtype = funnelData?.subtype;
     }
     try {
       setLoader("button");
       const data = await get_recommended_funds(params);
       storageService().set('userSelectedRisk', data.rp_indicator);
       const recommendedTotalAmount = data?.amount;
-      graphData = { ...graphData, ...data, amount, recommendedTotalAmount};
-      storageService().setObject('graphData', graphData);
+      updateFunnelData({ ...data, amount, recommendedTotalAmount });
       setLoader(false);
       navigate(`recommendations`);
     } catch (err) {
@@ -119,7 +118,7 @@ const InvestedAmount = (props) => {
         </div>
         <EquityDebtSlider
           equity={stockSplitVal}
-          disabled={goalRecommendation.id === 'savetax'}
+          disabled={funnelGoalData.id === 'savetax'}
           onChange={handleChange}
           fixedRiskTitle={
             investType === 'arbitrage' ?

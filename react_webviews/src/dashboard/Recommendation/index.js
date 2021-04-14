@@ -21,6 +21,7 @@ import PeriodWiseReturns from '../mini-components/PeriodWiseReturns';
 import { get, isArray } from 'lodash';
 import { get_recommended_funds } from '../invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
+import useFunnelDataHook from '../invest/common/funnelDataHook';
 const sipTypesKeys = [
   "buildwealth",
   "savetaxsip",
@@ -36,19 +37,19 @@ const sipTypesKeys = [
 
 const Recommendations = (props) => {
   const routeState = get(props, 'location.state', {});
-  const [graphData, setGraphData] = useState(storageService().getObject('graphData') || {});
+  const { funnelData, updateFunnelData } = useFunnelDataHook();
   const [recommendations, setRecommendations] = useState([]);
   const [userRiskProfile, setUserRiskProfile] = useState(storageService().get('userSelectedRisk') || '');
   const [renderTopCard, setRenderTopCard] = useState(false);
 
   useEffect(() => {
-    if (isArray(graphData.recommendation)) {
-      setRecommendations(graphData.recommendation);
+    if (isArray(funnelData.recommendation)) {
+      setRecommendations(funnelData.recommendation);
     }
-    if (graphData.investType === 'savetax' || userRiskProfile) {
+    if (funnelData.investType === 'savetax' || userRiskProfile) {
       setRenderTopCard(true);
     }
-  }, [graphData]);
+  }, [funnelData]);
 
   const partner = getConfig().partner;
   const [dialogStates, setDialogStates] = useState({
@@ -60,11 +61,11 @@ const Recommendations = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const {kyc: userKyc, user: currentUser, isLoading} = useUserKycHook();
   let sipOrOneTime = "";
-  if ((graphData.type !== "riskprofile") & (graphData.type !== "insta-redeem")) {
+  if ((funnelData.type !== "riskprofile") & (funnelData.type !== "insta-redeem")) {
     sipOrOneTime = "onetime";
-    if (sipTypesKeys.indexOf(graphData.investType) !== -1) sipOrOneTime = "sip";
+    if (sipTypesKeys.indexOf(funnelData.investType) !== -1) sipOrOneTime = "sip";
   } else {
-    sipOrOneTime = graphData.order_type;
+    sipOrOneTime = funnelData.order_type;
   }
 
   let investCtaText = "INVEST";
@@ -76,7 +77,7 @@ const Recommendations = (props) => {
   }
 
   const getRecommendations = async () => {
-    const { amount, investType: type, term } = storageService().getObject('graphData');
+    const { amount, investType: type, term } = storageService().getObject('funnelData');
     var params = {
       amount,
       term,
@@ -92,12 +93,10 @@ const Recommendations = (props) => {
         storageService().set('userSelectedRisk', res.rp_indicator);
         setUserRiskProfile(res.rp_indicator);
       }
-      storageService().setObject('graphData', {
-        ...graphData,
+      updateFunnelData({
         ...res,
         recommendedTotalAmount: res.amount
       });
-      setGraphData(storageService().getObject('graphData'));
 
       setIsApiRunning(false);
     } catch (err) {
@@ -114,7 +113,7 @@ const Recommendations = (props) => {
 
   const proceedInvestment = (investReferralData, isReferralGiven, handleGraph) => {
     let investmentObject = {};
-    if (graphData.type !== "riskprofile") {
+    if (funnelData.type !== "riskprofile") {
       var allocations = [];
       for (let data of recommendations) {
         let allocation = {};
@@ -123,19 +122,19 @@ const Recommendations = (props) => {
         allocations.push(allocation);
       }
 
-      if (graphData.type === "insta-redeem") {
-        investmentObject.order_type = graphData.order_type;
+      if (funnelData.type === "insta-redeem") {
+        investmentObject.order_type = funnelData.order_type;
       }
-      investmentObject.name = graphData.name;
+      investmentObject.name = funnelData.name;
       investmentObject.bondstock = routeState.bond + ":" + routeState.stock;
-      investmentObject.amount = graphData.recommendedTotalAmount;
-      investmentObject.term = graphData.term;
-      investmentObject.type = graphData.investType;
-      investmentObject.subtype = graphData.subtype;
+      investmentObject.amount = funnelData.recommendedTotalAmount;
+      investmentObject.term = funnelData.term;
+      investmentObject.type = funnelData.investType;
+      investmentObject.subtype = funnelData.subtype;
       investmentObject.allocations = allocations;
 
     } else {
-      investmentObject = graphData;
+      investmentObject = funnelData;
     }
 
     let 
@@ -147,19 +146,19 @@ const Recommendations = (props) => {
 
     let investmentEventData = {};
 
-    if (graphData.type === "riskprofile") {
+    if (funnelData.type === "riskprofile") {
       investmentEventData = {
-        amount: graphData.recommendedTotalAmount,
-        investment_type: graphData.type,
+        amount: funnelData.recommendedTotalAmount,
+        investment_type: funnelData.type,
         journey_name: "mf",
-        investment_subtype: graphData.subtype,
+        investment_subtype: funnelData.subtype,
       };
     } else {
       investmentEventData = {
-        amount: graphData.recommendedTotalAmount,
-        investment_type: graphData.investType,
+        amount: funnelData.recommendedTotalAmount,
+        investment_type: funnelData.investType,
         journey_name: "mf",
-        investment_subtype: graphData.subtype,
+        investment_subtype: funnelData.subtype,
       };
     }
 
@@ -178,7 +177,7 @@ const Recommendations = (props) => {
       return;
     } else if (sipOrOneTime === "onetime") {
       storageService().set("came_from_risk_webview", "");
-      if (graphData.type === "riskprofile") {
+      if (funnelData.type === "riskprofile") {
         if (!storageService().get("firsttime_from_risk_webview_invest")) {
           storageService().set("firsttime_from_risk_webview_invest", true);
         } else {
@@ -268,24 +267,24 @@ const Recommendations = (props) => {
           <RecommendationTopCard
             data={{
               userRiskProfile,
-              graphData
+              funnelData
             }}
             parentProps={props}
           />
         }
         <PeriodWiseReturns
-          initialTerm={graphData.term}
-          equity={graphData.equity}
-          stockReturns={graphData.stockReturns}
-          bondReturns={graphData.bondReturns}
-          principalAmount={graphData.amount}
+          initialTerm={funnelData.term}
+          equity={funnelData.equity}
+          stockReturns={funnelData.stockReturns}
+          bondReturns={funnelData.bondReturns}
+          principalAmount={funnelData.amount}
           showInfo
           // isRecurring={isRecurring}
         />
         <section className='recommendations-common-container'>
           <div className='recommendations-header'>
             <div>Our Recommendation</div>
-            {graphData.investType !== 'insta-redeem' && (
+            {funnelData.investType !== 'insta-redeem' && (
               <div onClick={editFund} className='edit-recommendation-funds'>
                 Edit
               </div>
@@ -300,7 +299,7 @@ const Recommendations = (props) => {
           <div className='recommendations-total-investment'>
             <div>Total Investment</div>
 
-            <div>{recommendations?.length ? formatAmountInr(graphData.recommendedTotalAmount) : '₹0'}</div>
+            <div>{recommendations?.length ? formatAmountInr(funnelData.recommendedTotalAmount) : '₹0'}</div>
           </div>
           <div>
             <div className="recommendations-disclaimer-morning">

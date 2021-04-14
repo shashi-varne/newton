@@ -18,13 +18,13 @@ import { isArray } from 'lodash';
 import './mini-components.scss';
 import { getConfig } from '../../../utils/functions';
 import { formatAmountInr } from '../../../utils/validators';
+import useFunnelDataHook from '../common/funnelDataHook';
 const date = new Date();
 
 const InvestAmount = (props) => {
-  const graphData = storageService().getObject('graphData');
-  const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { investType, year, equity, term, isRecurring, investTypeDisplay, ...moreData } = graphData;
-  const [amount, setAmount] = useState(graphData?.amount || '');
+  const { funnelData, funnelGoalData, updateFunnelData } = useFunnelDataHook();
+  const { investType, year, equity, term, isRecurring, investTypeDisplay, ...moreData } = funnelData;
+  const [amount, setAmount] = useState(funnelData?.amount || '');
   const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
   const [error, setError] = useState(false);
@@ -60,7 +60,7 @@ const InvestAmount = (props) => {
     if(error){
       setError(false);
     }
-    if(goalRecommendation.itype !== "saveforgoal"){
+    if(funnelGoalData.itype !== "saveforgoal"){
       // ? Shouldn't this check be made even for 'parkmymoney'
       let result;
       if (investTypeDisplay === "sip") {
@@ -76,13 +76,13 @@ const InvestAmount = (props) => {
         setError(false);
       }
     }
-    if (goalRecommendation.id === "savetax") {
-      calculateTax(graphData?.corpus);
+    if (funnelGoalData.id === "savetax") {
+      calculateTax(funnelData?.corpus);
     } else {
       const valueOfCorpus = corpusValue(
         equity,
         amount,
-        goalRecommendation.id,
+        funnelGoalData.id,
         isRecurring,
         term
       );
@@ -95,15 +95,15 @@ const InvestAmount = (props) => {
       const params = {
         amount,
         type: investType,
-        term: graphData?.term,
+        term: funnelData?.term,
         rp_enabled: getConfig().riskEnabledFunnels,
       };
       setLoader("button");
       if (investType === "saveforgoal") {
-        params.subtype = graphData?.subtype;
+        params.subtype = funnelData?.subtype;
         delete params.amount;
       } else if (investType === 'investsurplus') {
-        graphData['term'] = 3;
+        funnelData['term'] = 3;
         params.term = 3; // TODO: Remove hardcoding later
       }
       const data = await get_recommended_funds(params);
@@ -113,16 +113,14 @@ const InvestAmount = (props) => {
         // RP enabled flow, when user has no risk profile
         storageService().remove('userSelectedRisk');
         if (data.msg_code === 0) {
-          navigate(`${goalRecommendation.id}/risk-select`);
+          navigate(`${funnelGoalData.id}/risk-select`);
         } else if (data.msg_code === 1) {
-          navigate(`${goalRecommendation.id}/risk-select-skippable`);
+          navigate(`${funnelGoalData.id}/risk-select-skippable`);
         }
         return;
       }
       
-      storageService().setObject('graphData', {
-        ...graphData, ...data, amount, recommendedTotalAmount: data.amount
-      });
+      updateFunnelData({ ...data, amount, recommendedTotalAmount: data.amount })
       
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully
@@ -130,7 +128,7 @@ const InvestAmount = (props) => {
         navigate('recommendations');
       } else {
         // RP disabled flow
-        navigate(`${goalRecommendation.id}/funds`, { ...graphData, amount });
+        navigate(`${funnelGoalData.id}/funds`, { ...funnelData, amount });
       }
     } catch (err) {
       console.log(err);
@@ -172,7 +170,7 @@ const InvestAmount = (props) => {
     <Container
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
-      title={graphData.name}
+      title={funnelData.name}
       disable={error}
       showLoader={loader}
       handleClick={goNext}
@@ -198,7 +196,7 @@ const InvestAmount = (props) => {
           <p className='invest-amount-input-duration'>
             {(
               investTypeDisplay !== 'sip' ||
-              goalRecommendation.itype !== 'saveforgoal'
+              funnelGoalData.itype !== 'saveforgoal'
              ) ? 
               'from my savings' : 'per month'
             }
@@ -206,7 +204,7 @@ const InvestAmount = (props) => {
         </div>
         <div className='invest-amount-corpus'>
           <div className='invest-amount-corpus-duration'>
-            {goalRecommendation.id === 'savetax' ?
+            {funnelGoalData.id === 'savetax' ?
               'till Mar {date.getFullYear()} to save tax upto:' : `Corpus in ${year}`
             }
           </div>
