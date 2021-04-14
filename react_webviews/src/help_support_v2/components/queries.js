@@ -9,6 +9,7 @@ import { Imgc } from "common/ui/Imgc";
 import { SkeltonRect } from "common/ui/Skelton";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
+import scrollIntoView from "scroll-into-view-if-needed";
 
 function TabContainer({ children, dir }) {
   return (
@@ -85,6 +86,12 @@ class Queries extends Component {
     } else {
       !tickets.open && this.getTickets("open");
     }
+    
+    let element = document.getElementById("viewScroll");
+    scrollIntoView(element, {
+      block: "start",
+      inline: "nearest",
+    });
   };
 
   renderTicketError = () => {};
@@ -175,9 +182,10 @@ class Queries extends Component {
               }}
               style={{ height: "80vh" }}
               enableMouseEvents
-              animateHeight={value === 1}
+              // animateHeight={value === 0}
             >
               <TabContainer dir={"ltr"}>
+                <div id="viewScroll"></div>
                 {tickets.open && tickets.open.length > 0 && (
                   <Tickets
                     tickets={tickets.open}
@@ -202,6 +210,7 @@ class Queries extends Component {
                 )}
               </TabContainer>
               <TabContainer dir={"ltr"}>
+                <div id="viewScroll"></div>
                 {tickets.closed && tickets.closed.length > 0 && (
                   <Tickets
                     tickets={tickets.closed}

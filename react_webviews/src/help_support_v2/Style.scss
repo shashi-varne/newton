@@ -260,6 +260,10 @@
   position: fixed;
   width: var(--desktop-width);
 
+  #viewScroll {
+    margin: -24px 0 20px;
+  }
+
   .nav-bar {
     height: 100%;
     padding-top: 10px;

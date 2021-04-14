@@ -32,12 +32,9 @@ class OpenTickets extends Component {
     let { index } = this.state;
     index += 5;
 
-    this.setState(
-      {
-        index: index,
-      },
-      // () => this.handleScroll()
-    );
+    this.setState({
+      index: index,
+    });
   };
 
   render() {
@@ -60,14 +57,13 @@ class OpenTickets extends Component {
           </div>
         ))}
         {tickets.slice(0, index).length !== length && (
-        <div
-          className="generic-page-button-small query-btn fade-in"
-          onClick={() => this.handleCta()}
-        >
-          Load more tickets
-        </div>
+          <div
+            className="generic-page-button-small query-btn fade-in"
+            onClick={() => this.handleCta()}
+          >
+            Load more tickets
+          </div>
         )}
-        <div id="viewScroll"></div>
       </div>
     );
   }

@@ -90,7 +90,7 @@ export const handleScroll = throttle(
     scrollIntoView(element, {
       block: "start",
       inline: "nearest",
-      behavior: "smooth",
+      // behavior: "smooth",
     });
   },
   50,
