@@ -224,6 +224,14 @@ class GroupHealthPlanIsPed extends Component {
                 insured_people_details,
                 'answers' : answers
             }
+            console.log(body)
+            var current_state = {}
+            for(var x in body.insured_people_details){
+                if(body.insured_people_details[x].ped){
+                    current_state[`${body.insured_people_details[x].relation_key}`]  = body.insured_people_details[x].ped
+                }
+            }
+            console.log(current_state)
             this.updateLead(body);
         }
 

@@ -489,14 +489,17 @@ class GroupHealthPlanPersonalDetails extends Component {
       //for api optimization
       var current_state = {};
       var keys_to_add = ['name', 'dob', 'gender', 'height', 'weight', 'pan_no', 'occupation']
-      var current_member = body.insured_people_details[0];
+      var current_member = this.state.member_key === 'applicant' ? body.buyer_details : body.insured_people_details[0];
+      
 
       for(var x in current_member){
         if(keys_to_add.indexOf(x) >= 0){
           current_state[x] = current_member[x];
         }
       }
-
+      if(form_data.pan_no){
+        current_state['pan_no'] = form_data.pan_no
+      }
       this.updateLead(body, '', current_state );
     }
   }

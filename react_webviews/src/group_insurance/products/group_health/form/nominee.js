@@ -289,8 +289,24 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }        
             
+            var keys_to_add = ['name', 'relation', 'dob'];
+            var current_state = {}
             
-            this.updateLead(body, '', {'name': this.state.form_data.name, 'relation': this.state.form_data.relation});     
+            for(var x in body.nominee_details){
+                if(keys_to_add.indexOf(x) >= 0){
+                    current_state[x] = body.nominee_details[x];
+                }
+            }
+            if(this.state.renderAppointee){
+                for(var x in body.nominee_details.appointee_details){
+                    if(keys_to_add.indexOf(x) >= 0){
+                        current_state[`appointee_${x}`] = body.nominee_details.appointee_details[x];
+                    }
+                }   
+            }
+
+            console.log(current_state)
+            this.updateLead(body, '',  current_state);     
         }
     }
 

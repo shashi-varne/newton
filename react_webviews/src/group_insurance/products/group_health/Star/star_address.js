@@ -216,7 +216,17 @@ class StarAddress extends Component {
         }
       }
 
-      this.updateLead(body);
+      console.log(body)
+      var keys_to_add = ['addr_line1', 'addr_line2', 'pincode', 'city', 'area', 'state'];
+      var current_state = {}
+
+      for(var x in body.address_details.permanent_address){
+        if(keys_to_add.indexOf(x) >= 0){
+          current_state[x] = body.address_details.permanent_address[x];
+        }
+      }
+
+      this.updateLead(body, '', current_state);
     }
   };
 

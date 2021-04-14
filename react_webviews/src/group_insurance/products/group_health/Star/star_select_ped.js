@@ -238,13 +238,15 @@ class GroupHealthStarPlanSelectPed extends Component {
          }
        }
      }
-     body.insured_people_details = insured_people_details;
-     this.setState({
-       form_data: body
-     },()=>{
-      this.updateLead(body);
-     })
+    body.insured_people_details = insured_people_details;
      
+    var current_state = {}
+    for(var x in body.answers){
+      if(body.answers[x].pre_existing_diseases.length > 0){
+        current_state[x] = body.answers[x].pre_existing_diseases[0].description;
+      }
+    }
+    this.updateLead(body, '', current_state);
    }
    };
 

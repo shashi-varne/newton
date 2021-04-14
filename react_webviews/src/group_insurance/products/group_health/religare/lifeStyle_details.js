@@ -17,7 +17,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
       ctaWithProvider: true,
       get_lead: true,
       life_style_question: {},
-      next_state: 'plan-medical-history'
+      next_state: 'plan-medical-history',
+      screen_name: 'life_style_details'
     };
 
     this.initialize = initialize.bind(this);
@@ -150,6 +151,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     const selected_members = member_base.map(member => (member.life_style_question_exists && member.life_style_question_exists !== 'No') ? member.key : '');
     let eventObj = {
       event_name: "health_insurance",
+      screen_name: "lifestyle_details",
       properties: {
         user_action: user_action,
         screen_name: "lifestyle_details",
@@ -349,7 +351,16 @@ class GroupHealthPlanLifestyleDetail extends Component {
       }
       body['insured_people_details'] = insured_people_details;
     }
-      this.updateLead(body);
+    
+    var current_state = {}
+    for(var x in body.answers){
+      if(body.answers[x].life_style_details[0].yes_no){
+        current_state[`${x}_yes_no`] = body.answers[x].life_style_details[0].yes_no;
+        current_state[`${x}_since_when`] = body.answers[x].life_style_details[0].since_when;
+        current_state[`${x}_desc`] = body.answers[x].life_style_details[0].description;
+      } 
+    }
+    this.updateLead(body, '', current_state);
    }
   };
 

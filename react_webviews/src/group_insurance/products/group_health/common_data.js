@@ -376,15 +376,19 @@ export async function updateLead( body, quote_id, current_state) {
     if(this.state.screen_name === 'personal_details_screen'){
         var prev_form_data = groupHealthPlanData['application_data']['personal_details_screen'][`${this.state.member_key}`] || {};
     }else{
-        var prev_form_data = groupHealthPlanData.application_data ? groupHealthPlanData.application_data[this.state.screen_name] : {};
+        var prev_form_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data[this.state.screen_name] || {}: {};
     }
-    console.log({prev_form_data, current_form_data})
 
     var isFormDataSame = false;
-    if(!isEmpty(prev_form_data)){
-        var isFormDataSame = compareObjects(Object.keys(current_form_data), prev_form_data, current_form_data);
+    // if(!isEmpty(prev_form_data)){
+        var keys_to_check = isEmpty(Object.keys(current_form_data)) ? Object.keys(prev_form_data) : Object.keys(current_form_data)
+        var isFormDataSame = compareObjects(keys_to_check, prev_form_data, current_form_data);
+    // }
+    if(isEmpty(current_form_data) && isEmpty(prev_form_data)){
+        isFormDataSame = true;
     }
-    console.log("SAME?", isFormDataSame)
+    
+    console.log('SAME?', isFormDataSame)
     if(isFormDataSame){
         this.navigate(this.state.next_state);
         return;

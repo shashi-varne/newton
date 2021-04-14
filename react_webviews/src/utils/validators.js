@@ -1040,10 +1040,19 @@ export function convertDateFormat(inputFormat) {
 
 export const compareObjects = (keysToCheck, oldState, newState) => {
   let compare = true;
+  console.log({oldState, newState})
+  if(isEmpty(oldState) && isEmpty(newState)) return true;
+  if(isEmpty(oldState) || isEmpty(newState)) return false;
+
+  if(Object.keys(oldState).length !== Object.keys(newState).length) return false;
+
   keysToCheck.forEach((key) => {
-    if (oldState[key].toString().trim() !== newState[key].toString().trim()) {
-      compare = false;
-    }
+    if ((oldState[key] && !newState[key]) || 
+        (newState[key] && !oldState[key]) || 
+         oldState[key].toString().trim() !== newState[key].toString().trim()) 
+        {
+        compare = false;
+        }
   });
   return compare;
 };

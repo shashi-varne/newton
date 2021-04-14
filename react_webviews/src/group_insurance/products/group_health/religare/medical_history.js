@@ -15,7 +15,8 @@ class GroupHealthPlanMedicalHistory extends Component {
       ctaWithProvider: true,
       get_lead: true,
       medical_questions: {},
-      next_state: 'is-ped'
+      next_state: 'is-ped',
+      screen_name: 'medical_history_details'
     };
 
     this.initialize = initialize.bind(this);
@@ -264,7 +265,14 @@ class GroupHealthPlanMedicalHistory extends Component {
 
 
       this.sendEvents("next");     
-      this.updateLead(body);
+      console.log(body)
+      var current_state = {}
+      for(var x in body.answers){
+        for(var y of body.answers[x].medical_history_details){
+          if(y.yes_no) current_state[`${x}_${y.question_id}`] = y.yes_no;
+        }
+      }
+      this.updateLead(body, '', current_state);
 
     }
 }
