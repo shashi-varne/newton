@@ -441,6 +441,7 @@ class GroupHealthLanding extends Component {
             style={{ margin: "20px 0px 0px 0px" }}
             baseData={this.state.stepsContentMapper}
             classNameIcon={'imgc-box-landing'}
+            showSkelton={true}
           />
 
           <div
