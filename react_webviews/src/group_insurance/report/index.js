@@ -64,7 +64,8 @@ class Report extends Component {
         top_title: 'Life Insurance',
         key: 'FYNTUNE',
         id: policy.fyntune_ref_id, 
-        premium: policy.total_amount
+        premium: policy.total_amount,
+        frequency: policy.frequency ? policy.frequency.toLowerCase() : 'annually'
       };
     } else if (provider === 'care_plus') {
       obj = {
@@ -374,9 +375,7 @@ class Report extends Component {
                   {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
                 </div>
                 {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span className="sub-text-bold">Premium:</span> {inrFormatDecimal(props.premium)}
-                  {props.key !== 'TERM_INSURANCE' &&
-                    ' annually' 
-                  }
+                {props.key !== 'TERM_INSURANCE' ? ` ${props.frequency}`: ''}
                 </div>}
                 {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span className="sub-text-bold">Premium:</span> {inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' && props.frequency !== 'Single' &&
