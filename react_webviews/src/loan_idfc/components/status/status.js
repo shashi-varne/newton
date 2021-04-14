@@ -214,6 +214,17 @@ const commonMapper = {
     stage: "after loan requirement details",
     hidePageTitle: true,
   },
+  location: {
+    top_icon: "not_eligible",
+    top_title: "You’re not eligible for a loan!",
+    button_title: "START A NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "idfc_application_rejected",
+    stage: "after loan requirement details",
+    hidePageTitle: true,
+  },
   internally_rejected: {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
@@ -269,7 +280,7 @@ class LoanStatus extends Component {
         commonMapper: mapper,
         application_status: application_status,
       });
-    } else if (idfc_rejection_reason === "pincode") {
+    } else if (idfc_rejection_reason === "pincode" || idfc_rejection_reason === "location") {
       mapper = commonMapper["pincode"] || {};
       this.setState({
         commonMapper: mapper,
@@ -480,7 +491,7 @@ class LoanStatus extends Component {
           )}
 
           {commonMapper.top_title === "You’re not eligible for a loan!" &&
-            idfc_rejection_reason !== "pincode" && (
+            (idfc_rejection_reason !== "pincode" && idfc_rejection_reason !== "location") && (
             <div className="subtitle">
               IDFC FIRST Bank has rejected the loan application as it does not
               meet their loan policy.
@@ -507,11 +518,10 @@ class LoanStatus extends Component {
             )}
 
           {commonMapper.top_title === "You’re not eligible for a loan!" &&
-            // !rejection_reason &&
-            idfc_rejection_reason === "pincode" && (
+            (idfc_rejection_reason === "pincode" || idfc_rejection_reason === "location") && (
               <div>
                 <p className="subtitle">
-                  Sorry! We don't serve in the selected location yet.
+                  Sorry! IDFC FIRST Bank don't serve in the selected location yet.
                 </p>
                 <p className="subtitle">
                   Thank you for expressing interest in availing a loan. Hope to
