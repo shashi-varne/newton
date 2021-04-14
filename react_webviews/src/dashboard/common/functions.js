@@ -1,6 +1,6 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import { getConfig } from "utils/functions";
 import { isReadyToInvest, initData } from "../../kyc/services";
 import { getBasePath } from "../../utils/functions";

@@ -3,10 +3,10 @@ import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import { navigate as navigateFunc } from "../common/functions";
 import Button from "@material-ui/core/Button";
-import AadhaarDialog from "../mini_components/AadhaarDialog";
+import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import DotDotLoaderNew from '../../common/ui/DotDotLoaderNew';
 
 const Failed = (props) => {

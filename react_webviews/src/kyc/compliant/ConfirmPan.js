@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "../common/Container";
 import { navigate as navigateFunc, panUiSet } from "../common/functions";
 import { getPathname } from "../constants";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import { kycSubmit } from "../common/api";
 import { getConfig } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
-import Input from "common/ui/Input";
+import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { getPathname, storageConstants } from "../constants";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import ResidentDialog from "./residentDialog";
-import Alert from "../mini_components/Alert";
+import Alert from "../mini-components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
-import AccountMerge from "../mini_components/AccountMerge";
+import AccountMerge from "../mini-components/AccountMerge";
 import { getConfig } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 

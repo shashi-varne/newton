@@ -2,11 +2,11 @@ import React, { Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
 import NotFound from "../common/components/NotFound";
 
-import Journey from "./journey";
-import Intro from "./upload/intro";
-import Progress from "./upload/progress";
-import Pan from "./upload/pan";
-import AddressUpload from "./upload/address";
+import Journey from "./journey/Journey";
+import Intro from "./upload/Intro";
+import Progress from "./upload/Progress";
+import Pan from "./upload/Pan";
+import AddressUpload from "./upload/Address";
 import KycBankDetails from "./bank-kyc/KycBankDetails";
 import KycBankVerify from "./bank-kyc/KycBankVerify";
 
@@ -25,32 +25,32 @@ import ConfirmPan from "./compliant/ConfirmPan";
 import KycComplete from "./compliant/Complete";
 import CompliantReport from "./compliant/Report";
 import Verify from "./compliant/Verify";
-import RtaCompliantPersonalDetails from "./rta_compliant";
+import RtaCompliantPersonalDetails from "./rta-compliant";
 
-import RegistrationSuccess from "./success";
+import RegistrationSuccess from "./success/RegistrationSuccess";
 
-import Home from "./home";
-import Nominee from "./nominee";
-import Report from "./report";
-import PersonalDetails1 from "./personal_details/Screen1";
-import PersonalDetails2 from "./personal_details/Screen2";
-import PersonalDetails3 from "./personal_details/Screen3";
-import PersonalDetails4 from "./personal_details/Screen4";
+import Home from "./home/Home";
+import Nominee from "./nominee/Nominee";
+import Report from "./report/KycReport";
+import PersonalDetails1 from "./personal-details/Screen1";
+import PersonalDetails2 from "./personal-details/Screen2";
+import PersonalDetails3 from "./personal-details/Screen3";
+import PersonalDetails4 from "./personal-details/Screen4";
 import KycUploadDocuments from "./bank-kyc/KycUploadDocuments";
 import SampleDocuments from "./bank-kyc/SampleDocuments";
 import AddressDetails2 from "./address/AddressDetails2";
-import AddressDetails1 from "./address/screen1";
-import DigilockerPersonalDetails1 from "./digilocker/screen1";
-import ChangeAddressDetails1 from "./address/change_address/ChangeAddressDetails1";
+import AddressDetails1 from "./address/AddressDetails1";
+import DigilockerPersonalDetails1 from "./digilocker/PersonalDetails1";
+import ChangeAddressDetails1 from "./address/change-address/ChangeAddressDetails1";
 import NriAddressDetails1 from "./address/nri/NRIAddressDetails1";
 import NRIAddressDetails2 from "./address/nri/NRIAddressDetails2";
-import Success from "./digilocker/success";
-import Failed from "./digilocker/failed";
-import Sign from "./upload/sign";
-import Selfie from "./upload/selfie";
-import IpvVideo from "./upload/ipv_video";
-import NRIAddressUpload from "./upload/nri_address";
-import ChangeAddressDetails2 from "./address/change_address/ChangeAddressDetails2";
+import Success from "./digilocker/Success";
+import Failed from "./digilocker/Failed";
+import Sign from "./upload/Sign";
+import Selfie from "./upload/Selfie";
+import IpvVideo from "./upload/IpvVideo";
+import NRIAddressUpload from "./upload/NriAddress";
+import ChangeAddressDetails2 from "./address/change-address/ChangeAddressDetails2";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -98,25 +98,61 @@ const Kyc = (props) => {
           path={`${url}/nri-address-details1`}
           component={NriAddressDetails1}
         />
-        <Route exact path={`${url}/upload/intro`} component={Intro} />
-        <Route exact path={`${url}/upload/progress`} component={Progress} />
-        <Route exact path={`${url}/upload/pan`} component={Pan} />
-        <Route exact path={`${url}/upload/sign`} component={Sign} />
-        <Route exact path={`${url}/upload/selfie`} component={Selfie} />
-        <Route exact path={`${url}/upload/selfie_video`} component={IpvVideo} />
-        <Route exact path={`${url}/upload/address`} component={AddressUpload} />
+        <Route 
+          exact
+          path={`${url}/upload/intro`} 
+          component={Intro} 
+        />
+        <Route 
+          exact 
+          path={`${url}/upload/progress`} 
+          component={Progress} 
+        />
+        <Route 
+          exact 
+          path={`${url}/upload/pan`} 
+          component={Pan} 
+        />
+        <Route 
+          exact 
+          path={`${url}/upload/sign`} 
+          component={Sign} 
+        />
+        <Route 
+          exact 
+          path={`${url}/upload/selfie`} 
+          component={Selfie} 
+        />
+        <Route 
+          exact 
+          path={`${url}/upload/selfie_video`} 
+          component={IpvVideo} 
+        />
+        <Route
+          exact 
+          path={`${url}/upload/address`} 
+          component={AddressUpload} 
+        />
         <Route
           exact
           path={`${url}/upload/address-nri`}
           component={NRIAddressUpload}
         />
-        <Route exact path={`${url}/home`} component={Home} />
+        <Route 
+          exact 
+          path={`${url}/home`} 
+          component={Home} 
+        />
         <Route
           exact
           path={`${url}/:userType/nominee-details`}
           component={Nominee}
         />
-        <Route exact path={`${url}/report`} component={Report} />
+        <Route 
+          exact 
+          path={`${url}/report`} 
+          component={Report} 
+        />
         <Route
           exact
           path={`${url}/compliant-personal-details`}
@@ -167,13 +203,21 @@ const Kyc = (props) => {
           path={`${url}/registration/success`}
           component={RegistrationSuccess}
         />
-        <Route exact path={`${url}/approved/banks/doc`} component={AddBank} />
+        <Route 
+          exact 
+          path={`${url}/approved/banks/doc`} 
+          component={AddBank} 
+        />
         <Route
           exact
           path={`${url}/approved/banks/verify/:bank_id`}
           component={AddBankVerify}
         />
-        <Route exact path={`${url}/add-bank`} component={BanksList} />
+        <Route 
+          exact 
+          path={`${url}/add-bank`} 
+          component={BanksList} 
+        />
         <Route
           exact
           path={`${url}/add-bank/details/:bank_id`}
@@ -219,8 +263,16 @@ const Kyc = (props) => {
           path={`${url}/dl/personal-details3`}
           render={(props) => <PersonalDetails4 {...props} type="digilocker" />}
         />
-        <Route exact path={`${url}/digilocker/success`} component={Success} />
-        <Route exact path={`${url}/digilocker/failed`} component={Failed} />
+        <Route 
+          exact 
+          path={`${url}/digilocker/success`} 
+          component={Success}
+        />
+        <Route 
+          exact 
+          path={`${url}/digilocker/failed`} 
+          component={Failed} 
+        />
         <Route
           exact
           path={`${url}/nri-address-details1`}

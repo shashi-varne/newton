@@ -172,7 +172,7 @@ const InvestAmount = (props) => {
     <Container
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
-      title={graphData.name}
+      title={title}
       disable={error}
       showLoader={loader}
       handleClick={goNext}

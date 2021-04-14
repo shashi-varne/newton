@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Container from "../common/Container";
 import { Button } from "@material-ui/core";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import "./MyAccount.scss";
 import { getBase64, getConfig } from "../../utils/functions";
@@ -131,7 +131,7 @@ const BlankMandateUpload = (props) => {
         <header>Share the picture of your mandate form</header>
         {file && fileToShow && (
           <div className="preview-container">
-            <img src={fileToShow} className="preview" alt="Uploaded image" />
+            <img src={fileToShow} className="preview" alt="Uploaded File" />
           </div>
         )}
         {!config.Web && (

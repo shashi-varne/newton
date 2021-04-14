@@ -7,23 +7,17 @@ import "./style.scss";
 
 const AccountLinked = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [isApiRunning, setIsApiRunning] = useState(false);
   const config = getConfig();
   const productName = config.productName;
   const partner = config.partner;
   const handleClick = () => {
-    navigate("/logout")
+    navigate("/logout");
   };
 
   const hideImage =
     isIframe() && partner.code === "moneycontrol" && config.isMobileDevice;
   return (
-    <Container
-      buttonTitle="CLOSE"
-      hidePageTitle
-      handleClick={handleClick}
-      showLoader={isApiRunning}
-    >
+    <Container buttonTitle="CLOSE" hidePageTitle handleClick={handleClick}>
       <div className="account-merge-linked">
         {!hideImage && (
           <div className="outline">

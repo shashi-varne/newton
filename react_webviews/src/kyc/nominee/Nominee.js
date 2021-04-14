@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import Input from "common/ui/Input";
+import Input from "../../common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { relationshipOptions, getPathname } from "../constants";
 import {
@@ -15,7 +15,7 @@ import {
   dobFormatTest,
   formatDate,
 } from "../../utils/validators";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Nominee = (props) => {

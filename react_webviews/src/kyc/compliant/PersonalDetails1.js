@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { genderOptions, residentialOptions, getPathname } from "../constants";
-import CompliantHelpDialog from "../mini_components/CompliantHelpDialog";
+import CompliantHelpDialog from "../mini-components/CompliantHelpDialog";
 import {
   formatDate,
   dobFormatTest,

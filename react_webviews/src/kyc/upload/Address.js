@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react'
-import Container from '../../common/Container'
-import Alert from '../../mini_components/Alert'
-import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper } from '../../constants'
-import { upload } from '../../common/api'
-import { getBase64, getConfig } from '../../../utils/functions'
-import toast from 'common/ui/Toast'
-import { combinedDocBlob } from '../../common/functions'
-import { navigate as navigateFunc } from '../../common/functions'
-import useUserKycHook from '../../common/hooks/userKycHook'
+import React, { useState, useEffect, useRef } from 'react'
+import Container from '../common/Container'
+import Alert from '../mini-components/Alert'
+import { storageService, isEmpty } from '../../utils/validators'
+import { storageConstants, docMapper } from '../constants'
+import { upload } from '../common/api'
+import { getBase64, getConfig } from '../../utils/functions'
+import toast from '../../common/ui/Toast'
+import { combinedDocBlob } from '../common/functions'
+import { navigate as navigateFunc } from '../common/functions'
+import useUserKycHook from '../common/hooks/userKycHook'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -34,7 +34,7 @@ const getTitleList = ({ kyc }) => {
 }
 
 const MessageComponent = (kyc) => {
-  const [titleList, setTitleList] = useState(getTitleList(kyc))
+  const [titleList] = useState(getTitleList(kyc))
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
@@ -47,19 +47,23 @@ const MessageComponent = (kyc) => {
   )
 }
 
-const ChangeAddressDetails2 = (props) => {
+const AddressUpload = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
 
-  const stateParams = props?.location?.state
-  const { address_doc_type: addressDocType } = stateParams
-
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
+  const {kyc: kycData, isLoading} = useUserKycHook();
+  const [kyc, setKyc] = useState(
+    kycData
+  )
 
-  const { kyc, isLoading } = useUserKycHook()
+  useEffect(() => {
+    setKyc(kycData)
+  }, [kycData])
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -189,27 +193,26 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleSubmit = async () => {
-    const navigate = navigateFunc.bind(props)
-    const type = kyc?.address?.meta_data?.is_nri ? 'nri_address' : 'address'
-    const addressKey = kyc?.address?.meta_data?.is_nri
-    ? 'passport'
-    : addressDocType
     try {
-      setIsApiRunning('button')
+      setIsApiRunning("button")
       let result
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, type, {
-          addressProofKey: addressKey,
+        result = await upload(frontDoc, 'address', {
+          address_proof_key: addressProofKey,
         })
       } else {
-        result = await upload(file, type, {
-          addressProofKey: addressKey,
+        result = await upload(file, 'address', {
+          address_proof_key: addressProofKey,
         })
       }
+      console.log(result)
+      setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/my-account')
+      navigate('/kyc/upload/progress')
     } catch (err) {
+      console.error(err)
     } finally {
+      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
@@ -221,19 +224,15 @@ const ChangeAddressDetails2 = (props) => {
     return addressLine
   }
 
-  const addressProofKey = kyc?.address?.meta_data?.is_nri
+  var addressProofKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'
-    : addressDocType
-  const addressProof = kyc?.address?.meta_data?.is_nri
+    : kyc?.address_doc_type
+  var addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
-    : docMapper[addressDocType]
+    : docMapper[kyc?.address_doc_type]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
-
-  const title = kyc?.address?.meta_data?.is_nri
-    ? 'Upload Indian Address Proof'
-    : 'Upload address proof'
 
   const getFullAddress = () => {
     let addressFull = ''
@@ -261,23 +260,35 @@ const ChangeAddressDetails2 = (props) => {
     return addressFull
   }
 
+  const editAddress = () => {
+    navigate("/kyc/address-details1", {
+      state: {
+        backToJourney: true,
+      },
+    });
+  };
+  
   const isWeb = getConfig().isWebCode
 
   return (
     <Container
-      hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
-      title={title}
-      count={1}
-      current={1}
-      total={4}
+      title="Upload address proof"
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
+          <div className="sub-title">
+            {getFullAddress()}
+            {getFullAddress() && (
+              <div className="edit" onClick={editAddress}>
+                EDIT
+              </div>
+            )}
+          </div>
           <Alert
             variant="attention"
             title="Note"
@@ -533,4 +544,4 @@ const ChangeAddressDetails2 = (props) => {
   )
 }
 
-export default ChangeAddressDetails2
+export default AddressUpload

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
-import CompliantHelpDialog from "../mini_components/CompliantHelpDialog";
+import CompliantHelpDialog from "../mini-components/CompliantHelpDialog";
 import {
   formatDate,
   dobFormatTest,

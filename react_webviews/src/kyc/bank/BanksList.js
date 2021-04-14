@@ -5,7 +5,7 @@ import { getMyAccount } from "../common/api";
 import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
 import { getPathname, storageConstants } from "../constants";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import { initData } from "../services";
 
 const productName = getConfig().productName;

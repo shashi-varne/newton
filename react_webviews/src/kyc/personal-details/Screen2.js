@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import Input from "common/ui/Input";
+import Input from "../../common/ui/Input";
 import { getPathname } from "../constants";
 import { isEmpty, validateAlphabets } from "../../utils/validators";
 import {
@@ -9,7 +9,7 @@ import {
   compareObjects,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const PersonalDetails2 = (props) => {

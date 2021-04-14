@@ -35,7 +35,7 @@ const ChangeAddressDetails1 = (props) => {
     let address_doc_type =
       selectedIndexResidentialStatus === 1 ? "PASSPORT" : "";
     let formData = {
-      address_doc_type: kyc.address?.address_doc_type || address_doc_type,
+      address_doc_type: kyc?.address_doc_type || address_doc_type,
     };
     setFormData({ ...formData });
   };
@@ -73,7 +73,7 @@ const ChangeAddressDetails1 = (props) => {
       title={title}
       count={1}
       current={1}
-      total={4}
+      total={2}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">
         <main>

@@ -22,7 +22,7 @@ import PaymentCallback from "./invest/components/PaymentCallback";
 import SipPaymentCallback from "./invest/components/SipPaymentCallback";
 import PageCallback from "./invest/components/PageCallback";
 import PaymentOptions from "./invest/components/PaymentOptions";
-import DigilockerCallback from "../kyc/digilocker/digilockercallback";
+import DigilockerCallback from "../kyc/digilocker/DigilockerCallback";
 import AccountMerge from "./account-merge";
 import AccountMergeOtp from "./account-merge/otp";
 import AccountLinked from "./account-merge/linked";

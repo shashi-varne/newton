@@ -13,7 +13,7 @@ import {
   compareObjects,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isEmpty } from "../../utils/validators";
 

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import Alert from "../mini_components/Alert";
+import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
-import toast from "common/ui/Toast";
-import PennyDialog from "../mini_components/PennyDialog";
-import PennyFailedDialog from "../mini_components/PennyFailedDialog";
-import PennySuccessDialog from "../mini_components/PennySuccessDialog";
-import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
+import toast from "../../common/ui/Toast";
+import PennyDialog from "../mini-components/PennyDialog";
+import PennyFailedDialog from "../mini-components/PennyFailedDialog";
+import PennySuccessDialog from "../mini-components/PennySuccessDialog";
+import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 

@@ -1,6 +1,6 @@
 import TextField from "@material-ui/core/TextField";
 import React, { useState, useEffect } from "react";
-import Toast from "common/ui/Toast";
+import Toast from "../../../common/ui/Toast";
 import { submit } from "../../common/api";
 import Container from "../../common/Container";
 import { kycNRIDocNameMapper } from "../../constants";

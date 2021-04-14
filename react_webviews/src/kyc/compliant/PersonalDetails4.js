@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
-import Input from "common/ui/Input";
+import Input from "../../common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { relationshipOptions, getPathname } from "../constants";
@@ -12,7 +12,7 @@ import {
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const PersonalDetails4 = (props) => {

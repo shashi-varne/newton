@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
-import ShowAadharDialog from './components/ShowAadharDialog'
-import Alert from '../mini_components/Alert'
+import ShowAadharDialog from './ShowAadharDialog'
+import Alert from '../mini-components/Alert'
 import { getUrlParams, isEmpty, storageService } from '../../utils/validators'
 import { getPathname, storageConstants } from '../constants'
 import { getKycAppStatus } from '../services'
-import toast from 'common/ui/Toast'
+import toast from '../../common/ui/Toast'
 import {
   navigate as navigateFunc,
   updateQueryStringParameter,
@@ -15,8 +15,8 @@ import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import { isMobile } from 'utils/functions'
 import { nativeCallback } from 'utils/native_callback'
-import AadhaarDialog from '../mini_components/AadhaarDialog'
-import KycBackModal from '../mini_components/KycBack'
+import AadhaarDialog from '../mini-components/AadhaarDialog'
+import KycBackModal from '../mini-components/KycBack'
 import { getBasePath } from '../../utils/functions'
 
 const Journey = (props) => {

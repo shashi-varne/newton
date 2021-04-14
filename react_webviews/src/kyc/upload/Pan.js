@@ -1,60 +1,116 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Container from '../../common/Container'
-import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants } from '../../constants'
-import { getIpvCode, upload } from '../../common/api'
-import { navigate as navigateFunc } from '../../common/functions'
-import { getConfig } from 'utils/functions'
-import toast from 'common/ui/Toast'
-import KnowMore from './KnowMore'
-import useUserKycHook from '../../common/hooks/userKycHook'
+import React, { useState, useRef } from 'react'
+import Container from '../common/Container'
+import Alert from '../mini-components/Alert'
+import { storageService, isEmpty } from '../../utils/validators'
+import { storageConstants } from '../constants'
+import { upload } from '../common/api'
+import { getBase64, getConfig } from '../../utils/functions'
+import toast from '../../common/ui/Toast'
+import { navigate as navigateFunc } from '../common/functions'
+import useUserKycHook from '../common/hooks/userKycHook'
 
-const IpvVideo = (props) => {
-  const [isApiRunning, setIsApiRunning] = useState(false)
-  const [file, setFile] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [ipvcode, setIpvCode] = useState('')
-  const {kyc, isLoading} = useUserKycHook();
-  const [showKnowMoreDialog, setKnowMoreDialog] = useState(false)
-
-  const open = () => {
-    setKnowMoreDialog(true)
-  }
-
-  const close = () => {
-    setKnowMoreDialog(false)
-  }
-
-  const inputEl = useRef(null)
-
-  useEffect(() => {
-    fetchIpvCode()
-  }, [])
-
-  const fetchIpvCode = async () => {
-    try {
-      const result = await getIpvCode()
-      setIpvCode(result.ipv_code)
-    } catch (err) {
-      toast(err.message)
-    } finally {
-      setLoading(false)
+const getTitleList = ({ kyc }) => {
+  let titleList = [
+    'Photo of PAN card should have your signature',
+    'Photo of PAN should be clear and it should not have the exposure of flash light',
+  ]
+  if (
+    kyc?.kyc_status !== 'compliant' &&
+    kyc?.dl_docs_status !== '' &&
+    kyc?.dl_docs_status !== 'init' &&
+    kyc?.dl_docs_status !== null
+  ) {
+    if (
+      kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+      kyc.all_dl_doc_statuses.pan_fetch_status === '' ||
+      kyc.all_dl_doc_statuses.pan_fetch_status === 'failed'
+    ) {
+      titleList[0] =
+        'Oops! seems like Digilocker is down, please upload your PAN card to proceed further'
     }
   }
+  return titleList
+}
+
+const MessageComponent = (kyc) => {
+  const [titleList, setTitleList] = useState(getTitleList(kyc))
+  return (
+    <section className="pan-alert">
+      {titleList.map((title, idx) => (
+        <div className="row" key={idx}>
+          <div className="order">{idx + 1}.</div>
+          <div className="value">{title}</div>
+        </div>
+      ))}
+    </section>
+  )
+}
+
+const Pan = (props) => {
+  const navigate = navigateFunc.bind(props)
+  const [isApiRunning, setIsApiRunning] = useState(false)
+  const [file, setFile] = useState(null)
+  const [fileToShow, setFileToShow] = useState(null)
+  const [subTitle, setSubTitle] = useState('')
+  const [title, setTitle] = useState('')
+  const [showLoader, setShowLoader] = useState(false)
+  const {kyc, isLoading} = useUserKycHook();
+  
+  const inputEl = useRef(null)
+
+  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
+    if (getConfig().generic_callback) {
+      window.callbackWeb[method_name]({
+        type: 'doc',
+        doc_type: doc_type,
+        doc_name: doc_name,
+        doc_side: doc_side,
+        // callbacks from native
+        upload: function upload(file) {
+          try {
+            switch (file.type) {
+              case 'image/jpeg':
+              case 'image/jpg':
+              case 'image/png':
+              case 'image/bmp':
+                setFile(file)
+                getBase64(file, function (img) {
+                  setFileToShow(img)
+                })
+              default:
+                toast('Please select image file')
+            }
+          } catch (e) {
+            //
+          }
+        },
+      })
+
+      window.callbackWeb.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
+          setShowLoader(true)
+        },
+      })
+    }
+  }
+  
   const handleChange = (event) => {
-    console.log(event.target.files)
     const uploadedFile = event.target.files[0]
-    let acceptedTypes = [
-      'video/mp4',
-      'video/webm',
-      'video/ogg',
-      'video/x-flv',
-      'video/x-ms-wmv',
-    ]
-    if (acceptedTypes.includes(uploadedFile.type)) {
-      setFile(event.target.files[0])
+    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
+
+    if (acceptedType.indexOf(uploadedFile.type) === -1) {
+      toast('Please select image file only')
+      return
+    }
+
+    if (getConfig().html_camera) {
+      native_call_handler('open_camera', 'pan', 'pan.jpg', 'front')
     } else {
-      toast('Upload a valid file format')
+      setFile(uploadedFile)
+      getBase64(uploadedFile, function (img) {
+        setFileToShow(img)
+      })
     }
   }
 
@@ -63,54 +119,72 @@ const IpvVideo = (props) => {
   }
 
   const handleSubmit = async () => {
-    const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
-      const result = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
+      const result = await upload(file, 'pan')
       storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      if (
+        (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
+        (result.error && !result.ocr_pan_kyc_matches)
+      ) {
+        setSubTitle(
+          'Photo of PAN should be clear and it should not have the exposure of flash light'
+        )
+        setSubTitle('PAN mismatch!')
+      } else {
+        if (
+          result.kyc.kyc_status !== 'compliant' &&
+          result.kyc.dl_docs_status !== '' &&
+          result.kyc.dl_docs_status !== 'init' &&
+          result.kyc.dl_docs_status !== null
+        ) {
+          navigate('/kyc-esign/info')
+        } else {
+          navigate('/kyc/upload/progress')
+        }
+      }
     } catch (err) {
       console.error(err)
     } finally {
+      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
 
-  const productName = getConfig().productName
   const isWeb = getConfig().isWebCode
 
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      skelton={loading || isLoading}
+      classOverRideContainer="pr-container"
+      skelton={isLoading || showLoader}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
-      title="Upload video (IPV)"
+      title="Upload PAN"
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-ipv-video" className="page-body-kyc">
+        <section id="kyc-upload-pan" className="page-body-kyc">
           <div className="sub-title">
-            As per SEBI, it's compulsory for all investors to go through IPV (In
-            Person Verification Process).
+            PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
+          <Alert
+            variant="attention"
+            title={title || 'Note'}
+            message={subTitle}
+            renderMessage={
+              !subTitle ? () => <MessageComponent kyc={kyc} /> : null
+            }
+          />
           {!isWeb && (
-            <div className="kyc-doc-upload-container">
-              {file && (
-                <img
-                  src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
-                  className="preview"
-                  alt="Uploaded IPV Video"
-                />
+            <div
+              className="kyc-doc-upload-container"
+            >
+              {file && fileToShow && (
+                <img src={fileToShow} className="preview" alt="" />
               )}
               {!file && (
-                <img
-                  className="icon"
-                  src={require(`assets/${productName}/card_upload_selfie.svg`)}
-                  alt="Upload Selfie"
-                  width="320px"
-                  style={{ display: 'block', margin: '0 auto', width: '320px' }}
-                />
+                <div className="caption">Upload front side of PAN Card</div>
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
@@ -120,7 +194,7 @@ const IpvVideo = (props) => {
                       type="file"
                       className="kyc-upload"
                       onChange={handleChange}
-                      accept="video/*"
+                      accept="image/*"
                       capture
                     />
                     <button
@@ -155,7 +229,7 @@ const IpvVideo = (props) => {
                       onClick={handleUpload}
                       className="kyc-upload-button"
                     >
-                      {!file && (
+                      {!file && !fileToShow && (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -177,21 +251,15 @@ const IpvVideo = (props) => {
           )}
           {isWeb && (
             <div className="kyc-doc-upload-container">
-              {file && (
+              {file && fileToShow && (
                 <img
-                  src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
+                  src={fileToShow}
                   className="preview"
-                  alt="Uploaded IPV Video"
+                  alt="Uploaded PAN Card"
                 />
               )}
               {!file && (
-                <img
-                  className="icon"
-                  src={require(`assets/${productName}/card_upload_selfie.svg`)}
-                  alt="Upload Selfie"
-                  width="320px"
-                  style={{ display: 'block', margin: '0 auto', width: '320px' }}
-                />
+                <div className="caption">Upload front side of PAN Card</div>
               )}
               <div className="kyc-upload-doc-actions">
                 <input
@@ -219,32 +287,10 @@ const IpvVideo = (props) => {
               </div>
             </div>
           )}
-          {!file && (
-            <div className="ipv_footer_instructions">
-              While recording,{' '}
-              <strong>read the following verification numbers loud</strong>{' '}
-              while looking at the camera
-            </div>
-          )}
-
-          {file && (
-            <div className="ipv_footer_instructions">
-              Please ensure that you've read aloud the below number for a
-              seamless verification experience.
-            </div>
-          )}
-          <div className="ipv_code">{ipvcode}</div>
-          <div className="flex-between-center">
-            <div className="know_more">How to make a selfie video ?</div>
-            <div className="link" onClick={() => open()}>
-              KNOW MORE
-            </div>
-          </div>
         </section>
       )}
-      <KnowMore isOpen={showKnowMoreDialog} close={close} />
     </Container>
   )
 }
 
-export default IpvVideo
+export default Pan

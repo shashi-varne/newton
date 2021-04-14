@@ -14,7 +14,7 @@ import {
   compareObjects,
 } from "../common/functions";
 import { kycSubmit, getCVL } from "../common/api";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const PersonalDetails3 = (props) => {

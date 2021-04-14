@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react'
-import Container from '../../common/Container'
-import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants } from '../../constants'
-import { upload } from '../../common/api'
-import { navigate as navigateFunc } from '../../common/functions'
+import Container from '../common/Container'
+import { storageService, isEmpty } from '../../utils/validators'
+import { storageConstants } from '../constants'
+import { upload } from '../common/api'
+import { navigate as navigateFunc } from '../common/functions'
 import { getConfig, getBase64 } from 'utils/functions'
-import toast from 'common/ui/Toast'
-import useUserKycHook from '../../common/hooks/userKycHook'
+import toast from '../../common/ui/Toast'
+import useUserKycHook from '../common/hooks/userKycHook'
 
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)

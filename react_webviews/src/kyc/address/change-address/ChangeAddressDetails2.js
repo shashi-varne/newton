@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
-import Alert from '../../mini_components/Alert'
+import Alert from '../../mini-components/Alert'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants, nriDocMapper as docMapper } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
-import toast from 'common/ui/Toast'
+import toast from '../../../common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
 import useUserKycHook from '../../common/hooks/userKycHook'
@@ -34,7 +34,7 @@ const getTitleList = ({ kyc }) => {
 }
 
 const MessageComponent = (kyc) => {
-  const [titleList, ] = useState(getTitleList(kyc))
+  const [titleList, setTitleList] = useState(getTitleList(kyc))
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
@@ -47,14 +47,19 @@ const MessageComponent = (kyc) => {
   )
 }
 
-const NRIAddressUpload = (props) => {
-  const navigate = navigateFunc.bind(props)
+const ChangeAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
+
+  const stateParams = props?.location?.state
+  const { address_doc_type: addressDocType } = stateParams
+
   const [file, setFile] = useState(null)
+
   const [state, setState] = useState({})
-  const {kyc, isLoading} = useUserKycHook();
+
+  const { kyc, isLoading } = useUserKycHook()
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -104,7 +109,7 @@ const NRIAddressUpload = (props) => {
 
       window.callbackWeb.add_listener({
         type: 'native_receiver_image',
-        show_loader: function () {
+        show_loader: function (show_loader) {
           setState({
             ...state,
             show_loader: true,
@@ -184,24 +189,27 @@ const NRIAddressUpload = (props) => {
   }
 
   const handleSubmit = async () => {
+    const navigate = navigateFunc.bind(props)
+    const type = kyc?.address?.meta_data?.is_nri ? 'nri_address' : 'address'
+    const addressKey = kyc?.address?.meta_data?.is_nri
+    ? 'passport'
+    : addressDocType
     try {
-      setIsApiRunning("button")
+      setIsApiRunning('button')
       let result
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'nri_address', {
-          address_proof_key: addressProofKey,
+        result = await upload(frontDoc, type, {
+          addressProofKey: addressKey,
         })
       } else {
-        result = await upload(file, 'nri_address', {
-          addressProofKey,
+        result = await upload(file, type, {
+          addressProofKey: addressKey,
         })
       }
       storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      navigate('/my-account')
     } catch (err) {
-      console.error(err)
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
@@ -215,69 +223,61 @@ const NRIAddressUpload = (props) => {
 
   const addressProofKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'
-    : kyc?.address_doc_type
+    : addressDocType
   const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
-    : docMapper[kyc?.address_doc_type]
+    : docMapper[addressDocType]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
 
+  const title = kyc?.address?.meta_data?.is_nri
+    ? 'Upload Indian Address Proof'
+    : 'Upload address proof'
+
   const getFullAddress = () => {
     let addressFull = ''
 
-    if (kyc?.nri_address?.meta_data?.addressline) {
-      addressFull += setComma(kyc?.nri_address?.meta_data?.addressline)
+    if (kyc?.address?.meta_data?.addressline) {
+      addressFull += setComma(kyc?.address?.meta_data?.addressline)
     }
 
-    if (kyc?.nri_address?.meta_data?.city) {
-      addressFull += setComma(kyc?.nri_address?.meta_data?.city)
+    if (kyc?.address?.meta_data?.city) {
+      addressFull += setComma(kyc?.address?.meta_data?.city)
     }
 
-    if (kyc?.nri_address?.meta_data?.state) {
-      addressFull += setComma(kyc?.nri_address?.meta_data?.state)
+    if (kyc?.address?.meta_data?.state) {
+      addressFull += setComma(kyc?.address?.meta_data?.state)
     }
 
-    if (kyc?.nri_address?.meta_data?.country) {
-      addressFull += setComma(kyc?.nri_address?.meta_data?.country)
+    if (kyc?.address?.meta_data?.country) {
+      addressFull += setComma(kyc?.address?.meta_data?.country)
     }
 
-    if (kyc?.nri_address?.meta_data?.pincode) {
-      addressFull += setComma(kyc?.nri_address?.meta_data?.pincode)
+    if (kyc?.address?.meta_data?.pincode) {
+      addressFull += setComma(kyc?.address?.meta_data?.pincode)
     }
 
     return addressFull
   }
 
-  const editAddress = () => {
-    navigate("/kyc/nri-address-details1", {
-      state: {
-        backToJourney: true,
-      },
-    });
-  };
-
   const isWeb = getConfig().isWebCode
 
   return (
     <Container
+      hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
-      title="Upload foreign address proof"
+      title={title}
+      count={2}
+      current={2}
+      total={2}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          <div className="sub-title">
-            {getFullAddress()}
-            {getFullAddress() && (
-              <div className="edit" onClick={editAddress}>
-                EDIT
-              </div>
-            )}
-          </div>
           <Alert
             variant="attention"
             title="Note"
@@ -533,4 +533,4 @@ const NRIAddressUpload = (props) => {
   )
 }
 
-export default NRIAddressUpload
+export default ChangeAddressDetails2

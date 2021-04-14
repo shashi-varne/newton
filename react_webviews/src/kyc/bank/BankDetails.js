@@ -5,7 +5,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import { storageConstants } from "../constants";
 import { getConfig } from "utils/functions";
 import { getMyAccount } from "../common/api";
-import toast from "common/ui/Toast";
+import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const BankDetails = (props) => {

@@ -207,7 +207,7 @@ const KycUploadDocuments = (props) => {
                     className="preview-image"
                     src={URL.createObjectURL(file)}
                     onLoad={handleImageLoad}
-                    alt="Uploaded Document Image"
+                    alt="Uploaded Document"
                   />
                 ) : (
                   <img
