@@ -360,3 +360,23 @@ export async function sendCapitalgain(data) {
     throw new Error( result.error || result.message || genericErrorMessage );
   }
 }
+
+
+export const upload = async (file) => {
+  const formData = new FormData()
+  formData.set('res', file)
+  const res = await Api.post(`/api/mandate/blank/signed/upload`, formData)
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw new Error( res?.pfwmessage || genericErrorMessage);
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    return result;
+  } else {
+    throw new Error( result.error || result.message || genericErrorMessage );
+  }
+}

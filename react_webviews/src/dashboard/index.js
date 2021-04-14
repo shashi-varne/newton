@@ -27,6 +27,7 @@ import AccountMerge from "./account-merge";
 import AccountMergeOtp from "./account-merge/otp";
 import AccountLinked from "./account-merge/linked";
 import InvestmentProof from "./components/InvestmentProof";
+import BlankMandateUpload from "./components/BlankMandateUpload";
 
 const Invest = (props) => {
   const { url } = props.match;
@@ -98,6 +99,7 @@ const Invest = (props) => {
           path={`${url}capital-gain`}
           render={(props) => <InvestmentProof {...props} type="capital-gain" />}
         />
+        <Route path={`${url}blank-mandate/upload`} component={BlankMandateUpload}  />
         <Route component={NotFound} />
       </Switch>
     </Fragment>
