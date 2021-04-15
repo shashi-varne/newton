@@ -31,6 +31,9 @@ export default class Redirect extends Component {
           case "SUCCESS":
             this.navigate("external_portfolio");
             break;
+          default:
+            this.navigate("email_entry");
+            break;
         }
       } else {
         nativeCallback({ action: "exit"});
