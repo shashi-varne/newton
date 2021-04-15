@@ -371,15 +371,16 @@ export async function updateLead( body, quote_id, current_state) {
     
     var groupHealthPlanData = this.state.groupHealthPlanData;
     var current_form_data = current_state || {};
+    var prev_form_data = {}
     if(this.state.screen_name === 'personal_details_screen' || this.state.screen_name === 'select_ped_screen'){
-        var prev_form_data = groupHealthPlanData['application_data'][this.state.screen_name][`${this.state.member_key}`] || {};
+        prev_form_data = groupHealthPlanData['application_data'][this.state.screen_name][`${this.state.member_key}`] || {};
     }else{
-        var prev_form_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data[this.state.screen_name] || {}: {};
+        prev_form_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data[this.state.screen_name] || {}: {};
     }
 
     var isFormDataSame = false;
     var keys_to_check = isEmpty(Object.keys(current_form_data)) ? Object.keys(prev_form_data) : Object.keys(current_form_data)
-    var isFormDataSame = compareObjects(keys_to_check, prev_form_data, current_form_data);
+    isFormDataSame = compareObjects(keys_to_check, prev_form_data, current_form_data);
 
     if(isEmpty(current_form_data) && isEmpty(prev_form_data)){
         isFormDataSame = true;
@@ -429,7 +430,7 @@ export async function updateLead( body, quote_id, current_state) {
                 skelton:false
             })
         if (res.pfwresponse.status_code === 200) {
-            var groupHealthPlanData = this.state.groupHealthPlanData;
+            groupHealthPlanData = this.state.groupHealthPlanData;
             groupHealthPlanData.application_form_data = resultData;
             this.setLocalProviderData(groupHealthPlanData);
             

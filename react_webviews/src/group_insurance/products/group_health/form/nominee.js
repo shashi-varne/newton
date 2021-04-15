@@ -299,9 +299,9 @@ class GroupHealthPlanNomineeDetails extends Component {
             }
             if(this.state.renderAppointee){
                 var appointee_data = body.nominee_details.appointee_details;
-                for(var x in appointee_data){
-                    if(keys_to_add.indexOf(x) >= 0){
-                        current_state[`appointee_${x}`] = appointee_data[x];
+                for(var y in appointee_data){
+                    if(keys_to_add.indexOf(y) >= 0){
+                        current_state[`appointee_${y}`] = appointee_data[y];
                     }
                 }   
             }

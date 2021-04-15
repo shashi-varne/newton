@@ -384,9 +384,9 @@ class GroupHealthPlanAddressDetails extends Component {
             }
 
             if(this.state.same_address === 'NO'){
-                for(var x in address.permanent_address){
-                    if(keys_to_add.indexOf(x) >= 0){
-                        current_state[`p_${x}`] = address.permanent_address[x]
+                for(var y in address.permanent_address){
+                    if(keys_to_add.indexOf(y) >= 0){
+                        current_state[`p_${y}`] = address.permanent_address[y]
                     }
                 }
             }

@@ -264,7 +264,7 @@ class GroupHealthPlanPremiumSummary extends Component {
           //for optimising APIs in form
           var application_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data  : {} ;
             
-          application_data['personal_details_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.personal_details_screen) ? groupHealthPlanData.application_data.personal_details_screen : {},
+          application_data['personal_details_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.personal_details_screen) ? groupHealthPlanData.application_data.personal_details_screen : {}
           application_data['select_ped_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.select_ped_screen) ? groupHealthPlanData.application_data.select_ped_screen : {}
           
           groupHealthPlanData.application_data = application_data;
