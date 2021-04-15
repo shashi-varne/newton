@@ -20,20 +20,20 @@ const RiskModify = ({
 
   const sessionStoredRisk = storageService().get('userSelectedRisk') || '';
   const goalRecommendation = storageService().getObject('goalRecommendations');
-  const graphData = storageService().getObject('graphData');
-  let riskOptions = graphData.rp_meta;
+  const funnelData = storageService().getObject('funnelData');
+  let riskOptions = funnelData.rp_meta;
   const [loader, setLoader] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [selectedRisk, selectRisk] = useState(sessionStoredRisk);
   const navigate = navigateFunc.bind(otherProps);
 
   // useEffect(() => {
-  //   const investTitle = selectTitle(graphData.investType);
+  //   const investTitle = selectTitle(funnelData.investType);
   //   setTitle(investTitle);
   // }, []);
 
   const updateRiskAndFetchRecommendations = async () => {
-    const { amount, investType: type, term } = graphData;
+    const { amount, investType: type, term } = funnelData;
     var params = {
       amount,
       term,
@@ -52,7 +52,7 @@ const RiskModify = ({
         // eslint-disable-next-line no-throw-literal
         throw 'Something went wrong. Please try again'
       }
-      storageService().setObject('graphData', { ...graphData, ...res });
+      storageService().setObject('funnelData', { ...funnelData, ...res });
 
       setLoader(false);
     } catch (err) {
@@ -73,8 +73,8 @@ const RiskModify = ({
     riskOptions.push({
       rp_indicator: 'Custom',
       subtitle: 'User created equity to debt distribution',
-      equity: graphData.equity,
-      debt: graphData.debt
+      equity: funnelData.equity,
+      debt: funnelData.debt
     })
   }
 

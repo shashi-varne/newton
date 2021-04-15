@@ -55,7 +55,7 @@ const Landing = (props) => {
       setLoader("button");
       const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
-      const graphData = {
+      const funnelData = {
         recommendation: data.recommendation,
         amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
         term,
@@ -69,8 +69,8 @@ const Landing = (props) => {
         investTypeDisplay,
         name:'Tax saving'
       };
-      storageService().setObject('graphData', graphData);
-      setData(graphData);
+      storageService().setObject('funnelData', funnelData);
+      setData(funnelData);
       setLoader(false);
       goNext();
     } catch (err) {
