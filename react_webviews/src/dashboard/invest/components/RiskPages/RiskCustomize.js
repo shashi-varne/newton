@@ -14,22 +14,22 @@ import BottomSheet from '../../../../common/ui/BottomSheet';
 const { productName } = getConfig();
 
 const RiskCustomize = (props) => {
-  const graphData = storageService().getObject('graphData');
+  const funnelData = storageService().getObject('funnelData');
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
   const navigate = navigateFunc.bind(props);
-  const [equity, setEquity] = useState(graphData.equity || 0);
+  const [equity, setEquity] = useState(funnelData.equity || 0);
   const [debt, setDebt] = useState(100 - equity);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
 
   // useEffect(() => {
-  //   const investTitle = selectTitle(graphData.investType);
+  //   const investTitle = selectTitle(funnelData.investType);
   //   setTitle(investTitle);
   // }, []);
 
   const fetchRecommendations = async () => {
-    const { amount, investType: type, term } = graphData;
+    const { amount, investType: type, term } = funnelData;
     var params = {
       amount,
       term,
@@ -43,8 +43,8 @@ const RiskCustomize = (props) => {
       setLoader(true);
       const res = await get_recommended_funds(params);
 
-      storageService().setObject('graphData', {
-        ...graphData,
+      storageService().setObject('funnelData', {
+        ...funnelData,
         ...res,
       });
       storageService().set('userSelectedRisk', 'Custom');

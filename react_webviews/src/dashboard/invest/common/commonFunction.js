@@ -11,7 +11,7 @@ export function navigate(pathname, data, redirect) {
     this.history.push({
       pathname: `/invest/${pathname}`,
       search: data?.searchParams || getConfig().searchParams,
-      state: { graphData: data },
+      state: { funnelData: data },
     });
   }
 }
