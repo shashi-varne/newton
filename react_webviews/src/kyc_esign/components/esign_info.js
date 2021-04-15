@@ -75,7 +75,7 @@ class ESignInfo extends Component {
           });
         }
         nativeCallback({
-          action: 'take_control', message: {
+          action: 'take_back_button_control', message: {
             back_text: 'You are almost there, do you really want to go back?'
           }
         });
