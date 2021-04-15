@@ -1,33 +1,38 @@
+import './RiskPages.scss';
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import { getConfig } from '../../../../utils/functions';
-import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
-import { navigate as navigateFunc, selectTitle } from '../../common/commonFunction';
+import { navigate as navigateFunc } from '../../common/commonFunction';
+import useFunnelDataHook from '../../common/funnelDataHook';
 import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
-import './RiskPages.scss';
+
 const { productName } = getConfig();
 
 const RiskSelect = ({
   canSkip,
   ...otherProps
 }) => {
-  const sessionStoredRisk = storageService().get('userSelectedRisk') || '';
-  const graphData = storageService().getObject('graphData');
+  const {
+    funnelData,
+    userRiskProfile,
+    updateFunnelData,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
-  const [selectedRisk, selectRisk] = useState(sessionStoredRisk);
+  const [selectedRisk, selectRisk] = useState(userRiskProfile);
   const navigate = navigateFunc.bind(otherProps);
 
   // useEffect(() => {
-  //   const investTitle = selectTitle(graphData.investType);
+  //   const investTitle = selectTitle(funnelData.investType);
   //   setTitle(investTitle);
   // }, []);
 
   const updateRiskAndFetchRecommendations = async (skipRiskUpdate) => {
-    const { amount, investType: type, term } = graphData;
+    const { amount, investType: type, term } = funnelData;
     var params = {
       amount,
       term,
@@ -50,9 +55,9 @@ const RiskSelect = ({
       const res = await get_recommended_funds(params);
 
       if (res.updated) {
-        storageService().set('userSelectedRisk', selectedRisk);
+        updateUserRiskProfile(selectedRisk);
       }
-      storageService().setObject('graphData', { ...graphData, ...res });
+      updateFunnelData(res);
       
       setLoader(false);
     } catch (err) {
@@ -64,8 +69,8 @@ const RiskSelect = ({
     await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
     let state = 'recommendations';
-    if (graphData.investType === 'saveforgoal') {
-      state = `savegoal/${graphData.subtype}/target`;
+    if (funnelData.investType === 'saveforgoal') {
+      state = `savegoal/${funnelData.subtype}/target`;
     }
     navigate(state);
   };
@@ -77,12 +82,12 @@ const RiskSelect = ({
         hideClose: true,
         fromExternalSrc: true,
         internalRedirect: true,
-        flow: graphData.flow,
-        amount: graphData.amount,
-        type: graphData.investType,
-        subType: graphData.subType, // only applicable for 'saveforgoal'
-        year: graphData.year, // only applicable for 'saveforgoal'
-        term: graphData.term
+        flow: funnelData.flow,
+        amount: funnelData.amount,
+        type: funnelData.investType,
+        subType: funnelData.subType, // only applicable for 'saveforgoal'
+        year: funnelData.year, // only applicable for 'saveforgoal'
+        term: funnelData.term
       }
     }, true);
   };

@@ -39,7 +39,7 @@ const Landing = (props) => {
     };
     setLoader("button");
     try {
-      await initFunnelData(params.type);
+      await initFunnelData({ type: params.type });
       const funnelObj = {
         amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
         term,

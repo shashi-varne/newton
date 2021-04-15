@@ -7,7 +7,7 @@ import no_lock_in_icon from 'assets/no_lock_in_icon.png';
 import monthly_sip_icon_dark from 'assets/monthly_sip_icon_dark.png';
 import one_time_icon_dark from 'assets/one_time_icon_dark.png';
 
-import { storageService, formatAmountInr } from 'utils/validators';
+import { formatAmountInr } from 'utils/validators';
 import { getReturnRates, navigate as navigateFunc, selectTitle } from '../common/commonFunction';
 import { get_recommended_funds } from '../common/api';
 import './mini-components.scss';
@@ -18,7 +18,12 @@ import useFunnelDataHook from '../common/funnelDataHook';
 const { stockReturns, bondReturns } = getReturnRates();
 
 const InvestedAmount = (props) => {
-  const { funnelData, funnelGoalData, updateFunnelData } = useFunnelDataHook();
+  const {
+    funnelData,
+    funnelGoalData,
+    updateFunnelData,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
   const { amount, investType, term, equity, isRecurring, investTypeDisplay } = funnelData;
   const [stockSplitVal, setStockSplitVal] = useState(equity || 0);
   const [loader, setLoader] = useState(false);
@@ -47,9 +52,12 @@ const InvestedAmount = (props) => {
     try {
       setLoader("button");
       const data = await get_recommended_funds(params);
-      storageService().set('userSelectedRisk', data.rp_indicator);
-      const recommendedTotalAmount = data?.amount;
-      updateFunnelData({ ...data, amount, recommendedTotalAmount });
+      updateUserRiskProfile(data.rp_indicator);
+      updateFunnelData({
+        ...data,
+        amount,
+        recommendedTotalAmount: data?.amount
+      });
       setLoader(false);
       navigate(`recommendations`);
     } catch (err) {

@@ -2,25 +2,19 @@ import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast';
-
-import { storageService } from 'utils/validators';
 import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
-import { get_recommended_funds } from '../../common/api';
+import moment from 'moment';
+import useFunnelDataHook from '../../common/funnelDataHook';
 
 const term = 15;
-const date = new Date();
-const month = date.getMonth();
-const currentMonth = month + 1;
-let currentYear = date.getFullYear();
+// TODO: What does this code do?
+const currentMonth = moment().month() + 1;
 let duration = currentMonth > 3 ? 15 - currentMonth : 3 - currentMonth;
 if (duration === 0) {
   duration = 1;
 }
-if (currentMonth > 3) {
-  currentYear = currentYear + 1;
-}
 
-const renderData = {
+const typeOptionsData = {
   subtitle: 'How would you like to invest?',
   options: [
     {
@@ -37,13 +31,13 @@ const renderData = {
 };
 
 const Landing = (props) => {
-  const [data, setData] = useState(null);
+  const { updateFunnelData, initFunnelData } = useFunnelDataHook();
   const [investTypeDisplay, setInvestTypeDisplay] = useState('sip');
   const [loader, setLoader] = useState(false);
   const otiAmount = 150000;
-  // eslint-disable-next-line radix
-  const sipAmount = parseInt(Math.floor(otiAmount / duration));
+  const sipAmount = Math.floor(otiAmount / duration);
   const navigate = navigateFunc.bind(props);
+
   const fetchRecommendedFunds = async () => {
     const params = {
       type: 'savetaxsip',
@@ -54,23 +48,17 @@ const Landing = (props) => {
     try {
       setLoader("button");
       const recurring = isRecurring(params.type);
-      const data = await get_recommended_funds(params);
-      const graphData = {
-        recommendation: data.recommendation,
+      await initFunnelData(params);
+      updateFunnelData({
         amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
         term,
-        // eslint-disable-next-line radix
-        year: parseInt(date.getFullYear() + term),
+        year: parseInt(moment().year() + term, 10),
         corpus: 150000,
         investType: params.type,
-        equity: data.recommendation.equity,
-        debt: data.recommendation.debt,
         isRecurring: recurring,
         investTypeDisplay,
         name:'Tax saving'
-      };
-      storageService().setObject('graphData', graphData);
-      setData(graphData);
+      });
       setLoader(false);
       goNext();
     } catch (err) {
@@ -81,11 +69,13 @@ const Landing = (props) => {
   };
 
   const goNext = () => {
-    navigate('savetax/amount', data);
+    navigate('savetax/amount');
   };
+
   const handleChange = (type) => {
     setInvestTypeDisplay(type);
   };
+
   return (
     <Container
       classOverRide='pr-error-container'
@@ -97,7 +87,7 @@ const Landing = (props) => {
     >
       <section className='invest-amount-common'>
         <InvestType
-          baseData={renderData}
+          baseData={typeOptionsData}
           selected={investTypeDisplay}
           handleChange={handleChange}
         />

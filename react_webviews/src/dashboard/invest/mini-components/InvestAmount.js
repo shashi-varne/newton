@@ -3,13 +3,12 @@ import Container from '../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 
-import { storageService, numDifferentiationInr } from 'utils/validators';
+import { numDifferentiationInr } from 'utils/validators';
 import {
   navigate as navigateFunc,
   corpusValue,
   validateOtAmount,
   validateSipAmount,
-  selectTitle,
   convertInrAmountToNumber,
 } from '../common/commonFunction';
 import { get_recommended_funds } from '../common/api';
@@ -19,22 +18,26 @@ import './mini-components.scss';
 import { getConfig } from '../../../utils/functions';
 import { formatAmountInr } from '../../../utils/validators';
 import useFunnelDataHook from '../common/funnelDataHook';
-const date = new Date();
 
 const InvestAmount = (props) => {
-  const { funnelData, funnelGoalData, updateFunnelData } = useFunnelDataHook();
-  const { investType, year, equity, term, isRecurring, investTypeDisplay, ...moreData } = funnelData;
+  const {
+    funnelData,
+    funnelGoalData,
+    updateFunnelData,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
+  const { investType, year, equity, term, isRecurring, investTypeDisplay } = funnelData;
   const [amount, setAmount] = useState(funnelData?.amount || '');
-  const [title, setTitle] = useState('');
+  // const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loader, setLoader] = useState(false);
   const navigate = navigateFunc.bind(props);
-  useEffect(() => {
-    const investTitle = selectTitle(investType);
-    setTitle(investTitle);
-  }, []);
+  // useEffect(() => {
+  //   const investTitle = selectTitle(investType);
+  //   setTitle(investTitle);
+  // }, []);
 
   const handleChange = (e) => {
     let value = e.target.value || "";
@@ -111,7 +114,7 @@ const InvestAmount = (props) => {
       
       if (!data.recommendation) {
         // RP enabled flow, when user has no risk profile
-        storageService().remove('userSelectedRisk');
+        updateUserRiskProfile(''); // clearing risk profile stored in session
         if (data.msg_code === 0) {
           navigate(`${funnelGoalData.id}/risk-select`);
         } else if (data.msg_code === 1) {
@@ -124,7 +127,7 @@ const InvestAmount = (props) => {
       
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully
-        storageService().set('userSelectedRisk', data.rp_indicator);
+        updateUserRiskProfile(data.rp_indicator);
         navigate('recommendations');
       } else {
         // RP disabled flow

@@ -1,26 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { storageService } from "../../../utils/validators";
-import { isEmpty, isArray } from 'lodash';
+import { isArray } from 'lodash';
 import { get_recommended_funds } from './api';
 
 function useFunnelDataHook() {
   const sessionFunnelData = storageService().getObject('funnelData') || {};
   const sessionFunnelGoalData = storageService().getObject('funnelGoalData') || {};
   const sessionFunnelReturnRates = storageService().getObject('funnelReturnRates') || {};
+  const sessionUserRiskProfile = storageService().get('userSelectedRisk') || '';
   
   const [funnelData, setFunnelData] = useState(sessionFunnelData);
   const [funnelGoalData, setFunnelGoalData] = useState(sessionFunnelGoalData);
   const [funnelReturnRates, setFunnelReturnRates] = useState(sessionFunnelReturnRates);
-  const [isLoading, setIsLoading] = useState(function () {
-    if (isEmpty(funnelData) || isEmpty(funnelGoalData)) {
-      return true;
-    }
-    return false;
-  });
-
-  const initFunnelData = async (type) => {
-    const data = await get_recommended_funds({ type });
-    setIsLoading(false);
+  const [userRiskProfile, setUserRiskProfile] = useState(sessionUserRiskProfile);
+  
+  const initFunnelData = async (params) => {
+    const data = await get_recommended_funds(params);
 
     const { recommendation } = data;
     if (recommendation && !isArray(recommendation)) {
@@ -54,21 +49,30 @@ function useFunnelDataHook() {
   }, [funnelGoalData]);
 
   useEffect(() => {
-    storageService().setObject('funnelData', funnelGoalData);
-  }, [funnelGoalData]);
+    storageService().setObject('funnelData', funnelData);
+  }, [funnelData]);
+
+  useEffect(() => {
+    storageService().set('userSelectedRisk', userRiskProfile);
+  }, [userRiskProfile]);
 
   const updateFunnelData = (propsToAppend) => {
     const newFunnelData = { ...funnelData, ...propsToAppend };
     setFunnelData(newFunnelData);
   }
 
+  const updateUserRiskProfile = (risk) => {
+    setUserRiskProfile(risk);
+  }
+
   return {
-    isLoading,
     funnelData,
     funnelGoalData,
     funnelReturnRates,
+    userRiskProfile,
+    initFunnelData,
     updateFunnelData,
-    initFunnelData
+    updateUserRiskProfile,
   };
 }
 

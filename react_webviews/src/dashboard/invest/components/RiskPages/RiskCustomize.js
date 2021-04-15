@@ -1,35 +1,39 @@
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
-import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
-import { navigate as navigateFunc, selectTitle } from '../../common/commonFunction';
+import { navigate as navigateFunc } from '../../common/commonFunction';
 import EquityDebtSlider from '../../mini-components/EquityDebtSlider';
 import toast from 'common/ui/Toast'
 import './RiskPages.scss';
 import InfoBox from '../../../../common/ui/F-InfoBox';
 import { getConfig } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
+import useFunnelDataHook from '../../common/funnelDataHook';
 
 const { productName } = getConfig();
 
 const RiskCustomize = (props) => {
-  const graphData = storageService().getObject('graphData');
+  const {
+    funnelData,
+    updateFunnelData,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
   const navigate = navigateFunc.bind(props);
-  const [equity, setEquity] = useState(graphData.equity || 0);
+  const [equity, setEquity] = useState(funnelData.equity || 0);
   const [debt, setDebt] = useState(100 - equity);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
 
   // useEffect(() => {
-  //   const investTitle = selectTitle(graphData.investType);
+  //   const investTitle = selectTitle(funnelData.investType);
   //   setTitle(investTitle);
   // }, []);
 
   const fetchRecommendations = async () => {
-    const { amount, investType: type, term } = graphData;
+    const { amount, investType: type, term } = funnelData;
     var params = {
       amount,
       term,
@@ -41,13 +45,10 @@ const RiskCustomize = (props) => {
 
     try {
       setLoader(true);
-      const res = await get_recommended_funds(params);
 
-      storageService().setObject('graphData', {
-        ...graphData,
-        ...res,
-      });
-      storageService().set('userSelectedRisk', 'Custom');
+      const res = await get_recommended_funds(params);
+      updateFunnelData(res);
+      updateUserRiskProfile('Custom');
 
       setLoader(false);
     } catch (err) {

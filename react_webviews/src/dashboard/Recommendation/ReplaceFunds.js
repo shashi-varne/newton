@@ -1,21 +1,22 @@
+import './style.scss';
 import React, { useState } from 'react';
 import Container from '../common/Container';
 import { FormControl, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';
 import FundCard from '../invest/mini-components/FundCard';
-
-import { storageService } from 'utils/validators';
-
-import './style.scss';
+import useFunnelDataHook from '../invest/common/funnelDataHook';
 
 const ReplaceFunds = (props) => {
   const [selectedFund, setSelectedFund] = useState('');
-  const { recommendation, alternatives } = storageService().getObject('graphData');
+  const { funnelData, updateFunnelData } = useFunnelDataHook();
+  const { recommendation, alternatives } = funnelData;
   const {
-    graphData: { mftype, mfid, amount, alternateFunds },
+    mftype, mfid, amount, alternateFunds,
   } = props.location.state;
+
   const handleChange = (e) => {
     setSelectedFund(e.target.value);
   };
+
   const replaceFund = () => {
     const alternateFund = alternatives[mftype].find((el) => el.mf.mfid === selectedFund);
     if (alternateFund) {
@@ -26,12 +27,11 @@ const ReplaceFunds = (props) => {
         }
         return el;
       });
-      const graphData = storageService().getObject('graphData');
-      graphData.recommendation = newData;
-      storageService().setObject('graphData', graphData);
+      updateFunnelData({ recommendation: newData });
     }
     props.history.goBack();
   };
+  
   return (
     <Container
       classOverRide='pr-error-container'
