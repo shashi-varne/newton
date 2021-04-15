@@ -112,6 +112,20 @@ export const investCardsBase = {
       icon: "ic_invest_nfo.svg",
     },
   },
+  financial_tools: {
+    fhc: {
+      title: "Financial health check",
+      subtitle: "Get an expert financial advice",
+      button_text: "CHECK NOW",
+      icon: "ic_fin_tools_fhc.svg",
+    },
+    risk_profile: {
+      title: "Risk profiler",
+      subtitle: "Invest as per your risk appetite",
+      button_text: "START NOW",
+      icon: "ic_fin_tools_risk.svg",
+    }
+  }
 };
 
 export const keyPathMapper = {

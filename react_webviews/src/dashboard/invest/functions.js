@@ -48,11 +48,9 @@ export async function initialize() {
     storageService().set("dataSettedInsideBoot", false);
   }
   if (
-    isEmpty(userKyc) ||
-    isEmpty(currentUser) ||
-    (this.state.screenName === "invest_landing" &&
-      getConfig().Web &&
-      !dataSettedInsideBoot)
+    this.state.screenName === "invest_landing" &&
+    getConfig().Web &&
+    !dataSettedInsideBoot
   ) {
     await this.getSummary();
   } else {
@@ -226,9 +224,9 @@ export function setInvestCardsData() {
   ];
   let referralData = storageService().getObject("referral");
   let referral = {};
-  let subbroker_code = {};
+  let subbroker_code = "";
   if (referralData) {
-    referral = referralData.subbroker.data;
+    referral = referralData.subbroker?.data;
     if (referral) {
       subbroker_code = referral.subbroker_code;
     }
@@ -241,17 +239,20 @@ export function setInvestCardsData() {
     our_recommendations: [
       "instaredeem",
       "buildwealth",
-      "insurance",
+      // "insurance",
       "savetax",
-      "nps",
+      // "nps",
     ],
-    diy: ["diyv2", "gold"],
+    diy: ["diyv2",
+    //  "gold"
+    ],
     bottom_scroll_cards: ["parkmoney", "savegoal"],
     bottom_cards: ["nfo"],
     popular_cards: [],
+    financial_tools: [],
   };
 
-  let restricted_items = ["gold", "nps", "risk_profile", "insurance"];
+  // let restricted_items = ["gold", "nps", "risk_profile", "insurance", "fhc"];
 
   let invest_cards_handling_partner = partner.invest_cards_handling;
 
@@ -274,6 +275,7 @@ export function setInvestCardsData() {
     "bottom_scroll_cards",
     "bottom_cards",
     "popular_cards",
+    "financial_tools",
   ];
 
   for (let handling_key of keys_for_handling) {
@@ -287,12 +289,14 @@ export function setInvestCardsData() {
       partner_specific = invest_cards_handling_partner[handling_key];
     }
     for (let itemKey of partner_specific) {
+      // if (
+      //   // restricted_items.indexOf(itemKey) !== -1 
+      //   // &&
+      //   // !partner.invest_screen_cards[itemKey]
+      // ) {
+      //   continue;
+      // } else 
       if (
-        restricted_items.indexOf(itemKey) !== -1 &&
-        !partner.invest_screen_cards[itemKey]
-      ) {
-        continue;
-      } else if (
         subbroker_code &&
         itemKey === "insurance" &&
         insuranceDisabled.indexOf(subbroker_code) !== -1
