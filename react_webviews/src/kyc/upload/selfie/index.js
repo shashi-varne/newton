@@ -17,42 +17,40 @@ const Sign = (props) => {
   const inputEl = useRef(null)
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
-    if (getConfig().generic_callback) {
-      window.callbackWeb[method_name]({
-        type: 'doc',
-        doc_type: doc_type,
-        doc_name: doc_name,
-        doc_side: doc_side,
-        // callbacks from native
-        upload: function upload(file) {
-          try {
-            switch (file.type) {
-              case 'image/jpeg':
-              case 'image/jpg':
-              case 'image/png':
-              case 'image/bmp':
-                setFile(file)
-                getBase64(file, function (img) {
-                  setFileToShow(img)
-                })
-                break;
-              default:
-                toast('Please select image file')
-                break
-            }
-          } catch (e) {
-            //
+    window.callbackWeb[method_name]({
+      type: 'doc',
+      doc_type: doc_type,
+      doc_name: doc_name,
+      doc_side: doc_side,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
+          switch (file.type) {
+            case 'image/jpeg':
+            case 'image/jpg':
+            case 'image/png':
+            case 'image/bmp':
+              setFile(file)
+              getBase64(file, function (img) {
+                setFileToShow(img)
+              })
+              break;
+            default:
+              toast('Please select image file')
+              break
           }
-        },
-      })
+        } catch (e) {
+          //
+        }
+      },
+    })
 
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function () {
-          setShowLoader(true)
-        },
-      })
-    }
+    window.callbackWeb.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function () {
+        setShowLoader(true)
+      },
+    })
   }
 
   const {kyc, isLoading} = useUserKycHook();

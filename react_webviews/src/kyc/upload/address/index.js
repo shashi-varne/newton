@@ -69,58 +69,56 @@ const AddressUpload = (props) => {
   const backDocRef = useRef(null)
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
-    if (getConfig().generic_callback) {
-      window.callbackWeb[method_name]({
-        type: 'doc',
-        doc_type: doc_type,
-        doc_name: doc_name,
-        doc_side: doc_side,
-        // callbacks from native
-        upload: function upload(file) {
-          try {
-            setState({
-              ...state,
-              docType: doc_type,
-              docName: doc_name,
-              doc_side: doc_side,
-              show_loader: true,
-            })
-            if (doc_side === 'back') {
-              setFrontDoc(file)
-            } else {
-              setBackDoc(file)
-            }
-            switch (file.type) {
-              case 'image/jpeg':
-              case 'image/jpg':
-              case 'image/png':
-              case 'image/bmp':
-                mergeDocs(file, doc_side)
-                break
-              default:
-                toast('Please select image file')
-                setState({
-                  ...state,
-                  docType: doc_type,
-                  show_loader: false,
-                })
-            }
-          } catch (e) {
-            //
-          }
-        },
-      })
-
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
+    window.callbackWeb[method_name]({
+      type: 'doc',
+      doc_type: doc_type,
+      doc_name: doc_name,
+      doc_side: doc_side,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
           setState({
             ...state,
+            docType: doc_type,
+            docName: doc_name,
+            doc_side: doc_side,
             show_loader: true,
           })
-        },
-      })
-    }
+          if (doc_side === 'back') {
+            setFrontDoc(file)
+          } else {
+            setBackDoc(file)
+          }
+          switch (file.type) {
+            case 'image/jpeg':
+            case 'image/jpg':
+            case 'image/png':
+            case 'image/bmp':
+              mergeDocs(file, doc_side)
+              break
+            default:
+              toast('Please select image file')
+              setState({
+                ...state,
+                docType: doc_type,
+                show_loader: false,
+              })
+          }
+        } catch (e) {
+          //
+        }
+      },
+    })
+
+    window.callbackWeb.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
+        setState({
+          ...state,
+          show_loader: true,
+        })
+      },
+    })
   }
 
   const handleChange = (type) => (event) => {
