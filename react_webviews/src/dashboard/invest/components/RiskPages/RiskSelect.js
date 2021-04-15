@@ -15,19 +15,19 @@ const RiskSelect = ({
   ...otherProps
 }) => {
   const sessionStoredRisk = storageService().get('userSelectedRisk') || '';
-  const graphData = storageService().getObject('graphData');
+  const funnelData = storageService().getObject('funnelData');
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
   const [selectedRisk, selectRisk] = useState(sessionStoredRisk);
   const navigate = navigateFunc.bind(otherProps);
 
   // useEffect(() => {
-  //   const investTitle = selectTitle(graphData.investType);
+  //   const investTitle = selectTitle(funnelData.investType);
   //   setTitle(investTitle);
   // }, []);
 
   const updateRiskAndFetchRecommendations = async (skipRiskUpdate) => {
-    const { amount, investType: type, term } = graphData;
+    const { amount, investType: type, term } = funnelData;
     var params = {
       amount,
       term,
@@ -52,7 +52,7 @@ const RiskSelect = ({
       if (res.updated) {
         storageService().set('userSelectedRisk', selectedRisk);
       }
-      storageService().setObject('graphData', { ...graphData, ...res });
+      storageService().setObject('funnelData', { ...funnelData, ...res });
       
       setLoader(false);
     } catch (err) {
@@ -64,8 +64,8 @@ const RiskSelect = ({
     await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
     let state = 'recommendations';
-    if (graphData.investType === 'saveforgoal') {
-      state = `savegoal/${graphData.subtype}/target`;
+    if (funnelData.investType === 'saveforgoal') {
+      state = `savegoal/${funnelData.subtype}/target`;
     }
     navigate(state);
   };
@@ -77,12 +77,12 @@ const RiskSelect = ({
         hideClose: true,
         fromExternalSrc: true,
         internalRedirect: true,
-        flow: graphData.flow,
-        amount: graphData.amount,
-        type: graphData.investType,
-        subType: graphData.subType, // only applicable for 'saveforgoal'
-        year: graphData.year, // only applicable for 'saveforgoal'
-        term: graphData.term
+        flow: funnelData.flow,
+        amount: funnelData.amount,
+        type: funnelData.investType,
+        subType: funnelData.subType, // only applicable for 'saveforgoal'
+        year: funnelData.year, // only applicable for 'saveforgoal'
+        term: funnelData.term
       }
     }, true);
   };
