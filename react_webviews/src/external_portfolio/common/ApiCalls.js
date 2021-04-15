@@ -232,3 +232,23 @@ export const hitNextPage = async (next_page, params) => {
   }
 }
 
+export const getSummary = async (params) => {
+  try {
+
+    const res = await Api.post('/api/user/account/summary');
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw (result.error || result.message || genericErrMsg);
+    }
+  } catch (e) {
+    throw e;
+  }
+}
