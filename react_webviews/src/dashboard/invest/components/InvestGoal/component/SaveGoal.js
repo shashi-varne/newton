@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Container from '../../../../common/Container';
 import toast from "common/ui/Toast"
 
-import {getRateOfInterest,navigate as navigateFunc,isRecurring} from '../../../common/commonFunction';
+import {getRateOfInterest,navigate as navigateFunc,isRecurring} from '../../../common/commonFunctions';
 import { storageService,numDifferentiationInr } from 'utils/validators';
 import { get_recommended_funds } from '../../../common/api';
 import { saveGoalMapper } from '../constants';

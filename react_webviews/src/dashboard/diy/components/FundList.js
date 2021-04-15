@@ -9,7 +9,7 @@ import './style.scss'
 import { storageService } from '../../../utils/validators'
 import { getConfig } from 'utils/functions'
 
-import { navigate as navigateFunc } from '../../invest/common/commonFunction'
+import { navigate as navigateFunc } from '../../invest/common/commonFunctions'
 
 import CartFooter from '../components/CartFooter'
 import { getFundList } from '../functions'

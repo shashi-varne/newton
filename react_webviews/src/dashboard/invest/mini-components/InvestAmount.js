@@ -11,7 +11,7 @@ import {
   validateSipAmount,
   selectTitle,
   convertInrAmountToNumber,
-} from '../common/commonFunction';
+} from '../common/commonFunctions';
 import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
 
