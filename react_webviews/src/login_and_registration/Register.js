@@ -139,6 +139,7 @@ class Register extends Component {
                     label="Enter mobile number"
                     name="mobile"
                     onChange={this.handleChange("mobile")}
+                    autoFocus
                   />
                 </div>
               )}
@@ -155,6 +156,7 @@ class Register extends Component {
                       label="Enter email address"
                       name="email"
                       onChange={this.handleChange("email")}
+                      autoFocus
                     />
                   </div>
                   <div className="form-field">

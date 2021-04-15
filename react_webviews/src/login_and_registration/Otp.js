@@ -40,7 +40,7 @@ class Otp extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if(value && (!validateNumber(value) || value.length > 4)) return;
+    if (value && (!validateNumber(value) || value.length > 4)) return;
     let { otp, otp_error } = this.state;
     otp = value;
     otp_error = "";
@@ -95,23 +95,24 @@ class Otp extends Component {
               helperText={otp_error || ""}
               class="input"
               onChange={this.handleChange("otp")}
+              autoFocus
             />
             <div className="resend-otp" onClick={() => this.resendOtp()}>
               Resend OTP
             </div>
             <Button
-                buttonTitle="VERIFY"
-                onClick={this.handleClick}
-                showLoader={isApiRunning}
-                disable={disabled}
-                style={{
-                  maxWidth: "180px",
-                  minWidth: "180px",
-                  letterSpacing: "2px",
-                  minHeight: "42px",
-                  borderRadius: "2px",
-                }}
-              />
+              buttonTitle="VERIFY"
+              onClick={this.handleClick}
+              showLoader={isApiRunning}
+              disable={disabled}
+              style={{
+                maxWidth: "180px",
+                minWidth: "180px",
+                letterSpacing: "2px",
+                minHeight: "42px",
+                borderRadius: "2px",
+              }}
+            />
           </div>
         </div>
       </div>
