@@ -7,6 +7,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import { getPathname, storageConstants } from "../constants";
 import toast from "../../common/ui/Toast";
 import { initData } from "../services";
+import "./BanksList.scss";
 
 const productName = getConfig().productName;
 const BanksList = (props) => {
@@ -54,15 +55,14 @@ const BanksList = (props) => {
   return (
     <Container
       skelton={showLoader}
-      id="banks-list"
       buttonTitle="ADD ANOTHER BANK"
       handleClick={handleClick}
       noFooter={
         changeRequest.add_bank_enabled &&
         ((config.web && !config.isIframe) || config.native)
       }
-      buttonClassName="bank-list-footer"
       title="Bank accounts"
+      type="outlined"
     >
       <div className="banks-list">
         {banks.map((bank, index) => {

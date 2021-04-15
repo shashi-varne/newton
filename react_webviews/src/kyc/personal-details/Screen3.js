@@ -115,7 +115,6 @@ const PersonalDetails3 = (props) => {
   return (
     <Container
       showSkelton={isLoading}
-      id="kyc-personal-details3"
       hideInPageTitle
       buttonTitle="CONTINUE"
       handleClick={handleClick}
@@ -126,7 +125,7 @@ const PersonalDetails3 = (props) => {
       current={type === "digilocker" ? 2 : 3}
       total="4"
     >
-      <div className="kyc-complaint-personal-details">
+      <div className="kyc-personal-details">
         <main>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

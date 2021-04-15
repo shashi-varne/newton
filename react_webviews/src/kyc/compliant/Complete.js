@@ -6,6 +6,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import { getPathname, storageConstants } from "../constants";
 import { storageService } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
+import "./Compliant.scss";
 
 const Complete = (props) => {
   const productName = getConfig().productName;

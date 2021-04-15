@@ -164,16 +164,13 @@ const AddBankVerify = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
-      id="kyc-approved-bank"
       buttonTitle="VERIFY BANK ACCOUNT"
       showLoader={isApiRunning}
       noFooter={showLoader}
       handleClick={handleClick}
-      title="Verify your bank accoun"
+      title="Verify your bank account"
     >
       <div className="kyc-approved-bank-verify">
-        {/* <div className="kyc-main-title">Verify your bank account</div> */}
         <Alert
           variant="info"
           title="Important"

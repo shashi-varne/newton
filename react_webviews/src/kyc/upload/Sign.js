@@ -125,7 +125,7 @@ const Sign = (props) => {
       title="Share Signature"
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan" className="page-body-kyc">
+        <section id="kyc-upload-pan">
           <div className="sub-title">
             Signature should match with your PAN’s signature
           </div>

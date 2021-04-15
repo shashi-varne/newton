@@ -145,7 +145,7 @@ const NRIAddressDetails2 = (props) => {
       count={4}
       total={4}
     >
-      <section id="kyc-address-details-2" className="page-body-kyc">
+      <section id="kyc-address-details-2">
         <div className="sub-title">Address as per {address_proof}</div>
         <form className="form-container">
           <TextField

@@ -129,7 +129,7 @@ const NriAddressDetails1 = (props) => {
       count={3}
       total={4}
     >
-      <div className="kyc-complaint-personal-details kyc-address-details">
+      <div className="kyc-personal-details kyc-address-details">
         <main>
           <Input
             label="Contact number"

@@ -108,7 +108,7 @@ const Sign = (props) => {
       title="Upload Selfie"
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan" className="page-body-kyc">
+        <section id="kyc-upload-pan">
           <div className="sub-title">Ears must be visible</div>
           {!isWeb && (
             <div className="kyc-doc-upload-container">

@@ -5,7 +5,7 @@ import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { getPathname, storageConstants } from "../constants";
 import toast from "../../common/ui/Toast";
-import ResidentDialog from "./residentDialog";
+import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";

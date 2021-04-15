@@ -277,7 +277,7 @@ const ChangeAddressDetails2 = (props) => {
       total={2}
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-address" className="page-body-kyc">
+        <section id="kyc-upload-address">
           <Alert
             variant="attention"
             title="Note"

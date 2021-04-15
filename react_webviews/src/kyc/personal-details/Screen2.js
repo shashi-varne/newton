@@ -104,11 +104,7 @@ const PersonalDetails2 = (props) => {
   return (
     <Container
       showSkelton={isLoading}
-      id="kyc-personal-details2"
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      // isApiRunning={isApiRunning}
-      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
       skelton={isLoading}
       showLoader={isApiRunning}
@@ -117,10 +113,7 @@ const PersonalDetails2 = (props) => {
       current="2"
       total="4"
     >
-      <div className="kyc-complaint-personal-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>2/4</span>
-        </div> */}
+      <div className="kyc-personal-details">
         <main>
           <Input
             label="Father's name"

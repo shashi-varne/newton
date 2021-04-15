@@ -116,13 +116,12 @@ const RtaCompliantPersonalDetails = (props) => {
   return (
     <Container
       skelton={isLoading}
-      id="kyc-rta-compliant-personal-details"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
     >
-      <div className="kyc-complaint-personal-details">
+      <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">
           <div>
             <div>Share your date of birth as per PAN:</div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
-import ShowAadharDialog from './ShowAadharDialog'
+import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
 import { getUrlParams, isEmpty, storageService } from '../../utils/validators'
 import { getPathname, storageConstants } from '../constants'
@@ -18,6 +18,7 @@ import { nativeCallback } from 'utils/native_callback'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import { getBasePath } from '../../utils/functions'
+import "./Journey.scss"
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)

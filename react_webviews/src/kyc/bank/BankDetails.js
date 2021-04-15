@@ -7,6 +7,7 @@ import { getConfig } from "utils/functions";
 import { getMyAccount } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import "./BankDetails.scss";
 
 const BankDetails = (props) => {
   const [showLoader, setShowLoader] = useState(true);
@@ -70,14 +71,12 @@ const BankDetails = (props) => {
     <Container
       showSkelton={showLoader || isLoading}
       hideInPageTitle
-      id="bank-details"
       buttonTitle="RE-UPLOAD DOCUMENT"
       handleClick={handleClick}
       noFooter={bank.bank_status !== "rejected"}
       title="Bank accounts"
     >
       <div className="bank-details">
-        {/* <div className="kyc-main-title">Bank accounts</div> */}
         {!showLoader && (
           <>
             <div className="bank-info">

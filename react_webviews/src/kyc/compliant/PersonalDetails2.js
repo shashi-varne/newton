@@ -119,7 +119,7 @@ const PersonalDetails2 = (props) => {
       current={2}
       total={3}
     >
-      <div className="kyc-complaint-personal-details">
+      <div className="kyc-personal-details">
         {!isLoading && (
           <main>
             <div className={`input ${isApiRunning && `disabled`}`}>

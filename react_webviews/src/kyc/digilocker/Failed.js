@@ -8,6 +8,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import DotDotLoaderNew from '../../common/ui/DotDotLoaderNew';
+import "./Digilocker.scss";
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);

@@ -1,0 +1,170 @@
+#kyc-bank-kyc-upload-docs {
+  .banner {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #f6f2ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .banner .title {
+    font-size: 11px;
+    color: #767e86;
+    line-height: 20px;
+    font-weight: normal;
+  }
+  .banner .left {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-right: 20px;
+  }
+
+  .banner .acc_no {
+    font-size: 13px;
+
+    .value {
+      line-height: 15px;
+      color: #160d2e;
+    }
+  }
+
+  .banner .left .icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 20px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: #8d879b;
+    padding: 0 15px 0 0;
+    margin-bottom: 20px;
+  }
+  
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    line-height: 1.5;
+    padding-bottom: 20px;
+
+    .option-type {
+      color: #160d2e;
+      border: 1px solid #767e86;
+      text-align: left;
+      padding: 9px 10px;
+      font-size: 13px;
+      border-radius: 4px;
+      margin: 10px 10px 0 0;
+      min-width: 140px;
+      max-width: fit-content;
+      display: flex;
+      justify-content: space-between;
+      column-gap: 10px;
+    }
+
+    .option-type:nth-child(3) {
+      min-width: 170px;
+    }
+
+    .disabled {
+      border-color: #9b98a2;
+      color: #9b98a2;
+    }
+
+    .selected {
+      color: var(--primary);
+      font-weight: 600;
+
+      .check-icon {
+        width: 10px;
+      }
+    }
+  }
+
+  .banner .edit {
+    text-transform: uppercase;
+    color: var(--secondary);
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .doc-title {
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--default);
+  }
+
+  .docs-image-container {
+    padding: 10px;
+    max-width: 100%;
+    background: #f5faff;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+  }
+
+  .docs-image-container .preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: #f6f2ff;
+  }
+
+  .sign-img {
+    display: block;
+    width: 56.15px;
+    height: 48.72px;
+  }
+
+  .preview-image {
+    display: block;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .upload-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    top: -10px;
+    cursor: pointer;
+  }
+
+  .upload-container svg {
+    fill: var(--secondary);
+  }
+
+  .upload-container .upload-action {
+    color: var(--secondary);
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 800;
+    margin-top: 3px;
+  }
+
+  .sample-document {
+    margin: 0 auto;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-top: 30px;
+    text-align: center;
+    color: var(--secondary);
+    cursor: pointer;
+  }
+
+  .ssl-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 40px 0;
+  }
+}

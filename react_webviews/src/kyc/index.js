@@ -11,6 +11,9 @@ import KycBankDetails from "./bank-kyc/KycBankDetails";
 import KycBankVerify from "./bank-kyc/KycBankVerify";
 
 import "./Style.scss";
+import "./mini-components/MiniComponents.scss";
+import "./upload/Upload.scss";
+import "./address/Address.scss";
 
 import AddBank from "./bank/AddBank";
 import AddBankVerify from "./bank/AddBankVerify";

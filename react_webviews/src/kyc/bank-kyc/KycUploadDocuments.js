@@ -9,6 +9,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig } from "../../utils/functions";
 import { getPathname } from "../constants";
+import "./KycUploadDocuments.scss";
 
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -147,8 +148,7 @@ const KycUploadDocuments = (props) => {
       showLoader={isApiRunning}
       title="Upload documents"
     >
-      <section id="kyc-bank-kyc-upload-docs" className="page-body-kyc">
-        {/* <div className="title">Upload documents</div> */}
+      <section id="kyc-bank-kyc-upload-docs">
         <div className="banner">
           <div className="left">
             <img src={bankData?.ifsc_image} alt="bank" className="icon" />

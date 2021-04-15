@@ -166,7 +166,7 @@ const PersonalDetails1 = (props) => {
       current={1}
       total={3}
     >
-      <div className="kyc-complaint-personal-details">
+      <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">
           <div>
             <div>Share your date of birth as per PAN:</div>

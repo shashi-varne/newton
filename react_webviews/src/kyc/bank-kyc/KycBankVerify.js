@@ -170,7 +170,6 @@ const KycBankVerify = (props) => {
 
   return (
     <Container
-      id="kyc-bank-verify"
       buttonTitle="VERIFY BANK ACCOUNT"
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}

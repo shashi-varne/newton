@@ -89,7 +89,7 @@ const IpvVideo = (props) => {
       title="Upload video (IPV)"
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-ipv-video" className="page-body-kyc">
+        <section id="kyc-upload-ipv-video">
           <div className="sub-title">
             As per SEBI, it's compulsory for all investors to go through IPV (In
             Person Verification Process).

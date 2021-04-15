@@ -149,7 +149,6 @@ const PersonalDetails4 = (props) => {
     <Container
       showSkelton={isLoading}
       hideInPageTitle
-      id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
       handleClick={handleClick}
       skelton={isLoading}

@@ -153,7 +153,7 @@ const PersonalDetails1 = (props) => {
       current={1}
       total={4}
     >
-      <div className="kyc-complaint-personal-details">
+      <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">
           Please fill your basic details for further verification
         </div>

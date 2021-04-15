@@ -155,7 +155,7 @@ const AddressDetails1 = (props) => {
       count={1}
       total={getTotalPages(form_data.residential_status)}
     >
-      <div className="kyc-complaint-personal-details kyc-address-details">
+      <div className="kyc-personal-details kyc-address-details">
         <main>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

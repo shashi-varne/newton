@@ -5,6 +5,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import { storageService } from "../../utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import { nativeCallback } from "utils/native_callback";
+import "./Compliant.scss";
 
 const productName = getConfig().productName;
 const Verify = (props) => {
@@ -25,7 +26,7 @@ const Verify = (props) => {
       handleClick={handleClick}
       title="KYC verified"
     >
-      <div className="kyc-compliant-complete kyc-compliant-verify">
+      <div className="kyc-compliant-complete">
         <header>
           <img
             src={require(`assets/${productName}/ic_process_done.svg`)}
@@ -33,7 +34,7 @@ const Verify = (props) => {
           />
           <div className="title">You're ready to invest!</div>
           <div
-            className="subtitle"
+            className="subtitle margin-top"
             onClick={() => navigate(getPathname.compliantReport)}
           >
             See KYC application details {" >"}

@@ -286,7 +286,6 @@ const KycBankDetails = (props) => {
 
   return (
     <Container
-      id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       skelton={isLoading}

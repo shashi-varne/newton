@@ -3,6 +3,7 @@ import Container from '../common/Container'
 import { getConfig } from '../../utils/functions'
 import { dlDocs } from '../constants'
 import { navigate as navigateFunc } from '../common/functions'
+import "./Digilocker.scss";
 
 const Success = (props) => {
   const productName = getConfig().productName

@@ -75,7 +75,7 @@ const ChangeAddressDetails1 = (props) => {
       current={1}
       total={2}
     >
-      <div className="kyc-complaint-personal-details kyc-address-details">
+      <div className="kyc-personal-details kyc-address-details">
         <main>
           <div className={`input ${disabled && `disabled`}`}>
             <RadioWithoutIcon

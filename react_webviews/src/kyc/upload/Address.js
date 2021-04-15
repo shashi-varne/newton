@@ -280,7 +280,7 @@ const AddressUpload = (props) => {
       title="Upload address proof"
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-address" className="page-body-kyc">
+        <section id="kyc-upload-address">
           <div className="sub-title">
             {getFullAddress()}
             {getFullAddress() && (

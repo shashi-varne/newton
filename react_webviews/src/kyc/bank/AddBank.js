@@ -222,9 +222,7 @@ const AddBank = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       skelton={isLoading}
-      id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       disable={isLoading}
@@ -232,7 +230,6 @@ const AddBank = (props) => {
       title="Enter bank account details"
     >
       <div className="kyc-approved-bank">
-        {/* <div className="kyc-main-title">Enter bank account details</div> */}
         {!isLoading && (
           <>
             <Alert

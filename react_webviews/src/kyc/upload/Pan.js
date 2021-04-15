@@ -33,7 +33,7 @@ const getTitleList = ({ kyc }) => {
 }
 
 const MessageComponent = (kyc) => {
-  const [titleList, setTitleList] = useState(getTitleList(kyc))
+  const [titleList] = useState(getTitleList(kyc))
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
@@ -164,7 +164,7 @@ const Pan = (props) => {
       title="Upload PAN"
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan" className="page-body-kyc">
+        <section id="kyc-upload-pan">
           <div className="sub-title">
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>

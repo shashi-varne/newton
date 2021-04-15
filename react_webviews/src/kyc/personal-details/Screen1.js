@@ -140,7 +140,6 @@ const PersonalDetails1 = (props) => {
 
   return (
     <Container
-      id="kyc-personal-details1"
       buttonTitle="SAVE AND CONTINUE"
       handleClick={handleClick}
       skelton={isLoading}
@@ -150,7 +149,7 @@ const PersonalDetails1 = (props) => {
       current="1"
       total="4"
     >
-      <div className="kyc-complaint-personal-details">
+      <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">
           We need basic details to verify identity
         </div>

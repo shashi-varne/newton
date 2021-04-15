@@ -186,7 +186,7 @@ const AddressDetails2 = (props) => {
       count={2}
       total={getTotalPages(kyc)}
     >
-      <section id="kyc-bank-kyc-address-details-2" className="page-body-kyc">
+      <section id="kyc-bank-kyc-address-details-2">
         <div className="sub-title">Address as per {getAddressProof(kyc)}</div>
         <form className="form-container">
           <TextField
