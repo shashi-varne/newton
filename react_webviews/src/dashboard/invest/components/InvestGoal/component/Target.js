@@ -4,7 +4,12 @@ import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 
 import { storageService, formatAmountInr } from 'utils/validators';
-import {getRateOfInterest, navigate as navigateFunc, isRecurring, convertInrAmountToNumber} from '../../../common/commonFunctions';
+import {
+  getRateOfInterest,
+  navigate as navigateFunc,
+  isRecurring,
+  convertInrAmountToNumber
+} from '../../../common/commonFunctions';
 import { get_recommended_funds } from '../../../common/api';
 import './style.scss';
 

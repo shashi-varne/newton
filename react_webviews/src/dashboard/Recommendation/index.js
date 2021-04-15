@@ -279,8 +279,8 @@ const Recommendations = (props) => {
           stockReturns={funnelData.stockReturns}
           bondReturns={funnelData.bondReturns}
           principalAmount={funnelData.amount}
+          isRecurring={funnelData.isRecurring}
           showInfo
-          // isRecurring={isRecurring}
         />
         <section className='recommendations-common-container'>
           <div className='recommendations-header'>

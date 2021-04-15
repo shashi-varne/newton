@@ -6,7 +6,7 @@ import toast from 'common/ui/Toast'
 import { storageService, numDifferentiationInr } from 'utils/validators';
 import {
   navigate as navigateFunc,
-  corpusValue,
+  getCorpusValue,
   validateOtAmount,
   validateSipAmount,
   selectTitle,
@@ -79,10 +79,9 @@ const InvestAmount = (props) => {
     if (goalRecommendation.id === "savetax") {
       calculateTax(funnelData?.corpus);
     } else {
-      const valueOfCorpus = corpusValue(
+      const valueOfCorpus = getCorpusValue(
         equity,
         amount,
-        goalRecommendation.id,
         isRecurring,
         term
       );
