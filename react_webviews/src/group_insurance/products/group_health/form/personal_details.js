@@ -497,7 +497,7 @@ class GroupHealthPlanPersonalDetails extends Component {
           current_state[x] = current_member[x];
         }
       }
-      if(form_data.pan_no){
+      if(this.state.pan_needed){
         current_state['pan_no'] = form_data.pan_no
       }
       this.updateLead(body, '', current_state );

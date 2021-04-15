@@ -43,6 +43,11 @@ class GroupHealthPlanMedicalHistory extends Component {
        element.relation = relation.key
      });
 
+     if(this.props.edit) {
+      this.setState({
+        next_state : `/group-insurance/group-health/${this.state.provider}/final-summary`
+      })
+    }
      member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
     
      let radio_options = [

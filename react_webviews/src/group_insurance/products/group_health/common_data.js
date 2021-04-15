@@ -111,7 +111,6 @@ export async function initialize() {
                 this.getApplicationDetails(application_id, providerConfig);
             } else if(application_id && this.state.screen_name !== 'final_summary_screen') {
                 var application_form_data = groupHealthPlanData.application_form_data;
-                console.log('from SESSION')
                     lead = application_form_data.quotation_details;
                     var member_base = ghGetMember(lead, providerConfig);
                     this.setState({
@@ -367,34 +366,31 @@ export async function getApplicationDetails(application_id, providerConfig) {
             showError: true,
           });
     }
-    
 }
 export async function updateLead( body, quote_id, current_state) {
     
     var groupHealthPlanData = this.state.groupHealthPlanData;
     var current_form_data = current_state || {};
-    if(this.state.screen_name === 'personal_details_screen'){
-        var prev_form_data = groupHealthPlanData['application_data']['personal_details_screen'][`${this.state.member_key}`] || {};
+    if(this.state.screen_name === 'personal_details_screen' || this.state.screen_name === 'select_ped_screen'){
+        var prev_form_data = groupHealthPlanData['application_data'][this.state.screen_name][`${this.state.member_key}`] || {};
     }else{
         var prev_form_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data[this.state.screen_name] || {}: {};
     }
 
     var isFormDataSame = false;
-    // if(!isEmpty(prev_form_data)){
-        var keys_to_check = isEmpty(Object.keys(current_form_data)) ? Object.keys(prev_form_data) : Object.keys(current_form_data)
-        var isFormDataSame = compareObjects(keys_to_check, prev_form_data, current_form_data);
-    // }
+    var keys_to_check = isEmpty(Object.keys(current_form_data)) ? Object.keys(prev_form_data) : Object.keys(current_form_data)
+    var isFormDataSame = compareObjects(keys_to_check, prev_form_data, current_form_data);
+
     if(isEmpty(current_form_data) && isEmpty(prev_form_data)){
         isFormDataSame = true;
     }
     
-    console.log('SAME?', isFormDataSame)
     if(isFormDataSame){
         this.navigate(this.state.next_state);
         return;
     }else{
-        if(this.state.screen_name === 'personal_details_screen'){
-            var personal_details_screen = groupHealthPlanData['application_data']['personal_details_screen'];
+        if(this.state.screen_name === 'personal_details_screen' || this.state.screen_name === 'select_ped_screen'){
+            var personal_details_screen = groupHealthPlanData['application_data'][this.state.screen_name];
             personal_details_screen[`${this.state.member_key}`] = current_form_data; 
             groupHealthPlanData.personal_details_screen = personal_details_screen;   
         }else{
@@ -423,9 +419,7 @@ export async function updateLead( body, quote_id, current_state) {
         const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
         
         var resultData = res.pfwresponse.result;
-        var groupHealthPlanData = this.state.groupHealthPlanData;
-        groupHealthPlanData.application_form_data = resultData;
-        this.setLocalProviderData(groupHealthPlanData);
+        
 
         this.setState({
             show_loader: false
@@ -435,6 +429,10 @@ export async function updateLead( body, quote_id, current_state) {
                 skelton:false
             })
         if (res.pfwresponse.status_code === 200) {
+            var groupHealthPlanData = this.state.groupHealthPlanData;
+            groupHealthPlanData.application_form_data = resultData;
+            this.setLocalProviderData(groupHealthPlanData);
+            
             if (body.pedcase) { 
                 this.initialize(); 
                 return}
@@ -446,6 +444,8 @@ export async function updateLead( body, quote_id, current_state) {
             
         } else {
             if (resultData.error && resultData.error.length > 0 && resultData.error[0]==='BMI check failed.') {
+                groupHealthPlanData['application_data'][this.state.screen_name][this.state.member_key] = {} 
+                this.setLocalProviderData(groupHealthPlanData)
                 this.setState({
                     openBmiDialog: true
                 }, () => {

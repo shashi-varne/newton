@@ -54,7 +54,6 @@ class GroupHealthPlanIsPed extends Component {
         let body = {}
         let pedcase = false;
         body["insured_people_details"] = [];
- 
         this.state.lead.insured_people_details.forEach((memberData) => {
            let relation_key  = memberData.insured_person.relation_key
            if(memberData.answers.pre_existing_diseases.length === 0 && memberData.insured_person.ped === true){
@@ -70,7 +69,14 @@ class GroupHealthPlanIsPed extends Component {
      }
      })
 
-       if (pedcase) { this.updateLead(body)}
+        var current_state = {}
+        for(var x of body.insured_people_details){
+            if(x.ped){
+                current_state[x.relation_key] = x.ped
+            }
+        }
+        
+       if (pedcase) { this.updateLead(body, '', current_state)}
 
         let member_base = this.state.member_base.map((element, index) => {
             let member = lead.insured_people_details.find(member => member.insured_person.relation_key === element.backend_key)
@@ -217,22 +223,21 @@ class GroupHealthPlanIsPed extends Component {
         if (canSubmitForm) {
             this.setState({
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
-            })
-
-         
-            let body = {
-                insured_people_details,
-                'answers' : answers
-            }
-            console.log(body)
-            var current_state = {}
-            for(var x in body.insured_people_details){
-                if(body.insured_people_details[x].ped){
-                    current_state[`${body.insured_people_details[x].relation_key}`]  = body.insured_people_details[x].ped
+            }, ()=>{
+                let body = {
+                    insured_people_details,
+                    'answers' : answers
                 }
-            }
-            console.log(current_state)
-            this.updateLead(body);
+                var current_state = {}
+                var insured_data = body.insured_people_details;
+                for(var x in insured_data){
+                    if(insured_data[x].ped){
+                        current_state[`${insured_data[x].relation_key}`]  = insured_data[x].ped
+                    }
+                }
+    
+                this.updateLead(body, '' , current_state);
+            })
         }
 
     }

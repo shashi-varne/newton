@@ -212,7 +212,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
         
 
-        let relationMap = this.state.relationshipOptions.filter(data => data.value === relation);
+        let relationMap = this.state.relationshipOptions.filter(data => data.value.toLowerCase() === relation.toLowerCase());
 
         if (!relation || relationMap.length === 0) {
             form_data.relation_error = 'please select relation'
@@ -298,14 +298,14 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }
             if(this.state.renderAppointee){
-                for(var x in body.nominee_details.appointee_details){
+                var appointee_data = body.nominee_details.appointee_details;
+                for(var x in appointee_data){
                     if(keys_to_add.indexOf(x) >= 0){
-                        current_state[`appointee_${x}`] = body.nominee_details.appointee_details[x];
+                        current_state[`appointee_${x}`] = appointee_data[x];
                     }
                 }   
             }
 
-            console.log(current_state)
             this.updateLead(body, '',  current_state);     
         }
     }

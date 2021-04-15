@@ -16,7 +16,8 @@ class GroupHealthStarPlanSelectPed extends Component {
       ctaWithProvider: true,
       get_lead: true,
       life_style_question: {},
-      next_state: 'final-summary'
+      next_state: 'final-summary',
+      screen_name: 'star_select_ped'
     };
 
     this.initialize = initialize.bind(this);
@@ -245,6 +246,9 @@ class GroupHealthStarPlanSelectPed extends Component {
       if(body.answers[x].pre_existing_diseases.length > 0){
         current_state[x] = body.answers[x].pre_existing_diseases[0].description;
       }
+    }
+    if(Object.keys(current_state).length === 0){
+      current_state['none'] = true;
     }
     this.updateLead(body, '', current_state);
    }

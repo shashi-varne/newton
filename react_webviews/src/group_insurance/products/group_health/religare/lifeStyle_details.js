@@ -43,8 +43,13 @@ class GroupHealthPlanLifestyleDetail extends Component {
         break;
       }
     };
+    if(this.props.edit) {
+      this.setState({
+        next_state : `/group-insurance/group-health/${this.state.provider}/final-summary`
+      })
+    }
     this.setState({
-      none_option_selected: none_option_selected
+      none_option_selected: none_option_selected, 
     })
 
     if (member_base.length > 1) {
@@ -354,10 +359,11 @@ class GroupHealthPlanLifestyleDetail extends Component {
     
     var current_state = {}
     for(var x in body.answers){
-      if(body.answers[x].life_style_details[0].yes_no){
-        current_state[`${x}_yes_no`] = body.answers[x].life_style_details[0].yes_no;
-        current_state[`${x}_since_when`] = body.answers[x].life_style_details[0].since_when;
-        current_state[`${x}_desc`] = body.answers[x].life_style_details[0].description;
+      var life_style_data = body.answers[x].life_style_details[0];
+      if(life_style_data.yes_no){
+        current_state[`${x}_yes_no`] = life_style_data.yes_no;
+        current_state[`${x}_since_when`] = life_style_data.since_when;
+        current_state[`${x}_desc`] = life_style_data.description;
       } 
     }
     this.updateLead(body, '', current_state);

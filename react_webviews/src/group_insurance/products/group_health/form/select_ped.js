@@ -356,13 +356,20 @@ class GroupHealthPlanSelectPed extends Component {
                 next_state: next_state || this.state.next_state,
                 force_forward: !!next_state && this.props.edit,
                 lead: lead
-            })
-
-            this.setState({
-                form_data: body
             }, ()=>{
-                this.updateLead(body);
+                var current_state = {};
+                for(var x in body.answers){
+                    for(var y of body.answers[x].pre_existing_diseases){
+                        current_state[`${x}_${y.question_id}_yes_no`] =  y.yes_no
+                        current_state[`${x}_${y.question_id}_description`] =  y.description
+                        if(provider !== 'HDFCERGO'){
+                        current_state[`${x}_${y.question_id}_since_when`] =  y.since_when
+                        } 
+                    }
+                }
+                this.updateLead(body, '', current_state);
             })
+            
             
         }
     }

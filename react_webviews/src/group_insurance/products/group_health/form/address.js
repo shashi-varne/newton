@@ -374,11 +374,12 @@ class GroupHealthPlanAddressDetails extends Component {
             }
             var keys_to_add = ['addr_line1', 'addr_line2','city', 'pincode', 'state']
             var address = body.address_details;
+            var address_data = provider === 'HDFCERGO' ? address.permanent_address : address.correspondence_address
             var current_state = {}
-
-            for(var x in address.correspondence_address){
+            
+            for(var x in address_data){
                 if(keys_to_add.indexOf(x) >= 0){
-                    current_state[x] = address.correspondence_address[x]
+                    current_state[x] = address_data[x]
                 }
             }
 
