@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Container from '../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
-
 import { storageService, numDifferentiationInr } from 'utils/validators';
 import {
   navigate as navigateFunc,
@@ -18,7 +17,6 @@ import { isArray } from 'lodash';
 import './mini-components.scss';
 import { getConfig } from '../../../utils/functions';
 import { formatAmountInr } from '../../../utils/validators';
-const date = new Date();
 
 const InvestAmount = (props) => {
   const funnelData = storageService().getObject('funnelData');

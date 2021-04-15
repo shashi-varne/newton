@@ -4,7 +4,7 @@ import InfoBox from '../../../../common/ui/F-InfoBox';
 import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
-import { navigate as navigateFunc, selectTitle } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from '../../common/commonFunctions';
 import FSelect from './FSelect';
 import './RiskPages.scss';
 import { getConfig } from '../../../../utils/functions';

@@ -164,8 +164,9 @@ export function getKycAppStatus(kyc) {
   var metaRejected = 0;
   var docRejected = 0;
   var rejectedItems = [];
+  var fieldsToCheck = [];
   if (kyc.kyc_status === "compliant") {
-    var fieldsToCheck = [
+    fieldsToCheck = [
       { name: "pan", keys: ["meta_data_status"] },
       { name: "bank", keys: ["meta_data_status"] },
       { name: "identification", keys: ["meta_data_status"] },
@@ -173,7 +174,7 @@ export function getKycAppStatus(kyc) {
       { name: "sign", keys: ["doc_status"] }
     ];
   } else {
-    var fieldsToCheck = [
+    fieldsToCheck = [
       { name: "pan", keys: ["doc_status", "meta_data_status"] },
       { name: "address", keys: ["doc_status", "meta_data_status"] },
       { name: "bank", keys: ["meta_data_status"] },
