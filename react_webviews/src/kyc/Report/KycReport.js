@@ -121,7 +121,7 @@ const Report = (props) => {
       navigate(getPathname.invest);
     } else {
       if (storageService().get(storageConstants.NATIVE)) {
-        nativeCallback({ action: "exit" });
+        nativeCallback({ action: "exit_web" });
       } else {
         navigate(getPathname.landing);
       }
@@ -138,7 +138,7 @@ const Report = (props) => {
         navigate(getPathname.invest);
       } else {
         if (storageService().get(storageConstants.NATIVE)) {
-          nativeCallback({ action: "exit" });
+          nativeCallback({ action: "exit_web" });
         } else {
           navigate(getPathname.landing);
         }

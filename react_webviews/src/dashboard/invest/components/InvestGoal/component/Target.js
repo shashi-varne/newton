@@ -1,23 +1,28 @@
+import './style.scss';
 import React, { useEffect, useState } from 'react';
 import Container from '../../../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
+import { formatAmountInr } from 'utils/validators';
+import {
+  navigate as navigateFunc,
+  isRecurring,
+  convertInrAmountToNumber,
+  getMonthlyCommitmentNew
+} from '../../../common/commonFunctions';
+import moment from 'moment';
+import useFunnelDataHook from '../../../common/funnelDataHook';
 
-import { storageService, formatAmountInr } from 'utils/validators';
-import {getRateOfInterest, navigate as navigateFunc, isRecurring, convertInrAmountToNumber} from '../../../common/commonFunction';
-import { get_recommended_funds } from '../../../common/api';
-import './style.scss';
+const currentYear = moment().year();
 
-// eslint-disable-next-line radix
-const currentYear = parseInt(new Date().getFullYear())
 const Target = (props) => {
-  const funnelData = storageService().getObject("funnelData");
   const [targetAmount, setTargetAmount] = useState(0);
   const [loader, setLoader] = useState(false);
-  const term= funnelData?.year ? funnelData?.year-  currentYear :  15;
+  const { funnelData, updateFunnelData, initFunnelData } = useFunnelDataHook();
+  const term = funnelData?.year ? funnelData?.year - currentYear :  15;
   const year = funnelData?.year || currentYear + 15;
-  const navigate = navigateFunc.bind(props);
   const { subtype } = props.match?.params;
+  const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
     switch (subtype) {
@@ -53,20 +58,6 @@ const Target = (props) => {
     }
   };
 
-  const getMonthlyCommitmentNew = (corpusValue, stockSplitVal) => {
-    var n = term * 12;
-    var r = getRateOfInterest(stockSplitVal);
-    var a = corpusValue;
-    var i = r / 12 / 100;
-    var tmp = Math.pow(1 + i, n) - 1;
-    var monthlyInvestment = (a * i) / tmp;
-    var monthlyAmount = monthlyInvestment;
-    if (monthlyAmount < 500) {
-      monthlyAmount = 500;
-    }
-    return Math.floor(monthlyAmount);
-  };
-
   const fetchRecommendedFunds = async (amount) => {
     try {
       const params = {
@@ -77,21 +68,18 @@ const Target = (props) => {
       };
       setLoader("button");
       const recurring = isRecurring('saveforgoal');
-      const { recommendation } = await get_recommended_funds(params);
-      const monthlyAmount = getMonthlyCommitmentNew(amount, recommendation.equity);
-      const updatedGraphData = {
-        year,
-        amount: monthlyAmount,
-        corpus: amount,
-        equity: recommendation.equity,
-        subtype,
+      await initFunnelData({ type: params.type });
+      updateFunnelData({
         term,
+        year,
+        subtype,
+        corpus: amount,
+        amount: getMonthlyCommitmentNew(term, amount, funnelData.equity),
         investType: 'saveforgoal',
         isRecurring: recurring,
-        investTypeDisplay:"sip",
-        name:"Saving for goal"
-      };
-      storageService().setObject('funnelData', updatedGraphData);
+        investTypeDisplay: "sip",
+        name: "Saving for goal"
+      });
       setLoader(false);
       navigate(`savegoal/${subtype}/amount`, true);
     } catch (err) {

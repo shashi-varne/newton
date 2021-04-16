@@ -14,7 +14,7 @@ const Complete = (props) => {
 
   const handleClick = () => {
     if (storageService().get(storageConstants.NATIVE)) {
-      nativeCallback({ action: "exit" });
+      nativeCallback({ action: "exit_web" });
     } else {
       navigate(getPathname.invest);
     }

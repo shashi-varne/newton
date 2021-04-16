@@ -73,7 +73,7 @@ const KycUploadDocuments = (props) => {
     if (selected === null || !file) return;
     try {
       setIsApiRunning("button");
-      const result = await uploadBankDocuments(
+      await uploadBankDocuments(
         file,
         verificationDocOptions[selected].value,
         bank_id

@@ -16,13 +16,12 @@ const Intro = (props) => {
   return (
     <Container
       buttonTitle="CONTINUE"
-      title="Intro"
       handleClick={handleClick}
       title='Upload documents'
     >
       <section id="kyc-upload-intro">
         <div className="banner">
-          <img src={require(`assets/${productName}/upload_doc_banner.svg`)} />
+          <img src={require(`assets/${productName}/upload_doc_banner.svg`)} alt="" />
         </div>
         <div className="intro">
           Securely upload required documents to verify personal and address
