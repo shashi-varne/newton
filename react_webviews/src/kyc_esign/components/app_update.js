@@ -29,7 +29,7 @@ class AppUpdateInfo extends Component {
   openInBrowser(url) {
 
     nativeCallback({
-      action: 'open_in_browser',
+      action: 'open_browser',
       message: {
         url: url
       }
