@@ -9,7 +9,7 @@ import './style.scss'
 import { storageService } from '../../../utils/validators'
 import { getConfig } from 'utils/functions'
 
-import { navigate as navigateFunc } from '../../invest/common/commonFunction'
+import { navigate as navigateFunc } from '../../invest/common/commonFunctions'
 
 import CartFooter from '../components/CartFooter'
 import { getFundList } from '../functions'
@@ -152,6 +152,7 @@ const FundList = (props) => {
       if (sortFilter === 'fundsize') {
         return Number(b.aum) - Number(a.aum) > 0 ? 1 : -1
       }
+      return -1;
     })
 
   return (
@@ -214,7 +215,6 @@ const FundList = (props) => {
           cart={cart}
           fundsList={fundsList}
           setCart={setCart}
-          setFundsList={setFundsList}
           sortFilter={sortFilter}
           fundHouse={fundHouse}
           fundOption={fundOption}

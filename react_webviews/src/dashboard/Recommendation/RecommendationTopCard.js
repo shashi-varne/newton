@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { getConfig } from '../../utils/functions';
 import { formatAmountInr, getFinancialYear } from '../../utils/validators';
-import { navigate as navigateFunc } from '../invest/common/commonFunction';
+import { navigate as navigateFunc } from '../invest/common/commonFunctions';
 import './RecommendationTopCard.scss';
 const { productName } = getConfig();
 

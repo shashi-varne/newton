@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Container from '../../../../common/Container';
 import Input from 'common/ui/Input';
 
-import { navigate as navigateFunc } from '../../../common/commonFunction';
+import { navigate as navigateFunc } from '../../../common/commonFunctions';
 
 import './style.scss';
 import { storageService } from 'utils/validators';

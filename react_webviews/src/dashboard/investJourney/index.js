@@ -6,7 +6,7 @@ import bse_icon from "assets/bse_icon.png";
 import fund_house_icon from "assets/fund_house_icon.png";
 import safe_secure_journey from "assets/safe_secure_journey.png";
 
-import { navigate as navigateFunc } from "../invest/common/commonFunction";
+import { navigate as navigateFunc } from "../invest/common/commonFunctions";
 
 import "./style.scss";
 import {

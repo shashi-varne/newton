@@ -4,7 +4,7 @@ import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast';
 
 import { storageService } from 'utils/validators';
-import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
+import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { get_recommended_funds } from '../../common/api';
 import moment from 'moment';
 

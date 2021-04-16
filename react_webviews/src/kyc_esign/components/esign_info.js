@@ -28,7 +28,6 @@ class ESignInfo extends Component {
 
   initialize = async () => {
     const kyc = storageService().getObject("kyc");
-    const user = storageService().getObject("user");
     if (!isEmpty(kyc)) {
       if (
         kyc.kyc_status !== "compliant" &&

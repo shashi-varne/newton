@@ -2,23 +2,21 @@ import React, { useState, useEffect } from 'react';
 import Container from '../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
-
 import { storageService, numDifferentiationInr } from 'utils/validators';
 import {
   navigate as navigateFunc,
-  corpusValue,
+  getCorpusValue,
   validateOtAmount,
   validateSipAmount,
   selectTitle,
   convertInrAmountToNumber,
-} from '../common/commonFunction';
+} from '../common/commonFunctions';
 import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
 
 import './mini-components.scss';
 import { getConfig } from '../../../utils/functions';
 import { formatAmountInr } from '../../../utils/validators';
-const date = new Date();
 
 const InvestAmount = (props) => {
   const funnelData = storageService().getObject('funnelData');
@@ -79,10 +77,9 @@ const InvestAmount = (props) => {
     if (goalRecommendation.id === "savetax") {
       calculateTax(funnelData?.corpus);
     } else {
-      const valueOfCorpus = corpusValue(
+      const valueOfCorpus = getCorpusValue(
         equity,
         amount,
-        goalRecommendation.id,
         isRecurring,
         term
       );
