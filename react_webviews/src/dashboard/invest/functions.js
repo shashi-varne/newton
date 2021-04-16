@@ -215,21 +215,18 @@ export function setInvestCardsData() {
     our_recommendations: [
       "instaredeem",
       "buildwealth",
-      // "insurance",
+      "insurance",
       "savetax",
-      // "nps",
+      "nps",
     ],
-    diy: [
-      "diyv2",
-      //  "gold"
-    ],
+    diy: ["diyv2", "gold"],
     bottom_scroll_cards: ["parkmoney", "savegoal"],
     bottom_cards: ["nfo"],
     popular_cards: [],
-    financial_tools: [],
+    financial_tools: ["fhc", "risk_profile"],
   };
 
-  // let restricted_items = ["gold", "nps", "risk_profile", "insurance", "fhc"];
+  let restricted_items = ["gold", "nps", "risk_profile", "insurance", "fhc"];
 
   let invest_cards_handling_partner = partner.invest_cards_handling;
 
@@ -266,14 +263,12 @@ export function setInvestCardsData() {
       partner_specific = invest_cards_handling_partner[handling_key];
     }
     for (let itemKey of partner_specific) {
-      // if (
-      //   // restricted_items.indexOf(itemKey) !== -1
-      //   // &&
-      //   // !partner.invest_screen_cards[itemKey]
-      // ) {
-      //   continue;
-      // } else
       if (
+        restricted_items.indexOf(itemKey) !== -1 &&
+        !partner.invest_screen_cards[itemKey]
+      ) {
+        continue;
+      } else if (
         subbroker_code &&
         itemKey === "insurance" &&
         insuranceDisabled.indexOf(subbroker_code) !== -1
