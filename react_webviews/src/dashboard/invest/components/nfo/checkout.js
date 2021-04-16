@@ -13,6 +13,7 @@ import PennyVerificationPending from "../../mini-components/PennyVerificationPen
 import InvestError from "../../mini-components/InvestError";
 import InvestReferralDialog from "../../mini-components/InvestReferralDialog";
 import { convertInrAmountToNumber } from "../../common/commonFunction";
+import { getNfoPurchaseLimit } from "./nfoFunctions";
 
 class Checkout extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class Checkout extends Component {
       purchaseLimitData: {},
     };
     this.initialize = initialize.bind(this);
+    this.getNfoPurchaseLimit = getNfoPurchaseLimit.bind(this);
   }
 
   componentWillMount() {
@@ -216,6 +218,20 @@ class Checkout extends Component {
         this.setState({ form_data: form_data, fundsData: fundsData });
       }
     }
+  };
+
+  deleteFund = (item, index) => {
+    let { fundsData, cartCount } = this.state;
+    let fundName = item.legalName || item.legal_name;
+    fundsData.splice(index, 1);
+    cartCount = fundsData.length;
+    this.setState({
+      fundName: fundName,
+      fundsData: fundsData,
+      cartCount: cartCount,
+    });
+    storageService().setObject("diystore_cart", fundsData);
+    storageService().set("diystore_cartCount", fundsData.length);
   };
 
   render() {

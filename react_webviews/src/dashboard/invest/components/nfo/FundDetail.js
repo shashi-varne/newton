@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "@material-ui/core/Button";
 import { storageService } from "utils/validators";
+import { initialize } from "../../functions";
 import {
-  initialize,
   getFormattedEndDate,
   getSchemeOption,
-} from "../../functions";
+} from "./nfoFunctions";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class FundDetail extends Component {
   };
 
   handleClick = () => {
-    this.navigate("/advanced-investing/new-fund-offers/funds/checkout")
+    this.navigate("/advanced-investing/new-fund-offers/funds/checkout");
   };
 
   render() {

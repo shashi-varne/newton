@@ -8,7 +8,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import { formatAmountInr } from "utils/validators";
 import { investRedeemData } from "../../constants";
-import { convertInrAmountToNumber } from "../../common/commonFunction";
+import { convertInrAmountToNumber, getGoalRecommendation } from "../../common/commonFunction";
+import { storageService } from "../../../../utils/validators";
 
 class InvestAmount extends Component {
   constructor(props) {
@@ -41,7 +42,27 @@ class InvestAmount extends Component {
   };
 
   handleClick = () => {
-    this.getRecommendation();
+    this.setState({ show_loader: true});
+    let instaRecommendations = storageService().getObject(
+      "instaRecommendations"
+    )[0];
+    let { amount, investType, term } = this.state;
+    let allocations = [{ amount: amount, mf: instaRecommendations }];
+    let recommendations = {
+      recommendation: allocations,
+      term: term,
+      investType: "insta-redeem",
+      name: "Insta Redeem",
+      investTypeDisplay: investType,
+      bondstock: "",
+      // eslint-disable-next-line
+      recommendedTotalAmount: parseInt(amount),
+      type: "insta-redeem",
+      order_type: investType,
+      subtype: "",
+    };
+    storageService().setObject("funnelData", recommendations);
+    this.navigate(`/invest/recommendations`);
   };
 
   handleChange = () => (event) => {
@@ -69,6 +90,29 @@ class InvestAmount extends Component {
     this.setState({ amount: amount });
   };
 
+  validateAmount = (amount) => {
+    let goal = getGoalRecommendation();
+    let max = 0;
+    let min = 0;
+    if (this.state.investType === "sip") {
+      max = goal.max_sip_amount;
+      min = goal.min_sip_amount;
+    } else {
+      max = goal.max_ot_amount;
+      min = goal.min_ot_amount;
+    }
+    let { amount_error } = this.state;
+    if (amount > max) {
+      amount_error =
+        "Investment amount cannot be more than " + formatAmountInr(max);
+    } else if (amount < min) {
+      amount_error = "Minimum amount should be atleast " + formatAmountInr(min);
+    } else {
+      amount_error = "";
+    }
+    this.setState({ amount_error: amount_error });
+  };
+  
   render() {
     let { investType, amount, amount_error, tags } = this.state;
     return (

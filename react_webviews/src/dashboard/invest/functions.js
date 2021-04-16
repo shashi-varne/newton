@@ -24,20 +24,11 @@ export async function initialize() {
   this.corpusValue = corpusValue.bind(this);
   this.navigate = navigate.bind(this);
   this.clickCard = clickCard.bind(this);
-  this.initializeInstaRedeem = initializeInstaRedeem.bind(this);
-  this.getInstaRecommendation = getInstaRecommendation.bind(this);
-  this.getRecommendation = getRecommendation.bind(this);
-  this.validateAmount = validateAmount.bind(this);
-  this.showFundInfo = showFundInfo.bind(this);
-  this.detailView = detailView.bind(this);
-  this.getNfoRecommendation = getNfoRecommendation.bind(this);
-  this.getNfoPurchaseLimit = getNfoPurchaseLimit.bind(this);
   this.checkLimit = checkLimit.bind(this);
   this.proceedInvestment = proceedInvestment.bind(this);
   this.makeInvestment = makeInvestment.bind(this);
   this.proceedInvestmentChild = proceedInvestmentChild.bind(this);
   this.getDiyPurchaseLimit = getDiyPurchaseLimit.bind(this);
-  this.deleteFund = deleteFund.bind(this);
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
@@ -141,7 +132,6 @@ export function setSummaryData(result) {
 export function getCampaignBySection(notifications, sections) {
   if (!sections) {
     sections = [];
-    // sections =  ['notification', 'profile', 'in_flow', 'landing'];
   }
 
   if (!notifications) {
@@ -154,15 +144,7 @@ export function getCampaignBySection(notifications, sections) {
     if (notifications[i].campaign.name === "PlutusPendingTransactionCampaign") {
       continue;
     }
-
     notificationsData.push(notifications[i]);
-    // for (var j = 0; j < notifications[i].notification_visual_data.target.length; j++) {
-    //   var camTarget = notifications[i].notification_visual_data.target[j];
-    //   if (sections.indexOf(camTarget.section) !== -1 ) {
-    //     notificationsData.push(notifications[i]);
-    //     break;
-    //   }
-    // }
   }
 
   return notificationsData;
@@ -243,8 +225,9 @@ export function setInvestCardsData() {
       "savetax",
       // "nps",
     ],
-    diy: ["diyv2",
-    //  "gold"
+    diy: [
+      "diyv2",
+      //  "gold"
     ],
     bottom_scroll_cards: ["parkmoney", "savegoal"],
     bottom_cards: ["nfo"],
@@ -290,12 +273,12 @@ export function setInvestCardsData() {
     }
     for (let itemKey of partner_specific) {
       // if (
-      //   // restricted_items.indexOf(itemKey) !== -1 
+      //   // restricted_items.indexOf(itemKey) !== -1
       //   // &&
       //   // !partner.invest_screen_cards[itemKey]
       // ) {
       //   continue;
-      // } else 
+      // } else
       if (
         subbroker_code &&
         itemKey === "insurance" &&
@@ -387,7 +370,6 @@ export async function getRecommendationApi(amount) {
   };
   this.setState({
     show_loader: true,
-    loadingText: "Please wait...",
     investType: data.investType,
     term: data.term,
     stockReturns: data.stockReturns,
@@ -521,253 +503,6 @@ export function navigate(pathname, data = {}) {
   }
 }
 
-export function initializeInstaRedeem() {
-  if (storageService().get("instaRecommendations")) {
-    let instaRecommendation = storageService().getObject(
-      "instaRecommendations"
-    )[0];
-    this.setState({
-      instaRecommendation: instaRecommendation,
-    });
-  } else {
-    this.getInstaRecommendation();
-  }
-} //TODO: Why a common function? is it reused?
-
-export async function getInstaRecommendation() {
-  this.setState({ show_loader: true });
-  try {
-    const res = await Api.get(apiConstants.getInstaRecommendation);
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      storageService().setObject("instaRecommendations", result.mfs);
-      storageService().setObject("goalRecommendations", result.itag);
-      let instaRecommendation = result.mfs[0];
-      this.setState({
-        show_loader: false,
-        instaRecommendation: instaRecommendation,
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    this.setState({ show_loader: false });
-    toast(errorMessage);
-  }
-} //TODO: Why a common function? is it reused?
-
-export function showFundInfo(data) {
-  let recommendation = { mf: data };
-  let dataCopy = Object.assign({}, recommendation);
-  dataCopy.diy_type = "recommendation";
-  dataCopy.invest_type_from = "instaredeem";
-  storageService().setObject("diystore_fundInfo", dataCopy);
-  this.navigate("/fund-details", {
-    searchParams: `${getConfig().searchParams}&isins=${data.isin}`,
-  });
-}
-
-export async function getRecommendation() {
-  this.setState({ show_loader: true, loadingText: "Please wait..." });
-  let instaRecommendations = storageService().getObject(
-    "instaRecommendations"
-  )[0];
-  let { amount, investType, term } = this.state;
-  let allocations = [{ amount: amount, mf: instaRecommendations }];
-  let recommendations = {
-    recommendation: allocations,
-    term: term,
-    investType: "insta-redeem",
-    name: "Insta Redeem",
-    investTypeDisplay: investType,
-    bondstock: "",
-    // eslint-disable-next-line
-    recommendedTotalAmount: parseInt(amount),
-    type: "insta-redeem",
-    order_type: investType,
-    subtype: "",
-  };
-  storageService().setObject("funnelData", recommendations);
-  this.navigate(`/invest/recommendations`);
-} //TODO: Why? where is this used?
-
-function getGoalRecommendations() {
-  let goal = storageService().getObject("goalRecommendations");
-  if (!goal) {
-    goal = {};
-  }
-
-  let result = {
-    min_sip_amount: goal.min_sip_amount ? goal.min_sip_amount : 500,
-    max_sip_amount: goal.max_sip_amount ? goal.max_sip_amount : 500000,
-    min_ot_amount: goal.min_ot_amount ? goal.min_ot_amount : 5000,
-    max_ot_amount: goal.max_ot_amount ? goal.max_ot_amount : 2000000,
-  };
-  return result;
-} //TODO: Why? where is this used?
-
-function validateAmount(amount) {
-  let goal = getGoalRecommendations();
-  let max = 0;
-  let min = 0;
-  if (this.state.investType === "sip") {
-    max = goal.max_sip_amount;
-    min = goal.min_sip_amount;
-  } else {
-    max = goal.max_ot_amount;
-    min = goal.min_ot_amount;
-  }
-  let { amount_error } = this.state;
-  if (amount > max) {
-    amount_error =
-      "Investment amount cannot be more than " + formatAmountInr(max);
-  } else if (amount < min) {
-    amount_error = "Minimum amount should be atleast " + formatAmountInr(min);
-  } else {
-    amount_error = "";
-  }
-  this.setState({ amount_error: amount_error });
-}
-
-export function detailView(fund) {
-  storageService().setObject("nfo_detail_fund", fund);
-  this.props.history.push(
-    {
-      pathname: `/advanced-investing/new-fund-offers/fund`,
-      search: getConfig().searchParams,
-    },
-    {
-      mfid: fund.mfid,
-    }
-  );
-}
-
-export function getFormattedStartDate(input) {
-  if (!input) {
-    return null;
-  } else {
-    let pattern = /(.*?)\/(.*?)\/(.*?)$/;
-    return input.replace(pattern, function (match, p1, p2, p3) {
-      let months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      return (p1 < 10 ? "0" + p1 : p1) + " " + months[p2 - 1];
-    });
-  }
-}
-
-export function getFormattedEndDate(input) {
-  if (!input) {
-    return null;
-  } else {
-    let pattern = /(.*?)\/(.*?)\/(.*?)$/;
-    return input.replace(pattern, function (match, p1, p2, p3) {
-      let months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      return (p1 < 10 ? "0" + p1 : p1) + " " + months[p2 - 1] + " " + p3;
-    });
-  }
-}
-
-export function getSchemeOption(text) {
-  if (!text) {
-    return null;
-  } else {
-    return text.split("_").join(" ");
-  }
-}
-
-export async function getNfoRecommendation() {
-  this.setState({ show_loader: true });
-  try {
-    const res = await Api.get(apiConstants.getNfoRecommendation);
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      storageService().remove("nfo_cart");
-      storageService().remove("nfo_cartCount");
-      let sortedArray = result.recommendations.filter((item) => {
-        return item.growth_or_dividend === this.state.scheme;
-      });
-      var newArray = sortedArray.map((dict) => {
-        dict["addedToCart"] = false;
-        dict["allow_purchase"] = true;
-        return dict;
-      });
-      storageService().setObject("nfo_fundsList", newArray);
-      let nfoFunds = newArray;
-      let cartCount = 0;
-      let showFunds = nfoFunds.length > 0;
-      this.setState({
-        show_loader: false,
-        nfoFunds: nfoFunds,
-        cartCount: cartCount,
-        showFunds: showFunds,
-      });
-    } else {
-      this.setState({ show_loader: false });
-      toast(result.message || result.error || errorMessage);
-    }
-  } catch (error) {
-    console.log(error);
-    this.setState({ show_loader: false });
-    toast(errorMessage);
-  }
-} //TODO: Why a common function? is it reused?
-
-export async function getNfoPurchaseLimit(data) {
-  this.setState({ show_loader: true });
-  try {
-    const res = await Api.get(
-      `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
-    );
-    const { result, status_code: status } = res.pfwresponse;
-    let { fundsData, purchaseLimitData } = this.state;
-    if (status === 200) {
-      purchaseLimitData[data.investType] = result.funds_data;
-      let disableInputSummary = true;
-      if (purchaseLimitData[data.investType][0].ot_sip_flag) {
-        fundsData[0].allow_purchase = true;
-        disableInputSummary = false;
-      }
-      this.setState({
-        show_loader: false,
-        fundsData: fundsData,
-        purchaseLimitData: purchaseLimitData,
-        disableInputSummary: disableInputSummary,
-      });
-    } else {
-      this.setState({ show_loader: false });
-      toast(result.error || result.message || errorMessage);
-    }
-  } catch (error) {
-    console.log(error);
-    this.setState({ show_loader: false });
-    toast(errorMessage);
-  }
-} //TODO: Why a common function? is it reused?
-
 export async function getDiyPurchaseLimit(data) {
   this.setState({ show_loader: true });
   try {
@@ -810,20 +545,6 @@ export async function getDiyPurchaseLimit(data) {
     toast(errorMessage);
   }
 } //TODO: Why a common function? is it reused?
-
-export function deleteFund(item, index) {
-  let { fundsData, cartCount } = this.state;
-  let fundName = item.legalName || item.legal_name;
-  fundsData.splice(index, 1);
-  cartCount = fundsData.length;
-  this.setState({
-    fundName: fundName,
-    fundsData: fundsData,
-    cartCount: cartCount,
-  });
-  storageService().setObject("diystore_cart", fundsData);
-  storageService().set("diystore_cartCount", fundsData.length);
-}
 
 export function checkLimit(amount, index) {
   let {

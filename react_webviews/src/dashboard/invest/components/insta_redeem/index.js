@@ -4,12 +4,14 @@ import { getConfig } from "utils/functions";
 import { initialize } from "../../functions";
 import Faqs from "common/ui/Faqs";
 import SecureInvest from "../../mini-components/SecureInvest";
-import { investRedeemData } from "../../constants";
+import { apiConstants, investRedeemData } from "../../constants";
 import Button from "material-ui/Button";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import HowToSteps from "common/ui/HowToSteps";
 import { SkeltonRect } from "../../../../common/ui/Skelton";
-import { isEmpty } from "../../../../utils/validators";
+import { isEmpty, storageService } from "../../../../utils/validators";
+import Api from "../../../../utils/api";
+import toast from "../../../../common/ui/Toast";
 
 class InstaRedeem extends Component {
   constructor(props) {
@@ -42,6 +44,51 @@ class InstaRedeem extends Component {
       openDialog: false,
     });
   };
+
+  showFundInfo(data) {
+    let recommendation = { mf: data };
+    let dataCopy = Object.assign({}, recommendation);
+    dataCopy.diy_type = "recommendation";
+    dataCopy.invest_type_from = "instaredeem";
+    storageService().setObject("diystore_fundInfo", dataCopy);
+    this.navigate("/fund-details", {
+      searchParams: `${getConfig().searchParams}&isins=${data.isin}`,
+    });
+  }
+
+  initializeInstaRedeem = () => {
+    if (storageService().get("instaRecommendations")) {
+      let instaRecommendation = storageService().getObject(
+        "instaRecommendations"
+      )[0];
+      this.setState({
+        instaRecommendation: instaRecommendation,
+      });
+    } else {
+      this.getInstaRecommendation();
+    }
+  }
+
+  getInstaRecommendation = async() => {
+    this.setState({ show_loader: true });
+    try {
+      const res = await Api.get(apiConstants.getInstaRecommendation);
+      const { result, status_code: status } = res.pfwresponse;
+      if (status === 200) {
+        storageService().setObject("instaRecommendations", result.mfs);
+        storageService().setObject("goalRecommendations", result.itag);
+        let instaRecommendation = result.mfs[0];
+        this.setState({
+          show_loader: false,
+          instaRecommendation: instaRecommendation,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({ show_loader: false });
+      toast("Something went wrong!");
+    }
+  }
 
   renderDialog = () => {
     return (
