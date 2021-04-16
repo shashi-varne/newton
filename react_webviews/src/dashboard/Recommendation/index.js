@@ -262,6 +262,7 @@ const Recommendations = (props) => {
       title='Recommended Funds'
       handleClick={goNext}
       showLoader={isApiRunning}
+      hidePageTitle
     > 
       <div style={{ margin: '0 -20px'}}>
         {renderTopCard &&

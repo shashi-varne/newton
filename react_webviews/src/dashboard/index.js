@@ -16,8 +16,8 @@ import SipDates from "./invest/components/nfo/SipDates";
 import InvestJourney from "./investJourney";
 import DIY from "./diy";
 
-import MyAccount from "./components/my_account";
-import Notification from "./components/notification";
+import MyAccount from "./MyAccount/MyAccount";
+import Notification from "./Notification/Notification";
 import PaymentCallback from "./invest/components/PaymentCallback";
 import SipPaymentCallback from "./invest/components/SipPaymentCallback";
 import PageCallback from "./invest/components/PageCallback";
@@ -26,8 +26,8 @@ import DigilockerCallback from "../kyc/Digilocker/DigilockerCallback";
 import AccountMerge from "./account-merge";
 import AccountMergeOtp from "./account-merge/otp";
 import AccountLinked from "./account-merge/linked";
-import InvestmentProof from "./components/InvestmentProof";
-import BlankMandateUpload from "./components/BlankMandateUpload";
+import InvestmentProof from "./MyAccount/InvestmentProof";
+import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 
 const Invest = (props) => {
   const { url } = props.match;

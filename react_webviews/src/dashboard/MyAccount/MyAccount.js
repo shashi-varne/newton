@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../Style.scss";
+import "./MyAccount.scss";
 import { getConfig } from "utils/functions";
 import { initialize } from "../common/functions";
 import Container from "../common/Container";
