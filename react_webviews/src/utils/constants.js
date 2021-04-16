@@ -4,19 +4,19 @@ export const themeConfig = {
     palette: {
         primary: {
             // light: will be calculated from palette.primary.main,
-            main: getConfig().styling.primaryColor,
+            main: getConfig().styles.primaryColor,
             // dark: will be calculated from palette.primary.main,
             contrastText: '#ffffff',
         },
         secondary: {
             // light: '#0066ff',
-            main: getConfig().styling.secondaryColor,
+            main: getConfig().styles.secondaryColor,
             // dark: will be calculated from palette.secondary.main,
             contrastText: '#ffffff',
         },
         default: {
             // light: '#0066ff',
-            main: getConfig().styling.default,
+            main: getConfig().styles.default,
             // dark: will be calculated from palette.secondary.main,
             contrastText: '#ffffff',
         }
@@ -31,10 +31,10 @@ export const themeConfig = {
         MuiFormLabel: {
             root: {
                 "&$focused": {
-                  color: getConfig().styling.primaryColor,
+                  color: getConfig().styles.primaryColor,
                 },
                 "&$focused&$error": {
-                    color: getConfig().styling.primaryColor,
+                    color: getConfig().styles.primaryColor,
                 },
                 "&$error": {
                     color: '#f44336',
@@ -50,20 +50,20 @@ export const themeConfig = {
             input: {
                 padding: '11px 0 7px',
                 fontSize: '14px',
-                color: getConfig().styling.default
+                color: getConfig().styles.default
             },
             fullWidth: {
                 // marginBottom: '12px'
             },
             focused: {
-                borderColor: getConfig().styling.inputFocusedColor || getConfig().styling.primaryColor,
+                borderColor: getConfig().styles.inputFocusedColor || getConfig().styles.primaryColor,
             },
             underline: {
                 "&$error": {
-                    color: getConfig().styling.primaryColor,
+                    color: getConfig().styles.primaryColor,
                 },
                 '&:after': {
-                    backgroundColor: getConfig().styling.inputFocusedColor || getConfig().styling.primaryColor
+                    backgroundColor: getConfig().styles.inputFocusedColor || getConfig().styles.primaryColor
                 },
                 transform: 'inherit',
                 transition: 'transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
@@ -82,7 +82,7 @@ export const themeConfig = {
         MuiInputLabel: {
             root: {
                 fontSize: '0.9rem',
-                color: getConfig().styling.label,
+                color: getConfig().styles.label,
                 fontWeight: 'normal'
             },
             shrink: {
@@ -92,9 +92,9 @@ export const themeConfig = {
         MuiButton: {
             raisedSecondary: {
                 '&:hover': {
-                    backgroundColor: getConfig().styling.secondaryColor
+                    backgroundColor: getConfig().styles.secondaryColor
                 },
-                backgroundColor: getConfig().styling.secondaryColor,
+                backgroundColor: getConfig().styles.secondaryColor,
                 color: '#fff',
                 borderRadius: 4,
                 boxShadow: 'none'
@@ -119,7 +119,7 @@ export const themeConfig = {
         },
         MuiCheckbox: {
             root: {
-                color: getConfig().styling.primaryColor,
+                color: getConfig().styles.primaryColor,
                 position: 'relative',
                 left: '-15px'
             }

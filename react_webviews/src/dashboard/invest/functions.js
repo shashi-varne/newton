@@ -143,7 +143,6 @@ export function setSummaryData(result) {
 export function getCampaignBySection(notifications, sections) {
   if (!sections) {
     sections = [];
-    // sections =  ['notification', 'profile', 'in_flow', 'landing'];
   }
 
   if (!notifications) {
@@ -158,13 +157,6 @@ export function getCampaignBySection(notifications, sections) {
     }
 
     notificationsData.push(notifications[i]);
-    // for (var j = 0; j < notifications[i].notification_visual_data.target.length; j++) {
-    //   var camTarget = notifications[i].notification_visual_data.target[j];
-    //   if (sections.indexOf(camTarget.section) !== -1 ) {
-    //     notificationsData.push(notifications[i]);
-    //     break;
-    //   }
-    // }
   }
 
   return notificationsData;
@@ -194,13 +186,6 @@ export async function setNpsData(response) {
 }
 
 export function setInvestCardsData() {
-  let { partner } = this.state || {};
-  if (!partner.invest_screen_cards) {
-    partner.invest_screen_cards = {
-      nps: false,
-      gold: false,
-    };
-  }
   let insuranceDisabled = [
     "lvb",
     "cccb",
@@ -226,97 +211,65 @@ export function setInvestCardsData() {
   ];
   let referralData = storageService().getObject("referral");
   let referral = {};
-  let subbroker_code = {};
+  let subbrokerCode = "";
   if (referralData) {
     referral = referralData.subbroker.data;
     if (referral) {
-      subbroker_code = referral.subbroker_code;
+      subbrokerCode = referral.subbroker_code;
     }
   }
-  if (partner.code === "bfdlmobile") {
-    investCardsBase["our_recommendations"]["instaredeem"].title = "Money +";
+  if (getConfig().code === "bfdlmobile") {
+    investCardsBase["ourRecommendations"]["instaredeem"].title = "Money +";
   }
+  let investCardsHandling = getConfig().investSubSectionMap;
 
-  let invest_cards_handling_common = {
-    our_recommendations: [
-      "instaredeem",
-      "buildwealth",
-      "insurance",
-      "savetax",
-      "nps",
-    ],
-    diy: ["diyv2", "gold"],
-    bottom_scroll_cards: ["parkmoney", "savegoal"],
-    bottom_cards: ["nfo"],
-    popular_cards: [],
-  };
+  let investShowData = {};
+  let renderCards = getConfig().investSections;
 
-  let restricted_items = ["gold", "nps", "risk_profile", "insurance"];
-
-  let invest_cards_handling_partner = partner.invest_cards_handling;
-
-  let invest_show_data = {};
-
-  let invest_render_cards_common = [
-    "kyc",
-    "our_recommendations",
+  let keysForHandling = [
+    "ourRecommendations",
     "diy",
-    "bottom_scroll_cards",
-    "bottom_cards",
-    "financial_tools",
+    "bottomScrollCards",
+    "bottomCards",
+    "popularCards",
+    "financialTools",
   ];
-  let render_cards = partner.invest_render_cards || invest_render_cards_common;
-
-  this.setState({ render_cards: render_cards });
-  let keys_for_handling = [
-    "our_recommendations",
-    "diy",
-    "bottom_scroll_cards",
-    "bottom_cards",
-    "popular_cards",
-  ];
-
-  for (let handling_key of keys_for_handling) {
-    invest_show_data[handling_key] = [];
-    let partner_specific = invest_cards_handling_common[handling_key];
+  for (let handlingKey of keysForHandling) {
+    investShowData[handlingKey] = [];
+    let partnerSpecific = [];
     if (
-      invest_cards_handling_partner &&
-      invest_cards_handling_partner[handling_key] &&
-      invest_cards_handling_partner[handling_key].length !== 0
+      investCardsHandling &&
+      investCardsHandling[handlingKey] &&
+      investCardsHandling[handlingKey].length !== 0
     ) {
-      partner_specific = invest_cards_handling_partner[handling_key];
+      partnerSpecific = investCardsHandling[handlingKey];
     }
-    for (let itemKey of partner_specific) {
+    for (let itemKey of partnerSpecific) {
       if (
-        restricted_items.indexOf(itemKey) !== -1 &&
-        !partner.invest_screen_cards[itemKey]
-      ) {
-        continue;
-      } else if (
-        subbroker_code &&
+        subbrokerCode &&
         itemKey === "insurance" &&
-        insuranceDisabled.indexOf(subbroker_code) !== -1
+        insuranceDisabled.indexOf(subbrokerCode) !== -1
       ) {
         continue;
       } else if (
-        subbroker_code &&
+        subbrokerCode &&
         itemKey === "nps" &&
-        npsDisabled.indexOf(subbroker_code) !== -1
+        npsDisabled.indexOf(subbrokerCode) !== -1
       ) {
         continue;
       } else if (
-        subbroker_code &&
+        subbrokerCode &&
         itemKey === "gold" &&
-        goldDisabled.indexOf(subbroker_code) !== -1
+        goldDisabled.indexOf(subbrokerCode) !== -1
       ) {
         continue;
       }
-      let handleObject = investCardsBase[handling_key][itemKey];
+      let handleObject = investCardsBase[handlingKey][itemKey];
       handleObject.key = itemKey;
-      invest_show_data[handling_key].push(handleObject);
+      investShowData[handlingKey].push(handleObject);
     }
   }
-  this.setState({ invest_show_data: invest_show_data });
+  this.setState({ investShowData, renderCards });
 }
 
 export function clickCard(state, title) {

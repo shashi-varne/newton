@@ -17,13 +17,13 @@ Exhaustive list of property values:
     "savegoal"
     "nfo", (mostly used for 'bottomCards' key)
     "diyv2" (only used for 'diy' key)
-    "fhc", "risk_profiler" (only used for 'financialTools' key)
+    "fhc", "risk_profile" (only used for 'financialTools' key)
 
 */
 
+// common config across all partners
 export const commonCardsConfig = {
   logo: "logo_white.png",
-  banner: "obc_banner.png",
   investSections: [
     "kyc",
     "ourRecommendations",
@@ -31,10 +31,14 @@ export const commonCardsConfig = {
     "bottomScrollCards",
     "bottomCards",
     "financialTools",
+    "popularCards",
   ],
-  diy: ["diyv2"],
-  bottomScrollCards: ["parkmoney", "savegoal"],
-  bottomCards: ["nfo"],
+  investSubSectionMap: {
+    ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    diy: ["diyv2"],
+    bottomScrollCards: ["parkmoney", "savegoal"],
+    bottomCards: ["nfo"],
+  },
   riskEnabledFunnels: false,
 };
 
@@ -111,44 +115,6 @@ export const baseUIElementsConfig = {
 };
 
 export const partnerConfigs = {
-  // Confirm config for fisdom, finity, hbl, flexi, medlife
-  fisdom: {
-    code: "fisdom",
-    investSubSectionMap: {
-      ourRecommendations: [
-        "instaredeem",
-        "buildwealth",
-        "savetax",
-        "insurance",
-        "gold",
-        "nps",
-      ],
-      diy: ["diyv2"],
-      bottomScrollCards: ["parkmoney", "savegoal"],
-      bottomCards: ["nfo"],
-      financialTools: ["fhc", "risk_profiler"],
-    },
-  },
-  finity: {
-    logo: "finity_white_logo.png",
-    code: "finity",
-    mobile: "+91-9916149111",
-    banner: "obc_banner.png",
-    investSubSectionMap: {
-      ourRecommendations: [
-        "instaredeem",
-        "buildwealth",
-        "savetax",
-        "insurance",
-        "gold",
-        "nps",
-      ],
-      diy: ["diyv2"],
-      bottomScrollCards: ["parkmoney", "savegoal"],
-      bottomCards: ["nfo"],
-      financialTools: ["fhc", "risk_profiler"],
-    },
-  },
   obc: {
     logo: "obc.png",
     code: "obc",
@@ -158,234 +124,325 @@ export const partnerConfigs = {
       primaryColor: "#4DB848",
     },
   },
+  lvb: {
+    logo: "lvb.png",
+    code: "lvb",
+    email: "lvb@fisdom.com",
+    styles: {
+      primaryColor: "#CC0E00",
+    },
+  },
+  svc: {
+    logo: "svc.png",
+    code: "svc",
+    email: "svc@fisdom.com",
+    styles: {
+      primaryColor: "#213B68",
+    },
+  },
+  fisdom: {
+    code: "fisdom",
+    investSubSectionMap: {
+      ourRecommendations: [
+        "instaredeem",
+        "buildwealth",
+        "insurance",
+        "savetax",
+        "nps",
+      ],
+      diy: ["diyv2", "gold"],
+      bottomScrollCards: ["parkmoney", "savegoal"],
+      bottomCards: ["nfo"],
+      financialTools: ["fhc", "risk_profile"],
+    },
+  },
+  finity: {
+    logo: "finity_white_logo.png",
+    code: "finity",
+    mobile: "+91-9916149111",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+      financialTools: ["fhc", "risk_profile"],
+    },
+  },
+  bfdlmobile: {
+    logo: "bfdl_white_sdk_logo.svg",
+    code: "bfdlmobile",
+    email: "bajajfinserv@finity.in",
+    mobile: "+91-7829331118",
+    message: "",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["100_sip", "instaredeem", "buildwealth", "savetax"],
+      financialTools: ["risk_profile"],
+    },
+    landingMarketingBanners: [
+      { image: "nfo.svg", type: "nfo" },
+      { image: "mb_4.svg", type: "100_sip" },
+      { image: "mb_6.svg", type: "diy" },
+      { image: "mb_5.svg", type: "buildwealth" },
+    ],
+    referralConfig: {
+      applyRefferal: false, // same as hide_apply_referral but with opposite value
+      shareRefferal: false, // same as hide_share_referral but with opposite value
+    },
+    styles: {
+      primaryColor: "#004164",
+      secondaryColor: "#ff5928",
+    },
+    uiElements: {
+      bottomCta: {
+        disabledColor: "#ffffff",
+      },
+    },
+  },
+  alb: {
+    logo: "alb.png",
+    code: "alb",
+    email: "alb@fisdom.com",
+    message: "",
+    mobile: "+91-7829733111",
+    styles: {
+      primaryColor: "#2E3192",
+      secondaryColor: "#00aeef",
+      backButtonColor: "#2E3192",
+      notificationsColor: "#00aeef",
+    },
+    uiElements: {
+      title: {
+        color: "#2E3192",
+      },
+    },
+  },
+  tvscredit: {
+    logo: "tvs.png",
+    code: "tvscredit",
+    email: "tvscredit@fisdom.com",
+    message: "",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["100_sip", "instaredeem", "buildwealth", "savetax"],
+    },
+    styles: {
+      primaryColor: "#2d2851",
+    },
+  },
+  ktb: {
+    code: "ktb",
+    email: "kbl@fisdom.com",
+    message: "",
+    mobile: "+91-7829229997",
+    styles: {
+      primaryColor: "#8C0094",
+    },
+    referralConfig: {
+      shareRefferal: false,
+    },
+  },
+  cub: {
+    logo: "cub.png",
+    code: "cub",
+    email: "cub@fisdom.com",
+    message: "",
+    styles: {
+      primaryColor: "#000180",
+    },
+  },
   fpg: {
     logo: "text_investments.svg",
     code: "fpg",
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
-    banner: "bfdl_banner.png",
+    message: "",
+    investSections: [
+      "kyc",
+      "ourRecommendations",
+      "popularCards",
+      "diy",
+      "bottomScrollCards",
+      "bottomCards",
+      "financialTools",
+    ],
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["instaredeem", "buildwealth", "gold", "savetax"],
       popularCards: ["top_equity", "nps"],
-      referralConfig: {
-        applyRefferal: false, // same as hide_apply_referral but with opposite value
-        shareRefferal: false, // same as hide_share_referral but with opposite value
-      },
-      landingConfig: {
-        nps: "inside_sdk",
-      },
-      styles: {
-        primaryColor: "#EB6024",
-        secondaryColor: "#EB6024",
-      },
-      uiElements: {
-        bottomCta: {
-          disabledBackgroundColor: "#F1D5C9", // same as 'cta_disabled_background'
-          disabledColor: "#ffffff", // same as cta_disabled_color
-        },
+    },
+    referralConfig: {
+      applyRefferal: false, // same as hide_apply_referral but with opposite value
+      shareRefferal: false, // same as hide_share_referral but with opposite value
+    },
+    landingConfig: {
+      nps: "inside_sdk",
+    },
+    styles: {
+      primaryColor: "#EB6024",
+      secondaryColor: "#EB6024",
+    },
+    uiElements: {
+      bottomCta: {
+        disabledBackgroundColor: "#F1D5C9", // same as 'cta_disabled_background'
+        disabledColor: "#ffffff", // same as cta_disabled_color
       },
     },
-    lvb: {
-      logo: "lvb.png",
-      code: "lvb",
-      email: "lvb@fisdom.com",
-      styles: {
-        primaryColor: "#CC0E00",
-      },
-    },
-    svc: {
-      logo: "svc.png",
-      code: "svc",
-      email: "svc@fisdom.com",
-      styles: {
-        primaryColor: "#213B68",
-      },
-    },
-    alb: {
-      logo: "alb.png",
-      code: "alb",
-      email: "alb@fisdom.com",
-      mobile: "+91-7829733111",
-      banner: "alb_banner.png",
-      styles: {
-        primaryColor: "#2E3192",
-        secondaryColor: "#00aeef",
-        backButtonColor: "#2E3192",
-        notificationsColor: "#00aeef",
-      },
-      uiElements: {
-        title: {
-          color: "#2E3192",
-        },
-      },
-    },
-    tvscredit: {
-      logo: "tvs.png",
-      code: "tvscredit",
-      email: "tvscredit@fisdom.com",
-      banner: "tvs_banner.png",
-      investSubSectionMap: {
-        ourRecommendations: [
-          "100_sip",
-          "instaredeem",
-          "buildwealth",
-          "savetax",
-        ],
-      },
-      styles: {
-        primaryColor: "#2d2851",
-      },
-    },
-    ktb: {
-      code: "ktb",
-      email: "kbl@fisdom.com",
-      mobile: "+91-7829229997",
-      styles: {
-        primaryColor: "#8C0094",
-      },
-      referralConfig: {
-        shareRefferal: false,
-      },
-    },
-    cub: {
-      logo: "cub.png",
-      code: "cub",
-      email: "cub@fisdom.com",
-      banner: "bfdl_banner.png",
-      styles: {
-        primaryColor: "#000180",
-      },
-    },
-    hbl: {
-      logo: "hbl.png",
-      code: "hbl",
-      banner: "bfdl_banner.png",
-      // TODO: Verify this part of config, unsure of config values
-      investSections: [
-        "kyc",
-        "ourRecommendations",
-        "diy",
-        "bottomScrollCards",
-        "financialTools",
+  },
+  hbl: {
+    logo: "hbl.png",
+    code: "hbl",
+    message: "",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: [
+        "instaredeem",
+        "buildwealth",
+        "insurance",
+        "savetax",
+        "nps",
       ],
-      investSubSectionMap: {
-        ourRecommendations: [
-          "instaredeem",
-          "buildwealth",
-          "savetax",
-          "nps",
-          "gold",
-          "insurance",
-        ],
-        diy: ["diyv2"],
-        bottomScrollCards: ["parkmoney", "savegoal"],
-        financialTools: ["risk_profiler"],
-      },
-      styles: {
-        primaryColor: "#0066B3",
+      diy: ["diyv2", "gold"],
+      financialTools: ["risk_profile"],
+    },
+    styles: {
+      primaryColor: "#0066B3",
+    },
+  },
+  subh: {
+    logo: "subh.svg",
+    code: "subh",
+    email: "support@shubhloans.com",
+    mobile: "+91-9019900199",
+    message: "",
+    investSections: ["kyc", "ourRecommendations", "diy"],
+    investSubSectionMap: {
+      ourRecommendations: ["100_sip", "300_sip", "instaredeem"],
+      diy: ["diyv2"],
+    },
+    styles: {
+      primaryColor: "#F5821F",
+      secondaryColor: "#F5821F",
+    },
+    uiElements: {
+      bottomCta: {
+        disabledColor: "#ffffff",
       },
     },
-    subh: {
-      logo: "subh.svg",
-      code: "subh",
-      email: "support@shubhloans.com",
-      mobile: "+91-9019900199",
-      banner: "bfdl_banner.png",
-      investSections: ["kyc", "our_recommendations", "diy"],
-      investSubSectionMap: {
-        ourRecommendations: ["100_sip", "300_sip", "instaredeem"],
-        diy: ["diyv2"],
-      },
-      styles: {
-        primaryColor: "#F5821F",
-        secondaryColor: "#F5821F",
-      },
-      uiElements: {
-        bottomCta: {
-          disabledColor: "#ffffff",
-        },
-      },
+  },
+  sbm: {
+    logo: "sbm.svg",
+    code: "sbm",
+    email: "sbm@fisdom.com",
+    message: "",
+    styles: {
+      primaryColor: "#1e3769",
     },
-    sbm: {
-      logo: "sbm.svg",
-      code: "sbm",
-      email: "sbm@fisdom.com",
-      banner: "bfdl_banner.png",
-      styles: {
-        primaryColor: "#1e3769",
-      },
-    },
-    flexi: {
-      code: "flexi",
-      // TODO: Verify this part of config, unsure of config values
-      investSections: [
-        "kyc",
-        "ourRecommendations",
-        "diy",
-        "bottomScrollCards",
-        "financialTools",
+  },
+  flexi: {
+    code: "flexi",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: [
+        "instaredeem",
+        "buildwealth",
+        "insurance",
+        "savetax",
+        "nps",
       ],
-      investSubSectionMap: {
-        ourRecommendations: [
-          "instaredeem",
-          "buildwealth",
-          "savetax",
-          "nps",
-          "gold",
-          "insurance",
-        ],
-        diy: ["diyv2"],
-        bottomScrollCards: ["parkmoney", "savegoal"],
-        financialTools: ["risk_profiler"],
-      },
+      diy: ["diyv2", "gold"],
+      financialTools: ["risk_profile"],
     },
-    medlife: {
-      code: "medlife",
-      // TODO: Verify this part of config, unsure of config values
-      investSections: [
-        "kyc",
-        "ourRecommendations",
-        "diy",
-        "bottomScrollCards",
-        "financialTools",
+  },
+  medlife: {
+    code: "medlife",
+    message: "",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: [
+        "instaredeem",
+        "buildwealth",
+        "insurance",
+        "savetax",
+        "nps",
       ],
-      investSubSectionMap: {
-        ourRecommendations: [
-          "instaredeem",
-          "buildwealth",
-          "savetax",
-          "nps",
-          "gold",
-          "insurance",
-        ],
-        diy: ["diyv2"],
-        bottomScrollCards: ["parkmoney", "savegoal"],
-        financialTools: ["risk_profiler"],
+      diy: ["diyv2", "gold"],
+      financialTools: ["risk_profile"],
+    },
+  },
+  life99: {
+    code: "life99",
+    message: "",
+  },
+  indb: {
+    code: "indb",
+    mobile: "+80-48-093070",
+    message: "",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax", "nps"],
+    },
+    referralConfig: {
+      shareRefferal: false, // same as hide_share_referral but with opposite value
+    },
+    styles: {
+      primaryColor: "#173883",
+      secondaryColor: "#173883",
+    },
+  },
+  finshell: {
+    logo: "finshell.svg",
+    code: "finshell",
+    email: "finshellpay@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["instaredeem", "buildwealth", "savetax", "nps"],
+    },
+    styles: {
+      primaryColor: "#007AFF",
+      secondaryColor: "#007AFF",
+    },
+  },
+  ippb: {
+    code: "ippb",
+    message: "",
+    styles: {
+      primaryColor: "#3F1027",
+    },
+  },
+  moneycontrol: {
+    logo: "moneycontrol.svg",
+    code: "moneycontrol",
+    email: "moneycontrol@finity.in",
+    mobile: "+91-7829228886", // check with satendra -> mobile is of fisdom
+    message: "",
+    styles: {
+      primaryColor: "#3792FC",
+      backButtonColor: "#3792FC",
+    },
+  },
+  taxwin: {
+    code: "taxwin",
+    logo: "taxwin.png",
+    message: "",
+    investSections: ["kyc", "ourRecommendations"],
+    investSubSectionMap: {
+      ourRecommendations: [
+        "instaredeem",
+        "buildwealth",
+        "insurance",
+        "savetax",
+        "nps",
+      ],
+    },
+  },
+  google: {
+    code: "google",
+    mobile: "+80-48-093070",
+    uiElements: {
+      header: {
+        backgroundColor: "#FFF", // same as white_header
       },
-    },
-    life99: {
-      code: "life99",
-    },
-    google: {
-      code: "google",
-      mobile: "+80-48-093070",
-      uiElements: {
-        header: {
-          backgroundColor: "#FFF", // same as white_header
-        },
-      },
-    },
-    indb: {
-      code: "indb",
-      mobile: "+80-48-093070",
-      styles: {
-        primaryColor: "#173883",
-        secondaryColor: "#173883",
-      },
-    },
-    taxwin: {
-      code: "taxwin",
     },
   },
 };
