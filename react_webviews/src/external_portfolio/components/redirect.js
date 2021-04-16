@@ -16,12 +16,18 @@ export default class Redirect extends Component {
   async componentDidMount() {
     try {
       this.setLoader(true);
-      let result = await getSummary();
+      let body = {
+        "external_portfolio": [
+             "portfolio_status"
+        ]
+      }
+
+      let result = await getSummary(body);
 
       if (result.data) {
         let { portfolio_status } = result.data.external_portfolio;
 
-        switch (portfolio_status.data.status) {
+        switch (portfolio_status.data.status.toUpperCase()) {
           case "INIT":
             this.navigate("email_entry");
             break;

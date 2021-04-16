@@ -235,7 +235,7 @@ export const hitNextPage = async (next_page, params) => {
 export const getSummary = async (params) => {
   try {
 
-    const res = await Api.post('/api/user/account/summary');
+    const res = await Api.post('/api/user/account/summary', params);
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
