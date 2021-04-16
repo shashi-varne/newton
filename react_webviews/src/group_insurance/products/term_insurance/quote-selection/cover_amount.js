@@ -336,7 +336,7 @@ class CoverAmount extends Component {
             </div>
           </div>
           <div className="annual-income-info-button"
-            style={{ color: getConfig().primary }}
+            style={{ color: getConfig().styles.primaryColor }}
             onClick={() => this.openPopUp()}>INFO</div>
         </div>
 

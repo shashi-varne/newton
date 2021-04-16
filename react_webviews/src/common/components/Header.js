@@ -35,7 +35,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             goBack}>
             {!disableBack && !headerData.hide_icon &&
             <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
             />
             }
@@ -56,7 +56,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             <SVG
             style={{marginLeft: 'auto', width:20, cursor:'pointer'}}
             onClick={handleTopIcon}
-            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
+            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
             src={rightIcon}
           />
           }

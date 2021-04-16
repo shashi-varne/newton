@@ -40,7 +40,7 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             color="secondary"
-            style={{backgroundColor: getConfig().secondary, color: 'white', width: '310px' , height: '50px'}}
+            style={{backgroundColor: getConfig().styles.secondaryColor, color: 'white', width: '310px' , height: '50px'}}
             className={buttonClass}
             classes={classes}
             disabled={props.disable}
@@ -64,7 +64,7 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             className={`${buttonClass} borderButton`}
-            style={{color: getConfig().secondary, borderColor: getConfig().secondary,
+            style={{color: getConfig().styles.secondaryColor, borderColor: getConfig().styles.secondaryColor,
             flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             disabled={props.disable}
           >
@@ -76,7 +76,7 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             color="secondary"
-            style={{ borderColor: getConfig().secondary, 
+            style={{ borderColor: getConfig().styles.secondaryColor, 
               flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             className={`${buttonClass} filledButton`}
             disabled={props.disable}
@@ -98,12 +98,12 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             className={`${buttonClass} borderButton`}
-            style={{color: getConfig().secondary, borderColor: getConfig().secondary,
+            style={{color: getConfig().styles.secondaryColor, borderColor: getConfig().styles.secondaryColor,
             flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             disabled={props.disable}
           >
               <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.secondaryColor)}
               src={download}
             /> 
             {props.buttonOneTitle}

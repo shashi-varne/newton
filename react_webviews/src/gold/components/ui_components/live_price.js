@@ -28,7 +28,7 @@ class GoldLivePriceClass extends Component {
                         />}
                         {this.props.parent.state.minutes >= 1 && 
                         <SVG
-                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary )}
+                            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.secondaryColor )}
                             src={ic_live_green}
                         />}
                     </div>
@@ -38,7 +38,7 @@ class GoldLivePriceClass extends Component {
                     </div>
                 </div>
                 <div className="right-text" 
-                style={{color: this.props.parent.state.minutes <1 ? '#D0021B' : getConfig().secondary}}>
+                style={{color: this.props.parent.state.minutes <1 ? '#D0021B' : getConfig().styles.secondaryColor}}>
                     VALID FOR {this.props.parent.state.minutes}:{this.props.parent.state.seconds}
                 </div>
             </div>

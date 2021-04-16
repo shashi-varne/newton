@@ -189,7 +189,7 @@ const KycUploadDocuments = (props) => {
                       preProcessor={(code) =>
                         code.replace(
                           /fill=".*?"/g,
-                          "fill=" + getConfig().primary
+                          "fill=" + getConfig().styles.primaryColor
                         )
                       }
                       src={require(`assets/check_selected_blue.svg`)}
