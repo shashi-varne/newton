@@ -78,35 +78,11 @@ export const baseTypographyConfig = {
     // fontFamily: '',
     // fontSize: '',
     // lineHeight: '',
-    titleProps: {
-      // fontFamily: '',
-      // fontSize: '',
-      color: '#2E3192',
-    },
-    ctaProps: {
-      disabledColor: '#ffffff',
-      // color: '',
-    },
-    formLabelProps: {
-      color: '#a2a2a2',
-    }
   },
   finity: {
     // fontFamily: '',
     // fontSize: '',
     // lineHeight: '',
-    titleProps: {
-      // fontFamily: '',
-      // fontSize: '',
-      color: '#2E3192',
-    },
-    ctaProps: {
-      disabledColor: '#ffffff',
-      // color: '',
-    },
-    formLabelProps: {
-      color: '#a2a2a2',
-    }
   }
 };
 
@@ -122,13 +98,6 @@ export const baseStylingConfig = {
     highlightColor: '#f6f2ff',
     skeletonColor: '#E7E7E7',
     // backButtonColor: '#2E3192',
-    // header: {
-    //   background: '#FFF',
-    // },
-    // ctaProps: {
-    //   backgroundDisabled: '#F1D5C9',
-    //   borderRadius: '',
-    // },
   },
   finity: {
     default: '#4a4a4a',
@@ -137,13 +106,12 @@ export const baseStylingConfig = {
     highlightColor: '#F0F7FF',
     skeletonColor: '#E7E7E7',
     // backButtonColor: '#2E3192',
-    // header: {
-    //   background: '#FFF',
-    // },
-    // ctaProps: {
-    //   backgroundDisabled: '#F1D5C9',
-    //   borderRadius: '',
-    // },
+  }
+};
+
+export const baseUIElementsConfig = {
+  formLabel: {
+    color: '#a2a2a2',
   }
 };
 
@@ -156,7 +124,7 @@ export const partnerConfigs = {
     banner: 'obc_banner.png',
     styling: {
       primaryColor: '#4DB848'
-    }
+    },
   },
   bfdlmobile: {
     logo: 'bfdl_white_sdk_logo.svg',
@@ -193,8 +161,10 @@ export const partnerConfigs = {
     styling: {
       primaryColor: '#4DB848',
       secondaryColor: '#ff5928',
-      ctaProps: {
-        backgroundDisabled: '#ffffff', // same as 'cta_disabled_background'
+    },
+    uiElements: {
+      bottomCta: {
+        disabledBackgroundColor: '#ffffff', // same as 'cta_disabled_background'
       }
     }
   },
@@ -240,16 +210,14 @@ export const partnerConfigs = {
       applyRefferal: false, // same as hide_apply_referral but with opposite value
       shareRefferal: false, // same as hide_share_referral but with opposite value
     },
-    typography: {
-      ctaProps: {
-        disabledColor: '#ffffff' // same as cta_disabled_color
-      }
-    },
     styling: {
       primaryColor: '#EB6024',
       secondaryColor: '#EB6024',
-      ctaProps: {
-        backgroundDisabled: '#F1D5C9', // same as 'cta_disabled_background'
+    },
+    uiElements: {
+      bottomCta: {
+        disabledBackgroundColor: '#F1D5C9', // same as 'cta_disabled_background'
+        disabledColor: '#ffffff' // same as cta_disabled_color
       }
     }
   }
