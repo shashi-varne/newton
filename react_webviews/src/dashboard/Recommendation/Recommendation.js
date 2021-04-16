@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../common/Container';
-import FundCard from '../invest/mini-components/FundCard';
+import FundCard from '../Invest/mini-components/FundCard';
 import TermsAndCond from "../mini-components/TermsAndCond"
 
 import trust_icons from 'assets/trust_icons.svg';
@@ -9,18 +9,18 @@ import morning_text from 'assets/morning_text.png';
 
 import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
-import { navigate as navigateFunc } from '../invest/common/commonFunction';
+import { navigate as navigateFunc } from '../Invest/common/commonFunction';
 
-import './style.scss';
-import { isInvestRefferalRequired, proceedInvestmentChild } from '../invest/functions';
-import PennyVerificationPending from '../invest/mini-components/PennyVerificationPending';
-import InvestError from '../invest/mini-components/InvestError';
-import InvestReferralDialog from '../invest/mini-components/InvestReferralDialog';
+import { isInvestRefferalRequired, proceedInvestmentChild } from '../Invest/functions';
+import PennyVerificationPending from '../Invest/mini-components/PennyVerificationPending';
+import InvestError from '../Invest/mini-components/InvestError';
+import InvestReferralDialog from '../Invest/mini-components/InvestReferralDialog';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 import PeriodWiseReturns from '../mini-components/PeriodWiseReturns';
 import { get, isArray } from 'lodash';
-import { get_recommended_funds } from '../invest/common/api';
+import { get_recommended_funds } from '../Invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
+import './Recommendation.scss';
 const sipTypesKeys = [
   "buildwealth",
   "savetaxsip",
