@@ -12,7 +12,7 @@ import "./style.scss";
 import {
   canDoInvestment,
   isInvestRefferalRequired,
-  proceedInvestmentChild,
+  proceedInvestment,
 } from "../proceedInvestmentFunctions";
 import PennyVerificationPending from "../invest/mini-components/PennyVerificationPending";
 import InvestError from "../invest/mini-components/InvestError";
@@ -57,7 +57,7 @@ const InvestJourney = (props) => {
     sipOrOneTime = order_type;
   }
 
-  const proceedInvestment = (investReferralData, isReferralGiven) => {
+  const goNext = (investReferralData, isReferralGiven) => {
     let paymentRedirectUrl = encodeURIComponent(
       `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}`
     );
@@ -78,7 +78,7 @@ const InvestJourney = (props) => {
       body.referral_code = investReferralData.code;
     }
 
-    proceedInvestmentChild({
+    proceedInvestment({
       sipOrOnetime: sipOrOneTime,
       body: body,
       isInvestJourney: true,
@@ -109,7 +109,7 @@ const InvestJourney = (props) => {
       buttonTitle={ctcTitle}
       title="How it works"
       classOverRideContainer="pr-container"
-      handleClick={proceedInvestment}
+      handleClick={goNext}
       showLoader={isApiRunning}
       skelton={isLoading}
     >
@@ -168,7 +168,7 @@ const InvestJourney = (props) => {
         />
         <InvestReferralDialog
           isOpen={dialogStates.openInvestReferral}
-          proceedInvestment={proceedInvestment}
+          goNext={goNext}
           close={() => handleDialogStates("openInvestReferral", false)}
         />
       </section>

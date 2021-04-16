@@ -6,7 +6,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import DotDotLoader from "common/ui/DotDotLoader";
 import { verifyCode } from "../common/api";
 
-const InvestReferralDialog = ({ isOpen, close, proceedInvestment }) => {
+const InvestReferralDialog = ({ isOpen, close, goNext }) => {
   const [form_data, setFormData] = useState({});
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isReferralApplied, setIsReferralApplied] = useState(false);
@@ -22,7 +22,7 @@ const InvestReferralDialog = ({ isOpen, close, proceedInvestment }) => {
   };
 
   const handleClick = () => {
-    proceedInvestment(
+    goNext(
       {
         applied: true,
         code: form_data.referral_code,
@@ -33,7 +33,7 @@ const InvestReferralDialog = ({ isOpen, close, proceedInvestment }) => {
   };
 
   const cancel = () => {
-    proceedInvestment(
+    goNext(
       {
         applied: false,
         code: "",

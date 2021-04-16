@@ -161,7 +161,7 @@ class Checkout extends Component {
     });
     if (submit) {
       this.setState({ totalAmount: totalAmount, isApiRunning: true }, () =>
-        this.proceedInvestment()
+        this.goNext()
       );
     } else {
       if (type === "nfo") toast("Please enter valid amount");
@@ -344,7 +344,7 @@ class Checkout extends Component {
           />
           <InvestReferralDialog
             isOpen={dialogStates.openInvestReferral}
-            proceedInvestment={this.proceedInvestment}
+            gotNext={this.goNext}
             close={() => this.handleDialogStates("openInvestReferral", false)}
           />
         </div>

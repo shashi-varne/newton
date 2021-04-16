@@ -13,7 +13,7 @@ import SuccessDialog from "../mini-components/SuccessDialog";
 import InvestError from "../mini-components/InvestError";
 import PennyVerificationPending from "../mini-components/PennyVerificationPending";
 import { getBasePath } from "../../../utils/functions";
-import { proceedInvestmentChild } from "../../proceedInvestmentFunctions";
+import { proceedInvestment } from "../../proceedInvestmentFunctions";
 
 class SipDates extends Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class SipDates extends Component {
       isSipDatesScreen: true,
     };
     this.initialize = initialize.bind(this);
-    this.proceedInvestmentChild = proceedInvestmentChild.bind(this);
+    this.proceedInvestment = proceedInvestment.bind(this);
   }
 
   componentWillMount() {
@@ -99,7 +99,7 @@ class SipDates extends Component {
 
     window.localStorage.setItem("investment", JSON.stringify(sipBaseData));
 
-    this.proceedInvestmentChild({
+    this.proceedInvestment({
       userKyc: userKyc,
       sipOrOnetime: "sip",
       body: sipBaseData,

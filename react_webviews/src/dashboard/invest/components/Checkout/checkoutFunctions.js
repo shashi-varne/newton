@@ -4,7 +4,7 @@ import { getBasePath } from "../../../../utils/functions";
 import { formatAmountInr, storageService } from "../../../../utils/validators";
 import { apiConstants } from "../../constants";
 import {
-  proceedInvestmentChild,
+  proceedInvestment,
   isInvestRefferalRequired,
 } from "../../../proceedInvestmentFunctions";
 import { navigate } from "../../functions";
@@ -14,8 +14,8 @@ export async function initializeComponentFunctions() {
   this.navigate = navigate.bind(this);
   this.deleteFund = deleteFund.bind(this);
   this.checkLimit = checkLimit.bind(this);
+  this.goNext = goNext.bind(this);
   this.proceedInvestment = proceedInvestment.bind(this);
-  this.proceedInvestmentChild = proceedInvestmentChild.bind(this);
   this.getDiyPurchaseLimit = getDiyPurchaseLimit.bind(this);
   let userKyc = storageService().getObject("kyc") || {};
   let currentUser = storageService().getObject("user") || {};
@@ -164,7 +164,7 @@ export function checkLimit(amount, index) {
   });
 }
 
-export async function proceedInvestment(investReferralData, isReferralGiven) {
+export async function goNext(investReferralData, isReferralGiven) {
   let {
     partner_code,
     fundsData,

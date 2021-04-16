@@ -12,7 +12,7 @@ export function isInvestRefferalRequired(partner_code) {
   return false;
 }
 
-export async function proceedInvestmentChild(data) {
+export async function proceedInvestment(data) {
   let userKyc = data.userKyc || storageService().getObject("kyc") || {};
   const kycJourneyStatus = getKycAppStatus(userKyc).status;
   let {

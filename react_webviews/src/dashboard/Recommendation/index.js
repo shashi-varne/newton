@@ -12,7 +12,7 @@ import { storageService, formatAmountInr } from 'utils/validators';
 import { navigate as navigateFunc } from '../invest/common/commonFunction';
 
 import './style.scss';
-import { isInvestRefferalRequired, proceedInvestmentChild } from '../proceedInvestmentFunctions';
+import { isInvestRefferalRequired, proceedInvestment } from '../proceedInvestmentFunctions';
 import PennyVerificationPending from '../invest/mini-components/PennyVerificationPending';
 import InvestError from '../invest/mini-components/InvestError';
 import InvestReferralDialog from '../invest/mini-components/InvestReferralDialog';
@@ -112,7 +112,7 @@ const Recommendations = (props) => {
     }
   }, []);
 
-  const proceedInvestment = (investReferralData, isReferralGiven, handleGraph) => {
+  const goNext = (investReferralData, isReferralGiven, handleGraph) => {
     let investmentObject = {};
     if (funnelData.type !== "riskprofile") {
       var allocations = [];
@@ -207,7 +207,7 @@ const Recommendations = (props) => {
         body.referral_code = investReferralData.code;
       }
 
-      proceedInvestmentChild({
+      proceedInvestment({
         userKyc: userKyc,
         sipOrOnetime: sipOrOneTime,
         body: body,
@@ -243,10 +243,6 @@ const Recommendations = (props) => {
   const navigate = navigateFunc.bind(props);
   const editFund = () => {
     navigate("recommendations/edit-funds");
-  };
-
-  const goNext = () => {
-    proceedInvestment();
   };
 
   return (
@@ -330,7 +326,7 @@ const Recommendations = (props) => {
           />
           <InvestReferralDialog
             isOpen={dialogStates.openInvestReferral}
-            proceedInvestment={proceedInvestment}
+            goNext={goNext}
             close={() => handleDialogStates("openInvestReferral", false)}
           />
         </section>
