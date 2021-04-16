@@ -113,7 +113,7 @@ class DigiStatus extends Component {
           });
         }
         nativeCallback({
-          action: "take_control",
+          action: "take_back_button_control",
           message: {
             back_text: "You are almost there, do you really want to go back?",
           },

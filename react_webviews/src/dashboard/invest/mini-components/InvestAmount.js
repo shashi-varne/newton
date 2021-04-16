@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Container from '../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
-import { storageService, numDifferentiationInr } from 'utils/validators';
+import { numDifferentiationInr } from 'utils/validators';
 import {
   navigate as navigateFunc,
   getCorpusValue,
   validateOtAmount,
   validateSipAmount,
-  selectTitle,
   convertInrAmountToNumber,
 } from '../common/commonFunctions';
 import { get_recommended_funds } from '../common/api';
@@ -17,22 +16,27 @@ import { isArray } from 'lodash';
 import './mini-components.scss';
 import { getConfig } from '../../../utils/functions';
 import { formatAmountInr } from '../../../utils/validators';
+import useFunnelDataHook from '../common/funnelDataHook';
 
 const InvestAmount = (props) => {
-  const funnelData = storageService().getObject('funnelData');
-  const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { investType, year, equity, term, isRecurring, investTypeDisplay, ...moreData } = funnelData;
+  const {
+    funnelData,
+    funnelGoalData,
+    updateFunnelData,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
+  const { investType, year, equity, term, isRecurring, investTypeDisplay } = funnelData;
   const [amount, setAmount] = useState(funnelData?.amount || '');
-  const [title, setTitle] = useState('');
+  // const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loader, setLoader] = useState(false);
   const navigate = navigateFunc.bind(props);
-  useEffect(() => {
-    const investTitle = selectTitle(investType);
-    setTitle(investTitle);
-  }, []);
+  // useEffect(() => {
+  //   const investTitle = selectTitle(investType);
+  //   setTitle(investTitle);
+  // }, []);
 
   const handleChange = (e) => {
     let value = e.target.value || "";
@@ -58,7 +62,7 @@ const InvestAmount = (props) => {
     if(error){
       setError(false);
     }
-    if(goalRecommendation.itype !== "saveforgoal"){
+    if(funnelGoalData.itype !== "saveforgoal"){
       // ? Shouldn't this check be made even for 'parkmymoney'
       let result;
       if (investTypeDisplay === "sip") {
@@ -74,7 +78,7 @@ const InvestAmount = (props) => {
         setError(false);
       }
     }
-    if (goalRecommendation.id === "savetax") {
+    if (funnelGoalData.id === "savetax") {
       calculateTax(funnelData?.corpus);
     } else {
       const valueOfCorpus = getCorpusValue(
@@ -108,26 +112,24 @@ const InvestAmount = (props) => {
       
       if (!data.recommendation) {
         // RP enabled flow, when user has no risk profile
-        storageService().remove('userSelectedRisk');
+        updateUserRiskProfile(''); // clearing risk profile stored in session
         if (data.msg_code === 0) {
-          navigate(`${goalRecommendation.id}/risk-select`);
+          navigate(`${funnelGoalData.id}/risk-select`);
         } else if (data.msg_code === 1) {
-          navigate(`${goalRecommendation.id}/risk-select-skippable`);
+          navigate(`${funnelGoalData.id}/risk-select-skippable`);
         }
         return;
       }
       
-      storageService().setObject('funnelData', {
-        ...funnelData, ...data, amount, recommendedTotalAmount: data.amount
-      });
+      updateFunnelData({ ...data, amount, recommendedTotalAmount: data.amount })
       
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully
-        storageService().set('userSelectedRisk', data.rp_indicator);
+        updateUserRiskProfile(data.rp_indicator);
         navigate('recommendations');
       } else {
         // RP disabled flow
-        navigate(`${goalRecommendation.id}/funds`, { ...funnelData, amount });
+        navigate(`${funnelGoalData.id}/funds`, { ...funnelData, amount });
       }
     } catch (err) {
       console.log(err);
@@ -195,7 +197,7 @@ const InvestAmount = (props) => {
           <p className='invest-amount-input-duration'>
             {(
               investTypeDisplay !== 'sip' ||
-              goalRecommendation.itype !== 'saveforgoal'
+              funnelGoalData.itype !== 'saveforgoal'
              ) ? 
               'from my savings' : 'per month'
             }
@@ -203,7 +205,7 @@ const InvestAmount = (props) => {
         </div>
         <div className='invest-amount-corpus'>
           <div className='invest-amount-corpus-duration'>
-            {goalRecommendation.id === 'savetax' ?
+            {funnelGoalData.id === 'savetax' ?
               'till Mar {date.getFullYear()} to save tax upto:' : `Corpus in ${year}`
             }
           </div>

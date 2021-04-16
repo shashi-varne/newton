@@ -7,18 +7,23 @@ import no_lock_in_icon from 'assets/no_lock_in_icon.png';
 import monthly_sip_icon_dark from 'assets/monthly_sip_icon_dark.png';
 import one_time_icon_dark from 'assets/one_time_icon_dark.png';
 
-import { storageService, formatAmountInr } from 'utils/validators';
+import { formatAmountInr } from 'utils/validators';
 import { getReturnRates, navigate as navigateFunc, selectTitle } from '../common/commonFunctions';
 import { get_recommended_funds } from '../common/api';
 import './mini-components.scss';
 import PeriodWiseReturns from '../../mini-components/PeriodWiseReturns';
 import EquityDebtSlider from './EquityDebtSlider';
+import useFunnelDataHook from '../common/funnelDataHook';
 
 const { stockReturns, bondReturns } = getReturnRates();
 
 const InvestedAmount = (props) => {
-  let funnelData = storageService().getObject('funnelData');
-  const goalRecommendation = storageService().getObject('goalRecommendations');
+  const {
+    funnelData,
+    funnelGoalData,
+    updateFunnelData,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
   const { amount, investType, term, equity, isRecurring, investTypeDisplay } = funnelData;
   const [stockSplitVal, setStockSplitVal] = useState(equity || 0);
   const [loader, setLoader] = useState(false);
@@ -47,10 +52,12 @@ const InvestedAmount = (props) => {
     try {
       setLoader("button");
       const data = await get_recommended_funds(params);
-      storageService().set('userSelectedRisk', data.rp_indicator);
-      const recommendedTotalAmount = data?.amount;
-      funnelData = { ...funnelData, ...data, amount, recommendedTotalAmount};
-      storageService().setObject('funnelData', funnelData);
+      updateUserRiskProfile(data.rp_indicator);
+      updateFunnelData({
+        ...data,
+        amount,
+        recommendedTotalAmount: data?.amount
+      });
       setLoader(false);
       navigate(`recommendations`);
     } catch (err) {
@@ -119,7 +126,7 @@ const InvestedAmount = (props) => {
         </div>
         <EquityDebtSlider
           equity={stockSplitVal}
-          disabled={goalRecommendation.id === 'savetax'}
+          disabled={funnelGoalData.id === 'savetax'}
           onChange={handleChange}
           fixedRiskTitle={
             investType === 'arbitrage' ?

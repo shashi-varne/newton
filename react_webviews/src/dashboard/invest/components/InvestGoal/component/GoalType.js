@@ -2,29 +2,31 @@
 import React, { useState } from 'react';
 import Container from '../../../../common/Container';
 import Input from 'common/ui/Input';
-
 import { navigate as navigateFunc } from '../../../common/commonFunctions';
-
+import useFunnelDataHook from '../../../common/funnelDataHook';
+import moment from 'moment';
 import './style.scss';
-import { storageService } from 'utils/validators';
 
-const currentYear = new Date().getFullYear();
+const currentYear = moment().year();
 const GoalType = (props) => {
   const [year, setYear] = useState(currentYear + 15);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const subtype = props.match?.params?.subtype;
   const navigate = navigateFunc.bind(props);
-  const funnelData = storageService().getObject("funnelData")
+  const { updateFunnelData } = useFunnelDataHook();
 
   const goNext = () => {
-    storageService().setObject("funnelData",{...funnelData,name:"Saving for goal", year})
+    updateFunnelData({
+      name: "Saving for goal",
+      year
+    });
+
     if (subtype === 'other') {
       navigate(`savegoal/${subtype}/target`);
     } else {
       navigate(`savegoal/${subtype}/${year}`);
     }
-
   };
 
   const handleChange = (e) => {
@@ -43,9 +45,9 @@ const GoalType = (props) => {
       if (currentYear >= year) {
         setError(true);
         setErrorMsg('The year should be more than the current year');
-      } else if(year > (currentYear + 100)){
+      } else if (year > (currentYear + 100)) {
         setError(true);
-        setErrorMsg(`The max year you can invest for is ${currentYear+100} years`);
+        setErrorMsg(`The max year you can invest for is ${currentYear + 100} years`);
       } else {
         setError(false);
         setErrorMsg('');
@@ -55,7 +57,7 @@ const GoalType = (props) => {
       setErrorMsg('Please enter a valid year');
     }
   };
-  
+
   return (
     <Container
       classOverRide='pr-error-container'

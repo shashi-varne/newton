@@ -21,6 +21,7 @@ import PeriodWiseReturns from '../mini-components/PeriodWiseReturns';
 import { get, isArray } from 'lodash';
 import { get_recommended_funds } from '../invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
+import useFunnelDataHook from '../invest/common/funnelDataHook';
 const sipTypesKeys = [
   "buildwealth",
   "savetaxsip",
@@ -36,9 +37,13 @@ const sipTypesKeys = [
 
 const Recommendations = (props) => {
   const routeState = get(props, 'location.state', {});
-  const [funnelData, setGraphData] = useState(storageService().getObject('funnelData') || {});
+  const {
+    funnelData,
+    updateFunnelData,
+    userRiskProfile,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
   const [recommendations, setRecommendations] = useState([]);
-  const [userRiskProfile, setUserRiskProfile] = useState(storageService().get('userSelectedRisk') || '');
   const [renderTopCard, setRenderTopCard] = useState(false);
 
   useEffect(() => {
@@ -89,15 +94,12 @@ const Recommendations = (props) => {
       const res = await get_recommended_funds(params);
 
       if (res.rp_indicator) {
-        storageService().set('userSelectedRisk', res.rp_indicator);
-        setUserRiskProfile(res.rp_indicator);
+        updateUserRiskProfile(res.rp_indicator);
       }
-      storageService().setObject('funnelData', {
-        ...funnelData,
+      updateFunnelData({
         ...res,
         recommendedTotalAmount: res.amount
       });
-      setGraphData(storageService().getObject('funnelData'));
 
       setIsApiRunning(false);
     } catch (err) {

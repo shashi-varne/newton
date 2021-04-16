@@ -1,24 +1,29 @@
+import './RiskPages.scss';
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import { getConfig } from '../../../../utils/functions';
-import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
+import useFunnelDataHook from '../../common/funnelDataHook';
 import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
-import './RiskPages.scss';
+
 const { productName } = getConfig();
 
 const RiskSelect = ({
   canSkip,
   ...otherProps
 }) => {
-  const sessionStoredRisk = storageService().get('userSelectedRisk') || '';
-  const funnelData = storageService().getObject('funnelData');
+  const {
+    funnelData,
+    userRiskProfile,
+    updateFunnelData,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
-  const [selectedRisk, selectRisk] = useState(sessionStoredRisk);
+  const [selectedRisk, selectRisk] = useState(userRiskProfile);
   const navigate = navigateFunc.bind(otherProps);
 
   // useEffect(() => {
@@ -50,9 +55,9 @@ const RiskSelect = ({
       const res = await get_recommended_funds(params);
 
       if (res.updated) {
-        storageService().set('userSelectedRisk', selectedRisk);
+        updateUserRiskProfile(selectedRisk);
       }
-      storageService().setObject('funnelData', { ...funnelData, ...res });
+      updateFunnelData(res);
       
       setLoader(false);
     } catch (err) {
