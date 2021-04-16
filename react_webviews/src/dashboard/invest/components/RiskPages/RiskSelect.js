@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { getConfig } from '../../../../utils/functions';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
-import { navigate as navigateFunc } from '../../common/commonFunction';
 import useFunnelDataHook from '../../common/funnelDataHook';
+import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
 

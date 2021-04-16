@@ -9,7 +9,7 @@ import morning_text from 'assets/morning_text.png';
 
 import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
-import { navigate as navigateFunc } from '../invest/common/commonFunction';
+import { navigate as navigateFunc } from '../invest/common/commonFunctions';
 
 import './style.scss';
 import { isInvestRefferalRequired, proceedInvestmentChild } from '../invest/functions';
@@ -281,8 +281,8 @@ const Recommendations = (props) => {
           stockReturns={funnelData.stockReturns}
           bondReturns={funnelData.bondReturns}
           principalAmount={funnelData.amount}
+          isRecurring={funnelData.isRecurring}
           showInfo
-          // isRecurring={isRecurring}
         />
         <section className='recommendations-common-container'>
           <div className='recommendations-header'>

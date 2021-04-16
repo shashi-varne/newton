@@ -5,7 +5,7 @@ import FundCard from '../invest/mini-components/FundCard';
 import Button from '@material-ui/core/Button';
 import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
 import replaceFund from 'assets/replace_bfdl.png';
-import { navigate as navigateFunc } from '../invest/common/commonFunction';
+import { navigate as navigateFunc } from '../invest/common/commonFunctions';
 import isEmpty from 'lodash/isEmpty';
 import useFunnelDataHook from '../invest/common/funnelDataHook';
 

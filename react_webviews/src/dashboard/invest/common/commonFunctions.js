@@ -1,5 +1,6 @@
 import { storageService, formatAmountInr } from 'utils/validators';
 import { getConfig } from "utils/functions";
+
 export function navigate(pathname, data, redirect) {
   if (redirect) {
     this.history.push({
@@ -40,7 +41,7 @@ export const isRecurring = (investType) => {
 };
 
 export const getReturnRates = () => {
-  return storageService().getObject('investReturnRates') || {};
+  return storageService().getObject('funnelReturnRates') || {};
 };
 
 export const getMonthlyCommitmentNew = (term, corpusValue, stockSplitVal) => {
@@ -57,7 +58,7 @@ export const getMonthlyCommitmentNew = (term, corpusValue, stockSplitVal) => {
   return Math.floor(monthlyAmount);
 };
 
-export const corpusValue = (stockSplitVal, amount, investtype, isRecurring, term) => {
+export const getCorpusValue = (stockSplitVal, amount, isRecurring, term) => {
   let principle = amount;
   var corpus_value = 0;
   for (var i = 0; i < term; i++) {
@@ -73,22 +74,11 @@ export const corpusValue = (stockSplitVal, amount, investtype, isRecurring, term
   }
   return corpus_value;
 };
-export const getPotentialValue = (amount, term, isRecurring) => {
-  let principle = amount;
-  var corpus_value = 0;
-  for (var i = 0; i < term; i++) {
-    if (isRecurring) {
-      var n = (i + 1) * 12;
-      var mr = getRateOfInterest() / 12 / 100;
-      corpus_value = (amount * (Math.pow(1 + mr, n) - 1)) / mr;
-    } else {
-      var currInterest = (principle * getRateOfInterest()) / 100;
-      corpus_value = principle + currInterest;
-      principle += currInterest;
-    }
-  }
-  return corpus_value;
+
+export const getPotentialValue = ({ ...params }) => {
+  return getCorpusValue(...params);
 };
+
 export const getRateOfInterest = (stockSplitVal) => {
   const { stockReturns, bondReturns } = getReturnRates();
   // TODO: Handle edge cases / negative scenarios

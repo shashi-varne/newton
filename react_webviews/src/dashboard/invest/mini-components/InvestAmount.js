@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Container from '../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
-
 import { numDifferentiationInr } from 'utils/validators';
 import {
   navigate as navigateFunc,
-  corpusValue,
+  getCorpusValue,
   validateOtAmount,
   validateSipAmount,
   convertInrAmountToNumber,
-} from '../common/commonFunction';
+} from '../common/commonFunctions';
 import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
 
@@ -82,10 +81,9 @@ const InvestAmount = (props) => {
     if (funnelGoalData.id === "savetax") {
       calculateTax(funnelData?.corpus);
     } else {
-      const valueOfCorpus = corpusValue(
+      const valueOfCorpus = getCorpusValue(
         equity,
         amount,
-        funnelGoalData.id,
         isRecurring,
         term
       );
