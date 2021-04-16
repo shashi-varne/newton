@@ -12,7 +12,7 @@ import { storageService, formatAmountInr } from 'utils/validators';
 import { navigate as navigateFunc } from '../invest/common/commonFunction';
 
 import './style.scss';
-import { isInvestRefferalRequired, proceedInvestmentChild } from '../invest/functions';
+import { isInvestRefferalRequired, proceedInvestmentChild } from '../proceedInvestmentFunctions';
 import PennyVerificationPending from '../invest/mini-components/PennyVerificationPending';
 import InvestError from '../invest/mini-components/InvestError';
 import InvestReferralDialog from '../invest/mini-components/InvestReferralDialog';

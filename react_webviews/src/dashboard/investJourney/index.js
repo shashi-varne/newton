@@ -13,7 +13,7 @@ import {
   canDoInvestment,
   isInvestRefferalRequired,
   proceedInvestmentChild,
-} from "../invest/functions";
+} from "../proceedInvestmentFunctions";
 import PennyVerificationPending from "../invest/mini-components/PennyVerificationPending";
 import InvestError from "../invest/mini-components/InvestError";
 import { getBasePath, getConfig } from "../../utils/functions";

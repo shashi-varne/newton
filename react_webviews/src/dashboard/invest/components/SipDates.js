@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Container from "../../../common/Container";
-import { initialize } from "../../functions";
+import Container from "../../common/Container";
+import { initialize } from "../functions";
 import DropdownInModal from "common/ui/DropdownInModal";
 import { getConfig } from "utils/functions";
 import {
@@ -9,10 +9,11 @@ import {
   formatAmountInr,
   isEmpty,
 } from "utils/validators";
-import SuccessDialog from "../../mini-components/SuccessDialog";
-import InvestError from "../../mini-components/InvestError";
-import PennyVerificationPending from "../../mini-components/PennyVerificationPending";
-import { getBasePath } from "../../../../utils/functions";
+import SuccessDialog from "../mini-components/SuccessDialog";
+import InvestError from "../mini-components/InvestError";
+import PennyVerificationPending from "../mini-components/PennyVerificationPending";
+import { getBasePath } from "../../../utils/functions";
+import { proceedInvestmentChild } from "../../proceedInvestmentFunctions";
 
 class SipDates extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class SipDates extends Component {
       isSipDatesScreen: true,
     };
     this.initialize = initialize.bind(this);
+    this.proceedInvestmentChild = proceedInvestmentChild.bind(this);
   }
 
   componentWillMount() {

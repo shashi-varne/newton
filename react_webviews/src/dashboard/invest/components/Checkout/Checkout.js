@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
-import { initialize } from "../../functions";
 import Input from "common/ui/Input";
 import { formatAmountInr } from "utils/validators";
 import { getConfig } from "utils/functions";
@@ -13,7 +12,7 @@ import PennyVerificationPending from "../../mini-components/PennyVerificationPen
 import InvestError from "../../mini-components/InvestError";
 import InvestReferralDialog from "../../mini-components/InvestReferralDialog";
 import { convertInrAmountToNumber } from "../../common/commonFunction";
-import { getNfoPurchaseLimit } from "./nfoFunctions";
+import { initializeComponentFunctions } from "./checkoutFunctions";
 
 class Checkout extends Component {
   constructor(props) {
@@ -33,12 +32,11 @@ class Checkout extends Component {
       dialogStates: {},
       purchaseLimitData: {},
     };
-    this.initialize = initialize.bind(this);
-    this.getNfoPurchaseLimit = getNfoPurchaseLimit.bind(this);
+    this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
+  componentDidMount() {
+    this.initializeComponentFunctions();
   }
 
   onload = () => {
@@ -218,20 +216,6 @@ class Checkout extends Component {
         this.setState({ form_data: form_data, fundsData: fundsData });
       }
     }
-  };
-
-  deleteFund = (item, index) => {
-    let { fundsData, cartCount } = this.state;
-    let fundName = item.legalName || item.legal_name;
-    fundsData.splice(index, 1);
-    cartCount = fundsData.length;
-    this.setState({
-      fundName: fundName,
-      fundsData: fundsData,
-      cartCount: cartCount,
-    });
-    storageService().setObject("diystore_cart", fundsData);
-    storageService().set("diystore_cartCount", fundsData.length);
   };
 
   render() {

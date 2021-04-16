@@ -11,8 +11,8 @@ import NfoInfo from "./invest/components/nfo";
 import NfoScheme from "./invest/components/nfo/scheme";
 import NfoFunds from "./invest/components/nfo/funds";
 import NfoFundDetail from "./invest/components/nfo/FundDetail";
-import NfoCheckout from "./invest/components/nfo/checkout";
-import SipDates from "./invest/components/nfo/SipDates";
+import NfoCheckout from "./invest/components/Checkout/Checkout";
+import SipDates from "./invest/components/SipDates";
 import InvestJourney from "./investJourney";
 import DIY from "./diy";
 
@@ -86,9 +86,21 @@ const Invest = (props) => {
           path={`${url}digilocker/callback`}
           component={DigilockerCallback}
         />
-        <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
-        <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />
-        <Route exact path={`${url}account/merge/linked/success`} component={AccountLinked} />
+        <Route
+          exact
+          path={`${url}account/merge/:pan_number`}
+          component={AccountMerge}
+        />
+        <Route
+          exact
+          path={`${url}account/merge/otp/:pan_number`}
+          component={AccountMergeOtp}
+        />
+        <Route
+          exact
+          path={`${url}account/merge/linked/success`}
+          component={AccountLinked}
+        />
         <Route
           path={`${url}investment-proof`}
           render={(props) => (
@@ -99,7 +111,10 @@ const Invest = (props) => {
           path={`${url}capital-gain`}
           render={(props) => <InvestmentProof {...props} type="capital-gain" />}
         />
-        <Route path={`${url}blank-mandate/upload`} component={BlankMandateUpload}  />
+        <Route
+          path={`${url}blank-mandate/upload`}
+          component={BlankMandateUpload}
+        />
         <Route component={NotFound} />
       </Switch>
     </Fragment>
