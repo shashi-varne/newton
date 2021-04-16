@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { initialize } from "../functions";
+import { navigate } from "../functions";
 import DropdownInModal from "common/ui/DropdownInModal";
 import { getConfig } from "utils/functions";
 import {
@@ -25,12 +25,12 @@ class SipDates extends Component {
       dialogStates: {},
       isSipDatesScreen: true,
     };
-    this.initialize = initialize.bind(this);
+    this.navigate = navigate.bind(this);
     this.proceedInvestment = proceedInvestment.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
+  componentDidMount() {
+    this.onload();
   }
 
   onload = () => {
@@ -68,9 +68,9 @@ class SipDates extends Component {
       finalPurchases.length === 1 ? "CONFIRM DATE" : "CONFIRM DATES";
 
     const paymentRedirectUrl = encodeURIComponent(
-      `${getBasePath()}/page/callback/sip/${
-        sipBaseData.investment.amount
-      }${getConfig().searchParams}`
+      `${getBasePath()}/page/callback/sip/${sipBaseData.investment.amount}${
+        getConfig().searchParams
+      }`
     );
 
     this.setState({
@@ -217,7 +217,7 @@ class SipDates extends Component {
             isOpen={openSuccessDialog}
             sips={sips}
             handleClick={this.handleSuccessDialog}
-            close={() => this.setState({openSuccessDialog : false})}
+            close={() => this.setState({ openSuccessDialog: false })}
           />
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPending}
@@ -227,7 +227,7 @@ class SipDates extends Component {
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
-            close={() => this.handleDialogStates('openInvestError', false)}
+            close={() => this.handleDialogStates("openInvestError", false)}
           />
         </div>
       </Container>

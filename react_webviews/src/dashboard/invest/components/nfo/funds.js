@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "@material-ui/core/Button";
-import { initialize } from "../../functions";
+import { navigate } from "../../functions";
 import {
   getFormattedEndDate,
   getFormattedStartDate,
@@ -21,11 +21,10 @@ class NfoFunds extends Component {
       screenName: "nfo_funds",
       showFunds: false,
     };
-    this.initialize = initialize.bind(this);
+    this.navigate = navigate.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
+  componentDidMount() {
     let scheme = this.props.match.params.scheme || "";
     let availableSchemes = ["growth", "dividend"];
     if (!scheme || !availableSchemes.includes(scheme)) {
@@ -33,13 +32,10 @@ class NfoFunds extends Component {
       return;
     }
     this.setState({ scheme: scheme });
+    this.getNfoRecommendation(scheme);
   }
 
-  onload = () => {
-    this.getNfoRecommendation();
-  };
-
-  getNfoRecommendation = async () => {
+  getNfoRecommendation = async (scheme) => {
     this.setState({ show_loader: true });
     const errorMessage = "Something went wrong!";
     try {
@@ -49,7 +45,7 @@ class NfoFunds extends Component {
         storageService().remove("nfo_cart");
         storageService().remove("nfo_cartCount");
         let sortedArray = result.recommendations.filter((item) => {
-          return item.growth_or_dividend === this.state.scheme;
+          return item.growth_or_dividend === scheme;
         });
         var newArray = sortedArray.map((dict) => {
           dict["addedToCart"] = false;

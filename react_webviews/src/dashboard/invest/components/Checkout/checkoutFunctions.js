@@ -17,6 +17,7 @@ export async function initializeComponentFunctions() {
   this.goNext = goNext.bind(this);
   this.proceedInvestment = proceedInvestment.bind(this);
   this.getDiyPurchaseLimit = getDiyPurchaseLimit.bind(this);
+  this.getNfoPurchaseLimit = getNfoPurchaseLimit.bind(this);
   let userKyc = storageService().getObject("kyc") || {};
   let currentUser = storageService().getObject("user") || {};
   this.setState({
@@ -245,7 +246,7 @@ export async function goNext(investReferralData, isReferralGiven) {
     body: body,
     investmentEventData: investmentEventData,
   });
-  this.proceedInvestmentChild({
+  this.proceedInvestment({
     userKyc: userKyc,
     sipOrOnetime: investment_type,
     body: body,

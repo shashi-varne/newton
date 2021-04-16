@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
-import { initialize } from "../../functions";
+import { navigate } from "../../functions";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import { formatAmountInr } from "utils/validators";
 import { investRedeemData } from "../../constants";
-import { convertInrAmountToNumber, getGoalRecommendation } from "../../common/commonFunction";
+import { convertInrAmountToNumber, getGoalRecommendation } from "../../common/commonFunctions";
 import { storageService } from "../../../../utils/validators";
 
 class InvestAmount extends Component {
@@ -19,11 +19,11 @@ class InvestAmount extends Component {
       productName: getConfig().productName,
       screenName: "insta_redeem_invest_type",
     };
-    this.initialize = initialize.bind(this);
+    this.navigate = navigate.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
+  componentDidMount() {
+    this.onload();
   }
 
   onload = () => {

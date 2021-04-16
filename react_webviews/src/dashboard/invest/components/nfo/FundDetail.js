@@ -2,11 +2,8 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "@material-ui/core/Button";
 import { storageService } from "utils/validators";
-import { initialize } from "../../functions";
-import {
-  getFormattedEndDate,
-  getSchemeOption,
-} from "./nfoFunctions";
+import { navigate } from "../../functions";
+import { getFormattedEndDate, getSchemeOption } from "./nfoFunctions";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -15,11 +12,11 @@ class FundDetail extends Component {
       show_loader: false,
       screenName: "nfo_fund_detail",
     };
-    this.initialize = initialize.bind(this);
+    this.navigate = navigate.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
+  componentDidMount() {
+    this.onload();
   }
 
   onload = () => {

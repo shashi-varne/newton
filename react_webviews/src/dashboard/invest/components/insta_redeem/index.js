@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
-import { initialize } from "../../functions";
+import { navigate } from "../../functions";
 import Faqs from "common/ui/Faqs";
 import SecureInvest from "../../mini-components/SecureInvest";
 import { apiConstants, investRedeemData } from "../../constants";
@@ -24,16 +24,12 @@ class InstaRedeem extends Component {
       openDialog: false,
       instaRecommendation: {},
     };
-    this.initialize = initialize.bind(this);
+    this.navigate = navigate.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
-  }
-
-  onload = () => {
+  componentDidMount() {
     this.initializeInstaRedeem();
-  };
+  }
 
   handleClick = () => {
     this.navigate("instaredeem/type");

@@ -9,6 +9,7 @@ import {
   validateOtAmount,
   validateSipAmount,
   convertInrAmountToNumber,
+  selectTitle,
 } from '../common/commonFunctions';
 import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
@@ -27,16 +28,16 @@ const InvestAmount = (props) => {
   } = useFunnelDataHook();
   const { investType, year, equity, term, isRecurring, investTypeDisplay } = funnelData;
   const [amount, setAmount] = useState(funnelData?.amount || '');
-  // const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loader, setLoader] = useState(false);
   const navigate = navigateFunc.bind(props);
-  // useEffect(() => {
-  //   const investTitle = selectTitle(investType);
-  //   setTitle(investTitle);
-  // }, []);
+  useEffect(() => {
+    const investTitle = selectTitle(investType);
+    setTitle(investTitle);
+  }, []);
 
   const handleChange = (e) => {
     let value = e.target.value || "";

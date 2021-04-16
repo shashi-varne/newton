@@ -11,7 +11,7 @@ import { CATEGORY, FUNDSLIST, SUBCATEGORY, CART } from "../../../diy/constants";
 import PennyVerificationPending from "../../mini-components/PennyVerificationPending";
 import InvestError from "../../mini-components/InvestError";
 import InvestReferralDialog from "../../mini-components/InvestReferralDialog";
-import { convertInrAmountToNumber } from "../../common/commonFunction";
+import { convertInrAmountToNumber } from "../../common/commonFunctions";
 import { initializeComponentFunctions } from "./checkoutFunctions";
 
 class Checkout extends Component {
