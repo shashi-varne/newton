@@ -125,7 +125,7 @@ class TicketConversations extends Component {
       {
         splitIndex: this.state.splitIndex + 5,
       },
-      () => this.handleScroll()
+      () => this.handleScroll('smooth')
     );
   };
 

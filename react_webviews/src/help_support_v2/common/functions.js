@@ -81,7 +81,7 @@ export function setErrorData(type) {
 }
 
 export const handleScroll = throttle(
-  () => {
+  (behavior = '') => {
     let element = document.getElementById("viewScroll");
     if (!element || element === null) {
       return;
@@ -90,7 +90,7 @@ export const handleScroll = throttle(
     scrollIntoView(element, {
       block: "start",
       inline: "nearest",
-      // behavior: "smooth",
+      behavior: behavior,
     });
   },
   50,
