@@ -20,7 +20,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 
 const AddBank = (props) => {
   const genericErrorMessage = "Something Went wrong!";
-  const partner = getConfig().partner;
+  const code = getConfig().code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
   const bank_id = props.location.state?.bank_id || "";
@@ -179,18 +179,18 @@ const AddBank = (props) => {
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
     if (
-      (partner.code === "ktb" &&
+      (code === "ktb" &&
         bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-      (partner.code === "lvb" &&
+      (code === "lvb" &&
         bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-      (partner.code === "cub" &&
+      (code === "cub" &&
         bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
-      (partner.code === "ippb" &&
+      (code === "ippb" &&
         bankData.ifsc_code.toUpperCase().startsWith("IPOS")) ||
-      (partner.code !== "ktb" &&
-        partner.code !== "lvb" &&
-        partner.code !== "cub" &&
-        partner.code !== "ippb")
+      (code !== "ktb" &&
+        code !== "lvb" &&
+        code !== "cub" &&
+        code !== "ippb")
     ) {
       setIsApiRunning("button");
       try {
@@ -205,7 +205,7 @@ const AddBank = (props) => {
         } else {
           bank.branch_name = "";
           bank.bank_name = "";
-          formData.ifsc_code_error = getIfscCodeError(partner.code);
+          formData.ifsc_code_error = getIfscCodeError(code);
         }
       } catch (err) {
         console.log(err);
@@ -215,14 +215,13 @@ const AddBank = (props) => {
     } else {
       bank.branch_name = "";
       bank.bank_name = "";
-      formData.ifsc_code_error = getIfscCodeError(partner.code);
+      formData.ifsc_code_error = getIfscCodeError(code);
     }
     return { bankData: bank, formData: formData, bankIcon: bankIcon };
   };
 
   return (
     <Container
-      // hideInPageTitle
       skelton={isLoading}
       id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
@@ -232,7 +231,6 @@ const AddBank = (props) => {
       title="Enter bank account details"
     >
       <div className="kyc-approved-bank">
-        {/* <div className="kyc-main-title">Enter bank account details</div> */}
         {!isLoading && (
           <>
             <Alert

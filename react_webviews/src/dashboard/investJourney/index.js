@@ -63,7 +63,7 @@ const InvestJourney = (props) => {
     );
 
     if (
-      isInvestRefferalRequired(getConfig().partner.code) &&
+      isInvestRefferalRequired(getConfig().code) &&
       !isReferralGiven
     ) {
       handleDialogStates("openInvestReferral", true);

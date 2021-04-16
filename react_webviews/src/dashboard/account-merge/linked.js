@@ -10,13 +10,13 @@ const AccountLinked = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const config = getConfig();
   const productName = config.productName;
-  const partner = config.partner;
+  const code = config.code;
   const handleClick = () => {
     navigate("/logout")
   };
 
   const hideImage =
-    isIframe() && partner.code === "moneycontrol" && config.isMobileDevice;
+    isIframe() && code === "moneycontrol" && config.isMobileDevice;
   return (
     <Container
       buttonTitle="CLOSE"

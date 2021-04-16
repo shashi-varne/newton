@@ -16,7 +16,6 @@ class Landing extends Component {
     this.state = {
       show_loader: false,
       productName: getConfig().productName,
-      partner: getConfig().partner,
       screenName: "invest_landing",
       investShowData: {},
       renderCards: [],

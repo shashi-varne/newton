@@ -61,8 +61,8 @@ const PaymentCallback = (props) => {
         <div className="contact-us">
           <div>For any query, react us at</div>
           <div className="info">
-            <div className="text border-right">{config.partner.mobile}</div>
-            <div className="text">{config.partner.email}</div>
+            <div className="text border-right">{config.mobile}</div>
+            <div className="text">{config.email}</div>
           </div>
         </div>
       </section>

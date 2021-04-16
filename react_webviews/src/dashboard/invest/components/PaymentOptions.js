@@ -96,7 +96,7 @@ const PaymentOptions = (props) => {
       if (isMobile.iOS) {
         if (!partner_check) {
           redirectData.show_toolbar = true;
-        } else if (getConfig().partner.code !== "alb") {
+        } else if (getConfig().code !== "alb") {
           redirectData.show_toolbar = true;
         }
       }

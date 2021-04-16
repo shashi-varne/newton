@@ -5,7 +5,6 @@ import { storageService } from 'utils/validators'
 import toast from 'common/ui/Toast'
 import { getConfig } from 'utils/functions'
 
-const partner = getConfig().partner
 const genericErrorMessage = 'Something Went wrong!'
 
 export const handleApi = (res) => {
@@ -101,7 +100,7 @@ export const kycSubmit = async (body) => {
       storageService().setObject(storageConstants.USER, result.user)
       return result
     case 402:
-      const email = partner.email
+      const email = getConfig().email
       let name = 'fisdom'
       if (getConfig().productName === 'finity') {
         name = 'finity'

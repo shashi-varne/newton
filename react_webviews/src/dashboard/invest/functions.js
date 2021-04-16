@@ -964,7 +964,7 @@ export async function proceedInvestmentChild(data) {
 
   let isKycNeeded = false;
   if (
-    (getConfig().partner.code === "bfdlmobile" && !data.isInvestJourney) ||
+    (getConfig().code === "bfdlmobile" && !data.isInvestJourney) ||
     data.isInvestJourney ||
     data.isSipDatesScreen
   ) {

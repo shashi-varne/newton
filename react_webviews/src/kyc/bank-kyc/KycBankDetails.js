@@ -24,7 +24,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
-  const partner = getConfig().partner;
+  const code = getConfig().code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
   const params = props.match.params || {};
@@ -246,18 +246,18 @@ const KycBankDetails = (props) => {
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
     if (
-      (partner.code === "ktb" &&
+      (code === "ktb" &&
         bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-      (partner.code === "lvb" &&
+      (code === "lvb" &&
         bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-      (partner.code === "cub" &&
+      (code === "cub" &&
         bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
-      (partner.code === "ippb" &&
+      (code === "ippb" &&
         bankData.ifsc_code.toUpperCase().startsWith("IPOS")) ||
-      (partner.code !== "ktb" &&
-        partner.code !== "lvb" &&
-        partner.code !== "cub" &&
-        partner.code !== "ippb")
+      (code !== "ktb" &&
+        code !== "lvb" &&
+        code !== "cub" &&
+        code !== "ippb")
     ) {
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
@@ -271,7 +271,7 @@ const KycBankDetails = (props) => {
         } else {
           bank.branch_name = "";
           bank.bank_name = "";
-          formData.ifsc_code_error = getIfscCodeError(partner.code);
+          formData.ifsc_code_error = getIfscCodeError(code);
         }
       } catch (err) {
         console.log(err);
@@ -279,7 +279,7 @@ const KycBankDetails = (props) => {
     } else {
       bank.branch_name = "";
       bank.bank_name = "";
-      formData.ifsc_code_error = getIfscCodeError(partner.code);
+      formData.ifsc_code_error = getIfscCodeError(code);
     }
     return { bankData: bank, formData: formData, bankIcon: bankIcon };
   };

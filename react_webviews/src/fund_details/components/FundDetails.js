@@ -258,7 +258,7 @@ const FundDetails = ({ classes, history }) => {
     );
 
     if (
-      isInvestRefferalRequired(getConfig().partner.code) &&
+      isInvestRefferalRequired(getConfig().code) &&
       !isReferralGiven
     ) {
       handleDialogStates("openInvestReferral", true);
