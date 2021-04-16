@@ -5,7 +5,7 @@ import {
   navigate as navigateFunc,
   isRecurring,
   getMonthlyCommitmentNew
-} from '../../../common/commonFunction';
+} from '../../../common/commonFunctions';
 import { numDifferentiationInr } from 'utils/validators';
 import { saveGoalMapper } from '../constants';
 import useFunnelDataHook from '../../../common/funnelDataHook';

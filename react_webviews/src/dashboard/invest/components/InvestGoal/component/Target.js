@@ -9,7 +9,7 @@ import {
   isRecurring,
   convertInrAmountToNumber,
   getMonthlyCommitmentNew
-} from '../../../common/commonFunction';
+} from '../../../common/commonFunctions';
 import moment from 'moment';
 import useFunnelDataHook from '../../../common/funnelDataHook';
 

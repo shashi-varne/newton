@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast'
-import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
+import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
 

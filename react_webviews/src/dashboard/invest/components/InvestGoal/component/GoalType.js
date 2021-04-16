@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Container from '../../../../common/Container';
 import Input from 'common/ui/Input';
-import { navigate as navigateFunc } from '../../../common/commonFunction';
+import { navigate as navigateFunc } from '../../../common/commonFunctions';
 import useFunnelDataHook from '../../../common/funnelDataHook';
 import moment from 'moment';
 import './style.scss';

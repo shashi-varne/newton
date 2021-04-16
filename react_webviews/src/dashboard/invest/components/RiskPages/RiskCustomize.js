@@ -2,7 +2,7 @@ import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import { navigate as navigateFunc } from '../../common/commonFunctions';
 import EquityDebtSlider from '../../mini-components/EquityDebtSlider';
 import toast from 'common/ui/Toast'
 import './RiskPages.scss';
