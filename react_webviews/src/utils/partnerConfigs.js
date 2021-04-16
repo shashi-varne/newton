@@ -1,56 +1,46 @@
+/*
+Exhaustive list of property values:
+- investSections: [
+    'kyc',
+    'ourRecommendations',
+    'diy',
+    'bottomScrollCards',
+    'bottomCards',
+    'financialTools'
+  ]
+
+- features list to use within investSubSectionMap 
+    "instaredeem",
+    "buildwealth",
+    "savetax",
+    "parkmoney",
+    "savegoal"
+    "nfo", (mostly used for 'bottomCards' key)
+    "diyv2" (only used for 'diy' key)
+    "fhc", "risk_profiler" (only used for 'financialTools' key)
+
+*/
 export const basePartnerConfig = {
   common: {
-    // INVEST SCREEN specific -----------------
     investSections: [
       'kyc',
       'ourRecommendations',
       'diy',
-      'popularCards',
       'bottomScrollCards',
       'bottomCards',
-      'financialTools',
     ],
     investSubSectionMap: {
-      kyc: [],
       ourRecommendations: [
-        '100_sip',
-        '300_sip',
-        'instaredeem',
-        'buildwealth',
-        'savetax',
-        'instaredeem',
-        'gold',
-        'loan'
+        "instaredeem",
+        "buildwealth",
+        "savetax",
       ],
-      diy: ['diyv2'],
-      bottomScrollCards: [
-        'parkmoney',
-        'savegoal'
-      ],
-      bottomCards: ['nfo'],
-      popularCards: [
-        'top_equity',
-        'nps'
-      ],
-      financialTools: [
-        'fhc',
-        'risk_profiler'
-      ]
+      diy: ["diyv2"],
+      bottomScrollCards: ["parkmoney", "savegoal"],
+      bottomCards: ["nfo"],
     },
-    // INVEST SCREEN specific END --------------
-    // SDK LANDING SCREEN specific ----------
-    landingMarketingBanners: [
-      { image: 'mb_4.svg', type: '100_sip' },
-      { image: 'mb_6.svg', type: 'diy' },
-      { image: 'mb_5.svg', type: 'buildwealth' },
-    ],
     landingConfig: { // same as 'entry' prop in old config
       nps: 'inside_sdk',
-    },
-    // SDK LANDING SCREEN specific END ------
-    referralConfig: { // same as feature_manager in old config 
-      applyRefferal: true,
-      shareRefferal: true,
     },
     riskEnabledFunnels: false,
   },
@@ -67,12 +57,11 @@ export const basePartnerConfig = {
   },
   finity: {
     productName: 'finity',
-    email: 'ask@fisdom.com',
+    email: 'ask@finity.in',
     mobile: '+91-8048039999',
     appLink: 'https://myway.onelink.me/W4GN/1f539fd2',
     termsLink: 'https://finity.in/terms/',
     schemeLink: 'https://finity.in/scheme/',
-    askEmail: 'ask@finity.in',
     webAppUrl: 'https://app.mywaywealth.com/#!/',
     email_domain: 'finity.in',
     riskEnabledFunnels: true,
@@ -80,6 +69,11 @@ export const basePartnerConfig = {
 };
 
 export const baseTypographyConfig = {
+  common: {
+    // fontFamily: '',
+    // fontSize: '',
+    // lineHeight: '',
+  },
   fisdom: {
     // fontFamily: '',
     // fontSize: '',
@@ -151,112 +145,112 @@ export const baseStylingConfig = {
     //   borderRadius: '',
     // },
   }
-}
-
-export const obc = {
-  logo: 'obc.png',
-  code: 'obc',
-  email: 'obc@fisdom.com',
-  mobile: '+91-7829228887',
-  banner: 'obc_banner.png',
-  styling: {
-    primaryColor: '#4DB848'
-  }
 };
 
-export const bfdlmobile = {
-  logo: 'bfdl_white_sdk_logo.svg',
-  code: 'bfdlmobile',
-  email: 'bajajfinserv@finity.in',
-  mobile: '+91-7829331118',
-  banner: 'bfdl_banner.png',
-  // back_button: 'back_icon_white.png',
-  // close_button: 'close_nav_icon.svg',
-  // search_button: 'bfdlmobile_search.png',
-  investSections: [
-    'kyc', // not sure if this is applicable to all?
-    'ourRecommendations',
-    'financialTools',
-  ],
-  investSubSectionMap: {
-    kyc: [],
-    ourRecommendations: [
-      '100_sip',
-      'instaredeem',
-      'buildwealth',
-      'savetax',
-    ],
-  },
-  landingMarketingBanners: [
-    { image: 'mb_4.svg', type: '100_sip' },
-    { image: 'mb_6.svg', type: 'diy' },
-    { image: 'mb_5.svg', type: 'buildwealth' },
-  ],
-  referralConfig: {
-    applyRefferal: false, // same as hide_apply_referral but with opposite value
-    shareRefferal: false, // same as hide_share_referral but with opposite value
-  },
-  styling: {
-    primaryColor: '#4DB848',
-    secondaryColor: '#ff5928',
-    ctaProps: {
-      backgroundDisabled: '#ffffff', // same as 'cta_disabled_background'
-    }
-  }
-};
-
-export const fpg = {
-  logo: 'text_investments.svg',
-  code: 'fpg',
-  mobile: '1800-212-5997',
-  email: 'care.futuremoney@fisdom.com',
-  banner: 'bfdl_banner.png',
-  investSections: [
-    'kyc',
-    'our_recommendations',
-    'popular_cards',
-    'diy',
-    'bottom_scroll_cards',
-    'bottom_cards',
-    'financial_tools',
-  ],
-  investSubSectionMap: {
-    ourRecommendations: [
-      'instaredeem',
-      'buildwealth',
-      'gold',
-      'savetax',
-    ],
-    diy: ['diyv2'],
-    bottomScrollCards: [
-      'parkmoney',
-      'savegoal'
-    ],
-    bottomCards: ['nfo'],
-    popularCards: [
-      'top_equity',
-      'nps'
-    ],
-  },
-  landingMarketingBanners: [
-    { image: 'Gold_updated_banner.svg', type: 'gold' },
-    { image: 'fpg_mb_insta.svg', type: 'instaredeem' },
-    { image: 'fpg_mb_100.svg', type: 'buildwealth' },
-  ],
-  referralConfig: {
-    applyRefferal: false, // same as hide_apply_referral but with opposite value
-    shareRefferal: false, // same as hide_share_referral but with opposite value
-  },
-  typography: {
-    ctaProps: {
-      disabledColor: '#ffffff' // same as cta_disabled_color
+export const partnerConfigs = {
+  obc: {
+    logo: 'obc.png',
+    code: 'obc',
+    email: 'obc@fisdom.com',
+    mobile: '+91-7829228887',
+    banner: 'obc_banner.png',
+    styling: {
+      primaryColor: '#4DB848'
     }
   },
-  styling: {
-    primaryColor: '#EB6024',
-    secondaryColor: '#EB6024',
-    ctaProps: {
-      backgroundDisabled: '#F1D5C9', // same as 'cta_disabled_background'
+  bfdlmobile: {
+    logo: 'bfdl_white_sdk_logo.svg',
+    code: 'bfdlmobile',
+    email: 'bajajfinserv@finity.in',
+    mobile: '+91-7829331118',
+    banner: 'bfdl_banner.png',
+    // back_button: 'back_icon_white.png',
+    // close_button: 'close_nav_icon.svg',
+    // search_button: 'bfdlmobile_search.png',
+    investSections: [
+      'kyc', // not sure if this is applicable to all?
+      'ourRecommendations',
+      'financialTools',
+    ],
+    investSubSectionMap: {
+      kyc: [],
+      ourRecommendations: [
+        '100_sip',
+        'instaredeem',
+        'buildwealth',
+        'savetax',
+      ],
+    },
+    landingMarketingBanners: [
+      { image: 'mb_4.svg', type: '100_sip' },
+      { image: 'mb_6.svg', type: 'diy' },
+      { image: 'mb_5.svg', type: 'buildwealth' },
+    ],
+    referralConfig: {
+      applyRefferal: false, // same as hide_apply_referral but with opposite value
+      shareRefferal: false, // same as hide_share_referral but with opposite value
+    },
+    styling: {
+      primaryColor: '#4DB848',
+      secondaryColor: '#ff5928',
+      ctaProps: {
+        backgroundDisabled: '#ffffff', // same as 'cta_disabled_background'
+      }
+    }
+  },
+  fpg: {
+    logo: 'text_investments.svg',
+    code: 'fpg',
+    mobile: '1800-212-5997',
+    email: 'care.futuremoney@fisdom.com',
+    banner: 'bfdl_banner.png',
+    investSections: [
+      'kyc',
+      'our_recommendations',
+      'popular_cards',
+      'diy',
+      'bottom_scroll_cards',
+      'bottom_cards',
+      'financial_tools',
+    ],
+    investSubSectionMap: {
+      ourRecommendations: [
+        'instaredeem',
+        'buildwealth',
+        'gold',
+        'savetax',
+      ],
+      diy: ['diyv2'],
+      bottomScrollCards: [
+        'parkmoney',
+        'savegoal'
+      ],
+      bottomCards: ['nfo'],
+      popularCards: [
+        'top_equity',
+        'nps'
+      ],
+    },
+    landingMarketingBanners: [
+      { image: 'Gold_updated_banner.svg', type: 'gold' },
+      { image: 'fpg_mb_insta.svg', type: 'instaredeem' },
+      { image: 'fpg_mb_100.svg', type: 'buildwealth' },
+    ],
+    referralConfig: {
+      applyRefferal: false, // same as hide_apply_referral but with opposite value
+      shareRefferal: false, // same as hide_share_referral but with opposite value
+    },
+    typography: {
+      ctaProps: {
+        disabledColor: '#ffffff' // same as cta_disabled_color
+      }
+    },
+    styling: {
+      primaryColor: '#EB6024',
+      secondaryColor: '#EB6024',
+      ctaProps: {
+        backgroundDisabled: '#F1D5C9', // same as 'cta_disabled_background'
+      }
     }
   }
 };
