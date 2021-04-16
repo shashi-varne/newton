@@ -4,19 +4,19 @@ export const themeConfig = {
     palette: {
         primary: {
             // light: will be calculated from palette.primary.main,
-            main: getConfig().primary,
+            main: getConfig().styling.primaryColor,
             // dark: will be calculated from palette.primary.main,
             contrastText: '#ffffff',
         },
         secondary: {
             // light: '#0066ff',
-            main: getConfig().secondary,
+            main: getConfig().styling.secondaryColor,
             // dark: will be calculated from palette.secondary.main,
             contrastText: '#ffffff',
         },
         default: {
             // light: '#0066ff',
-            main: getConfig().default,
+            main: getConfig().styling.default,
             // dark: will be calculated from palette.secondary.main,
             contrastText: '#ffffff',
         }
@@ -31,10 +31,10 @@ export const themeConfig = {
         MuiFormLabel: {
             root: {
                 "&$focused": {
-                  color: getConfig().primary,
+                  color: getConfig().styling.primaryColor,
                 },
                 "&$focused&$error": {
-                    color: getConfig().primary,
+                    color: getConfig().styling.primaryColor,
                 },
                 "&$error": {
                     color: '#f44336',
@@ -50,20 +50,20 @@ export const themeConfig = {
             input: {
                 padding: '11px 0 7px',
                 fontSize: '14px',
-                color: getConfig().default
+                color: getConfig().styling.default
             },
             fullWidth: {
                 // marginBottom: '12px'
             },
             focused: {
-                borderColor: getConfig().inputFocusedColor || getConfig().primary,
+                borderColor: getConfig().styling.inputFocusedColor || getConfig().styling.primaryColor,
             },
             underline: {
                 "&$error": {
-                    color: getConfig().primary,
+                    color: getConfig().styling.primaryColor,
                 },
                 '&:after': {
-                    backgroundColor: getConfig().inputFocusedColor || getConfig().primary
+                    backgroundColor: getConfig().styling.inputFocusedColor || getConfig().styling.primaryColor
                 },
                 transform: 'inherit',
                 transition: 'transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms',
@@ -82,7 +82,7 @@ export const themeConfig = {
         MuiInputLabel: {
             root: {
                 fontSize: '0.9rem',
-                color: getConfig().label,
+                color: getConfig().styling.label,
                 fontWeight: 'normal'
             },
             shrink: {
@@ -92,9 +92,9 @@ export const themeConfig = {
         MuiButton: {
             raisedSecondary: {
                 '&:hover': {
-                    backgroundColor: getConfig().secondary
+                    backgroundColor: getConfig().styling.secondaryColor
                 },
-                backgroundColor: getConfig().secondary,
+                backgroundColor: getConfig().styling.secondaryColor,
                 color: '#fff',
                 borderRadius: 4,
                 boxShadow: 'none'
@@ -119,7 +119,7 @@ export const themeConfig = {
         },
         MuiCheckbox: {
             root: {
-                color: getConfig().primary,
+                color: getConfig().styling.primaryColor,
                 position: 'relative',
                 left: '-15px'
             }
@@ -131,6 +131,7 @@ export const themeConfig = {
         }
     }
 }
+
 
 export function bankAccountTypeOptions(isNri) {
     var account_types = [];

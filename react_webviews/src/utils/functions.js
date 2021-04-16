@@ -1,6 +1,7 @@
 // import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams } from './validators';
 import $ from 'jquery';
+import { basePartnerConfig, baseStylingConfig, partnerConfigs } from './partnerConfigs';
 
 const partnersConfigBase = {
   obc: {
@@ -494,7 +495,8 @@ function getPartnerConfig(partner_code) {
     productType = 'minvest';
   }
 
-  let config_to_return = baseConfig[productType];
+  let config_to_return = basePartnerConfig[productType]
+  // baseConfig[productType];
 
   if (isStaging) {
     // config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
@@ -504,49 +506,62 @@ function getPartnerConfig(partner_code) {
 
   config_to_return.isStaging = isStaging;
 
-  let partnerKeysMapper = {
-    askEmail: 'email',
-    mobile: 'mobile',
-    primary: 'primary_color',
-    secondary: 'secondary_color',
-    cta_disabled_color: 'cta_disabled_color',
-    cta_disabled_background: 'cta_disabled_background',
-    back_button_color: 'back_button_color',
-    notifications_color: 'notifications_color',
-    header_title_color: 'header_title_color',
-    inputFocusedColor: 'inputFocusedColor',
-    white_header: 'white_header',
-  };
+  // let partnerKeysMapper = {
+  //   askEmail: 'email',
+  //   mobile: 'mobile',
+  //   primary: 'primary_color',
+  //   secondary: 'secondary_color',
+  //   cta_disabled_color: 'cta_disabled_color',
+  //   cta_disabled_background: 'cta_disabled_background',
+  //   back_button_color: 'back_button_color',
+  //   notifications_color: 'notifications_color',
+  //   header_title_color: 'header_title_color',
+  //   inputFocusedColor: 'inputFocusedColor',
+  //   white_header: 'white_header',
+  // };
 
   config_to_return.isFinwiz = true;
 
-  if (
-    checkValidString(partner_code) &&
-    partner_code !== 'fisdom' &&
-    partner_code !== 'finity' &&
-    partner_code !== 'test'
-  ) {
+  // if (
+    // checkValidString(partner_code)
+    //  &&
+    // partner_code !== 'fisdom' &&
+    // partner_code !== 'finity' &&
+    // partner_code !== 'test'
+  // ) {
     if (partner_code === 'bfdl') {
       partner_code = 'bfdlmobile';
     }
-    let partnerData = partnersConfigBase[partner_code] || partnersConfigBase['fisdom'];
-    config_to_return.partner_code = partner_code;
-    config_to_return.isFinwiz = false;
-    for (var key in partnerKeysMapper) {
-      let key_to_copy = partnerKeysMapper[key];
-      if (partnerData[key_to_copy]) {
-        config_to_return[key] = partnerData[key_to_copy];
-      }
+
+    let partnerData = partnerConfigs[partner_code] || partnerConfigs['fisdom'];
+    const style = baseStylingConfig[productType];
+    config_to_return = {...config_to_return, ...partnerData, 
+      // ...style, ...partnerData?.styling
+      styling: {
+      ...style, ...partnerData?.styling
     }
-  }
+  };
+    // delete config_to_return.styling
+    console.log(config_to_return);
+
+    // let partnerData = partnersConfigBase[partner_code] || partnersConfigBase['fisdom'];
+    // config_to_return.partner_code = partner_code;
+    // config_to_return.isFinwiz = false;
+    // for (var key in partnerKeysMapper) {
+    //   let key_to_copy = partnerKeysMapper[key];
+    //   if (partnerData[key_to_copy]) {
+    //     config_to_return[key] = partnerData[key_to_copy];
+    //   }
+    // }
+  // }
 
   let html = document.querySelector(`html`);
-  html.style.setProperty(`--secondary`, `${config_to_return.secondary}`);
-  html.style.setProperty(`--highlight`, `${config_to_return.highlight_color}`);
-  html.style.setProperty(`--skelton-color`, `${config_to_return.skelton_color}`);
-  html.style.setProperty(`--primary`, `${config_to_return.primary}`);
-  html.style.setProperty(`--default`, `${config_to_return.default}`);
-  html.style.setProperty(`--label`, `${config_to_return.label}`);
+  html.style.setProperty(`--secondary`, `${config_to_return.styling.secondaryColor}`);
+  html.style.setProperty(`--highlight`, `${config_to_return.styling.highlightColor}`);
+  html.style.setProperty(`--skelton-color`, `${config_to_return.styling.skeltonColor}`);
+  html.style.setProperty(`--primary`, `${config_to_return.styling.primaryColor}`);
+  html.style.setProperty(`--default`, `${config_to_return.styling.default}`);
+  html.style.setProperty(`--label`, `${config_to_return.styling.label}`);
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
   html.style.setProperty('--color-action-disable', '#E8ECF1');
