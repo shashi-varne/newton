@@ -1,37 +1,25 @@
 import React, { useState } from 'react';
 import Container from '../../../../common/Container';
 import toast from "common/ui/Toast"
-
 import {
-  getRateOfInterest,
   navigate as navigateFunc,
-  isRecurring
+  isRecurring,
+  getMonthlyCommitmentNew
 } from '../../../common/commonFunctions';
-import { storageService,numDifferentiationInr } from 'utils/validators';
-import { get_recommended_funds } from '../../../common/api';
+import { numDifferentiationInr } from 'utils/validators';
 import { saveGoalMapper } from '../constants';
+import useFunnelDataHook from '../../../common/funnelDataHook';
+import moment from 'moment';
+
+const currentYear = moment().year();
 
 const SaveGoal = (props) => {
   const [loader, setLoader] = useState(false);
-
   const navigate = navigateFunc.bind(props);
   const { subtype, year } = props.match?.params;
-  // eslint-disable-next-line radix
-  const term = parseInt(year - new Date().getFullYear());
+  const term = parseInt((year - currentYear), 10);
 
-  const getMonthlyCommitmentNew = (corpusValue, stockSplitVal) => {
-    var n = term * 12;
-    var r = getRateOfInterest(stockSplitVal);
-    var a = corpusValue;
-    var i = r / 12 / 100;
-    var tmp = Math.pow(1 + i, n) - 1;
-    var monthlyInvestment = (a * i) / tmp;
-    var monthlyAmount = monthlyInvestment;
-    if (monthlyAmount < 500) {
-      monthlyAmount = 500;
-    }
-    return Math.floor(monthlyAmount);
-  };
+  const { funnelData, updateFunnelData, initFunnelData } = useFunnelDataHook();
 
   const fetchRecommendedFunds = async (amount) => {
     try {
@@ -43,20 +31,17 @@ const SaveGoal = (props) => {
       };
       setLoader(true);
       const recurring = isRecurring('saveforgoal');
-      const { recommendation } = await get_recommended_funds(params);
-      const monthlyAmount = getMonthlyCommitmentNew(amount, recommendation.equity);
-      const funnelData = {
-        year,
-        amount: monthlyAmount,
-        corpus: amount,
-        equity: recommendation.equity,
-        subtype,
+      await initFunnelData(params);
+      updateFunnelData({
         term,
+        year,
+        subtype,
+        corpus: amount,
+        amount: getMonthlyCommitmentNew(term, amount, funnelData.equity),
         investType: 'saveforgoal',
         isRecurring: recurring,
-        name:"Saving for goal"
-      };
-      storageService().setObject('funnelData', funnelData);
+        name: "Saving for goal"
+      });
       setLoader(false);
       goNext();
     } catch (err) {
@@ -71,7 +56,7 @@ const SaveGoal = (props) => {
   
   const calculateCorpusValue = (amount) => {
     // eslint-disable-next-line radix
-    return Math.round(amount * Math.pow(1 + 0.05, parseInt(year - new Date().getFullYear())));
+    return Math.round(amount * Math.pow(1 + 0.05, parseInt(year - currentYear)));
   };
 
   const handleInvestedAmount = (type) => () => {
@@ -82,6 +67,7 @@ const SaveGoal = (props) => {
   const setYourTarget = () => {
     navigate(`savegoal/${subtype}/target`);
   };
+
   return (
     <Container
       classOverRide='pr-error-container'

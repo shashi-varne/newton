@@ -12,7 +12,7 @@ export function navigate(pathname, data, redirect) {
     this.history.push({
       pathname: `/invest/${pathname}`,
       search: data?.searchParams || getConfig().searchParams,
-      state: { funnelData: data },
+      state: { ...data },
     });
   }
 }
@@ -42,6 +42,20 @@ export const isRecurring = (investType) => {
 
 export const getReturnRates = () => {
   return storageService().getObject('funnelReturnRates') || {};
+};
+
+export const getMonthlyCommitmentNew = (term, corpusValue, stockSplitVal) => {
+  var n = term * 12;
+  var r = getRateOfInterest(stockSplitVal);
+  var a = corpusValue;
+  var i = r / 12 / 100;
+  var tmp = Math.pow(1 + i, n) - 1;
+  var monthlyInvestment = (a * i) / tmp;
+  var monthlyAmount = monthlyInvestment;
+  if (monthlyAmount < 500) {
+    monthlyAmount = 500;
+  }
+  return Math.floor(monthlyAmount);
 };
 
 export const getCorpusValue = (stockSplitVal, amount, isRecurring, term) => {

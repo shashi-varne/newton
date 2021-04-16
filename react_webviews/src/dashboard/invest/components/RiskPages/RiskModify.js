@@ -1,14 +1,14 @@
+import './RiskPages.scss';
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import InfoBox from '../../../../common/ui/F-InfoBox';
-import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
 import { navigate as navigateFunc } from '../../common/commonFunctions';
 import FSelect from './FSelect';
-import './RiskPages.scss';
 import { getConfig } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
+import useFunnelDataHook from '../../common/funnelDataHook';
 
 const { productName } = getConfig();
 
@@ -17,15 +17,19 @@ const RiskModify = ({
   modifyRisk,
   ...otherProps
 }) => {
-
-  const sessionStoredRisk = storageService().get('userSelectedRisk') || '';
-  const goalRecommendation = storageService().getObject('goalRecommendations');
-  const funnelData = storageService().getObject('funnelData');
-  let riskOptions = funnelData.rp_meta;
+  const {
+    funnelData,
+    funnelGoalData,
+    userRiskProfile,
+    updateFunnelData,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [selectedRisk, selectRisk] = useState(sessionStoredRisk);
+  const [selectedRisk, selectRisk] = useState(userRiskProfile);
   const navigate = navigateFunc.bind(otherProps);
+  
+  let riskOptions = funnelData.rp_meta;
 
   // useEffect(() => {
   //   const investTitle = selectTitle(funnelData.investType);
@@ -47,12 +51,12 @@ const RiskModify = ({
       const res = await get_recommended_funds(params);
 
       if (res.updated) {
-        storageService().set('userSelectedRisk', selectedRisk);
+        updateUserRiskProfile(selectedRisk);
       } else {
         // eslint-disable-next-line no-throw-literal
         throw 'Something went wrong. Please try again'
       }
-      storageService().setObject('funnelData', { ...funnelData, ...res });
+      updateFunnelData(res);
 
       setLoader(false);
     } catch (err) {
@@ -61,7 +65,7 @@ const RiskModify = ({
   }
 
   const goNext = async () => {
-    if (selectedRisk !== 'Custom' && selectedRisk !== sessionStoredRisk) {
+    if (selectedRisk !== 'Custom' && selectedRisk !== userRiskProfile) {
       await updateRiskAndFetchRecommendations();
     }
     navigate('recommendations');
@@ -69,7 +73,7 @@ const RiskModify = ({
 
   const toggleConfirmDialog = () => setShowConfirmDialog(!showConfirmDialog);
 
-  if (sessionStoredRisk === 'Custom') {
+  if (userRiskProfile === 'Custom') {
     riskOptions.push({
       rp_indicator: 'Custom',
       subtitle: 'User created equity to debt distribution',
@@ -113,7 +117,7 @@ const RiskModify = ({
         }
         <div
           className="risk-customize-cta"
-          onClick={() => navigate(`${goalRecommendation.id}/risk-customize`)}>
+          onClick={() => navigate(`${funnelGoalData.id}/risk-customize`)}>
           Customise EQUITY to DEBT DISTRIBUTION
         </div>
         <BottomSheet
