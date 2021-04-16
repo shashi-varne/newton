@@ -15,10 +15,10 @@ const GoalType = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
   const subtype = props.match?.params?.subtype;
   const navigate = navigateFunc.bind(props);
-  const graphData = storageService().getObject("graphData")
+  const funnelData = storageService().getObject("funnelData")
 
   const goNext = () => {
-    storageService().setObject("graphData",{...graphData,name:"Saving for goal", year})
+    storageService().setObject("funnelData",{...funnelData,name:"Saving for goal", year})
     if (subtype === 'other') {
       navigate(`savegoal/${subtype}/target`);
     } else {

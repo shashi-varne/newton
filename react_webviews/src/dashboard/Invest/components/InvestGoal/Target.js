@@ -11,11 +11,11 @@ import './Target.scss';
 // eslint-disable-next-line radix
 const currentYear = parseInt(new Date().getFullYear())
 const Target = (props) => {
-  const graphData = storageService().getObject("graphData");
+  const funnelData = storageService().getObject("funnelData");
   const [targetAmount, setTargetAmount] = useState(0);
   const [loader, setLoader] = useState(false);
-  const term= graphData?.year ? graphData?.year-  currentYear :  15;
-  const year = graphData?.year || currentYear + 15;
+  const term= funnelData?.year ? funnelData?.year-  currentYear :  15;
+  const year = funnelData?.year || currentYear + 15;
   const navigate = navigateFunc.bind(props);
   const { subtype } = props.match?.params;
 
@@ -91,7 +91,7 @@ const Target = (props) => {
         investTypeDisplay:"sip",
         name:"Saving for goal"
       };
-      storageService().setObject('graphData', updatedGraphData);
+      storageService().setObject('funnelData', updatedGraphData);
       setLoader(false);
       navigate(`savegoal/${subtype}/amount`, true);
     } catch (err) {

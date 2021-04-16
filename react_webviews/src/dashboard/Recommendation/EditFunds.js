@@ -14,7 +14,7 @@ import './EditFunds.scss';
 
 const EditFunds = (props) => {
   const [open, setOpen] = useState(false);
-  const { recommendation, alternatives } = storageService().getObject('graphData');
+  const { recommendation, alternatives } = storageService().getObject('funnelData');
   const navigate = navigateFunc.bind(props);
 
   const filterAlternateFunds = (mftype) => {

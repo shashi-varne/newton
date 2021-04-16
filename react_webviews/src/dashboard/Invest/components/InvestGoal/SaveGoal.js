@@ -42,7 +42,7 @@ const SaveGoal = (props) => {
       const recurring = isRecurring('saveforgoal');
       const { recommendation } = await get_recommended_funds(params);
       const monthlyAmount = getMonthlyCommitmentNew(amount, recommendation.equity);
-      const graphData = {
+      const funnelData = {
         year,
         amount: monthlyAmount,
         corpus: amount,
@@ -53,7 +53,7 @@ const SaveGoal = (props) => {
         isRecurring: recurring,
         name:"Saving for goal"
       };
-      storageService().setObject('graphData', graphData);
+      storageService().setObject('funnelData', funnelData);
       setLoader(false);
       goNext();
     } catch (err) {

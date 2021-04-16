@@ -40,7 +40,7 @@ const Landing = (props) => {
       setLoader("button");
       const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
-      const graphData = {
+      const funnelData = {
         recommendation: data.recommendation,
         amount: 50000,
         term: investTypeDisplay === '3Y' ? 3 : 1,
@@ -53,7 +53,7 @@ const Landing = (props) => {
         investTypeDisplay,
         name: 'Wealth building'
       };
-      storageService().setObject('graphData', graphData);
+      storageService().setObject('funnelData', funnelData);
       setLoader(false);
       goNext();
     } catch (err) {

@@ -17,9 +17,9 @@ import EquityDebtSlider from './EquityDebtSlider';
 const { stockReturns, bondReturns } = getReturnRates();
 
 const InvestedAmount = (props) => {
-  let graphData = storageService().getObject('graphData');
+  let funnelData = storageService().getObject('funnelData');
   const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { amount, investType, term, equity, isRecurring, investTypeDisplay } = graphData;
+  const { amount, investType, term, equity, isRecurring, investTypeDisplay } = funnelData;
   const [stockSplitVal, setStockSplitVal] = useState(equity || 0);
   const [loader, setLoader] = useState(false);
   const [title, setTitle] = useState('');
@@ -42,15 +42,15 @@ const InvestedAmount = (props) => {
       term: term,
     };
     if (investType === 'saveforgoal') {
-      params.subtype = graphData?.subtype;
+      params.subtype = funnelData?.subtype;
     }
     try {
       setLoader("button");
       const data = await get_recommended_funds(params);
       storageService().set('userSelectedRisk', data.rp_indicator);
       const recommendedTotalAmount = data?.amount;
-      graphData = { ...graphData, ...data, amount, recommendedTotalAmount};
-      storageService().setObject('graphData', graphData);
+      funnelData = { ...funnelData, ...data, amount, recommendedTotalAmount};
+      storageService().setObject('funnelData', funnelData);
       setLoader(false);
       navigate(`recommendations`);
     } catch (err) {

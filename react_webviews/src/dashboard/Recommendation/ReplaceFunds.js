@@ -9,9 +9,9 @@ import './ReplaceFunds.scss';
 
 const ReplaceFunds = (props) => {
   const [selectedFund, setSelectedFund] = useState('');
-  const { recommendation, alternatives } = storageService().getObject('graphData');
+  const { recommendation, alternatives } = storageService().getObject('funnelData');
   const {
-    graphData: { mftype, mfid, amount, alternateFunds },
+    funnelData: { mftype, mfid, amount, alternateFunds },
   } = props.location.state;
   const handleChange = (e) => {
     setSelectedFund(e.target.value);
@@ -26,9 +26,9 @@ const ReplaceFunds = (props) => {
         }
         return el;
       });
-      const graphData = storageService().getObject('graphData');
-      graphData.recommendation = newData;
-      storageService().setObject('graphData', graphData);
+      const funnelData = storageService().getObject('funnelData');
+      funnelData.recommendation = newData;
+      storageService().setObject('funnelData', funnelData);
     }
     props.history.goBack();
   };

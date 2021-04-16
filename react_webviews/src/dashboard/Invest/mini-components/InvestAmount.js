@@ -22,10 +22,10 @@ const date = new Date();
 const month = date.getMonth();
 
 const InvestAmount = (props) => {
-  const graphData = storageService().getObject('graphData');
+  const funnelData = storageService().getObject('funnelData');
   const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { investType, year, equity, term, isRecurring, investTypeDisplay, ...moreData } = graphData;
-  const [amount, setAmount] = useState(graphData?.amount || '');
+  const { investType, year, equity, term, isRecurring, investTypeDisplay, ...moreData } = funnelData;
+  const [amount, setAmount] = useState(funnelData?.amount || '');
   const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
   const [error, setError] = useState(false);
@@ -83,7 +83,7 @@ const InvestAmount = (props) => {
       if (currentMonth > 3) {
         setSaveTaxYear(year => year + 1);
       }
-      calculateTax(graphData?.corpus);
+      calculateTax(funnelData?.corpus);
     } else {
       const valueOfCorpus = corpusValue(
         equity,
@@ -101,15 +101,15 @@ const InvestAmount = (props) => {
       const params = {
         amount,
         type: investType,
-        term: graphData?.term,
+        term: funnelData?.term,
         rp_enabled: getConfig().riskEnabledFunnels,
       };
       setLoader("button");
       if (investType === "saveforgoal") {
-        params.subtype = graphData?.subtype;
+        params.subtype = funnelData?.subtype;
         delete params.amount;
       } else if (investType === 'investsurplus') {
-        graphData['term'] = 3;
+        funnelData['term'] = 3;
         params.term = 3; // TODO: Remove hardcoding later
       }
       const data = await get_recommended_funds(params);
@@ -126,8 +126,8 @@ const InvestAmount = (props) => {
         return;
       }
       
-      storageService().setObject('graphData', {
-        ...graphData, ...data, amount, recommendedTotalAmount: data.amount
+      storageService().setObject('funnelData', {
+        ...funnelData, ...data, amount, recommendedTotalAmount: data.amount
       });
       
       if (isArray(data.recommendation)) {
@@ -136,7 +136,7 @@ const InvestAmount = (props) => {
         navigate('recommendations');
       } else {
         // RP disabled flow
-        navigate(`${goalRecommendation.id}/funds`, { ...graphData, amount });
+        navigate(`${goalRecommendation.id}/funds`, { ...funnelData, amount });
       }
     } catch (err) {
       console.log(err);
@@ -178,7 +178,7 @@ const InvestAmount = (props) => {
     <Container
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
-      title={graphData.name}
+      title={funnelData.name}
       disable={error}
       showLoader={loader}
       handleClick={goNext}
