@@ -5,6 +5,7 @@ import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { initialize } from '../common_data';
+import { storageService } from "utils/validators";
 
 class GroupHealthSelectInsureType extends Component {
 
@@ -18,6 +19,8 @@ class GroupHealthSelectInsureType extends Component {
 
   componentWillMount() {
     this.initialize();
+    storageService().setObject("resumeToPremiumHealthInsurance", false)
+    storageService().remove('paymentFailed');
   }
 
 

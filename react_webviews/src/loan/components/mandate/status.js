@@ -18,24 +18,24 @@ const commonMapper = {
     'top_title': 'Sorry!',
     'mid_title': '',
     'button_title': 'OK',
-    'cta_state': '/loan/home',
-    'close_state': '/loan/home'
+    'cta_state': '/loan/dmi/loan-know-more',
+    'close_state': '/loan/dmi/loan-know-more'
   },
   'failed': {
     'top_icon': 'error_illustration',
     'top_title': 'E-mandate failed',
     'mid_title': '',
     'button_title': 'RETRY',
-    'cta_state': '/loan/bank',
-    'close_state': '/loan/home'
+    'cta_state': '/loan/dmi/bank',
+    'close_state': '/loan/dmi/loan-know-more'
   },
   'loan_not_eligible': {
     'top_icon': 'ils_loan_failed',
     'top_title': 'Sorry!',
     'mid_title': '',
     'button_title': 'OK',
-    'cta_state': '/loan/home',
-    'close_state': '/loan/home',
+    'cta_state': '/loan/dmi/loan-know-more',
+    'close_state': '/loan/dmi/loan-know-more',
     'noFooter': true,
     'hide_contact': true
   },
@@ -88,14 +88,14 @@ class MandateStatus extends Component {
     let dmi_loan_status = resultData.dmi_loan_status;
 
     if (resultData.callback_status || dmi_loan_status === 'emandate_done') {
-      this.navigate('/loan/reference');
+      this.navigate('/loan/dmi/reference');
     } else {
 
       if (dmi_loan_status === 'emandate_failed') {
         status = 'failed';
       } else if(dmi_loan_status === 'emandate_discrepancy' || 
       dmi_loan_status === 'emandate_exit' ||  dmi_loan_status === 'emandate') {
-        this.navigate('/loan/bank');
+        this.navigate('/loan/dmi/bank');
       } else {
         status = 'pending';
       }

@@ -197,7 +197,7 @@ class Recommendation extends Component {
     if (this.state.funds.length === 0) {
 
       this.setState({
-        amount_error: 'No funds found, try chaning Amount/Type/Term'
+        amount_error: 'No funds found, try changing Amount/Type/Term'
       })
       return;
     }

@@ -7,6 +7,7 @@ import { getConfig } from 'utils/functions';
 
 
 import {didMount ,commonRender} from '../../common/components/container_functions';
+import { storageService } from '../../utils/validators';
 
 
 
@@ -48,15 +49,19 @@ class Container extends Component {
   historyGoBack = () => {
     this.setState({
       back_pressed: true
-    })
+    });
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
     let { search } = this.props.location;
 
     if (search.indexOf('goBack') < 0) {
       if (pathname.indexOf('result') >= 0) {
-
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        if (getConfig().isWebCode) {
+          nativeCallback({ events: this.getEvents('back') });
+          this.props.history.goBack();
+        } else {
+          nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        }
         return;
       }
     }
@@ -66,16 +71,23 @@ class Container extends Component {
       return;
     }
 
-    if (pathname.indexOf('question1') >= 0) {
-      nativeCallback({ events: this.getEvents('back') });
-      this.navigate('intro');
-      return;
-    }
+    // if (pathname.indexOf('question1') >= 0) {
+    //   nativeCallback({ events: this.getEvents('back') });
+    //   this.navigate('intro');
+    //   return;
+    // }
 
     switch (pathname) {
       case "/risk":
       case "/risk/intro":
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        const { flow } = storageService().getObject('risk-entry-params') || {};
+
+        if (getConfig().isWebCode && flow) {
+          nativeCallback({ events: this.getEvents('back') });
+          this.props.history.goBack();
+        } else {
+          nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        }
         break;
       case "/risk/recommendation":
         this.navigate('result');
@@ -92,7 +104,7 @@ class Container extends Component {
     }
   }
 
-  handleClose = () => {
+  handleCloseCallback = () => {
     if (this.state.openPopup) {
       nativeCallback({ events: this.getEvents('exit_no') });
     }
@@ -100,7 +112,6 @@ class Container extends Component {
       openDialog: false,
       openPopup: false
     });
-
   }
 
 
@@ -110,7 +121,6 @@ class Container extends Component {
     });
 
     nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
-
   }
 
 

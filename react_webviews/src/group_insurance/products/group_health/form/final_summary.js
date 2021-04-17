@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
-import { getConfig, getBasePath } from 'utils/functions';
+import { getConfig, getBasePath, getParamsMark } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
@@ -38,6 +38,7 @@ class GroupHealthPlanFinalSummary extends Component {
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
             screen_name:'final_summary_screen',
+            pgReached: getUrlParams().pgReached ? true : false
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -83,10 +84,6 @@ class GroupHealthPlanFinalSummary extends Component {
       }
  
     onload = () => {
-        const queryParams = getUrlParams();
-        if(queryParams.pgReached){
-            this.setState({pgReached : true})
-        }        
         let { lead, provider } = this.state;  
 
         let insured_people_details = lead.insured_people_details;
@@ -598,7 +595,7 @@ class GroupHealthPlanFinalSummary extends Component {
         if (getConfig().generic_callback) {
             pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
-        nativeRedirectUrl += '&pgReached=true';
+        nativeRedirectUrl += getParamsMark(nativeRedirectUrl) + 'pgReached=true';
         
         if (getConfig().app === 'ios') {
             nativeCallback({

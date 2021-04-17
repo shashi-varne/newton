@@ -327,7 +327,10 @@ export async function updateLead( body, quote_id) {
         if (!quote_id) {
             quote_id = storageService().get('ghs_ergo_quote_id');
         }
-
+        if(body.pedcase)
+            this.setState({
+                skelton:true
+            })
         this.setState({
             show_loader: "button"
         });
@@ -336,12 +339,17 @@ export async function updateLead( body, quote_id) {
 
         const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
         var resultData = res.pfwresponse.result;
-        if (res.pfwresponse.status_code === 200) {
+        this.setState({
+            show_loader: false
+        })
+        if(body.pedcase)
             this.setState({
-                show_loader: false
+                skelton:false
             })
-            if (body.pedcase) { this.initialize(); this.setState({ show_loader: "button" });return}
-
+        if (res.pfwresponse.status_code === 200) {
+            if (body.pedcase) { 
+                this.initialize(); 
+                return}
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
             } else {
@@ -349,9 +357,6 @@ export async function updateLead( body, quote_id) {
             }
             
         } else {
-            this.setState({
-                show_loader: false
-            });
             if (resultData.error && resultData.error.length > 0 && resultData.error[0]==='BMI check failed.') {
                 this.setState({
                     openBmiDialog: true
