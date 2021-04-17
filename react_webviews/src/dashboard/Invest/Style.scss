@@ -217,14 +217,6 @@
   }
 }
 
-
-
-
-
-
-
-
-
 .invest-header {
   display: flex;
   justify-content: space-between;
@@ -244,27 +236,6 @@
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .content {
   .content-selected {
@@ -398,8 +369,6 @@
 
 //// VERIFICATION FAILED DIALOG END ////
 
-
-
 .invest-refferal-dialog {
   color: #333333;
   line-height: 1.5;
@@ -481,3 +450,38 @@
     }
   }
 }
+
+/////////////////SDK Landing ////////////////////////////
+.sdk-landing {
+  .landing-marketing-banners {
+    overflow-x: auto;
+    margin: 0 -20px 0 -20px;
+    padding: 0 20px 0 20px;
+    .marketing-banners-list {
+      display: flex;
+      background-color: yellow;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+
+    .marketing-banner-icon-wrapper {
+      margin-right: 20px;
+      width: 250px;
+      height: 100px;
+      display: block;
+      padding-bottom: 0px;
+      background: black;
+    }
+
+    .single-marketing-banner {
+      min-height: 120px;
+      width: 100%;
+    }
+  }
+
+  .sdk-landing-cards {
+    margin-top: 20px;
+  }
+}
+
+////////////////End of SDK Landing ///////////////////

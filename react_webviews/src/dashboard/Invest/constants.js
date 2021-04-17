@@ -408,3 +408,50 @@ export const riskProfiles = [{
   name: 'Custom',
   desc: 'User created equity to debt distribution',
 }];
+
+export const sdkInvestCardMapper = [
+ {
+    key: 'invest',
+    title: 'Start investing',
+    titleImg:'ic_db_invest_solid.svg',
+    subtitle: 'Mutual Funds',
+    img: 'ic_db_invest.svg',
+    height: '133px',
+    path: '/invest'
+  },
+  {
+    key: 'portfolio',
+    title: 'My portfolio',
+    subtitle: 'Track investment, Withdraw',
+    img: 'ic_db_portfolio.svg',
+    path: 'reports'
+  },
+  {
+    key: 'account',
+    title: 'My Account',
+    subtitle: 'Account details, Mandate',
+    img: 'ic_db_account.svg',
+    path: '/my-account'
+  },
+  {
+    key: 'kyc',
+    title: 'KYC',
+    subtitle: 'Create investment profile',
+    img: 'ic_db_kyc.svg',
+    path: '/kyc/home'
+  },
+  {
+    key: 'refer',
+    title: 'Refer & Earn',
+    subtitle: 'Refer to your friends & earn rewards',
+    img: 'ic_db_refer.svg',
+    path: '/refer'
+  },
+  {
+    key: 'help',
+    title: 'Help & support',
+    subtitle: 'Read FAQs, contact us',
+    img: 'ic_db_help.svg',
+    path: '/help'
+  }
+]

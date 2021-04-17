@@ -26,10 +26,8 @@ import Target from "./components/InvestGoal/Target";
 import RiskSelect from "./components/RiskPages/RiskSelect";
 import RiskModify from "./components/RiskPages/RiskModify";
 import RiskCustomize from "./components/RiskPages/RiskCustomize";
-
 const Invest = (props) => {
   const { url } = props.match;
-
   return (
     <Switch>
       <Route

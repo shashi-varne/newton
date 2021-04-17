@@ -9,6 +9,7 @@ import {
   kycStatusMapper,
   kycStatusMapperInvest,
   premiumBottomSheetMapper,
+  sdkInvestCardMapper
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 import { getBasePath } from "../../utils/functions";
@@ -46,7 +47,7 @@ export async function initialize() {
     storageService().set("dataSettedInsideBoot", false);
   }
   if (this.onload) this.onload();
-  if ((this.state.screenName === "invest_landing" && getConfig().Web &&
+  if ((this.state.screenName === "invest_landing" &&
       !dataSettedInsideBoot)) {
     await this.getSummary();
   }
@@ -1120,6 +1121,7 @@ function navigation(history, pathname, data = {}) {
 
 export function initilizeKyc() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
+  let partner = this.state.partner || storageService().getObject("partner") || {};
   let currentUser =
     this.state.currentUser || storageService().getObject("user") || {};
   let isCompliant = userKyc.kyc_status === "compliant" ? true : false;
@@ -1182,6 +1184,23 @@ export function initilizeKyc() {
       );
     }
   }
+
+  const isWeb = getConfig().isWeb;
+  if(!isWeb){
+    const cards = handleRenderCard({
+      currentUser,
+      partner,
+      isReadyToInvestBase,
+      kycStatusData,
+    userKyc,
+    kycJourneyStatus,
+    kycJourneyStatusMapperData,
+    isWeb
+    
+  })
+  this.setState({renderLandingCards : cards});
+}
+  
 }
 
 export function openPremiumOnboardBottomSheet(
@@ -1252,3 +1271,69 @@ export const resetRiskProfileJourney = () => {
   storageService().set("firsttime_from_risk_webview_invest", "");
   return;
 };
+function handleInvestSubtitle (partner = '')  {
+  let investCardSubtitle = 'Mutual funds, Save tax';
+
+  if (partner) {
+    let invest_screen_cards = partner.invest_screen_cards;
+    investCardSubtitle = 'Mutual funds';
+    if (invest_screen_cards?.gold) {
+      investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
+    } else {
+      investCardSubtitle = 'Mutual funds, Save tax';
+    }
+
+    if (invest_screen_cards?.nps) {
+      investCardSubtitle = investCardSubtitle += ', NPS';
+    }
+  }
+  return investCardSubtitle;
+};
+
+function handleRenderCard(props) {
+  
+  const {currentUser, partner,isWeb, isReadyToInvestBase,kycJourneyStatusMapperData, kycStatusData, userKyc, kycJourneyStatus } = props; 
+  console.log("working",kycJourneyStatusMapperData);
+  const hideReferral = currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
+  const referralCode = !currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
+  const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
+  const premiumKyc = kycJourneyStatus === 'ground_premium' ? 'PREMIUM' : '';
+  const kyc = !isReadyToInvestBase;
+  const kycDefaultSubTitle = !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium' ? 'Create investment profile' : '';
+  const kycSubTitle = !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium' ? kycJourneyStatusMapperData?.landing_text : '';
+  const cards = sdkInvestCardMapper.filter(el => {
+    if(el.key === 'kyc') {
+      el.color = kycJourneyStatusMapperData?.color;
+      if(premiumKyc){
+        el.title = el.title + premiumKyc;
+      }
+      if(kycDefaultSubTitle){
+        el.subtitle = kycDefaultSubTitle;
+      }
+      console.log("hell",kycJourneyStatus);
+      console.log("hell",kycSubTitle);
+      if(kycSubTitle){
+        el.subtitle = kycSubTitle;
+        el.dot = true;
+      }
+      return kyc;
+    } else if(el.key === 'account') {
+      return myAccount;
+    } else if(el.key === 'refer'){
+      if(referralCode){
+        el.referralCode = true;
+        el.path = "";
+        return referralCode;
+      } else {
+        return hideReferral;
+      }
+    } else {
+      if(el.key === 'invest'){
+       el.subtitle = handleInvestSubtitle(partner)
+      }
+      return true;
+    }
+  })
+  return cards;
+
+}

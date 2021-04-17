@@ -26,13 +26,16 @@ import DigilockerCallback from "../kyc/digilocker/digilockercallback";
 import AccountMerge from "./AccountMerge";
 import AccountMergeOtp from "./AccountMerge/Otp";
 import AccountLinked from "./AccountMerge/Linked";
+import SdkLanding from './Invest/SdkLanding';
+import {getConfig} from 'utils/functions';
 
 const Home = (props) => {
   const { url } = props.match;
+  const isWeb = getConfig().isWeb;
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}`} component={Invest} />
+        <Route exact path={`${url}`} component={isWeb ? Invest : SdkLanding} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}diy`} component={DIY} />

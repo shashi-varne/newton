@@ -36,15 +36,8 @@ class Landing extends Component {
   }
 
   onload = () => {
-    // let userKyc = storageService().getObject("kyc") || {};
-    // let currentUser = storageService().getObject("user") || {};
     this.initilizeKyc();
     this.setInvestCardsData();
-    // if (
-    //   isEmpty(userKyc) ||
-    //   isEmpty(currentUser) 
-    //   ) {
-    // }
   };
 
   addBank = () => {

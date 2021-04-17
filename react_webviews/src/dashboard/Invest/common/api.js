@@ -174,3 +174,21 @@ export const verifyCode = async (data) => {
       throw result.error || result.message || genericErrMsg
   }
 }
+
+export const applyReferralCode = async (code) => {
+  const res = await Api.get(`api/referral/apply?code=${code}`);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrMsg
+  }
+  const { result, status_code: status } = res.pfwresponse
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrMsg
+  }
+}

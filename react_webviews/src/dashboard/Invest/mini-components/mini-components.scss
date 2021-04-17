@@ -214,3 +214,79 @@
 }
 
 ///////// End of InvestType ////////////////
+
+
+////////////Sdk Landing Card/////////////////
+.sdk-landing-card{
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 0px 0px 0px 0px;
+    height: 100px;
+    display: flex;
+
+    .text{
+      flex: 1 1 80%;
+      padding: 20px 0 0 20px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      
+      .title{
+        font-size: 20px;
+      }
+
+      .subtitle{
+        color: #160d2e;
+        font-size: 13px;
+        margin: 4px 0 0 0;
+
+        .sdk-card-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          display: inline-block;
+          margin: 0 4px 0 0;
+        }
+
+        .sdk-card-status-load{
+          width: 70% !important;
+          height: 15px !important;
+        }
+      }
+
+      .subtitle-status{
+        font-size: 10px;
+      }
+    }
+    .imageWrapper{
+      flex: 1 1 20%;
+      
+    }
+    .sdk-refferal-wrapper{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .sdk-refferal-btn{
+        border-color: grey ;
+        color: grey !important;
+        border-radius: 25px ;
+        border: 1px solid grey ;
+        min-height: 36px;
+        min-width: 88px;
+        padding: 0 8px;
+        margin: 6px 8px;
+        background: transparent;
+        color: currentColor;
+        white-space: nowrap;
+        text-transform: uppercase;
+        font-weight: 500;
+        font-size: 14px;
+        font-style: inherit;
+        font-variant: inherit;
+        font-family: inherit;
+        text-decoration: none;
+        overflow: hidden;
+        transition: box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+    }
+}
+////////////End of Sdk Landing Card/////////////////
