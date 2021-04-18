@@ -9,10 +9,10 @@ import toast from "common/ui/Toast";
 import { nfoData } from "../../constants";
 import TermsAndCond from "../../../mini-components/TermsAndCond";
 import { CATEGORY, FUNDSLIST, SUBCATEGORY, CART } from "../../../diy/constants";
-import PennyVerificationPending from "../mini_components/PennyVerificationPending";
-import InvestError from "../mini_components/InvestError";
-import InvestReferralDialog from "../mini_components/InvestReferralDialog";
-import { convertInrAmountToNumber } from "../../common/commonFunction";
+import PennyVerificationPending from "../../mini-components/PennyVerificationPending";
+import InvestError from "../../mini-components/InvestError";
+import InvestReferralDialog from "../../mini-components/InvestReferralDialog";
+import { convertInrAmountToNumber } from "../../common/commonFunctions";
 
 class Checkout extends Component {
   constructor(props) {

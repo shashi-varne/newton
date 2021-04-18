@@ -52,11 +52,14 @@ const ChangeAddressDetails2 = (props) => {
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
 
+  const stateParams = props?.location?.state
+  const { address_doc_type: addressDocType } = stateParams
+
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
 
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook()
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -117,7 +120,7 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleChange = (type) => (event) => {
-    console.log(event.target.files)
+    const isWeb = getConfig().isWebCode
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -127,14 +130,14 @@ const ChangeAddressDetails2 = (props) => {
     }
 
     if (type === 'front') {
-      if (getConfig().html_camera) {
+      if (!isWeb) {
         native_call_handler('open_camera', 'address', 'front.jpg', 'front')
       } else {
         setFrontDoc(uploadedFile)
         mergeDocs(uploadedFile, 'front')
       }
     } else if (type === 'back') {
-      if (getConfig().html_camera) {
+      if (!isWeb) {
         native_call_handler('open_camera', 'address', 'back.jpg', 'back')
       } else {
         setBackDoc(uploadedFile)
@@ -187,24 +190,26 @@ const ChangeAddressDetails2 = (props) => {
 
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
+    const type = kyc?.address?.meta_data?.is_nri ? 'nri_address' : 'address'
+    const addressKey = kyc?.address?.meta_data?.is_nri
+    ? 'passport'
+    : addressDocType
     try {
-      setIsApiRunning("button")
+      setIsApiRunning('button')
       let result
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'nri_address', {
-          address_proof_key: addressProofKey,
+        result = await upload(frontDoc, type, {
+          addressProofKey: addressKey,
         })
       } else {
-        result = await upload(file, 'nri_address', {
-          addressProofKey,
+        result = await upload(file, type, {
+          addressProofKey: addressKey,
         })
       }
       storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      navigate('/my-account')
     } catch (err) {
-      console.error(err)
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
@@ -218,10 +223,10 @@ const ChangeAddressDetails2 = (props) => {
 
   const addressProofKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'
-    : kyc?.address_doc_type
+    : addressDocType
   const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
-    : docMapper[kyc?.address_doc_type]
+    : docMapper[addressDocType]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -256,13 +261,15 @@ const ChangeAddressDetails2 = (props) => {
     return addressFull
   }
 
+  const isWeb = getConfig().isWebCode
+
   return (
     <Container
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}
-      disable={(!frontDoc && !backDoc)}
+      disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
       title={title}
       count={1}
@@ -276,7 +283,7 @@ const ChangeAddressDetails2 = (props) => {
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
           />
-          {!getConfig().html_camera && (
+          {!isWeb && (
             <div className="kyc-doc-upload-container">
               {frontDoc && state.frontFileShow && (
                 <img
@@ -354,7 +361,7 @@ const ChangeAddressDetails2 = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && (
+          {isWeb && (
             <div className="kyc-doc-upload-container">
               {frontDoc && state.frontFileShow && (
                 <img
@@ -398,7 +405,7 @@ const ChangeAddressDetails2 = (props) => {
               </div>
             </div>
           )}
-          {!getConfig().html_camera && !onlyFrontDocRequired && (
+          {!isWeb && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
               {backDoc && state.backFileShow && (
                 <img
@@ -476,7 +483,7 @@ const ChangeAddressDetails2 = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && !onlyFrontDocRequired && (
+          {isWeb && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
               {backDoc && state.backFileShow && (
                 <img

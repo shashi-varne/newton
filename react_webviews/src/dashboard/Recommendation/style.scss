@@ -3,50 +3,47 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-bottom: 30px;
+  padding: 20px 20px 30px;
+  margin-top: 20px;
 }
 
 .recommendations-header {
-  margin-top: -10px;
-  display: flex;
-  background-color: white;
-  z-index: 2;
-  padding: 15px 0;
-  position: absolute;
-  left: 0;
-  right: 0;
   width: 100%;
-  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  
   & > div {
     flex: 1 1 80%;
-    font-size: 18px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.6;
   }
   .edit-recommendation-funds {
     flex: 1 1 20%;
     text-align: right;
     color: var(--secondary);
-    font-size: 16px;
-    text-decoration: underline;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 22px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     cursor: pointer;
   }
 }
 
-.recommendations-funds-lists {
-  padding-top: 80px;
-}
 .recommendations-funds-item {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  margin-bottom: 20px;
+  border-bottom: 2px solid #EAEAEA;
+  padding: 20px 0;
+  // margin-bottom: 20px;
   border-radius: 3px;
   cursor: pointer;
 
   .recommendations-funds-item-icon {
     margin-right: 10px;
-    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid #EDEDED;
     border-radius: 2px;
     img {
       width: 80px;
@@ -60,13 +57,14 @@
 
     .recommendations-funds-item-name {
       font-size: 16px;
+      line-height: 1.4;
     }
 
     .recommendations-funds-item-status {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 10px;
+      padding: 10px 0;
       font-size: 16px;
 
       & > p:first-child {
@@ -156,6 +154,7 @@
     width: 25px;
   }
 }
+
 ///// End of Recommendation Edit //////
 
 // Alternate-funds //////////////

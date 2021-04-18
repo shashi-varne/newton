@@ -6,7 +6,7 @@ import bse_icon from "assets/bse_icon.png";
 import fund_house_icon from "assets/fund_house_icon.png";
 import safe_secure_journey from "assets/safe_secure_journey.png";
 
-import { navigate as navigateFunc } from "../invest/common/commonFunction";
+import { navigate as navigateFunc } from "../invest/common/commonFunctions";
 
 import "./style.scss";
 import {
@@ -14,10 +14,10 @@ import {
   isInvestRefferalRequired,
   proceedInvestmentChild,
 } from "../invest/functions";
-import PennyVerificationPending from "../invest/components/mini_components/PennyVerificationPending";
-import InvestError from "../invest/components/mini_components/InvestError";
+import PennyVerificationPending from "../invest/mini-components/PennyVerificationPending";
+import InvestError from "../invest/mini-components/InvestError";
 import { getBasePath, getConfig } from "../../utils/functions";
-import InvestReferralDialog from "../invest/components/mini_components/InvestReferralDialog";
+import InvestReferralDialog from "../invest/mini-components/InvestReferralDialog";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { formatAmountInr } from "../../utils/validators";
 

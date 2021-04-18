@@ -124,7 +124,7 @@ const AddressUpload = (props) => {
   }
 
   const handleChange = (type) => (event) => {
-    console.log(event.target.files)
+    const isWeb = getConfig().isWebCode
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -134,14 +134,14 @@ const AddressUpload = (props) => {
     }
 
     if (type === 'front') {
-      if (getConfig().html_camera) {
+      if (!isWeb) {
         native_call_handler('open_camera', 'address', 'front.jpg', 'front')
       } else {
         setFrontDoc(uploadedFile)
         mergeDocs(uploadedFile, 'front')
       }
     } else if (type === 'back') {
-      if (getConfig().html_camera) {
+      if (!isWeb) {
         native_call_handler('open_camera', 'address', 'back.jpg', 'back')
       } else {
         setBackDoc(uploadedFile)

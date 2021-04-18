@@ -1,5 +1,5 @@
 import React from "react";
-import { navigate as navigateFunc } from "../common/commonFunction";
+import { navigate as navigateFunc } from "../common/commonFunctions";
 
 const PageCallback = (props) => {
   const navigate = navigateFunc.bind(props);

@@ -53,7 +53,7 @@ class MyAccount extends Component {
         this.navigate("nps/identity");
         break;
       default:
-        this.navigate("blank-mandate/upload");
+        this.navigate(route);
         break;
     }
   };
@@ -141,7 +141,6 @@ class MyAccount extends Component {
     let bank = userKyc.bank || {};
     return (
       <Container
-        hidePageTitle
         noFooter={true}
         skelton={this.state.showLoader}
         title="My Account"

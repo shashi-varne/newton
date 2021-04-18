@@ -3,7 +3,7 @@ import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import { initialize } from "../../functions";
 import Faqs from "common/ui/Faqs";
-import SecureInvest from "../mini_components/SecureInvest";
+import SecureInvest from "../../mini-components/SecureInvest";
 import { investRedeemData } from "../../constants";
 import Button from "material-ui/Button";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";

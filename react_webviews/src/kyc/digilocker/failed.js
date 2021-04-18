@@ -25,8 +25,8 @@ const Failed = (props) => {
     const navigate = navigateFunc.bind(props);
     try {
       setIsApiRunning(true);
-      const result = await setKycType("manual");
-      navigate("/kyc/journey", {state: {fromState: 'digilocker-failed'}});
+      await setKycType("manual");
+      navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }});
     } catch (err) {
       toast(err.message);
     } finally {
@@ -38,7 +38,7 @@ const Failed = (props) => {
 
   const productName = getConfig().productName;
   return (
-    <Container title="Aadhaar KYC Failed !" noFooter skelton={isLoading}>
+    <Container title="Aadhaar KYC Failed!" noFooter skelton={isLoading}>
       <section id="digilocker-failed">
         <img
           className="digi-image"

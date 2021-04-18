@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import DotDotLoader from "common/ui/DotDotLoader";
-import { verifyCode } from "../../common/api";
+import { verifyCode } from "../common/api";
 
 const InvestReferralDialog = ({ isOpen, close, proceedInvestment }) => {
   const [form_data, setFormData] = useState({});

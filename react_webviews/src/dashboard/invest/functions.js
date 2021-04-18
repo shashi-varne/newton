@@ -397,11 +397,11 @@ export async function getRecommendationApi(amount) {
     });
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      data.stockSplit = result.recommendation.equity;
-      data.bondSplit = result.recommendation.debt;
-      this.setState({ stockSplit: data.stockSplit, bondSplit: data.bondSplit });
+      data.equity = result.recommendation.equity;
+      data.debt = result.recommendation.debt;
+      this.setState({ equity: data.equity, debt: data.debt });
       let date = new Date();
-      let graphdata = {
+      let funnelData = {
         recommendation: result.recommendation,
         amount: data.amount,
         term: data.term,
@@ -412,11 +412,11 @@ export async function getRecommendationApi(amount) {
         investTypeDisplay: "sip",
         name: "Wealth building",
         isSliderEditable: result.recommendation.editable,
-        stockSplit: result.recommendation.equity,
-        bondSplit: result.recommendation.debt,
+        equity: result.recommendation.equity,
+        debt: result.recommendation.debt,
         graphType: data.investType,
       };
-      storageService().setObject("graphData", graphdata);
+      storageService().setObject("funnelData", funnelData);
       if (amount === 300) {
         this.navigate(`/invest/buildwealth/amount`);
         this.setState({ show_loader: false });
@@ -436,12 +436,12 @@ export async function getRecommendationApi(amount) {
 
 function getRateOfInterest(data) {
   let range = Math.abs(data.stockReturns - data.bondReturns);
-  if (data.stockSplit < 1) {
+  if (data.equity < 1) {
     return data.bondReturns;
-  } else if (data.stockSplit > 99) {
+  } else if (data.equity > 99) {
     return data.stockReturns;
   } else {
-    let rateOffset = (range * data.stockSplit) / 100;
+    let rateOffset = (range * data.equity) / 100;
     return data.bondReturns + rateOffset;
   }
 }
@@ -470,12 +470,12 @@ export async function getRecommendedPlans(amount) {
       amount: amount,
       term: this.state.term,
       subType: this.state.subType,
-      equity: this.state.stockSplit,
-      debt: this.state.bondSplit,
+      equity: this.state.equity,
+      debt: this.state.debt,
     });
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      let graphdata = {
+      let funnelData = {
         recommendation: result.recommendation,
         alternatives: result.alternatives,
         amount: result.amount,
@@ -485,10 +485,10 @@ export async function getRecommendedPlans(amount) {
         subType: this.state.subType,
         graphType: this.state.investType,
         investTypeDisplay: this.state.investTypeDisplay,
-        stock: this.state.stockSplit,
-        bond: this.state.bondSplit,
+        stock: this.state.equity,
+        bond: this.state.debt,
       };
-      storageService().setObject("graphData", graphdata);
+      storageService().setObject("funnelData", funnelData);
       this.navigate("/invest/recommendations");
       this.setState({ show_loader: false });
     } else {
@@ -529,7 +529,7 @@ export function initializeInstaRedeem() {
   } else {
     this.getInstaRecommendation();
   }
-}
+} //TODO: Why a common function? is it reused?
 
 export async function getInstaRecommendation() {
   this.setState({ show_loader: true });
@@ -550,7 +550,7 @@ export async function getInstaRecommendation() {
     this.setState({ show_loader: false });
     toast(errorMessage);
   }
-}
+} //TODO: Why a common function? is it reused?
 
 export function showFundInfo(data) {
   let recommendation = { mf: data };
@@ -583,9 +583,9 @@ export async function getRecommendation() {
     order_type: investType,
     subtype: "",
   };
-  storageService().setObject("graphData", recommendations);
+  storageService().setObject("funnelData", recommendations);
   this.navigate(`/invest/recommendations`);
-}
+} //TODO: Why? where is this used?
 
 function getGoalRecommendations() {
   let goal = storageService().getObject("goalRecommendations");
@@ -600,7 +600,7 @@ function getGoalRecommendations() {
     max_ot_amount: goal.max_ot_amount ? goal.max_ot_amount : 2000000,
   };
   return result;
-}
+} //TODO: Why? where is this used?
 
 function validateAmount(amount) {
   let goal = getGoalRecommendations();
@@ -731,7 +731,7 @@ export async function getNfoRecommendation() {
     this.setState({ show_loader: false });
     toast(errorMessage);
   }
-}
+} //TODO: Why a common function? is it reused?
 
 export async function getNfoPurchaseLimit(data) {
   this.setState({ show_loader: true });
@@ -763,7 +763,7 @@ export async function getNfoPurchaseLimit(data) {
     this.setState({ show_loader: false });
     toast(errorMessage);
   }
-}
+} //TODO: Why a common function? is it reused?
 
 export async function getDiyPurchaseLimit(data) {
   this.setState({ show_loader: true });
@@ -806,7 +806,7 @@ export async function getDiyPurchaseLimit(data) {
     this.setState({ show_loader: false });
     toast(errorMessage);
   }
-}
+} //TODO: Why a common function? is it reused?
 
 export function deleteFund(item, index) {
   let { fundsData, cartCount } = this.state;
@@ -932,7 +932,7 @@ export async function proceedInvestment(investReferralData, isReferralGiven) {
     },
     () => this.makeInvestment(investment, isReferralGiven)
   );
-}
+} //TODO: Why a common function? is it reused? Where is this used right now?
 
 export async function makeInvestment(investment, isReferralGiven) {
   let {
@@ -994,7 +994,7 @@ export async function makeInvestment(investment, isReferralGiven) {
     handleDialogStates: this.handleDialogStates,
     handleApiRunning: this.handleApiRunning,
   });
-}
+} //TODO: Why a common function? is it reused? Where is this used right now?
 
 export async function proceedInvestmentChild(data) {
   let userKyc = data.userKyc || storageService().getObject("kyc") || {};

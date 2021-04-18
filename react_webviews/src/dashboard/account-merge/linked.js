@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { getConfig, isIframe } from "utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
-import toast from "../../common/ui/Toast";
-import { logout } from "../../login_and_registration/function";
-import { storageService } from "../../utils/validators";
 import Container from "../common/Container";
-import { navigate as navigateFunc } from "../invest/common/commonFunction";
+import { navigate as navigateFunc } from "../invest/common/commonFunctions";
 import "./style.scss";
 
 const AccountLinked = (props) => {
@@ -14,26 +11,8 @@ const AccountLinked = (props) => {
   const config = getConfig();
   const productName = config.productName;
   const partner = config.partner;
-  const handleClick = async () => {
-    if (config.Web) {
-      if (isIframe()) {
-        // handle I frame
-      } else {
-        setIsApiRunning("button");
-        try {
-          storageService().clear();
-          window.localStorage.clear();
-          await logout();
-          navigate("/login", null, true);
-        } catch (err) {
-          toast(err || "Something went wrong");
-        } finally {
-          setIsApiRunning(false);
-        }
-      }
-    } else {
-      // handle logout in native callbacks
-    }
+  const handleClick = () => {
+    navigate("/logout")
   };
 
   const hideImage =

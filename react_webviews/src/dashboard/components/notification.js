@@ -47,7 +47,6 @@ class Notification extends Component {
     let { notifications } = this.state;
     return (
       <Container
-        hidePageTitle
         noFooter={true}
         skelton={this.state.showLoader}
         title="Notification"

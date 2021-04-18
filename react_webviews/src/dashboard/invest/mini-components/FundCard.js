@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatAmountInr } from 'utils/validators';
-import RatingStar from '../../../../fund_details/common/RatingStar';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import RatingStar from '../../../fund_details/common/RatingStar';
+import { navigate as navigateFunc } from '../common/commonFunctions';
 const FundCard = ({ classOverRide, fund ,graph, isins, proceedInvestment, parentProps }) => {
   const {
     amount,
@@ -26,15 +26,15 @@ const FundCard = ({ classOverRide, fund ,graph, isins, proceedInvestment, parent
       // })
   };
   return (
-    <div className={`recommendations-funds-item ${classOverRide}`} onClick={graph && handleGraph}>
+    <div className={`recommendations-funds-item ${classOverRide}`} onClick={handleGraph}>
       <div className='recommendations-funds-item-icon'>
-        <img  alt={amc_logo_small} src={amc_logo_small} />
+        <img alt={amc_logo_small} src={amc_logo_small} />
       </div>
       <div className='recommendations-funds-item-info'>
         <div className='recommendations-funds-item-name'>{mfname}</div>
         <div className='recommendations-funds-item-status'>
-          <p>{mftype_name}</p>
-          <p>{amount && formatAmountInr(amount)}</p>
+          <span>{mftype_name}</span>
+          <span>{amount && formatAmountInr(amount)}</span>
         </div>
         <div className='recommendations-funds-item-rating'>
           <RatingStar value={rating} />

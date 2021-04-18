@@ -6,14 +6,6 @@ import { isReadyToInvest, initData } from "../../kyc/services";
 import { getBasePath } from "../../utils/functions";
 
 export async function initialize() {
-  let isLoggedIn = storageService().get("currentUser");
-  if (!isLoggedIn) {
-    this.props.history.push({
-      pathname: "login",
-      search: getConfig().searchParams,
-    });
-  }
-
   this.getMyAccount = getMyAccount.bind(this);
   this.getNotifications = getNotifications.bind(this);
   this.navigate = navigate.bind(this);
@@ -78,8 +70,8 @@ export async function getMyAccount() {
 
       let pendingMandate = {};
       if (mandate.prompt) {
-        var pref = mandate.mandate_preference;
-        var type = mandate.source_type;
+        const pref = mandate.mandate_preference;
+        const type = mandate.source_type;
         if (pref === null && type === "fresh") {
           pendingMandate = {
             show_status: true,
@@ -168,7 +160,7 @@ export async function getMyAccount() {
 }
 
 export async function getNotifications() {
-  this.setState({ showLoader: true, loaderMessage: "Please wait..." });
+  this.setState({ showLoader: true });
   try {
     const res = await Api.post(`/api/user/account/summary`, {
       campaign: ["user_campaign"],

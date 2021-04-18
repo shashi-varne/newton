@@ -8,7 +8,7 @@ import { CART } from '../../../diy/constants'
 import DiyCartButton from '../../../diy/components/CartButton'
 import Cart from '../../../diy/components/Cart'
 
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from '../../common/commonFunctions'
 
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   const navigate = navigateFunc.bind(parentProps)
