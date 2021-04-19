@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '../../../common/Container';
 
-import { navigate as navigateFunc} from '../../common/commonFunction';
+import { navigate as navigateFunc} from '../../common/commonFunctions';
 import './InvestGoal.scss';
 
 const saveGoal = {

@@ -3,16 +3,14 @@ import Container from '../../../common/Container';
 import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast'
 
-import { storageService } from 'utils/validators';
-import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
-import { get_recommended_funds } from '../../common/api';
+import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
+import moment from 'moment';
+import useFunnelDataHook from '../../common/funnelDataHook';
 import "../../commonStyles.scss"
 
 const term = 3;
-const date = new Date();
-let currentYear = date.getFullYear();
-
-const renderData = {
+const currentYear = moment().year();
+const timeOptionsData = {
   subtitle: 'I will likely need the money',
   options: [
     {
@@ -32,6 +30,9 @@ const Landing = (props) => {
   const [loader, setLoader] = useState(false);
   const [investTypeDisplay, setInvestTypeDisplay] = useState('3Y');
   const navigate = navigateFunc.bind(props);
+
+  const { updateFunnelData, initFunnelData } = useFunnelDataHook();
+
   const fetchRecommendedFunds = async () => {
     const params = {
       type: 'investsurplus',
@@ -39,21 +40,16 @@ const Landing = (props) => {
     try {
       setLoader("button");
       const recurring = isRecurring(params.type);
-      const data = await get_recommended_funds(params);
-      const funnelData = {
-        recommendation: data.recommendation,
+      await initFunnelData(params);
+      updateFunnelData({
         amount: 50000,
         term: investTypeDisplay === '3Y' ? 3 : 1,
-        // eslint-disable-next-line radix
-        year: investTypeDisplay === '3Y' ? parseInt(currentYear + term) : parseInt(currentYear + 1),
+        year: investTypeDisplay === '3Y' ? (currentYear + term) : (currentYear + 1),
         investType: params.type,
-        equity: data.recommendation.equity,
-        debt: data.recommendation.debt,
         isRecurring: recurring,
         investTypeDisplay,
         name: 'Wealth building'
-      };
-      storageService().setObject('funnelData', funnelData);
+      });
       setLoader(false);
       goNext();
     } catch (err) {
@@ -69,6 +65,7 @@ const Landing = (props) => {
   const handleChange = (type) => {
     setInvestTypeDisplay(type);
   };
+
   return (
     <Container
       classOverRide='pr-error-container'
@@ -80,7 +77,7 @@ const Landing = (props) => {
     >
       <section className='invest-amount-common'>
         <InvestType
-          baseData={renderData}
+          baseData={timeOptionsData}
           selected={investTypeDisplay}
           handleChange={handleChange}
         />

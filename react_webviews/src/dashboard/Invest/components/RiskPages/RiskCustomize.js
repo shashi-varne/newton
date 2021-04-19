@@ -1,20 +1,24 @@
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
-import { storageService } from '../../../../utils/validators';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
-import { navigate as navigateFunc, selectTitle } from '../../common/commonFunction';
+import { navigate as navigateFunc } from '../../common/commonFunctions';
 import EquityDebtSlider from '../../mini-components/EquityDebtSlider';
 import toast from 'common/ui/Toast'
 import './RiskPages.scss';
 import InfoBox from '../../../../common/ui/F-InfoBox';
 import { getConfig } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
+import useFunnelDataHook from '../../common/funnelDataHook';
 
 const { productName } = getConfig();
 
 const RiskCustomize = (props) => {
-  const funnelData = storageService().getObject('funnelData');
+  const {
+    funnelData,
+    updateFunnelData,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
   const navigate = navigateFunc.bind(props);
@@ -41,13 +45,10 @@ const RiskCustomize = (props) => {
 
     try {
       setLoader(true);
-      const res = await get_recommended_funds(params);
 
-      storageService().setObject('funnelData', {
-        ...funnelData,
-        ...res,
-      });
-      storageService().set('userSelectedRisk', 'Custom');
+      const res = await get_recommended_funds(params);
+      updateFunnelData(res);
+      updateUserRiskProfile('Custom');
 
       setLoader(false);
     } catch (err) {

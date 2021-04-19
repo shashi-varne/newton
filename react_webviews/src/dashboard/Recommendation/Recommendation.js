@@ -9,7 +9,7 @@ import morning_text from 'assets/morning_text.png';
 
 import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
-import { navigate as navigateFunc } from '../Invest/common/commonFunction';
+import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
 
 import { isInvestRefferalRequired, proceedInvestmentChild } from '../Invest/functions';
 import PennyVerificationPending from '../Invest/mini-components/PennyVerificationPending';
@@ -20,6 +20,7 @@ import PeriodWiseReturns from '../mini-components/PeriodWiseReturns';
 import { get, isArray } from 'lodash';
 import { get_recommended_funds } from '../Invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
+import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import './Recommendation.scss';
 const sipTypesKeys = [
   "buildwealth",
@@ -36,9 +37,13 @@ const sipTypesKeys = [
 
 const Recommendations = (props) => {
   const routeState = get(props, 'location.state', {});
-  const [funnelData, setGraphData] = useState(storageService().getObject('funnelData') || {});
+  const {
+    funnelData,
+    updateFunnelData,
+    userRiskProfile,
+    updateUserRiskProfile
+  } = useFunnelDataHook();
   const [recommendations, setRecommendations] = useState([]);
-  const [userRiskProfile, setUserRiskProfile] = useState(storageService().get('userSelectedRisk') || '');
   const [renderTopCard, setRenderTopCard] = useState(false);
 
   useEffect(() => {
@@ -89,15 +94,12 @@ const Recommendations = (props) => {
       const res = await get_recommended_funds(params);
 
       if (res.rp_indicator) {
-        storageService().set('userSelectedRisk', res.rp_indicator);
-        setUserRiskProfile(res.rp_indicator);
+        updateUserRiskProfile(res.rp_indicator);
       }
-      storageService().setObject('funnelData', {
-        ...funnelData,
+      updateFunnelData({
         ...res,
         recommendedTotalAmount: res.amount
       });
-      setGraphData(storageService().getObject('funnelData'));
 
       setIsApiRunning(false);
     } catch (err) {
@@ -279,8 +281,8 @@ const Recommendations = (props) => {
           stockReturns={funnelData.stockReturns}
           bondReturns={funnelData.bondReturns}
           principalAmount={funnelData.amount}
+          isRecurring={funnelData.isRecurring}
           showInfo
-          // isRecurring={isRecurring}
         />
         <section className='recommendations-common-container'>
           <div className='recommendations-header'>

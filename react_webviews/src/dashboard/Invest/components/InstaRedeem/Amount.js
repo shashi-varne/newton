@@ -8,7 +8,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import { formatAmountInr } from "utils/validators";
 import { investRedeemData } from "../../constants";
-import { convertInrAmountToNumber } from "../../common/commonFunction";
+import { convertInrAmountToNumber } from "../../common/commonFunctions";
 import './Amount.scss';
 
 class InvestAmount extends Component {

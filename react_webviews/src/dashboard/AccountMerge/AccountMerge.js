@@ -2,7 +2,7 @@ import React from "react";
 import { getConfig } from "../../utils/functions";
 import { isEmpty, storageService } from "../../utils/validators";
 import Container from "../common/Container";
-import { navigate as navigateFunc } from "../Invest/common/commonFunction";
+import { navigate as navigateFunc } from "../Invest/common/commonFunctions";
 import "./AccountMerge.scss";
 
 const AccountMerge = (props) => {

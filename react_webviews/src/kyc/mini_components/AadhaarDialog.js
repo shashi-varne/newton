@@ -31,7 +31,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
           message: { title: "Aadhaar KYC" },
         });
       }
-      nativeCallback({ action: "take_control", message: data });
+      nativeCallback({ action: "take_back_button_control", message: data });
     } else if (!isMobile.any()) {
       const redirectData = {
         show_toolbar: false,

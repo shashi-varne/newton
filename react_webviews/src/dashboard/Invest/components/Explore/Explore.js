@@ -5,7 +5,7 @@ import diy_equity_icon from 'assets/diy_equity_icon.svg'
 import diy_debt_icon from 'assets/diy_debt_icon.svg'
 import diy_hybrid_icon from 'assets/diy_hybrid_icon.svg'
 import diy_goal_icon from 'assets/diy_goal_icon.svg'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from '../../common/commonFunctions'
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
 import { getConfig } from "utils/functions";

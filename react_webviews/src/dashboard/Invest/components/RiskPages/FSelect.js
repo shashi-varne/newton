@@ -63,7 +63,7 @@ const FSelect = ({
 }
 
 const RenderOption = (props) => {
-  const { opt, idx, selected, titleProp, onClick, renderItem } = props;
+  const { opt, idx, selected, onClick, renderItem } = props;
 
   if (isFunction(renderItem) && renderItem(opt)) {
     return (

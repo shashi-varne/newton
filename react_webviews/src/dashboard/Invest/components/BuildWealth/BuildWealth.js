@@ -3,11 +3,10 @@ import Container from '../../../common/Container';
 import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast';
 
-import { storageService } from 'utils/validators';
-import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
-import { get_recommended_funds } from '../../common/api';
+import { navigate as navigateFunc } from '../../common/commonFunctions';
 import "../../commonStyles.scss"
 import moment from 'moment';
+import useFunnelDataHook from '../../common/funnelDataHook';
 
 const term = 5;
 
@@ -28,7 +27,7 @@ const renderData = {
 };
 
 const Landing = (props) => {
-  const [data, setData] = useState(null);
+  const { updateFunnelData, initFunnelData } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   const [investTypeDisplay, setInvestTypeDisplay] = useState('sip');
   const otiAmount = 50000;
@@ -41,23 +40,19 @@ const Landing = (props) => {
     };
     setLoader("button");
     try {
-      const data = await get_recommended_funds(params);
-      const funnelData = {
-        recommendation: data.recommendation,
+      await initFunnelData({ type: params.type });
+      const funnelObj = {
         amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
         term,
         // eslint-disable-next-line radix
         year: parseInt(moment().year() + term),
         corpus: otiAmount,
         investType: params.type,
-        equity: data.recommendation.equity,
-        debt: data.recommendation.debt,
         isRecurring: investTypeDisplay === 'sip' ? true : false,
         investTypeDisplay,
         name: 'Wealth building'
       };
-      storageService().setObject('funnelData', funnelData);
-      setData(funnelData);
+      updateFunnelData(funnelObj);
       setLoader(false);
       goNext();
     } catch (err) {
@@ -67,7 +62,7 @@ const Landing = (props) => {
   };
 
   const goNext = () => {
-    navigate('buildwealth/amount', data);
+    navigate('buildwealth/amount');
   };
 
   const handleChange = (type) => {

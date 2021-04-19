@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getConfig, isIframe } from "utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import Container from "../common/Container";
-import { navigate as navigateFunc } from "../Invest/common/commonFunction";
+import { navigate as navigateFunc } from "../Invest/common/commonFunctions";
 import "./Linked.scss";
 
 const AccountLinked = (props) => {
