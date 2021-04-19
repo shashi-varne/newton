@@ -221,12 +221,13 @@ export function setInvestCardsData() {
   if (getConfig().code === "bfdlmobile") {
     investCardsBase["ourRecommendations"]["instaredeem"].title = "Money +";
   }
-  let investCardsHandling = getConfig().investSubSectionMap;
+  
+  let investShowData = {}; // stores card data to display
+  let renderCards = getConfig().investSections; // render cards according to the hierarchy in investSections
+  let investCardsHandling = getConfig().investSubSectionMap; // handles subsection cards according to heirarchy in investSubSectionMap
 
-  let investShowData = {};
-  let renderCards = getConfig().investSections;
-
-  let keysForHandling = [
+  // all possible sections which have subsections to display
+  let allSections = [
     "ourRecommendations",
     "diy",
     "bottomScrollCards",
@@ -234,17 +235,18 @@ export function setInvestCardsData() {
     "popularCards",
     "financialTools",
   ];
-  for (let handlingKey of keysForHandling) {
-    investShowData[handlingKey] = [];
-    let partnerSpecific = [];
+
+  for (let section of allSections) {
+    investShowData[section] = [];
+    let subSection = [];
     if (
       investCardsHandling &&
-      investCardsHandling[handlingKey] &&
-      investCardsHandling[handlingKey].length !== 0
+      investCardsHandling[section] &&
+      investCardsHandling[section].length !== 0
     ) {
-      partnerSpecific = investCardsHandling[handlingKey];
+      subSection = investCardsHandling[section];
     }
-    for (let itemKey of partnerSpecific) {
+    for (let itemKey of subSection) {
       if (
         subbrokerCode &&
         itemKey === "insurance" &&
@@ -264,9 +266,9 @@ export function setInvestCardsData() {
       ) {
         continue;
       }
-      let handleObject = investCardsBase[handlingKey][itemKey];
-      handleObject.key = itemKey;
-      investShowData[handlingKey].push(handleObject);
+      let cardData = investCardsBase[section][itemKey];
+      cardData.key = itemKey;
+      investShowData[section].push(cardData);
     }
   }
   this.setState({ investShowData, renderCards });
