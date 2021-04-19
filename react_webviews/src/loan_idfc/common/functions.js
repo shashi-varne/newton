@@ -565,7 +565,7 @@ export async function updateApplication(
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      let title1 = result.error[0] || "Something went wrong!";
+      let title1 = (Array.isArray(result.error) ? result.error[0] : result.error) || "Something went wrong!";
       this.setState({
         show_loader: false,
         loaderWithData: false,
@@ -888,7 +888,7 @@ export async function submitApplication(
       if (rejection_cases.indexOf(result.error) !== -1) {
         this.navigate("loan-status");
       } else {
-        let title1 = result.error[0] || "Something went wrong!";
+        let title1 = (Array.isArray(result.error) ? result.error[0] : result.error) || "Something went wrong!";
         this.setState({
           show_loader: false,
           loaderWithData: false,
@@ -1116,6 +1116,21 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
+
+  let { employment_type } = this.state.lead.application_info;
+  let maxAmount = employment_type === 'self_employed' ? '900000' : '4000000';
+
+  if (
+    form_data.amount_required &&
+    // eslint-disable-next-line
+    parseInt(form_data.amount_required) > parseInt(maxAmount)
+  ) {
+    form_data.amount_required_error = `Maximum loan amount should be ${numDifferentiationInr(
+      parseInt(maxAmount)
+    )}`;
+    canSubmitForm = false;
+  }
+
   if (form_data.dob && !isValidDate(form_data.dob)) {
     form_data.dob_error = "Please enter valid dob";
     canSubmitForm = false;
@@ -1133,9 +1148,6 @@ export async function formCheckUpdate(
 
   if (canSubmitForm) {
     let body = {};
-    this.setState({
-      show_loader: true,
-    });
 
     for (let j in keys_to_check) {
       let key = keys_to_check[j];

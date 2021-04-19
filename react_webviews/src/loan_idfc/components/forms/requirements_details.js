@@ -33,8 +33,18 @@ class LoanRequirementDetails extends Component {
     let lead = this.state.lead || {};
     let application_info = lead.application_info || {};
 
+    let employment_type = application_info.employment_type || "";
+
+    let amount_required = application_info.amount_required || '';
+
+    if (employment_type === 'salaried' && amount_required > 4000000)
+      amount_required = 4000000;
+
+    if (employment_type === 'self_employed' && amount_required > 900000)
+      amount_required = 900000;
+
     let form_data = {
-      amount_required: application_info.amount_required,
+      amount_required: amount_required,
       tenor: !application_info.tenor ? "" : String(application_info.tenor),
     };
 
