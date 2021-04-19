@@ -119,9 +119,11 @@ class Api {
         }
         return response.data;
       }, error => {
+        Sentry.captureException(error);
         return error;
       })
       .catch(error => {
+        Sentry.captureException(error);
         return error;
       });
   }
