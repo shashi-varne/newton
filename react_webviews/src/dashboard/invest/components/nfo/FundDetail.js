@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "@material-ui/core/Button";
 import { storageService } from "utils/validators";
-import { navigate } from "../../functions";
+import { navigate } from "../../landingFunctions";
 import { getFormattedEndDate, getSchemeOption } from "./nfoFunctions";
 
 class FundDetail extends Component {

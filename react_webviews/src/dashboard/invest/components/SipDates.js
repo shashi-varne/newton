@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { navigate } from "../functions";
+import { navigate } from "../landingFunctions";
 import DropdownInModal from "common/ui/DropdownInModal";
 import { getConfig } from "utils/functions";
 import {

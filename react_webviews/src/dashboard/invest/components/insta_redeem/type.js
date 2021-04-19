@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
-import { navigate } from "../../functions";
+import { navigate } from "../../landingFunctions";
 import InvestType from "../../mini-components/InvestType";
 import { investRedeemData } from "../../constants";
 

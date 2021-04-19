@@ -5,7 +5,7 @@ import "../../common/theme/Style.scss";
 import NotFound from "../../common/components/NotFound";
 
 import "./Style.scss";
-import Landing from "./landing";
+import Landing from "./Landing";
 import InstaRedeem from "./components/insta_redeem";
 import Type from "./components/insta_redeem/type";
 import Amount from "./components/insta_redeem/amount";

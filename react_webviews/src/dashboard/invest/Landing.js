@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
-import { initialize } from "./functions";
+import { initialize } from "./landingFunctions";
 import InvestCard from "./mini-components/InvestCard";
 import SecureInvest from "./mini-components/SecureInvest";
 import VerificationFailedDialog from "./mini-components/VerificationFailedDialog";

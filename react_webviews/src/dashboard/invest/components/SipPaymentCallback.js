@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getConfig } from "utils/functions";
 import Container from "../../common/Container";
 import { Imgc } from "common/ui/Imgc";
-import { getCampaignBySection, resetRiskProfileJourney } from "../functions";
+import { getCampaignBySection, resetRiskProfileJourney } from "../landingFunctions";
 import { getCampaign } from "../common/api";
 import { isEmpty, storageService } from "utils/validators";
 import { initData } from "../../../kyc/services";

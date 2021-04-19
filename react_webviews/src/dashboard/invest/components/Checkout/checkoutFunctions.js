@@ -7,7 +7,7 @@ import {
   proceedInvestment,
   isInvestRefferalRequired,
 } from "../../../proceedInvestmentFunctions";
-import { navigate } from "../../functions";
+import { navigate } from "../../landingFunctions";
 
 const errorMessage = "Something went wrong!";
 export async function initializeComponentFunctions() {

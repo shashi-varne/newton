@@ -2,7 +2,7 @@ import React from "react";
 import { getConfig } from "utils/functions";
 import Container from "../../common/Container";
 import { Imgc } from "common/ui/Imgc";
-import { resetRiskProfileJourney } from "../functions";
+import { resetRiskProfileJourney } from "../landingFunctions";
 
 const PaymentCallback = (props) => {
   const params = props.match.params || {};

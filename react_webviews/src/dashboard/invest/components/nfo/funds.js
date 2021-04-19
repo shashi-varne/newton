@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "@material-ui/core/Button";
-import { navigate } from "../../functions";
+import { navigate } from "../../landingFunctions";
 import {
   getFormattedEndDate,
   getFormattedStartDate,
