@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "../common/Container";
 import { storageService } from "../../utils/validators";
 import { Button } from "@material-ui/core";
-import { send80cInvest, sendCapitalgain } from "../common/functions";
+import { sendInvestmentProof } from "./MyAccountFunctions";
 import toast from "common/ui/Toast";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import "./MyAccount.scss";
@@ -17,12 +17,12 @@ const InvestmentProof = (props) => {
     "investment-proof": {
       investedYears: storageService().getObject("elss") || [],
       title: "80C Investment Proof",
-      emailMe: send80cInvest,
+      statement: "elssstatement",
     },
     "capital-gain": {
-      investedYears: storageService().getObject("capitalgain") || [2020, 2021],
+      investedYears: storageService().getObject("capitalgain"),
       title: "Capital Gain",
-      emailMe: sendCapitalgain,
+      statement: "taxstatement",
     },
   };
 
@@ -30,7 +30,10 @@ const InvestmentProof = (props) => {
   const emailMe = async (year) => {
     setIsApiRunning(true);
     try {
-      const result = await investmentData.emailMe(year);
+      const result = await sendInvestmentProof({
+        statement: investmentData.statement,
+        year: year,
+      });
       if (!result) return;
       setDialogMessage(result.message);
       console.log(result);

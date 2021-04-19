@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./MyAccount.scss";
 import { getConfig } from "utils/functions";
-import { initialize } from "../common/functions";
+import { initializeComponentFunctions } from "./MyAccountFunctions";
 import Container from "../common/Container";
 import Button from "material-ui/Button";
 import Dialog, {
@@ -21,11 +21,11 @@ class MyAccount extends Component {
       userKyc: {},
       openDialog: false,
     };
-    this.initialize = initialize.bind(this);
+    this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
+  componentDidMount() {
+    this.initializeComponentFunctions();
   }
 
   onload = () => {

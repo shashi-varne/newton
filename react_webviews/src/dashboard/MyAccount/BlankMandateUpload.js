@@ -5,7 +5,7 @@ import toast from "../../common/ui/Toast";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import "./MyAccount.scss";
 import { getBase64, getConfig } from "../../utils/functions";
-import { upload } from "../common/functions";
+import { upload } from "./MyAccountFunctions";
 
 const BlankMandateUpload = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
