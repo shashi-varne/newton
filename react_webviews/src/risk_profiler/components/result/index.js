@@ -135,12 +135,18 @@ class Result extends Component {
     if (openWebModule) {
       window.location.href = this.redirectUrlBuilder();
     } else {
-      const entryParams = this.state.params;
+      const entryParams = this.state.params || {};
+
+      if (!entryParams.type) {
+        // When coming from anywhere except from within funnel
+        nativeCallback({ action: 'exit' });
+        return;
+      }
+
       let messageBody = pick(
         entryParams,
         ['amount', 'flow', 'term', 'type', 'year', 'subType']
       );
-
       if (entryParams.type === 'saveforgoal') {
         const monthlyAmount = this.calculateMonthlyAmount(
           parseInt(entryParams.year - new Date().getFullYear(), 10),
