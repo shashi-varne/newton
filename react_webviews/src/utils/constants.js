@@ -109,6 +109,7 @@ export const themeConfig = {
                 textTransform: 'capitalize'
             },
             root: {
+                borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 4,
                 boxShadow: 'none !important'
             }
         },

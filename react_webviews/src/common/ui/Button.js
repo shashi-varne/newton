@@ -154,7 +154,7 @@ class CustomButton extends Component {
 const styles = {
   button: {
     padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px 0px !important',
-    borderRadius: 6,
+    borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 6,
     textTransform: 'capitalize',
     fontSize: '16px !important',
     boxShadow: 'none',

@@ -95,7 +95,6 @@ class Landing extends Component {
       modalData,
       openKycPremiumLanding,
     } = this.state;
-    console.log(investShowData);
     let {
       ourRecommendations,
       diy,

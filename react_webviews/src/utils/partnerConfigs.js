@@ -284,6 +284,7 @@ export const partnerConfigs = {
       bottomCta: {
         disabledBackgroundColor: "#F1D5C9", // same as 'cta_disabled_background'
         disabledColor: "#ffffff", // same as cta_disabled_color
+        borderRadius: 25,
       },
     },
   },
