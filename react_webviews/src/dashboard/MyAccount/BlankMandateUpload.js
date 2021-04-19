@@ -56,6 +56,7 @@ const BlankMandateUpload = (props) => {
                 getBase64(file, function (img) {
                   setFileToShow(img);
                 });
+                break;
               default:
                 toast("Please select image file");
             }

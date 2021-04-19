@@ -8,8 +8,11 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import { formatAmountInr } from "utils/validators";
 import { investRedeemData } from "../../constants";
-import { convertInrAmountToNumber, getGoalRecommendation } from "../../common/commonFunctions";
-import { storageService } from "../../../../utils/validators";
+import {
+  convertInrAmountToNumber,
+  getGoalRecommendation,
+} from "../../common/commonFunctions";
+import { isEmpty, storageService } from "../../../../utils/validators";
 
 class InvestAmount extends Component {
   constructor(props) {
@@ -27,6 +30,12 @@ class InvestAmount extends Component {
   }
 
   onload = () => {
+    const instaRecommendations =
+      storageService().getObject("instaRecommendations") || [];
+    if (isEmpty(instaRecommendations)) {
+      this.navigate("/invest/instaredeem");
+      return;
+    }
     let investType = this.props.match.params.investType || "";
     let tags = investRedeemData.tagsMapper[investType];
     let amount = 50000;
@@ -38,17 +47,15 @@ class InvestAmount extends Component {
       stockReturns: 15,
       bondReturns: 8,
       term: 15,
+      instaRecommendations: instaRecommendations[0],
     });
   };
 
   handleClick = () => {
-    this.setState({ show_loader: true});
-    let instaRecommendations = storageService().getObject(
-      "instaRecommendations"
-    )[0];
-    let { amount, investType, term } = this.state;
-    let allocations = [{ amount: amount, mf: instaRecommendations }];
-    let recommendations = {
+    this.setState({ show_loader: true });
+    const { amount, investType, term, instaRecommendations } = this.state;
+    const allocations = [{ amount: amount, mf: instaRecommendations }];
+    const recommendations = {
       recommendation: allocations,
       term: term,
       investType: "insta-redeem",
@@ -112,7 +119,7 @@ class InvestAmount extends Component {
     }
     this.setState({ amount_error: amount_error });
   };
-  
+
   render() {
     let { investType, amount, amount_error, tags } = this.state;
     return (

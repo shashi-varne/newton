@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
-import { initialize } from "./landingFunctions";
+import { initializeComponentFunctions } from "./landingFunctions";
 import InvestCard from "./mini-components/InvestCard";
 import SecureInvest from "./mini-components/SecureInvest";
 import VerificationFailedDialog from "./mini-components/VerificationFailedDialog";
@@ -14,7 +14,7 @@ class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      showSkelton: false,
       productName: getConfig().productName,
       partner: getConfig().partner,
       screenName: "invest_landing",
@@ -25,11 +25,11 @@ class Landing extends Component {
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
     };
-    this.initialize = initialize.bind(this);
+    this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
 
   componentWillMount() {
-    this.initialize();
+    this.initializeComponentFunctions();
   }
 
   onload = () => {
@@ -107,7 +107,7 @@ class Landing extends Component {
     } = invest_show_data;
     return (
       <Container
-        skelton={this.state.show_loader}
+        skelton={this.state.showSkelton}
         noFooter={true}
         title="Start Investing"
       >

@@ -13,7 +13,7 @@ import {
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 
 let errorMessage = "Something went wrong!";
-export async function initialize() {
+export async function initializeComponentFunctions() {
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
   this.setInvestCardsData = setInvestCardsData.bind(this);
@@ -48,7 +48,7 @@ export async function initialize() {
 }
 
 export async function getSummary() {
-  this.setState({ show_loader: true, loadingText: "Please wait..." });
+  this.setState({ showSkelton: true });
   try {
     const res = await Api.post(apiConstants.accountSummary, {
       campaign: ["user_campaign"],
@@ -62,14 +62,14 @@ export async function getSummary() {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setSummaryData(result);
-      this.setState({ show_loader: false });
+      this.setState({ showSkelton: false });
     } else {
-      this.setState({ show_loader: false });
+      this.setState({ showSkelton: false });
       toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
-    this.setState({ show_loader: false });
+    this.setState({ showSkelton: false });
     toast(errorMessage);
   }
 }
@@ -358,7 +358,7 @@ export async function getRecommendationApi(amount) {
     amount: amount,
   };
   this.setState({
-    show_loader: true,
+    showSkelton: true,
     investType: data.investType,
     term: data.term,
     stockReturns: data.stockReturns,
@@ -393,17 +393,17 @@ export async function getRecommendationApi(amount) {
       storageService().setObject("funnelData", funnelData);
       if (amount === 300) {
         this.navigate(`/invest/buildwealth/amount`);
-        this.setState({ show_loader: false });
+        this.setState({ showSkelton: false });
       } else {
         this.getRecommendedPlans(amount);
       }
     } else {
-      this.setState({ show_loader: false });
+      this.setState({ showSkelton: false });
       toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
-    this.setState({ show_loader: false });
+    this.setState({ showSkelton: false });
     toast(errorMessage);
   }
 }
@@ -464,14 +464,14 @@ export async function getRecommendedPlans(amount) {
       };
       storageService().setObject("funnelData", funnelData);
       this.navigate("/invest/recommendations");
-      this.setState({ show_loader: false });
+      this.setState({ showSkelton: false });
     } else {
-      this.setState({ show_loader: false });
+      this.setState({ showSkelton: false });
       toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
-    this.setState({ show_loader: false });
+    this.setState({ showSkelton: false });
     toast(errorMessage);
   }
 }

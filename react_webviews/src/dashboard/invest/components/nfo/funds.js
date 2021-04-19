@@ -3,15 +3,14 @@ import Container from "../../../common/Container";
 import Button from "@material-ui/core/Button";
 import { navigate } from "../../landingFunctions";
 import {
-  getFormattedEndDate,
-  getFormattedStartDate,
+  getFormattedDate,
+  getNfoRecommendation,
   getSchemeOption,
 } from "./nfoFunctions";
 import { storageService } from "utils/validators";
 import { getConfig } from "../../../../utils/functions";
 import toast from "../../../../common/ui/Toast";
-import Api from "../../../../utils/api";
-import { apiConstants } from "../../constants";
+import { isEmpty } from "../../../../utils/validators";
 
 class NfoFunds extends Component {
   constructor(props) {
@@ -32,44 +31,36 @@ class NfoFunds extends Component {
       return;
     }
     this.setState({ scheme: scheme });
-    this.getNfoRecommendation(scheme);
+    this.initialize(scheme);
   }
 
-  getNfoRecommendation = async (scheme) => {
+  initialize = async (scheme) => {
     this.setState({ show_loader: true });
     const errorMessage = "Something went wrong!";
     try {
-      const res = await Api.get(apiConstants.getNfoRecommendation);
-      const { result, status_code: status } = res.pfwresponse;
-      if (status === 200) {
-        storageService().remove("nfo_cart");
-        storageService().remove("nfo_cartCount");
-        let sortedArray = result.recommendations.filter((item) => {
+      const result = await getNfoRecommendation();
+      if (!result) return;
+      storageService().remove("nfo_cart");
+      storageService().remove("nfo_cartCount");
+      let filteredByScheme =
+        result.recommendations.filter((item) => {
           return item.growth_or_dividend === scheme;
-        });
-        var newArray = sortedArray.map((dict) => {
+        }) || [];
+      const fundList =
+        filteredByScheme.map((dict) => {
           dict["addedToCart"] = false;
           dict["allow_purchase"] = true;
           return dict;
-        });
-        storageService().setObject("nfo_fundsList", newArray);
-        let nfoFunds = newArray;
-        let cartCount = 0;
-        let showFunds = nfoFunds.length > 0;
-        this.setState({
-          show_loader: false,
-          nfoFunds: nfoFunds,
-          cartCount: cartCount,
-          showFunds: showFunds,
-        });
-      } else {
-        this.setState({ show_loader: false });
-        toast(result.message || result.error || errorMessage);
-      }
+        }) || [];
+      storageService().setObject("nfo_fundsList", fundList);
+      this.setState({
+        show_loader: false,
+        nfoFunds: fundList,
+      });
     } catch (error) {
       console.log(error);
       this.setState({ show_loader: false });
-      toast(errorMessage);
+      toast(error.message || errorMessage);
     }
   };
 
@@ -92,7 +83,7 @@ class NfoFunds extends Component {
   };
 
   render() {
-    let { nfoFunds, showFunds } = this.state;
+    let { nfoFunds } = this.state;
     return (
       <Container
         skelton={this.state.show_loader}
@@ -100,13 +91,12 @@ class NfoFunds extends Component {
         title="NFO Funds"
       >
         <div className="nfo-funds">
-          {!showFunds && (
+          {isEmpty(nfoFunds) && (
             <div className="message">
               We are sorry ! There are no funds that match your requirements.
             </div>
           )}
-          {nfoFunds &&
-            showFunds &&
+          {!isEmpty(nfoFunds) &&
             nfoFunds.map((data, index) => {
               return (
                 <div key={index} className="content">
@@ -133,8 +123,8 @@ class NfoFunds extends Component {
                       </div>
                     </div>
                     <div className="date">
-                      from {getFormattedStartDate(data.start_date)} - to{" "}
-                      {getFormattedEndDate(data.end_date)}
+                      from {getFormattedDate(data.start_date)} - to{" "}
+                      {getFormattedDate(data.end_date, true)}
                     </div>
                   </div>
                 </div>

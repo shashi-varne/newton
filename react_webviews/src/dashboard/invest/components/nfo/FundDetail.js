@@ -3,7 +3,7 @@ import Container from "../../../common/Container";
 import Button from "@material-ui/core/Button";
 import { storageService } from "utils/validators";
 import { navigate } from "../../landingFunctions";
-import { getFormattedEndDate, getSchemeOption } from "./nfoFunctions";
+import { getFormattedDate, getSchemeOption } from "./nfoFunctions";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -54,9 +54,9 @@ class FundDetail extends Component {
             )}
             <h3>{fund.friendly_name}</h3>
             <div className="duration">
-              <b>Launch: </b> {getFormattedEndDate(fund.start_date)} /{" "}
+              <b>Launch: </b> {getFormattedDate(fund.start_date, true)} /{" "}
               <b>Closure: </b>
-              {getFormattedEndDate(fund.end_date)}
+              {getFormattedDate(fund.end_date, true)}
             </div>
             <div className="tags">
               <span className="text-capitalize">
@@ -87,7 +87,7 @@ class FundDetail extends Component {
             </p>
             <p className="lock-in">
               <b>Lock-in: </b>
-              {getFormattedEndDate(fund.lockin_in)}
+              {getFormattedDate(fund.lockin_in)}
             </p>
             <p className="load">
               <b>Exit load: </b>

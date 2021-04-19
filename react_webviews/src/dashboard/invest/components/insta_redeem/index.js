@@ -53,19 +53,18 @@ class InstaRedeem extends Component {
   }
 
   initializeInstaRedeem = () => {
-    if (storageService().get("instaRecommendations")) {
-      let instaRecommendation = storageService().getObject(
-        "instaRecommendations"
-      )[0];
+    const instaRecommendations =
+      storageService().get("instaRecommendations") || [];
+    if (!isEmpty(instaRecommendations)) {
       this.setState({
-        instaRecommendation: instaRecommendation,
+        instaRecommendation: instaRecommendations[0],
       });
     } else {
       this.getInstaRecommendation();
     }
-  }
+  };
 
-  getInstaRecommendation = async() => {
+  getInstaRecommendation = async () => {
     this.setState({ show_loader: true });
     try {
       const res = await Api.get(apiConstants.getInstaRecommendation);
@@ -84,7 +83,7 @@ class InstaRedeem extends Component {
       this.setState({ show_loader: false });
       toast("Something went wrong!");
     }
-  }
+  };
 
   renderDialog = () => {
     return (
