@@ -16,6 +16,7 @@ import {
   validateEmail
 } from "utils/validators";
 import { getUrlParams } from "utils/validators";
+import { employmentMapper } from "../constants";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -1118,19 +1119,14 @@ export async function formCheckUpdate(
 
 
   let { employment_type } = this.state.lead.application_info;
-  let maxAmount = employment_type === 'self_employed' ? '900000' : '4000000';
-
-  let mapper = {
-    salaried: ['salaried', 'Rs 40 lacs'],
-    self_employed: ['self employed', 'Rs 9 lacs']
-  }
+  let maxAmount = employmentMapper[employment_type][1];
 
   if (
     form_data.amount_required &&
     // eslint-disable-next-line
-    parseInt(form_data.amount_required) > parseInt(maxAmount)
+    parseInt(form_data.amount_required) > maxAmount
   ) {
-    form_data.amount_required_error = `Max loan amount for ${mapper[employment_type][0]} is ${mapper[employment_type][1]}`;
+    form_data.amount_required_error = `Max loan amount for ${employmentMapper[employment_type][0]} is ${employmentMapper[employment_type][2]}`;
     canSubmitForm = false;
   }
 

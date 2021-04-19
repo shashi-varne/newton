@@ -9,6 +9,7 @@ import {
   numDifferentiationInr,
   formatAmount,
 } from "utils/validators";
+import { employmentMapper } from "../../constants";
 
 class LoanRequirementDetails extends Component {
   constructor(props) {
@@ -37,11 +38,8 @@ class LoanRequirementDetails extends Component {
 
     let amount_required = application_info.amount_required || '';
 
-    if (employment_type === 'salaried' && amount_required > 4000000)
-      amount_required = 4000000;
-
-    if (employment_type === 'self_employed' && amount_required > 900000)
-      amount_required = 900000;
+    if (amount_required > employmentMapper[employment_type][1])
+      amount_required = employmentMapper[employment_type][1];
 
     let form_data = {
       amount_required: amount_required,
