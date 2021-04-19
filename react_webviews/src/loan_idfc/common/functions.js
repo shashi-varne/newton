@@ -1120,14 +1120,17 @@ export async function formCheckUpdate(
   let { employment_type } = this.state.lead.application_info;
   let maxAmount = employment_type === 'self_employed' ? '900000' : '4000000';
 
+  let mapper = {
+    salaried: ['salaried', 'Rs 40 lacs'],
+    self_employed: ['self employed', 'Rs 9 lacs']
+  }
+
   if (
     form_data.amount_required &&
     // eslint-disable-next-line
     parseInt(form_data.amount_required) > parseInt(maxAmount)
   ) {
-    form_data.amount_required_error = `Maximum loan amount should be ${numDifferentiationInr(
-      parseInt(maxAmount)
-    )}`;
+    form_data.amount_required_error = `Max loan amount for ${mapper[employment_type][0]} is ${mapper[employment_type][1]}`;
     canSubmitForm = false;
   }
 
