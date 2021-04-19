@@ -10,7 +10,7 @@ import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
 import search from 'assets/icon_search.svg';
 import notificationLogo from 'assets/ic_notification.svg';
-import notificationBadgeLogo from 'assets/ic_notification.svg';
+import notificationBadgeLogo from 'assets/ic_notification_badge.svg';
 import isEmpty from 'lodash/isEmpty';
 import { storageService } from "utils/validators";
 import '../theme/Style.scss';
