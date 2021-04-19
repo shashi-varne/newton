@@ -13,6 +13,9 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 import './common/theme/Style.scss';
 import "./common/ui/style.scss";
 import { getConfig } from './utils/functions';
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
+
 $(document).ready(function () {
   if (isMobile.Android()) {
     window.addEventListener('resize', function () {
@@ -46,5 +49,12 @@ $(document).ready(function () {
     }, false);
   }
 });
-
+Sentry.init({
+  dsn: "https://cc73fa20f8e14bfb82d1bfa6c19558d0@o569643.ingest.sentry.io/5715663",
+  integrations: [new Integrations.BrowserTracing()],
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // adjust this value accordingly in production
+  tracesSampleRate: 1.0,
+});
 ReactDOM.render(<App />, document.getElementById('root'));

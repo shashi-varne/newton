@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import * as Sentry from '@sentry/browser'
 
 import { checkValidString } from './validators';
 import { encrypt, decrypt } from './encryption';
@@ -60,6 +60,56 @@ class Api {
       .then(response => {
         if (response.data._encr_payload) {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
+        }
+        if (response.data.pfwresponse.status_code !== 200) {
+          var errorMsg = response.data.pfwresponse.result.error || response.data.pfwresponse.result.message || "Something went wrong";
+          var main_pathname=window.location.pathname
+          var project='admin'
+          if (main_pathname.indexOf('group-insurance') >= 0) {
+            project = 'group-insurance';
+          } else if (main_pathname.indexOf('insurance') >= 0) {
+            project = 'insurance';
+          } else if (main_pathname.indexOf('risk') >= 0) {
+            project = 'risk';
+          } else if (main_pathname.indexOf('mandate-otm') >= 0) {
+            project = 'mandate-otm';
+          } else if (main_pathname.indexOf('e-mandate') >= 0) {
+            project = 'e-mandate';
+          } else if (main_pathname.indexOf('mandate') >= 0) {
+            project = 'mandate';
+          } else if (main_pathname.indexOf('gold') >= 0) {
+            project = 'gold';
+          } else if (main_pathname.indexOf('isip') >= 0) {
+            project = 'isip';
+          } else if (main_pathname.indexOf('referral') >= 0) {
+            project = 'referral';
+          } else if (main_pathname.indexOf('help') >= 0) {
+            project = 'help';
+          } else if (main_pathname.indexOf('loan') >= 0) {
+            project = 'loan';
+          } else if (main_pathname.indexOf('w-report') >= 0) {
+            project = 'w-report';
+          } else if (main_pathname.indexOf('kyc-esign') >= 0) {
+            project = 'kyc-esign';
+          } else if (main_pathname.indexOf('pg') >= 0) {
+            project = 'pg';
+          } else if (main_pathname.indexOf('portfolio-rebalancing') >= 0) {
+            project = 'portfolio-rebalancing';
+          } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
+            project = 'iw-dashboard';
+          }
+          Sentry.configureScope(
+            scope=>scope
+            .setTag("squad",project)
+            .setTag("pathname",main_pathname)
+            .setTransactionName(`Error on ${verb} request`)
+            // .setUser({"email":"test@example.com"})
+            .setLevel(Sentry.Severity.Error)
+            .setExtra("api_res",JSON.stringify(response.data))
+          )
+          var SentryError = new Error(errorMsg)
+          SentryError.name= `${project} ${main_pathname}`
+          Sentry.captureException(SentryError)
         }
 
         let force_error_api = window.sessionStorage.getItem('force_error_api');
