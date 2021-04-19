@@ -5,7 +5,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import { storageService } from "../../utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import { nativeCallback } from "utils/native_callback";
-import "./Compliant.scss";
+import "./commonStyles.scss";
 
 const productName = getConfig().productName;
 const Verify = (props) => {

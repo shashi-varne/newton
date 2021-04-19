@@ -6,7 +6,7 @@ import toast from "../../common/ui/Toast";
 import { kycSubmit } from "../common/api";
 import { getConfig } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
-import "./Compliant.scss";
+import "./commonStyles.scss";
 
 const ConfirmPan = (props) => {
   const genericErrorMessage = "Something Went wrong!";
