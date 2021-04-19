@@ -1284,52 +1284,34 @@ function handleInvestSubtitle (partner = '')  {
 };
 
 export function handleRenderCard() {
-    let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-    let partner = this.state.partner || storageService().getObject("partner") || {};
-    let currentUser = this.state.currentUser || storageService().getObject("user") || {};
-    let isReadyToInvestBase = isReadyToInvest();
-    const isWeb =getConfig().isWebCode;
-    // const {currentUser, partner,isWeb, isReadyToInvestBase,kycJourneyStatusMapperData, userKyc, kycJourneyStatus } = props; 
-    const hideReferral = currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
-    const referralCode = !currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_apply_refferal;
-    const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
-    // const premiumKyc = kycJourneyStatus === 'ground_premium' ? 'PREMIUM' : '';
-    const kyc = !isReadyToInvestBase;
-    // const kycDefaultSubTitle = !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium' ? 'Create investment profile' : '';
-    // const kycSubTitle = !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium' ? kycJourneyStatusMapperData?.landing_text : '';
-    const cards = sdkInvestCardMapper.filter(el => {
-      if(el.key === 'kyc') {
-        //el.color = kycJourneyStatusMapperData?.color;
-        // if(premiumKyc){
-        //   el.title = el.title + premiumKyc;
-        // }
-        // if(kycDefaultSubTitle){
-        //   el.subtitle = kycDefaultSubTitle;
-        // }
-        // console.log("hell",kycJourneyStatus);
-        // console.log("hell",kycSubTitle);
-        // if(kycSubTitle){
-        //   el.subtitle = kycSubTitle;
-        //   el.dot = true;
-        // }
-        return kyc;
-      } else if(el.key === 'account') {
-        return myAccount;
-      } else if(el.key === 'refer'){
-        if(referralCode){
-          el.referralCode = true;
-          el.path = "";
-          return referralCode;
-        } else {
-          return hideReferral;
-        }
+  let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
+  let partner = this.state.partner || storageService().getObject("partner") || {};
+  let currentUser = this.state.currentUser || storageService().getObject("user") || {};
+  let isReadyToInvestBase = isReadyToInvest();
+  const isWeb =getConfig().Web;
+  const hideReferral = currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
+  const referralCode = !currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_apply_refferal;
+  const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
+  const kyc = !isReadyToInvestBase;
+  const cards = sdkInvestCardMapper.filter(el => {
+    if(el.key === 'kyc') {
+      return kyc;
+    } else if(el.key === 'account') {
+      return myAccount;
+    } else if(el.key === 'refer') {
+      if(referralCode){
+        el.referralCode = true;
+        el.path = "";
+        return referralCode;
       } else {
-        if(el.key === 'invest'){
-         el.subtitle = handleInvestSubtitle(partner)
-        }
-        return true;
+        return hideReferral;
       }
-    })
-    this.setState({renderLandingCards : cards});
-  
-  }
+    } else {
+      if(el.key === 'invest') {
+        el.subtitle = handleInvestSubtitle(partner)
+      }
+      return true;
+    }
+  })
+  this.setState({renderLandingCards : cards});
+}

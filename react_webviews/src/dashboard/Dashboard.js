@@ -31,7 +31,7 @@ import {getConfig} from 'utils/functions';
 
 const Home = (props) => {
   const { url } = props.match;
-  const isWeb = getConfig().isWebCode;
+  const isWeb = getConfig().Web;
   return (
     <Fragment>
       <Switch>

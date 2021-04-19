@@ -18,7 +18,7 @@ class Landing extends Component {
       productName: getConfig().productName,
       partner: getConfig().partner,
       screenName: 'sdk_landing',
-      isWeb: getConfig().isWebCode,
+      isWeb: getConfig().Web,
       invest_show_data: {},
       render_cards: [],
       verificationFailed: false,

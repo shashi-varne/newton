@@ -23,7 +23,7 @@ const TermsAndCond = () => {
   });
   const [doc, setDoc] = useState('');
   const partner_code = getConfig().partner_code;
-  const isWeb = getConfig().isWebCode;
+  const isWeb = getConfig().Web;
 
   const fetchTerms = async (docType) => {
     try {

@@ -9,8 +9,6 @@ import VerificationFailedDialog from "./mini-components/VerificationFailedDialog
 import KycStatusDialog from "./mini-components/KycStatusDialog";
 import KycPremiumLandingDialog from "./mini-components/KycPremiumLandingDialog";
 import { SkeltonRect } from 'common/ui/Skelton';
-import { storageService } from "utils/validators";
-import isEmpty from "lodash/isEmpty";
 
 class Landing extends Component {
   constructor(props) {
@@ -115,7 +113,7 @@ class Landing extends Component {
       >
         <div className="invest-landing">
           {
-            !this.state.kycStatusLoader &&
+            !kycStatusLoader &&
             <div className="generic-page-subtitle">
               {isReadyToInvestBase 
                 ? " Your KYC is verified, You’re ready to invest"
@@ -123,7 +121,7 @@ class Landing extends Component {
             </div>
           }
           {
-            this.state.kycStatusLoader &&
+            kycStatusLoader &&
             <SkeltonRect
               style={{
                 width: '100%',
@@ -138,7 +136,7 @@ class Landing extends Component {
                 case "kyc":
                   return (
                     <React.Fragment key={index}>
-                      {!isReadyToInvestBase && kycStatusData && !this.state.kycStatusLoader && (
+                      {!isReadyToInvestBase && kycStatusData && !kycStatusLoader && (
                         <div
                           className="kyc"
                           style={{
