@@ -110,7 +110,7 @@ class Api {
             .setTag("pathname",main_pathname)
             .setTransactionName(`Error on ${verb} request`)
             // .setUser({"email":"test@example.com"})
-            .setLevel(Sentry.Severity.Error)
+            .setLevel(Sentry.Severity.Critical)
             .setExtra("api_res",JSON.stringify(response.data))
           )
           var SentryError = new Error(errorMsg)
