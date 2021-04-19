@@ -20,7 +20,7 @@ import MyAccount from "./components/my_account";
 import Notification from "./components/notification";
 import PaymentCallback from "./Invest/components/PaymentCallback";
 import SipPaymentCallback from "./Invest/components/SipPaymentCallback";
-import PageCallback from "./Invest/components/pageCallback";
+import PageCallback from "./Invest/components/PageCallback";
 import PaymentOptions from "./Invest/components/PaymentOptions";
 import DigilockerCallback from "../kyc/digilocker/digilockercallback";
 import AccountMerge from "./AccountMerge";
@@ -31,7 +31,7 @@ import {getConfig} from 'utils/functions';
 
 const Home = (props) => {
   const { url } = props.match;
-  const isWeb = getConfig().isWeb;
+  const isWeb = getConfig().isWebCode;
   return (
     <Fragment>
       <Switch>

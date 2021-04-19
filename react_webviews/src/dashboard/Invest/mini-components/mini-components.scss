@@ -223,6 +223,7 @@
     padding: 0px 0px 0px 0px;
     height: 100px;
     display: flex;
+    background: white;
 
     .text{
       flex: 1 1 80%;
@@ -232,6 +233,7 @@
       
       .title{
         font-size: 20px;
+        font-weight: bold;
       }
 
       .subtitle{
@@ -265,28 +267,26 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
       .sdk-refferal-btn{
-        border-color: grey ;
-        color: grey !important;
-        border-radius: 25px ;
-        border: 1px solid grey ;
-        min-height: 36px;
+        border: 1px solid #4DB848;
+        color: #4DB848;
+        font-size: 0.875rem;
         min-width: 88px;
+        box-sizing: border-box;
+        min-height: 36px;
         padding: 0 8px;
         margin: 6px 8px;
-        background: transparent;
-        color: currentColor;
-        white-space: nowrap;
-        text-transform: uppercase;
-        font-weight: 500;
-        font-size: 14px;
-        font-style: inherit;
-        font-variant: inherit;
-        font-family: inherit;
-        text-decoration: none;
-        overflow: hidden;
-        transition: box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        border-radius: 2px;
+      }
+      
+      .sdk-refferal-btn.disable-refferal-btn{
+        border-color: grey;
+        color: grey;
       }
     }
+}
+.sdk-landing-card.disable-card-action {
+  pointer-events: none;
 }
 ////////////End of Sdk Landing Card/////////////////

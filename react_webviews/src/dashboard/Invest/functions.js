@@ -19,6 +19,7 @@ export async function initialize() {
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
   this.setInvestCardsData = setInvestCardsData.bind(this);
+  this.handleRenderCard = handleRenderCard.bind(this);
   this.getRecommendationApi = getRecommendationApi.bind(this);
   this.getRecommendedPlans = getRecommendedPlans.bind(this);
   this.getRateOfInterest = getRateOfInterest.bind(this);
@@ -43,14 +44,24 @@ export async function initialize() {
   this.openKyc = openKyc.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
-  if (this.state.screenName === "invest_landing" && dataSettedInsideBoot) {
+  if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
   }
-  if (this.onload) this.onload();
-  if ((this.state.screenName === "invest_landing" &&
+  if(this.state.screenName === "invest_landing"){
+    this.setInvestCardsData();
+  } else if(this.state.screenName === "sdk_landing") {
+    this.handleRenderCard();
+  }
+
+  if ((this.state.screenName === "invest_landing" &&  getConfig().Web &&
       !dataSettedInsideBoot)) {
     await this.getSummary();
   }
+  if ((this.state.screenName === "sdk_landing" && !getConfig().Web &&
+      !dataSettedInsideBoot)) {
+    await this.getSummary();
+  }
+  if (this.onload) this.onload();
 }
 
 export async function getSummary() {
@@ -1121,7 +1132,6 @@ function navigation(history, pathname, data = {}) {
 
 export function initilizeKyc() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-  let partner = this.state.partner || storageService().getObject("partner") || {};
   let currentUser =
     this.state.currentUser || storageService().getObject("user") || {};
   let isCompliant = userKyc.kyc_status === "compliant" ? true : false;
@@ -1184,23 +1194,6 @@ export function initilizeKyc() {
       );
     }
   }
-
-  const isWeb = getConfig().isWeb;
-  if(!isWeb){
-    const cards = handleRenderCard({
-      currentUser,
-      partner,
-      isReadyToInvestBase,
-      kycStatusData,
-    userKyc,
-    kycJourneyStatus,
-    kycJourneyStatusMapperData,
-    isWeb
-    
-  })
-  this.setState({renderLandingCards : cards});
-}
-  
 }
 
 export function openPremiumOnboardBottomSheet(
@@ -1290,50 +1283,53 @@ function handleInvestSubtitle (partner = '')  {
   return investCardSubtitle;
 };
 
-function handleRenderCard(props) {
-  
-  const {currentUser, partner,isWeb, isReadyToInvestBase,kycJourneyStatusMapperData, kycStatusData, userKyc, kycJourneyStatus } = props; 
-  console.log("working",kycJourneyStatusMapperData);
-  const hideReferral = currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
-  const referralCode = !currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
-  const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
-  const premiumKyc = kycJourneyStatus === 'ground_premium' ? 'PREMIUM' : '';
-  const kyc = !isReadyToInvestBase;
-  const kycDefaultSubTitle = !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium' ? 'Create investment profile' : '';
-  const kycSubTitle = !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium' ? kycJourneyStatusMapperData?.landing_text : '';
-  const cards = sdkInvestCardMapper.filter(el => {
-    if(el.key === 'kyc') {
-      el.color = kycJourneyStatusMapperData?.color;
-      if(premiumKyc){
-        el.title = el.title + premiumKyc;
-      }
-      if(kycDefaultSubTitle){
-        el.subtitle = kycDefaultSubTitle;
-      }
-      console.log("hell",kycJourneyStatus);
-      console.log("hell",kycSubTitle);
-      if(kycSubTitle){
-        el.subtitle = kycSubTitle;
-        el.dot = true;
-      }
-      return kyc;
-    } else if(el.key === 'account') {
-      return myAccount;
-    } else if(el.key === 'refer'){
-      if(referralCode){
-        el.referralCode = true;
-        el.path = "";
-        return referralCode;
+export function handleRenderCard() {
+    let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
+    let partner = this.state.partner || storageService().getObject("partner") || {};
+    let currentUser = this.state.currentUser || storageService().getObject("user") || {};
+    let isReadyToInvestBase = isReadyToInvest();
+    const isWeb =getConfig().isWebCode;
+    // const {currentUser, partner,isWeb, isReadyToInvestBase,kycJourneyStatusMapperData, userKyc, kycJourneyStatus } = props; 
+    const hideReferral = currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
+    const referralCode = !currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_apply_refferal;
+    const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
+    // const premiumKyc = kycJourneyStatus === 'ground_premium' ? 'PREMIUM' : '';
+    const kyc = !isReadyToInvestBase;
+    // const kycDefaultSubTitle = !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium' ? 'Create investment profile' : '';
+    // const kycSubTitle = !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium' ? kycJourneyStatusMapperData?.landing_text : '';
+    const cards = sdkInvestCardMapper.filter(el => {
+      if(el.key === 'kyc') {
+        //el.color = kycJourneyStatusMapperData?.color;
+        // if(premiumKyc){
+        //   el.title = el.title + premiumKyc;
+        // }
+        // if(kycDefaultSubTitle){
+        //   el.subtitle = kycDefaultSubTitle;
+        // }
+        // console.log("hell",kycJourneyStatus);
+        // console.log("hell",kycSubTitle);
+        // if(kycSubTitle){
+        //   el.subtitle = kycSubTitle;
+        //   el.dot = true;
+        // }
+        return kyc;
+      } else if(el.key === 'account') {
+        return myAccount;
+      } else if(el.key === 'refer'){
+        if(referralCode){
+          el.referralCode = true;
+          el.path = "";
+          return referralCode;
+        } else {
+          return hideReferral;
+        }
       } else {
-        return hideReferral;
+        if(el.key === 'invest'){
+         el.subtitle = handleInvestSubtitle(partner)
+        }
+        return true;
       }
-    } else {
-      if(el.key === 'invest'){
-       el.subtitle = handleInvestSubtitle(partner)
-      }
-      return true;
-    }
-  })
-  return cards;
-
-}
+    })
+    this.setState({renderLandingCards : cards});
+  
+  }

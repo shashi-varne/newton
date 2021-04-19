@@ -37,7 +37,6 @@ class Landing extends Component {
 
   onload = () => {
     this.initilizeKyc();
-    this.setInvestCardsData();
   };
 
   addBank = () => {
