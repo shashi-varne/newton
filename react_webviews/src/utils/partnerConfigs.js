@@ -6,19 +6,22 @@ Exhaustive list of property values:
     'diy',
     'bottomScrollCards',
     'bottomCards',
-    'financialTools'
+    'financialTools',
+    'popularCards
   ]
 
 - features list to use within investSubSectionMap 
     "instaredeem",
     "buildwealth",
+    "insurance",
     "savetax",
-    "parkmoney",
-    "savegoal"
-    "nfo", (mostly used for 'bottomCards' key)
-    "diyv2" (only used for 'diy' key)
-    "fhc", "risk_profile" (only used for 'financialTools' key)
-
+    "nps",
+    "parkmoney", (used under 'bottomScrollCards' key)
+    "savegoal", (used under 'bottomScrollCards' key)
+    "nfo", (mostly used under 'bottomCards' key)
+    "diyv2", (only used under 'diy' key)
+    "gold", (used under 'diy' key)
+    "fhc", "risk_profile" (only used under 'financialTools' key)
 */
 
 // common config across all partners

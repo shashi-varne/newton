@@ -61,6 +61,7 @@ function getPartnerConfig(partner_code) {
     productType = "minvest";
   }
 
+  // Appending base config of the productType(fisdom/finity) with the common config accross all partners
   let config_to_return = {
     ...basePartnerConfig[productType],
     ...commonCardsConfig,
@@ -78,13 +79,14 @@ function getPartnerConfig(partner_code) {
     partner_code = "bfdlmobile";
   }
 
+  // Generating partnerData
   let partnerData = partnerConfigs[partner_code] || partnerConfigs["fisdom"];
   config_to_return = {
-    ...config_to_return,
-    ...partnerData,
+    ...config_to_return, // taking the base config of the productType(fisdom/finity)
+    ...partnerData, // overriding with particular partner config
     styles: {
-      ...baseStylesConfig[productType],
-      ...partnerData?.styles,
+      ...baseStylesConfig[productType], //taking common base styles config
+      ...partnerData?.styles, // overriding with the partner styles
     },
   };
 
