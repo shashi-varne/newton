@@ -97,22 +97,8 @@ function getPartnerConfig(partner_code) {
       ...partnerData?.styles, // overriding with the partner styles
     },
     uiElements: {
-      formLabel: {
-        ...baseUIElementsConfig?.formLabel,
-        ...partnerData?.uiElements?.formLabel,
-      },
-      header: {
-        ...baseUIElementsConfig?.header,
-        ...partnerData?.uiElements?.header,
-      },
-      title: {
-        ...baseUIElementsConfig?.title,
-        ...partnerData?.uiElements?.title,
-      },
-      bottomCta: {
-        ...baseUIElementsConfig?.bottomCta,
-        ...partnerData?.uiElements?.bottomCta,
-      },
+      ...baseUIElementsConfig,
+      ...partnerData?.uiElements,
     },
     typography: {
       ...baseTypographyConfig[productType],
