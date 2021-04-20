@@ -8,7 +8,7 @@ import SecureInvest from "./mini-components/SecureInvest";
 import VerificationFailedDialog from "./mini-components/VerificationFailedDialog";
 import KycStatusDialog from "./mini-components/KycStatusDialog";
 import KycPremiumLandingDialog from "./mini-components/KycPremiumLandingDialog";
-import { isEmpty } from "../../utils/validators";
+import isEmpty from "lodash/isEmpty";
 
 class Landing extends Component {
   constructor(props) {
@@ -17,8 +17,8 @@ class Landing extends Component {
       show_loader: false,
       productName: getConfig().productName,
       screenName: "invest_landing",
-      investShowData: {},
-      renderCards: [],
+      investCardsData: {},
+      investSections: [],
       verificationFailed: false,
       modalData: {},
       openKycStatusDialog: false,
@@ -84,26 +84,25 @@ class Landing extends Component {
   };
 
   render() {
-    let {
+    const {
       isReadyToInvestBase,
       productName,
-      investShowData,
-      renderCards,
+      investCardsData,
+      investSections,
       kycStatusData,
       verificationFailed,
       openKycStatusDialog,
       modalData,
       openKycPremiumLanding,
     } = this.state;
-    let {
+    const {
       ourRecommendations,
       diy,
       bottomScrollCards,
       bottomCards,
       popularCards,
       financialTools,
-    } = investShowData;
-
+    } = investCardsData;
     return (
       <Container
         skelton={this.state.show_loader}
@@ -116,8 +115,8 @@ class Landing extends Component {
               ? " Your KYC is verified, You’re ready to invest"
               : "Invest in your future"}
           </div>
-          {renderCards &&
-            renderCards.map((element, index) => {
+          {investSections &&
+            investSections.map((element, index) => {
               switch (element) {
                 case "kyc":
                   return (

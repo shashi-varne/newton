@@ -7,7 +7,7 @@ Exhaustive list of property values:
     'bottomScrollCards',
     'bottomCards',
     'financialTools',
-    'popularCards
+    'popularCards',
   ]
 
 - features list to use within investSubSectionMap 
