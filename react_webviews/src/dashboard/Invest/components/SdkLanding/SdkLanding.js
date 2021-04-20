@@ -8,7 +8,7 @@ import { storageService } from 'utils/validators';
 import isEmpty from 'lodash/isEmpty';
 import { applyReferralCode } from '../../common/api';
 import toast from 'common/ui/Toast';
-// import CampaignDialog from '../../mini-components/CampaignDialog';
+import CampaignDialog from '../../mini-components/CampaignDialog';
 import './SdkLanding.scss';
 
 class SdkLanding extends Component {
@@ -30,8 +30,7 @@ class SdkLanding extends Component {
       referral: '',
       dotLoader: false,
       openBottomSheet: false,
-      bottom_sheet_dialog_data:[]
-
+      bottom_sheet_dialog_data: [],
     };
     this.initialize = initialize.bind(this);
   }
@@ -42,7 +41,10 @@ class SdkLanding extends Component {
 
   onload = () => {
     this.initilizeKyc();
-    this.handleCampaignNotification();
+    const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
+    if (!isBottomSheetDisplayed) {
+      this.handleCampaignNotification();
+    }
   };
 
   handleRefferalInput = (e) => {
@@ -75,25 +77,38 @@ class SdkLanding extends Component {
     }
   };
 
+  closeCampaignDialog = () => {
+    this.setState({ openBottomSheet: false });
+  };
+
   handleCampaignNotification = () => {
-    const notifications = storageService().getObject("campaign") || [];
-    const bottom_sheet_dialog_data = notifications.reduceRight((acc,data) => {
-      if(data?.notification_visual_data?.target?.length >= 1){
+    const notifications = storageService().getObject('campaign') || [];
+    const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
+      if (data?.notification_visual_data?.target?.length >= 1) {
         // eslint-disable-next-line no-unused-expressions
-       data?.notification_visual_data?.target.forEach((el,idx) => {
-          if(el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
+        data?.notification_visual_data?.target.forEach((el, idx) => {
+          if (el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
             acc = el;
             acc.campaign_name = data?.campaign?.name;
           }
-        })
+        });
       }
       return acc;
-    },{});
+    }, {});
 
-    if(!isEmpty(bottom_sheet_dialog_data)){
-      this.setState({bottom_sheet_dialog_data, openBottomSheet: true});
+    if (!isEmpty(bottom_sheet_dialog_data)) {
+      storageService().set('is_bottom_sheet_displayed', true);
+      this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
     }
   };
+
+  handleMarkettingBanner = (path) => () => {
+    if(path === '/invest/recommendations'){
+      this.getRecommendationApi(100);
+    } else {
+      this.navigate(path);
+    }
+  }
 
   render() {
     let {
@@ -113,7 +128,6 @@ class SdkLanding extends Component {
         title='Hello'
         logo
         notification
-        topIcon='search'
         handleNotification={this.handleNotification}
         background='sdk-background'
         classHeader='sdk-header'
@@ -145,7 +159,7 @@ class SdkLanding extends Component {
               ) : (
                 <div className='marketing-banners-list'>
                   {partner?.landing_marketing_banners.map((el, idx) => (
-                    <div className='marketing-banner-icon-wrapper' key={idx}>
+                    <div className='marketing-banner-icon-wrapper' key={idx} onClick={this.handleMarkettingBanner(el?.path)}>
                       <img src={require(`assets/${el.image}`)} alt='' style={{ width: '100%' }} />
                     </div>
                   ))}
@@ -197,7 +211,12 @@ class SdkLanding extends Component {
             </div>
           )}
         </div>
-        {/* <CampaignDialog isOpen={this.state.openBottomSheet} close={() => this.setState({openBottomSheet: false})} data={this.state.bottom_sheet_dialog_data}/> */}
+        <CampaignDialog
+          isOpen={this.state.openBottomSheet}
+          close={this.closeCampaignDialog}
+          cancel={this.closeCampaignDialog}
+          data={this.state.bottom_sheet_dialog_data}
+        />
       </Container>
     );
   }

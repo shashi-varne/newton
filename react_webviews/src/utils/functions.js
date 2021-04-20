@@ -122,9 +122,9 @@ const partnersConfigBase = {
       our_recommendations: ['100_sip', 'instaredeem', 'buildwealth', 'savetax'],
     },
     landing_marketing_banners: [
-      { image: 'mb_4.svg', type: '100_sip' },
-      { image: 'mb_6.svg', type: 'diy' },
-      { image: 'mb_5.svg', type: 'buildwealth' },
+      { image: 'mb_4.svg', type: '100_sip', path: '/invest/recommendations' },
+      { image: 'mb_6.svg', type: 'diy', path: '/invest/explore' },
+      { image: 'mb_5.svg', type: 'buildwealth', path: '/invest/buildwealth' },
     ],
     feature_manager: {
       hide_apply_refferal: true,
@@ -209,9 +209,9 @@ const partnersConfigBase = {
     close_button: 'close_nav_icon.svg',
     search_button: 'search.png',
     landing_marketing_banners: [
-      { image: 'Gold_updated_banner.svg', type: 'gold' },
-      { image: 'fpg_mb_insta.svg', type: 'instaredeem' },
-      { image: 'fpg_mb_100.svg', type: 'buildwealth' },
+      { image: 'Gold_updated_banner.svg', type: 'gold', path : '/gold' },
+      { image: 'fpg_mb_insta.svg', type: 'instaredeem', path: '/invest/instaredeem' },
+      { image: 'fpg_mb_100.svg', type: 'buildwealth', path: '/invest/buildwealth' },
     ],
     feature_manager: {
       hide_apply_refferal: true,

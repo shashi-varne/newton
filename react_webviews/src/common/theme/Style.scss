@@ -1046,6 +1046,18 @@ $header-title-font-size: 20px;
   box-shadow: none !important;
 }
 
+.sdk-header-partner-logo{
+  display: flex;
+  align-items: center;
+  width: 120px;
+  max-width: 50%;
+  img{
+    height: 30px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+}
+
 .main-top-title-new2 {
   font-size: 20px !important;
   color: #160d2e !important;
