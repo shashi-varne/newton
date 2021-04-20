@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
 import { getSummary } from "../common/ApiCalls";
-import { navigate, setLoader } from "../common/commonFunctions";
+import { navigate, setLoader, setPlatformAndUser } from "../common/commonFunctions";
 import toast from "../../common/ui/Toast";
 import { nativeCallback } from "utils/native_callback";
 
@@ -11,6 +11,7 @@ export default class Redirect extends Component {
     this.state = {};
     this.navigate = navigate.bind(this);
     this.setLoader = setLoader.bind(this);
+    setPlatformAndUser();
   }
 
   async componentDidMount() {
@@ -18,28 +19,19 @@ export default class Redirect extends Component {
       this.setLoader(true);
       let body = {
         "external_portfolio": [
-             "portfolio_status"
+          "portfolio_status"
         ]
       }
 
       let result = await getSummary(body);
 
       if (result.data) {
-        let { portfolio_status } = result.data.external_portfolio;
+        const { portfolio_status } = result.data.external_portfolio;
 
-        switch (portfolio_status.data.status.toUpperCase()) {
-          case "INIT":
-            this.navigate("email_entry");
-            break;
-          case "PENDING":
-            this.navigate("statement_request");
-            break;
-          case "SUCCESS":
-            this.navigate("external_portfolio");
-            break;
-          default:
-            this.navigate("email_entry");
-            break;
+        if (portfolio_status?.data?.link) {
+          window.location.replace(portfolio_status.data.link);
+        } else {
+          this.navigate("email_entry", {}, true);
         }
       } else {
         nativeCallback({ action: "exit"});
