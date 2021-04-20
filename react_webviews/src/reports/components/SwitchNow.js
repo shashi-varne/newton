@@ -15,7 +15,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import toast from "common/ui/Toast";
-import { convertInrAmountToNumber } from "../../dashboard/invest/common/commonFunction";
+import { convertInrAmountToNumber } from "../../utils/validators";
 
 const SwitchNow = (props) => {
   const params = props?.match?.params || {};

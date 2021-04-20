@@ -242,7 +242,7 @@ const Summary = (props) => {
               data.showTransactions ? (
                 <>
                   {currentUser.nps_investment &&
-                    partner.invest_screen_cards.nps && (
+                    partner?.invest_screen_cards?.nps && (
                       <div
                         className="content"
                         onClick={() => flowOptions("npsInvestments")}
