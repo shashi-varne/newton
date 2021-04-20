@@ -57,7 +57,7 @@ class InstaRedeem extends Component {
 
   initializeInstaRedeem = async () => {
     const instaRecommendations =
-      storageService().get("instaRecommendations") || [];
+      storageService().getObject("instaRecommendations") || [];
     if (!isEmpty(instaRecommendations)) {
       this.setState({
         instaRecommendation: instaRecommendations[0],
