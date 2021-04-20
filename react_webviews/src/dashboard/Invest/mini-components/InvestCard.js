@@ -8,7 +8,7 @@ const InvestCard = (props) => {
       <div className="content">
         <div className="title">{props.data.title}</div>
         <div className="subtitle">{props.data.subtitle}</div>
-        <Button>{props.data.button_text}</Button>
+        <Button className="invest-landing-button">{props.data.button_text}</Button>
       </div>
       <div className="image-wrapper">
         <img src={require(`assets/${productName}/${props.data.icon}`)} alt="" />

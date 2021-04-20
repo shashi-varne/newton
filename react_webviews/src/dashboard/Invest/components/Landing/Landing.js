@@ -151,7 +151,7 @@ class Landing extends Component {
                           <div className="subtitle">
                             {kycStatusData.subtitle}
                           </div>
-                          <Button>{kycStatusData.button_text}</Button>
+                          <Button className="invest-landing-button">{kycStatusData.button_text}</Button>
                         </div>
                       )}
                     </React.Fragment>
@@ -279,7 +279,7 @@ class Landing extends Component {
                                   <div className="subtitle">
                                     Get an expert financial advice
                                   </div>
-                                  <Button>CHECK NOW</Button>
+                                  <Button className="invest-landing-button">CHECK NOW</Button>
                                 </div>
                               )}
                               {partner.invest_screen_cards.risk_profile && (
@@ -298,7 +298,7 @@ class Landing extends Component {
                                   <div className="subtitle">
                                     Invest as per your risk appetite
                                   </div>
-                                  <Button>START NOW</Button>
+                                  <Button className="invest-landing-button">START NOW</Button>
                                 </div>
                               )}
                             </div>

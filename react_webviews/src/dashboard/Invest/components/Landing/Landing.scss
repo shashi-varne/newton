@@ -28,7 +28,7 @@
     }
   }
 
-  button {
+  .invest-landing-button {
     font-weight: 800;
     font-size: 11px;
     color: white;
@@ -40,7 +40,7 @@
     letter-spacing: 0.01em;
   }
 
-  button:hover {
+  .invest-landing-button:hover {
     background-color: var(--secondary);
   }
 
@@ -168,7 +168,7 @@
       margin: 20px 0 10px 0;
     }
 
-    button {
+    .invest-landing-button {
       color: var(--secondary);
       border: 2px solid var(--secondary);
       background-color: white;
