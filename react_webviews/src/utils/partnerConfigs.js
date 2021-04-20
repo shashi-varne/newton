@@ -42,7 +42,6 @@ export const commonCardsConfig = {
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
   },
-  riskEnabledFunnels: false,
 };
 
 export const basePartnerConfig = {
@@ -92,9 +91,10 @@ export const baseStylesConfig = {
   common: {
     /* Can consider using a common style object for styles
     common to both partner types*/
+    default: "#4a4a4a",
+    notificationsColor: "#ffffff",
   },
   fisdom: {
-    default: "#4a4a4a",
     primaryColor: "#4f2da7",
     secondaryColor: "#35cb5d",
     highlightColor: "#f6f2ff",

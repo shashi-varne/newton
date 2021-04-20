@@ -174,7 +174,7 @@ export async function getNotifications() {
         result.data.campaign.user_campaign.data
       );
       this.setState({ notifications: notifications });
-      storageService().set("campaign", notifications);
+      storageService().setObject("campaign", notifications);
     } else {
       this.setState({ showLoader: false });
       toast(result.message || result.error || "Something went wrong!");

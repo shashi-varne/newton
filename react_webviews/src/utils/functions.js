@@ -1,7 +1,14 @@
 // import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams } from './validators';
 import $ from 'jquery';
-import { basePartnerConfig, baseStylesConfig, baseTypographyConfig, baseUIElementsConfig, commonCardsConfig, partnerConfigs } from './partnerConfigs';
+import { 
+  basePartnerConfig, 
+  baseStylesConfig, 
+  baseTypographyConfig, 
+  baseUIElementsConfig, 
+  commonCardsConfig, 
+  partnerConfigs 
+} from './partnerConfigs';
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
@@ -65,7 +72,6 @@ function getPartnerConfig(partner_code) {
   let config_to_return = {
     ...commonCardsConfig,
     ...basePartnerConfig[productType],
-    ...baseTypographyConfig[productType],
   };
 
   if (isStaging) {
@@ -86,12 +92,31 @@ function getPartnerConfig(partner_code) {
     ...config_to_return, // taking the base config of the productType(fisdom/finity)
     ...partnerData, // overriding with particular partner config
     styles: {
+      ...baseStylesConfig.common,
       ...baseStylesConfig[productType], //taking common base styles config
       ...partnerData?.styles, // overriding with the partner styles
     },
     uiElements: {
-      ...baseUIElementsConfig,
-      ...partnerData?.uiElements,
+      formLabel: {
+        ...baseUIElementsConfig?.formLabel,
+        ...partnerData?.uiElements?.formLabel,
+      },
+      header: {
+        ...baseUIElementsConfig?.header,
+        ...partnerData?.uiElements?.header,
+      },
+      title: {
+        ...baseUIElementsConfig?.title,
+        ...partnerData?.uiElements?.title,
+      },
+      bottomCta: {
+        ...baseUIElementsConfig?.bottomCta,
+        ...partnerData?.uiElements?.bottomCta,
+      },
+    },
+    typography: {
+      ...baseTypographyConfig[productType],
+      ...partnerData?.typography,
     }
   };
 
