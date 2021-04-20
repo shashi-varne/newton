@@ -9,7 +9,7 @@ import toast from '../../../common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
 import useUserKycHook from '../../common/hooks/userKycHook'
-import "./commonStyles.scss";
+import "../commonStyles.scss";
 
 const getTitleList = ({ kyc }) => {
   let titleList = [

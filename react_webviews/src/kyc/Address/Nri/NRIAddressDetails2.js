@@ -11,7 +11,7 @@ import {
 } from "../../common/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
-import "./commonStyles.scss";
+import "../commonStyles.scss";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);

@@ -32,10 +32,10 @@ class NfoFunds extends Component {
       return;
     }
     this.setState({ scheme: scheme });
-    this.initialize(scheme);
+    this.onload(scheme);
   }
 
-  initialize = async (scheme) => {
+  onload = async (scheme) => {
     this.setState({ show_loader: true });
     const errorMessage = "Something went wrong!";
     try {

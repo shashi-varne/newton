@@ -176,3 +176,21 @@ export const applyReferralCode = async (code) => {
       throw result.error || result.message || genericErrMsg
   }
 }
+
+export const getInstaRecommendation = async () => {
+  const res = await Api.get(apiConstants.getInstaRecommendation);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrMsg
+  }
+  const { result, status_code: status } = res.pfwresponse
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrMsg
+  }
+}
