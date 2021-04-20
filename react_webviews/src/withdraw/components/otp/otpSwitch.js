@@ -59,9 +59,11 @@ const OtpSwitch = (props) => {
       navigate(
         '/withdraw/otp/success',
         {
-          type: stateParams?.type,
-          message: result?.message,
-        },null,
+          state: {
+            type: stateParams?.type,
+            message: result?.message,
+          }
+        },
         true
       )
     } catch (err) {
@@ -69,9 +71,11 @@ const OtpSwitch = (props) => {
       navigate(
         '/withdraw/otp/failed',
         {
-          type: stateParams?.type,
-          message: err.message,
-        },null,
+          state:{
+            type: stateParams?.type,
+            message: err.message,
+          }
+        },
         true
       )
     } finally {

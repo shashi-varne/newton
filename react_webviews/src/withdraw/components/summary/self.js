@@ -49,7 +49,7 @@ const SelfSummary = (props) => {
       })
       console.log(result)
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('verify', { ...result })
+        navigate('verify', { state:{...result} })
         return
       }
     } catch (err) {

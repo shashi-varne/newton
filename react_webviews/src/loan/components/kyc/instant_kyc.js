@@ -289,7 +289,7 @@ class InstantKycHome extends Component {
               {portalStatus.indexOf(this.state.dmi_loan_status) !== -1 &&
                 <SVG
                   className="right"
-                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                   src={next_arrow}
                 />}
               {portalStatus.indexOf(this.state.dmi_loan_status) === -1 &&

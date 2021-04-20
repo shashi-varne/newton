@@ -68,7 +68,7 @@ const Landing = (props) => {
       }
     }
 
-    navigate('remark', qstn);
+    navigate('remark', {state:qstn});
   };
 
   const handleClose = () => {

@@ -1,6 +1,6 @@
 import { getConfig } from "utils/functions";
 
-export function navigate(pathname,state, data, redirect,params) {
+export function navigate(pathname, data, redirect) {
     if (redirect) {
       this.history.push({
         pathname: pathname,
@@ -10,7 +10,7 @@ export function navigate(pathname,state, data, redirect,params) {
       this.history.push({
         pathname: `/withdraw/${pathname}`,
         search: data?.searchParams || getConfig().searchParams,
-        state,
+        state: data?.state,
       });
     }
   }

@@ -36,6 +36,7 @@ const Balance = (props) => {
     if (!openModal) {
       navigate(url, null, false)
     } else {
+      setAmount('');
       setOpen(true)
     }
   }
@@ -44,27 +45,31 @@ const Balance = (props) => {
   }
 
   const handleSwitch = () => {
+    setAmount('');
     setError(false)
     setOpen(true)
   }
 
   const handleChange = (event) => {
-    if (event.target.value.length !== 0) {
-      setAmount(event.target.value)
+    let value = event.target.value || "";
+    // eslint-disable-next-line radix
+    if (!isNaN(parseInt(value))) {
+      // eslint-disable-next-line radix
+      setAmount(parseInt(value));
       if (error) {
         setError(false)
       }
     } else {
-      setAmount(event.target.value)
-      setError(true)
+      setAmount('');
+      setError(true);
     }
   }
   const handleProceed = () => {
     if (amount) {
       if (type === 'systematic') {
-        navigate(type, { amount })
+        navigate(type, {state: {amount} })
       } else {
-        navigate('switch', { amount })
+        navigate('switch', {state: {amount} })
       }
     } else {
       setError(true)
@@ -115,6 +120,7 @@ const Balance = (props) => {
               <img
                 src={require(`assets/surplus_graph.png`)}
                 className="withdraw-mid-tile-img"
+                alt="graph"
               />
               <div className="mid-tile-text">
                 Don't var the money lie down idle in bank account. Switch to
@@ -142,6 +148,7 @@ const Balance = (props) => {
                       className="icon"
                       src={require('assets/system_withdraw_icn.png')}
                       width="40"
+                      alt='withdraw-icon'
                     />
                     <div className="text">
                       <div className="header">{title}</div>

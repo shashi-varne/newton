@@ -28,7 +28,7 @@ const tiles = [
 const Explore = (props) => {
   const navigate = navigateFunc.bind(props)
   const handleClick = () => {
-    navigate('/invest', null, null, true)
+    navigate('/invest', null, true)
   }
   return (
     <section className="withdraw-explore-investment-options">

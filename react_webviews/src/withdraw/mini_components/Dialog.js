@@ -1,6 +1,6 @@
 import React from 'react'
-import Dialog from 'common/ui/Dialog'
-import TextField from '@material-ui/core/TextField'
+import Dialog from '@material-ui/core/Dialog'
+import Input from 'common/ui/Input';
 import Button from '@material-ui/core/Button'
 
 const AmountDialog = ({ open, close, disableBackdropClick,title, id, placeholder,handleChange,handleProceed,value,error, helperText }) => {
@@ -17,15 +17,19 @@ const AmountDialog = ({ open, close, disableBackdropClick,title, id, placeholder
       <section className="withdraw-amount-dialog-content">
         <div className="title">{title}</div>
         <form className="withdraw-amount-form">
-          <TextField
+          <Input
             id={id}
             name={id}
             placeholder={placeholder}
             fullWidth
             value={value}
             onChange={handleChange}
+            type='text'
             error={error}
+            autoFocus
             helperText={helperText}
+            inputMode='numeric'
+            pattern='[0-9]*'
           />
           <div className="flex-between">
             <Button color="primary" onClick={close} className="cancel-btn">

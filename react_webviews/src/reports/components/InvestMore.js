@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { isEmpty, storageService, formatAmountInr } from "utils/validators";
+import { isEmpty, storageService, formatAmountInr, convertInrAmountToNumber } from "utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import Input from "common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import { Imgc } from "common/ui/Imgc";
-import { proceedInvestmentChild } from "../../dashboard/invest/functions";
+import { proceedInvestment } from "../../dashboard/proceedInvestmentFunctions";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
-import PennyVerificationPending from "../../dashboard/invest/components/mini_components/PennyVerificationPending";
-import InvestError from "../../dashboard/invest/components/mini_components/InvestError";
-import InvestReferralDialog from "../../dashboard/invest/components/mini_components/InvestReferralDialog";
-import { convertInrAmountToNumber } from "../../dashboard/invest/common/commonFunction";
+import PennyVerificationPending from "../../dashboard/Invest/mini-components/PennyVerificationPending";
+import InvestError from "../../dashboard/Invest/mini-components/InvestError";
+import InvestReferralDialog from "../../dashboard/Invest/mini-components/InvestReferralDialog";
 
 const InvestMore = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -102,7 +101,7 @@ const InvestMore = (props) => {
       body.referral_code = investReferralData.code;
     }
 
-    proceedInvestmentChild({
+    proceedInvestment({
       userKyc: userKyc,
       sipOrOnetime: sipOrOnetime,
       body: body,

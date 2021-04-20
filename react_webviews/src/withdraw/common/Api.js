@@ -114,6 +114,7 @@ export const getRecommendedFund = async (type, amount = null) => {
       api += `?amount=${amount}`
     }
     let res = await Api.get(api)
+    // let res;
     // if (type === 'insta-redeem') {
     //   res = insta
     // } else if (type === 'self') {
@@ -126,7 +127,11 @@ export const getRecommendedFund = async (type, amount = null) => {
       !res.pfwresponse ||
       isEmpty(res.pfwresponse)
     ) {
-      throw genericErrMsg
+      if(type === 'insta-redeem' && res.pfwresponse.status_code !== 200){
+        throw res;
+      } else {
+        throw genericErrMsg
+      }
     }
     const { result, status_code: status } = res.pfwresponse
 

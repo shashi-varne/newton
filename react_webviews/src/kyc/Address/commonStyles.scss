@@ -1,0 +1,53 @@
+.kyc-address-details {
+  .input {
+    .MuiGrid-item {
+      min-width: 164px !important;
+    }
+
+    .address-label {
+      color: #8d879b;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .address-proof {
+      display: flex;
+      flex-wrap: wrap;
+
+      .address-proof-option {
+        margin: 10px 15px 10px 0;
+        padding: 8px 10px 8px 10px;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 4px;
+        text-align: left;
+        font-size: 13px;
+        color: #160d2e;
+        border: 1px solid;
+        border-color: #767e86;
+        min-width: 145px;
+        cursor: pointer;
+
+        .check-icon {
+          width: 10px;
+        }
+      }
+
+      .disabled {
+        color: #9b98a2;
+        border-color: #9b98a2;
+      }
+
+      .selected {
+        font-weight: 600;
+        color: var(--primary);
+        border-color: var(--primary);
+      }
+
+      .helper-text {
+        margin-top: -5px;
+        color: #f44336;
+      }
+    }
+  }
+}

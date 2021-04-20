@@ -50,7 +50,6 @@ const WithdrawSwitch = (props) => {
   const showFundGraph = (isins) => () => {
     navigate(
       '/fund-details',
-      null,
       { searchParams: `${props.location.search}&isins=${isins}` },
       true
     );

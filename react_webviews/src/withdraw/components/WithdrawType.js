@@ -27,35 +27,12 @@ const Landing = (props) => {
   const fetchRecommendedFunds = async () => {
     try {
       setShowSkeltonLoader(true)
-      const data = await getRecommendedFund(type, amount)
+      const data = await getRecommendedFund(type, amount);
+      const recData = data?.recommendations || [];
+      setRecommendedFunds(recData);
       if (type === 'insta-redeem') {
-        if (data?.recommendations && data?.recommendations?.length > 0) {
-          const recData = data?.recommendations[0]
-          setRecommendedFunds(recData)
-          if (
-            recData.ir_funds_available &&
-            recData.all_success &&
-            recData.allocations &&
-            recData.allocations[0] &&
-            (recData.allocations[0].amount <= 0 ||
-              !recData.allocations[0].amount)
-          ) {
-            setLimitCrossed(true)
-          }
-          if (recData.ir_funds_available && recData.all_success) {
-            setInvestedUser(true)
-          } else if (recData.ir_funds_available && !recData.all_success) {
-            setFetchFailed(true)
-            setButtonTitle('RETRY')
-          } else {
-            setZeroInvested(true)
-            setButtonTitle('DEPOSIT NOW')
-          }
-        } else {
-          setFetchFailed(true)
-        }
+        setInstaRecommendation(recData);
       } else {
-        setRecommendedFunds(data?.recommendations[0])
         if (type === 'systematic') {
           let val = {}
           // eslint-disable-next-line no-unused-expressions
@@ -67,8 +44,17 @@ const Landing = (props) => {
           setTotalAmount(totalAmount)
         }
       }
-    } catch (err) {
-      toast(err, 'error')
+    } catch (error) {
+      if (type === 'insta-redeem') {
+        var errRec = error.pfwresponse.result.error;
+        if(Array.isArray(errRec)) {
+          setInstaRecommendation(errRec);
+        } else{
+          toast(error, 'error');
+        }
+      } else{
+        toast(error, 'error');
+      }
     } finally {
       setShowSkeltonLoader(false)
     }
@@ -104,7 +90,7 @@ const Landing = (props) => {
   }
   const handleClick = () => {
     if (zeroInvested) {
-      navigate('/invest/insta-redeem', null, null, true)
+      navigate('/invest/instaredeem', null, true)
     } else if (fetchFailed) {
       fetchRecommendedFunds()
     } else {
@@ -115,14 +101,18 @@ const Landing = (props) => {
       if (type === 'manual') {
         console.log(recommendedFunds)
         navigate(`self/summary`, {
-          amounts: value,
-          ...recommendedFunds,
+          state:{
+            amounts: value,
+            ...recommendedFunds,
+          }
         })
       } else {
         console.log(recommendedFunds)
         navigate(`${type}/summary`, {
-          amounts: value,
-          ...recommendedFunds,
+          state:{
+            amounts: value,
+            ...recommendedFunds,
+          }
         })
       }
     }
@@ -141,6 +131,33 @@ const Landing = (props) => {
         return "Manual withdraw";
       default:
         return "Withdraw";
+    }
+  }
+
+  const setInstaRecommendation = (data) => {
+    if (data?.length > 0) {
+      const recData = data[0] || [];
+      if (
+        recData.ir_funds_available &&
+        recData.all_success &&
+        recData.allocations &&
+        recData.allocations[0] &&
+        (recData.allocations[0].amount <= 0 ||
+          !recData.allocations[0].amount)
+      ) {
+        setLimitCrossed(true)
+      }
+      if (recData.ir_funds_available && recData.all_success) {
+        setInvestedUser(true)
+      } else if (recData.ir_funds_available && !recData.all_success) {
+        setFetchFailed(true)
+        setButtonTitle('RETRY')
+      } else {
+        setZeroInvested(true)
+        setButtonTitle('DEPOSIT NOW')
+      }
+    } else {
+      setFetchFailed(true)
     }
   }
   return (
@@ -164,20 +181,22 @@ const Landing = (props) => {
       type={type !== 'insta-redeem' ? "withProvider" : ''}
       title={getTitle()}
     >
-      {recommendedFunds?.allocations && (
+      {!isEmpty(recommendedFunds) && (
         <>
           {(investedUser || type !== 'insta-redeem') && (
             <section>
-              {recommendedFunds?.allocations?.map((el, idx) => (
-                <FundCard
+              {recommendedFunds?.map(el => (
+                el?.allocations?.map((fundData,idx) => {
+                  return <FundCard
                   key={idx}
                   expand={idx === 0}
                   type={type}
-                  data={el}
+                  data={fundData}
                   disabled={type === 'systematic' || limitCrossed}
                   calcTotalAmount={calcTotalAmount}
                   checkError={checkError}
-                />
+                  />
+                })
               ))}
             </section>
           )}
