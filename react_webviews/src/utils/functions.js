@@ -1,7 +1,7 @@
 // import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams } from './validators';
 import $ from 'jquery';
-import { basePartnerConfig, baseStylesConfig, commonCardsConfig, partnerConfigs } from './partnerConfigs';
+import { basePartnerConfig, baseStylesConfig, baseTypographyConfig, baseUIElementsConfig, commonCardsConfig, partnerConfigs } from './partnerConfigs';
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
@@ -63,8 +63,9 @@ function getPartnerConfig(partner_code) {
 
   // Appending base config of the productType(fisdom/finity) with the common config accross all partners
   let config_to_return = {
-    ...basePartnerConfig[productType],
     ...commonCardsConfig,
+    ...basePartnerConfig[productType],
+    ...baseTypographyConfig[productType],
   };
 
   if (isStaging) {
@@ -88,6 +89,10 @@ function getPartnerConfig(partner_code) {
       ...baseStylesConfig[productType], //taking common base styles config
       ...partnerData?.styles, // overriding with the partner styles
     },
+    uiElements: {
+      ...baseUIElementsConfig,
+      ...partnerData?.uiElements,
+    }
   };
 
   let html = document.querySelector(`html`);
@@ -96,7 +101,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--skelton-color`, `${config_to_return.styles.skeltonColor}`);
   html.style.setProperty(`--primary`, `${config_to_return.styles.primaryColor}`);
   html.style.setProperty(`--default`, `${config_to_return.styles.default}`);
-  html.style.setProperty(`--label`, `${config_to_return.styles.label}`);
+  html.style.setProperty(`--label`, `${config_to_return.uiElements.formLabel.color}`);
   html.style.setProperty(`--desktop-width`, "640px");
   html.style.setProperty(`--tooltip-width`, "540px");
   html.style.setProperty("--color-action-disable", "#E8ECF1");

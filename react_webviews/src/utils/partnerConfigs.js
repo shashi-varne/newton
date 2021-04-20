@@ -216,6 +216,9 @@ export const partnerConfigs = {
       title: {
         color: "#2E3192",
       },
+      header: {
+        backgroundColor : "#E8FD00",
+      }
     },
   },
   tvscredit: {
@@ -423,6 +426,11 @@ export const partnerConfigs = {
     styles: {
       primaryColor: "#3792FC",
       backButtonColor: "#3792FC",
+    },
+    uiElements: {
+      header: {
+        backgroundColor: "#FFF", // same as white_header
+      },
     },
   },
   taxwin: {

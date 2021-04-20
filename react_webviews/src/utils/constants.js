@@ -82,7 +82,7 @@ export const themeConfig = {
         MuiInputLabel: {
             root: {
                 fontSize: '0.9rem',
-                color: getConfig().styles.label,
+                color: getConfig().uiElements?.formLabel.color,
                 fontWeight: 'normal'
             },
             shrink: {
