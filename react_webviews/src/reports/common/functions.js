@@ -62,6 +62,7 @@ export const redirectToReports = (name) => {
     "&generic_callback=true&redirect_url=" +
     redirectUrl;
   window.location.href = url;
+  // TODO -> use navigation
 };
 
 export const dateOrdinalSuffix = (dom) => {

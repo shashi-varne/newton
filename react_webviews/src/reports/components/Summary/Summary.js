@@ -453,7 +453,7 @@ const Summary = (props) => {
                   <div>Withdraw your funds</div>
                 </div>
               </div>
-              {data.insurance_active && (
+              {!data.insurance_active && (
                 <div
                   className="content"
                   onClick={() => redirectToReports("insurance")}
@@ -478,7 +478,7 @@ const Summary = (props) => {
                   />
                   <div className="text">
                     <div className="title">Gold</div>
-                    <div>{data.gold_details.total_balance} gm</div>
+                    <div>{data?.gold_details?.total_balance || 0} gm</div>
                   </div>
                 </div>
               )}
