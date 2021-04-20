@@ -112,7 +112,7 @@ class TicketConversations extends Component {
     });
 
     if (reply) {
-      this.handleScroll();
+      this.handleScroll('smooth');
 
       this.setState({
         splitIndex: conversations.length
