@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { getTransactions, getNextTransactions } from "../../common/api";
+import "./commonStyles.scss";
 
 const FundswiseTransactions = (props) => {
   const params = props?.match?.params || {};

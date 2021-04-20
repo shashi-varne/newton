@@ -8,6 +8,7 @@ import {
 } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import Slider from "common/ui/Slider";
+import "./commonStyles.scss";
 
 const PausePeriod = (props) => {
   const productName = getConfig().productName;

@@ -4,8 +4,8 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
 import { getFunds, getFundMf } from "../common/api";
 import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
-import FundNotAvailable from "./mini_components/FundNotAvailable";
-import AskInvestType from "./mini_components/AskInvestType";
+import FundNotAvailable from "./mini-components/FundNotAvailable";
+import AskInvestType from "./mini-components/AskInvestType";
 import Button from "../../common/ui/Button";
 
 const Funds = (props) => {

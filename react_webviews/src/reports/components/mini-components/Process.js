@@ -4,6 +4,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import HourglassFullIcon from "@material-ui/icons/HourglassFull";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
+import "./mini-components.scss";
 
 const Process = ({ isOpen, data, close, state, type, status }) => {
   return (

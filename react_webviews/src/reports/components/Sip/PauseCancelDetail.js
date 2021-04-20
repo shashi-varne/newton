@@ -6,6 +6,7 @@ import { navigate as navigateFunc } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import { getSipNote, postSipAction } from "../../common/api";
 import toast from "common/ui/Toast";
+import "./commonStyles.scss";
 
 const PauseCancelDetail = (props) => {
   const productName = getConfig().productName;

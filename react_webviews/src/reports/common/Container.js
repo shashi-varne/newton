@@ -18,7 +18,7 @@ class Container extends Component {
       inPageTitle: true,
       force_hide_inpage_title: this.props.hidePageTitle,
       new_header: true,
-      project: "landing", //to use in common functions
+      project: "reports", //to use in common functions
     };
     this.historyGoBack = this.historyGoBack.bind(this);
     this.handleTopIcon = this.handleTopIcon.bind(this);
@@ -57,10 +57,7 @@ class Container extends Component {
   }
 
   render() {
-    let props_base = {
-      classOverRide: "loanMainContainer",
-    };
-    return <Fragment>{this.commonRender(props_base)}</Fragment>;
+    return <Fragment>{this.commonRender()}</Fragment>;
   }
 }
 

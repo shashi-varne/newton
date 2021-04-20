@@ -9,6 +9,7 @@ import {
 } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
+import "./commonStyles.scss";
 
 const SipDetails = (props) => {
   const productName = getConfig().productName;

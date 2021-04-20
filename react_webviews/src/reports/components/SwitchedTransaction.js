@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { getPurchaseProcessData, storageConstants } from "../constants";
-import Process from "./mini_components/Process";
+import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 
 const SwitchedTransaction = (props) => {

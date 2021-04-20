@@ -1,6 +1,7 @@
 import React from "react";
 import Menu from "material-ui/Menu";
 import MenuItem from "material-ui/Menu/MenuItem";
+import "./mini-components.scss";
 
 const FundSummaryMenu = ({
   menuPosition,

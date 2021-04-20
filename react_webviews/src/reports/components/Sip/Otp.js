@@ -7,6 +7,7 @@ import { storageService, isEmpty } from "../../../utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { initData } from "../../../kyc/services";
 import { resendOtp, submitOtp } from "../../common/api";
+import "./commonStyles.scss";
 
 class Otp extends Component {
   constructor(props) {

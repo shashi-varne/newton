@@ -1,6 +1,7 @@
 import React from "react";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import Button from "@material-ui/core/Button";
+import "./mini-components.scss";
 
 const FundNotAvailable = ({ isOpen, data, close }) => {
   return (

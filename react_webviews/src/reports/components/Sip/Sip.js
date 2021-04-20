@@ -8,6 +8,7 @@ import {
   dateOrdinalSuffix,
 } from "../../common/functions";
 import { getConfig } from "utils/functions";
+import "./commonStyles.scss";
 
 const Sip = (props) => {
   const productName = getConfig().productName;

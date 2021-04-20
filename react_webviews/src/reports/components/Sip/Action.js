@@ -5,6 +5,7 @@ import { getPathname } from "../../constants";
 import { navigate as navigateFunc } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import { Imgc } from "common/ui/Imgc";
+import "./commonStyles.scss";
 
 const Action = (props) => {
   const goBack = () => {

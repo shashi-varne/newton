@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Container from "../common/Container";
+import Container from "../../common/Container";
 import {
   formatAmountInr,
   isEmpty,
@@ -14,10 +14,11 @@ import {
   getProjectedValue,
   redirectToReports,
   getAmountInInr,
-} from "../common/functions";
-import { getPathname, storageConstants } from "../constants";
-import { getSummaryV2 } from "../common/api";
-import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+} from "../../common/functions";
+import { getPathname, storageConstants } from "../../constants";
+import { getSummaryV2 } from "../../common/api";
+import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
+import "./commonStyles.scss";
 
 const Summary = (props) => {
   const productName = getConfig().productName;

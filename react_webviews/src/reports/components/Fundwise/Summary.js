@@ -8,8 +8,9 @@ import {
   getAmountInInr,
 } from "../../common/functions";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import FundSummaryMenu from "../mini_components/FundSummaryMenu";
+import FundSummaryMenu from "../mini-components/FundSummaryMenu";
 import toast from "common/ui/Toast";
+import "./commonStyles.scss";
 
 const FundswiseSummary = (props) => {
   const navigate = navigateFunc.bind(props);
