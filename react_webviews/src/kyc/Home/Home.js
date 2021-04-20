@@ -11,6 +11,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
 import { getConfig, isIframe } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
