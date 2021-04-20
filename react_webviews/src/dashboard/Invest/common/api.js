@@ -1,8 +1,6 @@
 import Api from 'utils/api';
 import { isEmpty } from 'utils/validators';
-import { storageService } from '../../../utils/validators';
 import { apiConstants } from '../constants';
-import { isArray } from 'lodash';
 const genericErrMsg = 'Something went wrong';
 
 export const get_recommended_funds = async (params) => {
@@ -169,6 +167,24 @@ export const applyReferralCode = async (code) => {
     isEmpty(res.pfwresponse)
   ) {
     throw genericErrMsg
+  }
+  const { result, status_code: status } = res.pfwresponse
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrMsg
+  }
+}
+
+export const getInstaRecommendation = async () => {
+  const res = await Api.get(apiConstants.getInstaRecommendation);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrMsg
   }
   const { result, status_code: status } = res.pfwresponse
   switch (status) {

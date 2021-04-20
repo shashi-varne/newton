@@ -1,4 +1,3 @@
-import './style.scss';
 import React, { useState } from 'react';
 import Container from '../common/Container';
 import FundCard from '../Invest/mini-components/FundCard';

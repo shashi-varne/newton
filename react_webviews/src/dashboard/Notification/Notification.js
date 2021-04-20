@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import { getConfig } from "utils/functions";
-import { initialize, getRedirectionUrlWebview } from "../common/functions";
-import Container from "../common/Container";
 import "./Notification.scss";
+import { getConfig } from "utils/functions";
+import Container from "../common/Container";
+import Api from "../../utils/api";
+import toast from "../../common/ui/Toast";
+import { storageService } from "../../utils/validators";
+import { getBasePath } from "../../utils/functions";
 
+const genericErrorMessage = "Something went wrong!";
 class Notification extends Component {
   constructor(props) {
     super(props);
@@ -12,29 +16,110 @@ class Notification extends Component {
       showLoader: false,
       notifications: [],
     };
-    this.initialize = initialize.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
-  }
-
-  onload = () => {
+  componentDidMount() {
     this.getNotifications();
+  }
+
+  getNotifications = async () => {
+    this.setState({ showLoader: true });
+    try {
+      const res = await Api.post(`/api/user/account/summary`, {
+        campaign: ["user_campaign"],
+      });
+      const { result, status_code: status } = res.pfwresponse;
+      if (status === 200) {
+        this.setState({ showLoader: false });
+        let campSections = ["notification", "profile"];
+        let notifications = this.filterCampaignTargetsBySection(
+          campSections,
+          result.data.campaign.user_campaign.data
+        );
+        this.setState({ notifications: notifications });
+        storageService().setObject("campaign", notifications);
+      } else {
+        this.setState({ showLoader: false });
+        toast(result.message || result.error || genericErrorMessage);
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({ showLoader: false });
+      toast(genericErrorMessage);
+    }
+  };
+
+  filterCampaignTargetsBySection(sections, notifications) {
+    if (!notifications) {
+      notifications = storageService().get("campaign") || [];
+    }
+
+    let notificationsData = [];
+
+    for (let i = 0; i < notifications.length; i++) {
+      if (
+        notifications[i].notification_visual_data &&
+        notifications[i].notification_visual_data.target
+      ) {
+        for (
+          let j = 0;
+          j < notifications[i].notification_visual_data.target.length;
+          j++
+        ) {
+          let camTarget = notifications[i].notification_visual_data.target[j];
+          if (sections.indexOf(camTarget.section) !== -1) {
+            camTarget.campaign_name = notifications[i].campaign.name;
+            notificationsData.push(camTarget);
+            break;
+          }
+        }
+      }
+    }
+    return notificationsData;
+  }
+
+  getRedirectionUrlWebview = (url, redirect_path, type, redirect_url) => {
+    let webRedirectionUrl = url;
+    let is_secure = storageService().get("is_secure");
+    let plutus_redirect_url = `${getBasePath()}/`;
+    if (redirect_path) {
+      plutus_redirect_url += redirect_path;
+    }
+    plutus_redirect_url += `${getConfig().searchParams}&is_secure=${is_secure}`;
+    plutus_redirect_url = encodeURIComponent(plutus_redirect_url);
+    if (redirect_url) {
+      webRedirectionUrl +=
+        // eslint-disable-next-line
+        (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
+        "generic_callback=true&redirect_url=" +
+        plutus_redirect_url;
+    } else {
+      webRedirectionUrl +=
+        // eslint-disable-next-line
+        (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
+        "generic_callback=true&plutus_redirect_url=" +
+        plutus_redirect_url;
+    }
+
+    if (type === "campaigns") {
+      webRedirectionUrl += "&campaign_version=1";
+    }
+
+    return webRedirectionUrl;
   };
 
   handleClick = (target) => {
     this.setState({ showLoader: true });
     let campLink = "";
     if (target.campaign_name === "whatsapp_consent") {
-      campLink = getRedirectionUrlWebview(
+      campLink = this.getRedirectionUrlWebview(
         target.url,
         "notification",
         "campaigns",
         true
       );
     } else {
-      campLink = getRedirectionUrlWebview(
+      campLink = this.getRedirectionUrlWebview(
         target.url,
         "notification",
         "campaigns"

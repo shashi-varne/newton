@@ -36,11 +36,11 @@ import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 import Landing from "./dashboard";
 
-import Login from './login_and_registration/login';
-import Register from './login_and_registration/register';
-import Otp from './login_and_registration/otp';
-import ForgotPassword from './login_and_registration/forgot_password';
-import Logout from './login_and_registration/logout';
+import Login from './login_and_registration/Login';
+import Register from './login_and_registration/Register';
+import Otp from './login_and_registration/Otp';
+import ForgotPassword from './login_and_registration/ForgotPassword';
+import Logout from './login_and_registration/Logout';
 import Kyc from './kyc';
 
 import ProtectedRoute from './common/components/ProtectedRoute';

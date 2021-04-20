@@ -1,4 +1,3 @@
-import './style.scss';
 import React, { useState } from 'react';
 import Container from '../common/Container';
 import { FormControl, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';

@@ -1029,3 +1029,11 @@ export function getFinancialYear() {
   }
   return 'FY ' + currentFinYear + '-' + nextFinYear.toString().slice(-2);
 }
+
+export const convertInrAmountToNumber = (value) => {
+  let amount = (value.match(/\d+/g) || "").toString();
+    if (amount) {
+      amount = amount.replaceAll(",", "");
+    }
+    return amount
+}
