@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
 import Input from "common/ui/Input";
-import { formatAmountInr } from "utils/validators";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import { nfoData } from "../../constants";
@@ -11,8 +10,11 @@ import { CATEGORY, FUNDSLIST, SUBCATEGORY, CART } from "../../../diy/constants";
 import PennyVerificationPending from "../../mini-components/PennyVerificationPending";
 import InvestError from "../../mini-components/InvestError";
 import InvestReferralDialog from "../../mini-components/InvestReferralDialog";
-import { convertInrAmountToNumber } from "../../common/commonFunctions";
 import { initializeComponentFunctions } from "./checkoutFunctions";
+import {
+  convertInrAmountToNumber,
+  formatAmountInr,
+} from "../../../../utils/validators";
 
 class Checkout extends Component {
   constructor(props) {

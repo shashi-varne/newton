@@ -188,11 +188,3 @@ export const selectTitle = (type) => {
       return 'Invest';
   }
 };
-
-export const convertInrAmountToNumber = (value) => {
-  let amount = (value.match(/\d+/g) || "").toString();
-    if (amount) {
-      amount = amount.replaceAll(",", "");
-    }
-    return amount
-}

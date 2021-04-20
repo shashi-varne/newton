@@ -8,7 +8,6 @@ import {
   getCorpusValue,
   validateOtAmount,
   validateSipAmount,
-  convertInrAmountToNumber,
   selectTitle,
 } from '../common/commonFunctions';
 import { get_recommended_funds } from '../common/api';
@@ -16,7 +15,10 @@ import { isArray } from 'lodash';
 
 import './mini-components.scss';
 import { getConfig } from '../../../utils/functions';
-import { formatAmountInr } from '../../../utils/validators';
+import { 
+  formatAmountInr, 
+  convertInrAmountToNumber 
+} from '../../../utils/validators';
 import useFunnelDataHook from '../common/funnelDataHook';
 
 const InvestAmount = (props) => {

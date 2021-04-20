@@ -3,15 +3,17 @@ import React, { useEffect, useState } from 'react';
 import Container from '../../../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
-import { formatAmountInr } from 'utils/validators';
 import {
   navigate as navigateFunc,
   isRecurring,
-  convertInrAmountToNumber,
   getMonthlyCommitmentNew
 } from '../../../common/commonFunctions';
 import moment from 'moment';
 import useFunnelDataHook from '../../../common/funnelDataHook';
+import { 
+  convertInrAmountToNumber, 
+  formatAmountInr 
+} from '../../../../../utils/validators';
 
 const currentYear = moment().year();
 

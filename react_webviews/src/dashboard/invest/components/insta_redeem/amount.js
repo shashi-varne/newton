@@ -7,11 +7,10 @@ import FormControl from "@material-ui/core/FormControl";
 import { formatAmountInr } from "utils/validators";
 import { investRedeemData } from "../../constants";
 import {
-  convertInrAmountToNumber,
   getGoalRecommendation,
   navigate as navigateFunc,
 } from "../../common/commonFunctions";
-import { isEmpty, storageService } from "../../../../utils/validators";
+import { isEmpty, storageService, convertInrAmountToNumber } from "../../../../utils/validators";
 import useFunnelDataHook from "../../common/funnelDataHook";
 
 const InvestAmount = (props) => {
