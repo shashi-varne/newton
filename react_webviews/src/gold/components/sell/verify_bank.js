@@ -263,7 +263,7 @@ class SellVerifyBank extends Component {
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div style={{ color: '#0A1C32', fontSize: 16, fontWeight: 600 }}>Verifying your account details</div>
-                            <div style={{ color: getConfig().primary, fontSize: 13 }}>00:{this.state.timeAvailableVerify < 10 ? '0' : ''}{this.state.timeAvailableVerify}</div>
+                            <div style={{ color: getConfig().styles.primaryColor, fontSize: 13 }}>00:{this.state.timeAvailableVerify < 10 ? '0' : ''}{this.state.timeAvailableVerify}</div>
                         </div>
                         <div style={{ color: '#767E86', fontSize: 14, margin: '15px 0 0 0' }}>
                             Please wait, while we verify your bank account. Do not close the app.
@@ -385,7 +385,7 @@ class SellVerifyBank extends Component {
                         onClick={() => this.navigate('sell-edit-bank')}
                         style={{
                             position: 'absolute', right: 16,
-                            color: getConfig().secondary, fontWeight: 'bold',
+                            color: getConfig().styles.secondaryColor, fontWeight: 'bold',
                             cursor: 'pointer'
                         }}>EDIT</div>
                     </div>

@@ -121,14 +121,14 @@ class SendEmail extends Component {
           <img style={{ width: '25%' }} src={icon} alt="OTM" />
         </div>
         <div style={{
-          color: getConfig().default,
+          color: getConfig().styles.default,
           fontSize: 16, textAlign: 'center', fontWeight: 500,
           margin: '20px 0 10px 0'
         }}>
           Hey {this.state.params.name},
         </div>
         <div style={{
-          color: getConfig().default, margin: '10px 0px 10px 0px',
+          color: getConfig().styles.default, margin: '10px 0px 10px 0px',
           fontSize: 16, textAlign: 'center'
         }}>
           We will email you a Bank Mandate(OTM) form,

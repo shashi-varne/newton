@@ -8,7 +8,7 @@ class RenderDiseasesClass extends Component {
     super(props);
     this.state = {
       type: getConfig().productName,
-      color: getConfig().primary,
+      color: getConfig().styles.primaryColor,
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);

@@ -28,7 +28,7 @@ export async function proceedInvestment(data) {
 
   let isKycNeeded = false;
   if (
-    (getConfig().partner.code === "bfdlmobile" && !data.isInvestJourney) ||
+    (getConfig().partner_code === "bfdlmobile" && !data.isInvestJourney) ||
     data.isInvestJourney ||
     data.isSipDatesScreen
   ) {

@@ -112,7 +112,7 @@ class SelectGrp extends Component {
 
           <div>
             <div style={{ display: '-webkit-box' }}>
-              <div style={{ width: index === this.state.recommendedIndex ? '28%' : '88%', color: getConfig().primary, fontWeight: 500 }}>
+              <div style={{ width: index === this.state.recommendedIndex ? '28%' : '88%', color: getConfig().styles.primaryColor, fontWeight: 500 }}>
                 {this.state.dataType === 'AOB' &&
                   <span>{props[this.state.keyToShow]}</span>
                 }

@@ -237,7 +237,7 @@ const SelectBankModal = (props) => {
     <div id="selectBankModal" className="modal modal-center">
       <div className="modal-content">
         <header className={`${getConfig().productName}`}>
-          <SVG className="ic_close" preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)} src={ic_close} width="25" onClick={() => props.closeBankModal()} />
+          <SVG className="ic_close" preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)} src={ic_close} width="25" onClick={() => props.closeBankModal()} />
         </header>
         <div className="header">
           <h1>Select preferred bank</h1>

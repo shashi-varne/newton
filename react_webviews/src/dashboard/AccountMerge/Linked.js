@@ -9,13 +9,13 @@ const AccountLinked = (props) => {
   const navigate = navigateFunc.bind(props);
   const config = getConfig();
   const productName = config.productName;
-  const partner = config.partner;
+  const code = config.code;
   const handleClick = () => {
     navigate("/logout");
   };
 
   const hideImage =
-    isIframe() && partner.code === "moneycontrol" && config.isMobileDevice;
+    isIframe() && code === "moneycontrol" && config.isMobileDevice;
   return (
     <Container buttonTitle="CLOSE" hidePageTitle handleClick={handleClick}>
       <div className="account-merge-linked">
