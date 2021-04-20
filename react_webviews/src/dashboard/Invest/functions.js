@@ -177,129 +177,54 @@ export async function setNpsData(response) {
 }
 
 export function setInvestCardsData() {
-  let { partner } = this.state || {};
-  if (!partner.invest_screen_cards) {
-    partner.invest_screen_cards = {
-      nps: false,
-      gold: false,
-    };
-  }
-  let insuranceDisabled = [
-    "lvb",
-    "cccb",
-    "sury",
-    "obc",
-    "svcho",
-    "alb",
-    "ktb",
-    "sbm",
-    "cub",
-  ];
-  let npsDisabled = ["cccb", "sury", "obc", "svcho", "ktb", "sbm", "cub"];
-  let goldDisabled = [
-    "apna",
-    "lvb",
-    "cccb",
-    "sury",
-    "obc",
-    "svcho",
-    "alb",
-    "ktb",
-    "cub",
-  ];
-  let referralData = storageService().getObject("referral");
-  let referral = {};
-  let subbroker_code = {};
-  if (referralData) {
-    referral = referralData.subbroker.data;
-    if (referral) {
-      subbroker_code = referral.subbroker_code;
-    }
-  }
-  if (partner.code === "bfdlmobile") {
-    investCardsBase["our_recommendations"]["instaredeem"].title = "Money +";
-  }
-
-  let invest_cards_handling_common = {
-    our_recommendations: [
-      "instaredeem",
-      "buildwealth",
-      "insurance",
-      "savetax",
-      "nps",
+  const disabledPartnersMap = {
+    insurance: [
+      "lvb",
+      "cccb",
+      "sury",
+      "obc",
+      "svcho",
+      "alb",
+      "ktb",
+      "sbm",
+      "cub",
     ],
-    diy: ["diyv2", "gold"],
-    bottom_scroll_cards: ["parkmoney", "savegoal"],
-    bottom_cards: ["nfo"],
-    popular_cards: [],
+    nps: ["cccb", "sury", "obc", "svcho", "ktb", "sbm", "cub"],
+    gold: ["apna", "lvb", "cccb", "sury", "obc", "svcho", "alb", "ktb", "cub"],
   };
 
-  let restricted_items = ["gold", "nps", "risk_profile", "insurance"];
-
-  let invest_cards_handling_partner = partner.invest_cards_handling;
-
-  let invest_show_data = {};
-
-  let invest_render_cards_common = [
-    "kyc",
-    "our_recommendations",
-    "diy",
-    "bottom_scroll_cards",
-    "bottom_cards",
-    "financial_tools",
-  ];
-  let render_cards = partner.invest_render_cards || invest_render_cards_common;
-
-  this.setState({ render_cards: render_cards });
-  let keys_for_handling = [
-    "our_recommendations",
-    "diy",
-    "bottom_scroll_cards",
-    "bottom_cards",
-    "popular_cards",
-  ];
-
-  for (let handling_key of keys_for_handling) {
-    invest_show_data[handling_key] = [];
-    let partner_specific = invest_cards_handling_common[handling_key];
-    if (
-      invest_cards_handling_partner &&
-      invest_cards_handling_partner[handling_key] &&
-      invest_cards_handling_partner[handling_key].length !== 0
-    ) {
-      partner_specific = invest_cards_handling_partner[handling_key];
-    }
-    for (let itemKey of partner_specific) {
-      if (
-        restricted_items.indexOf(itemKey) !== -1 &&
-        !partner.invest_screen_cards[itemKey]
-      ) {
-        continue;
-      } else if (
-        subbroker_code &&
-        itemKey === "insurance" &&
-        insuranceDisabled.indexOf(subbroker_code) !== -1
-      ) {
-        continue;
-      } else if (
-        subbroker_code &&
-        itemKey === "nps" &&
-        npsDisabled.indexOf(subbroker_code) !== -1
-      ) {
-        continue;
-      } else if (
-        subbroker_code &&
-        itemKey === "gold" &&
-        goldDisabled.indexOf(subbroker_code) !== -1
-      ) {
-        continue;
-      }
-      let handleObject = investCardsBase[handling_key][itemKey];
-      handleObject.key = itemKey;
-      invest_show_data[handling_key].push(handleObject);
-    }
+  const referralData = storageService().getObject("referral") || {};
+  let subbrokerCode = "";
+  if (referralData?.subbroker?.data) {
+    subbrokerCode = referralData.subbroker.data.subbroker_code;
   }
-  this.setState({ invest_show_data: invest_show_data });
+
+  if (getConfig().code === "bfdlmobile") {
+    investCardsBase["ourRecommendations"]["instaredeem"].title = "Money +";
+  }
+
+  let investCardsData = {}; // stores card data to display
+  const { investSections, investSubSectionMap } = getConfig();
+
+  for (let section of investSections) {
+    const subSections = investSubSectionMap[section] || [];
+    if (subSections.length > 0) {
+      investCardsData[section] = [];
+      for (let subSection of subSections) {
+        if (
+          subbrokerCode &&
+          ["insurance", "nps", "gold"].includes(subSection) &&
+          disabledPartnersMap[subSection].includes(subbrokerCode)
+        ) {
+          continue;
+        }
+        let cardData = investCardsBase[section][subSection];
+        cardData.key = subSection;
+        investCardsData[section].push(cardData);
+      }
+    }
+    this.setState({ investCardsData, investSections });
+  }
 }
 
 export function clickCard(state, title) {

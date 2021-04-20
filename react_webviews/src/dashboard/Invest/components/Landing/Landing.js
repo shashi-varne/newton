@@ -10,6 +10,7 @@ import KycStatusDialog from "../../mini-components/KycStatusDialog";
 import KycPremiumLandingDialog from "../../mini-components/KycPremiumLandingDialog";
 import { SkeltonRect } from 'common/ui/Skelton';
 import './Landing.scss';
+import isEmpty from "lodash/isEmpty";
 
 class Landing extends Component {
   constructor(props) {
@@ -18,10 +19,9 @@ class Landing extends Component {
       show_loader: false,
       kycStatusLoader: false,
       productName: getConfig().productName,
-      partner: getConfig().partner,
       screenName: "invest_landing",
-      invest_show_data: {},
-      render_cards: [],
+      investCardsData: {},
+      investSections: [],
       verificationFailed: false,
       modalData: {},
       openKycStatusDialog: false,
@@ -86,26 +86,26 @@ class Landing extends Component {
   };
 
   render() {
-    let {
+    const {
       isReadyToInvestBase,
       kycStatusLoader,
       productName,
-      invest_show_data,
-      partner,
-      render_cards,
+      investCardsData,
+      investSections,
       kycStatusData,
       verificationFailed,
       openKycStatusDialog,
       modalData,
       openKycPremiumLanding,
     } = this.state;
-    let {
-      our_recommendations,
+    const {
+      ourRecommendations,
       diy,
-      bottom_scroll_cards,
-      bottom_cards,
-      popular_cards,
-    } = invest_show_data;
+      bottomScrollCards,
+      bottomCards,
+      popularCards,
+      financialTools,
+    } = investCardsData;
     return (
       <Container
         skelton={this.state.show_loader}
@@ -131,8 +131,8 @@ class Landing extends Component {
               }}
             />
           }
-          {render_cards &&
-            render_cards.map((element, index) => {
+          {investSections &&
+            investSections.map((element, index) => {
               switch (element) {
                 case "kyc":
                   return (
@@ -156,15 +156,15 @@ class Landing extends Component {
                       )}
                     </React.Fragment>
                   );
-                case "our_recommendations":
+                case "ourRecommendations":
                   return (
                     <React.Fragment key={index}>
-                      {our_recommendations && (
+                      {!isEmpty(ourRecommendations) && (
                         <>
                           <div className="invest-main-top-title">
                             Our recommendations
                           </div>
-                          {our_recommendations.map((item, index) => {
+                          {ourRecommendations.map((item, index) => {
                             return (
                               <InvestCard
                                 data={item}
@@ -182,9 +182,11 @@ class Landing extends Component {
                 case "diy":
                   return (
                     <React.Fragment key={index}>
-                      {diy && (
+                      {!isEmpty(diy) && (
                         <>
-                          <div className="invest-main-top-title">Do it yourself</div>
+                          <div className="invest-main-top-title">
+                            Do it yourself
+                          </div>
                           {diy.map((item, index) => {
                             return (
                               <InvestCard
@@ -200,12 +202,12 @@ class Landing extends Component {
                       )}
                     </React.Fragment>
                   );
-                case "bottom_scroll_cards":
+                case "bottomScrollCards":
                   return (
                     <div className="bottom-scroll-cards" key={index}>
                       <div className="list">
-                        {bottom_scroll_cards &&
-                          bottom_scroll_cards.map((item, index) => {
+                        {!isEmpty(bottomScrollCards) &&
+                          bottomScrollCards.map((item, index) => {
                             return (
                               <div
                                 key={index}
@@ -232,11 +234,11 @@ class Landing extends Component {
                       </div>
                     </div>
                   );
-                case "bottom_cards":
+                case "bottomCards":
                   return (
                     <React.Fragment key={index}>
-                      {bottom_cards &&
-                        bottom_cards.map((item, index) => {
+                      {!isEmpty(bottomCards) &&
+                        bottomCards.map((item, index) => {
                           return (
                             <InvestCard
                               data={item}
@@ -249,74 +251,55 @@ class Landing extends Component {
                         })}
                     </React.Fragment>
                   );
-                case "financial_tools":
+                case "financialTools":
                   return (
                     <React.Fragment key={index}>
-                      {partner.invest_screen_cards &&
-                        partner.invest_screen_cards.risk_profile && (
-                          <div className="invest-main-top-title">Financial tools</div>
-                        )}
-                      {partner.invest_screen_cards &&
-                        (partner.invest_screen_cards.risk_profile ||
-                          partner.invest_screen_cards.fhc) && (
+                      {!isEmpty(financialTools) && (
+                        <>
+                          <div className="invest-main-top-title">
+                            Financial tools
+                          </div>
                           <div className="bottom-scroll-cards">
                             <div className="list">
-                              {partner.invest_screen_cards.fhc && (
-                                <div
-                                  className="card invest-card financial-card"
-                                  onClick={() => this.clickCard("fhc")}
-                                >
-                                  <div className="content">
-                                    <div className="title">
-                                      Financial health check
+                              {financialTools.map((data, index) => {
+                                return (
+                                  <div
+                                    className="card invest-card financial-card"
+                                    onClick={() => this.clickCard(data.key)}
+                                    key={index}
+                                  >
+                                    <div className="content">
+                                      <div className="title">{data.title}</div>
+                                      <img
+                                        src={require(`assets/${productName}/${data.icon}`)}
+                                        alt=""
+                                        className="icon"
+                                      />
                                     </div>
-                                    <img
-                                      src={require(`assets/${productName}/ic_fin_tools_fhc.svg`)}
-                                      alt=""
-                                      className="icon"
-                                    />
+                                    <div className="subtitle">
+                                      {data.subtitle}
+                                    </div>
+                                    <Button className="invest-landing-button">{data.button_text}</Button>
                                   </div>
-                                  <div className="subtitle">
-                                    Get an expert financial advice
-                                  </div>
-                                  <Button className="invest-landing-button">CHECK NOW</Button>
-                                </div>
-                              )}
-                              {partner.invest_screen_cards.risk_profile && (
-                                <div
-                                  className="card invest-card financial-card"
-                                  onClick={() => this.clickCard("risk_profile")}
-                                >
-                                  <div className="content">
-                                    <div className="title">Risk profiler</div>
-                                    <img
-                                      src={require(`assets/${productName}/ic_fin_tools_risk.svg`)}
-                                      alt=""
-                                      className="icon"
-                                    />
-                                  </div>
-                                  <div className="subtitle">
-                                    Invest as per your risk appetite
-                                  </div>
-                                  <Button className="invest-landing-button">START NOW</Button>
-                                </div>
-                              )}
+                                );
+                              })}
                             </div>
                           </div>
-                        )}
+                        </>
+                      )}
                     </React.Fragment>
                   );
-                case "popular_cards":
+                case "popularCards":
                   return (
                     <React.Fragment key={index}>
-                      {popular_cards && (
+                      {!isEmpty(popularCards) && (
                         <>
                           <div className="invest-main-top-title">
                             More investment options
                           </div>
                           <div className="bottom-scroll-cards">
                             <div className="list">
-                              {popular_cards.map((item, index) => {
+                              {popularCards.map((item, index) => {
                                 return (
                                   <div
                                     key={index}

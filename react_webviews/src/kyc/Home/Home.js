@@ -201,7 +201,8 @@ const Home = (props) => {
   };
 
   const accountMerge = async () => {
-    let email = config.partner.email;
+    let config = getConfig();
+    let email = config.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;

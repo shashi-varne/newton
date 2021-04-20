@@ -142,7 +142,7 @@ class DropdownInModalClass extends Component {
           <DialogTitle id='dropdown-in-modal-dialog-title'>
             <div onClick={this.handleClose}>
               <SVG
-                preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                 src={close_icn}
               />
             </div>
@@ -221,7 +221,7 @@ class DropdownInModalClass extends Component {
 
             <SVG
               className='text-block-2-img'
-              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
               src={down_arrow}
             />
           </div>
