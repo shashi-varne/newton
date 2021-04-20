@@ -55,7 +55,7 @@ const Recommendations = (props) => {
     }
   }, [funnelData]);
 
-  const partner = getConfig().partner;
+  const partner_code = getConfig().partner_code;
   const [dialogStates, setDialogStates] = useState({
     openPennyVerificationPendind: false,
     openInvestError: false,
@@ -171,7 +171,7 @@ const Recommendations = (props) => {
       return
     }
 
-    if (!currentUser.active_investment && partner.code !== "bfdlmobile") {
+    if (!currentUser.active_investment && partner_code !== "bfdlmobile") {
       navigate(
         "/invest-journey",
         { state: { investment: JSON.stringify(investmentObject) } },
@@ -194,7 +194,7 @@ const Recommendations = (props) => {
     }
 
       if (
-        isInvestRefferalRequired(getConfig().partner.code) &&
+        isInvestRefferalRequired(partner_code) &&
         !isReferralGiven
       ) {
         handleDialogStates("openInvestReferral", true);
@@ -252,7 +252,7 @@ const Recommendations = (props) => {
       buttonTitle={
         currentUser &&
         !currentUser.active_investment &&
-        partner.code !== "bfdlmobile"
+        partner_code !== "bfdlmobile"
           ? "HOW IT WORKS?"
           : investCtaText
       }
@@ -304,7 +304,7 @@ const Recommendations = (props) => {
           <div>
             <div className="recommendations-disclaimer-morning">
               <img alt="single_star" src={single_star} />
-              {partner.code !== "hbl" ? (
+              {partner_code !== "hbl" ? (
                 <img alt="morning_star" width="100" src={morning_text} />
               ) : (
                 <div>BL Portfolio Star Track MF Ratings</div>
