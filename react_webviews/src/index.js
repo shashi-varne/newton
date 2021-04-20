@@ -49,12 +49,23 @@ $(document).ready(function () {
     }, false);
   }
 });
-Sentry.init({
-  dsn: "https://cc73fa20f8e14bfb82d1bfa6c19558d0@o569643.ingest.sentry.io/5715663",
-  integrations: [new Integrations.BrowserTracing()],
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // adjust this value accordingly in production
-  tracesSampleRate: 1.0,
-});
+
+if(getConfig().productName === "fisdom")
+{
+  Sentry.init({
+    dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
+    integrations: [new Integrations.BrowserTracing()],
+    allowUrls:["wv.fisdom.com"],
+    tracesSampleRate: 1.0,
+  });
+}
+else{
+  Sentry.init({
+    dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
+    integrations: [new Integrations.BrowserTracing()],
+    allowUrls:["wv.mywaywealth.com"],
+    tracesSampleRate: 1.0,
+  });
+}
+
 ReactDOM.render(<App />, document.getElementById('root'));

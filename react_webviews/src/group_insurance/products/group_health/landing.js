@@ -324,7 +324,7 @@ class GroupHealthLanding extends Component {
             : "GET INSURED"
         }
         onlyButton={true}
-        handleClick={() => this.handleClick1()}
+        handleClick={() => this.handleClick()}
         provider={this.state.provider}
         force_hide_inpage_title={true}
       >
