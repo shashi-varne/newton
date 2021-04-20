@@ -50,7 +50,7 @@ $(document).ready(function () {
   }
 });
 
-if(getConfig().productName === "fisdom")
+if(getConfig().productName === "fisdom" && window.location.href.indexOf("wv.fisdom.com")>=0)
 {
   Sentry.init({
     dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
@@ -59,7 +59,7 @@ if(getConfig().productName === "fisdom")
     tracesSampleRate: 1.0,
   });
 }
-else{
+else if(getConfig().productName === "finity" && window.location.href.indexOf("wv.mywaywealth.com")>=0){
   Sentry.init({
     dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
     integrations: [new Integrations.BrowserTracing()],
