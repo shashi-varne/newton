@@ -147,7 +147,7 @@ class TicketConversations extends Component {
           openTextBox: true,
           splitIndex: length,
         },
-        () => this.handleScroll()
+        () => this.handleScroll('smooth')
       );
     } else {
       this.sendEvents("next", { reply: "yes" });
