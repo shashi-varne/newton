@@ -250,7 +250,7 @@ class CategoryList extends Component {
         }}
         noFooter
       >
-        <div className="help-CategoryList" style={{marginTop: `${faqList.length > 0 ? '105px' : '140px'}`}}>
+        <div className="help-CategoryList" style={{marginTop: `${faqList.length > 0 ? '106px' : '140px'}`}}>
           <div className="Header header-title-page header-title-page-text">
             <MyQueries
               title="How can we help?"
