@@ -88,27 +88,6 @@ export const validateFields = (formData, keyToCheck) => {
   return { formData, canSubmit }
 }
 
-export const submitAadharData = (data) => {
-  let encodedURI = encodeURIComponent(window.location.host + '/aadhar/callback')
-  if (window.location.port === '80') {
-    encodedURI = encodeURIComponent(
-      window.location.hostname + '/aadhar/callback'
-    )
-  }
-  window.location.href =
-    getConfig().base_url +
-    '/page/kyc/ekyc?pan=' +
-    data.pan_number +
-    '&aadhar=' +
-    data.aadhar +
-    '&mobile_number=' +
-    data.mobile_number +
-    '&redirect_url=' +
-    window.location.protocol +
-    '//' +
-    encodedURI
-}
-
 export const panUiSet = (pan) => {
   if (!pan) {
     return ''
@@ -142,7 +121,6 @@ export const dataURLtoBlob = (dataurl) => {
 export const combinedDocBlob = (fr, bc, docName) => {
   let canvas = document.createElement('canvas')
   let context = canvas.getContext('2d')
-  console.log(fr)
   canvas.width = fr.width > bc.width ? fr.width : bc.width
   canvas.height = fr.height + bc.height
   context.fillStyle = 'rgba(255, 255, 255, 0.5)'

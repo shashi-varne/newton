@@ -1,0 +1,94 @@
+///////////// BANK LIST START //////////////
+
+.banks-list {
+  line-height: 1.5;
+  padding-bottom: 20px;
+
+  .block {
+    display: -ms-flexbox;
+    display: flex;
+    cursor: pointer;
+    padding: 20px 0;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    margin-top: 10px;
+
+    .bank-details {
+      display: flex;
+      align-items: center;
+    }
+
+    .left-icon {
+      width: 40px;
+      vertical-align: middle;
+    }
+
+    .content {
+      margin-left: 20px;
+      margin-right: 10px;
+
+      .bank-name {
+        display: flex;
+
+        .name {
+          font-size: 15px;
+          line-height: 18px;
+          font-weight: bold;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          min-width: 150px;
+          max-width: 180px;
+        }
+
+        .alert-icon {
+          width: 15px;
+          margin-left: 5px;
+        }
+
+        .tag {
+          background: #e0ffbf;
+          padding: 7px 10px 5px 10px;
+          border-radius: 8px;
+          font-size: 10px;
+          line-height: 12px;
+          text-align: center;
+          letter-spacing: 1px;
+          color: #7ed321;
+          vertical-align: middle;
+          box-sizing: border-box;
+          cursor: pointer;
+        }
+      }
+
+      .account {
+        font-size: 13px;
+        color: #767e86;
+      }
+
+      .status {
+        font-size: 11px;
+        color: #ffd01f;
+      }
+
+      .verified {
+        color: #35cb5d;
+      }
+
+      .failed {
+        color: #d0021b;
+      }
+    }
+
+    .right-icon {
+      display: flex;
+    }
+  }
+
+  .block:last-child {
+    border-bottom: 0;
+  }
+}
+
+///////////// BANK LIST END //////////////

@@ -24,12 +24,13 @@ import CartDialog from './CartDialog';
 import IframeContainer from '../../e_mandate/commoniFrame/Container';
 
 import './Style.scss';
-import { isInvestRefferalRequired, proceedInvestmentChild } from '../../dashboard/invest/functions';
+import { isInvestRefferalRequired, proceedInvestment } from '../../dashboard/proceedInvestmentFunctions';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
-import PennyVerificationPending from '../../dashboard/invest/components/mini_components/PennyVerificationPending';
-import InvestError from '../../dashboard/invest/components/mini_components/InvestError';
-import InvestReferralDialog from '../../dashboard/invest/components/mini_components/InvestReferralDialog';
+import PennyVerificationPending from '../../dashboard/Invest/mini-components/PennyVerificationPending';
+import InvestError from '../../dashboard/Invest/mini-components/InvestError';
+import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestReferralDialog';
 import { SkeltonRect } from '../../common/ui/Skelton';
+import { getBasePath } from '../../utils/functions';
 
 const styles = {
   root: {
@@ -214,7 +215,7 @@ const FundDetails = ({ classes, history }) => {
         }
         break;
       case "mf":
-        proceedInvestment()
+        goNext()
         break;
       default:
         history.goBack();
@@ -230,7 +231,7 @@ const FundDetails = ({ classes, history }) => {
     navigate("/diy/invest")
   };
 
-  const proceedInvestment = (investReferralData, isReferralGiven) => {
+  const goNext = (investReferralData, isReferralGiven) => {
     const sipTypesKeys = [
       "buildwealth",
       "savetaxsip",
@@ -253,7 +254,7 @@ const FundDetails = ({ classes, history }) => {
       sipOrOneTime = investment.order_type;
     }
     let paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/${sipOrOneTime}/${investment.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}`
     );
 
     if (
@@ -272,7 +273,7 @@ const FundDetails = ({ classes, history }) => {
       body.referral_code = investReferralData.code;
     }
 
-    proceedInvestmentChild({
+    proceedInvestment({
       sipOrOnetime: sipOrOneTime,
       body: body,
       paymentRedirectUrl: paymentRedirectUrl,
@@ -652,7 +653,7 @@ const FundDetails = ({ classes, history }) => {
             {dialogStates.openInvestReferral && (
               <InvestReferralDialog
                 isOpen={dialogStates.openInvestReferral}
-                proceedInvestment={proceedInvestment}
+                goNext={goNext}
               />
             )}
           </>

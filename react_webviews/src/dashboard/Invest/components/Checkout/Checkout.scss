@@ -1,0 +1,135 @@
+.nfo-checkout {
+  padding: 20px 0 40px 0;
+  margin-top: -20px;
+}
+
+.checkout-invest-type {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  padding: 15px;
+  margin: -20px;
+  background: #f8f8f8;
+
+  .item {
+    text-align: center;
+    background: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px;
+    width: 50%;
+    position: relative;
+
+    img {
+      width: 50px;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin: 10px;
+      color: #878787;
+      height: 38px;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+  }
+
+  .selected {
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    h3 {
+      color: #4a4a4a;
+    }
+
+    .icon {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      width: 30px;
+    }
+  }
+}
+
+.cart-items {
+  margin-top: 40px;
+  padding-bottom: 20px;
+
+  .message {
+    margin: 10px 0;
+    text-align: center;
+    font-size: 16px;
+    color: #333333;
+  }
+
+  .item {
+    display: flex;
+    margin: 0 -10px 15px -10px;
+    align-items: center;
+    padding: 10px 15px;
+    position: relative;
+
+    .icon {
+      -ms-flex: 1;
+      flex: 1;
+      text-align: center;
+
+      img {
+        width: 70px;
+        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .text {
+      color: #4a4a4a;
+      padding-left: 5px;
+      flex: 5;
+      -ms-flex: 5;
+
+      h4 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-weight: 700;
+        line-height: 1.1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 5px;
+
+        img {
+          width: 25px;
+          margin-right: 15px;
+          cursor: pointer;
+        }
+      }
+
+      .input {
+        width: 100%;
+      }
+    }
+
+    .disabled {
+      background: rgba(0, 0, 0, 0.3);
+      position: absolute;
+      width: 100%;
+      z-index: 30;
+      height: 100%;
+      left: 0;
+      right: 0;
+      border-radius: 5px;
+
+      .text {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        color: #fff;
+        font-size: 18px;
+        width: 100%;
+        text-align: center;
+        font-weight: 600;
+      }
+    }
+  }
+}

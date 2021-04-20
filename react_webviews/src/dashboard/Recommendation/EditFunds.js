@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import Container from '../common/Container';
-import FundCard from '../invest/components/mini_components/FundCard';
+import FundCard from '../Invest/mini-components/FundCard';
 import Button from '@material-ui/core/Button';
 import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
-
 import replaceFund from 'assets/replace_bfdl.png';
 
-import { storageService } from 'utils/validators';
-import { navigate as navigateFunc } from '../invest/common/commonFunction';
+import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
+import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import isEmpty from 'lodash/isEmpty';
+import './EditFunds.scss';
 
-import './style.scss';
 
 const EditFunds = (props) => {
   const [open, setOpen] = useState(false);
-  const { recommendation, alternatives } = storageService().getObject('graphData');
+  const { funnelData } = useFunnelDataHook();
+  const { recommendation, alternatives } = funnelData;
   const navigate = navigateFunc.bind(props);
 
   const filterAlternateFunds = (mftype) => {
@@ -29,6 +29,7 @@ const EditFunds = (props) => {
     });
     return alternatives[mftype];
   };
+
   const showAlternateFunds = ({ amount, mf: { mfid, mftype } }) => (e) => {
     const alternateFunds = filterAlternateFunds(mftype);
     if (isEmpty(alternateFunds)) {
@@ -37,20 +38,19 @@ const EditFunds = (props) => {
       navigate('recommendations/alternate-funds', { mftype, mfid, amount, alternateFunds });
     }
   };
+
   const goBack = () => {
     props.history.goBack();
   };
+
   const onClose = () => {
     setOpen(!open);
   };
+
   return (
     <Container
       classOverRide='pr-error-container'
-      // fullWidthButton
       buttonTitle='Done'
-      // helpContact
-      // hideInPageTitle
-      hidePageTitle
       title='Edit Funds'
       handleClick={goBack}
       classOverRideContainer='pr-container'

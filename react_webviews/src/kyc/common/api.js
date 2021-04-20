@@ -2,7 +2,7 @@ import Api from 'utils/api'
 import { apiConstants, storageConstants } from '../constants'
 import { isEmpty } from 'utils/validators'
 import { storageService } from 'utils/validators'
-import toast from 'common/ui/Toast'
+import toast from '../../common/ui/Toast'
 import { getConfig } from 'utils/functions'
 
 const partner = getConfig().partner
@@ -40,20 +40,6 @@ export const getUserKycFromSummary = async () => {
     return result;
   } catch (err) {
     console.log(err)
-  }
-}
-
-export const logout = async () => {
-  try {
-    const res = await Api.get('api/logout')
-    const result = handleApi(res);
-    if(result) {
-      storageService().clear();
-      window.localStorage.clear();
-      return result
-    }
-  } catch (err) {
-    toast(err.message || genericErrorMessage)
   }
 }
 
@@ -156,26 +142,26 @@ export const addAdditionalBank = async (data) => {
   }
 }
 
-export const upload = async (file, type = 'pan', data = {}) => {
+export const upload = async (file, type, data = {}) => {
   const formData = new FormData()
   formData.set('res', file)
-  let address_proof_key = ''
+  let addressProofKey = ''
   if (!isEmpty(data)) {
     switch (type) {
       case 'ipvvideo':
         formData.append('ipv_code', data.ipv_code)
         break
       case 'address':
-        address_proof_key = data?.address_proof_key
+        addressProofKey = data?.addressProofKey
         break
       case 'nri_address':
-       address_proof_key = data?.address_proof_key
+       addressProofKey = data?.addressProofKey
        break
        default:
          break
     }
   }
-  const url = isEmpty(address_proof_key) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${address_proof_key}`
+  const url = isEmpty(addressProofKey) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${addressProofKey}`
   const res = await Api.post(url, formData)
   if (
     res.pfwresponse.status_code === 200 &&
