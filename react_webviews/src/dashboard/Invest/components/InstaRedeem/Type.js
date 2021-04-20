@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
-import { initialize } from "../../functions";
+import { navigate } from "../../functions";
 import InvestType from "../../mini-components/InvestType";
 import { investRedeemData } from "../../constants";
 
@@ -14,11 +14,7 @@ class Type extends Component {
       screenName: "insta_redeem_invest_type",
       investType: "onetime",
     };
-    this.initialize = initialize.bind(this);
-  }
-
-  componentWillMount() {
-    this.initialize();
+    this.navigate = navigate.bind(this);
   }
 
   handleClick = () => {
@@ -36,7 +32,6 @@ class Type extends Component {
         showLoader={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
-        // hidePageTitle
         title="How would you like to invest?"
         count="1"
         total="2"

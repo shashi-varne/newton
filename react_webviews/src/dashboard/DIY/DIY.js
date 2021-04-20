@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import FundList from "./components/FundList";
 import Search from "./components/Search";
-import Checkout from "../Invest/components/NFO/Checkout";
+import Checkout from "../Invest/components/Checkout/Checkout";
 
 const DIY = (props) => {
   const { url } = props.match;

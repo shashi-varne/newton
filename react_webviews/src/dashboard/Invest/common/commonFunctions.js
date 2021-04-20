@@ -18,26 +18,16 @@ export function navigate(pathname, data, redirect) {
 }
 
 export const isRecurring = (investType) => {
-  switch (investType) {
-    case 'sectoralsip':
-      return true;
-    case 'midcapsip':
-      return true;
-    case 'balancedsip':
-      return true;
-    case 'indexsip':
-      return true;
-    case 'shariahsip':
-      return true;
-    case 'savetaxsip':
-      return true;
-    case 'buildwealth':
-      return true;
-    case 'saveforgoal':
-      return true;
-    default:
-      return false;
-  }
+  return [
+    'sectoralsip', 
+    'midcapsip', 
+    'balancedsip', 
+    'indexsip', 
+    'shariahsip', 
+    'savetaxsip', 
+    'buildwealth', 
+    'saveforgoal'
+  ].includes(investType);
 };
 
 export const getReturnRates = () => {
@@ -198,11 +188,3 @@ export const selectTitle = (type) => {
       return 'Invest';
   }
 };
-
-export const convertInrAmountToNumber = (value) => {
-  let amount = (value.match(/\d+/g) || "").toString();
-    if (amount) {
-      amount = amount.replaceAll(",", "");
-    }
-    return amount
-}

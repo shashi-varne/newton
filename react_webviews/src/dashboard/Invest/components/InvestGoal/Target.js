@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Container from '../../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
-import { formatAmountInr } from 'utils/validators';
+import { 
+  convertInrAmountToNumber, 
+  formatAmountInr 
+} from 'utils/validators';
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { navigate as navigateFunc, isRecurring, convertInrAmountToNumber, getMonthlyCommitmentNew} from '../../common/commonFunctions';
+import { navigate as navigateFunc, isRecurring, getMonthlyCommitmentNew} from '../../common/commonFunctions';
 import './Target.scss';
 
 const currentYear = moment().year();

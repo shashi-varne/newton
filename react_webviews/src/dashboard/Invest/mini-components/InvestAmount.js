@@ -8,14 +8,17 @@ import {
   getCorpusValue,
   validateOtAmount,
   validateSipAmount,
-  convertInrAmountToNumber,
+  selectTitle,
 } from '../common/commonFunctions';
 import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
 
 import { getConfig } from '../../../utils/functions';
+import { 
+  formatAmountInr, 
+  convertInrAmountToNumber 
+} from '../../../utils/validators';
 import useFunnelDataHook from '../common/funnelDataHook';
-import { formatAmountInr } from '../../../utils/validators';
 import './mini-components.scss';
 const date = new Date();
 const month = date.getMonth();
@@ -29,17 +32,17 @@ const InvestAmount = (props) => {
   } = useFunnelDataHook();
   const { investType, year, equity, term, isRecurring, investTypeDisplay } = funnelData;
   const [amount, setAmount] = useState(funnelData?.amount || '');
-  // const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loader, setLoader] = useState(false);
   const [saveTaxYear, setSaveTaxYear] = useState(date.getFullYear());
   const navigate = navigateFunc.bind(props);
-  // useEffect(() => {
-  //   const investTitle = selectTitle(investType);
-  //   setTitle(investTitle);
-  // }, []);
+  useEffect(() => {
+    const investTitle = selectTitle(investType);
+    setTitle(investTitle);
+  }, []);
 
   const handleChange = (e) => {
     let value = e.target.value || "";
@@ -178,7 +181,7 @@ const InvestAmount = (props) => {
     <Container
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
-      title={funnelData.name}
+      title={title}
       disable={error}
       showLoader={loader}
       handleClick={goNext}

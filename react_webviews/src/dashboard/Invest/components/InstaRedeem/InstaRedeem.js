@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
-import { initialize } from "../../functions";
+import { navigate } from "../../functions";
 import Faqs from "common/ui/Faqs";
 import SecureInvest from "../../mini-components/SecureInvest";
 import { investRedeemData } from "../../constants";
@@ -9,9 +9,12 @@ import Button from "material-ui/Button";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import HowToSteps from "common/ui/HowToSteps";
 import { SkeltonRect } from "../../../../common/ui/Skelton";
-import { isEmpty } from "../../../../utils/validators";
-import './InstaRedeem.scss';
-import '../../commonStyles.scss';
+import { storageService } from "../../../../utils/validators";
+import toast from "../../../../common/ui/Toast";
+import "./InstaRedeem.scss";
+import "../../commonStyles.scss";
+import isEmpty from "lodash/isEmpty";
+import { getInstaRecommendation } from "../../common/api";
 
 class InstaRedeem extends Component {
   constructor(props) {
@@ -24,16 +27,12 @@ class InstaRedeem extends Component {
       openDialog: false,
       instaRecommendation: {},
     };
-    this.initialize = initialize.bind(this);
+    this.navigate = navigate.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
-  }
-
-  onload = () => {
+  componentDidMount() {
     this.initializeInstaRedeem();
-  };
+  }
 
   handleClick = () => {
     this.navigate("instaredeem/type");
@@ -43,6 +42,44 @@ class InstaRedeem extends Component {
     this.setState({
       openDialog: false,
     });
+  };
+
+  showFundInfo(data) {
+    let recommendation = { mf: data };
+    let dataCopy = Object.assign({}, recommendation);
+    dataCopy.diy_type = "recommendation";
+    dataCopy.invest_type_from = "instaredeem";
+    storageService().setObject("diystore_fundInfo", dataCopy);
+    this.navigate("/fund-details", {
+      searchParams: `${getConfig().searchParams}&isins=${data.isin}`,
+    });
+  }
+
+  initializeInstaRedeem = async () => {
+    const instaRecommendations =
+      storageService().getObject("instaRecommendations") || [];
+    if (!isEmpty(instaRecommendations)) {
+      this.setState({
+        instaRecommendation: instaRecommendations[0],
+      });
+    } else {
+      this.setState({ show_loader: true });
+      try {
+        const result = await getInstaRecommendation();
+        if(!result) return;
+        storageService().setObject("instaRecommendations", result.mfs);
+        storageService().setObject("goalRecommendations", result.itag);
+        let instaRecommendation = result.mfs[0];
+        this.setState({
+          show_loader: false,
+          instaRecommendation: instaRecommendation,
+        });
+      } catch (error) {
+        console.log(error);
+        this.setState({ show_loader: false });
+        toast("Something went wrong!");
+      }
+    }
   };
 
   renderDialog = () => {

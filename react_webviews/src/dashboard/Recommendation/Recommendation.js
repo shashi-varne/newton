@@ -11,7 +11,7 @@ import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
 import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
 
-import { isInvestRefferalRequired, proceedInvestmentChild } from '../Invest/functions';
+import { isInvestRefferalRequired, proceedInvestment } from '../proceedInvestmentFunctions';
 import PennyVerificationPending from '../Invest/mini-components/PennyVerificationPending';
 import InvestError from '../Invest/mini-components/InvestError';
 import InvestReferralDialog from '../Invest/mini-components/InvestReferralDialog';
@@ -114,7 +114,7 @@ const Recommendations = (props) => {
     }
   }, []);
 
-  const proceedInvestment = (investReferralData, isReferralGiven, handleGraph) => {
+  const goNext = (investReferralData, isReferralGiven, handleGraph) => {
     let investmentObject = {};
     if (funnelData.type !== "riskprofile") {
       var allocations = [];
@@ -209,7 +209,7 @@ const Recommendations = (props) => {
         body.referral_code = investReferralData.code;
       }
 
-      proceedInvestmentChild({
+      proceedInvestment({
         userKyc: userKyc,
         sipOrOnetime: sipOrOneTime,
         body: body,
@@ -247,10 +247,6 @@ const Recommendations = (props) => {
     navigate("recommendations/edit-funds");
   };
 
-  const goNext = () => {
-    proceedInvestment();
-  };
-
   return (
     <Container
       buttonTitle={
@@ -264,6 +260,7 @@ const Recommendations = (props) => {
       title='Recommended Funds'
       handleClick={goNext}
       showLoader={isApiRunning}
+      hidePageTitle
     > 
       <div style={{ margin: '0 -20px'}}>
         {renderTopCard &&
