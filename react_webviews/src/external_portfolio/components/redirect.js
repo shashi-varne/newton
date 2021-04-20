@@ -29,7 +29,9 @@ export default class Redirect extends Component {
         const { portfolio_status } = result.data.external_portfolio;
 
         if (portfolio_status?.data?.link) {
-          window.location.replace(portfolio_status.data.link);
+          window.location.replace(
+            `${portfolio_status.data.link}&generic_callback=true`
+          );
         } else {
           this.navigate("email_entry", {}, true);
         }
