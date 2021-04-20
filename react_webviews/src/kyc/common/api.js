@@ -2,7 +2,7 @@ import Api from 'utils/api'
 import { apiConstants, storageConstants } from '../constants'
 import { isEmpty } from 'utils/validators'
 import { storageService } from 'utils/validators'
-import toast from 'common/ui/Toast'
+import toast from '../../common/ui/Toast'
 import { getConfig } from 'utils/functions'
 
 const genericErrorMessage = 'Something Went wrong!'

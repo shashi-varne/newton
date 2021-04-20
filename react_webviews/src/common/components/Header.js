@@ -9,6 +9,10 @@ import {getConfig} from 'utils/functions';
 import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
 import search from 'assets/icon_search.svg';
+import notificationLogo from 'assets/ic_notification.svg';
+import notificationBadgeLogo from 'assets/ic_notification_badge.svg';
+import isEmpty from 'lodash/isEmpty';
+import { storageService } from "utils/validators";
 import '../theme/Style.scss';
 import restart from 'assets/restart_nav_icn.svg';
 
@@ -22,35 +26,49 @@ const headerIconMapper = {
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
-  className ,style, headerData={}, new_header}) => {
+  className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
     const rightIcon = headerIconMapper[topIcon];
+    const campaign = storageService().getObject("campaign");
+    const partner = getConfig().partner;
     return (
       <AppBar position="fixed" color="primary" 
       className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
       style={style}
       >
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
-          onClick={headerData.goBack ||
-            goBack}>
-            {!disableBack && !headerData.hide_icon &&
-            <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
+          {
+            !logo &&
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
+              onClick={headerData.goBack ||
+              goBack}>
+              {!disableBack && !headerData.hide_icon &&
+              <SVG
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
-            />
-            }
-            {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
-            <Close />}
-          </IconButton>
+              />
+              }
+              {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
+              <Close />}
+            </IconButton>
+          }
+          {
+            logo && 
+             <div>
+                <img src={require(`assets/${partner?.logo}`)} alt="partner logo" /> 
+            </div>
+          }
 
           <div>
-            <div
-            style={style}
-              className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 
-              ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
-            >
-              {title}
-            </div>
+            {
+              !logo && 
+              <div
+                style={style}
+                className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 
+                ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
+                >
+                {title}
+              </div>
+            }
           </div>
           {topIcon &&
             <SVG
@@ -59,6 +77,21 @@ const Header = ({ classes, title, count, total, current, goBack,
             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
             src={rightIcon}
           />
+          }
+          {notification &&
+            <SVG
+            style={{marginLeft: '20px', width:20, cursor:'pointer'}}
+            onClick={handleNotification}
+            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
+            src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
+          />
+          }
+          {/* The product logo will come here -> (will need asset) */}
+          {
+            false && 
+            <div>
+              <img src={require('assets/finity_navlogo.png')} alt="productType" />
+            </div>
           }
         </Toolbar>
       </AppBar >

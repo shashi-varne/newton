@@ -1,9 +1,10 @@
-import './style.scss';
 import React, { useState } from 'react';
 import Container from '../common/Container';
 import { FormControl, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';
-import FundCard from '../invest/mini-components/FundCard';
-import useFunnelDataHook from '../invest/common/funnelDataHook';
+import FundCard from '../Invest/mini-components/FundCard';
+import useFunnelDataHook from '../Invest/common/funnelDataHook';
+
+import './ReplaceFunds.scss';
 
 const ReplaceFunds = (props) => {
   const [selectedFund, setSelectedFund] = useState('');

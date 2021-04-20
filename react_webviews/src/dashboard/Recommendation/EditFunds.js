@@ -1,13 +1,15 @@
-import './style.scss';
 import React, { useState } from 'react';
 import Container from '../common/Container';
-import FundCard from '../invest/mini-components/FundCard';
+import FundCard from '../Invest/mini-components/FundCard';
 import Button from '@material-ui/core/Button';
 import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
 import replaceFund from 'assets/replace_bfdl.png';
-import { navigate as navigateFunc } from '../invest/common/commonFunctions';
+
+import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
+import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import isEmpty from 'lodash/isEmpty';
-import useFunnelDataHook from '../invest/common/funnelDataHook';
+import './EditFunds.scss';
+
 
 const EditFunds = (props) => {
   const [open, setOpen] = useState(false);
