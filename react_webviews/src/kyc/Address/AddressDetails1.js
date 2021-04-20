@@ -9,6 +9,7 @@ import toast from "../../common/ui/Toast";
 import SVG from "react-inlinesvg";
 import { getConfig } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import "./commonStyles.scss";
 
 const AddressDetails1 = (props) => {
   const genericErrorMessage = "Something went wrong!";

@@ -8,6 +8,7 @@ import { getBase64, getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
 import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
+import "./commonStyles.scss";
 
 const getTitleList = ({ kyc }) => {
   let titleList = [

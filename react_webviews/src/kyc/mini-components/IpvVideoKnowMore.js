@@ -3,6 +3,7 @@ import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
 import SVG from "react-inlinesvg";
 import { Button } from "material-ui";
+import "./mini-components.scss";
 
 const KnowMore = ({ isOpen, close }) => {
   const config = getConfig();

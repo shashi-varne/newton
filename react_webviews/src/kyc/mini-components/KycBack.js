@@ -2,6 +2,7 @@ import React from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import Button from '@material-ui/core/Button'
+import "./mini-components.scss";
 
 const KycBackModal = ({ id, open, confirm, cancel, ...props }) => {
   return (

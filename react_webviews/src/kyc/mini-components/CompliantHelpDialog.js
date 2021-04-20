@@ -2,6 +2,7 @@ import React from "react";
 import { getConfig } from "utils/functions";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import Button from "@material-ui/core/Button";
+import "./mini-components.scss";
 
 const partner = getConfig().partner;
 const CompliantHelpDialog = ({ close, isOpen, pan }) => {

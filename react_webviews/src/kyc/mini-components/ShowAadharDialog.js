@@ -2,6 +2,7 @@ import React from 'react'
 import Dialog from '../../common/ui/Dialog'
 import { getConfig } from 'utils/functions'
 import { Button } from '@material-ui/core'
+import "./mini-components.scss";
 
 const ShowAadharDialog = ({ open, onClose, redirect }) => {
   const productName = getConfig().productName

@@ -8,6 +8,7 @@ import { getConfig } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import KnowMore from '../mini-components/IpvVideoKnowMore'
 import useUserKycHook from '../common/hooks/userKycHook'
+import "./commonStyles.scss";
 
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)

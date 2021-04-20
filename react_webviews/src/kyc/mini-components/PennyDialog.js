@@ -1,6 +1,7 @@
 import React from "react";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import { Imgc } from "common/ui/Imgc";
+import "./mini-components.scss";
 
 const PennyDialog = ({ isOpen, count }) => {
   return (

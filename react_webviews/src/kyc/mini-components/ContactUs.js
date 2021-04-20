@@ -1,5 +1,6 @@
 import React from "react";
 import { getConfig } from "utils/functions";
+import "./mini-components.scss";
 
 const partner = getConfig().partner;
 const ContactUs = () => {

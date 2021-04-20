@@ -6,6 +6,7 @@ import { isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import "./commonStyles.scss";
 
 const Progress = (props) => {
   const {kyc, isLoading} = useUserKycHook();

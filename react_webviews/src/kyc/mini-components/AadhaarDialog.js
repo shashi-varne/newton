@@ -7,6 +7,7 @@ import { storageService } from "utils/validators";
 import { updateQueryStringParameter } from "../common/functions";
 import { storageConstants } from "../constants";
 import { getBasePath } from "../../utils/functions";
+import "./mini-components.scss";
 
 const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
   const productName = getConfig().productName;

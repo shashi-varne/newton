@@ -1,7 +1,7 @@
 import React from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
-
+import "./mini-components.scss";
 import Slide from '@material-ui/core/Slide'
 
 function Transition(props) {

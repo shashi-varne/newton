@@ -2,6 +2,7 @@ import React from "react";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
+import "./mini-components.scss";
 
 const PennySuccessDialog = ({ isOpen, redirect }) => {
   const productName = getConfig().productName;

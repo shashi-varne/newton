@@ -8,6 +8,7 @@ import {
   navigate as navigateFunc,
 } from "../../common/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
+import "./commonStyles.scss";
 
 const ChangeAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);

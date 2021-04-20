@@ -1,5 +1,6 @@
 import React from "react";
 import { getConfig } from "utils/functions";
+import "./commonStyles.scss";
 
 const UploadCard = (props) => {
   const productName = getConfig().productName;

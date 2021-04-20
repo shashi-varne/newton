@@ -12,6 +12,7 @@ import {
 } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { validateNumber } from "utils/validators";
+import "./commonStyles.scss";
 
 const AddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);

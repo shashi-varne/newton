@@ -12,6 +12,7 @@ import {
 import { kycSubmit } from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import useUserKycHook from "../../common/hooks/userKycHook";
+import "./commonStyles.scss";
 
 const NriAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
