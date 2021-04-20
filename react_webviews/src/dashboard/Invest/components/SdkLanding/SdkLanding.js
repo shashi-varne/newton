@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import Container from '../common/Container';
+import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize } from './functions';
+import { initialize } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
-import SdkInvestCard from './mini-components/SdkInvestCard';
+import SdkInvestCard from '../../mini-components/SdkInvestCard';
+import { storageService } from 'utils/validators';
 import isEmpty from 'lodash/isEmpty';
-import { applyReferralCode } from './common/api';
+import { applyReferralCode } from '../../common/api';
 import toast from 'common/ui/Toast';
-import './Style.scss';
+// import CampaignDialog from '../../mini-components/CampaignDialog';
+import './SdkLanding.scss';
 
-class Landing extends Component {
+class SdkLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,6 +29,9 @@ class Landing extends Component {
       openKycPremiumLanding: false,
       referral: '',
       dotLoader: false,
+      openBottomSheet: false,
+      bottom_sheet_dialog_data:[]
+
     };
     this.initialize = initialize.bind(this);
   }
@@ -37,7 +42,7 @@ class Landing extends Component {
 
   onload = () => {
     this.initilizeKyc();
-    // this.setSdkLandingCardsData();
+    this.handleCampaignNotification();
   };
 
   handleRefferalInput = (e) => {
@@ -50,9 +55,9 @@ class Landing extends Component {
 
   handleCard = (path) => () => {
     if (path) {
-      if(path === '/kyc'){
-        this.clickCard("kyc", this.state.kycStatusData.title);
-      } else{
+      if (path === '/kyc') {
+        this.clickCard('kyc', this.state.kycStatusData.title);
+      } else {
         this.navigate(path);
       }
     }
@@ -70,8 +75,36 @@ class Landing extends Component {
     }
   };
 
+  handleCampaignNotification = () => {
+    const notifications = storageService().getObject("campaign") || [];
+    const bottom_sheet_dialog_data = notifications.reduceRight((acc,data) => {
+      if(data?.notification_visual_data?.target?.length >= 1){
+        // eslint-disable-next-line no-unused-expressions
+       data?.notification_visual_data?.target.forEach((el,idx) => {
+          if(el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
+            acc = el;
+            acc.campaign_name = data?.campaign?.name;
+          }
+        })
+      }
+      return acc;
+    },{});
+
+    if(!isEmpty(bottom_sheet_dialog_data)){
+      this.setState({bottom_sheet_dialog_data, openBottomSheet: true});
+    }
+  };
+
   render() {
-    let { isReadyToInvestBase, kycStatusLoader, partner, dotLoader, referral, kycJourneyStatusMapperData, kycJourneyStatus } = this.state;
+    let {
+      isReadyToInvestBase,
+      kycStatusLoader,
+      partner,
+      dotLoader,
+      referral,
+      kycJourneyStatusMapperData,
+      kycJourneyStatus,
+    } = this.state;
 
     return (
       <Container
@@ -82,7 +115,8 @@ class Landing extends Component {
         notification
         topIcon='search'
         handleNotification={this.handleNotification}
-        background="sdk-background"
+        background='sdk-background'
+        classHeader='sdk-header'
       >
         <div className='sdk-landing'>
           {!this.state.kycStatusLoader ? (
@@ -92,7 +126,9 @@ class Landing extends Component {
                 : 'Let’s make your money work for you!'}
             </div>
           ) : (
-            <SkeltonRect style={{ marginBottom: '20px',marginTop:"-20px" , width: '75%', lineHeight: '1.6' }} />
+            <SkeltonRect
+              style={{ marginBottom: '20px', marginTop: '-20px', width: '75%', lineHeight: '1.6' }}
+            />
           )}
 
           {/* Marketing Banners */}
@@ -126,15 +162,21 @@ class Landing extends Component {
                   el.isLoading = kycStatusLoader;
                   el.color = kycJourneyStatusMapperData?.color;
                   const premiumKyc = kycJourneyStatus === 'ground_premium' ? 'PREMIUM' : '';
-                  const kycDefaultSubTitle = !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium' ? 'Create investment profile' : '';
-                  const kycSubTitle = !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium' ? kycJourneyStatusMapperData?.landing_text : '';
-                  if(premiumKyc){
+                  const kycDefaultSubTitle =
+                    !kycJourneyStatusMapperData || kycJourneyStatus === 'ground_premium'
+                      ? 'Create investment profile'
+                      : '';
+                  const kycSubTitle =
+                    !isEmpty(kycJourneyStatusMapperData) && kycJourneyStatus !== 'ground_premium'
+                      ? kycJourneyStatusMapperData?.landing_text
+                      : '';
+                  if (premiumKyc) {
                     el.title = el.title + premiumKyc;
                   }
-                  if(kycDefaultSubTitle){
+                  if (kycDefaultSubTitle) {
                     el.subtitle = kycDefaultSubTitle;
                   }
-                  if(kycSubTitle){
+                  if (kycSubTitle) {
                     el.subtitle = kycSubTitle;
                     el.dot = true;
                   }
@@ -155,9 +197,10 @@ class Landing extends Component {
             </div>
           )}
         </div>
+        {/* <CampaignDialog isOpen={this.state.openBottomSheet} close={() => this.setState({openBottomSheet: false})} data={this.state.bottom_sheet_dialog_data}/> */}
       </Container>
     );
   }
 }
 
-export default Landing;
+export default SdkLanding;

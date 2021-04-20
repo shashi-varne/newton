@@ -53,3 +53,17 @@
     }
   }
 }
+
+.content {
+  .content-selected {
+    font-weight: 600 !important;
+    font-size: 16px;
+  }
+
+  .appened-text {
+    color: #767e86;
+    font-size: 13px;
+    font-weight: 300;
+    margin: 1px 0 0 20px;
+  }
+}

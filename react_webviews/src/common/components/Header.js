@@ -29,6 +29,7 @@ const Header = ({ classes, title, count, total, current, goBack,
   className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
     const rightIcon = headerIconMapper[topIcon];
     const campaign = storageService().getObject("campaign");
+    const partner = getConfig().partner;
     return (
       <AppBar position="fixed" color="primary" 
       className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
@@ -53,10 +54,8 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             logo && 
              <div>
-               {/* the partner logo will be added here */}
-           <img src={require(`assets/logo_idbi.svg`)} alt="partner logo" /> 
-            <div></div>
-          </div>
+                <img src={require(`assets/${partner?.logo}`)} alt="partner logo" /> 
+            </div>
           }
 
           <div>

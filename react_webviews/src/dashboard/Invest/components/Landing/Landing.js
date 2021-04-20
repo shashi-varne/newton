@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import Container from "../common/Container";
+import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
-import { initialize } from "./functions";
-import InvestCard from "./mini-components/InvestCard";
-import SecureInvest from "./mini-components/SecureInvest";
-import VerificationFailedDialog from "./mini-components/VerificationFailedDialog";
-import KycStatusDialog from "./mini-components/KycStatusDialog";
-import KycPremiumLandingDialog from "./mini-components/KycPremiumLandingDialog";
+import { initialize } from "../../functions";
+import InvestCard from "../../mini-components/InvestCard";
+import SecureInvest from "../../mini-components/SecureInvest";
+import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
+import KycStatusDialog from "../../mini-components/KycStatusDialog";
+import KycPremiumLandingDialog from "../../mini-components/KycPremiumLandingDialog";
 import { SkeltonRect } from 'common/ui/Skelton';
+import './Landing.scss';
 
 class Landing extends Component {
   constructor(props) {

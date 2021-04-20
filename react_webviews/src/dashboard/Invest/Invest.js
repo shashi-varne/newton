@@ -4,8 +4,7 @@ import "../../common/theme/Style.scss";
 
 import NotFound from "../../common/components/NotFound";
 
-import "./Style.scss";
-import Landing from "./Landing";
+import Landing from "./components/Landing";
 import InstaRedeem from "./components/InstaRedeem";
 import Type from "./components/InstaRedeem/Type";
 import Amount from "./components/InstaRedeem/Amount";

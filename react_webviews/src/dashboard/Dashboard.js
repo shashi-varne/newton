@@ -3,10 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import "../common/theme/Style.scss";
 
 import NotFound from "../common/components/NotFound";
-
-import "./Invest/Style.scss";
 import Invest from "./Invest";
-
 import NfoInfo from "./Invest/components/NFO";
 import NfoScheme from "./Invest/components/NFO/Scheme";
 import NfoFunds from "./Invest/components/NFO/Funds";
@@ -16,8 +13,8 @@ import SipDates from "./Invest/components/NFO/SipDates";
 import InvestJourney from "./InvestJourney";
 import DIY from "./DIY";
 
-import MyAccount from "./components/my_account";
-import Notification from "./components/notification";
+import MyAccount from "./MyAccount";
+import Notification from "./Notification";
 import PaymentCallback from "./Invest/components/PaymentCallback";
 import SipPaymentCallback from "./Invest/components/SipPaymentCallback";
 import PageCallback from "./Invest/components/PageCallback";
@@ -26,7 +23,7 @@ import DigilockerCallback from "../kyc/digilocker/digilockercallback";
 import AccountMerge from "./AccountMerge";
 import AccountMergeOtp from "./AccountMerge/Otp";
 import AccountLinked from "./AccountMerge/Linked";
-import SdkLanding from './Invest/SdkLanding';
+import SdkLanding from './Invest/components/SdkLanding';
 import {getConfig} from 'utils/functions';
 
 const Home = (props) => {

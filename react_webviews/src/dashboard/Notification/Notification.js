@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import "../Style.scss";
 import { getConfig } from "utils/functions";
 import { initialize, getRedirectionUrlWebview } from "../common/functions";
 import Container from "../common/Container";
+import "./Notification.scss";
 
 class Notification extends Component {
   constructor(props) {

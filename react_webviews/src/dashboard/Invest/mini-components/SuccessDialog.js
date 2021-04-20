@@ -3,6 +3,7 @@ import Dialog, { DialogContent, DialogActions } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import { dateOrdinal } from "utils/validators";
+import './mini-components.scss';
 import '../commonStyles.scss';
 
 const SuccessDialog = ({ isOpen, handleClick, sips = [], close }) => {
