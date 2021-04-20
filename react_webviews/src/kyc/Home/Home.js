@@ -189,11 +189,7 @@ const Home = (props) => {
       navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {
-        if (isIframe()) {
-          // handle Iframe
-        } else {
-          navigate("/logout");
-        }
+        navigate("/logout");
       } else {
         nativeCallback({ action: "session_expired" });
       }
