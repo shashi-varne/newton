@@ -273,7 +273,7 @@ export function getRedirectionUrlWebview(
   redirect_url
 ) {
   let webRedirectionUrl = url;
-  let is_secure = storageService().get("is_secure");
+  let is_secure = getConfig().is_secure;
   let plutus_redirect_url = `${getBasePath()}/`;
   if (redirect_path) {
     plutus_redirect_url += redirect_path;

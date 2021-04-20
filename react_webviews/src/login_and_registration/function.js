@@ -24,10 +24,7 @@ export function initialize() {
   let main_query_params = getUrlParams();
   let { referrer } = main_query_params;
   let referrerParam = referrer || "";
-  let rebalancing_redirect_url =
-    getConfig().redirect_url !== undefined
-      ? "?redirect_url=" + getConfig().redirect_url
-      : "";
+  let rebalancing_redirect_url = "";
 
   let socialRedirectUrl = encodeURIComponent(
     window.location.href + "/#/social/callback" + rebalancing_redirect_url
@@ -208,10 +205,7 @@ export async function mobileLogin(body) {
         };
         storageService().setObject("user_promo", item);
       }
-      let rebalancing_redirect_url =
-        getConfig().redirect_url !== undefined
-          ? getConfig().redirect_url
-          : false;
+      let rebalancing_redirect_url = false;
 
       this.setState({ isApiRunning: false });
       this.navigate("mobile/verify", {

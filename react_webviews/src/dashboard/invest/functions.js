@@ -359,7 +359,7 @@ export function clickCard(state, title) {
 function getPath(path) {
   let redirectUrl =
     window.location.href.indexOf("&is_secure=") === -1
-      ? `${window.location.href}&is_secure=${storageService().get("is_secure")}`
+      ? `${window.location.href}&is_secure=${getConfig().is_secure}`
       : window.location.href;
   redirectUrl = encodeURIComponent(redirectUrl);
   return (

@@ -24,6 +24,7 @@ class Notification extends Component {
   };
 
   handleClick = (target) => {
+    // Todo: Need to check what target.url has
     this.setState({ showLoader: true });
     let campLink = "";
     if (target.campaign_name === "whatsapp_consent") {

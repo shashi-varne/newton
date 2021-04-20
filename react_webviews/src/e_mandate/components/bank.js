@@ -163,14 +163,13 @@ class SelectBank extends Component {
         );
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
-        let redirect_url = getConfig().redirect_url;
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app + '&redirect_url=' + redirect_url;
+          '&app=' + app;
         if (getConfig().generic_callback) {
           pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
-        if (!redirect_url) {
+        if (!getConfig().Web && !getConfig().is_secure) {
           if (getConfig().app === 'ios') {
             nativeCallback({
               action: 'show_top_bar', message: {
@@ -183,35 +182,37 @@ class SelectBank extends Component {
               back_text: 'You are almost there, do you really want to go back?'
             }
           });
-        } else {
-          let redirectData = {
-            show_toolbar: false,
-            icon: 'back',
-            dialog: {
-              message: 'Are you sure you want to exit?',
-              action: [{
-                action_name: 'positive',
-                action_text: 'Yes',
-                action_type: 'redirect',
-                redirect_url: redirect_url
-              }, {
-                action_name: 'negative',
-                action_text: 'No',
-                action_type: 'cancel',
-                redirect_url: ''
-              }]
-            },
-            data: {
-              type: 'webview'
-            }
-          };
-          if (getConfig().app === 'ios') {
-            redirectData.show_toolbar = true;
-          }
-          nativeCallback({
-            action: 'third_party_redirect', message: redirectData
-          });
-        }
+        } 
+          // Todo: Need to check (difference between native and sdk)
+        // else { 
+        //   let redirectData = {
+        //     show_toolbar: false,
+        //     icon: 'back',
+        //     dialog: {
+        //       message: 'Are you sure you want to exit?',
+        //       action: [{
+        //         action_name: 'positive',
+        //         action_text: 'Yes',
+        //         action_type: 'redirect',
+        //         redirect_url: paymentRedirectUrl
+        //       }, {
+        //         action_name: 'negative',
+        //         action_text: 'No',
+        //         action_type: 'cancel',
+        //         redirect_url: ''
+        //       }]
+        //     },
+        //     data: {
+        //       type: 'webview'
+        //     }
+        //   };
+        //   if (getConfig().app === 'ios') {
+        //     redirectData.show_toolbar = true;
+        //   }
+        //   nativeCallback({
+        //     action: 'third_party_redirect', message: redirectData
+        //   });
+        // }
         window.location.href = pgLink;
       } else {
         this.setState({

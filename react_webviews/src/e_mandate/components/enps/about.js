@@ -139,11 +139,10 @@ class About extends Component {
       return;
 
     }
-    let redirect_url = getConfig().redirect_url;
     let basepath = getBasePath()
     let current_url = basepath + '/e-mandate/enps/redirection' + getConfig().searchParams;
     var pgLink = getConfig().base_url + '/page/nps/user/esign/' + this.state.pc_urlsafe;
-    if (!redirect_url) {
+    if (!getConfig().isWebCode && !getConfig().is_secure) {
       if (getConfig().app === 'ios') {
         nativeCallback({
           action: 'show_top_bar', message: {
@@ -157,35 +156,36 @@ class About extends Component {
           back_text: 'You are almost there, do you really want to go back?'
         }
       });
-    } else {
-      let redirectData = {
-        show_toolbar: false,
-        icon: 'back',
-        dialog: {
-          message: 'Are you sure you want to exit?',
-          action: [{
-            action_name: 'positive',
-            action_text: 'Yes',
-            action_type: 'redirect',
-            redirect_url: current_url
-          }, {
-            action_name: 'negative',
-            action_text: 'No',
-            action_type: 'cancel',
-            redirect_url: ''
-          }]
-        },
-        data: {
-          type: 'webview'
-        }
-      };
-      if (getConfig().app === 'ios') {
-        redirectData.show_toolbar = true;
-      }
-      nativeCallback({
-        action: 'third_party_redirect', message: redirectData
-      });
-    }
+    } 
+    // else {
+    //   let redirectData = {
+    //     show_toolbar: false,
+    //     icon: 'back',
+    //     dialog: {
+    //       message: 'Are you sure you want to exit?',
+    //       action: [{
+    //         action_name: 'positive',
+    //         action_text: 'Yes',
+    //         action_type: 'redirect',
+    //         redirect_url: current_url
+    //       }, {
+    //         action_name: 'negative',
+    //         action_text: 'No',
+    //         action_type: 'cancel',
+    //         redirect_url: ''
+    //       }]
+    //     },
+    //     data: {
+    //       type: 'webview'
+    //     }
+    //   };
+    //   if (getConfig().app === 'ios') {
+    //     redirectData.show_toolbar = true;
+    //   }
+    //   nativeCallback({
+    //     action: 'third_party_redirect', message: redirectData
+    //   });
+    // }
 
     // for web, we will open in new tab
     if(getConfig().Web) {

@@ -140,7 +140,7 @@ class DeliveryOrder extends Component {
       });
     }
 
-    if (!getConfig().redirect_url) {
+    if (!getConfig().isWebCode && !getConfig().is_secure) {
       nativeCallback({
         action: 'take_control', message: {
           back_url: nativeRedirectUrl,
