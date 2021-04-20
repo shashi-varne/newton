@@ -9,8 +9,8 @@ import {
   formatAmountInr,
   isEmpty,
 } from "utils/validators";
-import SuccessDialog from "../Invest/mini-components/PennyVerificationPending";
-import InvestError from "../Invest/mini-components/PennyVerificationPending";
+import SuccessDialog from "../Invest/mini-components/SuccessDialog";
+import InvestError from "../Invest/mini-components/InvestError";
 import PennyVerificationPending from "../Invest/mini-components/PennyVerificationPending";
 import { getBasePath } from "../../utils/functions";
 import { proceedInvestment } from "../proceedInvestmentFunctions";
