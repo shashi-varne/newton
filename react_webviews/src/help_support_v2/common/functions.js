@@ -558,7 +558,7 @@ export function getPdf(e) {
       {
         documents: documents,
       },
-      () => this.handleScroll()
+      () => this.handleScroll('smooth')
     );
   }
 }
@@ -607,5 +607,7 @@ export function save(file) {
   this.setState({
     documents: documents,
     show_loader: false,
-  });
+  },
+  () => this.handleScroll('smooth')
+);
 }

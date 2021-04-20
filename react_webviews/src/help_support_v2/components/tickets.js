@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { initialize, handleScroll } from "../common/functions";
+import { initialize } from "../common/functions";
 
 const moment = require("moment");
 class OpenTickets extends Component {
@@ -12,7 +12,6 @@ class OpenTickets extends Component {
       index: 5,
     };
     this.initialize = initialize.bind(this);
-    this.handleScroll = handleScroll.bind(this);
   }
 
   componentWillMount() {
