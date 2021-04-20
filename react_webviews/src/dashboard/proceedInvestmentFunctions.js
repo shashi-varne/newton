@@ -3,7 +3,7 @@ import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
 import { getConfig } from "../utils/functions";
 import { storageService } from "../utils/validators";
-import { apiConstants } from "./invest/constants";
+import { apiConstants } from "./Invest/constants";
 
 export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {

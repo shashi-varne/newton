@@ -26,9 +26,9 @@ import IframeContainer from '../../e_mandate/commoniFrame/Container';
 import './Style.scss';
 import { isInvestRefferalRequired, proceedInvestment } from '../../dashboard/proceedInvestmentFunctions';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
-import PennyVerificationPending from '../../dashboard/invest/mini-components/PennyVerificationPending';
-import InvestError from '../../dashboard/invest/mini-components/InvestError';
-import InvestReferralDialog from '../../dashboard/invest/mini-components/InvestReferralDialog';
+import PennyVerificationPending from '../../dashboard/Invest/mini-components/PennyVerificationPending';
+import InvestError from '../../dashboard/Invest/mini-components/InvestError';
+import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestReferralDialog';
 import { SkeltonRect } from '../../common/ui/Skelton';
 import { getBasePath } from '../../utils/functions';
 

@@ -1,0 +1,132 @@
+.investment-proof {
+  color: #333333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  line-height: 1.5;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 15px 0;
+
+  .button {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4) !important;
+    background-color: rgb(250, 250, 250) !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+  }
+
+  .button:hover {
+    background-color: rgb(250, 250, 250) !important;
+  }
+}
+
+.investment-proof-dialog {
+  line-height: 1.5;
+  color: #333333;
+
+  .action {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0 20px 20px 20px;
+
+    .button {
+      background-color: var(--secondary);
+      color: white;
+      padding: 10px 32px;
+    }
+  }
+}
+
+.blank-mandate-upload {
+  color: #333333;
+  line-height: 1.5;
+  padding-bottom: 40px;
+
+  header {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .preview-container {
+    width: 100%;
+    background-color: rgb(247, 245, 245);
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .preview {
+    display: block;
+    width: 97%;
+    height: 300px;
+    margin: 0 auto;
+  }
+
+  .blank-mandate-doc-upload-container {
+    margin-top: 20px;
+    border: 1px dashed gray;
+    background-color: #f7f5f5;
+    padding: 20px 10px;
+
+    .blank-mandate-upload-doc-actions {
+      .blank-mandate-upload {
+        display: none;
+      }
+
+      .blank-mandate-upload-button {
+        display: block;
+        margin: 0 auto;
+        margin-top: 10px;
+        background-color: transparent;
+        padding: 0;
+        border: none;
+        cursor: pointer;
+
+        img {
+          width: 40px;
+        }
+      }
+
+      .mobile-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        font-size: 16px;
+      }
+
+      .upload-action {
+        font-size: 16px;
+        color: var(--secondary);
+        margin-top: 4px;
+      }
+    }
+  }
+}
+
+.blank-mandate-upload-dialog {
+  line-height: 1.5;
+  color: #333333;
+
+  .content {
+    min-width: 250px;
+    font-size: 15px;
+  }
+
+  .action {
+    display: flex;
+    justify-content: flex-end;
+    min-width: 250px;
+    margin: -15px 0 0 0;
+    padding: 0 20px 10px 20px;
+
+    .button {
+      background-color: white;
+      color: #878787;
+      padding: 10px 32px;
+    }
+
+    .button:hover {
+      background-color: rgba(158,158,158,0.2);
+    }
+  }
+}

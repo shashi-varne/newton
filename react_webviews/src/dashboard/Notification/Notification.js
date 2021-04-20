@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../Style.scss";
+import "./Notification.scss";
 import { getConfig } from "utils/functions";
 import Container from "../common/Container";
 import Api from "../../utils/api";

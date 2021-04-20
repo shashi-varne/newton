@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./MyAccount.scss";
 import { getConfig } from "utils/functions";
 import { initializeComponentFunctions } from "./MyAccountFunctions";
 import Container from "../common/Container";
@@ -9,6 +8,7 @@ import Dialog, {
   DialogContent,
   DialogContentText,
 } from "material-ui/Dialog";
+import "./MyAccount.scss";
 
 class MyAccount extends Component {
   constructor(props) {

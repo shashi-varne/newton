@@ -5,8 +5,9 @@ import {
   getInvestedValue,
   getPotentialValue,
   getRateOfInterest
-} from '../invest/common/commonFunctions';
+} from '../Invest/common/commonFunctions';
 
+import './mini-components.scss';
 /*
   Explanation:
 
