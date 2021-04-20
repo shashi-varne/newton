@@ -1,6 +1,7 @@
 import React from "react";
 import { getConfig, isIframe } from "utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
+import { nativeCallback } from "../../utils/native_callback";
 import Container from "../common/Container";
 import { navigate as navigateFunc } from "../Invest/common/commonFunctions";
 import "./Linked.scss";
@@ -11,7 +12,15 @@ const AccountLinked = (props) => {
   const productName = config.productName;
   const partner = config.partner;
   const handleClick = () => {
-    navigate("/logout");
+    if (config.Web) {
+      if (isIframe()) {
+        // handle Iframe
+      } else {
+        navigate("/logout");
+      }
+    } else {
+      nativeCallback({ action: "session_expired" });
+    }
   };
 
   const hideImage =

@@ -9,7 +9,7 @@ import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isIframe } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Home = (props) => {
@@ -30,6 +30,7 @@ const Home = (props) => {
   const isPremiumFlow = stateParams.isPremiumFlow || false;
   const { kyc, user, isLoading } = useUserKycHook();
   const [userName, setUserName] = useState('')
+  const config = getConfig();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -186,12 +187,19 @@ const Home = (props) => {
       storageService().setObject(storageConstants.AUTH_IDS, authIds);
       navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
     } else {
-      navigate("/logout")
+      if (config.Web) {
+        if (isIframe()) {
+          // handle Iframe
+        } else {
+          navigate("/logout");
+        }
+      } else {
+        nativeCallback({ action: "session_expired" });
+      }
     }
   };
 
   const accountMerge = async () => {
-    let config = getConfig();
     let email = config.partner.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
@@ -269,11 +277,11 @@ const Home = (props) => {
       } else {
         if (is_nri) {
           navigate(`${getPathname.journey}`, {
-            searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
+            searchParams: `${config.searchParams}&show_aadhaar=false`,
           });
         } else {
           navigate(`${getPathname.journey}`, {
-            searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+            searchParams: `${config.searchParams}&show_aadhaar=true`,
           });
         }
       }
