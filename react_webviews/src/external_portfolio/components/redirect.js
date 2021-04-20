@@ -44,6 +44,11 @@ export default class Redirect extends Component {
   }
 
   render() {
-    return <Container showLoader={this.state.show_loader}></Container>;
+    return (
+      <Container
+        goBack={() => nativeCallback({ action: 'exit' })}
+        showLoader={this.state.show_loader}
+      ></Container>
+    );
   }
 }
