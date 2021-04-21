@@ -20,7 +20,7 @@ class SelectGrp extends Component {
       dataType: this.props.dataType,
       keyToShow: this.props.keyToShow || '',
       inputKeyName: this.props.inputKeyName || '',
-      tick_icon: getConfig().type !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
+      tick_icon: getConfig().productName !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
       inputToRender: this.props.inputToRender,
       view_scrolled: false
     };
