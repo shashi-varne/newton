@@ -31,6 +31,8 @@ class CategoryList extends Component {
       screen_name: "category-list",
       isApiRunning: false,
       componentClicked: false,
+      noResults: false,
+      inputSelected: false
     };
     this.initialize = initialize.bind(this);
     this.getAllCategories = getAllCategories.bind(this);
@@ -47,7 +49,9 @@ class CategoryList extends Component {
   }
 
   handleScroll = () => {
-    document.getElementById('input-with-icon-textfield').blur();
+    if(!this.state.inputSelected) {
+      document.getElementById('input-with-icon-textfield').blur();
+    }
   };
 
   onload = async () => {
@@ -104,6 +108,8 @@ class CategoryList extends Component {
     let value = event.target ? event.target.value : event;
     this.setState({
       searchInput: value,
+      noResults: false,
+      inputSelected: false
     });
 
     if (!this.state.isApiRunning) {
@@ -123,6 +129,7 @@ class CategoryList extends Component {
       let list = result ? result.faqs : [];
       this.setState({
         faqList: list,
+        noResults: true
       });
     } else {
       this.handleSearch(value);
@@ -135,6 +142,7 @@ class CategoryList extends Component {
       let list = result ? result.faqs : [];
       this.setState({
         faqList: list,
+        noResults: true
       });
     },
     1000,
@@ -229,6 +237,7 @@ class CategoryList extends Component {
 
     this.setState({
       componentClicked: componentClicked,
+      inputSelected: true
     });
 
     if (componentClicked && faqList.length === 0) {
@@ -247,6 +256,7 @@ class CategoryList extends Component {
       categoryList,
       isApiRunning,
       componentClicked,
+      noResults
     } = this.state;
 
     return (
@@ -299,7 +309,7 @@ class CategoryList extends Component {
             ))}
           {searchInput.length !== 0 &&
             faqList.length === 0 &&
-            !isApiRunning && <div className="no-result">No result found</div>}
+            !isApiRunning && noResults && <div className="no-result">No result found</div>}
 
           {componentClicked && isApiRunning && <CustomSkelton />}
 
