@@ -54,14 +54,12 @@ export function didMount() {
     setHeights({ 'header': true, 'container': false });
 
     let that = this;
-    if (getConfig().generic_callback || this.state.project === 'help') {
-        window.callbackWeb.add_listener({
-            type: 'back_pressed',
-            go_back: function () {
-                that.historyGoBack();
-            }
-        });
-    }
+    window.callbackWeb.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+            that.historyGoBack();
+        }
+    });
 
     window.addEventListener("scroll", this.onScroll, true);
 
