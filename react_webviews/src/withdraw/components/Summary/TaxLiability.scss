@@ -1,0 +1,34 @@
+.withdraw-summary-liability {
+  color: #767386;
+}
+
+.withdraw-summary-liability .title,
+.withdraw-summary-liability .total {
+  color: #0a1c32;
+}
+
+.withdraw-summary-liability .title{
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.withdraw-summary-liability .breakdown{
+  margin-top: 15px;
+}
+
+.withdraw-summary-liability.Card{
+  background-color: var(--highlight);
+  padding: 20px;
+  margin: 10px 0 20px 0;
+  box-shadow: none;
+  border-radius: 6px;
+}
+
+.withdraw-summary-liability .ruler {
+  margin: 15px -20px 15px -20px;
+  border: 1px solid #ededed;
+}
+
+.withdraw-summary-liability .breakdown .item {
+  margin-top: 3px;
+}

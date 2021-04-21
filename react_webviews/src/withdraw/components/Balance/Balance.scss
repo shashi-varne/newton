@@ -1,0 +1,114 @@
+.withdraw-background-override {
+  background-color: #f1f1f1;
+  line-height: 1.5;
+  overflow-y: auto;
+}
+
+#withdraw-balance {
+  padding-top: 20px;
+  .report-header {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: 15px 15px 30px 15px;
+    width: 100%;
+  }
+  .report-header .title {
+    font-size: 18px;
+    margin: 10px auto;
+    text-align: center;
+  }
+  .report-header .amount {
+    font-size: 32px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  main.Card {
+    margin: 15px;
+  }
+
+  main.Card .MuiButton-outlined {
+    border: 1px solid var(--secondary);
+  }
+
+  .Card .withdraw-mid-tile-img {
+    display: block;
+    width: 45%;
+    margin: 0 auto;
+    object-fit: contain;
+  }
+
+  .Card .mid-tile-text {
+    margin: 22px;
+    font-size: 12px;
+    color: #333333;
+  }
+
+  .withdrawable-tile .tile {
+    flex-basis: 0 0 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .withdrawable-tile .tile .tile-text {
+    width: 10ch;
+  }
+
+  .withdrawable-tile .tile .tile-text,
+  .withdrawable-tile .tile-amount {
+    text-align: center;
+  }
+
+  .withdrawable-tile .tile-amount {
+    margin-top: 10px;
+  }
+
+  .Card {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .Card .MuiButton-label {
+    color: var(--secondary);
+  }
+
+  .footer .title {
+    font-size: 16px;
+    margin-left: 3px;
+    margin-top: 4px;
+    margin-bottom: 13px;
+    font-weight: 500;
+    color: black;
+  }
+
+  .footer .withdraw-list-item .icon {
+    object-fit: contain;
+  }
+
+  .footer .withdraw-list-item {
+    cursor: pointer;
+  }
+
+  .footer .withdraw-list-item .text .header {
+    margin: 0;
+    font-size: 15px;
+    color: black;
+    margin: 5px 0 10px 0;
+  }
+
+  .footer .withdraw-list-item .text {
+    margin-left: 20px;
+    width: 100%;
+  }
+
+  .footer .withdraw-list-item .text .desc {
+    font-size: 12px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    color: rgb(51, 51, 51);
+    min-height: 32px;
+    line-height: normal;
+    box-sizing: border-box;
+    border-bottom: 1px solid #efefef;
+  }
+}
