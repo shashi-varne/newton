@@ -5,22 +5,23 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
 import ReactTooltip from "react-tooltip";
-import { initialize } from '../common_data';
+import { initialize, getPlanDetails } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
-import {formatAmount} from '../../../../utils/validators';
-
+import {formatAmount, isEmpty} from '../../../../utils/validators';
+import { compareObjects } from 'utils/validators';
 
 class GroupHealthPlanList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            skelton: true,
             plan_data: {},
-            screen_name: 'plan_list_screen'
+            screen_name: 'plan_list_screen',
+            
         }
 
         this.initialize = initialize.bind(this);
+        this.getPlanDetails = getPlanDetails.bind(this);
     }
 
     componentWillMount() {
@@ -32,58 +33,14 @@ class GroupHealthPlanList extends Component {
     }
 
     onload = async() =>{
-        this.setErrorData("onload");
-        this.setState({ skelton: true });
-        let error = "";
-        let errorType = "";
-        let {groupHealthPlanData : {post_body}} = this.state;
-
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details'];
-        let body = {};
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
-        }
-        try {
-
-             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`,
-             body);
-
-            this.setState({
-                skelton: false
-            });
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-
-                this.setState({
-                    plan_data: resultData,
-                    common: resultData.common
-                }, () => {
-                    ReactTooltip.rebuild()
-                })
-
-
-            } else {
-                error = resultData.error || resultData.message
-                    || true;
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                skelton: false
-            });
-            error = true;
-            errorType = "crash";
-        }
-        if (error) {
-            this.setState({
-              errorData: {
-                ...this.state.errorData,
-                title2: error,
-                type: errorType
-              },
-              showError: "page",
-            });
-          }
+        var groupHealthPlanData = this.state.groupHealthPlanData;
+        var resultData = groupHealthPlanData['plan_list'];
+        var plan_data = resultData.plan_data;
+        this.setState({
+            plan_data,
+            common: plan_data.common,
+            next_screen: 'plan-details'
+        })
     }
 
 
@@ -122,6 +79,7 @@ class GroupHealthPlanList extends Component {
         let {provider, groupHealthPlanData, plan_data} = this.state;
         let common = plan_data.common || {};
         let eldest_dict  = plan_data.eldest_dict || {};
+        let post_body = groupHealthPlanData.post_body;
 
         groupHealthPlanData.plan_selected = plan;
         groupHealthPlanData.plan_selected.copay = plan.complete_details.copay;
@@ -129,9 +87,12 @@ class GroupHealthPlanList extends Component {
         groupHealthPlanData.base_plan_title = common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
         groupHealthPlanData.post_body.cover_plan = plan.plan_type;
-
+        
+        var keys_to_check = ['account_type'];
+        
         if(provider === 'HDFCERGO'){
             groupHealthPlanData.plan_selected.plan_title = this.state.providerConfig.hdfc_plan_title_mapper[plan.plan_id];
+            keys_to_check = [...keys_to_check, 'city', 'plan_id']
         }
         if(provider === 'RELIGARE') {
             groupHealthPlanData.post_body.eldest_member = eldest_dict.eldest_member;
@@ -140,8 +101,31 @@ class GroupHealthPlanList extends Component {
         }
        
         this.setLocalProviderData(groupHealthPlanData);
+        var current_state = {}
+        for(var x in post_body){
+            if(keys_to_check.indexOf(x) >= 0){
+                current_state[x] = post_body[x]
+            }
+        }
+        for(var y in post_body.member_details){
+            current_state[`${y}_dob`] = post_body.member_details[y].dob;
+        }
+        this.setState({
+            current_state
+        }, ()=>{
+            var sameData = compareObjects( Object.keys(current_state) ,current_state, groupHealthPlanData.plan_list_current_state);
+            if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
+                console.log('fist cond')
+                this.getPlanDetails();
+            }else{
+                console.log('second cond')
+                this.setLocalProviderData(groupHealthPlanData);
+                this.navigate('plan-details')
+            }
+        })
 
-        this.navigate(this.state.next_screen || 'plan-details');
+        
+        
     }
 
     renderTileMidData = (props, index) => {

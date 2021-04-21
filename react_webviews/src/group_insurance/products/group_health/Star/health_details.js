@@ -8,6 +8,8 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { getConfig } from 'utils/functions';
+import Api from 'utils/api';
+import { isEmpty } from '../../../../utils/validators';
 
 class GroupHealthPlanStarHealthDetails extends Component {
 
@@ -136,7 +138,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
         )
     }
 
-    handleClick = () => {
+    handleClick = async () => {
 
     
         this.sendEvents('next');
@@ -156,10 +158,12 @@ class GroupHealthPlanStarHealthDetails extends Component {
         if (canProceed) {
             
             groupHealthPlanData.health_details = this.state.value;
-            groupHealthPlanData.sum_assured = "500000";
+            groupHealthPlanData.sum_assured = "300000";
             groupHealthPlanData.cover_plan = "FHONEW";
-            groupHealthPlanData.post_body.sum_assured = "500000";
+            groupHealthPlanData.post_body.sum_assured = "300000";
+            groupHealthPlanData.post_body.si = "300000";
             groupHealthPlanData.post_body.cover_plan = "FHONEW";
+            groupHealthPlanData.post_body.plan_id = "FHONEW";
             groupHealthPlanData.plan_selected = {
                 copay: ' 0% copay is applicable only where insured age is less than 60 yrs, there will be 20% copay for insured whose age at the time of entry is above 60 yrs',
                 recommendation_tag: '',
@@ -169,8 +173,60 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 claim_settlement_ratio: '78.15'
             }
             groupHealthPlanData.post_body.plan_title = 'Family Health Optima';
-            this.setLocalProviderData(groupHealthPlanData);
-            this.navigate(this.state.next_screen);
+
+            if(isEmpty(groupHealthPlanData.plan_details_screen)){
+                this.setErrorData("submit");            
+                let error = "";
+                let errorType = "";
+                var post_body = groupHealthPlanData.post_body;
+                let keys_to_remove = ['base_premium', 'sum_assured', 'discount_amount', 'insured_pattern','tax_amount', 'tenure','total_amount', 'type_of_plan']
+                for(let key in keys_to_remove){
+                  delete post_body[keys_to_remove[key]]
+                }
+
+                let body = {};
+                let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'postal_code'];
+                for(let key of allowed_post_body_keys){
+                    body[key] = post_body[key];
+                }
+                groupHealthPlanData.post_body = post_body;
+
+                this.setState({ show_loader: "button"});
+                try {
+                    const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,body);
+                    var resultData = res.pfwresponse.result;
+                    if (res.pfwresponse.status_code === 200) {
+                        
+                        groupHealthPlanData['plan_details_screen'] = resultData;
+                        this.setLocalProviderData(groupHealthPlanData);
+                        this.navigate(this.state.next_screen);
+                        
+                    } else {
+                        error = resultData.error || resultData.message
+                            || true;
+                    }
+                } catch (err) {
+                    console.log(err)
+                    this.setState({
+                        show_loader: false
+                    });
+                    error = true;
+                    errorType = "crash";
+                }
+                if (error) {
+                    this.setState({
+                      errorData: {
+                        ...this.state.errorData,
+                        title2: error,
+                        type: errorType
+                      },
+                      showError: "page",
+                    });
+                }
+            }else{
+                this.setLocalProviderData(groupHealthPlanData);
+                this.navigate(this.state.next_screen);
+            }
         }
     }
 
