@@ -763,15 +763,6 @@ export const getConfig = () => {
     returnConfig.html_camera = returnConfig.iOS || returnConfig.Web ? true : false;
   }
 
-  if (project === 'isip') {
-    searchParams += getParamsMark(searchParams);
-
-    // eslint-disable-next-line
-    if (returnConfig.iOS) {
-      returnConfig.hide_header = true;
-    }
-  }
-
   returnConfig.app_version = '';
   if (checkValidString(app_version)) {
     returnConfig.app_version = app_version;
