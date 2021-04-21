@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
-import {  formatAmountInr } from "../../../utils/validators";
+import { formatAmountInr } from "../../../utils/validators";
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 
@@ -51,14 +51,14 @@ class LoanEligible extends Component {
     }
   }
 
-  triggerConversion= async () => {
+  triggerConversion = async () => {
 
     this.setState({
       show_loader: true
     });
     try {
 
-      let res = await Api.get(`/relay/api/loan/dmi/accept_offer/${this.state.application_id}`);
+      let res = await Api.get(`/relay/api/loan/dmi/accept_offer/${this.state.application_id}${this.state.checkbox.one ? '?is_insured=true' : ''}`);
 
       var resultData = res.pfwresponse.result;
       if (res.pfwresponse.status_code === 200 && !resultData.error) {
@@ -82,30 +82,52 @@ class LoanEligible extends Component {
 
 
   handleClick = () => {
-      this.sendEvents('next');
-      this.triggerConversion();
+    this.sendEvents('next');
+    this.triggerConversion();
+  }
+
+  onDocumentLoadSuccess = ({ numPages }) => {
+    this.setState({
+      numPages: numPages
+    })
+  }
+
+  goBack = () => {
+    this.sendEvents('back')
+
+    if (this.state.tncClicked) {
+      this.setState({
+        tncClicked: false
+      })
+    } else {
+      this.navigate('/loan/dmi/journey')
+    }
   }
 
   render() {
-
     let vendor_info = this.state.vendor_info || {};
     return (
       <Container
         showLoader={this.state.show_loader}
-        title=''
+        title={this.state.tncClicked ? 'Terms and Conditions' : ''}
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
-        hidePageTitle={true}
+        hidePageTitle={!this.state.tncClicked}
+        noFooter={this.state.tncClicked}
         headerData={{
-          icon: 'close'
+          icon: 'close',
+          goBack: this.goBack
+        }}
+        styleContainer={{
+          overflow: this.state.tncClicked && 'hidden'
         }}
       >
         <div className="loan-status">
           <img
-            src={ require(`assets/${this.state.productName}/ils_loan_status.svg`)}
-            style={{width:"100%"}}
-            alt="" 
+            src={require(`assets/${this.state.productName}/ils_loan_status.svg`)}
+            style={{ width: "100%" }}
+            alt=""
           />
 
           <div className="loan-eligible">
@@ -115,7 +137,7 @@ class LoanEligible extends Component {
           <div className="loan-amount">
             {formatAmountInr(vendor_info.approved_amount_decision)}
           </div>
-
+            
           <div className="loan-value">
             <div>
               <div>EMI amount</div>
@@ -127,13 +149,13 @@ class LoanEligible extends Component {
             </div>
             <div>
               <div>Annual interest rate</div>
-                <div className="values">{vendor_info.loan_rate}%</div>
+              <div className="values">{vendor_info.loan_rate}%</div>
             </div>
           </div>
 
           <div className="container">
-            <div style={{padding:'20px 20px 19px 20px'}}>
-              <div className="head" style={{paddingBottom: '22px'}}>
+            <div style={{ padding: '20px 20px 19px 20px' }}>
+              <div className="head" style={{ paddingBottom: '22px' }}>
                 Loan details
               </div>
               <div className="items">
@@ -142,16 +164,16 @@ class LoanEligible extends Component {
               </div>
               <div className="items">
                 <div>Processing fee</div>
-                <div>{'- '+formatAmountInr(vendor_info.processing_fee_decision)}</div>
+                <div>{'- ' + formatAmountInr(vendor_info.processing_fee_decision)}</div>
               </div>
               <div className="items">
-                <div>GST(18%)</div>
-                <div>{'- '+formatAmountInr(vendor_info.gst_decision)}</div>
+                <div>GST (@18%)</div>
+                <div>{'- ' + formatAmountInr(vendor_info.gst_decision)}</div>
               </div>
-              <hr style={{background:"#ccd3db"}} />
+              <hr style={{ background: "#ccd3db" }} />
               <div className="credit">
                 <div>Amount credited to bank a/c</div>
-                <div>{formatAmountInr(vendor_info.net_amount_decision)}</div>
+                <div>{this.state.checkbox.one ? formatAmountInr(vendor_info.net_amount_decision - vendor_info.insurance_premium_decision) : formatAmountInr(vendor_info.net_amount_decision)}</div>
               </div>
             </div>
           </div>
