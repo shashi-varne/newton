@@ -62,7 +62,7 @@ class CategoryList extends Component {
     }
 
     if(!inputSelected) {
-      document.getElementById('input-with-icon-textfield').blur();
+      document.getElementById('input-with-icon-textfield')?.blur();
     }
   };
 

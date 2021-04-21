@@ -279,7 +279,7 @@ class Answers extends Component {
               <div className="title">
                 {!thumbStatus
                   ? `Was this helpful?`
-                  : "Thank you for your feedback"}
+                  : "Thank you for your feedback!"}
               </div>
               <div className="thumb-container">
                 <img
