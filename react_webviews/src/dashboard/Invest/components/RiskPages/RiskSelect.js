@@ -57,7 +57,7 @@ const RiskSelect = ({
       if (res.updated) {
         updateUserRiskProfile(selectedRisk);
       }
-      updateFunnelData(res);
+      updateFunnelData({ ...res, recommendedTotalAmount: res.amount });
       
       setLoader(false);
     } catch (err) {

@@ -47,7 +47,7 @@ const InvestAmount = (props) => {
     setTitle(investTitle);
     if (!amount && investType === 'saveforgoal') {
       setAmount(
-        getMonthlyCommitmentNew(term, amount, funnelData.equity)
+        getMonthlyCommitmentNew(term, funnelData.corpus, funnelData.equity)
       );
     }
   }, []);
@@ -120,9 +120,6 @@ const InvestAmount = (props) => {
       setLoader("button");
       if (investType === "saveforgoal") {
         params.subtype = funnelData?.subtype;
-      } else if (investType === 'investsurplus') {
-        funnelData['term'] = 3;
-        params.term = 3; // TODO: Remove hardcoding later
       }
       const data = await get_recommended_funds(params);
       setLoader(false);
@@ -142,11 +139,11 @@ const InvestAmount = (props) => {
       
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully
-        updateUserRiskProfile(data.rp_indicator);
+        updateUserRiskProfile(data.rp_indicator || '');
         navigate('recommendations');
       } else {
         // RP disabled flow
-        navigate(`${funnelGoalData.id}/funds`, { ...funnelData, amount });
+        navigate(`${funnelGoalData.id}/funds`);
       }
     } catch (err) {
       console.log(err);
