@@ -31,6 +31,7 @@ class CategoryList extends Component {
       screen_name: "category-list",
       isApiRunning: false,
       componentClicked: false,
+      scrolled: false
     };
     this.initialize = initialize.bind(this);
     this.getAllCategories = getAllCategories.bind(this);
@@ -38,8 +39,21 @@ class CategoryList extends Component {
   }
 
   componentWillMount() {
+    window.addEventListener('scroll', this.handleScroll, true);
     this.initialize();
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll = () => {
+    console.log('scroll')
+    this.setState({
+      componentClicked: false,
+      scrolled: true
+    })
+  };
 
   onload = async () => {
     let result = await this.getAllCategories();
@@ -238,6 +252,7 @@ class CategoryList extends Component {
       categoryList,
       isApiRunning,
       componentClicked,
+      scrolled
     } = this.state;
 
     return (
@@ -250,7 +265,14 @@ class CategoryList extends Component {
         }}
         noFooter
       >
-        <div className="help-CategoryList" style={{marginTop: `${faqList.length > 0 && componentClicked ? '106px' : '140px'}`}}>
+        <div
+          className="help-CategoryList"
+          style={{
+            marginTop: `${
+              faqList.length > 0 && (componentClicked || !scrolled || scrolled) ? "106px" : "140px"
+            }`,
+          }}
+        >
           <div className="Header header-title-page header-title-page-text">
             <MyQueries
               title="How can we help?"
@@ -266,7 +288,7 @@ class CategoryList extends Component {
           <div id="categoryList"></div>
           {faqList.length > 0 &&
             !isApiRunning &&
-            componentClicked &&
+            (componentClicked || scrolled) &&
             // searchInput.length !== 0 &&
             faqList.map((item, index) => (
               <div
@@ -290,7 +312,7 @@ class CategoryList extends Component {
 
           {this.state.skelton && <CustomSkelton />}
 
-          {!this.state.skelton && !componentClicked && categoryList && (
+          {!this.state.skelton && !componentClicked && !scrolled && categoryList && (
             <div className="fade-in">
               <div className="title">Category</div>
 
