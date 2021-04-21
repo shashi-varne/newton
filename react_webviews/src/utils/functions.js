@@ -116,6 +116,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, "640px");
   html.style.setProperty(`--tooltip-width`, "540px");
   html.style.setProperty("--color-action-disable", "#E8ECF1");
+
   return config_to_return;
 }
 

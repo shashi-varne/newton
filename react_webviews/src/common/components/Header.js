@@ -75,7 +75,7 @@ const Header = ({ classes, title, count, total, current, goBack,
               <SVG
               style={{marginLeft: 'auto', width:25, cursor:'pointer'}}
               onClick={handleTopIcon}
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (!new_header ? getConfig().primary : 'white'))}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (!new_header ? getConfig().styles.primaryColor : 'white'))}
               src={rightIcon}
             />
             }
@@ -83,19 +83,19 @@ const Header = ({ classes, title, count, total, current, goBack,
               <SVG
               style={{marginLeft: '20px', width:25, cursor:'pointer'}}
               onClick={handleNotification}
-              preProcessor={code => code.replace(/fill=#FFF".*?"/, 'fill=' + (new_header ? getConfig().notifications_color : 'white'))}
+              preProcessor={code => code.replace(/fill=#FFF".*?"/, 'fill=' + (new_header ? getConfig().notificationColor : 'white'))}
               src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
             />
             }
           </div>
 
-          {/* The product logo will come here -> (will need asset) */}
-          {
+          {/* The product type logo will come here(pending) */}
+          {/* {
             false && 
             <div>
               <img src={require('assets/finity_navlogo.png')} alt="productType" />
             </div>
-          }
+          } */}
         </Toolbar>
       </AppBar >
     )
