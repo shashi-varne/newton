@@ -471,7 +471,9 @@ const Summary = (props) => {
               {data.insurance_active && investCards.insurance && (
                 <div
                   className="content"
-                  onClick={() => redirectToReports("insurance")}
+                  onClick={() => navigate("/group-insurance/common/report")
+                    // redirectToReports("insurance")
+                  }
                 >
                   <img
                     alt=""
@@ -485,7 +487,10 @@ const Summary = (props) => {
               {data.gold_active_investment && investCards.gold && (
                 <div
                   className="content"
-                  onClick={() => redirectToReports("gold")}
+                  onClick={() => 
+                    navigate("/gold/my-gold")
+                    // redirectToReports("gold")
+                  }
                 >
                   <img
                     alt=""
