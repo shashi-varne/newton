@@ -21,8 +21,8 @@ import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import "./commonStyles.scss";
 
 const Summary = (props) => {
-  const productName = getConfig().productName;
-  const partner = getConfig().partner;
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [report, setReportData] = useState({});
   const [current, setCurrent] = useState(true);
@@ -34,6 +34,7 @@ const Summary = (props) => {
   });
   const [data, setData] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
+  const [investCards, setInvestCards] = useState({});
   const { user: currentUser, isLoading } = useUserKycHook();
 
   useEffect(() => {
@@ -41,6 +42,20 @@ const Summary = (props) => {
   }, []);
 
   const initialize = async () => {
+    const investSections = config.investSections;
+    const investSubSectionMap = config.investSubSectionMap;
+    const keysToCheck = ["nps", "insurance", "gold"];
+    const cardsToShow = {};
+    for(let section of investSections) {
+      if(!isEmpty(investSubSectionMap[section])) {
+        for(let subSections of investSubSectionMap[section]) {
+          if(keysToCheck.includes(subSections)) {
+            cardsToShow[subSections] = true;
+          }
+        }
+      }
+    }
+    setInvestCards(cardsToShow)
     const result = await getSummaryV2();
     if (!result) {
       setShowSkelton(false);
@@ -242,7 +257,7 @@ const Summary = (props) => {
               data.showTransactions ? (
                 <>
                   {currentUser.nps_investment &&
-                    partner?.invest_screen_cards?.nps && (
+                    investCards.nps && (
                       <div
                         className="content"
                         onClick={() => flowOptions("npsInvestments")}
@@ -453,7 +468,7 @@ const Summary = (props) => {
                   <div>Withdraw your funds</div>
                 </div>
               </div>
-              {!data.insurance_active && (
+              {data.insurance_active && investCards.insurance && (
                 <div
                   className="content"
                   onClick={() => redirectToReports("insurance")}
@@ -467,7 +482,7 @@ const Summary = (props) => {
                   </div>
                 </div>
               )}
-              {data.gold_active_investment && (
+              {data.gold_active_investment && investCards.gold && (
                 <div
                   className="content"
                   onClick={() => redirectToReports("gold")}
