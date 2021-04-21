@@ -59,8 +59,7 @@ class Landing extends Component {
 
     if(!isEmpty(openModuleData)){
       if(!openModuleData.sub_module) {
-        // window.location.href = redirect_url;
-        this.navigate("/landing");
+        nativeCallback({ action: 'exit_web' })
       }
     }
     this.setState({

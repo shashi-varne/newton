@@ -306,8 +306,7 @@ class Container extends Component {
 
     switch (pathname) {
       case "/group-insurance":
-        // nativeCallback({ action: 'exit', events: this.getEvents('back') });
-        this.navigate("/landing");
+        nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/group-insurance/common/report":
         openModule('app/portfolio')

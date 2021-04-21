@@ -268,31 +268,12 @@ export async function authenticate() {
 
 export function getRedirectionUrlWebview(
   url,
-  redirect_path,
-  type,
-  redirect_url
+  type
 ) {
   let webRedirectionUrl = url;
-  let is_secure = getConfig().is_secure;
-  let plutus_redirect_url = `${getBasePath()}/`;
-  if (redirect_path) {
-    plutus_redirect_url += redirect_path;
-  }
-  plutus_redirect_url += `${getConfig().searchParams}&is_secure=${is_secure}`;
-  plutus_redirect_url = encodeURIComponent(plutus_redirect_url);
-  if (redirect_url) {
-    webRedirectionUrl +=
-      // eslint-disable-next-line
-      (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
-      "generic_callback=true&redirect_url=" +
-      plutus_redirect_url;
-  } else {
-    webRedirectionUrl +=
-      // eslint-disable-next-line
-      (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
-      "generic_callback=true&plutus_redirect_url=" +
-      plutus_redirect_url;
-  }
+  webRedirectionUrl +=
+    (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
+    "generic_callback=true";
 
   if (type === "campaigns") {
     webRedirectionUrl += "&campaign_version=1";

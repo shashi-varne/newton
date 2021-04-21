@@ -554,23 +554,6 @@ function getPartnerConfig(partner_code) {
   return config_to_return;
 }
 
-// export function setWebAppParams(redirect_url) {
-//   redirect_url = decodeURIComponent(redirect_url);
-//   let redirect_url_data = redirect_url.split('?is_secure=');
-
-//   let is_secure = false;
-//   if (redirect_url_data.length === 2) {
-//     is_secure = redirect_url_data[1];
-//   }
-
-//   let web_params = '';
-//   if (checkValidString(is_secure)) {
-//     web_params += 'is_secure=' + is_secure;
-//   }
-
-//   return web_params;
-// }
-
 export const isMobileDevice = () => {
   var mobileDevice = isMobile.any() || window.innerWidth < 767;
   if (mobileDevice) {
@@ -799,7 +782,8 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
-  returnConfig.isWebCode = returnConfig.Web;
+  returnConfig.isWebOrSdk = returnConfig.Web || is_secure;
+  returnConfig.isSdk = !returnConfig.Web && is_secure; 
   returnConfig.partner = partnersConfigBase[partner_code] || partnersConfigBase['fisdom'];
   
   return returnConfig;

@@ -136,7 +136,7 @@ class PlanDetailsClass extends Component {
     let current_url = window.location.href;
     this.sendEvents(type);
 
-    if (getConfig().Web && !getConfig().is_secure) {
+    if (getConfig().isWebOrSdk) {
       nativeCallback({
         action: 'open_in_browser',
         message: {

@@ -163,14 +163,13 @@ class SelectBank extends Component {
         );
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
-        // let redirect_url = getConfig().redirect_url;
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
           '&app=' + app;
         if (getConfig().generic_callback) {
           pgLink += '&generic_callback=' + getConfig().generic_callback;
         }
-        if (!getConfig().Web && !getConfig().is_secure) {
+        if (!getConfig().isSdk) {
           if (getConfig().app === 'ios') {
             nativeCallback({
               action: 'show_top_bar', message: {
@@ -184,7 +183,6 @@ class SelectBank extends Component {
             }
           });
         } else { 
-          // Todo: Need to check (difference between native and sdk)
           let redirectData = {
             show_toolbar: false,
             icon: 'back',
@@ -194,7 +192,7 @@ class SelectBank extends Component {
                 action_name: 'positive',
                 action_text: 'Yes',
                 action_type: 'redirect',
-                // redirect_url: redirect_url
+                redirect_url: paymentRedirectUrl
               }, {
                 action_name: 'negative',
                 action_text: 'No',

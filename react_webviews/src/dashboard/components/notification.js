@@ -24,23 +24,12 @@ class Notification extends Component {
   };
 
   handleClick = (target) => {
-    // Todo: Need to check what target.url has
     this.setState({ showLoader: true });
     let campLink = "";
-    if (target.campaign_name === "whatsapp_consent") {
-      campLink = getRedirectionUrlWebview(
-        target.url,
-        "notification",
-        "campaigns",
-        true
-      );
-    } else {
-      campLink = getRedirectionUrlWebview(
-        target.url,
-        "notification",
-        "campaigns"
-      );
-    }
+    campLink = getRedirectionUrlWebview(
+      target.url,
+      "campaigns"
+    );
     window.location.href = campLink;
   };
 

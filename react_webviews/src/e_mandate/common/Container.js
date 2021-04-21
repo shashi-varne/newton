@@ -6,7 +6,6 @@ import { didMount, commonRender } from '../../common/components/container_functi
 import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listner_otm';
 import { getConfig } from 'utils/functions';
-import { navigate } from '../../common/components/container_functions'
 
 
 class Container extends Component {
@@ -28,7 +27,6 @@ class Container extends Component {
 
     this.didMount = didMount.bind(this);
     this.commonRender = commonRender.bind(this);
-    this.navigate = navigate.bind(this);
   }
 
 
@@ -77,7 +75,6 @@ class Container extends Component {
         return;
     }
 
-    // Todo: Need to check what is disableBack use for
     if ((params && params.disableBack) || this.props.disableBack) {
       nativeCallback({ action: 'exit', events: this.getEvents('exit') });
       return;
@@ -89,8 +86,7 @@ class Container extends Component {
       case "/e-mandate/enps/about":
       case "/e-mandate/enps/success":
       case "/e-mandate/enps/failure":
-        // nativeCallback({ action: 'exit', events: this.getEvents('exit') });
-        this.navigate("/landing")
+        nativeCallback({ action: 'exit', events: this.getEvents('exit') });
         break;
       default:
         if (this.getEvents('back')) {
