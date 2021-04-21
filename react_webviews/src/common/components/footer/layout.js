@@ -178,7 +178,11 @@ export class FooterLayoutBase extends Component {
           props.handleClick();
         }
       }}>
-      <div className={`FlexItem2 ${!props.disable ? 'FlexButtonGenericColor' : ''}`}>
+      <div className={`FlexItem2 ${!props.disable ? 'FlexButtonGenericColor' : ''}`} 
+        style={{
+          borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 6
+        }} 
+      >
         <Button
           type={props.type}
           disable={props.disable}

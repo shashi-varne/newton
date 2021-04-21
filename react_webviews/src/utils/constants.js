@@ -96,7 +96,7 @@ export const themeConfig = {
                 },
                 backgroundColor: getConfig().styles.secondaryColor,
                 color: '#fff',
-                borderRadius: 4,
+                borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 4,
                 boxShadow: 'none'
             },
             disabled: {
