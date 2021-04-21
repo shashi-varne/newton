@@ -45,7 +45,7 @@ const PaymentOptions = (props) => {
           redirect_url: encodeURIComponent(
             `${basePath}/sdk/page/callback${
               getConfig().searchParams
-            }&is_secure=${getConfig().is_secure}`
+            }&is_secure=${storageService().get("is_secure")}`
           ),
           invest_id: result.post_args.ppt_id,
           remark: remark,
@@ -77,7 +77,7 @@ const PaymentOptions = (props) => {
               redirect_url: encodeURIComponent(
                 `${basePath}/page/callback/${investment_type}/${investment_amount}${
                   getConfig().searchParams
-                }&is_secure=${getConfig().is_secure}`
+                }&is_secure=${storageService().get("is_secure")}`
               ),
             },
             {
@@ -111,7 +111,7 @@ const PaymentOptions = (props) => {
             encodeURIComponent(
               `${basePath}/page/callback/${investment_type}/${investment_amount}${
                 getConfig().searchParams
-              }&is_secure=${getConfig().is_secure}`
+              }&is_secure=${storageService().get("is_secure")}`
             ) +
             "&sdk_capabilities=" +
             storageService().get("sdk_capabilities");
@@ -123,7 +123,7 @@ const PaymentOptions = (props) => {
             encodeURIComponent(
               `${basePath}/page/callback/${investment_type}/${investment_amount}${
                 getConfig().searchParams
-              }&is_secure=${getConfig().is_secure}`
+              }&is_secure=${storageService().get("is_secure")}`
             );
         }
       } else {
@@ -135,7 +135,7 @@ const PaymentOptions = (props) => {
             encodeURIComponent(
               `${basePath}/page/callback/${investment_type}/${investment_amount}${
                 getConfig().searchParams
-              }&is_secure=${getConfig().is_secure}`
+              }&is_secure=${storageService().get("is_secure")}`
             ) +
             "&sdk_capabilities=" +
             storageService().get("sdk_capabilities");
@@ -147,7 +147,7 @@ const PaymentOptions = (props) => {
             encodeURIComponent(
               `${basePath}/page/callback/${investment_type}/${investment_amount}${
                 getConfig().searchParams
-              }&is_secure=${getConfig().is_secure}`
+              }&is_secure=${storageService().get("is_secure")}`
             );
         }
       }

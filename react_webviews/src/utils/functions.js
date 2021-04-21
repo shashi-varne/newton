@@ -1,5 +1,5 @@
 // import colors from '../common/theme/Style.scss';
-import { checkValidString, getUrlParams } from './validators';
+import { checkValidString, getUrlParams, storageService } from './validators';
 import $ from 'jquery';
 
 const partnersConfigBase = {
@@ -654,6 +654,8 @@ export const getConfig = () => {
     project = 'iw-dashboard';
   }
 
+  if (is_secure === "true") storageService().set("is_secure", true);
+
   let search = window.location.search;
   const insurance_v2 = generic_callback === 'true' ? true : search.indexOf('insurance_v2') >= 0;
 
@@ -661,9 +663,6 @@ export const getConfig = () => {
 
   let searchParams = ``;
   let searchParamsMustAppend = ``;
-
-  searchParams += getParamsMark(searchParams) + `is_secure=${is_secure}`;
-  searchParamsMustAppend += getParamsMark(searchParams) + `is_secure=${is_secure}`;
 
   base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
   if(!base_url_default) {

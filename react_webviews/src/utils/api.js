@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-import { checkValidString } from './validators';
+import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions';
 
@@ -36,7 +36,7 @@ class Api {
       if (params instanceof FormData) {
         is_secure = false;
       } else {
-        is_secure = getConfig().is_secure;
+        is_secure = storageService().get("is_secure");
       }
     }
     if (sdk_capabilities) {

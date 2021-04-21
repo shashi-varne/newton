@@ -110,7 +110,7 @@ const SipPaymentCallback = (props) => {
                 basePath +
                   "/" +
                   "?is_secure=" +
-                  getConfig().is_secure
+                  storageService().get("is_secure")
               );
             window.location.href = auto_debit_campaign_url;
           } else if (
@@ -129,7 +129,7 @@ const SipPaymentCallback = (props) => {
                   "?base_url=" +
                   config.base_url +
                   "&is_secure=" +
-                  getConfig().is_secure
+                  storageService().get("is_secure")
               );
             window.location.href = url;
           }
