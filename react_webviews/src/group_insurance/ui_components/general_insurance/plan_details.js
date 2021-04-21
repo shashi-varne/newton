@@ -89,7 +89,7 @@ class PlanDetailsClass extends Component {
         }
       },
       type: getConfig().productName,
-      color: getConfig().primary,
+      color: getConfig().styles.primaryColor,
       quoteData: {},
       premiudmDtailsStored: window.sessionStorage.getItem('group_insurance_plan_final_data') ?
         JSON.parse(window.sessionStorage.getItem('group_insurance_plan_final_data')) : ''
@@ -432,11 +432,11 @@ class PlanDetailsClass extends Component {
           {!this.state.isRedirectionModal && this.props.parent.state.product_key !== 'CORONA' && <span className="accident-plan-item4">in</span>}
           {this.state.isRedirectionModal && <span className="accident-plan-item4" style={{ marginBottom: 3 }}>starts from</span>}
           {this.props.parent.state.product_key !== 'CORONA' &&
-            <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹
+            <span className="accident-plan-item-color" style={{ color: getConfig().styles.primaryColor, fontWeight: 'bold' }}>₹
           {props.premium}/{props.plan_frequency || 'year'}</span>
           }
           {this.props.parent.state.product_key === 'CORONA' &&
-            <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold', marginTop : '-20px'}}>₹
+            <span className="accident-plan-item-color" style={{ color: getConfig().styles.primaryColor, fontWeight: 'bold', marginTop : '-20px'}}>₹
           {props.premium} <span style={{ fontSize: '9px', color: '#6f6f6f' }}>{props.plan_frequency || 'for a year'}</span></span>
           }
         </div>

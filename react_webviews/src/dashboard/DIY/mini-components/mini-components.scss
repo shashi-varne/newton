@@ -1,0 +1,275 @@
+.capitalize {
+  text-transform: capitalize;
+}
+
+.diy-fund-card {
+  display: flex;
+  padding: 15px;
+  align-items: center;
+  margin-bottom: 10px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.diy-fund-card-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border-radius: 5px;
+  color: #fff;
+  box-sizing: border-box;
+  background-color: var(--secondary);
+  align-self: flex-start;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.diy-fund-card-added {
+  background-color: var(--skelton-color);
+  color: red;
+}
+
+.diy-fund-card-button .action {
+  margin-left: 3px;
+}
+
+.diy-fund-card-img {
+  flex-basis: 30%;
+  min-width: 100px;
+  img {
+    border: 0;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.diy-fund-card-details {
+  flex: 2;
+  .diy-fund-card-name {
+    margin: 0;
+    line-height: 1.25em;
+    font-weight: bold;
+    font-size: 18px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.diy-fund-card-info-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+
+  .diy-fund-card-info {
+    display: flex;
+    flex-direction: column;
+    p {
+      font-size: 16px;
+      span {
+        color: var(--secondary);
+      }
+    }
+    & > p {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-top: 0;
+      color: #727272;
+    }
+  }
+}
+
+.diy-cart-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+}
+
+.diy-cart-footer .button {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 100px;
+  padding: 8px 15px;
+
+  img {
+    width: 20px;
+  }
+
+  .title {
+    margin-left: 10px;
+  }
+
+  .icon {
+    width: 20px;
+    svg {
+      fill: var(--primary);
+    }
+  }
+}
+
+.diy-cart-footer .diy-filter-button {
+  background-color: #fff;
+}
+
+.diy-cart-footer .diy-filter-button:hover {
+  background-color: #fff;
+}
+
+.diy-cart-footer .button:nth-of-type(2) {
+  margin-left: 10px;
+}
+
+#diy-dialog {
+  .MuiDialog-paper {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .MuiDialog-paperWidthSm {
+    width: 100%;
+    align-self: flex-end;
+  }
+
+  .diy-bottom-sheet {
+    width: 100%;
+  }
+
+  .diy-bottom-sheet .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .diy-bottom-sheet .header .text {
+    font-weight: bold;
+    color: #333333;
+  }
+
+  .diy-bottom-sheet .filter {
+    display: flex;
+    background-color: #fff;
+  }
+
+  .diy-bottom-sheet .filter .title {
+    flex: 1;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      .selected {
+        background-color: #fff;
+      }
+    }
+
+    ul li {
+      padding: 20px;
+      list-style-type: none;
+      text-align: center;
+      font-weight: bold;
+      box-sizing: border-box;
+      background-color: #e8e8e8;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .diy-bottom-sheet .filter .body {
+    flex: 4;
+    height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .diy-sort-filter,
+  .diy-option-filter {
+    margin: 0 10px;
+  }
+
+  .diy-bottom-sheet .cart-item {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      font-size: 16px;
+    }
+
+    .delete-icon {
+      display: block;
+      width: 30px;
+      cursor: pointer;
+    }
+  }
+
+  .diy-filter-bottom-sheet {
+    header {
+      margin: -20px -20px 0 -20px;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 8px 20px;
+      font-size: 15px;
+    }
+
+    .filter {
+      .title {
+        background-color: #e8e8e8;
+        margin-left: -20px;
+        font-size: 15px;
+      }
+    }
+
+    footer {
+      margin: 0 -20px -20px -20px;
+
+      button {
+        border-radius: 0;
+        padding: 14px 10px;
+      }
+    }
+  }
+
+  .diy-fund-houses {
+    .house {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      cursor: pointer;
+    }
+    
+    svg {
+      fill: var(--label);
+      font-weight: bold;
+      font-size: 25px;
+    }
+
+    .checked {
+      fill: var(--secondary);
+      font-weight: bold;
+    }
+
+    .house-name {
+      font-size: 16px;
+      margin-left: 20px;
+    }
+  }
+}
+
+////// DIY SEARCH START //////
+
+
+
+
+
+
+
+////// DIY SEARCH END //////

@@ -78,7 +78,7 @@ class ReactResponsiveCarousel extends Component {
               <li
                 style={{
                   ...indicatorStyles,
-                  background:  getConfig().primary,
+                  background:  getConfig().styles.primaryColor,
                   width: "10px",
                 }}
               />

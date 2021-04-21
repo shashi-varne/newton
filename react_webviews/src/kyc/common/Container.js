@@ -51,10 +51,7 @@ class Container extends Component {
   }
 
   render() {
-    let props_base = {
-      classOverRide: "loanMainContainer",
-    };
-    return <Fragment>{this.commonRender(props_base)}</Fragment>;
+    return <Fragment>{this.commonRender()}</Fragment>;
   }
 }
 

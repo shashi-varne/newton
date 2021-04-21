@@ -8,7 +8,7 @@ class FaqsClass extends Component {
         super(props);
         this.state = {
             options: this.props.options,
-            productName: getConfig().type,
+            productName: getConfig().productName,
             selectedIndex: ''
         };
     }

@@ -91,7 +91,7 @@ export function commonRender(props_base) {
     for (var i = 0; i < this.props.total; i++) {
         if (this.props.current > i) {
             steps.push(<span className='active'
-                style={{ background: getConfig().primary, marginRight: 0 }} key={i}></span>);
+                style={{ background: getConfig().styles.primaryColor, marginRight: 0 }} key={i}></span>);
         } else {
             steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
         }
@@ -130,7 +130,9 @@ export function commonRender(props_base) {
                     filterPage={this.props.filterPage}
                     handleFilter={this.props.handleFilter} 
                     hideBack={this.props.hideBack}
-          
+                    logo={this.props.logo}
+                    notification={this.props.notification}
+                    handleNotification={this.props.handleNotification}          
                 />
                 }
                 {/* Below Header Block */}

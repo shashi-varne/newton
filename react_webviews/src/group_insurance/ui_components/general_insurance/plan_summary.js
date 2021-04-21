@@ -344,7 +344,7 @@ class PlanSummaryClass extends Component {
             </div>
         </div>
         <div className="baxa-disclaimer">
-          <p style={{ color: getConfig().primary, marginBottom: '25px', textAlign: 'center'}}>*Maximum of 2 policy purchases per user allowed, anymore can lead to dispute during claim</p>
+          <p style={{ color: getConfig().styles.primaryColor, marginBottom: '25px', textAlign: 'center'}}>*Maximum of 2 policy purchases per user allowed, anymore can lead to dispute during claim</p>
         </div>
       </Container>
     );
