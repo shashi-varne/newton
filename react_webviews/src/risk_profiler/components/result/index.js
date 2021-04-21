@@ -167,7 +167,7 @@ class Result extends Component {
       return;
     }
    
-    const openWebModule = getConfig().isWebCode;
+    const openWebModule = getConfig().isWebOrSdk;
     if (openWebModule) {
       if (get(this.state, 'params.internalRedirect')) {
         this.redirectToInvestFlow();
