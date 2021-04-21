@@ -72,7 +72,7 @@ const RecommendationTopCard = ({
   }
 
   return (
-    <div className="recommendation-top-section">
+    <div className="recommendation-top-card">
       {renderContent()}
     </div>
   );

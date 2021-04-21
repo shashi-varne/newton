@@ -55,7 +55,7 @@ const EditFunds = (props) => {
       handleClick={goBack}
       classOverRideContainer='pr-container'
     >
-      <section className='recommendations-common-container-edit'>
+      <section className='recommendation-section-edit'>
         <div className='recommendations-funds-lists-edit'>
           {recommendation?.map((el, idx) => (
             <div key={idx} className='recommendations-funds-item-edit'>
