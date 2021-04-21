@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
-import Button from "@material-ui/core/Button";
+import Button from "common/ui/Button";
 import { initialize } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SecureInvest from "../../mini-components/SecureInvest";
@@ -279,7 +279,13 @@ class Landing extends Component {
                                     <div className="subtitle">
                                       {data.subtitle}
                                     </div>
-                                    <Button className="invest-landing-button">{data.button_text}</Button>
+                                    <Button
+                                      buttonTitle={data.button_text}
+                                      classes={{
+                                        root: "invest-landing-button",
+                                      }}
+                                      type="outlined"
+                                    />
                                   </div>
                                 );
                               })}
