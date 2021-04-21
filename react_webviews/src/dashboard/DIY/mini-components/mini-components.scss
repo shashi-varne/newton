@@ -146,11 +146,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 15px 15px 15px;
   }
 
   .diy-bottom-sheet .header .text {
-    font-weight: bold;
     color: #333333;
+    font-size: 15px;
   }
 
   .diy-bottom-sheet .filter {
@@ -203,6 +204,7 @@
 
     .title {
       font-size: 16px;
+      color: #333333;
     }
 
     .delete-icon {
@@ -213,11 +215,15 @@
   }
 
   .diy-filter-bottom-sheet {
-    header {
+    .header {
       margin: -20px -20px 0 -20px;
       border-bottom: 1px solid #e8e8e8;
-      padding: 8px 20px;
+      padding: 15px 20px;
       font-size: 15px;
+
+      .reset {
+        color: var(--secondary);
+      }
     }
 
     .filter {
@@ -231,9 +237,10 @@
     footer {
       margin: 0 -20px -20px -20px;
 
-      button {
+      .button {
         border-radius: 0;
         padding: 14px 10px;
+        height: 45px;
       }
     }
   }
