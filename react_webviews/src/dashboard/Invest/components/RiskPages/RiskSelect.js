@@ -1,4 +1,4 @@
-import './RiskPages.scss';
+import './commonStyles.scss';
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import { getConfig } from '../../../../utils/functions';

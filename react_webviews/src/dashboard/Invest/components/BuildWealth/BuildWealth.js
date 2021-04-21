@@ -27,7 +27,7 @@ const renderData = {
 };
 
 const Landing = (props) => {
-  const { updateFunnelData, initFunnelData } = useFunnelDataHook();
+  const { initFunnelData } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   const [investTypeDisplay, setInvestTypeDisplay] = useState('sip');
   const otiAmount = 50000;
@@ -40,19 +40,20 @@ const Landing = (props) => {
     };
     setLoader("button");
     try {
-      await initFunnelData({ type: params.type });
-      const funnelObj = {
+      const appendToFunnelData = {
         amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
         term,
-        // eslint-disable-next-line radix
-        year: parseInt(moment().year() + term),
+        year: parseInt(moment().year() + term, 10),
         corpus: otiAmount,
         investType: params.type,
         isRecurring: investTypeDisplay === 'sip' ? true : false,
         investTypeDisplay,
         name: 'Wealth building'
       };
-      updateFunnelData(funnelObj);
+      await initFunnelData({
+        apiParams: { type: params.type },
+        appendToFunnelData: appendToFunnelData
+      });
       setLoader(false);
       goNext();
     } catch (err) {

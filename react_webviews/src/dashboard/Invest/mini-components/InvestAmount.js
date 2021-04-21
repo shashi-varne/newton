@@ -9,6 +9,7 @@ import {
   validateOtAmount,
   validateSipAmount,
   selectTitle,
+  getMonthlyCommitmentNew,
 } from '../common/commonFunctions';
 import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
@@ -20,8 +21,10 @@ import {
 } from '../../../utils/validators';
 import useFunnelDataHook from '../common/funnelDataHook';
 import './mini-components.scss';
+
 const date = new Date();
 const month = date.getMonth();
+const riskEnabledFunnel = getConfig().riskEnabledFunnels;
 
 const InvestAmount = (props) => {
   const {
@@ -42,6 +45,11 @@ const InvestAmount = (props) => {
   useEffect(() => {
     const investTitle = selectTitle(investType);
     setTitle(investTitle);
+    if (!amount && investType === 'saveforgoal') {
+      setAmount(
+        getMonthlyCommitmentNew(term, amount, funnelData.equity)
+      );
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -107,12 +115,11 @@ const InvestAmount = (props) => {
         amount,
         type: investType,
         term: funnelData?.term,
-        rp_enabled: getConfig().riskEnabledFunnels,
+        rp_enabled: riskEnabledFunnel,
       };
       setLoader("button");
       if (investType === "saveforgoal") {
         params.subtype = funnelData?.subtype;
-        delete params.amount;
       } else if (investType === 'investsurplus') {
         funnelData['term'] = 3;
         params.term = 3; // TODO: Remove hardcoding later
@@ -213,14 +220,16 @@ const InvestAmount = (props) => {
             }
           </p>
         </div>
-        <div className='invest-amount-corpus'>
-          <div className='invest-amount-corpus-duration'>
-            {funnelGoalData.id === 'savetax' ?
-              `till Mar ${saveTaxYear} to save tax upto:` : `Corpus in ${year}`
-            }
+        {!riskEnabledFunnel &&
+          <div className='invest-amount-corpus'>
+            <div className='invest-amount-corpus-duration'>
+              {funnelGoalData.id === 'savetax' ?
+                `till Mar ${saveTaxYear} to save tax upto:` : `Corpus in ${year}`
+              }
+            </div>
+            <div className='invest-amount-corpus-amount'>{numDifferentiationInr(corpus)}</div>
           </div>
-          <div className='invest-amount-corpus-amount'>{numDifferentiationInr(corpus)}</div>
-        </div>
+        }
       </section>
     </Container>
   );
