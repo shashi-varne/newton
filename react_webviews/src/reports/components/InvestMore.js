@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { isEmpty, storageService, formatAmountInr } from "utils/validators";
+import { isEmpty, storageService, formatAmountInr, convertInrAmountToNumber } from "utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import Input from "common/ui/Input";
@@ -11,7 +11,6 @@ import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import PennyVerificationPending from "../../dashboard/Invest/mini-components/PennyVerificationPending";
 import InvestError from "../../dashboard/Invest/mini-components/InvestError";
 import InvestReferralDialog from "../../dashboard/Invest/mini-components/InvestReferralDialog";
-import { convertInrAmountToNumber } from "../../utils/validators";
 
 const InvestMore = (props) => {
   const navigate = navigateFunc.bind(props);

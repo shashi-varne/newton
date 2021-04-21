@@ -4,6 +4,7 @@ import {
   formatAmountInr,
   isEmpty,
   storageService,
+  convertInrAmountToNumber
 } from "utils/validators";
 import Button from "material-ui/Button";
 import { getPathname, storageConstants } from "../constants";
@@ -15,7 +16,6 @@ import { navigate as navigateFunc } from "../common/functions";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import toast from "common/ui/Toast";
-import { convertInrAmountToNumber } from "../../utils/validators";
 
 const SwitchNow = (props) => {
   const params = props?.match?.params || {};
