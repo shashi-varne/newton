@@ -12,6 +12,7 @@
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 15px;
+    line-height: 1.5;
 
     .icon {
       width: fit-content;
@@ -45,7 +46,7 @@
           margin-top: 10px;
 
           p {
-            margin-bottom: 0px;
+            margin: 0px;
             padding-top: 0;
             color: #727272;
             font-size: 16px;
@@ -56,12 +57,13 @@
         .invest {
           width: fit-content;
 
-          button {
-            color: white;
-            background-color: var(--secondary);
+          .button {
             margin: 6px 8px;
-            line-height: 1.5;
-            min-width: 85px;
+            width: 90px !important;
+            min-width: 90px;
+            height: 40px;
+            font-size: 14px !important;
+            border-radius: 3px;
           }
         }
       }

@@ -154,7 +154,7 @@ class Landing extends Component {
                           <Button
                             buttonTitle={kycStatusData.button_text}
                             classes={{
-                              root: "invest-landing-button",
+                              button: "invest-landing-button",
                             }}
                           />
                         </div>
@@ -287,7 +287,7 @@ class Landing extends Component {
                                     <Button
                                       buttonTitle={data.button_text}
                                       classes={{
-                                        root: "invest-landing-button",
+                                        button: "invest-landing-button",
                                       }}
                                       type="outlined"
                                     />

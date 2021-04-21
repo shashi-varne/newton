@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import Button from "@material-ui/core/Button";
 import { storageService } from "utils/validators";
 import { navigate } from "../../functions";
 import { getFormattedDate, getSchemeOption } from "./nfoFunctions";
-
-import './FundDetail.scss';
+import Button from "common/ui/Button";
+import "./FundDetail.scss";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -66,7 +65,11 @@ class FundDetail extends Component {
               </span>
               {fund.tax_plan === "elss" && <span>Tax saving</span>}
             </div>
-            <Button onClick={this.handleClick}>INVEST</Button>
+            <Button
+              onClick={this.handleClick}
+              buttonTitle="INVEST"
+              classes={{ button: "button" }}
+            />
             <div className="risk">
               <div className="text">
                 <b>Risk</b>

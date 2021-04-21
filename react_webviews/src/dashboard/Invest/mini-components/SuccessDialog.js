@@ -52,7 +52,7 @@ const SuccessDialog = ({ isOpen, handleClick, sips = [], close }) => {
       <DialogActions className="action">
         <Button
           onClick={handleClick}
-          classes={{ root: "button" }}
+          classes={{ button: "button" }}
           buttonTitle="CONTINUE TO PAYMENT"
         />
       </DialogActions>

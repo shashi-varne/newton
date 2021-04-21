@@ -32,7 +32,7 @@ const PennyVerificationPending = ({ isOpen, handleClick }) => {
       <DialogActions className="action">
         <Button
           onClick={handleClick}
-          classes={{ root: "button" }}
+          classes={{ button: "button" }}
           buttonTitle="MANAGE BANK ACCOUNT"
         />
       </DialogActions>
