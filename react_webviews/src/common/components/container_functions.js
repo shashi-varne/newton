@@ -235,10 +235,7 @@ export function commonRender(props_base) {
 }
 
 export function unmount() {
-    if (getConfig().generic_callback || this.state.project === 'help') {
-        window.callbackWeb.remove_listener({});
-    }
-
+    window.callbackWeb.remove_listener({});
     window.removeEventListener("scroll", this.onScroll, false);
 
     this.setState({
