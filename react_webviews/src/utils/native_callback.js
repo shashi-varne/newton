@@ -30,12 +30,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
   
   if (action) {
-    if (action in oldToNewMethodsMapper) {
-      newAction = oldToNewMethodsMapper[action];
-      callbackData.action = newAction;
-    } else {
-      callbackData.action = action;
-    }
+    newAction = oldToNewMethodsMapper[action];
+    callbackData.action = newAction || action;
   }
 
   if(events && events.properties) {
@@ -92,6 +88,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
     if (action === 'resume_provider') {
       nativeCallback({ action: 'show_top_bar', message: { title: message.provider } });
+      callbackData.action = 'open_url';
       message = {
         url: message.resume_link
       }
