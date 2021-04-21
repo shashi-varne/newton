@@ -74,7 +74,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             <SVG
             style={{marginLeft: 'auto', width:20, cursor:'pointer'}}
             onClick={handleTopIcon}
-            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
+            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
             src={rightIcon}
           />
           }

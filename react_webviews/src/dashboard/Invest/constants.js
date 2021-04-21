@@ -10,7 +10,7 @@ export const apiConstants = {
 };
 
 export const investCardsBase = {
-  popular_cards: {
+  popularCards: {
     top_equity: {
       title: "Top equity funds",
       icon: "icn_top_equity_funds.svg",
@@ -24,7 +24,7 @@ export const investCardsBase = {
       icon: "icn_nps.svg",
     },
   },
-  our_recommendations: {
+  ourRecommendations: {
     buildwealth: {
       title: "High growth funds (Build Wealth)",
       subtitle: "Start SIP or One-time investment",
@@ -88,7 +88,7 @@ export const investCardsBase = {
       icon: "ic_invest_gold.svg",
     },
   },
-  bottom_scroll_cards: {
+  bottomScrollCards: {
     parkmoney: {
       title: "Short term investments",
       subtitle: "",
@@ -104,7 +104,7 @@ export const investCardsBase = {
       icon_line: "ic_line.svg",
     },
   },
-  bottom_cards: {
+  bottomCards: {
     nfo: {
       title: "New funds offer (NFO)",
       subtitle: "Subscribe early at lowest price for maximum gains",
@@ -112,7 +112,7 @@ export const investCardsBase = {
       icon: "ic_invest_nfo.svg",
     },
   },
-  financial_tools: {
+  financialTools: {
     fhc: {
       title: "Financial health check",
       subtitle: "Get an expert financial advice",
@@ -125,7 +125,7 @@ export const investCardsBase = {
       button_text: "START NOW",
       icon: "ic_fin_tools_risk.svg",
     }
-  }
+  },
 };
 
 export const keyPathMapper = {

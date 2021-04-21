@@ -20,7 +20,7 @@ const CustomizedSlider = (props) => {
         onChange={handleChange}
         disabled={props.disabled}
         trackStyle={{
-          background: getConfig().primary
+          background: getConfig().styles.primaryColor
         }}
         railStyle={{
           height: 4
