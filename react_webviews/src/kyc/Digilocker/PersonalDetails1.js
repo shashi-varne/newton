@@ -121,7 +121,7 @@ const PersonalDetails1 = (props) => {
       });
     } catch (err) {
       console.log(err);
-      toast(err);
+      toast(err.message);
     } finally {
       setShowLoader(false);
     }

@@ -1,7 +1,7 @@
 import React from "react";
 import Dialog, { DialogContent, DialogActions } from "material-ui/Dialog";
-import Button from "@material-ui/core/Button";
-import '../commonStyles.scss';
+import Button from "common/ui/Button";
+import "../commonStyles.scss";
 
 const InvestError = ({ isOpen, handleClick, errorMessage, close }) => {
   if (!errorMessage) {
@@ -27,9 +27,11 @@ const InvestError = ({ isOpen, handleClick, errorMessage, close }) => {
         <div className="error-message" id="error-message"></div>
       </DialogContent>
       <DialogActions className="action">
-        <Button onClick={handleClick} className="trasparent-button">
-          Got it!
-        </Button>
+        <Button
+          onClick={handleClick}
+          classes={{ root: "trasparent-button" }}
+          buttonTitle="GOT IT!"
+        />
       </DialogActions>
       {getMessage("error-message")}
     </Dialog>

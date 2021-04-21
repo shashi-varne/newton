@@ -28,20 +28,15 @@
     }
   }
 
-  button {
+  .invest-landing-button {
     font-weight: 800;
-    font-size: 11px;
-    color: white;
-    padding: 0px 10px 0 10px;
-    width: 140px;
+    font-size: 11px !important;
+    padding: 0px 10px;
+    width: 140px !important;
     margin: 6px 8px 6px 0;
-    background-color: var(--secondary);
     line-height: 36px;
     letter-spacing: 0.01em;
-  }
-
-  button:hover {
-    background-color: var(--secondary);
+    height: 40px !important;
   }
 
   .invest-card {
@@ -168,10 +163,8 @@
       margin: 20px 0 10px 0;
     }
 
-    button {
-      color: var(--secondary);
-      border: 2px solid var(--secondary);
-      background-color: white;
+    .invest-landing-button {
+      border: 2px solid var(--secondary) !important;
     }
   }
 

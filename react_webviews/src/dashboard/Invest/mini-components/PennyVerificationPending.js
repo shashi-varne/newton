@@ -1,9 +1,9 @@
 import React from "react";
 import Dialog, { DialogContent, DialogActions } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
-import Button from "@material-ui/core/Button";
-import '../commonStyles.scss';
-import './mini-components.scss';
+import Button from "common/ui/Button";
+import "../commonStyles.scss";
+import "./mini-components.scss";
 
 const PennyVerificationPending = ({ isOpen, handleClick }) => {
   const productName = getConfig().productName;
@@ -30,9 +30,11 @@ const PennyVerificationPending = ({ isOpen, handleClick }) => {
         </div>
       </DialogContent>
       <DialogActions className="action">
-        <Button onClick={handleClick} className="button">
-          MANAGE BANK ACCOUNT
-        </Button>
+        <Button
+          onClick={handleClick}
+          classes={{ root: "button" }}
+          buttonTitle="MANAGE BANK ACCOUNT"
+        />
       </DialogActions>
     </Dialog>
   );
