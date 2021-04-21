@@ -1370,6 +1370,23 @@ $header-title-font-size: 20px;
   width: 40px;
 }
 
+// Withdraw provider //
+.withdraw-footer-layout {
+  padding: 10px;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  line-height: 1.5;
+
+  .FlexItem1-withProvider-footer {
+    .text-block-1 {
+      font-weight: 500;
+    }
+  }
+
+  .FlexItem2-withProvider-footer {
+    margin: 0;
+  }  
+}
+
 #bottom-popup .MuiDialog-paper {
   position: fixed;
   width: 100%;

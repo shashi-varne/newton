@@ -151,6 +151,29 @@ export class FooterLayoutBase extends Component {
       )
   }
 
+  WithProviderLayoutWithdraw = (props) => {
+    return (
+      <div className="FooterDefaultLayout withdraw-footer-layout">
+        {props.buttonData && (
+          <div
+            className="FlexItem1 FlexItem1-withProvider-footer"
+            style={props.buttonData.leftStyle}
+          >
+            <div className="text-block">
+              <div className="text-block-1">{props.buttonData.leftTitle}</div>
+              <div className="text-block-2">
+                {props.buttonData.leftSubtitle}
+              </div>
+            </div>
+          </div>
+        )}
+        <div  className="FlexItem2 FlexItem2-withProvider-footer">
+          <Button type={props.type} disable={props.disable} onClick={props.handleClick} {...props} />
+        </div>
+      </div>
+    );
+  };
+
   insuranceDefault = (props) => {
     return (
       <div className="FooterDefaultLayout" onClick={props.handleClick}>
@@ -288,6 +311,13 @@ WithProviderLayoutGold = (props) => {
         type = 'withProviderGold';
       }
     }
+
+    if(project === 'withdraw') {
+      if(type === 'withProvider') {
+        type = 'withProviderWithdraw';
+      }
+    }
+
     let renderMapper = {
         'summary': this.renderInsuranceSummary,
         'twobutton': this.TwoButtonLayout,
@@ -296,6 +326,7 @@ WithProviderLayoutGold = (props) => {
         'default': this.renderDefaultLayout,
         'withProviderGold': this.WithProviderLayoutGold,
         'fundDetailsDualButton': this.fundDetailsDualButton,
+        'withProviderWithdraw': this.WithProviderLayoutWithdraw,
     }
 
     let renderFunction = renderMapper[type] || renderMapper['default'];

@@ -163,7 +163,7 @@ class Checkout extends Component {
       }
     });
     if (submit) {
-      this.setState({ totalAmount: totalAmount, isApiRunning: true }, () =>
+      this.setState({ totalAmount: totalAmount }, () =>
         this.goNext()
       );
     } else {
@@ -347,7 +347,7 @@ class Checkout extends Component {
           />
           <InvestReferralDialog
             isOpen={dialogStates.openInvestReferral}
-            gotNext={this.goNext}
+            goNext={this.goNext}
             close={() => this.handleDialogStates("openInvestReferral", false)}
           />
         </div>
