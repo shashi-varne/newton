@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import InputWithIcon from "common/ui/InputWithIcon";
 import { initialize } from "../../common/commonFunctions";
 import card from "assets/card.png";
@@ -9,6 +9,7 @@ class NpsPran extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       pran: "",
     };
     this.initialize = initialize.bind(this);
@@ -18,10 +19,17 @@ class NpsPran extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    this.setState({
+      skelton: false
+    })
+  };
 
   handleChange = (name) => (event) => {
     let value = event.target.value;
+    if(value.length > 12) {
+      return
+    }
     this.setState({
       [name]: value,
     });
@@ -37,15 +45,13 @@ class NpsPran extends Component {
   render() {
     return (
       <Container
-        classOverRide="pr-error-container"
-        fullWidthButton
         buttonTitle="CONTINUE"
-        hideInPageTitle
-        hidePageTitle
         title="PRAN Details"
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        skelton={this.state.skelton}
         handleClick={this.handleClick}
-        classOverRideContainer="pr-container"
       >
         <div className="pran-details">
           <div className="InputField">
@@ -60,7 +66,7 @@ class NpsPran extends Component {
               onChange={this.handleChange("pran")}
             />
           </div>
-          <div class="tnc">
+          <div className="tnc">
             PRAN is unique account number allotted to every NPS account
             subscriber, check for it on your PAN card
           </div>

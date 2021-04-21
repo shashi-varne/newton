@@ -98,7 +98,7 @@ class NpsIdentity extends Component {
 
     form_data = {
       mother_name: mother_name || '',
-      marital_status: is_married || '',
+      marital_status: is_married ? 'married' : 'single',
       spouse_name: spouse_name || ''
     }
 
@@ -247,12 +247,19 @@ class NpsIdentity extends Component {
     }
   }
 
+  bannerText = () => {
+    return (
+      <span>
+        Please <span className="bold">confirm</span> your personal details.
+      </span>
+    );
+  }
+
   render() {
     let { form_data, selfie_needed, uploaded, img } = this.state;
 
     return (
       <Container
-        hidePageTitle
         buttonTitle="PROCEED"
         title="Additional Details"
         showLoader={this.state.show_loader}
@@ -261,14 +268,9 @@ class NpsIdentity extends Component {
         errorData={this.state.errorData}
         handleClick={this.handleClick}
         disable={(selfie_needed && !uploaded) ? true : false}
+        banner={true}
+        bannerText={this.bannerText()}
       >
-        <div className="page-heading">
-          <img src={require("assets/hand_icon.png")} alt="" width="50" />
-          <div className="text">
-            Please <span className="bold">confirm</span> your personal details.
-          </div>
-        </div>
-
         {selfie_needed && (
           <div className="image-prev-container">
             <div className="heading">Share your selfie</div>

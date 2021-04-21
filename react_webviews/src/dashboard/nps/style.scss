@@ -424,12 +424,10 @@
   .title {
     font-size: 15px;
     font-weight: 600;
-    margin: 30px 0;
   }
 }
 
 .nps-upload {
-  margin-top: 40px;
   .MuiInputLabel-root.MuiFormLabel-focused,
   .MuiInputLabel-shrink {
     font-size: 1.1rem !important;
@@ -800,7 +798,7 @@
   }
 
   .uploaded {
-    width: 30%;
+    width: 50%;
   }
 
   .display-flex {
@@ -1130,11 +1128,27 @@
     justify-content: space-between;
 
     .not-now {
-      background-color: #878787;
+      background-color: #ffffff;
+      color: #000000;
     }
   }
 
   .call-back-popup-button {
     width: 40%;
   }
+}
+
+.pran-title {
+  color: #4A494A;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.pran-subtitle {
+  color: #4A494A;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 10px 0 20px 0;
+  line-height: 1.5;
 }

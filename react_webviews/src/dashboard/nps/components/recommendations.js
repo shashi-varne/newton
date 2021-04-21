@@ -3,7 +3,6 @@ import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { inrFormatDecimal2 } from "utils/validators";
 import { getConfig } from "utils/functions";
-import toast from "common/ui/Toast";
 import Radio from "@material-ui/core/Radio";
 import Button from "@material-ui/core/Button";
 import { initialize } from "../common/commonFunctions";
@@ -16,7 +15,6 @@ import {
 } from "@material-ui/core";
 import PieChart from "./piegraph";
 import Slide from "@material-ui/core/Slide";
-import { formatAmountInr } from "../../../utils/validators";
 
 const risk_level = ["High", "Low", "Moderate", "Moderate Low"];
 const isMobileDevice = getConfig().isMobileDevice;
@@ -41,6 +39,7 @@ class Recommendations extends Component {
       url: "",
       pension_house: {},
       skelton: "g",
+      pran: ''
     };
     this.initialize = initialize.bind(this);
   }
@@ -51,10 +50,11 @@ class Recommendations extends Component {
 
   onload = () => {
     let currentUser = storageService().getObject("user");
-    let { display_summary_only } = this.state;
+    let { display_summary_only, pran } = this.state;
 
     display_summary_only = currentUser.nps_investment || false;
-    if (storageService().get("nps-pran_number")) {
+    pran = storageService().get("nps_pran_number");
+    if (pran) {
       display_summary_only = true;
     }
 
@@ -69,6 +69,7 @@ class Recommendations extends Component {
       display_summary_only: display_summary_only,
       amount: amount,
       pension_house: pension_house,
+      pran: pran
     });
 
     this.fetchRecommendedFunds();
@@ -80,11 +81,12 @@ class Recommendations extends Component {
     });
 
     let amount = storageService().get("npsAmount");
+    let { pran } = this.state;
 
     const res = await this.get_recommended_funds(amount, true);
     let data = res;
 
-    if (data) {
+    if (data & !pran) {
       let recommendations = data.recommended[0];
       let graphData = [
         {
@@ -126,6 +128,14 @@ class Recommendations extends Component {
           this.state.display_summary_only && this.handleClick();
         }
       );
+    } else {
+      this.setState({
+        all_charges: data.all_charges,
+      },
+      () => {
+        this.state.display_summary_only && this.handleClick();
+      }
+    );
     }
   };
 
@@ -200,7 +210,7 @@ class Recommendations extends Component {
   };
 
   renderInvestmentSummary = () => {
-    let { recommendations, all_charges } = this.state;
+    let { recommendations, all_charges, pran } = this.state;
 
     return (
       <Dialog
@@ -217,15 +227,15 @@ class Recommendations extends Component {
             id="alert-dialog-description"
           >
             <div className="md-dialog-content">
-              {/* <div ng-if="pran_number || (!recommendation_avail && pran_backend)">
-                <div className="title">Contribution to your existing NPS</div>
-                <div className="subtitle">
+              {pran && <div>
+                <div className="pran-title">Contribution to your existing NPS</div>
+                <div className="pran-subtitle">
                   Continue contributing to your existing NPS account
-                        with <b>PRAN - {'{pran_number || pran_backend}'}</b>
+                        with <b>PRAN - {pran}</b>
                 </div>
-              </div> */}
+              </div>}
 
-              <div style={{ display: "flex", margin: "0 0 20px 0" }}>
+              {!pran && <div style={{ display: "flex", margin: "0 0 20px 0" }}>
                 <img
                   src={
                     recommendations.pension_house &&
@@ -256,7 +266,7 @@ class Recommendations extends Component {
                       recommendations.pension_house.name}
                   </div>
                 </div>
-              </div>
+              </div>}
 
               <div className="mid-content">
                 {all_charges &&
@@ -272,7 +282,7 @@ class Recommendations extends Component {
                             {item.text}
                           </div>
                           <div className="mid-content-points-right">
-                            {formatAmountInr(item.value)}
+                            {inrFormatDecimal2(item.value)}
                           </div>
                         </div>
                       )}
@@ -302,18 +312,24 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
+    let { pran } = this.state;
+
     let data = {
       amount: this.state.amount,
       order_type: "one_time",
-      pension_house_id:
-        (!this.state.display_summary_only &&
-          this.state.pension_house &&
-          this.state.pension_house.pension_house_id) ||
-        this.state.recommendations.pension_house
-          ? this.state.recommendations.pension_house.pension_house_id
-          : "",
-      risk: this.state.risk,
     };
+
+    if (!pran) {
+      data.pension_house_id = (!this.state.display_summary_only &&
+        this.state.pension_house &&
+        this.state.pension_house.pension_house_id) ||
+      this.state.recommendations.pension_house
+        ? this.state.recommendations.pension_house.pension_house_id
+        : "";
+      data.risk = this.state.risk;
+    } else {
+      data.pran = pran;
+    }
 
     let result = await this.getInvestmentData(data, true);
 

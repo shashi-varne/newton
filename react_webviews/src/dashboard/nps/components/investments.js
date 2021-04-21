@@ -57,10 +57,14 @@ class NpsInvestments extends Component {
       npscampaign: npscampaign,
       npsCampActionUrl: npsCampActionUrl
     })
+
+    let error = "";
+    let errorType = "";
     
     try {
       this.setState({
         skelton: true,
+        showError: false,
       });
       const res = await Api.get(`/api/nps/summary`);
 
@@ -82,14 +86,22 @@ class NpsInvestments extends Component {
           nps_data: nps_data
         })
       } else {
-        toast(result.error || result.message);
+        let title1 = result.error || result.message || "Something went wrong!";
+        this.setState({
+          title1: title1,
+        });
+        this.setErrorData("onload");
+        throw error;
       }
 
     } catch (err) {
-      this.setState({
-        skelton: false,
-      });
-      throw err;
+      console.log(err);
+      error = true;
+      errorType = "page";
+    }
+  
+    if (error) {
+      this.handleError(error, errorType, true);
     }
   }
 
@@ -143,6 +155,8 @@ class NpsInvestments extends Component {
         buttonTitle="INVEST MORE"
         title="NPS Investments"
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={this.investMore}
         skelton={this.state.skelton}
       >
@@ -201,16 +215,6 @@ class NpsInvestments extends Component {
                   <div className="sub-title">Complete nps transaction</div>
                 </div>
               </div>}
-            {/* <!-- <div className="list" ui-sref="nps-sip-schedule" ng-show="sipIntents.length > 0">
-              <div className="icon">
-                <img
-                  alt='' src="../assets/img/sip.png" width="50" />
-              </div>
-              <div className="text">
-                <div className="title">NPS SIP Schedule</div>
-                <div className="sub-title"></div>
-              </div>
-            </div> --> */}
             {this.state.nps_data && this.state.nps_data.portfolio_data.length > 0 && <div
               className="list"
               onClick={() => this.optionClicked('performance', 'track nps performance')}
@@ -227,7 +231,7 @@ class NpsInvestments extends Component {
                 <div className="sub-title">View fund wise summary</div>
               </div>
             </div>}
-            {this.state.nps_data && this.state.nps_data.pending_orders.length > 0 && <div
+            {this.state.nps_data && this.state.nps_data?.pending_orders?.length > 0 && <div
               className="list"
               onClick={() => this.optionClicked('pending', 'pending order')}
             >

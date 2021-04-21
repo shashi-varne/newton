@@ -45,6 +45,7 @@ class PanDetails extends Component {
       openDialog: false,
       title: "",
       subtitle: "",
+      isKycApproved: false
     };
     this.initialize = initialize.bind(this);
   }
@@ -56,8 +57,9 @@ class PanDetails extends Component {
   onload = () => {
     let currentUser = storageService().getObject("user");
     let userKyc = storageService().getObject("kyc");
-    let { form_data } = this.state;
+    let { form_data, isKycApproved } = this.state;
 
+    isKycApproved = userKyc.pan.meta_data_status === 'approved';;
     form_data.dob = userKyc.pan.meta_data.dob || "";
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 
@@ -66,6 +68,7 @@ class PanDetails extends Component {
 
     this.setState({
       currentUser: currentUser,
+      isKycApproved: isKycApproved,
       userKyc: userKyc,
       form_data: form_data,
     });
@@ -149,11 +152,10 @@ class PanDetails extends Component {
       let { pan, address } = userKyc;
 
       if (is_nps_contributed) {
-        storageService().set("nps-pran_number", form_data.pran);
+        storageService().set("nps_pran_number", form_data.pran);
       } else {
-        storageService().set("nps-pran_number", '');
+        storageService().set("nps_pran_number", '');
       }
-
       pan.meta_data.dob = form_data.dob;
       pan.meta_data.pan_number = form_data.pan;
 
@@ -222,9 +224,9 @@ class PanDetails extends Component {
   };
 
   cta_action = () => {
-    let { btn_text } = this.state;
+    let { btn_text, form_data } = this.state;
     if (btn_text === 'SIGN OUT') {
-      this.navigate('logout')
+      this.navigate(`/account/merge/${form_data.pan_number}`, '', true)
     } else {
       this.navigate('accountmerge')
     }
@@ -235,7 +237,7 @@ class PanDetails extends Component {
   }
 
   render() {
-    let { form_data, is_nps_contributed, currentUser } = this.state;
+    let { form_data, is_nps_contributed, currentUser, isKycApproved } = this.state;
     return (
       <Container
         classOverRIde="pr-error-container"
@@ -261,6 +263,7 @@ class PanDetails extends Component {
                 value={form_data.pan || ""}
                 maxLength={10}
                 onChange={this.handleChange("pan")}
+                disabled={isKycApproved}
               />
             </div>
 
@@ -316,6 +319,7 @@ class PanDetails extends Component {
                 value={form_data.dob || ""}
                 maxLength={10}
                 onChange={this.handleChange("dob")}
+                disabled={isKycApproved}
               />
             </div>
 
@@ -335,6 +339,7 @@ class PanDetails extends Component {
                   helperText={form_data.mobile_number_error}
                   value={form_data.mobile_number || ""}
                   onChange={this.handleChange("mobile_number")}
+                  disabled={isKycApproved}
                 />
               </div>
             )}
@@ -352,6 +357,7 @@ class PanDetails extends Component {
                   helperText={form_data.email_error}
                   value={form_data.email || ""}
                   onChange={this.handleChange("email")}
+                  disabled={isKycApproved}
                 />
               </div>
             )}

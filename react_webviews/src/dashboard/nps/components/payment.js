@@ -37,14 +37,16 @@ class NpsPaymentCallback extends Component {
     } else {
       const result = await this.getNPSInvestmentStatus();
       storageService().set('nps_additional_details_required', true);
+      storageService().setObject('nps_additional_details', result.registration_details);
+      storageService().setObject('kyc_app', result.kyc_app);
   
-      let currentUser = storageService().get("currentUser");
-  
-      if (result.registration_details.additional_details_status) {
+      let currentUser = storageService().getObject("user");
+ 
+      if (!result.registration_details.additional_details_status) {
         if (currentUser.kyc_registration_v2 == 'init') {
-          this.navigate('/home-kyc');
+          this.navigate('/kyc/journey');
         } else if (currentUser.kyc_registration_v2 == 'incomplete') {
-          this.navigate('/kyc-journey', '', true);
+          this.navigate('/kyc/journey', '', true);
         } else {
           this.navigate('identity');
         }

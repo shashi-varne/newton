@@ -18,7 +18,6 @@ class NpsNominee extends Component {
       show_loader: false,
       form_data: {},
       nps_details: {},
-      canSubmit: true,
       screen_name: "nps_nominee",
       skelton: 'g'
     };
@@ -67,11 +66,11 @@ class NpsNominee extends Component {
   };
 
   handleClick = async () => {
-    let { form_data, canSubmit } = this.state;
+    let { form_data } = this.state;
 
     let keys_to_check = ["nominee_name", "nominee_dob", "relationship"];
 
-    this.formCheckUpdate(keys_to_check, form_data);
+    let canSubmit = this.formCheckUpdate(keys_to_check, form_data);
 
     if (canSubmit) {
       let data = {
@@ -86,12 +85,18 @@ class NpsNominee extends Component {
     }
   };
 
+  bannerText = () => {
+    return (
+      <span>
+        Please <span className="bold">confirm</span> the nominee details.
+      </span>
+    );
+  }
+
   render() {
     let { form_data } = this.state;
     return (
       <Container
-        hideInPageTitle
-        hidePageTitle
         title="Nominee Details"
         buttonTitle="SAVE AND CONTINUE"
         showLoader={this.state.show_loader}
@@ -99,14 +104,9 @@ class NpsNominee extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-      >
-        <div className="page-heading">
-          <img src={require("assets/hand_icon.png")} alt="" width="50" />
-          <div className="text">
-            Please <span className="bold">confirm</span> the nominee details.
-          </div>
-        </div>
-
+        banner={true}
+        bannerText={this.bannerText()}
+      >       
         <div className="nps-nominee">
           <div className="InputField">
             <InputWithIcon
