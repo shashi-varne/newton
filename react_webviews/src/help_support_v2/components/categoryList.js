@@ -31,7 +31,6 @@ class CategoryList extends Component {
       screen_name: "category-list",
       isApiRunning: false,
       componentClicked: false,
-      scrolled: false
     };
     this.initialize = initialize.bind(this);
     this.getAllCategories = getAllCategories.bind(this);
@@ -48,11 +47,7 @@ class CategoryList extends Component {
   }
 
   handleScroll = () => {
-    console.log('scroll')
-    this.setState({
-      componentClicked: false,
-      scrolled: true
-    })
+    document.getElementById('input-with-icon-textfield').blur();
   };
 
   onload = async () => {
@@ -252,7 +247,6 @@ class CategoryList extends Component {
       categoryList,
       isApiRunning,
       componentClicked,
-      scrolled
     } = this.state;
 
     return (
@@ -269,7 +263,7 @@ class CategoryList extends Component {
           className="help-CategoryList"
           style={{
             marginTop: `${
-              faqList.length > 0 && (componentClicked || !scrolled || scrolled) ? "106px" : "140px"
+              faqList.length > 0 && componentClicked ? "106px" : "140px"
             }`,
           }}
         >
@@ -288,8 +282,7 @@ class CategoryList extends Component {
           <div id="categoryList"></div>
           {faqList.length > 0 &&
             !isApiRunning &&
-            (componentClicked || scrolled) &&
-            // searchInput.length !== 0 &&
+            componentClicked &&
             faqList.map((item, index) => (
               <div
                 className="search-inputs"
@@ -312,7 +305,7 @@ class CategoryList extends Component {
 
           {this.state.skelton && <CustomSkelton />}
 
-          {!this.state.skelton && !componentClicked && !scrolled && categoryList && (
+          {!this.state.skelton && !componentClicked && categoryList && (
             <div className="fade-in">
               <div className="title">Category</div>
 
