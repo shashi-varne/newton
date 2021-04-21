@@ -1,1 +1,1 @@
-export { default } from './InvestGoal';
+export { default } from './GoalType';

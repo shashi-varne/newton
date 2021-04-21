@@ -1,4 +1,4 @@
-import './RiskPages.scss';
+import './commonStyles.scss';
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import { getConfig } from '../../../../utils/functions';
@@ -57,7 +57,7 @@ const RiskSelect = ({
       if (res.updated) {
         updateUserRiskProfile(selectedRisk);
       }
-      updateFunnelData(res);
+      updateFunnelData({ ...res, recommendedTotalAmount: res.amount });
       
       setLoader(false);
     } catch (err) {
