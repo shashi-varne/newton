@@ -50,14 +50,17 @@ class CategoryList extends Component {
 
   handleScroll = () => {
     let { inputSelected } = this.state;
+
     if (inputSelected) {
+      let that = this;
       setTimeout(function(){ 
-        this.setState({
+        inputSelected = false;
+        that.setState({
           inputSelected: inputSelected
         })
-       }, 1200);
+       }, 700);
     }
-    
+
     if(!inputSelected) {
       document.getElementById('input-with-icon-textfield').blur();
     }
@@ -118,6 +121,7 @@ class CategoryList extends Component {
     this.setState({
       searchInput: value,
       noResults: false,
+      inputSelected: false
     });
 
     if (!this.state.isApiRunning) {
