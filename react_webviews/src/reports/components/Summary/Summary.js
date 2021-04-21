@@ -46,16 +46,16 @@ const Summary = (props) => {
     const investSubSectionMap = config.investSubSectionMap;
     const keysToCheck = ["nps", "insurance", "gold"];
     const cardsToShow = {};
-    for(let section of investSections) {
-      if(!isEmpty(investSubSectionMap[section])) {
-        for(let subSections of investSubSectionMap[section]) {
-          if(keysToCheck.includes(subSections)) {
+    for (let section of investSections) {
+      if (!isEmpty(investSubSectionMap[section])) {
+        for (let subSections of investSubSectionMap[section]) {
+          if (keysToCheck.includes(subSections)) {
             cardsToShow[subSections] = true;
           }
         }
       }
     }
-    setInvestCards(cardsToShow)
+    setInvestCards(cardsToShow);
     const result = await getSummaryV2();
     if (!result) {
       setShowSkelton(false);
@@ -143,6 +143,11 @@ const Summary = (props) => {
     navigate(getPathname.reportGoals);
   };
 
+  const imageMapper = {
+    finity: "svg",
+    fisdom: "png",
+  };
+  console.log(productName);
   return (
     <Container
       title="My Money"
@@ -256,23 +261,33 @@ const Summary = (props) => {
               data.showSipSchedule ||
               data.showTransactions ? (
                 <>
-                  {currentUser.nps_investment &&
-                    investCards.nps && (
-                      <div
-                        className="content"
-                        onClick={() => flowOptions("npsInvestments")}
-                      >
-                        <img
-                          alt=""
-                          src={require(`assets/nps_report_icon.png`)}
-                        />
-                        <div className="text">
-                          <div className="title">NPS Investments</div>
-                        </div>
+                  {currentUser.nps_investment && investCards.nps && (
+                    <div
+                      className="content"
+                      onClick={() => flowOptions("npsInvestments")}
+                    >
+                      <img
+                        alt=""
+                        className={
+                          productName === "finity"
+                            ? "reports-finity-icon"
+                            : "icon"
+                        }
+                        src={require(`assets/${productName}/nps_report_icon.${imageMapper[productName]}`)}
+                      />
+                      <div className="text">
+                        <div className="title">NPS Investments</div>
                       </div>
-                    )}
+                    </div>
+                  )}
                   <div className="content" onClick={() => showGoals()}>
-                    <img alt="" src={require(`assets/goalwise.png`)} />
+                    <img
+                      className={
+                        productName === "finity" && "reports-finity-icon"
+                      }
+                      alt=""
+                      src={require(`assets/${productName}/goalwise.${imageMapper[productName]}`)}
+                    />
                     <div className="text">
                       <div className="title">Track my goals</div>
                       <div>View Goal Wise Investments</div>
@@ -284,8 +299,11 @@ const Summary = (props) => {
                       onClick={() => flowOptions("reportsPurchased")}
                     >
                       <img
+                        className={
+                          productName === "finity" && "reports-finity-icon"
+                        }
                         alt=""
-                        src={require(`assets/pending_purchase.png`)}
+                        src={require(`assets/${productName}/pending_purchase.${imageMapper[productName]}`)}
                       />
                       <div className="text">
                         <div className="title">Pending Purchase</div>
@@ -299,8 +317,11 @@ const Summary = (props) => {
                       onClick={() => flowOptions("reportsRedeemed")}
                     >
                       <img
+                        className={
+                          productName === "finity" && "reports-finity-icon"
+                        }
                         alt=""
-                        src={require(`assets/pending_redemption.png`)}
+                        src={require(`assets/${productName}/pending_redemption.${imageMapper[productName]}`)}
                       />
                       <div className="text">
                         <div className="title">Pending Withdrawals</div>
@@ -314,8 +335,11 @@ const Summary = (props) => {
                       onClick={() => flowOptions("reportsSwitched")}
                     >
                       <img
+                        className={
+                          productName === "finity" && "reports-finity-icon"
+                        }
                         alt=""
-                        src={require(`assets/pending_purchase.png`)}
+                        src={require(`assets/${productName}/pending_purchase.${imageMapper[productName]}`)}
                       />
                       <div className="text">
                         <div className="title">Pending Switch</div>
@@ -328,7 +352,13 @@ const Summary = (props) => {
                       className="content"
                       onClick={() => flowOptions("reportsSip")}
                     >
-                      <img alt="" src={require(`assets/sip.png`)} />
+                      <img
+                        className={
+                          productName === "finity" && "reports-finity-icon"
+                        }
+                        alt=""
+                        src={require(`assets/${productName}/sip.${imageMapper[productName]}`)}
+                      />
                       <div className="text">
                         <div className="title">Existing SIPs</div>
                         <div>{formatAmountInr(report.sips.total_payment)}</div>
@@ -341,7 +371,13 @@ const Summary = (props) => {
                         className="content"
                         onClick={() => flowOptions("reportsTransactions")}
                       >
-                        <img alt="" src={require(`assets/transactions.png`)} />
+                        <img
+                          className={
+                            productName === "finity" && "reports-finity-icon"
+                          }
+                          alt=""
+                          src={require(`assets/${productName}/transactions.${imageMapper[productName]}`)}
+                        />
                         <div className="text">
                           <div className="title">Transactions</div>
                         </div>
@@ -350,7 +386,13 @@ const Summary = (props) => {
                         className="content"
                         onClick={() => flowOptions("reportsFundswiseSummary")}
                       >
-                        <img alt="" src={require(`assets/fundwise.png`)} />
+                        <img
+                          className={
+                            productName === "finity" && "reports-finity-icon"
+                          }
+                          alt=""
+                          src={require(`assets/${productName}/fundwise.${imageMapper[productName]}`)}
+                        />
                         <div className="text">
                           <div className="title">Track Fund Performance</div>
                           <div>View fund wise summary</div>
@@ -471,7 +513,7 @@ const Summary = (props) => {
               {data.insurance_active && investCards.insurance && (
                 <div
                   className="content"
-                  onClick={() => 
+                  onClick={() =>
                     // navigate("/group-insurance/common/report")
                     redirectToReports("insurance")
                   }
@@ -488,7 +530,7 @@ const Summary = (props) => {
               {data.gold_active_investment && investCards.gold && (
                 <div
                   className="content"
-                  onClick={() => 
+                  onClick={() =>
                     // navigate("/gold/my-gold")
                     redirectToReports("gold")
                   }
