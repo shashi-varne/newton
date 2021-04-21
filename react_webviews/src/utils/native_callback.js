@@ -1,5 +1,5 @@
 import { isMobile } from './functions';
-import { getConfig } from './functions';
+import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
 
@@ -19,8 +19,6 @@ export const nativeCallbackOld = (status_code, message, action) => {
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let callbackData = {};
   let project = getConfig().project;
-  let redirect_url = getConfig().redirect_url;
-  redirect_url = decodeURIComponent(redirect_url);
   
   if (action) {
     callbackData.action = action;
@@ -33,6 +31,10 @@ export const nativeCallback = async ({ action = null, message = null, events = n
     console.log(events.properties);
   }
 
+  if (action === 'native_back' || action === 'exit') {
+    if (!getConfig().isSdk) callbackData.action = 'exit_web';
+    else window.location.href = redirectToLanding();
+  }
 
   if (callbackData.action === 'open_pdf') {
     callbackData.action = 'open_url';
@@ -229,8 +231,8 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
   if (getConfig().app !== 'web') {
 
-    if (redirect_url && redirect_url !== 'undefined' && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
-      window.location.href = redirect_url
+    if (getConfig().isSdk && (callbackData.action === 'exit_web' || callbackData.action === 'exit_module' || callbackData.action === 'open_module')) {
+      window.location.href = redirectToLanding();
     } else {
       if (action === 'exit_web_sdk') {
         callbackData.action = 'exit_web';
@@ -245,13 +247,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       }
     }
   } else {
-    if (action === 'native_back' || action === 'exit_web' || action === 'exit' ||
-      action === 'open_module') {
-      if (!redirect_url) {
-        redirect_url = getConfig().webAppUrl;
-      }
-      window.location.href = redirect_url;
-    } else if (action === 'open_in_browser' || action === 'open_url') {
+    if (action === 'open_in_browser' || action === 'open_url') {
       open_browser_web(message.url, '_blank')
     } else if (action === 'resume_provider') {
       open_browser_web(message.resume_link, '_self')
@@ -262,21 +258,6 @@ export const nativeCallback = async ({ action = null, message = null, events = n
 
 };
 
-
-export function getWebUrlByPath(path) {
-  if (!path) {
-    path = '';
-  }
-
-  let web_url = getConfig().webAppUrl + path //can accept params with path also, below it handlled
-
-  if (getConfig().webAppParams) {
-    // eslint-disable-next-line
-    web_url += (web_url.match(/[\?]/g) ? "&" : "?") + getConfig().webAppParams;
-  }
-
-  return web_url;
-}
 
 export function openNativeModule(moduleName) {
 
@@ -296,7 +277,7 @@ export function openNativeModule(moduleName) {
 
 export function openModule(moduleName) {
 
-  if (getConfig().isWebCode) {
+  if (getConfig().isWebOrSdk) {
 
     let module_mapper = {
       'app/portfolio': 'reports',
@@ -306,7 +287,7 @@ export function openModule(moduleName) {
     }
 
     let moduleNameWeb = module_mapper[moduleName] || '';
-    let module_url = getWebUrlByPath(moduleNameWeb);
+    let module_url = `${getBasePath()}/${moduleNameWeb}${getConfig.searchParams}`;
 
     window.location.href = module_url;
   } else {
@@ -328,7 +309,7 @@ export function openPdfCall(data = {}) {
     data.back_url = current_url;
   }
 
-  if (getConfig().isWebCode) {
+  if (getConfig().isWebOrSdk) {
       nativeCallback({
           action: 'open_in_browser',
           message: {
@@ -354,4 +335,8 @@ export function openPdfCall(data = {}) {
     nativeCallback({ action: 'open_pdf', message: { url: url } });
   }
 
+}
+
+export function redirectToLanding() {
+  return `${getBasePath()}/landing${getConfig.searchParams}`;
 }
