@@ -106,7 +106,7 @@ const SipPaymentCallback = (props) => {
             auto_debit_campaign_url +=
               // eslint-disable-next-line
               (auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?") +
-              "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
+              "generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
                 basePath +
                   "/" +
@@ -123,7 +123,7 @@ const SipPaymentCallback = (props) => {
             url +=
               // eslint-disable-next-line
               (url.match(/[\?]/g) ? "&" : "?") +
-              "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
+              "generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
                 basePath +
                   "/" +
