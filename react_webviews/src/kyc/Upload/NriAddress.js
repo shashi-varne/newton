@@ -116,7 +116,7 @@ const NRIAddressUpload = (props) => {
   }
 
   const handleChange = (type) => (event) => {
-    const isWeb = getConfig().isWebCode
+    const isWeb = getConfig().isWebOrSdk
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -258,7 +258,7 @@ const NRIAddressUpload = (props) => {
     });
   };
 
-  const isWeb = getConfig().isWebCode
+  const isWeb = getConfig().isWebOrSdk
 
   return (
     <Container

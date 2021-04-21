@@ -277,7 +277,7 @@ export function openNativeModule(moduleName) {
 
 export function openModule(moduleName) {
 
-  if (getConfig().isWebCode) {
+  if (getConfig().isWebOrSdk) {
 
     let module_mapper = {
       'app/portfolio': 'reports',
@@ -309,7 +309,7 @@ export function openPdfCall(data = {}) {
     data.back_url = current_url;
   }
 
-  if (getConfig().isWebCode) {
+  if (getConfig().isWebOrSdk) {
       nativeCallback({
           action: 'open_in_browser',
           message: {
