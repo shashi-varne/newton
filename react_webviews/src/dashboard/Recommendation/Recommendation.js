@@ -242,7 +242,7 @@ const Recommendations = (props) => {
       return el.mf.isin;
     });
     setIsins(isinsVal?.join(","));
-  }, []);
+  }, [recommendations]);
 
   const editFund = () => {
     navigate("recommendations/edit-funds");
@@ -301,7 +301,13 @@ const Recommendations = (props) => {
           <div className='recommendations-funds-lists'>
             {recommendations &&
               recommendations?.map((el, idx) => (
-                <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
+                <FundCard 
+                  isins={isins} 
+                  graph 
+                  key={idx} 
+                  fund={el} 
+                  setInvestmentData={goNext} 
+                  parentProps={props} />
               ))}
           </div>
           <div className='recommendations-total-investment'>
@@ -336,7 +342,7 @@ const Recommendations = (props) => {
           />
           <InvestReferralDialog
             isOpen={dialogStates.openInvestReferral}
-            proceedInvestment={proceedInvestment}
+            goNext={goNext}
             close={() => handleDialogStates("openInvestReferral", false)}
           />
         </section>

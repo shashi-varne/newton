@@ -11,7 +11,7 @@ const InvestCard = (props) => {
         <Button
           buttonTitle={props.data.button_text}
           classes={{
-            root: "invest-landing-button",
+            button: "invest-landing-button",
           }}
         />
       </div>
