@@ -36,12 +36,14 @@ export default class Redirect extends Component {
           this.navigate("email_entry", {}, true);
         }
       } else {
+        toast('Something went wrong!');
         nativeCallback({ action: "exit"});
       }
     } catch (err) {
       this.setLoader(false);
       console.log(err);
-      toast(err);
+      toast('Something went wrong!');
+      nativeCallback({ action: "exit" });
     }
   }
 
