@@ -637,7 +637,7 @@ class QuoteGeneration extends Component {
           <div className="quote-tiles4a">
               Claim Settled
           </div>
-          <div className="quote-tiles4a" style={{color:getConfig().primary,fontWeight:500}}>
+          <div className="quote-tiles4a" style={{color:getConfig().styles.primaryColor,fontWeight:500}}>
           98%
           </div>
         </div>
@@ -646,7 +646,7 @@ class QuoteGeneration extends Component {
             Basic benefits
             </div>
           <div className="quote-tiles4b"
-            style={{ color: getConfig().primary }}
+            style={{ color: getConfig().styles.primaryColor }}
             onClick={() => this.openPopUpInfo(index, props.quote_provider)}>INFO</div>
         </div>
 

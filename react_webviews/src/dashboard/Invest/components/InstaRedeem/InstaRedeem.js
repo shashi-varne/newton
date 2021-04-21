@@ -5,7 +5,7 @@ import { navigate } from "../../functions";
 import Faqs from "common/ui/Faqs";
 import SecureInvest from "../../mini-components/SecureInvest";
 import { investRedeemData } from "../../constants";
-import Button from "material-ui/Button";
+import Button from "common/ui/Button";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import HowToSteps from "common/ui/HowToSteps";
 import { SkeltonRect } from "../../../../common/ui/Skelton";
@@ -23,7 +23,7 @@ class InstaRedeem extends Component {
       show_loader: false,
       productName: getConfig().productName,
       screenName: "insta_redeem",
-      partner: getConfig().partner,
+      code: getConfig().partner_code,
       openDialog: false,
       instaRecommendation: {},
     };
@@ -117,9 +117,11 @@ class InstaRedeem extends Component {
           </div>
         </DialogContent>
         <DialogActions className="action">
-          <Button onClick={this.handleClose} className="button">
-            OKAY
-          </Button>
+          <Button
+            onClick={this.handleClose}
+            classes={{ root: "button" }}
+            buttonTitle="OKAY"
+          />
         </DialogActions>
       </Dialog>
     );
@@ -130,14 +132,14 @@ class InstaRedeem extends Component {
   };
 
   render() {
-    let { partner, productName, instaRecommendation, show_loader } = this.state;
+    let { code, productName, instaRecommendation, show_loader } = this.state;
     let { benefits, faqData } = investRedeemData;
     return (
       <Container
         buttonTitle="START INVESTING"
         handleClick={this.handleClick}
         title={
-          partner.code === "bfdlmobile" ? "Money +" : "Insta redemption fund"
+          code === "bfdlmobile" ? "Money +" : "Insta redemption fund"
         }
       >
         <div className="invest-redeem">
@@ -176,7 +178,7 @@ class InstaRedeem extends Component {
                   <div className="common-badge bond">
                     {instaRecommendation.mftype_name}
                   </div>
-                  {partner.code !== "hbl" && instaRecommendation.rating > 0 && (
+                  {code !== "hbl" && instaRecommendation.rating > 0 && (
                     <div className="common-badge rating">
                       <div className="img">
                         <img src={require(`assets/ic_star.svg`)} alt="" />
@@ -184,7 +186,7 @@ class InstaRedeem extends Component {
                       <div className="value">{instaRecommendation.rating}</div>
                     </div>
                   )}
-                  {partner.code === "hbl" &&
+                  {code === "hbl" &&
                     instaRecommendation.the_hindu_rating > 0 && (
                       <div className="common-badge rating">
                         <div className="img">

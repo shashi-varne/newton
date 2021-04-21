@@ -4,7 +4,7 @@ import Dialog, { DialogContent } from "material-ui/Dialog";
 import Button from "@material-ui/core/Button";
 import "./mini-components.scss";
 
-const partner = getConfig().partner;
+const config = getConfig();
 const CompliantHelpDialog = ({ close, isOpen, pan }) => {
   return (
     <Dialog
@@ -23,9 +23,9 @@ const CompliantHelpDialog = ({ close, isOpen, pan }) => {
           please reach us at :
         </div>
         <div className="partner-info">
-          <div>{partner.mobile}</div>
+          <div>{config.mobile}</div>
           <div>|</div>
-          <div>{partner.email}</div>
+          <div>{config.email}</div>
         </div>
         <Button onClick={() => close()}>OK</Button>
       </DialogContent>

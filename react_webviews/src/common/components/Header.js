@@ -29,7 +29,7 @@ const Header = ({ classes, title, count, total, current, goBack,
   className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
     const rightIcon = headerIconMapper[topIcon];
     const campaign = storageService().getObject("campaign");
-    const partner = getConfig().partner;
+    const partner = getConfig();
     return (
       <AppBar position="fixed" color="primary" 
       className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}

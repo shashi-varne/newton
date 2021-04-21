@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Container from '../common/Container';
 import FundCard from '../Invest/mini-components/FundCard';
-import Button from '@material-ui/core/Button';
 import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
 import replaceFund from 'assets/replace_bfdl.png';
 
@@ -9,6 +8,7 @@ import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import isEmpty from 'lodash/isEmpty';
 import './EditFunds.scss';
+import Button from '../../common/ui/Button';
 
 
 const EditFunds = (props) => {
@@ -83,13 +83,12 @@ const DialogContainer = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
       aria-labelledby='responsive-dialog-title'
+      className="edit-funds-dialog"
     >
       <DialogTitle id='form-dialog-title'>No alternative funds available</DialogTitle>
-      <DialogActions>
-        <Button className='DialogButtonFullWidth' onClick={onClose} color='default' autoFocus>
-          GOT IT!
-        </Button>
-      </DialogActions>
+      <DialogActions className="edit-funds-dialog-bottom">
+        <Button buttonTitle="GOT IT" style={{width: "100px", height: "45px"}} onClick={onClose} />
+       </DialogActions>
     </Dialog>
   );
 };

@@ -458,7 +458,7 @@ class Recommendation extends Component {
             </div> */}
             <div style={{cursor: 'pointer'}} onClick={() => this.handleClickOpen()} >
               <p style={{ color: '#4a4a4a', fontSize: 14 }}>Amount</p>
-              <div style={{ color: getConfig().primary }}>{inrFormatDecimal(this.state.amount)}</div>
+              <div style={{ color: getConfig().styles.primaryColor }}>{inrFormatDecimal(this.state.amount)}</div>
               <div style={{ border: '1px solid #f2f2f2', marginTop: 3 }}></div>
               <p style={{ color: 'red', fontSize: 12 }}>{this.state.amount_error}</p>
             </div>
