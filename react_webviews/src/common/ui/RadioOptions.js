@@ -77,7 +77,7 @@ class RadioButtonsGroup extends Component {
               icon={this.props.icon_type === 'blue_icon' ? <RadioButtonUnchecked /> : <CircleUnchecked />}
               checkedIcon={
                 this.props.icon_type === 'blue_icon' ? <RadioButtonChecked /> : <CircleCheckedFilled
-                  style={{ color: (this.props.icon_type === 'blue_icon' ? getConfig().primary : this.props.color || getConfig().secondary) }} />
+                  style={{ color: (this.props.icon_type === 'blue_icon' ? getConfig().styles.primaryColor : this.props.color || getConfig().styles.secondaryColor) }} />
               } />}
             label={option.inputToRender && option.inputToRender.inputKeyName === this.props.value ? 
               <Input
@@ -123,7 +123,9 @@ class RadioButtonsGroup extends Component {
 
     return (
       <FormControl component="fieldset" className={styles.formControl} >
-        <FormLabel component="legend">{this.props.label}</FormLabel>
+        <FormLabel component="legend" classes={this.props.labelClasses || {}}>
+          {this.props.label}
+        </FormLabel>
         <RadioGroup
           aria-label={this.props.label}
           name="gender1"

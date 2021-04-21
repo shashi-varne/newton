@@ -35,7 +35,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
       </header>
       {show_note && (
         <div className="alert-status-info">
-          <img src={require(`assets/attention_icon_new.svg`)} />
+          <img src={require(`assets/attention_icon_new.svg`)} alt="" />
           <div className="text">
             <div className="title">Note</div>
             <div>

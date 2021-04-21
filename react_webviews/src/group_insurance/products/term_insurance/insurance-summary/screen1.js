@@ -20,7 +20,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
 class Summary extends Component {
@@ -63,7 +63,8 @@ class Summary extends Component {
   }
 
   componentWillMount() {
-    let current_url = window.location.origin + '/group-insurance/term/journey' + getConfig().searchParams;
+    let basepath = getBasePath();
+    let current_url = basepath + '/group-insurance/term/journey' + getConfig().searchParams;
     this.setState({
       current_url: current_url
     });
@@ -111,8 +112,9 @@ class Summary extends Component {
     });
 
     let app = getConfig().app;
+    let basepath = getBasePath();
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + '/group-insurance/term/payment/' + this.state.params.insurance_id
+      basepath + '/group-insurance/term/payment/' + this.state.params.insurance_id
     );
     var pgLink = payment_link;
     var back_url = encodeURIComponent(this.state.current_url);
@@ -1166,7 +1168,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'personal') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Personal details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-personal')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-personal')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('personal')}
@@ -1178,7 +1180,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'contact') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Contact details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-contact')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-contact')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('contact')}
@@ -1190,7 +1192,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'professional') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Professional details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-professional')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-professional')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('professional')}
@@ -1202,7 +1204,7 @@ class Summary extends Component {
                       <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'nominee') ? shrink : expand} alt="" width="20" />
                     </span>
                     <span>Nominee details</span>
-                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-nominee')}>Edit</span>}
+                    {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-nominee')}>Edit</span>}
                   </div>
                 </div>
                 {this.renderAccordionBody('nominee')}
@@ -1215,7 +1217,7 @@ class Summary extends Component {
                         <img style={{ position: 'relative', top: 2 }} src={(this.state.accordianTab === 'appointee') ? shrink : expand} alt="" width="20" />
                       </span>
                       <span>Appointee details</span>
-                      {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().secondary, fontSize: 13 }} onClick={() => this.navigate('edit-appointee')}>Edit</span>}
+                      {this.state.edit_allowed && <span style={{ position: 'absolute', right: 0, color: getConfig().styles.secondaryColor, fontSize: 13 }} onClick={() => this.navigate('edit-appointee')}>Edit</span>}
                     </div>
                   </div>
                   {this.renderAccordionBody('appointee')}

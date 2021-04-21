@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import qs from 'qs';
 import { getConfig } from 'utils/functions';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
-import meter1 from 'assets/meter1.svg';
-import meter2 from 'assets/meter2.svg';
-import meter3 from 'assets/meter3.svg';
-import meter4 from 'assets/meter4.svg';
-import meter5 from 'assets/meter5.svg';
+import conservative from 'assets/meter-conservative.svg';
+import moderatelyConservative from 'assets/meter-moderately-conservative.svg';
+import moderate from 'assets/meter-moderate.svg';
+import moderatelyAggresive from 'assets/meter-moderately-aggresive.svg';
+import aggresive from 'assets/meter-aggresive.svg';
 import { nativeCallback } from 'utils/native_callback';
-
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -17,7 +15,8 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-
+import { getUrlParams, storageService } from '../../../utils/validators';
+import { pick, get, isEmpty } from 'lodash';
 
 class Result extends Component {
   constructor(props) {
@@ -25,26 +24,75 @@ class Result extends Component {
     this.state = {
       show_loader: true,
       openDialogReset: false,
-      params: qs.parse(props.history.location.search.slice(1)),
+      params: this.setEntryParams(),
       productName: getConfig().productName
-    }
+    };    
   }
 
+  setEntryParams = () => {
+    let urlParams = getUrlParams();
+    const routeParams = get(this.props, 'location.state');
+    
+    if (!isEmpty(routeParams)) {
+      urlParams = routeParams
+    }
+
+    if (urlParams.fromExternalSrc) {
+      storageService().setObject(
+        'risk-entry-params',
+        pick(
+          urlParams,
+          [
+            'amount',
+            'flow',
+            'term',
+            'type',
+            'year', 
+            'subType',
+            'hideRPReset',
+            'hideClose',
+            'internalRedirect'
+          ]
+        )
+      );
+    } else {
+      urlParams = storageService().getObject('risk-entry-params') || {};
+    }
+    // return entryParams;
+
+    return urlParams;
+  }
 
   async componentDidMount() {
     try {
 
       // let score = JSON.parse(window.sessionStorage.getItem('score'));
-      let score;
       const res = await Api.get('/api/risk/profile/user/recommendation');
-      if (res.pfwresponse.result.score) {
-        score = res.pfwresponse.result.score;
+      const score = get(res, 'pfwresponse.result.score');
+      if (!isEmpty(score) && score.score) {
+
+        if (this.state.params.type === 'saveforgoal') {
+          const { pfwresponse: { result: recommRes }} = await Api.get('/api/invest/recommendv2', {
+            type: 'investsurplus',
+            term: parseInt(this.state.params.year - new Date().getFullYear(), 10),
+            rp_enabled: true,
+          });
+
+          this.setState({
+            stockSplit: recommRes.recommendation.equity,
+            bondSplit: recommRes.recommendation.debt,
+            stockReturns: recommRes.recommendation.expected_return_eq,
+            bondReturns: recommRes.recommendation.expected_return_debt,
+          });
+        }
+
         this.setState({
           score: score,
-          show_loader: false
+          show_loader: false,
         });
       } else {
-        this.navigate('intro');
+        storageService().setObject('useNewFlow', this.props.useNewFlow);
+        this.navigate('intro', true);
       }
     } catch (err) {
       this.setState({
@@ -54,14 +102,25 @@ class Result extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        indicator: (this.state.score) ? this.state.score.indicator : false
-      }
-    });
+  navigate = (pathname, replace, state) => {
+    let params = {
+      indicator: (this.state.score) ? this.state.score.indicator : false
+    };
+
+    if (!replace) {
+      this.props.history.push({
+        pathname: pathname,
+        search: getConfig().searchParams,
+        params,
+        state: state
+      });
+    } else {
+      this.props.history.replace({
+        pathname: pathname,
+        search: getConfig().searchParams,
+        params,
+      });
+    }
   }
 
   sendEvents(user_action) {
@@ -70,7 +129,8 @@ class Result extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'Result',
-        "risk_tolerance": this.state.score.indicator
+        "risk_tolerance": this.state.score.indicator,
+        flow: this.state.params.flow || 'risk analyser',
       }
     };
     if (user_action === 'just_set_events') {
@@ -80,9 +140,101 @@ class Result extends Component {
     }
   }
 
+  redirectToInvestFlow = () => {
+    const entryParams = this.state.params || {};
+
+    if (entryParams.type === 'saveforgoal') {
+      this.navigate(`invest/savegoal/${entryParams.subType}/amount`);
+    } else {
+      this.navigate(
+        '/invest/recommendations',
+        false,
+        {
+          amount: entryParams.amount,
+          type: entryParams.type,
+          term: entryParams.term,
+          flow: entryParams.flow,
+          fromRiskProfiler: true,
+        }
+      );
+    }
+  }
+
   handleClick = async () => {
     this.sendEvents('next');
-    this.navigate('recommendation');
+    if (!this.props.useNewFlow) {
+      this.navigate('recommendation');
+      return;
+    }
+   
+    const openWebModule = getConfig().isWebCode;
+    if (openWebModule) {
+      if (get(this.state, 'params.internalRedirect')) {
+        this.redirectToInvestFlow();
+      } else {
+        window.location.href = this.redirectUrlBuilder();
+      }
+    } else {
+      nativeCallback({ action: 'exit' });
+    }
+  }
+
+  calculateMonthlyAmount = (term, corpusValue) => {
+    var n = term * 12;
+    var r = this.getRateOfInterest();
+    var a = corpusValue;
+    var i = (r / 12) / 100;
+    var tmp = Math.pow((1 + i), n) - 1;
+    var monthlyInvestment = (a * i) / tmp;
+    var monthlyAmount = monthlyInvestment;
+    if (monthlyAmount < 500) {
+      monthlyAmount = 500;
+    }
+    return Math.floor(monthlyAmount);
+  }
+
+  getRateOfInterest = () => {
+    var range = Math.abs(this.state.stockReturns - this.state.bondReturns);
+    if (this.state.stockSplit < 1) {
+      return this.state.bondReturns;
+    } else if (this.state.stockSplit > 99) {
+      return this.state.stockReturns;
+    } else {
+      var rateOffset = (range * this.state.stockSplit) / 100;
+      return this.state.bondReturns + rateOffset;
+    }
+  }
+
+  redirectUrlBuilder = () => {
+    const entryParams = this.state.params;
+    let webPath = '';
+
+    if (entryParams.type === 'saveforgoal') {
+      const monthlyAmount = this.calculateMonthlyAmount(
+        parseInt(entryParams.year - new Date().getFullYear(), 10),
+        entryParams.amount
+      );
+      webPath = "invest/savegoal/" +
+        `${entryParams.subType}/` +
+        `${entryParams.year}/` +
+        `${monthlyAmount}/` +
+        `${entryParams.amount}`;
+      return getConfig().webAppUrl + webPath; 
+    } 
+    
+    if (!entryParams.type) {
+      webPath='invest';
+    } else {
+      webPath = 'risk-v2/recommendations';
+    }
+
+    return getConfig().webAppUrl + 
+      webPath + '?' +
+      'amount=' + entryParams.amount +
+      '&type=' + entryParams.type +
+      '&term=' + entryParams.term +
+      '&flow=' + entryParams.flow +
+      '&fromRisk=true';
   }
 
   renderDialog = () => {
@@ -159,27 +311,27 @@ class Result extends Component {
       1: {
         title: 'Conservative Investor',
         contennt: 'Investor like you are comfortable in accepting lower returns for a higher degree of liquidity or stability. Typically, a Conservative investor primarly seeks to minimize risk and loss of money.',
-        img: meter1
+        img: conservative
       },
       2: {
-        title: 'Low risk Investor',
+        title: 'Moderately Conservative Investor',
         contennt: 'You have a low risk appetite. Consistent and sustainable returns are what you as an investor need.',
-        img: meter2
+        img: moderatelyConservative
       },
       3: {
         title: 'Moderate Investor',
         contennt: 'You have a moderate tolerance for risk, investors like you values reducing risks and enhancing returns equally. Also, moderate investors are willing to accept modest risks to seek higher long-term returns.',
-        img: meter3
+        img: moderate
       },
       4: {
-        title: 'High risk Investor',
+        title: 'Moderately Aggresive Investor',
         contennt: 'You are ready to take high risk by investing in risky bets. You seem to be okay with risks as long as the reward compensates well.',
-        img: meter4
+        img: moderatelyAggresive
       },
       5: {
         title: 'Aggressive Investor',
         contennt: 'You have a very high tolerance for risk, investors like you prefer to stay in the market in times of extreme volatility in exchange for the possibility of receiving high relative returns over the time to outpace inflation.',
-        img: meter5
+        img: aggresive
       }
     }
 
@@ -188,11 +340,11 @@ class Result extends Component {
 
   getImg(score) {
     let map = {
-      1: meter1,
-      2: meter2,
-      3: meter3,
-      4: meter4,
-      5: meter5
+      1: conservative,
+      2: moderatelyConservative,
+      3: moderate,
+      4: moderatelyAggresive,
+      5: aggresive
 
     }
     return map[score];
@@ -223,9 +375,9 @@ class Result extends Component {
           handleClick={this.handleClick}
           edit={this.props.edit}
           buttonTitle="Fund Recommendation"
-          topIcon="restart"
+          topIcon={this.state.params.hideRPReset !== "true" ? '' : "restart"}
           handleReset={this.showDialog}
-          resetpage={true}
+          resetpage={this.state.params.hideRPReset !== "true"}
           events={this.sendEvents('just_set_events')}
         >
           <div className="meter-img">

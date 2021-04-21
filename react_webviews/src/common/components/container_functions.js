@@ -19,6 +19,7 @@ import '../../utils/native_listner';
 import { Imgc } from '../../common/ui/Imgc';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
+import { isFunction } from 'lodash';
 
 let start_time = '';
 
@@ -90,7 +91,7 @@ export function commonRender(props_base) {
     for (var i = 0; i < this.props.total; i++) {
         if (this.props.current > i) {
             steps.push(<span className='active'
-                style={{ background: getConfig().primary, marginRight: 0 }} key={i}></span>);
+                style={{ background: getConfig().styles.primaryColor, marginRight: 0 }} key={i}></span>);
         } else {
             steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
         }
@@ -129,7 +130,9 @@ export function commonRender(props_base) {
                     filterPage={this.props.filterPage}
                     handleFilter={this.props.handleFilter} 
                     hideBack={this.props.hideBack}
-          
+                    logo={this.props.logo}
+                    notification={this.props.notification}
+                    handleNotification={this.props.handleNotification}          
                 />
                 }
                 {/* Below Header Block */}
@@ -555,6 +558,10 @@ export function renderPageLoader() {
 }
 
 export function handleClose() {
+    if (isFunction(this.handleCloseCallback)) {
+        this.handleCloseCallback();
+    }
+
     this.setState({
         openDialog: false,
         openPopup: false

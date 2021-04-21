@@ -5,7 +5,7 @@ import provider from 'assets/provider.svg';
 import { numDifferentiationInr } from '../../../utils/validators';
 
 import Api from 'utils/api';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { insuranceStateMapper, insuranceProductTitleMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import instant_fisdom from 'assets/instant_fisdom.svg';
@@ -180,14 +180,14 @@ class PlanSummaryClass extends Component {
       res2 = await Api.get('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
 
       if (res2.pfwresponse.status_code === 200) {
-
-        let current_url = window.location.origin + '/group-insurance/' +
+        let basepath = getBasePath();
+        let current_url = basepath + '/group-insurance/' +
           insuranceStateMapper[this.props.parent.state.product_key] + '/summary' + getConfig().searchParams
 
         let nativeRedirectUrl = current_url;
 
         let paymentRedirectUrl = encodeURIComponent(
-          window.location.origin + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/payment'
+          basepath + '/group-insurance/' + insuranceStateMapper[this.props.parent.state.product_key] + '/payment'
         );
 
         var payment_link = res2.pfwresponse.result.payment_link;
@@ -347,7 +347,7 @@ class PlanSummaryClass extends Component {
             </div>
         </div>
         <div className="baxa-disclaimer">
-          <p style={{ color: getConfig().primary, marginBottom: '25px', textAlign: 'center'}}>*Maximum of 2 policy purchases per user allowed, anymore can lead to dispute during claim</p>
+          <p style={{ color: getConfig().styles.primaryColor, marginBottom: '25px', textAlign: 'center'}}>*Maximum of 2 policy purchases per user allowed, anymore can lead to dispute during claim</p>
         </div>
       </Container>
     );

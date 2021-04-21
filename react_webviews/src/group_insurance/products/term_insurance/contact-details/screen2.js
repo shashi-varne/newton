@@ -19,7 +19,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
 class ContactDetails2 extends Component {
@@ -445,8 +445,8 @@ class ContactDetails2 extends Component {
             insurance_app_id: this.state.params.insurance_id
           });
           if (result.pfwresponse.status_code === 200) {
-
-            let current_url = window.location.origin + '/group-insurance/term/journey' + getConfig().searchParams;
+            let basepath = getBasePath();
+            let current_url = basepath + '/group-insurance/term/journey' + getConfig().searchParams;
             nativeCallback({
               action: 'take_control', message: {
                 back_url: current_url,

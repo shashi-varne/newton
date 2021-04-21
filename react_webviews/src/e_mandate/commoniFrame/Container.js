@@ -15,6 +15,8 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import '../../utils/native_listner_otm';
 import { getConfig, setHeights } from 'utils/functions';
+
+import "./Style.scss"
 // import Frame from 'react-frame-component';
 
 class Container extends Component {
@@ -238,14 +240,14 @@ class Container extends Component {
     for (var i = 0; i < this.props.total; i++) {
       if (this.props.current > i) {
         steps.push(<span className='active'
-          style={{ background: getConfig().primary, marginRight: 0 }} key={i}></span>);
+          style={{ background: getConfig().styles.primaryColor, marginRight: 0 }} key={i}></span>);
       } else {
         steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
       }
     }
     return (
       <div style={{ backgroundColor: 'white', width: this.props.width || '100%' , height: '100%' ,
-       display: 'flex' , flexDirection : 'column' , justifyContent : 'space-between' , }}>
+       display: 'flex' , flexDirection : 'column' , justifyContent : 'space-between' , }} className={this.props.classOverRideContainer || ''}>
         {/* Header Block */}
   
         {(!this.props.noHeader && !getConfig().hide_header) && <Header
@@ -284,21 +286,21 @@ class Container extends Component {
         {/* Children Block */}
         {this.props.iframeIcon && <div className={'childblockiframe'} >
           <div className='childblockiframe-element-one'>
-             <div style={{fontSize: '20px', lineHeight:'24px', fontWeight: 'bold', marginBottom: '30px'}}>{this.props.title}</div>
+             { this.props.title && <div style={{fontSize: '20px', lineHeight:'24px', fontWeight: 'bold', marginBottom: '30px'}}>{this.props.title}</div> }
              <span>{this.props.children}</span>
           </div>
         { <div className='imgiframe'> <img className='childblockiframe-element-img' src={this.props.iframeIcon} alt="Mandate" /></div> }
          </div>}
 
-         {!this.props.iframeIcon && <div className={`ContainerWrapper ${this.props.classOverRideContainer}`} style={{marginTop:'90px'}}>    
-         <h1>{this.props.title}</h1> 
+         {!this.props.iframeIcon && <div className='iframe-child'>    
+         {this.props.title && <h1>{this.props.title}</h1>} 
          {this.props.children} </div> }
 
 
         {/* Footer Block */}
 
       <div className='footer-iframe'>
-        {!this.props.noFooter && this.props.iframeIcon &&
+        {!this.props.noFooter &&
           <Footer
             iframe={true}
             fullWidthButton={this.props.fullWidthButton}  

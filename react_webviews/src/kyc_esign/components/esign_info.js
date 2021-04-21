@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
 import { navigate as navigateFunc } from '../common/functions'
@@ -28,7 +28,6 @@ class ESignInfo extends Component {
 
   initialize = async () => {
     const kyc = storageService().getObject("kyc");
-    const user = storageService().getObject("user");
     if (!isEmpty(kyc)) {
       if (
         kyc.kyc_status !== "compliant" &&
@@ -56,8 +55,9 @@ class ESignInfo extends Component {
   }
 
   handleClick = async () => {
+    let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
-      window.location.origin + '/kyc-esign/nsdl' + getConfig().searchParams
+      basepath + '/kyc-esign/nsdl' + getConfig().searchParams
     );
 
     this.setState({ show_loader: "button" });
@@ -74,7 +74,7 @@ class ESignInfo extends Component {
           });
         }
         nativeCallback({
-          action: 'take_control', message: {
+          action: 'take_back_button_control', message: {
             back_text: 'You are almost there, do you really want to go back?'
           }
         });

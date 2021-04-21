@@ -1,0 +1,186 @@
+.t_and_c_title {
+  background-color: var(--primary);
+  h2 {
+    color: white;
+  }
+}
+.tc_link {
+  cursor: pointer;
+  text-decoration: underline;
+  color: var(--primary);
+}
+
+.tc-dialog-loader {
+  height: 40vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+// PeriodWiseReturns styling ---------
+
+.invested-amount-common-container{
+  margin: 0 -20px -20px -20px;
+}
+
+.invested-amount-display {
+    background-color: #ececec;
+    padding:0px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 10px;
+ 
+    .invested-amount-display-left{
+        display: flex;
+        flex-direction: column;
+        padding:15px 0px;
+        flex:5;
+
+        .invested-amount-display-left-text {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .invested-amount-display-left-val {
+            font-size: 20px;
+        }
+    }
+    .invested-amount-display-right {
+    flex:1;
+    }
+}
+
+.invested-amount-return-container {
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    padding: 20px;
+
+    .invested-amount-return-text {
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 18px;
+    }
+}
+
+.invested-amount-year-tabs {
+    padding: 25px 0px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    span {
+        padding: 5px 7px;
+        font-size: 12px;
+        color:#767E86;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    span.selected {
+        background-color: var(--primary);
+        border-radius: 8px;
+        color:white
+    }
+}
+
+.invested-amount-corpus-values {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  .invested-amount-corpus-invested, .invested-amount-corpus-projected {
+      display: flex;
+      flex-basis: 45%;
+      
+      .color-box {
+          width: 10px;
+          height: 10px;
+          margin-top: 1px;
+          margin-right: 5px;
+          background-color: var(--primary);
+      }
+
+      .text {
+          h1 {
+            margin: 0;
+            padding: 0;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            color: #767E86;
+            font-weight: bold;
+            font-size: 12px;
+          }
+
+          div {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #0A1D32;
+          }
+          
+      }
+  }
+
+  .invested-amount-corpus-invested {
+      .color-box {
+          background-color: var(--highlight);
+      }
+  }
+
+  .invested-amount-corpus-projected {
+      justify-content: flex-end;
+
+      .text {
+          text-align: right;
+
+          .info-icn {
+              margin-left: 5px;
+          }
+      }
+  }
+
+  .invested-amount-corpus-divider {
+      border-right: 1px solid #EEEEEE;
+      height: 40px;
+  }
+}
+
+.avg-return-ror {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #EEEEEE;
+  padding-bottom: 10px;
+
+  .value {
+    font-size: 26px;
+    line-height: 24px;
+    font-weight: 700;
+    margin-right: 18px;
+    color: var(--primary);
+  }
+
+  .text {
+    font-size: 15px;
+    line-height: 24px;
+    color: #767E86;
+  }
+}
+
+.avg-return-content {
+  margin-top: 20px;
+  font-size: 14px;
+  line-height: 21px;
+  color: #767E86;
+}
+
+.avg-return-breakup {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--primary);
+}
+
+// PeriodWiseReturns styling END -------

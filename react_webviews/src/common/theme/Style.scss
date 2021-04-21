@@ -426,7 +426,7 @@ button {
 }
 
 .FlexButtonGenericColor{
-  background-color: rgb(53, 203, 93);
+  // background-color: rgb(53, 203, 93);
   color: white;
   border-radius: 6px;
 }
@@ -1700,4 +1700,22 @@ $header-title-font-size: 20px;
   right: 0;
   bottom: 0;
   z-index: 200;
+
+  .LoaderOverlay{
+    img{
+      width: 33%;
+      height: 33%;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .Loaderiframe {
+    .LoaderOverlay{
+      img{
+        width: 75%;
+        height: 75%;
+      }
+    }
+  }
 }

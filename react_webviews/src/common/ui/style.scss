@@ -261,13 +261,13 @@
 }
 input.default-otp-input {
   width: 33px !important;
-  height: 20px;
+  height: auto;
   border-bottom: 2px solid var(--primary) !important;
   border: none;
   margin: 0 10px 0 0;
   width: 20%;
   text-align: center;
-  padding: 5px 0px;
+  padding: 0px;
   outline: none;
   background: transparent;
   color: black;
@@ -976,4 +976,34 @@ body[data-device="mobile"] {
 .generic-button-raised {
   color: white;
   background-color: var(--secondary);
+}
+
+
+#f-info-box {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background: var(--highlight);
+
+  #f-info-box-img {
+    margin-right: 16px;
+  }
+
+  #f-info-box-body {
+    flex-basis: 60%;
+    word-break: break-word;
+    flex: 1;
+  }
+
+  #f-info-box-ctrl {
+    font-size: 12px;
+    letter-spacing: 1px;;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-left: 16px;
+  }
 }

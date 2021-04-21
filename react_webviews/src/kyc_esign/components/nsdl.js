@@ -11,6 +11,7 @@ import Api from "../../utils/api";
 import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
+import { getBasePath } from "../../utils/functions";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -92,7 +93,7 @@ class DigiStatus extends Component {
       return;
     }
     const redirectUrl = encodeURIComponent(
-      window.location.origin + "/kyc-esign/nsdl" + getConfig().searchParams
+      getBasePath() + "/kyc-esign/nsdl" + getConfig().searchParams
     );
 
     this.setState({ show_loader: "button" });
@@ -112,7 +113,7 @@ class DigiStatus extends Component {
           });
         }
         nativeCallback({
-          action: "take_control",
+          action: "take_back_button_control",
           message: {
             back_text: "You are almost there, do you really want to go back?",
           },
