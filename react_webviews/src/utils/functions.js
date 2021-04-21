@@ -347,8 +347,8 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
-  returnConfig.isWebOrSdk = returnConfig.Web || is_secure;
-  returnConfig.isSdk = !returnConfig.Web && is_secure; 
+  returnConfig.isWebOrSdk = returnConfig.Web || storageService().get("is_secure");
+  returnConfig.isSdk = !returnConfig.Web && storageService().get("is_secure"); 
   
   return returnConfig;
 };
