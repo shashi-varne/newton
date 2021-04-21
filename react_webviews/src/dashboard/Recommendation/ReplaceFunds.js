@@ -41,7 +41,7 @@ const ReplaceFunds = (props) => {
       handleClick={replaceFund}
       classOverRideContainer='pr-container'
     >
-      <section className='recommendations-common-container'>
+      <section className='recommendations-section-replace'>
         <FormControl component='fieldset'>
           <RadioGroup
             aria-label='alternateFund'

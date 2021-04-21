@@ -31,24 +31,23 @@ const Landing = (props) => {
   const [investTypeDisplay, setInvestTypeDisplay] = useState('3Y');
   const navigate = navigateFunc.bind(props);
 
-  const { updateFunnelData, initFunnelData } = useFunnelDataHook();
+  const { initFunnelData } = useFunnelDataHook();
 
   const fetchRecommendedFunds = async () => {
-    const params = {
-      type: 'investsurplus',
+    const appendToFunnelData = {
+      amount: 50000,
+      term: investTypeDisplay === '3Y' ? 3 : 1,
+      year: investTypeDisplay === '3Y' ? (currentYear + term) : (currentYear + 1),
+      investType: 'investsurplus',
+      isRecurring: isRecurring('investsurplus'),
+      investTypeDisplay,
+      name: 'Wealth building'
     };
     try {
       setLoader("button");
-      const recurring = isRecurring(params.type);
-      await initFunnelData(params);
-      updateFunnelData({
-        amount: 50000,
-        term: investTypeDisplay === '3Y' ? 3 : 1,
-        year: investTypeDisplay === '3Y' ? (currentYear + term) : (currentYear + 1),
-        investType: params.type,
-        isRecurring: recurring,
-        investTypeDisplay,
-        name: 'Wealth building'
+      await initFunnelData({
+        apiParams: { type: 'investsurplus' },
+        appendToFunnelData: appendToFunnelData
       });
       setLoader(false);
       goNext();
