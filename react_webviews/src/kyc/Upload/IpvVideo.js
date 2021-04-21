@@ -78,7 +78,7 @@ const IpvVideo = (props) => {
   }
 
   const productName = getConfig().productName
-  const isWeb = getConfig().isWebCode
+  const isWeb = getConfig().isWebOrSdk
 
   return (
     <Container
