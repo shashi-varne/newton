@@ -1,6 +1,5 @@
 .withdraw-remark {
   padding-top: 20px;
-  .withdraw-reason-title,
   .withdraw-remark-title {
     padding: 20px;
     font-size: 17px;
@@ -33,6 +32,19 @@
         padding: 0px 20px;
         margin: 0px;
         font-size: 16px;
+      }
+    }
+  }
+}
+
+.wremark-container{
+  .FooterDefaultLayout{
+    .FlexItem2{
+      button{
+        color: #fff;
+        box-shadow: none;
+        border-radius: 4px;
+        background-color: #35cb5d;
       }
     }
   }

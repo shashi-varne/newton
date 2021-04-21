@@ -10,8 +10,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Dialog from '../../mini-components/Dialog';
 
 import { postWithdrawReasons } from '../../common/Api';
-import './WithdrawRemark.scss';
 import toast from 'common/ui/Toast';
+import './WithdrawRemark.scss';
 
 const WithdrawRemark = ({ location, ...props }) => {
   const [value, setValue] = useState(null);
@@ -103,6 +103,7 @@ const WithdrawRemark = ({ location, ...props }) => {
       noPadding
       handleClick={handleClick}
       showLoader={isLoading}
+      classOverRide='wremark-container'
     >
       {!isEmpty(subQstn?.action) && (
         <section className='withdraw-remark'>
