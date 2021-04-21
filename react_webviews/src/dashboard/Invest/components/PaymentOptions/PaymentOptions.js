@@ -5,7 +5,8 @@ import { isEmpty, storageService } from "utils/validators";
 import { getBasePath } from "utils/functions";
 import Container from "../../../common/Container";
 import { getbankInvestment } from "../../common/api";
-import './PaymentOptions.scss';
+import "./PaymentOptions.scss";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const PaymentOptions = (props) => {
   const state = props.location.state || {};
@@ -57,7 +58,10 @@ const PaymentOptions = (props) => {
             link: result.confirm_pay_url,
           },
         };
-        // handle call back web make_bank_payment
+        nativeCallback({
+          action: "make_bank_payment",
+          message: redirectData,
+        });
       } catch (err) {
         console.log(err);
         toast(err);
@@ -101,7 +105,10 @@ const PaymentOptions = (props) => {
           redirectData.show_toolbar = true;
         }
       }
-      // handle call back web third_party_redirect
+      nativeCallback({
+        action: "third_party_redirect",
+        message: redirectData,
+      });
       pg_link = mode.link;
       if (mode.pg_type === "otp") {
         if (storageService().get("sdk_capabilities")) {

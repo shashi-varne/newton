@@ -22,7 +22,7 @@ class DropdownInModalClass extends Component {
           : '',
       options: this.props.options,
       onChange: this.props.onChange,
-      tick_icon: getConfig().type !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
+      tick_icon: getConfig().productName !== 'fisdom' ? tick_icon_myway : tick_icon_fisdom,
       inputToRender: this.props.inputToRender,
       view_scrolled: false,
       value: this.props.value,

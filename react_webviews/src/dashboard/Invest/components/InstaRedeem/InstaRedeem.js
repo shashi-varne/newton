@@ -5,7 +5,7 @@ import { navigate } from "../../functions";
 import Faqs from "common/ui/Faqs";
 import SecureInvest from "../../mini-components/SecureInvest";
 import { investRedeemData } from "../../constants";
-import Button from "material-ui/Button";
+import Button from "common/ui/Button";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import HowToSteps from "common/ui/HowToSteps";
 import { SkeltonRect } from "../../../../common/ui/Skelton";
@@ -117,9 +117,11 @@ class InstaRedeem extends Component {
           </div>
         </DialogContent>
         <DialogActions className="action">
-          <Button onClick={this.handleClose} className="button">
-            OKAY
-          </Button>
+          <Button
+            onClick={this.handleClose}
+            classes={{ root: "button" }}
+            buttonTitle="OKAY"
+          />
         </DialogActions>
       </Dialog>
     );

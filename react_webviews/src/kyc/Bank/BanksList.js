@@ -38,7 +38,7 @@ const BanksList = (props) => {
       );
     } catch (err) {
       console.log(err);
-      toast(err);
+      toast(err.message);
     }
   };
 

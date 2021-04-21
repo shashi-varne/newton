@@ -53,9 +53,9 @@ export async function getSummary() {
   let userKyc = storageService().getObject("kyc") || {};
   let currentUser = storageService().getObject("user") || {};
   if(isEmpty(currentUser) || isEmpty(userKyc)) {
-    this.setState({ show_loader: true, loadingText: "Please wait...", kycStatusLoader : true });
+    this.setState({ show_loader: true,  kycStatusLoader : true });
   } else {
-    this.setState({ show_loader: false, loadingText: "Please wait...", kycStatusLoader : true });
+    this.setState({ show_loader: false,  kycStatusLoader : true });
   }
   try {
     const res = await Api.post(apiConstants.accountSummary, {
@@ -134,7 +134,6 @@ export function setSummaryData(result) {
 export function getCampaignBySection(notifications, sections) {
   if (!sections) {
     sections = [];
-    // sections =  ['notification', 'profile', 'in_flow', 'landing'];
   }
 
   if (!notifications) {
@@ -149,13 +148,6 @@ export function getCampaignBySection(notifications, sections) {
     }
 
     notificationsData.push(notifications[i]);
-    // for (var j = 0; j < notifications[i].notification_visual_data.target.length; j++) {
-    //   var camTarget = notifications[i].notification_visual_data.target[j];
-    //   if (sections.indexOf(camTarget.section) !== -1 ) {
-    //     notificationsData.push(notifications[i]);
-    //     break;
-    //   }
-    // }
   }
 
   return notificationsData;
@@ -299,7 +291,6 @@ export async function getRecommendationApi(amount) {
   };
   this.setState({
     show_loader: true,
-    loadingText: "Please wait...",
     investType: data.investType,
     term: data.term,
     stockReturns: data.stockReturns,
