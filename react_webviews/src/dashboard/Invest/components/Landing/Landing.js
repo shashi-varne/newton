@@ -151,7 +151,12 @@ class Landing extends Component {
                           <div className="subtitle">
                             {kycStatusData.subtitle}
                           </div>
-                          <Button className="invest-landing-button">{kycStatusData.button_text}</Button>
+                          <Button
+                            buttonTitle={kycStatusData.button_text}
+                            classes={{
+                              root: "invest-landing-button",
+                            }}
+                          />
                         </div>
                       )}
                     </React.Fragment>
