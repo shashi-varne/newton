@@ -410,7 +410,7 @@ class GroupHealthPlanDetails extends Component {
                 <div className="accident-plan-read-text">
                   *For detailed list of all terms and conditions, please refer
                   <span
-                    style={{ color: getConfig().primary }}
+                    style={{ color: getConfig().styles.primaryColor }}
                     onClick={() =>
                       this.openPdf(
                         this.state.plan_data.policy_prospectus,

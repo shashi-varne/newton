@@ -98,7 +98,7 @@ export const validateInvestAmount = (amount, investType, investTypeDisplay) => {
       } else if (amount > 500000) {
         return {
           status: true,
-          msg: 'Investment amount canot be more than ₹ 5,00,000',
+          msg: 'Investment amount cannot be more than ₹ 5,00,000',
         };
       }
     } else {
@@ -110,7 +110,7 @@ export const validateInvestAmount = (amount, investType, investTypeDisplay) => {
       } else if (amount > 2000000) {
         return {
           status: true,
-          msg: 'Investment amount canot be more than ₹ 20,00,000',
+          msg: 'Investment amount cannot be more than ₹ 20,00,000',
         };
       }
     }
@@ -142,7 +142,7 @@ export const validateSipAmount = (amount) => {
   if (amount > goal.max_sip_amount) {
     validation.error = true;
     validation.message =
-      'Investment amount canot be more than ' + formatAmountInr(goal.max_sip_amount);
+      'Investment amount cannot be more than ' + formatAmountInr(goal.max_sip_amount);
   } else if (amount < goal.min_sip_amount) {
     validation.error = true;
     validation.message = 'Minimum amount should be atleast ' + formatAmountInr(goal.min_sip_amount);
@@ -163,7 +163,7 @@ export const validateOtAmount = (amount) => {
   if (amount > goal.max_ot_amount) {
     validation.error = true;
     validation.message =
-      'Investment amount canot be more than ' + formatAmountInr(goal.max_ot_amount);
+      'Investment amount cannot be more than ' + formatAmountInr(goal.max_ot_amount);
   } else if (amount < goal.min_ot_amount) {
     validation.error = true;
     validation.message = 'Minimum amount should be atleast ' + formatAmountInr(goal.min_ot_amount);

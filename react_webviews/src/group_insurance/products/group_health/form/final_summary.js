@@ -1119,7 +1119,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     <Grid item xs={11}>
                         <div className="accident-plan-terms-text" style={{}}>
                         I agree to the <span onClick={() => this.openPdf(this.state.lead.terms_and_condition,
-                        'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
+                        'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().styles.primaryColor }}>
                             Terms and conditions</span></div>
                     </Grid>
                     </Grid>

@@ -28,3 +28,12 @@
     width: 25px;
   }
 }
+
+.edit-funds-dialog {
+  .edit-funds-dialog-bottom {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 15px;
+    padding-bottom: 15px
+  }
+}

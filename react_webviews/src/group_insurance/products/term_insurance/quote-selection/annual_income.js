@@ -155,7 +155,7 @@ class AnnualIncome extends Component {
           <div> {props.value}</div>}
         {this.state.selectedIndex === index &&
           <div style={{ display: '-webkit-box' }}>
-            <div style={{ width: '88%', color: getConfig().primary, fontWeight: 500 }}>{props.value}</div>
+            <div style={{ width: '88%', color: getConfig().styles.primaryColor, fontWeight: 500 }}>{props.value}</div>
             <img width="20" src={selected_option} alt="Insurance" />
           </div>}
       </div>
@@ -213,7 +213,7 @@ class AnnualIncome extends Component {
               <div style={{ color: this.state.annual_income_error ? 'red' : '#878787', fontSize: 12 }}>Select an option from below</div>}
           </div>
           <div className="annual-income-info-button"
-            style={{ color: getConfig().primary }}
+            style={{ color: getConfig().styles.primaryColor }}
             onClick={() => this.openPopUp()}>INFO</div>
         </div>
 
