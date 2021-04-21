@@ -1,45 +1,43 @@
+import './GoalTarget.scss';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import toast from "common/ui/Toast"
-
-import {navigate as navigateFunc,isRecurring, getMonthlyCommitmentNew} from '../../common/commonFunctions';
+import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
 import { numDifferentiationInr } from 'utils/validators';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { saveGoalMapper } from './constants';
 import moment from 'moment';
-import './SaveGoal.scss';
-
 
 const currentYear = moment().year();
 
-const SaveGoal = (props) => {
+const GoalTarget = (props) => {
   const [loader, setLoader] = useState(false);
   const navigate = navigateFunc.bind(props);
   const { subtype, year } = props.match?.params;
   const term = parseInt((year - currentYear), 10);
 
-  const { funnelData, updateFunnelData, initFunnelData } = useFunnelDataHook();
+  const { initFunnelData } = useFunnelDataHook();
 
   const fetchRecommendedFunds = async (amount) => {
     try {
-      const params = {
-        amount,
-        type: 'saveforgoal',
-        subtype,
-        term,
-      };
-      setLoader(true);
-      const recurring = isRecurring('saveforgoal');
-      await initFunnelData(params);
-      updateFunnelData({
+      const appendToFunnelData = {
         term,
         year,
         subtype,
         corpus: amount,
-        amount: getMonthlyCommitmentNew(term, amount, funnelData.equity),
         investType: 'saveforgoal',
-        isRecurring: recurring,
+        isRecurring: isRecurring('saveforgoal'),
         name: "Saving for goal"
+      };
+      setLoader(true);
+      await initFunnelData({
+        apiParams: {
+          amount,
+          type: 'saveforgoal',
+          subtype,
+          term
+        },
+        appendToFunnelData: appendToFunnelData
       });
       setLoader(false);
       goNext();
@@ -64,7 +62,7 @@ const SaveGoal = (props) => {
   };
 
   const setYourTarget = () => {
-    navigate(`savegoal/${subtype}/target`);
+    navigate(`savegoal/${subtype}/${year}/target`);
   };
 
   return (
@@ -102,4 +100,4 @@ const SaveGoal = (props) => {
     </Container>
   );
 };
-export default SaveGoal;
+export default GoalTarget;

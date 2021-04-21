@@ -1,16 +1,17 @@
+// ----------- Asset Imports -------------------
+import trust_icons from 'assets/trust_icons.svg';
+import single_star from 'assets/single_star.png';
+import morning_text from 'assets/morning_text.png';
+// ---------------------------------------------
+
+import './Recommendation.scss';
 import React, { useState, useEffect } from 'react';
 import Container from '../common/Container';
 import FundCard from '../Invest/mini-components/FundCard';
 import TermsAndCond from "../mini-components/TermsAndCond"
-
-import trust_icons from 'assets/trust_icons.svg';
-import single_star from 'assets/single_star.png';
-import morning_text from 'assets/morning_text.png';
-
 import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
 import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
-
 import { isInvestRefferalRequired, proceedInvestment } from '../proceedInvestmentFunctions';
 import PennyVerificationPending from '../Invest/mini-components/PennyVerificationPending';
 import InvestError from '../Invest/mini-components/InvestError';
@@ -21,7 +22,7 @@ import { get, isArray } from 'lodash';
 import { get_recommended_funds } from '../Invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
-import './Recommendation.scss';
+
 const sipTypesKeys = [
   "buildwealth",
   "savetaxsip",
@@ -34,9 +35,12 @@ const sipTypesKeys = [
   "goldsip",
   "diysip",
 ];
+const riskEnabledFunnel = getConfig().riskEnabledFunnels;
+const partner_code = getConfig().partner_code;
 
 const Recommendations = (props) => {
   const routeState = get(props, 'location.state', {});
+  const navigate = navigateFunc.bind(props);
   const {
     funnelData,
     updateFunnelData,
@@ -50,12 +54,11 @@ const Recommendations = (props) => {
     if (isArray(funnelData.recommendation)) {
       setRecommendations(funnelData.recommendation);
     }
-    if (funnelData.investType === 'savetax' || userRiskProfile) {
+    if (['savetax', 'savetaxsip'].includes(funnelData.investType) || userRiskProfile) {
       setRenderTopCard(true);
     }
   }, [funnelData]);
 
-  const partner_code = getConfig().partner_code;
   const [dialogStates, setDialogStates] = useState({
     openPennyVerificationPendind: false,
     openInvestError: false,
@@ -241,8 +244,6 @@ const Recommendations = (props) => {
     setIsins(isinsVal?.join(","));
   }, [recommendations]);
 
-
-  const navigate = navigateFunc.bind(props);
   const editFund = () => {
     navigate("recommendations/edit-funds");
   };
@@ -262,26 +263,33 @@ const Recommendations = (props) => {
       showLoader={isApiRunning}
       hidePageTitle
     > 
-      <div style={{ margin: '0 -20px'}}>
-        {renderTopCard &&
-          <RecommendationTopCard
-            data={{
-              userRiskProfile,
-              funnelData
-            }}
-            parentProps={props}
-          />
+      <div className="recommendation-page">
+        {riskEnabledFunnel && 
+          <>
+            {renderTopCard &&
+              <RecommendationTopCard
+                data={{
+                  userRiskProfile,
+                  funnelData
+                }}
+                parentProps={props}
+              />
+            }
+            <PeriodWiseReturns
+              initialTerm={funnelData.term}
+              equity={funnelData.equity}
+              stockReturns={funnelData.stockReturns}
+              bondReturns={funnelData.bondReturns}
+              principalAmount={funnelData.amount}
+              isRecurring={funnelData.isRecurring}
+              showInfo
+            />
+          </>
         }
-        <PeriodWiseReturns
-          initialTerm={funnelData.term}
-          equity={funnelData.equity}
-          stockReturns={funnelData.stockReturns}
-          bondReturns={funnelData.bondReturns}
-          principalAmount={funnelData.amount}
-          isRecurring={funnelData.isRecurring}
-          showInfo
-        />
-        <section className='recommendations-common-container'>
+        <section
+          className='recommendations-section'
+          style={{ marginTop: riskEnabledFunnel ? '20px' : ''}}
+        >
           <div className='recommendations-header'>
             <div>Our Recommendation</div>
             {funnelData.investType !== 'insta-redeem' && (
@@ -307,7 +315,7 @@ const Recommendations = (props) => {
 
             <div>{recommendations?.length ? formatAmountInr(funnelData.recommendedTotalAmount) : '₹0'}</div>
           </div>
-          <div>
+          <div className="recommendations-disclaimers">
             <div className="recommendations-disclaimer-morning">
               <img alt="single_star" src={single_star} />
               {partner_code !== "hbl" ? (
@@ -317,10 +325,10 @@ const Recommendations = (props) => {
               )}
             </div>
             <TermsAndCond />
-          </div>
-          <div className='recommendations-trust-icons'>
-            <div>Investments with fisdom are 100% secure</div>
-            <img alt='trust_sebi_secure' src={trust_icons} />
+            <div className='recommendations-trust-icons'>
+              <div>Investments with fisdom are 100% secure</div>
+              <img alt='trust_sebi_secure' src={trust_icons} />
+            </div>
           </div>
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPendind}

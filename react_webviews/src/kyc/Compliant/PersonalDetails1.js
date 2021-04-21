@@ -221,7 +221,6 @@ const PersonalDetails1 = (props) => {
                 helperText={form_data.gender_error}
                 width="40"
                 label="Gender:"
-                class="gender"
                 options={genderOptions}
                 id="account_type"
                 value={form_data.gender || ""}
@@ -235,7 +234,6 @@ const PersonalDetails1 = (props) => {
                 helperText={form_data.resident_error}
                 width="40"
                 label="Residential status:"
-                class="residential-status"
                 options={residentialOptions}
                 id="account_type"
                 value={form_data.residential_status || ""}
