@@ -107,7 +107,7 @@ const Filter = ({
             onClick={apply}
             buttonTitle="Apply"
             classes={{
-              button: "button"
+              button: "filter-button"
             }}
           />
         </footer>

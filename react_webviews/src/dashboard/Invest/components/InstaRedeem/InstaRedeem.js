@@ -119,7 +119,7 @@ class InstaRedeem extends Component {
         <DialogActions className="action">
           <Button
             onClick={this.handleClose}
-            classes={{ button: "button" }}
+            classes={{ button: "invest-dialog-button" }}
             buttonTitle="OKAY"
           />
         </DialogActions>

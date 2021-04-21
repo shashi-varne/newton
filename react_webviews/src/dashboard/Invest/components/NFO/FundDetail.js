@@ -68,7 +68,7 @@ class FundDetail extends Component {
             <Button
               onClick={this.handleClick}
               buttonTitle="INVEST"
-              classes={{ button: "button" }}
+              classes={{ button: "nfo-invest-button" }}
             />
             <div className="risk">
               <div className="text">

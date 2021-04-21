@@ -123,7 +123,7 @@ class NfoFunds extends Component {
                         <Button
                           onClick={this.handleClick(data)}
                           buttonTitle="INVEST"
-                          classes={{ button: "button" }}
+                          classes={{ button: "nfo-funds-button" }}
                         />
                       </div>
                     </div>
