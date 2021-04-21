@@ -1,5 +1,5 @@
 // import colors from '../common/theme/Style.scss';
-import { checkValidString, getUrlParams } from './validators';
+import { checkValidString, getUrlParams, storageService } from './validators';
 import $ from 'jquery';
 import { 
   basePartnerConfig, 
@@ -120,23 +120,6 @@ function getPartnerConfig(partner_code) {
   return config_to_return;
 }
 
-export function setWebAppParams(redirect_url) {
-  redirect_url = decodeURIComponent(redirect_url);
-  let redirect_url_data = redirect_url.split('?is_secure=');
-
-  let is_secure = false;
-  if (redirect_url_data.length === 2) {
-    is_secure = redirect_url_data[1];
-  }
-
-  let web_params = '';
-  if (checkValidString(is_secure)) {
-    web_params += 'is_secure=' + is_secure;
-  }
-
-  return web_params;
-}
-
 export const isMobileDevice = () => {
   var mobileDevice = isMobile.any() || window.innerWidth < 767;
   if (mobileDevice) {
@@ -186,9 +169,8 @@ export const getConfig = () => {
     base_url = base_url_default;
   }
 
-
+  let { is_secure = false } = main_query_params;
   let { generic_callback } = main_query_params;
-  let { redirect_url } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
@@ -238,6 +220,8 @@ export const getConfig = () => {
     project = 'iw-dashboard';
   }
 
+  if (is_secure === "true") storageService().set("is_secure", true);
+
   let search = window.location.search;
   const insurance_v2 = generic_callback === 'true' ? true : search.indexOf('insurance_v2') >= 0;
 
@@ -245,7 +229,6 @@ export const getConfig = () => {
 
   let searchParams = ``;
   let searchParamsMustAppend = ``;
-
 
   base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
   if(!base_url_default) {
@@ -258,17 +241,6 @@ export const getConfig = () => {
     returnConfig.generic_callback = generic_callback;
     searchParams += getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
-  }
-
-  returnConfig.redirect_url = '';
-  if (checkValidString(redirect_url)) {
-    returnConfig.webAppParams = setWebAppParams(redirect_url);
-
-    returnConfig.webAppUrl = decodeURIComponent(redirect_url).split('#')[0] + '#!/';
-    redirect_url = encodeURIComponent(redirect_url);
-    returnConfig.redirect_url = redirect_url;
-    searchParams +=  getParamsMark(searchParams) +  `redirect_url=${redirect_url}`;
-    searchParamsMustAppend += getParamsMark(searchParams) +  `redirect_url=${redirect_url}`;
   }
 
   if (sdk_capabilities) {
@@ -375,7 +347,8 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
-  returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
+  returnConfig.isWebOrSdk = returnConfig.Web || storageService().get("is_secure");
+  returnConfig.isSdk = !returnConfig.Web && storageService().get("is_secure"); 
   
   return returnConfig;
 };

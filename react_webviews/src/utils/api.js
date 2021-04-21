@@ -1,13 +1,12 @@
 import axios from 'axios';
 
 
-import { checkValidString } from './validators';
+import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions';
 
 let base_url = getConfig().base_url;
 
-let redirect_url = getConfig().redirect_url;
 let sdk_capabilities = getConfig().sdk_capabilities;
 let is_secure = false;
 
@@ -33,16 +32,11 @@ class Api {
   }
 
   static xhr(route, params, verb) {
-    if (redirect_url && verb !== 'get') {
+    if (verb !== 'get') {
       if (params instanceof FormData) {
         is_secure = false;
       } else {
-        redirect_url = decodeURIComponent(redirect_url);
-        let redirect_url_data = redirect_url.split("?is_secure=")
-        if (redirect_url_data.length === 2) {
-          is_secure = checkValidString(redirect_url_data[1]);
-        }
-
+        is_secure = storageService().get("is_secure");
       }
     }
     if (sdk_capabilities) {

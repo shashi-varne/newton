@@ -205,9 +205,6 @@ class PlanSummaryClass extends Component {
           pgLink += '&partner_code=' + getConfig().partner_code;
         }
 
-        if (getConfig().redirect_url) {
-          pgLink += '&redirect_url=' + getConfig().redirect_url;
-        }
         this.sendEvents('next');
 
         window.sessionStorage.setItem('group_insurance_payment_url', pgLink);

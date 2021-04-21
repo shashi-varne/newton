@@ -1,3 +1,4 @@
+import './CustomGoalTarget.scss';
 import React, { useEffect, useState } from 'react';
 import Container from '../../../common/Container';
 import Input from 'common/ui/Input';
@@ -8,18 +9,16 @@ import {
 } from 'utils/validators';
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { navigate as navigateFunc, isRecurring, getMonthlyCommitmentNew} from '../../common/commonFunctions';
-import './Target.scss';
+import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
 
 const currentYear = moment().year();
 
-const Target = (props) => {
+const CustomGoalTarget = (props) => {
   const [targetAmount, setTargetAmount] = useState(0);
   const [loader, setLoader] = useState(false);
-  const { funnelData, updateFunnelData, initFunnelData } = useFunnelDataHook();
-  const term = funnelData?.year ? funnelData?.year - currentYear :  15;
-  const year = funnelData?.year || currentYear + 15;
-  const { subtype } = props.match?.params;
+  const { initFunnelData } = useFunnelDataHook();
+  const { subtype, year } = props.match?.params;
+  const term = year - currentYear;
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
@@ -58,25 +57,25 @@ const Target = (props) => {
 
   const fetchRecommendedFunds = async (amount) => {
     try {
-      const params = {
-        amount,
-        type: 'saveforgoal',
-        subtype,
+      const appendToFunnelData = {
         term,
-      };
-      setLoader("button");
-      const recurring = isRecurring('saveforgoal');
-      await initFunnelData({ type: params.type });
-      updateFunnelData({
-        term,
-        year,
+        year: Number(year),
         subtype,
         corpus: amount,
-        amount: getMonthlyCommitmentNew(term, amount, funnelData.equity),
         investType: 'saveforgoal',
-        isRecurring: recurring,
+        isRecurring: isRecurring('saveforgoal'),
         investTypeDisplay: "sip",
         name: "Saving for goal"
+      };
+      setLoader("button");
+      await initFunnelData({
+        apiParams: {
+          amount,
+          type: 'saveforgoal',
+          subtype,
+          term,
+        },
+        appendToFunnelData: appendToFunnelData
       });
       setLoader(false);
       navigate(`savegoal/${subtype}/amount`, true);
@@ -120,4 +119,4 @@ const Target = (props) => {
     </Container>
   );
 };
-export default Target;
+export default CustomGoalTarget;

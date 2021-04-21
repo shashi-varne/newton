@@ -495,7 +495,7 @@ export function openInBrowser(url, type) {
 
     let mapper_data = mapper[type];
 
-    if(getConfig().Android && !getConfig().isWebCode) {
+    if(getConfig().Android && !getConfig().isWebOrSdk) {
         nativeCallback({
             action: 'download_on_device',
             message: {

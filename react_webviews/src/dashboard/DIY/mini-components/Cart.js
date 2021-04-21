@@ -1,6 +1,6 @@
 import React from 'react'
 import DiyDialog from './DiyDialog'
-import Button from '@material-ui/core/Button'
+import Button from 'common/ui/Button'
 import { storageService } from '../../../utils/validators'
 
 import delete_new from '../../../assets/delete_new.png'
@@ -34,7 +34,7 @@ const Cart = ({ isOpen, setCartActive, cart, setCart, ...props }) => {
     <DiyDialog close={close} open={isOpen}>
       <section className="diy-bottom-sheet">
         <header className="header">
-          <div className="text">Fund Name</div>
+          <b className="text ">Fund Name</b>
           <div className="text">Remove</div>
         </header>
         <main>
@@ -52,14 +52,15 @@ const Cart = ({ isOpen, setCartActive, cart, setCart, ...props }) => {
           ))}
         </main>
         <Button
-          variant="contained"
           fullWidth
-          disabled={cart.length === 0}
-          color="secondary"
+          disable={cart.length === 0}
           onClick={handleCheckoutProceed}
-        >
-          Proceed to Checkout
-        </Button>
+          buttonTitle="Proceed to Checkout"
+          style={{
+            height: "45px",
+            marginTop: "15px",
+          }}
+        />
       </section>
     </DiyDialog>
   )

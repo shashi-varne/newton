@@ -55,6 +55,8 @@ const InvestedAmount = (props) => {
       updateUserRiskProfile(data.rp_indicator);
       updateFunnelData({
         ...data,
+        equity: stockSplitVal,
+        debt: 100 - stockSplitVal,
         amount,
         recommendedTotalAmount: data?.amount
       });
