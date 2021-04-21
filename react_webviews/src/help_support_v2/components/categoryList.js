@@ -58,7 +58,7 @@ class CategoryList extends Component {
         that.setState({
           inputSelected: inputSelected
         })
-       }, 700);
+       }, 1000);
     }
 
     if(!inputSelected) {
