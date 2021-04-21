@@ -13,7 +13,7 @@ import Dialog, {
 import Button from 'material-ui/Button';
 import file from 'assets/file.svg';
 import cancel from 'assets/cancel.svg';
-import '../../utils/native_listner_otm';
+import '../../utils/native_listener';
 import { nativeCallback } from 'utils/native_callback';
 import { isMobile, getConfig } from 'utils/functions';
 

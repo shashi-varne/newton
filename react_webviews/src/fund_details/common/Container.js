@@ -14,7 +14,7 @@ import {
   DialogContent,
   DialogContentText,
 } from '@material-ui/core';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { getConfig, setHeights } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
 import { isFunction } from '../../utils/validators';
@@ -48,17 +48,10 @@ const Container = (props) => {
     if (x.current) {
       x.current = false;
     } else {
-      if (getConfig().generic_callback) {
-        window.callbackWeb.addEventListener({
-          type: 'back_pressed',
-          go_back: () => historyGoBack(),
-        });
-      } else {
-        window.PlutusSdk.addEventListener({
-          type: 'back_pressed',
-          go_back: () => historyGoBack(),
-        });
-      }
+      window.callbackWeb.addEventListener({
+        type: 'back_pressed',
+        go_back: () => historyGoBack(),
+      });
     }
   }, []);
 

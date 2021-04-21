@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import { didMount, commonRender } from '../../common/components/container_functions';
 
 import { nativeCallback } from 'utils/native_callback';
-import '../../utils/native_listner_otm';
+import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 
 
@@ -34,10 +34,8 @@ class Container extends Component {
 
     this.didMount();
 
-    if (getConfig().generic_callback) {
-      if (getConfig().iOS) {
-        nativeCallback({ action: 'hide_top_bar' });
-      }
+    if (getConfig().iOS) {
+      nativeCallback({ action: 'hide_top_bar' });
     }
   }
 

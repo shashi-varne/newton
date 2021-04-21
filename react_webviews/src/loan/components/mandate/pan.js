@@ -36,15 +36,13 @@ class MandatePan extends Component {
 
   componentDidMount() {
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
+    window.callbackWeb.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
 
-          that.showLoaderNative();
-        }
-      });
-    }
+        that.showLoaderNative();
+      }
+    });
   }
 
   onload = () => {
@@ -195,51 +193,49 @@ class MandatePan extends Component {
 
   native_call_handler(method_name, doc_type, doc_name, doc_side) {
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb[method_name]({
-        type: 'doc',
-        doc_type: doc_type,
-        doc_name: doc_name,
-        doc_side: doc_side,
-        // callbacks from native
-        upload: function upload(file) {
-          try {
-            that.setState({
-              docType: this.doc_type,
-              docName: this.docName,
-              doc_side: this.doc_side,
-              show_loader: true
-            })
-            switch (file.type) {
-              case 'image/jpeg':
-              case 'image/jpg':
-              case 'image/png':
-              case 'image/bmp':
-                that.mergeDocs(file);
-                break;
-              default:
-                alert('Please select image file');
-                that.setState({
-                  docType: this.doc_type,
-                  show_loader: false
-                })
-            }
-          } catch (e) {
-            // 
-          }
-        }
-      });
-
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
+    window.callbackWeb[method_name]({
+      type: 'doc',
+      doc_type: doc_type,
+      doc_name: doc_name,
+      doc_side: doc_side,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
           that.setState({
+            docType: this.doc_type,
+            docName: this.docName,
+            doc_side: this.doc_side,
             show_loader: true
           })
-          that.showLoaderNative();
+          switch (file.type) {
+            case 'image/jpeg':
+            case 'image/jpg':
+            case 'image/png':
+            case 'image/bmp':
+              that.mergeDocs(file);
+              break;
+            default:
+              alert('Please select image file');
+              that.setState({
+                docType: this.doc_type,
+                show_loader: false
+              })
+          }
+        } catch (e) {
+          // 
         }
-      });
-    }
+      }
+    });
+
+    window.callbackWeb.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
+        that.setState({
+          show_loader: true
+        })
+        that.showLoaderNative();
+      }
+    });
   }
 
   openCameraWeb() {
