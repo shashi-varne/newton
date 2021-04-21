@@ -314,7 +314,7 @@ class Intro extends Component {
             <div className="quote-tiles4a">
               Claim Settled
             </div>
-            <div className="quote-tiles4a" style={{ color: getConfig().primary, fontWeight: 500 }}>
+            <div className="quote-tiles4a" style={{ color: getConfig().styles.primaryColor, fontWeight: 500 }}>
               {props.claim_settled_ratio}% {props.quote_provider === 'EDELWEISS' && <span className="hash-right">#</span>}
             </div>
           </div>

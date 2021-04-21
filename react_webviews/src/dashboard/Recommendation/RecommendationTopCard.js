@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { getConfig } from '../../utils/functions';
 import { formatAmountInr, getFinancialYear } from '../../utils/validators';
-import { navigate as navigateFunc } from '../invest/common/commonFunction';
+import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
 import './RecommendationTopCard.scss';
 const { productName } = getConfig();
 
@@ -11,12 +11,12 @@ const RecommendationTopCard = ({
   parentProps
 }) => {
   const navigate = navigateFunc.bind(parentProps);
-  const { userRiskProfile, graphData } = data;
+  const { userRiskProfile, funnelData } = data;
   const [showRiskInfo, setShowRiskInfo] = useState(false);
-
+  console.log(funnelData.investType)
   const renderContent = () => {
     if (userRiskProfile) {
-      const { equity, debt, investType } = graphData;
+      const { equity, debt, investType } = funnelData;
       const toggleRiskInfoDialog = () => setShowRiskInfo(!showRiskInfo);
 
       return (
@@ -60,19 +60,19 @@ const RecommendationTopCard = ({
           />
         </div>
       );
-    } else if (graphData.investType === 'savetax') {
+    } else if (['savetax', 'savetaxsip'].includes(funnelData.investType)) {
       return (
         <div className="tax-card">
           <img src="assets/img/sale.svg" alt="" />
           <div className="text">Tax savings for {getFinancialYear()}</div>
-          <div className="amount">{formatAmountInr(graphData.corpus)}</div>
+          <div className="amount">{formatAmountInr(funnelData.corpus)}</div>
         </div>
       );
     }
   }
 
   return (
-    <div className="recommendation-top-section">
+    <div className="recommendation-top-card">
       {renderContent()}
     </div>
   );

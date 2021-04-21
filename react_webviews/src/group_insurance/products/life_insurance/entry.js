@@ -86,7 +86,7 @@ class LifeInsuranceEntry extends Component {
               >{props.title}{props.key === 'term' && !props.resume_flag &&
               <span style={{
                 padding: '3px 7px',
-                borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
+                borderRadius: 10, fontSize: 10, background: getConfig().styles.primaryColor, margin: '0 0 0 10px', color: 'white'
               }}>Recommended</span>}
               </div>
               <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>

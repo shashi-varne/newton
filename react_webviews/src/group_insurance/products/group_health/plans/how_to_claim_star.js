@@ -12,7 +12,7 @@ class GroupHealthPlanHowToClaimStar extends Component {
                 steps: []
             },
             type: getConfig().productName,
-            color: getConfig().primary,
+            color: getConfig().styles.primaryColor,
             show_loader: true
         };
 
@@ -29,7 +29,7 @@ class GroupHealthPlanHowToClaimStar extends Component {
         let renderData = {
             'header_title': 'How to claim?',
             'header_subtitle': 'Star Family Health Optima',
-            'cta_title': 'OK'
+            'cta_title': 'OKAY'
         }
 
         renderData.steps = [

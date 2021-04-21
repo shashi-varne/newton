@@ -1,0 +1,78 @@
+.invest-payment-callback {
+  margin: 0 -10px;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  text-align: center;
+  line-height: 1.5;
+  color: #333333;
+
+  .content {
+    padding: 40px 20px 30px 20px;
+
+    .success-icon {
+      width: 80px;
+      padding-bottom: 40px;
+    }
+
+    h3 {
+      color: #4a4a4a;
+      font-size: 22px;
+      margin: 0;
+      line-height: 1.1;
+      font-weight: 800;
+    }
+
+    .error-title {
+      font-size: 30px;
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0;
+      padding-top: 10px;
+      color: #4a4a4a;
+      font-size: 18px;
+    }
+
+    .message {
+      display: flex;
+      align-items: flex-start;
+      font-size: 16px;
+      margin-top: 20px;
+      color: #878787;
+      padding-bottom: 15px;
+
+      .eta-icon {
+        width: 30px;
+        margin-right: 3px;
+      }
+
+      span {
+        font-weight: 700;
+      }
+    }
+  }
+
+  .contact-us {
+    background: #f9f9f9;
+    padding: 20px 10px 10px 10px;
+    color: #a6a6a6;
+    font-size: 18px;
+
+    .info {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 10px 0;
+      font-size: 16px;
+      font-weight: 600;
+
+      .text {
+        width: 50%;
+      }
+
+      .border-right {
+        border-right: 1px solid;
+      }
+    }
+  }
+}

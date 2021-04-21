@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { formatAmountInr } from '../../utils/validators';
+import {
+  getInvestedValue,
+  getPotentialValue,
+  getRateOfInterest
+} from '../Invest/common/commonFunctions';
 
+import './mini-components.scss';
 /*
   Explanation:
 
@@ -33,41 +39,22 @@ const PeriodWiseReturns = ({
   const termOptions = [1, 3, 5, 10, 15, 20];
 
   useEffect(() => {
-    getPotentialValue();
+    updatePotentialValue();
     calculateInvestedVal();
   }, [equity, currentTerm]);
 
-  const getPotentialValue = () => {
-    let principle = principalAmount;
-    var corpus_value = 0;
-    for (var i = 0; i < currentTerm; i++) {
-      if (isRecurring) {
-        var n = (i + 1) * 12;
-        var mr = getRateOfInterest() / 12 / 100;
-        corpus_value = (principalAmount * (Math.pow(1 + mr, n) - 1)) / mr;
-      } else {
-        var currInterest = (principle * getRateOfInterest()) / 100;
-        corpus_value = principle + currInterest;
-        principle += currInterest;
-      }
-    }
-    setPotentialValue(corpus_value);
-  };
-
-  const getRateOfInterest = () => {
-    var range = Math.abs(stockReturns - bondReturns);
-    if (equity < 1) {
-      return bondReturns;
-    } else if (equity > 99) {
-      return stockReturns;
-    } else {
-      var rateOffset = (range * equity) / 100;
-      return bondReturns + rateOffset;
-    }
+  const updatePotentialValue = () => {
+    const potentialVal = getPotentialValue(
+      equity,
+      principalAmount,
+      isRecurring,
+      currentTerm
+    );
+    setPotentialValue(potentialVal);
   };
 
   const calculateInvestedVal = () => {
-    const value = isRecurring ? principalAmount * 12 * currentTerm : principalAmount;
+    const value = getInvestedValue(currentTerm, principalAmount, isRecurring);
     setInvestedValue(value);
   };
 
@@ -126,7 +113,7 @@ const PeriodWiseReturns = ({
           >
             <>
               <div className="avg-return-ror">
-                <span className="value">{getRateOfInterest()}%*</span>
+                <span className="value">{getRateOfInterest(equity)}%*</span>
                 <span className="text">is the Rate of Return (RoR) used to estimate projected returns.</span>
               </div>
               <div className="avg-return-content">
