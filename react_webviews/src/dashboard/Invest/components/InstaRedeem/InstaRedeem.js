@@ -92,7 +92,7 @@ class InstaRedeem extends Component {
         className="invest-redeem-dialog"
       >
         <DialogContent className="dialog-content">
-          <div className="head-bar">
+          <div className="head-bar insta-redeem-head-bar">
             <div className="text-left">Instant withdrawal</div>
             <img
               src={require(`assets/${this.state.productName}/ic_instant_withdrawal.svg`)}
@@ -158,7 +158,7 @@ class InstaRedeem extends Component {
                 <div className="text">
                   {data.disc}
                   {data.key === "withdrawal" && (
-                    <div className="know-more" onClick={this.knowMore}>
+                    <div className="know-more-text" onClick={this.knowMore}>
                       KNOW MORE
                     </div>
                   )}
