@@ -69,6 +69,8 @@
 #kyc-upload-ipv-video,
 #kyc-upload-sign  {
   font-size: 14px;
+  padding-bottom: 50px;
+
   .alert-status-info {
     margin-top: 20px;
   }
@@ -139,7 +141,7 @@
 .kyc-doc-upload-container {
   margin-top: 20px;
   border: 1px dashed var(--skelton-color);
-  padding: 10px;
+  padding: 10px 0;
 }
 
 .kyc-doc-upload-container.noBorder {
@@ -148,12 +150,17 @@
 
 .kyc-doc-upload-container .caption {
   text-align: center;
+  line-height: 1.5;
+  color: #160d2e;
 }
 
 .kyc-doc-upload-container .preview {
   display: block;
   width: 100%;
   object-fit: contain;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin-top: 10px;
 }
 
 .kyc-upload-doc-actions {
@@ -194,5 +201,6 @@
     color: var(--secondary);
     font-size: 10px;
     font-weight: 800;
+    margin-top: 5px;
   }
 }

@@ -431,9 +431,8 @@ button {
 }
 
 .FlexButtonGenericColor{
-  // background-color: rgb(53, 203, 93);
+  background-color: var(--secondary);
   color: white;
-  border-radius: 6px;
 }
 
 .FooterTwoButtonLayout button.borderButton {
