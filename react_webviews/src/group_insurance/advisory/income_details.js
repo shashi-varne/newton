@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Container from '../common/Container';
 import Input from '../../common/ui/Input';
-import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../common/ui/DropDownNew'
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {advisoryConstants} from './constants';
@@ -284,7 +284,7 @@ class AdvisoryIncomeDetails extends Component {
              </div>
 
             <div className="InputField" style={{marginBottom: '5px'}}>
-             <DropdownWithoutIcon
+             <DropDownNew
               parent={this}
               selectedIndex = {this.state.form_data.income_growth_index || 0}
               width="140"
@@ -299,9 +299,8 @@ class AdvisoryIncomeDetails extends Component {
               onChange={this.handleChange("income_growth")}
             />
             </div>
-
             <div className="InputField">
-            <DropdownWithoutIcon
+            <DropDownNew
               parent={this}
               selectedIndex = {this.state.form_data.retire_index || 0}
               width="140"

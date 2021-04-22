@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import BottomInfo from '../../../../common/ui/BottomInfo';
 import { getConfig } from 'utils/functions';
 import { initialize } from '../common_data';
 import Input from '../../../../common/ui/Input';
@@ -42,7 +41,7 @@ class GroupHealthPlanDobReligare extends Component {
         
         this.setState({
             header_title: isSelf ? 'Your date of birth' : 'Date of birth details',
-            default_helper_text: `${isSelf ? "Your" : "Adult member's"} age should be more than 18 yrs`,
+            default_helper_text: `${isSelf ? "You" : "Adult member's age"} should be 18 years or older`,
         });
 
 
@@ -92,7 +91,7 @@ class GroupHealthPlanDobReligare extends Component {
                 "user_action": user_action,
                 "screen_name": "enter birthday",
                 "flow": this.state.insured_account_type || '',
-                product: 'religare',
+                product: this.state.providerConfig.provider_api,
                 is_dob_entered: this.state.eldest_dob ? 'yes' : 'no',
                 eldest_member: this.state.eldest_member,
             }
@@ -110,6 +109,10 @@ class GroupHealthPlanDobReligare extends Component {
         let {validation_props, groupHealthPlanData } = this.state || {};
 
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData) || {};
+        var post_body = groupHealthPlanData.post_body;
+        if(post_body && post_body.quotation_id){
+            delete post_body['quotation_id'];
+        }
 
         let ui_members = groupHealthPlanData.ui_members || {};
         
@@ -170,7 +173,10 @@ class GroupHealthPlanDobReligare extends Component {
             
             post_body.eldest_member = this.memberKeyMapper(this.state.eldest_member).backend_key;
             post_body.eldest_dob = this.state.eldest_dob;
-
+            
+            if(this.state.provider === 'GMC'){
+                post_body.plan_id = 'fisdom_health_protect'
+            }
             groupHealthPlanData.post_body = post_body;
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
@@ -208,6 +214,7 @@ class GroupHealthPlanDobReligare extends Component {
         let currentDate = new Date().toISOString().slice(0, 10);
         const { eldest_member, default_helper_text } = this.state;
         const isSelf = eldest_member === 'self';
+        
 
         return (
             <Container
@@ -262,8 +269,6 @@ class GroupHealthPlanDobReligare extends Component {
                     </div>
 
                 }
-
-                <BottomInfo baseData={{ 'content': 'Illness can hit you any time, get insured today to cover your medical expenses' }} />
             </Container>
         );
     }
