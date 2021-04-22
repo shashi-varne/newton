@@ -17,7 +17,7 @@ const RiskCustomize = (props) => {
   const {
     funnelData,
     updateFunnelData,
-    updateUserRiskProfile
+    setUserRiskProfile
   } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
@@ -48,7 +48,7 @@ const RiskCustomize = (props) => {
 
       const res = await get_recommended_funds(params);
       updateFunnelData(res);
-      updateUserRiskProfile('Custom');
+      setUserRiskProfile('Custom');
 
       setLoader(false);
     } catch (err) {

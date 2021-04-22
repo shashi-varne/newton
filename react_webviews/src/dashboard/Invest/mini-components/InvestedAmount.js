@@ -22,7 +22,7 @@ const InvestedAmount = (props) => {
     funnelData,
     funnelGoalData,
     updateFunnelData,
-    updateUserRiskProfile
+    setUserRiskProfile
   } = useFunnelDataHook();
   const { amount, investType, term, equity, isRecurring, investTypeDisplay } = funnelData;
   const [stockSplitVal, setStockSplitVal] = useState(equity || 0);
@@ -52,7 +52,7 @@ const InvestedAmount = (props) => {
     try {
       setLoader("button");
       const data = await get_recommended_funds(params);
-      updateUserRiskProfile(data.rp_indicator);
+      setUserRiskProfile(data.rp_indicator);
       updateFunnelData({
         ...data,
         equity: stockSplitVal,
