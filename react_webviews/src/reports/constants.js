@@ -35,7 +35,7 @@ export const getPathname = {
   instaredeem: "/invest/instaredeem",
   npsInvestments: "/nps/investents",
   withdraw: "/withdraw",
-  withdrawReason: "/withdraw/reason/",
+  withdrawReason: "/withdraw/reason",
   reportGoals: "/reports/goals",
   reportsPurchased: "/reports/purchased-transaction",
   reportsRedeemed: "/reports/redeemed-transaction",

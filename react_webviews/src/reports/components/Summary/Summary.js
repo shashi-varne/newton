@@ -126,7 +126,7 @@ const Summary = (props) => {
 
   const redirectWithdraw = () => {
     if (currentUser.kyc_registration_v2 === "complete") {
-      navigate(`${getPathname.withdrawReason}portfolio`);
+      navigate(`${getPathname.withdrawReason}`);
       return;
     } else {
       navigate(getPathname.withdraw);
