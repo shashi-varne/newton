@@ -22,10 +22,11 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    justify-content: space-between;
 
     img {
       width: 70px;
-      margin-right: 18px;
+      margin-right: 5px;
     }
 
     .text {

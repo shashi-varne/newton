@@ -96,13 +96,13 @@ export const baseStylesConfig = {
     /* Can consider using a common style object for styles
     common to both partner types*/
     default: "#4a4a4a",
+    skeltonColor: "#E7E7E7",
     notificationsColor: "#ffffff",
   },
   fisdom: {
     primaryColor: "#4f2da7",
     secondaryColor: "#35cb5d",
     highlightColor: "#f6f2ff",
-    skeletonColor: "#E7E7E7",
     // backButtonColor: '#2E3192',
   },
   finity: {
@@ -110,7 +110,6 @@ export const baseStylesConfig = {
     primaryColor: "#3792fc",
     secondaryColor: "#35cb5d",
     highlightColor: "#F0F7FF",
-    skeletonColor: "#E7E7E7",
     // backButtonColor: '#2E3192',
   },
 };
@@ -291,6 +290,9 @@ export const partnerConfigs = {
       secondaryColor: "#EB6024",
     },
     uiElements: {
+      button: {
+        borderRadius: 25,
+      },
       bottomCta: {
         disabledBackgroundColor: "#F1D5C9", // same as 'cta_disabled_background'
         disabledColor: "#ffffff", // same as cta_disabled_color

@@ -89,10 +89,10 @@ const InstaRedeem = (props) => {
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         aria-labelledby="responsive-dialog-title"
-        className="invest-redeem-dialog"
+        className="insta-redeem-dialog"
       >
         <DialogContent className="dialog-content">
-          <div className="head-bar">
+          <div className="head-bar insta-redeem-head-bar">
             <div className="text-left">Instant withdrawal</div>
             <img
               src={require(`assets/${productName}/ic_instant_withdrawal.svg`)}
@@ -135,7 +135,7 @@ const InstaRedeem = (props) => {
         partner_code === "bfdlmobile" ? "Money +" : "Insta redemption fund"
       }
     >
-      <div className="invest-redeem">
+      <div className="insta-redeem">
         <div className="generic-page-subtitle">
           Instant withdrawal facility with superior return compared to savings
           bank account
@@ -151,7 +151,7 @@ const InstaRedeem = (props) => {
               <div className="text">
                 {data.disc}
                 {data.key === "withdrawal" && (
-                  <div className="know-more" onClick={() => setOpenDialog(true)}>
+                  <div className="insta-redeem-know-more" onClick={() => setOpenDialog(true)}>
                     KNOW MORE
                   </div>
                 )}

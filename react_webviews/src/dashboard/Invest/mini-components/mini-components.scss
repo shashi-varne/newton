@@ -166,13 +166,11 @@
 
 //////// PennyVerficationPending ///////////
 .penny-verification-pending-dialog {
-    .dialog-content {
-      padding: 5px 15px 0 15px !important;
-  
-      .text {
-        margin-top: 30px;
-      }
+  .dialog-content {
+    .text {
+      margin-top: 30px;
     }
+  }
 }
 
 //////// End of PennyVerficationPending ///////////
@@ -224,13 +222,14 @@
     height: 100px;
     display: flex;
     background: white;
+    cursor: pointer;
 
     .text{
       flex: 1 1 80%;
       padding: 20px 0 0 20px;
       background-size: contain;
       background-repeat: no-repeat;
-      
+      text-align: left;
       .title{
         font-size: 20px;
         font-weight: bold;
@@ -505,6 +504,80 @@
 }
 
 ////////////// End of Invest Referral Dialog ///////////////////////
+
+
+/////////////// Campaign Dialog /////////////////////////
+
+.campaign-dialog{
+  .MuiDialog-paperWidthSm{
+    max-width: 500px !important;
+  }
+  .campaign-dialog-content{
+    position: relative;
+    padding: 15px !important;
+    padding-bottom: 0px !important;
+    .title{
+      margin: 40px 0;
+      width: 55%;
+      color: #160d2e;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .subtitle{
+      color: #767e86;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+
+    .campaign-img-container{
+      position: absolute;
+      right: 0;
+      top: 0;
+      img{
+        width: 120px;
+        margin: 10px 10px 0px 0px;
+      }
+    }
+  }
+
+  .dialog-action{
+    display: flex;
+    align-items: center;
+    padding:0px 15px 15px 15px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    width: 100% !important;
+
+    .button {
+      width: 100%;
+      padding: 5px 15px;
+      font-size: 14px;
+      border-radius: 5px;
+      min-height: 47px;
+      font-weight: bold;
+      margin: 0px !important;
+      letter-spacing: 0.01em;
+      .MuiButton-label{
+        text-transform: uppercase !important;
+      }
+    }
+
+    .bg-full {
+      color: white;
+      background-color: var(--secondary);
+    }
+
+    .no-bg {
+      background-color: white;
+      color: #878787;
+    }
+  }
+}
+
+/////////////// End of Campaign Dialog /////////////////////////
+
+
 
 @media only screen and (max-width: 700px) {
   #invest-bottom-dialog, #sdk-campaign-dialog {
