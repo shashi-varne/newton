@@ -11,23 +11,23 @@ import { getConfig } from './functions';
     contentType = contentType || '';
     sliceSize = sliceSize || 512;
 
-    var byteCharacters = atob(b64Data);
-    var byteArrays = [];
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
 
-    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      var slice = byteCharacters.slice(offset, offset + sliceSize);
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
 
-      var byteNumbers = new Array(slice.length);
-      for (var i = 0; i < slice.length; i++) {
+      let byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
         byteNumbers[i] = slice.charCodeAt(i);
       }
 
-      var byteArray = new Uint8Array(byteNumbers);
+      let byteArray = new Uint8Array(byteNumbers);
 
       byteArrays.push(byteArray);
     }
 
-    var blob = new Blob(byteArrays, { type: contentType });
+    let blob = new Blob(byteArrays, { type: contentType });
     return blob;
   }
 
@@ -37,8 +37,8 @@ import { getConfig } from './functions';
 
   exports.upload_blob = function (data_json_str) {
 
-    for (var j = 0; j < listeners.length; j++) {
-      var lis = listeners[j];
+    for (let j = 0; j < listeners.length; j++) {
+      let lis = listeners[j];
       if (lis.type === 'native_receiver_image') {
         lis.show_loader(true);
         listeners.splice(j, 1);
@@ -46,16 +46,16 @@ import { getConfig } from './functions';
       }
     }
     // native_receiver_image({ type: 'native_receiver_image' })
-    var d
+    let d
     if (typeof window.Android !== 'undefined') {
       d = JSON.parse(data_json_str);  // Handle Exception
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       d = data_json_str;
     }
-    for (var i = 0; i < listeners.length; i++) {
-      var l = listeners[i];
+    for (let i = 0; i < listeners.length; i++) {
+      let l = listeners[i];
       if (l.type === 'doc' && (l.doc_type === d.file_name || l.doc_type === d.doc_type)) {
-        var file = b64toBlob(d.blobBase64, d.mime_type || d.file_type, '');
+        let file = b64toBlob(d.blobBase64, d.mime_type || d.file_type, '');
         file.file_name = d.file_name_local;
         l.upload(file);
         listeners.splice(i, 1);
@@ -100,7 +100,7 @@ import { getConfig } from './functions';
     }
   }
 
-  var listeners = [];
+  let listeners = [];
 
   exports.add_listener = function (listener) {
     listeners.push(listener);
@@ -111,8 +111,8 @@ import { getConfig } from './functions';
   }
 
   exports.back_pressed = function () {
-    for (var i = 0, j = listeners.length; i < j; i++) {
-      var l = listeners[i];
+    for (let i = 0, j = listeners.length; i < j; i++) {
+      let l = listeners[i];
 
       if (l.type === 'back_pressed') {
         l.go_back();
@@ -169,7 +169,7 @@ import { getConfig } from './functions';
   }
 
   exports.send_device_data = function (data_json_str) {
-    var json_data = {};
+    let json_data = {};
 
     if(getConfig().Web) {
       json_data = {
@@ -189,8 +189,8 @@ import { getConfig } from './functions';
       }
     }
 
-    for (var j = 0; j < listeners.length; j++) {
-      var lis = listeners[j];
+    for (let j = 0; j < listeners.length; j++) {
+      let lis = listeners[j];
       if (lis.type === 'location_nsp_received') {
         lis.location_nsp_received(json_data);
         break;
