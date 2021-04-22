@@ -1050,6 +1050,24 @@ $header-title-font-size: 20px;
   box-shadow: none !important;
 }
 
+.sdk-header-partner-logo{
+  display: flex;
+  align-items: center;
+  width: 120px;
+  max-width: 50%;
+  img{
+    height: 30px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+}
+
+.header-right-nav-components{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
 .main-top-title-new2 {
   font-size: 20px !important;
   color: #160d2e !important;
@@ -1398,6 +1416,23 @@ $header-title-font-size: 20px;
 
 .FlexItem1-withProvider-footer .FooterImage {
   width: 40px;
+}
+
+// Withdraw provider //
+.withdraw-footer-layout {
+  padding: 10px;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  line-height: 1.5;
+
+  .FlexItem1-withProvider-footer {
+    .text-block-1 {
+      font-weight: 500;
+    }
+  }
+
+  .FlexItem2-withProvider-footer {
+    margin: 0;
+  }  
 }
 
 #bottom-popup .MuiDialog-paper {
