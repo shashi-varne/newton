@@ -3,10 +3,11 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation, calculateAge } from 'utils/validators';
-import { initialize, updateBottomPremium } from '../common_data';
+import { initialize, updateBottomPremium, getAddOnsData, getCoverPeriodData } from '../common_data';
 import Api from 'utils/api';
 import { childeNameMapper } from '../../../constants';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import { compareObjects, isEmpty } from '../../../../utils/validators';
 class GroupHealthPlanSelectFloater extends Component {
     constructor(props) {
         super(props);
@@ -18,6 +19,8 @@ class GroupHealthPlanSelectFloater extends Component {
         }
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
+        this.getAddOnsData = getAddOnsData.bind(this);
+        this.getCoverPeriod = getCoverPeriodData.bind(this);
     }
     componentWillMount() {
         this.initialize();
@@ -123,64 +126,35 @@ class GroupHealthPlanSelectFloater extends Component {
 
             groupHealthPlanData.post_body.premium = this.state.premium_data_floater[this.state.selectedIndex].premium
             this.setLocalProviderData(groupHealthPlanData);
-           
-            if(groupHealthPlanData.type_of_plan !== type_of_plan){
-                this.setErrorData("submit");
-                this.setState({ show_loader: 'button' });
-                let error = "";
-                let errorType = "";
-                let post_body = this.state.groupHealthPlanData.post_body;
-            
-                let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];        
-                let body = {};
-                for(let key of allowed_post_body_keys){
-                    body[key] = post_body[key];
+
+            if(this.state.provider === 'RELIGARE'){
+                groupHealthPlanData.type_of_plan = type_of_plan;
+                groupHealthPlanData.post_body.floater_type = type_of_plan;
+
+                var current_state = {}
+                var keys_to_check = ['account_type', 'si', 'plan_id', 'floater_type'];
+
+                for(var x of keys_to_check){
+                    current_state[x] = groupHealthPlanData.post_body[x]
                 }
-                body['add_ons'] = post_body.add_ons_array;
-                body['floater_type'] = this.state.premium_data_floater[this.state.selectedIndex].key;
                 
-                if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
-                    body['floater_type'] = 'non_floater';
-                }
-    
-                try {
-               
-                    const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
-                    body);
-                    
-                    var resultData = res.pfwresponse.result;
-                    
-                    if (res.pfwresponse.status_code === 200){
-                        groupHealthPlanData['plan-select-cover-period']  = resultData;
-                        groupHealthPlanData.type_of_plan = type_of_plan;
-                        groupHealthPlanData.post_body.floater_type = type_of_plan;
-                        this.setLocalProviderData(groupHealthPlanData)
-                        this.navigate('plan-select-cover-period')
-                        this.setState({
-                            show_loader: false
-                        });
-                    } else {
-                        error = resultData.error || resultData.message
-                            || true;
+                this.setLocalProviderData(groupHealthPlanData);
+                this.setState({
+                    current_state
+                }, ()=>{
+                    var sameData = compareObjects(Object.keys(current_state), current_state, groupHealthPlanData.add_ons_previous_data)
+                    console.log('SameD', sameData)
+                    if(!sameData || isEmpty(groupHealthPlanData['plan-select-add-ons'])){
+                        this.getAddOnsData();
+                    }else{
+                        this.navigate('plan-select-add-ons')
                     }
-                } catch (err) {
-                    console.log(err)
-                    this.setState({
-                        show_loader: false
-                    });
-                    error = true;
-                    errorType = "crash";
-                }
-                if (error) {
-                    this.setState({
-                      errorData: {
-                        ...this.state.errorData,
-                        title2: error,
-                        type: errorType
-                      },
-                      showError: "page",
-                    });
-                }
+                })
+                return;
+            }
+
+            if(groupHealthPlanData.type_of_plan !== type_of_plan){
+                this.getCoverPeriod();
             }else{
                 this.setLocalProviderData(groupHealthPlanData)
                 this.navigate('plan-select-cover-period')   

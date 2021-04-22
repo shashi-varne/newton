@@ -98,8 +98,10 @@ class GroupHealthPlanList extends Component {
             groupHealthPlanData.post_body.eldest_member = eldest_dict.eldest_member;
             groupHealthPlanData.post_body.eldest_dob = eldest_dict.eldest_dob;
             groupHealthPlanData.plan_selected.plan_title = 'Care';
+            keys_to_check.push('plan_id')
+
         }
-       
+
         this.setLocalProviderData(groupHealthPlanData);
         var current_state = {}
         for(var x in post_body){
@@ -113,7 +115,10 @@ class GroupHealthPlanList extends Component {
         this.setState({
             current_state
         }, ()=>{
+            console.log(current_state)
+            console.log(groupHealthPlanData.plan_list_current_state)
             var sameData = compareObjects( Object.keys(current_state) ,current_state, groupHealthPlanData.plan_list_current_state);
+            console.log('same', sameData)
             if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
                 console.log('fist cond')
                 this.getPlanDetails();

@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import {  calculateAge, isValidDate,
      IsFutureDate, formatDate, dobFormatTest, capitalizeFirstLetter } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
-import { initialize, getCityDetails, getPlanDetails } from '../common_data';
+import { initialize, getCityDetails, getPlanDetails, getPlanList } from '../common_data';
 import toast from '../../../../common/ui/Toast';
 import {resetInsuredMembers, getInsuredMembersUi} from '../constants';
 import { childeNameMapper } from '../../../constants';
@@ -27,6 +27,7 @@ class GroupHealthPlanDob extends Component {
         this.initialize = initialize.bind(this);
         this.getCityDetails = getCityDetails.bind(this);
         this.getPlanDetails = getPlanDetails.bind(this);
+        this.getPlanList = getPlanList.bind(this);
     }
 
     componentWillMount() {
@@ -242,16 +243,30 @@ class GroupHealthPlanDob extends Component {
                 }
                 return;
             }
+
             if (provider === 'STAR') {
                 groupHealthPlanData.post_body = post_body;
                 this.setLocalProviderData(groupHealthPlanData);
                 this.navigate(this.state.next_screen)
                 return;
             }
+            if(provider === 'RELIGARE'){
+
+                // add code to make api optimisation here
+                this.setLocalProviderData(groupHealthPlanData);
+                if(isEmpty(groupHealthPlanData.plan_list)){
+                    console.log('first')
+                    this.getPlanList();
+                }else{
+                    console.log('second')
+                    this.navigate('plan-list')
+                }
+                return;
+            }
 
             //GMC
             this.setLocalProviderData(groupHealthPlanData);
-            var keys_to_check = ['account_type']
+            var keys_to_check = ['account_type', 'adults', 'children', 'plan_id']
             var current_state = {}
             for(var x in post_body){
                 if(keys_to_check.indexOf(x) >= 0){
@@ -264,7 +279,11 @@ class GroupHealthPlanDob extends Component {
             this.setState({
                 current_state
             },()=>{
+                console.log(current_state)
+                console.log(groupHealthPlanData.plan_list_current_state)
+                
                 var sameData = compareObjects( Object.keys(current_state),current_state, groupHealthPlanData.plan_list_current_state);
+                console.log('same', sameData)
                 if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
                     this.getPlanDetails();
                     return;

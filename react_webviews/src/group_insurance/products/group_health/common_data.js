@@ -9,6 +9,7 @@ import { nativeCallback } from 'utils/native_callback';
 import {isEmpty} from '../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
+import { getForkTsCheckerWebpackPluginHooks } from 'fork-ts-checker-webpack-plugin/lib/hooks';
 
 export async function initialize() {
     this.setErrorData =setErrorData.bind(this)
@@ -495,6 +496,9 @@ export async function getPlanDetails(){
             if(provider === 'HDFCERGO'){
                 allowed_post_body_keys.push('city');
             }
+            if(provider === 'STAR'){
+                allowed_post_body_keys.push('postal_code');
+            }
             let body = {};
 
             for(let key of allowed_post_body_keys){
@@ -628,6 +632,169 @@ export async function getCityDetails(){
           showError: "page",
         });
       }
+}
+
+
+export async function getAddOnsData(){
+    this.setErrorData("submit");
+        
+        let error = "";
+        let errorType = "";
+        let post_body = this.state.groupHealthPlanData.post_body;
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "si"];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
+        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
+            body['floater_type'] = 'non_floater';
+        }
+
+        let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
+        // eslint-disable-next-line radix
+        this.setState({show_loader: 'button'})
+            try {
+                const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_add_ons/religare', body);
+
+                var resultData = res.pfwresponse.result;
+                if (res.pfwresponse.status_code === 200) {
+                    this.setState({
+                        skelton: false
+                    });
+                    add_ons_data = resultData.compulsary.concat(resultData.optional)  || [];
+
+                    
+                    let options = [];
+                    let opd_data_options = add_ons_data[1].price;
+                    for(var key in opd_data_options){
+                        let opt = {
+                            name: key,
+                            premium: add_ons_data[1].price[key]
+                        }
+                        options.push(opt);
+                    }
+
+                    let temp = add_ons_data[2];
+                        add_ons_data[2] = add_ons_data[3];
+                        add_ons_data[3] = temp;
+                    
+                    
+                    if(this.state.groupHealthPlanData.post_body.si === "400000"){
+                        
+                        for(var item in add_ons_data){
+                            if(add_ons_data[item].id === "ncb"){
+                                add_ons_data[item].checked = true;
+                                add_ons_data[item].disabled = true;
+                                add_ons_data[item].bottom_text = "This benefit is mandatory with your selected plan";
+                            }
+                        }    
+                    }
+                    
+                    
+                    add_ons_data[1].price = options;
+                    add_ons_data[1].default_premium = add_ons_data[1].price[0].premium;
+                    add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].name;
+                    
+
+                    groupHealthPlanData['plan-select-add-ons'] = add_ons_data;
+                    groupHealthPlanData['add_ons_previous_data'] = this.state.current_state;
+                    this.setLocalProviderData(groupHealthPlanData);
+                    this.navigate('plan-select-add-ons')
+                } else {
+                    error=resultData.error || resultData.message
+                        || true;
+                }
+            } catch (err) {
+                console.log(err)
+                this.setState({
+                    show_loader: false
+                });
+                error=true;
+                errorType="crash";
+            }
+            if (error) {
+                this.setState({
+                  errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                  },
+                  showError: "page",
+                });
+              }
+}
+export async function getCoverPeriodData(){
+                this.setErrorData("submit");
+                this.setState({ show_loader: 'button' });
+                let error = "";
+                let errorType = "";
+                let post_body = this.state.groupHealthPlanData.post_body;
+                let groupHealthPlanData = this.state.groupHealthPlanData;
+                let type_of_plan = ''
+                
+                let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id", "si"];        
+                let body = {};
+                for(let key of allowed_post_body_keys){
+                    body[key] = post_body[key];
+                }
+                if(this.state.provider === 'RELIGARE'){
+                    body['add_ons'] = post_body.add_ons_array;
+                }
+                if(this.state.screen_name === 'cover_type_screen'){
+                    type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
+                    body['floater_type'] = this.state.premium_data_floater[this.state.selectedIndex].key;
+                }
+
+                if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
+                    body['floater_type'] = 'non_floater';
+                }
+                try {
+               
+                    const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
+                    body);
+                    
+                    var resultData = res.pfwresponse.result;
+                    
+                    if (res.pfwresponse.status_code === 200){
+                        groupHealthPlanData['plan-select-cover-period']  = resultData;
+                        
+                        if(this.state.screen_name === 'cover_type_screen'){
+                            groupHealthPlanData.type_of_plan = type_of_plan;
+                            groupHealthPlanData.post_body.floater_type = type_of_plan;
+                        }
+                        if(this.state.screen_name === 'add_ons_screen'){
+                            groupHealthPlanData.previous_add_ons_data = this.state.current_state;
+                        }
+                        
+                        this.setLocalProviderData(groupHealthPlanData)
+                        this.navigate('plan-select-cover-period')
+                        this.setState({
+                            show_loader: false
+                        });
+                    } else {
+                        error = resultData.error || resultData.message
+                            || true;
+                    }
+                } catch (err) {
+                    console.log(err)
+                    this.setState({
+                        show_loader: false
+                    });
+                    error = true;
+                    errorType = "crash";
+                }
+                if (error) {
+                    this.setState({
+                      errorData: {
+                        ...this.state.errorData,
+                        title2: error,
+                        type: errorType
+                      },
+                      showError: "page",
+                    });
+                }
 }
 
 export async function updateLead( body, quote_id, current_state) {

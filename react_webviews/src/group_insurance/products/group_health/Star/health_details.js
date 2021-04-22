@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { initialize } from '../common_data';
+import { initialize, getPlanDetails } from '../common_data';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import Dialog, {
     DialogContent
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import { getConfig } from 'utils/functions';
-import Api from 'utils/api';
-import { isEmpty } from '../../../../utils/validators';
+import { isEmpty, compareObjects } from '../../../../utils/validators';
 
 class GroupHealthPlanStarHealthDetails extends Component {
 
@@ -22,6 +21,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
         }
 
         this.initialize = initialize.bind(this);
+        this.getPlanDetails = getPlanDetails.bind(this);
     }
 
     componentWillMount() {
@@ -173,60 +173,32 @@ class GroupHealthPlanStarHealthDetails extends Component {
                 claim_settlement_ratio: '78.15'
             }
             groupHealthPlanData.post_body.plan_title = 'Family Health Optima';
-
-            if(isEmpty(groupHealthPlanData.plan_details_screen)){
-                this.setErrorData("submit");            
-                let error = "";
-                let errorType = "";
-                var post_body = groupHealthPlanData.post_body;
-                let keys_to_remove = ['base_premium', 'sum_assured', 'discount_amount', 'insured_pattern','tax_amount', 'tenure','total_amount', 'type_of_plan']
-                for(let key in keys_to_remove){
-                  delete post_body[keys_to_remove[key]]
+            
+            this.setLocalProviderData(groupHealthPlanData);
+            var post_body = groupHealthPlanData.post_body;
+            var keys_to_check = ['account_type', 'adults', 'children','postal_code']
+            var current_state = {}
+            for(var x in post_body){
+                if(keys_to_check.indexOf(x) >= 0){
+                    current_state[x] = post_body[x]
                 }
-
-                let body = {};
-                let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'postal_code'];
-                for(let key of allowed_post_body_keys){
-                    body[key] = post_body[key];
-                }
-                groupHealthPlanData.post_body = post_body;
-
-                this.setState({ show_loader: "button"});
-                try {
-                    const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,body);
-                    var resultData = res.pfwresponse.result;
-                    if (res.pfwresponse.status_code === 200) {
-                        
-                        groupHealthPlanData['plan_details_screen'] = resultData;
-                        this.setLocalProviderData(groupHealthPlanData);
-                        this.navigate(this.state.next_screen);
-                        
-                    } else {
-                        error = resultData.error || resultData.message
-                            || true;
-                    }
-                } catch (err) {
-                    console.log(err)
-                    this.setState({
-                        show_loader: false
-                    });
-                    error = true;
-                    errorType = "crash";
-                }
-                if (error) {
-                    this.setState({
-                      errorData: {
-                        ...this.state.errorData,
-                        title2: error,
-                        type: errorType
-                      },
-                      showError: "page",
-                    });
-                }
-            }else{
-                this.setLocalProviderData(groupHealthPlanData);
-                this.navigate(this.state.next_screen);
             }
+            for(var y in post_body.member_details){
+                current_state[`${y}_dob`] = post_body.member_details[y].dob;
+            }
+            this.setState({
+                current_state
+            },()=>{
+                var sameData = compareObjects(Object.keys(current_state),current_state, groupHealthPlanData.plan_list_current_state);
+                if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
+                    this.getPlanDetails();
+                    return;
+                }else{
+                    this.setLocalProviderData(groupHealthPlanData);
+                    this.navigate(this.state.next_screen);
+                    return;
+                }
+            })
         }
     }
 

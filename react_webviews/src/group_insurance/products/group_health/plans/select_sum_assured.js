@@ -32,6 +32,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
     }
 
     onload = async() =>{
+        
         var groupHealthPlanData = this.state.groupHealthPlanData;
         var resultData = groupHealthPlanData.sum_assured_screen;
         
@@ -68,7 +69,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
     sendEvents(user_action) {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-
+        let selectedIndex = this.state.selectedIndex || 0;
         let eventObj  = {}
             eventObj = {
                 "event_name": 'health_insurance',
@@ -77,7 +78,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     "product": this.state.providerConfig.provider_api,
                     "flow": this.state.insured_account_type || '',
                     "screen_name": 'select sum insured',
-                    'sum_assured' : groupHealthPlanData.plan_selected.premium_data.length > 0 ? groupHealthPlanData.plan_selected.premium_data[this.state.selectedIndex || 0].sum_insured : ''
+                    'sum_assured' : groupHealthPlanData.plan_selected.premium_data.length > 0 && this.state.selectedIndex ? groupHealthPlanData.plan_selected.premium_data[selectedIndex].sum_insured : ''
                 }
             };
             
