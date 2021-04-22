@@ -116,7 +116,7 @@ class InstaRedeem extends Component {
             days and 0% seven days onwards
           </div>
         </DialogContent>
-        <DialogActions className="action insta-redeem-action">
+        <DialogActions className="action">
           <Button
             onClick={this.handleClose}
             classes={{ button: "invest-dialog-button" }}
