@@ -180,7 +180,7 @@ const KycBankVerify = (props) => {
         <Alert
           variant="info"
           title="Important"
-          message="We will credit ₹1 to your bank account for verification."
+          message="We will credit ₹1 to verify your bank account."
         />
         {isEmpty(bankData) && (
           <>
