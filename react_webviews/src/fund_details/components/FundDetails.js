@@ -101,7 +101,7 @@ const FundDetails = ({ classes, history }) => {
       <div className="fund-details-dual-button-content">
         <div className="cart-content">
           <img alt="" src={require(`assets/add_cart_icon.png`)} />
-          <span>{length}</span>
+          <div className="circle"><span>{length}</span></div>
         </div>
         <span>funds <br/> in cart</span>
       </div>
