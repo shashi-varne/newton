@@ -107,8 +107,8 @@ const FundswiseSummary = (props) => {
                     <div className="content">
                       <h5
                         className={`${
-                          fund.redeemed_earnings.amount > 0 && "green"
-                        } ${fund.redeemed_earnings.amount < 0 && "red"}`}
+                          fund.redeemed_earnings.amount > 0 && "green-text"
+                        } ${fund.redeemed_earnings.amount < 0 && "red-text"}`}
                       >
                         {fund.redeemed_earnings.amount === 0
                           ? "-"
@@ -126,8 +126,8 @@ const FundswiseSummary = (props) => {
                     <div className="content">
                       <h5
                         className={`${
-                          fund.current_earnings.amount > 0 && "green"
-                        } ${fund.current_earnings.amount < 0 && "red"}`}
+                          fund.current_earnings.amount > 0 && "green-text"
+                        } ${fund.current_earnings.amount < 0 && "red-text"}`}
                       >
                         {fund.current_earnings.amount === 0
                           ? "-"

@@ -124,14 +124,14 @@ const Goals = (props) => {
                     <div className="content">
                       <div
                         className={`amount ${
-                          goal.earnings >= 0 ? "green" : "red"
+                          goal.earnings >= 0 ? "green-text" : "red-text"
                         }`}
                       >
                         {getAmountInInr(goal.earnings)}
                         {goal.earnings_percent && goal.earnings_percent !== 0 && (
                           <div
                             className={`earning-percent ${
-                              goal.earnings_percent >= 0 ? "green" : "red"
+                              goal.earnings_percent >= 0 ? "green-text" : "red-text"
                             }`}
                           >
                             ( {goal.earnings_percent > 0 && "+"}{" "}

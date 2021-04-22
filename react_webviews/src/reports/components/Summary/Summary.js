@@ -169,7 +169,7 @@ const Summary = (props) => {
                       <div className="title ">
                         1 Day Change:{" "}
                         {report.current.one_day_earnings.amount >= 0 ? (
-                          <span className="green">
+                          <span className="green-text">
                             {formatAmountInr(
                               report.current.one_day_earnings.amount
                             )}{" "}
@@ -178,7 +178,7 @@ const Summary = (props) => {
                             %)
                           </span>
                         ) : (
-                          <span className="red">
+                          <span className="red-text">
                             -{" "}
                             {formatAmountInr(
                               -1 * report.current.one_day_earnings.amount
@@ -197,7 +197,7 @@ const Summary = (props) => {
                         <div className="content">
                           <div>Earnings</div>
                           <div
-                            className={report.current.earnings >= 0 && "green"}
+                            className={report.current.earnings >= 0 && "green-text"}
                           >
                             {formatAmountInr(report.current.earnings)}
                           </div>
@@ -227,7 +227,7 @@ const Summary = (props) => {
                     </div>
                     <div className="content">
                       <div>Earnings</div>
-                      <div className={report.past.earnings > 0 && "green"}>
+                      <div className={report.past.earnings > 0 && "green-text"}>
                         {getAmountInInr(report.past.earnings)}
                       </div>
                     </div>

@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
-import "./Style.scss";
+import "./commonStyle.scss";
 import NotFound from "common/components/NotFound";
 
 import Summary from "./components/Summary/Summary";

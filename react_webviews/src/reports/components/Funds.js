@@ -194,7 +194,7 @@ const Funds = (props) => {
                       fund.current_earnings.percent !== 0 && (
                         <div
                           className={`earning-percent ${
-                            fund.current_earnings.percent >= 0 ? "green" : "red"
+                            fund.current_earnings.percent >= 0 ? "green-text" : "red-text"
                           }`}
                         >
                           {fund.current_earnings.percent > 0 && "+"}
@@ -236,7 +236,7 @@ const Funds = (props) => {
                         <div className="content">
                           <div
                             className={`amount ${
-                              fund.current_earnings.amount < 0 ? "red" : "green"
+                              fund.current_earnings.amount < 0 ? "red-text" : "green-text"
                             }`}
                           >
                             {getAmountInInr(fund.current_earnings.amount)}
@@ -245,8 +245,8 @@ const Funds = (props) => {
                                 <div
                                   className={`earning-percent ${
                                     fund.current_earnings.percent >= 0
-                                      ? "green"
-                                      : "red"
+                                      ? "green-text"
+                                      : "red-text"
                                   }`}
                                 >
                                   ( {fund.current_earnings.percent > 0 && "+"}{" "}
