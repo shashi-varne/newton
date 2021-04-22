@@ -45,7 +45,7 @@ const Recommendations = (props) => {
     funnelData,
     updateFunnelData,
     userRiskProfile,
-    updateUserRiskProfile
+    setUserRiskProfile
   } = useFunnelDataHook();
   const [recommendations, setRecommendations] = useState([]);
   const [renderTopCard, setRenderTopCard] = useState(false);
@@ -97,7 +97,7 @@ const Recommendations = (props) => {
       const res = await get_recommended_funds(params);
 
       if (res.rp_indicator) {
-        updateUserRiskProfile(res.rp_indicator);
+        setUserRiskProfile(res.rp_indicator);
       }
       updateFunnelData({
         ...res,

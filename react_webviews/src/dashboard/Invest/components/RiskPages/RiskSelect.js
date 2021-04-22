@@ -19,7 +19,7 @@ const RiskSelect = ({
     funnelData,
     userRiskProfile,
     updateFunnelData,
-    updateUserRiskProfile
+    setUserRiskProfile
   } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
@@ -55,7 +55,7 @@ const RiskSelect = ({
       const res = await get_recommended_funds(params);
 
       if (res.updated) {
-        updateUserRiskProfile(selectedRisk);
+        setUserRiskProfile(selectedRisk);
       }
       updateFunnelData({ ...res, recommendedTotalAmount: res.amount });
       
