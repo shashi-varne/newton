@@ -7,6 +7,24 @@ import { getPathname } from "../constants";
 import { getReportGoals } from "../common/api";
 import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
 
+const pathnameMapper = {
+  buildwealth: getPathname.buildwealth,
+  savetax: getPathname.savetax,
+  investsurplus: getPathname.parkmoney,
+  saveforgoal: getPathname.savegoal,
+  diy: getPathname.explore,
+  "insta-redeem": getPathname.instaredeem,
+  // "reliancesimplysave": getPathname.reliancesmartsaveBreakUp,
+  // "monthlyincomeplan": getPathname.monthlyincomeplan,
+  // "midcap": getPathname.midcap,
+  // "arbitrage": getPathname.arbitrage,
+  // index: getPathname.advancedInvestingIndex,
+  // shariah: getPathname.shariah,
+  // balanced: getPathname.balanced,
+  // legacy: getPathname.legacy,
+  // sectoral: getPathname.sectoral,
+  // gold: getPathname.investGold,
+};
 const Goals = (props) => {
   const sliderConstants = {
     min: 0,
@@ -31,58 +49,11 @@ const Goals = (props) => {
   };
 
   const redirectToInvestType = (goal) => {
-    switch (goal.itag.itype) {
-      case "buildwealth":
-        navigate(getPathname.buildwealth);
-        break;
-      case "savetax":
-        navigate(getPathname.savetax);
-        break;
-      case "reliancesimplysave":
-        navigate(getPathname.reliancesmartsaveBreakUp);
-        break;
-      case "investsurplus":
-        navigate(getPathname.parkmoney);
-        break;
-      case "saveforgoal":
-        navigate(`${getPathname.savegoal}${goal.itag.subtype}`);
-        break;
-      case "monthlyincomeplan":
-        navigate(getPathname.monthlyincomeplan);
-        break;
-      case "midcap":
-        navigate(getPathname.midcap);
-        break;
-      case "arbitrage":
-        navigate(getPathname.arbitrage);
-        break;
-      case "index":
-        navigate(getPathname.advancedInvestingIndex);
-        break;
-      case "shariah":
-        navigate(getPathname.shariah);
-        break;
-      case "balanced":
-        navigate(getPathname.balanced);
-        break;
-      case "legacy":
-        navigate(getPathname.legacy);
-        break;
-      case "sectoral":
-        navigate(getPathname.sectoral);
-        break;
-      case "gold":
-        navigate(getPathname.investGold);
-        break;
-      case "diy":
-        navigate(getPathname.explore);
-        break;
-      case "insta-redeem":
-        navigate(getPathname.instaredeem);
-        break;
-      default:
-        break;
-    }
+    let pathname = pathnameMapper[goal?.itag?.itype] || "";
+    if (!pathname) return;
+    if (goal.itag.itype === "saveforgoal")
+      pathname = `${pathname}${goal.itag.subtype}`;
+    navigate(pathname);
   };
 
   return (
@@ -131,7 +102,9 @@ const Goals = (props) => {
                         {goal.earnings_percent && goal.earnings_percent !== 0 && (
                           <div
                             className={`earning-percent ${
-                              goal.earnings_percent >= 0 ? "green-text" : "red-text"
+                              goal.earnings_percent >= 0
+                                ? "green-text"
+                                : "red-text"
                             }`}
                           >
                             ( {goal.earnings_percent > 0 && "+"}{" "}

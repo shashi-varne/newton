@@ -54,9 +54,7 @@ export const redirectToReports = (name) => {
       break;
   }
   let url =
-    window.location.protocol +
-    "//" +
-    window.location.host +
+    window.location.origin +
     path +
     getConfig().searchParams +
     "&generic_callback=true&redirect_url=" +
@@ -75,4 +73,29 @@ export const dateOrdinalSuffix = (dom) => {
 export const getAmountInInr = (amount) => {
   if (amount >= 0) return formatAmountInr(amount);
   return `- ${formatAmountInr(-1 * amount)}`;
+};
+
+export const getSipStatusName = (status) => {
+  switch (status) {
+    case "mandate_approved":
+      return "Mandate approved";
+    case "active":
+      return "Auto debit started";
+    case "pause_requested":
+      return "Requested to pause";
+    case "paused":
+      return "SIP paused";
+    case "cancellation_requested":
+      return "Requested to cancel";
+    case "cancelled":
+      return "SIP cancelled";
+    case "init":
+      return "SIP mandate created";
+    case "resume_requested":
+      return "Resume requested";
+    case "restart_requested":
+      return "Restart requested";
+    default:
+      return "";
+  }
 };

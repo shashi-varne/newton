@@ -6,21 +6,22 @@ import { getSipAction } from "../../common/api";
 import {
   navigate as navigateFunc,
   dateOrdinalSuffix,
+  getSipStatusName,
 } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import "./commonStyles.scss";
 
+const productName = getConfig().productName;
+const sip_mandate_created = ["init", "mandate_approved", "active"];
+const mandate_approved = ["mandate_approved", "active"];
+const requested_pause = ["pause_requested", "paused"];
+const requested_cancel = ["cancellation_requested", "cancelled"];
 const SipDetails = (props) => {
-  const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
   const report = storageService().getObject(storageConstants.PAUSE_SIP) || {};
   if (isEmpty(report)) props.history.goBack();
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const sip_mandate_created = ["init", "mandate_approved", "active"];
-  const mandate_approved = ["mandate_approved", "active"];
-  const requested_pause = ["pause_requested", "paused"];
-  const requested_cancel = ["cancellation_requested", "cancelled"];
   let buttonTitle = "";
   if (sip_mandate_created.includes(report.friendly_status))
     buttonTitle = "CANCEL SIP";
@@ -28,31 +29,6 @@ const SipDetails = (props) => {
     buttonTitle = "RESUME SIP";
   else if (requested_cancel.includes(report.friendly_status))
     buttonTitle = "RESTART SIP";
-
-  const getStatusName = (status) => {
-    switch (status) {
-      case "mandate_approved":
-        return "Mandate approved";
-      case "active":
-        return "Auto debit started";
-      case "pause_requested":
-        return "Requested to pause";
-      case "paused":
-        return "SIP paused";
-      case "cancellation_requested":
-        return "Requested to cancel";
-      case "cancelled":
-        return "SIP cancelled";
-      case "init":
-        return "SIP mandate created";
-      case "resume_requested":
-        return "Resume requested";
-      case "restart_requested":
-        return "Restart requested";
-      default:
-        return "";
-    }
-  };
 
   const formatName = (name) => {
     if (name === "init") {
@@ -169,7 +145,7 @@ const SipDetails = (props) => {
               />
               <div>
                 <div className="title">Status</div>
-                <div>{getStatusName(report.friendly_status)}</div>
+                <div>{getSipStatusName(report.friendly_status)}</div>
                 <div className="progress-bar">
                   {sip_mandate_created.includes(report.friendly_status) && (
                     <>
