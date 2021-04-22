@@ -71,6 +71,7 @@ export const storageConstants = {
   SELECTED_SIP: "selected-sip",
   PAUSE_REQUEST_DATA: "pause-request-data",
   MF_INVEST_DATA: "mf_invest_data",
+  REPORTS_SELECTED_FUND: "reports_selected_fund",
 };
 
 export const getPurchaseProcessData = (

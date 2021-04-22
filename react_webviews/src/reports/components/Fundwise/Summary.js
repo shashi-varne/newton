@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
-import { getPathname } from "../../constants";
+import { getPathname, storageConstants } from "../../constants";
 import { getFunds, getFundDetailsForSwitch } from "../../common/api";
 import {
   navigate as navigateFunc,
@@ -11,6 +11,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FundSummaryMenu from "../mini-components/FundSummaryMenu";
 import toast from "common/ui/Toast";
 import "./commonStyles.scss";
+import { storageService } from "../../../utils/validators";
 
 const FundswiseSummary = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -34,6 +35,10 @@ const FundswiseSummary = (props) => {
   };
 
   const getFundDetails = (index) => {
+    storageService().setObject(
+      storageConstants.REPORTS_SELECTED_FUND,
+      funds[index]
+    );
     navigate(`${getPathname.reportsFundswiseDetails}${index}`);
   };
 
