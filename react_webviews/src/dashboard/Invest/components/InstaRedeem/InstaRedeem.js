@@ -158,7 +158,7 @@ class InstaRedeem extends Component {
                 <div className="text">
                   {data.disc}
                   {data.key === "withdrawal" && (
-                    <div className="know-more" onClick={this.knowMore}>
+                    <div className="know-more-text" onClick={this.knowMore}>
                       KNOW MORE
                     </div>
                   )}

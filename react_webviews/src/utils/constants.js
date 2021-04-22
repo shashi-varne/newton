@@ -96,7 +96,7 @@ export const themeConfig = {
                 },
                 backgroundColor: getConfig().styles.secondaryColor,
                 color: '#fff',
-                borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 4,
+                borderRadius: getConfig().uiElements?.button?.borderRadius || 4,
                 boxShadow: 'none'
             },
             disabled: {
@@ -109,7 +109,7 @@ export const themeConfig = {
                 textTransform: 'capitalize'
             },
             root: {
-                borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 4,
+                borderRadius: getConfig().uiElements?.button?.borderRadius || 4,
                 boxShadow: 'none !important'
             }
         },

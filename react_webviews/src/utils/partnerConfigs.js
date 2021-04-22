@@ -290,6 +290,9 @@ export const partnerConfigs = {
       secondaryColor: "#EB6024",
     },
     uiElements: {
+      button: {
+        borderRadius: 25,
+      },
       bottomCta: {
         disabledBackgroundColor: "#F1D5C9", // same as 'cta_disabled_background'
         disabledColor: "#ffffff", // same as cta_disabled_color
