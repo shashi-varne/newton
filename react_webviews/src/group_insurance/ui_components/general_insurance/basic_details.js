@@ -7,7 +7,7 @@ import {
   genderOptions, insuranceMaritalStatus, relationshipOptionsGroupInsuranceAll,
   insuranceProductTitleMapper
 } from '../../constants';
-import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../common/ui/DropDownNew'
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
@@ -89,7 +89,7 @@ class BasicDetailsForm extends Component {
             onChange={this.handleChange('nominee_name')} />
         </div>
         <div id="nomineeScroll" ref={this.nomineeRef} className="InputField">
-          <DropdownWithoutIcon
+          <DropDownNew
             width="40"
             options={this.state.relationshipOptions}
             id="relation"
@@ -98,7 +98,8 @@ class BasicDetailsForm extends Component {
             helperText={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relation_error : ''}
             value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.relation || '' : ''}
             name="nominee_relation"
-            onChange={this.handleChange('nominee_relation')} />
+            onChange={this.handleChange('nominee_relation')}
+          />
         </div>
       </div>
 

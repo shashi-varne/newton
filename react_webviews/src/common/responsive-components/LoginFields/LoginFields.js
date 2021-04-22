@@ -410,7 +410,7 @@ const LoginFields = (props) => {
 
 const CommonLoginOpts = (props) => {
   const serverUrl = 'https://my.fisdom.com';
-  const socialRedirectUrl = encodeURIComponent('https://wv.fisdom.com/iw-dashboard/main/dashboard?base_url=https://my.fisdom.com');
+  const socialRedirectUrl = encodeURIComponent('https://wv.fisdom.com/iw-dashboard/main/dashboard');
   const goTo = props.view === 'phone' ? 'email' : 'phone';
   return (
     <div className="common-login-opts">
