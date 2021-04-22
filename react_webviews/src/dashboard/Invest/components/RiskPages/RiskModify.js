@@ -1,4 +1,4 @@
-import './RiskPages.scss';
+import './commonStyles.scss';
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import InfoBox from '../../../../common/ui/F-InfoBox';

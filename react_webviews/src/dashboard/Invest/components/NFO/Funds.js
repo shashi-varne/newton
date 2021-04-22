@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import Button from "@material-ui/core/Button";
+import Button from "common/ui/Button";
 import { navigate } from "../../functions";
 import {
   getFormattedDate,
@@ -11,7 +11,7 @@ import { storageService } from "utils/validators";
 import { getConfig } from "../../../../utils/functions";
 import toast from "../../../../common/ui/Toast";
 import { isEmpty } from "../../../../utils/validators";
-import './Funds.scss';
+import "./Funds.scss";
 
 class NfoFunds extends Component {
   constructor(props) {
@@ -120,7 +120,11 @@ class NfoFunds extends Component {
                         <p>Category: {data.tax_plan}</p>
                       </div>
                       <div className="invest">
-                        <Button onClick={this.handleClick(data)}>INVEST</Button>
+                        <Button
+                          onClick={this.handleClick(data)}
+                          buttonTitle="INVEST"
+                          classes={{ button: "nfo-funds-button" }}
+                        />
                       </div>
                     </div>
                     <div className="date">

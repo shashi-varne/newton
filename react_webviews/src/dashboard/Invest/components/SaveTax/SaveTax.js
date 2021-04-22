@@ -31,7 +31,7 @@ const typeOptionsData = {
 };
 
 const Landing = (props) => {
-  const { updateFunnelData, initFunnelData } = useFunnelDataHook();
+  const { initFunnelData } = useFunnelDataHook();
   const [investTypeDisplay, setInvestTypeDisplay] = useState('sip');
   const [loader, setLoader] = useState(false);
   const otiAmount = 150000;
@@ -39,25 +39,22 @@ const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const fetchRecommendedFunds = async () => {
-    const params = {
-      type: 'savetaxsip',
-    };
-    if (investTypeDisplay === 'onetime') {
-      params.type = 'savetax';
+    const type = investTypeDisplay === 'onetime' ? 'savetax' : 'savetaxsip';
+    const appendToFunnelData = {
+      amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
+      term,
+      year: parseInt(moment().year() + term, 10),
+      corpus: 150000,
+      investType: type,
+      isRecurring: isRecurring(type),
+      investTypeDisplay,
+      name: 'Tax saving'
     }
     try {
       setLoader("button");
-      const recurring = isRecurring(params.type);
-      await initFunnelData(params);
-      updateFunnelData({
-        amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
-        term,
-        year: parseInt(moment().year() + term, 10),
-        corpus: 150000,
-        investType: params.type,
-        isRecurring: recurring,
-        investTypeDisplay,
-        name:'Tax saving'
+      await initFunnelData({
+        apiParams: { type },
+        appendToFunnelData: appendToFunnelData
       });
       setLoader(false);
       goNext();

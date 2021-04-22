@@ -1,0 +1,50 @@
+.invest-goal-save-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.invest-goal-save-header{
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.invest-goal-save-list{
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  width: 100%;
+
+  .invest-goal-save-item{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+      width: 100%;
+      cursor: pointer;
+
+      p{
+          margin:10px 0px;
+          font-size: 16px;
+      }
+      .invest-goal-save-item-corpus{
+              font-size: 16px;
+          span{
+              font-weight: bold;
+          }
+      }
+  }
+}
+
+.invest-goal-set-target{
+  text-align: center;
+  color:#35cb5d;
+  font-size: 16px;
+  margin-top: 50px;
+  cursor: pointer;
+  font-weight: bold;
+}

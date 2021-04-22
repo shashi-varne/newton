@@ -114,7 +114,7 @@ const Sign = (props) => {
     }
   }
 
-  const isWeb = getConfig().isWebCode
+  const isWeb = getConfig().isWebOrSdk
 
   return (
     <Container

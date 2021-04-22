@@ -245,7 +245,7 @@ class Recommendation extends Component {
                                 getConfig().searchParams
     );
 
-    let openWebModule = getConfig().isWebCode;
+    let openWebModule = getConfig().isWebOrSdk;
     if (isin) {
 
       if(openWebModule) {

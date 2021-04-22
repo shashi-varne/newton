@@ -57,7 +57,7 @@ class CommonRenderBenefits extends Component {
                 >
 
                {this.state.renderData.header_subtitle && 
-                <div className="common-top-page-subtitle-dark">
+                <div className="common-top-page-subtitle-light">
                     {this.state.renderData.header_subtitle}
                 </div>}
                 <div className="generic-render-benefits">
