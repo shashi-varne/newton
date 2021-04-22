@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router';
 
 import Header from './Header';
-import Footer from './footer';
+import Footer from '../../common/components/footer';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import { nativeCallback } from 'utils/native_callback';
@@ -20,6 +20,7 @@ import { getConfig, setHeights } from 'utils/functions';
 import { isFunction } from '../../utils/validators';
 
 import './Style.scss';
+import UiSkelton from '../../common/ui/Skelton';
 
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -151,7 +152,7 @@ const Container = (props) => {
       {/* Below Header Block */}
       <div id='HeaderHeight' style={{ top: 56 }}>
         {/* Loader Block */}
-        {renderPageLoader()}
+        {/* {renderPageLoader()} */}
       </div>
 
       {/*  */}
@@ -185,20 +186,26 @@ const Container = (props) => {
         </div>
       )}
 
+      {props.skelton &&
+        <UiSkelton type={props.skelton} />
+      }
+
       {/* Children Block */}
-      <div
-        style={props.styleContainer}
-        className={`
+      {!props.skelton &&
+        <div
+          style={props.styleContainer}
+          className={`
             Container 
             ${props.classOverRideContainer}
             ${props.noPadding ? 'no-padding' : ''}
           `}
-      >
-        {props.children}
-      </div>
+        >
+          {props.children}
+        </div>
+      }
 
       {/* Footer Block */}
-      {!props.noFooter && (
+      {!props.noFooter && !props.skelton && (
         <Footer
           noFooter={props.noFooter}
           fullWidthButton={props.fullWidthButton}
@@ -210,6 +217,14 @@ const Container = (props) => {
           buttonData={props.buttonData}
           twoButton={props.twoButton}
           buttonTitle2={props.buttonTitle2}
+          showLoader={props.showLoader}
+          dualbuttonwithouticon={props.dualbuttonwithouticon}
+          twoButton={props.twoButton}
+          buttonOneTitle={props.buttonOneTitle}
+          buttonTwoTitle={props.buttonTwoTitle}
+          handleClickOne={props.handleClickOne}
+          handleClickTwo={props.handleClickTwo}
+          {...props}
         />
       )}
       {/* No Internet */}

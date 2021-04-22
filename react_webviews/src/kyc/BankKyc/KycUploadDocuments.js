@@ -165,7 +165,7 @@ const KycUploadDocuments = (props) => {
         <main>
           <div className="doc-title">Select the document for verification</div>
           <div className="subtitle">
-            Make sure your name is clearly visible in the document
+            Ensure your name is clearly visible in the document
           </div>
           <div className="options">
             {verificationDocOptions.map((data, index) => {

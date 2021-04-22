@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini-components/Alert'
 import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper } from '../../constants'
+import { storageConstants, nriDocMapper as docMapper, getPathname } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
 import toast from '../../../common/ui/Toast'
@@ -35,7 +35,7 @@ const getTitleList = ({ kyc }) => {
 }
 
 const MessageComponent = (kyc) => {
-  const [titleList, setTitleList] = useState(getTitleList(kyc))
+  const titleList = getTitleList(kyc)
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
@@ -49,11 +49,15 @@ const MessageComponent = (kyc) => {
 }
 
 const ChangeAddressDetails2 = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
 
-  const stateParams = props?.location?.state
+  const stateParams = props?.location?.state || {}
+  if(!stateParams.address_doc_type) {
+    navigate(getPathname.changeAddressDetails1);
+  }
   const { address_doc_type: addressDocType } = stateParams
 
   const [file, setFile] = useState(null)
@@ -188,7 +192,6 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleSubmit = async () => {
-    const navigate = navigateFunc.bind(props)
     const type = kyc?.address?.meta_data?.is_nri ? 'nri_address' : 'address'
     const addressKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'

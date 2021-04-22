@@ -513,29 +513,29 @@ export async function getKycFromSummary() {
 }
 
 export function redirectAfterLogin(data, user) {
-  var kyc_login = storageService().getObject("kyc");
+  const kyc = storageService().getObject("kyc");
   if (data.firstLogin) {
-    this.navigate("/");
+    this.navigate("/", { state: { goBack: "/" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment
   ) {
-    this.navigate("/kyc/journey");
+    this.navigate("/kyc/journey", { state: { goBack: "/invest" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     !user.active_investment
   ) {
-    this.navigate("/");
+    this.navigate("/", { state: { goBack: "/" } });
   } else if (
-    kyc_login &&
-    !kyc_login.pan.meta_data.pan_number &&
+    kyc &&
+    !kyc.pan.meta_data.pan_number &&
     user.kyc_registration_v2 === "init"
   ) {
-    this.navigate("/kyc/home");
+    this.navigate("/kyc/home", { state: { goBack: "/invest" } });
   } else if (user.active_investment) {
-    this.navigate("/landing");
+    this.navigate("/landing", { state: { goBack: "/landing" } });
   } else {
-    this.navigate("/");
+    this.navigate("/", { state: { goBack: "/" } });
   }
 }
 

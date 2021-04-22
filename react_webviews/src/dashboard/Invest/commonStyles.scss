@@ -23,6 +23,12 @@
       }
     }
 
+    .insta-redeem-head-bar {
+      column-gap: 10px;
+      padding-top: 10px;
+      margin-right: 0;
+    }
+
     .subtitle {
       color: #767e86;
       font-size: 14px;
@@ -43,6 +49,10 @@
     .text {
       margin-top: 40px;
     }
+
+    .success-text-message {
+      margin: 35px 0 0 0;
+    }
   }
 
   .error-message {
@@ -54,7 +64,7 @@
   .action {
     width: 100% !important;
     padding: 0 15px;
-    margin: 8px 0 30px 0;
+    margin: 0px 0 30px 0;
 
     .invest-dialog-button {
       width: 100%;
@@ -62,7 +72,6 @@
       margin: 0px;
       padding: 5px 15px;
       font-size: 14px !important;
-      border-radius: 5px;
       line-height: 36px;
       font-weight: bold;
       height: 45px !important;

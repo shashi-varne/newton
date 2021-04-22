@@ -6,6 +6,7 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
+import { getConfig } from "../../utils/functions";
 
 class Container extends Component {
   constructor(props) {
@@ -43,6 +44,17 @@ class Container extends Component {
       this.props.headerData.goBack();
       return;
     }
+
+    const goBackPath = this.props.location?.state?.goBack || "";
+
+    if(goBackPath) {
+      this.props.history.push({
+        pathname: goBackPath,
+        search: getConfig().searchParams,
+      });
+      return;
+    }
+
     this.props.history.goBack();
   };
 
