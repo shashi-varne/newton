@@ -293,10 +293,7 @@ export const getConfig = () => {
 
     // eslint-disable-next-line
     returnConfig.html_camera =
-      (returnConfig.iOS || returnConfig.Web) && html_camera;
-    if (returnConfig.iOS) {
-      returnConfig.hide_header = true;
-    }
+      (returnConfig.iOS || returnConfig.Web) ? true : html_camera;
   }
 
   if (project === 'loan') {
