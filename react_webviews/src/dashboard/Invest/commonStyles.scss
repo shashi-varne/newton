@@ -23,6 +23,12 @@
       }
     }
 
+    .insta-redeem-head-bar {
+      column-gap: 10px;
+      padding-top: 10px;
+      margin-right: 0;
+    }
+
     .subtitle {
       color: #767e86;
       font-size: 14px;
@@ -77,5 +83,9 @@
       float: right;
       background-color: rgb(250, 250, 250);
     }
+  }
+
+  .insta-redeem-action {
+    margin-top: 0;
   }
 }

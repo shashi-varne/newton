@@ -92,7 +92,7 @@ class InstaRedeem extends Component {
         className="invest-redeem-dialog"
       >
         <DialogContent className="dialog-content">
-          <div className="head-bar">
+          <div className="head-bar insta-redeem-head-bar">
             <div className="text-left">Instant withdrawal</div>
             <img
               src={require(`assets/${this.state.productName}/ic_instant_withdrawal.svg`)}
@@ -116,7 +116,7 @@ class InstaRedeem extends Component {
             days and 0% seven days onwards
           </div>
         </DialogContent>
-        <DialogActions className="action">
+        <DialogActions className="action insta-redeem-action">
           <Button
             onClick={this.handleClose}
             classes={{ button: "invest-dialog-button" }}
