@@ -102,7 +102,7 @@ class SdkLanding extends Component {
     }
   };
 
-  handleMarkettingBanner = (path) => () => {
+  handleMarketingBanner = (path) => () => {
     if(path === '/invest/recommendations'){
       this.getRecommendationApi(100);
     } else {

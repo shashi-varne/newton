@@ -1063,6 +1063,12 @@ $header-title-font-size: 20px;
   }
 }
 
+.header-right-nav-components{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
 .main-top-title-new2 {
   font-size: 20px !important;
   color: #160d2e !important;

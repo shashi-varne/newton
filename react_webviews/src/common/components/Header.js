@@ -107,7 +107,7 @@ const Header = ({ classes, title, count, total, current, goBack,
               </div>
             }
             </div>
-            <div style={{marginLeft: "auto", display: 'flex', alignItems: 'center'}}>
+            <div className='header-right-nav-components'>
               {resetpage &&
                 <SVG
                 style={{marginLeft: 'auto', width:20}}
@@ -118,7 +118,7 @@ const Header = ({ classes, title, count, total, current, goBack,
               }
               {topIcon &&
                 <SVG
-                style={{marginLeft: 'auto', width:25, cursor:'pointer'}}
+                style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                 onClick={handleTopIcon}
                 preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
                 src={rightIcon}

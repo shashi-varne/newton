@@ -49,6 +49,7 @@ import ProtectedRoute from './common/components/ProtectedRoute';
 
 import Tooltip from 'common/ui/Tooltip';
 import 'common/theme/Style.scss';
+import { storageService } from './utils/validators';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -64,8 +65,8 @@ var basename = window.sessionStorage.getItem('base_href') || '';
 if (basename && basename.indexOf('appl/webview') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
-  
-const isBottomSheetDisplayed = window.sessionStorage.getItem("is_bottom_sheet_displayed");
+
+const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
 if(isBottomSheetDisplayed) {
   window.sessionStorage.setItem("is_bottom_sheet_displayed", false);
 }
