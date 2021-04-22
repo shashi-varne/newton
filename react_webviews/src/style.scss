@@ -1,0 +1,53 @@
+.main-container{
+  height: 100vh;
+  overflow: hidden;
+  header {
+    z-index: 1300 !important;
+  }
+
+  .middle-content{
+    display: flex;
+    height: 100%;
+  }
+
+  .feature-container{
+    width: 640px !important;
+    margin-left: 283px !important;
+    min-width: 640px !important;
+    overflow: auto;
+    height: 100%;
+    .ContainerWrapper{
+      margin: 0px !important;
+      max-width: 100% !important;
+      position: relative;
+      padding-bottom: 100px !important;
+      header{
+        position: fixed;
+        top: 64px;
+        width: 640px !important;
+        margin-left: 283px !important;
+      }
+    }
+  }
+}
+
+.navbar{
+  & > div{
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .right-content{
+    display: none;
+  }
+  .main-container .feature-container{
+    width: 100% !important;
+    margin-left: 0px !important;
+    min-width: 100% !important;
+  }
+  .main-container .feature-container .ContainerWrapper header{
+    width: 100% !important;
+  }
+}
