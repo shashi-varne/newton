@@ -3,14 +3,24 @@ import { formatAmountInr } from 'utils/validators';
 import RatingStar from '../../../fund_details/common/RatingStar';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import './mini-components.scss';
-const FundCard = ({ classOverRide, fund ,graph, isins, proceedInvestment, parentProps }) => {
+const FundCard = ({ 
+  classOverRide, 
+  fund,
+  graph, 
+  isins, 
+  setInvestmentData, 
+  parentProps
+}) => {
   const {
     amount,
     mf: { mfname, rating, isin, amc_logo_small,mftype_name },
   } = fund;
   const navigate = navigateFunc.bind(parentProps);
   const handleGraph = () => {
-    proceedInvestment({}, "", true)
+    if(!graph) {
+      return;
+    }
+    setInvestmentData({}, "", true)
     navigate(
       `/fund-details`,
       {
@@ -20,11 +30,6 @@ const FundCard = ({ classOverRide, fund ,graph, isins, proceedInvestment, parent
       true
     )
     return;
-      // return history.push({
-      //   pathname: '/fund-details',
-      //   search: `?isins=${isins}&selected_isin=${isin}`,
-      //   state:{flow:"mf journey"}
-      // })
   };
   return (
     <div className={`recommendations-funds-item ${classOverRide}`} onClick={handleGraph}>

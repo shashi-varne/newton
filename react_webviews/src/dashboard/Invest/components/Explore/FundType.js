@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import Container from '../../../common/Container'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
+import Button from 'common/ui/Button'
 import { storageService } from 'utils/validators'
 import heart_icon from 'assets/trending_heart_icon.png'
 import { CART } from '../../../DIY/constants'
@@ -59,13 +59,13 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
           </article>
         </div>
         <Button
-          color="secondary"
-          variant="raised"
+          disable={addedToCart ? true : false}
           onClick={handleAddToCart}
-          disabled={addedToCart ? true : false}
-        >
-          {addedToCart ? 'Added' : 'Add to Cart'}
-        </Button>
+          classes={{
+            button: "invest-explore-trending-button"
+          }}
+          buttonTitle={addedToCart ? 'Added' : 'Add to Cart'}
+        />
       </div>
     </div>
   )

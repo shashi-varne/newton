@@ -205,7 +205,7 @@ class DropdownInModalClass extends Component {
           }}
         >
           <InputLabel htmlFor={this.props.id} style={{ marginTop: '-25px' }}>
-            <span style={{ fontSize: '0.8rem' }}>{this.props.label}</span>
+            <span style={{ fontSize: '11px' }}>{this.props.label}</span>
           </InputLabel>
 
           <div className={`input-box ${this.props.inputBox && 'input-box-port-reb'}`}>
