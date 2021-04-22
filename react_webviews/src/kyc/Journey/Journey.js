@@ -537,7 +537,7 @@ const Journey = (props) => {
   const redirectUrl = encodeURIComponent(
     `${basePath}/digilocker/callback${
       getConfig().searchParams
-    }&is_secure=${storageService().get('is_secure')}`
+    }&is_secure=${storageService().get("is_secure")}`
   )
 
   const cancel = () => {
@@ -557,7 +557,7 @@ const Journey = (props) => {
       url: `${basePath}/kyc/journey${
         getConfig().searchParams
       }&show_aadhaar=true&is_secure=
-        ${storageService().get('is_secure')}`,
+        ${storageService().get("is_secure")}`,
       message: 'You are almost there, do you really want to go back?',
     }
     if (isMobile.any() && storageService().get(storageConstants.NATIVE)) {
@@ -583,7 +583,7 @@ const Journey = (props) => {
                 `${basePath}/kyc/journey${
                   getConfig().searchParams
                 }&show_aadhaar=true&is_secure=
-                  ${storageService().get('is_secure')}`
+                  ${storageService().get("is_secure")}`
               ),
             },
             {

@@ -57,10 +57,9 @@ class Landing extends Component {
     let { params } = this.props.location || {}
     let openModuleData = params ? params.openModuleData : {}
 
-    let redirect_url = decodeURIComponent(getConfig().redirect_url);
     if(!isEmpty(openModuleData)){
-      if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
-        window.location.href = redirect_url;
+      if(!openModuleData.sub_module) {
+        nativeCallback({ action: 'exit_web' })
       }
     }
     this.setState({
@@ -238,7 +237,7 @@ class Landing extends Component {
         'banner_clicked' : banner_clicked ? true : false,
         'callback_clicked' : callback_clicked ?  true : false,
         'advisory_card_cta' : this.state.advisory_button_text,
-        'insurance_advisory_card_clicked': advisory_clicked
+        'insurance_advisory_card_clicked': advisory_clicked ? true : false
       }
     };
 
@@ -250,7 +249,6 @@ class Landing extends Component {
   }
 
   goToAdvisory = (e) =>{
-    // console.log('go go')
     e.preventDefault();
     this.sendEvents('next', "", "", "", true);
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)

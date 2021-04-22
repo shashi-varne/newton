@@ -29,7 +29,7 @@ const InvestError = ({ isOpen, handleClick, errorMessage, close }) => {
       <DialogActions className="action">
         <Button
           onClick={handleClick}
-          classes={{ button: "trasparent-button" }}
+          classes={{ button: "invest-dialog-transparent-button" }}
           buttonTitle="GOT IT!"
         />
       </DialogActions>

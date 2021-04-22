@@ -121,7 +121,7 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleChange = (type) => (event) => {
-    const isWeb = getConfig().isWebCode
+    const isWeb = getConfig().isWebOrSdk
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -262,7 +262,7 @@ const ChangeAddressDetails2 = (props) => {
     return addressFull
   }
 
-  const isWeb = getConfig().isWebCode
+  const isWeb = getConfig().isWebOrSdk
 
   return (
     <Container

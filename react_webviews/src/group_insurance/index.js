@@ -104,7 +104,6 @@ import LifeInsuranceEntry from './products/life_insurance/entry';
 
 /******************************* Other Insurnace ******************/
 import OtherInsuranceEntry from './products/other_insurance/entry';
-
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
 
@@ -155,7 +154,8 @@ import GroupHealthPlanSelectPed from './products/group_health/form/select_ped';
 import GroupHealthPlanFinalSummary from './products/group_health/form/final_summary';
 import GroupHealthPayment from './products/group_health/payment/index';
 import GroupHealthReportDetails from './products/group_health/report_details';
-
+import GroupHealthPlanSelectPaymentFrequency from './products/group_health/gmc/payment_frequency';
+import GroupHealthPlanGoodHealthDeclaration from './products/group_health/gmc/good-health-dec';
 
 /***************Star Health******************/
 import GroupHealthPlanStarPincode from './products/group_health/Star/star_pincode';
@@ -370,6 +370,8 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/plan-list`} component={GroupHealthPlanList} />
           <Route path={`${url}/group-health/:provider/plan-details`} component={GroupHealthPlanDetails} />
           <Route path={`${url}/group-health/:provider/plan-select-sum-assured`} component={GroupHealthPlanSelectSumAssured} />
+          <Route path={`${url}/group-health/:provider/plan-select-paying-frequency`} component={GroupHealthPlanSelectPaymentFrequency}/>
+          <Route path={`${url}/group-health/:provider/plan-good-health-dec`} component={GroupHealthPlanGoodHealthDeclaration}/>
           <Route path={`${url}/group-health/:provider/plan-select-cover-period`} component={GroupHealthPlanSelectCoverPeriod} />
           <Route path={`${url}/group-health/:provider/plan-select-floater`} component={GroupHealthPlanSelectFloater} />
           <Route path={`${url}/group-health/:provider/plan-premium-summary`} component={GroupHealthPlanPremiumSummary} />
@@ -530,6 +532,7 @@ const Insurance = (props) => {
 
             { /********** Other Insurance-page **********/}
             <Route path={`${url}/other-insurance/entry`} component={OtherInsuranceEntry} />
+
 
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

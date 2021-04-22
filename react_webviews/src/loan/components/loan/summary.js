@@ -216,13 +216,13 @@ class LoanSummary extends Component {
                 <div>{'- ' + formatAmountInr(vendor_info.processing_fee_final)}</div>
               </div>
               <div className="items">
-                <div>GST(18%)</div>
+                <div>GST (@18%)</div>
                 <div>{'- ' + formatAmountInr(vendor_info.gst_final)}</div>
               </div>
               <hr style={{ background: "#ccd3db" }} />
               <div className="credit">
                 <div>Amount credited to bank a/c</div>
-                <div>{formatAmountInr(vendor_info.net_amount_final)}</div>
+                <div>{vendor_info.is_insured ? formatAmountInr(vendor_info.net_amount_final - vendor_info.insurance_premium_final) : formatAmountInr(vendor_info.net_amount_final)}</div>
               </div>
             </div>
           </div>

@@ -50,7 +50,7 @@ class BottomSheetClass extends Component {
                                 </div>}
 
                         </div>
-                        {data.helpClick && 
+                        {data.helpClick && getConfig().project !== 'loan' && 
                         <div className="help">
                             <Button
                                 fullWidth={true}
