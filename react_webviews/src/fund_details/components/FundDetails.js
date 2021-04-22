@@ -101,7 +101,7 @@ const FundDetails = ({ classes, history }) => {
       <div className="fund-details-dual-button-content">
         <div className="cart-content">
           <img alt="" src={require(`assets/add_cart_icon.png`)} />
-          <span>{length}</span>
+          <div className="circle"><span>{length}</span></div>
         </div>
         <span>funds <br/> in cart</span>
       </div>
@@ -700,10 +700,10 @@ const FundDetails = ({ classes, history }) => {
           twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
           buttonTwoTitle={ ENTER_AMOUNT }
           handleClickTwo={handleClick2}
-          handleClick2={handleClick2} // old container field
-          buttonTitle2={ENTER_AMOUNT} // old container field
-          // showLoader={isApiRunning} // new container field
-          showLoader={isLoading || loading} // old container field
+          // handleClick2={handleClick2} // old container field
+          // buttonTitle2={ENTER_AMOUNT} // old container field
+          showLoader={isApiRunning} // new container field
+          // showLoader={isLoading || loading} // old container field
           type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
         >
           {fundDetails && ContainerData()}
