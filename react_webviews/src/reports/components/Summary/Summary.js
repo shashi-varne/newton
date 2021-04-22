@@ -20,9 +20,9 @@ import { getSummaryV2 } from "../../common/api";
 import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import "./commonStyles.scss";
 
+const config = getConfig();
+const productName = config.productName;
 const Summary = (props) => {
-  const config = getConfig();
-  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [report, setReportData] = useState({});
   const [current, setCurrent] = useState(true);

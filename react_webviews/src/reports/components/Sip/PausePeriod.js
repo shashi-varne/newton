@@ -10,13 +10,13 @@ import { getConfig } from "utils/functions";
 import Slider from "common/ui/Slider";
 import "./commonStyles.scss";
 
-const PausePeriod = (props) => {
-  const productName = getConfig().productName;
-  const sliderValues = {
-    min: 1,
-    max: 6,
-    value: 2,
-  };
+const sliderValues = {
+  min: 1,
+  max: 6,
+  value: 2,
+};
+const productName = getConfig().productName;
+const PausePeriod = (props) => {  
   const sip = storageService().getObject(storageConstants.PAUSE_SIP) || {};
   if (isEmpty(sip)) props.history.goBack();
   const navigate = navigateFunc.bind(props);
