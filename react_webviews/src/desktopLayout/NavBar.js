@@ -1,32 +1,37 @@
 import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import Hidden from "@material-ui/core/Hidden";
-const NavBar = ({ handleMobileView }) => {
+import {getConfig} from 'utils/functions';
+import {navigate as navigateFunc} from './commonFunctions'
+import {withRouter} from 'react-router-dom';
+import './NavBar.scss';
+import { storageService } from "../utils/validators";
+const NavBar = (props) => {
+  const {partner,logo} = getConfig();
+  const navigate = navigateFunc.bind(props);
+  const handleLogout =() => {
+    navigate('/logout');
+  }
+  const user = storageService().getObject('user');
+
   return (
     <AppBar position="sticky" className="navbar">
-      <Toolbar>
-        <Typography variant="h5">Fisdom</Typography>
-        <Hidden mdUp>
-          <IconButton onClick={handleMobileView}>
-            <MenuIcon fontSize="large" />
-          </IconButton>
-        </Hidden>
-        <Hidden smDown>
-          <IconButton>
-            <ExitToAppIcon
-              fontSize="large"
-              color="action"
-              style={{color:"white"}}
-            />
-          </IconButton>
-        </Hidden>
+      <Toolbar className='navbar-container'>
+        <div className='header-partner-logo'>
+          <img src={require(`assets/${logo}`)} alt={partner} />
+        </div>
+        <div className='navbar-right-container'>
+            <div className='user-profile-data'>
+              <div className='user-name'>{user?.name}</div>
+              <div className='user-contact'>{user?.email || user?.mobile}</div>
+            </div>
+            <div className='navbar-logout-section' onClick={handleLogout}>
+                <img src={require('assets/logout.png')} alt="logout" />
+                <div className='navbar-logout'>Logout</div>
+            </div>
+        </div>
       </Toolbar>
     </AppBar>
   );
 };
-export default NavBar;
+export default withRouter(NavBar);

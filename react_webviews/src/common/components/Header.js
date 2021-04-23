@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -15,6 +15,8 @@ import isEmpty from 'lodash/isEmpty';
 import { storageService } from "utils/validators";
 import '../theme/Style.scss';
 import restart from 'assets/restart_nav_icn.svg';
+import Slider from '../../desktopLayout/Drawer';
+import MenuIcon from "@material-ui/icons/Menu";
 
 const headerIconMapper = {
   back: back_arrow,
@@ -30,6 +32,11 @@ const Header = ({ classes, title, count, total, current, goBack,
     const rightIcon = headerIconMapper[topIcon];
     const campaign = storageService().getObject("campaign");
     const partner = getConfig().partner;
+    const mobile = getConfig().isMobileDevice;
+    const [open,setOpen] = useState(false);
+    const handleMobileView = () => {
+      setOpen(!open);
+    };
     return (
       <AppBar position="fixed" color="primary" 
       className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
@@ -140,7 +147,15 @@ const Header = ({ classes, title, count, total, current, goBack,
           }
           </>}
 
-          
+          {
+            mobile &&
+            <div className='mobile-navbar-menu'>
+              <IconButton onClick={handleMobileView}>
+              <MenuIcon fontSize="large" />
+              </IconButton>
+              <Slider mobileView={open} handleMobileView={handleMobileView}/>
+            </div>
+          }
         </Toolbar>
       </AppBar >
     )

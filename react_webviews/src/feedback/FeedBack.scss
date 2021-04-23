@@ -1,0 +1,15 @@
+
+
+.feedback-message{
+  border: 1px solid #e8e8e8;
+    border-radius: 3px;
+    padding: 10px;
+
+  .MuiInput-underline:before,.MuiInput-underline:after{
+    display: none;
+  }
+
+  .MuiFormHelperText-root{
+    text-align: right;
+  }
+}
