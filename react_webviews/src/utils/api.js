@@ -14,12 +14,11 @@ let is_secure = false;
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
-
 class Api {
   static get(route, params) {
     return this.xhr(route, params, 'get');
   }
-
+  
   static put(route, params) {
     return this.xhr(route, params, 'put')
   }
@@ -61,49 +60,10 @@ class Api {
         if (response.data._encr_payload) {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
         }
-        let force_error_api = window.sessionStorage.getItem('force_error_api');
-        if(force_error_api) {
-          response.data.pfwresponse.status_code = 410;
-          // response.data.pfwresponse.result = {};
-          response.data.pfwresponse.result.error = 'Sorry, we could not process your request';
-        }
         if (response.data.pfwresponse.status_code !== 200) {
           var errorMsg = response.data.pfwresponse.result.error || response.data.pfwresponse.result.message || "Something went wrong";
           var main_pathname=window.location.pathname
-          var project='admin'
-          if (main_pathname.indexOf('group-insurance') >= 0) {
-            project = 'group-insurance';
-          } else if (main_pathname.indexOf('insurance') >= 0) {
-            project = 'insurance';
-          } else if (main_pathname.indexOf('risk') >= 0) {
-            project = 'risk';
-          } else if (main_pathname.indexOf('mandate-otm') >= 0) {
-            project = 'mandate-otm';
-          } else if (main_pathname.indexOf('e-mandate') >= 0) {
-            project = 'e-mandate';
-          } else if (main_pathname.indexOf('mandate') >= 0) {
-            project = 'mandate';
-          } else if (main_pathname.indexOf('gold') >= 0) {
-            project = 'gold';
-          } else if (main_pathname.indexOf('isip') >= 0) {
-            project = 'isip';
-          } else if (main_pathname.indexOf('referral') >= 0) {
-            project = 'referral';
-          } else if (main_pathname.indexOf('help') >= 0) {
-            project = 'help';
-          } else if (main_pathname.indexOf('loan') >= 0) {
-            project = 'loan';
-          } else if (main_pathname.indexOf('w-report') >= 0) {
-            project = 'w-report';
-          } else if (main_pathname.indexOf('kyc-esign') >= 0) {
-            project = 'kyc-esign';
-          } else if (main_pathname.indexOf('pg') >= 0) {
-            project = 'pg';
-          } else if (main_pathname.indexOf('portfolio-rebalancing') >= 0) {
-            project = 'portfolio-rebalancing';
-          } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
-            project = 'iw-dashboard';
-          }
+          var project=getConfig().project || 'Others'
           Sentry.configureScope(
             scope=>scope
             .setTag("squad",project)
@@ -115,6 +75,12 @@ class Api {
           var SentryError = new Error(errorMsg)
           SentryError.name= `${project} ${main_pathname}`
           Sentry.captureException(SentryError)
+        }
+        let force_error_api = window.sessionStorage.getItem('force_error_api');
+        if(force_error_api) {
+          response.data.pfwresponse.status_code = 410;
+          // response.data.pfwresponse.result = {};
+          response.data.pfwresponse.result.error = 'Sorry, we could not process your request';
         }
         return response.data;
       }, error => {
