@@ -84,7 +84,7 @@ const Invest = (props) => {
         component={Type}
       />
       <Route
-        path={`${url}/instaredeem/amount/:investType`}
+        path={`${url}/instaredeem/amount`}
         component={Amount}
       />
       <Route
