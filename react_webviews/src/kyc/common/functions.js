@@ -88,27 +88,6 @@ export const validateFields = (formData, keyToCheck) => {
   return { formData, canSubmit }
 }
 
-export const submitAadharData = (data) => {
-  let encodedURI = encodeURIComponent(window.location.host + '/aadhar/callback')
-  if (window.location.port === '80') {
-    encodedURI = encodeURIComponent(
-      window.location.hostname + '/aadhar/callback'
-    )
-  }
-  window.location.href =
-    getConfig().base_url +
-    '/page/kyc/ekyc?pan=' +
-    data.pan_number +
-    '&aadhar=' +
-    data.aadhar +
-    '&mobile_number=' +
-    data.mobile_number +
-    '&redirect_url=' +
-    window.location.protocol +
-    '//' +
-    encodedURI
-}
-
 export const panUiSet = (pan) => {
   if (!pan) {
     return ''

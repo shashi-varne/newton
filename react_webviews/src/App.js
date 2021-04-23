@@ -22,12 +22,13 @@ import HNI from './external_portfolio';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
+import Withdraw from './withdraw'
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 import Fhc from './fhc';
 import WealthReport from './wealth_report';
 import InternalWealthDashboard from './internal_wealth_dashboard';
-import Loan from './loan';
+import Loan from './loan_idfc';
 import Payment from './payment';
 import KycEsign from './kyc_esign';
 import PortfolioRebalancing from './portfolio_rebalancing';
@@ -35,18 +36,20 @@ import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 import Landing from "./dashboard";
+import Report from "./reports";
 
-import Login from './login_and_registration/login';
-import Register from './login_and_registration/register';
-import Otp from './login_and_registration/otp';
-import ForgotPassword from './login_and_registration/forgot_password';
-import Logout from './login_and_registration/logout';
+import Login from './login_and_registration/Login';
+import Register from './login_and_registration/Register';
+import Otp from './login_and_registration/Otp';
+import ForgotPassword from './login_and_registration/ForgotPassword';
+import Logout from './login_and_registration/Logout';
 import Kyc from './kyc';
 
 import ProtectedRoute from './common/components/ProtectedRoute';
 
 import Tooltip from 'common/ui/Tooltip';
 import 'common/theme/Style.scss';
+import { storageService } from './utils/validators';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -61,6 +64,11 @@ const theme = createMuiTheme(themeConfig);
 var basename = window.sessionStorage.getItem('base_href') || '';
 if (basename && basename.indexOf('appl/webview') !== -1) {
   basename = basename ? basename + 'view/' : '';
+}
+
+const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
+if(isBottomSheetDisplayed) {
+  window.sessionStorage.setItem("is_bottom_sheet_displayed", false);
 }
 
 const ScrollToTop = withRouter(
@@ -117,6 +125,8 @@ class App extends Component {
               <Route path='/forgot-password' component={ForgotPassword} />
               <Route path='/logout' component={Logout} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <ProtectedRoute path='/withdraw' component={Withdraw} />
+              <ProtectedRoute path='/reports' component={Report} />
               <ProtectedRoute path='/kyc' component={Kyc} />
               <ProtectedRoute path='/' component={Landing}/>
               <Route component={NotFound} />

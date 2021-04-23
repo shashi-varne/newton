@@ -24,11 +24,11 @@ import CartDialog from './CartDialog';
 import IframeContainer from '../../e_mandate/commoniFrame/Container';
 
 import './Style.scss';
-import { isInvestRefferalRequired, proceedInvestmentChild } from '../../dashboard/invest/functions';
+import { isInvestRefferalRequired, proceedInvestment } from '../../dashboard/proceedInvestmentFunctions';
 import useUserKycHook from '../../kyc/common/hooks/userKycHook';
-import PennyVerificationPending from '../../dashboard/invest/mini-components/PennyVerificationPending';
-import InvestError from '../../dashboard/invest/mini-components/InvestError';
-import InvestReferralDialog from '../../dashboard/invest/mini-components/InvestReferralDialog';
+import PennyVerificationPending from '../../dashboard/Invest/mini-components/PennyVerificationPending';
+import InvestError from '../../dashboard/Invest/mini-components/InvestError';
+import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestReferralDialog';
 import { SkeltonRect } from '../../common/ui/Skelton';
 import { getBasePath } from '../../utils/functions';
 
@@ -101,7 +101,7 @@ const FundDetails = ({ classes, history }) => {
       <div className="fund-details-dual-button-content">
         <div className="cart-content">
           <img alt="" src={require(`assets/add_cart_icon.png`)} />
-          <span>{length}</span>
+          <div className="circle"><span>{length}</span></div>
         </div>
         <span>funds <br/> in cart</span>
       </div>
@@ -215,7 +215,7 @@ const FundDetails = ({ classes, history }) => {
         }
         break;
       case "mf":
-        proceedInvestment()
+        goNext()
         break;
       default:
         history.goBack();
@@ -231,7 +231,7 @@ const FundDetails = ({ classes, history }) => {
     navigate("/diy/invest")
   };
 
-  const proceedInvestment = (investReferralData, isReferralGiven) => {
+  const goNext = (investReferralData, isReferralGiven) => {
     const sipTypesKeys = [
       "buildwealth",
       "savetaxsip",
@@ -258,7 +258,7 @@ const FundDetails = ({ classes, history }) => {
     );
 
     if (
-      isInvestRefferalRequired(getConfig().partner.code) &&
+      isInvestRefferalRequired(getConfig().code) &&
       !isReferralGiven
     ) {
       handleDialogStates("openInvestReferral", true);
@@ -273,7 +273,7 @@ const FundDetails = ({ classes, history }) => {
       body.referral_code = investReferralData.code;
     }
 
-    proceedInvestmentChild({
+    proceedInvestment({
       sipOrOnetime: sipOrOneTime,
       body: body,
       paymentRedirectUrl: paymentRedirectUrl,
@@ -303,6 +303,14 @@ const FundDetails = ({ classes, history }) => {
       search: getConfig().searchParams,
     })
   }
+
+  const goBack = () => {
+    if(type === 'diy'){
+      handleInvest();
+    } else {
+      history.goBack();
+    }
+  };
 
   const handleInvest = () => {
     window.location.href =  getConfig().webAppUrl + 'diy/invest';
@@ -653,7 +661,7 @@ const FundDetails = ({ classes, history }) => {
             {dialogStates.openInvestReferral && (
               <InvestReferralDialog
                 isOpen={dialogStates.openInvestReferral}
-                proceedInvestment={proceedInvestment}
+                goNext={goNext}
               />
             )}
           </>
@@ -692,10 +700,10 @@ const FundDetails = ({ classes, history }) => {
           twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
           buttonTwoTitle={ ENTER_AMOUNT }
           handleClickTwo={handleClick2}
-          handleClick2={handleClick2} // old container field
-          buttonTitle2={ENTER_AMOUNT} // old container field
-          // showLoader={isApiRunning} // new container field
-          showLoader={isLoading || loading} // old container field
+          // handleClick2={handleClick2} // old container field
+          // buttonTitle2={ENTER_AMOUNT} // old container field
+          showLoader={isApiRunning} // new container field
+          // showLoader={isLoading || loading} // old container field
           type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
         >
           {fundDetails && ContainerData()}

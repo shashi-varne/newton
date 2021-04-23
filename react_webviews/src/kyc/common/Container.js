@@ -6,6 +6,7 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listner";
+import { getConfig } from "../../utils/functions";
 
 class Container extends Component {
   constructor(props) {
@@ -43,6 +44,17 @@ class Container extends Component {
       this.props.headerData.goBack();
       return;
     }
+
+    const goBackPath = this.props.location?.state?.goBack || "";
+
+    if(goBackPath) {
+      this.props.history.push({
+        pathname: goBackPath,
+        search: getConfig().searchParams,
+      });
+      return;
+    }
+
     this.props.history.goBack();
   };
 
@@ -51,10 +63,7 @@ class Container extends Component {
   }
 
   render() {
-    let props_base = {
-      classOverRide: "loanMainContainer",
-    };
-    return <Fragment>{this.commonRender(props_base)}</Fragment>;
+    return <Fragment>{this.commonRender()}</Fragment>;
   }
 }
 

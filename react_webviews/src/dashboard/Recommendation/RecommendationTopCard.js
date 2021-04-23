@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { getConfig } from '../../utils/functions';
 import { formatAmountInr, getFinancialYear } from '../../utils/validators';
-import { navigate as navigateFunc } from '../invest/common/commonFunctions';
+import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
 import './RecommendationTopCard.scss';
 const { productName } = getConfig();
 
@@ -13,7 +13,7 @@ const RecommendationTopCard = ({
   const navigate = navigateFunc.bind(parentProps);
   const { userRiskProfile, funnelData } = data;
   const [showRiskInfo, setShowRiskInfo] = useState(false);
-
+  console.log(funnelData.investType)
   const renderContent = () => {
     if (userRiskProfile) {
       const { equity, debt, investType } = funnelData;
@@ -60,7 +60,7 @@ const RecommendationTopCard = ({
           />
         </div>
       );
-    } else if (funnelData.investType === 'savetax') {
+    } else if (['savetax', 'savetaxsip'].includes(funnelData.investType)) {
       return (
         <div className="tax-card">
           <img src="assets/img/sale.svg" alt="" />
@@ -72,7 +72,7 @@ const RecommendationTopCard = ({
   }
 
   return (
-    <div className="recommendation-top-section">
+    <div className="recommendation-top-card">
       {renderContent()}
     </div>
   );

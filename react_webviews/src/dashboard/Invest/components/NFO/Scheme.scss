@@ -1,0 +1,29 @@
+.nfo-scheme {
+  .info {
+    margin: 0;
+    background: white;
+    border: none;
+    padding: 0;
+
+    .content {
+      cursor: pointer;
+      background: #fafafa;
+
+      img {
+        margin: 0;
+      }
+
+      .text {
+        padding-top: 5px;
+
+        .title {
+          font-size: 24px;
+        }
+
+        .subtitle {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}

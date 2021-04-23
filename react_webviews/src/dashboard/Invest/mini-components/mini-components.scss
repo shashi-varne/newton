@@ -1,0 +1,594 @@
+//////////Invest Amount ////////////////
+
+.invest-amount-corpus-amount,.invest-amount-corpus-duration,
+.invest-amount-input-head,.invest-amount-input-duration{
+    text-align: center;
+}
+
+.invest-amount-input{
+
+    .invest-amount-input-head{
+        margin-bottom: 10px;
+        font-size: 16px;       
+    }
+    .invest-amount-input-duration{
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+}
+
+.invest-amount-corpus{
+    margin-top: 30px;
+
+    .invest-amount-corpus-duration{
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .invest-amount-corpus-amount{
+        font-size: 24px;
+        color: var(--primary);
+    }
+}
+.invest-amount-num{
+    input{
+        text-align: center !important;
+        font-size: 30px;
+        
+    }
+    .MuiInput-underline:before{
+        display: none;
+    }
+    .MuiInput-underline:after{
+        width: max-content;
+        min-width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+    p{
+        text-align: center;
+    }
+}
+
+/////////End of Invest Amount /////////////
+
+
+////////Invested Amount /////////////////
+.invested-amount-placeholder-icons {
+    display: flex;
+    padding:15px 0px;
+    &>div {
+        flex-basis: 100%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        img {
+            width: 50px;
+        }
+        p {
+            font-size: 14px;
+            color: #d4c5ff;
+        }
+
+        &:first-child {
+            border-right: 1px solid #e8e8e8;
+        }
+    }
+
+}
+
+.invest-slider-container {
+    display: flex;
+    flex-direction: column;
+    padding:0px 20px;
+
+    .invest-slider-head {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .invest-slider-range {
+        display: flex;
+        padding: 10px 0px 20px 0px;
+        .invest-slider-stock {
+            flex:1 1 30%;
+            text-align: center;
+            font-size: 16px;
+        }
+        .invest-slider-ratio-text {
+            flex:1 1 40%;
+            text-align: center;
+            font-size: 12px;
+            color: #b2b2b2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .invest-slider-bond {
+            flex:1 1 30%;
+            text-align: center;
+            font-size: 16px;
+            
+        }
+    }
+}
+/////// End of Invested Amount ///////////
+
+/////// Fund Card ///////////////////
+.recommendations-funds-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    border-bottom: 2px solid #EAEAEA;
+    padding: 20px 0;
+    // margin-bottom: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+  
+    .recommendations-funds-item-icon {
+      margin-right: 10px;
+      border: 1px solid #EDEDED;
+      border-radius: 2px;
+      img {
+        width: 80px;
+      }
+    }
+  
+    .recommendations-funds-item-info {
+      flex: 1 1 70%;
+      display: flex;
+      flex-direction: column;
+  
+      .recommendations-funds-item-name {
+        font-size: 16px;
+        line-height: 1.4;
+      }
+  
+      .recommendations-funds-item-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        font-size: 16px;
+  
+        & > p:first-child {
+          color: #4685ce;
+        }
+      }
+    }
+  }
+/////// End of Fund Card /////////////
+
+
+//////// PennyVerficationPending ///////////
+.penny-verification-pending-dialog {
+  .dialog-content {
+    .text {
+      margin-top: 30px;
+    }
+  }
+}
+
+//////// End of PennyVerficationPending ///////////
+
+
+///////// InvestType ////////////////
+.invest-type {
+    width: 100%;
+  
+    .type {
+      display: flex;
+      column-gap: 20px;
+      margin-top: 30px;
+  
+      .content {
+        width: 50%;
+        position: relative;
+        text-align: center;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        min-height: 60px;
+  
+        img {
+          width: 100%;
+        }
+  
+        .text {
+          position: absolute;
+          top: 15px;
+          left: 15px;
+          color: #0a1d32;
+          font-size: 15px;
+          font-weight: 600;
+        }
+      }
+    }
+}
+
+///////// End of InvestType ////////////////
+
+
+////////////Sdk Landing Card/////////////////
+.sdk-landing-card{
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 0px 0px 0px 0px;
+    height: 100px;
+    display: flex;
+    background: white;
+    cursor: pointer;
+
+    .text{
+      flex: 1 1 80%;
+      padding: 20px 0 0 20px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      text-align: left;
+      .title{
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .subtitle{
+        color: #160d2e;
+        font-size: 13px;
+        margin: 4px 0 0 0;
+
+        .sdk-card-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          display: inline-block;
+          margin: 0 4px 0 0;
+        }
+
+        .sdk-card-status-load{
+          width: 70% !important;
+          height: 15px !important;
+        }
+      }
+
+      .subtitle-status{
+        font-size: 10px;
+      }
+    }
+    .imageWrapper{
+      flex: 1 1 20%;
+      
+    }
+    .sdk-refferal-wrapper{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .sdk-refferal-btn{
+        border: 1px solid #4DB848;
+        color: #4DB848;
+        font-size: 0.875rem;
+        min-width: 88px;
+        box-sizing: border-box;
+        min-height: 36px;
+        padding: 0 8px;
+        margin: 6px 8px;
+        border-radius: 2px;
+      }
+      
+      .sdk-refferal-btn.disable-refferal-btn{
+        border-color: grey;
+        color: grey;
+      }
+    }
+}
+.sdk-landing-card.disable-card-action {
+  pointer-events: none;
+}
+////////////End of Sdk Landing Card/////////////////
+
+
+////////////////////// common bottom sheet dialog Landing///////////////////////
+
+.verification-failed-dialog {
+  .verification-failed-dialog-content {
+    padding: 15px 15px 30px 15px !important;
+
+    .title {
+      margin: -15px -15px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+      color: #160d2e;
+      font-size: 20px;
+      font-weight: 600;
+
+      .text {
+        margin: 30px 0 10px 0;
+      }
+    }
+
+    .subtitle {
+      color: #767e86;
+      font-size: 14px;
+      margin: 20px 0;
+    }
+
+    .bottom-info {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      background-color: white;
+
+      .bottom-info-box {
+        display: -ms-flexbox;
+        display: flex;
+        padding: 0 10px 0 10px;
+
+        img {
+          margin: 0 10px 0 0px;
+        }
+
+        .bottom-info-content {
+          color: #767e86;
+          font-size: 13px;
+          font-weight: 400;
+        }
+      }
+
+      .bottom-info-mid {
+        border-left: 1px solid #d3dbe4;
+        height: 12px;
+      }
+    }
+
+    .action {
+      display: flex;
+      width: 100%;
+      align-items: center;
+
+      .button {
+        width: 100%;
+        padding: 5px 15px;
+        font-size: 14px;
+        border-radius: 5px;
+        min-height: 47px;
+        font-weight: bold;
+        letter-spacing: 0.01em;
+      }
+
+      .bg-full {
+        color: white;
+        background-color: var(--secondary);
+      }
+
+      .no-bg {
+        background-color: white;
+        color: #878787;
+      }
+    }
+  }
+
+  .kyc-premium-content {
+    .title {
+      .text {
+        margin-bottom: 30px;
+      }
+    }
+
+    .subtitle {
+      margin: 30px 0 10px 0;
+    }
+
+    .action {
+      margin-top: 30px;
+    }
+  }
+}
+
+//////////////// End of common bottom sheet dialog Landing /////////
+
+
+///////////////Secure Invest ///////////////////////////////
+
+.secure-invest-bottom {
+  padding: 10px 0 10px 0;
+  text-align: center;
+  margin: 0 0 30px 0px;
+  border-radius: 6px;
+
+  .content {
+    font-size: 14px;
+    color: #767e86;
+    margin: 0 0 5px 0;
+    font-weight: 500;
+  }
+
+  img {
+    margin: 5px 0 0 0;
+  }
+}
+
+///////////////End of Secure Invest /////////////////////////
+
+
+////////////// Invest Referral Dialog ///////////////////////
+
+.invest-refferal-dialog {
+  color: #333333;
+  line-height: 1.5;
+
+  .invest-refferal-dialog-content {
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+      color: #0a1d32;
+      font-size: 16px;
+      font-weight: 600;
+      padding-bottom: 10px;
+    }
+
+    .sub-text {
+      color: #767e86;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .input {
+      padding: 10px 0;
+
+      .text {
+        color: #878787;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+        font-size: 13px;
+
+        .verify {
+          color: var(--secondary);
+          font-size: 15px;
+        }
+      }
+
+      .referral-loader {
+        position: absolute;
+
+        .dot-spinner {
+          padding-right: 22px;
+        }
+      }
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding-top: 20px;
+
+      button {
+        min-width: 140px;
+        color: white;
+        background-color: var(--secondary);
+        padding: 5px 15px;
+        border-radius: 5px;
+        min-height: 42px;
+        line-height: 36px;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 0.01em;
+      }
+
+      .trasparent-button {
+        border: 1px solid var(--secondary);
+        color: var(--secondary);
+        background-color: white;
+      }
+
+      .disabled {
+        background-color: #bfc1c1 !important;
+        color: rgba(0, 0, 0, 0.38) !important;
+        border: 1px solid #bfc1c1 !important;
+      }
+    }
+  }
+}
+
+////////////// End of Invest Referral Dialog ///////////////////////
+
+
+/////////////// Campaign Dialog /////////////////////////
+
+.campaign-dialog{
+  .MuiDialog-paperWidthSm{
+    max-width: 500px !important;
+  }
+  .campaign-dialog-content{
+    position: relative;
+    padding: 15px !important;
+    padding-bottom: 0px !important;
+    .title{
+      margin: 40px 0;
+      width: 55%;
+      color: #160d2e;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .subtitle{
+      color: #767e86;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+
+    .campaign-img-container{
+      position: absolute;
+      right: 0;
+      top: 0;
+      img{
+        width: 120px;
+        margin: 10px 10px 0px 0px;
+      }
+    }
+  }
+
+  .dialog-action{
+    display: flex;
+    align-items: center;
+    padding:0px 15px 15px 15px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    width: 100% !important;
+
+    .button {
+      width: 100%;
+      padding: 5px 15px;
+      font-size: 14px;
+      border-radius: 5px;
+      min-height: 47px;
+      font-weight: bold;
+      margin: 0px !important;
+      letter-spacing: 0.01em;
+      .MuiButton-label{
+        text-transform: uppercase !important;
+      }
+    }
+
+    .bg-full {
+      color: white;
+      background-color: var(--secondary);
+    }
+
+    .no-bg {
+      background-color: white;
+      color: #878787;
+    }
+  }
+}
+
+/////////////// End of Campaign Dialog /////////////////////////
+
+
+
+@media only screen and (max-width: 700px) {
+  #invest-bottom-dialog, #sdk-campaign-dialog {
+    .MuiDialog-paper {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .MuiDialog-paperWidthSm {
+      width: 100%;
+      align-self: flex-end;
+    }
+  }
+}

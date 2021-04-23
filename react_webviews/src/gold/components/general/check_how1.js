@@ -125,7 +125,7 @@ class CheckHow1 extends Component {
                   {
                     label: 'Price',
                     data: [1781.24, 5454.37, 9590.61, 28510.10, 42158.60],
-                     backgroundColor: getConfig().primary,
+                     backgroundColor: getConfig().styles.primaryColor,
                   }
                 ]}
             }

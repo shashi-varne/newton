@@ -289,11 +289,24 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
     val = '';
   }
   const isNegativeVal = val < 0;
+  
+  function postFix(val){
+    return parseFloat(val) < 2
+  }
+
   val = Math.abs(val);
-  if (val >= 10000000) val = (val / 10000000).toFixed(decimalPlaces) + ' Cr';
-  else if (val >= 100000) val = (val / 100000).toFixed(decimalPlaces) + ' L';
-  else if (val >= 1000) val = (val / 1000).toFixed(decimalPlaces) + ' K';
-  else if (val) return inrFormatDecimal(val);
+  if (val >= 10000000){ 
+    val = (val / 10000000).toFixed(decimalPlaces) + ' Crore';
+    val = postFix(val) ? val : val + 's' ;
+  }
+  else if (val >= 100000){
+    val = (val / 100000).toFixed(decimalPlaces) + ' Lakh'; 
+    val = postFix(val) ? val : val + 's' ;
+  } 
+  else if (val >= 1000)
+     val = (val / 1000).toFixed(decimalPlaces) + ' K';
+  else if (val) 
+    return inrFormatDecimal(val);
 
   val = val.toString();
   // remove .00
@@ -310,6 +323,7 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
   }
   return val;
 }
+
 
 export function numDifferentiationInr(val, decimalPlaces, retainLeadingZeroes) {
   return numDifferentiation(val, true, decimalPlaces, retainLeadingZeroes);
@@ -942,6 +956,53 @@ export function containsSpecialCharactersAndNumbers(value){
   return format.test(value);
 }
 
+export function bytesToSize(bytes, decimals = 2) {
+  if (bytes === 0) return "0 Bytes";
+
+  const k = 1000;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+}
+
+export function timeStampToDate(timestamp) {
+  let date = timestamp.substring(0, 10);
+
+  let new_date = date.split('-').reverse().join('/')
+  return new_date
+}
+
+export function changeNumberFormat(number, decimals, recursiveCall) {
+  const decimalPoints = decimals || 2;
+  const noOfLakhs = number / 100000;
+  let displayStr;
+  let isPlural;
+
+  // Rounds off digits to decimalPoints decimal places
+  function roundOf(integer) {
+      return +integer.toLocaleString(undefined, {
+          minimumFractionDigits: decimalPoints,
+          maximumFractionDigits: decimalPoints,
+      });
+  }
+
+  if (noOfLakhs >= 1 && noOfLakhs <= 99) {
+      const lakhs = roundOf(noOfLakhs);
+      isPlural = lakhs > 1 && !recursiveCall;
+      displayStr = `${lakhs} lakh${isPlural ? 's' : ''}`;
+  } else if (noOfLakhs >= 100) {
+      const crores = roundOf(noOfLakhs / 100);
+      const crorePrefix = crores >= 100000 ? changeNumberFormat(crores, decimals, true) : crores;
+      isPlural = crores > 1 && !recursiveCall;
+      displayStr = `${crorePrefix} crore${isPlural ? 's' : ''}`;
+  } else {
+      displayStr = roundOf(+number);
+  }
+
+  return displayStr;
+}
+
 export function countChars(line) {
   return line.split(' ').filter(word => !isEmpty(word)).reduce((acc, cur) => acc += cur.length, 0)
 }
@@ -1028,4 +1089,23 @@ export function getFinancialYear() {
     currentFinYear -= 1;
   }
   return 'FY ' + currentFinYear + '-' + nextFinYear.toString().slice(-2);
+}
+
+export const convertInrAmountToNumber = (value) => {
+  let amount = (value.match(/\d+/g) || "").toString();
+    if (amount) {
+      amount = amount.replaceAll(",", "");
+    }
+    return amount
+}
+export function convertDateFormat(inputFormat) {
+  function pad(s) { return (s < 10) ? '0' + s : s; }
+  var d = new Date(inputFormat)
+  return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
+}
+export function Casesensitivity(str){
+  if(!str || !isNaN(str)){
+    return str
+  }
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() + "";
 }

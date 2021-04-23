@@ -11,6 +11,8 @@ import Api from "utils/api";
 import ReligarePremium from "../religare/religare_premium";
 import HDFCPremium from "../hdfc/hdfc_premium";
 import StarPremium from "../Star/star_premium";
+import GMCPremium from "../gmc/gmc_premium";
+
 class GroupHealthPlanPremiumSummary extends Component {
   constructor(props) {
     super(props);
@@ -65,6 +67,10 @@ class GroupHealthPlanPremiumSummary extends Component {
           body.insurance_type = groupHealthPlanData.ui_members.parents_option;
         }
       }
+      if(this.state.providerConfig.provider_api === 'care_plus'){
+        body['payment_frequency'] = post_body.payment_frequency;
+      }
+
     }
 
     //quote creation api
@@ -84,8 +90,7 @@ class GroupHealthPlanPremiumSummary extends Component {
       else{
         if(typeof(resultData.error) === 'object' && resultData.error.quotation_id){
           quote_id =  resultData.error.quotation_id;
-        }
-        else{
+        }else{
           error = resultData.error || resultData.message || true
         }
       }
@@ -148,6 +153,7 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.net_premium = lead.total_premium - lead.gst ;
       properties.gst_tax = lead.gst;
       properties.total_amount = lead.total_premium;
+      properties.payment_frequency = lead.payment_frequency;
     } else {
       var final_add_ons_data = []
       if(post_body){
@@ -176,9 +182,9 @@ class GroupHealthPlanPremiumSummary extends Component {
         properties.net_premium = groupHealthPlanDataProp.plan_selected_final.premium;
         properties.gst_tax = groupHealthPlanDataProp.post_body.gst || 0;
         properties.total_amount = groupHealthPlanDataProp.plan_selected_final.total_amount;
+        properties.payment_frequency = groupHealthPlanDataProp.plan_selected_final.payment_frequency;
       }
     }
-
     properties.total_discount = properties.discount_amount;
     this.setState({ properties: properties });
   };
@@ -278,11 +284,12 @@ class GroupHealthPlanPremiumSummary extends Component {
     } 
   };
 
-  renderProviderPremium() {
+    renderProviderPremium() {
     const premiumComponentMap = {
       religare: <ReligarePremium account_type={this.state.groupHealthPlanData.account_type || this.state.lead.insurance_type} {...this.state.properties} />,
       hdfcergo: <HDFCPremium {...this.state.properties} />,
       star: <StarPremium {...this.state.properties} />,
+      gmc: <GMCPremium {...this.state.properties} />,
     };
     return premiumComponentMap[this.state.provider.toLowerCase()];
   }
@@ -299,7 +306,7 @@ class GroupHealthPlanPremiumSummary extends Component {
         title="Premium summary"
         fullWidthButton={true}
         onlyButton={true}
-        buttonTitle="CONTINUE AND PROVIDE DETAILS"
+        buttonTitle="CONTINUE"
         handleClick={() => this.handleClick()}
       >
         <div className="group-health-plan-premium-summary">
@@ -311,19 +318,21 @@ class GroupHealthPlanPremiumSummary extends Component {
               />
             </div>
             <div className="left">
-              <div className="tc-title">
+              <div className="tc-title" style={{fontSize: '15px', marginTop: this.state.providerConfig.key === 'GMC' ? '-20px': ''}}>
                 {this.state.providerData.title2}
               </div>
-              <div className="tc-subtitle">
+              {this.state.providerConfig.key !== 'GMC' ? (
+                <div className="tc-subtitle">
                 {this.state.provider !== 'HDFCERGO' ? this.state.providerConfig.subtitle : this.state.get_lead ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.lead && this.state.lead.plan_id]:  this.state.plan_selected.plan_title}
               </div>
+              ): null}
             </div>
           </div>
           {this.state.properties && this.renderProviderPremium()}
-          <div className="premium-summary-disclaimer" style={{ color: getConfig().primary }}>
+          <div className="premium-summary-disclaimer" style={{ color: getConfig().styles.primaryColor }}>
             <p>Premium values are being rounded off for ease of representation, there may be a small difference in final payable value.</p>
           </div>
-          <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />
+          <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical care at affordable cost' }} />
         </div>
       </Container>
     );

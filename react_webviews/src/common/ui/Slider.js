@@ -14,12 +14,13 @@ const CustomizedSlider = (props) => {
     <div className="slider">
       <Slider
         defaultValue={Number(props.default)}
+        value={Number(props.value)}
         min={Number(props.min)}
         max={Number(props.max)}
         onChange={handleChange}
         disabled={props.disabled}
         trackStyle={{
-          background: getConfig().primary
+          background: getConfig().styles.primaryColor
         }}
         railStyle={{
           height: 4

@@ -1,0 +1,28 @@
+.invest-explore-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.invest-explore-card:hover {
+  cursor: pointer;
+}
+
+.invest-explore-icon {
+  display: block;
+  object-fit: contain;
+  height: 50px;
+  width: 50px;
+}
+
+.invest-explore-meta {
+  .title {
+    font-weight: bold !important;
+    font-size: 16px !important;
+  }
+
+  .subtitle {
+    font-size: 14px !important;
+    color: #9b9b93;
+  }
+}

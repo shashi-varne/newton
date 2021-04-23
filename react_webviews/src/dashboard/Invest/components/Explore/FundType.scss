@@ -1,0 +1,104 @@
+#invest-explore-fund-type {
+  .heading {
+    margin: 20px 0;
+    color: #333333;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .top-title {
+    margin: 0 0 20px 0;
+  }
+
+  .scroll {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .scroll .item {
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    flex: 1 1 auto;
+    margin: 10px;
+    min-width: 250px;
+  }
+
+  .item .item-details {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: flex-start;
+  }
+
+  .item-details .title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 10px;
+    margin-bottom: 0;
+    -ms-flex: 1;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .item .cart-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #e8e8e8;
+    padding: 4px;
+  }
+
+  .cart-actions .stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cart-actions .invest-explore-trending-button {
+    height: 36px;
+    min-height: 36px;
+    width: 90px !important;
+    font-size: 14px !important;
+  }
+
+  .stats .desc {
+    margin-left: 5px;
+    font-size: 14px;
+    color: #9b9b93;
+  }
+
+  .categories-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .categories-container .card {
+    flex: 0 45%;
+    margin: 10px 0 10px 10px;
+  }
+  .categories-container .card:nth-child(even) {
+    margin-left: 10px;
+  }
+
+  .categories-container .card:hover {
+    cursor: pointer;
+  }
+
+  .categories-container .card .name {
+    margin-top: 20px;
+    font-weight: bold;
+    word-break: break-word;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+}

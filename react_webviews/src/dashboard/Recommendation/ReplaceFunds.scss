@@ -1,0 +1,35 @@
+.recommendations-replace-funds-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 20px 0 30px;
+}
+
+.alternate-funds-item {
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  padding: 0px 10px;
+  margin: 0px !important;
+  margin-bottom: 10px !important;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  .recommendations-funds-item {
+    box-shadow: none;
+    border-bottom: none;
+    margin-bottom: 0px;
+    padding: 10px 10px 0px 10px;
+
+    .recommendations-funds-item-icon {
+      img {
+        width: 60px;
+      }
+    }
+
+    .recommendations-funds-item-info {
+      .recommendations-funds-item-name {
+        font-size: 14px;
+      }
+    }
+  }
+}

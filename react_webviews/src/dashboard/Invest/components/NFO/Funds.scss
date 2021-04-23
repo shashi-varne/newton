@@ -1,0 +1,78 @@
+.nfo-funds {
+  .message {
+    padding: 20px 0 50px 0;
+    font-size: 14px;
+  }
+
+  .content {
+    border-bottom: 1px solid #e6e6e6;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    line-height: 1.5;
+
+    .icon {
+      width: fit-content;
+      margin: 0 20px 0 0;
+      padding: 0;
+      cursor: pointer;
+      border: 1px solid #e8e8e8;
+
+      img {
+        width: 90px;
+      }
+    }
+
+    .text {
+      width: 100%;
+
+      .title {
+        line-height: 1.25em;
+        color: #4a4a4a;
+        font-size: 18px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .item {
+        display: flex;
+        display: -ms-flexbox;
+        justify-content: space-between;
+
+        .sub-item {
+          margin-top: 10px;
+
+          p {
+            margin: 0px;
+            padding-top: 0;
+            color: #727272;
+            font-size: 16px;
+            text-transform: capitalize;
+          }
+        }
+
+        .invest {
+          width: fit-content;
+
+          .nfo-funds-button {
+            margin: 6px 8px;
+            width: 90px !important;
+            min-width: 90px;
+            height: 40px;
+            font-size: 14px !important;
+            border-radius: 3px;
+          }
+        }
+      }
+
+      .date {
+        font-size: 14px;
+        margin-top: 5px;
+        color: var(--secondary);
+      }
+    }
+  }
+}

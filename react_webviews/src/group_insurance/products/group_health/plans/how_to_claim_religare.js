@@ -12,7 +12,7 @@ class GroupHealthPlanHowToClaimReligare extends Component {
                 steps: []
             },
             type: getConfig().productName,
-            color: getConfig().primary,
+            color: getConfig().styles.primaryColor,
             show_loader: true
         };
 
@@ -26,9 +26,10 @@ class GroupHealthPlanHowToClaimReligare extends Component {
     }
 
     handleData = () => {
+        let { params } = this.props.location || {};
         let renderData = {
             'header_title': 'How to claim?',
-            'cta_title': 'OK'
+            'cta_title': params ? params.cta_title : 'OKAY'
         }
 
         renderData.steps = [
@@ -38,7 +39,7 @@ class GroupHealthPlanHowToClaimReligare extends Component {
             {
                 'title': 'Contact details',
                 'subtitle': <div className="contact_mail">customerfirst@careinsurance.com</div>,
-                'contact_no':<div className="contact_mail"><span id="contact-no">1800-102-4488</span> (toll free number)</div>
+                'contact_no':<div className="contact_mail"><span id="contact-no" style={{color: getConfig().primary}}>1800-102-4488</span> (toll free number)</div>
             },
             {
                 'title': 'Cashless claims:',

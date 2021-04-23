@@ -16,7 +16,7 @@ const headerIconMapper = {
 }
 
 const colorReplace = (code, headerData) => {
-  let color = getConfig().primary;
+  let color = getConfig().styles.primaryColor;
   if (headerData && headerData.leftIconColor) {
     color = headerData.leftIconColor;
   }
