@@ -56,12 +56,12 @@ const Sip = (props) => {
                 <div
                   className={`status ${
                     sip.friendly_status === "cancelled"
-                      ? "red-text"
+                      ? "sip-red-text"
                       : sip.friendly_status === "active"
-                      ? "green-text"
+                      ? "sip-green-text"
                       : sip.friendly_status === "paused"
-                      ? "blue-text"
-                      : "yellow-text"
+                      ? "sip-blue-text"
+                      : "sip-yellow-text"
                   }`}
                 >
                   <div className="dot"></div>

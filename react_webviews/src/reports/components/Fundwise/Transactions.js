@@ -77,8 +77,8 @@ const FundswiseTransactions = (props) => {
                   <span>Folio No: {transaction.folio_number}</span>
                   <span
                     className={`text ${
-                      transaction.ttype === "purchase" && "green-text"
-                    } ${transaction.ttype === "redemption" && "red-text"}`}
+                      transaction.ttype === "purchase" && "fundswise-green-text"
+                    } ${transaction.ttype === "redemption" && "fundswise-red-text"}`}
                   >
                     {transaction.ttype}
                   </span>
