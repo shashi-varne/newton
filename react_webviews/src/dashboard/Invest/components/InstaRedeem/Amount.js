@@ -1,3 +1,4 @@
+import './Amount.scss';
 import React, { useState } from "react";
 import Container from "../../../common/Container";
 import Input from "@material-ui/core/Input";
@@ -9,45 +10,34 @@ import {
   getGoalRecommendation,
   navigate as navigateFunc,
 } from "../../common/commonFunctions";
-import { isEmpty, storageService, convertInrAmountToNumber, formatAmountInr } from "../../../../utils/validators";
+import { convertInrAmountToNumber, formatAmountInr } from "../../../../utils/validators";
 import useFunnelDataHook from "../../common/funnelDataHook";
-import './Amount.scss';
 
 const InvestAmount = (props) => {
   const navigate = navigateFunc.bind(props);
-  const instaRecommendations =
-    storageService().getObject("instaRecommendations") || [];
-  if (isEmpty(instaRecommendations)) {
-    navigate("/invest/instaredeem");
-    return;
-  }
-  const investType = props.match.params.investType || "";
-  const tags = investRedeemData.tagsMapper[investType];
-  const term = 15;
-  const instaRecommendation = instaRecommendations[0];
 
-  const [amount, setAmount] = useState(investType === "sip" ? 5000 : 50000);
+  const { funnelData, updateFunnelData } = useFunnelDataHook();
+  const sipOrOnetime = funnelData.investTypeDisplay;
+  const tags = investRedeemData.tagsMapper[sipOrOnetime];
+  const [amount, setAmount] = useState(
+    funnelData.recommendedTotalAmount ||
+    (sipOrOnetime === "sip" ? 5000 : 50000)
+  );
   const [amountError, setAmountError] = useState("");
   const [showLoader, setShowLoader] = useState(false);
-  const { updateFunnelData } = useFunnelDataHook();
+
   const handleClick = () => {
     setShowLoader("button");
-    const allocations = [{ amount: amount, mf: instaRecommendation }];
     const recommendations = {
-      recommendation: allocations,
-      term: term,
-      investType: "insta-redeem",
-      name: "Insta Redeem",
-      investTypeDisplay: investType,
-      bondstock: "",
+      recommendation: [{
+        ...funnelData.recommendation[0],
+        amount
+      }],
       // eslint-disable-next-line
       recommendedTotalAmount: parseInt(amount),
-      type: "insta-redeem",
-      order_type: investType,
-      subtype: "",
     };
     updateFunnelData(recommendations);
-    navigate(`recommendations`);
+    navigate('recommendations');
   };
 
   const handleChange = () => (event) => {
@@ -76,7 +66,7 @@ const InvestAmount = (props) => {
     let goal = getGoalRecommendation();
     let max = 0;
     let min = 0;
-    if (investType === "sip") {
+    if (sipOrOnetime === "sip") {
       max = goal.max_sip_amount;
       min = goal.min_sip_amount;
     } else {
@@ -121,7 +111,7 @@ const InvestAmount = (props) => {
             onChange={handleChange("amount")}
             autoFocus
             endAdornment={
-              investType === "sip" && (
+              sipOrOnetime === "sip" && (
                 <InputAdornment position="end">per month</InputAdornment>
               )
             }

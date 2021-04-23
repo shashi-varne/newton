@@ -1,46 +1,48 @@
-import React from "react";
-import Dialog, { DialogContent } from "material-ui/Dialog";
-import { getConfig } from "utils/functions";
-import Button from "@material-ui/core/Button";
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Slide from '@material-ui/core/Slide';
 
-const KycStatusDialog = ({ isOpen, close, handleClick, cancel, data }) => {
-  const productName = getConfig().productName;
+const CampaignDialog = ({ isOpen, close, handleClick, cancel, data }) => {
   return (
     <Dialog
       open={isOpen}
-      onClose={() => close()}
-      aria-labelledby="campaign-dialog"
+      onClose={close}
+      aria-labelledby='campaign-dialog'
       keepMounted
-      aria-describedby="campaign-dialog"
-      className="campaign-dialog"
-      id="sdk-campaign-dialog"
+      aria-describedby='campaign-dialog'
+      TransitionComponent={Transition}
+      className='campaign-dialog'
+      id='sdk-campaign-dialog'
     >
-      <DialogContent className="verification-failed-dialog-content">
-        <div className="title">
-          <div className="text">{data?.title}</div>
-          <img
-            src={data?.image}
-            alt=""
-            className="img"
-          />
+      <DialogContent className='campaign-dialog-content'>
+        <div className='title'>
+          <div className='text'>{data?.title}</div>
         </div>
-        <div className="subtitle">{data?.subtitle}</div>
-        <div className="action">
-          {!data?.action_buttons?.buttons?.length  === 2 && (
-            <Button className="button no-bg" onClick={() => cancel()}>
-              NOT NOW
-            </Button>
-          )}
-          {
-
-          }
-          <Button className="button bg-full" onClick={() => handleClick()}>
-            {data.action_buttons?.buttons[0]?.title}
-          </Button>
+        <div className='campaign-img-container'>
+          <img src={data?.image} alt='' className='img' />
         </div>
+        <div className='subtitle'>{data?.subtitle}</div>
       </DialogContent>
+
+      <DialogActions className='dialog-action'>
+        {!data?.action_buttons?.buttons?.length === 2 && (
+          <Button className='button no-bg' onClick={cancel}>
+            NOT NOW
+          </Button>
+        )}
+        <Button className='button bg-full' onClick={handleClick}>
+          {data.action_buttons?.buttons[0]?.title}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
 
-export default KycStatusDialog;
+export default CampaignDialog;
+
+const Transition = (props) => {
+  return <Slide direction="up" {...props} />;
+}

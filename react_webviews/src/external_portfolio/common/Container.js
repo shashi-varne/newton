@@ -12,7 +12,7 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { getConfig, setHeights } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
 import { isEmpty, isFunction } from "../../utils/validators";
@@ -34,32 +34,18 @@ class Container extends Component {
     // this.check_hide_header_title();
     setHeights({ 'header': true, 'container': false });
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    } else {
-      window.PlutusSdk.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    }
+    window.callbackWeb.add_listener({
+      type: 'back_pressed',
+      go_back: function () {
+        that.historyGoBack();
+      }
+    });
 
     window.addEventListener("scroll", this.onScroll, false);
   }
 
   componentWillUnmount() {
-    if (getConfig().generic_callback) {
-      window.callbackWeb.remove_listener({});
-    } else {
-      window.PlutusSdk.remove_listener({});
-    }
-
+    window.callbackWeb.remove_listener({});
     window.removeEventListener("scroll", this.onScroll, false);
   }
 

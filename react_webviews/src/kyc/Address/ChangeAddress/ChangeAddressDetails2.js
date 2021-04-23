@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini-components/Alert'
 import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper } from '../../constants'
+import { storageConstants, nriDocMapper as docMapper, getPathname } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
 import toast from '../../../common/ui/Toast'
@@ -35,7 +35,7 @@ const getTitleList = ({ kyc }) => {
 }
 
 const MessageComponent = (kyc) => {
-  const [titleList, setTitleList] = useState(getTitleList(kyc))
+  const titleList = getTitleList(kyc)
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
@@ -49,11 +49,15 @@ const MessageComponent = (kyc) => {
 }
 
 const ChangeAddressDetails2 = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
 
-  const stateParams = props?.location?.state
+  const stateParams = props?.location?.state || {}
+  if(!stateParams.address_doc_type) {
+    navigate(getPathname.changeAddressDetails1);
+  }
   const { address_doc_type: addressDocType } = stateParams
 
   const [file, setFile] = useState(null)
@@ -66,58 +70,56 @@ const ChangeAddressDetails2 = (props) => {
   const backDocRef = useRef(null)
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
-    if (getConfig().generic_callback) {
-      window.callbackWeb[method_name]({
-        type: 'doc',
-        doc_type: doc_type,
-        doc_name: doc_name,
-        doc_side: doc_side,
-        // callbacks from native
-        upload: function upload(file) {
-          try {
-            setState({
-              ...state,
-              docType: doc_type,
-              docName: doc_name,
-              doc_side: doc_side,
-              show_loader: true,
-            })
-            if (doc_side === 'back') {
-              setFrontDoc(file)
-            } else {
-              setBackDoc(file)
-            }
-            switch (file.type) {
-              case 'image/jpeg':
-              case 'image/jpg':
-              case 'image/png':
-              case 'image/bmp':
-                mergeDocs(file, doc_side)
-                break
-              default:
-                toast('Please select image file')
-                setState({
-                  ...state,
-                  docType: doc_type,
-                  show_loader: false,
-                })
-            }
-          } catch (e) {
-            //
-          }
-        },
-      })
-
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
+    window.callbackWeb[method_name]({
+      type: 'doc',
+      doc_type: doc_type,
+      doc_name: doc_name,
+      doc_side: doc_side,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
           setState({
             ...state,
+            docType: doc_type,
+            docName: doc_name,
+            doc_side: doc_side,
             show_loader: true,
           })
-        },
-      })
-    }
+          if (doc_side === 'back') {
+            setFrontDoc(file)
+          } else {
+            setBackDoc(file)
+          }
+          switch (file.type) {
+            case 'image/jpeg':
+            case 'image/jpg':
+            case 'image/png':
+            case 'image/bmp':
+              mergeDocs(file, doc_side)
+              break
+            default:
+              toast('Please select image file')
+              setState({
+                ...state,
+                docType: doc_type,
+                show_loader: false,
+              })
+          }
+        } catch (e) {
+          //
+        }
+      },
+    })
+
+    window.callbackWeb.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
+        setState({
+          ...state,
+          show_loader: true,
+        })
+      },
+    })
   }
 
   const handleChange = (type) => (event) => {
@@ -190,7 +192,6 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleSubmit = async () => {
-    const navigate = navigateFunc.bind(props)
     const type = kyc?.address?.meta_data?.is_nri ? 'nri_address' : 'address'
     const addressKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'

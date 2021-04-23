@@ -14,6 +14,9 @@ import HNI from './external_portfolio';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
+import Withdraw from './withdraw'
+import Report from "./reports";
+
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 import Fhc from './fhc';
@@ -61,8 +64,10 @@ const Feature = () => {
           <Route path='/fund-details' component={FundDetails} />
           <Route path='/feedback' component={FeedBack} />
           
+          <ProtectedRoute path='/withdraw' component={Withdraw} />
+          <ProtectedRoute path='/reports' component={Report} />
           <ProtectedRoute path='/kyc' component={Kyc} />
-          <ProtectedRoute path='/' component={Landing} />
+          <ProtectedRoute path='/' component={Landing}/>
           <Route component={NotFound} />
         </Switch>
   );

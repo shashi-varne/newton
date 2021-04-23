@@ -20,12 +20,15 @@ import { ToastContainer } from 'react-toastify';
 
 import InternalWealthDashboard from './internal_wealth_dashboard';
 import DesktopLayout from './DesktopLayout';
+// import CommonRenderFaqs from './common/components/RenderFaqs';
+
 
 import Feature from './Feature';
 
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
 import 'common/theme/Style.scss';
+import { storageService } from './utils/validators';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -42,6 +45,12 @@ if (basename && basename.indexOf('appl/webview') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
 const mobile = getConfig().isMobileDevice;
+
+const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
+if(isBottomSheetDisplayed) {
+  window.sessionStorage.setItem("is_bottom_sheet_displayed", false);
+}
+
 const ScrollToTop = withRouter(
   class ScrollToTopWithoutRouter extends Component {
     componentDidUpdate(prevProps) {

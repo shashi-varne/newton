@@ -4,26 +4,23 @@ import DropdownWithoutIcon from 'common/ui/SelectWithoutIcon';
 import toast from 'common/ui/Toast';
 import isEmpty from 'lodash/isEmpty';
 import Input from 'common/ui/Input';
+import Dialog from 'common/ui/Dialog';
+import Button from 'common/ui/Button';
 import { getFeedBackList, postFeedBackList } from './common/api';
-import { withStyles } from 'material-ui/styles';
+import { navigate as navigateFunc } from './common/commonFunctions';
+import { withRouter } from 'react-router-dom';
 import './FeedBack.scss';
 import { storageService } from 'utils/validators';
 
-const styles = {
-  root: {
-    border: '1px solid #e8e8e8 !important',
-    borderRadius: '3px !important',
-    padding: '10px !important',
-  },
-};
-
 const characterLength = 150;
-const FeedBack = ({ classes }) => {
+const FeedBack = (props) => {
   const [feedBackList, setFeedBackList] = useState(null);
   const [selectedValue, setSelectedValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [buttonLoader, setButtonLoader] = useState('');
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
+  const navigate = navigateFunc.bind(props);
   const user = storageService().getObject('user');
 
   useEffect(() => {
@@ -34,10 +31,10 @@ const FeedBack = ({ classes }) => {
       setIsLoading(true);
       const data = await getFeedBackList();
       console.log('data', data);
-      const newData = data?.relevant_categories?.map(el => {
+      const newData = data?.relevant_categories?.map((el) => {
         el.value = el.tag;
         return el;
-      })
+      });
       setFeedBackList(newData);
     } catch (err) {
       toast(err, 'error');
@@ -47,30 +44,48 @@ const FeedBack = ({ classes }) => {
   };
 
   const sendFeedBack = async () => {
-    if(message.length < 10) {
+    if (message.length < 10) {
       toast('Minimum 10 characters required');
       return;
     }
     const params = {
       email: user?.email,
       message,
-      tag: selectedValue
-    }
-    try{
+      tag: selectedValue,
+    };
+    try {
+      setButtonLoader('button');
       await postFeedBackList(params);
-      
-    } catch(err){
-      console.log("errr");
+      setShowMessage(true);
+    } catch (err) {
+      toast(err, 'error');
+      console.log('errr');
     } finally {
-
+      setButtonLoader(false);
     }
-  }
+  };
+
+  const handleDialog = () => {
+    setShowMessage(!showMessage);
+  };
 
   const handleChange = (value) => {
     setSelectedValue(value);
   };
+
+  const handleClick = () => {
+    setShowMessage(false);
+    navigate('/');
+  };
   return (
-    <Container buttonTitle='NEXT' title='Write to us' handleClick={sendFeedBack} skelton={isLoading} buttonDisabled={!selectedValue || !message}>
+    <Container
+      buttonTitle='NEXT'
+      title='Write to us'
+      handleClick={sendFeedBack}
+      skelton={isLoading}
+      buttonDisabled={!selectedValue || !message}
+      showLoader={buttonLoader}
+    >
       {!isEmpty(feedBackList) && (
         <div>
           <div className='fund-list-input'>
@@ -79,7 +94,7 @@ const FeedBack = ({ classes }) => {
               id='subject'
               label='Subject'
               isAOB={true}
-              value={selectedValue || ""}
+              value={selectedValue || ''}
               name='subject'
               onChange={handleChange}
             />
@@ -91,7 +106,6 @@ const FeedBack = ({ classes }) => {
               rows={9}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className={classes.root}
               helperText={`${message.length}/${characterLength}`}
               variant='outlined'
               inputProps={{
@@ -101,10 +115,34 @@ const FeedBack = ({ classes }) => {
           </div>
         </div>
       )}
+      <DialogSucess close={handleDialog} isOpen={showMessage} handleClick={handleClick} />
     </Container>
   );
 };
 
-export default withStyles(styles)(FeedBack);
+export default withRouter(FeedBack);
 
-
+const DialogSucess = ({ isOpen, close, handleClick }) => {
+  return (
+    <Dialog
+      open={isOpen}
+      onClose={close}
+      aria-labelledby='feedback-dialog'
+      aria-describedby='feedback-dialog'
+      className='feedback-dialog'
+      id='feedback-campaign-dialog'
+      disableBackdropClick
+    >
+      <div className='feedback-message-dialog'>
+        <div className='feedback-img-wrapper'>
+          <img src={require('assets/send_icon.png')} alt='send_icon' />
+        </div>
+        <div className='feedback-dialog-res'>
+          Thanks for writing to us. <br />
+          We will revert to you shortly.
+        </div>
+        <Button buttonTitle='OK' onClick={handleClick} />
+      </div>
+    </Dialog>
+  );
+};

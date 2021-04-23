@@ -94,7 +94,7 @@ class eNPSOtpClass extends Component {
           let basepath = getBasePath();
           let current_url = basepath + '/e-mandate/enps/redirection' + getConfig().searchParams;
           var pgLink = getConfig().base_url + result.redirect_url;
-          if (!getConfig().isSdk) {
+          if (getConfig().isNative) {
             if (getConfig().app === 'ios') {
               nativeCallback({
                 action: 'show_top_bar', message: {

@@ -84,13 +84,13 @@
 
 .diy-cart-footer {
   display: flex;
-  align-items: center;
   justify-content: center;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 10px;
+  column-gap: 35px;
 }
 
 .diy-cart-footer .button {
@@ -105,6 +105,7 @@
 
   .title {
     margin-left: 10px;
+    font-weight: 400;
   }
 
   .icon {
@@ -121,10 +122,6 @@
 
 .diy-cart-footer .diy-filter-button:hover {
   background-color: #fff;
-}
-
-.diy-cart-footer .button:nth-of-type(2) {
-  margin-left: 10px;
 }
 
 #diy-dialog {

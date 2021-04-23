@@ -60,7 +60,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           }
           {
             logo && 
-             <div>
+             <div className='sdk-header-partner-logo'>
                 <img src={require(`assets/${partner?.logo}`)} alt="partner logo" /> 
             </div>
           }
@@ -114,30 +114,32 @@ const Header = ({ classes, title, count, total, current, goBack,
               </div>
             }
             </div>
-            {resetpage &&
-              <SVG
-              style={{marginLeft: 'auto', width:20}}
-              onClick={handleReset}
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
-              src={restart}
-            />
-            }
-            {topIcon &&
-            <SVG
-            style={{marginLeft: 'auto', width:20, cursor:'pointer'}}
-            onClick={handleTopIcon}
-            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
-            src={rightIcon}
-          />
-          }
-          {notification &&
-            <SVG
-            style={{marginLeft: '20px', width:20, cursor:'pointer'}}
-            onClick={handleNotification}
-            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
-            src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
-          />
-          }
+            <div className='header-right-nav-components'>
+              {resetpage &&
+                <SVG
+                style={{marginLeft: 'auto', width:20}}
+                onClick={handleReset}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
+                src={restart}
+              />
+              }
+              {topIcon &&
+                <SVG
+                style={{marginLeft: '20px', width:25, cursor:'pointer'}}
+                onClick={handleTopIcon}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
+                src={rightIcon}
+              />
+              }
+              {notification &&
+                <SVG
+                style={{marginLeft: '20px', width:25, cursor:'pointer'}}
+                onClick={handleNotification}
+                preProcessor={code => code.replace(/fill=#FFF".*?"/, 'fill=' + (new_header ? getConfig().notificationColor : 'white'))}
+                src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
+              />
+              }
+          </div>
           {/* The product logo will come here -> (will need asset) */}
           {
             false && 
@@ -145,7 +147,8 @@ const Header = ({ classes, title, count, total, current, goBack,
               <img src={require('assets/finity_navlogo.png')} alt="productType" />
             </div>
           }
-          </>}
+          </>
+        }
 
           {
             mobile &&

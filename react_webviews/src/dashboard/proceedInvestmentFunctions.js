@@ -2,7 +2,7 @@ import toast from "../common/ui/Toast";
 import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
 import { getConfig } from "../utils/functions";
-import { storageService } from "../utils/validators";
+import { storageService, isFunction } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
 
 export function isInvestRefferalRequired(partner_code) {
@@ -24,6 +24,7 @@ export async function proceedInvestment(data) {
     history,
     handleApiRunning,
     handleDialogStates,
+    handleIsRedirectToPayment,
   } = data;
 
   let isKycNeeded = false;
@@ -92,6 +93,9 @@ export async function proceedInvestment(data) {
           }
         }
       } else {
+        if (isFunction(handleIsRedirectToPayment)) {
+          handleIsRedirectToPayment(false);
+        }
         let errorMessage = result.error || result.message || "Error";
         storageService().setObject("is_debit_enabled", result.is_debit_enabled);
         switch (status) {

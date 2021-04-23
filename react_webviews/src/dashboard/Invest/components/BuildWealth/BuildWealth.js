@@ -38,7 +38,7 @@ const Landing = (props) => {
     const params = {
       type: investTypeDisplay === "sip" ? 'buildwealth' : 'buildwealthot',
     };
-    setLoader("page");
+    setLoader("button");
     try {
       const appendToFunnelData = {
         amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
@@ -54,10 +54,10 @@ const Landing = (props) => {
         apiParams: { type: params.type },
         appendToFunnelData: appendToFunnelData
       });
-      // setLoader(false);
-      // goNext();
+      setLoader(false);
+      goNext();
     } catch (err) {
-      // setLoader(false);
+      setLoader(false);
       toast(err);
     }
   };

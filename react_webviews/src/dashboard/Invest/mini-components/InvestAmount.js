@@ -31,7 +31,7 @@ const InvestAmount = (props) => {
     funnelData,
     funnelGoalData,
     updateFunnelData,
-    updateUserRiskProfile
+    setUserRiskProfile
   } = useFunnelDataHook();
   const { investType, year, equity, term, isRecurring, investTypeDisplay } = funnelData;
   const [amount, setAmount] = useState(funnelData?.amount || '');
@@ -126,7 +126,7 @@ const InvestAmount = (props) => {
       
       if (!data.recommendation) {
         // RP enabled flow, when user has no risk profile
-        updateUserRiskProfile(''); // clearing risk profile stored in session
+        setUserRiskProfile(''); // clearing risk profile stored in session
         if (data.msg_code === 0) {
           navigate(`${funnelGoalData.id}/risk-select`);
         } else if (data.msg_code === 1) {
@@ -139,7 +139,7 @@ const InvestAmount = (props) => {
       
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully
-        updateUserRiskProfile(data.rp_indicator || '');
+        setUserRiskProfile(data.rp_indicator || '');
         navigate('recommendations');
       } else {
         // RP disabled flow
@@ -177,7 +177,7 @@ const InvestAmount = (props) => {
     if (tempAmount > eligibleAmount) {
       tempAmount = eligibleAmount;
     }
-    let taxsaved = tempAmount * 0.303;
+    let taxsaved = tempAmount * 0.312;
     setCorpus(taxsaved);
   };
 

@@ -28,7 +28,7 @@ const SuccessDialog = ({ isOpen, handleClick, sips = [], close }) => {
             alt=""
           />
         </div>
-        <div className="subtitle text">
+        <div className="subtitle success-text-message">
           Your monthly SIP investment
           {sips.length !== 1 && <span>s</span>} date
           {sips.length !== 1 && <span>s</span>}

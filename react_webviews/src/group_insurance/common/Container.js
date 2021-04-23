@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { getConfig, manageDialog } from 'utils/functions';
 
 import { nativeCallback, openModule } from 'utils/native_callback';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
 import { storageService } from '../../utils/validators';

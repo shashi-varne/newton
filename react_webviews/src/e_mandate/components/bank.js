@@ -165,11 +165,9 @@ class SelectBank extends Component {
         let app = getConfig().app;
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app;
-        if (getConfig().generic_callback) {
-          pgLink += '&generic_callback=' + getConfig().generic_callback;
-        }
-        if (!getConfig().isSdk) {
+          '&app=' + app + '&generic_callback=' + getConfig().generic_callback;
+        
+        if (getConfig().isNative) {
           if (getConfig().app === 'ios') {
             nativeCallback({
               action: 'show_top_bar', message: {
