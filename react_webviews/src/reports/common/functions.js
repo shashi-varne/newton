@@ -54,9 +54,7 @@ export const redirectToReports = (name) => {
       break;
   }
   let url =
-    window.location.protocol +
-    "//" +
-    window.location.host +
+    window.location.origin +
     path +
     getConfig().searchParams +
     "&generic_callback=true&redirect_url=" +
