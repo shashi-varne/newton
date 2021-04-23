@@ -81,7 +81,7 @@ const Balance = (props) => {
   const noInvestments = isEmpty(balance?.balance) || balance === 0
   return (
     <Container
-      title={noInvestments ? '' : 'Withdraw'}
+      title='Withdraw'
       noFooter
       noPadding
       noInvestments={noInvestments}
@@ -101,7 +101,7 @@ const Balance = (props) => {
                 <div className="tile">
                   <div className="tile-text">Total Balance</div>
                   <div className="tile-amount">
-                    {balance?.total_balance?.toLocaleString('en-IN') || 0}
+                  ₹ {balance?.total_balance?.toLocaleString('en-IN') || 0}
                   </div>
                 </div>
                 <div className="tile">
