@@ -37,7 +37,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   if (action === 'native_back' || action === 'exit') {
-    if (!getConfig().Web && !getConfig().isSdk) callbackData.action = 'exit_web';
+    if (getConfig().isNative) callbackData.action = 'exit_web';
     else window.location.href = redirectToLanding();
   }
 

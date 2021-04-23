@@ -167,7 +167,7 @@ class SelectBank extends Component {
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
           '&app=' + app + '&generic_callback=' + getConfig().generic_callback;
         
-        if (!getConfig().isSdk) {
+        if (getConfig().isNative) {
           if (getConfig().app === 'ios') {
             nativeCallback({
               action: 'show_top_bar', message: {

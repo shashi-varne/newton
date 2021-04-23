@@ -103,7 +103,7 @@ class BuyOrder extends Component {
         },
       });
     }
-    if (!getConfig().isSdk) {
+    if (getConfig().isNative) {
       nativeCallback({
         action: 'take_control',
         message: {

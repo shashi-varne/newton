@@ -316,6 +316,7 @@ export const getConfig = () => {
 
   returnConfig.isWebOrSdk = returnConfig.Web || storageService().get("is_secure");
   returnConfig.isSdk = storageService().get("is_secure"); 
+  returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
   
   return returnConfig;
 };
