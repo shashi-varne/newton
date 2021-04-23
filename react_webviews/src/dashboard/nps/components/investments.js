@@ -148,6 +148,10 @@ class NpsInvestments extends Component {
     this.navigate('amount/one-time')
   }
 
+  goBack = () => {
+    this.navigate('/invest', '', true);
+  };
+
   render() {
     return (
       <Container
@@ -159,6 +163,9 @@ class NpsInvestments extends Component {
         errorData={this.state.errorData}
         handleClick={this.investMore}
         skelton={this.state.skelton}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <section className="page invest nps">
           <div className="nps-investments">

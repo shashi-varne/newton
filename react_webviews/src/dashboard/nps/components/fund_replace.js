@@ -33,16 +33,16 @@ class ReplaceFund extends Component {
       let amount = storageService().get('npsAmount')
       const data = await this.get_recommended_funds(amount);
 
-      data.result.pension_houses.map((el, index) => {
-        if (el.name  === data.result.recommended[0].pension_house.name) {
-          data.result.pension_houses.splice(index, 1);
-          data.result.pension_houses.splice(0, 0, el)
+      data.pension_houses.map((el, index) => {
+        if (el.name  === data.recommended[0].pension_house.name) {
+          data.pension_houses.splice(index, 1);
+          data.pension_houses.splice(0, 0, el)
         }
       })
 
       this.setState({
-        recommended: data.result.recommended[0].pension_house,
-        pension_houses: data.result.pension_houses,
+        recommended: data.recommended[0].pension_house,
+        pension_houses: data.pension_houses,
         show_loader: false,
       });
       

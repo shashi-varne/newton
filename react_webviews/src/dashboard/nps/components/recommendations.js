@@ -85,8 +85,7 @@ class Recommendations extends Component {
 
     const res = await this.get_recommended_funds(amount, true);
     let data = res;
-
-    if (data & !pran) {
+    if (data && !pran) {
       let recommendations = data.recommended[0];
       let graphData = [
         {
@@ -381,7 +380,9 @@ class Recommendations extends Component {
         title="Recommended fund"
         showLoader={show_loader}
         handleClick={this.handleClick}
-        goBack={this.goBack}
+        headerData={{
+          goBack: this.goBack
+        }}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}

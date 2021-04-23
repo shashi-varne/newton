@@ -44,7 +44,7 @@ class NpsPaymentCallback extends Component {
  
       if (!result.registration_details.additional_details_status) {
         if (currentUser.kyc_registration_v2 == 'init') {
-          this.navigate('/kyc/journey');
+          this.navigate('/kyc/journey', '', true);
         } else if (currentUser.kyc_registration_v2 == 'incomplete') {
           this.navigate('/kyc/journey', '', true);
         } else {

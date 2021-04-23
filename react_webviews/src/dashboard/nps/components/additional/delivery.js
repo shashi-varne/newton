@@ -33,10 +33,12 @@ class NpsDelivery extends Component {
 
     let { form_data } = this.state;
 
-    form_data.pincode = address.meta_data.pincode || "";
-    form_data.addressline = address.meta_data.addressline || "";
-    form_data.city = address.meta_data.city || address.meta_data.district || "";
-    form_data.state = address.meta_data.state || "";
+    if (address) {
+      form_data.pincode = address.meta_data.pincode || "";
+      form_data.addressline = address.meta_data.addressline || "";
+      form_data.city = address.meta_data.city || address.meta_data.district || "";
+      form_data.state = address.meta_data.state || "";
+    }
 
     this.setState({
       address: address,
@@ -138,7 +140,7 @@ class NpsDelivery extends Component {
         bannerText={this.bannerText()}
       >
         <div className="nps-delivery-details">
-          <div className="title">PRAN delivery address</div>
+          <div className="title" style={{marginBottom: '20px'}}>PRAN delivery address</div>
 
           <div className="InputField">
             <InputWithIcon

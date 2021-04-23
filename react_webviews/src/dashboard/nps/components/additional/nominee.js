@@ -37,9 +37,11 @@ class NpsNominee extends Component {
     let { form_data } = this.state;
     let { nomination } = nps_details;
 
-    form_data.nominee_name = nomination.name || "";
-    form_data.nominee_dob = nomination.dob || "";
-    form_data.relationship = capitalize(nomination.relationship || "");
+    if (nomination) {
+      form_data.nominee_name = nomination.name || "";
+      form_data.nominee_dob = nomination.dob || "";
+      form_data.relationship = capitalize(nomination.relationship || "");
+    }
 
     this.setState({
       nps_details: nps_details,

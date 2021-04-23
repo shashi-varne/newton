@@ -42,10 +42,12 @@ class uploadAddressProof extends Component {
     );
     let { address } = kyc_app;
 
-    this.setState({
-      address: address.meta_data || '',
-      skelton: false
-    });
+    if (address) {
+      this.setState({
+        address: address.meta_data || '',
+        skelton: false
+      });
+    }
   };
 
   componentDidMount() {
