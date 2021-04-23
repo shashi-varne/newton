@@ -5,7 +5,6 @@ import Container from "../common/Container";
 import Api from "../../utils/api";
 import toast from "../../common/ui/Toast";
 import { storageService } from "../../utils/validators";
-import { getBasePath } from "../../utils/functions";
 
 const genericErrorMessage = "Something went wrong!";
 class Notification extends Component {
@@ -81,6 +80,7 @@ class Notification extends Component {
   getRedirectionUrlWebview = (url, type) => {
     let webRedirectionUrl = url;
     webRedirectionUrl +=
+      // eslint-disable-next-line
       (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
       "generic_callback=true";
 
