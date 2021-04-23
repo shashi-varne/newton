@@ -84,13 +84,13 @@
 
 .diy-cart-footer {
   display: flex;
-  align-items: center;
   justify-content: center;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 10px;
+  column-gap: 35px;
 }
 
 .diy-cart-footer .button {
@@ -105,6 +105,7 @@
 
   .title {
     margin-left: 10px;
+    font-weight: 400;
   }
 
   .icon {
@@ -121,10 +122,6 @@
 
 .diy-cart-footer .diy-filter-button:hover {
   background-color: #fff;
-}
-
-.diy-cart-footer .button:nth-of-type(2) {
-  margin-left: 10px;
 }
 
 #diy-dialog {
@@ -146,11 +143,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 15px 15px 15px;
   }
 
   .diy-bottom-sheet .header .text {
-    font-weight: bold;
     color: #333333;
+    font-size: 15px;
   }
 
   .diy-bottom-sheet .filter {
@@ -203,6 +201,7 @@
 
     .title {
       font-size: 16px;
+      color: #333333;
     }
 
     .delete-icon {
@@ -213,11 +212,15 @@
   }
 
   .diy-filter-bottom-sheet {
-    header {
+    .header {
       margin: -20px -20px 0 -20px;
       border-bottom: 1px solid #e8e8e8;
-      padding: 8px 20px;
+      padding: 15px 20px;
       font-size: 15px;
+
+      .reset {
+        color: var(--secondary);
+      }
     }
 
     .filter {
@@ -231,9 +234,10 @@
     footer {
       margin: 0 -20px -20px -20px;
 
-      button {
+      .filter-button {
         border-radius: 0;
         padding: 14px 10px;
+        height: 45px;
       }
     }
   }

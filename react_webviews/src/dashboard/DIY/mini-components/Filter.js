@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import DiyDialog from './DiyDialog'
-import Button from '@material-ui/core/Button'
+import Button from 'common/ui/Button'
 
 import SortFilter from './SortFilter'
 import OptionFilter from './OptionFilter'
@@ -48,8 +48,8 @@ const Filter = ({
     <DiyDialog close={close} open={isOpen}>
       <section className="diy-bottom-sheet diy-filter-bottom-sheet">
         <header className="header">
-          <div className="text">Filter</div>
-          <Button color="secondary" onClick={reset}>Reset</Button>
+          <b className="text">Filter</b>
+          <div onClick={reset} className="reset">Reset</div>
         </header>
         <main className="filter">
           <div className="title">
@@ -103,13 +103,13 @@ const Filter = ({
         </main>
         <footer>
           <Button
-            variant="contained"
             fullWidth
-            color="secondary"
             onClick={apply}
-          >
-            Apply
-          </Button>
+            buttonTitle="Apply"
+            classes={{
+              button: "filter-button"
+            }}
+          />
         </footer>
       </section>
     </DiyDialog>

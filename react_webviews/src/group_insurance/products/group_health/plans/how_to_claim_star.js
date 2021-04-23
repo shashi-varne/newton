@@ -29,7 +29,7 @@ class GroupHealthPlanHowToClaimStar extends Component {
         let renderData = {
             'header_title': 'How to claim?',
             'header_subtitle': 'Star Family Health Optima',
-            'cta_title': 'OK'
+            'cta_title': 'OKAY'
         }
 
         renderData.steps = [

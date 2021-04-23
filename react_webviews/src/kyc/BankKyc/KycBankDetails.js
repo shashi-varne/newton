@@ -44,7 +44,7 @@ const KycBankDetails = (props) => {
   const [name, setName] = useState("");
   const [note, setNote] = useState({
     info_text:
-      "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
+      "As per SEBI, it is mandatory for you to add your add bank account details.",
     variant: "info",
   });
   const [disableFields, setDisableFields] = useState({

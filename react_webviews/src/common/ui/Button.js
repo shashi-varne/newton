@@ -132,8 +132,8 @@ class CustomButton extends Component {
             style={props.style}
             className={`${buttonClass} ${typeToClass[props.type || ''] || ''}`}
             classes={classes}
+            disabled={props.buttonDisabled || props.disable}
             onClick={props.onClick}
-            disabled={props.disable}
           >
             {!showLoader && props.buttonTitle}
             {showLoader && <DotDotLoaderNew
@@ -156,8 +156,10 @@ const styles = {
     padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px 0px !important',
     borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 6,
     textTransform: 'capitalize',
-    fontSize: '16px !important',
+    fontSize: '12px !important',
     boxShadow: 'none',
+    fontWeight: 'bold',
+    letterSpacing: '1px',
     // boxShadow: '0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149)',
     width: !getConfig().isMobileDevice ? 'auto' :  '100%'
   },

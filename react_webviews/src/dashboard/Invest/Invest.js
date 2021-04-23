@@ -11,17 +11,17 @@ import Amount from "./components/InstaRedeem/Amount";
 import SaveTax from "./components/SaveTax";
 import ParkMoney from "./components/ParkMoney";
 import BuildWealth from "./components/BuildWealth";
-import InvestGoal from "./components/InvestGoal";
+import GoalType from "./components/InvestGoal";
 import InvestAmount from "./mini-components/InvestAmount";
 import InvestedAmount from "./mini-components/InvestedAmount";
-import GoalType from "./components/InvestGoal/GoalType";
-import SaveGoal from "./components/InvestGoal/SaveGoal";
+import SelectYear from "./components/InvestGoal/SelectYear";
+import GoalTarget from "./components/InvestGoal/GoalTarget";
 import ExploreFunds from  "./components/Explore"
 import FundType from "./components/Explore/FundType"
 import Recommendations from "../Recommendation/Recommendation";
 import EditFunds from "../Recommendation/EditFunds"
 import AlternateFunds from "../Recommendation/ReplaceFunds"
-import Target from "./components/InvestGoal/Target";
+import CustomGoalTarget from "./components/InvestGoal/CustomGoalTarget";
 import RiskSelect from "./components/RiskPages/RiskSelect";
 import RiskModify from "./components/RiskPages/RiskModify";
 import RiskCustomize from "./components/RiskPages/RiskCustomize";
@@ -84,13 +84,13 @@ const Invest = (props) => {
         component={Type}
       />
       <Route
-        path={`${url}/instaredeem/amount/:investType`}
+        path={`${url}/instaredeem/amount`}
         component={Amount}
       />
       <Route
         exact
         path={`${url}/savegoal`}
-        component={InvestGoal}
+        component={GoalType}
       />
       <Route
         path={[
@@ -121,17 +121,17 @@ const Invest = (props) => {
       <Route
         exact
         path={`${url}/savegoal/:subtype`}
-        component={GoalType}
+        component={SelectYear}
       />
       <Route
         exact
-        path={`${url}/savegoal/:subtype/target`}
-        component={Target}
+        path={`${url}/savegoal/:subtype/:year/target`}
+        component={CustomGoalTarget}
       />
       <Route
         exact
         path={`${url}/savegoal/:subtype/:year`}
-        component={SaveGoal}
+        component={GoalTarget}
       />
 
       <Route component={NotFound} />

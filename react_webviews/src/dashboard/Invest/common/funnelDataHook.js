@@ -9,13 +9,13 @@ function useFunnelDataHook() {
   const sessionFunnelReturnRates = storageService().getObject('funnelReturnRates') || {};
   const sessionUserRiskProfile = storageService().get('userSelectedRisk') || '';
   
-  const [funnelData, setFunnelData] = useState(sessionFunnelData);
-  const [funnelGoalData, setFunnelGoalData] = useState(sessionFunnelGoalData);
-  const [funnelReturnRates, setFunnelReturnRates] = useState(sessionFunnelReturnRates);
-  const [userRiskProfile, setUserRiskProfile] = useState(sessionUserRiskProfile);
-  
-  const initFunnelData = async (params) => {
-    const data = await get_recommended_funds(params);
+  const [funnelData, funnelDataSetter] = useState(sessionFunnelData);
+  const [funnelGoalData, funnelGoalDataSetter] = useState(sessionFunnelGoalData);
+  const [funnelReturnRates, funnelReturnRatesSetter] = useState(sessionFunnelReturnRates);
+  const [userRiskProfile, userRiskProfileSetter] = useState(sessionUserRiskProfile);
+
+  const initFunnelData = async ({ apiParams, appendToFunnelData }) => {
+    const data = await get_recommended_funds(apiParams);
 
     const { recommendation } = data;
     if (recommendation && !isArray(recommendation)) {
@@ -25,45 +25,51 @@ function useFunnelDataHook() {
           stockReturns: recommendation.expected_return_eq || 10,
           bondReturns: recommendation.expected_return_debt || 6.5
         });
-        setFunnelData({
-          ...data,
-          equity: recommendation.equity,
-          debt: recommendation.debt,
-        });
       }
+      
+      setFunnelData({
+        ...data,
+        equity: recommendation.equity,
+        debt: recommendation.debt,
+        ...appendToFunnelData
+      });
     } else {
       setFunnelReturnRates({
         stockReturns: data.expected_return_eq || 10,
         bondReturns: data.expected_return_debt || 6.5
       });
-      setFunnelData(data);
+      setFunnelData({
+        ...data,
+        ...appendToFunnelData
+      });
     }
   };
 
-  useEffect(() => {
-    storageService().setObject('funnelReturnRates', funnelReturnRates);
-  }, [funnelReturnRates]);
+  const setFunnelData = (data) => {
+    console.log('data', data);
+    storageService().setObject('funnelData', data);
+    funnelDataSetter(data);
+  };
 
-  useEffect(() => {
-    storageService().setObject('funnelGoalData', funnelGoalData);
-  }, [funnelGoalData]);
+  const setFunnelGoalData = (data) => {
+    storageService().setObject('funnelGoalData', data);
+    funnelGoalDataSetter(data);
+  };
 
-  useEffect(() => {
-    storageService().setObject('funnelData', funnelData);
-  }, [funnelData]);
+  const setFunnelReturnRates = (data) => {
+    storageService().setObject('funnelReturnRates', data);
+    funnelReturnRatesSetter(data);
+  };
 
-  useEffect(() => {
-    storageService().set('userSelectedRisk', userRiskProfile);
-  }, [userRiskProfile]);
-
+  const setUserRiskProfile = (data) => {
+    storageService().set('userSelectedRisk', data);
+    userRiskProfileSetter(data);
+  };
+  
   const updateFunnelData = (propsToAppend) => {
     const newFunnelData = { ...funnelData, ...propsToAppend };
     setFunnelData(newFunnelData);
-  }
-
-  const updateUserRiskProfile = (risk) => {
-    setUserRiskProfile(risk);
-  }
+  };
 
   return {
     funnelData,
@@ -71,8 +77,11 @@ function useFunnelDataHook() {
     funnelReturnRates,
     userRiskProfile,
     initFunnelData,
+    setFunnelData,
+    setFunnelGoalData,
+    setFunnelReturnRates,
+    setUserRiskProfile,
     updateFunnelData,
-    updateUserRiskProfile,
   };
 }
 

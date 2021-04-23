@@ -182,7 +182,8 @@ export const getInstaRecommendation = async () => {
   if (
     res.pfwstatus_code !== 200 ||
     !res.pfwresponse ||
-    isEmpty(res.pfwresponse)
+    isEmpty(res.pfwresponse) ||
+    isEmpty(res.pfwresponse.result)
   ) {
     throw res.pfwmessage || genericErrMsg
   }

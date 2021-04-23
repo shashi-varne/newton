@@ -1,4 +1,4 @@
-import './RiskPages.scss';
+import './commonStyles.scss';
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import InfoBox from '../../../../common/ui/F-InfoBox';
@@ -22,7 +22,7 @@ const RiskModify = ({
     funnelGoalData,
     userRiskProfile,
     updateFunnelData,
-    updateUserRiskProfile
+    setUserRiskProfile
   } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -51,7 +51,7 @@ const RiskModify = ({
       const res = await get_recommended_funds(params);
 
       if (res.updated) {
-        updateUserRiskProfile(selectedRisk);
+        setUserRiskProfile(selectedRisk);
       } else {
         // eslint-disable-next-line no-throw-literal
         throw 'Something went wrong. Please try again'

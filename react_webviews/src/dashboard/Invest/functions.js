@@ -241,18 +241,22 @@ export function clickCard(state, title) {
       break;
     case "insurance":
       let insurancePath = "/group-insurance";
+      // this.navigate(insurancePath);
       window.location.href = getPath(insurancePath);
       break;
     case "gold":
       let goldPath = "/gold/my-gold";
+      // this.navigate(goldPath)
       window.location.href = getPath(goldPath);
       break;
     case "fhc":
       let fhcPath = "/fhc";
+      // this.navigate(fhcPath)
       window.location.href = getPath(fhcPath);
       break;
     case "risk_profile":
       let riskProfilePath = "/risk/result";
+      // this.navigate(riskProfilePath)
       window.location.href = getPath(riskProfilePath);
       break;
     case "top_equity":

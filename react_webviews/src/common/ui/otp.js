@@ -105,10 +105,10 @@ class OtpDefaultClass extends Component {
         )}
 
         {(this.state.timeAvailable <= 0 || !this.state.timeAvailable) && !this.props.isDisabled && (
-          <div style={{ margin: '30px 0 0 -10px' }}>
+          <div style={{ margin: '30px 0 0 -10px' }} className={this.props.class1}>
             <div
               onClick={this.resendOtp}
-              style={{ color: '#4A494A', margin: '0 0 0 10px', fontSize: 14 }}
+              style={{ color: '#4A494A', margin: '0 0 0 10px', fontSize: 14, textAlign: "center" }}
               className={this.props.parent.class}
             >
               Didn’t receive?

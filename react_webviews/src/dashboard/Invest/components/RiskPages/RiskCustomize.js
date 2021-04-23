@@ -1,3 +1,4 @@
+import './commonStyles.scss';
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
@@ -5,7 +6,6 @@ import { get_recommended_funds } from '../../common/api';
 import { navigate as navigateFunc } from '../../common/commonFunctions';
 import EquityDebtSlider from '../../mini-components/EquityDebtSlider';
 import toast from 'common/ui/Toast'
-import './RiskPages.scss';
 import InfoBox from '../../../../common/ui/F-InfoBox';
 import { getConfig } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
@@ -17,7 +17,7 @@ const RiskCustomize = (props) => {
   const {
     funnelData,
     updateFunnelData,
-    updateUserRiskProfile
+    setUserRiskProfile
   } = useFunnelDataHook();
   const [loader, setLoader] = useState(false);
   // const [title, setTitle] = useState('');
@@ -48,7 +48,7 @@ const RiskCustomize = (props) => {
 
       const res = await get_recommended_funds(params);
       updateFunnelData(res);
-      updateUserRiskProfile('Custom');
+      setUserRiskProfile('Custom');
 
       setLoader(false);
     } catch (err) {
