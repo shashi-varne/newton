@@ -7,11 +7,11 @@ import { getPathname } from "../constants";
 import { getReportGoals } from "../common/api";
 import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
 
+const sliderConstants = {
+  min: 0,
+  max: 100,
+};
 const Goals = (props) => {
-  const sliderConstants = {
-    min: 0,
-    max: 100,
-  };
   const navigate = navigateFunc.bind(props);
   const [goals, setGoals] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
@@ -31,58 +31,11 @@ const Goals = (props) => {
   };
 
   const redirectToInvestType = (goal) => {
-    switch (goal.itag.itype) {
-      case "buildwealth":
-        navigate(getPathname.buildwealth);
-        break;
-      case "savetax":
-        navigate(getPathname.savetax);
-        break;
-      case "reliancesimplysave":
-        navigate(getPathname.reliancesmartsaveBreakUp);
-        break;
-      case "investsurplus":
-        navigate(getPathname.parkmoney);
-        break;
-      case "saveforgoal":
-        navigate(`${getPathname.savegoal}${goal.itag.subtype}`);
-        break;
-      case "monthlyincomeplan":
-        navigate(getPathname.monthlyincomeplan);
-        break;
-      case "midcap":
-        navigate(getPathname.midcap);
-        break;
-      case "arbitrage":
-        navigate(getPathname.arbitrage);
-        break;
-      case "index":
-        navigate(getPathname.advancedInvestingIndex);
-        break;
-      case "shariah":
-        navigate(getPathname.shariah);
-        break;
-      case "balanced":
-        navigate(getPathname.balanced);
-        break;
-      case "legacy":
-        navigate(getPathname.legacy);
-        break;
-      case "sectoral":
-        navigate(getPathname.sectoral);
-        break;
-      case "gold":
-        navigate(getPathname.investGold);
-        break;
-      case "diy":
-        navigate(getPathname.explore);
-        break;
-      case "insta-redeem":
-        navigate(getPathname.instaredeem);
-        break;
-      default:
-        break;
-    }
+    let pathname = getPathname[goal?.itag?.itype] || "";
+    if (!pathname) return;
+    if (goal.itag.itype === "saveforgoal")
+      pathname = `${pathname}/${goal.itag.subtype}`;
+    navigate(pathname);
   };
 
   return (
@@ -124,14 +77,18 @@ const Goals = (props) => {
                     <div className="content">
                       <div
                         className={`amount ${
-                          goal.earnings >= 0 ? "green" : "red"
+                          goal.earnings >= 0
+                            ? "goals-green-text"
+                            : "goals-red-text"
                         }`}
                       >
                         {getAmountInInr(goal.earnings)}
                         {goal.earnings_percent && goal.earnings_percent !== 0 && (
                           <div
                             className={`earning-percent ${
-                              goal.earnings_percent >= 0 ? "green" : "red"
+                              goal.earnings_percent >= 0
+                                ? "goals-green-text"
+                                : "goals-red-text"
                             }`}
                           >
                             ( {goal.earnings_percent > 0 && "+"}{" "}

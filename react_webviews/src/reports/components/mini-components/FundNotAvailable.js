@@ -15,8 +15,7 @@ const FundNotAvailable = ({ isOpen, data, close }) => {
     >
       <DialogContent className="reports-no-fund-message-dialog-content">
         <div className="text">
-          Sorry! {data.mfname} ICICI Prudential Liquid Fund - Growth is no
-          longer available for purchase
+          Sorry! {data.mfname} is no longer available for purchase
         </div>
         <div className="align-right">
           <Button onClick={() => close()}>OKAY</Button>
