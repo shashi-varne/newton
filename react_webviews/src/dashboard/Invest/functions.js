@@ -242,23 +242,19 @@ export function clickCard(state, title) {
       break;
     case "insurance":
       let insurancePath = "/group-insurance";
-      // this.navigate(insurancePath);
-      window.location.href = getPath(insurancePath);
+      this.navigate(insurancePath);
       break;
     case "gold":
       let goldPath = "/gold/my-gold";
-      // this.navigate(goldPath)
-      window.location.href = getPath(goldPath);
+      this.navigate(goldPath)
       break;
     case "fhc":
       let fhcPath = "/fhc";
-      // this.navigate(fhcPath)
-      window.location.href = getPath(fhcPath);
+      this.navigate(fhcPath)
       break;
     case "risk_profile":
       let riskProfilePath = "/risk/result";
-      // this.navigate(riskProfilePath)
-      window.location.href = getPath(riskProfilePath);
+      this.navigate(riskProfilePath)
       break;
     case "top_equity":
       this.navigate(`/diy/fundlist/Equity/Multi_Cap`);
@@ -267,23 +263,6 @@ export function clickCard(state, title) {
       this.navigate(keyPathMapper[state] || state);
       break;
   }
-}
-
-function getPath(path) {
-  let redirectUrl =
-    window.location.href.indexOf("&is_secure=") === -1
-      ? `${window.location.href}&is_secure=${storageService().get("is_secure")}`
-      : window.location.href;
-  redirectUrl = encodeURIComponent(redirectUrl);
-  return (
-    window.location.protocol +
-    "//" +
-    window.location.host +
-    path +
-    getConfig().searchParams +
-    "&generic_callback=true&redirect_url=" +
-    redirectUrl
-  );
 }
 
 export async function getRecommendationApi(amount) {

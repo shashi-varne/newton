@@ -8,8 +8,8 @@ import { getSipNote, postSipAction } from "../../common/api";
 import toast from "common/ui/Toast";
 import "./commonStyles.scss";
 
+const productName = getConfig().productName;
 const PauseCancelDetail = (props) => {
-  const productName = getConfig().productName;
   const sip = storageService().getObject(storageConstants.PAUSE_SIP) || {};
   if (isEmpty(sip)) props.history.goBack();
   const params = props?.match?.params || {};
@@ -86,39 +86,24 @@ const PauseCancelDetail = (props) => {
           <div>
             <div className="mf-name">{sip.mfname}</div>
             {action === "pause" && (
-              <div className="content">
-                <img
-                  src={require(`assets/${productName}/paused_sip_icon.svg`)}
-                  alt=""
-                />
-                <div>
-                  <div className="title">Pause period</div>
-                  <div>{note.pause_period}</div>
-                </div>
-              </div>
+              <PauseCancelCard
+                icon="paused_sip_icon.svg"
+                title="Pause period"
+                subtitle={note.pause_period}
+              />
             )}
             {action === "cancel" && (
               <>
-                <div className="content">
-                  <img
-                    src={require(`assets/${productName}/paused_sip_icon.svg`)}
-                    alt=""
-                  />
-                  <div>
-                    <div className="title">Last SIP installment</div>
-                    <div>{note.last_sip_installment || "NA"}</div>
-                  </div>
-                </div>
-                <div className="content">
-                  <img
-                    src={require(`assets/${productName}/amount_icon.svg`)}
-                    alt=""
-                  />
-                  <div>
-                    <div className="title">Amount</div>
-                    <div>{formatAmountInr(sip.amount)}</div>
-                  </div>
-                </div>
+                <PauseCancelCard
+                  icon="paused_sip_icon.svg"
+                  title="Last SIP installment"
+                  subtitle={note.last_sip_installment || "NA"}
+                />
+                <PauseCancelCard
+                  icon="amount_icon.svg"
+                  title="Amount"
+                  subtitle={formatAmountInr(sip.amount)}
+                />
               </>
             )}
             <div className="alert">
@@ -136,3 +121,15 @@ const PauseCancelDetail = (props) => {
 };
 
 export default PauseCancelDetail;
+
+export const PauseCancelCard = ({ icon, title, subtitle }) => {
+  return (
+    <div className="content">
+      <img src={require(`assets/${productName}/${icon}`)} alt="" />
+      <div>
+        <div className="title">{title}</div>
+        <div>{subtitle}</div>
+      </div>
+    </div>
+  );
+};

@@ -12,7 +12,7 @@ import dropdown_arrow_myway from 'assets/down_arrow_myway.svg';
 import {
   inrFormatDecimal
 } from '../../../../utils/validators';
-import '../../../../utils/native_listner_otm';
+import '../../../../utils/native_listener';
 
 import { quotePointsPorivders } from '../../../constants';
 

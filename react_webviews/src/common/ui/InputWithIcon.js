@@ -6,7 +6,7 @@ import Input from './Input';
 import Icon from './Icon';
 
 const InputWithIcon = (props) => (
-  <Grid container spacing={16} alignItems="flex-end">
+  <Grid container spacing={16} alignItems="flex-end" className={props.error ? 'align-center' : ''}>
     <Grid item xs={2}>
       {props.icon && <Icon
         src={props.icon}

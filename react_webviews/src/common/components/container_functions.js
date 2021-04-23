@@ -15,7 +15,7 @@ import Dialog, {
     DialogContent,
     DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { Imgc } from '../../common/ui/Imgc';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
@@ -54,21 +54,12 @@ export function didMount() {
     setHeights({ 'header': true, 'container': false });
 
     let that = this;
-    if (getConfig().generic_callback || this.state.project === 'help') {
-        window.callbackWeb.add_listener({
-            type: 'back_pressed',
-            go_back: function () {
-                that.historyGoBack();
-            }
-        });
-    } else {
-        window.PlutusSdk.add_listener({
-            type: 'back_pressed',
-            go_back: function () {
-                that.historyGoBack();
-            }
-        });
-    }
+    window.callbackWeb.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+            that.historyGoBack();
+        }
+    });
 
     window.addEventListener("scroll", this.onScroll, true);
 
@@ -246,18 +237,7 @@ export function commonRender(props_base) {
 }
 
 export function unmount() {
-    if (getConfig().generic_callback || this.state.project === 'help') {
-        window.callbackWeb.remove_listener({});
-    } else {
-        if (window.PlutusSdk) {
-            window.PlutusSdk.remove_listener({})
-        }
-
-        if (window.PaymentCallback) {
-            window.PaymentCallback.remove_listener({})
-        }
-    }
-
+    window.callbackWeb.remove_listener({});
     window.removeEventListener("scroll", this.onScroll, false);
 
     this.setState({

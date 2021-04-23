@@ -92,10 +92,8 @@ class BuyOrder extends Component {
       paymentRedirectUrl +
       '&back_url=' +
       encodeURIComponent(nativeRedirectUrl) +
-      '&order_type=buy';
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
+      '&order_type=buy' +
+      '&generic_callback=' + getConfig().generic_callback;
 
     if (getConfig().app === 'ios') {
       nativeCallback({
@@ -105,7 +103,7 @@ class BuyOrder extends Component {
         },
       });
     }
-    if (!getConfig().isSdk) {
+    if (getConfig().isNative) {
       nativeCallback({
         action: 'take_control',
         message: {

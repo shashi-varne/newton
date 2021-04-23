@@ -47,7 +47,7 @@ const Journey = (props) => {
     if (user?.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete") {
       setGoBackModal(true)
     } else {
-      navigate('/')
+      nativeCallback({ action: "exit" })
     }
   }
 
