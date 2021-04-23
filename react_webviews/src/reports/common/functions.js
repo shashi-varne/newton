@@ -38,31 +38,6 @@ export const getProjectedValue = (amount, year, invest_type) => {
   return projectedValue.toFixed(0);
 };
 
-export const redirectToReports = (name) => {
-  let redirectUrl = encodeURIComponent(
-    window.location.href + "&is_secure=" + storageService().get("is_secure")
-  );
-  let path = "/group-insurance/common/report";
-  switch (name) {
-    case "gold":
-      path = "/gold/my-gold";
-      break;
-    case "insurance":
-      path = "/group-insurance/common/report";
-      break;
-    default:
-      break;
-  }
-  let url =
-    window.location.origin +
-    path +
-    getConfig().searchParams +
-    "&generic_callback=true&redirect_url=" +
-    redirectUrl;
-  window.location.href = url;
-  // TODO -> use navigation
-};
-
 export const dateOrdinalSuffix = (dom) => {
   if (dom === 31 || dom === 21 || dom === 1) return "st";
   if (dom === 22 || dom === 2) return "nd";

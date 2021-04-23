@@ -5,7 +5,7 @@ import {
   commonRender,
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
-import "../../utils/native_listner";
+import "../../utils/native_listener";
 import { getConfig } from "../../utils/functions";
 
 class Container extends Component {
