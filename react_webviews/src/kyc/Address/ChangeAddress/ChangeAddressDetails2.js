@@ -216,13 +216,6 @@ const ChangeAddressDetails2 = (props) => {
     }
   }
 
-  const setComma = (addressLine) => {
-    if (addressLine !== '') {
-      return (addressLine += ', ')
-    }
-    return addressLine
-  }
-
   const addressProofKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'
     : addressDocType
@@ -236,32 +229,6 @@ const ChangeAddressDetails2 = (props) => {
   const title = kyc?.address?.meta_data?.is_nri
     ? 'Upload Indian Address Proof'
     : 'Upload address proof'
-
-  const getFullAddress = () => {
-    let addressFull = ''
-
-    if (kyc?.address?.meta_data?.addressline) {
-      addressFull += setComma(kyc?.address?.meta_data?.addressline)
-    }
-
-    if (kyc?.address?.meta_data?.city) {
-      addressFull += setComma(kyc?.address?.meta_data?.city)
-    }
-
-    if (kyc?.address?.meta_data?.state) {
-      addressFull += setComma(kyc?.address?.meta_data?.state)
-    }
-
-    if (kyc?.address?.meta_data?.country) {
-      addressFull += setComma(kyc?.address?.meta_data?.country)
-    }
-
-    if (kyc?.address?.meta_data?.pincode) {
-      addressFull += setComma(kyc?.address?.meta_data?.pincode)
-    }
-
-    return addressFull
-  }
 
   const isWeb = getConfig().isWebOrSdk
 

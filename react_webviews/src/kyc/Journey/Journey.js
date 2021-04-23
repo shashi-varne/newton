@@ -3,22 +3,20 @@ import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
-import { getUrlParams, isEmpty, storageService } from '../../utils/validators'
-import { getPathname, storageConstants } from '../constants'
+import { isEmpty, storageService } from '../../utils/validators'
+import { getPathname } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
   navigate as navigateFunc,
-  updateQueryStringParameter,
 } from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
-import { isMobile } from 'utils/functions'
-import { nativeCallback } from 'utils/native_callback'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import { getBasePath } from '../../utils/functions'
 import "./Journey.scss"
+import { nativeCallback } from '../../utils/native_callback'
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -534,12 +532,6 @@ const Journey = (props) => {
 
   const productName = getConfig().productName
 
-  const redirectUrl = encodeURIComponent(
-    `${basePath}/digilocker/callback${
-      getConfig().searchParams
-    }&is_secure=${storageService().get("is_secure")}`
-  )
-
   const cancel = () => {
     setDlAadhaar(false)
     navigate(`${getPathname.journey}`, {
@@ -550,64 +542,6 @@ const Journey = (props) => {
 
   const proceed = () => {
     setAadhaarLinkDialog(true)
-  }
-
-  const connectDigiLocker = () => {
-    const data = {
-      url: `${basePath}/kyc/journey${
-        getConfig().searchParams
-      }&show_aadhaar=true&is_secure=
-        ${storageService().get("is_secure")}`,
-      message: 'You are almost there, do you really want to go back?',
-    }
-    if (isMobile.any() && storageService().get(storageConstants.NATIVE)) {
-      if (isMobile.iOS()) {
-        nativeCallback({
-          action: 'show_top_bar',
-          message: { title: 'Aadhaar KYC' },
-        })
-      }
-      nativeCallback({ action: 'take_back_button_control', message: data })
-    } else if (!isMobile.any()) {
-      const redirectData = {
-        show_toolbar: false,
-        icon: 'back',
-        dialog: {
-          message: 'You are almost there, do you really want to go back?',
-          action: [
-            {
-              action_name: 'positive',
-              action_text: 'Yes',
-              action_type: 'redirect',
-              redirect_url: encodeURIComponent(
-                `${basePath}/kyc/journey${
-                  getConfig().searchParams
-                }&show_aadhaar=true&is_secure=
-                  ${storageService().get("is_secure")}`
-              ),
-            },
-            {
-              action_name: 'negative',
-              action_text: 'No',
-              action_type: 'cancel',
-              redirect_url: '',
-            },
-          ],
-        },
-        data: {
-          type: 'server',
-        },
-      }
-      if (isMobile.iOS()) {
-        redirectData.show_toolbar = true
-      }
-      nativeCallback({ action: 'third_party_redirect', message: redirectData })
-    }
-    window.location.href = updateQueryStringParameter(
-      kyc.digilocker_url,
-      'redirect_url',
-      redirectUrl
-    )
   }
 
   if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -625,7 +559,7 @@ const Journey = (props) => {
       kyc.dl_docs_status !== null
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
-      stateParams.show_aadhaar === true ||
+      stateParams?.show_aadhaar ||
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var kycJourneyData = initJourneyData() || []

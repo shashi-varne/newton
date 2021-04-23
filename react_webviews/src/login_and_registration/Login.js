@@ -8,11 +8,12 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
 
+const config = getConfig();
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productName: getConfig().productName,
+      productName: config.productName,
       loginType: "mobile",
       form_data: {},
       isApiRunning: false,
@@ -61,10 +62,7 @@ class Login extends Component {
     return (
       <div className="login">
         <div className="header">
-          <img
-            src={require(`assets/${productName}_white_logo.png`)}
-            alt="logo"
-          />
+          <img src={require(`assets/${config.logo}`)} alt="logo" />
         </div>
         <div className="login-details">
           <div className="left-image">
@@ -173,8 +171,10 @@ class Login extends Component {
                 style={{
                   width: "100%",
                   letterSpacing: "2px",
-                  minHeight: "42px",
-                  borderRadius: "2px",
+                  minHeight: "45px",
+                  borderRadius: `${
+                    config?.uiElements?.button?.borderRadius || "2px"
+                  }`,
                 }}
               />
               {productName !== "finity" && (

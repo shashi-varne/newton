@@ -53,7 +53,6 @@ const Pan = (props) => {
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
   const [subTitle, setSubTitle] = useState('')
-  const [title, setTitle] = useState('')
   const [showLoader, setShowLoader] = useState(false)
   const {kyc, isLoading} = useUserKycHook();
   
@@ -77,6 +76,7 @@ const Pan = (props) => {
               getBase64(file, function (img) {
                 setFileToShow(img)
               })
+              break;
             default:
               toast('Please select image file')
           }
@@ -169,7 +169,7 @@ const Pan = (props) => {
           </div>
           <Alert
             variant="attention"
-            title={title || 'Note'}
+            title={'Note'}
             message={subTitle}
             renderMessage={
               !subTitle ? () => <MessageComponent kyc={kyc} /> : null

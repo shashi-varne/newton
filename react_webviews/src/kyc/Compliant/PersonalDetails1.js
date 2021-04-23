@@ -73,7 +73,6 @@ const PersonalDetails1 = (props) => {
 
   const handleClick = () => {
     let keysToCheck = ["dob", "residential_status", "gender"];
-    if (is_nri) keysToCheck.push("tin_number");
     if (user.email === null) keysToCheck.push("email");
     if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
