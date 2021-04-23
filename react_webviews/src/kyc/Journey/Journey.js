@@ -22,7 +22,7 @@ import "./Journey.scss"
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
-  const urlParams = getUrlParams(props?.location?.search)
+  const stateParams = props?.location?.state;
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [aadhaarLinkDialog, setAadhaarLinkDialog] = useState(false)
   const [npsDetailsReq] = useState(
@@ -47,7 +47,7 @@ const Journey = (props) => {
     if (user?.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete") {
       setGoBackModal(true)
     } else {
-      navigate('/')
+      nativeCallback({ action: "exit" })
     }
   }
 
@@ -625,7 +625,7 @@ const Journey = (props) => {
       kyc.dl_docs_status !== null
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
-      urlParams.show_aadhaar === 'true' ||
+      stateParams.show_aadhaar === true ||
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var kycJourneyData = initJourneyData() || []

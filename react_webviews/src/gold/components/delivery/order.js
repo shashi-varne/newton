@@ -127,10 +127,8 @@ class DeliveryOrder extends Component {
 
     var pgLink = this.state.redeem_body.payment_link;
     // eslint-disable-next-line
-    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + encodeURIComponent(nativeRedirectUrl) + '&order_type=delivery';
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
+    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' +
+     encodeURIComponent(nativeRedirectUrl) + '&order_type=delivery' + '&generic_callback=' + getConfig().generic_callback;
 
     if (getConfig().app === 'ios') {
       nativeCallback({
@@ -140,7 +138,7 @@ class DeliveryOrder extends Component {
       });
     }
 
-    if (!getConfig().isSdk) {
+    if (getConfig().isNative) {
       nativeCallback({
         action: 'take_control', message: {
           back_url: nativeRedirectUrl,

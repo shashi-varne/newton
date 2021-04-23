@@ -17,11 +17,11 @@
       margin-bottom: 10px;
     }
 
-    .red {
+    .summary-red-text {
       color: #d32f2f;
     }
 
-    .green {
+    .summary-green-text {
       color: #34ca5c;
     }
 
@@ -61,6 +61,11 @@
       img {
         width: 50px;
         margin-right: 10px;
+      }
+
+      .reports-finity-icon {
+        width: 35px;
+        margin-left: 5px;
       }
 
       .text {
@@ -146,6 +151,7 @@
             border-radius: 50%;
             border: 2px solid;
             border-color: rgba(0, 0, 0, 0.54);
+            cursor: pointer;
           }
 
           .selected {

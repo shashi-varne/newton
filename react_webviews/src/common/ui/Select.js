@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
-import Grid from 'material-ui/Grid';
-import Select from 'material-ui/Select';
-import { MenuItem } from 'material-ui/Menu';
-import { InputLabel } from 'material-ui/Input';
-import { FormControl } from 'material-ui/Form';
+import React, { Component } from "react";
+import Grid from "material-ui/Grid";
+import Select from "material-ui/Select";
+import { MenuItem } from "material-ui/Menu";
+import { InputLabel } from "material-ui/Input";
+import { FormControl } from "material-ui/Form";
 
-import './style.scss';
-import Icon from './Icon';
+import "./style.scss";
+import Icon from "./Icon";
 
 class SelectGrp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedValue: this.props.value,
-      options: this.props.options
+      options: this.props.options,
     };
   }
 
   componentDidUpdate(prevState) {
     if (prevState.value !== this.props.value) {
-      this.setState({selectedValue: this.props.value})
+      this.setState({ selectedValue: this.props.value });
     }
   }
 
@@ -33,7 +33,9 @@ class SelectGrp extends Component {
 
     const allOptions = options.map((option, i) => {
       return (
-        <MenuItem key={i} value={option}>{option}</MenuItem>
+        <MenuItem key={i} value={option}>
+          {option}
+        </MenuItem>
       );
     });
 
@@ -49,9 +51,21 @@ class SelectGrp extends Component {
             name: this.props.id,
             id: this.props.id,
           }}
-          autoWidth={true} >
+          autoWidth={true}
+        >
           {allOptions}
         </Select>
+        {this.props.error ? (
+          <span className="error-radiogrp">
+            {this.props.helperText || "Please select an option"}
+          </span>
+        ) : (
+          this.props.helperText && (
+            <span className="error-radiogrp">
+              {this.props.helperText || ""}
+            </span>
+          )
+        )}
       </FormControl>
     );
   }
@@ -60,13 +74,10 @@ class SelectGrp extends Component {
 const Dropdown = (props) => (
   <Grid container spacing={16} alignItems="flex-end">
     <Grid item xs={2}>
-      {props.icon && <Icon
-        src={props.icon}
-        width={props.width} />}
+      {props.icon && <Icon src={props.icon} width={props.width} />}
     </Grid>
     <Grid item xs={10}>
-      <SelectGrp
-        {...props} />
+      <SelectGrp {...props} />
     </Grid>
   </Grid>
 );

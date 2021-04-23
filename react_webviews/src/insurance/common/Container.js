@@ -7,7 +7,7 @@ import { getConfig } from 'utils/functions';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import { nativeCallback } from 'utils/native_callback';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import {didMount ,commonRender} from '../../common/components/container_functions';
 class Container extends Component {
 

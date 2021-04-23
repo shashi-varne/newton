@@ -24,6 +24,7 @@ import AccountMerge from "./AccountMerge";
 import AccountMergeOtp from "./AccountMerge/Otp";
 import AccountLinked from "./AccountMerge/Linked";
 import SdkLanding from './Invest/components/SdkLanding';
+import NPS from "./nps";
 import {getConfig} from 'utils/functions';
 
 const Home = (props) => {
@@ -37,6 +38,7 @@ const Home = (props) => {
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}diy`} component={DIY} />
         <Route path={`${url}invest-journey`} component={InvestJourney} />
+        <Route path={`${url}nps`} component={NPS} />
         <Route
           path={`${url}advanced-investing/new-fund-offers/info`}
           component={NfoInfo}
