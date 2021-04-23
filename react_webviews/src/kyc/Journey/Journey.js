@@ -16,6 +16,7 @@ import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import { getBasePath } from '../../utils/functions'
 import "./Journey.scss"
+import { nativeCallback } from '../../utils/native_callback'
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
