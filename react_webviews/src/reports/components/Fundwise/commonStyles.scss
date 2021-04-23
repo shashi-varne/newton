@@ -21,6 +21,7 @@
   .content {
     color: gray;
     text-align: center;
+    text-transform: capitalize;
   }
 
   .block1 {
@@ -109,11 +110,11 @@
           color: #333333;
         }
 
-        .green {
+        .fundswise-green-text {
           color: #71bf1c;
         }
 
-        .red {
+        .fundswise-red-text {
           color: #d0021b;
         }
       }
@@ -157,11 +158,11 @@
         text-transform: capitalize;
       }
 
-      .green {
+      .fundswise-green-text {
         color: #71bf1c;
       }
 
-      .red {
+      .fundswise-red-text {
         color: #d0021b;
       }
     }

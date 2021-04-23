@@ -4,6 +4,7 @@ import { isEmpty } from "utils/validators";
 import { getPurchaseProcessData, storageConstants } from "../constants";
 import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
+import ProgressStep from "./mini-components/ProgressStep";
 
 const SwitchedTransaction = (props) => {
   const transactions = storageService().getObject(
@@ -45,55 +46,19 @@ const SwitchedTransaction = (props) => {
                   </div>
                 </div>
                 <div className="progress-bar">
-                  <div className="progress">
-                    <div className="content">
-                      <hr className="left"></hr>
-                      <img src={require(`assets/completed_step.svg`)} alt="" />
-                      <hr className="right"></hr>
-                    </div>
-                    <div className="text">
-                      <div>SWITCH REQUESTED</div>
-                    </div>
-                  </div>
-                  <div className="progress">
-                    <div className="content">
-                      <hr className="left"></hr>
-                      {switched.plutus_state === "order_placed" ||
-                      switched.plutus_state === "unit_deducted" ? (
-                        <img
-                          src={require(`assets/completed_step.svg`)}
-                          alt=""
-                        />
-                      ) : (
-                        <span className="dot"></span>
-                      )}
-                      <hr className="right"></hr>
-                    </div>
-                    <div className="text">ORDER PLACED</div>
-                  </div>
-                  <div className="progress">
-                    <div className="content">
-                      <hr className="left"></hr>
-                      {switched.plutus_state === "unit_deducted" ? (
-                        <img
-                          src={require(`assets/completed_step.svg`)}
-                          alt=""
-                        />
-                      ) : (
-                        <span className="dot"></span>
-                      )}
-                      <hr className="right"></hr>
-                    </div>
-                    <div className="text">UNITS SWITCHED</div>
-                  </div>
-                  <div className="progress">
-                    <div className="content">
-                      <hr className="left"></hr>
-                      <span className="dot"></span>
-                      <hr className="right"></hr>
-                    </div>
-                    <div className="text">SWITCH CONFIRMED</div>
-                  </div>
+                  <ProgressStep isCompleted={true} text="SWITCH REQUESTED" />
+                  <ProgressStep
+                    isCompleted={
+                      switched.plutus_state === "order_placed" ||
+                      switched.plutus_state === "unit_deducted"
+                    }
+                    text="ORDER PLACED"
+                  />
+                  <ProgressStep
+                    isCompleted={switched.plutus_state === "unit_deducted"}
+                    text="UNITS SWITCHED"
+                  />
+                  <ProgressStep isCompleted={false} text="SWITCH CONFIRMED" />
                 </div>
                 <div className="check-process">
                   <div className="text" onClick={() => handleProcess(switched)}>
