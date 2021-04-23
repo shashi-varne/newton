@@ -57,8 +57,7 @@ const InvestedAmount = (props) => {
         ...data,
         equity: stockSplitVal,
         debt: 100 - stockSplitVal,
-        amount,
-        recommendedTotalAmount: data?.amount
+        userEnteredAmt: amount
       });
       setLoader(false);
       navigate(`recommendations`);

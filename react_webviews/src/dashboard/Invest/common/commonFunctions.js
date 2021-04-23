@@ -118,16 +118,16 @@ export const validateInvestAmount = (amount, investType, investTypeDisplay) => {
 };
 
 export const getGoalRecommendation = () => {
-  let goal = storageService().getObject('goalRecommendations');
+  let goal = storageService().getObject('funnelGoalData');
   if (!goal) {
     goal = {};
   }
 
   const result = {
-    min_sip_amount: goal.min_sip_amount ? goal.min_sip_amount : 500,
-    max_sip_amount: goal.max_sip_amount ? goal.max_sip_amount : 500000,
-    min_ot_amount: goal.min_ot_amount ? goal.min_ot_amount : 5000,
-    max_ot_amount: goal.max_ot_amount ? goal.max_ot_amount : 2000000,
+    min_sip_amount: goal.min_sip_amount || 500,
+    max_sip_amount: goal.max_sip_amount || 500000,
+    min_ot_amount: goal.min_ot_amount || 5000,
+    max_ot_amount: goal.max_ot_amount || 2000000,
   };
   return result;
 };
@@ -188,3 +188,4 @@ export const selectTitle = (type) => {
       return 'Invest';
   }
 };
+

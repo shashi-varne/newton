@@ -28,8 +28,8 @@ const goalTypes = {
 }
 const GoalType = (props) => {
   const navigate = navigateFunc.bind(props);
-  const goNext = (name) => ()=> {
-    navigate(`savegoal/${name}`)
+  const goNext = (name) => () => {
+    navigate(`savegoal/${name}`);
   }
   return (
     <Container
