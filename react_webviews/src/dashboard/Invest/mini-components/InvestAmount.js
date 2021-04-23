@@ -34,7 +34,11 @@ const InvestAmount = (props) => {
     setUserRiskProfile
   } = useFunnelDataHook();
   const { investType, year, equity, term, isRecurring, investTypeDisplay } = funnelData;
-  const [amount, setAmount] = useState(funnelData?.amount || '');
+  const [amount, setAmount] = useState(
+    funnelData?.userEnteredAmt ||
+    funnelData?.amount ||
+    ''
+  );
   const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
   const [error, setError] = useState(false);
@@ -76,21 +80,18 @@ const InvestAmount = (props) => {
     if(error){
       setError(false);
     }
-    if(funnelGoalData.itype !== "saveforgoal"){
-      // ? Shouldn't this check be made even for 'parkmymoney'
-      let result;
-      if (investTypeDisplay === "sip") {
-        result = validateSipAmount(amount);
-      } else {
-        result = validateOtAmount(amount);
-      }
-      if (result?.error) {
-        setError(true);
-        setErrorMsg(result?.message);
-      } else {
-        setErrorMsg('');
-        setError(false);
-      }
+    let result;
+    if (investTypeDisplay === "sip") {
+      result = validateSipAmount(amount);
+    } else {
+      result = validateOtAmount(amount);
+    }
+    if (result?.error) {
+      setError(true);
+      setErrorMsg(result?.message);
+    } else {
+      setErrorMsg('');
+      setError(false);
     }
     if (funnelGoalData.id === "savetax") {
       const currentMonth = month + 1;
@@ -135,7 +136,7 @@ const InvestAmount = (props) => {
         return;
       }
       
-      updateFunnelData({ ...data, amount, recommendedTotalAmount: data.amount })
+      updateFunnelData({ ...data, userEnteredAmt: amount })
       
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully

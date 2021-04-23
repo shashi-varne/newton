@@ -41,7 +41,8 @@ const Landing = (props) => {
       investType: 'investsurplus',
       isRecurring: isRecurring('investsurplus'),
       investTypeDisplay,
-      name: 'Wealth building'
+      name: 'Wealth building',
+      showRecommendationTopCards: true
     };
     try {
       setLoader("button");

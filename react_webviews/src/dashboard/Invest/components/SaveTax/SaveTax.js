@@ -48,7 +48,8 @@ const Landing = (props) => {
       investType: type,
       isRecurring: isRecurring(type),
       investTypeDisplay,
-      name: 'Tax saving'
+      name: 'Tax saving',
+      showRecommendationTopCards: true
     }
     try {
       setLoader("button");

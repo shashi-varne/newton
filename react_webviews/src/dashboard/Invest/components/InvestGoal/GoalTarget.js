@@ -2,46 +2,54 @@ import './GoalTarget.scss';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import toast from "common/ui/Toast"
-import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { numDifferentiationInr } from 'utils/validators';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { saveGoalMapper } from './constants';
-import moment from 'moment';
+import { getConfig } from '../../../../utils/functions';
+import { get_recommended_funds } from '../../common/api';
 
-const currentYear = moment().year();
+const riskEnabled = getConfig().riskEnabledFunnels;
 
 const GoalTarget = (props) => {
-  const [loader, setLoader] = useState(false);
   const navigate = navigateFunc.bind(props);
-  const { subtype, year } = props.match?.params;
-  const term = parseInt((year - currentYear), 10);
+  
+  const [loader, setLoader] = useState(false);
+  const {
+    funnelData,
+    funnelGoalData,
+    updateFunnelData
+  } = useFunnelDataHook();
+  const { subtype, year } = props.match?.params || funnelData;
 
-  const { initFunnelData } = useFunnelDataHook();
-
-  const fetchRecommendedFunds = async (amount) => {
+  const fetchRecommendedFunds = async (corpus) => {
     try {
-      const appendToFunnelData = {
-        term,
-        year,
-        subtype,
-        corpus: amount,
-        investType: 'saveforgoal',
-        isRecurring: isRecurring('saveforgoal'),
-        name: "Saving for goal"
+      const params = {
+        type: funnelData.investType,
+        subtye: funnelData.subtype,
+        term: funnelData?.term,
+        rp_enabled: riskEnabled,
       };
       setLoader(true);
-      await initFunnelData({
-        apiParams: {
-          amount,
-          type: 'saveforgoal',
-          subtype,
-          term
-        },
-        appendToFunnelData: appendToFunnelData
-      });
+      const data = await get_recommended_funds(params);
       setLoader(false);
-      goNext();
+
+      if (!data.recommendation) {
+        // RP enabled flow, when user has no risk profile
+        updateFunnelData({ corpus });
+        if (data.msg_code === 0) {
+          navigate(`${funnelGoalData.id}/risk-select`);
+        } else if (data.msg_code === 1) {
+          navigate(`${funnelGoalData.id}/risk-select-skippable`);
+        }
+        return;
+      }
+
+      updateFunnelData({ ...data, corpus });
+
+      navigate(`savegoal/${subtype}/amount`);
     } catch (err) {
+      console.log(err);
       setLoader(false);
       toast(err)
     }
@@ -53,7 +61,7 @@ const GoalTarget = (props) => {
   
   const calculateCorpusValue = (amount) => {
     // eslint-disable-next-line radix
-    return Math.round(amount * Math.pow(1 + 0.05, parseInt(year - currentYear)));
+    return Math.round(amount * Math.pow(1 + 0.05, parseInt(funnelData.term)));
   };
 
   const handleInvestedAmount = (type) => () => {

@@ -48,7 +48,8 @@ const Landing = (props) => {
         investType: params.type,
         isRecurring: investTypeDisplay === 'sip' ? true : false,
         investTypeDisplay,
-        name: 'Wealth building'
+        name: 'Wealth building',
+        showRecommendationTopCards: true
       };
       await initFunnelData({
         apiParams: { type: params.type },

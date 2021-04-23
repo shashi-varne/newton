@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { storageService } from "../../../utils/validators";
 import { isArray } from 'lodash';
 import { get_recommended_funds } from './api';

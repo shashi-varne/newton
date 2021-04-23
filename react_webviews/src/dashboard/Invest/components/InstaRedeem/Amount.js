@@ -20,7 +20,7 @@ const InvestAmount = (props) => {
   const sipOrOnetime = funnelData.investTypeDisplay;
   const tags = investRedeemData.tagsMapper[sipOrOnetime];
   const [amount, setAmount] = useState(
-    funnelData.recommendedTotalAmount ||
+    funnelData.userEnteredAmt ||
     (sipOrOnetime === "sip" ? 5000 : 50000)
   );
   const [amountError, setAmountError] = useState("");
@@ -34,7 +34,7 @@ const InvestAmount = (props) => {
         amount
       }],
       // eslint-disable-next-line
-      recommendedTotalAmount: parseInt(amount),
+      userEnteredAmt: parseInt(amount),
     };
     updateFunnelData(recommendations);
     navigate('recommendations');

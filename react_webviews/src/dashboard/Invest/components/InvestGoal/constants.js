@@ -1,5 +1,3 @@
-
-
 export const saveGoalMapper = {
     retirement:[
         {
@@ -70,3 +68,11 @@ export const saveGoalMapper = {
         }
     ]
 }
+
+export const customGoalTargetMap = {
+    retirement: 20000000,
+    childeducation: 1000000,
+    childwedding: 1500000,
+    vacation: 200000,
+    other: 20000000
+};
