@@ -6,7 +6,6 @@ import Button from "common/ui/Button";
 import {
   navigate as navigateFunc,
   getProjectedValue,
-  redirectToReports,
   getAmountInInr,
 } from "../../common/functions";
 import { getPathname, storageConstants } from "../../constants";
@@ -367,8 +366,7 @@ const Summary = (props) => {
               {data.insurance_active && investCards.insurance && (
                 <SummaryCard
                   goNext={() =>
-                    // navigate("/group-insurance/common/report")
-                    redirectToReports("insurance")
+                    navigate("/group-insurance/common/report")
                   }
                   icon="ic_pf_insurance.svg"
                   title="Insurance"
@@ -377,8 +375,7 @@ const Summary = (props) => {
               {data.gold_active_investment && investCards.gold && (
                 <SummaryCard
                   goNext={() =>
-                    // navigate("/gold/my-gold")
-                    redirectToReports("gold")
+                    navigate("/gold/my-gold")
                   }
                   icon="ic_pf_gold.svg"
                   title="Gold"

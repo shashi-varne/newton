@@ -5,7 +5,7 @@ import {didMount ,commonRender} from '../../common/components/container_function
 
 
 import { nativeCallback } from "utils/native_callback";
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import {checkStringInString, storageService} from 'utils/validators';
 import {forceBackState, goBackMap} from '../constants';
 

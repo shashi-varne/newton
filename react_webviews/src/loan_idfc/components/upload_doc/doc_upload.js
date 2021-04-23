@@ -62,14 +62,12 @@ class DocumentUpload extends Component {
 
   componentDidMount() {
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb.add_listener({
-        type: "native_receiver_image",
-        show_loader: function (show_loader) {
-          that.showLoaderNative();
-        },
-      });
-    }
+    window.callbackWeb.add_listener({
+      type: "native_receiver_image",
+      show_loader: function (show_loader) {
+        that.showLoaderNative();
+      },
+    });
   }
 
   onload = () => {
@@ -231,46 +229,44 @@ class DocumentUpload extends Component {
 
   native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb[method_name]({
-        type: "doc",
-        doc_type: doc_type,
-        doc_name: doc_name,
-        // callbacks from native
-        upload: function upload(file) {
-          try {
+    window.callbackWeb[method_name]({
+      type: "doc",
+      doc_type: doc_type,
+      doc_name: doc_name,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
+          that.setState({
+            docType: this.doc_type,
+            docName: this.doc_name,
+            show_loader: true,
+          });
+          if (file.size > 5000000) {
+            alert("Please select file less than 5mb");
             that.setState({
-              docType: this.doc_type,
-              docName: this.doc_name,
-              show_loader: true,
+              show_loader: false,
             });
-            if (file.size > 5000000) {
-              alert("Please select file less than 5mb");
+            return;
+          }
+          switch (file.type) {
+            case "application/pdf":
+            case "image/jpeg":
+            case "image/jpg":
+            case "image/png":
+            case "image/bmp":
+              that.save(file, this.doc_name);
+              break;
+            default:
+              alert("Please select pdf/img file");
               that.setState({
                 show_loader: false,
               });
-              return;
-            }
-            switch (file.type) {
-              case "application/pdf":
-              case "image/jpeg":
-              case "image/jpg":
-              case "image/png":
-              case "image/bmp":
-                that.save(file, this.doc_name);
-                break;
-              default:
-                alert("Please select pdf/img file");
-                that.setState({
-                  show_loader: false,
-                });
-            }
-          } catch (e) {
-            //
           }
-        },
-      });
-    }
+        } catch (e) {
+          //
+        }
+      },
+    });
   }
 
   save = (file, name) => {

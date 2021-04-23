@@ -56,14 +56,12 @@ class UploadBank extends Component {
 
   componentDidMount() {
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb.add_listener({
-        type: "native_receiver_image",
-        show_loader: function (show_loader) {
-          that.showLoaderNative();
-        },
-      });
-    }
+    window.callbackWeb.add_listener({
+      type: "native_receiver_image",
+      show_loader: function (show_loader) {
+        that.showLoaderNative();
+      },
+    });
   }
 
   showLoaderNative() {
@@ -171,34 +169,32 @@ class UploadBank extends Component {
 
   native_call_handler(method_name, doc_type) {
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb[method_name]({
-        type: "doc",
-        doc_type: doc_type,
-        // callbacks from native
-        upload: function upload(file) {
-          try {
-            that.setState({
-              docType: this.doc_type,
-              show_loader: true,
-            });
-            switch (file.type) {
-              case "application/pdf":
-                that.save(file);
-                break;
-              default:
-                alert("Please select pdf file");
-                that.setState({
-                  docType: this.doc_type,
-                  show_loader: false,
-                });
-            }
-          } catch (e) {
-            //
+    window.callbackWeb[method_name]({
+      type: "doc",
+      doc_type: doc_type,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
+          that.setState({
+            docType: this.doc_type,
+            show_loader: true,
+          });
+          switch (file.type) {
+            case "application/pdf":
+              that.save(file);
+              break;
+            default:
+              alert("Please select pdf file");
+              that.setState({
+                docType: this.doc_type,
+                show_loader: false,
+              });
           }
-        },
-      });
-    }
+        } catch (e) {
+          //
+        }
+      },
+    });
   }
 
   openFileExplorer() {
