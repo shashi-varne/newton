@@ -244,14 +244,14 @@ class Register extends Component {
                   }`,
                 }}
               />
-              {!this.state.resendVerification && (
+              {this.state.resendVerification && (
                 <div
                   className="resend-verification"
                   onClick={() => this.resendVerificationLink()}
                 >
                   <span>Resend verification link </span>
                   <span className="loader">
-                    {!this.state.resendVerificationApi && (
+                    {this.state.resendVerificationApi && (
                       <CircularProgress size={15} thickness={5} />
                     )}
                   </span>
