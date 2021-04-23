@@ -62,112 +62,47 @@ const Redeemed = (props) => {
                 </div>
                 {redeemed.trans_type !== "insta-redeem" && (
                   <div className="progress-bar">
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        <img
-                          src={require(`assets/completed_step.svg`)}
-                          alt=""
-                        />
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">
-                        <div>WITHDRAW REQUESTED</div>
-                        <div className="small">{redeemed.dt_created}</div>
-                      </div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        {redeemed.plutus_state === "order_placed" ||
-                        redeemed.plutus_state === "unit_deducted" ? (
-                          <img
-                            src={require(`assets/completed_step.svg`)}
-                            alt=""
-                          />
-                        ) : (
-                          <span className="dot"></span>
-                        )}
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">ORDER PLACED</div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        {redeemed.plutus_state === "unit_deducted" ? (
-                          <img
-                            src={require(`assets/completed_step.svg`)}
-                            alt=""
-                          />
-                        ) : (
-                          <span className="dot"></span>
-                        )}
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">UNITS DEDUCTED</div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        <span className="dot"></span>
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">AMOUNT CREDITED</div>
-                    </div>
+                    <ProgressStep
+                      isCompleted={true}
+                      text="WITHDRAW REQUESTED"
+                      subtext={redeemed.dt_created}
+                    />
+                    <ProgressStep
+                      isCompleted={
+                        redeemed.plutus_state === "order_placed" ||
+                        redeemed.plutus_state === "unit_deducted"
+                      }
+                      text="ORDER PLACED"
+                    />
+                    <ProgressStep
+                      isCompleted={redeemed.plutus_state === "unit_deducted"}
+                      text="UNITS DEDUCTED"
+                    />
+                    <ProgressStep
+                      isCompleted={false}
+                      text="AMOUNT CREDITED"
+                      subtext={redeemed.expected_credit_date}
+                    />
                   </div>
                 )}
                 {redeemed.trans_type === "insta-redeem" && (
                   <div className="progress-bar upcoming">
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        <img
-                          src={require(`assets/completed_step.svg`)}
-                          alt=""
-                        />
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">
-                        <div>WITHDRAW REQUESTED</div>
-                        <div className="small">{redeemed.dt_created}</div>
-                      </div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        {redeemed.units_deducted || redeemed.amount_credited ? (
-                          <img
-                            src={require(`assets/completed_step.svg`)}
-                            alt=""
-                          />
-                        ) : (
-                          <span className="dot"></span>
-                        )}
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">UNITS DEDUCTED</div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        {redeemed.amount_credited ? (
-                          <img
-                            src={require(`assets/completed_step.svg`)}
-                            alt=""
-                          />
-                        ) : (
-                          <span className="dot"></span>
-                        )}
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">
-                        <div>AMOUNT CREDITED</div>
-                        <div className="small">
-                          {redeemed.expected_credit_date}
-                        </div>
-                      </div>
-                    </div>
+                    <ProgressStep
+                      isCompleted={true}
+                      text="WITHDRAW REQUESTED"
+                      subtext={redeemed.dt_created}
+                    />
+                    <ProgressStep
+                      isCompleted={
+                        redeemed.units_deducted || redeemed.amount_credited
+                      }
+                      text="UNITS DEDUCTED"
+                    />
+                    <ProgressStep
+                      isCompleted={redeemed.amount_credited}
+                      text="AMOUNT CREDITED"
+                      subtext={redeemed.expected_credit_date}
+                    />
                   </div>
                 )}
                 <div className="check-process">
@@ -197,3 +132,23 @@ const Redeemed = (props) => {
 };
 
 export default Redeemed;
+
+export const ProgressStep = ({ isCompleted, text, subtext }) => {
+  return (
+    <div className="progress">
+      <div className="content">
+        <hr className="left"></hr>
+        {isCompleted ? (
+          <img src={require(`assets/completed_step.svg`)} alt="" />
+        ) : (
+          <span className="dot"></span>
+        )}
+        <hr className="right"></hr>
+      </div>
+      <div className="text">
+        <div>{text}</div>
+        <div className="small">{subtext}</div>
+      </div>
+    </div>
+  );
+};
