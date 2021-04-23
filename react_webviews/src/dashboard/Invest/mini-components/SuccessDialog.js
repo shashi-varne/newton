@@ -14,7 +14,7 @@ const SuccessDialog = ({ isOpen, handleClick, sips = [], close }) => {
       aria-labelledby="success-dialog"
       keepMounted
       aria-describedby="success-dialog"
-      className="invest-redeem-dialog"
+      className="invest-common-dialog"
       id="invest-bottom-dialog"
       onClose={close}
     >

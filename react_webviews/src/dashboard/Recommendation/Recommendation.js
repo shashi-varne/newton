@@ -326,12 +326,12 @@ const Recommendations = (props) => {
           </div>
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPendind}
-            handleClick={() => navigate("/kyc/add-bank")}
+            handleClick={() => navigate("/kyc/add-bank", null, true)}
           />
           <InvestError
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
-            handleClick={() => navigate("/invest")}
+            handleClick={() => navigate("/invest", null, true)}
             close={() => handleDialogStates("openInvestError", false)}
           />
           <InvestReferralDialog

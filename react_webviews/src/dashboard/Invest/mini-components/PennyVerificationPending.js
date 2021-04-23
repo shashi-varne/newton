@@ -13,7 +13,7 @@ const PennyVerificationPending = ({ isOpen, handleClick }) => {
       aria-labelledby="success-dialog"
       keepMounted
       aria-describedby="success-dialog"
-      className="invest-redeem-dialog penny-verification-pending-dialog"
+      className="invest-common-dialog penny-verification-pending-dialog"
       id="invest-bottom-dialog"
     >
       <DialogContent className="dialog-content">

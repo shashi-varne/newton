@@ -143,7 +143,7 @@
 
 .withdraw-explore-investment-options {
   margin: 0 auto;
-  background-color: #f1f1f1;
+  background-color: #ededed;
 
   .main {
     background-color: white;
@@ -173,6 +173,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .cta-button:hover {
+    background-color: var(--secondary);
   }
   
   .cta-button .cta-button-text {

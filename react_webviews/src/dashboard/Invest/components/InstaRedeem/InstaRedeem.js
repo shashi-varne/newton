@@ -89,7 +89,7 @@ const InstaRedeem = (props) => {
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         aria-labelledby="responsive-dialog-title"
-        className="insta-redeem-dialog"
+        className="invest-common-dialog"
       >
         <DialogContent className="dialog-content">
           <div className="head-bar insta-redeem-head-bar">

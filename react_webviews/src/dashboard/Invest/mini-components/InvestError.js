@@ -19,7 +19,7 @@ const InvestError = ({ isOpen, handleClick, errorMessage, close }) => {
       aria-labelledby="success-dialog"
       keepMounted
       aria-describedby="success-dialog"
-      className="invest-redeem-dialog"
+      className="invest-common-dialog"
       id="invest-error"
       onClose={close}
     >

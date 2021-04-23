@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import Button from 'common/ui/Button'
 import React, { useEffect, useState } from 'react'
 import Container from '../../common/Container'
 import { withdrawOptions } from '../../constants'
@@ -85,7 +85,10 @@ const Balance = (props) => {
       noFooter
       noPadding
       noInvestments={noInvestments}
-      classOverRideContainer="withdraw-background-override"
+      classOverRideContainer={
+        `withdraw-background-override 
+        ${noInvestments && "withdraw-explore-override"
+      }`}
       skelton={isEmpty(balance)}
       // noHeader={isEmpty(balance)}
     >
@@ -128,14 +131,20 @@ const Balance = (props) => {
                 Don't var the money lie down idle in bank account. Switch to
                 debt funds and get up to 4% more returns than bank!
               </div>
-              <Button
+              {/* <Button
                 className="withdraw-mid-tile-text2"
                 variant="outlined"
                 onClick={handleSwitch}
                 fullWidth
               >
                 switch now
-              </Button>
+              </Button> */}
+              <Button
+                buttonTitle="Switch Now"
+                onClick={handleSwitch}
+                classes={{ button: "withdraw-mid-tile-text2" }}
+                type="outlined"
+              />
             </main>
             <footer className="footer Card">
               <div className="title">Withdraw</div>
