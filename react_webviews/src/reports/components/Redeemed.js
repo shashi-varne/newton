@@ -61,7 +61,7 @@ const Redeemed = (props) => {
                     </div>
                   )}
                 </div>
-                {redeemed.trans_type !== "insta-redeem" && (
+                {redeemed.trans_type !== "insta-redeem" ? (
                   <div className="progress-bar">
                     <ProgressStep
                       isCompleted={true}
@@ -85,8 +85,7 @@ const Redeemed = (props) => {
                       subtext={redeemed.expected_credit_date}
                     />
                   </div>
-                )}
-                {redeemed.trans_type === "insta-redeem" && (
+                ) : (
                   <div className="progress-bar upcoming">
                     <ProgressStep
                       isCompleted={true}

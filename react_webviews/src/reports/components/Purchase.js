@@ -50,7 +50,7 @@ const Purchase = (props) => {
                     </div>
                   </div>
                 </div>
-                {purchased.status !== "upcoming" && (
+                {purchased.status !== "upcoming" ? (
                   <div className="progress-bar">
                     <ProgressStep
                       isCompleted={true}
@@ -72,8 +72,7 @@ const Purchase = (props) => {
                       text="INVESTMENT CONFIRMED"
                     />
                   </div>
-                )}
-                {purchased.status === "upcoming" && (
+                ) : (
                   <div className="progress-bar upcoming">
                     <ProgressStep
                       isCompleted={true}
