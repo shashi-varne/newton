@@ -84,10 +84,6 @@ class Notification extends Component {
       (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
       "generic_callback=true";
 
-    if (type === "campaigns") {
-      webRedirectionUrl += "&campaign_version=1";
-    }
-
     return webRedirectionUrl;
   };
 

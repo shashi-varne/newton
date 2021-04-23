@@ -196,10 +196,7 @@ class PlanSummaryClass extends Component {
         var back_url = encodeURIComponent(current_url);
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app + '&back_url=' + back_url;
-        if (getConfig().generic_callback) {
-          pgLink += '&generic_callback=' + getConfig().generic_callback;
-        }
+          '&app=' + app + '&back_url=' + back_url + '&generic_callback=' + getConfig().generic_callback;
 
         if (getConfig().partner_code) {
           pgLink += '&partner_code=' + getConfig().partner_code;

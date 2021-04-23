@@ -11,7 +11,7 @@ import Dialog, {
 import Button from 'material-ui/Button';
 import thumb from 'assets/thumb.svg';
 import edit from 'assets/edit.svg';
-import '../../utils/native_listner_otm';
+import '../../utils/native_listener';
 import { nativeCallback } from 'utils/native_callback';
 import Input from '../../common/ui/Input';
 import MobileInputWithoutIcon from '../../common/ui/MobileInputWithoutIcon';
