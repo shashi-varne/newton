@@ -16,18 +16,14 @@ export default function PieChart (props) {
   
   return (
     // Require a container div since ResponsivePieChart fit to size of its contianer
-    <div
-      style={{ width: `${width}px`, height: `${height}px` }}
-      className="animated animatedFadeInUp fadeInUp">
+    <div style={{ width: `${width}px`, height: `${height}px` }}>
       <ResponsivePie
         data={data}
         innerRadius={0.6}
         enableRadialLabels={false}
-        enableSlicesLabels={false}
+        enableSliceLabels={false}
         padAngle={1}
         animate={true}
-        tooltip={'green'
-      }
         colors={colors}
         {...otherProps}
       />

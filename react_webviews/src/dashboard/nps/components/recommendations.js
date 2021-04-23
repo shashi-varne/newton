@@ -166,7 +166,9 @@ class Recommendations extends Component {
         open={this.state.openDialog}
         onClose={this.handleClose}
         aria-labelledby="responsive-dialog-title"
-        className="risk-level"
+        classes={{
+          paperScrollPaper: 'risk-level'
+        }}
       >
         <DialogTitle id="form-dialog-title" className="edit-title">
           Choose Risk Level
