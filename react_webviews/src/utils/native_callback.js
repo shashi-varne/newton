@@ -37,7 +37,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
   }
 
   if (action === 'native_back' || action === 'exit') {
-    if (!getConfig().isSdk) callbackData.action = 'exit_web';
+    if (!getConfig().Web && !getConfig().isSdk) callbackData.action = 'exit_web';
     else window.location.href = redirectToLanding();
   }
 
@@ -266,5 +266,5 @@ export function openPdfCall(data = {}) {
 }
 
 export function redirectToLanding() {
-  return `${getBasePath()}/landing${getConfig.searchParams}`;
+  return `${getBasePath()}/landing${getConfig().searchParams}`;
 }
