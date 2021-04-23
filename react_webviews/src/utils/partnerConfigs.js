@@ -147,7 +147,6 @@ export const partnerConfigs = {
     },
   },
   fisdom: {
-    logo: "fisdom_white_logo.png",
     code: "fisdom",
     investSubSectionMap: {
       ourRecommendations: [
