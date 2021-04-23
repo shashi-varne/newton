@@ -266,5 +266,5 @@ export function openPdfCall(data = {}) {
 }
 
 export function redirectToLanding() {
-  return `${getBasePath()}/landing${getConfig().searchParams}`;
+  return `${getBasePath()}/${getConfig().searchParams}`;
 }
