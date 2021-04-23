@@ -278,7 +278,7 @@ class Landing extends Component {
             <img style={{ margin: '-15px 5px 30px 0', width: '100%', cursor: 'pointer' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div> */}
            <div className="hi-landing-banner">
-              <p className="hi-landing-banner-header">fisdom HealthProtect</p>
+              <p className="hi-landing-banner-header">{getConfig().productName} HealthProtect</p>
               <p className="hi-landing-banner-text">₹10 Lakh health cover @ just ₹728/m</p>
               <p className="hi-landing-banner-text">100% additional personal accident cover</p>
               <img className="hi-landing-banner-img" src={require(`../../assets/hi-banner-image.svg`)} alt="" />
