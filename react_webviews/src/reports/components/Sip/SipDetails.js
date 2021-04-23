@@ -6,7 +6,6 @@ import { getSipAction } from "../../common/api";
 import {
   navigate as navigateFunc,
   dateOrdinalSuffix,
-  getSipStatusName,
 } from "../../common/functions";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
@@ -17,6 +16,17 @@ const sip_mandate_created = ["init", "mandate_approved", "active"];
 const mandate_approved = ["mandate_approved", "active"];
 const requested_pause = ["pause_requested", "paused"];
 const requested_cancel = ["cancellation_requested", "cancelled"];
+const getSipStatusName = {
+  mandate_approved: "Mandate approved",
+  active: "Auto debit started",
+  pause_requested: "Requested to pause",
+  paused: "SIP paused",
+  cancellation_requested: "Requested to cancel",
+  cancelled: "SIP cancelled",
+  init: "SIP mandate created",
+  resume_requested: "Resume requested",
+  restart_requested: "Restart requested",
+};
 const SipDetails = (props) => {
   const navigate = navigateFunc.bind(props);
   const report = storageService().getObject(storageConstants.PAUSE_SIP) || {};
@@ -145,7 +155,7 @@ const SipDetails = (props) => {
               />
               <div>
                 <div className="title">Status</div>
-                <div>{getSipStatusName(report.friendly_status)}</div>
+                <div>{getSipStatusName[report?.friendly_status] || ""}</div>
                 <div className="progress-bar">
                   {sip_mandate_created.includes(report.friendly_status) && (
                     <>

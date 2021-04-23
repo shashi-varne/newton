@@ -103,19 +103,19 @@ const Summary = (props) => {
   };
 
   const handleInvestData = (name, value) => {
-    let invest_data = { ...investData };
-    invest_data[name] = value;
+    let investValues = { ...investData };
+    investValues[name] = value;
     if (name === "investType") {
-      invest_data.amount = invest_data.investType === "sip" ? 500 : 5000;
+      investValues.amount = investValues.investType === "sip" ? 500 : 5000;
     }
-    invest_data[`${name}_error`] = "";
+    investValues[`${name}_error`] = "";
     const projectedValue = getProjectedValue(
-      invest_data.amount,
-      invest_data.time,
-      invest_data.investType
+      investValues.amount,
+      investValues.time,
+      investValues.investType
     );
-    invest_data.projectedValue = projectedValue;
-    setInvestData(invest_data);
+    investValues.projectedValue = projectedValue;
+    setInvestData(investValues);
   };
 
   const flowOptions = (name) => {
@@ -191,7 +191,8 @@ const Summary = (props) => {
                           <div>Earnings</div>
                           <div
                             className={
-                              report.current.earnings >= 0 && "summary-green-text"
+                              report.current.earnings >= 0 &&
+                              "summary-green-text"
                             }
                           >
                             {formatAmountInr(report.current.earnings)}
@@ -222,7 +223,11 @@ const Summary = (props) => {
                     </div>
                     <div className="content">
                       <div>Earnings</div>
-                      <div className={report.past.earnings > 0 && "summary-green-text"}>
+                      <div
+                        className={
+                          report.past.earnings > 0 && "summary-green-text"
+                        }
+                      >
                         {getAmountInInr(report.past.earnings)}
                       </div>
                     </div>
@@ -398,7 +403,7 @@ export const SummaryCard = ({
   iconClassName,
 }) => {
   return (
-    <div className="content" onClick={() => goNext()}>
+    <div className="content" onClick={goNext}>
       <img
         alt=""
         src={require(`assets/${productName}/${icon}`)}

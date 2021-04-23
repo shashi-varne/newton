@@ -7,29 +7,11 @@ import { getPathname } from "../constants";
 import { getReportGoals } from "../common/api";
 import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
 
-const pathnameMapper = {
-  buildwealth: getPathname.buildwealth,
-  savetax: getPathname.savetax,
-  investsurplus: getPathname.parkmoney,
-  saveforgoal: getPathname.savegoal,
-  diy: getPathname.explore,
-  "insta-redeem": getPathname.instaredeem,
-  // "reliancesimplysave": getPathname.reliancesmartsaveBreakUp,
-  // "monthlyincomeplan": getPathname.monthlyincomeplan,
-  // "midcap": getPathname.midcap,
-  // "arbitrage": getPathname.arbitrage,
-  // index: getPathname.advancedInvestingIndex,
-  // shariah: getPathname.shariah,
-  // balanced: getPathname.balanced,
-  // legacy: getPathname.legacy,
-  // sectoral: getPathname.sectoral,
-  // gold: getPathname.investGold,
+const sliderConstants = {
+  min: 0,
+  max: 100,
 };
 const Goals = (props) => {
-  const sliderConstants = {
-    min: 0,
-    max: 100,
-  };
   const navigate = navigateFunc.bind(props);
   const [goals, setGoals] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
@@ -49,10 +31,10 @@ const Goals = (props) => {
   };
 
   const redirectToInvestType = (goal) => {
-    let pathname = pathnameMapper[goal?.itag?.itype] || "";
+    let pathname = getPathname[goal?.itag?.itype] || "";
     if (!pathname) return;
     if (goal.itag.itype === "saveforgoal")
-      pathname = `${pathname}${goal.itag.subtype}`;
+      pathname = `${pathname}/${goal.itag.subtype}`;
     navigate(pathname);
   };
 
@@ -95,7 +77,9 @@ const Goals = (props) => {
                     <div className="content">
                       <div
                         className={`amount ${
-                          goal.earnings >= 0 ? "goals-green-text" : "goals-red-text"
+                          goal.earnings >= 0
+                            ? "goals-green-text"
+                            : "goals-red-text"
                         }`}
                       >
                         {getAmountInInr(goal.earnings)}
