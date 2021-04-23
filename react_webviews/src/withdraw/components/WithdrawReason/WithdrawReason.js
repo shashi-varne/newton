@@ -30,12 +30,19 @@ const Landing = (props) => {
   }, []);
 
   const fetchWithdrawReasons = async () => {
-    const result = await getWithdrawReasons();
-    if (result?.dnd_flag) {
-      navigate('');
-    } else {
-      storageService().setObject('withdrawReasons', result?.survey?.question);
-      setReasons(result?.survey?.question);
+    setIsLoading(true)
+    try {
+      const result = await getWithdrawReasons();
+      if (result?.dnd_flag) {
+        navigate("");
+      } else {
+        storageService().setObject("withdrawReasons", result?.survey?.question);
+        setReasons(result?.survey?.question);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
   const sendWithdrawReason = async (param) => {
