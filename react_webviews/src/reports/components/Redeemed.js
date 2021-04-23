@@ -42,7 +42,7 @@ const Redeemed = (props) => {
                       <div>{formatAmountInr(redeemed.amount)}</div>
                     </div>
                   </div>
-                  {!redeemed.bank_account_no && (
+                  {!redeemed.bank_account_no ? (
                     <div className="content">
                       <img alt="" src={require(`assets/date.png`)} />
                       <div className="text redeemed-text">
@@ -50,8 +50,7 @@ const Redeemed = (props) => {
                         <div>{redeemed.tran_date}</div>
                       </div>
                     </div>
-                  )}
-                  {redeemed.bank_account_no && (
+                  ) : (
                     <div className="content">
                       <img alt="" src={require(`assets/add_bank_icon.png`)} />
                       <div className="text">
