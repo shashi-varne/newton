@@ -4,6 +4,7 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPurchaseProcessData, storageConstants } from "../constants";
 import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
+import ProgressStep from "./mini-components/ProgressStep";
 
 const Purchase = (props) => {
   const transactions = storageService().getObject(
@@ -51,87 +52,38 @@ const Purchase = (props) => {
                 </div>
                 {purchased.status !== "upcoming" && (
                   <div className="progress-bar">
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        <img
-                          src={require(`assets/completed_step.svg`)}
-                          alt=""
-                        />
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">PAYMENT SUCCESSFUL</div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        {purchased.plutus_state === "order_placed" ||
-                        purchased.plutus_state === "unit_alloted" ? (
-                          <img
-                            src={require(`assets/completed_step.svg`)}
-                            alt=""
-                          />
-                        ) : (
-                          <span className="dot"></span>
-                        )}
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">ORDER PLACED</div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        {purchased.plutus_state === "unit_alloted" ? (
-                          <img
-                            src={require(`assets/completed_step.svg`)}
-                            alt=""
-                          />
-                        ) : (
-                          <span className="dot"></span>
-                        )}
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">UNITS ALLOTED</div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        <span className="dot"></span>
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">INVESTMENT CONFIRMED</div>
-                    </div>
+                    <ProgressStep
+                      isCompleted={true}
+                      text="PAYMENT SUCCESSFUL"
+                    />
+                    <ProgressStep
+                      isCompleted={
+                        purchased.plutus_state === "order_placed" ||
+                        purchased.plutus_state === "unit_alloted"
+                      }
+                      text="ORDER PLACED"
+                    />
+                    <ProgressStep
+                      isCompleted={purchased.plutus_state === "unit_alloted"}
+                      text="UNITS ALLOTED"
+                    />
+                    <ProgressStep
+                      isCompleted={false}
+                      text="INVESTMENT CONFIRMED"
+                    />
                   </div>
                 )}
                 {purchased.status === "upcoming" && (
                   <div className="progress-bar upcoming">
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        <img
-                          src={require(`assets/completed_step.svg`)}
-                          alt=""
-                        />
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">AUTO DEBIT REQUEST RAISED</div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        <span className="dot"></span>
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">UNITS ALLOTED</div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        <span className="dot"></span>
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">INVESTMENT CONFIRMED</div>
-                    </div>
+                    <ProgressStep
+                      isCompleted={true}
+                      text="AUTO DEBIT REQUEST RAISED"
+                    />
+                    <ProgressStep isCompleted={false} text="UNITS ALLOTED" />
+                    <ProgressStep
+                      isCompleted={false}
+                      text="INVESTMENT CONFIRMED"
+                    />
                   </div>
                 )}
                 <div className="check-process">

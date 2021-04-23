@@ -4,6 +4,7 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPurchaseProcessData, storageConstants } from "../constants";
 import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
+import ProgressStep from "./mini-components/ProgressStep";
 
 const Redeemed = (props) => {
   const transactions = storageService().getObject(
@@ -132,23 +133,3 @@ const Redeemed = (props) => {
 };
 
 export default Redeemed;
-
-export const ProgressStep = ({ isCompleted, text, subtext }) => {
-  return (
-    <div className="progress">
-      <div className="content">
-        <hr className="left"></hr>
-        {isCompleted ? (
-          <img src={require(`assets/completed_step.svg`)} alt="" />
-        ) : (
-          <span className="dot"></span>
-        )}
-        <hr className="right"></hr>
-      </div>
-      <div className="text">
-        <div>{text}</div>
-        <div className="small">{subtext}</div>
-      </div>
-    </div>
-  );
-};
