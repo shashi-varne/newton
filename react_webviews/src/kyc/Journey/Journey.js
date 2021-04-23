@@ -625,7 +625,7 @@ const Journey = (props) => {
       kyc.dl_docs_status !== null
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
-      stateParams.show_aadhaar === true ||
+      stateParams?.show_aadhaar ||
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var kycJourneyData = initJourneyData() || []
