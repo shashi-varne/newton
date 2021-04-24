@@ -7,7 +7,6 @@ import {
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
 import { isFunction } from "../../utils/validators";
-import './Style.scss';
 
 class Container extends Component {
   constructor(props) {
