@@ -186,7 +186,7 @@ const Funds = (props) => {
         {!isEmpty(funds) &&
           funds.map((fund, index) => {
             return (
-              <div className="fund" key={index}>
+              <div className="reports-fund-content" key={index}>
                 <h5 onClick={() => handleTiles(index)}>
                   <div>{fund.mf.friendly_name}</div>
                   <div className="right-info">
