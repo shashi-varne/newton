@@ -84,13 +84,11 @@ const Balance = (props) => {
       title='Withdraw'
       noFooter
       noPadding
-      noInvestments={noInvestments}
       classOverRideContainer={
         `withdraw-background-override 
         ${noInvestments && "withdraw-explore-override"
       }`}
       skelton={isEmpty(balance)}
-      // noHeader={isEmpty(balance)}
     >
       {!isEmpty(balance) && !noInvestments && (
         <>
@@ -131,14 +129,6 @@ const Balance = (props) => {
                 Don't var the money lie down idle in bank account. Switch to
                 debt funds and get up to 4% more returns than bank!
               </div>
-              {/* <Button
-                className="withdraw-mid-tile-text2"
-                variant="outlined"
-                onClick={handleSwitch}
-                fullWidth
-              >
-                switch now
-              </Button> */}
               <Button
                 buttonTitle="Switch Now"
                 onClick={handleSwitch}

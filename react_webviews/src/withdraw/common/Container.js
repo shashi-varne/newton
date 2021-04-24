@@ -61,11 +61,7 @@ class Container extends Component {
   }
 
   render() {
-    let props_base = {
-      classOverRide: this?.props?.noInvestments ? "loanMainContainer withdraw-no-investments-override" : "loanMainContainer",
-    };
-
-    return <Fragment>{this.commonRender(props_base)}</Fragment>;
+    return <Fragment>{this.commonRender()}</Fragment>;
   }
 }
 
