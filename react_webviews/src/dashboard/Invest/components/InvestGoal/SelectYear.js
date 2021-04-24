@@ -36,6 +36,7 @@ const SelectYear = (props) => {
       await initFunnelData({
         apiParams: {
           type: 'saveforgoal',
+          flow: 'invest for goal',
           subtype,
           term,
         },

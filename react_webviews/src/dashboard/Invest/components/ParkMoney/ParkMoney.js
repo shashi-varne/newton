@@ -42,6 +42,7 @@ const Landing = (props) => {
       isRecurring: isRecurring('investsurplus'),
       investTypeDisplay,
       name: 'Wealth building',
+      flow: 'park my savings',
       showRecommendationTopCards: true
     };
     try {

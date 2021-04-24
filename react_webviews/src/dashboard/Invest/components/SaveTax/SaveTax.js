@@ -49,6 +49,7 @@ const Landing = (props) => {
       isRecurring: isRecurring(type),
       investTypeDisplay,
       name: 'Tax saving',
+      flow: 'tax saving',
       showRecommendationTopCards: true
     }
     try {
