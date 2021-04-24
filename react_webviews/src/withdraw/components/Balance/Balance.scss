@@ -1,13 +1,18 @@
-.withdraw-background-override {
-  background-color: #f1f1f1 !important;
-  line-height: 1.5;
-  overflow-y: auto;
-  margin-top: 20px;
-}
+.withdraw-override-container {
+  height: 100%;
 
-.withdraw-explore-override {
-  background-color: #ededed !important;
-  margin-top: 0;
+  .withdraw-background-override {
+    background-color: #f1f1f1 !important;
+    line-height: 1.5;
+    overflow-y: auto;
+    margin-top: 20px;
+  }
+
+  .withdraw-explore-override {
+    background-color: #ededed !important;
+    height: calc(100% - 106px);
+    margin-top: 0;
+  }
 }
 
 #withdraw-balance {
@@ -52,6 +57,11 @@
     color: #333333;
   }
 
+  .withdrawable-tile {
+    display: flex;
+    justify-content: space-around;
+  }
+
   .withdrawable-tile .tile {
     flex-basis: 0 0 30%;
     display: flex;
@@ -70,6 +80,7 @@
 
   .withdrawable-tile .tile-amount {
     margin-top: 10px;
+    font-size: 16px;
   }
 
   .Card {

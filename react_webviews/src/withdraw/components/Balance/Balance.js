@@ -84,6 +84,7 @@ const Balance = (props) => {
       title='Withdraw'
       noFooter
       noPadding
+      classOverRide={!isEmpty(balance) && "withdraw-override-container"}
       classOverRideContainer={
         `withdraw-background-override 
         ${noInvestments && "withdraw-explore-override"
@@ -98,7 +99,7 @@ const Balance = (props) => {
               <div className="amount">
                 ₹ {balance?.balance?.toLocaleString('en-IN') || 0}
               </div>
-              <div className="withdrawable-tile flex-between">
+              <div className="withdrawable-tile">
                 <div className="tile">
                   <div className="tile-text">Total Balance</div>
                   <div className="tile-amount">
