@@ -32,7 +32,11 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) => {
         if (showLoader) {
-          return <UiSkelton type />;
+          return (
+            <div className="ContainerWrapper">
+              <UiSkelton type />
+            </div>
+          );
         }
         if (showComponent) {
           return <Component {...props} />;

@@ -187,7 +187,9 @@ const Container = (props) => {
       )}
 
       {props.skelton &&
-        <UiSkelton type={props.skelton} />
+        <div className="Loader" style={{paddingTop: "56px"}}>
+          <UiSkelton type={props.skelton} />
+        </div>
       }
 
       {/* Children Block */}

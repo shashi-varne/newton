@@ -177,8 +177,10 @@ export const validateOtAmount = (amount) => {
 export const selectTitle = (type) => {
   switch (type) {
     case 'buildwealth':
+    case 'buildwealthot':
       return 'Build Wealth';
     case 'savetaxsip':
+    case 'savetax':
       return 'Save Tax';
     case 'saveforgoal':
       return 'Save for a Goal';

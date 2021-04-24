@@ -83,7 +83,7 @@ class NpsSuccess extends Component {
                   <p>For any query, reach us at</p>
                   <div className="flex-box">
                     <div className="item">{getConfig().mobile}</div>
-                    <div className="item">{getConfig().askEmail}</div>
+                    <div className="item">{getConfig().email}</div>
                   </div>
                 </div>
               </div>
