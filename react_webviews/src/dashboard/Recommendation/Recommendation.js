@@ -135,7 +135,11 @@ const Recommendations = (props) => {
       investmentObject.type = funnelData.investType;
       investmentObject.subtype = funnelData.subtype;
       investmentObject.allocations = allocations;
-
+      investmentObject.flow = funnelData.flow;
+      if (funnelData.showRecommendationTopCards && riskEnabledFunnel) {
+        investmentObject.risk_profile_indicator = userRiskProfile;
+        investmentObject.equity_ratio = funnelData.equity;
+      }
     } else {
       investmentObject = funnelData;
     }

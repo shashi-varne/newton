@@ -20,11 +20,16 @@ const InvestAmount = (props) => {
   const sipOrOnetime = funnelData.investTypeDisplay;
   const tags = investRedeemData.tagsMapper[sipOrOnetime];
   const [amount, setAmount] = useState(
-    funnelData.userEnteredAmt ||
+    funnelData.amount ||
     (sipOrOnetime === "sip" ? 5000 : 50000)
   );
   const [amountError, setAmountError] = useState("");
   const [showLoader, setShowLoader] = useState(false);
+
+  const setIntAmount = (val) => {
+    // function to set amount as integer everytime
+    setAmount(parseInt(val, 10));
+  }
 
   const handleClick = () => {
     setShowLoader("button");
@@ -33,35 +38,32 @@ const InvestAmount = (props) => {
         ...funnelData.recommendation[0],
         amount
       }],
-      // eslint-disable-next-line
-      userEnteredAmt: parseInt(amount),
+      amount,
     };
     updateFunnelData(recommendations);
     navigate('recommendations');
   };
-
+  
   const handleChange = () => (event) => {
     let value = event.target.value;
     value = convertInrAmountToNumber(value);
-    // eslint-disable-next-line
-    if (!isNaN(parseInt(value))) {
-      // eslint-disable-next-line
-      setAmount(parseInt(value));
-      validateAmount(amount);
+    if (!isNaN(value)) {
+      setIntAmount(value);
+      validateAmount(value);
     } else {
-      setAmount("");
+      setIntAmount(0);
       setAmountError("This is required");
     }
   };
-
+  
   const updateAmount = (value) => {
     let data = amount;
     if (!data) data = value;
     else data += value;
     validateAmount(data);
-    setAmount(data);
+    setIntAmount(data);
   };
-
+  
   const validateAmount = (value) => {
     let goal = getGoalRecommendation();
     let max = 0;

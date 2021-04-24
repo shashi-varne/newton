@@ -49,6 +49,7 @@ const Landing = (props) => {
         isRecurring: investTypeDisplay === 'sip' ? true : false,
         investTypeDisplay,
         name: 'Wealth building',
+        flow: 'build wealth',
         showRecommendationTopCards: true
       };
       await initFunnelData({

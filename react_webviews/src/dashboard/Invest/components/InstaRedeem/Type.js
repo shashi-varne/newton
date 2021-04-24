@@ -13,7 +13,7 @@ const Type = (props) => {
 
   const handleClick = () => {
     updateFunnelData({
-      userEnteredAmt: '',
+      amount: '',
       investTypeDisplay: investType,
       order_type: investType
     });
