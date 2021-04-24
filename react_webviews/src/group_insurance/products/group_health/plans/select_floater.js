@@ -4,7 +4,6 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation, calculateAge } from 'utils/validators';
 import { initialize, updateBottomPremium, getAddOnsData, getCoverPeriodData } from '../common_data';
-import Api from 'utils/api';
 import { childeNameMapper } from '../../../constants';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import { compareObjects, isEmpty } from '../../../../utils/validators';

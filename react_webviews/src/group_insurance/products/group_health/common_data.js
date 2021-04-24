@@ -9,8 +9,6 @@ import { nativeCallback } from 'utils/native_callback';
 import {isEmpty} from '../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
-import { getForkTsCheckerWebpackPluginHooks } from 'fork-ts-checker-webpack-plugin/lib/hooks';
-import GroupHealthPlanIsPed from './form/is_ped';
 
 export async function initialize() {
     this.setErrorData =setErrorData.bind(this)

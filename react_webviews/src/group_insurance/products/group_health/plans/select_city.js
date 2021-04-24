@@ -3,7 +3,6 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import Api from 'utils/api';
 import Autosuggests from '../../../../common/ui/Autosuggest';
 import { FormControl } from 'material-ui/Form';
 import { initialize, checkCity, getPlanList } from '../common_data';

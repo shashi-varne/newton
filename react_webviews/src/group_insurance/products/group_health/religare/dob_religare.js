@@ -6,7 +6,6 @@ import { initialize, getPlanDetails, getPlanList } from '../common_data';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { isEmpty, formatDate, dobFormatTest, isValidDate, capitalizeFirstLetter } from 'utils/validators';
-import Api from 'utils/api';
 import { calculateAge, compareObjects } from '../../../../utils/validators';
 import {getInsuredMembersUi, resetInsuredMembers} from '../constants';
 
@@ -146,8 +145,6 @@ class GroupHealthPlanDobReligare extends Component {
             canProceed = false;
         }
 
-       
-
         if (canProceed) {
             let post_body = groupHealthPlanData.post_body || {};
 
@@ -182,9 +179,6 @@ class GroupHealthPlanDobReligare extends Component {
                 post_body.plan_id = 'fisdom_health_protect';
             }
             groupHealthPlanData.post_body = post_body;
-            
-            let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id'];
-
             this.setLocalProviderData(groupHealthPlanData);
 
             var keys_to_check = ['account_type']
@@ -216,7 +210,6 @@ class GroupHealthPlanDobReligare extends Component {
                 }else{
                     this.navigate('plan-list')
                 }
-                
             }
         }
 

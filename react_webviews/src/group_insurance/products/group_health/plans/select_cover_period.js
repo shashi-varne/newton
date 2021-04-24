@@ -3,7 +3,6 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { inrFormatDecimal } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
-import Api from 'utils/api';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import { getConfig } from 'utils/functions';
 import { storageService } from '../../../../utils/validators';

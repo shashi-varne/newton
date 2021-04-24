@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {  calculateAge, isValidDate,
@@ -232,7 +231,6 @@ class GroupHealthPlanDob extends Component {
 
             groupHealthPlanData.post_body = post_body;
         
-            let {provider} = this.state;
 
             if(provider === 'HDFCERGO'){
                 this.setLocalProviderData(groupHealthPlanData)

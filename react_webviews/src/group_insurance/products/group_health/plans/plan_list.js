@@ -3,15 +3,11 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import Api from 'utils/api';
-import ReactTooltip from "react-tooltip";
 import { initialize, getPlanDetails } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import Button from '../../../../common/ui/Button'
 import {formatAmount, isEmpty} from '../../../../utils/validators';
 import { compareObjects } from 'utils/validators';
-import { isThisSecond } from 'date-fns';
-// import { Button } from 'material-ui';
 
 class GroupHealthPlanList extends Component {
 

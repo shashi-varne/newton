@@ -8,7 +8,6 @@ import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
 import { initialize, updateBottomPremium, updateBottomPremiumAddOns, getCoverPeriodData } from '../common_data';
-import Api from 'utils/api';
 import { compact } from 'lodash';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import { compareObjects, isEmpty } from '../../../../utils/validators';
