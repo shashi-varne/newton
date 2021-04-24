@@ -55,7 +55,7 @@ const KycBankDetails = (props) => {
     ifsc_code_disabled: false,
   });
   const [dl_flow, setDlFlow] = useState(false);
-
+  const [ifscDisabled, setIfscDisabled] = useState(false);
   const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
@@ -260,6 +260,7 @@ const KycBankDetails = (props) => {
         code !== "ippb")
     ) {
       try {
+        setIfscDisabled(true);
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
           const data = result[0] || {};
@@ -275,6 +276,8 @@ const KycBankDetails = (props) => {
         }
       } catch (err) {
         console.log(err);
+      } finally {
+        setIfscDisabled(false);
       }
     } else {
       bank.branch_name = "";
@@ -334,7 +337,7 @@ const KycBankDetails = (props) => {
                     </>
                   ),
                 }}
-                disabled={isApiRunning || disableFields.ifsc_code_disabled}
+                disabled={isApiRunning || disableFields.ifsc_code_disabled || ifscDisabled}
               />
               <Input
                 label="Account Number"

@@ -7,13 +7,13 @@ import toast from "common/ui/Toast";
 import { validateNumber } from "../utils/validators";
 import Button from "../common/ui/Button";
 
-const isMobileView = getConfig().isMobileDevice;
-
+const config = getConfig();
+const isMobileView = config.isMobileDevice;
+const productName = config.productName;
 class Otp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productName: getConfig().productName,
       otp: "",
       isApiRunning: false,
     };
@@ -67,21 +67,18 @@ class Otp extends Component {
       <div className="login otp">
         {!isMobileView && (
           <div className="header">
-            <img
-              src={require(`assets/${this.state.productName}_white_logo.png`)}
-              alt="logo"
-            />
+            <img src={require(`assets/${config.logo}`)} alt="logo" />
           </div>
         )}
         <div className={`${!isMobileView && "content"} otp-content`}>
           <div className={`${isMobileView && "otp-model-mini"} otp-model`}>
-            {this.state.productName === "finity" && (
+            {productName === "finity" && (
               <div class="logo">
                 <img src={require(`assets/finity_navlogo.png`)} alt="finity" />
                 <h5>Direct Mutual Funds | NPS</h5>
               </div>
             )}
-            {isMobileView && this.state.productName !== "finity" && (
+            {isMobileView && productName !== "finity" && (
               <div class="logo">
                 <img src={require(`assets/logo_highres_f.png`)} alt="fisdom" />
                 <h5>Join 1000’s of Smart Investors</h5>
@@ -109,8 +106,10 @@ class Otp extends Component {
                 maxWidth: "180px",
                 minWidth: "180px",
                 letterSpacing: "2px",
-                minHeight: "42px",
-                borderRadius: "2px",
+                minHeight: "45px",
+                borderRadius: `${
+                  config?.uiElements?.button?.borderRadius || "2px"
+                }`,
               }}
             />
           </div>

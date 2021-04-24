@@ -1,5 +1,5 @@
 .withdraw-background-override {
-  background-color: #f1f1f1;
+  background-color: #f1f1f1 !important;
   line-height: 1.5;
   overflow-y: auto;
 }
@@ -23,11 +23,14 @@
     text-align: center;
   }
   main.Card {
-    margin: 15px;
+    margin: 20px 15px;
   }
 
   main.Card .MuiButton-outlined {
     border: 1px solid var(--secondary);
+    padding: 15px 0;
+    font-size: 16px;
+    font-weight: 400;
   }
 
   .Card .withdraw-mid-tile-img {
@@ -87,13 +90,16 @@
 
   .footer .withdraw-list-item {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-bottom: 15px;
   }
 
   .footer .withdraw-list-item .text .header {
     margin: 0;
-    font-size: 15px;
+    font-size: 17px;
     color: black;
-    margin: 5px 0 10px 0;
+    line-height: 1.1;
   }
 
   .footer .withdraw-list-item .text {
@@ -102,13 +108,21 @@
   }
 
   .footer .withdraw-list-item .text .desc {
-    font-size: 12px;
+    font-size: 14px;
     padding-top: 5px;
     padding-bottom: 10px;
-    color: rgb(51, 51, 51);
+    color: #333333;
     min-height: 32px;
     line-height: normal;
     box-sizing: border-box;
     border-bottom: 1px solid #efefef;
+  }
+
+  .footer .withdraw-list-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .footer .withdraw-list-item:last-child .text .desc {
+    border-bottom: 0;
   }
 }
