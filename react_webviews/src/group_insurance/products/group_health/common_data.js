@@ -10,6 +10,7 @@ import {isEmpty} from '../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 import { getForkTsCheckerWebpackPluginHooks } from 'fork-ts-checker-webpack-plugin/lib/hooks';
+import GroupHealthPlanIsPed from './form/is_ped';
 
 export async function initialize() {
     this.setErrorData =setErrorData.bind(this)
@@ -466,16 +467,12 @@ export async function getPlanDetails(){
             let error = "";
             let errorType = "";
             
-            // let keys_to_empty = ['tenure', 'sum_assured', 'tenure', 'tax_amount', 'base_premium',
-            //                     'total_amount', 'discount_amount', 'insured_pattern', 'type_of_plan',
-            //                 'selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
-            // let not_req_keys_for_backend = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
-            //     for (var i in keys_to_empty) {
-            //         if(!not_req_keys_for_backend.includes(keys_to_empty[i])) {
-            //         post_body[keys_to_empty[i]] = '';
-            //     }
-            //     groupHealthPlanData[keys_to_empty[i]] = '';
-            // }
+            
+            let keys_to_empty = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
+            
+            for(var x of keys_to_empty){
+                groupHealthPlanData[x] = ""
+            }
         
             let keys_to_remove = ['base_premium', 'sum_assured', 'discount_amount', 'insured_pattern','tax_amount', 'tenure','total_amount', 'type_of_plan']
             for(let key in keys_to_remove){
@@ -509,7 +506,6 @@ export async function getPlanDetails(){
             this.setState({
                 groupHealthPlanData: groupHealthPlanData
             })
-
                 this.setState({ show_loader: "button"});
                 try {
                     const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,body);
@@ -697,7 +693,6 @@ export async function getAddOnsData(){
                     add_ons_data[1].default_premium = add_ons_data[1].price[0].premium;
                     add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].name;
                     
-
                     groupHealthPlanData['plan-select-add-ons'] = add_ons_data;
                     groupHealthPlanData['add_ons_previous_data'] = this.state.current_state;
                     this.setLocalProviderData(groupHealthPlanData);

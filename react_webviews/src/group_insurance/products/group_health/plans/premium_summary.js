@@ -87,6 +87,8 @@ class GroupHealthPlanPremiumSummary extends Component {
       
       if(res.pfwresponse.status_code === 200){
         quote_id = resultData.quotation ? resultData.quotation.id : '';
+        groupHealthPlanData.post_body.quotation_id = quote_id;
+        storageService().set("ghs_ergo_quote_id", quote_id);
       }
       else{
         if(typeof(resultData.error) === 'object' && resultData.error.quotation_id){
@@ -96,7 +98,6 @@ class GroupHealthPlanPremiumSummary extends Component {
         }
       }
       
-      groupHealthPlanData.post_body.quotation_id = quote_id;
       this.setLocalProviderData(groupHealthPlanData)
       if(!error){
         this.setState({

@@ -72,7 +72,8 @@ class GroupHealthPlanStarSumInsured extends Component {
         this.setState({
             premiumAmt: resultData.premium_details.premium,
             plan_selected_final: resultData.premium_details,
-            loadingPremium: false
+            loadingPremium: false,
+            selectedIndex: groupHealthPlanData.selectedIndexSumAssured || 0
         });
 
         let dob_data = {};

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { initialize, getPlanDetails } from '../common_data';
+import { initialize, getPlanDetails, getPlanList } from '../common_data';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { isEmpty, formatDate, dobFormatTest, isValidDate, capitalizeFirstLetter } from 'utils/validators';
@@ -30,6 +30,7 @@ class GroupHealthPlanDobReligare extends Component {
 
         this.initialize = initialize.bind(this);
         this.getPlanDetails = getPlanDetails.bind(this);
+        this.getPlanList = getPlanList.bind(this);
     }
 
     componentWillMount() {
@@ -109,6 +110,7 @@ class GroupHealthPlanDobReligare extends Component {
     handleClick = async () => {
         this.sendEvents('next');
         let {validation_props, groupHealthPlanData } = this.state || {};
+        var {provider} = this.state;
 
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData) || {};
         var post_body = groupHealthPlanData.post_body;
@@ -176,14 +178,15 @@ class GroupHealthPlanDobReligare extends Component {
             post_body.eldest_member = this.memberKeyMapper(this.state.eldest_member).backend_key;
             post_body.eldest_dob = this.state.eldest_dob;
             
-            if(this.state.provider === 'GMC'){
-                post_body.plan_id = 'fisdom_health_protect'
+            if(provider === 'GMC'){
+                post_body.plan_id = 'fisdom_health_protect';
             }
             groupHealthPlanData.post_body = post_body;
             
             let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id'];
 
             this.setLocalProviderData(groupHealthPlanData);
+
             var keys_to_check = ['account_type']
             var current_state = {}
             for(var x in post_body){
@@ -194,19 +197,27 @@ class GroupHealthPlanDobReligare extends Component {
             for(var y in post_body.member_details){
                 current_state[`${y}_dob`] = post_body.member_details[y].dob;
             }
-
-            this.setState({
-                current_state
-            }, ()=>{
-                var sameData = compareObjects( Object.keys(current_state),current_state, groupHealthPlanData.plan_list_current_state);
-                if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
-                    this.getPlanDetails();
+            if(provider === 'GMC'){
+                this.setState({
+                    current_state
+                }, ()=>{
+                    var sameData = compareObjects( Object.keys(current_state),current_state, groupHealthPlanData.plan_list_current_state);
+                    if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
+                        this.getPlanDetails();
+                    }else{
+                        this.setLocalProviderData(groupHealthPlanData);
+                        this.navigate(this.state.next_screen);
+                        return;
+                    }
+                })
+            }else if(provider === 'RELIGARE'){
+                if(isEmpty(groupHealthPlanData.plan_list)){
+                    this.getPlanList();
                 }else{
-                    this.setLocalProviderData(groupHealthPlanData);
-                    this.navigate(this.state.next_screen);
-                    return;
+                    this.navigate('plan-list')
                 }
-            })
+                
+            }
         }
 
     }

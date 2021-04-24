@@ -7,8 +7,11 @@ import Api from 'utils/api';
 import ReactTooltip from "react-tooltip";
 import { initialize, getPlanDetails } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import Button from '../../../../common/ui/Button'
 import {formatAmount, isEmpty} from '../../../../utils/validators';
 import { compareObjects } from 'utils/validators';
+import { isThisSecond } from 'date-fns';
+// import { Button } from 'material-ui';
 
 class GroupHealthPlanList extends Component {
 
@@ -17,7 +20,7 @@ class GroupHealthPlanList extends Component {
         this.state = {
             plan_data: {},
             screen_name: 'plan_list_screen',
-            
+            show_loader: false
         }
 
         this.initialize = initialize.bind(this);
@@ -75,6 +78,7 @@ class GroupHealthPlanList extends Component {
     }
 
     selectPlan = (plan, index) => {
+
         this.sendEvents('next', plan);
         let {provider, groupHealthPlanData, plan_data} = this.state;
         let common = plan_data.common || {};
@@ -113,17 +117,13 @@ class GroupHealthPlanList extends Component {
             current_state[`${y}_dob`] = post_body.member_details[y].dob;
         }
         this.setState({
-            current_state
+            current_state,
+            selectedPlanIndex: index
         }, ()=>{
-            console.log(current_state)
-            console.log(groupHealthPlanData.plan_list_current_state)
             var sameData = compareObjects( Object.keys(current_state) ,current_state, groupHealthPlanData.plan_list_current_state);
-            console.log('same', sameData)
             if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
-                console.log('fist cond')
                 this.getPlanDetails();
             }else{
-                console.log('second cond')
                 this.setLocalProviderData(groupHealthPlanData);
                 this.navigate('plan-details')
             }
@@ -147,6 +147,8 @@ class GroupHealthPlanList extends Component {
 
     renderPlans = (props, index) => {
         let plan_data = props;
+        console.log('11', this.state.selectedPlanIndex, index)
+        console.log('aaa', this.state.show_loader && (this.state.selectedPlanIndex === index))
         return (
             <div className="tile" key={index} onClick={() => this.selectPlan(props, index)}>
                 <div className="group-health-recommendation" style={{ backgroundColor: props.recommedation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
@@ -168,8 +170,8 @@ class GroupHealthPlanList extends Component {
                     this.renderTileMidData(props, index))}
                 </div>
 
-                <div className="bottom-cta">
-                    STARTS AT ₹ {formatAmount(props.starts_at_value)}/YEAR
+                <div className="plan-list-cta">
+                <Button showLoader={this.state.show_loader && (this.state.selectedPlanIndex === index)} buttonTitle={`STARTS AT ₹ ${formatAmount(props.starts_at_value)}/YEAR`}/>
                 </div>
             </div>
         );
@@ -177,7 +179,6 @@ class GroupHealthPlanList extends Component {
 
 
     render() {
-
 
         return (
             <Container

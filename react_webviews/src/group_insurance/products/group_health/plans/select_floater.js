@@ -153,7 +153,7 @@ class GroupHealthPlanSelectFloater extends Component {
                 return;
             }
 
-            if(groupHealthPlanData.type_of_plan !== type_of_plan){
+            if(groupHealthPlanData.type_of_plan !== type_of_plan){ //HDFCERGO
                 this.getCoverPeriod();
             }else{
                 this.setLocalProviderData(groupHealthPlanData)

@@ -251,8 +251,6 @@ class GroupHealthPlanDob extends Component {
                 return;
             }
             if(provider === 'RELIGARE'){
-
-                // add code to make api optimisation here
                 this.setLocalProviderData(groupHealthPlanData);
                 if(isEmpty(groupHealthPlanData.plan_list)){
                     console.log('first')

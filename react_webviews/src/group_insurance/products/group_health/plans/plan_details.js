@@ -52,10 +52,8 @@ class GroupHealthPlanDetails extends Component {
       
       this.setState({
         plan_data : resultData,
-        benefits: resultData.benefits,
+        benefits: resultData.benefits,                  
       })
-
-        
     }
 
     navigateBenefits = (type) => {
@@ -175,6 +173,7 @@ class GroupHealthPlanDetails extends Component {
         groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
 
         groupHealthPlanData.post_body.base_premium = groupHealthPlanData.plan_selected.base_premium;
+        console.log(groupHealthPlanData.plan_selected.base_premium)
         groupHealthPlanData.post_body.premium = groupHealthPlanData.plan_selected.net_premium;
 
         let post_body = groupHealthPlanData.post_body;

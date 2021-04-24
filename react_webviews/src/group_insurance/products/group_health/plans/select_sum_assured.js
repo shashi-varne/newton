@@ -4,8 +4,8 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
-import { numDifferentiationInr } from 'utils/validators';
-import { initialize, updateBottomPremium } from '../common_data';
+import { numDifferentiationInr, isEmpty, compareObjects } from 'utils/validators';
+import { initialize, updateBottomPremium, getAddOnsData } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import ValueSelector from '../../../../common/ui/ValueSelector';
 
@@ -21,6 +21,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
+        this.getAddOnsData = getAddOnsData.bind(this);
     }
 
     async componentWillMount() {
@@ -96,7 +97,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
         groupHealthPlanData.sum_assured = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.sum_assured = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.si = selectedPlan.sum_insured;
-        groupHealthPlanData.post_body.base_premium = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.premium = selectedPlan.premium;
 
         if(this.state.provider === 'RELIGARE') {
@@ -115,6 +115,8 @@ class GroupHealthPlanSelectSumAssured extends Component {
         let post_body = groupHealthPlanData.post_body;
         var previousIndex = groupHealthPlanData.selectedIndexSumAssured;
         
+        console.log(this.state.selectedIndex)
+        console.log(previousIndex)
         if(this.state.selectedIndex !== previousIndex){
 
             this.setErrorData('submit')
@@ -132,10 +134,31 @@ class GroupHealthPlanSelectSumAssured extends Component {
             var next_state = ''
             let body = {};
 
-            if((provider === 'HDFCERGO' || provider === 'RELIGARE') && account_type === 'self'){
+            if(provider === 'HDFCERGO' && account_type === 'self'){
+                
                 next_state = 'plan-select-cover-period'
                 allowed_post_body_keys.push('city')
                 body['floater_type'] = 'non_floater'
+            }else if(provider === 'RELIGARE' && account_type === 'self'){
+                groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
+                this.setLocalProviderData(groupHealthPlanData)
+                next_state = 'plan-select-add-ons'
+                var current_state = {}
+                var keys_to_check = ['account_type', 'si', 'plan_id'];
+                for(var x of keys_to_check){
+                    current_state[x] = post_body[x]
+                }
+                this.setState({
+                    current_state
+                }, ()=>{
+                    var sameData = compareObjects(Object.keys(current_state), current_state, groupHealthPlanData.add_ons_previous_data);
+                    if(!sameData || isEmpty(groupHealthPlanData['plan-select-add-ons'])){
+                        this.getAddOnsData();
+                    }else{
+                        this.navigate('plan-select-add-ons')
+                    }
+                })
+                return;    
             }else if((provider === 'HDFCERGO' || provider === 'RELIGARE') && account_type !== 'self'){
                 next_state = 'plan-select-floater'
                 allowed_post_body_keys.push('city')
@@ -146,10 +169,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
             for(let key of allowed_post_body_keys){
                 body[key] = post_body[key];
             }
-            
-
-            console.log(body)
-
             try {
                 const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
                 
@@ -158,9 +177,15 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     
                     groupHealthPlanData[next_state] = resultData;
                     groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
-                    
-                    this.setLocalProviderData(groupHealthPlanData);
+                    if(groupHealthPlanData.account_type !== 'self'){
+                        groupHealthPlanData.selectedIndexFloater = 0;
+                        groupHealthPlanData.type_of_plan = ''
+                    }
+                    if(provider === 'GMC'){
+                        groupHealthPlanData.paymentFrequencySelected = '';
+                    }
 
+                    this.setLocalProviderData(groupHealthPlanData);
                     if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
                         groupHealthPlanData.post_body.floater_type = 'non_floater';
                         this.setLocalProviderData(groupHealthPlanData);
@@ -199,6 +224,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 groupHealthPlanData.post_body.floater_type = 'non_floater';
                 this.setLocalProviderData(groupHealthPlanData);
                 this.navigate(this.state.next_screen.not_floater || 'plan-select-cover-period');
+                
             } else {
                 this.navigate(this.state.next_screen.floater || 'plan-select-floater');
             }

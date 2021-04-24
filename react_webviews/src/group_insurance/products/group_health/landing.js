@@ -203,6 +203,10 @@ class GroupHealthLanding extends Component {
       return;
     }
 
+    // if(groupHealthPlanData.post_body['quotation_id']){
+    //   delete groupHealthPlanData.post_body['quotation_id'];
+    // }
+
     let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + this.state.providerConfig.key) || {};
     let post_body = groupHealthPlanData.post_body;
     if(post_body){
