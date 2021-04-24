@@ -697,6 +697,7 @@ const FundDetails = ({ classes, history }) => {
           buttonOneTitle={buttonTitle}
           skelton={isLoading || loading} // new container field
           classOverRideContainer='fd-container'
+          classOverRide="fd-container"
           twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
           buttonTwoTitle={ ENTER_AMOUNT }
           handleClickTwo={handleClick2}
