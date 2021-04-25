@@ -168,7 +168,7 @@ class GroupHealthPlanList extends Component {
                 </div>
 
                 <div className="plan-list-cta">
-                <Button showLoader={!!this.state.show_loader && (this.state.selectedPlanIndex === index)} buttonTitle={`STARTS AT ₹ ${formatAmount(props.starts_at_value)}/YEAR`}/>
+                <Button showLoader={  (this.state.selectedPlanIndex === index) ? 'button' : false } buttonTitle={`STARTS AT ₹ ${formatAmount(props.starts_at_value)}/YEAR`}/>
                 </div>
             </div>
         );
