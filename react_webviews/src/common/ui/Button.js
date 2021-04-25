@@ -136,8 +136,9 @@ class CustomButton extends Component {
             onClick={props.onClick}
           >
             {!showLoader && props.buttonTitle}
-            {showLoader && <DotDotLoaderNew
-            styleBounce={{backgroundColor:'white'}}
+            {showLoader && 
+            <DotDotLoaderNew
+              styleBounce={{backgroundColor:'white'}}
             />}
             {
               props.arrow &&

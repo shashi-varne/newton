@@ -16,7 +16,6 @@ class GroupHealthPlanList extends Component {
         this.state = {
             plan_data: {},
             screen_name: 'plan_list_screen',
-            show_loader: false
         }
 
         this.initialize = initialize.bind(this);
@@ -74,9 +73,13 @@ class GroupHealthPlanList extends Component {
     }
 
     selectPlan = (plan, index) => {
-
+        
         this.sendEvents('next', plan);
         let {provider, groupHealthPlanData, plan_data} = this.state;
+
+        if(isEmpty(plan)){
+            plan = groupHealthPlanData.plan_selected;
+        }
         let common = plan_data.common || {};
         let eldest_dict  = plan_data.eldest_dict || {};
         let post_body = groupHealthPlanData.post_body;
@@ -143,8 +146,6 @@ class GroupHealthPlanList extends Component {
 
     renderPlans = (props, index) => {
         let plan_data = props;
-        console.log('11', this.state.selectedPlanIndex, index)
-        console.log('aaa', this.state.show_loader && (this.state.selectedPlanIndex === index))
         return (
             <div className="tile" key={index} onClick={() => this.selectPlan(props, index)}>
                 <div className="group-health-recommendation" style={{ backgroundColor: props.recommedation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
@@ -167,7 +168,7 @@ class GroupHealthPlanList extends Component {
                 </div>
 
                 <div className="plan-list-cta">
-                <Button showLoader={this.state.show_loader && (this.state.selectedPlanIndex === index)} buttonTitle={`STARTS AT ₹ ${formatAmount(props.starts_at_value)}/YEAR`}/>
+                <Button showLoader={!!this.state.show_loader && (this.state.selectedPlanIndex === index)} buttonTitle={`STARTS AT ₹ ${formatAmount(props.starts_at_value)}/YEAR`}/>
                 </div>
             </div>
         );

@@ -115,8 +115,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         let post_body = groupHealthPlanData.post_body;
         var previousIndex = groupHealthPlanData.selectedIndexSumAssured;
         
-        console.log(this.state.selectedIndex)
-        console.log(previousIndex)
+        
         if(this.state.selectedIndex !== previousIndex){
 
             this.setErrorData('submit')
@@ -179,6 +178,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
                     if(groupHealthPlanData.account_type !== 'self'){
                         groupHealthPlanData.selectedIndexFloater = 0;
+                        groupHealthPlanData.selectedIndexCover = 0;
                         groupHealthPlanData.type_of_plan = ''
                     }
                     if(provider === 'GMC'){
@@ -216,6 +216,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     type: errorType
                   },
                   showError: "page",
+                  show_loader: false
                 });
               }       
         }else{

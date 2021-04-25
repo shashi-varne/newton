@@ -142,7 +142,6 @@ class GroupHealthPlanSelectFloater extends Component {
                     current_state
                 }, ()=>{
                     var sameData = compareObjects(Object.keys(current_state), current_state, groupHealthPlanData.add_ons_previous_data)
-                    console.log('SameD', sameData)
                     if(!sameData || isEmpty(groupHealthPlanData['plan-select-add-ons'])){
                         this.getAddOnsData();
                     }else{

@@ -6,7 +6,7 @@ import BottomInfo from '../../../../common/ui/BottomInfo';
 import Autosuggests from '../../../../common/ui/Autosuggest';
 import { FormControl } from 'material-ui/Form';
 import { initialize, checkCity, getPlanList } from '../common_data';
-import { isEmpty } from '../../../../utils/validators';
+import { isEmpty, compareObjects } from '../../../../utils/validators';
 class GroupHealthPlanSelectCity extends Component {
     constructor(props) {
         super(props);
@@ -53,14 +53,37 @@ class GroupHealthPlanSelectCity extends Component {
     }
     handleClick = () => {
         this.sendEvents('next');
-        var groupHealthPlanData = this.state.groupHealthPlanData;
-        if(isEmpty(groupHealthPlanData.plan_list) || this.state.city !== groupHealthPlanData.city){
-            this.checkCity(this.state.city, true, this.state.suggestions_list);
-        }else{
-            this.navigate('plan-list')
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        groupHealthPlanData['select_city']['city'] = this.state.city;
+        groupHealthPlanData.city = this.state.city;
+        groupHealthPlanData.post_body.city = this.state.city;
+        var current_state = this.state.current_state || {};
+        current_state['city'] = this.state.city; 
+
+        this.setLocalProviderData(groupHealthPlanData);
+        
+        var current_state = {}
+        var keys_to_add = ['account_type', 'city']
+        for(var x of keys_to_add){
+            current_state[x] = groupHealthPlanData.post_body[x]
         }
-        
-        
+        for(var x in groupHealthPlanData.post_body.member_details){
+            current_state[`${x}`] = groupHealthPlanData.post_body.member_details[x]['dob'];
+        }
+        console.log(current_state)
+
+        var previousData = groupHealthPlanData.list_previous_data || {};
+        var sameData = compareObjects(Object.keys(current_state), current_state, previousData)
+        this.setState({
+            current_state
+        }, ()=>{
+            if(!sameData || isEmpty(groupHealthPlanData.plan_list)){
+                this.checkCity(this.state.city, true, this.state.suggestions_list);
+            }else{
+                console.log('second')
+                this.navigate('plan-list')
+            }
+        })
     }
     sendEvents(user_action) {
         let eventObj = {

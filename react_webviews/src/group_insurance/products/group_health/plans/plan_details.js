@@ -163,7 +163,6 @@ class GroupHealthPlanDetails extends Component {
     }
 
     handleClick = async () => {
-
         this.sendEvents('next');
         
         let groupHealthPlanData = this.state.groupHealthPlanData;
@@ -171,14 +170,9 @@ class GroupHealthPlanDetails extends Component {
         groupHealthPlanData.plan_selected.common_data = this.state.common_data;
         groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;
         groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
-
         groupHealthPlanData.post_body.base_premium = groupHealthPlanData.plan_selected.base_premium;
-        console.log(groupHealthPlanData.plan_selected.base_premium)
         groupHealthPlanData.post_body.premium = groupHealthPlanData.plan_selected.net_premium;
-
         let post_body = groupHealthPlanData.post_body;
-        
-        
         
         if(isEmpty(groupHealthPlanData.sum_assured_screen)){
           this.setErrorData("submit");
@@ -240,6 +234,7 @@ class GroupHealthPlanDetails extends Component {
                 type: errorType
               },
               showError: "page",
+              show_loader: false
             });
           }
         }else{

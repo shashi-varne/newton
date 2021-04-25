@@ -63,8 +63,6 @@ class GroupHealthPlanDob extends Component {
                 final_dob_data.push(dob_data[i]);
             }
         }
-        console.log(final_dob_data)
-       
         this.setState({
             final_dob_data: final_dob_data,
             dob_data: dob_data
@@ -250,13 +248,22 @@ class GroupHealthPlanDob extends Component {
             }
             if(provider === 'RELIGARE'){
                 this.setLocalProviderData(groupHealthPlanData);
-                if(isEmpty(groupHealthPlanData.plan_list)){
-                    console.log('first')
-                    this.getPlanList();
-                }else{
-                    console.log('second')
-                    this.navigate('plan-list')
+                var current_state = {}
+                current_state['account_type'] = post_body['account_type'];
+                for(var x in post_body.member_details){
+                    current_state[`${x}`] = post_body.member_details[x]['dob'];
                 }
+                var previousData = groupHealthPlanData.list_previous_data || {};
+                var sameData = compareObjects(Object.keys(current_state), current_state, previousData)
+                this.setState({
+                    current_state
+                }, ()=>{
+                    if(!sameData || isEmpty(groupHealthPlanData.plan_list)){
+                        this.getPlanList();
+                    }else{
+                        this.navigate('plan-list')
+                    }
+                })
                 return;
             }
 

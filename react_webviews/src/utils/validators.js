@@ -1097,7 +1097,6 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
         (newState[key] && !oldState[key]) || 
          (oldState[key] && newState[key] && (oldState[key].toString().trim() !== newState[key].toString().trim()))) 
         {
-          console.log('diff key',key)
         compare = false;
         }
   });

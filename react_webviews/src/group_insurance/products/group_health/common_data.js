@@ -386,11 +386,6 @@ export function checkCity(city, proceed, suggestions_list){
             city_error: 'Please select city from provided list'
         });
     } else if(proceed) {
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        groupHealthPlanData['select_city']['city'] = this.state.city;
-        groupHealthPlanData.city = this.state.city;
-        groupHealthPlanData.post_body.city = this.state.city;
-        this.setLocalProviderData(groupHealthPlanData);
         this.getPlanList();
     }
 }
@@ -427,6 +422,7 @@ export async function getPlanList(){
                     plan_list['plan_data'] = resultData;
                     plan_list['common'] = resultData.common;
                     groupHealthPlanData['plan_list'] = plan_list;
+                    groupHealthPlanData['list_previous_data'] = this.state.current_state;
                     this.setLocalProviderData(groupHealthPlanData);
                     this.navigate('plan-list')
                 })
@@ -452,6 +448,7 @@ export async function getPlanList(){
                 type: errorType
               },
               showError: "page",
+              show_loader: false
             });
           }
 }
@@ -461,7 +458,14 @@ export async function getPlanDetails(){
     var post_body = groupHealthPlanData.post_body;
     var provider = this.state.provider;
     let allowed_post_body_keys = ['adults', 'children', 'member_details', 'plan_id'];
-    this.setErrorData("submit");            
+    
+    
+    if(this.state.screen_name === 'plan_list_screen'){
+        this.setErrorData("submit", '', this.selectPlan); 
+    }else{
+        this.setErrorData("submit"); 
+    }
+
             let error = "";
             let errorType = "";
             
@@ -536,6 +540,7 @@ export async function getPlanDetails(){
                         type: errorType
                       },
                       showError: "page",
+                      show_loader: false
                     });
                 }
 }
@@ -624,6 +629,7 @@ export async function getCityDetails(){
             type: errorType
           },
           showError: "page",
+          show_loader: false
         });
       }
 }
@@ -715,6 +721,7 @@ export async function getAddOnsData(){
                     type: errorType
                   },
                   showError: "page",
+                  show_loader: false
                 });
               }
 }
@@ -786,12 +793,13 @@ export async function getCoverPeriodData(){
                         type: errorType
                       },
                       showError: "page",
+                      show_loader: false
                     });
                 }
 }
 
 export async function updateLead( body, quote_id, current_state) {
-    
+
     var groupHealthPlanData = this.state.groupHealthPlanData;
     var current_form_data = current_state || {};
     var prev_form_data = {}
@@ -894,8 +902,13 @@ export async function updateLead( body, quote_id, current_state) {
         error=true;
         errorType="crash";
     }
-    if(error)
-    {
+    if(error){
+        if(this.state.screen_name === 'personal_details_screen' || this.state.screen_name === 'select_ped_screen'){
+            groupHealthPlanData['application_data'][`${this.state.screen_name}`][this.state.member_key] = {}
+        }else{
+            groupHealthPlanData['application_data'][`${this.state.screen_name}`] = {}
+        }
+        this.setLocalProviderData(groupHealthPlanData);
         this.setState({
             errorData: {
               ...this.state.errorData,
