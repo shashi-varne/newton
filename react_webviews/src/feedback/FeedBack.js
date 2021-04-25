@@ -4,11 +4,13 @@ import DropdownWithoutIcon from 'common/ui/SelectWithoutIcon';
 import toast from 'common/ui/Toast';
 import isEmpty from 'lodash/isEmpty';
 import Input from 'common/ui/Input';
-import Dialog from 'common/ui/Dialog';
-import Button from 'common/ui/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import Button from '@material-ui/core/Button';
 import { getFeedBackList, postFeedBackList } from './common/api';
 import { navigate as navigateFunc } from './common/commonFunctions';
 import { withRouter } from 'react-router-dom';
+import Grow from '@material-ui/core/Grow';
 import './FeedBack.scss';
 import { storageService } from 'utils/validators';
 
@@ -132,17 +134,26 @@ const DialogSucess = ({ isOpen, close, handleClick }) => {
       className='feedback-dialog'
       id='feedback-campaign-dialog'
       disableBackdropClick
+      TransitionComponent={Transition}
     >
-      <div className='feedback-message-dialog'>
-        <div className='feedback-img-wrapper'>
-          <img src={require('assets/send_icon.png')} alt='send_icon' />
+      <DialogContent>
+        <div className='feedback-message-dialog'>
+          <div className='feedback-img-wrapper'>
+            <img src={require('assets/send_icon.png')} alt='send_icon' />
+          </div>
+          <div className='feedback-dialog-res'>
+            Thanks for writing to us. <br />
+            We will revert to you shortly.
+          </div>
+          <Button className='button-bg-full' onClick={handleClick}>
+            OK
+            </Button>
         </div>
-        <div className='feedback-dialog-res'>
-          Thanks for writing to us. <br />
-          We will revert to you shortly.
-        </div>
-        <Button buttonTitle='OK' onClick={handleClick} />
-      </div>
+      </DialogContent>
     </Dialog>
   );
 };
+
+const Transition = (props) => {
+  return <Grow {...props} />;
+}

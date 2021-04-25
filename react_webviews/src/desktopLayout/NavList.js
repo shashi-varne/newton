@@ -19,6 +19,7 @@ import { withRouter } from 'react-router-dom';
 import { navigate as navigateFunc } from './commonFunctions';
 import { isReadyToInvest } from '../kyc/services';
 import { storageService } from 'utils/validators';
+import ReferDialog from './ReferralDialog';
 
 import './NavList.scss';
 let data = [
@@ -89,27 +90,30 @@ let data = [
   },
 ];
 const NavList = (props) => {
-  const [active, setActive] = useState('');
   const productName = getConfig().productName;
   const mobile = getConfig().isMobileDevice;
   const navigate = navigateFunc.bind(props);
   const user = storageService().getObject('user');
   const userKyc = storageService().getObject('kyc');
-  const partnerLoan = getConfig()?.invest_screen_cards?.loan;
+  const partnerLoan = getConfig()?.navLinkOptions?.loan;
+  const [referDialog, setReferDialog] = useState(false);
   const showReferral = !getConfig()?.referralConfig?.shareRefferal;
 
   useEffect(() => {
     filterNavList();
   }, []);
-  const handleModal = () => {
-    alert('open modal');
+  const handleRefferalModal = () => {
+    setReferDialog(!referDialog);
   };
-  const handleClick = ({path, id}) => () => {
+  const handleClick = ({ path, id }) => () => {
     if (path) {
-      setActive(id);
       navigate(path);
     } else {
-      handleModal();
+      if (mobile) {
+        props.handleModal();
+      } else {
+        handleRefferalModal();
+      }
     }
   };
   const filterNavList = (id) => {
@@ -119,9 +123,9 @@ const NavList = (props) => {
     if (id === 'register' && isReadyToInvestBase) {
       return null;
     }
-    // if(name === 'loans' && !partnerLoan) {
-    //   return  null;
-    // }
+    if(id === 'loans' && !partnerLoan) {
+      return  null;
+    }
     if (id === 'fhc' && productName === 'finity') {
       return null;
     }
@@ -149,12 +153,7 @@ const NavList = (props) => {
             return null;
           }
           return (
-            <ListItem
-              key={idx}
-              button
-              onClick={handleClick(el)}
-              className={`nav-link-listItem` && (active === el?.id && 'active') }
-            >
+            <ListItem key={idx} button onClick={handleClick(el)} className='nav-link-listItem'>
               <ListItemIcon>
                 <img className='nav-link-icons' src={el.icon} alt={el.name} />
               </ListItemIcon>
@@ -228,6 +227,11 @@ const NavList = (props) => {
           All rights reserved
         </div>
       </div>
+      
+      {
+        !mobile &&
+        <ReferDialog isOpen={referDialog} close={handleRefferalModal} />
+      }
     </div>
   );
 };

@@ -7,7 +7,7 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForward";
 import IconButton from '@material-ui/core/IconButton';
 import NavList from "./NavList";
 import "./Drawer.scss";
-const Slider = ({ mobileView, handleMobileView }) => {
+const Slider = ({ mobileView, handleMobileView, handleModal }) => {
   const mobile = getConfig().isMobileDevice;
   if(mobile){
   return <Drawer
@@ -23,7 +23,7 @@ const Slider = ({ mobileView, handleMobileView }) => {
                 <ArrowForwardIosIcon />
               </IconButton>
             </Toolbar>
-            <NavList handleClick={handleMobileView} />
+            <NavList handleClick={handleMobileView} handleModal={handleModal}/>
           </Drawer>
   } else{
 
@@ -36,7 +36,7 @@ const Slider = ({ mobileView, handleMobileView }) => {
           variant="permanent"
         >
           <Toolbar />
-          <NavList />
+          <NavList handleClick={handleMobileView} handleModal={handleModal}/>
         </Drawer>
       </Hidden>
       <Hidden mdUp>

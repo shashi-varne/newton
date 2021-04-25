@@ -1,0 +1,125 @@
+.referral-dialog {
+  position: relative;
+  .refer-close-icon {
+    position: absolute;
+    top: 5px !important;
+    right: 5px !important;
+    cursor: pointer;
+  }
+  .referral-message-dialog {
+    max-width: 500px;
+    .refer-title {
+      font-size: 16px;
+    }
+  }
+
+  .referral-img-wrapper {
+    min-height: 360px;
+    min-width: 400px;
+    img {
+      width: 80%;
+    }
+  }
+
+  .referral-dialog-message {
+    background: #ddedf3;
+    margin-top: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    
+
+    .referral-message-wrapper {
+      margin-top: -100px;
+      
+      .referral-message {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .share-refferal {
+    margin-top: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .referral-code {
+    text-transform: uppercase;
+    font-size: 26px;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  .referral-input-container{
+    .referral-promo-text{
+      font-size: 16px;
+      line-height: 1.5;
+    }
+  }
+
+  .dialog-action{
+    display: flex;
+    align-items: center;
+    padding:0px 15px 15px 15px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    width: 100% !important;
+
+    .button {
+      width: 100%;
+      padding: 5px 15px;
+      font-size: 14px;
+      border-radius: 5px;
+      min-height: 47px;
+      font-weight: bold;
+      margin: 0px !important;
+      letter-spacing: 0.01em;
+      .MuiButton-label{
+        text-transform: uppercase !important;
+      }
+    }
+
+    .bg-full {
+      color: white;
+      background-color: var(--secondary);
+    }
+
+    .no-bg {
+      background-color: white;
+      color: #878787;
+    }
+  }
+  .referral-skeleton-container{
+    margin-top: -80px;
+    .refer-promo-skeleton{
+      margin-bottom: 10px;
+      background: #78cfef !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .referral-dialog {
+    .referral-dialog-message {
+      .referral-message-wrapper {
+        margin-top: -50px;
+        .referral-message {
+          font-size: 14px;
+          line-height: 21px;
+        }
+      }
+    }
+
+    .share-refferal {
+      font-size: 14px;
+    }
+    .referral-code {
+      font-size: 16px;
+    }
+
+    .referral-img-wrapper{
+      min-height: 160px;
+      min-width: 240px;
+    }
+  }
+}
