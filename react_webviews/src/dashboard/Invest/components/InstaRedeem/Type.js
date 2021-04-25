@@ -9,11 +9,11 @@ const Type = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const { funnelData, updateFunnelData } = useFunnelDataHook();
-  const [investType, setInvestType] = useState(funnelData.investTypeDisplay);
+  const [investType, setInvestType] = useState(funnelData.investTypeDisplay || 'onetime');
 
   const handleClick = () => {
     updateFunnelData({
-      recommendedTotalAmount: '',
+      amount: '',
       investTypeDisplay: investType,
       order_type: investType
     });

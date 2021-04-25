@@ -24,7 +24,8 @@ const InvestedAmount = (props) => {
     updateFunnelData,
     setUserRiskProfile
   } = useFunnelDataHook();
-  const { amount, investType, term, equity, isRecurring, investTypeDisplay } = funnelData;
+  const { investType, term, equity, isRecurring, investTypeDisplay } = funnelData;
+  const amount = funnelData.userEnteredAmt || funnelData.amount;
   const [stockSplitVal, setStockSplitVal] = useState(equity || 0);
   const [loader, setLoader] = useState(false);
   const [title, setTitle] = useState('');
@@ -57,8 +58,6 @@ const InvestedAmount = (props) => {
         ...data,
         equity: stockSplitVal,
         debt: 100 - stockSplitVal,
-        amount,
-        recommendedTotalAmount: data?.amount
       });
       setLoader(false);
       navigate(`recommendations`);

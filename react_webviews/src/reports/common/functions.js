@@ -1,5 +1,4 @@
 import { getConfig } from "utils/functions";
-import { storageService } from "utils/validators";
 import { formatAmountInr } from "../../utils/validators";
 
 export function navigate(pathname, data = {}) {

@@ -125,11 +125,11 @@ class SelectDropDown2 extends React.Component {
               fontSize: isLableOpen ? '' : '13px', lineHeight: isLableOpen ? '18px' : '21px',
             }}>
             {this.props.label}</div></InputLabel>)}
-          <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? `1px solid ${getConfig().primary}` : '1px solid #D6D6D6' }}>
+          <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? `1px solid ${getConfig().styles.primaryColor}` : '1px solid #D6D6D6' }}>
             <Select
               ref={inst => (this.myRef = inst)}
               blurInputOnSelect={false}
-              BrandColor={getConfig().primary}
+              BrandColor={getConfig().styles.primaryColor}
               onBlurResetsInput={true}
               openMenuOnClick={true}
               className='react-select-container'

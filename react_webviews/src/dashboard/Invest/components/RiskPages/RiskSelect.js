@@ -57,7 +57,10 @@ const RiskSelect = ({
       if (res.updated) {
         setUserRiskProfile(selectedRisk);
       }
-      updateFunnelData({ ...res, recommendedTotalAmount: res.amount });
+      updateFunnelData({
+        ...res,
+        showRecommendationTopCards: true
+      });
       
       setLoader(false);
     } catch (err) {
@@ -70,7 +73,7 @@ const RiskSelect = ({
 
     let state = 'recommendations';
     if (funnelData.investType === 'saveforgoal') {
-      state = `savegoal/${funnelData.subtype}/target`;
+      state = `savegoal/${funnelData.subtype}/amount`;
     }
     navigate(state);
   };
@@ -85,7 +88,7 @@ const RiskSelect = ({
         flow: funnelData.flow,
         amount: funnelData.amount,
         type: funnelData.investType,
-        subType: funnelData.subType, // only applicable for 'saveforgoal'
+        subType: funnelData.subtype, // only applicable for 'saveforgoal'
         year: funnelData.year, // only applicable for 'saveforgoal'
         term: funnelData.term
       }

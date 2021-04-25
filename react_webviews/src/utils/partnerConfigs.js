@@ -96,7 +96,7 @@ export const baseStylesConfig = {
     /* Can consider using a common style object for styles
     common to both partner types*/
     default: "#4a4a4a",
-    skeltonColor: "#E7E7E7",
+    skeletonColor: "#E7E7E7",
     notificationsColor: "#ffffff",
   },
   fisdom: {

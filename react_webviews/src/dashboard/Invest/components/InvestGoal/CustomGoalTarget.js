@@ -7,40 +7,32 @@ import {
   convertInrAmountToNumber, 
   formatAmountInr 
 } from 'utils/validators';
-import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from '../../common/commonFunctions';
+import { getConfig } from '../../../../utils/functions';
+import { customGoalTargetMap } from './constants';
+import { get_recommended_funds } from '../../common/api';
 
-const currentYear = moment().year();
+const riskEnabled = getConfig().riskEnabledFunnels;
 
 const CustomGoalTarget = (props) => {
+  const navigate = navigateFunc.bind(props);
+  
   const [targetAmount, setTargetAmount] = useState(0);
   const [loader, setLoader] = useState(false);
-  const { initFunnelData } = useFunnelDataHook();
-  const { subtype, year } = props.match?.params;
-  const term = year - currentYear;
-  const navigate = navigateFunc.bind(props);
+  const {
+    funnelData,
+    funnelGoalData,
+    updateFunnelData
+  } = useFunnelDataHook();
+  const { subtype } = props.match?.params || funnelData;
 
   useEffect(() => {
-    switch (subtype) {
-      case 'retirement':
-        setTargetAmount(20000000);
-        break;
-      case 'childeducation':
-        setTargetAmount(1000000);
-        break;
-      case 'childwedding':
-        setTargetAmount(1500000);
-        break;
-      case 'vacation':
-        setTargetAmount(200000);
-        break;
-      case 'other':
-        setTargetAmount(20000000);
-        break;
-      default:
-        setTargetAmount(0);
-    }
+    setTargetAmount(
+      funnelData.corpus ||
+      customGoalTargetMap[subtype] ||
+      0
+    );
   }, []);
 
   const handleChange = (e) => {
@@ -55,31 +47,35 @@ const CustomGoalTarget = (props) => {
     }
   };
 
-  const fetchRecommendedFunds = async (amount) => {
+  const fetchRecommendedFunds = async (corpus) => {
     try {
-      const appendToFunnelData = {
-        term,
-        year: Number(year),
-        subtype,
-        corpus: amount,
-        investType: 'saveforgoal',
-        isRecurring: isRecurring('saveforgoal'),
-        investTypeDisplay: "sip",
-        name: "Saving for goal"
+      const params = {
+        type: funnelData.investType,
+        subtye: funnelData.subtype,
+        term: funnelData?.term,
+        rp_enabled: riskEnabled,
       };
       setLoader("button");
-      await initFunnelData({
-        apiParams: {
-          amount,
-          type: 'saveforgoal',
-          subtype,
-          term,
-        },
-        appendToFunnelData: appendToFunnelData
-      });
+
+      const data = await get_recommended_funds(params);
       setLoader(false);
-      navigate(`savegoal/${subtype}/amount`, true);
+
+      if (!data.recommendation) {
+        // RP enabled flow, when user has no risk profile
+        updateFunnelData({ corpus });
+        if (data.msg_code === 0) {
+          navigate(`${funnelGoalData.id}/risk-select`);
+        } else if (data.msg_code === 1) {
+          navigate(`${funnelGoalData.id}/risk-select-skippable`);
+        }
+        return;
+      }
+
+      updateFunnelData({ ...data, corpus });
+
+      navigate(`savegoal/${subtype}/amount`);
     } catch (err) {
+      console.log(err);
       setLoader(false);
       toast(err)
     }

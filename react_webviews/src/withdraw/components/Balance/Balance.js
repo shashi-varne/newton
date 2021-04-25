@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import Button from 'common/ui/Button'
 import React, { useEffect, useState } from 'react'
 import Container from '../../common/Container'
 import { withdrawOptions } from '../../constants'
@@ -81,13 +81,15 @@ const Balance = (props) => {
   const noInvestments = isEmpty(balance?.balance) || balance === 0
   return (
     <Container
-      title={noInvestments ? '' : 'Withdraw'}
+      title='Withdraw'
       noFooter
       noPadding
-      noInvestments={noInvestments}
-      classOverRideContainer="withdraw-background-override"
+      classOverRide={!isEmpty(balance) && "withdraw-override-container"}
+      classOverRideContainer={
+        `withdraw-background-override 
+        ${noInvestments && "withdraw-explore-override"
+      }`}
       skelton={isEmpty(balance)}
-      // noHeader={isEmpty(balance)}
     >
       {!isEmpty(balance) && !noInvestments && (
         <>
@@ -97,11 +99,11 @@ const Balance = (props) => {
               <div className="amount">
                 ₹ {balance?.balance?.toLocaleString('en-IN') || 0}
               </div>
-              <div className="withdrawable-tile flex-between">
+              <div className="withdrawable-tile">
                 <div className="tile">
                   <div className="tile-text">Total Balance</div>
                   <div className="tile-amount">
-                    {balance?.total_balance?.toLocaleString('en-IN') || 0}
+                  ₹ {balance?.total_balance?.toLocaleString('en-IN') || 0}
                   </div>
                 </div>
                 <div className="tile">
@@ -129,13 +131,11 @@ const Balance = (props) => {
                 debt funds and get up to 4% more returns than bank!
               </div>
               <Button
-                className="withdraw-mid-tile-text2"
-                variant="outlined"
+                buttonTitle="Switch Now"
                 onClick={handleSwitch}
-                fullWidth
-              >
-                switch now
-              </Button>
+                classes={{ button: "withdraw-mid-tile-text2" }}
+                type="outlined"
+              />
             </main>
             <footer className="footer Card">
               <div className="title">Withdraw</div>

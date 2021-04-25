@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
+  border-top: 1px solid #ededed;
+  padding-top: 20px;
 
   .withdraw-fund-header {
     display: flex;
@@ -113,17 +115,15 @@
     background-color: var(--highlight);
     padding: 10px;
     font-size: 10px;
+    align-items: center;
+    line-height: 1.5;
   }
 
-  .summary-bottom-info .MuiButton-label {
+  .summary-bottom-info .tax-summary-know-more {
+    color: var(--primary);
     font-size: 10px;
-    color: #3792FC;
-  }
-
-  .summary-bottom-info .know-more .MuiButton-root {
-    padding: 0px;
-    min-height: auto;
-    min-width: auto;
+    font-weight: 700;
+    cursor: pointer;
   }
 
   .summary-bottom-info .icon {
@@ -144,13 +144,13 @@
 .withdraw-explore-investment-options {
   margin: 0 auto;
   background-color: #ededed;
-  padding-bottom: 100%;
 
   .main {
     background-color: white;
     padding: 8px;
     margin-bottom: 22px;
     border: 1px solid #ede9e9;
+    border-top: 0;
   }
   .top-text {
     text-align: center;
@@ -169,11 +169,14 @@
 
   .cta-button {
     margin: 6px auto;
-    width: 80%;
     background-color: var(--secondary);
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .cta-button:hover {
+    background-color: var(--secondary);
   }
   
   .cta-button .cta-button-text {
@@ -186,6 +189,7 @@
     fill: white;
     size: 10ch;
     font-size: 16px;
+    margin-right: -8px;
   }
 
   .tiles {
@@ -209,6 +213,7 @@
   .tiles .tile .label {
     color: #c2b1e7;
     font-size: 14px;
+    text-align: center;
   }
 }
 

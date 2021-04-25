@@ -109,7 +109,7 @@ function getPartnerConfig(partner_code) {
   let html = document.querySelector(`html`);
   html.style.setProperty(`--secondary`,`${config_to_return.styles.secondaryColor}`);
   html.style.setProperty(`--highlight`,`${config_to_return.styles.highlightColor}`);
-  html.style.setProperty(`--skelton-color`, `${config_to_return.styles.skeltonColor}`);
+  html.style.setProperty(`--skelton-color`, `${config_to_return.styles.skeletonColor}`);
   html.style.setProperty(`--primary`, `${config_to_return.styles.primaryColor}`);
   html.style.setProperty(`--header-background`, `${config_to_return?.uiElements?.header?.backgroundColor}`);
   html.style.setProperty(`--default`, `${config_to_return.styles.default}`);

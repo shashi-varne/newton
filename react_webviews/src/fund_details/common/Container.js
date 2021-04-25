@@ -90,22 +90,22 @@ const Container = (props) => {
     );
   };
 
-  const renderPageLoader = () => {
-    if (props.showLoader) {
-      return (
-        <div className={`Loader ${props.loaderData ? props.loaderData.loaderClass : ''}`}>
-          <div className='LoaderOverlay'>
-            <img src={loaderMain} alt='' />
-            {props.loaderData && props.loaderData.loadingText && (
-              <div className='LoaderOverlayText'>{props.loaderData.loadingText}</div>
-            )}
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  };
+  // const renderPageLoader = () => {
+  //   if (props.showLoader) {
+  //     return (
+  //       <div className={`Loader ${props.loaderData ? props.loaderData.loaderClass : ''}`}>
+  //         <div className='LoaderOverlay'>
+  //           <img src={loaderMain} alt='' />
+  //           {props.loaderData && props.loaderData.loadingText && (
+  //             <div className='LoaderOverlayText'>{props.loaderData.loadingText}</div>
+  //           )}
+  //         </div>
+  //       </div>
+  //     );
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   const headerGoBack = () => {
     historyGoBack({ fromHeader: true });
@@ -187,7 +187,9 @@ const Container = (props) => {
       )}
 
       {props.skelton &&
-        <UiSkelton type={props.skelton} />
+        <div className="Loader" style={{paddingTop: "56px"}}>
+          <UiSkelton type={props.skelton} />
+        </div>
       }
 
       {/* Children Block */}

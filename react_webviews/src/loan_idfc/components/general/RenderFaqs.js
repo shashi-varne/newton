@@ -15,7 +15,7 @@ class CommonRenderFaqs extends Component {
                 }
             },
             type: getConfig().productName,
-            color: getConfig().primary,
+            color: getConfig().styles.primaryColor,
             show_loader: true,
             selectedIndex: '',
         };

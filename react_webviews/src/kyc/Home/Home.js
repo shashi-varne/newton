@@ -9,7 +9,7 @@ import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isIframe } from "../../utils/functions";
+import { getConfig } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 

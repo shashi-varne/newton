@@ -55,9 +55,13 @@ const InstaRedeem = (props) => {
     dataCopy.diy_type = "recommendation";
     dataCopy.invest_type_from = "instaredeem";
     storageService().setObject("diystore_fundInfo", dataCopy);
-    navigate("/fund-details", {
-      searchParams: `${getConfig().searchParams}&isins=${data.isin}`,
-    });
+    navigate(
+      "/fund-details",
+      {
+        searchParams: `${getConfig().searchParams}&isins=${data.isin}`,
+      },
+      true
+    );
   }
 
   const initializeInstaRedeem = async () => {
@@ -89,7 +93,7 @@ const InstaRedeem = (props) => {
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         aria-labelledby="responsive-dialog-title"
-        className="insta-redeem-dialog"
+        className="invest-common-dialog"
       >
         <DialogContent className="dialog-content">
           <div className="head-bar insta-redeem-head-bar">

@@ -99,10 +99,7 @@ const Recommendations = (props) => {
       if (res.rp_indicator) {
         setUserRiskProfile(res.rp_indicator);
       }
-      updateFunnelData({
-        ...res,
-        recommendedTotalAmount: res.amount
-      });
+      updateFunnelData(res);
 
       setIsApiRunning(false);
     } catch (err) {
@@ -133,12 +130,16 @@ const Recommendations = (props) => {
       }
       investmentObject.name = funnelData.name;
       investmentObject.bondstock = routeState.bond + ":" + routeState.stock;
-      investmentObject.amount = funnelData.recommendedTotalAmount;
+      investmentObject.amount = funnelData.amount;
       investmentObject.term = funnelData.term;
       investmentObject.type = funnelData.investType;
       investmentObject.subtype = funnelData.subtype;
       investmentObject.allocations = allocations;
-
+      investmentObject.flow = funnelData.flow;
+      if (funnelData.showRecommendationTopCards && riskEnabledFunnel) {
+        investmentObject.risk_profile_indicator = userRiskProfile;
+        investmentObject.equity_ratio = funnelData.equity;
+      }
     } else {
       investmentObject = funnelData;
     }
@@ -154,14 +155,14 @@ const Recommendations = (props) => {
 
     if (funnelData.type === "riskprofile") {
       investmentEventData = {
-        amount: funnelData.recommendedTotalAmount,
+        amount: funnelData.amount,
         investment_type: funnelData.type,
         journey_name: "mf",
         investment_subtype: funnelData.subtype,
       };
     } else {
       investmentEventData = {
-        amount: funnelData.recommendedTotalAmount,
+        amount: funnelData.amount,
         investment_type: funnelData.investType,
         journey_name: "mf",
         investment_subtype: funnelData.subtype,
@@ -264,7 +265,7 @@ const Recommendations = (props) => {
       hidePageTitle
     > 
       <div className="recommendation-page">
-        {riskEnabledFunnel && 
+        {riskEnabledFunnel && funnelData.showRecommendationTopCards &&
           <>
             {renderTopCard &&
               <RecommendationTopCard
@@ -286,10 +287,7 @@ const Recommendations = (props) => {
             />
           </>
         }
-        <section
-          className='recommendations-section'
-          style={{ marginTop: riskEnabledFunnel ? '20px' : ''}}
-        >
+        <section className='recommendations-section'>
           <div className='recommendations-header'>
             <div>Our Recommendation</div>
             {funnelData.investType !== 'insta-redeem' && (
@@ -313,7 +311,7 @@ const Recommendations = (props) => {
           <div className='recommendations-total-investment'>
             <div>Total Investment</div>
 
-            <div>{recommendations?.length ? formatAmountInr(funnelData.recommendedTotalAmount) : '₹0'}</div>
+            <div>{recommendations?.length ? formatAmountInr(funnelData.amount) : '₹0'}</div>
           </div>
           <div className="recommendations-disclaimers">
             <div className="recommendations-disclaimer-morning">
@@ -332,12 +330,12 @@ const Recommendations = (props) => {
           </div>
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPendind}
-            handleClick={() => navigate("/kyc/add-bank")}
+            handleClick={() => navigate("/kyc/add-bank", null, true)}
           />
           <InvestError
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
-            handleClick={() => navigate("/invest")}
+            handleClick={() => navigate("/invest", null, true)}
             close={() => handleDialogStates("openInvestError", false)}
           />
           <InvestReferralDialog

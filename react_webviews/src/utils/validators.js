@@ -1093,10 +1093,10 @@ export function getFinancialYear() {
 
 export const convertInrAmountToNumber = (value) => {
   let amount = (value.match(/\d+/g) || "").toString();
-    if (amount) {
-      amount = amount.replaceAll(",", "");
-    }
-    return amount
+  if (amount) {
+    amount = amount.replaceAll(",", "");
+  }
+  return parseInt(amount, 10);
 }
 export function convertDateFormat(inputFormat) {
   function pad(s) { return (s < 10) ? '0' + s : s; }
