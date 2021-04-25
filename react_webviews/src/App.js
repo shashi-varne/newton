@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Login from './login_and_registration/Login';
@@ -19,7 +19,7 @@ import { withRouter } from "react-router";
 import { ToastContainer } from 'react-toastify';
 
 import InternalWealthDashboard from './internal_wealth_dashboard';
-import DesktopLayout from './DesktopLayout';
+import DesktopLayout from './desktopLayout';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 

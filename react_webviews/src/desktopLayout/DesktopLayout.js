@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import NavBar from './desktopLayout/NavBar';
-import Drawer from './desktopLayout/Drawer';
-import RightContent from './desktopLayout/InvestInfo';
+import NavBar from './NavBar';
+import Drawer from './Drawer';
+import RightContent from './InvestInfo';
 import 'common/theme/Style.scss';
-import './style.scss';
-
-import ProtectedRoute from './common/components/ProtectedRoute';
+import './DesktopLayout.scss';
 const Feature = (props) => {
   const [mobileView, setmobileView] = useState(false);
 
