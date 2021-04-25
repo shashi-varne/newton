@@ -193,7 +193,6 @@ class GroupHealthPlanDetails extends Component {
           if(this.state.provider === 'STAR'){
             allowed_post_body_keys = [...allowed_post_body_keys, 'postal_code', 'si']
           }
-          console.log(allowed_post_body_keys, post_body)
 
           for(let key of allowed_post_body_keys){
               body[key] = post_body[key];

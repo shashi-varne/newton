@@ -86,7 +86,6 @@ class GroupHealthPlanSelectFloater extends Component {
                             ind_pre_data.push(obj);
                         }
                     }
-                    console.log('se', selectedIndex)
                     this.updateBottomPremium(premium_data_floater[selectedIndex].premium);
                     this.setState({
                         premium_data_floater: premium_data_floater,
