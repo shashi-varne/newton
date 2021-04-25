@@ -6,13 +6,14 @@ import {navigate as navigateFunc} from './commonFunctions'
 import {withRouter} from 'react-router-dom';
 import './NavBar.scss';
 import { storageService } from "../utils/validators";
+const {partner,logo} = getConfig();
+const user = storageService().getObject('user');
+
 const NavBar = (props) => {
-  const {partner,logo} = getConfig();
   const navigate = navigateFunc.bind(props);
   const handleLogout =() => {
     navigate('/logout');
   }
-  const user = storageService().getObject('user');
 
   return (
     <AppBar position="sticky" className="navbar">

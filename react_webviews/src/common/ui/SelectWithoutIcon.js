@@ -28,7 +28,6 @@ class SelectGrp extends Component {
 
   handleChange = (event) => {
     this.setState({ selectedValue: event.target.value });
-    console.log("evenet os", event);
     this.props.onChange(event.target.value);
   };
 

@@ -598,9 +598,10 @@ export function handleRenderCard() {
 export function handleCampaignNotification () {
   const notifications = storageService().getObject('campaign') || [];
   const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
-    if (data?.notification_visual_data?.target?.length >= 1) {
+    const target = data?.notification_visual_data?.target;
+    if (target?.length >= 1) {
       // eslint-disable-next-line no-unused-expressions
-      data?.notification_visual_data?.target.forEach((el, idx) => {
+      target.forEach((el, idx) => {
         if (el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
           acc = el;
           acc.campaign_name = data?.campaign?.name;

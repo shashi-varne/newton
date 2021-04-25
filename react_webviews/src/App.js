@@ -44,7 +44,7 @@ var basename = window.sessionStorage.getItem('base_href') || '';
 if (basename && basename.indexOf('appl/webview') !== -1) {
   basename = basename ? basename + 'view/' : '';
 }
-const mobile = getConfig().isMobileDevice;
+const isMobileDevice = getConfig().isMobileDevice;
 
 const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
 if(isBottomSheetDisplayed) {
@@ -84,7 +84,7 @@ const App = () => {
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               {
-                mobile ?
+                isMobileDevice ?
                 <Route component={Feature}/>:
                 <DesktopLayout>
                   <Feature />

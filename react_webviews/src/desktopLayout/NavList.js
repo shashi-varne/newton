@@ -89,15 +89,16 @@ let data = [
     path: '/logout',
   },
 ];
+const productName = getConfig().productName;
+const isMobileDevice = getConfig().isMobileDevice;
+const user = storageService().getObject('user');
+const userKyc = storageService().getObject('kyc');
+const partnerLoan = getConfig()?.navLinkOptions?.loan;
+const showReferral = !getConfig()?.referralConfig?.shareRefferal;
+
 const NavList = (props) => {
-  const productName = getConfig().productName;
-  const mobile = getConfig().isMobileDevice;
   const navigate = navigateFunc.bind(props);
-  const user = storageService().getObject('user');
-  const userKyc = storageService().getObject('kyc');
-  const partnerLoan = getConfig()?.navLinkOptions?.loan;
   const [referDialog, setReferDialog] = useState(false);
-  const showReferral = !getConfig()?.referralConfig?.shareRefferal;
 
   useEffect(() => {
     filterNavList();
@@ -109,7 +110,7 @@ const NavList = (props) => {
     if (path) {
       navigate(path);
     } else {
-      if (mobile) {
+      if (isMobileDevice) {
         props.handleModal();
       } else {
         handleRefferalModal();
@@ -117,7 +118,7 @@ const NavList = (props) => {
     }
   };
   const filterNavList = (id) => {
-    if (id === 'logout' && !mobile) {
+    if (id === 'logout' && !isMobileDevice) {
       return null;
     }
     if (id === 'register' && isReadyToInvestBase) {
@@ -140,7 +141,7 @@ const NavList = (props) => {
   const isReadyToInvestBase = isReadyToInvest();
   return (
     <div className='navlink-container'>
-      {mobile && (
+      {isMobileDevice && (
         <div className='user-mobile-details'>
           <div className='user-name'>{user?.name}</div>
           <div className='user-contact'>{user?.email || user?.mobile}</div>
@@ -229,7 +230,7 @@ const NavList = (props) => {
       </div>
       
       {
-        !mobile &&
+        !isMobileDevice &&
         <ReferDialog isOpen={referDialog} close={handleRefferalModal} />
       }
     </div>

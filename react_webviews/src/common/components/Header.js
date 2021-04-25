@@ -15,7 +15,7 @@ import isEmpty from 'lodash/isEmpty';
 import { storageService } from "utils/validators";
 import '../theme/Style.scss';
 import restart from 'assets/restart_nav_icn.svg';
-import Slider from '../../desktopLayout/Drawer';
+import Drawer from '../../desktopLayout/Drawer';
 import MenuIcon from "@material-ui/icons/Menu";
 import ReferDialog from '../../desktopLayout/ReferralDialog';
 
@@ -25,6 +25,11 @@ const headerIconMapper = {
   search: search,
   restart: restart
 }
+const campaign = storageService().getObject("campaign");
+const isMobileDevice = getConfig().isMobileDevice;
+const partnerLogo = getConfig().logo;
+const isWeb = getConfig().Web;
+const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor : '';
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
@@ -32,18 +37,13 @@ const Header = ({ classes, title, count, total, current, goBack,
   className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
-    const campaign = storageService().getObject("campaign");
-    const partnerLogo = getConfig().logo;
-    const mobile = getConfig().isMobileDevice;
-    const isWeb = getConfig().Web;
-    const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor : '';
-    const [open,setOpen] = useState(false);
-    const handleMobileView = () => {
-      setOpen(!open);
+    const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
+    const handleMobileViewDrawer = () => {
+      setMobileViewDrawer(!mobileViewDrawer);
     };
-    const handleModal = () => {
+    const handleReferModal = () => {
       if(!referDialog){
-        setOpen(!open);
+        setMobileViewDrawer(!mobileViewDrawer);
       }
       setReferDialog(!referDialog);
     };
@@ -161,18 +161,18 @@ const Header = ({ classes, title, count, total, current, goBack,
         }
 
         {
-          mobile && isWeb &&
+          isMobileDevice && isWeb &&
           <div className='mobile-navbar-menu'>
-            <IconButton onClick={handleMobileView}>
+            <IconButton onClick={handleMobileViewDrawer}>
               <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'}}/>
             </IconButton>
-            <Slider mobileView={open} handleMobileView={handleMobileView} handleModal={handleModal}/>
+            <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal}/>
           </div>
         }
         </Toolbar>
         {
-          mobile &&
-          <ReferDialog isOpen={referDialog} close={handleModal} />
+          isMobileDevice &&
+          <ReferDialog isOpen={referDialog} close={handleReferModal} />
         }
       </AppBar >
     )

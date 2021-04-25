@@ -31,7 +31,7 @@ class SdkLanding extends Component {
       dotLoader: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      headerBackground: getConfig().uiElements?.header?.backgroundColor
+      headerStyle: getConfig().uiElements?.header
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -111,7 +111,7 @@ class SdkLanding extends Component {
         notification
         handleNotification={this.handleNotification}
         background='sdk-background'
-        classHeader={this.state.headerBackground ? 'sdk-partner-header' : 'sdk-header'}
+        classHeader={this.state.headerStyle ? 'sdk-partner-header' : 'sdk-header'}
       >
         <div className='sdk-landing'>
           {!this.state.kycStatusLoader ? (

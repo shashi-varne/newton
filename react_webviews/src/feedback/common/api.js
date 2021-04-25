@@ -1,5 +1,5 @@
 import Api from 'utils/api';
-import { isEmpty } from 'utils/validators';
+import isEmpty from 'lodash/isEmpty';
 const genericErrMsg = 'Something went wrong';
 
 export const getFeedBackList = async () => {

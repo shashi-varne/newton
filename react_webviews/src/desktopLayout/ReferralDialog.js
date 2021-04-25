@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-// import Dialog from 'common/ui/Dialog';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,13 +12,16 @@ import { storageService } from 'utils/validators';
 import Slide from '@material-ui/core/Slide';
 import Grow from '@material-ui/core/Grow';
 import { getConfig } from 'utils/functions';
+
+const isMobileDevice = getConfig().isMobileDevice;
+const user = storageService().getObject('user');
+
 const ReferDialog = ({ isOpen, close }) => {
   const [referralCode, setReferralCode] = useState('');
   const [loader, setLoader] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
   const [promoData, setPromoData] = useState({});
-  const user = storageService().getObject('user');
   // const [copyText, setCopyText] = useState('');
   const textToCopy = useRef(null);
   useEffect(() => {
@@ -164,8 +166,7 @@ const ReferDialog = ({ isOpen, close }) => {
 export default ReferDialog;
 
 const Transition = (props) => {
-  const mobile = getConfig().isMobileDevice;
-  if(mobile){
+  if(isMobileDevice){
     return <Slide direction='up' {...props} />;
   } else {
     return <Grow {...props} />;
