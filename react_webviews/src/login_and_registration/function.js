@@ -98,12 +98,23 @@ export function formCheckFields(
   }
 
   let redirectUrl = encodeURIComponent(`${window.location.origin}/`);
+  let referrer = this.state.referrer || "";
+  const partners = ["hbl", "sbm", "flexi", "medlife", "life99", "taxwin"];
+  const partner = storageService().get("partner") || "";
+  if(partners.includes(partner)) {
+    referrer = partner;
+    const deeplinkUrl = storageService().get("deeplink_url") || "";
+    if(deeplinkUrl) {
+      redirectUrl = deeplinkUrl;
+    }
+  }
+
   let body = {};
   this.setState({ isApiRunning: "button" });
   if (loginType === "email" && userAction === "LOGIN") {
     body.email = form_data["email"];
     body.password = form_data["password"];
-    body.referrer = this.state.referrer;
+    body.referrer = referrer;
     body.redirect_url = redirectUrl;
     this.emailLogin(body);
   } else if (loginType === "email" && userAction === "REGISTER") {
@@ -111,7 +122,7 @@ export function formCheckFields(
     body.password = form_data["password"];
     body.referrer_code = form_data["referral_code"] || "";
     body.redirect_url = redirectUrl;
-    body.referrer = this.state.referrer;
+    body.referrer = referrer;
     this.emailRegister(body);
   } else if (userAction === "RESET") {
     if (loginType === "mobile")
