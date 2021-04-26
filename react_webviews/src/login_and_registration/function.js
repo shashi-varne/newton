@@ -22,12 +22,13 @@ export function initialize() {
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
   let main_query_params = getUrlParams();
-  let { referrer } = main_query_params;
+  let { referrer, redirect_url } = main_query_params;
   let referrerParam = referrer || "";
-  let rebalancing_redirect_url = "";
 
   let socialRedirectUrl = encodeURIComponent(
-    window.location.href + "/#/social/callback" + rebalancing_redirect_url
+    window.location.origin + "/social/callback" + redirect_url
+      ? "?redirect_url=" + redirect_url
+      : ""
   );
 
   let facebookUrl =
@@ -96,29 +97,40 @@ export function formCheckFields(
     }
   }
 
-  let redirectUrl = encodeURIComponent(window.location.href);
-  let body = {
-    redirect_url: redirectUrl,
-  };
+  let redirectUrl = encodeURIComponent(`${window.location.origin}/`);
+  let referrer = this.state.referrer || "";
+  const partners = ["hbl", "sbm", "flexi", "medlife", "life99", "taxwin"];
+  const partner = storageService().get("partner") || "";
+  if(partners.includes(partner)) {
+    referrer = partner;
+    const deeplinkUrl = storageService().get("deeplink_url") || "";
+    if(deeplinkUrl) {
+      redirectUrl = deeplinkUrl;
+    }
+  }
 
+  let body = {};
   this.setState({ isApiRunning: "button" });
   if (loginType === "email" && userAction === "LOGIN") {
     body.email = form_data["email"];
     body.password = form_data["password"];
-    body.referrer = this.state.referrer;
+    body.referrer = referrer;
+    body.redirect_url = redirectUrl;
     this.emailLogin(body);
   } else if (loginType === "email" && userAction === "REGISTER") {
     body.email = form_data["email"];
     body.password = form_data["password"];
     body.referrer_code = form_data["referral_code"] || "";
-    body.referrer = this.state.referrer;
+    body.redirect_url = redirectUrl;
+    body.referrer = referrer;
     this.emailRegister(body);
   } else if (userAction === "RESET") {
     if (loginType === "mobile")
-      body.mobile_number = `${form_data["code"]}|${form_data["mobile"]}`;
+      body.mobile = `${form_data["code"]}|${form_data["mobile"]}`;
     else body.email = form_data.email;
     this.forgotPassword(body);
   } else {
+    body.redirect_url = redirectUrl;
     body.mobile_number = `${form_data["code"]}|${form_data["mobile"]}`;
     this.mobileLogin(body);
   }
@@ -436,7 +448,7 @@ export async function forgotPassword(body) {
       else {
         this.navigate("mobile/verify", {
           state: {
-            mobile_number: body.mobile_number,
+            mobile_number: body.mobile,
             forgot: true,
           },
         });
