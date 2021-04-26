@@ -524,7 +524,7 @@ export function openKyc() {
     } else if (kycJourneyStatus === "ground_pan") {
       this.navigate("/kyc/journey", {
         state: {
-          show_aadhaar: true,
+          show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
           fromState: "invest",
         },
       });
