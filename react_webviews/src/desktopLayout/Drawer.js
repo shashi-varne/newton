@@ -2,8 +2,6 @@ import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';
 import { getConfig } from 'utils/functions';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForward';
-import IconButton from '@material-ui/core/IconButton';
 import NavList from './NavList';
 import './Drawer.scss';
 const isMobileDevice = getConfig().isMobileDevice;
@@ -19,11 +17,6 @@ const Slider = ({ mobileViewDrawer, handleMobileViewDrawer, handleReferModal }) 
         onClose={handleMobileViewDrawer}
         className='mobile-drawer'
       >
-        <Toolbar>
-          <IconButton onClick={handleMobileViewDrawer}>
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </Toolbar>
         <NavList handleClick={handleMobileViewDrawer} handleModal={handleReferModal} />
       </Drawer>
     );

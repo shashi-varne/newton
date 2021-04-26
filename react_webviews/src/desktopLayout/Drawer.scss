@@ -5,3 +5,10 @@
     width: 300px;
   }
 }
+
+.mobile-drawer{
+  top: 55px !important;
+  .MuiDrawer-paper,.MuiBackdrop-root{
+    top: 55px !important;
+  }
+}

@@ -99,6 +99,7 @@ const showReferral = !getConfig()?.referralConfig?.shareRefferal;
 const NavList = (props) => {
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
+  const [activePath, setActivePath] = useState('');
 
   useEffect(() => {
     filterNavList();
@@ -107,6 +108,7 @@ const NavList = (props) => {
     setReferDialog(!referDialog);
   };
   const handleClick = ({ path, id }) => () => {
+    setActivePath(id);
     if (path) {
       navigate(path);
     } else {
@@ -141,28 +143,31 @@ const NavList = (props) => {
   const isReadyToInvestBase = isReadyToInvest();
   return (
     <div className='navlink-container'>
-      {isMobileDevice && (
-        <div className='user-mobile-details'>
-          <div className='user-name'>{user?.name}</div>
-          <div className='user-contact'>{user?.email || user?.mobile}</div>
-        </div>
-      )}
-      <List className='navlink-lists'>
-        {data.map((el, idx) => {
-          const hideNavItem = !filterNavList(el.id);
-          if (hideNavItem) {
-            return null;
-          }
-          return (
-            <ListItem key={idx} button onClick={handleClick(el)} className='nav-link-listItem'>
-              <ListItemIcon>
-                <img className='nav-link-icons' src={el.icon} alt={el.name} />
-              </ListItemIcon>
-              <ListItemText className='nav-link-text' primary={el.name} />
-            </ListItem>
-          );
-        })}
-      </List>
+      <div>
+        {isMobileDevice && (
+          <div className='user-mobile-details'>
+            <div className='user-name'>{user?.name}</div>
+            <div className='user-contact'>{user?.email || user?.mobile}</div>
+          </div>
+        )}
+        <List className='navlink-lists'>
+          {data.map((el, idx) => {
+            const hideNavItem = !filterNavList(el.id);
+            if (hideNavItem) {
+              return null;
+            }
+            return (
+              <ListItem key={idx} onClick={handleClick(el)} className={`nav-link-listItem ${activePath === el.id ? 'navlink-active': ''}`}>
+                <ListItemIcon>
+                  <img className='nav-link-icons' src={el.icon} alt={el.name} />
+                </ListItemIcon>
+                <ListItemText className='nav-link-text' primary={el.name} />
+              </ListItem>
+            );
+          })}
+        </List>
+      </div>
+
       <div>
         <div className='navlink-footer-list'>
           {productName === 'fisdom' && (
