@@ -22,7 +22,7 @@
       max-width: 100% !important;
       position: relative;
       // padding-bottom: 100px !important;
-      header{
+      & > header{
         position: fixed;
         top: 60px;
         width: 640px !important;

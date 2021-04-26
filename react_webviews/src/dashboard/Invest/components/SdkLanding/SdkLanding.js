@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize, handleCampaignNotification } from '../../functions';
+import { initialize, handleCampaignNotification, handleCampaignRedirection } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -35,6 +35,7 @@ class SdkLanding extends Component {
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
+    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -91,6 +92,12 @@ class SdkLanding extends Component {
     }
   }
 
+  handleCampaign = () => {
+    this.setState({show_loader : 'page', openBottomSheet : false});
+    let campLink = this.state.bottom_sheet_dialog_data.url;
+    handleCampaignRedirection(campLink);
+  }
+
   render() {
     let {
       isReadyToInvestBase,
@@ -112,6 +119,7 @@ class SdkLanding extends Component {
         handleNotification={this.handleNotification}
         background='sdk-background'
         classHeader={this.state.headerStyle ? 'sdk-partner-header' : 'sdk-header'}
+        showLoader={this.state.show_loader}
       >
         <div className='sdk-landing'>
           {!this.state.kycStatusLoader ? (
@@ -197,6 +205,7 @@ class SdkLanding extends Component {
           close={this.closeCampaignDialog}
           cancel={this.closeCampaignDialog}
           data={this.state.bottom_sheet_dialog_data}
+          handleClick={this.handleCampaign}
         />
       </Container>
     );

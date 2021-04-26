@@ -616,3 +616,11 @@ export function handleCampaignNotification () {
     this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
   }
 };
+
+export function handleCampaignRedirection (url) {
+  let campLink = url;
+  // eslint-disable-next-line
+  campLink += (campLink.match(/[\?]/g) ? "&" : "?") +
+  "generic_callback=true";
+  window.location.href = campLink;
+}

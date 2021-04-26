@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
-import { initialize, handleCampaignNotification } from "../../functions";
+import { initialize, handleCampaignNotification, handleCampaignRedirection } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SecureInvest from "../../mini-components/SecureInvest";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
@@ -34,6 +34,7 @@ class Landing extends Component {
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
+    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -99,6 +100,12 @@ class Landing extends Component {
     this.setState({ openBottomSheet: false });
   };
 
+  handleCampaign = () => {
+    this.setState({show_loader : 'page', openBottomSheet : false});
+    let campLink = this.state.bottom_sheet_dialog_data.url;
+    handleCampaignRedirection(campLink);
+  }
+
   render() {
     const {
       isReadyToInvestBase,
@@ -125,6 +132,7 @@ class Landing extends Component {
         skelton={this.state.show_loader}
         noFooter={true}
         title="Start Investing"
+        showLoader={this.state.show_loader}
       >
         <div className="invest-landing">
           {
@@ -395,6 +403,7 @@ class Landing extends Component {
           close={this.closeCampaignDialog}
           cancel={this.closeCampaignDialog}
           data={this.state.bottom_sheet_dialog_data}
+          handleClick={this.handleCampaign}
         />
       </Container>
     );
