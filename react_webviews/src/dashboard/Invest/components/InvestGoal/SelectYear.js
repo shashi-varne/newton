@@ -3,23 +3,63 @@ import './SelectYear.scss';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import Input from 'common/ui/Input';
-import { navigate as navigateFunc } from '../../common/commonFunctions';
+import { isRecurring, navigate as navigateFunc } from '../../common/commonFunctions';
 import moment from 'moment';
-
+import useFunnelDataHook from '../../common/funnelDataHook';
+import toast from 'common/ui/Toast'
 
 const currentYear = moment().year();
 const SelectYear = (props) => {
-  const [year, setYear] = useState(currentYear + 15);
-  const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
   const subtype = props.match?.params?.subtype;
   const navigate = navigateFunc.bind(props);
 
-  const goNext = () => {
-    if (subtype === 'other') {
-      navigate(`savegoal/${subtype}/${year}/target`);
-    } else {
-      navigate(`savegoal/${subtype}/${year}`);
+  const { initFunnelData } = useFunnelDataHook();
+  const [year, setYear] = useState(currentYear + 15);
+  const [error, setError] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const initJourneyData = async () => {
+    const term = year - currentYear;
+    try {
+      const appendToFunnelData = {
+        term,
+        year: Number(year),
+        subtype,
+        investType: 'saveforgoal',
+        isRecurring: isRecurring('saveforgoal'),
+        investTypeDisplay: "sip",
+        name: "Saving for goal",
+        showRecommendationTopCards: true
+      };
+      setLoader("button");
+      await initFunnelData({
+        apiParams: {
+          type: 'saveforgoal',
+          flow: 'invest for goal',
+          subtype,
+          term,
+        },
+        appendToFunnelData: appendToFunnelData
+      });
+      setLoader(false);
+    } catch(err) {
+      setLoader(false);
+      throw(err);
+    }
+  };
+
+  const goNext = async () => {
+    try {
+      await initJourneyData();
+      if (subtype === 'other') {
+        navigate(`savegoal/${subtype}/${year}/target`);
+      } else {
+        navigate(`savegoal/${subtype}/${year}`);
+      }
+    } catch (err) {
+      console.log(err);
+      toast('Something went wrong! Please try again');
     }
   };
 
@@ -60,6 +100,7 @@ const SelectYear = (props) => {
       handleClick={goNext}
       classOverRideContainer='pr-container'
       disable={error}
+      showLoader={loader}
     >
       <section className='invest-goal-type-container'>
         <div>In year</div>

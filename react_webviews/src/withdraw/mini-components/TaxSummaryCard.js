@@ -1,4 +1,3 @@
-import { Button } from '@material-ui/core'
 import React, { useState } from 'react'
 import { getConfig } from '../../utils/functions'
 import KnowMoreDialog from './KnowMoreDialog'
@@ -87,10 +86,8 @@ const TaxSummaryCard = ({
             />
             <div className="content">Avoid taxes for better returns!</div>
           </div>
-          <div className="know-more">
-            <Button type="text" color="primary" onClick={openDialog}>
-              KNOW MORE
-            </Button>
+          <div className="tax-summary-know-more" onClick={openDialog}>
+            KNOW HOW
           </div>
         </footer>
       )}

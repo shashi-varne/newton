@@ -714,7 +714,7 @@ class DocumentUpload extends Component {
                         preProcessor={(code) =>
                           code.replace(
                             /fill=".*?"/g,
-                            "fill=" + getConfig().secondary
+                            "fill=" + getConfig().styles.secondaryColor
                           )
                         }
                         src={plus}

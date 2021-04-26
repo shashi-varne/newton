@@ -141,7 +141,7 @@ const SwitchFund = (props) => {
               <main>
                 {filteredFunds.map((fund, index) => {
                   return (
-                    <div key={index} className="fund">
+                    <div key={index} className="reports-switch-fund">
                       <h4>{fund.mfname}</h4>
                       <div className="details">
                         <div className="mf-type">{fund.mftype_name}</div>

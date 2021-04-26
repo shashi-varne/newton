@@ -82,7 +82,7 @@ const FundswiseSummary = (props) => {
         {!isEmpty(funds) &&
           funds.map((fund, index) => {
             return (
-              <div className="fund" key={index}>
+              <div className="summary-fund-content" key={index}>
                 <h5>
                   <div className="text" onClick={() => getFundDetails(index)}>
                     {fund.mf.friendly_name}

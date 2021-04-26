@@ -83,6 +83,8 @@
 }
 
 .nps {
+  padding: 10px 0 40px;
+
   .container-padding {
     padding: 0px;
   }
@@ -185,9 +187,9 @@
   color: #4a4a4a;
 }
 
-.MuiButtonBase-root {
-  border-radius: 6px !important;
-}
+// .MuiButtonBase-root {
+//   border-radius: 6px !important;
+// }
 
 .fund {
   padding: 15px;
@@ -731,24 +733,28 @@
 }
 
 .replace-funds {
-  margin-top: 20px;
   .md-block {
     padding: 20px 0;
-    border: 1px solid #e8e8e8;
-    border-left: 0px;
-    border-right: 0px;
+    border-bottom: 1px solid #e8e8e8;
     display: flex;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+  }
+  .md-block:nth-child(1) {
+    padding-top: 0;
+  }
+  .md-block:nth-last-child(1) {
+    border-bottom: none;
   }
   .item {
     display: flex;
     align-items: center;
 
     .recommended-active {
-      font-size: 18px;
+      font-size: 16px;
       margin-left: 10px;
+
       .recommended {
         font-size: 12px;
         background-color: #5cb849;
@@ -768,6 +774,10 @@
   .MuiTypography-title {
     color: rgba(255, 255, 255, 0.87) !important;
   }
+}
+
+.risk-level {
+  padding: 15px;
 }
 
 .nps-flex-box {

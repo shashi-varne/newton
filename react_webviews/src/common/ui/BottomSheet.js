@@ -35,7 +35,6 @@ class BottomSheetClass extends Component {
                 <DialogContent>
                     <div className="generic-bottomsheet" id="alert-dialog-description">
                         <div className="top">
-
                             <div className="t-left">
                                 <div className="header_title">{data.header_title}</div>
                                 {data.content ?

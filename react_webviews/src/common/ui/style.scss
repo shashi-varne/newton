@@ -665,6 +665,10 @@ body[data-device="mobile"] {
     justify-content: space-between;
     align-items: center;
     margin: 0 0 10px 0;
+
+    .t-right {
+      margin-left: 10px;
+    }
   }
 
   div#alert-dialog-description {

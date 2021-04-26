@@ -97,7 +97,7 @@ class Journey extends Component {
       apiError: '',
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
-      askEmail: getConfig().askEmail,
+      askEmail: getConfig().email,
       productName: getConfig().productName
     }
     this.renderJourney = this.renderJourney.bind(this);

@@ -29,7 +29,7 @@ const RiskModify = ({
   const [selectedRisk, selectRisk] = useState(userRiskProfile);
   const navigate = navigateFunc.bind(otherProps);
   
-  let riskOptions = funnelData.rp_meta;
+  let riskOptions = [...funnelData.rp_meta];
 
   // useEffect(() => {
   //   const investTitle = selectTitle(funnelData.investType);

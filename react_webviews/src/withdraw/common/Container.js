@@ -7,7 +7,6 @@ import {
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
 import { isFunction } from "../../utils/validators";
-import './Style.scss';
 
 class Container extends Component {
   constructor(props) {
@@ -61,11 +60,7 @@ class Container extends Component {
   }
 
   render() {
-    let props_base = {
-      classOverRide: this?.props?.noInvestments ? "loanMainContainer withdraw-no-investments-override" : "loanMainContainer",
-    };
-
-    return <Fragment>{this.commonRender(props_base)}</Fragment>;
+    return <Fragment>{this.commonRender()}</Fragment>;
   }
 }
 

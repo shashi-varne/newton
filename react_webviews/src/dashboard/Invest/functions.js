@@ -12,6 +12,7 @@ import {
   sdkInvestCardMapper
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
+import { get_recommended_funds } from "./common/api";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -20,7 +21,7 @@ export async function initialize() {
   this.setInvestCardsData = setInvestCardsData.bind(this);
   this.handleRenderCard = handleRenderCard.bind(this);
   this.getRecommendationApi = getRecommendationApi.bind(this);
-  this.getRecommendedPlans = getRecommendedPlans.bind(this);
+  this.getRecommendations = getRecommendations.bind(this);
   this.getRateOfInterest = getRateOfInterest.bind(this);
   this.corpusValue = corpusValue.bind(this);
   this.navigate = navigate.bind(this);
@@ -265,56 +266,52 @@ export function clickCard(state, title) {
 }
 
 export async function getRecommendationApi(amount) {
-  let data = {
+  const params = {
     investType: "buildwealth",
-    term: 15,
-    stockReturns: 15,
-    bondReturns: 8,
+    term: 5,
     amount: amount,
   };
+
   this.setState({
     show_loader: true,
-    investType: data.investType,
-    term: data.term,
-    stockReturns: data.stockReturns,
-    bondReturns: data.bondReturns,
+    investType: params.investType,
+    term: params.term,
   });
+
   try {
-    const res = await Api.get(apiConstants.getRecommendation, {
-      type: data.investType,
-      amount: data.amount,
+    const { recommendation } = await get_recommended_funds(params);
+    
+    this.setState({
+      equity: recommendation.equity,
+      debt: recommendation.debt
     });
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      data.equity = result.recommendation.equity;
-      data.debt = result.recommendation.debt;
-      this.setState({ equity: data.equity, debt: data.debt });
-      let date = new Date();
-      let funnelData = {
-        recommendation: result.recommendation,
-        amount: data.amount,
-        term: data.term,
-        // eslint-disable-next-line
-        year: parseInt(date.getFullYear() + data.term),
-        corpus: this.corpusValue(data),
-        investType: data.investType,
-        investTypeDisplay: "sip",
-        name: "Wealth building",
-        isSliderEditable: result.recommendation.editable,
-        equity: result.recommendation.equity,
-        debt: result.recommendation.debt,
-        graphType: data.investType,
-      };
-      storageService().setObject("funnelData", funnelData);
-      if (amount === 300) {
-        this.navigate(`/invest/buildwealth/amount`);
-        this.setState({ show_loader: false });
-      } else {
-        this.getRecommendedPlans(amount);
-      }
+
+    const funnelData = {
+      recommendation: recommendation,
+      amount: params.amount,
+      term: params.term,
+      // eslint-disable-next-line
+      year: parseInt(new Date().getFullYear() + params.term),
+      corpus: this.corpusValue(params),
+      investType: params.investType,
+      investTypeDisplay: "sip",
+      name: "Wealth building",
+      isSliderEditable: recommendation.editable,
+      equity: recommendation.equity,
+      debt: recommendation.debt,
+      graphType: params.investType,
+    };
+    storageService().setObject("funnelData", funnelData);
+    storageService().setObject("funnelGoalData", recommendation.goal);
+    storageService().setObject("funnelReturnRates", {
+      stockReturns: recommendation.expected_return_eq,
+      bondReturns: recommendation.expected_return_debt
+    });
+
+    if (amount === 300) {
+      this.navigate(`/invest/buildwealth/amount`);
     } else {
-      this.setState({ show_loader: false });
-      toast(result.message || result.error || errorMessage);
+      this.getRecommendations(amount);
     }
   } catch (error) {
     console.log(error);
@@ -352,38 +349,42 @@ export function corpusValue(data) {
   return corpus_value;
 }
 
-export async function getRecommendedPlans(amount) {
+export async function getRecommendations(amount) {
   try {
-    const res = await Api.get(apiConstants.getRecommendation, {
+    const result = await get_recommended_funds({
       type: this.state.investType,
       amount: amount,
       term: this.state.term,
-      subType: this.state.subType,
       equity: this.state.equity,
       debt: this.state.debt,
+      rp_enabled: getConfig().riskEnabledFunnels
     });
-    const { result, status_code: status } = res.pfwresponse;
-    if (status === 200) {
-      let funnelData = {
-        recommendation: result.recommendation,
-        alternatives: result.alternatives,
-        amount: result.amount,
-        term: this.state.term,
-        investType: this.state.investType,
-        name: this.state.investName,
-        subType: this.state.subType,
-        graphType: this.state.investType,
-        investTypeDisplay: this.state.investTypeDisplay,
-        stock: this.state.equity,
-        bond: this.state.debt,
-      };
-      storageService().setObject("funnelData", funnelData);
-      this.navigate("/invest/recommendations");
-      this.setState({ show_loader: false });
-    } else {
-      this.setState({ show_loader: false });
-      toast(result.message || result.error || errorMessage);
+
+    if (!result.recommendation) {
+      // RP enabled flow, when user has no risk profile
+      storageService().remove('userSelectedRisk');
+      if (result.msg_code === 0) {
+        this.navigate(`/invest/${this.state.investType}/risk-select`);
+      } else if (result.msg_code === 1) {
+        this.navigate(`/invest/${this.state.investType}/risk-select-skippable`);
+      }
+      return;
     }
+
+    const funnelData = {
+      term: this.state.term,
+      investType: this.state.investType,
+      name: this.state.investName,
+      graphType: this.state.investType,
+      investTypeDisplay: this.state.investTypeDisplay,
+      showRecommendationTopCards: true,
+      recommendedTotalAmount: result.amount,
+      ...result
+    };
+    storageService().setObject("funnelData", funnelData);
+    storageService().set("userSelectedRisk", result.rp_indicator);
+
+    this.navigate("/invest/recommendations");
   } catch (error) {
     console.log(error);
     this.setState({ show_loader: false });
