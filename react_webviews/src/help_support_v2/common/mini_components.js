@@ -1,18 +1,31 @@
 import React, { Fragment } from "react";
 import { SkeltonRect } from "common/ui/Skelton";
 import Search from "../components/search";
+import back_arrow from 'assets/back_arrow.svg';
+import { IconButton } from "@material-ui/core";
+import SVG from 'react-inlinesvg';
 
 export const MyQueries = (props) => {
   return (
-    <div className={`${props.search ? "search-bar-header" : ""}`}>
-      <div className="help-header-title">
-        <div style={{ width: "75%" }}>{props.title}</div>
+    <div className={`${props.search ? props.showButton ? "search-bar-header search-bar-header-w-button" : "search-bar-header" : ""}`}>
+      <div className={props.showButton ? "help-header-title help-header-title-w-button" : "help-header-title"}>
+        <div style={{ width: "75%",display:"flex",alignItems:"center" }}>
+          <IconButton
+            color="inherit" aria-label="Menu"
+          // onClick={}
+          className={props.showButton?"showButton":"hideButton"}>
+            <SVG
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=black')}
+              src={back_arrow}
+            />
+          </IconButton>
+        {props.title}</div>
         <div onClick={() => props.onClick()} className="header-query">
           My queries
         </div>
       </div>
       {props.search && (
-        <div className="help-search-bar">
+        <div className={props.showButton?"help-search-bar help-search-bar-w-button":"help-search-bar"}>
           <Search
             value={props.value}
             onChange={(e) => props.onChange(e)}

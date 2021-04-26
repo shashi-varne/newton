@@ -614,6 +614,12 @@
 .help-header-title {
   display: flex;
   justify-content: space-between;
+  .hideButton{
+    display: none;
+  }
+  .showButton{
+    margin-left: 2px;
+  }
   .header-query {
     font-size: 15px;
     font-weight: 500;
@@ -633,6 +639,9 @@
       opacity: 0.6;
     }
   }
+}
+.help-header-title-w-button{
+  align-items: center;
 }
 
 .fade-in {
@@ -661,6 +670,12 @@
   .help-search-bar {
     margin-top: 40px;
   }
+  .help-search-bar-w-button{
+    padding-left: 20px;
+  }
+}
+.search-bar-header-w-button{
+  padding:0px 0px 20px 0px;
 }
 
 @media only screen and (min-width: 300px) and (max-width: 500px) {

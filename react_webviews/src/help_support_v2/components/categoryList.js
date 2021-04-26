@@ -16,6 +16,9 @@ import Dialog, {
   DialogContentText,
 } from "material-ui/Dialog";
 import Button from "material-ui/Button";
+import back_arrow from 'assets/back_arrow.svg';
+import { IconButton } from "@material-ui/core";
+import SVG from 'react-inlinesvg';
 
 class CategoryList extends Component {
   constructor(props) {
@@ -289,7 +292,7 @@ class CategoryList extends Component {
             }`,
           }}
         >
-          <div className="Header header-title-page header-title-page-text">
+          <div className="Header header-title-page header-title-page-text" style={{paddingLeft:"0px"}}>
             <MyQueries
               title="How can we help?"
               onClick={this.handleQuery}
@@ -298,6 +301,7 @@ class CategoryList extends Component {
               onChange={this.handleChange}
               onSearch={this.handleBlankSearch}
               componentClicked={componentClicked}
+              showButton={true}
             />
           </div>
 
