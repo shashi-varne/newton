@@ -108,11 +108,11 @@ class OtpDefaultClass extends Component {
           <div style={{ margin: '30px 0 0 -10px' }}>
             <div
               onClick={this.resendOtp}
-              style={{ color: '#4A494A', margin: '0 0 0 10px', fontSize: 14 }}
+              style={{ color: '#4A494A', margin: '0 0 0 10px', fontSize: 14, textAlign: "center" }}
               className={this.props.parent.class}
             >
               Didn’t receive?
-              <span style={{ color: getConfig().primary, fontWeight: 500, cursor: 'pointer' }}>
+              <span style={{ color: getConfig().secondary, fontWeight: 500, cursor: 'pointer' }}>
                 &nbsp; Resend OTP
               </span>
             </div>

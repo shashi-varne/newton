@@ -10,6 +10,7 @@ import {storageService} from "utils/validators";
 import { setRecommendationData } from '../advisory/common_data'
 import '../common/Style.scss'
 import { isEmpty } from 'utils/validators';
+import Button from 'material-ui/Button';
 
 class Landing extends Component {
 
@@ -238,7 +239,7 @@ class Landing extends Component {
         'banner_clicked' : banner_clicked ? true : false,
         'callback_clicked' : callback_clicked ?  true : false,
         'advisory_card_cta' : this.state.advisory_button_text,
-        'insurance_advisory_card_clicked': advisory_clicked
+        'insurance_advisory_card_clicked': advisory_clicked ? true : false
       }
     };
 
@@ -250,7 +251,6 @@ class Landing extends Component {
   }
 
   goToAdvisory = (e) =>{
-    // console.log('go go')
     e.preventDefault();
     this.sendEvents('next', "", "", "", true);
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
@@ -274,9 +274,19 @@ class Landing extends Component {
         errorData={this.state.errorData}
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
-           <div onClick={this.policymove}>
-           <img style={{ margin: '-15px 5px 30px 0', width: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
-           </div>
+           {/* <div onClick={this.policymove}>
+            <img style={{ margin: '-15px 5px 30px 0', width: '100%', cursor: 'pointer' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
+           </div> */}
+           <div className="hi-landing-banner">
+              <p className="hi-landing-banner-header">{getConfig().productName} HealthProtect</p>
+              <p className="hi-landing-banner-text">₹10 Lakh health cover @ just ₹728/m</p>
+              <p className="hi-landing-banner-text">100% additional personal accident cover</p>
+              <img className="hi-landing-banner-img" src={require(`../../assets/hi-banner-image.svg`)} alt="" />
+              <Button variant="raised"
+                size="large" color="secondary" autoFocus className="button" onClick={() => this.navigate('/group-insurance/group-health/GMC/landing')}>
+                GET INSURED
+              </Button>
+            </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
             <div className="advisory-entry-container" onClick={(e)=>this.goToAdvisory(e)}>  
