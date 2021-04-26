@@ -16,9 +16,7 @@ import Dialog, {
   DialogContentText,
 } from "material-ui/Dialog";
 import Button from "material-ui/Button";
-import back_arrow from 'assets/back_arrow.svg';
-import { IconButton } from "@material-ui/core";
-import SVG from 'react-inlinesvg';
+
 
 class CategoryList extends Component {
   constructor(props) {
