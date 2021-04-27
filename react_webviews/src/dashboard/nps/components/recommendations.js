@@ -355,9 +355,6 @@ class Recommendations extends Component {
         });
       } else {
         window.location.href = pgLink;
-        this.setState({
-          skelton: false,
-        });
       }
     }
   };
