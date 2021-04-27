@@ -1,36 +1,44 @@
-.main-container{
+.main-container {
   height: 100vh;
   overflow: hidden;
   header {
     z-index: 1300 !important;
   }
 
-  .middle-content{
+  .middle-content {
     display: flex;
     height: 100%;
     margin-left: 300px !important;
   }
 
-  .feature-container{
+  .feature-container {
     width: 640px !important;
     padding-bottom: 60px;
     overflow: auto;
     height: 100%;
-    .ContainerWrapper{
+    .ContainerWrapper {
       margin: 0px !important;
       max-width: 100% !important;
       position: relative;
       // padding-bottom: 100px !important;
-      & > header{
+      & > header {
         position: fixed;
         top: 60px;
         width: 640px !important;
         margin-left: 300px !important;
       }
+
+      #HeaderHeight {
+        .Step{
+          max-width: 640px !important;
+          margin-left: 300px !important;
+          top: 124px !important;
+        }
+      }
     }
   }
 
-  .right-content{
+  .right-content {
     width: calc(100% - 640px);
     display: grid;
     place-items: center;
@@ -38,8 +46,8 @@
   }
 }
 
-@media only screen and (min-width: 768px){  
-  .MuiModal-root{
+@media only screen and (min-width: 768px) {
+  .MuiModal-root {
     top: 60px !important;
     margin-left: 300px !important;
     position: fixed !important;
@@ -47,18 +55,21 @@
     max-width: 640px !important;
     height: initial !important;
 
-    .MuiDialog-paper{
+    .MuiDialog-paper {
       max-width: 500px !important;
       max-height: 80% !important;
     }
   }
 
-  #diy-dialog{
-    .MuiDialog-paper{
+  #diy-dialog {
+    .MuiDialog-paper {
       max-width: 100% !important;
     }
   }
-  #sdk-campaign-dialog.MuiModal-root,#referral-dialog.MuiModal-root,#feedback-campaign-dialog.MuiModal-root{
+  #sdk-campaign-dialog.MuiModal-root,
+  #referral-dialog.MuiModal-root,
+  #feedback-campaign-dialog.MuiModal-root,
+  #invest-bottom-dialog.MuiModal-root {
     top: 0px !important;
     margin-left: 0px !important;
     position: fixed !important;
@@ -67,15 +78,13 @@
     height: 100% !important;
   }
 
-
-
-  .MuiBackdrop-root{
+  .MuiBackdrop-root {
     position: absolute !important;
   }
 
   // Temp fix for the fund details screen(will be removed once we use new container)
-  .fd-container{
-    .Loader{
+  .fd-container {
+    .Loader {
       margin-left: 300px !important;
       max-width: 640px !important;
       margin-top: 56px !important;
@@ -83,18 +92,16 @@
   }
 }
 
-
-
 @media only screen and (max-width: 500px) {
-  .right-content{
+  .right-content {
     display: none;
   }
-  .main-container .feature-container{
+  .main-container .feature-container {
     width: 100% !important;
     margin-left: 0px !important;
     min-width: 100% !important;
   }
-  .main-container .feature-container .ContainerWrapper header{
+  .main-container .feature-container .ContainerWrapper header {
     width: 100% !important;
   }
 }

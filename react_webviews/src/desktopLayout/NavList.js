@@ -27,7 +27,7 @@ let data = [
     id: 'register',
     name: 'Register',
     icon: register,
-    path: '/register',
+    path: '/kyc',
   },
   {
     id: 'notification',
@@ -109,6 +109,17 @@ const NavList = (props) => {
   };
   const handleClick = ({ path, id }) => () => {
     setActivePath(id);
+    if(id === 'register'){
+      if (user.kyc_registration_v2 === "init") {
+        path = "/kyc/home";
+      } else if (user.kyc_registration_v2 !== "complete") {
+        path = "/kyc/journey";
+      } else if (user.active_investment) {
+        path = "/reports";
+      } else {
+        path = "/invest";
+      }
+    }
     if (path) {
       navigate(path);
     } else {
