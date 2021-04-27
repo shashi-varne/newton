@@ -59,6 +59,7 @@ const Cart = ({ isOpen, setCartActive, cart, setCart, ...props }) => {
           style={{
             height: "45px",
             marginTop: "15px",
+            width: "100%",
           }}
         />
       </section>

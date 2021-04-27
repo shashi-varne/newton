@@ -19,12 +19,25 @@
     display: flex;
     align-items: center;
     
-    & > div {
-      flex: 1 1 80%;
+    .recommendation-title {
       font-weight: 600;
       font-size: 16px;
       line-height: 1.6;
     }
+
+    .recommendation-how-button {
+      color: #fff;
+      background: var(--primary);
+      border-radius: 8px;
+      padding: 2px 10px;
+      letter-spacing: 1px;
+      margin-left: 10px;
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
     .edit-recommendation-funds {
       flex: 1 1 20%;
       text-align: right;
@@ -41,11 +54,14 @@
   .recommendations-total-investment {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 22px;
     padding: 10px 0px;
+    color: rgb(74, 74, 74);
+    .amount-per-month{
+      font-size: 12.75px;
+    }
   }
 }
 

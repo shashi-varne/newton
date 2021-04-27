@@ -10,6 +10,7 @@ import {
 import { navigate as navigateFunc } from "../common/functions";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import toast from "common/ui/Toast";
+import { getConfig } from "../../utils/functions";
 
 const SwitchFund = (props) => {
   const params = props?.match?.params || {};
@@ -91,7 +92,12 @@ const SwitchFund = (props) => {
     let data = { ...fund };
     data.diy_type = "reports";
     storageService().setObject(storageConstants.DIYSTORE_FUNDINFO, data);
-    navigate(getPathname.diyFundInfo);
+    navigate(
+      `/fund-details`,
+      {
+        searchParams: `${getConfig().searchParams}&isins=${fund.isin}`,
+      },
+    )
   };
 
   const switchFund = (fund) => {

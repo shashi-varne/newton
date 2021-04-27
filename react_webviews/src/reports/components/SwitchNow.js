@@ -76,6 +76,9 @@ const SwitchNow = (props) => {
       if (!obj.amount) {
         toast("Please enter amount");
         return;
+      } else if(obj.amount < fundTo.min_purchase) {
+        toast(`Min amount to switch is ${formatAmountInr(fundTo.min_purchase)}`);
+        return;
       }
       if (obj.amount === fund.switchable_amount) {
         obj.all_units = true;
@@ -184,7 +187,7 @@ const SwitchNow = (props) => {
                                 : ""
                             }
                             onChange={handleAmount(index)}
-                            disabled={isApiRunning}
+                            disable={isApiRunning}
                           />
                         </div>
                       )}

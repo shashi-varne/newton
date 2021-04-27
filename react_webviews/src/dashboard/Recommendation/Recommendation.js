@@ -249,6 +249,10 @@ const Recommendations = (props) => {
     navigate("recommendations/edit-funds");
   };
 
+  const checkHow = () => {
+    navigate("recommendations/how-we-recommend");
+  }
+
   return (
     <Container
       buttonTitle={
@@ -289,7 +293,10 @@ const Recommendations = (props) => {
         }
         <section className='recommendations-section'>
           <div className='recommendations-header'>
-            <div>Our Recommendation</div>
+            <div className="recommendation-title">Our Recommendation</div>
+            <div className="recommendation-how-button" onClick={checkHow}>
+              <span>How?</span>
+            </div>
             {funnelData.investType !== 'insta-redeem' && (
               <div onClick={editFund} className='edit-recommendation-funds'>
                 Edit
@@ -309,9 +316,11 @@ const Recommendations = (props) => {
               ))}
           </div>
           <div className='recommendations-total-investment'>
-            <div>Total Investment</div>
-
+            <div>Total investment</div>
+            <div>
             <div>{recommendations?.length ? formatAmountInr(funnelData.amount) : '₹0'}</div>
+            {funnelData.investTypeDisplay === 'sip' && <div className='amount-per-month'>per month</div>}
+            </div>
           </div>
           <div className="recommendations-disclaimers">
             <div className="recommendations-disclaimer-morning">

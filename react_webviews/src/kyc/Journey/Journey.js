@@ -3,7 +3,7 @@ import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
-import { isEmpty, storageService } from '../../utils/validators'
+import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { getPathname } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
@@ -20,6 +20,7 @@ import { nativeCallback } from '../../utils/native_callback'
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
+  const urlParams = getUrlParams(props?.location?.search)
   const stateParams = props?.location?.state;
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [aadhaarLinkDialog, setAadhaarLinkDialog] = useState(false)
@@ -559,7 +560,7 @@ const Journey = (props) => {
       kyc.dl_docs_status !== null
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
-      stateParams?.show_aadhaar ||
+      stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var kycJourneyData = initJourneyData() || []

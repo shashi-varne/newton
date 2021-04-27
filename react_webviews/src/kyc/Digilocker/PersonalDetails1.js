@@ -151,7 +151,7 @@ const PersonalDetails1 = (props) => {
       title={title}
       count={1}
       current={1}
-      total={4}
+      total={3}
     >
       <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">

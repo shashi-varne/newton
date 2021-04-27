@@ -156,7 +156,7 @@ const PersonalDetails4 = (props) => {
       title={title}
       count={type === "digilocker" ? 3 : 4}
       current={type === "digilocker" ? 3 : 4}
-      total="4"
+      total={type === "digilocker" ? 3 : 4}
     >
       <div className="kyc-nominee">
         <main>

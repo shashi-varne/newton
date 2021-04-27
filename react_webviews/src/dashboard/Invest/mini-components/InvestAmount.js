@@ -211,10 +211,10 @@ const InvestAmount = (props) => {
           </div>
           <p className='invest-amount-input-duration'>
             {(
-              investTypeDisplay !== 'sip' ||
-              funnelGoalData.itype !== 'saveforgoal'
+              investTypeDisplay === 'sip' ||
+              funnelGoalData.itype === 'saveforgoal'
              ) ? 
-              'from my savings' : 'per month'
+             'per month' : 'from my savings'
             }
           </p>
         </div>
