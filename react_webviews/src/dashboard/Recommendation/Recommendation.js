@@ -249,6 +249,10 @@ const Recommendations = (props) => {
     navigate("recommendations/edit-funds");
   };
 
+  const checkHow = () => {
+    navigate("recommendations/how-we-recommend");
+  }
+
   return (
     <Container
       buttonTitle={
@@ -289,7 +293,10 @@ const Recommendations = (props) => {
         }
         <section className='recommendations-section'>
           <div className='recommendations-header'>
-            <div>Our Recommendation</div>
+            <div className="recommendation-title">Our Recommendation</div>
+            <div className="recommendation-how-button" onClick={checkHow}>
+              <span>How?</span>
+            </div>
             {funnelData.investType !== 'insta-redeem' && (
               <div onClick={editFund} className='edit-recommendation-funds'>
                 Edit

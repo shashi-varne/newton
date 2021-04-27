@@ -1,9 +1,7 @@
+import "../../common/theme/Style.scss";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import "../../common/theme/Style.scss";
-
 import NotFound from "../../common/components/NotFound";
-
 import Landing from "./components/Landing";
 import InstaRedeem from "./components/InstaRedeem";
 import Type from "./components/InstaRedeem/Type";
@@ -25,6 +23,8 @@ import CustomGoalTarget from "./components/InvestGoal/CustomGoalTarget";
 import RiskSelect from "./components/RiskPages/RiskSelect";
 import RiskModify from "./components/RiskPages/RiskModify";
 import RiskCustomize from "./components/RiskPages/RiskCustomize";
+import HowWeRecommend from "../Recommendation/HowWeRecommend";
+
 const Invest = (props) => {
   const { url } = props.match;
   return (
@@ -73,6 +73,11 @@ const Invest = (props) => {
         exact
         path={`${url}/recommendations/edit-funds`}
         component={EditFunds}
+      />
+      <Route
+        exact
+        path={`${url}/recommendations/how-we-recommend`}
+        component={HowWeRecommend}
       />
       <Route
         exact
