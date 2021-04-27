@@ -356,7 +356,7 @@ class Result extends Component {
           classOverRideContainer="result-container-risk"
           handleClick={this.handleClick}
           edit={this.props.edit}
-          buttonTitle="Fund Recommendation"
+          buttonTitle="Invest Now"
           topIcon={this.state.params.hideRPReset !== "true" ? '' : "restart"}
           handleReset={this.showDialog}
           resetpage={this.state.params.hideRPReset !== "true"}
