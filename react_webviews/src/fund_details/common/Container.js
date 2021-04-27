@@ -276,8 +276,8 @@ export default withRouter(Container);
 //   }
 
 //   historyGoBack = (backData) => {
-//     // let fromHeader = backData ? backData.fromHeader : false;
-//     // let pathname = this.props.history.location.pathname;
+//     let fromHeader = backData ? backData.fromHeader : false;
+//     let pathname = this.props.history.location.pathname;
 //     let { params } = this.props.location;
 
 //     if (params && params.disableBack) {

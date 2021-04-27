@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
-import { initialize } from "../../functions";
+import { initialize, handleCampaignNotification, handleCampaignRedirection } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SecureInvest from "../../mini-components/SecureInvest";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
 import KycStatusDialog from "../../mini-components/KycStatusDialog";
 import KycPremiumLandingDialog from "../../mini-components/KycPremiumLandingDialog";
+import CampaignDialog from '../../mini-components/CampaignDialog';
+import { storageService } from 'utils/validators';
 import { SkeltonRect } from 'common/ui/Skelton';
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
@@ -26,8 +28,13 @@ class Landing extends Component {
       modalData: {},
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
+      openBottomSheet: false,
+      bottom_sheet_dialog_data: [],
+      isWeb: getConfig().Web
     };
     this.initialize = initialize.bind(this);
+    this.handleCampaignNotification = handleCampaignNotification.bind(this);
+    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -36,6 +43,10 @@ class Landing extends Component {
 
   onload = () => {
     this.initilizeKyc();
+    const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
+    if (!isBottomSheetDisplayed && this.state.isWeb) {
+      this.handleCampaignNotification();
+    }
   };
 
   addBank = () => {
@@ -85,6 +96,16 @@ class Landing extends Component {
     }
   };
 
+  closeCampaignDialog = () => {
+    this.setState({ openBottomSheet: false });
+  };
+
+  handleCampaign = () => {
+    this.setState({show_loader : 'page', openBottomSheet : false});
+    let campLink = this.state.bottom_sheet_dialog_data.url;
+    handleCampaignRedirection(campLink);
+  }
+
   render() {
     const {
       isReadyToInvestBase,
@@ -111,6 +132,7 @@ class Landing extends Component {
         skelton={this.state.show_loader}
         noFooter={true}
         title="Start Investing"
+        showLoader={this.state.show_loader}
       >
         <div className="invest-landing">
           {
@@ -376,6 +398,13 @@ class Landing extends Component {
             />
           )}
         </div>
+        <CampaignDialog
+          isOpen={this.state.openBottomSheet}
+          close={this.closeCampaignDialog}
+          cancel={this.closeCampaignDialog}
+          data={this.state.bottom_sheet_dialog_data}
+          handleClick={this.handleCampaign}
+        />
       </Container>
     );
   }

@@ -161,6 +161,7 @@ export const partnerConfigs = {
       bottomCards: ["nfo"],
       financialTools: ["fhc", "risk_profile"],
     },
+    navLinkOptions:{loan: true}
   },
   finity: {
     logo: "finity_white_logo.png",

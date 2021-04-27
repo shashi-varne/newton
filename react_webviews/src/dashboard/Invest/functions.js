@@ -593,3 +593,34 @@ export function handleRenderCard() {
   })
   this.setState({renderLandingCards : cards});
 }
+
+
+export function handleCampaignNotification () {
+  const notifications = storageService().getObject('campaign') || [];
+  const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
+    const target = data?.notification_visual_data?.target;
+    if (target?.length >= 1) {
+      // eslint-disable-next-line no-unused-expressions
+      target.forEach((el, idx) => {
+        if (el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
+          acc = el;
+          acc.campaign_name = data?.campaign?.name;
+        }
+      });
+    }
+    return acc;
+  }, {});
+
+  if (!isEmpty(bottom_sheet_dialog_data)) {
+    storageService().set('is_bottom_sheet_displayed', true);
+    this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
+  }
+};
+
+export function handleCampaignRedirection (url) {
+  let campLink = url;
+  // eslint-disable-next-line
+  campLink += (campLink.match(/[\?]/g) ? "&" : "?") +
+  "generic_callback=true";
+  window.location.href = campLink;
+}

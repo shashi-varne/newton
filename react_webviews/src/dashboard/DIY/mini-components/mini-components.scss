@@ -91,6 +91,9 @@
   right: 0;
   padding: 10px;
   column-gap: 35px;
+  margin-left: 300px;
+  width: calc(100% - 300px);
+  max-width: 640px;
 }
 
 .diy-cart-footer .button {

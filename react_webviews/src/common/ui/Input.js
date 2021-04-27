@@ -32,6 +32,7 @@ const Input = (props) => {
       <TextField
         inputref={props.inputref}
         error={props.error}
+        rows={props.rows}
         disabled={props.disabled}
         type={props.type}
         defaultValue={props.defaultValue}
