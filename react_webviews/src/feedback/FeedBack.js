@@ -32,7 +32,6 @@ const FeedBack = (props) => {
     try {
       setIsLoading(true);
       const data = await getFeedBackList();
-      console.log('data', data);
       const newData = data?.relevant_categories?.map((el) => {
         el.value = el.tag;
         return el;
