@@ -133,8 +133,10 @@ body[data-device="web"] {
   }
 
   .Loader {
-    max-width: var(--desktop-width);
+    // max-width: var(--desktop-width);
+    width: 100%;
     margin: 0 auto;
+    top: 60px;
   }
 
   .Container {
@@ -653,7 +655,7 @@ input#pan {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 250;
+  z-index: 99999;
 }
 
 .LoaderOverlay {

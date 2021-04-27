@@ -277,7 +277,7 @@ const DiyFundCard = ({
           <div className="diy-fund-card-info">
             <p>AUM: {Math.round(props.aum, 0)} Crs</p>
             <p>
-              Return: <span>{props[returnField[value]]}</span>
+              Return: <span>{props[returnField[value]]}%</span>
             </p>
             <RatingStar value={props.morning_star_rating} />
           </div>
