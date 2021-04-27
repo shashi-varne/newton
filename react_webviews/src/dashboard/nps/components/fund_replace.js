@@ -3,7 +3,6 @@ import Container from "../../common/Container";
 import Radio from "@material-ui/core/Radio";
 import { initialize } from "../common/commonFunctions";
 import { storageService } from "utils/validators";
-import { element } from "prop-types";
 
 class ReplaceFund extends Component {
   constructor(props) {
