@@ -40,6 +40,7 @@ const Landing = (props) => {
         setReasons(result?.survey?.question);
       }
     } catch (err) {
+      props.history.goBack();
       console.log(err);
     } finally {
       setIsLoading(false);
