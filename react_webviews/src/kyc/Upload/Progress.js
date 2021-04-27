@@ -48,6 +48,11 @@ const Progress = (props) => {
     navigate(stateMapper[key]);
   };
 
+  const goBack = () => {
+    const navigate = navigateFunc.bind(props)
+    navigate('/kyc/journey')
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -60,6 +65,7 @@ const Progress = (props) => {
         navigate(getPathname.journey);
       }}
       title="Upload documents"
+      headerData={{goBack}}
     >
       <section id="kyc-upload-progress">
         <main className="documents">
