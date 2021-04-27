@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import Radio from "@material-ui/core/Radio";
 import { initialize } from "../common/commonFunctions";
 import { storageService } from "utils/validators";
+import { element } from "prop-types";
 
 class ReplaceFund extends Component {
   constructor(props) {
@@ -40,10 +41,21 @@ class ReplaceFund extends Component {
         }
       })
 
+      const npsCurrent = storageService().getObject("nps-current") || {};
+
+      let selectedIndex = 0;
+      data.pension_houses.forEach((element, index) => {
+        if(element.pension_house_id === npsCurrent.pension_house_id) {
+          selectedIndex = index;
+          return;
+        }
+      })
+
       this.setState({
         recommended: data.recommended[0].pension_house,
         pension_houses: data.pension_houses,
         show_loader: false,
+        selectedValue: selectedIndex,
       });
       
   };

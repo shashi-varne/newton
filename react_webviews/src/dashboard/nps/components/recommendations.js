@@ -314,7 +314,7 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran } = this.state;
+    let { pran, pension_house, recommendations } = this.state;
 
     let data = {
       amount: this.state.amount,
@@ -322,12 +322,13 @@ class Recommendations extends Component {
     };
 
     if (!pran) {
-      data.pension_house_id = (!this.state.display_summary_only &&
-        this.state.pension_house &&
-        this.state.pension_house.pension_house_id) ||
-      this.state.recommendations.pension_house
-        ? this.state.recommendations.pension_house.pension_house_id
-        : "";
+      data.pension_house_id =
+      !this.state.display_summary_only &&
+      (pension_house
+        ? pension_house.pension_house_id
+        : recommendations.pension_house
+        ? recommendations.pension_house.pension_house_id
+        : "");
       data.risk = this.state.risk;
     } else {
       data.pran = pran;
@@ -363,6 +364,13 @@ class Recommendations extends Component {
     this.navigate("amount/one-time");
   };
 
+  handleReplace = () => {
+    const { recommendations, pension_house } = this.state;
+    const replaceObject = pension_house || recommendations?.pension_house;
+    storageService().setObject("nps-current", replaceObject);
+    this.navigate("fundreplace");
+  }
+
   render() {
     let {
       recommendations,
@@ -396,7 +404,7 @@ class Recommendations extends Component {
               <div
                 className="replace"
                 onClick={() => {
-                  this.navigate("fundreplace");
+                  this.handleReplace();
                 }}
               >
                 Replace
