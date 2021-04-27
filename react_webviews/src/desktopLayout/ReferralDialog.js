@@ -14,9 +14,9 @@ import Grow from '@material-ui/core/Grow';
 import { getConfig } from 'utils/functions';
 
 const isMobileDevice = getConfig().isMobileDevice;
-const user = storageService().getObject('user');
 
 const ReferDialog = ({ isOpen, close }) => {
+  const user = storageService().getObject('user');
   const [referralCode, setReferralCode] = useState('');
   const [loader, setLoader] = useState(false);
   const [message, setMessage] = useState('');
