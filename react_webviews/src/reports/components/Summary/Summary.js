@@ -149,7 +149,7 @@ const Summary = (props) => {
       <div className="reports">
         {!isEmpty(report) && (
           <>
-            <header>
+            <header className="reports-header">
               {current && (
                 <>
                   <div className="title">Current Value</div>
