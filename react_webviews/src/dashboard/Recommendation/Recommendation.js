@@ -316,9 +316,11 @@ const Recommendations = (props) => {
               ))}
           </div>
           <div className='recommendations-total-investment'>
-            <div>Total Investment</div>
-
+            <div>Total investment</div>
+            <div>
             <div>{recommendations?.length ? formatAmountInr(funnelData.amount) : '₹0'}</div>
+            {funnelData.investTypeDisplay === 'sip' && <div className='amount-per-month'>per month</div>}
+            </div>
           </div>
           <div className="recommendations-disclaimers">
             <div className="recommendations-disclaimer-morning">
