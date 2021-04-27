@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import { didMount, commonRender } from "common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listner";
+import { getConfig } from "../../utils/functions";
 
 class Container extends Component {
   constructor(props) {
@@ -60,7 +61,8 @@ class Container extends Component {
 
   render() {
     let props_base = {
-      classOverRide : 'loanMainContainer'
+      classOverRide : 'loanMainContainer',
+      classOverRideContainer: getConfig().app === 'ios' ? 'ios-container' : ''
     }
     return(
       <Fragment>
