@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import PieChart from "./piegraph";
 import Slide from "@material-ui/core/Slide";
+import { getBasePath } from "../../../utils/functions";
 
 const risk_level = ["High", "Low", "Moderate", "Moderate Low"];
 const isMobileDevice = getConfig().isMobileDevice;
@@ -338,7 +339,7 @@ class Recommendations extends Component {
       let pgLink = result.investments.pg_link;
 
       let plutus_redirect_url = encodeURIComponent(
-        window.location.origin + `/nps/redirect` + getConfig().searchParams
+        getBasePath() + `/nps/redirect` + getConfig().searchParams
       );
 
       pgLink +=
@@ -349,11 +350,14 @@ class Recommendations extends Component {
       if (this.state.display_summary_only) {
         this.setState({
           url: pgLink,
-          show_loader: false,
+          skelton: false,
           openInvestmentSummary: true,
         });
       } else {
         window.location.href = pgLink;
+        this.setState({
+          skelton: false,
+        });
       }
     }
   };

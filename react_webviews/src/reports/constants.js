@@ -23,7 +23,7 @@ export const getPathname = {
   saveforgoal: "/invest/savegoal",
   diy: "/invest/explore",
   "insta-redeem": "/invest/instaredeem",
-  npsInvestments: "/nps/investents",
+  npsInvestments: "/nps/investments",
   withdraw: "/withdraw",
   withdrawReason: "/withdraw/reason",
   reportGoals: "/reports/goals",

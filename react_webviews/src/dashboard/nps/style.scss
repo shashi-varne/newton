@@ -44,9 +44,9 @@
   margin: 20px auto;
 
   div {
-    color: rgb(79, 45, 167);
+    color: var(--primary);
     text-align: center;
-    margin-bottom: 15px;
+    padding-bottom: 30px;
     font-weight: 600;
     cursor: pointer;
   }
