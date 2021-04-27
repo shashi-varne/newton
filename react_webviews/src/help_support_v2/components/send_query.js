@@ -84,7 +84,7 @@ class SendQuery extends Component {
     let body_data = new FormData();
     body_data.set("subject", this.state.sub_category);
     body_data.set("description", this.state.value);
-    body_data.set("cf_product", "Gold");
+    body_data.set("cf_product", this.state.category);
     body_data.set("cf_category", this.state.category);
     body_data.set("cf_subcategory", this.state.sub_category);
     this.state.documents.forEach((item) => {
