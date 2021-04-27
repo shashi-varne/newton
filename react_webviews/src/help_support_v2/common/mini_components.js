@@ -4,6 +4,8 @@ import Search from "../components/search";
 import back_arrow from 'assets/back_arrow.svg';
 import { IconButton } from "@material-ui/core";
 import SVG from 'react-inlinesvg';
+import {getConfig} from 'utils/functions'
+
 
 export const MyQueries = (props) => {
   return (
@@ -12,10 +14,10 @@ export const MyQueries = (props) => {
         <div style={{ width: "75%",display:"flex",alignItems:"center" }}>
           <IconButton
             color="inherit" aria-label="Menu"
-          // onClick={}
+          onClick={props.onBackPress}
           className={props.showButton?"showButton":"hideButton"}>
             <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=black')}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (getConfig().primary))}
               src={back_arrow}
             />
           </IconButton>

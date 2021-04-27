@@ -63,7 +63,9 @@ class CategoryList extends Component {
     }
 
     if(!inputSelected) {
-      document.getElementById('input-with-icon-textfield')?.blur();
+      if(document.getElementById('input-with-icon-textfield')) {
+        document.getElementById('input-with-icon-textfield').blur();
+      }
     }
   };
 
@@ -262,6 +264,10 @@ class CategoryList extends Component {
     }
   };
 
+  onBackPress = () => {
+    nativeCallback({ action: "exit" });
+  }
+
   render() {
     let {
       faqList,
@@ -300,6 +306,7 @@ class CategoryList extends Component {
               onSearch={this.handleBlankSearch}
               componentClicked={componentClicked}
               showButton={true}
+              onBackPress={this.onBackPress}
             />
           </div>
 
