@@ -12,7 +12,12 @@ const Success = (props) => {
     navigate('/kyc/journey')
   }
   return (
-    <Container title="Share Details" buttonTitle="PROCEED" handleClick={proceed}>
+    <Container
+      title="Share Details"
+      buttonTitle="PROCEED"
+      handleClick={proceed}
+      headerData={{goBack: proceed }}
+    >
       <section id="digilocker-success">
         <div className="page-desc">
           Tap on Proceed to allow fisdom to access your following documents

@@ -54,6 +54,12 @@ const InvestAmount = (props) => {
         getMonthlyCommitmentNew(term, funnelData.corpus, funnelData.equity)
       );
     }
+    if (funnelGoalData.id === "savetax") {
+      const currentMonth = month + 1;
+      if (currentMonth > 3) {
+        setSaveTaxYear(year => year + 1);
+      }
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -63,7 +69,7 @@ const InvestAmount = (props) => {
     if (!isNaN(value)) {
       setAmount(value);
     } else {
-      setAmount(''); // TODO: are we sure we want to send empty string here?
+      setAmount('');
       setCorpus(0);
     }
   };
@@ -94,10 +100,6 @@ const InvestAmount = (props) => {
       setError(false);
     }
     if (funnelGoalData.id === "savetax") {
-      const currentMonth = month + 1;
-      if (currentMonth > 3) {
-        setSaveTaxYear(year => year + 1);
-      }
       calculateTax(funnelData?.corpus);
     } else {
       const valueOfCorpus = getCorpusValue(
