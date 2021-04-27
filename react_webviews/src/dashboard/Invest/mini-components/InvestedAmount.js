@@ -106,24 +106,27 @@ const InvestedAmount = (props) => {
           principalAmount={amount}
           isRecurring={isRecurring}
         />
-
-        <div className='invested-amount-placeholder-icons'>
-          <div className='invested-amount-placeholder-left'>
-            <img alt='withdraw_anytime_icon' src={withdraw_anytime_icon} />
-            <p>
-              Withdraw
-              <br />
-              anytime
-            </p>
-          </div>
-          <div className='invested-amount-placeholder-right'>
-            <img alt='no_lock_in_icon' src={no_lock_in_icon} />
-            <p>
-              No lock-in
-              <br />
-              period
-            </p>
-          </div>
+        <div className="invested-amount-placeholder-icons">
+          {funnelGoalData.id !== "savetax" && (
+            <>
+              <div className="invested-amount-placeholder-left">
+                <img alt="withdraw_anytime_icon" src={withdraw_anytime_icon} />
+                <p>
+                  Withdraw
+                  <br />
+                  anytime
+                </p>
+              </div>
+              <div className="invested-amount-placeholder-right">
+                <img alt="no_lock_in_icon" src={no_lock_in_icon} />
+                <p>
+                  No lock-in
+                  <br />
+                  period
+                </p>
+              </div>
+            </>
+          )}
         </div>
         <EquityDebtSlider
           equity={stockSplitVal}
