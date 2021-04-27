@@ -25,7 +25,6 @@ const headerIconMapper = {
   search: search,
   restart: restart
 }
-const campaign = storageService().getObject("campaign");
 const isMobileDevice = getConfig().isMobileDevice;
 const partnerLogo = getConfig().logo;
 const isWeb = getConfig().Web;
@@ -38,6 +37,8 @@ const Header = ({ classes, title, count, total, current, goBack,
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
+    const campaign = storageService().getObject("campaign");
+
     const handleMobileViewDrawer = () => {
       setMobileViewDrawer(!mobileViewDrawer);
     };

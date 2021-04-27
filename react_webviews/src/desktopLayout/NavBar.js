@@ -7,10 +7,10 @@ import {withRouter} from 'react-router-dom';
 import './NavBar.scss';
 import { storageService } from "../utils/validators";
 const {partner,logo} = getConfig();
-const user = storageService().getObject('user');
 
 const NavBar = (props) => {
   const navigate = navigateFunc.bind(props);
+  const user = storageService().getObject('user');
   const handleLogout =() => {
     navigate('/logout');
   }

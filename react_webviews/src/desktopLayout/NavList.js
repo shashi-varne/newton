@@ -91,8 +91,6 @@ let data = [
 ];
 const productName = getConfig().productName;
 const isMobileDevice = getConfig().isMobileDevice;
-const user = storageService().getObject('user');
-const userKyc = storageService().getObject('kyc');
 const partnerLoan = getConfig()?.navLinkOptions?.loan;
 const showReferral = !getConfig()?.referralConfig?.shareRefferal;
 
@@ -100,6 +98,8 @@ const NavList = (props) => {
   const navigate = navigateFunc.bind(props);
   const [referDialog, setReferDialog] = useState(false);
   const [activePath, setActivePath] = useState('');
+  const user = storageService().getObject('user');
+  const userKyc = storageService().getObject('kyc');
 
   useEffect(() => {
     filterNavList();
