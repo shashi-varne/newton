@@ -32,7 +32,9 @@ class Answers extends Component {
   }
 
   componentDidUpdate() {
-    this.swipeableActions.updateHeight();
+    if (Object.keys(this.state.faqs).length !== 0) {
+            this.swipeableActions.updateHeight();
+          }
   }
 
   onload = async () => {
