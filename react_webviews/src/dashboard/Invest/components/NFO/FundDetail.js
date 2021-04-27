@@ -51,7 +51,7 @@ class FundDetail extends Component {
               src={fund.amc_logo_small}
             />
             {fund.nfo_recommendation && (
-              <span className="recommended">RECOMMENDED</span>
+              <span className="nfo-recommended">RECOMMENDED</span>
             )}
             <h3>{fund.friendly_name}</h3>
             <div className="duration">
