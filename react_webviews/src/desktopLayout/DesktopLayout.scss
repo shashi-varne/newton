@@ -67,8 +67,19 @@
     height: 100% !important;
   }
 
+
+
   .MuiBackdrop-root{
     position: absolute !important;
+  }
+
+  // Temp fix for the fund details screen(will be removed once we use new container)
+  .fd-container{
+    .Loader{
+      margin-left: 300px !important;
+      max-width: 640px !important;
+      margin-top: 56px !important;
+    }
   }
 }
 
