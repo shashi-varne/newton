@@ -47,7 +47,7 @@ const EquityDebtSlider = ({
       <div className='invest-slider-range'>
         <div className='invest-slider-stock'>{equity}% Stocks</div>
         <div className='invest-slider-ratio-text'>
-          <span>slide to change</span> <span>ratio</span>
+         {!disabled && <><span>slide to change</span> <span>ratio</span></>}
         </div>
         <div className='invest-slider-bond'>{100 - equity}% Bonds</div>
       </div>
