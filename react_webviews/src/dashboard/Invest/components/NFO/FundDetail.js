@@ -73,12 +73,12 @@ class FundDetail extends Component {
             <div className="risk">
               <div className="text">
                 <b>Risk</b>
-                <div className="subtitle">{fund.riskometer}</div>
+                <div className="subtitle">{fund.riskometer_v2}</div>
               </div>
               {fund.risk_value && (
                 <img
                   alt=""
-                  src={require(`assets/risk_value_${fund.risk_value}.png`)}
+                  src={require(`assets/risk_value_${fund.risk_value_v2}.png`)}
                 />
               )}
             </div>
@@ -92,7 +92,7 @@ class FundDetail extends Component {
             </p>
             <p className="lock-in">
               <b>Lock-in: </b>
-              {getFormattedDate(fund.lockin_in)}
+              {getFormattedDate(fund.lockin_in, true)}
             </p>
             <p className="load">
               <b>Exit load: </b>
