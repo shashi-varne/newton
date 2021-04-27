@@ -32,9 +32,7 @@ class Answers extends Component {
   }
 
   componentDidUpdate() {
-    if (Object.keys(this.state.faqs).length !== 0) {
-      this.swipeableActions.updateHeight();
-    }
+    this.swipeableActions.updateHeight();
   }
 
   onload = async () => {
@@ -115,13 +113,20 @@ class Answers extends Component {
       helpful_clicked: "no",
     });
 
-    let { faqs, sub_category_id, faqDesc } = this.state;
+    let { faqs, sub_category_id } = this.state;
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
 
     this.sendEvents("next", {
       related_questions_clicked: "yes",
       related_questions_id: faq_id,
     });
+
+    this.handleDescription(faq_id);
+  };
+
+  handleDescription = async (faq_id) => {
+    let { faqDesc } = this.state;
+
     if (!faqDesc[faq_id]) {
       let result = await this.getFaqDescription(faq_id);
       faqDesc[faq_id] = result.faq;
@@ -130,10 +135,10 @@ class Answers extends Component {
         faqDesc: faqDesc,
       });
     }
-  };
+  }
 
   handleClick = async (dir) => {
-    let { index, faqs, sub_category_id, faqDesc } = this.state;
+    let { index, faqs, sub_category_id } = this.state;
 
     index = dir === "next" ? index + 1 : index - 1;
 
@@ -161,15 +166,7 @@ class Answers extends Component {
       });
     }
 
-    if (!faqDesc[faq_id]) {
-      let result = await this.getFaqDescription(faq_id);
-
-      faqDesc[faq_id] = result.faq;
-
-      this.setState({
-        faqDesc: faqDesc,
-      });
-    }
+    this.handleDescription(faq_id);
   };
 
   handleQuery = () => {
