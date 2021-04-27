@@ -1,0 +1,57 @@
+
+.risk_profiler-recommendation {
+  padding-bottom: 60px;
+
+  p {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .risk_profiler-heading {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 30px;
+    color: #0a1d32;
+    margin: 0 0 10px;
+  }
+
+  .risk_profiler-desc {
+    padding: 10px 0 30px 0;
+    font-size: 13px;
+    line-height: 21px;
+    font-weight: 400;
+    color: #767e86;
+  }
+
+  .risk_profiler-points {
+    margin-top: 30px;
+
+    .risk_profiler-points-heading {
+      padding-bottom: 20px;
+      margin-bottom: 0;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 17.78px;
+      color: #0a1d32;
+    }
+    .risk_profiler-point {
+      padding-bottom: 30px;
+      display: flex;
+      align-items: flex-start;
+
+      .risk_profiler-point-img {
+        padding-right: 20px;
+      }
+      
+      .risk_profiler-point-des {
+        font-size: 13px;
+        line-height: 22px;
+        font-weight: 400;
+        color: #767e86;
+      }
+    }
+    .risk_profiler-point:last-child {
+      padding-bottom: 0px;
+    }
+  }
+}
