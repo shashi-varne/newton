@@ -910,3 +910,8 @@ export const idfc_config = {
     ],
   },
 };
+
+export const employmentMapper = {
+  salaried: ['salaried', 4000000, 'Rs 40 lacs'],
+  self_employed: ['self employed', 900000, 'Rs 9 lacs']
+}
