@@ -26,7 +26,6 @@ import icn_critical_illness_finity from '../../../assets/icn_critical_illness_fi
 import icn_corona_fisdom from '../../../assets/icn_corona_fisdom.svg'
 import icn_corona_finity from '../../../assets/icn_corona_finity.svg'
 
-// import DiseasesSpecificPlan from '../health_insurance/diseases_specific_plan'
 
 import hdfc_logo from '../../../../src/assets/ic_hdfc_logo.svg';
 import religare_logo from '../../../../src/assets/ic_care.svg';
@@ -139,7 +138,7 @@ class HealthInsuranceLanding extends Component {
             subtitle: 'Starts from ₹50/year',
             icon: icn_dengue,
             Product_name: 'dengue insurance',
-            resume_flag: this.state.resumeFlagAll ? this.state.resumeFlagAll['DENGUE'] : false
+            resume_flag: this.state.resumeFlagAll ? this.state.resumeFlagAll['DENGUE'] : false,
           },
           {
             key: 'CORONA',
@@ -243,7 +242,7 @@ class HealthInsuranceLanding extends Component {
   handleClickEntry = async (data) => {
   let specificPlans = [ 'CRITICAL_HEALTH_INSURANCE' , 'DENGUE' , 'CORONA'  ]
    if(specificPlans.includes(data.key))  {
-     this.handleClickData(data)
+     this.handleClick(data)
      return;
    }
     if (data) {
@@ -297,44 +296,6 @@ class HealthInsuranceLanding extends Component {
 
   }
 
-  handleClickData = (data) => {
-
-    this.setState({
-      show_loader : true
-    })
-
-    let product_key = data.key ? data.key : data;
-    typeof data === 'object' ? data.insurance_type = 'Disease specific plans'  : data = {"insurance_type" : 'Disease specific plans'}
-    this.sendEvents(data);
-    var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'DENGUE', 'CORONA'];
-
-    var lead_id = '';
-    var path = '';
-    var fullPath = '';
-
-    if (product_key === 'CRITICAL_HEALTH_INSURANCE') {
-      fullPath = 'health/critical_illness/plan';
-    }
-
-    if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
-      if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
-        this.state.BHARTIAXA_APPS[product_key].length > 0) {
-        let data = this.state.BHARTIAXA_APPS[product_key][0];
-        lead_id = data.lead_id;
-
-        path = getBhartiaxaStatusToState(data);
-        if (data.status === 'complete') {
-          lead_id = '';
-        }
-      } else {
-        path = 'plan';
-      }
-      fullPath = insuranceStateMapper[product_key] + '/' + path;
-    }
-
-    window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
-    this.navigate('/group-insurance/' + fullPath);
-  }
 
   onload = async () => {
     this.setErrorData('onload');
@@ -386,6 +347,11 @@ class HealthInsuranceLanding extends Component {
 
         for (const ele of insuranceProducts) {
           ele.resume_flag = resumeFlagAll[ele.key];
+          if (ele.component) {
+            for (const item of ele.component) {
+              item.resume_flag = resumeFlagAll[item.key];
+            }
+          };
         }
 
         this.setState({
@@ -457,7 +423,7 @@ class HealthInsuranceLanding extends Component {
     return id;
   }
 
-  handleClick = (product_key, title, index, type) => {
+  handleClick = (data, index) => {
 
     let stateMapper = {
       'HEALTH_SUPER_TOPUP': 'super_topup',
@@ -470,53 +436,64 @@ class HealthInsuranceLanding extends Component {
     var lead_id = '';
     var path = '';
     var fullPath = '';
+    let type = data.type
+    let product_key = data.key ? data.key : data;
+    // props.key, props.title, index, props.type
 
     fullPath = 'health/' + stateMapper[product_key] + '/plan';
 
-    if (type = 'drop-down') {
+    if (type === 'drop-down') {
       this.setState({ value: this.state.value === index ? null : index })
       return
     }
 
-    // if ( (product_key === 'HealthInsuranceEntry' || product_key === 'HEALTH_SURAKSHA')) {
-    //   this.HealthInsuranceEntry();
-    //   return;
-    // }
-
-    // if (product_key === 'DISEASE_SPECIFIC_PLANS' || product_key === 'disease-Specific-plan' ) {
-    //   this.DISEASE_SPECIFIC_PLANS();
-    //   return;
-    // }
-    this.sendEvents('next', title ? title : '')
-
     if (product_key === 'HEALTH_SUPER_TOPUP') {
+      // this.sendEvents('next', title ? title : '')
       this.navigate('/group-insurance/' + fullPath);
+      console.log(product_key, ' product_key is good')
       return
     }
 
-    if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
-      if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
-        this.state.BHARTIAXA_APPS[product_key].length > 0) {
-        let data = this.state.BHARTIAXA_APPS[product_key][0];
-        lead_id = data.lead_id;
-        path = getBhartiaxaStatusToState(data);
-        if (data.status === 'complete') {
-          lead_id = '';
-        }
-      } else {
-        path = 'plan';
-      }
-
-      fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } else {
-      // this.navigate(this.state.redirectTermPath);
-      this.navigate('/group-insurance/term/intro');
+    if ( (product_key === 'HealthInsuranceEntry' || product_key === 'HEALTH_SURAKSHA')) {
       return;
     }
 
-    window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
-    this.navigate('/group-insurance/' + fullPath);
+    if (product_key === 'DISEASE_SPECIFIC_PLANS' || product_key === 'disease-Specific-plan' ) {
+      return;
+    }
+    // this.sendEvents('next', title ? title : '');
+
+  this.setState({
+    show_loader : true
+  })
+
+  typeof data === 'object' ? data.insurance_type = 'Disease specific plans'  : data = {"insurance_type" : 'Disease specific plans'}
+  this.sendEvents(data);
+
+
+  if (product_key === 'CRITICAL_HEALTH_INSURANCE') {
+    fullPath = 'health/critical_illness/plan';
   }
+
+  if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
+    if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
+      this.state.BHARTIAXA_APPS[product_key].length > 0) {
+      let data = this.state.BHARTIAXA_APPS[product_key][0];
+      lead_id = data.lead_id;
+
+      path = getBhartiaxaStatusToState(data);
+      if (data.status === 'complete') {
+        lead_id = '';
+      }
+    } else {
+      path = 'plan';
+    }
+    fullPath = insuranceStateMapper[product_key] + '/' + path;
+  }
+
+  window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
+  this.navigate('/group-insurance/' + fullPath);
+}
 
   handleEvent = (val) => {
     val.subtitle = val.insurance_type === 'Comprehensive health insurance' ? val.subtitle : val.Product_name

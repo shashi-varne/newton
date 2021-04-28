@@ -40,7 +40,7 @@ class MenuListDropDownClass extends Component {
 
         return (
             <div key={index}>
-                <div className='menu-list-dropdown' onClick={() => this.props.parent.handleClick(props.key, props.title, index, props.type)}>
+                <div className='menu-list-dropdown' onClick={() => this.props.parent.handleClick(props,index )}>
                     <div style={{ display: 'flex', width: '100%' }}>
                         <img src={props.icon} alt="" className='image-icon' />
                         <div className='dropdown-elements'
