@@ -42,25 +42,6 @@ class DiseasesSpecificPlan extends Component {
       }
     ];
 
-    var corona_product = {
-      key: 'CORONA',
-      title: 'Coronavirus insurance',
-      subtitle: 'Keep your savings immune to covid',
-      icon: 'icn_corona',
-      Product_name : 'coronovirus insurance',
-      resume_flag : this.props.parent.state.resumeFlagAll ? this.props.parent.state.resumeFlagAll['CORONA']  : false
-    }
-  
-    var baxa_products = this.props.parent.state.BHARTIAXA_APPS['CORONA'] || [];
-    
-    if(baxa_products.length !== 0){
-      baxa_products.forEach((item) =>{
-        if(item.status === "incomplete" && item.lead_payment_status === "payment_done"){
-          insuranceProducts.push(corona_product)
-        }
-      })
-    }
-
     if (this.state.partner_code === 'hbl') {
       let index = insuranceProducts.findIndex(obj => obj.key === "CORONA");
       insuranceProducts.splice(index, 1);

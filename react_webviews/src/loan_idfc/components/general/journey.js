@@ -393,6 +393,9 @@ class JourneyMap extends Component {
       } else if (idfc_loan_status === "idfc_1.0_accepted" || idfc_loan_status === "idfc_1.0_submitted") {
         this.get10Callback();
       } else if (idfc_loan_status === "idfc_1.0_failed") {
+        this.setState({
+          skelton: true
+        })
         this.submitApplication({}, "one", "", "eligible-loan");
       } else if (idfc_loan_status === "idfc_1.1_accepted" || idfc_loan_status === "idfc_1.1_submitted") {
         this.get11Callback();

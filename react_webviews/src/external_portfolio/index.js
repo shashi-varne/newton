@@ -15,6 +15,7 @@ import Settings from './components/settings';
 import PANSelector from './components/select_PAN';
 import CamsRequestStepsPage from './components/cams_request_steps_page';
 import CamsWebpage from './components/cams_webpage';
+import Redirect from './components/redirect';
 
 function external_portfolio(props) {
   const { url } = props.match;
@@ -33,6 +34,7 @@ function external_portfolio(props) {
           <Route path={`${url}/settings`} component={Settings} />
           <Route path={`${url}/select_pan`} component={PANSelector} />
           <Route path={`${url}/fund_holdings`} component={FundHoldings} />
+          <Route path={`${url}/redirect`} component={Redirect} />
         </Switch>
      </Fragment>
  
