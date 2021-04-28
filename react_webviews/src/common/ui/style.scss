@@ -1260,3 +1260,86 @@ label{
 .react-select__indicators{
 padding-right: 12px !important;
 }
+
+.report-card-container{
+  padding: 20px;
+  background-color: rgb(231, 248, 236);
+  border-radius: 5px;
+  p{margin: 0}
+  .status-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between ;
+    margin-bottom: 20px;
+    .status-container{
+      display: flex;
+      align-items: center;
+      font-size: 10px;
+      .status-circle{
+        margin: -2px 6px 0 0;
+        background-color: #35CB5D;
+        height: 6px;
+        width: 6px;
+        border-radius: 999px;
+      }
+      .status-text{
+        font-weight: 700;
+        color: #35CB5D;
+        letter-spacing: 0.5px;
+      }
+    }
+    .product-category{
+      font-size: 8px;
+      color: #AD95D6;
+      font-weight: bold;
+    }
+  }
+
+  .heading-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    img{
+      width: 36px;
+      height: 36px;
+      object-fit: cover;
+    }
+    .heading-title{
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #160D2E;
+    }
+    .heading-subtitle{
+      font-size: 11px;
+      font-weight: 500;
+      color: #767E86;
+    }
+  }
+  .card-info-one{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    letter-spacing: 0.3px;
+    .info-left{
+      text-align: left;
+    }
+    .info-right{
+      text-align: right;
+      span{
+        color: #767E86;
+      }
+    }
+    .info-title{
+      font-size: 12px;
+      color: #767E86;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .info-subtitle{
+      font-size: 14px;
+    }
+  }
+}

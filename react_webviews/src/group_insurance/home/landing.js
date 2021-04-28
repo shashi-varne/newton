@@ -256,6 +256,11 @@ class Landing extends Component {
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
     return;
   }
+  toToReports = () =>{
+    // this.sendEvents()
+    this.navigate('/group-insurance/common/report')
+    return;
+  }
   callBackScreen = () =>{
     this.sendEvents('next', "", "", true);
     this.navigate('/group-insurance/call-back-details');
@@ -289,6 +294,13 @@ class Landing extends Component {
             </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
+            <div className="inactive-entry-card" onClick={this.toToReports}>
+              <img alt="inactive-policy-card" src={require(`assets/${this.state.type}/policy_icon.svg`)} />
+              <div className="inactive-right">
+                <p className="inactive-title">Your policies</p>
+                <p className="inactive-subtitle">Looks like you have zero coverage</p>
+              </div>
+            </div>
             <div className="advisory-entry-container" onClick={(e)=>this.goToAdvisory(e)}>  
               <img className="advisory-entry" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt=""/>
               <p className="adivsory-card-heading">Do you have adequate insurance coverage?</p>

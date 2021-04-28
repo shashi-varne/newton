@@ -532,6 +532,37 @@
     margin: 0 5px 0 0;
   }
 }
+.report-list-container{
+  list-style-type: none;
+  padding: 0 0 0 0;
+  margin: 0 -20px 20px -20px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #D6D6D6;
+  cursor: pointer;
+  
+  li{
+    flex: 1;
+    text-align: center;
+    padding-bottom: 20px;
+    color: #161A2E;
+    font-size: 13px;
+    font-weight: 500;
+    span{
+      color: #767E86;
+      margin-left: 3px;
+    }
+  }
+  li.active{
+    border-bottom: 2px solid #4F2DA7;
+    color: #4F2DA7;
+    font-weight: 700;
+    span{
+      color: #A998D2;
+    }
+  }
+}
+
 .report-detail-header {
   display: flex;
 }
@@ -1335,7 +1366,29 @@
   }
 }
 
-
+.inactive-entry-card{
+  display: flex;
+  justify-content: left;
+  border-radius: 4.5px;
+  padding: 20px;
+  background-color: #4F2DA7;
+  cursor: pointer;
+  img, p{margin: 0}
+  
+  .inactive-right{
+    margin-left: 20px;
+    color: #F6F2FF;
+    .inactive-title{
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .inactive-subtitle{
+      font-size: 13.5px;
+      font-weight: 500;
+    }
+  }
+}
 .advisory-entry-container{
   width: 100%;
   margin: 20px 0;

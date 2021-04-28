@@ -10,6 +10,7 @@ import {
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getCssMapperReport , TitleMaper , ProviderName} from '../constants';
+import ReportCard from '../../common/ui/ReportCard';
 
 class Report extends Component {
 
@@ -498,6 +499,19 @@ class Report extends Component {
     }
   };
 
+  selectTab = (selectedTab) =>{
+    var target = document.getElementById(`${selectedTab}`);
+    if(target){
+      target.classList.add('active');
+      var tabs = document.querySelectorAll('[data-tab-target]')
+      tabs.forEach((tab) =>{
+        if(tab.id !== selectedTab){
+          tab.classList.remove('active');
+        }
+      })
+    }
+  }
+
   render() {
     return (
       <Container
@@ -510,6 +524,14 @@ class Report extends Component {
         classOverRideContainer="report"
         skelton={this.state.skelton}
       >
+        <ul className="report-list-container">
+          <li onClick={()=>this.selectTab('#active')} id="#active" data-tab-target="tab-element" >Active<span>(1)</span></li>
+          <li onClick={()=>this.selectTab('#pricing')} id="#pricing" data-tab-target="tab-element">Pending<span>(0)</span></li>
+          <li onClick={()=>this.selectTab('#about')} id="#about" data-tab-target="tab-element">Inactive<span>(0)</span></li>
+        </ul>
+
+        <ReportCard/>
+        <div style={{marginBottom: '100px'}}></div>
         {this.state.reportData.map(this.renderReportCards)}
         {this.state.loading_more && <div className="loader">
           Loading...
