@@ -216,7 +216,6 @@ class StarAddress extends Component {
         }
       }
 
-      console.log(body)
       var keys_to_add = ['addr_line1', 'addr_line2', 'pincode', 'city', 'area', 'state'];
       var current_state = {}
 

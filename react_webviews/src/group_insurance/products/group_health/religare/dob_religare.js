@@ -209,7 +209,6 @@ class GroupHealthPlanDobReligare extends Component {
                 var current_state = {}
                 current_state['account_type'] = post_body['account_type'];
                 for(var x in post_body.member_details){
-                    console.log(x)
                     current_state[`${x}`] = post_body.member_details[x]['dob'];
                 }
                 var previousData = groupHealthPlanData.list_previous_data || {};
@@ -220,7 +219,6 @@ class GroupHealthPlanDobReligare extends Component {
                     if(!sameData || isEmpty(groupHealthPlanData.plan_list)){
                         this.getPlanList();
                     }else{
-                        console.log('second')
                         this.navigate('plan-list')
                     }
                 })

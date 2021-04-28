@@ -69,7 +69,7 @@ class GroupHealthPlanAddOns extends Component {
     onload = async () => {
         let cta_premium = this.state.groupHealthPlanData.post_body.premium || this.state.bottomButtonData.leftSubtitleUnformatted;
         this.updateBottomPremiumAddOns(cta_premium);
-        var add_ons_data = this.state.groupHealthPlanData['plan-select-add-ons'];
+        var add_ons_data = this.state.groupHealthPlanData[this.state.screen_name];
 
 
         this.setState({
@@ -271,7 +271,7 @@ class GroupHealthPlanAddOns extends Component {
             current_state
         }, ()=>{
             var sameData = compareObjects(Object.keys(current_state), current_state, groupHealthPlanData.previous_add_ons_data);
-            if(!sameData || isEmpty(groupHealthPlanData['plan-select-cover-period'])){
+            if(!sameData || isEmpty(groupHealthPlanData['cover_period_screen'])){
                 this.getCoverPeriodData();
             }else{
                 this.navigate('plan-select-cover-period')

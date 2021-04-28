@@ -70,7 +70,6 @@ class GroupHealthPlanSelectCity extends Component {
         for(var x in groupHealthPlanData.post_body.member_details){
             current_state[`${x}`] = groupHealthPlanData.post_body.member_details[x]['dob'];
         }
-        console.log(current_state)
 
         var previousData = groupHealthPlanData.list_previous_data || {};
         var sameData = compareObjects(Object.keys(current_state), current_state, previousData)
@@ -80,7 +79,6 @@ class GroupHealthPlanSelectCity extends Component {
             if(!sameData || isEmpty(groupHealthPlanData.plan_list)){
                 this.checkCity(this.state.city, true, this.state.suggestions_list);
             }else{
-                console.log('second')
                 this.navigate('plan-list')
             }
         })

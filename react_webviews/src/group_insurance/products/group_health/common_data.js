@@ -370,7 +370,6 @@ export async function getApplicationDetails(application_id, providerConfig) {
 }
 
 export function checkCity(city, proceed, suggestions_list){
-    console.log('city', city)
     if(!city) {
         if(proceed) {
             this.setState({
@@ -697,7 +696,7 @@ export async function getAddOnsData(){
                     add_ons_data[1].default_premium = add_ons_data[1].price[0].premium;
                     add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].name;
                     
-                    groupHealthPlanData['plan-select-add-ons'] = add_ons_data;
+                    groupHealthPlanData['add_ons_screen'] = add_ons_data;
                     groupHealthPlanData['add_ons_previous_data'] = this.state.current_state;
                     this.setLocalProviderData(groupHealthPlanData);
                     this.navigate('plan-select-add-ons')
@@ -758,7 +757,7 @@ export async function getCoverPeriodData(){
                     var resultData = res.pfwresponse.result;
                     
                     if (res.pfwresponse.status_code === 200){
-                        groupHealthPlanData['plan-select-cover-period']  = resultData;
+                        groupHealthPlanData['cover_period_screen']  = resultData;
                         
                         if(this.state.screen_name === 'cover_type_screen'){
                             groupHealthPlanData.type_of_plan = type_of_plan;

@@ -282,11 +282,7 @@ class GroupHealthPlanDob extends Component {
             this.setState({
                 current_state
             },()=>{
-                console.log(current_state)
-                console.log(groupHealthPlanData.plan_list_current_state)
-                
                 var sameData = compareObjects( Object.keys(current_state),current_state, groupHealthPlanData.plan_list_current_state);
-                console.log('same', sameData)
                 if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
                     this.getPlanDetails();
                     return;

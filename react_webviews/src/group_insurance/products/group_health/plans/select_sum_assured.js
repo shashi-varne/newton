@@ -35,7 +35,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
     onload = async() =>{
         
         var groupHealthPlanData = this.state.groupHealthPlanData;
-        var resultData = groupHealthPlanData.sum_assured_screen;
+        var resultData = groupHealthPlanData[this.state.screen_name];
         
         var optionsList = []
             for(var x of resultData.premium_details){
@@ -79,7 +79,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     "product": this.state.providerConfig.provider_api,
                     "flow": this.state.insured_account_type || '',
                     "screen_name": 'select sum insured',
-                    'sum_assured' : groupHealthPlanData.plan_selected.premium_data.length > 0 && this.state.selectedIndex ? groupHealthPlanData.plan_selected.premium_data[selectedIndex].sum_insured : ''
+                    'sum_assured' : this.state.selectedIndex >= 0 ? this.state.premium_data[this.state.selectedIndex].sum_insured : ''
                 }
             };
             
@@ -115,8 +115,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         let post_body = groupHealthPlanData.post_body;
         var previousIndex = groupHealthPlanData.selectedIndexSumAssured;
         
-        
-        if(this.state.selectedIndex !== previousIndex){
+        if(this.state.selectedIndex !== previousIndex) {
 
             this.setErrorData('submit')
             let error = "";
@@ -135,13 +134,13 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
             if(provider === 'HDFCERGO' && account_type === 'self'){
                 
-                next_state = 'plan-select-cover-period'
+                next_state = 'cover_period_screen'
                 allowed_post_body_keys.push('city')
                 body['floater_type'] = 'non_floater'
             }else if(provider === 'RELIGARE' && account_type === 'self'){
                 groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
                 this.setLocalProviderData(groupHealthPlanData)
-                next_state = 'plan-select-add-ons'
+                next_state = 'add_ons_screen'
                 var current_state = {}
                 var keys_to_check = ['account_type', 'si', 'plan_id'];
                 for(var x of keys_to_check){
@@ -151,7 +150,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     current_state
                 }, ()=>{
                     var sameData = compareObjects(Object.keys(current_state), current_state, groupHealthPlanData.add_ons_previous_data);
-                    if(!sameData || isEmpty(groupHealthPlanData['plan-select-add-ons'])){
+                    if(!sameData || isEmpty(groupHealthPlanData['add_ons_screen'])){
                         this.getAddOnsData();
                     }else{
                         this.navigate('plan-select-add-ons')
@@ -159,10 +158,10 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 })
                 return;    
             }else if((provider === 'HDFCERGO' || provider === 'RELIGARE') && account_type !== 'self'){
-                next_state = 'plan-select-floater'
+                next_state = 'cover_type_screen'
                 allowed_post_body_keys.push('city')
             }else if(provider === 'GMC'){
-                next_state = 'plan-payment-frequency'
+                next_state = 'plan_payment_frequency'
             }
             
             for(let key of allowed_post_body_keys){
@@ -177,8 +176,8 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     groupHealthPlanData[next_state] = resultData;
                     groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
                     if(groupHealthPlanData.account_type !== 'self'){
-                        groupHealthPlanData.selectedIndexFloater = 0;
-                        groupHealthPlanData.selectedIndexCover = 0;
+                        groupHealthPlanData.selectedIndexFloater = "";
+                        groupHealthPlanData.selectedIndexCover = "";
                         groupHealthPlanData.type_of_plan = ''
                     }
                     if(provider === 'GMC'){

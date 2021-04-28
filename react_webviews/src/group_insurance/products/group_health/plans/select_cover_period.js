@@ -12,6 +12,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         this.state = {
             ctaWithProvider: true,
             premium_data: [],
+            screen_name: 'cover_period_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
@@ -25,7 +26,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
     onload = async() =>{
         
-        var resultData = this.state.groupHealthPlanData['plan-select-cover-period'];
+        var resultData = this.state.groupHealthPlanData[this.state.screen_name];
         let type_of_plan = this.state.groupHealthPlanData.post_body.floater_type;
         
         this.setState({

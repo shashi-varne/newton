@@ -51,7 +51,7 @@ class GroupHealthPlanSelectFloater extends Component {
             }
 
             let total_number = post_body.adults + post_body.children;
-            let resultData = groupHealthPlanData['plan-select-floater'];
+            let resultData = groupHealthPlanData[this.state.screen_name];
 
             let premium_data_wf = resultData.premium_details['floater'][0];
             let premium_data_nf = resultData.premium_details['non_floater'][0];
@@ -141,7 +141,7 @@ class GroupHealthPlanSelectFloater extends Component {
                     current_state
                 }, ()=>{
                     var sameData = compareObjects(Object.keys(current_state), current_state, groupHealthPlanData.add_ons_previous_data)
-                    if(!sameData || isEmpty(groupHealthPlanData['plan-select-add-ons'])){
+                    if(!sameData || isEmpty(groupHealthPlanData['add_ons_screen'])){
                         this.getAddOnsData();
                     }else{
                         this.navigate('plan-select-add-ons')
@@ -156,10 +156,6 @@ class GroupHealthPlanSelectFloater extends Component {
                 this.setLocalProviderData(groupHealthPlanData)
                 this.navigate('plan-select-cover-period')   
             }
-            
-           
-
-        //    this.navigate(this.state.next_screen || 'plan-select-cover-period');
        }
        choosePlan = (index, props) => {
            if(props.key === "non_floater" && this.state.disableFloaterOption){

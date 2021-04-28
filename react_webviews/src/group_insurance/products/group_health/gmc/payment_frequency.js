@@ -38,7 +38,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
 
     onload = async() =>{
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        var resultData = groupHealthPlanData['plan-payment-frequency']; 
+        var resultData = groupHealthPlanData[this.state.screen_name]; 
         var optionsList = []
         for(var x of resultData.premium_details){
             var temp = {

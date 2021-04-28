@@ -49,6 +49,11 @@ class GroupHealthSelectInsureType extends Component {
 
     groupHealthPlanData.eldest_member = ''; //reset
     groupHealthPlanData.eldest_dob = ''; //reset
+    //reset
+    let keys_to_empty = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
+    for(var x of keys_to_empty){
+        groupHealthPlanData[x] = ""
+    }
 
     let post_body = groupHealthPlanData.post_body || {};
 

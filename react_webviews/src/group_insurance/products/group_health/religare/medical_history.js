@@ -270,7 +270,6 @@ class GroupHealthPlanMedicalHistory extends Component {
 
 
       this.sendEvents("next");     
-      console.log(body)
       var current_state = {}
       for(var x in body.answers){
         for(var y of body.answers[x].medical_history_details){
