@@ -7,6 +7,7 @@
 .RadioButton.unchecked label {
   background: #fff;
   border: 1px solid #e6e6e6;
+  color: #161A2E;
 }
 .RadioButton.checked label {
   color: #fff;
@@ -71,6 +72,12 @@
 }
 .Flex .radio-btn-group {
   flex: 1;
+  height: 36px;
+}
+
+.radio-btn-group .inside-text{
+  font-size: 13px;
+  font-weight: normal;
 }
 .MobileGrid {
   display: flex;
@@ -527,7 +534,7 @@ input.default-otp-input {
     font-size: 14px;
   }
 
-  .completed-icon img {
+  .completed-icon {
     width: 14px;
     margin: 4px 0 0 8px;
   }
@@ -745,6 +752,10 @@ body[data-device="mobile"] {
     margin-top: 0px !important;
     height: auto;
   }
+}
+
+.MuiGrid-grid-xs-7{
+  min-width: 210px;
 }
 
 .MuiMenuItem-root {
@@ -1100,11 +1111,39 @@ body[data-device="mobile"] {
     opacity: 0.7;
   }
 }
+.generic-button-outlined {
+  color: var(--secondary) !important;
+  background-color: white !important;
+  border: 1px solid var(--secondary) !important;
+}
+.generic-button-raised {
+  color: white;
+  background-color: var(--secondary);
+}
+.generic-button-textonly {
+  color: var(--secondary) !important;
+  background-color: white !important;
+  font-weight: bold !important;
+  width: fit-content !important;
+  justify-content: end !important;
+}
 
 .label{
   position: relative;
 }
 
+.generic-button-raised {
+  color: white;
+  background-color: var(--secondary);
+}
+
+.Toastify__toast{
+  min-height: 40px !important;
+  margin: 0 20px;
+  border-radius: 20px !important;
+  bottom: 120px !important;
+  text-align: center;
+}
 .react-select-container{
   border: none !important;
   // border-bottom: 1px solid #D6D6D6 !important;

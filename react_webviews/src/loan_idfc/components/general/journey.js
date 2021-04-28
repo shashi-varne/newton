@@ -67,7 +67,7 @@ const journeyMapper2 = {
   },
   "idfc_1.1_submitted": {
     index: "2",
-    next_state: "loan-requirement-details"
+    next_state: "loan-eligible"
   },
   "idfc_1.1_accepted": {
     index: "2",
@@ -107,7 +107,22 @@ const journeyMapper2 = {
   },
   application_submitted: {
     index: "4",
-  }
+  },
+  underwriting: {
+    index: "4",
+  },
+  verification: {
+    index: "4",
+  },
+  sanctioned: {
+    index: "4",
+  },
+  pre_disbursal_stage: {
+    index: "4",
+  },
+  disbursal: {
+    index: "4",
+  },
 };
 class JourneyMap extends Component {
   constructor(props) {
@@ -378,6 +393,9 @@ class JourneyMap extends Component {
       } else if (idfc_loan_status === "idfc_1.0_accepted" || idfc_loan_status === "idfc_1.0_submitted") {
         this.get10Callback();
       } else if (idfc_loan_status === "idfc_1.0_failed") {
+        this.setState({
+          skelton: true
+        })
         this.submitApplication({}, "one", "", "eligible-loan");
       } else if (idfc_loan_status === "idfc_1.1_accepted" || idfc_loan_status === "idfc_1.1_submitted") {
         this.get11Callback();

@@ -150,7 +150,7 @@ body[data-device="web"] {
   }
 
   .FlexItem2-withProvider-footer {
-    margin: 0 10px 0 10px;
+    margin: 0 10px 0 0;
   }
 
   .FlexItem1-withProvider-footer .text-block-1 {
@@ -213,7 +213,7 @@ body[data-device="web"] {
 
 .Container {
   padding: 20px 20px;
-  overflow: visible !important;  //For Drop-down to appear this changes was done as the container was hiding the drop-down
+  // overflow: visible !important;  //For Drop-down to appear this changes was done as the container was hiding the drop-down
   /* margin-bottom: 60px;
   padding-bottom: 20px !important;  */
   background-color: #fff;
@@ -1115,19 +1115,54 @@ $header-title-font-size: 20px;
 
 .common-top-page-subtitle {
   color: #767e86;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   margin: -10px 0 30px 0px;
   line-height: 1.6;
 }
 
+
+.health-insurance-title-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 10px;
+  img{
+    margin: 0;
+    align-self: flex-start;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+.health-landing-covers-title{
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 18px;
+}
+
+.common-top-page-title-dark{
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #160D2E;
+  margin-bottom: 17px;
+}
 .common-top-page-subtitle-dark {
   color: #102f50;
   font-size: 16px;
-  font-weight: 500;
-  margin: -10px 0 30px 0;
-  line-height: 1.6;
+  font-weight: 700;
+  margin: -8px 0 0px 0;
+  line-height: 19px;
 }
+.common-top-page-subtitle-light{
+  color: #767E86;
+  font-size: 13px;
+  margin-top: -10px;
+}
+
 
 .common-how-steps {
   margin: 50px 0 40px 0;
@@ -1141,7 +1176,7 @@ $header-title-font-size: 20px;
   }
   .top-title {
     color: #0a1c32;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
   }
   .top-icon {
@@ -1271,7 +1306,7 @@ $header-title-font-size: 20px;
   .common-faqs-tile {
     border-bottom: 1px solid #d7d4d4;
     cursor: pointer;
-    padding: 5px 0 5px 0;
+    padding: 5px 18px 5px 0;
   }
 
   .common-faqs-tile:last-child{
@@ -1284,6 +1319,9 @@ $header-title-font-size: 20px;
     margin: 10px 0 10px 0;
     color: WorkSans-Regular_Medium;
     font-weight: 500;
+    .top-icon{
+      margin-left: 25px;
+    }
   }
   .subtitle {
     color: #767e86;
@@ -1314,39 +1352,39 @@ $header-title-font-size: 20px;
 
 .FlexItem2-withProvider-footer {
   flex: 1;
-  margin: 0 10px 0 0;
 }
 
 .FlexItem1-withProvider-footer .text-block-1 {
   color: #0a1c32;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
   text-align: left;
   text-overflow: ellipsis;
   white-space: break-spaces;
   overflow: hidden;
   width: 95%;
+  margin-bottom: 3px;
 }
 .FlexItem1-withProvider-footer .text-block {
   width: 100%;
+  margin-left: 10px;
 }
 
 .FlexItem1-withProvider-footer .text-block-2 {
   color: #0a1d32;
-  font-size: 16px;
+  font-size: 15px;
   text-align: left;
   /* padding: 5px 0 0 0; */
 }
 
 .FlexItem1-withProvider-footer .text-block-2-img {
-  margin: 0px 5px 0 0;
+  margin: 0px 0 0 5px;
   vertical-align: middle;
 }
 
 .FlexItem1-withProvider-footer .image-block {
   /* margin: 5px 5px 10px 3px;
   height: 48px; */
-  margin: 0px 9px 0px 3px;
 }
 
 .FlexItem2-withProvider-footer button {
@@ -1667,6 +1705,58 @@ $header-title-font-size: 20px;
   object-fit: cover;
 }
 
+
+.what-is-covered {
+  color: #161A2E;
+  padding: 10px 10px 10px 0;
+  border-radius: 4px;
+  margin: 10px 0 0 0;
+  cursor: pointer;
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    height: 30px;
+    margin-left: 20px;
+    padding-left: 0;
+  }
+
+  .wic-title {
+    font-size: 13px;
+    font-weight: bold;
+  }
+  
+  .content {
+    margin: 20px 30px 0 20px;
+    padding-left: 0;
+  }
+
+  
+
+  .wic-tile {
+    display: flex;
+    align-items: baseline;
+    margin: 15px 0 10px 5px;
+    font-size: 12px;
+      font-weight: 400;
+      .circle {
+        min-width: 8px;
+        min-height: 8px;
+        border-radius: 999px;
+        background-color: #161A2E;
+      }
+      .wic-tile-right {
+        margin: 0 0 0 10px;
+        font-size: 13px;
+        text-align: left;
+        color: #161A2E;
+      }
+  }
+  .svg-img{
+    margin-right: 15px;
+  }
+}
 // --Iframe Container CSS Below--:
 .childblockiframe{
   display: flex;

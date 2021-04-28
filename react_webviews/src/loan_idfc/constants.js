@@ -846,7 +846,7 @@ export const idfc_config = {
             subtitle: "Should at least be 25 years of age",
           },
           {
-            icon: "icn_b3_m",
+            icon: "ic_input_65",
             subtitle:
               "Maximum age at the time of loan maturity should not be >65 years",
           },
@@ -910,3 +910,8 @@ export const idfc_config = {
     ],
   },
 };
+
+export const employmentMapper = {
+  salaried: ['salaried', 4000000, 'Rs 40 lacs'],
+  self_employed: ['self employed', 900000, 'Rs 9 lacs']
+}
