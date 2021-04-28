@@ -98,11 +98,11 @@ const FundType = (props) => {
   const type = props.match.params?.type.toLowerCase()
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [cartActive, setCartActive] = useState(false)
-  const trendingFunds = storageService().getObject('diystore_trending')
-  const categories = storageService().getObject('diystore_categoryList')
+  const trendingFunds = storageService().getObject('diystore_trending') || [];
+  const categories = storageService().getObject('diystore_categoryList') || [];
   const { sub_categories } = categories?.find(
     (el) => el.category.toLowerCase() === type
-  )
+  ) || [];
   return (
     <Container
       classOverRIde="pr-error-container"

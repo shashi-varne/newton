@@ -4,12 +4,23 @@
 }
 
 .checkout-invest-type {
-  display: flex;
-  align-items: center;
-  column-gap: 10px;
   padding: 15px;
   margin: -20px;
   background: #f8f8f8;
+
+  .invest-type-title {
+    font-size: 20px;
+    color: #160d2e;
+    font-weight: 600;
+    margin: 10px;
+    padding-bottom: 6px;
+  }
+
+  .checkout-invest-type-cards {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+  }
 
   .item {
     text-align: center;

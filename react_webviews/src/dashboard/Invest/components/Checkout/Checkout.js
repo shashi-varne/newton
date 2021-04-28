@@ -58,6 +58,9 @@ class Checkout extends Component {
       if (fund) {
         fundsData.push(fund);
         fundsData.forEach(() => form_data.push({}));
+        fundsData = fundsData.map((data) => {
+          return { ...data, allow_purchase: { sip: false, onetime: false } };
+        });
         this.setState(
           { fundsData: fundsData, form_data: form_data, ctc_title },
           () => this.getPurchaseLimit(fund.isin)
@@ -79,6 +82,9 @@ class Checkout extends Component {
       if (!fundsData || fundsData?.length < 1) {
         return;
       }
+      fundsData = fundsData.map((data) => {
+        return { ...data, allow_purchase: { sip: false, onetime: false } };
+      });
       fundsData.forEach(() => form_data.push({}));
       let fundsArray = storageService().getObject(FUNDSLIST);
       let isins = this.getIsins(fundsData);
@@ -146,9 +152,13 @@ class Checkout extends Component {
     return isinArr.join(",");
   };
 
+  getAllowedFunds = (funds, investType) => {
+    return funds.filter((data) => data.allow_purchase[investType]);
+  };
+
   handleClick = () => {
-    let { fundsData, type } = this.state;
-    let allowedFunds = fundsData.filter((data) => data.allow_purchase);
+    let { fundsData, type, investType } = this.state;
+    let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (fundsData.length === 0 || allowedFunds.length === 0) {
       this.props.history.goBack();
       return;
@@ -163,9 +173,7 @@ class Checkout extends Component {
       }
     });
     if (submit) {
-      this.setState({ totalAmount: totalAmount }, () =>
-        this.goNext()
-      );
+      this.setState({ totalAmount: totalAmount }, () => this.goNext());
     } else {
       if (type === "nfo") toast("Please enter valid amount");
       else toast("Please fill in all the amount field(s).");
@@ -233,7 +241,7 @@ class Checkout extends Component {
       renderData,
       dialogStates,
     } = this.state;
-    let allowedFunds = fundsData.filter((data) => data.allow_purchase) || [];
+    let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
     return (
       <Container
@@ -252,37 +260,42 @@ class Checkout extends Component {
               marginTop: type === "nfo" && "0",
             }}
           >
-            {renderData.map((data, index) => {
-              return (
-                <div
-                  key={index}
-                  id={data.value}
-                  onClick={this.handleChange()}
-                  className={
-                    investType === data.value ? "selected item" : "item"
-                  }
-                >
-                  {investType === data.value && (
-                    <img alt="" src={require(`assets/${data.icon}`)} />
-                  )}
-                  {investType !== data.value && (
-                    <img
-                      id={data.value}
-                      alt=""
-                      src={require(`assets/${data.icon_light}`)}
-                    />
-                  )}
-                  <h3 id={data.value}>{data.name}</h3>
-                  {investType === data.value && (
-                    <img
-                      className="icon"
-                      alt=""
-                      src={require(`assets/${data.selected_icon}`)}
-                    />
-                  )}
-                </div>
-              );
-            })}
+            {type === "diy" && (
+              <div className="invest-type-title">Select investment plan</div>
+            )}
+            <div className="checkout-invest-type-cards">
+              {renderData.map((data, index) => {
+                return (
+                  <div
+                    key={index}
+                    id={data.value}
+                    onClick={this.handleChange()}
+                    className={
+                      investType === data.value ? "selected item" : "item"
+                    }
+                  >
+                    {investType === data.value && (
+                      <img alt="" src={require(`assets/${data.icon}`)} />
+                    )}
+                    {investType !== data.value && (
+                      <img
+                        id={data.value}
+                        alt=""
+                        src={require(`assets/${data.icon_light}`)}
+                      />
+                    )}
+                    <h3 id={data.value}>{data.name}</h3>
+                    {investType === data.value && (
+                      <img
+                        className="icon"
+                        alt=""
+                        src={require(`assets/${data.selected_icon}`)}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
           <div className="cart-items">
             {fundsData && fundsData.length === 0 && (
@@ -325,7 +338,7 @@ class Checkout extends Component {
                         pattern="[0-9]*"
                       />
                     </div>
-                    {!fund.allow_purchase && (
+                    {!fund["allow_purchase"][investType] && (
                       <div className="disabled">
                         <div className="text">This fund is not supported</div>
                       </div>
