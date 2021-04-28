@@ -6,7 +6,7 @@ import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import { nfoData } from "../../constants";
 import TermsAndCond from "../../../mini-components/TermsAndCond";
-import { CATEGORY, FUNDSLIST, SUBCATEGORY, CART } from "../../../DIY/constants";
+import { CATEGORY, SUBCATEGORY, CART } from "../../../DIY/constants";
 import PennyVerificationPending from "../../mini-components/PennyVerificationPending";
 import InvestError from "../../mini-components/InvestError";
 import InvestReferralDialog from "../../mini-components/InvestReferralDialog";
@@ -86,7 +86,6 @@ class Checkout extends Component {
         return { ...data, allow_purchase: { sip: false, onetime: false } };
       });
       fundsData.forEach(() => form_data.push({}));
-      let fundsArray = storageService().getObject(FUNDSLIST);
       let isins = this.getIsins(fundsData);
       if (partner_code === "bfdlmobile") {
         renderData = renderData.map((data) => {
@@ -98,7 +97,6 @@ class Checkout extends Component {
           fundsData: fundsData,
           categoryName: categoryName,
           schemeType: schemeType,
-          fundsArray: fundsArray,
           form_data: form_data,
           renderData: renderData,
           ctc_title: ctc_title,
@@ -229,6 +227,17 @@ class Checkout extends Component {
     }
   };
 
+  deleteFund = (index) => {
+    let { fundsData } = this.state;
+    fundsData.splice(index, 1);
+    const cartCount = fundsData.length;
+    this.setState({
+      fundsData: fundsData,
+    });
+    storageService().setObject("diystore_cart", fundsData);
+    storageService().set("diystore_cartCount", cartCount);
+  };
+
   render() {
     let {
       form_data,
@@ -316,7 +325,7 @@ class Checkout extends Component {
                         {type === "diy" && (
                           <span>
                             <img
-                              onClick={() => this.deleteFund(fund, index)}
+                              onClick={() => this.deleteFund(index)}
                               className="icon"
                               alt=""
                               src={require(`assets/delete_new.png`)}

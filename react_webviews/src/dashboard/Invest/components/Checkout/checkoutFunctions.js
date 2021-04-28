@@ -12,7 +12,6 @@ import { navigate } from "../../functions";
 const errorMessage = "Something went wrong!";
 export async function initializeComponentFunctions() {
   this.navigate = navigate.bind(this);
-  this.deleteFund = deleteFund.bind(this);
   this.checkLimit = checkLimit.bind(this);
   this.goNext = goNext.bind(this);
   this.proceedInvestment = proceedInvestment.bind(this);
@@ -26,20 +25,6 @@ export async function initializeComponentFunctions() {
   });
   if (this.onload) this.onload();
 }
-
-export const deleteFund = (item, index) => {
-  let { fundsData, cartCount } = this.state;
-  let fundName = item.legalName || item.legal_name;
-  fundsData.splice(index, 1);
-  cartCount = fundsData.length;
-  this.setState({
-    fundName: fundName,
-    fundsData: fundsData,
-    cartCount: cartCount,
-  });
-  storageService().setObject("diystore_cart", fundsData);
-  storageService().set("diystore_cartCount", fundsData.length);
-};
 
 export async function getNfoPurchaseLimit(data) {
   this.setState({ show_loader: true });
