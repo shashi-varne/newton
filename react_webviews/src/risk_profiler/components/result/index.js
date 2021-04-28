@@ -47,10 +47,10 @@ class Result extends Component {
 
     return urlParams;
   }
-
+  
   async componentDidMount() {
+    storageService().setObject('useNewFlow', this.props.useNewFlow);
     try {
-
       // let score = JSON.parse(window.sessionStorage.getItem('score'));
       const res = await Api.get('/api/risk/profile/user/recommendation');
       const score = get(res, 'pfwresponse.result.score');
@@ -76,7 +76,6 @@ class Result extends Component {
           show_loader: false,
         });
       } else {
-        storageService().setObject('useNewFlow', this.props.useNewFlow);
         this.navigate('intro', true);
       }
     } catch (err) {
