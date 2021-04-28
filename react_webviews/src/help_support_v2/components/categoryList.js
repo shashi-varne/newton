@@ -33,7 +33,8 @@ class CategoryList extends Component {
       isApiRunning: false,
       componentClicked: false,
       noResults: false,
-      inputSelected: false
+      inputSelected: false,
+      kyc_status:""
     };
     this.initialize = initialize.bind(this);
     this.getAllCategories = getAllCategories.bind(this);
@@ -83,6 +84,7 @@ class CategoryList extends Component {
 
     this.setState({
       categoryList: categoryList,
+      kyc_status: result.kyc_status
     });
   };
 
@@ -108,6 +110,7 @@ class CategoryList extends Component {
           screen_name: "category",
           category_clicked: data.card_name || "no",
           my_queries_clicked: data.my_queries_clicked || "no",
+          kyc_status: this.state.kyc_status
         },
       };
     }
