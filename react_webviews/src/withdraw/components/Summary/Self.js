@@ -49,7 +49,6 @@ const SelfSummary = (props) => {
       const result = await redeemOrders('manual', {
         investments: [{ itype, subtype, allocations }],
       })
-      console.log(result)
       if (result?.resend_redeem_otp_link && result?.verification_link) {
         navigate('verify', { state:{...result} })
         return

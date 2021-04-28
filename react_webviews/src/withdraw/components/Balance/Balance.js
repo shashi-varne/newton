@@ -97,25 +97,25 @@ const Balance = (props) => {
             <div className="report-header">
               <div className="title">Withdrawable Balance</div>
               <div className="amount">
-                ₹ {balance?.balance?.toLocaleString('en-IN') || 0}
+                {formatAmountInr(balance?.balance) || 0}
               </div>
               <div className="withdrawable-tile">
                 <div className="tile">
                   <div className="tile-text">Total Balance</div>
                   <div className="tile-amount">
-                  ₹ {balance?.total_balance?.toLocaleString('en-IN') || 0}
+                    {formatAmountInr(balance?.total_balance) || 0}
                   </div>
                 </div>
                 <div className="tile">
                   <div className="tile-text">Pending Switch</div>
                   <div className="tile-amount">
-                    ₹ {balance?.switch_pending_amount?.toLocaleString('en-IN') || 0}
+                    {formatAmountInr(balance?.switch_pending_amount) || 0}
                   </div>
                 </div>
                 <div className="tile">
                   <div className="tile-text">Pending Redemption</div>
                   <div className="tile-amount">
-                    ₹ {balance?.redeem_pending_amount?.toLocaleString('en-IN') || 0}
+                    {formatAmountInr(balance?.redeem_pending_amount)|| 0}
                   </div>
                 </div>
               </div>
