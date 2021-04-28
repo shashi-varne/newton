@@ -111,7 +111,7 @@ const FundType = (props) => {
       classOverRideContainer="pr-container"
     >
       <section id="invest-explore-fund-type">
-        <h6 className="heading top-title">Top trending {type} funds</h6>
+        {trendingFunds[type]?.length > 0 && <h6 className="heading top-title">Top trending {type} funds</h6>}
         <div className="scroll">
           {trendingFunds[type]?.map((fund, idx) => (
             <TrendingCard key={idx} cart={cart} setCart={setCart} type={type} {...fund} parentProps={props} />
