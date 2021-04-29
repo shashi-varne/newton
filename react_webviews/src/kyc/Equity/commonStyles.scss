@@ -35,3 +35,36 @@
     height: 40px;
   }
 }
+
+.kyc-trading-experience {
+  padding: 10px 0 20px 0;
+
+  .kte-subtitle {
+    padding: 0 20px;
+    margin-bottom: 40px;
+  }
+
+  .kte-tile {
+    font-size: 15px;
+    line-height: 24px;
+    color: #767e86;
+    padding: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .kte-selected-tile {
+    color: #161a2e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 20px;
+    background: linear-gradient(90deg, #f4f4f4 0%, #ffffff 98.76%);
+
+    img {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
