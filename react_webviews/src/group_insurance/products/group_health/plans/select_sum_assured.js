@@ -69,8 +69,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
 
     sendEvents(user_action) {
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        let selectedIndex = this.state.selectedIndex || 0;
         let eventObj  = {}
             eventObj = {
                 "event_name": 'health_insurance',

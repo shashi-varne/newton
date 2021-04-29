@@ -250,8 +250,8 @@ class GroupHealthPlanDob extends Component {
                 this.setLocalProviderData(groupHealthPlanData);
                 var current_state = {}
                 current_state['account_type'] = post_body['account_type'];
-                for(var x in post_body.member_details){
-                    current_state[`${x}`] = post_body.member_details[x]['dob'];
+                for(var i in post_body.member_details){
+                    current_state[`${i}`] = post_body.member_details[i]['dob'];
                 }
                 var previousData = groupHealthPlanData.list_previous_data || {};
                 var sameData = compareObjects(Object.keys(current_state), current_state, previousData)
@@ -270,14 +270,15 @@ class GroupHealthPlanDob extends Component {
             //GMC
             this.setLocalProviderData(groupHealthPlanData);
             var keys_to_check = ['account_type', 'adults', 'children', 'plan_id']
+            // eslint-disable-next-line
             var current_state = {}
-            for(var x in post_body){
-                if(keys_to_check.indexOf(x) >= 0){
-                    current_state[x] = post_body[x]
+            for(var y in post_body){
+                if(keys_to_check.indexOf(y) >= 0){
+                    current_state[y] = post_body[y]
                 }
             }
-            for(var y in post_body.member_details){
-                current_state[`${y}_dob`] = post_body.member_details[y].dob;
+            for(var x in post_body.member_details){
+                current_state[`${x}_dob`] = post_body.member_details[x].dob;
             }
             this.setState({
                 current_state

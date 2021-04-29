@@ -206,9 +206,9 @@ class GroupHealthPlanDobReligare extends Component {
                 })
             }else if(provider === 'RELIGARE'){
                 this.setLocalProviderData(groupHealthPlanData);
-                var current_state = {}
+                let current_state = {}
                 current_state['account_type'] = post_body['account_type'];
-                for(var x in post_body.member_details){
+                for(let x in post_body.member_details){
                     current_state[`${x}`] = post_body.member_details[x]['dob'];
                 }
                 var previousData = groupHealthPlanData.list_previous_data || {};

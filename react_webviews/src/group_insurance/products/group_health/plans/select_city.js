@@ -61,14 +61,15 @@ class GroupHealthPlanSelectCity extends Component {
         current_state['city'] = this.state.city; 
 
         this.setLocalProviderData(groupHealthPlanData);
-        
+
+        // eslint-disable-next-line
         var current_state = {}
         var keys_to_add = ['account_type', 'city']
         for(var x of keys_to_add){
             current_state[x] = groupHealthPlanData.post_body[x]
         }
-        for(var x in groupHealthPlanData.post_body.member_details){
-            current_state[`${x}`] = groupHealthPlanData.post_body.member_details[x]['dob'];
+        for(var y in groupHealthPlanData.post_body.member_details){
+            current_state[`${y}`] = groupHealthPlanData.post_body.member_details[y]['dob'];
         }
 
         var previousData = groupHealthPlanData.list_previous_data || {};
