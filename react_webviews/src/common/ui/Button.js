@@ -21,8 +21,9 @@ class CustomButton extends Component {
     let showLoader = props.showLoader;
     showLoader = showLoader === 'button' ? true : false;
 
-    
-    if(!showLoader || !props.showError){
+    if(props.multipleCTA && showLoader){
+      disableBodyTouch(); //disable touch
+    }else if((!showLoader || !props.showError) && !props.multipleCTA){
       disableBodyTouch(true); //touch enabled
     }
 
