@@ -51,9 +51,6 @@ import Selfie from "./Upload/Selfie";
 import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
-import Stocks from "./Equity/Stocks";
-import TradingExperience from "./Equity/TradingExperience";
-import LocationError from "./Equity/LocationError";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -285,21 +282,6 @@ const Kyc = (props) => {
           exact
           path={`${url}/nri-address-details2`}
           component={NRIAddressDetails2}
-        />
-        <Route
-          exact
-          path={`${url}/stocks`}
-          component={Stocks}
-        />
-        <Route
-          exact
-          path={`${url}/trading-experience`}
-          component={TradingExperience}
-        />
-        <Route
-          exact
-          path={`${url}/location-error`}
-          component={LocationError}
         />
         <Route component={NotFound} />
       </Switch>

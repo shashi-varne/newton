@@ -5,7 +5,7 @@ import Container from "../common/Container";
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;
-const Stocks = (props) => {
+const StocksStatus = (props) => {
   return (
     <Container noFooter title="Stocks">
       <div
@@ -30,4 +30,4 @@ const Stocks = (props) => {
   );
 };
 
-export default Stocks;
+export default StocksStatus;

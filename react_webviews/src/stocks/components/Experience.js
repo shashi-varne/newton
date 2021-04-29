@@ -20,7 +20,7 @@ const tradingExperienceValues = [
     value: "5+",
   },
 ];
-const TradingExperience = (props) => {
+const Experience = (props) => {
   const [experience, setExperience] = useState("0-1");
   return (
     <Container
@@ -52,4 +52,4 @@ const TradingExperience = (props) => {
   );
 };
 
-export default TradingExperience;
+export default Experience;
