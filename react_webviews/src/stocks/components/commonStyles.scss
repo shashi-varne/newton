@@ -1,11 +1,11 @@
-.kyc-stocks-card {
+.stocks-status-card {
   padding: 20px 2px 20px 20px;
   background-size: cover;
   background-repeat: no-repeat;
   color: #160d2e;
   margin-top: 20px;
 
-  .kyc-stocks-title {
+  .stocks-title {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -20,7 +20,7 @@
     }
   }
 
-  .kyc-stocks-subtitle {
+  .stocks-subtitle {
     font-weight: 400;
     font-size: 13px;
     margin: 0;
@@ -29,22 +29,22 @@
     line-height: 22px;
   }
 
-  .kyc-stocks-button {
+  .stocks-button {
     width: 180px !important;
     font-weight: 700;
     height: 40px;
   }
 }
 
-.kyc-trading-experience {
+.trading-experience {
   padding: 10px 0 20px 0;
 
-  .kte-subtitle {
+  .te-subtitle {
     padding: 0 20px;
     margin-bottom: 40px;
   }
 
-  .kte-tile {
+  .te-tile {
     font-size: 15px;
     line-height: 24px;
     color: #767e86;
@@ -54,7 +54,7 @@
     cursor: pointer;
   }
 
-  .kte-selected-tile {
+  .te-selected-tile {
     color: #161a2e;
     display: flex;
     justify-content: space-between;
@@ -69,22 +69,22 @@
   }
 }
 
-.kyc-location-error {
+.location-error {
   text-align: center;
 
-  .kyc-location-error-img {
+  .location-error-img {
     width: 100%;
     margin-bottom: 30px;
   }
 
-  .kyc-location-error-title {
+  .location-error-title {
     font-weight: bold;
     font-size: 17px;
     line-height: 27px;
     color: #161a2e;
   }
 
-  .kyc-location-error-subtitle {
+  .location-error-subtitle {
     font-size: 13px;
     line-height: 22px;
     color: #767e86;

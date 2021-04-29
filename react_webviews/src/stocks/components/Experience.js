@@ -28,15 +28,15 @@ const Experience = (props) => {
       title="Select trading experience"
       noPadding
     >
-      <div className="kyc-trading-experience">
-        <div className="generic-page-subtitle kte-subtitle">
+      <div className="trading-experience">
+        <div className="generic-page-subtitle te-subtitle">
           As per SEBI, it is mandatory to share your trading experience
         </div>
         {tradingExperienceValues.map((data, index) => {
           const selected = data.value === experience;
           return (
             <div
-              className={`kte-tile ${selected && "kte-selected-tile"}`}
+              className={`te-tile ${selected && "te-selected-tile"}`}
               key={index}
               onClick={() => setExperience(data.value)}
             >

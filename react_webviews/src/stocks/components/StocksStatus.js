@@ -9,21 +9,21 @@ const StocksStatus = (props) => {
   return (
     <Container noFooter title="Stocks">
       <div
-        className="kyc-stocks-card"
+        className="stocks-status-card"
         style={{
           backgroundImage: `url(${require(`assets/${productName}/kyc_cip.svg`)})`,
         }}
       >
-        <div className="kyc-stocks-title">
+        <div className="stocks-title">
           <h3>Complete your KYC application</h3>
           <img alt="" src={require(`assets/${productName}/kyc_icon.svg`)} />
         </div>
-        <p className="kyc-stocks-subtitle">
+        <p className="stocks-subtitle">
           Don't miss out on good returns by delaying
         </p>
         <Button
           buttonTitle="COMPLETE NOW"
-          classes={{ button: "kyc-stocks-button" }}
+          classes={{ button: "stocks-button" }}
         />
       </div>
     </Container>
