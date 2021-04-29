@@ -37,9 +37,11 @@ class LoanRequirementDetails extends Component {
     let employment_type = application_info.employment_type || "";
 
     let amount_required = application_info.amount_required || '';
-
-    if (amount_required > employmentMapper[employment_type][1])
-      amount_required = employmentMapper[employment_type][1];
+    if(employment_type){
+      if (amount_required > employmentMapper[employment_type.toLowerCase()][1])
+      amount_required = employmentMapper[employment_type.toLowerCase()][1];  
+    }
+    
 
     let form_data = {
       amount_required: amount_required,
