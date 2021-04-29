@@ -1,0 +1,37 @@
+.kyc-stocks-card {
+  padding: 20px 2px 20px 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #160d2e;
+  margin-top: 20px;
+
+  .kyc-stocks-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    column-gap: 20px;
+
+    h3 {
+      margin: 0;
+      font-weight: bold;
+      font-size: 17px;
+      line-height: 20px;
+      padding-top: 3px;
+    }
+  }
+
+  .kyc-stocks-subtitle {
+    font-weight: 400;
+    font-size: 13px;
+    margin: 0;
+    padding: 0 20px 35px 0;
+    width: 80%;
+    line-height: 22px;
+  }
+
+  .kyc-stocks-button {
+    width: 180px !important;
+    font-weight: 700;
+    height: 40px;
+  }
+}
