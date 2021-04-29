@@ -43,9 +43,9 @@ class NpsPaymentCallback extends Component {
       let currentUser = storageService().getObject("user");
  
       if (!result.registration_details.additional_details_status) {
-        if (currentUser.kyc_registration_v2 == 'init') {
+        if (currentUser.kyc_registration_v2 === 'init') {
           this.navigate('/kyc/journey', '', true);
-        } else if (currentUser.kyc_registration_v2 == 'incomplete') {
+        } else if (currentUser.kyc_registration_v2 === 'incomplete') {
           this.navigate('/kyc/journey', '', true);
         } else {
           this.navigate('identity');
@@ -78,7 +78,12 @@ class NpsPaymentCallback extends Component {
           >
             {this.state.status === 'success' && <div>
               <div className="icon">
-                <img src={require("assets/thumb.svg")} width="80" height="80" />
+                <img
+                  alt=""
+                  src={require("assets/thumb.svg")}
+                  width="80"
+                  height="80"
+                />
               </div>
               <div className="sub-head">Payment Successful</div>
               <div className="sub-title">
