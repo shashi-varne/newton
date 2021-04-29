@@ -789,7 +789,7 @@ export async function get07State(body = {}) {
     } else if (result.idfc_07_state === "success" && !result.bt_eligible) {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else if (
-      result.idfc_07_state === "success" &&
+      (result.idfc_07_state === "success" || result.perfios_status === "bypass") &&
       result.vendor_application_status === "bt_bypass"
     ) {
       that.submitApplication({}, "one", "", "eligible-loan");
