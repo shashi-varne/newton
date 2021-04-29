@@ -7,7 +7,7 @@ import relationship from "assets/relationship.png";
 import Select from "common/ui/Select";
 import { initialize } from "../../common/commonFunctions";
 import { storageService, capitalize } from "utils/validators";
-import { dobFormatTest, formatDate } from "utils/validators";
+import { formatDate } from "utils/validators";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
