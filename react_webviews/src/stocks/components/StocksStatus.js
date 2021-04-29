@@ -11,12 +11,15 @@ const StocksStatus = (props) => {
       <div
         className="stocks-status-card"
         style={{
-          backgroundImage: `url(${require(`assets/${productName}/kyc_cip.svg`)})`,
+          backgroundImage: `url(${require(`assets/${productName}/stocks_cip.svg`)})`,
         }}
       >
         <div className="stocks-title">
           <h3>Complete your KYC application</h3>
-          <img alt="" src={require(`assets/${productName}/kyc_icon.svg`)} />
+          <img
+            alt=""
+            src={require(`assets/${productName}/stocks_status_icon.svg`)}
+          />
         </div>
         <p className="stocks-subtitle">
           Don't miss out on good returns by delaying
