@@ -4,8 +4,7 @@ import { getConfig } from "../../utils/functions";
 import Container from "../common/Container";
 import "./commonStyles.scss";
 
-const config = getConfig();
-const productName = config.productName;
+const productName = getConfig().productName;
 const Stocks = (props) => {
   return (
     <Container noFooter title="Stocks">
