@@ -356,16 +356,21 @@ class GroupHealthPlanLifestyleDetail extends Component {
       }
       body['insured_people_details'] = insured_people_details;
     }
-    
+
     var current_state = {}
-    for(var x in body.answers){
-      var life_style_data = body.answers[x].life_style_details[0];
-      if(life_style_data.yes_no){
-        current_state[`${x}_yes_no`] = life_style_data.yes_no;
-        current_state[`${x}_since_when`] = life_style_data.since_when;
-        current_state[`${x}_desc`] = life_style_data.description;
-      } 
-    }
+    if(!none_option_selected){
+      for(var x in body.answers){
+        var life_style_data = body.answers[x].life_style_details[0];
+        if(life_style_data.yes_no){
+          current_state[`${x}_yes_no`] = life_style_data.yes_no;
+          current_state[`${x}_since_when`] = life_style_data.since_when;
+          current_state[`${x}_desc`] = life_style_data.description;
+        } 
+      }
+    }else{
+      var current_state = {'none': true}
+    } 
+
     this.updateLead(body, '', current_state);
    }
   };

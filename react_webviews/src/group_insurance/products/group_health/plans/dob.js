@@ -228,7 +228,6 @@ class GroupHealthPlanDob extends Component {
             }
 
             groupHealthPlanData.post_body = post_body;
-        
 
             if(provider === 'HDFCERGO'){
                 this.setLocalProviderData(groupHealthPlanData)
@@ -241,7 +240,6 @@ class GroupHealthPlanDob extends Component {
             }
 
             if (provider === 'STAR') {
-                groupHealthPlanData.post_body = post_body;
                 this.setLocalProviderData(groupHealthPlanData);
                 this.navigate(this.state.next_screen)
                 return;

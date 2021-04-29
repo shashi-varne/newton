@@ -468,9 +468,7 @@ export async function getPlanDetails(){
             let error = "";
             let errorType = "";
             
-            
             let keys_to_empty = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
-            
             for(var x of keys_to_empty){
                 groupHealthPlanData[x] = ""
             }
