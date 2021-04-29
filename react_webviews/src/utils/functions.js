@@ -375,6 +375,18 @@ const partnersConfigBase = {
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
     search_button: "search.png"
+  },
+  quesscorp: {
+    logo: 'logo_white.png',
+    primary_color: '#4f2da7',
+    code: 'quesscorp',
+    email: 'ask@fisdom.com',
+    mobile: '+91-7829228886',
+    message: '',
+    banner: 'obc_banner.png',
+    back_button: 'back_icon_white.png',
+    close_button: 'close_nav_icon.svg',
+    search_button: 'search.png'
   }
 };
 
