@@ -368,7 +368,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
         } 
       }
     }else{
-      var current_state = {'none': true}
+      current_state = {'none': true}
     } 
 
     this.updateLead(body, '', current_state);
