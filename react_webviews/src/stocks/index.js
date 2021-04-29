@@ -9,6 +9,7 @@ import Allow from "./Location/Allow";
 
 import "./Style.scss";
 import SelfieInstructions from "./components/SelfieInstructions";
+import NriError from "./components/NriError";
 
 const Stocks = (props) => {
   const { url } = props.match;
@@ -19,6 +20,7 @@ const Stocks = (props) => {
         <Route exact path={`${url}/status`} component={StocksStatus} />
         <Route exact path={`${url}/experience`} component={Experience} />
         <Route exact path={`${url}/location-error`} component={LocationError} />
+        <Route exact path={`${url}/nri-error`} component={NriError} />
         <Route exact path={`${url}/selfie-instructions`} component={SelfieInstructions} />
         <Route component={NotFound} />
       </Switch>

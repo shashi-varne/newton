@@ -1,23 +1,16 @@
 import React from "react";
-import { Imgc } from "../../common/ui/Imgc";
-import { getConfig } from "../../utils/functions";
 import Container from "../common/Container";
+import { StatusInfo } from "../mini-components/StatusInfo";
 import "./commonStyles.scss";
 
-const productName = getConfig().productName;
 const LocationError = (props) => {
   return (
     <Container buttonTitle="OKAY" type="outlined" hidePageTitle>
-      <div className="location-error">
-        <Imgc
-          className="location-error-img"
-          src={require(`assets/${productName}/kyc_no_stocks_nri.svg`)}
-        />
-        <div className="location-error-title">You cannot proceed with KYC</div>
-        <div className="location-error-subtitle">
-          As per SEBI regulations, your location should be in India
-        </div>
-      </div>
+      <StatusInfo
+        icon="no_stocks_nri.svg"
+        title="You cannot proceed with KYC"
+        subtitle="As per SEBI regulations, your location should be in India"
+      />
     </Container>
   );
 };

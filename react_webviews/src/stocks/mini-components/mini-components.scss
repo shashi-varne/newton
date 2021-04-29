@@ -1,0 +1,22 @@
+.status-info {
+  text-align: center;
+
+  .status-info-img {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .status-info-title {
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 27px;
+    color: #161a2e;
+  }
+
+  .status-info-subtitle {
+    font-size: 13px;
+    line-height: 22px;
+    color: #767e86;
+    padding-top: 10px;
+  }
+}
