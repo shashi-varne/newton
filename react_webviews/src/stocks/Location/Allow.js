@@ -8,6 +8,7 @@ const productName = getConfig().productName;
 
 const Allow = (props) => {
   const [showLocationError, setShowLocationError] = useState(false);
+  const [locationData, setLocationData] = useState(null);
   const navigate = navigateFunc.bind(props);
 
   const accessHandler = () => {
@@ -16,8 +17,14 @@ const Allow = (props) => {
     }
   }
 
-  const allowAccess = () => {
+  const allowAccess = (position) => {
     console.log("location accessed");
+    const data = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    }
+    console.log(data);
+    setLocationData(data);
     // navigate("path")
   }
 
@@ -28,7 +35,7 @@ const Allow = (props) => {
   const goBack = () => {
     // navigate('path')
   }
-  
+
   return (
     <Container
       force_hide_inpage_title={true}
@@ -55,6 +62,7 @@ const Allow = (props) => {
         </div>
         {showLocationError && 
           <div className="location-error">
+            {/* todo: error note component to be added */}
             Location is required to continue
             the KYC
           </div>
