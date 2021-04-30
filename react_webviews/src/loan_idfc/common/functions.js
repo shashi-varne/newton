@@ -843,6 +843,7 @@ export async function submitApplication(
       "eligible_loan",
       "bank_upload",
       "perfios_state",
+      'bt_info_screen'
     ];
     this.setState({
       loaderWithData: screens.includes(this.state.screen_name),
