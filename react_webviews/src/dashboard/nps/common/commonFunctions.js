@@ -413,10 +413,11 @@ export async function submitPran(params) {
     } else {
       switch(status) {
         case 301: 
-          this.navigate('pan')
-          break
+          this.navigate('pan');
+          break;
         case 303:
           this.navigate('/kyc/journey', '', true)
+          break;
         default: 
           let title1 = result.error || result.message || "Something went wrong!";
           this.setState({

@@ -306,7 +306,7 @@ const Home = (props) => {
               error={panError ? true : false}
               helperText={panError || ""}
               onChange={handleChange}
-              maxLength={11}
+              maxLength={10}
               type="text"
               disabled={showLoader}
               autoFocus

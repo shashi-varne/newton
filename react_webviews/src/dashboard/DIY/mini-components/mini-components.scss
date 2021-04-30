@@ -79,6 +79,10 @@
       padding-top: 0;
       color: #727272;
     }
+
+    .diy-fund-card-info-negative{
+      color: #d32f2f;
+    }
   }
 }
 
@@ -91,6 +95,9 @@
   right: 0;
   padding: 10px;
   column-gap: 35px;
+  margin-left: 300px;
+  width: calc(100% - 300px);
+  max-width: 640px;
 }
 
 .diy-cart-footer .button {

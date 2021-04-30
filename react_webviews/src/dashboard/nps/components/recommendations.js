@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { inrFormatDecimal2 } from "utils/validators";
@@ -16,8 +16,8 @@ import {
 import PieChart from "./piegraph";
 import Slide from "@material-ui/core/Slide";
 import { getBasePath } from "../../../utils/functions";
+import { keyBy } from 'lodash';
 
-const risk_level = ["High", "Low", "Moderate", "Moderate Low"];
 const isMobileDevice = getConfig().isMobileDevice;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -34,16 +34,17 @@ class Recommendations extends Component {
       openDialog: false,
       openInvestmentSummary: true,
       risk: "high",
-      graphData: [],
+      pieChartData: [],
       display_summary_only: false,
       amount: "",
       url: "",
       pension_house: {},
       skelton: "g",
-      pran: ''
+      pran: '',
+      alternativeRiskOptsMap: {}
     };
     this.initialize = initialize.bind(this);
-  }
+;  }
 
   componentWillMount() {
     this.initialize();
@@ -87,42 +88,20 @@ class Recommendations extends Component {
     const res = await this.get_recommended_funds(amount, true);
     let data = res;
     if (data && !pran) {
-      let recommendations = data.recommended[0];
-      let graphData = [
-        {
-          id: "E",
-          label: "E",
-          value: recommendations.e_allocation,
-          color: "hsl(227, 70%, 50%)",
-        },
-        {
-          id: "G",
-          label: "G",
-          value: recommendations.g_allocation,
-          color: "hsl(316, 70%, 50%)",
-        },
-        {
-          id: "C",
-          label: "C",
-          value: recommendations.c_allocation,
-          color: "hsl(291, 70%, 50%)",
-        },
-        {
-          id: "A",
-          label: "A",
-          value: recommendations.a_allocation,
-          color: "hsl(262, 70%, 50%)",
-        },
-      ];
+      const [recommendations] = data.recommended;
+      const altRiskOptsMap = keyBy(data.alternatives, 'risk');
+      const assetAlloc = altRiskOptsMap[recommendations.risk || this.state.risk]
 
       this.setState(
         {
           recommendations: recommendations,
           all_charges: data.all_charges,
           payment_details: data.payment_breakup,
+          alternativeRiskOptsMap: altRiskOptsMap,
+          assetAllocation: assetAlloc,
+          pieChartData: createPieChartData(assetAlloc),
           skelton: this.state.display_summary_only,
-          risk: recommendations.risk,
-          graphData: graphData,
+          risk: recommendations.risk || this.state.risk,
         },
         () => {
           this.state.display_summary_only && this.handleClick();
@@ -154,54 +133,14 @@ class Recommendations extends Component {
     });
   };
 
-  handleChange = (name) => {
+  changeRiskSelection = (name) => {
+    const assetAlloc = this.state.alternativeRiskOptsMap[name];
     this.setState({
+      openDialog: false,
       risk: name,
+      assetAllocation: assetAlloc,
+      pieChartData: createPieChartData(assetAlloc)
     });
-  };
-
-  renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-        classes={{
-          paperScrollPaper: 'risk-level'
-        }}
-      >
-        <DialogTitle id="form-dialog-title" className="edit-title">
-          Choose Risk Level
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText className="nps-flex-box" component="div">
-            {risk_level.map((item, index) => (
-              <div className="edit-risk" key={index}>
-                <div>{item}</div>
-                <Radio
-                  checked={this.state.risk === item}
-                  onChange={() => this.handleChange(item)}
-                  value={this.state.risk || ""}
-                  name="radio-button-demo"
-                  color="primary"
-                />
-              </div>
-            ))}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            className="DialogButtonFullWidth"
-            color="default"
-            autoFocus
-            onClick={this.handleClose}
-          >
-            APPLY NOW
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
   };
 
   closeInvestment = () => {
@@ -344,6 +283,7 @@ class Recommendations extends Component {
       );
 
       pgLink +=
+        // eslint-disable-next-line no-useless-escape
         (pgLink.match(/[\?]/g) ? "&" : "?") +
         "plutus_redirect_url=" +
         plutus_redirect_url;
@@ -372,12 +312,13 @@ class Recommendations extends Component {
   }
 
   render() {
-    let {
+    const {
+      assetAllocation,
       recommendations,
       pension_house,
       show_loader,
       all_charges,
-      graphData,
+      pieChartData,
       display_summary_only,
       url,
     } = this.state;
@@ -388,7 +329,6 @@ class Recommendations extends Component {
         buttonTitle="PROCEED"
         title="Recommended fund"
         noFooter={display_summary_only}
-        title="Recommended fund"
         showLoader={show_loader}
         handleClick={this.handleClick}
         headerData={{
@@ -444,19 +384,19 @@ class Recommendations extends Component {
                 >
                   Edit
                 </span>
+                <RiskSelectDialog
+                  open={this.state.openDialog}
+                  onClose={this.handleClose}
+                  onApply={this.changeRiskSelection}
+                  currentRisk={this.state.risk}
+                />
               </div>
               <div className="allocation">
                 <div className="graph">
                   <PieChart
                     height={isMobileDevice ? 100 : 180}
                     width={isMobileDevice ? 100 : 180}
-                    data={graphData || {}}
-                    colors={[
-                      "rgb(74, 144, 226)",
-                      "rgb(51, 191, 159)",
-                      "rgb(131, 90, 237)",
-                      "rgb(185, 176, 64)",
-                    ]}
+                    data={pieChartData || {}}
                   ></PieChart>
                   <div
                     className="text-center"
@@ -472,10 +412,10 @@ class Recommendations extends Component {
                         <b>Class E</b>
                       </div>
                       <div className="">
-                        <span className="color3">
-                          {recommendations && recommendations.e_allocation}%
-                        </span>{" "}
-                        in equity
+                        <span style={{ color: classColorMap['E'] }}>
+                          {assetAllocation?.e_allocation}% 
+                        </span>
+                        &nbsp;in equity
                       </div>
                     </li>
                     <li>
@@ -483,10 +423,10 @@ class Recommendations extends Component {
                         <b>Class C</b>
                       </div>
                       <div className="">
-                        <span className="color4">
-                          {recommendations && recommendations.c_allocation}%
-                        </span>{" "}
-                        in corporate debt
+                        <span style={{ color: classColorMap['C'] }}>
+                          {assetAllocation?.c_allocation}%
+                        </span>
+                        &nbsp;in corporate debt
                       </div>
                     </li>
                     <li>
@@ -494,10 +434,10 @@ class Recommendations extends Component {
                         <b>Class G</b>
                       </div>
                       <div className="">
-                        <span className="color2">
-                          {recommendations && recommendations.g_allocation}%
-                        </span>{" "}
-                        in govt. bonds
+                        <span style={{ color: classColorMap['G'] }}>
+                          {assetAllocation?.g_allocation}%
+                        </span>
+                        &nbsp;in govt. bonds
                       </div>
                     </li>
                     <li>
@@ -505,10 +445,10 @@ class Recommendations extends Component {
                         <b>Class A</b>
                       </div>
                       <div className="">
-                        <span className="color1">
-                          {recommendations && recommendations.a_allocation}%
-                        </span>{" "}
-                        in AIFs
+                        <span style={{ color: classColorMap['A'] }}>
+                          {assetAllocation?.a_allocation}%
+                        </span>
+                        &nbsp;in AIFs
                       </div>
                     </li>
                   </ul>
@@ -549,16 +489,15 @@ class Recommendations extends Component {
                 </div>
               </div>
               <div className="terms">
-            <img src={require("assets/terms_agree.png")} alt="" width="25" />
-            <div>
-              By tapping on proceed, I agree that I have read the {" "}
-              <span onClick={() => this.openInBrowser("https://www.fisdom.com")} style={{textDecoration:'underline', cursor:'pointer'}}>
-                terms & conditions
-              </span>
+                <img src={require("assets/terms_agree.png")} alt="" width="25" />
+                <div>
+                  By tapping on proceed, I agree that I have read the {" "}
+                  <span onClick={() => this.openInBrowser("https://www.fisdom.com")} style={{textDecoration:'underline', cursor:'pointer'}}>
+                    terms & conditions
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-            </div>
-            {this.renderDialog()}
           </div>
         )}
         {this.state.display_summary_only &&
@@ -569,4 +508,99 @@ class Recommendations extends Component {
   }
 }
 
+const createPieChartData = (allocData) => {
+  return [
+    {
+      id: "E",
+      label: "E",
+      value: allocData.e_allocation,
+      color: classColorMap['E'],
+    },
+    {
+      id: "G",
+      label: "G",
+      value: allocData.g_allocation,
+      color: classColorMap['G'],
+    },
+    {
+      id: "C",
+      label: "C",
+      value: allocData.c_allocation,
+      color: classColorMap['C'],
+    },
+    {
+      id: "A",
+      label: "A",
+      value: allocData.a_allocation,
+      color: classColorMap['A'],
+    },
+  ]
+};
+
+const classColorMap = {
+  E: "rgb(74, 144, 226)",
+  G: "rgb(51, 191, 159)",
+  C: "rgb(131, 90, 237)",
+  A: "rgb(185, 176, 64)"
+};
+
 export default Recommendations;
+
+
+const riskLevelMap = {
+  high: "High",
+  low: "Low",
+  moderate: "Moderate",
+  moderately_low: "Moderately Low",
+  moderately_high: "Moderately High"
+};
+
+const RiskSelectDialog = ({
+  open,
+  onClose,
+  currentRisk,
+  onApply
+}) => {
+  const [selectedRisk, setSelectedRisk] = useState(currentRisk);
+
+  return (
+    <Dialog
+      fullScreen={false}
+      open={open}
+      onClose={onClose}
+      aria-labelledby="responsive-dialog-title"
+      classes={{
+        paperScrollPaper: 'risk-level'
+      }}
+    >
+      <DialogTitle id="form-dialog-title" className="edit-title">
+        Choose Risk Level
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText className="nps-flex-box" component="div">
+          {Object.entries(riskLevelMap).map(([key, value]) => (
+            <div className="edit-risk" key={key} onClick={() => setSelectedRisk(key)}>
+              <div>{value}</div>
+              <Radio
+                checked={key === selectedRisk}
+                value={selectedRisk}
+                name="radio-button-demo"
+                color="primary"
+              />
+            </div>
+          ))}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          className="DialogButtonFullWidth"
+          color="default"
+          autoFocus
+          onClick={() => onApply(selectedRisk)}
+        >
+          APPLY
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};

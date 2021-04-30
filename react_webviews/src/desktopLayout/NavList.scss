@@ -1,0 +1,111 @@
+.navlink-container {
+  padding-bottom: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #fafafa;
+  .user-mobile-details {
+    padding: 15px;
+    border-bottom: 1px solid #e8e8e8;
+
+    .user-name {
+      font-size: 16px;
+      color: #333333;
+      display: block;
+      line-height: normal;
+      text-transform: uppercase;
+    }
+
+    .user-contact {
+      font-size: 16px;
+      color: #727272;
+      display: block;
+      line-height: normal;
+      margin-top: 0px;
+    }
+  }
+  .navlink-lists {
+    .nav-link-listItem {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    .nav-link-listItem:hover{
+      background: #f3f3f3;
+    }
+    .navlink-active.nav-link-listItem{
+      background: white !important;
+    }
+    .nav-link-icons {
+      width: 30px;
+    }
+
+    .nav-link-text {
+      padding-left: 0px;
+    }
+
+    .nav-link-listItem.active {
+      background: red !important;
+    }
+  }
+
+  .navlink-footer-list {
+    padding-left: 20px;
+    .navlink-footer-item {
+      margin-bottom: 3px;
+      a {
+        font-size: 14px;
+        color: #777777;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .navlink-footer-abt {
+    margin-left: 20px;
+    font-size: 12px;
+    margin-top: 20px;
+    color: #c4c4c4;
+    margin-bottom: 0;
+    line-height: normal;
+    text-align: left;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .navlink-container {
+    background: white;
+    height: 90%;
+    overflow-y: auto;
+    width: 250px;
+    .navlink-lists {
+      width: 250px;
+      .nav-link-listItem {
+        padding: 3px 10px;
+        .nav-link-text{
+          span{
+            font-size: 14px !important;
+          }
+        }
+      }
+    }
+  }
+  .referral-dialog {
+    .referral-dialog-message {
+      .referral-message-wrapper {
+        margin-top: -50px;
+        .referral-message {
+          font-size: 14px;
+          line-height: 21px;
+        }
+      }
+    }
+
+    .share-refferal {
+      font-size: 14px;
+    }
+    .referral-code {
+      font-size: 16px;
+    }
+  }
+}

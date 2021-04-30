@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize } from '../../functions';
+import { initialize, handleCampaignNotification, handleCampaignRedirection } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -31,8 +31,11 @@ class SdkLanding extends Component {
       dotLoader: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
+      headerStyle: getConfig().uiElements?.header
     };
     this.initialize = initialize.bind(this);
+    this.handleCampaignNotification = handleCampaignNotification.bind(this);
+    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -81,33 +84,18 @@ class SdkLanding extends Component {
     this.setState({ openBottomSheet: false });
   };
 
-  handleCampaignNotification = () => {
-    const notifications = storageService().getObject('campaign') || [];
-    const bottom_sheet_dialog_data = notifications.reduceRight((acc, data) => {
-      if (data?.notification_visual_data?.target?.length >= 1) {
-        // eslint-disable-next-line no-unused-expressions
-        data?.notification_visual_data?.target.forEach((el, idx) => {
-          if (el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
-            acc = el;
-            acc.campaign_name = data?.campaign?.name;
-          }
-        });
-      }
-      return acc;
-    }, {});
-
-    if (!isEmpty(bottom_sheet_dialog_data)) {
-      storageService().set('is_bottom_sheet_displayed', true);
-      this.setState({ bottom_sheet_dialog_data, openBottomSheet: true });
-    }
-  };
-
   handleMarketingBanner = (path) => () => {
     if(path === '/invest/recommendations'){
       this.getRecommendationApi(100);
     } else {
       this.navigate(path);
     }
+  }
+
+  handleCampaign = () => {
+    this.setState({show_loader : 'page', openBottomSheet : false});
+    let campLink = this.state.bottom_sheet_dialog_data.url;
+    handleCampaignRedirection(campLink);
   }
 
   render() {
@@ -130,7 +118,8 @@ class SdkLanding extends Component {
         notification
         handleNotification={this.handleNotification}
         background='sdk-background'
-        classHeader='sdk-header'
+        classHeader={this.state.headerStyle ? 'sdk-partner-header' : 'sdk-header'}
+        showLoader={this.state.show_loader}
       >
         <div className='sdk-landing'>
           {!this.state.kycStatusLoader ? (
@@ -216,6 +205,7 @@ class SdkLanding extends Component {
           close={this.closeCampaignDialog}
           cancel={this.closeCampaignDialog}
           data={this.state.bottom_sheet_dialog_data}
+          handleClick={this.handleCampaign}
         />
       </Container>
     );

@@ -34,12 +34,13 @@ const Landing = (props) => {
     try {
       const result = await getWithdrawReasons();
       if (result?.dnd_flag) {
-        navigate("/withdraw");
+        navigate("");
       } else {
         storageService().setObject("withdrawReasons", result?.survey?.question);
         setReasons(result?.survey?.question);
       }
     } catch (err) {
+      props.history.goBack();
       console.log(err);
     } finally {
       setIsLoading(false);

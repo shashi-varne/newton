@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -15,6 +15,9 @@ import isEmpty from 'lodash/isEmpty';
 import { storageService } from "utils/validators";
 import '../theme/Style.scss';
 import restart from 'assets/restart_nav_icn.svg';
+import Drawer from '../../desktopLayout/Drawer';
+import MenuIcon from "@material-ui/icons/Menu";
+import ReferDialog from '../../desktopLayout/ReferralDialog';
 
 const headerIconMapper = {
   back: back_arrow,
@@ -22,14 +25,29 @@ const headerIconMapper = {
   search: search,
   restart: restart
 }
+const isMobileDevice = getConfig().isMobileDevice;
+const partnerLogo = getConfig().logo;
+const isWeb = getConfig().Web;
+const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor : '';
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
   className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
     const rightIcon = headerIconMapper[topIcon];
+    const [referDialog, setReferDialog] = useState(false);
+    const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
     const campaign = storageService().getObject("campaign");
-    const partner = getConfig();
+
+    const handleMobileViewDrawer = () => {
+      setMobileViewDrawer(!mobileViewDrawer);
+    };
+    const handleReferModal = () => {
+      if(!referDialog){
+        setMobileViewDrawer(!mobileViewDrawer);
+      }
+      setReferDialog(!referDialog);
+    };
     return (
       <AppBar position="fixed" color="primary" 
       className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
@@ -43,7 +61,7 @@ const Header = ({ classes, title, count, total, current, goBack,
               goBack}>
               {!disableBack && !headerData.hide_icon &&
               <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
               />
               }
@@ -54,7 +72,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             logo && 
              <div className='sdk-header-partner-logo'>
-                <img src={require(`assets/${partner?.logo}`)} alt="partner logo" /> 
+                <img src={require(`assets/${partnerLogo}`)} alt="partner logo" /> 
             </div>
           }
 
@@ -112,7 +130,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                 <SVG
                 style={{marginLeft: 'auto', width:20}}
                 onClick={handleReset}
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
                 src={restart}
               />
               }
@@ -120,7 +138,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                 <SVG
                 style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                 onClick={handleTopIcon}
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().styles.primaryColor : 'white'))}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
                 src={rightIcon}
               />
               }
@@ -128,7 +146,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                 <SVG
                 style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                 onClick={handleNotification}
-                preProcessor={code => code.replace(/fill=#FFF".*?"/, 'fill=' + (new_header ? getConfig().notificationColor : 'white'))}
+                preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (getConfig()?.notificationColor || 'white') : 'white'))}
                 src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
               />
               }
@@ -143,8 +161,20 @@ const Header = ({ classes, title, count, total, current, goBack,
           </>
         }
 
-          
+        {
+          isMobileDevice && isWeb &&
+          <div className='mobile-navbar-menu'>
+            <IconButton onClick={handleMobileViewDrawer}>
+              <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'}}/>
+            </IconButton>
+            <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal}/>
+          </div>
+        }
         </Toolbar>
+        {
+          isMobileDevice &&
+          <ReferDialog isOpen={referDialog} close={handleReferModal} />
+        }
       </AppBar >
     )
   };

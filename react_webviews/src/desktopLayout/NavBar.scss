@@ -1,0 +1,49 @@
+.navbar{
+  height: 60px;
+  .navbar-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:0px 20px !important;
+
+    .header-partner-logo{
+      img{
+        height: 30px;
+      }
+    }
+  }
+
+  .navbar-right-container{
+    display: flex;
+    align-items: center;
+    .user-profile-data{
+      margin-right: 20px;
+
+      .user-name{
+        height: 20px;
+        font-size: 14px;
+        text-align: right;
+      }
+
+      .user-contact{
+        font-size: 12px;
+        text-align: right;
+      }
+    }
+    .navbar-logout-section{
+      border-left: 1px solid #e8e8e8;
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      cursor: pointer;
+      img{
+        width: 30px;
+        margin-right: 10px;
+      }
+
+      .navbar-logout{
+        font-size: 16px;
+      }
+    }
+  }
+}

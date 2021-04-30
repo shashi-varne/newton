@@ -159,10 +159,10 @@ const InvestMore = (props) => {
               value={formatAmountInr(form_data.amount) || ""}
               onChange={handleAmount()}
             />
-            <div className="text margin">
+            <div className="text invest-more-margin">
               As {params.mode} in {investBody.mfname}
             </div>
-            <div className="terms padding">
+            <div className="invest-more-terms invest-more-terms-padding">
               <Checkbox
                 class="checkbox"
                 checked={termsCheck}
@@ -179,7 +179,7 @@ const InvestMore = (props) => {
                 </a>
               </div>
             </div>
-            <div className="terms">
+            <div className="invest-more-terms">
               <Checkbox
                 class="checkbox"
                 checked={schemeCheck}

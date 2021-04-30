@@ -61,6 +61,7 @@ class NpsSuccess extends Component {
                         src={require("assets/check_icon.png")}
                         width="80"
                         height="80"
+                        alt=""
                       />
                     </div>
                     <h1>Congratulations!</h1>
