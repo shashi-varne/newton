@@ -51,6 +51,7 @@ import Selfie from "./Upload/Selfie";
 import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
+import Native from "./Native/Native";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -58,6 +59,7 @@ const Kyc = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}/journey`} component={Journey} />
+        <Route exact path={`${url}/native`} component={Native} />
         <Route
           exact
           path={`${url}/personal-details1`}
