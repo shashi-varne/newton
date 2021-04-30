@@ -457,3 +457,28 @@ export function getBasePath() {
   }
   return window.location.origin + basename;
 }
+
+export function navigate(props, pathname, data = {}) {
+  const fromState = props.history?.location?.pathname || ""
+  const toState = pathname
+  data.state = {
+    ...data?.state,
+    fromState,
+    toState
+  }
+  if (data.edit) {
+    props.history.replace({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  } else {
+    props.history.push({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  }
+}
