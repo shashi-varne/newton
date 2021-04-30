@@ -350,6 +350,7 @@ const partnersConfigBase = {
     close_button: 'close_nav_icon.svg',
     search_button: 'search.png',
     white_header: true,
+    webAppUrl: 'https://google-dot-plutus-web.appspot.com/#!/'
   },
   indb: {
     logo: 'logo_white.png',
@@ -526,6 +527,7 @@ function getPartnerConfig(partner_code) {
     header_title_color: 'header_title_color',
     inputFocusedColor: 'inputFocusedColor',
     white_header: 'white_header',
+    webAppUrl: 'webAppUrl'
   };
 
   config_to_return.isFinwiz = true;
