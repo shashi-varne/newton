@@ -674,7 +674,7 @@ class AddressDetails extends Component {
               <div className="InputField">
                 <Input
                   error={(this.state.form_data.permanent_landmark_error && !this.state.form_data.permanent_landmark) || false}
-                  helperText={this.state.form_data.permanent_landmark ? this.state.form_data.permanent_landmark_error : ''}
+                  helperText={this.state.form_data.permanent_landmark_error}
                   type="text"
                   width="40"
                   label="Landmark"
