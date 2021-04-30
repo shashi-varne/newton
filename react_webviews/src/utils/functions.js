@@ -352,6 +352,20 @@ const partnersConfigBase = {
     white_header: true,
     webAppUrl: 'https://google-dot-plutus-web.appspot.com/#!/'
   },
+  gpay: {
+    logo: 'logo_white.png',
+    primary_color: '#4f2da7',
+    code: 'gpay',
+    email: 'ask@fisdom.com',
+    mobile: '+80-48-093070',
+    message: '',
+    banner: 'obc_banner.png',
+    back_button: 'back_icon_white.png',
+    close_button: 'close_nav_icon.svg',
+    search_button: 'search.png',
+    white_header: true,
+    webAppUrl: 'https://google-dot-plutus-web.appspot.com/#!/'
+  },
   indb: {
     logo: 'logo_white.png',
     primary_color: '#173883',
