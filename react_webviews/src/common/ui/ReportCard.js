@@ -1,34 +1,37 @@
 import React, { Component } from 'react'
+import {numDifferentiationInr, timeStampToDate} from 'utils/validators';
 
 class ReportCard extends Component {
     render() {
+        var {report} = this.props;
+        console.log(report.key)
         return (
-            <div className="report-card-container">
+            <div className="report-card-container" style={{backgroundColor: report.cssMapper.backgroundColor}}>
                 
                 <div className="status-bar">
                     <div className="status-container">
-                        <p className="status-circle"></p>
-                        <p className="status-text">ISSUED</p>
+                        <p className="status-circle" style={{backgroundColor: report.cssMapper.color}}></p>
+                        <p className="status-text" style={{color: report.cssMapper.color}}>{report.cssMapper.disc}</p>
                     </div>
-                    <p className="product-category">HEALTH INSURANCE</p>
+                    <p className="product-category">{report.product_category}</p>
                 </div>
 
                 <div className="heading-container">
                     <div>
-                        <p className="heading-title">Sanchay Plus</p>
-                        <p className="heading-subtitle">HDFC Life Insurance</p>
+                        <p className="heading-title">{report.product_title}</p>
+                        <p className="heading-subtitle">{report.product_name}</p>
                     </div>
-                    <img alt="product-icon" src={require(`assets/hdfc_ergo_ic_logo_card.svg`)}/>
+                    <img alt="product-icon" src={`${report.logo}`}/>
                 </div>
 
                 <div className="card-info-one">
                     <div className="info-left">
                         <p className="info-title">Cover amount</p>
-                        <p className="info-subtitle">₹12,584</p>
+                        <p className="info-subtitle">{numDifferentiationInr(report.sum_assured)}</p>
                     </div>
                     <div className="info-right">
                         <p className="info-title">Premium amount</p>
-                        <p className="info-subtitle">₹ 70<span>/yr</span></p>
+                        <p className="info-subtitle">{numDifferentiationInr(report.premium)}<span>/yr</span></p>
                     </div>
                 </div>
 
@@ -39,7 +42,7 @@ class ReportCard extends Component {
                     </div>
                     <div className="info-right">
                         <p className="info-title">Valid upto</p>
-                        <p className="info-subtitle">26/07/2021</p>
+                        <p className="info-subtitle">{ report.valid_upto ? timeStampToDate(report.valid_upto) : 'Not available' }</p>
                     </div>
                 </div>
                 

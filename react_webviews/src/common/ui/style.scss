@@ -1262,19 +1262,22 @@ padding-right: 12px !important;
 }
 
 .report-card-container{
-  padding: 20px;
+  padding: 20px 20px 20px 20px;
   background-color: rgb(231, 248, 236);
-  border-radius: 5px;
+  border-radius: 6px;
+  margin-bottom: 30px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   p{margin: 0}
   .status-bar{
     display: flex;
     align-items: center;
     justify-content: space-between ;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
     .status-container{
       display: flex;
       align-items: center;
       font-size: 10px;
+      padding-top: 3px;
       .status-circle{
         margin: -2px 6px 0 0;
         background-color: #35CB5D;
@@ -1286,9 +1289,11 @@ padding-right: 12px !important;
         font-weight: 700;
         color: #35CB5D;
         letter-spacing: 0.5px;
+        text-transform: uppercase;
       }
     }
     .product-category{
+      text-transform: uppercase;
       font-size: 8px;
       color: #AD95D6;
       font-weight: bold;
@@ -1299,7 +1304,7 @@ padding-right: 12px !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     img{
       width: 36px;
       height: 36px;
@@ -1307,6 +1312,7 @@ padding-right: 12px !important;
     }
     .heading-title{
       font-size: 15px;
+      padding-top: 5px;
       font-weight: 700;
       margin-bottom: 8px;
       color: #160D2E;
@@ -1333,13 +1339,17 @@ padding-right: 12px !important;
       }
     }
     .info-title{
-      font-size: 12px;
+      font-size: 10px;
       color: #767E86;
       text-transform: uppercase;
       margin-bottom: 6px;
+      padding-top: 5px;
     }
     .info-subtitle{
-      font-size: 14px;
+      font-size: 13px;
     }
+  }
+  .card-info-one:last-child{
+    margin-bottom: 0;
   }
 }

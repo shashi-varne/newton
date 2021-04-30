@@ -786,10 +786,21 @@ export function getCssMapperReport(policy) {
     cssMapper.policy_issued.disc = 'Issued';
   }
 
-
   let obj = {};
   let policy_status = policy.status;
 
+  var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending'];
+  var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
+
+  var backgroundColor = "";
+  if(issued_statuses.indexOf(policy_status) > -1){
+    backgroundColor = "#F5FBED"
+  }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
+    backgroundColor = "#FFFDF2"
+  }else{
+    backgroundColor = "#FDF7F8"
+  }
+  
   if (policy.key === 'TERM_INSURANCE') {
     if (policy_status === 'failed') {
       obj.status = 'rejected';
@@ -803,7 +814,7 @@ export function getCssMapperReport(policy) {
   }
 
   obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
-
+  obj.cssMapper['backgroundColor'] = backgroundColor;
   if(policy_status === 'request_pending') {
     if(provider === 'STAR') {
       obj.cssMapper.disc += ` Star Health`;
@@ -814,7 +825,21 @@ export function getCssMapperReport(policy) {
 
   return obj;
 }
+export function productNameMapper(key){
+  let mapper = {
+    'religare': 'Health insurance',
+    'care_plus': 'Health insurance',
+    'HOSPICASH': 'Health insurance',
+    'CORONA': 'Health insurance',
+    'DENGUE': 'Health insurance',
+    'star': 'Health insurance',
+    'hdfc_ergo': 'Health insurance',
+    'PERSONAL_ACCIDENT': 'Other insurance'
+    //add sanchay plus and click to invest and smart wallet
+  }
 
+  return mapper[key];
+}
 export function childeNameMapper(name) {
   
   let mapper = {

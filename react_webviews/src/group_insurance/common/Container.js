@@ -51,6 +51,7 @@ class Container extends Component {
        || pathname === '/group-insurance/advisory/recommendations'
        || pathname === '/group-insurance/advisory/email-report'
        || pathname === '/group-insurance/call-back-details'
+       || pathname === '/group-insurance/common/report'
        ) {
       this.setState({
         new_header: true,
