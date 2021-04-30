@@ -5,8 +5,6 @@ import { fetchFHCData } from '../common/ApiCalls';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../common/ui/Toast';
-import WVInfoBubble from '../../common/ui/InfoBubble';
-
 class Landing extends Component {
     constructor(props) {
         super(props);
@@ -69,12 +67,6 @@ class Landing extends Component {
                 onlyButton={true}
             >
                 <div className="landing-container">
-                    <WVInfoBubble
-                        type="warnin"
-                        isDismissable
-                        hasTitle
-                    >
-                    </WVInfoBubble>
                     <img
                         src={require(`assets/fhc_landing.svg`)}
                         className="landing-img"
