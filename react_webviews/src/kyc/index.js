@@ -52,6 +52,9 @@ import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
 
+// Equity Components
+import AllowLocation from  "./equity/AllowLocation";
+
 const Kyc = (props) => {
   const { url } = props.match;
   return (
@@ -282,6 +285,11 @@ const Kyc = (props) => {
           exact
           path={`${url}/nri-address-details2`}
           component={NRIAddressDetails2}
+        />
+        <Route 
+          exact 
+          path={`${url}/location/allow`} 
+          component={AllowLocation} 
         />
         <Route component={NotFound} />
       </Switch>
