@@ -1,0 +1,37 @@
+.wv-info-bubble {
+  display: flex;
+  width: 100%;
+  align-items: end;
+  padding: 10px 12px;
+  border-radius: 4px;
+
+  .wv-ib-icon {
+    flex-basis: auto;
+    margin-right: 12px;
+    margin-top: 2px;
+  }
+
+  .wv-ib-content {
+    flex: 1;
+
+    .wv-ib-content-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+
+      span {
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 21px;
+      }
+    }
+
+    .wv-ib-content-desc {
+      text-align: left;
+      font-size: 13px;
+      line-height: 21px;
+      color: #767E86;
+    }
+  }
+}
