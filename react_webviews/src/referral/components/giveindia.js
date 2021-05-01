@@ -32,6 +32,7 @@ class GiveIndiaRefferal extends Component {
     
     let back_url  = window.location.href ;
     back_url += getParamsMark(back_url) + 'exit_now=true';
+    back_url = encodeURIComponent(back_url)
 
     nativeCallback({
         action: 'open_inapp_tab',
