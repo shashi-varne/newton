@@ -458,8 +458,8 @@ export function getBasePath() {
   return window.location.origin + basename;
 }
 
-export function navigate(props, pathname, data = {}) {
-  const fromState = props.history?.location?.pathname || ""
+export function navigate(pathname, data = {}) {
+  const fromState = this?.location?.pathname || ""
   const toState = pathname
   data.state = {
     ...data?.state,
@@ -467,14 +467,14 @@ export function navigate(props, pathname, data = {}) {
     toState
   }
   if (data.edit) {
-    props.history.replace({
+    this.history.replace({
       pathname: pathname,
       search: data.searchParams || getConfig().searchParams,
       params: data.params || {},
       state: data.state || {},
     });
   } else {
-    props.history.push({
+    this.history.push({
       pathname: pathname,
       search: data.searchParams || getConfig().searchParams,
       params: data.params || {},
