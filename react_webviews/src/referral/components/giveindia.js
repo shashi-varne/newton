@@ -10,7 +10,8 @@ class GiveIndiaRefferal extends Component {
     super(props);
     this.state = {
       show_loader: 'page',
-      params: getUrlParams()
+      params: getUrlParams(),
+      loadingText: ''
     }
   }
 
@@ -34,6 +35,9 @@ class GiveIndiaRefferal extends Component {
     back_url += getParamsMark(back_url) + 'exit_now=true';
     back_url = encodeURIComponent(back_url)
 
+    this.setState({
+        loadingText: ''
+    })
     nativeCallback({
         action: 'open_inapp_tab',
         message: {
