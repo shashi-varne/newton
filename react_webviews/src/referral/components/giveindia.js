@@ -11,7 +11,7 @@ class GiveIndiaRefferal extends Component {
     this.state = {
       show_loader: 'page',
       params: getUrlParams(),
-      loadingText: ''
+      loadingText: 'Please wait...'
     }
   }
 
@@ -36,7 +36,7 @@ class GiveIndiaRefferal extends Component {
     back_url = encodeURIComponent(back_url)
 
     this.setState({
-        loadingText: ''
+        loadingText: 'Please wait...'
     })
     nativeCallback({
         action: 'open_inapp_tab',
