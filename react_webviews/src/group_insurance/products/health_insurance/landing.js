@@ -23,10 +23,6 @@ import icn_dengue_finity from '../../../assets/icn_dengue_finity.svg'
 import icn_critical_illness_fisdom from '../../../assets/icn_critical_illness_fisdom.svg'
 import icn_critical_illness_finity from '../../../assets/icn_critical_illness_finity.svg'
 
-import icn_corona_fisdom from '../../../assets/icn_corona_fisdom.svg'
-import icn_corona_finity from '../../../assets/icn_corona_finity.svg'
-
-
 import hdfc_logo from '../../../../src/assets/ic_hdfc_logo.svg';
 import religare_logo from '../../../../src/assets/ic_care.svg';
 import star_logo from '../../../../src/assets/ic_star_health.svg';
@@ -75,7 +71,6 @@ class HealthInsuranceLanding extends Component {
 
     let icn_dengue = this.state.type !== 'fisdom' ? icn_dengue_finity : icn_dengue_fisdom;
     let icn_critical_illness = this.state.type !== 'fisdom' ? icn_critical_illness_finity : icn_critical_illness_fisdom;
-    let icn_corona = this.state.type !== 'fisdom' ? icn_corona_finity : icn_corona_fisdom;
 
     let insuranceProducts = [
       {
@@ -140,14 +135,6 @@ class HealthInsuranceLanding extends Component {
             Product_name: 'dengue insurance',
             resume_flag: this.state.resumeFlagAll ? this.state.resumeFlagAll['DENGUE'] : false,
           },
-          {
-            key: 'CORONA',
-            title: 'Coronavirus insurance',
-            subtitle: 'Keep your savings immune to covid',
-            icon: icn_corona,
-            Product_name: 'coronovirus insurance',
-            resume_flag: this.state.resumeFlagAll ? this.resumeFlagAll['CORONA'] : false
-          },
         ],
         type: 'drop-down',
         formate: 'object'
@@ -171,13 +158,12 @@ class HealthInsuranceLanding extends Component {
       let index = insuranceProducts.findIndex(obj => obj.key === "CORONA");
       insuranceProducts.splice(index, 1);
     }
-    // let redirect_url =  decodeURIComponent(getConfig().redirect_url);
-    // if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
-    //   window.location.href = redirect_url;
-    // }
     let { params } = this.props.location || {};
     let openModuleData = params ? params.openModuleData : {}
-
+    let redirect_url =  decodeURIComponent(getConfig().redirect_url);
+    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+      window.location.href = redirect_url;
+    }
 
     // if(openModuleData && openModuleData.sub_module) {
     //   let pathname = openModuleData.sub_module;
@@ -438,37 +424,29 @@ class HealthInsuranceLanding extends Component {
     var fullPath = '';
     let type = data.type
     let product_key = data.key ? data.key : data;
-    // props.key, props.title, index, props.type
 
     fullPath = 'health/' + stateMapper[product_key] + '/plan';
 
     if (type === 'drop-down') {
-      this.setState({ value: this.state.value === index ? null : index })
-      return
-    }
-
-    if (product_key === 'HEALTH_SUPER_TOPUP') {
-      // this.sendEvents('next', title ? title : '')
-      this.navigate('/group-insurance/' + fullPath);
-      console.log(product_key, ' product_key is good')
+      this.setState({ value: this.state.value === index ? null : index }) 
       return
     }
 
     if ( (product_key === 'HealthInsuranceEntry' || product_key === 'HEALTH_SURAKSHA')) {
+      this.setState({ value: 0 })
       return;
     }
 
-    if (product_key === 'DISEASE_SPECIFIC_PLANS' || product_key === 'disease-Specific-plan' ) {
+    if (product_key === 'DISEASE_SPECIFIC_PLANS' || product_key === 'disease-Specific-plan') {
+      this.setState({ value: 1 })
       return;
     }
-    // this.sendEvents('next', title ? title : '');
 
   this.setState({
     show_loader : true
   })
 
-  typeof data === 'object' ? data.insurance_type = 'Disease specific plans'  : data = {"insurance_type" : 'Disease specific plans'}
-  this.sendEvents(data);
+  this.sendEvents('next', data ? data.title : '')
 
 
   if (product_key === 'CRITICAL_HEALTH_INSURANCE') {
