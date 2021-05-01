@@ -16,6 +16,7 @@ import {
   validateEmail
 } from "utils/validators";
 import { getUrlParams } from "utils/validators";
+import { employmentMapper } from "../constants";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -565,7 +566,7 @@ export async function updateApplication(
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      let title1 = result.error[0] || "Something went wrong!";
+      let title1 = (Array.isArray(result.error) ? result.error[0] : result.error) || "Something went wrong!";
       this.setState({
         show_loader: false,
         loaderWithData: false,
@@ -788,7 +789,7 @@ export async function get07State(body = {}) {
     } else if (result.idfc_07_state === "success" && !result.bt_eligible) {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else if (
-      result.idfc_07_state === "success" &&
+      (result.idfc_07_state === "success" || result.perfios_status === "bypass") &&
       result.vendor_application_status === "bt_bypass"
     ) {
       that.submitApplication({}, "one", "", "eligible-loan");
@@ -888,7 +889,7 @@ export async function submitApplication(
       if (rejection_cases.indexOf(result.error) !== -1) {
         this.navigate("loan-status");
       } else {
-        let title1 = result.error[0] || "Something went wrong!";
+        let title1 = (Array.isArray(result.error) ? result.error[0] : result.error) || "Something went wrong!";
         this.setState({
           show_loader: false,
           loaderWithData: false,
@@ -1116,6 +1117,19 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
+  let { employment_type } = this.state.lead.application_info;
+  if(employment_type){
+    let maxAmount = employmentMapper[employment_type.toLowerCase()][1];
+    if (
+      form_data.amount_required &&
+      // eslint-disable-next-line
+      parseInt(form_data.amount_required) > maxAmount
+    ) {
+      form_data.amount_required_error = `Max loan amount for ${employmentMapper[employment_type.toLowerCase()][0]} is ${employmentMapper[employment_type.toLowerCase()][2]}`;
+      canSubmitForm = false;
+    }
+  }
+
   if (form_data.dob && !isValidDate(form_data.dob)) {
     form_data.dob_error = "Please enter valid dob";
     canSubmitForm = false;
@@ -1133,9 +1147,6 @@ export async function formCheckUpdate(
 
   if (canSubmitForm) {
     let body = {};
-    this.setState({
-      show_loader: true,
-    });
 
     for (let j in keys_to_check) {
       let key = keys_to_check[j];
