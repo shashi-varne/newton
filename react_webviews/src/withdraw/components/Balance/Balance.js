@@ -6,7 +6,7 @@ import { navigate as navigateFunc } from '../../common/commonFunction'
 import Dialog from '../../mini-components/Dialog'
 import { getBalance } from '../../common/Api'
 import toast from 'common/ui/Toast'
-import { isEmpty, formatAmountInr, convertInrAmountToNumber } from '../../../utils/validators'
+import { isEmpty, formatAmountInr, convertInrAmountToNumber } from 'utils/validators'
 import Explore from '../../mini-components/Explore'
 import './Balance.scss';
 
@@ -15,6 +15,7 @@ const Balance = (props) => {
   const [amount, setAmount] = useState('')
   const [error, setError] = useState(false)
   const [type, setType] = useState('')
+  const [helperText, setHelperText] = useState('Please enter the amount');
   const navigate = navigateFunc.bind(props)
   const [balance, setBalance] = useState(null)
 
@@ -59,11 +60,13 @@ const Balance = (props) => {
       // eslint-disable-next-line radix
       setAmount(parseInt(value));
       if (error) {
-        setError(false)
+        setError(false);
+        setHelperText('');
       }
     } else {
       setAmount('');
       setError(true);
+      setHelperText('')
     }
   }
   const handleProceed = () => {
@@ -71,7 +74,13 @@ const Balance = (props) => {
       if (type === 'systematic') {
         navigate(type, {state: {amount} })
       } else {
-        navigate('switch', {state: {amount} })
+        // eslint-disable-next-line radix
+        if( amount < 5000 ){
+          setError(true);
+          setHelperText('minimum switch amount is 5000');
+        } else{
+          navigate('switch', {state: {amount} })
+        }
       }
     } else {
       setError(true)
@@ -171,7 +180,7 @@ const Balance = (props) => {
             handleProceed={handleProceed}
             value={amount ? formatAmountInr(amount) : ""}
             error={error}
-            helperText={error ? 'Please enter the amount' : ''}
+            helperText={error ? helperText : ''}
           />
         </>
       )}

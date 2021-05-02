@@ -16,7 +16,7 @@ import './Self.scss';
 
 const SelfSummary = (props) => {
   const navigate = navigateFunc.bind(props)
-  const [taxes, setTaxes] = useState(taxes)
+  const [taxes, setTaxes] = useState('')
   const [open, setOpen] = useState({})
   const [isApiRunning, setIsApiRunning] = useState(false)
 
@@ -85,7 +85,6 @@ const SelfSummary = (props) => {
     fetchTaxes()
   }, [])
 
-  console.log(taxes)
 
   return (
     <Container

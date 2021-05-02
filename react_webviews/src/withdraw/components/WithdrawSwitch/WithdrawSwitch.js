@@ -22,7 +22,7 @@ const WithdrawSwitch = (props) => {
       const data = await getRecommendedSwitch(amount);
       setSwitchFunds(data);
     } catch (err) {
-      console.log(err);
+      toast(err);
     } finally {
       setIsLoading(false);
     }
@@ -35,7 +35,6 @@ const WithdrawSwitch = (props) => {
       navigate('verify', { state:{...response} });
     } catch (err) {
       toast(err);
-      console.log(err);
     } finally {
       setIsLoading(false);
     }
