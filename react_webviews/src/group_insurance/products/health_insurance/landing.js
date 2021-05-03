@@ -226,7 +226,7 @@ class HealthInsuranceLanding extends Component {
   }
 
   handleClickEntry = async (data) => {
-  let specificPlans = [ 'CRITICAL_HEALTH_INSURANCE' , 'DENGUE' , 'CORONA'  ]
+  let specificPlans = [ 'CRITICAL_HEALTH_INSURANCE' , 'DENGUE',  ]
    if(specificPlans.includes(data.key))  {
      this.handleClick(data)
      return;
@@ -312,7 +312,6 @@ class HealthInsuranceLanding extends Component {
         let BHARTIAXA_APPS = {
           'HOSPICASH': BHARTIAXA['HOSPICASH'],
           'DENGUE': BHARTIAXA['DENGUE'],
-          'CORONA': BHARTIAXA['CORONA']
         }
 
         for (var key in BHARTIAXA_APPS) {
@@ -351,7 +350,6 @@ class HealthInsuranceLanding extends Component {
           let navigateMapper = {
             hospicash: 'HOSPICASH',
             dengue: 'DENGUE',
-            corona: 'CORONA',
             term_insurance: 'TERM_INSURANCE',
           };
 
@@ -418,7 +416,7 @@ class HealthInsuranceLanding extends Component {
       'CRITICAL_HEALTH_INSURANCE': 'critical_illness',
     };
 
-    var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'HEALTH', 'DENGUE', 'CORONA'];
+    var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'HEALTH', 'DENGUE',];
     var lead_id = '';
     var path = '';
     var fullPath = '';
@@ -426,6 +424,8 @@ class HealthInsuranceLanding extends Component {
     let product_key = data.key ? data.key : data;
 
     fullPath = 'health/' + stateMapper[product_key] + '/plan';
+
+    if(!product_key || product_key === 'CORONA') return
 
     if (type === 'drop-down') {
       this.setState({ value: this.state.value === index ? null : index }) 
