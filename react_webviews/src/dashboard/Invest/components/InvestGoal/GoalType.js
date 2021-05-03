@@ -2,7 +2,7 @@ import './GoalType.scss';
 import React from 'react';
 import Container from '../../../common/Container';
 
-import { navigate as navigateFunc} from '../../common/commonFunctions';
+import { navigate as navigateFunc} from 'utils/functions';
 
 const goalTypes = {
   "Retirement":{

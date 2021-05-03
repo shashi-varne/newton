@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatAmountInr } from 'utils/validators';
 import RatingStar from '../../../fund_details/common/RatingStar';
-import { navigate as navigateFunc } from '../common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import './mini-components.scss';
 const FundCard = ({ 
   classOverRide, 

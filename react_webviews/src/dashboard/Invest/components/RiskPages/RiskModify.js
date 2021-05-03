@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import InfoBox from '../../../../common/ui/F-InfoBox';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
-import { navigate as navigateFunc } from '../../common/commonFunctions';
 import FSelect from './FSelect';
-import { getConfig } from '../../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import useFunnelDataHook from '../../common/funnelDataHook';
 

@@ -7,14 +7,11 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { getPathname } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import {
-  navigate as navigateFunc,
-} from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
-import { getBasePath } from '../../utils/functions'
+import { getBasePath, navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 

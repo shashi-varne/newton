@@ -8,8 +8,7 @@ import {
   formatAmountInr 
 } from 'utils/validators';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { navigate as navigateFunc } from '../../common/commonFunctions';
-import { getConfig } from '../../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import { customGoalTargetMap } from './constants';
 import { get_recommended_funds } from '../../common/api';
 

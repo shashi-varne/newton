@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "../common/Container";
 import { isEmpty, storageService, formatAmountInr, convertInrAmountToNumber } from "utils/validators";
 import { getPathname, storageConstants } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import Input from "common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import { Imgc } from "common/ui/Imgc";

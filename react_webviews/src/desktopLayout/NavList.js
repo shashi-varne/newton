@@ -16,7 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import logout from 'assets/logout_grey.png';
 import { getConfig } from 'utils/functions';
 import { withRouter } from 'react-router-dom';
-import { navigate as navigateFunc } from './commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import { isReadyToInvest } from '../kyc/services';
 import { storageService } from 'utils/validators';
 import ReferDialog from './ReferralDialog';

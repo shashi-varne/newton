@@ -1,8 +1,7 @@
 import React from 'react'
 import Container from '../common/Container'
-import { getConfig } from '../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { dlDocs } from '../constants'
-import { navigate as navigateFunc } from '../common/functions'
 import "./Digilocker.scss";
 
 const Success = (props) => {

@@ -7,7 +7,7 @@ import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { isEmpty } from 'utils/validators'
 import { getConfig } from 'utils/functions'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import { formatAmountInr } from '../../../utils/validators'
 
 import '../commonStyles.scss';

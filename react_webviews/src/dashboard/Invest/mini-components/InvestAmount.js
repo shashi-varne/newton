@@ -4,7 +4,6 @@ import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 import { numDifferentiationInr } from 'utils/validators';
 import {
-  navigate as navigateFunc,
   getCorpusValue,
   validateOtAmount,
   validateSipAmount,
@@ -14,7 +13,7 @@ import {
 import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
 
-import { getConfig } from '../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import { 
   formatAmountInr, 
   convertInrAmountToNumber 

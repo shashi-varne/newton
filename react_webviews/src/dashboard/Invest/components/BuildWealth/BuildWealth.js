@@ -3,7 +3,7 @@ import Container from '../../../common/Container';
 import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast';
 
-import { navigate as navigateFunc } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import "../../commonStyles.scss"
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';

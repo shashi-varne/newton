@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { storageService } from "utils/validators";
 import { storageConstants, getPathname } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import {
   saveBankData,
   getBankStatus,

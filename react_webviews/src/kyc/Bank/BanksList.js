@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { getMyAccount } from "../common/api";
 import { storageService } from "utils/validators";
-import { navigate as navigateFunc } from "../common/functions";
 import { getPathname, storageConstants } from "../constants";
 import toast from "../../common/ui/Toast";
 import { initData } from "../services";

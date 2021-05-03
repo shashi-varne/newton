@@ -4,9 +4,9 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { getFunds, getFundDetailsForSwitch } from "../../common/api";
 import {
-  navigate as navigateFunc,
   getAmountInInr,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FundSummaryMenu from "../mini-components/FundSummaryMenu";
 import toast from "common/ui/Toast";

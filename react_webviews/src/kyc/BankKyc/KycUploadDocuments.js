@@ -4,10 +4,9 @@ import { verificationDocOptions } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { getPathname } from "../constants";
 import "./KycUploadDocuments.scss";
 
