@@ -535,8 +535,8 @@
 .insurance-common-report-page{
   margin-top: -20px;
 .report-list-tab-container{
-  position: sticky;
-  top: 56px;
+  // position: sticky;
+  // top: 56px;
   background-color: white;
   list-style-type: none;
   padding: 30px 0 0 0;
@@ -566,6 +566,24 @@
       color: #A998D2;
     }
   }
+
+}
+
+.inactive-policy-background{
+  display: block;
+  margin: 50px auto 20px;
+}
+.empty-state-text{
+  text-align: center;
+  color: #767E86;
+}
+.advisory-link{
+  color: #35CB5D;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 42px;
+  cursor: pointer;
 }
 }
 .report-detail-header {

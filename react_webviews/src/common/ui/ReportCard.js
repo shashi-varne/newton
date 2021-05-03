@@ -4,7 +4,6 @@ import {numDifferentiationInr, timeStampToDate} from 'utils/validators';
 class ReportCard extends Component {
     render() {
         var {report} = this.props;
-        console.log(report.key)
         return (
             <div className="report-card-container" style={{backgroundColor: report.cssMapper.backgroundColor}}>
                 

@@ -6,11 +6,12 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { getDateBreakup, capitalizeFirstLetter } from 'utils/validators';
 import {
-  inrFormatDecimalWithoutIcon , inrFormatDecimal
+  inrFormatDecimalWithoutIcon , inrFormatDecimal, isEmpty
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getCssMapperReport , TitleMaper , ProviderName, productNameMapper} from '../constants';
 import ReportCard from '../../common/ui/ReportCard';
+import { Fragment } from 'react';
 
 class Report extends Component {
 
@@ -19,6 +20,7 @@ class Report extends Component {
     this.state = {
       skelton: true,
       reportData: [],
+      productName: getConfig().productName,
     };
 
     this.renderReportCards = this.renderReportCards.bind(this);
@@ -142,10 +144,26 @@ class Report extends Component {
     obj.product_key = 'offline_insurance' 
     return obj;
   }
+  
+  filterReportData = (reportData) =>{
+    var activeReports = [], pendingReports = [], inactiveReports = [];
+    var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending'];
+    var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
+
+    reportData.forEach(report =>{
+      let policy_status = report.status;
+      if(issued_statuses.indexOf(policy_status) > -1){
+        activeReports.push(report)
+      }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
+        pendingReports.push(report)
+      }else{
+        inactiveReports.push(report)
+      }
+    })
+    return {activeReports, pendingReports, inactiveReports};
+  }
 
   setReportData(termData, group_insurance_policies, health_insurance_policies  , o2o_applications ) {
-
-
     let canShowReport = false;
     let application;
     let pathname = ''
@@ -156,6 +174,7 @@ class Report extends Component {
       if (insurance_apps.complete.length > 0) {
         canShowReport = true;
         application = insurance_apps.complete[0];
+
         pathname = 'report';
       } else if (insurance_apps.failed.length > 0) {
         canShowReport = true;
@@ -219,9 +238,19 @@ class Report extends Component {
       let policy = this.getProviderObject_offline(o2o_details[i]);
       reportData.push(policy);
     }
-
+    
+    var filteredReportData = this.filterReportData(reportData);
+    var selectedReports = filteredReportData.activeReports;
     this.setState({
-      reportData: reportData,
+      reportData,
+      selectedTab: 'activeReports',
+      reportCount: {
+        active: filteredReportData.activeReports.length,
+        pending: filteredReportData.pendingReports.length,
+        inactive: filteredReportData.inactiveReports.length
+      },
+      selectedReports : selectedReports,
+      filteredReportData,
       termRedirectionPath: fullPath
     })
   }
@@ -512,11 +541,14 @@ class Report extends Component {
           tab.classList.remove('active');
         }
       })
+      var filteredReportData = this.state.filteredReportData;
+      var selectedReports = filteredReportData[selectedTab]
+      this.setState({selectedReports, selectedTab})
     }
   }
 
   render() {
-    console.log(this.state.reportData)
+    var reportCount = this.state.reportCount;
     return (
       <Container
         noFooter={true}
@@ -530,16 +562,27 @@ class Report extends Component {
       >
         <div className="insurance-common-report-page">
           <ul className="report-list-tab-container">
-            <li className="active" onClick={()=>this.selectTab('#active')} id="#active" data-tab-target="tab-element" >Active<span>(1)</span></li>
-            <li onClick={()=>this.selectTab('#pricing')} id="#pricing" data-tab-target="tab-element">Pending<span>(0)</span></li>
-            <li onClick={()=>this.selectTab('#about')} id="#about" data-tab-target="tab-element">Inactive<span>(0)</span></li>
+            <li className="active" onClick={()=>this.selectTab('activeReports')} id="activeReports" data-tab-target="tab-element" >Active<span>({reportCount && reportCount.active})</span></li>
+            <li onClick={()=>this.selectTab('pendingReports')} id="pendingReports" data-tab-target="tab-element">Pending<span>({reportCount && reportCount.pending})</span></li>
+            <li onClick={()=>this.selectTab('inactiveReports')} id="inactiveReports" data-tab-target="tab-element">Inactive<span>({reportCount && reportCount.inactive})</span></li>
           </ul>
       
           <div className="insurance-cards-container">
-            {
-              this.state.reportData.map((report, index) =>(
+            {this.state.selectedReports && this.state.selectedReports.length > 0 ? 
+              this.state.selectedReports.map((report, index) =>(
                   <ReportCard report={report}/>
-              ))
+              )): (
+                <Fragment>
+                <img className="inactive-policy-background" src={require(`assets/${this.state.productName}/inactive-policy-background.svg`)}/>
+                <p className="empty-state-text"> {this.state.selectedTab === 'activeReports'? 'No active policy': 'No pending application'} </p>
+
+                {this.state.selectedTab === 'activeReports' ? (
+                  <p className="advisory-link" onClick={() => this.navigate('/group-insurance/advisory/landing')}>
+                    CHECK THE RIGHT COVERAGE
+                  </p>
+                ): null}
+                </Fragment>
+              )
             }
           </div>
           {/* <div style={{marginBottom: '100px'}}></div>
