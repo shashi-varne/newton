@@ -3,10 +3,14 @@ import { getConfig } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
-import './PaymentCallback.scss';
+import "./PaymentCallback.scss";
+import { navigate as navigateFunc } from "../../common/commonFunctions";
+import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 
 const PaymentCallback = (props) => {
   const params = props.match.params || {};
+  const navigate = navigateFunc.bind(props);
+  const { user, isLoading } = useUserKycHook();
   const status = params.status || "";
   let message = params.message || "";
   resetRiskProfileJourney()
@@ -19,17 +23,27 @@ const PaymentCallback = (props) => {
   }
 
   const handleClick = () => {
-    props.history.push({
-      pathname: "/reports",
-      search: config.searchParams,
-    });
+    navigate("/reports", null, true);
   };
+
+  const goBack = () => {
+    if (
+      user.kyc_registration_v2 === "init" ||
+      user.kyc_registration_v2 === "incomplete"
+    ) {
+      navigate("/kyc/journey", null, true);
+    } else {
+      navigate("/landing", null, true);
+    }
+  }
 
   return (
     <Container
-      buttonTitle="Done"
+      buttonTitle="DONE"
       hidePageTitle
-      handleClick={() => handleClick()}
+      handleClick={handleClick}
+      headerData={{goBack}}
+      skelton={isLoading}
     >
       <section className="invest-payment-callback">
         {!paymentError && (
