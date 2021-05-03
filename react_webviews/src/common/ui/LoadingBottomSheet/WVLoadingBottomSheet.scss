@@ -1,0 +1,48 @@
+.wv-loading-bs {
+  .MuiDialog-paper {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+  .MuiDialog-paperWidthSm {
+    width: 100%;
+    align-self: flex-end;
+  }
+
+  .wv-lb-content {
+    padding: 15px;
+
+    .wv-lbc-gif {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .wv-lbc-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+      margin: 20px 0;
+      font-weight: bold;
+      font-size: 15px;
+      line-height: 24px;
+      color: var(--dark);
+      text-transform: capitalize;
+      
+      span {
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 21px;
+        color: var(--primary);
+      }
+    }
+    
+    .wv-lbc-subtitle {
+      color: var(--grey);
+      font-size: 13px;
+      line-height: 21px;
+      text-transform: capitalize;
+      margin-top: 5px;
+    }
+  }
+}

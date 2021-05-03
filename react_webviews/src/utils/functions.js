@@ -560,6 +560,8 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
   html.style.setProperty('--color-action-disable', '#E8ECF1');
+  html.style.setProperty('--dark', '#0A1D32');
+  html.style.setProperty('--grey', '#767E86');
 
   return config_to_return;
 }
