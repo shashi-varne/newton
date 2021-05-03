@@ -50,9 +50,13 @@ body[data-device="web"] {
     top: 60px;
   }
   .generic-error-dialog-page{
-    max-width: var(--desktop-width);
+    // max-width: var(--desktop-width);
+    width: 100%;
     margin: 0 auto;
-    margin-top: 56px;
+    margin-top: 124px;
+    margin-left: 300px;
+    max-width: 640px;
+
   }
   .MuiAppBar-positionFixed {
     left: 0 !important;

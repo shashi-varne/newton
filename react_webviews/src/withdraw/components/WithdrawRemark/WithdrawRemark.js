@@ -34,7 +34,6 @@ const WithdrawRemark = ({ location, ...props }) => {
       navigate('');
     } catch (err) {
       toast(err);
-      console.log(err);
     } finally{
       setIsLoading(false);
     }

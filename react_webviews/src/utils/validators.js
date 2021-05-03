@@ -216,7 +216,11 @@ export function formatAmount(amount) {
 
 export function formatAmountInr(amount) {
   if (!amount) {
-    return '₹';
+    if(amount === 0) {
+      return '₹' + amount;
+    } else {
+      return '₹';
+    }
   }
 
   amount = Number(amount);

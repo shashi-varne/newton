@@ -101,19 +101,17 @@ const Landing = (props) => {
         return
       }
       if (type === 'manual') {
-        console.log(recommendedFunds)
         navigate(`self/summary`, {
           state:{
             amounts: value,
-            ...recommendedFunds,
+            ...recommendedFunds[0],
           }
         })
       } else {
-        console.log(recommendedFunds)
         navigate(`${type}/summary`, {
           state:{
             amounts: value,
-            ...recommendedFunds,
+            ...recommendedFunds[0],
           }
         })
       }

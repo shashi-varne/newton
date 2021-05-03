@@ -25,6 +25,7 @@ const Request = (props) => {
       hidePageTitle={true}
       buttonTitle="OK"
       handleClick={() => handleClick()}
+      headerData={{goBack: handleClick}}
     >
       {!isEmpty(requestData) && (
         <div className="reports-sip-request">
