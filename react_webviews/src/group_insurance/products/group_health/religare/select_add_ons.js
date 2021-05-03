@@ -71,6 +71,7 @@ class GroupHealthPlanAddOns extends Component {
         
         let error = "";
         let errorType = "";
+        var groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = this.state.groupHealthPlanData.post_body;
 
         let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];
@@ -84,7 +85,13 @@ class GroupHealthPlanAddOns extends Component {
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
         // eslint-disable-next-line radix
-        let cta_premium =  this.state.bottomButtonData.leftSubtitleUnformatted || this.state.groupHealthPlanData.post_body.premium ;
+        let cta_premium = '';
+        if(groupHealthPlanData.account_type === 'self'){
+            cta_premium =   groupHealthPlanData.selectedSumInsuredPremium || this.state.groupHealthPlanData.post_body.premium;
+        }else{
+            cta_premium =   groupHealthPlanData.net_premium_addons || this.state.groupHealthPlanData.post_body.premium;
+        }
+        
         this.updateBottomPremiumAddOns(cta_premium);
         
         if (add_ons_data.length === 0) {
@@ -178,7 +185,6 @@ class GroupHealthPlanAddOns extends Component {
         });
 
         let updated_premium = cta_premium + total_premium;
-        
         this.updateBottomPremiumAddOns(updated_premium);
     }
 
