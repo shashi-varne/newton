@@ -38,7 +38,8 @@ class ReplaceFund extends Component {
           data.pension_houses.splice(index, 1);
           data.pension_houses.splice(0, 0, el)
         }
-      })
+        return el;
+      });
 
       this.setState({
         recommended: data.recommended[0].pension_house,

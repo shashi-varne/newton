@@ -199,6 +199,7 @@ class PanDetails extends Component {
               </div>
               <img
                 src={require(`assets/${this.state.productName}/popup_kyc_pending.svg`)}
+                alt=""
               />
             </div>
             <div className="btn">
@@ -237,7 +238,7 @@ class PanDetails extends Component {
   }
 
   render() {
-    let { form_data, is_nps_contributed, currentUser, isKycApproved } = this.state;
+    const { form_data, is_nps_contributed, currentUser, isKycApproved } = this.state;
     return (
       <Container
         classOverRIde="pr-error-container"
@@ -281,7 +282,7 @@ class PanDetails extends Component {
                     name="is_nps_contributed"
                     error={this.state.is_nps_contributed_error ? true : false}
                     helperText={this.state.is_nps_contributed_error}
-                    value={this.state.is_nps_contributed || ""}
+                    value={this.state.is_nps_contributed}
                     onChange={this.handleChangeRadio}
                   />
                 </Grid>
