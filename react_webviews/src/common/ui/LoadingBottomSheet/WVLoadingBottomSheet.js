@@ -1,6 +1,6 @@
 /*
  
-Info: Bottomsheet with a loader, a timer and some content 
+Use: Bottomsheet with a loader, a timer and some content 
 
 Syntax:
   <WVLoadingBottomSheet
@@ -25,7 +25,7 @@ import { Imgc } from "common/ui/Imgc";
 import PropTypes from 'prop-types';
 import { isFunction, noop } from 'lodash';
 
-const WVLoadingBottomSheet = ({
+export const WVLoadingBottomSheet = ({
   isOpen,
   gifSrc,
   title,
@@ -135,5 +135,3 @@ WVLoadingBottomSheet.defaultProps = {
   onTimerChange: () => {},
   classes: {}
 };
-
-export default WVLoadingBottomSheet;

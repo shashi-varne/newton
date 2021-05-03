@@ -1,6 +1,24 @@
+/*
+
+Use: Info Bubble to show informational/error/success/warning content with ability to dismiss
+
+Syntax:
+  <WVInfoBubble
+    isDismissable
+    isOpen={openBubble}
+    hasTitle
+    {...}
+  >
+    Enter content here ***required***
+  </WVInfoBubble>
+
+*/
+
+
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getConfig } from 'utils/functions';
+// import { getConfig } from 'utils/functions';
+import Fade from '@material-ui/core/Fade';
 import SVG from 'react-inlinesvg';
 
 const TYPES = {
@@ -34,48 +52,55 @@ const TYPES = {
   }
 }
 
-const WVInfoBubble = ({
-  isDismissable,
-  hasTitle,
-  customTitle,
-  type,
-  children
+export const WVInfoBubble = ({
+  isDismissable, // Set this flag if dismiss feature (cross on top right) is required
+  isOpen, // Only required when isDismissable is true
+  onDismissClick, // callback for when cross is clicked
+  hasTitle, // Set this to use the default title value from 'TYPES'
+  customTitle, // Overrirdes default title value
+  type, // Set bubble type - info/warning/error/success
+  children // Info bubble content
 }) => {
   const typeConfig = TYPES[type] || {};
 
   return (
-    <div className='wv-info-bubble' style={{ backgroundColor: typeConfig.bgColor }}>
-      {typeConfig.icon &&
-        <SVG
-          className='wv-ib-icon'
-          // preProcessor={code => code.replace(/fill='.*?'/g, 'fill=' + typeConfig.iconColor)}
-          src={require(`assets/${typeConfig.icon}.svg`)}
-        />
-      }
-      <div className='wv-ib-content'>
-        {hasTitle &&
-          <div className='wv-ib-content-title'>
-            <span style={{ color: typeConfig.titleColor }}>
-              {customTitle || typeConfig.title}
-            </span>
-            {isDismissable &&
-              <img
-                src={require('assets/close_icon_grey.svg')}
-                alt='X'
-              />
-            }
-          </div>
+    <Fade in={isDismissable && isOpen} timeout={350}>
+      <div className='wv-info-bubble' style={{ backgroundColor: typeConfig.bgColor }}>
+        {typeConfig.icon &&
+          <SVG
+            className='wv-ib-icon'
+            // preProcessor={code => code.replace(/fill='.*?'/g, 'fill=' + typeConfig.iconColor)}
+            src={require(`assets/${typeConfig.icon}.svg`)}
+          />
         }
-        <div className='wv-ib-content-desc'>
-          {children}
+        <div className='wv-ib-content'>
+          {hasTitle &&
+            <div className='wv-ib-content-title'>
+              <span style={{ color: typeConfig.titleColor }}>
+                {customTitle || typeConfig.title}
+              </span>
+              {isDismissable &&
+                <img
+                  src={require('assets/close_icon_grey.svg')}
+                  alt='X'
+                  onClick={onDismissClick}
+                />
+              }
+            </div>
+          }
+          <div className='wv-ib-content-desc'>
+            {children}
+          </div>
         </div>
       </div>
-    </div>
+    </Fade>
   );
 }
 
 WVInfoBubble.propTypes = {
   isDismissable: PropTypes.bool,
+  onDismissClick: PropTypes.func,
+  isOpen: PropTypes.bool,
   hasTitle: PropTypes.bool,
   customTitle: PropTypes.string,
   type: PropTypes.oneOf(Object.keys(TYPES)),
@@ -84,8 +109,7 @@ WVInfoBubble.propTypes = {
 
 WVInfoBubble.defaultProps = {
   isDismissable: false,
+  onDismissClick: () => {},
   hasTitle: false,
   type: 'info',
 };
-
-export default WVInfoBubble;
