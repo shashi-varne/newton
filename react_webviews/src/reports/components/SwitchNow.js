@@ -80,6 +80,9 @@ const SwitchNow = (props) => {
         } else if(obj.amount < fundTo.min_purchase) {
           toast(`Min amount to switch is ${formatAmountInr(fundTo.min_purchase)}`);
           return;
+        } else if(obj.amount > fund.switchable_amount) {
+          toast(`Max amount to switch is ${formatAmountInr(fund.switchable_amount)}`);
+          return;
         }
         if (obj.amount === fund.switchable_amount) {
           obj.all_units = true;
