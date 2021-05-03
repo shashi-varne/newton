@@ -18,7 +18,7 @@ const PaymentCallback = (props) => {
   let paymentError = false;
   if (status === "error" || status === "failed") {
     paymentError = true;
-    if (!message || message === " ")
+    if (!message)
       message = "Something went wrong, please retry with correct details";
   }
 

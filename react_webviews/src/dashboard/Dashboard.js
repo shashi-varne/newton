@@ -65,10 +65,22 @@ const Home = (props) => {
         <Route path={`${url}notification`} component={Notification} />
 
         <Route
+          exact
+          path={`${url}payment/callback/:status`}
+          component={PaymentCallback}
+        />
+        <Route
+          exact
           path={`${url}payment/callback/:status/:message`}
           component={PaymentCallback}
         />
         <Route
+          exact
+          path={`${url}sip/payment/callback/:status`}
+          component={SipPaymentCallback}
+        />
+        <Route
+          exact
           path={`${url}sip/payment/callback/:status/:message`}
           component={SipPaymentCallback}
         />
