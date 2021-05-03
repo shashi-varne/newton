@@ -21,3 +21,36 @@
     padding-top: 10px;
   }
 }
+
+.kyc-selfie-upload-status {
+  .kyc-selfie-upload-status-content {
+    .kyc-selfie-upload-status-info {
+      display: flex;
+      column-gap: 20px;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .sus-info-title {
+        padding: 10px 0;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 32px;
+        width: 95%;
+        color: #161a2e;
+      }
+
+      .sus-info-subtitle {
+        font-size: 13px;
+        line-height: 21px;
+        width: 95%;
+        color: #767e86;
+        padding-bottom: 35px;
+      }
+    }
+
+    .sus-button {
+      width: 100%;
+      min-height: 45px;
+    }
+  }
+}
