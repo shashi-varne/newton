@@ -1,7 +1,24 @@
 import { getConfig } from "utils/functions";
 import { storageService } from "utils/validators";
+import { commonBackMapper } from "utils/constants";
 
 const isLoggedIn = storageService().get("currentUser");
+
+export const backMapper = (state) => {
+  const backStatesMapper = {
+   ...commonBackMapper,
+   '/add-bank': '/my-account',
+   '/reports/redeemed-transaction': '/reports',
+   '/reports/switched-transaction': '/reports',
+   '/account/merge/linked/success': '/logout',
+   '/reports/sip/pause-request': '/reports/sip',
+   '/reports/sip/details': '/reports/sip',
+   '/reports/sip': '/reports',
+   '/diy/fundinfo/direct': '/'
+  }
+
+  return backStatesMapper[state] || "";
+}
 
 export const checkBeforeRedirection = (fromState, toState) => {
   if (isLoggedIn) {
@@ -28,13 +45,31 @@ export const checkBeforeRedirection = (fromState, toState) => {
   }
 };
 
-export const backButtonHanlder = (fromState, currentState) => {
+export const checkAfterRedirection = (fromState, toState) => {
+  if (window.top === window.self) {
+    if (
+      toState !== "/partner-landing" &&
+      toState !== "/login" &&
+      toState !== "/register" &&
+      toState !== "/forgot-password" &&
+      toState !== "/mobile/verify"
+    ) {
+      if (!isLoggedIn) {
+       return "/login";
+      }
+    }
+  }
+}
+
+
+export const backButtonHanlder = (fromState, currentState, params) => {
   const returnObj = {};
+  const backPath = backMapper(currentState);
   // Todo: need to check fhc-summary
-  let landingRedirectPaths = ["fhc-summary", "/sip/payment/callback", "/kyc/report", "/notification", "/nps/payment/callback",
+  const landingRedirectPaths = ["fhc-summary", "/sip/payment/callback", "/kyc/report", "/notification", "/nps/payment/callback",
     "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"];
 
-  let fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
+  const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
    '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
     '/nps/sip', '/my-account', '/modal', '/page/callback', '/nps/pran', '/invest/recommendations', '/reports/sip/pause-request', '/kyc/journey'];
     
@@ -56,22 +91,16 @@ export const backButtonHanlder = (fromState, currentState) => {
     }
   }
 
-  switch (currentState) {
-    case "/kyc/digilocker/failed":
-      returnObj.path = "/kyc/journey";
-      returnObj.state = { show_aadhaar: true }
-      break;
-    }
+  if (currentState === "/kyc/digilocker/failed") {
+    returnObj.path = "/kyc/journey";
+    returnObj.state = { show_aadhaar: true }
   }
-}
 
-var backMapper = {
-  '/add-bank': '/my-account',
-  '/kyc-esign/nsdl': '/invest',
-  '/reports/switched-transaction': '/reports',
-  '/account/merge/linked/success': '/logout',
-  '/reports/sip/pause-request': '/reports/sip',
-  '/reports/sip/details': '/reports/sip',
-  '/reports/sip': '/reports',
-  '/diy/fundinfo/direct': '/'
+  if (currentState === "/kyc-esign/nsdl" && params.status === "success") {
+    returnObj.path = "/invest";
+  }
+
+  if (backPath) {
+    returnObj.path = backPath;
+  }
 }

@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { getConfig, isIframe } from "../utils/functions";
+import { getConfig, isIframe, navigate as navigateFunc } from "../utils/functions";
 import { storageService } from "../utils/validators";
 import { logout } from "./function";
 
 const Logout = (props) => {
   const config = getConfig();
+  const navigate = navigateFunc.bind(props); 
 
   useEffect(() => {
     initialize();
@@ -22,10 +23,7 @@ const Logout = (props) => {
         } catch (err) {
           console.log(err);
         } finally {
-          props.history.push({
-            pathname: "/login",
-            search: config.searchParams,
-          });
+          navigate("/login");
         }
       }
     } else {

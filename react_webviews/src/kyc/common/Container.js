@@ -7,6 +7,7 @@ import {
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
 import { getConfig } from "../../utils/functions";
+import { storageService } from "utils/validators";
 
 class Container extends Component {
   constructor(props) {
@@ -48,10 +49,14 @@ class Container extends Component {
     const toStatePath = this.props.location?.state?.toState || "";
 
     if(toStatePath) {
-      this.props.history.push({
-        pathname: toStatePath,
-        search: getConfig().searchParams,
-      });
+      if (getConfig().isSdk && storageService().get('native')) {
+        nativeCallback({ action: "exit_web" });
+      } else {
+        this.props.history.push({
+          pathname: toStatePath,
+          search: getConfig().searchParams,
+        });
+      }
       return;
     }
 

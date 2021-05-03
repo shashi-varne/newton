@@ -318,6 +318,8 @@ export const getConfig = () => {
   returnConfig.isSdk = storageService().get("is_secure"); 
   returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
   returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
+  returnConfig.isIframe = isIframe();
+  returnConfig.platform = !returnConfig.isIframe ? (!returnConfig.Web ? "sdk" : "web" ): "iframe";
   
   return returnConfig;
 };
@@ -458,14 +460,23 @@ export function getBasePath() {
   return window.location.origin + basename;
 }
 
+const { checkBeforeRedirection, checkAfterRedirection, backButtonHanlder } = require(`./${getConfig().platform}_app`);
+
 export function navigate(pathname, data = {}) {
-  const fromState = this?.location?.pathname || ""
-  const toState = pathname
+  let fromState = this?.location?.pathname || ""
+  let toState = pathname
+  
+  const redirectPath = checkBeforeRedirection(fromState, toState)
+  if (redirectPath) {
+    toState = redirectPath
+  }
+
   data.state = {
     ...data?.state,
     fromState,
     toState
   }
+
   if (data.edit) {
     this.history.replace({
       pathname: pathname,
@@ -483,10 +494,9 @@ export function navigate(pathname, data = {}) {
   }
 }
 
-export function isNpsOutsideSdk(partner, toState, fromState) {
+export function isNpsOutsideSdk(fromState, toState) {
   let config = getConfig();
-  if (config.landingconfig && config.landingconfig.nps &&
-    config.landingconfig.nps === 'inside_sdk') {
+  if (config?.landingconfig?.nps === 'inside_sdk') {
     return false;
   }
 
@@ -497,4 +507,10 @@ export function isNpsOutsideSdk(partner, toState, fromState) {
         toState === "/nps/performance"))) {
     return true;
   }
+}
+
+export {
+  checkBeforeRedirection, 
+  checkAfterRedirection, 
+  backButtonHanlder
 }
