@@ -53,7 +53,12 @@ import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
 
 // Equity Components
-import AllowLocation from  "./equity/AllowLocation";
+import AllowLocation from  "./Equity/AllowLocation";
+import Experience from "./Equity/components/Experience";
+import SelfieInstructions from "./Equity/components/SelfieInstructions";
+import StocksStatus from "./Equity/components/StocksStatus";
+import NriError from "./Equity/components/NriError";
+import LocationError from "./Equity/components/LocationError";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -290,6 +295,31 @@ const Kyc = (props) => {
           exact 
           path={`${url}/location/allow`} 
           component={AllowLocation} 
+        />
+        <Route 
+          exact 
+          path={`${url}/trading-experience`} 
+          component={Experience} 
+        />
+        <Route 
+          exact 
+          path={`${url}/selfie-instructions`} 
+          component={SelfieInstructions} 
+        />
+        <Route 
+          exact 
+          path={`${url}/stocks-status`} 
+          component={StocksStatus} 
+        />
+        <Route 
+          exact 
+          path={`${url}/nri-error`} 
+          component={NriError} 
+        />
+        <Route 
+          exact 
+          path={`${url}/location-error`} 
+          component={LocationError} 
         />
         <Route component={NotFound} />
       </Switch>

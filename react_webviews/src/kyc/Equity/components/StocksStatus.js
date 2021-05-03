@@ -1,7 +1,7 @@
 import React from "react";
-import Button from "../../common/ui/Button";
-import { getConfig } from "../../utils/functions";
-import Container from "../common/Container";
+import Button from "../../../common/ui/Button";
+import { getConfig } from "../../../utils/functions";
+import Container from "../../common/Container";
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;

@@ -1,6 +1,6 @@
 import React from "react";
-import { getConfig } from "../../utils/functions";
-import Container from "../common/Container";
+import { getConfig } from "../../../utils/functions";
+import Container from "../../common/Container";
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;

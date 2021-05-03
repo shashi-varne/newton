@@ -1,6 +1,6 @@
 import React from "react";
-import { Imgc } from "../../common/ui/Imgc";
-import { getConfig } from "../../utils/functions";
+import { Imgc } from "../../../common/ui/Imgc";
+import { getConfig } from "../../../utils/functions";
 import "./mini-components.scss";
 
 const productName = getConfig().productName;

@@ -1,5 +1,5 @@
 import React from "react";
-import Container from "../common/Container";
+import Container from "../../common/Container";
 import { StatusInfo } from "../mini-components/StatusInfo";
 import "./commonStyles.scss";
 

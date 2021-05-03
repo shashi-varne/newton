@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Container from "../common/Container";
+import Container from "../../common/Container";
 import "./commonStyles.scss";
 
 const tradingExperienceValues = [
