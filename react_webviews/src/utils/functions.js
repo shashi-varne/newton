@@ -482,3 +482,19 @@ export function navigate(pathname, data = {}) {
     });
   }
 }
+
+export function isNpsOutsideSdk(partner, toState, fromState) {
+  let config = getConfig();
+  if (config.landingconfig && config.landingconfig.nps &&
+    config.landingconfig.nps === 'inside_sdk') {
+    return false;
+  }
+
+  if (fromState === "/nps" ||
+    ((fromState.indexOf("/nps/amount") !== -1) && toState === "/nps/info") ||
+    ((fromState.indexOf("/nps/payment/callback") !== -1) &&
+      ((toState.indexOf("/nps/amount") !== -1) || toState === "/nps/investments" ||
+        toState === "/nps/performance"))) {
+    return true;
+  }
+}

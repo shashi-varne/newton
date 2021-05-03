@@ -45,11 +45,11 @@ class Container extends Component {
       return;
     }
 
-    const goBackPath = this.props.location?.state?.goBack || "";
+    const toStatePath = this.props.location?.state?.toState || "";
 
-    if(goBackPath) {
+    if(toStatePath) {
       this.props.history.push({
-        pathname: goBackPath,
+        pathname: toStatePath,
         search: getConfig().searchParams,
       });
       return;
