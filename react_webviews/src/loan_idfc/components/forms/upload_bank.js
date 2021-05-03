@@ -224,7 +224,7 @@ class UploadBank extends Component {
 
     if (!file) return
 
-    if (file.size >= 600000) {
+    if (file.size >= 6291456) {
       toast("Please select pdf file less than 6 MB only");
       return;
     }
