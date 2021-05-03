@@ -8,7 +8,7 @@ const PageCallback = (props) => {
   if (!status) {
     navigate("/invest", null, true);
   } else {
-    if (!message) message = "";
+    if (!message) message = " ";
     if (investment_type === "sip") {
       navigate(`/sip/payment/callback/${status}/${message}`, null, true);
     } else if (investment_type === "onetime") {

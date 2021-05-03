@@ -7,7 +7,7 @@ import { getCampaign } from "../../common/api";
 import { isEmpty, storageService } from "utils/validators";
 import { initData } from "../../../../kyc/services";
 import { getBasePath } from "utils/functions";
-import './SipPaymentCallback.scss';
+import "./SipPaymentCallback.scss";
 
 const SipPaymentCallback = (props) => {
   const params = props.match.params || {};
@@ -26,7 +26,7 @@ const SipPaymentCallback = (props) => {
   let paymentError = false;
   if (status === "error" || status === "failed") {
     paymentError = true;
-    if (!message)
+    if (!message || message === " ")
       message = "Something went wrong, please retry with correct details";
   }
 
@@ -142,13 +142,18 @@ const SipPaymentCallback = (props) => {
     }
   };
 
+  const goBack = () => {
+    navigate("/landing");
+  }
+
   return (
     <Container
       buttonTitle={buttonTitle}
       showLoader={isApiRunning}
       handleClick={() => handleClick()}
-      title="Congratulations! Order placed"
+      title={!paymentError ? "Congratulations! Order placed" : "Payment failed"}
       skelton={skelton}
+      headerData={{goBack}}
     >
       <section className="invest-sip-payment-callback">
         {!paymentError && (
@@ -172,7 +177,6 @@ const SipPaymentCallback = (props) => {
         )}
         {paymentError && (
           <div className="content">
-            <div className="title">Payment failed</div>
             <Imgc
               src={require(`assets/${config.productName}/error_illustration.svg`)}
               alt=""
