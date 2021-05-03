@@ -31,7 +31,6 @@ import ProtectedRoute from './common/components/ProtectedRoute';
 import FeedBack from './feedback';
 
 import Kyc from './kyc';
-import Stocks from './stocks';
 import 'common/theme/Style.scss';
 
 const Feature = () => {
@@ -64,7 +63,6 @@ const Feature = () => {
       <ProtectedRoute path='/withdraw' component={Withdraw} />
       <ProtectedRoute path='/reports' component={Report} />
       <ProtectedRoute path='/kyc' component={Kyc} />
-      <ProtectedRoute path='/stocks' component={Stocks} />
       <ProtectedRoute path='/' component={Landing} />
       <Route component={NotFound} />
     </Switch>
