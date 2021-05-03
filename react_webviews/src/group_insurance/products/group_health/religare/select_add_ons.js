@@ -84,7 +84,7 @@ class GroupHealthPlanAddOns extends Component {
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
         // eslint-disable-next-line radix
-        let cta_premium = this.state.bottomButtonData.leftSubtitleUnformatted;
+        let cta_premium =  this.state.bottomButtonData.leftSubtitleUnformatted || this.state.groupHealthPlanData.post_body.premium ;
         this.updateBottomPremiumAddOns(cta_premium);
         
         if (add_ons_data.length === 0) {
