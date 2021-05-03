@@ -39,7 +39,7 @@ const PaymentCallback = (props) => {
 
   return (
     <Container
-      buttonTitle="Done"
+      buttonTitle="DONE"
       hidePageTitle
       handleClick={handleClick}
       headerData={{goBack}}

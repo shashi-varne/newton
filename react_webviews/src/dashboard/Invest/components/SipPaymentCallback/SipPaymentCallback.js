@@ -56,7 +56,7 @@ const SipPaymentCallback = (props) => {
           }) || {};
       }
       if (campaignData && !isEmpty(campaignData) && !paymentError)
-        setButtonTitle("Automate SIPs via easySIP");
+        setButtonTitle("AUTOMATE SIPS VIA EASYSIP");
       setCampaign(campaignData);
       let user = { ...currentUser };
       if (isEmpty(user)) {
@@ -151,7 +151,7 @@ const SipPaymentCallback = (props) => {
       buttonTitle={buttonTitle}
       showLoader={isApiRunning}
       handleClick={() => handleClick()}
-      title={!paymentError ? "Congratulations! Order placed" : "Payment failed"}
+      title={!paymentError ? "Payment successful" : "Payment failed"}
       skelton={skelton}
       headerData={{goBack}}
     >
@@ -163,7 +163,7 @@ const SipPaymentCallback = (props) => {
               alt=""
               className="img"
             />
-            <h4>Payment successful</h4>
+            <h4>Order placed</h4>
             <p>You are one step closer to your financial freedom</p>
             <div className="message">
               <img
