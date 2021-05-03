@@ -7,6 +7,7 @@ import { getConfig } from "../../utils/functions";
 import { isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
 import "./Otp.scss";
+import AccountMergeConfirmBack from "../mini-components/AccountMergeConfirmBack";
 
 class AccountMergeOtp extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class AccountMergeOtp extends Component {
       timeAvailable: 30,
       totalTime: 30,
       otp: "",
+      openConfirmBack: false
     };
   }
 
@@ -112,7 +114,7 @@ class AccountMergeOtp extends Component {
   };
 
   render() {
-    let { auth_id, otp, isApiRunning, otpData } = this.state;
+    let { auth_id, otp, isApiRunning, otpData, openConfirmBack } = this.state;
     return (
       <Container
         skelton={this.state.show_loader}
@@ -121,6 +123,7 @@ class AccountMergeOtp extends Component {
         title="Enter OTP to verify"
         disable={otp.length !== 4}
         showLoader={isApiRunning}
+        headerData={{ goBack: () => this.setState({ openConfirmBack: true }) }}
       >
         {!isEmpty(otpData) && (
           <div className="account-merge-otp">
@@ -134,6 +137,11 @@ class AccountMergeOtp extends Component {
             </div>
           </div>
         )}
+        <AccountMergeConfirmBack
+          isOpen={openConfirmBack}
+          close={() => this.setState({ openConfirmBack: false })}
+          goBack={() => this.props.history.goBack()}
+        />
       </Container>
     );
   }
