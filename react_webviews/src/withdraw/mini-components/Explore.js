@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
-import { navigate as navigateFunc } from '../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import './mini-components.scss';
 
 // Current Version of material ui does not have right alt icons

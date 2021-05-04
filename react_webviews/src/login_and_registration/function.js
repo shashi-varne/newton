@@ -2,7 +2,7 @@ import { validateEmail } from "utils/validators";
 import toast from "common/ui/Toast";
 import Api from "utils/api";
 import { storageService, getUrlParams } from "utils/validators";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 
 const isMobileView = getConfig().isMobileDevice;
@@ -18,7 +18,7 @@ export function initialize() {
   this.resendOtp = resendOtp.bind(this);
   this.forgotPassword = forgotPassword.bind(this);
   this.verifyForgotOtp = verifyForgotOtp.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
   let main_query_params = getUrlParams();

@@ -1,4 +1,4 @@
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
 
@@ -6,7 +6,6 @@ const isLoggedIn = storageService().get("currentUser");
 
 export const backMapper = (state) => {
   const backStatesMapper = {
-   ...commonBackMapper,
    '/add-bank': '/my-account',
    '/reports/redeemed-transaction': '/reports',
    '/reports/switched-transaction': '/reports',
@@ -14,7 +13,8 @@ export const backMapper = (state) => {
    '/reports/sip/pause-request': '/reports/sip',
    '/reports/sip/details': '/reports/sip',
    '/reports/sip': '/reports',
-   '/diy/fundinfo/direct': '/'
+   '/diy/fundinfo/direct': '/',
+   ...commonBackMapper
   }
 
   return backStatesMapper[state] || "";
@@ -45,7 +45,8 @@ export const checkBeforeRedirection = (fromState, toState) => {
   }
 };
 
-export const checkAfterRedirection = (fromState, toState) => {
+export const checkAfterRedirection = (props, fromState, toState) => {
+  const navigate = navigateFunc.bind(props);
   if (window.top === window.self) {
     if (
       toState !== "/partner-landing" &&
@@ -55,7 +56,7 @@ export const checkAfterRedirection = (fromState, toState) => {
       toState !== "/mobile/verify"
     ) {
       if (!isLoggedIn) {
-       return "/login";
+        navigate("/login");
       }
     }
   }

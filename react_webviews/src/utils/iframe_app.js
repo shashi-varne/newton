@@ -40,18 +40,18 @@ const config = getConfig();
 
 export const backMapper = (state) => {
   const backStatesMapper = {
-    ...commonBackMapper,
     '/reports/redeemed-transaction': '/reports',
     '/reports/switched-transaction': '/reports',
     '/reports/sip/pause-request': '/reports/sip',
     '/reports/sip/details': '/reports/sip',
     '/reports/sip': '/reports',
+    ...commonBackMapper,
   }
 
   return backStatesMapper[state] || "";
 }
 
-export const checkBeforeRedirection = (fromState, toState) => {
+export const checkBeforeRedirection = (props, fromState, toState) => {
   if (isLoggedIn) {
     if (
       toState === "/login" ||
@@ -67,6 +67,9 @@ export const checkBeforeRedirection = (fromState, toState) => {
     }
   }
 };
+
+export const checkAfterRedirection = (fromState, toState) => {
+}
 
 export const backButtonHanlder = (fromState, currentState, params) => {
   const backEnabledPages = [

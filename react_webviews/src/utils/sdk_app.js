@@ -6,11 +6,11 @@ import { commonBackMapper } from "utils/constants";
 
 export const backMapper = (state) => {
   const backStatesMapper = {
-   ...commonBackMapper,
    '/reports/switched-transaction': '/reports',
    '/reports/sip/pause-request': '/reports/sip',
    '/reports/sip/details': '/reports/sip',
    '/reports/sip': '/reports',
+   ...commonBackMapper,
   }
 
   return backStatesMapper[state] || "";
@@ -26,7 +26,7 @@ export const checkBeforeRedirection = (fromState, toState) => {
   }
 };
 
-export const checkAfterRedirection = (fromState, toState) => {
+export const checkAfterRedirection = (props, fromState, toState) => {
   if (toState === "/" || isNpsOutsideSdk(fromState, toState)) {
     nativeCallback({ action: "take_back_button_control" });
     nativeCallback({ action: "clear_history" });
