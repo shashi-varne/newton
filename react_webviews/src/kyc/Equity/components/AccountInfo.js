@@ -1,6 +1,7 @@
 import React from "react";
 import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
+import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;
@@ -12,6 +13,10 @@ const benefits = [
   {
     icon: "paperless.svg",
     text: "Paperless process - fast & secure",
+  },
+  {
+    icon: "experience.svg",
+    text: "Get the best investment experience",
   },
 ];
 const AccountInfo = (props) => {
@@ -43,6 +48,37 @@ const AccountInfo = (props) => {
               })}
             </div>
           </div>
+          <div>
+            <div className="generic-page-title">{"Fees & charges"}</div>
+            <div className="kaim-fees-info">
+              <div className="kaim-fees-info-text">
+                <div>Account opening charges</div>
+                <div className="kaim-fees-info-subtext">(one-time fee)</div>
+              </div>
+              <div>
+                <div className="kaim-no-fees-text1">₹ 250/yr+ GST</div>
+                <div className="kaim-no-fees-text2">FREE</div>
+              </div>
+            </div>
+            <div className="kaim-fees-info">
+              <div className="kaim-fees-info-text">
+                <div>Platform charges</div>
+              </div>
+              <div>
+                <div className="kaim-no-fees-text1">₹ 250/yr+ GST</div>
+                <div className="kaim-no-fees-text2">FREE</div>
+              </div>
+            </div>
+          </div>
+          <div className="kaim-terms">
+            <Checkbox checked={true} />
+            <div>
+              I agree to have read and understood the{" "}
+              <span>{"Terms & conditions"}</span> and{" "}
+              <span>Equity Annexure</span>{" "}
+            </div>
+          </div>
+           {/* add secure invest card */}
         </main>
       </div>
     </Container>

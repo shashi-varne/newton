@@ -81,6 +81,8 @@
 }
 
 .kyc-account-info {
+  padding-bottom: 30px;
+
   .kyc-account-info-header {
     display: flex;
     align-items: flex-end;
@@ -108,6 +110,7 @@
 
     .kaim-key-benefits {
       margin-right: -20px;
+      padding-bottom: 40px;
     }
 
     .kaim-benefits {
@@ -123,12 +126,67 @@
         color: #767e86;
 
         img {
+          border-radius: 8px;
           width: 170px;
         }
 
         .kaim-benefits-info-text {
           width: 85%;
         }
+      }
+
+      .kaim-benefits-info:last-child {
+        padding-right: 20px;
+      }
+    }
+
+    .kaim-fees-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      column-gap: 20px;
+      padding: 10px 0;
+
+      .kaim-fees-info-text {
+        font-size: 13px;
+        line-height: 21px;
+        color: #161a2e;
+
+        .kaim-fees-info-subtext {
+          font-size: 11px;
+          line-height: 18px;
+          color: #767e86;
+        }
+      }
+
+      .kaim-no-fees-text1 {
+        font-size: 13px;
+        line-height: 21px;
+        text-decoration-line: line-through;
+        color: #767e86;
+      }
+
+      .kaim-no-fees-text2 {
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 21px;
+        color: var(--primary);
+        text-align: right;
+      }
+    }
+
+    .kaim-terms {
+      padding-top: 20px;
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      font-size: 13px;
+      line-height: 21px;
+      color: #767e86;
+
+      span {
+        color: var(--primary);
+        font-weight: 600;
       }
     }
   }
