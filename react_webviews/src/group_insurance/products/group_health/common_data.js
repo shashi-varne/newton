@@ -980,10 +980,14 @@ export async function resetQuote() {
         if (res.pfwresponse.status_code === 200) {
             
             let next_state = `/group-insurance/group-health/${this.state.provider}/insure-type`;
+            var groupHealthPlanData = this.state.groupHealthPlanData || {};
             if(this.state.provider === 'GMC'){
-                var groupHealthPlanData = this.state.groupHealthPlanData || {};
                 groupHealthPlanData['goodHDec'] = false;
                 this.setLocalProviderData(groupHealthPlanData)
+            }
+            if(!isEmpty(groupHealthPlanData.application_data)){
+              groupHealthPlanData.application_data = {};
+              this.setLocalProviderData(groupHealthPlanData)
             }
             this.navigate(next_state);
             this.setState({

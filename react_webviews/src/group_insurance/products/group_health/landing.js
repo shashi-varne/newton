@@ -208,17 +208,15 @@ class GroupHealthLanding extends Component {
 
     if(!isEmpty(groupHealthPlanData.application_data)){
       groupHealthPlanData.application_data = {};
+      
     }
-
-
     let post_body = groupHealthPlanData.post_body;
     if(post_body){
       delete post_body['quotation_id'];
       groupHealthPlanData.post_body  = post_body;
-      this.setLocalProviderData(groupHealthPlanData);
     }
     
-  
+    this.setLocalProviderData(groupHealthPlanData)
     this.sendEvents("next");
     storageService().setObject("resumeToPremiumHealthInsurance", false);
     this.navigate(this.state.providerConfig.get_next[screen_name]);
