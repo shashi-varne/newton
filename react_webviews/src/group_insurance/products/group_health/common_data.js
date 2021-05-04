@@ -473,7 +473,7 @@ export async function getPlanDetails(){
                 groupHealthPlanData[x] = ""
             }
         
-            let keys_to_remove = ['base_premium', 'sum_assured', 'discount_amount', 'insured_pattern','tax_amount', 'tenure','total_amount', 'type_of_plan']
+            let keys_to_remove = ['sum_assured', 'discount_amount', 'insured_pattern','tax_amount', 'tenure','total_amount', 'type_of_plan']
             for(let key in keys_to_remove){
               delete post_body[keys_to_remove[key]]
             }
