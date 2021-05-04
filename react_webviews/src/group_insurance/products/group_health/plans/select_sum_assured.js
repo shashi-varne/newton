@@ -131,12 +131,12 @@ class GroupHealthPlanSelectSumAssured extends Component {
             let body = {};
 
             if(provider === 'HDFCERGO' && account_type === 'self'){
-                
                 next_state = 'cover_period_screen'
                 allowed_post_body_keys.push('city')
                 body['floater_type'] = 'non_floater'
             }else if(provider === 'RELIGARE' && account_type === 'self'){
                 groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
+                groupHealthPlanData.post_body.floater_type = 'non_floater';
                 this.setLocalProviderData(groupHealthPlanData)
                 next_state = 'add_ons_screen'
                 var current_state = {}
