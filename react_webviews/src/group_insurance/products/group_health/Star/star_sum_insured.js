@@ -6,7 +6,7 @@ import { numDifferentiationInr, formatAmountInr } from 'utils/validators';
 import Api from 'utils/api';
 import DotDotLoader from 'common/ui/DotDotLoader';
 import { getConfig } from 'utils/functions';
-import { isEmpty } from '../../../../utils/validators';
+import { isEmpty, storageService } from '../../../../utils/validators';
 import toast from '../../../../common/ui/Toast';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
@@ -248,8 +248,9 @@ class GroupHealthPlanStarSumInsured extends Component {
             gst: plan_selected_final.gst[1],
             floater_type: plan_selected_final.floater_type
         });
-
-
+        if(storageService().getObject('applicationPhaseReached')){
+            delete groupHealthPlanData.post_body['quotation_id'];
+        }
         this.setLocalProviderData(groupHealthPlanData);
         this.navigate(this.state.next_screen || 'plan-premium-summary');
 
