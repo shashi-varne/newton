@@ -1,17 +1,16 @@
 import toast from "../../../../common/ui/Toast";
 import Api from "../../../../utils/api";
-import { getBasePath } from "../../../../utils/functions";
+import { getBasePath, navigate as navigateFunc } from "../../../../utils/functions";
 import { formatAmountInr, storageService } from "../../../../utils/validators";
 import { apiConstants } from "../../constants";
 import {
   proceedInvestment,
   isInvestRefferalRequired,
 } from "../../../proceedInvestmentFunctions";
-import { navigate } from "../../functions";
 
 const errorMessage = "Something went wrong!";
 export async function initializeComponentFunctions() {
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.deleteFund = deleteFund.bind(this);
   this.checkLimit = checkLimit.bind(this);
   this.goNext = goNext.bind(this);

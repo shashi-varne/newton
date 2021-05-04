@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "common/ui/Button";
-import { navigate } from "../../functions";
+import { navigate as navigateFunc } from "utils/functions";
 import {
   getFormattedDate,
   getNfoRecommendation,
@@ -21,7 +21,7 @@ class NfoFunds extends Component {
       screenName: "nfo_funds",
       showFunds: false,
     };
-    this.navigate = navigate.bind(this);
+    this.navigate = navigateFunc.bind(props);
   }
 
   componentDidMount() {

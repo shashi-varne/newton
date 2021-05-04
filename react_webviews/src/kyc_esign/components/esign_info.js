@@ -18,7 +18,7 @@ class ESignInfo extends Component {
       dl_flow: false
     }
 
-    this.navigate = navigateFunc.bind(this.props);
+    this.navigate = navigateFunc.bind(props);
   }
 
   componentDidMount = () => {

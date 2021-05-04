@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
-import { navigate } from "../../functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { getFormattedDate, getSchemeOption } from "./nfoFunctions";
 import Button from "common/ui/Button";
 import "./FundDetail.scss";
@@ -13,7 +13,7 @@ class FundDetail extends Component {
       show_loader: false,
       screenName: "nfo_fund_detail",
     };
-    this.navigate = navigate.bind(this);
+    this.navigate = navigateFunc.bind(props);
   }
 
   componentDidMount() {
