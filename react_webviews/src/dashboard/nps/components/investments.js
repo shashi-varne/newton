@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { initialize } from "../common/commonFunctions";
 import Api from "utils/api";
-import toast from "common/ui/Toast";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "../../../utils/validators";
 import { getConfig } from "utils/functions";

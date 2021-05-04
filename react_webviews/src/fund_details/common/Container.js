@@ -3,8 +3,8 @@ import { withRouter } from 'react-router';
 
 import Header from './Header';
 import Footer from '../../common/components/footer';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+// import loader_fisdom from 'assets/loader_gif_fisdom.gif';
+// import loader_myway from 'assets/loader_gif_myway.gif';
 import { nativeCallback } from 'utils/native_callback';
 import Button from '@material-ui/core/Button';
 import {
@@ -25,7 +25,7 @@ import UiSkelton from '../../common/ui/Skelton';
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const x = React.useRef(true);
-  const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
+  // const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
   const inPageTitle = true;
 
   const historyGoBack = (backData) => {
@@ -221,7 +221,6 @@ const Container = (props) => {
           buttonTitle2={props.buttonTitle2}
           showLoader={props.showLoader}
           dualbuttonwithouticon={props.dualbuttonwithouticon}
-          twoButton={props.twoButton}
           buttonOneTitle={props.buttonOneTitle}
           buttonTwoTitle={props.buttonTwoTitle}
           handleClickOne={props.handleClickOne}

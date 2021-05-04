@@ -65,20 +65,39 @@ const Home = (props) => {
         <Route path={`${url}notification`} component={Notification} />
 
         <Route
+          exact
+          path={`${url}payment/callback/:status`}
+          component={PaymentCallback}
+        />
+        <Route
+          exact
           path={`${url}payment/callback/:status/:message`}
           component={PaymentCallback}
         />
         <Route
+          exact
+          path={`${url}sip/payment/callback/:status`}
+          component={SipPaymentCallback}
+        />
+        <Route
+          exact
           path={`${url}sip/payment/callback/:status/:message`}
           component={SipPaymentCallback}
         />
         <Route path={`${url}payment/options`} component={PaymentOptions} />
         <Route
-          path={[
-            `${url}page/callback/:investment_type/:investment_amount`,
-            `${url}page/callback/:investment_type/:investment_amount/:status`,
-            `${url}page/callback/:investment_type/:investment_amount/:status/:message`,
-          ]}
+          exact
+          path={`${url}page/callback/:investment_type/:investment_amount`}
+          component={PageCallback}
+        />
+        <Route
+          exact
+          path={`${url}page/callback/:investment_type/:investment_amount/:status`}
+          component={PageCallback}
+        />
+        <Route
+          exact
+          path={`${url}page/callback/:investment_type/:investment_amount/:status/:message`}
           component={PageCallback}
         />
         <Route

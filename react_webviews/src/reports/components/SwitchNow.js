@@ -64,28 +64,33 @@ const SwitchNow = (props) => {
   const handleClick = async () => {
     let dataToSend = [];
     for (let fund of fundDetails.folio_wise_details) {
-      let obj = {
-        from_mf: fundDetails.mf.isin,
-        all_units: false,
-        amount: "",
-        to_mf: fundTo.isin,
-        folio_number: "",
-      };
-      obj.folio_number = fund.folio;
-      obj.amount = fund.switchAmount;
-      if (!obj.amount) {
-        toast("Please enter amount");
-        return;
-      } else if(obj.amount < fundTo.min_purchase) {
-        toast(`Min amount to switch is ${formatAmountInr(fundTo.min_purchase)}`);
-        return;
+      if(fund.switch_possible) {
+        let obj = {
+          from_mf: fundDetails.mf.isin,
+          all_units: false,
+          amount: "",
+          to_mf: fundTo.isin,
+          folio_number: "",
+        };
+        obj.folio_number = fund.folio;
+        obj.amount = fund.switchAmount;
+        if (!obj.amount) {
+          toast("Please enter amount");
+          return;
+        } else if(obj.amount < fundTo.min_purchase) {
+          toast(`Min amount to switch is ${formatAmountInr(fundTo.min_purchase)}`);
+          return;
+        } else if(obj.amount > fund.switchable_amount) {
+          toast(`Max amount to switch is ${formatAmountInr(fund.switchable_amount)}`);
+          return;
+        }
+        if (obj.amount === fund.switchable_amount) {
+          obj.all_units = true;
+        } else {
+          obj.all_units = false;
+        }
+        dataToSend.push(obj);
       }
-      if (obj.amount === fund.switchable_amount) {
-        obj.all_units = true;
-      } else {
-        obj.all_units = false;
-      }
-      dataToSend.push(obj);
     }
 
     try {

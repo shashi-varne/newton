@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import Input from "../../../common/ui/Input";

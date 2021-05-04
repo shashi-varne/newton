@@ -19,26 +19,24 @@ class NpsPerformance extends Component {
   }
 
   onload = async () => {
-
-    let nps_performance = storageService().getObject('nps_performance');
-    let pran = storageService().get('pran');
+    const nps_performance = storageService().getObject('nps_performance');
+    const pran = storageService().get('pran');
 
     this.setState({
       nps_performance: nps_performance,
-      pran, pran
-    })
+      pran
+    });
   }
 
   getFullName = (type) => {
-    if (type == 'E') {
+    if (type === 'E') {
       return 'Equity';
-    } else if (type == 'C') {
+    } else if (type === 'C') {
       return 'Corporate bonds';
-    } else if (type == 'G') {
-      return 'Government securities'
-    } else {
-      return '';
-    }
+    } else if (type === 'G') {
+      return 'Government securities';
+    } 
+    return '';
   };
 
   render() {
