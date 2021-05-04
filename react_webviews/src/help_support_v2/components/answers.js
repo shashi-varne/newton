@@ -33,8 +33,24 @@ class Answers extends Component {
 
   componentDidUpdate() {
     if (Object.keys(this.state.faqs).length !== 0) {
-            this.swipeableActions.updateHeight();
+      this.swipeableActions.updateHeight();
+    }
+
+    let aTags = document.getElementsByTagName('a') || [];
+
+    for (var i = 0; i < aTags.length; i++) {
+      let url = aTags[i].href;
+      aTags[i].onclick = function (event) {
+
+        event.preventDefault(); // default behaviour removed to handle our own
+        nativeCallback({
+          action: 'open_in_browser',
+          message: {
+            url: url
           }
+        });
+      }
+    }
   }
 
   onload = async () => {
@@ -148,8 +164,8 @@ class Answers extends Component {
       index === -1
         ? 0
         : index === faqs[sub_category_id].length
-        ? faqs[sub_category_id].length - 1
-        : index;
+          ? faqs[sub_category_id].length - 1
+          : index;
 
     this.setState({
       index: index,
@@ -230,7 +246,7 @@ class Answers extends Component {
             onClick={this.handleQuery}
           />
         }
-        
+
         events={this.sendEvents("just_set_events")}
         showError={this.state.showError}
         errorData={this.state.errorData}
@@ -260,9 +276,8 @@ class Answers extends Component {
                 {faqs &&
                   faqs[sub_category_id].map((item, index) => (
                     <div key={index}>
-                      <div className="question">{`${item.title}${
-                        item.title[item.title.length - 1] !== "?" ? "." : ""
-                      }`}</div>
+                      <div className="question">{`${item.title}${item.title[item.title.length - 1] !== "?" ? "." : ""
+                        }`}</div>
                       <div className="answer">
                         {faqDesc[item.cms_faq_id] &&
                           ReactHtmlParser(faqDesc[item.cms_faq_id].description)}
@@ -285,20 +300,18 @@ class Answers extends Component {
                   onClick={() =>
                     !isApiRunning && this.handleFeedBack("thumbs_up")
                   }
-                  src={require(`assets/${
-                    thumbStatus === "thumbs_up" ? "thumb_up_fill" : "thumb_up"
-                  }.svg`)}
+                  src={require(`assets/${thumbStatus === "thumbs_up" ? "thumb_up_fill" : "thumb_up"
+                    }.svg`)}
                   alt=""
                 />
                 <img
                   onClick={() =>
                     !isApiRunning && this.handleFeedBack("thumbs_down")
                   }
-                  src={require(`assets/${
-                    thumbStatus === "thumbs_down"
+                  src={require(`assets/${thumbStatus === "thumbs_down"
                       ? "thumb_down_fill"
                       : "thumb_down"
-                  }.svg`)}
+                    }.svg`)}
                   alt=""
                 />
               </div>
