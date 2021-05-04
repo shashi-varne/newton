@@ -150,7 +150,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         groupHealthPlanData.post_body.si = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.base_premium = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.premium = selectedPlan.premium;
-
+        groupHealthPlanData.selectedSumInsuredPremium = selectedPlan.premium;
 
         if(this.state.provider === 'RELIGARE') {
             groupHealthPlanData.post_body.sum_assured = (groupHealthPlanData.post_body.sum_assured)/100000
