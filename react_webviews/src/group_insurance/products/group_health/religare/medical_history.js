@@ -276,6 +276,9 @@ class GroupHealthPlanMedicalHistory extends Component {
           if(y.yes_no) current_state[`${x}_${y.question_id}`] = y.yes_no;
         }
       }
+      if(isEmpty(current_state)){
+        current_state['none'] = true;
+      }
       this.updateLead(body, '', current_state);
 
     }
