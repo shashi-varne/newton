@@ -100,7 +100,7 @@ class Container extends Component {
     }
 
     let redirectPath  = backMapperBharti[path] ? backMapperBharti[path] : '/group-insurance';
-
+    nativeCallback({ events: this.getEvents('back') });
     this.navigate(redirectPath);
   }
 
@@ -142,6 +142,7 @@ class Container extends Component {
       return;
     }
       if (this.checkStringInString('/group-insurance/other-insurance/entry')) {
+        nativeCallback({ events: this.getEvents('back') });
         this.navigate('/group-insurance');
         return;
       }
@@ -149,6 +150,7 @@ class Container extends Component {
       if (this.checkStringInString('group-insurance/corona/plan') 
       || this.checkStringInString('/group-insurance/dengue/plan') 
       || this.checkStringInString('/group-insurance/hospicash/plan')){
+        nativeCallback({ events: this.getEvents('back') });
         this.navigate('/group-insurance/health/landing');
         return;
       }
@@ -174,6 +176,7 @@ class Container extends Component {
       }
 
       if(this.checkStringInString('insure-type') || this.checkStringInString('payment')) {
+        nativeCallback({ events: this.getEvents('back') });
         this.navigate(group_health_landing);
         return;
       }
@@ -185,6 +188,7 @@ class Container extends Component {
 
 
       if(this.checkStringInString('group-insurance/group-health') && this.checkStringInString('landing')) {
+        nativeCallback({ events: this.getEvents('back') });
         this.navigate('/group-insurance/health/landing');
         return;
       }
@@ -255,6 +259,7 @@ class Container extends Component {
     if(pathname.indexOf('/group-health') < 0) {
       if (project_child === 'bhartiaxa' && pathname.indexOf('/home_insurance') >= 0 && 
       pathname.indexOf('/plan') >= 0) {
+        nativeCallback({ events:this.getEvents('back') });
         this.navigate('/group-insurance/other-insurance/entry');
         return;
       }
@@ -262,6 +267,7 @@ class Container extends Component {
      
       if (project_child === 'bhartiaxa' && pathname.indexOf('/plan') >= 0 &&
       pathname.indexOf('/health') >= 0) {
+        nativeCallback({ events: this.getEvents('back') });
         this.navigate('/group-insurance/health/landing');
         return;
       }
@@ -272,6 +278,7 @@ class Container extends Component {
       }
   
       if (project_child === 'bhartiaxa' && pathname.indexOf('/health/landing') >= 0) {
+        nativeCallback({ events: this.getEvents('back') });
         this.navigate('/group-insurance');
         return;
       }
@@ -334,12 +341,6 @@ class Container extends Component {
         break;
       case '/group-insurance/term/intro':
         this.navigate('/group-insurance');
-        break;
-      case '/group-insurance/life-insurance/savings-plan/landing': 
-        this.navigate(back_button_mapper[pathname]);
-        break;
-        case '/group-insurance/life-insurance/entry': 
-        this.navigate(back_button_mapper[pathname]);
         break;
       default:
         nativeCallback({ events: this.getEvents('back') });
