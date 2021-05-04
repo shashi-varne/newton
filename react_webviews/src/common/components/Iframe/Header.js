@@ -8,6 +8,8 @@ import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
 import '../../theme/Style.scss';
 import './style.scss';
+import { storageService } from '../../../utils/validators';
+import { getConfig } from '../../../utils/functions';
 const headerIconMapper = {
   back: back_arrow,
   close: close_icn,
@@ -35,8 +37,8 @@ const Header = ({
   style,
   headerData = {},
   new_header,
-}) => (
-  <AppBar position='fixed' color='primary' classes={{ root: classes.root }}>
+}) => {
+  return <AppBar position='fixed' color='primary' classes={{ root: classes.root }}>
     <Toolbar classes={{ root: classes.toolbarRoot }}>
       <div
         className='iframe-top-action-button'
@@ -69,7 +71,7 @@ const Header = ({
       </div>
     </Toolbar>
   </AppBar>
-);
+};
 
 const styles = {
   root: {
