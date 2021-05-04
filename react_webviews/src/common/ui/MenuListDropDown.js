@@ -23,7 +23,7 @@ class MenuListDropDownClass extends Component {
                             borderBottomColor: '#EFEDF2', borderBottomStyle: 'solid', paddingTop: '20px', paddingBottom: array.length - 1 !== index ? '20px' : '40px',
                             justifyContent: 'space-between', cursor: 'pointer'
                         }}>
-                            <div className='insurance_plans_logos_text menu-list-dropdown'>{props.title} {props.key === 'GMC' && <span className="recommended-tag">Recommended</span>}
+                            <div className='insurance_plans_logos_text menu-list-dropdown-title'>{props.title} {props.key === 'GMC' && <span className="recommended-tag">Recommended</span>}
                               {props.resume_flag && <span className='menu-list-dropdown-resume' >Resume</span>}</div>
                             <div className='insurance_plans_logos_subtext' style={{ fontWeight: '300' }}>{props.subtitle}</div>
                         </div>
