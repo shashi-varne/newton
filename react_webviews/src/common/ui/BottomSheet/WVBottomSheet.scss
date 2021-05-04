@@ -1,0 +1,100 @@
+.wv-bottomsheet {
+  .MuiDialog-paper {
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    left: -20px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .MuiDialogActions-root {
+    margin: 0;
+  }
+
+  .content-button {
+    margin: 0 20px 20px 20px;
+    display: flex;
+    width: auto;
+    justify-content: center;
+  }
+
+  button {
+    margin: 0px;
+  }
+}
+
+/* Content Section */
+.wv-bottomsheet-content {
+  display: flex;
+  justify-content: space-between;
+
+  .wv-bc-left {
+    flex: 0 1 52%;
+
+    .wv-bcl-title {
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 32px;
+      color: var(--dark);
+      margin-top: 10px;
+      word-break: break-all;
+    }
+    
+    .wv-bcl-desc {
+      font-size: 13px;
+      line-height: 21px;
+      color: var(--grey);
+      word-break: break-all;
+    }
+  }
+
+  .wv-bc-right {
+    margin-left: 20px;
+
+    // .wv-bcr-image {
+    // }
+  }
+  
+}
+
+/* Actions Section */
+.wv-bottomsheet-actions {
+  padding: 20px;
+  margin: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Button Layouts */
+.wv-ba-button-text {
+  .MuiButton-label {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+}
+
+.wv-ba-layout-stacked {
+  .wv-ba-button1 {
+    margin-bottom: 20px;
+  }
+}
+
+// .wv-ba-layout-stackedOR {
+
+// }
+
+.wv-ba-layout-horizontal {
+  flex-direction: row;
+
+  .wv-ba-button2 {
+    margin-left: 30px;
+  }
+
+  .wv-ba-button-secondary {
+    flex: 1;
+  }
+}
