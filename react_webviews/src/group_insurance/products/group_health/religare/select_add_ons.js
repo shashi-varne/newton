@@ -68,6 +68,7 @@ class GroupHealthPlanAddOns extends Component {
 
     onload = async () => {
         let cta_premium = '';
+        var groupHealthPlanData = this.state.groupHealthPlanData;
         if(groupHealthPlanData.account_type === 'self'){
             cta_premium =   groupHealthPlanData.selectedSumInsuredPremium || this.state.groupHealthPlanData.post_body.premium;
         }else{
