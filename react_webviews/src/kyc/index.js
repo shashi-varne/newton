@@ -60,6 +60,7 @@ import StocksStatus from "./Equity/components/StocksStatus";
 import NriError from "./Equity/components/NriError";
 import LocationError from "./Equity/components/LocationError";
 import AccountInfo from "./Equity/components/AccountInfo";
+import PanInstructions from "./Equity/components/PanInstructions";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -326,6 +327,11 @@ const Kyc = (props) => {
           exact 
           path={`${url}/account-info`} 
           component={AccountInfo} 
+        />
+        <Route 
+          exact 
+          path={`${url}/pan-instructions`} 
+          component={PanInstructions} 
         />
         <Route component={NotFound} />
       </Switch>
