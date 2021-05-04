@@ -26,6 +26,8 @@ import AccountLinked from "./AccountMerge/Linked";
 import SdkLanding from './Invest/components/SdkLanding';
 import NPS from "./nps";
 import {getConfig} from 'utils/functions';
+import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
+import InvestmentProof from "./MyAccount/InvestmentProof";
 
 const Home = (props) => {
   const { url } = props.match;
@@ -108,6 +110,15 @@ const Home = (props) => {
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
         <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />
         <Route exact path={`${url}account/merge/linked/success`} component={AccountLinked} />
+        <Route exact path={`${url}blank-mandate/upload`} component={BlankMandateUpload} />
+        <Route 
+          exact path={`${url}investment-proof`} 
+          render={(props) => <InvestmentProof {...props} type="investment-proof" />} 
+        />
+        <Route 
+          exact path={`${url}capital-gain`} 
+          render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
+        />
         <Route component={NotFound} />
       </Switch>
     </Fragment>
