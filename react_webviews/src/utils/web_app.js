@@ -2,7 +2,6 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
 
-const isLoggedIn = storageService().get("currentUser");
 
 export const backMapper = (state) => {
   const backStatesMapper = {
@@ -21,7 +20,7 @@ export const backMapper = (state) => {
 }
 
 export const checkBeforeRedirection = (fromState, toState) => {
-  if (isLoggedIn) {
+  if (getConfig().isLoggedIn) {
     if (toState === "/login" && storageService().get("deeplink_url")) {
       window.location.href = decodeURIComponent(
         storageService.get("deeplink_url")
@@ -55,7 +54,7 @@ export const checkAfterRedirection = (props, fromState, toState) => {
       toState !== "/forgot-password" &&
       toState !== "/mobile/verify"
     ) {
-      if (!isLoggedIn) {
+      if (!getConfig().isLoggedIn) {
         navigate("/login");
       }
     }

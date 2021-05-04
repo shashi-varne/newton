@@ -35,9 +35,6 @@ import { commonBackMapper } from "utils/constants";
   //   console.log(e);
   // }
 
-const isLoggedIn = storageService().get("currentUser");
-const config = getConfig();
-
 export const backMapper = (state) => {
   const backStatesMapper = {
     '/reports/redeemed-transaction': '/reports',
@@ -52,7 +49,7 @@ export const backMapper = (state) => {
 }
 
 export const checkBeforeRedirection = (props, fromState, toState) => {
-  if (isLoggedIn) {
+  if (getConfig().isLoggedIn) {
     if (
       toState === "/login" ||
       toState === "/register" ||
@@ -86,7 +83,7 @@ export const backButtonHanlder = (fromState, currentState, params) => {
     var message = JSON.stringify({
       type: "iframe_close"
     });
-    if(config?.code === 'moneycontrol' && ["/payment/callback","/sip/payment/callback"].includes(currentState)) {
+    if(getConfig().code === 'moneycontrol' && ["/payment/callback","/sip/payment/callback"].includes(currentState)) {
       backButtonHanlderWeb(fromState, currentState)
     } else {
       // appService.sendEvent(message);
@@ -98,6 +95,7 @@ export const backButtonHanlder = (fromState, currentState, params) => {
 
 export const backButtonHanlderWeb = (fromState, currentState, params) => {
   const returnObj = {};
+  const config = getConfig();
   
   // Todo: need to check fhc-summary
   const landingRedirectPaths = ["fhc-summary", "/kyc/report", "/notification", "/nps/payment/callback",

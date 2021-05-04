@@ -6,7 +6,7 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { storageService } from "utils/validators";
 
 class Container extends Component {
@@ -26,6 +26,7 @@ class Container extends Component {
 
     this.didMount = didMount.bind(this);
     this.commonRender = commonRender.bind(this);
+    this.navigate = navigateFunc.bind(props);
   }
 
   componentDidMount() {
@@ -37,6 +38,7 @@ class Container extends Component {
   }
 
   historyGoBack = (backData) => {
+    console.log(this.navigate("/"));
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
