@@ -67,7 +67,12 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     onload = async () => {
-        let cta_premium = this.state.groupHealthPlanData.post_body.premium || this.state.bottomButtonData.leftSubtitleUnformatted;
+        let cta_premium = '';
+        if(groupHealthPlanData.account_type === 'self'){
+            cta_premium =   groupHealthPlanData.selectedSumInsuredPremium || this.state.groupHealthPlanData.post_body.premium;
+        }else{
+            cta_premium =   groupHealthPlanData.net_premium_addons || this.state.groupHealthPlanData.post_body.premium;
+        }
         this.updateBottomPremiumAddOns(cta_premium);
         var add_ons_data = this.state.groupHealthPlanData[this.state.screen_name];
 
@@ -92,7 +97,6 @@ class GroupHealthPlanAddOns extends Component {
         });
 
         let updated_premium = cta_premium + total_premium;
-        
         this.updateBottomPremiumAddOns(updated_premium);
     }
 

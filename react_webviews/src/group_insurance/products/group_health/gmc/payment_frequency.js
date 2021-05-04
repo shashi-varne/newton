@@ -8,7 +8,7 @@ import ValueSelector from '../../../../common/ui/ValueSelector';
 import Checkbox from '../../../../common/ui/Checkbox';
 import { getConfig } from 'utils/functions';
 import toast from "../../../../common/ui/Toast";
-import { inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal, storageService } from 'utils/validators';
 
 var getFrequency = {
     'MONTHLY': 'month',
@@ -109,12 +109,8 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         }
 
         this.sendEvents('next');
-        
-        
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
-
-        
 
         if(groupHealthPlanData.paymentFrequencySelected !==  this.state.payment_frequency){
             this.setErrorData("submit");
@@ -156,7 +152,9 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
                 groupHealthPlanData['gmc_cta_postfix'] = premium_details.payment_frequency === 'MONTHLY' ? 'month' : 'year';
                 
                 groupHealthPlanData.paymentFrequencySelected = premium_details.payment_frequency;
-    
+                if(storageService().getObject('applicationPhaseReached')){
+                    delete groupHealthPlanData.post_body['quotation_id'];
+                }
                 this.setLocalProviderData(groupHealthPlanData);
                 this.navigate('plan-good-health-dec');
                 this.setState({
