@@ -336,7 +336,7 @@ class Result extends Component {
               <b>Oops! No risk profile found.</b>
               <br />
               <br />
-              Please click the restart icon to redo our risk questionnaire
+              Please click the restart icon to redo your risk questionnaire
             </div>
           }
         </Container>
