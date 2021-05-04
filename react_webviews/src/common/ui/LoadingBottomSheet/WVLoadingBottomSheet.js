@@ -2,7 +2,7 @@
  
 Use: Bottomsheet with a loader, a timer and some content 
 
-Syntax:
+Example syntax:
   <WVLoadingBottomSheet
     isOpen={true} ***required***
     gifSrc={require('assets/ic_verfication_in_progress.gif')}
@@ -30,9 +30,9 @@ export const WVLoadingBottomSheet = ({
   gifSrc,
   title,
   subtitle,
-  timerDuration,
-  onTimerEnd, // callback for when timer is stopped
-  onTimerChange, // callback for when timer is ticking
+  timerDuration, // Sets duration for timer in seconds
+  onTimerEnd, // Callback for when timer is stopped
+  onTimerChange, // Callback for when timer is ticking
   classes
 }) => {
   const [timer, setTimer] = useState(parseInt(timerDuration, 10));

@@ -12,13 +12,6 @@
     margin: 0;
   }
 
-  .content-button {
-    margin: 0 20px 20px 20px;
-    display: flex;
-    width: auto;
-    justify-content: center;
-  }
-
   button {
     margin: 0px;
   }
@@ -41,7 +34,7 @@
       word-break: break-all;
     }
     
-    .wv-bcl-desc {
+    .wv-bcl-subtitle {
       font-size: 13px;
       line-height: 21px;
       color: var(--grey);
@@ -66,7 +59,7 @@
   flex-direction: column;
 }
 
-/* Button Layouts */
+/* Button Styles */
 .wv-ba-button-text {
   .MuiButton-label {
     font-size: 10px;
@@ -77,9 +70,11 @@
   }
 }
 
+/* Button Layouts */
+
 .wv-ba-layout-stacked {
   .wv-ba-button1 {
-    margin-bottom: 20px;
+    margin-bottom: 20px; // Margin between top and bottom buttons in a 'stacked' layout 
   }
 }
 
@@ -91,10 +86,12 @@
   flex-direction: row;
 
   .wv-ba-button2 {
-    margin-left: 30px;
+    margin-left: 30px; // Margin between left and right buttons in a 'horizontal' layout 
   }
 
   .wv-ba-button-secondary {
+    /* Allows for type="secondary" buttons to be more
+     flexible (squeeze/expand) in a 'horizontal' layout */
     flex: 1;
   }
 }

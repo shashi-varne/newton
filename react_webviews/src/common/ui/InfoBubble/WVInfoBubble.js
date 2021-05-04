@@ -2,9 +2,10 @@
 
 Use: Info Bubble to show informational/error/success/warning content with ability to dismiss
 
-Syntax:
+Example syntax:
   <WVInfoBubble
     isDismissable
+    type="warning"
     isOpen={openBubble}
     hasTitle
     {...}
@@ -56,9 +57,9 @@ export const WVInfoBubble = ({
   isDismissable, // Set this flag if dismiss feature (cross on top right) is required
   isOpen, // Only required when isDismissable is true
   onDismissClick, // callback for when cross is clicked
-  hasTitle, // Set this to use the default title value from 'TYPES'
+  hasTitle, // Sets this to use the default title value from 'TYPES'
   customTitle, // Overrirdes default title value
-  type, // Set bubble type - info/warning/error/success
+  type, // Sets bubble type - info/warning/error/success [default='info']
   children // Info bubble content
 }) => {
   const typeConfig = TYPES[type] || {};
