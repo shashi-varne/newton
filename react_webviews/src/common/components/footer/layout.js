@@ -229,7 +229,7 @@ WithProviderLayoutGold = (props) => {
   WithProviderLayoutLoan = (props) => {
     return(
       <div className="FooterDefaultLayout">
-        {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
+        {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer loan-with-provider" 
         onClick={props.handleClick2}
         style={props.buttonData.leftStyle}>
           <div className="text-block">
