@@ -53,7 +53,7 @@ import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
 
 // Equity Components
-import AllowLocation from  "./equity/AllowLocation";
+import AllowLocation from  "./Equity/AllowLocation";
 
 const Kyc = (props) => {
   const { url } = props.match;
