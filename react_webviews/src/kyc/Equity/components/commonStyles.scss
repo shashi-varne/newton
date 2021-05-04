@@ -105,5 +105,31 @@
       padding: 0 0 30px 0;
       line-height: 24px;
     }
+
+    .kaim-key-benefits {
+      margin-right: -20px;
+    }
+
+    .kaim-benefits {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+      column-gap: 20px;
+
+      .kaim-benefits-info {
+        padding: 20px 0 10px 0;
+        font-size: 13px;
+        line-height: 21px;
+        color: #767e86;
+
+        img {
+          width: 170px;
+        }
+
+        .kaim-benefits-info-text {
+          width: 85%;
+        }
+      }
+    }
   }
 }
