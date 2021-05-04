@@ -920,10 +920,7 @@ export async function updateLead( body, quote_id, current_state) {
 export function navigate(pathname, data = {}) {
 
     if ((this.props.edit || data.edit) && ['select_ped_screen', 'is_ped'].indexOf(this.state.screen_name) === -1) {
-        this.props.history.replace({
-            pathname: pathname,
-            search: getConfig().searchParams
-        });
+        this.props.history.goBack();
     } else {
         this.props.history.push({
             pathname: pathname,
