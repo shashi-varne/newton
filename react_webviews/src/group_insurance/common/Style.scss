@@ -1194,8 +1194,8 @@
 
 
 .menu-list-dropdown-title{
-  font-weight: 400;
-  font-size: 13px;
+  font-weight: 400 !important;
+  font-size: 13px !important;
   margin-bottom: 5px;
   line-height: 15.41px;
   width: 100%;
@@ -1203,13 +1203,13 @@
 
 
 .menu-list-dropdown-resume{
-  background: ff6868 ; 
+  background: #ff6868 ; 
   letter-spacing: 0.1;
   font-size: 8px;
   line-height: 10.06px;
   position: relative;
   top: -3px;
-  border-radius: 7;
+  border-radius: 7px;
   padding: 2px 4px;
   margin-top: -30px;
   color: white;
