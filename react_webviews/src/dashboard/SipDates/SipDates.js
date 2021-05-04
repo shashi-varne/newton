@@ -26,7 +26,7 @@ class SipDates extends Component {
       dialogStates: {},
       isSipDatesScreen: true,
     };
-    this.navigate = navigateFunc.bind(props);
+    this.navigate = navigateFunc.bind(this.props);
     this.proceedInvestment = proceedInvestment.bind(this);
   }
 

@@ -13,7 +13,7 @@ class FundDetail extends Component {
       show_loader: false,
       screenName: "nfo_fund_detail",
     };
-    this.navigate = navigateFunc.bind(props);
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentDidMount() {

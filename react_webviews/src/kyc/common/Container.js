@@ -26,19 +26,18 @@ class Container extends Component {
 
     this.didMount = didMount.bind(this);
     this.commonRender = commonRender.bind(this);
-    this.navigate = navigateFunc.bind(props);
   }
 
   componentDidMount() {
     this.didMount();
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentWillUnmount() {
     this.unmount();
   }
 
-  historyGoBack = (backData) => {
-    console.log(this.navigate("/"));
+  historyGoBack = async (backData) => {
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
