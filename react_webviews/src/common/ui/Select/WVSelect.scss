@@ -1,0 +1,39 @@
+.wv-select-container {
+  margin: 0 -15px 30px -20px;
+}
+
+.wv-select-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px 22px;
+  cursor: pointer;
+
+  &.selected {
+    background: linear-gradient(to right, #f4f4f4, white);
+  }
+  
+  .wv-select-item-content {
+    flex-basis: 90%;
+  }
+
+  .wv-select-item-title {
+    color: var(--dark);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 24px;
+  }
+  
+  .wv-select-item-subtitle {
+    font-size: 15px;
+    color: var(--grey);
+    line-height: 1.4;
+  }
+
+  .wv-select-selected-icon {
+    width: 14px;
+    margin: 4px 0 0 8px;
+    vertical-align: middle;
+  }
+}
