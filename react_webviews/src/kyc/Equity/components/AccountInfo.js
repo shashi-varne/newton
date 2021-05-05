@@ -41,7 +41,10 @@ const AccountInfo = (props) => {
               {benefits.map((data, index) => {
                 return (
                   <div key={index} className="kaim-benefits-info">
-                    <img src={require(`assets/${productName}/${data.icon}`)} />
+                    <img
+                      src={require(`assets/${productName}/${data.icon}`)}
+                      alt=""
+                    />
                     <div className="kaim-benefits-info-text">{data.text}</div>
                   </div>
                 );
@@ -78,7 +81,7 @@ const AccountInfo = (props) => {
               <span>Equity Annexure</span>{" "}
             </div>
           </div>
-           {/* add secure invest card */}
+          {/* add secure invest card */}
         </main>
       </div>
     </Container>

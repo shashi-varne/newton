@@ -1,9 +1,7 @@
 import React from "react";
-import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
 
-const productName = getConfig().productName;
 const instructions = [
   {
     text: "Make sure your signature in your PAN is clearly visible",
