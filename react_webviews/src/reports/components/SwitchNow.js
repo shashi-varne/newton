@@ -12,7 +12,7 @@ import {
   getFundDetailsForSwitch,
   postSwitchRecommendation,
 } from "../common/api";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import toast from "common/ui/Toast";

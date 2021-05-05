@@ -5,7 +5,7 @@ import Container from '../../common/Container'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import toast from 'common/ui/Toast'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import Button from '@material-ui/core/Button'
 
 import './OtpSwitch.scss';

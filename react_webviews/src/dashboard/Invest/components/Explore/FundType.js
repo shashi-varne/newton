@@ -9,7 +9,7 @@ import DiyCartButton from '../../../DIY/mini-components/CartButton'
 import Cart from '../../../DIY/mini-components/Cart'
 import './FundType.scss';
 
-import { navigate as navigateFunc } from '../../common/commonFunctions'
+import { navigate as navigateFunc } from 'utils/functions'
 
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   const navigate = navigateFunc.bind(parentProps)

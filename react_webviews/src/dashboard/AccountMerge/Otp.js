@@ -3,7 +3,7 @@ import toast from "common/ui/Toast";
 import OtpDefault from "../../common/ui/otp";
 import { getMerge } from "../../kyc/common/api";
 import Api from "../../utils/api";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
 import "./Otp.scss";
@@ -22,6 +22,8 @@ class AccountMergeOtp extends Component {
       otp: "",
       openConfirmBack: false
     };
+
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentDidMount() {
@@ -94,10 +96,7 @@ class AccountMergeOtp extends Component {
         isApiRunning: false,
       });
       if (res.pfwresponse.status_code === 200) {
-        this.props.history.push({
-          pathname: "/account/merge/linked/success",
-          search: getConfig().searchParams,
-        });
+        this.navigate("/account/merge/linked/success")
       } else {
         toast(
           res.pfwresponse.result.error ||

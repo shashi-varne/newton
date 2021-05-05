@@ -8,8 +8,8 @@ import FormControl from "@material-ui/core/FormControl";
 import { investRedeemData } from "../../constants";
 import {
   getGoalRecommendation,
-  navigate as navigateFunc,
 } from "../../common/commonFunctions";
+import { navigate as navigateFunc } from 'utils/functions'
 import { convertInrAmountToNumber, formatAmountInr } from "../../../../utils/validators";
 import useFunnelDataHook from "../../common/funnelDataHook";
 

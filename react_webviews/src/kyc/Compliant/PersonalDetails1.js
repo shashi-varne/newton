@@ -12,9 +12,9 @@ import {
 } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { kycSubmit } from "../common/api";
 
@@ -153,6 +153,10 @@ const PersonalDetails1 = (props) => {
     setFormData({ ...formData });
   };
 
+  const goBack = () => {
+    navigate("/kyc/journey");
+  }
+
   return (
     <Container
       skelton={isLoading}
@@ -164,6 +168,7 @@ const PersonalDetails1 = (props) => {
       count={1}
       current={1}
       total={3}
+      headerData={{goBack}}
     >
       <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">

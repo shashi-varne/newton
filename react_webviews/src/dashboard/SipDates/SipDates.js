@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
-import { navigate } from "../Invest/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import DropdownInModal from "common/ui/DropdownInModal";
 import { getConfig } from "utils/functions";
 import {
@@ -26,7 +26,7 @@ class SipDates extends Component {
       dialogStates: {},
       isSipDatesScreen: true,
     };
-    this.navigate = navigate.bind(this);
+    this.navigate = navigateFunc.bind(this.props);
     this.proceedInvestment = proceedInvestment.bind(this);
   }
 

@@ -11,7 +11,7 @@ import FundCard from '../Invest/mini-components/FundCard';
 import TermsAndCond from "../mini-components/TermsAndCond"
 import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
-import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import { isInvestRefferalRequired, proceedInvestment } from '../proceedInvestmentFunctions';
 import PennyVerificationPending from '../Invest/mini-components/PennyVerificationPending';
 import InvestError from '../Invest/mini-components/InvestError';

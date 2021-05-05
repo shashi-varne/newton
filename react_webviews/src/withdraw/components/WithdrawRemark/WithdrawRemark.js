@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Container from '../../common/Container';
 import isEmpty from 'lodash/isEmpty';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import { navigate as navigateFunc } from 'utils/functions';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';

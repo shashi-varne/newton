@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";

@@ -1,8 +1,7 @@
 import React from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Alert from "../mini-components/Alert";
-import { navigate as navigateFunc } from "../common/functions";
 import { getPathname, storageConstants } from "../constants";
 import { storageService } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";

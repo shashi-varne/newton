@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Container from '../../common/Container'
 import OtpDefault from 'common/ui/otp'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import toast from 'common/ui/Toast'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'

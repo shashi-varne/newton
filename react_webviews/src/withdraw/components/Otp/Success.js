@@ -1,6 +1,6 @@
 import React from 'react'
 import Container from '../../common/Container'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 
 import './Success.scss';
 

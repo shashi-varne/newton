@@ -7,7 +7,7 @@ import bond_icon from 'assets/bond_icon.png';
 import info_icon from 'assets/info_icon_fisdom.svg';
 import { inrFormatDecimal } from 'utils/validators';
 import { getRecommendedSwitch, postSwitchOrders } from '../../common/Api';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import { navigate as navigateFunc } from 'utils/functions';
 import toast from 'common/ui/Toast';
 import './WithdrawSwitch.scss';
 

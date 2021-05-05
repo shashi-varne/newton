@@ -1,13 +1,13 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isReadyToInvest, initData } from "../../kyc/services";
 
 const genericErrorMessage = "Something went wrong!";
 export async function initializeComponentFunctions() {
   this.getMyAccount = getMyAccount.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.authenticate = authenticate.bind(this);
   this.exportTransactions = exportTransactions.bind(this);
   await initData();

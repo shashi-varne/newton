@@ -7,9 +7,9 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { relationshipOptions, getPathname } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";

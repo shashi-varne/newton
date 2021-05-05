@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Container from '../../common/Container';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import isEmpty from 'lodash/isEmpty';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import { navigate as navigateFunc } from 'utils/functions';
 import Dialog from '../../mini-components/Dialog';
 import toast from 'common/ui/Toast';
 

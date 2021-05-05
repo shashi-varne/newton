@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "common/ui/Button";
-import { navigate } from "../../functions";
 import {
   getFormattedDate,
   getNfoRecommendation,
   getSchemeOption,
 } from "./nfoFunctions";
 import { storageService } from "utils/validators";
-import { getConfig } from "../../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../../utils/functions";
 import toast from "../../../../common/ui/Toast";
 import { isEmpty } from "../../../../utils/validators";
 import "./Funds.scss";
@@ -21,7 +20,7 @@ class NfoFunds extends Component {
       screenName: "nfo_funds",
       showFunds: false,
     };
-    this.navigate = navigate.bind(this);
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentDidMount() {

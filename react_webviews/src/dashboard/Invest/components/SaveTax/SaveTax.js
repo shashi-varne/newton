@@ -4,7 +4,8 @@ import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast';
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
+import { isRecurring } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 
 const term = 15;
 // TODO: What does this code do?

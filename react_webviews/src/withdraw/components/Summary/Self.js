@@ -8,7 +8,7 @@ import { Redirect } from 'react-router-dom'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { getConfig } from 'utils/functions'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import { formatAmountInr, isEmpty } from '../../../utils/validators'
 
 import '../commonStyles.scss';

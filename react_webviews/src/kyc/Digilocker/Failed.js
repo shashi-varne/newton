@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
-import { navigate as navigateFunc } from "../common/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";

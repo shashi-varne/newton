@@ -1,5 +1,5 @@
 import { storageService } from "utils/validators";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
@@ -9,7 +9,7 @@ import toast from "../../../common/ui/Toast";
 const genericErrMsg = "Something went wrong";
 
 export async function initialize() {
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.formCheckUpdate = formCheckUpdate.bind(this);
   this.get_recommended_funds = get_recommended_funds.bind(this);
   this.kyc_submit = kyc_submit.bind(this);

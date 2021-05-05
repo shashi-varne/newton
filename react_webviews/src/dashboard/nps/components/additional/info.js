@@ -39,14 +39,11 @@ class NpsInfo extends Component {
         });
     } else {
       if (this.state.currentUser.nps_investment) {
-        this.props.history.push(
-          { pathname: `amount/one-time`, search: getConfig().searchParams },
-          {
-            state: {
-              pran_number: this.state.npsUser.pran,
-            },
+        this.navigate("amount/one-time", {
+          state: {
+            pran_number: this.state.npsUser.pran,
           }
-        );
+        })
       } else {
         this.navigate("pan");
       }

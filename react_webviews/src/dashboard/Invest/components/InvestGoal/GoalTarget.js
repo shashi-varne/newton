@@ -2,11 +2,10 @@ import './GoalTarget.scss';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import toast from "common/ui/Toast"
-import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { numDifferentiationInr } from 'utils/validators';
 import useFunnelDataHook from '../../common/funnelDataHook';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import { saveGoalMapper, customGoalTargetMap } from './constants';
-import { getConfig } from '../../../../utils/functions';
 import { get_recommended_funds } from '../../common/api';
 
 const riskEnabled = getConfig().riskEnabledFunnels;

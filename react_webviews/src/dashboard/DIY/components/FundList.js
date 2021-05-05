@@ -6,9 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import RatingStar from '../../../fund_details/common/RatingStar'
 import Button from 'common/ui/Button'
 import { storageService } from '../../../utils/validators'
-import { getConfig } from 'utils/functions'
-
-import { navigate as navigateFunc } from '../../Invest/common/commonFunctions'
+import { getConfig, navigate as navigateFunc } from 'utils/functions'
 
 import CartFooter from '../mini-components/CartFooter'
 import { getFundList } from '../functions'
