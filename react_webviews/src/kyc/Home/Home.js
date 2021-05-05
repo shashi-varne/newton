@@ -84,6 +84,7 @@ const Home = (props) => {
   };
 
   const handleClick = async () => {
+    sendEvents("next")
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
@@ -234,6 +235,7 @@ const Home = (props) => {
   };
 
   const savePan = async (is_nri) => {
+    sendEvents(`${is_nri ? "yes" : "no"}`,'resident popup')
     try {
       setShowLoader("button");
       if (is_nri) {
@@ -286,8 +288,26 @@ const Home = (props) => {
     }
   };
 
+  const sendEvents = (userAction, screenName) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction,
+        "screen_name": screenName || "pan_entry",
+        "pan": pan ? "yes" : "no",
+        "initial_kyc_status": kyc?.kyc_status || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-home"
       buttonTitle={buttonTitle}
