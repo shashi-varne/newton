@@ -76,6 +76,12 @@ const Pan = (props) => {
               getBase64(file, function (img) {
                 setFileToShow(img)
               })
+              setTimeout(
+                function () {
+                  setShowLoader(false);
+                },
+                1000
+              );
               break;
             default:
               toast('Please select image file')
@@ -95,6 +101,7 @@ const Pan = (props) => {
   }
   
   const handleChange = (event) => {
+    event.preventDefault();
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -103,18 +110,17 @@ const Pan = (props) => {
       return
     }
 
-    if (getConfig().html_camera) {
-      native_call_handler('open_camera', 'pan', 'pan.jpg', 'front')
-    } else {
-      setFile(uploadedFile)
-      getBase64(uploadedFile, function (img) {
-        setFileToShow(img)
-      })
-    }
+    setFile(uploadedFile)
+    getBase64(uploadedFile, function (img) {
+      setFileToShow(img)
+    })
   }
 
-  const handleUpload = () => {
-    inputEl.current.click()
+  const handleUpload = (method_name) => {
+    if(getConfig().html_camera)
+      inputEl.current.click()
+    else
+      native_call_handler(method_name, 'pan', 'pan.jpg', 'front')
   }
 
   const handleSubmit = async () => {
@@ -198,7 +204,7 @@ const Pan = (props) => {
                     />
                     <button
                       data-click-type="camera-front"
-                      onClick={handleUpload}
+                      onClick={() => handleUpload("open_camera")}
                       className="kyc-upload-button"
                     >
                       {!file && (
@@ -225,7 +231,7 @@ const Pan = (props) => {
                       onChange={handleChange}
                     />
                     <button
-                      onClick={handleUpload}
+                      onClick={() => handleUpload("open_gallery")}
                       className="kyc-upload-button"
                     >
                       {!file && !fileToShow && (
@@ -267,7 +273,7 @@ const Pan = (props) => {
                   className="kyc-upload"
                   onChange={handleChange}
                 />
-                <button onClick={handleUpload} className="kyc-upload-button">
+                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
