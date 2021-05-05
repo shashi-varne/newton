@@ -95,6 +95,7 @@ export const WVBottomSheet = ({
             order="1"
             title={button1Props.title}
             type={button1Props.type}
+            {...button1Props}
           />
           {buttonLayout === 'stackedOR' && <WVButtonLayout.ORDivider />}
           {/*
@@ -106,6 +107,7 @@ export const WVBottomSheet = ({
               order="2"
               title={button2Props.title}
               type={button2Props.type}
+              {...button2Props}
             />
           }
         </WVButtonLayout>
@@ -117,7 +119,7 @@ export const WVBottomSheet = ({
 WVBottomSheet.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
-  buttonLayout: PropTypes.oneOfType(['stacked', 'stackedOR', 'horizontal']),
+  buttonLayout: PropTypes.oneOf(['stacked', 'stackedOR', 'horizontal']),
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,
