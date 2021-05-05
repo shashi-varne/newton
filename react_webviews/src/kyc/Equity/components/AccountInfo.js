@@ -3,6 +3,7 @@ import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
+import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer"
 
 const productName = getConfig().productName;
 const benefits = [
@@ -81,7 +82,7 @@ const AccountInfo = (props) => {
               <span>Equity Annexure</span>{" "}
             </div>
           </div>
-          {/* add secure invest card */}
+          <SecurityDisclaimer />
         </main>
       </div>
     </Container>
