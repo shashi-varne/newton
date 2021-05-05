@@ -11,10 +11,6 @@
   .MuiDialogActions-root {
     margin: 0;
   }
-
-  button {
-    margin: 0px;
-  }
 }
 
 /* Content Section */
@@ -56,42 +52,4 @@
   padding: 20px;
   margin: 0 !important;
   display: flex;
-  flex-direction: column;
-}
-
-/* Button Styles */
-.wv-ba-button-text {
-  .MuiButton-label {
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-}
-
-/* Button Layouts */
-
-.wv-ba-layout-stacked {
-  .wv-ba-button1 {
-    margin-bottom: 20px; // Margin between top and bottom buttons in a 'stacked' layout 
-  }
-}
-
-// .wv-ba-layout-stackedOR {
-
-// }
-
-.wv-ba-layout-horizontal {
-  flex-direction: row;
-
-  .wv-ba-button2 {
-    margin-left: 30px; // Margin between left and right buttons in a 'horizontal' layout 
-  }
-
-  .wv-ba-button-secondary {
-    /* Allows for type="secondary" buttons to be more
-     flexible (squeeze/expand) in a 'horizontal' layout */
-    flex: 1;
-  }
 }

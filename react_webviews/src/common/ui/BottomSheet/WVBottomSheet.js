@@ -32,9 +32,9 @@ import Dialog, {
   DialogActions
 } from 'material-ui/Dialog';
 import { Imgc } from '../Imgc';
-import { isEmpty } from '../../../utils/validators';
+import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
+import WVButtonLayout from '../ButtonLayout';
 
 export const WVBottomSheet = ({
   isOpen,
@@ -83,93 +83,41 @@ export const WVBottomSheet = ({
         </div>
       </DialogContent>
       <DialogActions>
-        <div className={`wv-bottomsheet-actions wv-ba-layout-${buttonLayout}`}>
+        <WVButtonLayout
+          layout={buttonLayout === 'stackedOR' ? 'stacked' : buttonLayout}
+          className="wv-bottomsheet-actions"
+        >
           {/*
             Placed on top in a 'stacked'/'stackedOR' layout,
             left in a 'horizontal' layout
           */}
-          <BottomSheetButton
+          <WVButtonLayout.Button
             order="1"
+            title={button1Props.title}
             type={button1Props.type}
-            {...button1Props}
           />
-          {buttonLayout === 'stackedOR' && <ORDivider />}
+          {buttonLayout === 'stackedOR' && <WVButtonLayout.ORDivider />}
           {/*
             Placed at the bottom in a 'stacked'/'stackedOR' layout,
             right in a 'horizontal' layout
           */}
           {!isEmpty(button2Props) &&
-            <BottomSheetButton
+            <WVButtonLayout.Button
               order="2"
+              title={button2Props.title}
               type={button2Props.type}
-              {...button2Props}
             />
           }
-        </div>
+        </WVButtonLayout>
       </DialogActions>
     </Dialog>
   );
 };
 
-const ORDivider = () => (
-  <img
-    src={require('assets/ORDivider.svg')}
-    alt="or"
-    style={{ width: '100%', margin: '10px 0' }}
-  />
-);
-
-const BUTTON_TYPE_PROPS = {
-  primary: {
-    variant: 'raised'
-  },
-  secondary: {
-    variant: 'outlined'
-  },
-  text: {}
-};
-
-const COMMON_BUTTON_PROPS = {
-  fullWidth: true,
-  autoFocus: true,
-  size: "large",
-  color: "secondary"
-};
-
-const BottomSheetButton = ({ order, title, classes = {}, type, ...props }) => {
-  let modifiedClasses = {
-    root: `
-      wv-ba-button${order}
-      wv-ba-button-${type}
-      ${classes.root}
-    `,
-    ...classes
-  };
-
-  return (
-    <Button
-      {...COMMON_BUTTON_PROPS}
-      {...BUTTON_TYPE_PROPS[type]}
-      classes={modifiedClasses}
-      onClick={props.handleClick}
-    >
-      {title}
-    </Button>
-  );
-}
-
 WVBottomSheet.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
   buttonLayout: PropTypes.oneOfType(['stacked', 'stackedOR', 'horizontal']),
-  button1Props: PropTypes.shape({
-    type: PropTypes.oneOfType(['primary', 'secondary', 'text']).isRequired,
-    title: PropTypes.string.isRequired,
-  }),
-  button2Props: PropTypes.shape({
-    type: PropTypes.oneOfType(['primary', 'secondary', 'text']).isRequired,
-    title: PropTypes.string.isRequired,
-  }),
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,
