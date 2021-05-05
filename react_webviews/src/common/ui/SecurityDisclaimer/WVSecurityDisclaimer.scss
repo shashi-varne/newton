@@ -1,0 +1,17 @@
+.wv-security-disclaimer {
+  width: 275px;
+  padding: 5px 0;
+
+  span {
+    font-size: 13px;
+    line-height: 15px;
+    text-align: center;
+    color: var(--dark);
+  }
+
+  .wv-sd-images {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
