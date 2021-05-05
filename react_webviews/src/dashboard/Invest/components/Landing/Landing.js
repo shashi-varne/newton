@@ -133,6 +133,7 @@ class Landing extends Component {
         noFooter={true}
         title="Start Investing"
         showLoader={this.state.show_loader}
+        noBackIcon={true}
       >
         <div className="invest-landing">
           {

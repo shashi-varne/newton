@@ -149,7 +149,8 @@ export function commonRender(props_base) {
                     hideBack={this.props.hideBack}
                     logo={this.props.logo}
                     notification={this.props.notification}
-                    handleNotification={this.props.handleNotification}          
+                    handleNotification={this.props.handleNotification}  
+                    noBackIcon={this.props.noBackIcon}        
                 />
                 }
                 {/* Below Header Block */}

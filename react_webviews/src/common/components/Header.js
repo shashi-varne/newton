@@ -33,7 +33,7 @@ const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
-  className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
+  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
@@ -55,7 +55,7 @@ const Header = ({ classes, title, count, total, current, goBack,
       >
         <Toolbar>
           {
-            !logo &&
+            !noBackIcon &&
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
               onClick={headerData.goBack ||
               goBack}>
@@ -70,7 +70,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             </IconButton>
           }
           {
-            logo && 
+            noBackIcon && 
              <div className='sdk-header-partner-logo'>
                 <img src={require(`assets/${partnerLogo}`)} alt="partner logo" /> 
             </div>
@@ -115,7 +115,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           <>
             <div>
             {
-              !logo && 
+              !noBackIcon && 
               <div
                 style={style}
                 className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 
