@@ -1,5 +1,5 @@
 
-import { getConfig, isNpsOutsideSdk } from "utils/functions";
+import { getConfig, navigate as navigateFunc, isNpsOutsideSdk } from "utils/functions";
 import { storageService } from "utils/validators";
 import { nativeCallback } from "./native_callback";
 import { commonBackMapper } from "utils/constants";
@@ -35,8 +35,8 @@ export const checkAfterRedirection = (props, fromState, toState) => {
   }
 }
 
-export const backButtonHanlder = (fromState, currentState, params) => {
-  const returnObj = {};
+export const backButtonHandler = (props, fromState, currentState, params) => {
+  const navigate = navigateFunc.bind(props);
   // Todo: need to check fhc-summary
   const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
     "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct", "/risk/recommendations/error"];
@@ -46,7 +46,8 @@ export const backButtonHanlder = (fromState, currentState, params) => {
     '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
     
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
-    returnObj.path = "/";
+    navigate("/");
+    return true;
   }
 
   if ("/modal".indexOf(currentState) !== -1) {
@@ -62,10 +63,12 @@ export const backButtonHanlder = (fromState, currentState, params) => {
         currentUser.kyc_registration_v2 === "init" ||
         currentUser.kyc_registration_v2 === "incomplete"
       ) {
-        returnObj.path = "/kyc/journey";
+        navigate("/kyc/journey");
+        return true;
       } else {
         nativeCallback({ action: "clear_history" });
-        returnObj.path = "/";
+        navigate("/");
+        return true;
       }
     }
   }
@@ -77,26 +80,31 @@ export const backButtonHanlder = (fromState, currentState, params) => {
   switch (currentState) {
     case "/payment/options":
       if (fromState === "/add/bank") {
-        returnObj.path = "/";
+        navigate("/");
+        return true;
       }
       break;
     case "/add-bank":
       if (storageService().get('native')) {
         nativeCallback({ action: "exit_web" });
       } else {
-        returnObj.path = "/my-account";
+        navigate("/my-account");
+        return true;
       }
       break;
     case "/kyc/digilocker/failed":
-      returnObj.path = "/kyc/journey";
-      returnObj.state = { show_aadhaar: true }
+      navigate("/kyc/journey", {
+        state: { show_aadhaar: true }
+      });
+      return true;
       break;
     case "/kyc-esign/nsdl":
-      if (params.status === "success") {
+      if (params?.status === "success") {
         if (storageService().get('native')) {
           nativeCallback({ action: "exit_web" });
         } else {
-          returnObj.path = "/invest";
+          navigate("/invest");
+          return true;
         }
       }
       break;
@@ -108,7 +116,8 @@ export const backButtonHanlder = (fromState, currentState, params) => {
       break;
     case '/nps/investments':
       if (isNpsOutsideSdk(fromState, currentState)) {
-        returnObj.path = "/";
+        navigate("/");
+        return true;
       } else {
         nativeCallback({ action: "exit_web" });
       }
@@ -119,7 +128,8 @@ export const backButtonHanlder = (fromState, currentState, params) => {
       } else {
         if (window.history.length > 1) {
           if (backMapper(currentState)) {
-            returnObj.path = backMapper(currentState);
+            navigate(backMapper(currentState));
+            return true;
           } else {
             // $window.history.back();
           }
@@ -135,10 +145,12 @@ export const backButtonHanlder = (fromState, currentState, params) => {
       if (isNpsOutsideSdk(fromState, currentState)) {
         nativeCallback({ action: "clear_history" });
       }
-      returnObj.path = "/nps";
+      navigate("/nps");
+      return true;
     } else {
       nativeCallback({ action: "clear_history" });
-      returnObj.path = "/";
+      navigate("/");
+      return true;
     }
   }
 }

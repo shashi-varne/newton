@@ -19,7 +19,7 @@ import '../../utils/native_listener';
 import { Imgc } from '../../common/ui/Imgc';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
-import { checkAfterRedirection, backButtonHanlder } from "utils/functions";
+import { checkAfterRedirection, backButtonHandler } from "utils/functions";
 import { isFunction } from 'lodash';
 
 let start_time = '';
@@ -43,7 +43,7 @@ export function didMount() {
     this.headerGoBack = headerGoBack.bind(this);
     this.renderGenericError = renderGenericError.bind(this);
     this.checkAfterRedirection = checkAfterRedirection.bind(this);
-    this.backButtonHanlder = backButtonHanlder.bind(this);
+    this.backButtonHandler = backButtonHandler.bind(this);
 
     const fromState = this.props?.location?.state?.fromState || "";
     const toState = this.props?.location?.state?.toState || "";

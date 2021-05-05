@@ -33,8 +33,8 @@ const Report = (props) => {
       navigate(getPathname.uploadProgress, {
         state: {
           disableNext: true,
-          fromState: "kyc-report",
-          toState: "landing",
+          fromState: "/kyc/report",
+          toState: "/landing",
         },
       });
       return;

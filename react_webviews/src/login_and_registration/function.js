@@ -527,27 +527,27 @@ export async function getKycFromSummary() {
 export function redirectAfterLogin(data, user) {
   const kyc = storageService().getObject("kyc");
   if (data.firstLogin) {
-    this.navigate("/", { state: { toState: "/" } });
+    this.navigate("/", { state: { goBack: "/" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment
   ) {
-    this.navigate("/kyc/journey", { state: { toState: "/invest" } });
+    this.navigate("/kyc/journey", { state: { goBack: "/invest" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     !user.active_investment
   ) {
-    this.navigate("/", { state: { toState: "/" } });
+    this.navigate("/", { state: { goBack: "/" } });
   } else if (
     kyc &&
     !kyc.pan.meta_data.pan_number &&
     user.kyc_registration_v2 === "init"
   ) {
-    this.navigate("/kyc/home", { state: { toState: "/invest" } });
+    this.navigate("/kyc/home", { state: { goBack: "/invest" } });
   } else if (user.active_investment) {
-    this.navigate("/landing", { state: { toState: "/landing" } });
+    this.navigate("/landing", { state: { goBack: "/landing" } });
   } else {
-    this.navigate("/", { state: { toState: "/" } });
+    this.navigate("/", { state: { goBack: "/" } });
   }
 }
 

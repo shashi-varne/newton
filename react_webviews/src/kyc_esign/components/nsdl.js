@@ -67,11 +67,11 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    /**
-     * Need to handle this
-     */
-    // nativeCallback({ action: 'exit_web' });
-    this.navigate("/invest");
+    if (getConfig().isNative) {
+      nativeCallback({ action: 'exit_web' });
+    } else {
+      this.navigate("/invest");
+    }
   };
 
   navigateToReports = () => {

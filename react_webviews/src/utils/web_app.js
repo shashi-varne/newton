@@ -1,6 +1,6 @@
+import { commonBackMapper } from "utils/constants";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
-import { commonBackMapper } from "utils/constants";
 
 
 export const backMapper = (state) => {
@@ -61,9 +61,8 @@ export const checkAfterRedirection = (props, fromState, toState) => {
   }
 }
 
-
-export const backButtonHanlder = (fromState, currentState, params) => {
-  const returnObj = {};
+export const backButtonHandler = (props, fromState, currentState, params) => {
+  const navigate = navigateFunc.bind(props);
   const backPath = backMapper(currentState);
   // Todo: need to check fhc-summary
   const landingRedirectPaths = ["fhc-summary", "/sip/payment/callback", "/kyc/report", "/notification", "/nps/payment/callback",
@@ -74,7 +73,8 @@ export const backButtonHanlder = (fromState, currentState, params) => {
     '/nps/sip', '/my-account', '/modal', '/page/callback', '/nps/pran', '/invest/recommendations', '/reports/sip/pause-request', '/kyc/journey'];
     
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
-    returnObj.path = "/landing";
+     navigate("/landing");
+     return true;
   }
 
   if ("/payment/callback".indexOf(currentState) !== -1) {
@@ -84,23 +84,28 @@ export const backButtonHanlder = (fromState, currentState, params) => {
         currentUser.kyc_registration_v2 === "init" ||
         currentUser.kyc_registration_v2 === "incomplete"
       ) {
-        returnObj.path = "/kyc/journey";
+         navigate("/kyc/journey");
       } else {
-        returnObj.path = "/landing";
+         navigate("/landing");
       }
+      return true;
     }
   }
 
   if (currentState === "/kyc/digilocker/failed") {
-    returnObj.path = "/kyc/journey";
-    returnObj.state = { show_aadhaar: true }
+     navigate("/kyc/journey", {
+      state: { show_aadhaar: true }
+     });
+     return true;
   }
 
-  if (currentState === "/kyc-esign/nsdl" && params.status === "success") {
-    returnObj.path = "/invest";
+  if (currentState === "/kyc-esign/nsdl" && params?.status === "success") {
+     navigate("/invest");
+     return true;
   }
 
   if (backPath) {
-    returnObj.path = backPath;
+     navigate(backPath);
+     return true;
   }
 }

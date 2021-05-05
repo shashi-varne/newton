@@ -461,7 +461,7 @@ export function getBasePath() {
   return window.location.origin + basename;
 }
 
-const { checkBeforeRedirection, checkAfterRedirection, backButtonHanlder } = require(`./${getConfig().platform}_app`);
+const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
 
 export function navigate(pathname, data = {}) {
   let fromState = this?.location?.pathname || ""
@@ -513,5 +513,5 @@ export function isNpsOutsideSdk(fromState, toState) {
 export {
   checkBeforeRedirection, 
   checkAfterRedirection, 
-  backButtonHanlder
+  backButtonHandler
 }

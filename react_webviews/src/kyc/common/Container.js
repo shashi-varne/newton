@@ -6,8 +6,7 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
-import { storageService } from "utils/validators";
+import { navigate as navigateFunc } from "../../utils/functions";
 
 class Container extends Component {
   constructor(props) {
@@ -37,7 +36,11 @@ class Container extends Component {
     this.unmount();
   }
 
-  historyGoBack = async (backData) => {
+  historyGoBack = (backData) => {
+    const fromState = this.props.location?.state?.fromState || "";
+    const toState = this.props.location?.state?.toState || "";
+    const params = this.props.location?.params || {};
+
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
@@ -47,17 +50,22 @@ class Container extends Component {
       return;
     }
 
-    const toStatePath = this.props.location?.state?.toState || "";
-
-    if(toStatePath) {
-      if (getConfig().isSdk && storageService().get('native')) {
-        nativeCallback({ action: "exit_web" });
-      } else {
-        this.props.history.push({
-          pathname: toStatePath,
-          search: getConfig().searchParams,
-        });
+    if (!backData?.fromHeader && toState) {
+      let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
+      if (isRedirected) {
+        return;
       }
+    }
+
+    const goBackPath = this.props.location?.state?.goBack || "";
+
+    if(goBackPath) {
+      this.navigate(goBackPath);
+      return;
+    }
+
+    if (fromState) {
+      this.navigate(fromState);
       return;
     }
 

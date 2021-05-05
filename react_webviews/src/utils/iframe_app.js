@@ -1,4 +1,4 @@
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
 
@@ -68,7 +68,7 @@ export const checkBeforeRedirection = (props, fromState, toState) => {
 export const checkAfterRedirection = (fromState, toState) => {
 }
 
-export const backButtonHanlder = (fromState, currentState, params) => {
+export const backButtonHandler = (props, fromState, currentState, params) => {
   const backEnabledPages = [
     "/funds/",
     "/reports",
@@ -84,17 +84,17 @@ export const backButtonHanlder = (fromState, currentState, params) => {
       type: "iframe_close"
     });
     if(getConfig().code === 'moneycontrol' && ["/payment/callback","/sip/payment/callback"].includes(currentState)) {
-      backButtonHanlderWeb(fromState, currentState)
+      backButtonHandlerWeb(props, fromState, currentState, params)
     } else {
       // appService.sendEvent(message);
     }
   } else {
-    backButtonHanlderWeb(fromState, currentState, params)
+    backButtonHandlerWeb(props, fromState, currentState, params)
   }
 }
 
-export const backButtonHanlderWeb = (fromState, currentState, params) => {
-  const returnObj = {};
+export const backButtonHandlerWeb = (props, fromState, currentState, params) => {
+  const navigate = navigateFunc.bind(props);
   const config = getConfig();
   
   // Todo: need to check fhc-summary
@@ -106,7 +106,8 @@ export const backButtonHanlderWeb = (fromState, currentState, params) => {
     '/nps/sip', '/my-account', '/modal', '/page/callback', '/nps/pran', '/invest/recommendations', '/reports/sip/pause-request', '/kyc/journey'];
     
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
-    returnObj.path = "/landing";
+    navigate("/landing");
+    return true;
   }
 
   switch(currentState) {
@@ -114,9 +115,11 @@ export const backButtonHanlderWeb = (fromState, currentState, params) => {
     case "/kyc/report":
     case "/notification":
       if (config?.code === 'moneycontrol') {
-        returnObj.path = "/invest/money-control";
+        navigate("/invest/money-control");
+        return true;
       } else {
-        returnObj.path = "/landing";
+        navigate("/landing");
+        return true;
       }
       break;
     case "/account/merge/linked/success":
@@ -127,7 +130,8 @@ export const backButtonHanlderWeb = (fromState, currentState, params) => {
         // appService.sendEvent(message);
         storageService().clear();
       } else {
-        returnObj.path = "/logout";
+        navigate("/logout");
+        return true;
       }
       break;
     case '/invest/money-control':
@@ -145,7 +149,8 @@ export const backButtonHanlderWeb = (fromState, currentState, params) => {
       break;
     default:
       if (backMapper(currentState)) {
-        returnObj.path = backMapper(currentState);
+        navigate(backMapper(currentState));
+        return true;
       } else {
         // $window.history.back();
       }
@@ -158,30 +163,37 @@ export const backButtonHanlderWeb = (fromState, currentState, params) => {
         currentUser.kyc_registration_v2 === "init" ||
         currentUser.kyc_registration_v2 === "incomplete"
       ) {
-        returnObj.path = "/kyc/journey";
+        navigate("/kyc/journey");
+        return true;
       } else {
         if (config?.code === 'moneycontrol') {
-          returnObj.path = "/invest/money-control";
+          navigate("/invest/money-control");
+          return true;
         } else {
-          returnObj.path = "/landing";
+          navigate("/landing");
+          return true;
         }
       }
     }
   }
 
   if (currentState === "/kyc/digilocker/failed") {
-    returnObj.path = "/kyc/journey";
-    returnObj.state = { show_aadhaar: true }
+    navigate("/kyc/journey", {
+      state: { show_aadhaar: true }
+    });
+    return true;
   }
 
   const diyDirectEntryArr = ["/diy/fundlist/direct", "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct"];
 
-  if ((currentState === "/kyc-esign/nsdl" && params.status === "success") ||
+  if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") ||
     diyDirectEntryArr.includes(currentState)) {
     if (config?.code === 'moneycontrol') {
-      returnObj.path = "/invest/money-control";
+      navigate("/invest/money-control");
+      return true;
     } else {
-      returnObj.path = "/invest";
+      navigate("/invest");
+      return true;
     }
   }
 }

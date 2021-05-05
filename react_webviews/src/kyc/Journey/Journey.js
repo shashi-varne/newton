@@ -40,28 +40,36 @@ const Journey = (props) => {
     setGoBackModal(false)
   }
 
+  const backHandlingCondition = () => {
+    if (config.isIframe) {
+      if (config.code === 'moneycontrol') {
+        navigate("/invest/money-control");
+      } else {
+        navigate("/landing");
+      }
+      return;
+    } else if (!config.Web) {
+      if (storageService().get('native')) {
+        nativeCallback({ action: "exit_web" });
+      } else {
+        navigate("/");
+      }
+      return;
+    }
+    navigate("/landing");
+  }
+
   const openGoBackModal = () => {
     if (user?.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete") {
       setGoBackModal(true)
     } else {
-      if (config.isIframe) {
-        if (config.code === 'moneycontrol') {
-          navigate("/invest/money-control");
-          return;
-        }
-      } else if (config.isSdk) {
-        if (storageService().get('native')) {
-          nativeCallback({ action: "exit_web" });
-          return;
-        }
-      }
-      navigate("/landing");
+      backHandlingCondition();
     }
   }
 
   const confirmGoBack = () => {
       closeGoBackModal()
-      navigate('/')
+      backHandlingCondition();
   }
 
   useEffect(() => {

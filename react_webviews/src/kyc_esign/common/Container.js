@@ -35,7 +35,10 @@ class Container extends Component {
 
 
   historyGoBack = (backData) => {
-    
+    const fromState = this.props.location?.state?.fromState || "";
+    const toState = this.props.location?.state?.toState || "";
+    const params = this.props.location?.params || {};
+
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
@@ -44,18 +47,15 @@ class Container extends Component {
       this.props.headerData.goBack();
       return;
     }
+
+    if (!backData?.fromHeader && toState) {
+      let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
+      if (isRedirected) {
+        return;
+      }
+    }
     
     nativeCallback({ action: 'exit_web' });
-
-    // switch (pathname) {
-    //   case "/loan/home":
-    //   case "/loan/report":
-    //   case "/loan/app-update":
-    //     nativeCallback({ action: "native_back"});
-    //     break;
-    //   default:
-    //     this.props.history.goBack();
-    // }
   };
 
   componentDidUpdate(prevProps) {
