@@ -51,8 +51,8 @@ class Answers extends Component {
       }
     }
     let imgTags = document.getElementsByTagName('img') || [];
-    for (var i = 0; i < imgTags.length; i++) {
-      imgTags[i].addEventListener("load",this.updateHeight)
+    for (var j = 0; j < imgTags.length; j++) {
+      imgTags[j].addEventListener("load",this.updateHeight)
     }
   }
 
