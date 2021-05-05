@@ -43,18 +43,18 @@ class Container extends Component {
       nativeCallback({ events: this.getEvents("back") });
     }
 
-    if(this.props.headerData && this.props.headerData.goBack) {
-      this.props.headerData.goBack();
-      return;
-    }
-
     if (!backData?.fromHeader && toState) {
       let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
       if (isRedirected) {
         return;
       }
     }
-    
+
+    if(this.props.headerData && this.props.headerData.goBack) {
+      this.props.headerData.goBack();
+      return;
+    }
+
     nativeCallback({ action: 'exit_web' });
   };
 

@@ -49,17 +49,17 @@ class Container extends Component {
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-    
-    if (this.props.headerData && this.props.headerData.goBack) {
-      this.props.headerData.goBack();
-      return;
-    }
 
     if (!backData?.fromHeader && toState) {
       let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
       if (isRedirected) {
         return;
       }
+    }
+    
+    if (this.props.headerData && this.props.headerData.goBack) {
+      this.props.headerData.goBack();
+      return;
     }
 
     const goBackPath = this.props.location?.state?.goBack || "";

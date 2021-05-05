@@ -1,5 +1,5 @@
 
-import { getConfig, setHeights } from 'utils/functions';
+import { getConfig, setHeights, listenPartnerEvents } from 'utils/functions';
 // import { nativeCallback } from "utils/native_callback";
 import Banner from 'common/ui/Banner';
 import UiSkelton from 'common/ui/Skelton';
@@ -26,6 +26,7 @@ let start_time = '';
 
 export function didMount() {
     start_time = new Date();
+    const config = getConfig();
 
     this.getHeightFromTop = getHeightFromTop.bind(this);
     this.onScroll = onScroll.bind(this);
@@ -50,7 +51,7 @@ export function didMount() {
     this.checkAfterRedirection(this.props, fromState, toState);
 
     this.setState({
-        productName: getConfig().productName,
+        productName: config.productName,
         mounted: true,
         force_show_inpage_title: true,
         inPageTitle: true
@@ -61,6 +62,19 @@ export function didMount() {
     setHeights({ 'header': true, 'container': false });
 
     let that = this;
+    if (config.isIframe) {
+        const partnerEvents = function (res) {
+            switch (res.type) {
+              case "back_pressed":
+                that.historyGoBack();
+                break;
+  
+              default:
+                break;
+            }
+        };
+        listenPartnerEvents(partnerEvents);
+    }
     window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
