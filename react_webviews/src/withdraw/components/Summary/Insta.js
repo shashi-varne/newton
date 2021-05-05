@@ -80,8 +80,6 @@ const Insta = (props) => {
       hidePageTitle
       handleClick={handleClick}
       skelton={isEmpty(taxes)}
-      // twoButton={true}
-      // footerText1={getTotalAmount()}
       showLoader={isApiRunning}
       buttonData={{
         leftTitle: "Withdraw amount",

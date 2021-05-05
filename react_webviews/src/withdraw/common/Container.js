@@ -6,7 +6,6 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
-import { isFunction } from "../../utils/validators";
 
 class Container extends Component {
   constructor(props) {
@@ -41,18 +40,39 @@ class Container extends Component {
   };
 
   historyGoBack = (backData) => {
-    let { params } = this.props.location
+    const fromState = this.props.location?.state?.fromState || "";
+    const toState = this.props.location?.state?.toState || "";
+    const params = this.props.location?.params || {};
 
-    if (params && params.disableBack) {
-      nativeCallback({ action: 'exit' })
-      return
+    if (this.getEvents("back")) {
+      nativeCallback({ events: this.getEvents("back") });
+    }
+    
+    if (!backData?.fromHeader && toState) { // need to confirm
+      let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
+      if (isRedirected) {
+        return;
+      }
     }
 
-    if (isFunction(this.props.goBack)) {
-      return this.props.goBack(params)
+    if (this.props.headerData && this.props.headerData.goBack) {
+      this.props.headerData.goBack();
+      return;
     }
-    nativeCallback({ events: this.getEvents('back') })
-    this.props.history.goBack()
+
+    const goBackPath = this.props.location?.state?.goBack || "";
+
+    if(goBackPath) {
+      this.navigate(goBackPath);
+      return;
+    }
+
+    if (fromState) {
+      this.navigate(fromState);
+      return;
+    }
+
+    this.props.history.goBack();
   }
 
   componentDidUpdate(prevProps) {

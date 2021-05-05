@@ -92,7 +92,7 @@ const Landing = (props) => {
   }
   const handleClick = () => {
     if (zeroInvested) {
-      navigate('/invest/instaredeem', null, true)
+      navigate('/invest/instaredeem')
     } else if (fetchFailed) {
       fetchRecommendedFunds()
     } else {
@@ -101,14 +101,14 @@ const Landing = (props) => {
         return
       }
       if (type === 'manual') {
-        navigate(`self/summary`, {
+        navigate(`/withdraw/self/summary`, {
           state:{
             amounts: value,
             ...recommendedFunds[0],
           }
         })
       } else {
-        navigate(`${type}/summary`, {
+        navigate(`/withdraw/${type}/summary`, {
           state:{
             amounts: value,
             ...recommendedFunds[0],
@@ -161,24 +161,15 @@ const Landing = (props) => {
     }
   }
 
-  const goBack = () => {
-    navigate('');
-  }
   return (
     <Container
       buttonTitle={buttonTitle}
       fullWidthButton
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      goBack={goBack}
-      // hideInPageTitle
       disable={type === 'insta-redeem' ? (limitCrossed || error) : error}
-      // handleClick2={handleClick}
       handleClick={handleClick}
       skelton={isEmpty(recommendedFunds) && showSkeltonLoader}
-      // twoButton={type !== 'insta-redeem'}
-      // footerText1={totalAmount}
-      // disable2={error}
       buttonData={{
         leftTitle: "Withdraw amount",
         leftSubtitle: formatAmountInr(totalAmount),
