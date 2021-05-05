@@ -37,7 +37,6 @@ class Answers extends Component {
     }
 
     let aTags = document.getElementsByTagName('a') || [];
-
     for (var i = 0; i < aTags.length; i++) {
       let url = aTags[i].href;
       aTags[i].onclick = function (event) {
@@ -51,6 +50,14 @@ class Answers extends Component {
         });
       }
     }
+    let imgTags = document.getElementsByTagName('img') || [];
+    for (var i = 0; i < imgTags.length; i++) {
+      imgTags[i].addEventListener("load",this.updateHeight)
+    }
+  }
+
+  updateHeight = () =>{
+    this.swipeableActions.updateHeight()
   }
 
   onload = async () => {
