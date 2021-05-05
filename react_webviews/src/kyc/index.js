@@ -61,6 +61,7 @@ import NriError from "./Equity/components/NriError";
 import LocationError from "./Equity/components/LocationError";
 import AccountInfo from "./Equity/components/AccountInfo";
 import PanInstructions from "./Equity/components/PanInstructions";
+import DocumentVerification from "./Equity/components/DocumentVerification";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -332,6 +333,11 @@ const Kyc = (props) => {
           exact 
           path={`${url}/pan-instructions`} 
           component={PanInstructions} 
+        />
+        <Route 
+          exact 
+          path={`${url}/document-verification`} 
+          component={DocumentVerification} 
         />
         <Route component={NotFound} />
       </Switch>
