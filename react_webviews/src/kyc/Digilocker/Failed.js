@@ -37,6 +37,16 @@ const Failed = (props) => {
     }
   };
 
+  const goBack = () => {
+    if (getConfig().isSdk) {
+      setBackDialogOpen(true);
+    } else {
+      navigate("/kyc/journey", {
+        state: { show_aadhaar: true },
+      });
+    }
+  };
+
   const {kyc, isLoading} = useUserKycHook();
 
   const productName = getConfig().productName;
@@ -45,7 +55,7 @@ const Failed = (props) => {
       title="Aadhaar KYC Failed!" 
       noFooter 
       skelton={isLoading}
-      headerData={{goBack: () => setBackDialogOpen(true) }}
+      headerData={{goBack}}
     >
       <section id="digilocker-failed">
         <img
@@ -100,7 +110,7 @@ const Failed = (props) => {
       <ConfirmBackDialog
         isOpen={isBackDialogOpen}
         close={() => setBackDialogOpen(false)}
-        goBack={() => navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }})} // need to confirm 
+        goBack={() => navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }})}
       />
     </Container>
   );
