@@ -149,11 +149,12 @@ const PersonalDetails1 = (props) => {
       current="1"
       total="4"
     >
-      <div className="kyc-personal-details">
-        <div className="kyc-main-subtitle">
+      <div className="kyc-personal-details" id='kyc-personal-details-container'>
+        <div className="kyc-main-subtitle" id='kyc-main-subtitle'>
           We need basic details to verify identity
         </div>
-        <main>
+        <main id='main'>
+        <span id='input-feild1'>
           <Input
             label="Name"
             class="input"
@@ -164,7 +165,8 @@ const PersonalDetails1 = (props) => {
             maxLength={20}
             type="text"
             disabled={isApiRunning}
-          />
+          /></span>
+          <span id='input-feild2'>
           <Input
             label="Date of birth(DD/MM/YYYY)"
             class="input"
@@ -176,8 +178,9 @@ const PersonalDetails1 = (props) => {
             type="text"
             id="dob"
             disabled={isApiRunning}
-          />
+          /></span>
           {user.email === null && (
+            <span id='input-feild3'>
             <Input
               label="Email"
               class="input"
@@ -187,9 +190,10 @@ const PersonalDetails1 = (props) => {
               onChange={handleChange("email")}
               type="text"
               disabled={isApiRunning}
-            />
+            /></span>
           )}
           {user.mobile === null && (
+            <span id='input-feild4'>
             <Input
               label="Mobile number"
               class="input"
@@ -200,9 +204,9 @@ const PersonalDetails1 = (props) => {
               maxLength={10}
               type="text"
               disabled={isApiRunning}
-            />
+            /></span>
           )}
-          <div className={`input ${isApiRunning && `disabled`}`}>
+          <div className={`input ${isApiRunning && `disabled`}`} id={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.gender_error ? true : false}
               helperText={form_data.gender_error}
@@ -216,7 +220,7 @@ const PersonalDetails1 = (props) => {
               disabled={isApiRunning}
             />
           </div>
-          <div className={`input ${isApiRunning && `disabled`}`}>
+          <div className={`input ${isApiRunning && `disabled`}`} id={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.marital_status_error ? true : false}
               helperText={form_data.marital_status_error}

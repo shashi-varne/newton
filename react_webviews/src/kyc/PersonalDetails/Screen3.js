@@ -156,7 +156,7 @@ const PersonalDetails3 = (props) => {
             />
           </div>
         </main>
-        <footer>
+        <footer id='footer-text'>
           By tapping ‘save and continue’ I agree that I am not a PEP(politically
           exposed person)
         </footer>

@@ -84,7 +84,8 @@ class Otp extends Component {
                 <h5>Join 1000’s of Smart Investors</h5>
               </div>
             )}
-            <div className="otp-text">Enter OTP</div>
+            <div className="otp-text" id='otp-text'>Enter OTP</div>
+            <span id='input-feild'>
             <Input
               error={otp_error ? true : false}
               type="text"
@@ -93,10 +94,11 @@ class Otp extends Component {
               class="input"
               onChange={this.handleChange("otp")}
               autoFocus
-            />
-            <div className="resend-otp" onClick={() => this.resendOtp()}>
+            /></span>
+            <div className="resend-otp" id='resend-otp' onClick={() => this.resendOtp()}>
               Resend OTP
             </div>
+            <span id='submit-button'>
             <Button
               buttonTitle="VERIFY"
               onClick={this.handleClick}
@@ -111,7 +113,7 @@ class Otp extends Component {
                   config?.uiElements?.button?.borderRadius || "2px"
                 }`,
               }}
-            />
+            /></span>
           </div>
         </div>
       </div>

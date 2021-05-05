@@ -114,7 +114,8 @@ const PersonalDetails2 = (props) => {
       total="4"
     >
       <div className="kyc-personal-details">
-        <main>
+        <main id='main'>
+          <span id='input-feild1'>
           <Input
             label="Father's name"
             class="input"
@@ -125,7 +126,8 @@ const PersonalDetails2 = (props) => {
             maxLength={20}
             type="text"
             disabled={isApiRunning}
-          />
+          /></span>
+          <span id='input-feild2'>
           <Input
             label="Mother's name"
             class="input"
@@ -135,8 +137,9 @@ const PersonalDetails2 = (props) => {
             onChange={handleChange("mother_name")}
             type="text"
             disabled={isApiRunning}
-          />
+          /></span>
           {form_data.marital_status === "MARRIED" && (
+            <span id='input-feild3'>
             <Input
               label="Spouse"
               class="input"
@@ -146,7 +149,7 @@ const PersonalDetails2 = (props) => {
               onChange={handleChange("spouse_name")}
               type="text"
               disabled={isApiRunning}
-            />
+            /></span>
           )}
         </main>
       </div>

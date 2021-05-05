@@ -697,15 +697,15 @@ const Journey = (props) => {
               />
             </div>
           )}
-          <div className="kyc-journey-title">{topTitle}</div>
+          <div className="kyc-journey-title" id='kyc-journey-title'>{topTitle}</div>
           {!show_aadhaar && (
-            <div className="kyc-journey-subtitle">
+            <div className="kyc-journey-subtitle" id='kyc-journey-subtitle'>
               Please keep your PAN ({kyc?.pan?.meta_data?.pan_number}) and
               address proof handy to complete KYC
             </div>
           )}
           {kyc?.kyc_status === 'compliant' && !investmentPending && (
-            <div className="kyc-journey-subtitle">
+            <div className="kyc-journey-subtitle" id='kyc-journey-subtitle'>
               To unlock premium onboarding, complete these simple steps
             </div>
           )}
@@ -713,11 +713,12 @@ const Journey = (props) => {
           {isCompliant &&
             user.active_investment &&
             user.kyc_registration_v2 !== 'submitted' && (
+              <span id='alert-box'>
               <Alert
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."
                 title={`Hey ${user.name}`}
-              />
+              /></span>
             )}
           <main className="steps-container">
             {kycJourneyData.map((item, idx) => (
@@ -747,12 +748,12 @@ const Journey = (props) => {
                   }
                 >
                   <div className="flex flex-between">
-                    <span className="field_key">
+                    <span className="field_key" id='field_key'>
                       {item.title}
                       {item?.value ? ':' : ''}
                     </span>
                     {item?.value && (
-                      <span className="field_value"> {item?.value}</span>
+                      <span className="field_value" id='field_value'> {item?.value}</span>
                     )}
                   </div>
 
@@ -768,7 +769,7 @@ const Journey = (props) => {
                   )}
                 </div>
 
-                {item?.disc && <div className="disc">{item?.disc}</div>}
+                {item?.disc && <div className="disc" id='disc'>{item?.disc}</div>}
               </div>
             ))}
           </main>

@@ -158,10 +158,11 @@ const PersonalDetails4 = (props) => {
       current={type === "digilocker" ? 3 : 4}
       total={type === "digilocker" ? 3 : 4}
     >
-      <div className="kyc-nominee">
-        <main>
-          <div className="nominee-checkbox">
+      <div className="kyc-nominee" id='kyc-nominee'>
+        <main id='main'>
+          <div className="nominee-checkbox" id='nominee-checkbox'>
             <Checkbox
+              id='check-box'
               defaultChecked
               checked={isChecked}
               value={isChecked}
@@ -169,10 +170,11 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-            <span>
+            <span id='check-box-text'>
               I do not wish to add a <b>nominee</b>
             </span>
           </div>
+          <span id='input-feild1'>
           <Input
             label="Name"
             class="input"
@@ -183,7 +185,8 @@ const PersonalDetails4 = (props) => {
             maxLength={20}
             type="text"
             disabled={isChecked || isApiRunning}
-          />
+          /></span>
+          <span id='input-feild2'>
           <Input
             label="Date of birth(DD/MM/YYYY)"
             class="input"
@@ -195,7 +198,7 @@ const PersonalDetails4 = (props) => {
             type="text"
             id="dob"
             disabled={isChecked || isApiRunning}
-          />
+          /></span>
           <div className="input">
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}

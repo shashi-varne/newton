@@ -172,7 +172,7 @@ const NavList = (props) => {
                 <ListItemIcon>
                   <img className='nav-link-icons' src={el.icon} alt={el.name} />
                 </ListItemIcon>
-                <ListItemText className='nav-link-text' primary={el.name} />
+                <ListItemText className='nav-link-text' id={`${el.id}_btn`} primary={el.name} />
               </ListItem>
             );
           })}

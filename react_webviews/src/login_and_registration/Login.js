@@ -72,10 +72,10 @@ class Login extends Component {
             />
           </div>
           <div className="login-form">
-            <div className="header-text">LOGIN</div>
+            <div className="header-text" id='login'>LOGIN</div>
             <div className="login-type">
               <div
-                className="text"
+                className="text" id='mobile'
                 style={{
                   fontWeight: loginType === "mobile" ? "bold" : "normal",
                 }}
@@ -86,7 +86,7 @@ class Login extends Component {
               </div>
               {productName !== "finity" && (
                 <div
-                  className="text"
+                  className="text" id='email'
                   style={{
                     fontWeight: loginType === "email" ? "bold" : "normal",
                   }}
@@ -99,8 +99,8 @@ class Login extends Component {
             </div>
             <div className="form">
               {loginType === "mobile" && (
-                <div className="form-field">
-                  <div className="country-code">
+                <div className="form-field" id='form-field'>
+                  <div className="country-code" id='country-code'>
                     <DropdownWithoutIcon
                       onChange={this.handleChange("code")}
                       error={!!form_data.code_error ? true : false}
@@ -157,13 +157,14 @@ class Login extends Component {
                     />
                   </div>
                   <div
-                    className="forgot_password"
+                    className="forgot_password" id='forgot_password'
                     onClick={() => this.navigate("forgot-password")}
                   >
                     FORGOT PASSWORD?
                   </div>
                 </>
               )}
+              <span id='submit-button'>
               <Button
                 buttonTitle="LOGIN"
                 onClick={this.handleClick}
@@ -172,20 +173,19 @@ class Login extends Component {
                   width: "100%",
                   letterSpacing: "2px",
                   minHeight: "45px",
-                  borderRadius: `${
-                    config?.uiElements?.button?.borderRadius || "2px"
-                  }`,
+                  borderRadius: `${config?.uiElements?.button?.borderRadius || "2px"
+                    }`,
                 }}
-              />
+              /></span>
               {productName !== "finity" && (
-                <div className="social-block">
+                <div className="social-block" id='social-block'>
                   <a
-                    className="socialSignupBtns facebookBtn"
+                    className="socialSignupBtns facebookBtn" id='socialSignupBtns facebookBtn'
                     href={facebookUrl}
                   >
                     FACEBOOK
                   </a>
-                  <a className="socialSignupBtns googleBtn" href={googleUrl}>
+                  <a className="socialSignupBtns googleBtn" id='socialSignupBtns googleBtn' href={googleUrl}>
                     GOOGLE
                   </a>
                 </div>
@@ -193,7 +193,7 @@ class Login extends Component {
             </div>
             {productName !== "finity" && (
               <div className="footer" onClick={() => this.navigate("register")}>
-                NEW USER? <span>REGISTER</span>
+                NEW USER? <span id='Register_btn'>REGISTER</span>
               </div>
             )}
             {productName === "finity" && (
@@ -224,7 +224,7 @@ class Login extends Component {
                 </div>
               </div>
             )}
-            <div className="agree-terms">
+            <div className="agree-terms" id='agree-terms'>
               By signing in, you agree to fisdom's{" "}
               <a
                 href="https://www.fisdom.com/terms/"

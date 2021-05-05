@@ -297,8 +297,9 @@ const Home = (props) => {
     >
       {!isEmpty(homeData) && (
         <div className="kyc-home">
-          <div className="kyc-main-subtitle">{homeData.subtitle}</div>
-          <main>
+          <div className="kyc-main-subtitle" id='kyc-main-subtitle'>{homeData.subtitle}</div>
+          <main id='main'>
+            <span id='input-feild'>
             <Input
               label="Enter PAN"
               class="input"
@@ -310,21 +311,23 @@ const Home = (props) => {
               type="text"
               disabled={showLoader}
               autoFocus
-            />
+            /></span>
+            <span id='alert_success'>
             {isStartKyc && isUserCompliant && (
               <Alert
                 variant="success"
                 message={renderData.success.subtitle}
                 title={renderData.success.title}
               />
-            )}
+            )}</span>
+            <span id='alert_failed'>
             {isStartKyc && !isUserCompliant && (
               <Alert
                 variant="danger"
                 message={renderData.incomplete.subtitle}
                 title={renderData.incomplete.title}
               />
-            )}
+            )}</span>
           </main>
           <ResidentDialog
             open={openResident}
