@@ -1,28 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { getPurchaseProcessData, storageConstants } from "../constants";
 import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
+import { getSummaryV2 } from "../common/api";
+import { getConfig } from "../../utils/functions";
 
 const SwitchedTransaction = (props) => {
-  const transactions = storageService().getObject(
-    storageConstants.PENDING_SWITCH
-  );
-  if (!transactions) {
-    props.history.goBack();
-  }
+  const stateParams = props.location?.state || {};
+  const [transactions, setTransactions] = useState({});
   const [openProcess, setOpenProcess] = useState(false);
   const [selectedSwitch, setSelectedSwitch] = useState({});
+  const [showSkelton, setShowSkelton] = useState(true);
+
+  useEffect(() => {
+    const transactionsData = storageService().getObject(
+      storageConstants.PENDING_SWITCH
+    );
+    if (!isEmpty(transactionsData) && stateParams.fromPath === "reports") {
+      setTransactions(transactionsData);
+      setShowSkelton(false);
+    } else {
+      initialize();
+    }
+  }, []);
+
+  const initialize = async () => {
+    const result = await getSummaryV2();
+    if (!result) {
+      setShowSkelton(false);
+      return;
+    }
+    setTransactions(result.report?.pending?.switch_transactions || {});
+    storageService().setObject(
+      storageConstants.PENDING_SWITCH,
+      result.report?.pending?.switch_transactions || {}
+    );
+    setShowSkelton(false);
+  };
 
   const handleProcess = (switched) => {
     setSelectedSwitch(switched);
     setOpenProcess(true);
   };
 
+  const goBack = () => {
+    props.history.push({
+      pathname: "/reports",
+      search: getConfig().searchParams,
+    });
+  };
+
   return (
-    <Container noFooter={true} title="Pending Switch">
+    <Container
+      noFooter={true}
+      title="Pending Switch"
+      skelton={showSkelton}
+      headerData={{ goBack }}
+    >
       <div className="report-purchase">
         {!isEmpty(transactions) &&
           transactions.map((switched, index) => {

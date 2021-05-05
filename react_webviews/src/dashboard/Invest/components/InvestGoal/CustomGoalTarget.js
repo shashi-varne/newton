@@ -29,8 +29,7 @@ const CustomGoalTarget = (props) => {
   useEffect(() => {
     setTargetAmount(
       funnelData.corpus ||
-      customGoalTargetMap[subtype] ||
-      0
+      customGoalTargetMap[subtype] || 0
     );
   }, []);
 

@@ -101,7 +101,7 @@ const BanksList = (props) => {
                 </div>
               </div>
               <img
-                src={require(`assets/${productName}/icon_color.svg`)}
+                src={require(`assets/${productName}/right_icon.svg`)}
                 alt=""
                 className="right-icon"
               />

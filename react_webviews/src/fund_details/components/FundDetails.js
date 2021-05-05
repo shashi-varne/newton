@@ -304,14 +304,6 @@ const FundDetails = ({ classes, history }) => {
     })
   }
 
-  const goBack = () => {
-    if(type === 'diy'){
-      handleInvest();
-    } else {
-      history.goBack();
-    }
-  };
-
   const handleInvest = () => {
     window.location.href =  getConfig().webAppUrl + 'diy/invest';
   }

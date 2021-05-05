@@ -48,7 +48,15 @@ const isMobileDevice = getConfig().isMobileDevice;
 
 const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
 if(isBottomSheetDisplayed) {
-  window.sessionStorage.setItem("is_bottom_sheet_displayed", false);
+  storageService().set("is_bottom_sheet_displayed", false);
+}
+
+const isBottomSheetDisplayedKycPremium = storageService().get(
+  "is_bottom_sheet_displayed_kyc_premium"
+);
+
+if(isBottomSheetDisplayedKycPremium) {
+  storageService().set("is_bottom_sheet_displayed_kyc_premium", false);
 }
 
 const ScrollToTop = withRouter(

@@ -24,7 +24,6 @@ const Journey = (props) => {
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
-  const basePath = getBasePath()
   const config = getConfig()
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
@@ -565,6 +564,7 @@ const Journey = (props) => {
   if (!isEmpty(kyc) && !isEmpty(user)) {
     var topTitle = ''
     var stage = 0
+    // eslint-disable-next-line
     var stageDetail = ''
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
@@ -650,7 +650,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_instant.svg`)}
                     alt="Instant Investment"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
@@ -661,7 +660,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_no_doc.svg`)}
                     alt="No document asked"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
@@ -688,7 +686,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_instant.svg`)}
                     alt="Instant Investment"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
@@ -699,7 +696,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_no_doc.svg`)}
                     alt="No document asked"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">

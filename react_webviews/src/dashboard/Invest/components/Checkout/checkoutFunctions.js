@@ -11,7 +11,6 @@ import {
 const errorMessage = "Something went wrong!";
 export async function initializeComponentFunctions() {
   this.navigate = navigateFunc.bind(this.props);
-  this.deleteFund = deleteFund.bind(this);
   this.checkLimit = checkLimit.bind(this);
   this.goNext = goNext.bind(this);
   this.proceedInvestment = proceedInvestment.bind(this);
@@ -26,20 +25,6 @@ export async function initializeComponentFunctions() {
   if (this.onload) this.onload();
 }
 
-export const deleteFund = (item, index) => {
-  let { fundsData, cartCount } = this.state;
-  let fundName = item.legalName || item.legal_name;
-  fundsData.splice(index, 1);
-  cartCount = fundsData.length;
-  this.setState({
-    fundName: fundName,
-    fundsData: fundsData,
-    cartCount: cartCount,
-  });
-  storageService().setObject("diystore_cart", fundsData);
-  storageService().set("diystore_cartCount", fundsData.length);
-};
-
 export async function getNfoPurchaseLimit(data) {
   this.setState({ show_loader: true });
   try {
@@ -53,7 +38,7 @@ export async function getNfoPurchaseLimit(data) {
       purchaseLimitData[data.investType] = result.funds_data;
       let disableInputSummary = true;
       if (purchaseLimitData[data.investType][0].ot_sip_flag) {
-        fundsData[0].allow_purchase = true;
+        fundsData[0].allow_purchase[data.investType] = true;
         disableInputSummary = false;
       }
       this.setState({
@@ -83,26 +68,17 @@ export async function getDiyPurchaseLimit(data) {
     let { fundsData, purchaseLimitData } = this.state;
     if (status === 200) {
       purchaseLimitData[data.investType] = result.funds_data;
-      purchaseLimitData[data.investType] = purchaseLimitData[
-        data.investType
-      ].map((dict) => {
-        var results = fundsData.filter((obj) => {
-          if (obj.isin === dict["isin"]) {
-            obj["allow_purchase"] = dict["ot_sip_flag"];
-          }
-          return obj;
-        });
-        dict["addedToCart"] = false;
-        dict["allow_purchase"] = true;
-        if (results.length === 0) {
-          dict["addedToCart"] = false;
+      const limitData = purchaseLimitData[data.investType] || [];
+      let funds = fundsData.map((fund) => {
+        let limit = limitData.find((obj) => obj.isin === fund.isin) || {};
+        if (limit.ot_sip_flag) {
+          fund.allow_purchase[data.investType] = true;
         }
-        return dict;
+        return fund;
       });
-
       this.setState({
         show_loader: false,
-        fundsData: fundsData,
+        fundsData: funds,
         purchaseLimitData: purchaseLimitData,
       });
     } else {
@@ -183,7 +159,7 @@ export async function goNext(investReferralData, isReferralGiven) {
 
   let allocations = [];
   fundsData
-    .filter((data) => data.allow_purchase)
+    .filter((data) => data["allow_purchase"][investType])
     .forEach((fund) => {
       let limitData = purchaseLimitData[investType].find(
         (element) => element.isin === fund.isin

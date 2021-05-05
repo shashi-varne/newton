@@ -143,7 +143,7 @@ const NavList = (props) => {
     if (id === 'fhc' && productName === 'finity') {
       return null;
     }
-    if (id === 'myAccount' && (!isReadyToInvestBase || userKyc?.bank?.doc_status !== 'rejected')) {
+    if (id === 'myAccount' && (!isReadyToInvestBase && userKyc?.bank?.doc_status !== 'rejected')) {
       return null;
     }
     if (id === 'refer' && !showReferral) {

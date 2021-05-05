@@ -22,7 +22,7 @@ const WithdrawSwitch = (props) => {
       const data = await getRecommendedSwitch(amount);
       setSwitchFunds(data);
     } catch (err) {
-      console.log(err);
+      toast(err);
     } finally {
       setIsLoading(false);
     }
@@ -31,11 +31,10 @@ const WithdrawSwitch = (props) => {
   const sendSwitchOrders = async (switch_orders) => {
     try {
       setIsLoading(true);
-      await postSwitchOrders({switch_orders});
-      navigate('verify');
+      const response = await postSwitchOrders({switch_orders});
+      navigate('verify', { state:{...response} });
     } catch (err) {
       toast(err);
-      console.log(err);
     } finally {
       setIsLoading(false);
     }
@@ -86,15 +85,15 @@ const WithdrawSwitch = (props) => {
     >
       {!isEmpty(switchFunds?.recommendations) && (
         <section>
-          {switchFunds?.recommendations?.map((el) => (
-            <div className='withdraw-switch'>
+          {switchFunds?.recommendations?.map((el, idx) => (
+            <div className='withdraw-switch' key={idx}>
               <div className='withdraw-mf'>
                 <div className='withdraw-mf-icon'>
                   <img src={stock_icon} alt='stock icon' />
                 </div>
                 <div className='withdraw-mf-details'>
                   <div className='withdraw-mf-name'>{el.from_mf.friendly_name}</div>
-                  <div className='withdraw-mf-amount'>{inrFormatDecimal(el.folios[0]?.amount)}</div>
+                  <div className='withdraw-mf-amount'>{inrFormatDecimal(el?.total_amount)}</div>
                   <div className='withdraw-mf-more' onClick={showFundGraph(el.from_mf.isin)}>
                     <img src={info_icon} alt='info_icon' />
                     Know more

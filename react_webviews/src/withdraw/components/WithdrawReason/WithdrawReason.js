@@ -4,6 +4,7 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import isEmpty from 'lodash/isEmpty';
 import { navigate as navigateFunc } from 'utils/functions';
 import Dialog from '../../mini-components/Dialog';
+import toast from 'common/ui/Toast';
 
 import './WithdrawReason.scss';
 
@@ -41,7 +42,6 @@ const Landing = (props) => {
       }
     } catch (err) {
       props.history.goBack();
-      console.log(err);
     } finally {
       setIsLoading(false);
     }
@@ -52,7 +52,7 @@ const Landing = (props) => {
       await postWithdrawReasons(param);
       navigate('');
     } catch (err) {
-      console.log(err);
+      toast(err);
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +72,7 @@ const Landing = (props) => {
           sendWithdrawReason({ choice: qstn?.tag, reason: qstn?.title });
           return;
         } catch (err) {
-          console.log(err);
+          toast(err);
         }
       }
     }
@@ -95,7 +95,6 @@ const Landing = (props) => {
   };
 
   const handleChange = (event) => {
-    console.log("value is", value);
     if (event.target.value.length !== 0) {
       setValue(event.target.value);
       if (error) {

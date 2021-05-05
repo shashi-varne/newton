@@ -4,8 +4,8 @@ import Container from '../../../common/Container';
 import toast from "common/ui/Toast"
 import { numDifferentiationInr } from 'utils/validators';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { saveGoalMapper } from './constants';
 import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
+import { saveGoalMapper, customGoalTargetMap } from './constants';
 import { get_recommended_funds } from '../../common/api';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
@@ -53,10 +53,6 @@ const GoalTarget = (props) => {
       toast(err)
     }
   };
-
-  const goNext = () => {
-    navigate(`savegoal/${subtype}/amount`, true);
-  };
   
   const calculateCorpusValue = (amount) => {
     // eslint-disable-next-line radix
@@ -69,6 +65,7 @@ const GoalTarget = (props) => {
   };
 
   const setYourTarget = () => {
+    updateFunnelData({ corpus: customGoalTargetMap[subtype] });
     navigate(`savegoal/${subtype}/${year}/target`);
   };
 
@@ -76,7 +73,6 @@ const GoalTarget = (props) => {
     <Container
       classOverRide='pr-error-container'
       title='Save for a Goal'
-      handleClick={goNext}
       noFooter
       classOverRideContainer='pr-container'
       skelton={loader}

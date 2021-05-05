@@ -284,6 +284,9 @@ export const getConfig = () => {
     returnConfig.Web = true;
   }
 
+  // eslint-disable-next-line
+  returnConfig.html_camera = returnConfig.iOS || returnConfig.Web ? true : false;
+
   if (project === 'mandate-otm') {
     let { key } = main_query_params;
     let { name } = main_query_params;
@@ -295,11 +298,6 @@ export const getConfig = () => {
     // eslint-disable-next-line
     returnConfig.html_camera =
       (returnConfig.iOS || returnConfig.Web) ? true : html_camera;
-  }
-
-  if (project === 'loan') {
-    // eslint-disable-next-line
-    returnConfig.html_camera = returnConfig.iOS || returnConfig.Web ? true : false;
   }
 
   returnConfig.app_version = '';
