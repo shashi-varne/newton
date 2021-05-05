@@ -97,8 +97,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   const navigate = navigateFunc.bind(props);
   const config = getConfig();
   
-  // Todo: need to check fhc-summary
-  const landingRedirectPaths = ["fhc-summary", "/kyc/report", "/notification", "/nps/payment/callback",
+  const landingRedirectPaths = ["/kyc/report", "/notification", "/nps/payment/callback",
     "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"];
 
   const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',

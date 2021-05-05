@@ -64,8 +64,8 @@ export const checkAfterRedirection = (props, fromState, toState) => {
 export const backButtonHandler = (props, fromState, currentState, params) => {
   const navigate = navigateFunc.bind(props);
   const backPath = backMapper(currentState);
-  // Todo: need to check fhc-summary
-  const landingRedirectPaths = ["fhc-summary", "/sip/payment/callback", "/kyc/report", "/notification", "/nps/payment/callback",
+
+  const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/nps/payment/callback",
     "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"];
 
   const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
