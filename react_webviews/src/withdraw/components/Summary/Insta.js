@@ -13,7 +13,7 @@ import './Insta.scss';
 import '../commonStyles.scss';
 
 const Insta = (props) => {
-  const [taxes, setTaxes] = useState(taxes)
+  const [taxes, setTaxes] = useState('');
   const [open, setOpen] = useState({})
   const [isApiRunning, setIsApiRunning] = useState(false)
 
@@ -36,10 +36,9 @@ const Insta = (props) => {
         },
         []
       )
-      const result = await redeemOrders('insta_redeem', {
+      await redeemOrders('insta_redeem', {
         investments: [{ itype, name, subtype, allocations }],
       })
-      console.log(result)
     } catch (err) {
       toast(err.message, 'error')
     } finally {

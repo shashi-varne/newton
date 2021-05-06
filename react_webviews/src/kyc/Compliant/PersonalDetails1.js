@@ -153,6 +153,10 @@ const PersonalDetails1 = (props) => {
     setFormData({ ...formData });
   };
 
+  const goBack = () => {
+    navigate("/kyc/journey");
+  }
+
   return (
     <Container
       skelton={isLoading}
@@ -164,6 +168,7 @@ const PersonalDetails1 = (props) => {
       count={1}
       current={1}
       total={3}
+      headerData={{goBack}}
     >
       <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">
