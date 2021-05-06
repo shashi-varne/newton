@@ -1,7 +1,7 @@
 import toast from "../common/ui/Toast";
 import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
-import { getConfig } from "../utils/functions";
+import { getConfig, isIframe } from "../utils/functions";
 import { storageService, isFunction } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
 
@@ -74,8 +74,11 @@ export async function proceedInvestment(data) {
           return;
         }
         if (getConfig().Web) {
-          // handleIframe
-          window.location.href = pgLink;
+          if (isIframe()) {
+            handleIframeInvest(pgLink, result, history);
+          } else {
+            window.location.href = pgLink;
+          }
         } else {
           if (result.rta_enabled) {
             navigation(history, "/payment/options", {
@@ -143,4 +146,91 @@ function navigation(history, pathname, data = {}) {
     search: getConfig().searchParams,
     state: data.state,
   });
+}
+
+export function handleIframeInvest(pgLink, result, history) {
+  let popup_window = popupWindowCenter(900, 580, pgLink);
+  pollProgress(600000, 5000, result.investments[0].id, popup_window).then(
+    function (poll_data) {
+      popup_window.close();
+      if (poll_data.status === "success") {
+        // Success
+        navigation(
+          history,
+          `/page/callback/${result.investments[0].order_type}/${result.investments[0].amount}/success/success`
+        );
+      } else if (poll_data.status === "failed") {
+        toast("Payment failed. Please try again");
+        // Failed
+      } else if (poll_data.status === "closed") {
+        // Closed
+        toast("Payment window closed. Please try again");
+      }
+    },
+    function (err) {
+      popup_window.close();
+      console.log(err);
+      if (err?.status === "timeout") {
+        toast("Payment has been time out. Please try again");
+      } else {
+        toast("Something went wrong. Please try again.");
+      }
+    }
+  );
+}
+
+function pollProgress(timeout, interval, id, popup_window) {
+  const endTime = Number(new Date()) + (timeout || 3 * 1000 * 60);
+  interval = interval || 1000;
+  let checkCondition = async function (resolve, reject) {
+    if (popup_window.closed) {
+      resolve({ status: "closed" });
+    } else {
+      try {
+        const res = await getInvestmentStatus(id);
+        let { result, status_code } = res.pfwresponse;
+        if (status_code === 200) {
+          if (result.investment.status === "pg_success") {
+            resolve({ status: "success" });
+          } else if (result.investment.status === "pg_failed") {
+            resolve({ status: "failed" });
+          } else if (Number(new Date()) < endTime) {
+            setTimeout(checkCondition, interval, resolve, reject);
+          } else {
+            reject({ status: "timeout" });
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    }
+  };
+  return new Promise(checkCondition);
+}
+
+function popupWindowCenter(w, h, url) {
+  let dualScreenLeft =
+    window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+  let dualScreenTop =
+    window.screenTop !== undefined ? window.screenTop : window.screenY;
+  let left = window.screen.width / 2 - w / 2 + dualScreenLeft;
+  let top = window.screen.height / 2 - h / 2 + dualScreenTop;
+  return window.open(
+    url,
+    "_blank",
+    "width=" +
+      w +
+      ",height=" +
+      h +
+      ",resizable,scrollbars,status,top=" +
+      top +
+      ",left=" +
+      left
+  );
+}
+
+async function getInvestmentStatus(id) {
+  const res = await Api.get(`/api/invest/${id}`);
+  return res;
 }

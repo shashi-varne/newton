@@ -12,8 +12,11 @@ import {
 import SuccessDialog from "../Invest/mini-components/SuccessDialog";
 import InvestError from "../Invest/mini-components/InvestError";
 import PennyVerificationPending from "../Invest/mini-components/PennyVerificationPending";
-import { getBasePath } from "../../utils/functions";
-import { proceedInvestment } from "../proceedInvestmentFunctions";
+import { getBasePath, isIframe } from "../../utils/functions";
+import {
+  handleIframeInvest,
+  proceedInvestment,
+} from "../proceedInvestmentFunctions";
 import "./SipDates.scss";
 
 class SipDates extends Component {
@@ -121,8 +124,11 @@ class SipDates extends Component {
       "redirect_url=" +
       paymentRedirectUrl;
     if (getConfig().Web) {
-      // handleIframe
-      window.location.href = pgLink;
+      if (isIframe()) {
+        handleIframeInvest(pgLink, investResponse, this.props.history);
+      } else {
+        window.location.href = pgLink;
+      }
     } else {
       if (investResponse.rta_enabled) {
         this.navigate("/payment/options", {
