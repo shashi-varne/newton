@@ -6,6 +6,7 @@ import { resetRiskProfileJourney } from "../../functions";
 import "./PaymentCallback.scss";
 import { navigate as navigateFunc } from "../../common/commonFunctions";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
+import { isIframe } from "../../../../utils/functions";
 
 const PaymentCallback = (props) => {
   const params = props.match.params || {};
@@ -31,9 +32,18 @@ const PaymentCallback = (props) => {
       user.kyc_registration_v2 === "init" ||
       user.kyc_registration_v2 === "incomplete"
     ) {
-      navigate("/kyc/journey", null, true);
+      navigate("/kyc/journey");
     } else {
-      navigate("/landing", null, true);
+      if(isIframe() && config?.code === 'moneycontrol') {
+        navigate("/invest/money-control"); // no screen with this url
+        return;
+      }
+      if(config.isSdk) {
+        nativeCallback({ action: "clear_history" });
+        navigate("/");
+        return;
+      }
+      navigate("/landing");
     }
   }
 

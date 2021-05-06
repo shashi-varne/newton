@@ -109,27 +109,6 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     return true;
   }
 
-  if ("/payment/callback".indexOf(currentState) !== -1) {
-    if (fromStateArray.indexOf(fromState) !== -1) {
-      let currentUser = storageService().getObject("user") || {}
-      if (
-        currentUser.kyc_registration_v2 === "init" ||
-        currentUser.kyc_registration_v2 === "incomplete"
-      ) {
-        navigate("/kyc/journey");
-        return true;
-      } else {
-        if (config?.code === 'moneycontrol') {
-          navigate("/invest/money-control");
-          return true;
-        } else {
-          navigate("/landing");
-          return true;
-        }
-      }
-    }
-  }
-
   if (currentState === "/kyc/digilocker/failed") {
     navigate("/kyc/journey", {
       state: { show_aadhaar: true }
