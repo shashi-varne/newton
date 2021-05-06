@@ -80,7 +80,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
     <SlidingDialog id={id} open={open} close={close} {...props} onClick={close}>
       <section className="kyc-dl-aadhaar-dialog">
         <div className="flex-between">
-          <div className="heading">
+          <div className="heading" id='aadhaar-heading'>
             Please ensure your mobile no. is linked with Aadhaar
           </div>
           <img
@@ -90,7 +90,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
           />
         </div>
 
-        <div className="dialog-actions">
+        <div className="dialog-actions" id='submit-button'>
           <Button
             color="secondary"
             variant="raised"

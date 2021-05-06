@@ -39,9 +39,9 @@ const MessageComponent = (kyc) => {
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
-        <div className="row" key={idx}>
-          <div className="order">{idx + 1}.</div>
-          <div className="value">{title}</div>
+        <div className="row" key={idx} id={`row_${idx + 1}`}>
+          <div className="order" id={`order_${idx + 1}`}>{idx + 1}.</div>
+          <div className="value" id={`value_${idx + 1}`}>{title}</div>
         </div>
       ))}
     </section>
@@ -304,7 +304,7 @@ const AddressUpload = (props) => {
                 />
               )}
               {!frontDoc && (
-                <div className="caption">
+                <div className="caption" id='caption'>
                   Upload front side of {addressProof}
                 </div>
               )}
@@ -382,7 +382,7 @@ const AddressUpload = (props) => {
                 />
               )}
               {!frontDoc && (
-                <div className="caption">
+                <div className="caption" id='caption'>
                   Upload front side of {addressProof}
                 </div>
               )}

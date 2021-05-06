@@ -173,7 +173,7 @@ const AddressDetails1 = (props) => {
             />
           </div>
           <div className="input">
-            <div className="address-label">Address proof:</div>
+            <div className="address-label" id='address-label'>Address proof:</div>
             <div className="address-proof">
               {addressProofOptions.map((data, index) => {
                 const selected = form_data.address_doc_type === data.value;

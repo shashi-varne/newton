@@ -24,11 +24,11 @@ const Intro = (props) => {
         <div className="banner">
           <img src={require(`assets/${productName}/upload_doc_banner.svg`)} alt="" />
         </div>
-        <div className="intro">
+        <div className="intro" id='intro'>
           Securely upload required documents to verify personal and address
           details.
         </div>
-        <footer className="trust">
+        <footer className="trust" id='trust'>
           <img
             src={require(`assets/${productName}/trust_icons.svg`)}
             alt="Trust Icons."

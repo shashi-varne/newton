@@ -91,7 +91,7 @@ const IpvVideo = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-ipv-video">
-          <div className="sub-title">
+          <div className="sub-title" id='sub-title'>
             As per SEBI, it's compulsory for all investors to go through IPV (In
             Person Verification Process).
           </div>
@@ -221,7 +221,7 @@ const IpvVideo = (props) => {
             </div>
           )}
           {!file && (
-            <div className="ipv_footer_instructions">
+            <div className="ipv_footer_instructions" id='ipv_footer_instructions'>
               While recording,{' '}
               <strong>read the following verification numbers loud</strong>{' '}
               while looking at the camera
@@ -234,9 +234,9 @@ const IpvVideo = (props) => {
               seamless verification experience.
             </div>
           )}
-          <div className="ipv_code">{ipvcode}</div>
+          <div className="ipv_code" id='ipv_code'>{ipvcode}</div>
           <div className="flex-between-center">
-            <div className="know_more">How to make a selfie video ?</div>
+            <div className="know_more" id='know_more'>How to make a selfie video ?</div>
             <div className="link" onClick={() => open()}>
               KNOW MORE
             </div>

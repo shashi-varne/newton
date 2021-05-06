@@ -38,9 +38,9 @@ const MessageComponent = (kyc) => {
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
-        <div className="row" key={idx}>
-          <div className="order">{idx + 1}.</div>
-          <div className="value">{title}</div>
+        <div className="row" key={idx} id={`row_${idx+1}`}>
+          <div className="order" id={`order_${idx+1}`}>{idx + 1}.</div>
+          <div className="value" id={`value_${idx+1}`}>{title}</div>
         </div>
       ))}
     </section>
@@ -164,7 +164,7 @@ const Pan = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">
-          <div className="sub-title">
+          <div className="sub-title" id='sub-title'>
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
           <Alert
@@ -183,7 +183,7 @@ const Pan = (props) => {
                 <img src={fileToShow} className="preview" alt="" />
               )}
               {!file && (
-                <div className="caption">Upload front side of PAN Card</div>
+                <div className="caption" id='caption'>Upload front side of PAN Card</div>
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">

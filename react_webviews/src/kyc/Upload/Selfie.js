@@ -108,7 +108,7 @@ const Sign = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">
-          <div className="sub-title">Ears must be visible</div>
+          <div className="sub-title" id='sub-title'>Ears must be visible</div>
           {!isWeb && (
             <div className="kyc-doc-upload-container">
               {file && fileToShow && (

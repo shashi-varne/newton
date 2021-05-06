@@ -11,6 +11,7 @@ const UploadCard = (props) => {
     subtitle,
     doc_status,
     approved_image,
+    index,
   } = props;
   return (
     <div className="kyc-upload-card" onClick={onClick}>
@@ -21,12 +22,14 @@ const UploadCard = (props) => {
           }`)}
           alt={title}
           className="icon"
+          id={`icon${index+1}`}
         />
         {doc_status === "rejected" && (
           <img
             src={require(`assets/attention_icon.svg`)}
             alt=""
             className="check-icon"
+            id={`check-icon-rejected_${index+1}`}
           />
         )}
         {doc_status === "submitted" && (
@@ -34,12 +37,13 @@ const UploadCard = (props) => {
             src={require(`assets/success_icon.svg`)}
             alt=""
             className="check-icon"
+            id={`check-icon-submitted_${index+1}`}
           />
         )}
       </div>
       <div>
-        <div className="title">{title}</div>
-        {subtitle && <div className="subtitle">{subtitle}</div>}
+        <div className="title" id={`title_${index+1}`}>{title}</div>
+        {subtitle && <div className="subtitle" id={`subtitle_${index+1}`}>{subtitle}</div>}
       </div>
     </div>
   );

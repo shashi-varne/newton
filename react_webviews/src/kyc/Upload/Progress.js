@@ -68,9 +68,9 @@ const Progress = (props) => {
       headerData={{goBack}}
     >
       <section id="kyc-upload-progress">
-        <main className="documents">
+        <main className="documents" id='main'>
           {documents.map((document, index) => (
-            <div key={index} className="document">
+            <div key={index} className="document" id={`document_${index+1}`}>
               <UploadCard
                 default_image={document.default_image}
                 title={document.title}
@@ -78,6 +78,7 @@ const Progress = (props) => {
                 doc_status={document.doc_status}
                 onClick={() => handleCards(document.key, index)}
                 approved_image={document.approved_image}
+                index={index}
               />
             </div>
           ))}

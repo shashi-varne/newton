@@ -28,7 +28,7 @@ const KnowMore = ({ isOpen, close }) => {
         <main>
           <div className="title">How to make a selfie Video?</div>
           <div className="content">
-            <div className="text">
+            <div className="text" id='text_1'> 
               <b>Step 1 - </b> Hold your PAN card and start recording.
             </div>
             <img
@@ -37,7 +37,7 @@ const KnowMore = ({ isOpen, close }) => {
             />
           </div>
           <div className="content">
-            <div className="text">
+            <div className="text" id='text_2'>
               <b>Step 2 - </b> Say your Name and stop recording video
             </div>
             <img
