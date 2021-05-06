@@ -124,7 +124,7 @@ class SipDates extends Component {
       "redirect_url=" +
       paymentRedirectUrl;
     if (getConfig().Web) {
-      if (!isIframe()) {
+      if (isIframe()) {
         handleIframeInvest(
           pgLink,
           investResponse,

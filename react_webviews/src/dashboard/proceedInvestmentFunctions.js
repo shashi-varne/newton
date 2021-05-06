@@ -74,7 +74,7 @@ export async function proceedInvestment(data) {
           return;
         }
         if (getConfig().Web) {
-          if (!isIframe()) {
+          if (isIframe()) {
             handleIframeInvest(pgLink, result, history, handleApiRunning);
           } else {
             window.location.href = pgLink;
