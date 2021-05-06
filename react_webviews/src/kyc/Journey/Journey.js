@@ -8,7 +8,7 @@ import { getPathname } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
-  navigate as navigateFunc,
+  navigate as navigateFunc, pollProgress, popupWindowCenter,
 } from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -543,6 +543,37 @@ const Journey = (props) => {
     setAadhaarLinkDialog(true)
   }
 
+  const handleIframeKyc = (url) => {
+    let popup_window = popupWindowCenter(900, 580, url);
+    setIsApiRunning("page");
+    pollProgress(600000, 5000, popup_window).then(
+      function (poll_data) {
+        popup_window.close();
+        if (poll_data.status === "success") {
+          // Success
+          navigate("/kyc/digilocker/success");
+        } else if (poll_data.status === "failed") {
+          // Failed
+          navigate("/kyc/digilocker/failed");
+        } else if (poll_data.status === "closed") {
+          // Closed
+          toast("Digilocker window closed. Please try again");
+        }
+        setIsApiRunning(false);
+      },
+      function (err) {
+        popup_window.close();
+        setIsApiRunning(false);
+        console.log(err);
+        if (err?.status === "timeout") {
+          toast("Digilocker has been timedout . Please try again");
+        } else {
+          toast("Something went wrong. Please try again.");
+        }
+      }
+    );
+  };
+
   if (!isEmpty(kyc) && !isEmpty(user)) {
     var topTitle = ''
     var stage = 0
@@ -616,6 +647,7 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
+      loaderData={{loadingText: " "}}
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
         <div className="kyc-journey">
@@ -776,10 +808,11 @@ const Journey = (props) => {
       />
       <AadhaarDialog
         open={aadhaarLinkDialog}
-        onClose={() => {
+        close={() => {
           setAadhaarLinkDialog(false)
         }}
         kyc={kyc}
+        handleIframeKyc={handleIframeKyc}
       />
       <KycBackModal
         id="kyc-back-modal"

@@ -6,10 +6,10 @@ import { nativeCallback } from "utils/native_callback";
 import { storageService } from "utils/validators";
 import { updateQueryStringParameter } from "../common/functions";
 import { storageConstants } from "../constants";
-import { getBasePath } from "../../utils/functions";
+import { getBasePath, isIframe } from "../../utils/functions";
 import "./mini-components.scss";
 
-const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
+const AadhaarDialog = ({ id, open, close, kyc, handleIframeKyc, ...props }) => {
   const productName = getConfig().productName;
   const basePath = getBasePath();
   const handleProceed = () => {
@@ -18,6 +18,17 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
         getConfig().searchParams
       }&is_secure=${storageService().get("is_secure")}`
     );
+    if (!isIframe()) {
+      close();
+      handleIframeKyc(
+        updateQueryStringParameter(
+          kyc.digilocker_url,
+          "redirect_url",
+          redirect_url
+        )
+      );
+      return;
+    }
     const data = {
       url: `${basePath}/kyc/journey${
         getConfig().searchParams

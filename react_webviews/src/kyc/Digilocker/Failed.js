@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
 import { getConfig } from "utils/functions";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc, pollProgress, popupWindowCenter } from "../common/functions";
 import Button from "@material-ui/core/Button";
 import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -13,6 +13,7 @@ import "./Digilocker.scss";
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const navigate = navigateFunc.bind(props);
 
   const close = () => {
     setOpen(false);
@@ -23,7 +24,6 @@ const Failed = (props) => {
   };
 
   const manual = async () => {
-    const navigate = navigateFunc.bind(props);
     try {
       setIsApiRunning(true);
       await setKycType("manual");
@@ -35,11 +35,49 @@ const Failed = (props) => {
     }
   };
 
+  const handleIframeKyc = (url) => {
+    let popup_window = popupWindowCenter(900, 580, url);
+    setIsApiRunning("page");
+    pollProgress(600000, 5000, popup_window).then(
+      function (poll_data) {
+        popup_window.close();
+        if (poll_data.status === "success") {
+          // Success
+          navigate("/kyc/digilocker/success");
+        } else if (poll_data.status === "failed") {
+          // Failed
+          navigate("/kyc/digilocker/failed");
+        } else if (poll_data.status === "closed") {
+          // Closed
+          toast("Digilocker window closed. Please try again");
+        }
+        setIsApiRunning(false);
+      },
+      function (err) {
+        popup_window.close();
+        setIsApiRunning(false);
+        console.log(err);
+        if (err?.status === "timeout") {
+          toast("Digilocker has been timedout . Please try again");
+        } else {
+          toast("Something went wrong. Please try again.");
+        }
+      }
+    );
+  };
+
+
   const {kyc, isLoading} = useUserKycHook();
 
   const productName = getConfig().productName;
   return (
-    <Container title="Aadhaar KYC Failed!" noFooter skelton={isLoading}>
+    <Container
+      title="Aadhaar KYC Failed!"
+      noFooter
+      skelton={isLoading}
+      showLoader={isApiRunning}
+      loaderData={{ loadingText: " " }}
+    >
       <section id="digilocker-failed">
         <img
           className="digi-image"
@@ -89,6 +127,7 @@ const Failed = (props) => {
         id="kyc-aadhaar-dialog"
         close={close}
         kyc={kyc}
+        handleIframeKyc={handleIframeKyc}
       />
     </Container>
   );
