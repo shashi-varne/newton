@@ -10,6 +10,7 @@ import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
 import useUserKycHook from '../../common/hooks/userKycHook'
 import "../commonStyles.scss";
+import { nativeCallback } from '../../../utils/native_callback'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -192,6 +193,7 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleSubmit = async () => {
+    sendEvents("next")
     const type = kyc?.address?.meta_data?.is_nri ? 'nri_address' : 'address'
     const addressKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'
@@ -232,9 +234,28 @@ const ChangeAddressDetails2 = (props) => {
 
   const isWeb = getConfig().isWebOrSdk
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "change address",
+        // "picture": source || "",
+        // "doc_side": state.doc_side || "",
+        // "doc_type": state.doc_type || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       hideInPageTitle
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}

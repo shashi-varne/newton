@@ -8,6 +8,7 @@ import { getMyAccount } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./BankDetails.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const BankDetails = (props) => {
   const [showLoader, setShowLoader] = useState(true);
@@ -22,6 +23,7 @@ const BankDetails = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
+    sendEvents("next")
     if (bank.status === "default") {
       navigate(`/kyc/${kyc.kyc_status}/upload-documents`);
     } else {
@@ -67,9 +69,26 @@ const BankDetails = (props) => {
     setShowLoader(false);
   };
 
+  const sendEvents = (userAction) => {
+    // let eventObj = {
+    //   "event_name": 'my_account',
+    //   "properties": {
+    //     "user_action": userAction || "",
+    //     "screen_name": "add bank/mandate",
+    //     // "primary_account": $scope.banks[0].bank_name
+    //   }
+    // };
+    // if (userAction === 'just_set_events') {
+    //   return eventObj;
+    // } else {
+    //   nativeCallback({ events: eventObj });
+    // }
+  }
+
   return (
     <Container
       showSkelton={showLoader || isLoading}
+      events={sendEvents("just_set_events")}
       hideInPageTitle
       buttonTitle="RE-UPLOAD DOCUMENT"
       handleClick={handleClick}

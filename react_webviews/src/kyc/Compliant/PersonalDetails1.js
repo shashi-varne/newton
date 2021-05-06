@@ -17,6 +17,7 @@ import {
 } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { kycSubmit } from "../common/api";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -76,6 +77,7 @@ const PersonalDetails1 = (props) => {
     if (user.email === null) keysToCheck.push("email");
     if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
+    sendEvents('next')
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -153,9 +155,29 @@ const PersonalDetails1 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "personal_details_1",
+        "mobile": form_data.mobile ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
+        "gender": form_data.gender,
+        // "help": $scope.helpOpened ? 'yes' : 'no',
+        "flow": 'premium onboarding'      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
   return (
     <Container
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       id="kyc-personal-details1"
       buttonTitle="CONTINUE"
       showLoader={isApiRunning}
