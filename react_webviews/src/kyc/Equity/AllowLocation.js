@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Container from '../common/Container'
 import { getConfig } from '../../utils/functions'
 import { navigate as navigateFunc } from '../common/functions'
-import "./Location.scss";
+import "./commonStyles.scss";
 
 const productName = getConfig().productName;
 
