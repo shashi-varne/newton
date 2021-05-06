@@ -124,8 +124,13 @@ class SipDates extends Component {
       "redirect_url=" +
       paymentRedirectUrl;
     if (getConfig().Web) {
-      if (isIframe()) {
-        handleIframeInvest(pgLink, investResponse, this.props.history);
+      if (!isIframe()) {
+        handleIframeInvest(
+          pgLink,
+          investResponse,
+          this.props.history,
+          this.handleApiRunning
+        );
       } else {
         window.location.href = pgLink;
       }
@@ -187,6 +192,9 @@ class SipDates extends Component {
         buttonTitle={buttonTitle}
         title="Select investment date"
         showLoader={isApiRunning}
+        loaderData={{
+          loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+        }}
       >
         <div className="sip-dates">
           {sips &&

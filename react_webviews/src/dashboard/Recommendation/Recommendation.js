@@ -267,6 +267,9 @@ const Recommendations = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       hidePageTitle
+      loaderData={{
+        loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+      }}
     > 
       <div className="recommendation-page">
         {riskEnabledFunnel && funnelData.showRecommendationTopCards &&

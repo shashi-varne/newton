@@ -74,10 +74,11 @@ export async function proceedInvestment(data) {
           return;
         }
         if (getConfig().Web) {
-          if (isIframe()) {
-            handleIframeInvest(pgLink, result, history);
+          if (!isIframe()) {
+            handleIframeInvest(pgLink, result, history, handleApiRunning);
           } else {
             window.location.href = pgLink;
+            handleApiRunning(false);
           }
         } else {
           if (result.rta_enabled) {
@@ -94,6 +95,7 @@ export async function proceedInvestment(data) {
           } else {
             navigation(history, "/kyc/journey");
           }
+          handleApiRunning(false);
         }
       } else {
         if (isFunction(handleIsRedirectToPayment)) {
@@ -115,8 +117,8 @@ export async function proceedInvestment(data) {
             handleDialogStates("openInvestError", true, errorMessage);
             break;
         }
+        handleApiRunning(false);
       }
-      handleApiRunning(false);
     } catch (error) {
       console.log(error);
       handleApiRunning(false);
@@ -148,8 +150,9 @@ function navigation(history, pathname, data = {}) {
   });
 }
 
-export function handleIframeInvest(pgLink, result, history) {
+export function handleIframeInvest(pgLink, result, history, handleApiRunning) {
   let popup_window = popupWindowCenter(900, 580, pgLink);
+  handleApiRunning("page")
   pollProgress(600000, 5000, result.investments[0].id, popup_window).then(
     function (poll_data) {
       popup_window.close();
@@ -166,9 +169,11 @@ export function handleIframeInvest(pgLink, result, history) {
         // Closed
         toast("Payment window closed. Please try again");
       }
+      handleApiRunning(false);
     },
     function (err) {
       popup_window.close();
+      handleApiRunning(false);
       console.log(err);
       if (err?.status === "timeout") {
         toast("Payment has been time out. Please try again");

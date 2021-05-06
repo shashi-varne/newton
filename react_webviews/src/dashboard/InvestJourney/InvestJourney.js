@@ -112,6 +112,9 @@ const InvestJourney = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       skelton={isLoading}
+      loaderData={{
+        loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+      }}
     >
       <section className="invest-journey-container">
         <div className="invest-journey-header">

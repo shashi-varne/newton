@@ -261,6 +261,9 @@ class Checkout extends Component {
         title={type === "nfo" && "Your Mutual Fund Plan"}
         hidePageTitle={type !== "nfo"}
         showLoader={isApiRunning}
+        loaderData={{
+          loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+        }}
       >
         <div className="nfo-checkout">
           <div
