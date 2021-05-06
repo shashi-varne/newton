@@ -7,6 +7,7 @@ import "./PaymentCallback.scss";
 import { navigate as navigateFunc } from "../../common/commonFunctions";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { isIframe } from "../../../../utils/functions";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const PaymentCallback = (props) => {
   const params = props.match.params || {};
