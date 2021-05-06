@@ -15,7 +15,6 @@ import Dialog, {
   DialogContent,
   DialogContentText,
 } from "material-ui/Dialog";
-import Button from "material-ui/Button";
 
 
 class CategoryList extends Component {
@@ -207,7 +206,13 @@ class CategoryList extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions style={{ display: "flex" }}>
-          <Button onClick={() => this.handleClose()}>GOT IT</Button>
+          <button
+            className="call-back-popup-button"
+            style={{ padding: "10px", cursor: "pointer" }}
+            onClick={() => this.handleClose()}
+          >
+            GOT IT
+          </button>
         </DialogActions>
       </Dialog>
     );
