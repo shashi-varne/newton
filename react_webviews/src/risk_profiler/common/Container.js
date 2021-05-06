@@ -2,7 +2,7 @@ import React, { Component , Fragment } from 'react';
 import { withRouter } from 'react-router';
 
 import { nativeCallback } from 'utils/native_callback';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 
 
@@ -56,7 +56,7 @@ class Container extends Component {
 
     if (search.indexOf('goBack') < 0) {
       if (pathname.indexOf('result') >= 0) {
-        if (getConfig().isWebCode) {
+        if (getConfig().isWebOrSdk) {
           nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {
@@ -82,7 +82,7 @@ class Container extends Component {
       case "/risk/intro":
         const { flow } = storageService().getObject('risk-entry-params') || {};
 
-        if (getConfig().isWebCode && flow) {
+        if (getConfig().isWebOrSdk && flow) {
           nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {

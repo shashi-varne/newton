@@ -8,12 +8,13 @@ import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
 import '../../theme/Style.scss';
 import './style.scss';
-import { storageService } from '../../../utils/validators';
-import { getConfig } from '../../../utils/functions';
+import { getConfig } from 'utils/functions';
 const headerIconMapper = {
   back: back_arrow,
   close: close_icn,
 };
+const logo = getConfig().logo;
+const partnerCode = getConfig().partner_code;
 
 const Header = ({
   classes,
@@ -38,39 +39,41 @@ const Header = ({
   headerData = {},
   new_header,
 }) => {
-  return <AppBar position='fixed' color='primary' classes={{ root: classes.root }}>
-    <Toolbar classes={{ root: classes.toolbarRoot }}>
-      <div
-        className='iframe-top-action-button'
-        color='inherit'
-        aria-label='Menu'
-        onClick={headerData.goBack || goBack}
-      >
-        {!disableBack && !headerData.hide_icon && (
-          <SVG
-            preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=white')}
-            src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
-          />
-        )}
-        {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon && <Close />}
-      </div>
 
-      <div>
-        <img
-          src={require(`assets/finity/moneycontrol_logo.svg`)}
-          className={classes.img}
-          alt='moneycontrol'
-        />
-      </div>
+  return (
+    <AppBar position='fixed' color='primary' classes={{ root: classes.root }}>
+      <Toolbar classes={{ root: classes.toolbarRoot }}>
+        <div
+          className='iframe-top-action-button'
+          color='inherit'
+          aria-label='Menu'
+          onClick={headerData.goBack || goBack}
+        >
+          {!disableBack && !headerData.hide_icon && (
+            <SVG
+              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=white')}
+              src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
+            />
+          )}
+          {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon && (
+            <Close />
+          )}
+        </div>
 
-      <div>
-        <img
-          src={require(`assets/finity_white_logo_2.png`)}
-          alt=''
-        />
-      </div>
-    </Toolbar>
-  </AppBar>
+        <div>
+          <img src={require(`assets/${logo}`)} className={classes.img} alt='moneycontrol' />
+        </div>
+        {
+          partnerCode === 'moneycontrol' ?
+          <div>
+          <img src={require(`assets/finity_white_logo_2.png`)} alt='' />
+        </div>
+        :
+        <div/>
+        }
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 const styles = {

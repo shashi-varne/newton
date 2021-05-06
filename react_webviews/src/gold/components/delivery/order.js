@@ -127,10 +127,8 @@ class DeliveryOrder extends Component {
 
     var pgLink = this.state.redeem_body.payment_link;
     // eslint-disable-next-line
-    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' + encodeURIComponent(nativeRedirectUrl) + '&order_type=delivery';
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
+    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' +
+     encodeURIComponent(nativeRedirectUrl) + '&order_type=delivery' + '&generic_callback=' + getConfig().generic_callback;
 
     if (getConfig().app === 'ios') {
       nativeCallback({
@@ -140,7 +138,7 @@ class DeliveryOrder extends Component {
       });
     }
 
-    if (!getConfig().redirect_url) {
+    if (getConfig().isNative) {
       nativeCallback({
         action: 'take_control', message: {
           back_url: nativeRedirectUrl,
@@ -181,7 +179,7 @@ class DeliveryOrder extends Component {
 
         <div className="gold-delivery-order">
           <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
-            <div style={{ textAlign: 'right', fontSize: 10, color: getConfig().primary }}>{this.state.providerData.karat}</div>
+            <div style={{ textAlign: 'right', fontSize: 10, color: getConfig().styles.primaryColor }}>{this.state.providerData.karat}</div>
             <div className="highlight-text1">
               <Imgc className="highlight-text11" style={{ width: 34,height:34 }}
                 src={this.state.orderData.media.images[0]} alt="info" />

@@ -35,11 +35,12 @@ class BottomSheetClass extends Component {
                 <DialogContent>
                     <div className="generic-bottomsheet" id="alert-dialog-description">
                         <div className="top">
-
                             <div className="t-left">
                                 <div className="header_title">{data.header_title}</div>
-                                {data.content &&
-                                    <div className="content">{ReactHtmlParser(data.content)}</div>}
+                                {data.content ?
+                                    <div className="content">{ReactHtmlParser(data.content)}</div> :
+                                    this.props.children || ''
+                                }
                             </div>
                             {(data.icon || data.src) &&
                                 <div className="t-right">
@@ -48,7 +49,7 @@ class BottomSheetClass extends Component {
                                 </div>}
 
                         </div>
-                        {data.helpClick && 
+                        {data.helpClick && getConfig().project !== 'loan' && 
                         <div className="help">
                             <Button
                                 fullWidth={true}
@@ -90,7 +91,7 @@ class BottomSheetClass extends Component {
                         buttonTitle={data.button_text1}
                     />
                 </DialogActions>
-            </Dialog >
+            </Dialog>
         );
     }
 };

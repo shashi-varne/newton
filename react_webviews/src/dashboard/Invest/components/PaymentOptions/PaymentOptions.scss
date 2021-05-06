@@ -1,0 +1,60 @@
+.invest-payment-options {
+  color: #333333;
+  line-height: 1.5;
+  padding-top: 20px;
+
+  .option {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0pt 1pt 4pt 2pt rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0 15px 15px;
+    margin-bottom: 20px;
+
+    .left {
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 50px;
+        height: 60px;
+        margin-right: 10px;
+      }
+
+      .text {
+        font-weight: 500;
+        font-size: 18px;
+        color: #4a4a4a;
+
+        .helper {
+          font-weight: 400;
+          font-size: 16px;
+          color: #878787;
+        }
+      }
+    }
+
+    .right {
+      width: 100px;
+    }
+  }
+
+  .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10px;
+    text-align: center;
+    margin-top: 50px;
+
+    .left {
+      width: 90px;
+    }
+
+    .right {
+      width: 120px;
+    }
+  }
+}

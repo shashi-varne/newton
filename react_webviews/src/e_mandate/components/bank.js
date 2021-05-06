@@ -163,14 +163,11 @@ class SelectBank extends Component {
         );
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
-        let redirect_url = getConfig().redirect_url;
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app + '&redirect_url=' + redirect_url;
-        if (getConfig().generic_callback) {
-          pgLink += '&generic_callback=' + getConfig().generic_callback;
-        }
-        if (!redirect_url) {
+          '&app=' + app + '&generic_callback=' + getConfig().generic_callback;
+        
+        if (getConfig().isNative) {
           if (getConfig().app === 'ios') {
             nativeCallback({
               action: 'show_top_bar', message: {
@@ -183,7 +180,7 @@ class SelectBank extends Component {
               back_text: 'You are almost there, do you really want to go back?'
             }
           });
-        } else {
+        } else { 
           let redirectData = {
             show_toolbar: false,
             icon: 'back',
@@ -193,7 +190,7 @@ class SelectBank extends Component {
                 action_name: 'positive',
                 action_text: 'Yes',
                 action_type: 'redirect',
-                redirect_url: redirect_url
+                redirect_url: paymentRedirectUrl
               }, {
                 action_name: 'negative',
                 action_text: 'No',

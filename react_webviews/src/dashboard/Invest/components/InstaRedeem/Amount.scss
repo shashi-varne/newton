@@ -1,0 +1,29 @@
+.insta-redeem-invest-amount {
+  .form-field {
+    background-color: #f8f8f8;
+    margin-top: 10px;
+    padding: 0 10px;
+
+    label {
+      padding: 10px 0 0 10px;
+    }
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    padding: 10px 0;
+
+    .tag {
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 4px;
+      padding: 10px 15px;
+      cursor: pointer;
+      color: var(--secondary);
+      border: 1px solid var(--secondary);
+      margin-bottom: 10px;
+    }
+  }
+}

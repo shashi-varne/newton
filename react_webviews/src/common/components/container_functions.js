@@ -15,7 +15,7 @@ import Dialog, {
     DialogContent,
     DialogContentText
 } from 'material-ui/Dialog';
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import { Imgc } from '../../common/ui/Imgc';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
@@ -49,31 +49,24 @@ export function didMount() {
         force_show_inpage_title: true,
         inPageTitle: true
     }, () => {
-        this.onScroll();
+        if(!iframe){
+            this.onScroll();
+        }
     })
 
     setHeights({ 'header': true, 'container': false });
 
     let that = this;
-    if (getConfig().generic_callback || this.state.project === 'help') {
-        window.callbackWeb.add_listener({
-            type: 'back_pressed',
-            go_back: function () {
-                that.historyGoBack();
-            }
-        });
-    } else {
-        window.PlutusSdk.add_listener({
-            type: 'back_pressed',
-            go_back: function () {
-                that.historyGoBack();
-            }
-        });
+    window.callbackWeb.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+            that.historyGoBack();
+        }
+    });
+    if(!iframe){   
+        window.addEventListener("scroll", this.onScroll, true);
+        this.check_hide_header_title();
     }
-
-    window.addEventListener("scroll", this.onScroll, true);
-
-    this.check_hide_header_title();
 }
 
 export function headerGoBack() {
@@ -93,21 +86,40 @@ export function commonRender(props_base) {
     for (var i = 0; i < this.props.total; i++) {
         if (this.props.current > i) {
             steps.push(<span className='active'
-                style={{ background: getConfig().primary, marginRight: 0 }} key={i}></span>);
+                style={{ background: getConfig().styles.primaryColor, marginRight: 0 }} key={i}></span>);
         } else {
             steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
         }
     }
 
-    
+    const renderPageLoader2 = (data) => {
+        if (this.props.showLoader) {
+          return (
+            <div
+              className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ""
+                }`}
+            >
+              <div className="LoaderOverlay">
+                <div className="LoaderOverlay-title">
+                  {data.title}
+                </div>
+                <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
+                <div className="LoaderOverlay-subtitle" >{data.subtitle}</div>
+              </div>
+            </div>
+          );
+        } else {
+          return null;
+        }
+    };
 
     if (this.state.mounted) {
         return (
 
-   <div className={this.addContainerClass(props_base)} >
+   <div className={this.addContainerClass(props_base)}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && !iframe && <Header
+                && !this.props.showLoaderModal && !iframe && !this.props.loaderWithData && <Header
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
@@ -132,7 +144,9 @@ export function commonRender(props_base) {
                     filterPage={this.props.filterPage}
                     handleFilter={this.props.handleFilter} 
                     hideBack={this.props.hideBack}
-          
+                    logo={this.props.logo}
+                    notification={this.props.notification}
+                    handleNotification={this.props.handleNotification}          
                 />
                 }
                 {
@@ -168,7 +182,10 @@ export function commonRender(props_base) {
                 <div id="HeaderHeight" style={{ top: 56 }}>
 
                     {/* Loader Block covering entire screen*/}
-                    {this.renderPageLoader()}
+                    {/* {this.renderPageLoader()} */}
+                    {this.props.loaderWithData
+                        ? renderPageLoader2(this.props.loaderData)
+                        : this.renderPageLoader()}
 
                     {/* Error Block */}
                     {this.renderGenericError()}
@@ -261,19 +278,10 @@ export function commonRender(props_base) {
 }
 
 export function unmount() {
-    if (getConfig().generic_callback || this.state.project === 'help') {
-        window.callbackWeb.remove_listener({});
-    } else {
-        if (window.PlutusSdk) {
-            window.PlutusSdk.remove_listener({})
-        }
-
-        if (window.PaymentCallback) {
-            window.PaymentCallback.remove_listener({})
-        }
+    window.callbackWeb.remove_listener({});
+    if(!iframe){
+        window.removeEventListener("scroll", this.onScroll, false);
     }
-
-    window.removeEventListener("scroll", this.onScroll, false);
 
     this.setState({
         mounted: false
@@ -422,7 +430,6 @@ export function renderPopup() {
 
 export function renderGenericError() {
 
-
     let errorData = this.props.errorData || {};
     let { title1, title2, button_text1, button_text2,
         handleClick2, handleClick1 } = errorData;
@@ -525,7 +532,7 @@ export function renderGenericError() {
 
                     <div className="title2 title2-page">{title2 || 'Sorry, we could not process your request'}</div>
 
-                    <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>
+                    {getConfig().project !== 'loan' && <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>}
                     {genericErrorActionsPage()}
                 </div>
             </div>

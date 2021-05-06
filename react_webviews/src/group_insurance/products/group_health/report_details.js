@@ -4,7 +4,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter
+    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter, convertDateFormat
 } from 'utils/validators';
 import Api from 'utils/api';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
@@ -17,6 +17,8 @@ import ReactHtmlParser from 'react-html-parser';
 import { childeNameMapper , ProviderName } from '../../constants';
 import {getCoverageType} from './constants';
 
+
+var hide_policy_period = ['incomplete', 'expired', 'rejected', 'policy_expired', 'failed', 'cancelled', 'Pending', 'Rejected', 'declined']
 class GroupHealthReportDetails extends Component {
 
     constructor(props) {
@@ -76,16 +78,10 @@ class GroupHealthReportDetails extends Component {
                 let payment_details = resultData.payment_details;
                 let application_details = resultData.application_details;
                 
-                let dt_created = new Date(policy_data.dt_created);
-                let dt_updated = new Date(policy_data.dt_updated);
-                let payment_success_dt = new Date(payment_details.payment_success_dt);
-
-                // let valid_from = getDateBreakup(policy_data.valid_from)
-                // let formatted_day = valid_from.plainDate.toString().length === 1 ? '0' +valid_from.plainDate : valid_from.plainDate ;
-                payment_details.payment_success_dt = payment_success_dt.getDate()+'/'+ (payment_success_dt.getMonth()+1) +'/'+ payment_success_dt.getFullYear();
-                policy_data.dt_created = dt_created.getDate()+'/'+ (dt_created.getMonth()+1) +'/'+ dt_created.getFullYear();
-                policy_data.dt_updated = dt_updated.getDate()+'/'+ (dt_updated.getMonth()+1) +'/'+ dt_updated.getFullYear();
-                // policy_data.valid_from =  formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+                payment_details.payment_success_dt = convertDateFormat(payment_details.payment_success_dt)
+                
+                policy_data.valid_from = convertDateFormat(policy_data.valid_from)
+                policy_data.valid_upto = convertDateFormat(policy_data.valid_upto)
                 
                 lead.insurance_type = resultData.quotation_details.insurance_type;
                 let insured_members = resultData.insured_member_details;
@@ -111,6 +107,10 @@ class GroupHealthReportDetails extends Component {
                 policy_data.status = data.status;
                 policy_data.cssMapper = data.cssMapper;
 
+                if(this.state.provider === "GMC"){
+                    var premium_payment_frequency = resultData.quotation_details.payment_frequency === "YEARLY" ? 'Annual' : 'Monthly';
+                }
+                
                 this.setState({
                     resultData: resultData,
                     common_data: common_data,
@@ -121,7 +121,8 @@ class GroupHealthReportDetails extends Component {
                     quotation_details: resultData.quotation_details,
                     applicantIndex: applicantIndex,
                     application_details: application_details,
-                    payment_details: payment_details
+                    payment_details: payment_details,
+                    premium_payment_frequency: premium_payment_frequency
                 })
                 this.setState({
                     skelton:false
@@ -265,7 +266,7 @@ class GroupHealthReportDetails extends Component {
                 'steps': {
                     'options': mapper_data.steps
                 },
-                'cta_title': 'OK'
+                'cta_title': 'OKAY'
             }
     
             if (type === 'how_to_claim') {
@@ -283,11 +284,16 @@ class GroupHealthReportDetails extends Component {
                         }
                     ]
                 }
-    
                 let basePath = `/group-insurance/group-health/${provider}/`;
-                if(provider === 'RELIGARE') {
-                    this.navigate(basePath + 'how-to-claim-religare');
-                    return;
+                if(provider === 'RELIGARE' || provider === 'GMC' ) {
+                    this.props.history.push({
+                      pathname: basePath + 'how-to-claim-religare',
+                      search: getConfig().searchParams,
+                      params: {
+                          cta_title: 'OKAY' 
+                      }
+                  });
+                  return;
                 }
     
                 if(provider === 'STAR') {
@@ -383,7 +389,7 @@ class GroupHealthReportDetails extends Component {
                         {this.state.applicantIndex === -1 ? (this.state.lead.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') :dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({childeNameMapper(props.key)})
+                            {props.name} <span style={{textTransform: 'none'}}> {props.key === 'self' && this.state.quotation_details.insurance_type === 'self'? '': `(${childeNameMapper(props.key)})`}</span>
                         </div>
                     </div>
                 </div>
@@ -410,21 +416,21 @@ class GroupHealthReportDetails extends Component {
                 errorData={this.state.errorData}
                 title={'Health insurance'}
                 fullWidthButton={true}
-                buttonTitle="OK"
+                buttonTitle="OKAY"
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
                 noFooter={!this.state.showPlanDetails}
             >
                  <div className="group-health-plan-details group-health-final-summary">
 
-                    <div style={{ margin: '18px 0 12px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
-                        <div className="circle"></div>
-                        <div className="report-color-state-title">{this.state.policy_data.cssMapper.disc}</div>
+                    <div style={{ margin: '18px 0 12px 0'}} className={`report-color-state`}>
+                        <div className="circle" style={{ backgroundColor: this.state.policy_data.cssMapper.color}}></div>
+                        <div className="report-color-state-title" style={{ color: this.state.policy_data.cssMapper.color}}>{this.state.policy_data.cssMapper.disc}</div>
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.provider === 'STAR' ? this.state.providerConfig.title: ''}</div>
-                            <div className="tc-subtitle">{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
+                            <div className="tc-subtitle" style={{marginTop: (this.state.provider === 'GMC' || this.state.provider === 'RELIGARE') ? "-22px": "", fontSize: '17px'}} >{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
                         </div>
 
                         <div className="tc-right">
@@ -467,10 +473,10 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
 
-                       {this.state.quotation_details && 
+                       {this.state.quotation_details && this.state.quotation_details.insurance_type !== 'self' && 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -488,13 +494,13 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                 PREMIUM PAID
+                                 TOTAL PREMIUM
                                 </div>
 
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
                                             <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.total_premium - this.state.quotation_details.gst)} </div>
-                                            <div style={{fontSize:10}}> (Net premium)</div>
+                                            <div style={{fontSize:10}}> {this.state.provider !== 'GMC' ? '(Net premium)' : '(Basic premium)'}</div>
                                         </div>
                                         <div>
                                             &nbsp;+&nbsp;
@@ -513,6 +519,22 @@ class GroupHealthReportDetails extends Component {
 
                             </div>
                         </div>
+
+                        {this.state.provider === 'GMC' ? ( 
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/cash-payment.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                    PREMIUM PAYMENT FREQUENCY
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.premium_payment_frequency}
+                                </div>
+                            </div>
+                        </div>): null}
+
                     </div>
 
                     <div className="member-tile">
@@ -528,6 +550,25 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
                     </div>
+                    
+                    {hide_policy_period.indexOf(this.state.policy_data.status) === -1 ? (
+                    <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_policy_period.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                POLICY PERIOD
+                                </div>
+                            <div className="mtr-bottom">
+                            {
+                                this.state.policy_data && this.state.policy_data.status === 'policy_issued' ? `${this.state.policy_data.valid_from} - ${this.state.policy_data.valid_upto}`: 'To be issued'
+                            }
+                            </div>
+                        </div>
+                    </div>) : (null)
+                    }
+                    
 
                     {this.state.policy_data.status && this.state.policy_data.status === 'policy_issued' &&
                       <div className="member-tile">
@@ -582,7 +623,7 @@ class GroupHealthReportDetails extends Component {
                     </div>}
 
                     {!this.state.showPlanDetails &&
-                        <div className="report-detail-download">
+                        <div className="report-detail-download" style={{border: 'none'}}>
 
                             <div className="report-detail-download-text" style={{ fontWeight: 400 }} onClick={() => {
                                 this.setState({
@@ -596,7 +637,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             {this.state.policy_data && this.state.policy_data.status === 'policy_issued' &&
                                 <div className="flex">
-                                    <div style={{ color: '#d8dadd', margin: '0 10px 0 10px' }}>
+                                    <div style={{ color: '#d8dadd', margin: '0 22px' }}>
                                         |
                                     </div>
 
@@ -617,7 +658,7 @@ class GroupHealthReportDetails extends Component {
                             <div className="common-how-steps" style={{ border: 'none', marginTop: 0, marginBottom: 0 }}>
                                 <div className="top-tile">
                                     <div className="top-title">
-                                        Benefits under this plan
+                                        Plan highlights
                             </div>
                                 </div>
 
@@ -626,7 +667,7 @@ class GroupHealthReportDetails extends Component {
                                     style={{ backgroundImage: `url(${this.state.ic_hs_special_benefits})` }}>
                                     <img className="special-benefit-img" src={require(`assets/ic_hs_special.svg`)}
                                         alt="" />
-                                    <span className="special-benefit-text">Special benefits</span>
+                                    <span className="special-benefit-text">Special features</span>
                                 </div>
                                 <div className='common-steps-images'>
                                     {this.state.extra_data.benefits.special.map(this.renderSteps)}
@@ -636,7 +677,7 @@ class GroupHealthReportDetails extends Component {
                                     style={{ backgroundImage: `url(${this.state.ic_hs_main_benefits})` }}>
                                     <img className="special-benefit-img" src={require(`assets/ic_hs_main.svg`)}
                                         alt="" />
-                                    <span className="special-benefit-text">Main benefits</span>
+                                    <span className="special-benefit-text">Key benefits</span>
                                 </div>
                                 <div className='common-steps-images'>
                                     {this.state.extra_data.benefits.main.map(this.renderSteps)}
@@ -660,7 +701,7 @@ class GroupHealthReportDetails extends Component {
                            <div className="accident-plan-read-text">
                              *For detailed list of all terms and conditions, please refer
                              <span
-                               style={{ color: getConfig().primary }}
+                               style={{ color: getConfig().styles.primaryColor }}
                                onClick={() =>
                                  this.openPdf(
                                    this.state.common_data.policy_prospectus,

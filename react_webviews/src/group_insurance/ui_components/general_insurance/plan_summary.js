@@ -196,18 +196,12 @@ class PlanSummaryClass extends Component {
         var back_url = encodeURIComponent(current_url);
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app + '&back_url=' + back_url;
-        if (getConfig().generic_callback) {
-          pgLink += '&generic_callback=' + getConfig().generic_callback;
-        }
+          '&app=' + app + '&back_url=' + back_url + '&generic_callback=' + getConfig().generic_callback;
 
         if (getConfig().partner_code) {
           pgLink += '&partner_code=' + getConfig().partner_code;
         }
 
-        if (getConfig().redirect_url) {
-          pgLink += '&redirect_url=' + getConfig().redirect_url;
-        }
         this.sendEvents('next');
 
         window.sessionStorage.setItem('group_insurance_payment_url', pgLink);
@@ -347,7 +341,7 @@ class PlanSummaryClass extends Component {
             </div>
         </div>
         <div className="baxa-disclaimer">
-          <p style={{ color: getConfig().primary, marginBottom: '25px', textAlign: 'center'}}>*Maximum of 2 policy purchases per user allowed, anymore can lead to dispute during claim</p>
+          <p style={{ color: getConfig().styles.primaryColor, marginBottom: '25px', textAlign: 'center'}}>*Maximum of 2 policy purchases per user allowed, anymore can lead to dispute during claim</p>
         </div>
       </Container>
     );

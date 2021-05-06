@@ -70,7 +70,7 @@ class AddEditAddress extends Component {
   handleClick = async () => {
     if (this.state.copyText === 'Copied') {
       this.sendEvents('next');
-      if (getConfig().redirect_url && !getConfig().Web) {
+      if (getConfig().isSdk) {
         // close webview for sdk
         nativeCallback({ action: 'exit_web_sdk' });
       } else {
@@ -112,7 +112,7 @@ class AddEditAddress extends Component {
         noFooter={true}
       >
         <div className="biller-details-tile">
-          <div style={{ fontSize: 14, color: getConfig().primary, marginBottom: 8 }}>Primary Account</div>
+          <div style={{ fontSize: 14, color: getConfig().styles.primaryColor, marginBottom: 8 }}>Primary Account</div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div>
               <div className="biller-bankname ">{this.state.bank_name}</div>
@@ -131,7 +131,7 @@ class AddEditAddress extends Component {
             <div className="biller-accountnumber2">
               <span style={{ float: 'left' }}>URN Number:</span>
               <span className="copy-item-billder-details" id="billerId">{this.state.biller_id}
-                <span onClick={() => this.copyItem(this.state.biller_id)} style={{ color: getConfig().secondary }}>{this.state.copyText}</span>
+                <span onClick={() => this.copyItem(this.state.biller_id)} style={{ color: getConfig().styles.secondaryColor }}>{this.state.copyText}</span>
               </span>
             </div>
 

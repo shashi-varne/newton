@@ -1,0 +1,181 @@
+.reports-ask-invest-type-dialog-content {
+  line-height: 1.5;
+
+  .text {
+    color: rgba(0, 0, 0, 0.87);
+    margin-bottom: 10px;
+    padding-right: 8px;
+  }
+
+  .align-right {
+    padding: 10px 8px 0 116px;
+    display: flex;
+    column-gap: 5px;
+    justify-content: flex-end;
+
+    button {
+      min-height: 40px;
+      min-width: 100px;
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    .bg-light {
+      background-color: white;
+      color: var(--primary);
+    }
+  }
+}
+
+#reports-process-dialog {
+  .reports-process-dialog-content {
+    padding: 15px !important;
+
+    header {
+      display: flex;
+      background-color: var(--primary);
+      align-items: center;
+      justify-content: space-between;
+      font-size: 20px;
+      color: white;
+      height: 60px;
+      letter-spacing: 0.005em;
+      padding: 0 16px;
+      column-gap: 10px;
+
+      .close-icon {
+        color: #878787;
+        padding: 15px 0 15px 15px;
+        cursor: pointer;
+
+        .icon {
+          vertical-align: middle;
+          font-size: 18px;
+        }
+      }
+    }
+
+    main {
+      padding: 10px 0 30px 0;
+
+      .process-step {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        .dot {
+          position: absolute;
+          border-radius: 50%;
+          width: 22px;
+          height: 22px;
+          background-color: #b2b2b2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .icon {
+            font-size: 16px;
+            color: white;
+          }
+        }
+
+        .completed {
+          background-color: var(--secondary);
+        }
+
+        .text {
+          padding-left: 29px;
+          margin-left: 11px;
+          border-left: 1px solid #b2b2b2;
+
+          .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            column-gap: 10px;
+            padding-bottom: 10px;
+
+            .title {
+              text-align: left;
+              color: #333c4e;
+              font-size: 17px;
+              font-weight: 400;
+              letter-spacing: 0.8px;
+            }
+
+            .time {
+              font-size: 12px;
+              color: #333c4e;
+            }
+          }
+
+          .desc {
+            color: #bdc2ce;
+            font-size: 11px;
+            font-weight: 400;
+            line-height: 1.8;
+            letter-spacing: 0.8px;
+            padding-bottom: 20px;
+          }
+        }
+
+        .selected {
+          border-color: var(--secondary);
+        }
+      }
+
+      .process-step:last-child {
+        .text {
+          border-left: 0;
+        }
+      }
+    }
+
+    .bottom-message {
+      background: rgb(240, 240, 240);
+      width: 100%;
+      color: rgba(0, 0, 0, 0.87);
+      padding: 8px 5px;
+    }
+  }
+}
+
+.reports-no-fund-message-dialog-content {
+  line-height: 1.5;
+
+  .text {
+    color: rgba(0, 0, 0, 0.87);
+    margin-bottom: 10px;
+    padding-right: 8px;
+  }
+
+  .align-right {
+    text-align: right;
+    padding: 10px 8px 0 116px;
+
+    button {
+      min-height: 40px;
+      min-width: 80px;
+      background-color: var(--secondary);
+      color: white;
+    }
+  }
+}
+
+#fundwise-summary-menu {
+  .MuiPaper-elevation8 {
+    -webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .menu-item {
+    display: flex;
+    padding-right: 20px;
+    align-items: center;
+
+    img {
+      width: 22px;
+      margin-right: 11px;
+    }
+  }
+}

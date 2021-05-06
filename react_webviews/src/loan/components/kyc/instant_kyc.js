@@ -81,11 +81,11 @@ class InstantKycHome extends Component {
           storageService().set('loan_okyc_id', okyc_id);
           let basepath = getBasePath();
           let paymentRedirectUrl = encodeURIComponent(
-            basepath + `/loan/redirection-status/kyc` + getConfig().searchParams
+            basepath + `/loan/dmi/redirection-status/kyc` + getConfig().searchParams
           );
 
           let back_url = encodeURIComponent(
-            basepath + `/loan/instant-kyc-status` + getConfig().searchParams + 
+            basepath + `/loan/dmi/instant-kyc-status` + getConfig().searchParams + 
             '&flow=kyc&okyc_id=' + okyc_id
           );
 
@@ -99,11 +99,7 @@ class InstantKycHome extends Component {
           let app = getConfig().app;
           // eslint-disable-next-line
           pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-            '&app=' + app + '&back_url=' + back_url;
-          if (getConfig().generic_callback) {
-            pgLink += '&generic_callback=' + getConfig().generic_callback;
-          }
-
+            '&app=' + app + '&back_url=' + back_url + '&generic_callback=' + getConfig().generic_callback;
         
           this.openInTabApp({
             url: pgLink,
@@ -148,7 +144,7 @@ class InstantKycHome extends Component {
     if (resultData.callback_status) {
       this.triggerDecision();
     } else {
-      let searchParams = getConfig().searchParams + '&status=pending';
+      let searchParams = getConfig().searchParams + '&status=pending&flow=kyc';
       this.navigate('instant-kyc-status', { searchParams: searchParams });
     }
 
@@ -289,7 +285,7 @@ class InstantKycHome extends Component {
               {portalStatus.indexOf(this.state.dmi_loan_status) !== -1 &&
                 <SVG
                   className="right"
-                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                   src={next_arrow}
                 />}
               {portalStatus.indexOf(this.state.dmi_loan_status) === -1 &&

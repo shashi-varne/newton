@@ -1,0 +1,78 @@
+///////////// CONFIRM PAN  START //////////////
+
+.kyc-compliant-confirm-pan {
+  line-height: 1.5;
+  main {
+    position: relative;
+
+    img {
+      width: 100%;
+    }
+
+    .pan-block-on-img {
+      position: absolute;
+      top: 50%;
+      left: 6%;
+
+      .user-name {
+        color: #0a1d32;
+        font-size: 15px;
+        font-weight: 600;
+        margin: 0 0 10px 0;
+      }
+
+      .pan-number {
+        color: #0a1d32;
+        line-height: 1.6;
+
+        span {
+          font-weight: 600;
+          margin: 0 0 0 4px;
+          text-transform: uppercase;
+          letter-spacing: 3px;
+        }
+      }
+    }
+  }
+}
+
+///////////// CONFIRM PAN  END //////////////
+
+///////////// KYC COMPLIANT COMPLETE  START //////////////
+
+.kyc-compliant-complete {
+  line-height: 1.5;
+
+  header {
+    text-align: center;
+
+    img {
+      margin: 40px 0;
+    }
+
+    .title {
+      font-size: 15px;
+      color: #160d2e;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      font-weight: 400;
+      color: #4f2da7;
+      margin: 30px 0 0 0;
+      cursor: pointer;
+    }
+
+    .margin-top {
+      margin-top: 50px;
+    }
+  }
+
+  .alert-status-info {
+    margin-top: 25px;
+  }
+}
+
+///////////// KYC COMPLIANT COMPLETE  END //////////////
+

@@ -1,0 +1,143 @@
+.insta-redeem {
+  padding-bottom: 30px;
+
+  .generic-page-subtitle {
+    margin: -20px 0 20px 0;
+  }
+
+  .title {
+    margin-top: 30px;
+    color: #160d2e;
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 10px;
+  }
+
+  .benefit {
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    img {
+      margin-right: 15px;
+    }
+
+    .text {
+      color: #767e86;
+      font-size: 13px;
+      line-height: 22px;
+
+      .insta-redeem-know-more {
+        color: #35cb5d;
+        font-size: 10px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .skelton-loader {
+    height: 80px !important;
+  }
+
+  .fund-card {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 0;
+    cursor: pointer;
+
+    .text {
+      -ms-flex: 6;
+      flex: 6;
+
+      h1 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.1;
+      }
+
+      .flex {
+        margin-top: 15px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+
+        .common-badge {
+          min-width: 10px;
+          padding: 3px 9px;
+          border-radius: 10px;
+          font-size: 10px;
+          margin-right: 10px;
+          line-height: 1.5;
+        }
+
+        .bond {
+          background-color: #fff6ce;
+          font-weight: bold;
+          color: #b39712;
+          text-transform: uppercase;
+        }
+
+        .rating {
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-align: center;
+          align-items: center;
+          background-color: #f0f7ff;
+          color: #767e86;
+
+          .img {
+            width: 10px;
+            margin-right: 5px;
+            margin-top: -3px;
+          }
+        }
+        .returns {
+          font-size: 12px;
+          .highlight-return {
+            margin-right: 5px;
+            font-weight: 600;
+            color: #7ed321;
+          }
+        }
+      }
+    }
+
+    .icon {
+      -ms-flex: 1;
+      flex: 1;
+      vertical-align: middle;
+      width: 60px;
+    }
+  }
+
+  .common-faqs {
+    color: #767e86;
+
+    .top-tile {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .common-faqs-tile:last-child {
+      margin-bottom: 30px;
+    }
+  }
+
+  .secure-invest-bottom {
+    margin-bottom: 5px;
+  }
+}

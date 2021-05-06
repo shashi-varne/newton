@@ -1,0 +1,47 @@
+.invest-sip-payment-callback {
+  color: #333333;
+  line-height: 1.5;
+
+  .content {
+    text-align: center;
+
+    .title {
+      font-size: 20px;
+      color: #160d2e;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .img {
+      margin: 20px 0 10px 0;
+      width: 100%;
+    }
+
+    h4 {
+      font-size: 18px;
+      color: #160d2e;
+      font-weight: 700;
+      margin: 0 0 20px 0;
+    }
+
+    p {
+      font-size: 14px;
+      color: #8d879b;
+      margin: 1px 0 10px 0px;
+    }
+
+    .message {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      font-size: 14px;
+      color: #8d879b;
+      padding-bottom: 20px;
+
+      .eta-icon {
+        width: 30px;
+        margin-right: 3px;
+      }
+    }
+  }
+}

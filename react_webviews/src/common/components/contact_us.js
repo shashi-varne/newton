@@ -15,7 +15,7 @@ class ContactUsClass extends Component {
                         |
                 </div>
                     <div className="success-bottom2a">
-                        {getConfig().askEmail}
+                        {getConfig().email}
                     </div>
                 </div>
             </div>

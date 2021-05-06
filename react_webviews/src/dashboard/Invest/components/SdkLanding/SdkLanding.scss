@@ -1,0 +1,48 @@
+.sdk-landing {
+  .landing-marketing-banners {
+    overflow-x: auto;
+    margin: 0 -20px 0 -20px;
+    padding: 0 20px 0 20px;
+    .marketing-banners-list {
+      display: flex;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+
+    .marketing-banner-icon-wrapper {
+      margin-right: 20px;
+      width: 250px;
+      height: 100px;
+      display: block;
+      padding-bottom: 0px;
+      background: black;
+    }
+
+    .single-marketing-banner {
+      min-height: 120px;
+      width: 100%;
+    }
+  }
+
+  .sdk-landing-cards {
+    margin-top: 20px;
+  }
+  
+  .generic-page-subtitle{
+    margin-top: -20px;
+  }
+}
+
+.sdk-background{
+  background: #f3f4f6 !important;
+  .header-title-page{
+    background: #f3f4f6 !important;
+  }
+}
+.sdk-header{
+  background-color: var(--primary) !important;
+}
+
+.sdk-partner-header{
+  background-color: var(--header-background) !important;
+}

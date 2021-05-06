@@ -1,0 +1,124 @@
+.main-container {
+  height: 100vh;
+  overflow: hidden;
+  header {
+    z-index: 1300 !important;
+  }
+
+  .middle-content {
+    display: flex;
+    height: 100%;
+    margin-left: 300px !important;
+  }
+
+  .feature-container {
+    width: 640px !important;
+    padding-bottom: 60px;
+    overflow: auto;
+    height: 100%;
+    .ContainerWrapper {
+      margin: 0px !important;
+      max-width: 100% !important;
+      position: relative;
+      // padding-bottom: 100px !important;
+      & > header {
+        position: fixed;
+        top: 60px;
+        width: 640px !important;
+        margin-left: 300px !important;
+      }
+
+      #HeaderHeight {
+        .Step{
+          max-width: 640px !important;
+          margin-left: 300px !important;
+          top: 124px !important;
+        }
+      }
+    }
+  }
+
+  .right-content {
+    width: calc(100% - 640px);
+    display: grid;
+    place-items: center;
+    background: #fafafa;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .MuiModal-root[role='dialog'] {
+    top: 60px !important;
+    margin-left: 300px !important;
+    position: fixed !important;
+    width: calc(100% - 300px) !important;
+    max-width: 640px !important;
+    height: initial !important;
+
+    .MuiDialog-paper {
+      max-width: 500px !important;
+      max-height: 80% !important;
+    }
+  }
+
+  #diy-dialog {
+    .MuiDialog-paper {
+      max-width: 100% !important;
+    }
+  }
+  #sdk-campaign-dialog.MuiModal-root,
+  #referral-dialog.MuiModal-root,
+  #feedback-campaign-dialog.MuiModal-root,
+  #invest-bottom-dialog.MuiModal-root {
+    top: 0px !important;
+    margin-left: 0px !important;
+    position: fixed !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+  }
+
+  .MuiBackdrop-root {
+    position: absolute !important;
+  }
+
+  // Temp fix for the fund details screen(will be removed once we use new container)
+  .fd-container {
+    .Loader {
+      margin-left: 300px !important;
+      max-width: 640px !important;
+      margin-top: 56px !important;
+    }
+  }
+
+  .MuiModal-root{
+    .MuiPopover-paper{
+      min-width: 160px;
+      max-width: 400px !important;
+      max-height: 256px !important;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, .175) !important;
+      ul{
+        padding: 5px 0px !important;
+
+        li{
+          overflow: hidden !important;
+          height: 46px !important;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .right-content {
+    display: none;
+  }
+  .main-container .feature-container {
+    width: 100% !important;
+    margin-left: 0px !important;
+    min-width: 100% !important;
+  }
+  .main-container .feature-container .ContainerWrapper header {
+    width: 100% !important;
+  }
+}

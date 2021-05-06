@@ -1,0 +1,113 @@
+.recommendation-page {
+  margin: 0 -20px;
+}
+
+.recommendation-page {
+  .recommendations-section:not(:nth-child(1)) {
+    padding-top: 40px;
+  }
+}
+
+.recommendations-section {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 0 20px 30px;
+
+  .recommendations-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    
+    .recommendation-title {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .recommendation-how-button {
+      color: #fff;
+      background: var(--primary);
+      border-radius: 8px;
+      padding: 2px 10px;
+      letter-spacing: 1px;
+      margin-left: 10px;
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .edit-recommendation-funds {
+      flex: 1 1 20%;
+      text-align: right;
+      color: var(--secondary);
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 22px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  }
+  
+  .recommendations-total-investment {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+    padding: 10px 0px;
+    color: rgb(74, 74, 74);
+    .amount-per-month{
+      font-size: 12.75px;
+    }
+  }
+}
+
+.recommendations-disclaimers {
+  margin: 60px 0;
+}
+
+.recommendations-disclaimer-morning {
+  display: flex;
+  margin-bottom: 13px;
+  font-size: 13px;
+  img {
+    margin-right: 5px;
+  }
+}
+
+.recommendations-disclaimer {
+  display: flex;
+  flex-direction: column;
+  .recommendations-disclaimer-tc {
+    a {
+      color: #337ab7;
+      text-decoration: none;
+    }
+    
+    img {
+      margin-right: 5px;
+    }
+
+    span {
+      font-size: 13px;
+    }
+  }
+}
+
+.recommendations-trust-icons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  div {
+    font-size: 14px;
+    color: #767e86;
+    margin: 0 0 5px 0;
+    font-weight: 500;
+  }
+}

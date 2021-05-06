@@ -4,8 +4,10 @@ import { initData } from "../../kyc/services";
 import { storageService } from "utils/validators";
 import isEmpty from "lodash/isEmpty";
 import { getConfig } from "utils/functions";
+import { nativeCallback } from "utils/native_callback";
 import UiSkelton from "../ui/Skelton";
 const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const isNative = getConfig().isNative;
   let current_user = storageService().get("currentUser");
   let user = storageService().get("user") || {};
   let kyc = storageService().get("kyc") || {};
@@ -20,6 +22,9 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     let show_component =
       current_user && !isEmpty(kyc) && !isEmpty(user) ? true : false;
     setShowComponent(show_component);
+    if (!show_component && isNative) {
+      nativeCallback({ action: "exit_web" });
+    }
     setShowLoader(false);
   };
   useEffect(() => {
@@ -32,11 +37,15 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) => {
         if (showLoader) {
-          return <UiSkelton type="g" />;
+          return (
+            <div className="ContainerWrapper">
+              <UiSkelton type />
+            </div>
+          );
         }
         if (showComponent) {
           return <Component {...props} />;
-        } else {
+        } else if (!isNative) {
           return (
             <Redirect
               to={{

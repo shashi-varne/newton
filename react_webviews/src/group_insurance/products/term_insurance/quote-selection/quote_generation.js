@@ -21,7 +21,7 @@ import {
 } from '../../../../utils/validators';
 import RadioOptions from '../../../../common/ui/RadioOptions';
 import { FormControl } from 'material-ui/Form';
-import '../../../../utils/native_listner_otm';
+import '../../../../utils/native_listener';
 
 import { payFreqOptionInsurance, ridersOptionInsurance, quotePoints, all_providers } from '../../../constants';
 
@@ -637,7 +637,7 @@ class QuoteGeneration extends Component {
           <div className="quote-tiles4a">
               Claim Settled
           </div>
-          <div className="quote-tiles4a" style={{color:getConfig().primary,fontWeight:500}}>
+          <div className="quote-tiles4a" style={{color:getConfig().styles.primaryColor,fontWeight:500}}>
           98%
           </div>
         </div>
@@ -646,7 +646,7 @@ class QuoteGeneration extends Component {
             Basic benefits
             </div>
           <div className="quote-tiles4b"
-            style={{ color: getConfig().primary }}
+            style={{ color: getConfig().styles.primaryColor }}
             onClick={() => this.openPopUpInfo(index, props.quote_provider)}>INFO</div>
         </div>
 

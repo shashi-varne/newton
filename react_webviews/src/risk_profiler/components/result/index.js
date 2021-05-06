@@ -8,7 +8,6 @@ import moderate from 'assets/meter-moderate.svg';
 import moderatelyAggresive from 'assets/meter-moderately-aggresive.svg';
 import aggresive from 'assets/meter-aggresive.svg';
 import { nativeCallback } from 'utils/native_callback';
-
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -16,8 +15,8 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import { getUrlParams, isEmpty, storageService } from '../../../utils/validators';
-import { pick, get } from 'lodash';
+import { getUrlParams, storageService } from '../../../utils/validators';
+import { pick, get, isEmpty } from 'lodash';
 
 class Result extends Component {
   constructor(props) {
@@ -32,12 +31,28 @@ class Result extends Component {
 
   setEntryParams = () => {
     let urlParams = getUrlParams();
+    const routeParams = get(this.props, 'location.state');
+    
+    if (!isEmpty(routeParams)) {
+      urlParams = routeParams
+    }
+
     if (urlParams.fromExternalSrc) {
       storageService().setObject(
         'risk-entry-params',
         pick(
           urlParams,
-          ['amount', 'flow', 'term', 'type', 'year', 'subType', 'hideRPReset', 'hideClose']
+          [
+            'amount',
+            'flow',
+            'term',
+            'type',
+            'year', 
+            'subType',
+            'hideRPReset',
+            'hideClose',
+            'internalRedirect'
+          ]
         )
       );
     } else {
@@ -87,7 +102,7 @@ class Result extends Component {
     }
   }
 
-  navigate = (pathname, replace) => {
+  navigate = (pathname, replace, state) => {
     let params = {
       indicator: (this.state.score) ? this.state.score.indicator : false
     };
@@ -97,6 +112,7 @@ class Result extends Component {
         pathname: pathname,
         search: getConfig().searchParams,
         params,
+        state: state
       });
     } else {
       this.props.history.replace({
@@ -124,6 +140,26 @@ class Result extends Component {
     }
   }
 
+  redirectToInvestFlow = () => {
+    const entryParams = this.state.params || {};
+
+    if (entryParams.type === 'saveforgoal') {
+      this.navigate(`invest/savegoal/${entryParams.subType}/amount`);
+    } else {
+      this.navigate(
+        '/invest/recommendations',
+        false,
+        {
+          amount: entryParams.amount,
+          type: entryParams.type,
+          term: entryParams.term,
+          flow: entryParams.flow,
+          fromRiskProfiler: true,
+        }
+      );
+    }
+  }
+
   handleClick = async () => {
     this.sendEvents('next');
     if (!this.props.useNewFlow) {
@@ -131,9 +167,13 @@ class Result extends Component {
       return;
     }
    
-    const openWebModule = getConfig().isWebCode;
+    const openWebModule = getConfig().isWebOrSdk;
     if (openWebModule) {
-      window.location.href = this.redirectUrlBuilder();
+      if (get(this.state, 'params.internalRedirect')) {
+        this.redirectToInvestFlow();
+      } else {
+        window.location.href = this.redirectUrlBuilder();
+      }
     } else {
       nativeCallback({ action: 'exit' });
     }
@@ -167,11 +207,6 @@ class Result extends Component {
 
   redirectUrlBuilder = () => {
     const entryParams = this.state.params;
-    // const webview_redirect_url = encodeURIComponent(
-    //   window.location.origin +
-    //   '/risk/recommendation' +
-    //   getConfig().searchParams
-    // );
     let webPath = '';
 
     if (entryParams.type === 'saveforgoal') {
@@ -200,7 +235,6 @@ class Result extends Component {
       '&term=' + entryParams.term +
       '&flow=' + entryParams.flow +
       '&fromRisk=true';
-      // '&webview_redirect_url=' + webview_redirect_url;
   }
 
   renderDialog = () => {

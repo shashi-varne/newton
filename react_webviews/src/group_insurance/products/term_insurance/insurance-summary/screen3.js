@@ -97,7 +97,7 @@ class Journey extends Component {
       apiError: '',
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
-      askEmail: getConfig().askEmail,
+      askEmail: getConfig().email,
       productName: getConfig().productName
     }
     this.renderJourney = this.renderJourney.bind(this);
@@ -174,10 +174,7 @@ class Journey extends Component {
     var back_url = encodeURIComponent(this.state.current_url);
     // eslint-disable-next-line
     pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-      '&app=' + app + '&back_url=' + back_url;
-    if (getConfig().generic_callback) {
-      pgLink += '&generic_callback=' + getConfig().generic_callback;
-    }
+      '&app=' + app + '&back_url=' + back_url + '&generic_callback=' + getConfig().generic_callback;
     window.location.href = pgLink;
     return;
   }
@@ -807,7 +804,7 @@ class Journey extends Component {
         <div className="journey-process5">
           <div className={'journey-process6 ' + (props.status === 'pending' ? 'journey-process7-grey' : '')}>{props.title}</div>
           <div className={'journey-process7 ' + (props.status === 'complete' ? 'journey-process7-black' : 'journey-process7-grey')}
-            style={{ color: props.status === 'init' ? getConfig().primary : '' }}>{props.disc}</div>
+            style={{ color: props.status === 'init' ? getConfig().styles.primaryColor : '' }}>{props.disc}</div>
           {index === 1 && props.status !== 'pending' && this.state.plutus_payment_status !== 'payment_done' &&
             (this.state.plutus_status === 'init' || this.state.plutus_status === 'incomplete' ||
               this.state.plutus_status === 'complete') && !this.state.params.isJourney &&

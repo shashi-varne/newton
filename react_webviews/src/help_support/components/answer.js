@@ -226,7 +226,7 @@ class Answer extends Component {
     return rel_ques.map((item, i) => {
       return (
         <div key={i}
-        style={{color: getConfig().primary}}
+        style={{color: getConfig().styles.primaryColor}}
         className="related-question" 
         onClick={() => { this.navigate('/help/answer', item, 'related'); 
         this.sendRelatedEvent(item.question_detail.question_id) }}>{item.question_detail.name}</div>

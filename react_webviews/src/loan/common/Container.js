@@ -5,7 +5,7 @@ import {didMount, commonRender} from '../../common/components/container_function
 
 
 import { nativeCallback } from "utils/native_callback";
-import '../../utils/native_listner';
+import '../../utils/native_listener';
 import {checkStringInString} from 'utils/validators';
 import { goBackMap} from '../constants';
 
@@ -85,9 +85,9 @@ class Container extends Component {
 
 
     switch (pathname) {
-      case "/loan/home":
-      case "/loan/report":
-      case "/loan/app-update":
+      case "/loan/dmi/loan-know-more":
+      case "/loan/dmi/report":
+      case "/loan/dmi/app-update":
         nativeCallback({ action: "native_back"});
         break;
       default:
@@ -112,9 +112,9 @@ class Container extends Component {
     });
 
     if(this.state.callbackType === 'loan_home') {
-      this.navigate('/loan/home');
+      this.navigate('/loan/dmi/loan-know-more');
     } else if(this.state.callbackType === 'loan_journey') {
-      this.navigate('/loan/journey');
+      this.navigate('/loan/dmi/journey');
     } else {
       nativeCallback({ action: this.state.callbackType });
     }

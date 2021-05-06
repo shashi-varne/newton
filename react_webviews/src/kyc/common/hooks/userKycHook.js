@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import { storageConstants, } from "../../constants";
 import { initData } from "../../services";
 import { isEmpty, storageService, } from "../../../utils/validators";
