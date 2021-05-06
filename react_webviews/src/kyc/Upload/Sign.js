@@ -126,7 +126,7 @@ const Sign = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">
-          <div className="sub-title">
+          <div className="sub-title" id='sub-title'>
             Signature should match with your PAN’s signature
           </div>
           {!isWeb && (
@@ -175,7 +175,7 @@ const Sign = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" id='open-camera'>open camera</div>
                     </button>
                   </div>
                   <div className="open-gallery">
@@ -202,7 +202,7 @@ const Sign = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" id='open-gallery'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -251,7 +251,7 @@ const Sign = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" id='open-gallery-2'>Open Gallery</div>
                 </button>
               </div>
             </div>

@@ -19,10 +19,10 @@ const PennyDialog = ({ isOpen, count }) => {
           alt=""
           className="img"
         />
-        <div className="title">
-          Verifying your bank account <span>00:{count}</span>
+        <div className="title" id='verify_bank_account'>
+          Verifying your bank account <span id='time_count'>00:{count}</span>
         </div>
-        <div className="subtitle">
+        <div className="subtitle" id='subtitle'>
           Hold on, while we verify your bank account. Please don’t close the
           app.
         </div>

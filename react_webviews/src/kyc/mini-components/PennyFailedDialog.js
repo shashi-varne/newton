@@ -17,25 +17,26 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
     >
       <DialogContent className="penny-failed-dialog-content">
         <div className="title">
-          <div className="text">Unable to add bank!</div>
+          <div className="text" id='text'>Unable to add bank!</div>
           <img
             src={require(`assets/${productName}/ic_bank_not_added.svg`)}
             alt=""
             className="img"
           />
         </div>
-        <div className="subtitle">
+        <div className="subtitle"  id='subtitle'>
           Bank account verification failed! No worries, please check if you've
           entered correct details.
         </div>
-        <Button className="button bg-full" onClick={() => checkBankDetails()}>
+        <Button className="button bg-full" id='check_bank_details' onClick={() => checkBankDetails()}>
           CHECK BANK DETAILS
         </Button>
         <div className="divider">
-          <span>OR</span>
+          <span id='or'>OR</span>
         </div>
         <Button
           className="button border-button"
+          id='upload_bank_documents'
           onClick={() => uploadDocuments()}
         >
           UPLOAD BANK DOCUMENTS

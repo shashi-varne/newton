@@ -16,13 +16,13 @@ const ConfirmBackModal = ({ id, open, confirm, cancel, ...props }) => {
       <DialogContent>
         <section className="kyc-esign-gb-dailog">
           <article
-            className="text"
+            className="text" id='text'
           >
             You are almost there, do you really want to go back?
           </article>
           <footer className="actions">
-            <Button onClick={confirm}>Yes</Button>
-            <Button onClick={cancel} variant="flat">No</Button>
+            <Button id='yes_btn' onClick={confirm}>Yes</Button>
+            <Button id="no_btn" onClick={cancel} variant="flat">No</Button>
           </footer>
         </section>
       </DialogContent>
