@@ -123,7 +123,7 @@ class RecommendationResult extends Component {
                     </div>
                     </div>
                     <div style={{margin: '0 5px', marginTop: '20px', width: '100%'}}>
-                        <button  className="call-back-popup-button" onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet', adequate_coverage_present )}>{this.state.more_details_cta_text}</button> 
+                        <button  className="call-back-popup-button" style={{opacity : key === 'corona' && !adequate_coverage_present ? '0.4' : '1'}} onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet', adequate_coverage_present )}>{this.state.more_details_cta_text}</button> 
                     </div>
                 </div>
          
@@ -132,9 +132,6 @@ class RecommendationResult extends Component {
         );
     }
     openMoreDetailsDialog = (key) =>{
-        if(key === 'corona'){
-            return;
-        }
         this.sendEvents('more details',this.state.recommendation_bottom_sheet_data[key].heading , 'recommendations' )
         this.setState({
             openMoreDetailsDialog: true
@@ -169,7 +166,7 @@ class RecommendationResult extends Component {
                         ) : null
                     }
                     <div className="recommendation-cta-container">
-                        <div className="more-details" style={{opacity: recommendation_data.key === 'corona' ? '0.4': '1'}} onClick={()=>this.openMoreDetailsDialog(recommendation_data.key)}>MORE DETAILS</div>
+                        <div className="more-details" onClick={()=>this.openMoreDetailsDialog(recommendation_data.key)}>MORE DETAILS</div>
                         <div className="get-the-plan" style={{opacity: recommendation_data.key === 'corona' ? '0.4': '1'}} onClick={()=>this.getPlan(recommendation_data.key, 'recommendations', adequate_coverage_present)}>GET THE PLAN</div>
                     </div>
                     </div>
@@ -180,7 +177,7 @@ class RecommendationResult extends Component {
                             <p>Congratulations! You are well covered</p>
                         </div>
                         <div style={{margin: '0 5px', marginTop: '20px', width: '100%'}}>
-                            <button  className="call-back-popup-button" style={{opacity: recommendation_data.key === 'corona' ? '0.4': '1'}} onClick={()=>this.openMoreDetailsDialog(recommendation_data.key)}>READ MORE DETAILS</button> 
+                            <button  className="call-back-popup-button" onClick={()=>this.openMoreDetailsDialog(recommendation_data.key)}>READ MORE DETAILS</button> 
                         </div>
                     </div>
                 ) }
