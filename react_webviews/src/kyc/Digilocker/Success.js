@@ -19,10 +19,10 @@ const Success = (props) => {
       headerData={{goBack: proceed }}
     >
       <section id="digilocker-success">
-        <div className="page-desc">
+        <div className="page-desc" id='page-desc-text'>
           Tap on Proceed to allow fisdom to access your following documents
         </div>
-        <main className="esign-steps">
+        <main className="esign-steps" id='main'>
           {dlDocs.map(({ name, icon }, idx) => (
             <div className="doc flex-center" key={icon}>
               <img
@@ -30,12 +30,12 @@ const Success = (props) => {
                 className="doc-icon"
                 alt=""
               />
-              <div className="doc-name">{idx + 1}{'. '}{name}</div>
+              <div className="doc-name" id={`name_${idx+1}`}>{idx + 1}{'. '}{name}</div>
             </div>
           ))}
         </main>
         <footer className="footer">
-          <div className="bottom-text flex-center-center center">Initiative by</div>
+          <div className="bottom-text flex-center-center center" id='Initiative-text'>Initiative by</div>
           <img
             src={require(`assets/ic_gov_meit.svg`)}
             alt="Initiative by Ministry of Electronics and Information Technology"

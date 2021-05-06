@@ -115,7 +115,7 @@ const IpvVideo = (props) => {
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
-                  <div className="open-camera">
+                  <div className="open-camera" id='open-camera'>
                     <input
                       ref={inputEl}
                       type="file"
@@ -128,6 +128,7 @@ const IpvVideo = (props) => {
                       data-click-type="camera-front"
                       onClick={handleUpload}
                       className="kyc-upload-button"
+                      id="kyc-upload-button"
                     >
                       {!file && (
                         <svg
@@ -142,10 +143,10 @@ const IpvVideo = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" id='open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery">
+                  <div className="open-gallery" id='open-gallery'>
                     <input
                       ref={inputEl}
                       type="file"
@@ -155,6 +156,7 @@ const IpvVideo = (props) => {
                     <button
                       onClick={handleUpload}
                       className="kyc-upload-button"
+                      id="kyc-upload-button"
                     >
                       {!file && (
                         <svg
@@ -169,7 +171,7 @@ const IpvVideo = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" id='open-gallery-text' >Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -201,7 +203,7 @@ const IpvVideo = (props) => {
                   className="kyc-upload"
                   onChange={handleChange}
                 />
-                <button onClick={handleUpload} className="kyc-upload-button">
+                <button onClick={handleUpload} className="kyc-upload-button" id="kyc-upload-button">
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -215,13 +217,13 @@ const IpvVideo = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>
           )}
           {!file && (
-            <div className="ipv_footer_instructions" id='ipv_footer_instructions'>
+            <div className="ipv_footer_instructions" id='ipv_footer_instructions_nofile'>
               While recording,{' '}
               <strong>read the following verification numbers loud</strong>{' '}
               while looking at the camera
@@ -229,15 +231,15 @@ const IpvVideo = (props) => {
           )}
 
           {file && (
-            <div className="ipv_footer_instructions">
+            <div className="ipv_footer_instructions" id='ipv_footer_instructions_file'>
               Please ensure that you've read aloud the below number for a
               seamless verification experience.
             </div>
           )}
           <div className="ipv_code" id='ipv_code'>{ipvcode}</div>
           <div className="flex-between-center">
-            <div className="know_more" id='know_more'>How to make a selfie video ?</div>
-            <div className="link" onClick={() => open()}>
+            <div className="know_more" id='know_more-text'>How to make a selfie video ?</div>
+            <div className="link" id='link' onClick={() => open()}>
               KNOW MORE
             </div>
           </div>

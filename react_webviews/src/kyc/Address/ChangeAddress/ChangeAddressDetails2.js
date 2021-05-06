@@ -39,9 +39,9 @@ const MessageComponent = (kyc) => {
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
-        <div className="row" key={idx}>
-          <div className="order">{idx + 1}.</div>
-          <div className="value">{title}</div>
+        <div className="row" key={idx} id={`row_${idx + 1}`}>
+          <div className="order" id={`order_${idx + 1}`}>{idx + 1}.</div>
+          <div className="value" id={`value_${idx + 1}`}>{title}</div>
         </div>
       ))}
     </section>
@@ -263,13 +263,13 @@ const ChangeAddressDetails2 = (props) => {
                 />
               )}
               {!frontDoc && (
-                <div className="caption">
+                <div className="caption" id='caption-text'>
                   Upload front side of {addressProof}
                 </div>
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
-                  <div className="open-camera">
+                  <div className="open-camera" id='open-gallery'>
                     <input
                       ref={frontDocRef}
                       type="file"
@@ -296,10 +296,10 @@ const ChangeAddressDetails2 = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" id='open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery">
+                  <div className="open-gallery" id='open-gallery'>
                     <input
                       ref={frontDocRef}
                       type="file"
@@ -323,7 +323,7 @@ const ChangeAddressDetails2 = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -369,7 +369,7 @@ const ChangeAddressDetails2 = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>
@@ -385,7 +385,7 @@ const ChangeAddressDetails2 = (props) => {
                 />
               )}
               {!backDoc && (
-                <div className="caption">
+                <div className="caption" id='caption-text'>
                   Upload back side of {addressProof}
                 </div>
               )}
@@ -418,10 +418,10 @@ const ChangeAddressDetails2 = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" id='open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery">
+                  <div className="open-gallery" id='open-gallery'>
                     <input
                       ref={backDocRef}
                       type="file"
@@ -445,7 +445,7 @@ const ChangeAddressDetails2 = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -491,7 +491,7 @@ const ChangeAddressDetails2 = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" id='open-gallery'>Open Gallery</div>
                 </button>
               </div>
             </div>

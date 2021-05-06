@@ -188,8 +188,9 @@ const AddressDetails2 = (props) => {
       total={getTotalPages(kyc)}
     >
       <section id="kyc-bank-kyc-address-details-2">
-        <div className="sub-title">Address as per {getAddressProof(kyc)}</div>
+        <div className="sub-title" id='getAddressProof-text'>Address as per {getAddressProof(kyc)}</div>
         <form className="form-container">
+        <span id='TextField_1'>
           <TextField
             label="Pincode"
             name="pincode"
@@ -199,7 +200,8 @@ const AddressDetails2 = (props) => {
             margin="normal"
             helperText={form_data.pincode_error || ""}
             error={form_data.pincode_error ? true : false}
-          />
+          /></span> 
+          <span id='TextField_2'> 
           <TextField
             label="Address"
             name="addressline"
@@ -210,7 +212,8 @@ const AddressDetails2 = (props) => {
             onChange={handleChange}
             margin="normal"
             multiline
-          />
+          /></span>
+          <span id='TextField_3'>
           <TextField
             label="City"
             name="city"
@@ -221,7 +224,8 @@ const AddressDetails2 = (props) => {
             margin="normal"
             onChange={handleChange}
             disabled
-          />
+          /></span> 
+          <span id='TextField_4'>
           <TextField
             label="State"
             name="state"
@@ -232,7 +236,7 @@ const AddressDetails2 = (props) => {
             margin="normal"
             onChange={handleChange}
             disabled
-          />
+          /></span>
         </form>
       </section>
     </Container>

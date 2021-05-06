@@ -131,7 +131,8 @@ const NriAddressDetails1 = (props) => {
       total={4}
     >
       <div className="kyc-personal-details kyc-address-details">
-        <main>
+        <main id='main'>
+          <span id='textfeild'>
           <Input
             label="Contact number"
             class="input"
@@ -141,7 +142,7 @@ const NriAddressDetails1 = (props) => {
             onChange={handleChange("mobile_number")}
             type="text"
             disabled={isApiRunning}
-          />
+          /></span>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.address_doc_type_error ? true : false}

@@ -86,16 +86,16 @@ const ConfirmPan = (props) => {
       dualbuttonwithouticon={true}
     >
       <div className="kyc-compliant-confirm-pan">
-        <div className="kyc-main-subtitle">
+        <div className="kyc-main-subtitle" id='kyc-main-subtitle-text'>
           Confirm your PAN to unlock premium onboarding
         </div>
         <main>
           <img alt="" src={require(`assets/crd_pan.png`)} />
           {kyc && (
             <div className="pan-block-on-img">
-              <div className="user-name">{kyc.pan?.meta_data?.name}</div>
-              <div className="pan-number">
-                PAN: <span>{panUiSet(kyc.pan?.meta_data?.pan_number)}</span>
+              <div className="user-name" id='user-name'>{kyc.pan?.meta_data?.name}</div>
+              <div className="pan-number" id='pan-number-text'>
+                PAN: <span id='pan_number'>{panUiSet(kyc.pan?.meta_data?.pan_number)}</span>
               </div>
             </div>
           )}

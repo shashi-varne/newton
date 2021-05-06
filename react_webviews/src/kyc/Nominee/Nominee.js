@@ -113,7 +113,8 @@ const Nominee = (props) => {
     >
       <div className="kyc-nominee">
         {!isEmpty(kyc) && (
-          <main>
+          <main id='main'>
+            <span id='input-feild_1'>
             <Input
               label="Name"
               class="input"
@@ -123,7 +124,8 @@ const Nominee = (props) => {
               onChange={handleChange("name")}
               maxLength={20}
               type="text"
-            />
+            /></span>
+            <span id='input-feild_2'>
             <Input
               label="Date of birth(DD/MM/YYYY)"
               class="input"
@@ -134,8 +136,8 @@ const Nominee = (props) => {
               maxLength={10}
               type="text"
               id="dob"
-            />
-            <div className="input">
+            /></span>
+            <div className="input" id='DropdownWithoutIcon'>
               <DropdownWithoutIcon
                 error={form_data.relationship_error ? true : false}
                 helperText={form_data.relationship_error}

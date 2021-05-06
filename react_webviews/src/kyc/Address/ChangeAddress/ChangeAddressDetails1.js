@@ -77,7 +77,7 @@ const ChangeAddressDetails1 = (props) => {
       total={2}
     >
       <div className="kyc-personal-details kyc-address-details">
-        <main>
+        <main id='main'>
           <div className={`input ${disabled && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.address_doc_type_error ? true : false}

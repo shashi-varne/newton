@@ -168,15 +168,16 @@ const PersonalDetails1 = (props) => {
       <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">
           <div>
-            <div>Share your date of birth as per PAN:</div>
-            <div className="pan">{form_data.pan}</div>
+            <div id='share-dob'>Share your date of birth as per PAN:</div>
+            <div className="pan" id='pan-text'>{form_data.pan}</div>
           </div>
-          <div className="help" onClick={() => setIsOpen(true)}>
+          <div className="help" id='HELP-text' onClick={() => setIsOpen(true)}>
             HELP
           </div>
         </div>
         {!isLoading && (
-          <main>
+          <main id='main'>
+            <span id='input-feild1'>
             <Input
               label="Date of birth(DD/MM/YYYY)"
               class="input"
@@ -188,7 +189,8 @@ const PersonalDetails1 = (props) => {
               type="text"
               id="dob"
               disabled={isApiRunning}
-            />
+            /></span>
+            <span id='input-feild2'>
             {user && user.email === null && (
               <Input
                 label="Email"
@@ -200,7 +202,8 @@ const PersonalDetails1 = (props) => {
                 type="text"
                 disabled={isApiRunning}
               />
-            )}
+            )}</span>
+            <span id='input-feild3'>
             {user && user.mobile === null && (
               <Input
                 label="Mobile number"
@@ -213,7 +216,7 @@ const PersonalDetails1 = (props) => {
                 type="text"
                 disabled={isApiRunning}
               />
-            )}
+            )}</span>
             <div className={`input ${isApiRunning && `disabled`}`}>
               <RadioWithoutIcon
                 error={form_data.gender_error ? true : false}
@@ -241,6 +244,7 @@ const PersonalDetails1 = (props) => {
               />
             </div>
             {is_nri && (
+              <span id='input-feild4'>
               <Input
                 label="Tax identification number (optional)"
                 class="input"
@@ -252,7 +256,7 @@ const PersonalDetails1 = (props) => {
                 minLength={8}
                 type="text"
                 disabled={isApiRunning}
-              />
+              /></span>
             )}
           </main>
         )}

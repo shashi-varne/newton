@@ -154,10 +154,11 @@ const PersonalDetails1 = (props) => {
       total={3}
     >
       <div className="kyc-personal-details">
-        <div className="kyc-main-subtitle">
+        <div className="kyc-main-subtitle" id='kyc-main-subtitle-text'>
           Please fill your basic details for further verification
         </div>
-        <main>
+        <main id='main'>
+        <span id='TextField_1'>
           <Input
             label="Name"
             class="input"
@@ -168,8 +169,9 @@ const PersonalDetails1 = (props) => {
             maxLength={20}
             type="text"
             disabled={showLoader}
-          />
+          /></span>
           {user.email === null && (
+            <span id='TextField_2'>
             <Input
               label="Email"
               class="input"
@@ -179,9 +181,10 @@ const PersonalDetails1 = (props) => {
               onChange={handleChange("email")}
               type="text"
               disabled={showLoader}
-            />
+            /></span>
           )}
           {user.mobile === null && (
+            <span id='TextField_3'>
             <Input
               label="Mobile number"
               class="input"
@@ -192,8 +195,9 @@ const PersonalDetails1 = (props) => {
               maxLength={10}
               type="text"
               disabled={showLoader}
-            />
+            /></span>
           )}
+          <span id='TextField_4'>
           <Input
             label="Father's name"
             class="input"
@@ -204,7 +208,8 @@ const PersonalDetails1 = (props) => {
             maxLength={20}
             type="text"
             disabled={showLoader}
-          />
+          /></span>
+          <span id='TextField_5'>
           <Input
             label="Mother's name"
             class="input"
@@ -214,7 +219,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("mother_name")}
             type="text"
             disabled={showLoader}
-          />
+          /></span>
           <div className={`input ${showLoader && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.gender_error ? true : false}
@@ -244,6 +249,7 @@ const PersonalDetails1 = (props) => {
             />
           </div>
           {form_data.marital_status === "MARRIED" && (
+            <span id='TextField_6'>
             <Input
               label="Spouse"
               class="input"
@@ -253,7 +259,7 @@ const PersonalDetails1 = (props) => {
               onChange={handleChange("spouse_name")}
               type="text"
               disabled={showLoader}
-            />
+            /></span>
           )}
         </main>
       </div>

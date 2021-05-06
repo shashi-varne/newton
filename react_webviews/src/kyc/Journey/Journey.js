@@ -628,7 +628,7 @@ const Journey = (props) => {
           {kyc?.kyc_status === 'compliant' && (
             <div className="kyc-pj-content">
               <div className="left">
-                <div className="pj-header">Premium Onboarding</div>
+                <div className="pj-header" id='pj-header'>Premium Onboarding</div>
                 <div className="pj-bottom-info-box">
                   <img
                     src={require(`assets/${productName}/ic_instant.svg`)}
@@ -662,8 +662,8 @@ const Journey = (props) => {
           {show_aadhaar && (
             <div className="kyc-pj-content">
               <div className="left">
-                <div className="pj-header">Aadhaar KYC</div>
-                <div className="pj-sub-text">
+                <div className="pj-header" id='pj-header'>Aadhaar KYC</div>
+                <div className="pj-sub-text" id='pj-sub-text'>
                   Link with Digilocker to complete Aadhaar KYC
                 </div>
 
@@ -674,7 +674,7 @@ const Journey = (props) => {
                     role="i"
                     className="icon"
                   />
-                  <div className="pj-bottom-info-content">
+                  <div className="pj-bottom-info-content" id='pj-bottom-info-content'>
                     Instant Investment
                   </div>
                 </div>
@@ -685,7 +685,7 @@ const Journey = (props) => {
                     role="i"
                     className="icon"
                   />
-                  <div className="pj-bottom-info-content">
+                  <div className="pj-bottom-info-content" id='pj-bottom-info-content'>
                     No document asked
                   </div>
                 </div>

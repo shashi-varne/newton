@@ -125,7 +125,7 @@ const Sign = (props) => {
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
-                  <div className="open-camera">
+                  <div className="open-camera" id='open-camera'>
                     <input
                       ref={inputEl}
                       type="file"
@@ -138,6 +138,7 @@ const Sign = (props) => {
                       data-click-type="camera-front"
                       onClick={handleUpload}
                       className="kyc-upload-button"
+                      id='kyc-upload-button'
                     >
                       {!file && (
                         <svg
@@ -152,7 +153,7 @@ const Sign = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" id='open-camera-text'>open camera</div>
                     </button>
                   </div>
                   <div className="open-gallery">
@@ -165,6 +166,7 @@ const Sign = (props) => {
                     <button
                       onClick={handleUpload}
                       className="kyc-upload-button"
+                      id='kyc-upload-button'
                     >
                       {!file && !fileToShow && (
                         <svg
@@ -179,7 +181,7 @@ const Sign = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" id='open-gallery-text' >Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -211,7 +213,7 @@ const Sign = (props) => {
                   className="kyc-upload"
                   onChange={handleChange}
                 />
-                <button onClick={handleUpload} className="kyc-upload-button">
+                <button onClick={handleUpload} className="kyc-upload-button" id='kyc-upload-button'>
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -225,7 +227,7 @@ const Sign = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>

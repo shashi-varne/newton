@@ -33,9 +33,9 @@ const Complete = (props) => {
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""
           />
-          <div className="title">Kudos, KYC is completed!</div>
+          <div className="title" id='title'>Kudos, KYC is completed!</div>
           <div
-            className="subtitle"
+            className="subtitle" id='application-details-text'
             onClick={() => navigate(getPathname.kycReport)}
           >
             See KYC application details {" >"}

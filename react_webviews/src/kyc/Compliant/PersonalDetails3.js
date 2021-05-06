@@ -139,7 +139,7 @@ const PersonalDetails3 = (props) => {
       total={3}
     >
       <div className="kyc-personal-details">
-        <main>
+        <main id='main'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.occupation_error ? true : false}
@@ -169,7 +169,7 @@ const PersonalDetails3 = (props) => {
             />
           </div>
         </main>
-        <footer>
+        <footer id='footer'>
           By tapping ‘save and continue’ I agree that I am not a PEP(politically
           exposed person)
         </footer>

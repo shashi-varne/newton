@@ -32,9 +32,9 @@ const Verify = (props) => {
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""
           />
-          <div className="title">You're ready to invest!</div>
+          <div className="title" id='title'>You're ready to invest!</div>
           <div
-            className="subtitle margin-top"
+            className="subtitle margin-top" id='application-details-text'
             onClick={() => navigate(getPathname.compliantReport)}
           >
             See KYC application details {" >"}

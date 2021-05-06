@@ -153,18 +153,18 @@ const KycUploadDocuments = (props) => {
           <div className="left">
             <img src={bankData?.ifsc_image} alt="bank" className="icon" />
             <div className="acc_no">
-              <div className="title">Account number</div>
-              <div className="value">{bankData?.account_number}</div>
+              <div className="title"id='account_number_title'>Account number</div>
+              <div className="value" id='account_number'>{bankData?.account_number}</div>
             </div>
           </div>
 
-          <div className="edit" onClick={handleEdit}>
+          <div className="edit" id='edit' onClick={handleEdit}>
             edit
           </div>
         </div>
         <main>
-          <div className="doc-title">Select the document for verification</div>
-          <div className="subtitle">
+          <div className="doc-title" id='doc-title'>Select the document for verification</div>
+          <div className="subtitle" id='subtitle'>
             Ensure your name is clearly visible in the document
           </div>
           <div className="options">
@@ -181,6 +181,7 @@ const KycUploadDocuments = (props) => {
                   onClick={() => {
                     if (!disableField) handleDocType(index);
                   }}
+                  id={`name_${index}`}
                 >
                   {data.name}
                   {selectedType && (
@@ -238,13 +239,13 @@ const KycUploadDocuments = (props) => {
                   </g>
                 </svg>
 
-                <div className="upload-action">Upload file</div>
+                <div className="upload-action" id='Upload-file-text'>Upload file</div>
               </div>
             </div>
           )}
         </main>
         {selectedDocValue && (
-          <div className="sample-document" onClick={handleSampleDocument}>
+          <div className="sample-document" id='sample-document-text' onClick={handleSampleDocument}>
             view sample document
           </div>
         )}

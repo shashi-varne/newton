@@ -124,15 +124,16 @@ const RtaCompliantPersonalDetails = (props) => {
       <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">
           <div>
-            <div>Share your date of birth as per PAN:</div>
-            <div className="pan">{form_data.pan}</div>
+            <div id='share-dob'>Share your date of birth as per PAN:</div>
+            <div className="pan" id='pan'>{form_data.pan}</div>
           </div>
-          <div className="help" onClick={() => setIsOpen(true)}>
+          <div className="help" id='help' onClick={() => setIsOpen(true)}>
             HELP
           </div>
         </div>
         {!isLoading && (
-          <main>
+          <main id='main'>
+            <span id='input-feild1'>
             <Input
               label="Date of birth(DD/MM/YYYY)"
               class="input"
@@ -143,8 +144,9 @@ const RtaCompliantPersonalDetails = (props) => {
               maxLength={10}
               type="text"
               id="dob"
-            />
+            /></span>
             {user && user.email === null && (
+              <span id='input-feild2'>
               <Input
                 label="Email"
                 class="input"
@@ -154,9 +156,10 @@ const RtaCompliantPersonalDetails = (props) => {
                 onChange={handleChange("email")}
                 type="text"
                 disabled={isApiRunning}
-              />
+              /></span>
             )}
             {user && user.mobile === null && (
+              <span id='input-feild2'>
               <Input
                 label="Mobile number"
                 class="input"
@@ -166,7 +169,7 @@ const RtaCompliantPersonalDetails = (props) => {
                 onChange={handleChange("mobile")}
                 maxLength={10}
                 type="text"
-              />
+              /></span>
             )}
           </main>
         )}

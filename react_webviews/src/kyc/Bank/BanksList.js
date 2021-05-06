@@ -71,12 +71,13 @@ const BanksList = (props) => {
               className="block"
               key={index}
               onClick={bank_details(bank.bank_id)}
+              id={`bank_${index+1}`}
             >
               <div className="bank-details">
                 <img src={bank.bank_image} className="left-icon" alt="" />
                 <div className="content">
                   <div className="bank-name">
-                    <div className="name">
+                    <div className="name" id='bank_name'>
                       {bank.bank_name}
                       {bank.bank_status === "rejected" && (
                         <img
@@ -88,14 +89,15 @@ const BanksList = (props) => {
                     </div>
                     {bank.status === "default" &&
                       bank.bank_status !== "rejected" && (
-                        <div className="tag">PRIMARY</div>
+                        <div className="tag" id='tag'>PRIMARY</div>
                       )}
                   </div>
-                  <div className="account">Account: {bank.account_number}</div>
+                  <div className="account" id='account_number'>Account: {bank.account_number}</div>
                   <div
                     className={`status  ${
                       bank.bank_status === "rejected" && "failed"
                     } ${bank.bank_status === "verified" && "verified"}`}
+                    id={`mapped_bank_status_${index+1}`}
                   >
                     {bank.mapped_bank_status}
                   </div>

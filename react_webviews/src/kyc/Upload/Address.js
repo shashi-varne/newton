@@ -283,7 +283,7 @@ const AddressUpload = (props) => {
           <div className="sub-title">
             {getFullAddress()}
             {getFullAddress() && (
-              <div className="edit" onClick={editAddress}>
+              <div className="edit" id='edit' onClick={editAddress}>
                 EDIT
               </div>
             )}
@@ -304,13 +304,13 @@ const AddressUpload = (props) => {
                 />
               )}
               {!frontDoc && (
-                <div className="caption" id='caption'>
+                <div className="caption" id='caption-text'>
                   Upload front side of {addressProof}
                 </div>
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
-                  <div className="open-camera">
+                  <div className="open-camera" id='open-camera'>
                     <input
                       ref={frontDocRef}
                       type="file"
@@ -337,10 +337,10 @@ const AddressUpload = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" id='open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery">
+                  <div className="open-gallery" id='open-gallery'>
                     <input
                       ref={frontDocRef}
                       type="file"
@@ -364,7 +364,7 @@ const AddressUpload = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -382,7 +382,7 @@ const AddressUpload = (props) => {
                 />
               )}
               {!frontDoc && (
-                <div className="caption" id='caption'>
+                <div className="caption" id='caption-text'>
                   Upload front side of {addressProof}
                 </div>
               )}
@@ -426,13 +426,13 @@ const AddressUpload = (props) => {
                 />
               )}
               {!backDoc && (
-                <div className="caption">
+                <div className="caption" id='caption-text'>
                   Upload back side of {addressProof}
                 </div>
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
-                  <div className="open-camera">
+                  <div className="open-camera" id='open-camera'>
                     <input
                       ref={backDocRef}
                       type="file"
@@ -445,6 +445,7 @@ const AddressUpload = (props) => {
                       data-click-type="camera-front"
                       onClick={handleUpload('back')}
                       className="kyc-upload-button"
+                      id="kyc-upload-button"
                     >
                       {!backDoc && (
                         <svg
@@ -459,10 +460,10 @@ const AddressUpload = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" id='open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery">
+                  <div className="open-gallery" id='open-gallery'>
                     <input
                       ref={backDocRef}
                       type="file"
@@ -472,6 +473,7 @@ const AddressUpload = (props) => {
                     <button
                       onClick={handleUpload('back')}
                       className="kyc-upload-button"
+                      id="kyc-upload-button"
                     >
                       {!backDoc && (
                         <svg
@@ -486,7 +488,7 @@ const AddressUpload = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -504,7 +506,7 @@ const AddressUpload = (props) => {
                 />
               )}
               {!backDoc && (
-                <div className="caption">
+                <div className="caption" id='caption-text'>
                   Upload back side of {addressProof}
                 </div>
               )}
@@ -518,6 +520,7 @@ const AddressUpload = (props) => {
                 <button
                   onClick={handleUpload('back')}
                   className="kyc-upload-button"
+                  id="kyc-upload-button"
                 >
                   {!backDoc && (
                     <svg
@@ -532,7 +535,7 @@ const AddressUpload = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>

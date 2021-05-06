@@ -60,7 +60,7 @@ const RegistrationSuccess = (props) => {
     >
       <div className="kyc-registration-success">
         <img src={require(`assets/thumpsup.png`)} alt="Success" />
-        <main>
+        <main id='main'>
           <p>Thanks for completing your registration.</p>
           <p>
             Thanks for completing your registration.

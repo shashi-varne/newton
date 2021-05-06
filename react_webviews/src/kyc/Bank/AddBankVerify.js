@@ -196,25 +196,25 @@ const AddBankVerify = (props) => {
                   />
                 </div>
                 <div className="right">
-                  <div>{bankData.bank_name}</div>
-                  <div className="text">{bankData.branch_name} </div>
+                  <div id='bank_name'>{bankData.bank_name}</div>
+                  <div className="text" id='branch_name'>{bankData.branch_name} </div>
                 </div>
               </div>
-              <div className="edit" onClick={edit()}>
+              <div className="edit" id='edit' onClick={edit()}>
                 EDIT
               </div>
             </div>
             <div className="item">
-              <div className="left">Account number</div>
-              <div className="right"> {bankData.account_number} </div>
+              <div className="left" id='account_number_title'>Account number</div>
+              <div className="right" id='account_number'> {bankData.account_number} </div>
             </div>
             <div className="item">
-              <div className="left">IFSC code</div>
-              <div className="right">{bankData.ifsc_code} </div>
+              <div className="left" id='ifsc_code_title'>IFSC code</div>
+              <div className="right" id='ifsc_code'>{bankData.ifsc_code} </div>
             </div>
             <div className="item">
-              <div className="left">Account type</div>
-              <div className="right"> {bankData.account_type} </div>
+              <div className="left" id='account_type_text'>Account type</div>
+              <div className="right" id='account_type'> {bankData.account_type} </div>
             </div>
           </>
         )}
