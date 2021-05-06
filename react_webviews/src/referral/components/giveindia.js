@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import {getParamsMark} from 'utils/functions';
+import {getParamsMark, getConfig } from 'utils/functions';
 import { getUrlParams } from '../../utils/validators';
 
 class GiveIndiaRefferal extends Component {
@@ -11,7 +11,8 @@ class GiveIndiaRefferal extends Component {
     this.state = {
       show_loader: 'page',
       params: getUrlParams(),
-      loadingText: 'Please wait...'
+      loadingText: 'Please wait...',
+      productName: getConfig().productName
     }
   }
 
@@ -41,7 +42,7 @@ class GiveIndiaRefferal extends Component {
     nativeCallback({
         action: 'open_inapp_tab',
         message: {
-            url:   'https://fisdom.giveindia.org',
+            url:   this.state.productName === 'fisdom' ? 'https://fisdom.giveindia.org' : 'https://finity.giveindia.org',
             back_url: back_url
         }
       });
