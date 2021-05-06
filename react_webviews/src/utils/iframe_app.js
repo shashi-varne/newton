@@ -36,16 +36,7 @@ import { commonBackMapper } from "utils/constants";
   // }
 
 export const backMapper = (state) => {
-  const backStatesMapper = {
-    '/reports/redeemed-transaction': '/reports',
-    '/reports/switched-transaction': '/reports',
-    '/reports/sip/pause-request': '/reports/sip',
-    '/reports/sip/details': '/reports/sip',
-    '/reports/sip': '/reports',
-    ...commonBackMapper,
-  }
-
-  return backStatesMapper[state] || "";
+  return commonBackMapper[state] || "";
 }
 
 export const checkBeforeRedirection = (props, fromState, toState) => {

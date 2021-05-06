@@ -183,4 +183,9 @@ export const commonBackMapper = {
     '/kyc/compliant-report-verified': '/',
     '/kyc/compliant-report-complete': '/',
     '/kyc/compliant-personal-details': '/kyc/journey',
+    '/reports/redeemed-transaction': '/reports',
+    '/reports/switched-transaction': '/reports',
+    '/reports/sip/pause-request': '/reports/sip',
+    '/reports/sip/details': '/reports/sip',
+    '/reports/sip': '/reports',
 }
