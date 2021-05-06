@@ -107,6 +107,12 @@ class RenderAttachment extends Component {
     this.setState({ open: false });
   };
 
+  handleClick = event => {
+    const { target = {} } = event || {};
+    target.value = "";
+  };
+
+
   renderDialog = () => {
     return (
       <Dialog
@@ -178,6 +184,7 @@ class RenderAttachment extends Component {
               type="file"
               style={{ display: "none" }}
               onChange={(e) => this.props.getPdf(e)}
+              onClick={(e) => this.handleClick(e)}
               id="myFile"
             />
             <SVG
