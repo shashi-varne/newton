@@ -5,7 +5,7 @@ import "./commonStyles.scss";
 
 const LocationError = (props) => {
   return (
-    <Container buttonTitle="OKAY" type="outlined" hidePageTitle>
+    <Container buttonTitle="OKAY" type="outlined" hidePageTitle disableBack>
       <StatusInfo
         icon="no_stocks_nri.svg"
         title="You cannot proceed with KYC"

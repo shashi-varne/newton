@@ -54,7 +54,7 @@ import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2
 import Native from "./Native/Native";
 
 // Equity Components
-import AllowLocation from  "./Equity/AllowLocation";
+import AllowLocation from  "./Equity/components/AllowLocation";
 import Experience from "./Equity/components/Experience";
 import SelfieInstructions from "./Equity/components/SelfieInstructions";
 import StocksStatus from "./Equity/components/StocksStatus";
