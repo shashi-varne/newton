@@ -61,10 +61,6 @@ class Container extends Component {
     const goBackPath = this.props.location?.state?.goBack || "";
 
     if(goBackPath) {
-      if (storageService().get("native") && goBackPath === "exit") {
-        nativeCallback({ action: "exit_web" });
-        return;
-      }
       this.navigate(goBackPath);
       return;
     }
