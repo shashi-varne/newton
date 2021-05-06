@@ -23,7 +23,7 @@ const PaymentCallback = (props) => {
   }
 
   const handleClick = () => {
-    navigate("/reports", null, true);
+    navigate("/reports");
   };
 
   const goBack = () => {

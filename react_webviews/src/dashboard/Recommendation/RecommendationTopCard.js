@@ -44,7 +44,7 @@ const RecommendationTopCard = ({
           </div>
           <div
             className="risk-profile-change-btn"
-            onClick={() => navigate(`${investType}/risk-${userRiskProfile ? 'modify' : 'select'}`)}>
+            onClick={() => navigate(`/invest/${investType}/risk-${userRiskProfile ? 'modify' : 'select'}`)}>
             {userRiskProfile ? "Change" : "Select"}
           </div>
           <BottomSheet

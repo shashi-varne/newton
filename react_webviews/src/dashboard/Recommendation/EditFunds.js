@@ -35,7 +35,7 @@ const EditFunds = (props) => {
     if (isEmpty(alternateFunds)) {
       setOpen(true);
     } else {
-      navigate('recommendations/alternate-funds', { mftype, mfid, amount, alternateFunds });
+      navigate('/invest/recommendations/alternate-funds', { state: {mftype, mfid, amount, alternateFunds} });
     }
   };
 

@@ -41,7 +41,7 @@ const InvestAmount = (props) => {
       amount,
     };
     updateFunnelData(recommendations);
-    navigate('recommendations');
+    navigate('/invest/recommendations');
   };
   
   const handleChange = () => (event) => {

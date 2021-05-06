@@ -3,7 +3,7 @@ import toast from "common/ui/Toast";
 import OtpDefault from "../../common/ui/otp";
 import { getMerge } from "../../kyc/common/api";
 import Api from "../../utils/api";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { navigate as navigateFunc } from "../../utils/functions";
 import { isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
 import "./Otp.scss";

@@ -61,7 +61,7 @@ const InvestedAmount = (props) => {
         debt: 100 - stockSplitVal,
       });
       setLoader(false);
-      navigate(`recommendations`);
+      navigate(`/invest/recommendations`);
     } catch (err) {
       setLoader(false);
       toast(err)

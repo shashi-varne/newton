@@ -7,7 +7,7 @@ import diy_hybrid_icon from 'assets/diy_hybrid_icon.svg'
 import diy_goal_icon from 'assets/diy_goal_icon.svg'
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
-import { getConfig, navigate as navigateFunc } from "utils/functions";
+import { navigate as navigateFunc } from "utils/functions";
 
 import { getTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
@@ -65,14 +65,11 @@ const InvestExplore = (props) => {
   }
   const navigate = navigateFunc.bind(props)
   const goNext = (title) => () => {
-    navigate(`explore/${title}`, null, false, props.location.search)
+    navigate(`/invest/explore/${title}`)
   }
 
   const handleRightIconClick = () => {
-    props.history.push({
-      pathname: `/diy/invest/search`,
-      search: getConfig().searchParams,
-    });
+    navigate("/diy/invest/search")
   }
 
   return (

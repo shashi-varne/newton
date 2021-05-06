@@ -67,7 +67,7 @@ const RiskModify = ({
     if (selectedRisk !== 'Custom' && selectedRisk !== userRiskProfile) {
       await updateRiskAndFetchRecommendations();
     }
-    navigate('recommendations');
+    navigate('/invest/recommendations');
   };
 
   const toggleConfirmDialog = () => setShowConfirmDialog(!showConfirmDialog);
@@ -116,7 +116,7 @@ const RiskModify = ({
         }
         <div
           className="risk-customize-cta"
-          onClick={() => navigate(`${funnelGoalData.id}/risk-customize`)}>
+          onClick={() => navigate(`/invest/${funnelGoalData.id}/risk-customize`)}>
           Customise EQUITY to DEBT DISTRIBUTION
         </div>
         <BottomSheet

@@ -27,7 +27,7 @@ const Cart = ({ isOpen, setCartActive, cart, setCart, ...props }) => {
 
   const handleCheckoutProceed = () => {
     const navigate = navigateFunc.bind(props)
-    navigate('/diy/invest', null, true, props.location.search)
+    navigate('/diy/invest')
   }
 
   return (

@@ -15,7 +15,7 @@ const AccountMerge = (props) => {
   const productName = getConfig().productName;
 
   const handleClick = () => {
-    navigate(`/account/merge/otp/${pan_number}`, null, true);
+    navigate(`/account/merge/otp/${pan_number}`);
   };
 
   return (

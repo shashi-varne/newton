@@ -50,7 +50,7 @@ class Container extends Component {
       nativeCallback({ events: this.getEvents("back") });
     }
 
-    if (!backData?.fromHeader && toState) {
+    if (toState) {
       let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
       if (isRedirected) {
         return;
@@ -61,12 +61,7 @@ class Container extends Component {
       this.props.headerData.goBack();
       return;
     }
-
-    if (fromState) {
-      this.navigate(fromState);
-      return;
-    }
-
+    
     this.props.history.goBack();
   };
 

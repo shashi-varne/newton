@@ -6,7 +6,7 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { navigate as navigateFunc } from "../../utils/functions";
 
 class Container extends Component {
   constructor(props) {
@@ -50,7 +50,7 @@ class Container extends Component {
       nativeCallback({ events: this.getEvents("back") });
     }
 
-    if (!backData?.fromHeader && toState) {
+    if (toState) {
       let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
       if (isRedirected) {
         return;
@@ -66,11 +66,6 @@ class Container extends Component {
 
     if(goBackPath) {
       this.navigate(goBackPath);
-      return;
-    }
-
-    if (fromState) {
-      this.navigate(fromState);
       return;
     }
 

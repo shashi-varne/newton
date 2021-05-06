@@ -146,7 +146,7 @@ class Recommendations extends Component {
     this.setState({
       openInvestmentSummary: false,
     });
-    this.navigate("amount/one-time");
+    this.navigate("/nps/amount/one-time");
   };
 
   renderInvestmentSummary = () => {
@@ -299,7 +299,7 @@ class Recommendations extends Component {
   };
 
   goBack = () => {
-    this.navigate("amount/one-time");
+    this.navigate("/nps/amount/one-time");
   };
 
   render() {
@@ -335,7 +335,7 @@ class Recommendations extends Component {
               <div
                 className="replace"
                 onClick={() => {
-                  this.navigate("fundreplace");
+                  this.navigate("/nps/fundreplace");
                 }}
               >
                 Replace
@@ -499,7 +499,7 @@ class Recommendations extends Component {
   }
 }
 
-const createPieChartData = (allocData) => {
+const createPieChartData = (allocData = {}) => {
   return [
     {
       id: "E",

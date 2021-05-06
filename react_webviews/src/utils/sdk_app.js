@@ -1,11 +1,12 @@
 
-import { getConfig, navigate as navigateFunc, isNpsOutsideSdk } from "utils/functions";
+import { navigate as navigateFunc, isNpsOutsideSdk } from "utils/functions";
 import { storageService } from "utils/validators";
 import { nativeCallback } from "./native_callback";
 import { commonBackMapper } from "utils/constants";
 
 export const backMapper = (state) => {
   const backStatesMapper = {
+   '/reports/redeemed-transaction': '/reports',
    '/reports/switched-transaction': '/reports',
    '/reports/sip/pause-request': '/reports/sip',
    '/reports/sip/details': '/reports/sip',

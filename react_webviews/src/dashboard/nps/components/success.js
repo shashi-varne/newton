@@ -38,7 +38,7 @@ class NpsSuccess extends Component {
   }
 
   handleClick = () => {
-    this.navigate("investments")
+    this.navigate("/nps/investments")
   }
 
   render() {

@@ -227,14 +227,14 @@ class PanDetails extends Component {
   cta_action = () => {
     let { btn_text, form_data } = this.state;
     if (btn_text === 'SIGN OUT') {
-      this.navigate(`/account/merge/${form_data.pan_number}`, '', true)
+      this.navigate(`/account/merge/${form_data.pan_number}`)
     } else {
-      this.navigate('accountmerge')
+      this.navigate('accountmerge') // check this
     }
   }
 
   goBack = () => {
-    this.navigate('invest')
+    this.navigate('/invest')
   }
 
   render() {

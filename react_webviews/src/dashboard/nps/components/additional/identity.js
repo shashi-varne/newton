@@ -144,10 +144,10 @@ class NpsIdentity extends Component {
         let result = await this.uploadDocs(this.state.file);
 
         if (result)
-          this.nps_register(queryParams, "nominee");
+          this.nps_register(queryParams, "/nps/nominee");
 
       } else {
-        this.nps_register(queryParams, "nominee");
+        this.nps_register(queryParams, "/nps/nominee");
       }
     }
   };

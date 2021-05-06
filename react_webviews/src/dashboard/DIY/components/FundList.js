@@ -248,14 +248,13 @@ const DiyFundCard = ({
       `/fund-details`,
       {
         searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy`,
-      },
-      true
+      }
     )
   }
   const handleInvest = () => {
     storageService().setObject('diystore_cart', [props])
     const navigate = navigateFunc.bind(parentProps)
-    navigate('/diy/invest', null, true, parentProps.location.search)
+    navigate('/diy/invest')
   }
   return (
     <div className="diy-fund-card">

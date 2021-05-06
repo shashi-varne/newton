@@ -54,9 +54,9 @@ const SelectYear = (props) => {
     try {
       await initJourneyData();
       if (subtype === 'other') {
-        navigate(`savegoal/${subtype}/${year}/target`);
+        navigate(`/invest/savegoal/${subtype}/${year}/target`);
       } else {
-        navigate(`savegoal/${subtype}/${year}`);
+        navigate(`/invest/savegoal/${subtype}/${year}`);
       }
     } catch (err) {
       console.log(err);
