@@ -55,6 +55,14 @@ import Native from "./Native/Native";
 
 // Equity Components
 import AllowLocation from  "./Equity/AllowLocation";
+import Experience from "./Equity/components/Experience";
+import SelfieInstructions from "./Equity/components/SelfieInstructions";
+import StocksStatus from "./Equity/components/StocksStatus";
+import NriError from "./Equity/components/NriError";
+import LocationError from "./Equity/components/LocationError";
+import AccountInfo from "./Equity/components/AccountInfo";
+import PanInstructions from "./Equity/components/PanInstructions";
+import DocumentVerification from "./Equity/components/DocumentVerification";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -292,6 +300,46 @@ const Kyc = (props) => {
           exact 
           path={`${url}/location/allow`} 
           component={AllowLocation} 
+        />
+        <Route 
+          exact 
+          path={`${url}/trading-experience`} 
+          component={Experience} 
+        />
+        <Route 
+          exact 
+          path={`${url}/selfie-instructions`} 
+          component={SelfieInstructions} 
+        />
+        <Route 
+          exact 
+          path={`${url}/stocks-status`} 
+          component={StocksStatus} 
+        />
+        <Route 
+          exact 
+          path={`${url}/nri-error`} 
+          component={NriError} 
+        />
+        <Route 
+          exact 
+          path={`${url}/location-error`} 
+          component={LocationError} 
+        />
+        <Route 
+          exact 
+          path={`${url}/account-info`} 
+          component={AccountInfo} 
+        />
+        <Route 
+          exact 
+          path={`${url}/pan-instructions`} 
+          component={PanInstructions} 
+        />
+        <Route 
+          exact 
+          path={`${url}/document-verification`} 
+          component={DocumentVerification} 
         />
         <Route component={NotFound} />
       </Switch>

@@ -1,0 +1,273 @@
+.stocks-status-card {
+  padding: 20px 2px 20px 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #160d2e;
+  margin-top: 20px;
+
+  .stocks-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    column-gap: 20px;
+
+    h3 {
+      margin: 0;
+      font-weight: bold;
+      font-size: 17px;
+      line-height: 20px;
+      padding-top: 3px;
+    }
+  }
+
+  .stocks-subtitle {
+    font-weight: 400;
+    font-size: 13px;
+    margin: 0;
+    padding: 0 20px 35px 0;
+    width: 80%;
+    line-height: 22px;
+  }
+
+  .stocks-button {
+    width: 180px !important;
+    font-weight: 700;
+    height: 40px;
+  }
+}
+
+.trading-experience {
+  padding: 10px 0 20px 0;
+
+  .te-subtitle {
+    padding: 0 20px;
+    margin-bottom: 40px;
+  }
+
+  .te-tile {
+    font-size: 15px;
+    line-height: 24px;
+    color: #767e86;
+    padding: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .te-selected-tile {
+    color: #161a2e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 20px;
+    background: linear-gradient(90deg, #f4f4f4 0%, #ffffff 98.76%);
+
+    img {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+.stocks-selfie-instructions {
+  margin-bottom: 40px;
+
+  .ssi-text {
+    font-size: 13px;
+    line-height: 15px;
+    color: #000000;
+    padding-bottom: 10px;
+  }
+}
+
+.kyc-account-info {
+  padding-bottom: 40px;
+
+  .kyc-account-info-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    column-gap: 35px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+    color: #161a2e;
+    padding-bottom: 20px;
+
+    .kaih-text {
+      padding: 10px 0;
+    }
+  }
+
+  .kyc-account-info-main {
+    .kaim-subtitle {
+      color: #767e86;
+      font-size: 15px;
+      font-weight: 400;
+      padding: 0 0 30px 0;
+      line-height: 24px;
+    }
+
+    .kaim-key-benefits {
+      margin-right: -20px;
+      padding-bottom: 40px;
+    }
+
+    .kaim-benefits {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+      column-gap: 20px;
+
+      .kaim-benefits-info {
+        padding: 20px 0 10px 0;
+        font-size: 13px;
+        line-height: 21px;
+        color: #767e86;
+
+        img {
+          border-radius: 8px;
+          width: 170px;
+        }
+
+        .kaim-benefits-info-text {
+          width: 85%;
+        }
+      }
+
+      .kaim-benefits-info:last-child {
+        padding-right: 20px;
+      }
+    }
+
+    .kaim-fees-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      column-gap: 20px;
+      padding: 10px 0;
+
+      .kaim-fees-info-text {
+        font-size: 13px;
+        line-height: 21px;
+        color: #161a2e;
+
+        .kaim-fees-info-subtext {
+          font-size: 11px;
+          line-height: 18px;
+          color: #767e86;
+        }
+      }
+
+      .kaim-no-fees-text1 {
+        font-size: 13px;
+        line-height: 21px;
+        text-decoration-line: line-through;
+        color: #767e86;
+      }
+
+      .kaim-no-fees-text2 {
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 21px;
+        color: var(--primary);
+        text-align: right;
+      }
+    }
+
+    .kaim-terms {
+      padding: 20px 0 30px;
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      font-size: 13px;
+      line-height: 21px;
+      color: #767e86;
+
+      span {
+        color: var(--primary);
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.stocks-pan-instructions {
+  padding-bottom: 15px;
+
+  .spi-text {
+    font-size: 13px;
+    line-height: 21px;
+    color: #000000;
+    padding-bottom: 10px;
+  }
+
+  img {
+    width: 100%;
+    padding-bottom: 20px;
+  }
+}
+
+.kyc-document-verification {
+  .kyc-document-verification-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    column-gap: 35px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+    color: #161a2e;
+    padding-bottom: 20px;
+  }
+
+  .kyc-document-verification-main {
+    .kdvm-subtitle {
+      font-size: 13px;
+      line-height: 21px;
+      color: #767e86;
+      padding-bottom: 20px;
+    }
+
+    .kdvm-title {
+      font-size: 15px;
+      line-height: 24px;
+      color: #160d2e;
+      font-weight: 600;
+    }
+
+    .kdvm-next-step {
+      background-color: var(--highlight);
+      border-radius: 10px;
+      padding: 16px 20px 16px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 20px;
+
+      .kdvm-next-step-text {
+        color: #161a2e;
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 21px;
+
+        .kdvm-next-step-message {
+          font-weight: normal;
+          font-size: 10px;
+          line-height: 16px;
+          letter-spacing: 1px;
+          padding-bottom: 3px;
+        }
+      }
+
+      .kdvm-next-step-status {
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 14px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #b39712;
+      }
+    }
+  }
+}
