@@ -146,7 +146,7 @@ class SendQuery extends Component {
             </div>
             <div>
               <button
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}
                 onClick={() => {
                   this.props.history.push(
                     { pathname: "queries", search: getConfig().searchParams },

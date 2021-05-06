@@ -208,7 +208,7 @@ class CategoryList extends Component {
         <DialogActions style={{ display: "flex" }}>
           <button
             className="call-back-popup-button"
-            style={{ padding: "10px", cursor: "pointer" }}
+            style={{ cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}
             onClick={() => this.handleClose()}
           >
             GOT IT
