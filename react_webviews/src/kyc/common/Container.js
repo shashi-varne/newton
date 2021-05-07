@@ -7,6 +7,7 @@ import {
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
 import { navigate as navigateFunc } from "../../utils/functions";
+import { storageService } from "../../utils/validators";
 
 class Container extends Component {
   constructor(props) {
@@ -61,13 +62,13 @@ class Container extends Component {
     const goBackPath = this.props.location?.state?.goBack || "";
 
     if (goBackPath) {
-      if (goBackPath === "exit") {
+      if (goBackPath === "exit" && storageService().get("native")) {
         switch (pathname) {
           case "/kyc/home":
           case "/kyc/add-bank":
           case "/kyc/approved/banks/doc":
           case "/kyc/journey":
-            nativeCallback({ action: "exit" });
+            nativeCallback({ action: "exit_web" });
             break;
           default:
             this.props.history.goBack();
