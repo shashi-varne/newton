@@ -8,7 +8,7 @@ const { productName } = getConfig();
 const HowWeRecommend = (props) => {
   return (
     <Container
-      buttonTitle="Go Back"
+      buttonTitle="GO BACK"
       title='How we recommend funds'
       handleClick={() => props.history.goBack()}
       hidePageTitle

@@ -5,6 +5,7 @@ export function navigate(pathname, data, redirect) {
       this.history.push({
         pathname: pathname,
         search: data?.searchParams || getConfig().searchParams,
+        state: data?.state
       });
     } else {
       this.history.push({

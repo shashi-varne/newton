@@ -14,7 +14,6 @@ import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
-import { getBasePath } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 
@@ -27,7 +26,6 @@ const Journey = (props) => {
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
-  const basePath = getBasePath()
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -548,6 +546,7 @@ const Journey = (props) => {
   if (!isEmpty(kyc) && !isEmpty(user)) {
     var topTitle = ''
     var stage = 0
+    // eslint-disable-next-line
     var stageDetail = ''
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
@@ -633,7 +632,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_instant.svg`)}
                     alt="Instant Investment"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
@@ -644,7 +642,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_no_doc.svg`)}
                     alt="No document asked"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
@@ -671,7 +668,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_instant.svg`)}
                     alt="Instant Investment"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content" id='pj-bottom-info-content'>
@@ -682,7 +678,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_no_doc.svg`)}
                     alt="No document asked"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content" id='pj-bottom-info-content'>

@@ -42,8 +42,49 @@ const IpvVideo = (props) => {
       setLoading(false)
     }
   }
+
+  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
+    window.callbackWeb[method_name]({
+      type: 'doc',
+      doc_type: doc_type,
+      doc_name: doc_name,
+      doc_side: doc_side,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
+          switch (file.type) {
+            case "video/mp4":
+            case "video/webm":
+            case "video/ogg":
+            case "video/x-flv":
+            case "video/x-ms-wmv":
+            setFile(file)
+            setTimeout(
+              function () {
+                setLoading(false);
+              },
+              1000
+            );
+            break;
+            default:
+              toast('Please select a valid video file')
+          }
+        } catch (e) {
+          //
+        }
+      },
+    })
+
+    window.callbackWeb.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
+        setLoading(true)
+      },
+    })
+  }
+  
   const handleChange = (event) => {
-    console.log(event.target.files)
+    event.preventDefault();
     const uploadedFile = event.target.files[0]
     let acceptedTypes = [
       'video/mp4',
@@ -59,8 +100,11 @@ const IpvVideo = (props) => {
     }
   }
 
-  const handleUpload = () => {
-    inputEl.current.click()
+  const handleUpload = (method_name) => {
+    if(getConfig().html_camera)
+      inputEl.current.click()
+    else
+      native_call_handler(method_name, 'ipvvideo', 'ipvvideo.jpg', 'front')
   }
 
   const handleSubmit = async () => {
@@ -126,7 +170,7 @@ const IpvVideo = (props) => {
                     />
                     <button
                       data-click-type="camera-front"
-                      onClick={handleUpload}
+                      onClick={() => handleUpload("open_video_camera")}
                       className="kyc-upload-button"
                       id="kyc-upload-button"
                     >
@@ -154,7 +198,7 @@ const IpvVideo = (props) => {
                       onChange={handleChange}
                     />
                     <button
-                      onClick={handleUpload}
+                      onClick={() => handleUpload("open_gallery")}
                       className="kyc-upload-button"
                       id="kyc-upload-button"
                     >
@@ -203,7 +247,7 @@ const IpvVideo = (props) => {
                   className="kyc-upload"
                   onChange={handleChange}
                 />
-                <button onClick={handleUpload} className="kyc-upload-button" id="kyc-upload-button">
+                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button" id="kyc-upload-button">
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

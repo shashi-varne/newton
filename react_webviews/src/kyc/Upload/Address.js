@@ -52,6 +52,7 @@ const AddressUpload = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
+  const [showLoader, setShowLoader] = useState(false)
   const [backDoc, setBackDoc] = useState(null)
 
   const [file, setFile] = useState(null)
@@ -95,7 +96,13 @@ const AddressUpload = (props) => {
             case 'image/jpg':
             case 'image/png':
             case 'image/bmp':
-              mergeDocs(file, doc_side)
+              mergeDocs(file, doc_side);
+              setTimeout(
+                function () {
+                  setShowLoader(false);
+                },
+                1000
+              );
               break
             default:
               toast('Please select image file')
@@ -123,7 +130,6 @@ const AddressUpload = (props) => {
   }
 
   const handleChange = (type) => (event) => {
-    const isWeb = getConfig().isWebOrSdk
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -131,22 +137,12 @@ const AddressUpload = (props) => {
       toast('Please select image file only')
       return
     }
-
     if (type === 'front') {
-      if (!isWeb) {
-        native_call_handler('open_camera', 'address', 'front.jpg', 'front')
-      } else {
-        setFrontDoc(uploadedFile)
-        mergeDocs(uploadedFile, 'front')
-      }
-    } else if (type === 'back') {
-      if (!isWeb) {
-        native_call_handler('open_camera', 'address', 'back.jpg', 'back')
-      } else {
-        setBackDoc(uploadedFile)
-        mergeDocs(uploadedFile, 'back')
-      }
+      setFrontDoc(uploadedFile)
+    } else {
+      setBackDoc(uploadedFile)
     }
+    mergeDocs(uploadedFile, type);
   }
 
   const mergeDocs = (file, type) => {
@@ -171,11 +167,16 @@ const AddressUpload = (props) => {
     })
   }
 
-  const handleUpload = (type) => () => {
-    if (type === 'front') {
-      frontDocRef.current.click()
-    } else {
-      backDocRef.current.click()
+  const handleUpload = (method_name, type) => () => {
+    if(getConfig().html_camera){
+      if (type === 'front') {
+        frontDocRef.current.click()
+      } else {
+        backDocRef.current.click()
+      }
+    }   
+    else {
+      native_call_handler(method_name, `address_${type}`, `address_${type}.jpg`, type)
     }
   }
 
@@ -272,7 +273,7 @@ const AddressUpload = (props) => {
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      skelton={isLoading}
+      skelton={isLoading || showLoader}
       handleClick={handleSubmit}
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
@@ -321,7 +322,7 @@ const AddressUpload = (props) => {
                     />
                     <button
                       data-click-type="camera-front"
-                      onClick={handleUpload('front')}
+                      onClick={handleUpload('open_camera','front')}
                       className="kyc-upload-button"
                     >
                       {!frontDoc && (
@@ -348,7 +349,7 @@ const AddressUpload = (props) => {
                       onChange={handleChange('front')}
                     />
                     <button
-                      onClick={handleUpload('front')}
+                      onClick={handleUpload('open_gallery','front')}
                       className="kyc-upload-button"
                     >
                       {!frontDoc && (
@@ -394,7 +395,7 @@ const AddressUpload = (props) => {
                   onChange={handleChange('front')}
                 />
                 <button
-                  onClick={handleUpload('front')}
+                  onClick={handleUpload('open_gallery','front')}
                   className="kyc-upload-button"
                 >
                   {!frontDoc && (
@@ -443,7 +444,7 @@ const AddressUpload = (props) => {
                     />
                     <button
                       data-click-type="camera-front"
-                      onClick={handleUpload('back')}
+                      onClick={handleUpload('open_camera','back')}
                       className="kyc-upload-button"
                       id="kyc-upload-button"
                     >
@@ -471,7 +472,7 @@ const AddressUpload = (props) => {
                       onChange={handleChange('back')}
                     />
                     <button
-                      onClick={handleUpload('back')}
+                      onClick={handleUpload('open_gallery','back')}
                       className="kyc-upload-button"
                       id="kyc-upload-button"
                     >
@@ -518,7 +519,7 @@ const AddressUpload = (props) => {
                   onChange={handleChange('back')}
                 />
                 <button
-                  onClick={handleUpload('back')}
+                  onClick={handleUpload('open_gallery','back')}
                   className="kyc-upload-button"
                   id="kyc-upload-button"
                 >
