@@ -72,7 +72,6 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         state: { show_aadhaar: true }
       });
       return true;
-      break;
     case "/kyc-esign/nsdl":
       if (params?.status === "success") {
         if (storageService().get('native')) {
