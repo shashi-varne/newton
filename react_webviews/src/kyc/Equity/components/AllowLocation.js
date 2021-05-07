@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Container from '../../common/Container'
 import { navigate as navigateFunc } from '../../common/functions';
 import { StatusInfo } from "../mini-components/StatusInfo";
+import WVInfoBubble from "../../../common/ui/InfoBubble/index"
 import "./commonStyles.scss";
 
 const Allow = (props) => {
@@ -50,9 +51,13 @@ const Allow = (props) => {
         />
         {showLocationError && 
           <div className="location-error">
-            {/* todo: error note component to be added */}
-            Location is required to continue
-            the KYC
+            <WVInfoBubble
+            type="error"
+            isDismissable
+            isOpen={showLocationError}
+            >
+              Location is required to continue the KYC
+            </WVInfoBubble>
           </div>
         }
       </section>
