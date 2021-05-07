@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { storageService } from "utils/validators";
 import { storageConstants, getPathname } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc, getFlow } from "../common/functions";
 import {
   saveBankData,
   getBankStatus,
@@ -173,8 +173,8 @@ const AddBankVerify = (props) => {
         "account_number": bankData.account_number ? "yes" : "no",
         "ifsc_code": bankData.ifsc_code ? "yes" : "no",
         "account_type": bankData.account_type ? "yes" : "no",
-        // "c_account_number": $scope.c_account_number ? "yes" : "no",
-        // "flow": $scope.flow
+        "c_account_number": userKyc.bank?.meta_data?.account_number ? "yes" : "no",
+        "flow": getFlow(userKyc) || ""
       }
     };
     if (userAction === 'just_set_events') {
@@ -183,6 +183,7 @@ const AddBankVerify = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
+
   return (
     <Container
       buttonTitle="VERIFY BANK ACCOUNT"

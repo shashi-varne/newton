@@ -159,7 +159,7 @@ export const getFlow = (kycData) => {
   let dlFlow = false;
   if (
     kycData.kyc_status !== 'compliant' &&
-    !kycData.address.meta_data.is_nri &&
+    !kycData.address?.meta_data?.is_nri &&
     kycData.dl_docs_status !== '' &&
     kycData.dl_docs_status !== 'init' &&
     kycData.dl_docs_status !== null

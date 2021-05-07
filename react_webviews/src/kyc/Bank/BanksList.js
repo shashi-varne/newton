@@ -49,6 +49,7 @@ const BanksList = (props) => {
   };
 
   const bank_details = (bank_id) => () => {
+    sendEvents('next')
     navigate(`${getPathname.bankDetails}${bank_id}`);
   };
 
@@ -60,7 +61,7 @@ const BanksList = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "add bank/mandate",
-        // "primary_account": $scope.banks[0].bank_name
+        "primary_account": banks[0]?.bank_name
       }
     };
     if (userAction === 'just_set_events') {

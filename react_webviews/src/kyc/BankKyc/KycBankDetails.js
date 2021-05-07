@@ -132,6 +132,7 @@ const KycBankDetails = (props) => {
 
   const handleClick = () => {
     if (disableFields.skip_api_call) {
+      sendEvents('next')
       handleNavigation();
     } else {
       const keysToCheck = [
