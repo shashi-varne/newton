@@ -3,7 +3,7 @@ import { isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
 import { getPathname } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
-import { getConfig } from "../../utils/functions";
+import { isIframe } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const RegistrationSuccess = (props) => {
@@ -41,7 +41,7 @@ const RegistrationSuccess = (props) => {
 
   const checkNPSAndProceed = () => {
     if (user.nps_investment) {
-      if (!getConfig().isIframe) {
+      if (!isIframe()) {
         navigate(getPathname.reports);
       }
     } else {

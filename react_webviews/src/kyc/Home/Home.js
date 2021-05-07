@@ -9,7 +9,7 @@ import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isIframe } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 
@@ -202,7 +202,7 @@ const Home = (props) => {
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (config.isIframe) {
+    if (isIframe()) {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());

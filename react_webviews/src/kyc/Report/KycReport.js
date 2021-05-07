@@ -14,6 +14,7 @@ import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { isIframe } from "../../utils/functions";
 
 const Report = (props) => {
   const productName = getConfig().productName;
@@ -130,7 +131,7 @@ const Report = (props) => {
 
   const checkNPSAndProceed = () => {
     if (user.nps_investment) {
-      if (!getConfig().isIframe) {
+      if (!isIframe()) {
         navigate(getPathname.reports);
       }
     } else {

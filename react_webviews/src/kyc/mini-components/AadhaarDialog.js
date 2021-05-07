@@ -18,7 +18,7 @@ const AadhaarDialog = ({ id, open, close, kyc, handleIframeKyc, ...props }) => {
         getConfig().searchParams
       }&is_secure=${storageService().get("is_secure")}`
     );
-    if (!isIframe()) {
+    if (isIframe()) {
       close();
       handleIframeKyc(
         updateQueryStringParameter(
