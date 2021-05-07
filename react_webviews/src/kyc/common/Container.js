@@ -7,6 +7,7 @@ import {
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
 import { navigate as navigateFunc } from "../../utils/functions";
+import { storageService } from "../../utils/validators";
 
 class Container extends Component {
   constructor(props) {
@@ -40,6 +41,7 @@ class Container extends Component {
     const fromState = this.props.location?.state?.fromState || "";
     const toState = this.props.location?.state?.toState || "";
     const params = this.props.location?.params || {};
+    const pathname = this.props.location?.pathname || "";
 
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
@@ -59,7 +61,20 @@ class Container extends Component {
 
     const goBackPath = this.props.location?.state?.goBack || "";
 
-    if(goBackPath) {
+    if (goBackPath) {
+      if (goBackPath === "exit" && storageService().get("native")) {
+        switch (pathname) {
+          case "/kyc/home":
+          case "/kyc/add-bank":
+          case "/kyc/approved/banks/doc":
+          case "/kyc/journey":
+            nativeCallback({ action: "exit_web" });
+            break;
+          default:
+            this.props.history.goBack();
+        }
+        return;
+      }
       this.navigate(goBackPath);
       return;
     }
