@@ -230,7 +230,7 @@ const AddBank = (props) => {
       title="Enter bank account details"
       data-aid='kyc-add-bank-screen'
     >
-      <div className="kyc-approved-bank" data-aid='kyc-approved-bank-container'>
+      <div className="kyc-approved-bank">
         {!isLoading && (
           <>
             <Alert

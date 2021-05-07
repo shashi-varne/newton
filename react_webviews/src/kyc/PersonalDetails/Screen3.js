@@ -126,7 +126,7 @@ const PersonalDetails3 = (props) => {
       total={type === "digilocker" ? 3 : 4}
       data-aid='Kyc-personal-details-screen-3'
     >
-      <div className="kyc-personal-details" data-aid='Kyc-personal-details-container'>
+      <div className="kyc-personal-details">
         <main  data-aid='Kyc-personal-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

@@ -77,7 +77,7 @@ const BankDetails = (props) => {
       title="Bank accounts"
       data-aid='kyc-bankDetails-page'
     >
-      <div className="bank-details" data-aid='bank-details-container'>
+      <div className="bank-details">
         {!showLoader && (
           <>
             <div className="bank-info" data-aid='bank-info'>

@@ -131,7 +131,7 @@ const NriAddressDetails1 = (props) => {
       total={4}
       data-aid='Kyc-NRIAddressDetails-screen-1'
     >
-      <div className="kyc-personal-details kyc-address-details" data-aid='Kyc-nri-address-details-container'>
+      <div className="kyc-personal-details kyc-address-details">
         <main data-aid='Kyc-nri-address-details'>
           <Input
             label="Contact number"

@@ -270,7 +270,7 @@ const NRIAddressUpload = (props) => {
       data-aid='Kyc-Upload-foreign-address-proof-screen'
     >
       {!isEmpty(kyc) && (
-        <section idata-aid='Kyc-upload-address-container'>
+        <section>
           <div className="sub-title">
             {getFullAddress()}
             {getFullAddress() && (

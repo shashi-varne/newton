@@ -86,7 +86,7 @@ const ConfirmPan = (props) => {
       dualbuttonwithouticon={true}
       data-aid='kyc-confirm-pan'
     >
-      <div className="kyc-compliant-confirm-pan" data='kyc-compliant-confirm-pan-container'> 
+      <div className="kyc-compliant-confirm-pan">
         <div className="kyc-main-subtitle">
           Confirm your PAN to unlock premium onboarding
         </div>

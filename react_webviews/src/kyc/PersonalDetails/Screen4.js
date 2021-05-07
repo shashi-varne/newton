@@ -159,7 +159,7 @@ const PersonalDetails4 = (props) => {
       total={type === "digilocker" ? 3 : 4}
       data-aid='Kyc-personal-details-screen-4'
     >
-      <div className="kyc-nominee" data-aid='Kyc-nominee-container'>
+      <div className="kyc-nominee">
         <main data-aid='Kyc-nominee-details'>
           <div className="nominee-checkbox" data-aid='Kyc-nominee-checkbox'>
             <Checkbox

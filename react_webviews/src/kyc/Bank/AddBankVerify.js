@@ -171,7 +171,7 @@ const AddBankVerify = (props) => {
       title="Verify your bank account"
       data-aid='kyc-approved-bank-verify-screen'
     >
-      <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify-container'>
+      <div className="kyc-approved-bank-verify">
         <Alert
           variant="info"
           title="Important"

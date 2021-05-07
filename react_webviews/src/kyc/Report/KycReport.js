@@ -316,7 +316,7 @@ const Report = (props) => {
       headerData={{goBack}}
       data-aid='kyc-report-screen'
     >
-      <div className="kyc-report" data-aid='kyc-report-container'>
+      <div className="kyc-report">
         <main data-aid='kyc-report'>
           <Imgc
             src={require(`assets/${productName}/congratulations_illustration.svg`)}

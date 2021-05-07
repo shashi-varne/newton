@@ -170,7 +170,7 @@ const Pan = (props) => {
       data-aid='Kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
-        <section data-aid='Kyc-upload-pan-container'>
+        <section>
           <div className="sub-title" data-aid='Kyc-pan-card'>
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
@@ -184,7 +184,7 @@ const Pan = (props) => {
           />
           {!isWeb && (
             <div
-              className="kyc-doc-upload-container" data-aid='Kyc-doc-upload-container'
+              className="kyc-doc-upload-container"
             >
               {file && fileToShow && (
                 <img src={fileToShow} className="preview" alt="" />
@@ -256,7 +256,7 @@ const Pan = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container" data-aid='Kyc-doc-upload-container'>
+            <div className="kyc-doc-upload-container">
               {file && fileToShow && (
                 <img
                   src={fileToShow}

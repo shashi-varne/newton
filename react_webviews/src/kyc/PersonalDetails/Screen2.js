@@ -114,7 +114,7 @@ const PersonalDetails2 = (props) => {
       total="4"
       data-aid='Kyc-personal-details-screen-2'
     >
-      <div className="kyc-personal-details" data-aid='Kyc-personal-details-container'>
+      <div className="kyc-personal-details">
         <main  data-aid='Kyc-personal-details'>
           <Input
             label="Father's name"

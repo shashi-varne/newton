@@ -171,7 +171,7 @@ const PersonalDetails1 = (props) => {
       headerData={{goBack}}
       data-aid='kyc-personal-details-screen-1'
     >
-      <div className="kyc-personal-details" data-aid='kyc-personal-details-container'>
+      <div className="kyc-personal-details">
         <div className="kyc-main-subtitle" data-aid='share-dob'>
           <div>
             <div>Share your date of birth as per PAN:</div>

@@ -114,8 +114,8 @@ const Sign = (props) => {
       data-aid='Kyc-Upload-Selfie-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan" data-aid='Kyc-upload-pan-container'>
-          <div className="sub-title" data-aid='Kyc-sub-title'>Ears must be visible</div>
+        <section id="kyc-upload-pan">
+          <div className="sub-title">Ears must be visible</div>
           {!isWeb && (
             <div className="kyc-doc-upload-container" data-aid='Kyc-doc-upload'>
               {file && fileToShow && (

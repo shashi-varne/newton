@@ -112,7 +112,7 @@ const Nominee = (props) => {
       title={title}
       data-aid='nominee-details-page'
     >
-      <div className="kyc-nominee" data-aid='kyc-nominee-container'>
+      <div className="kyc-nominee">
         {!isEmpty(kyc) && (
           <main data-aid='kyc-nominee'>
             <Input

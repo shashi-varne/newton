@@ -28,7 +28,7 @@ const Complete = (props) => {
       force_hide_inpage_title={true}
       data-aid='kyc-compliant-complete-screen'
     >
-      <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete-container'>
+      <div className="kyc-compliant-complete">
         <header data-aid='header'>
           <img
             src={require(`assets/${productName}/ic_process_done.svg`)}

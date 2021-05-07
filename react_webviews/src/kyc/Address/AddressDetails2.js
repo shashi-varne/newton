@@ -188,7 +188,7 @@ const AddressDetails2 = (props) => {
       total={getTotalPages(kyc)}
       data-aid='Kyc-bank-kyc-address-details-2'
     >
-      <section id="kyc-bank-kyc-address-details-2" data-aid='Kyc-bank-kyc-address-details-container'>
+      <section id="kyc-bank-kyc-address-details-2">
         <div className="sub-title" data-aid='Kyc-getAddressProof-text'>Address as per {getAddressProof(kyc)}</div>
         <form className="form-container" data-aid='Kyc-form-container'>
           <TextField

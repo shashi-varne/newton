@@ -147,7 +147,7 @@ const PersonalDetails4 = (props) => {
       title={title}
       data-aid='kyc-personal-details-screen-4'
     >
-      <div className="kyc-nominee" data-aid='kyc-nominee-container'>
+      <div className="kyc-nominee">
         <main data-aid='kyc-nominee'>
           <div className="nominee-checkbox" data-aid='nominee-checkbox'>
             <Checkbox

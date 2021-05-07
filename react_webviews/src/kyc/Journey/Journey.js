@@ -716,7 +716,7 @@ const Journey = (props) => {
                 title={`Hey ${user.name}`}
               /></span>
             )}
-          <main className="steps-container" data-aid='Kyc-steps-container'>
+          <main className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
                 className={

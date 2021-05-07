@@ -77,7 +77,7 @@ const ChangeAddressDetails1 = (props) => {
       total={2}
       data-aid='Kyc-ChangeAddressDetails-screen1'
     >
-      <div className="kyc-personal-details kyc-address-details" data-aid='Kyc-personal-details-container'>
+      <div className="kyc-personal-details kyc-address-details">
         <main data-aid='Kyc-personal-details'>
           <div className={`input ${disabled && `disabled`}`}>
             <RadioWithoutIcon

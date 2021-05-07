@@ -132,8 +132,8 @@ const Sign = (props) => {
       data-aid='Kyc-Signature-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan" data-aid='Kyc-upload-pan-container'>
-          <div className="sub-title" data-aria-dropeffect='sub-title'>
+        <section id="kyc-upload-pan">
+          <div className="sub-title">
             Signature should match with your PAN’s signature
           </div>
           {!isWeb && (
