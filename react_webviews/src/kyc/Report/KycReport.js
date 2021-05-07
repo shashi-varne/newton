@@ -9,7 +9,7 @@ import {
   storageConstants,
 } from "../constants";
 import ContactUs from "../mini-components/ContactUs";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc, getFlow } from "../common/functions";
 import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
@@ -109,6 +109,7 @@ const Report = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents('next')
     if (isCompliant) {
       proceed();
     } else {
@@ -306,9 +307,26 @@ const Report = (props) => {
     }
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "kyc_done",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       id="kyc-home"
+      events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       handleClick={handleClick}
       title={topTitle}

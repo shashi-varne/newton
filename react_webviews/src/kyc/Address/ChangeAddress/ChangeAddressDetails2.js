@@ -123,7 +123,8 @@ const ChangeAddressDetails2 = (props) => {
     })
   }
 
-  const handleChange = (type) => (event) => {
+  const handleChange = (type, openType) => (event) => {
+    sendEvents('get_image', openType, type)
     const isWeb = getConfig().isWebOrSdk
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
@@ -234,15 +235,15 @@ const ChangeAddressDetails2 = (props) => {
 
   const isWeb = getConfig().isWebOrSdk
 
-  const sendEvents = (userAction) => {
+  const sendEvents = (userAction, openType, type) => {
     let eventObj = {
       "event_name": 'my_account',
       "properties": {
         "user_action": userAction || "",
         "screen_name": "change address",
-        // "picture": source || "",
-        // "doc_side": state.doc_side || "",
-        // "doc_type": state.doc_type || ""
+        "picture": openType || "",
+        "doc_side": type || "",
+        "doc_type": addressProof || ""
       }
     };
     if (userAction === 'just_set_events') {
@@ -295,7 +296,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front')}
+                      onChange={handleChange('front','open-camera')}
                       accept="image/*"
                       capture
                     />
@@ -325,7 +326,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front')}
+                      onChange={handleChange('front','open-gallery')}
                     />
                     <button
                       onClick={handleUpload('front')}
@@ -371,7 +372,7 @@ const ChangeAddressDetails2 = (props) => {
                   ref={frontDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('front')}
+                  onChange={handleChange('front','open-gallery')}
                 />
                 <button
                   onClick={handleUpload('front')}
@@ -417,7 +418,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back')}
+                      onChange={handleChange('back','open-camera')}
                       accept="image/*"
                       capture
                     />
@@ -447,7 +448,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back')}
+                      onChange={handleChange('back','open-gallery')}
                     />
                     <button
                       onClick={handleUpload('back')}
@@ -493,7 +494,7 @@ const ChangeAddressDetails2 = (props) => {
                   ref={backDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('back')}
+                  onChange={handleChange('back','open-gallery')}
                 />
                 <button
                   onClick={handleUpload('back')}

@@ -165,7 +165,7 @@ const PersonalDetails1 = (props) => {
         "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
         "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
         "gender": form_data.gender,
-        // "help": $scope.helpOpened ? 'yes' : 'no',
+        "help": isOpen ? 'yes' : 'no',
         "flow": 'premium onboarding'      }
     };
     if (userAction === 'just_set_events') {
