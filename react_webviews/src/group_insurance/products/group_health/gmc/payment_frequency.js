@@ -8,7 +8,7 @@ import ValueSelector from '../../../../common/ui/ValueSelector';
 import Checkbox from '../../../../common/ui/Checkbox';
 import { getConfig } from 'utils/functions';
 import toast from "../../../../common/ui/Toast";
-import { inrFormatDecimal, storageService } from 'utils/validators';
+import { inrFormatDecimal, storageService, isEmpty } from 'utils/validators';
 
 var getFrequency = {
     'MONTHLY': 'month',
@@ -154,6 +154,9 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
                 groupHealthPlanData.paymentFrequencySelected = premium_details.payment_frequency;
                 if(storageService().getObject('applicationPhaseReached')){
                     delete groupHealthPlanData.post_body['quotation_id'];
+                    if(!isEmpty(groupHealthPlanData.application_data)){
+                        groupHealthPlanData.application_data = {};
+                    }
                 }
                 this.setLocalProviderData(groupHealthPlanData);
                 this.navigate('plan-good-health-dec');

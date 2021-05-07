@@ -197,6 +197,9 @@ class GroupHealthPlanStarSumInsured extends Component {
         });
         if(storageService().getObject('applicationPhaseReached')){
             delete groupHealthPlanData.post_body['quotation_id'];
+            if(!isEmpty(groupHealthPlanData.application_data)){
+                groupHealthPlanData.application_data = {};
+            }
         }
         this.setLocalProviderData(groupHealthPlanData);
         this.navigate(this.state.next_screen || 'plan-premium-summary');

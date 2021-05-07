@@ -5,7 +5,7 @@ import { inrFormatDecimal } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import { getConfig } from 'utils/functions';
-import { storageService } from '../../../../utils/validators';
+import { storageService, isEmpty } from '../../../../utils/validators';
 class GroupHealthPlanSelectCoverPeriod extends Component {
     constructor(props) {
         super(props);
@@ -105,6 +105,9 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
         if(storageService().getObject('applicationPhaseReached')){
             delete groupHealthPlanData.post_body['quotation_id'];
+            if(!isEmpty(groupHealthPlanData.application_data)){
+                groupHealthPlanData.application_data = {};
+            }
         }
         this.setLocalProviderData(groupHealthPlanData);
         this.navigate('plan-premium-summary');
