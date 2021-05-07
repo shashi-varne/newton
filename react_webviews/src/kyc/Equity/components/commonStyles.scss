@@ -1,3 +1,24 @@
+$generic-subtitle-margin-top: -10px;
+
+.generic-page-subtitle {
+  margin-top: $generic-subtitle-margin-top;
+}
+
+@mixin d-flex {
+  display: flex;
+}
+
+@mixin d-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin d-flex-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
 .stocks-status-card {
   padding: 20px 2px 20px 20px;
   background-size: cover;
@@ -276,5 +297,38 @@
   .location-error {
     text-align: center;
     margin-top: 30px;
+  }
+}
+
+
+#manual-signature {
+  .page-content {
+    margin-top: 25px;
+    margin-bottom: 30px;
+    font-size: 13px;
+
+    .step {
+      .step-header {
+        @include d-flex();
+        column-gap: 20px;
+
+        .step-title {
+          font-weight: bold;
+        }
+      }
+
+      .step-content {
+        margin: 10px 0 30px 40px;
+        color: #767E86;
+
+        .step-note {
+          line-height: 21px;
+        }
+      }
+    }
+
+    .page-note {
+      color: #767E86;
+    }
   }
 }

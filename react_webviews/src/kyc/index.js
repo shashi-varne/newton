@@ -63,6 +63,7 @@ import LocationError from "./Equity/components/LocationError";
 import AccountInfo from "./Equity/components/AccountInfo";
 import PanInstructions from "./Equity/components/PanInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
+import ManualSignature from "./Equity/components/ManualSignature";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -340,6 +341,11 @@ const Kyc = (props) => {
           exact 
           path={`${url}/document-verification`} 
           component={DocumentVerification} 
+        />
+        <Route 
+          exact 
+          path={`${url}/manual-signature`} 
+          component={ManualSignature} 
         />
         <Route component={NotFound} />
       </Switch>
