@@ -21,7 +21,6 @@ import { getConfig, isIframe } from 'utils/functions';
 import { withStyles } from '@material-ui/core/styles';
 import { storageService } from 'utils/validators';
 import CartDialog from './CartDialog';
-import IframeContainer from '../../e_mandate/commoniFrame/Container';
 
 import './Style.scss';
 import { isInvestRefferalRequired, proceedInvestment } from '../../dashboard/proceedInvestmentFunctions';
@@ -90,7 +89,6 @@ const FundDetails = ({ classes, history }) => {
   const { kyc, isLoading: loading } = useUserKycHook();
   const [dialogStates, setDialogStates] = useState({});
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const partnerCode = getConfig().partner_code;
   const [open, setOpen] = useState(false);
   const iframe = isIframe();
   const isMobile = getConfig().isMobileDevice;
@@ -152,7 +150,7 @@ const FundDetails = ({ classes, history }) => {
           await fetch_graph_data(response?.text_report[0]?.isin);
         }
       } catch (err) {
-        toast('wrong', 'error');
+        toast('Something went wrong', 'error');
         setLoading(false);
       }
     })();
@@ -666,55 +664,102 @@ const FundDetails = ({ classes, history }) => {
     setOpen(!open);
   };
 
+  const ContainerProps = !iframe ?
+  {
+    // title={fundDetails?.performance?.friendly_name},
+    // hideInPageTitle={true},
+    // noPadding,
+    // fullWidthButton,
+    // handleClick={handleClick},
+    // buttonTitle={buttonTitle},
+    // showLoader={isLoading},
+    // classOverRideContainer='fd-container',
+    title:fundDetails?.performance?.friendly_name,
+    hidePageTitle:true,
+    hideInPageTitle:true,
+    noPadding: true,
+    // fullWidthButton,
+    handleClick:handleClick,
+    handleClickOne:handleClick,
+    buttonTitle:buttonTitle,
+    buttonOneTitle:buttonTitle,
+    skelton:isLoading || loading, // new container field
+    // classOverRideContainer:'fd-container',
+    classOverRide:"fd-container",
+    twoButton: status === 'FUND_ADDED' && productType !== 'finity' ,
+    buttonTwoTitle: ENTER_AMOUNT ,
+    handleClickTwo:handleClick2,
+    // handleClick2={handleClick2}, // old container field
+    // buttonTitle2={ENTER_AMOUNT}, // old container field
+    showLoader:isApiRunning, // new container field
+    // showLoader={isLoading || loading}, // old container field
+    type: status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : "",
+  }
+  :
+  {
+    hideInPageTitle:true,
+    noPadding: true,
+    fullWidthButton: true,
+    handleClick:handleInvest,
+    buttonTitle:'INVEST NOW',
+    skelton:isLoading,
+    classOverRide:'fd-iframe-container',
+  }
+
   return (
     <div>
-      {!iframe && partnerCode !== 'moneycontrol' ? (
-        <Container
-          // title={fundDetails?.performance?.friendly_name}
-          // hideInPageTitle={true}
-          // noPadding
-          // fullWidthButton
-          // handleClick={handleClick}
-          // buttonTitle={buttonTitle}
-          // showLoader={isLoading}
-          // classOverRideContainer='fd-container'
-          title={fundDetails?.performance?.friendly_name}
-          hidePageTitle={true}
-          hideInPageTitle={true}
-          noPadding
-          // fullWidthButton
-          handleClick={handleClick}
-          handleClickOne={handleClick}
-          buttonTitle={buttonTitle}
-          buttonOneTitle={buttonTitle}
-          skelton={isLoading || loading} // new container field
-          classOverRideContainer='fd-container'
-          classOverRide="fd-container"
-          twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
-          buttonTwoTitle={ ENTER_AMOUNT }
-          handleClickTwo={handleClick2}
-          // handleClick2={handleClick2} // old container field
-          // buttonTitle2={ENTER_AMOUNT} // old container field
-          showLoader={isApiRunning} // new container field
-          // showLoader={isLoading || loading} // old container field
-          type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
-        >
-          {fundDetails && ContainerData()}
-        </Container>
-      ) : (
-        <IframeContainer
-          hideInPageTitle={true}
-          noPadding
-          fullWidthButton
-          handleClick={handleInvest}
-          buttonTitle={'INVEST NOW'}
-          showLoader={isLoading}
-          classOverRideContainer='fd-container-iframe'
-        >
-          {fundDetails && ContainerData()}
-        </IframeContainer>
-      )}
+      <Container {...ContainerProps} >
+        {fundDetails && ContainerData()}
+      </Container>
     </div>
+    // <div>
+    //   {!iframe && partnerCode !== 'moneycontrol' ? (
+    //     <Container
+    //       // title={fundDetails?.performance?.friendly_name}
+    //       // hideInPageTitle={true}
+    //       // noPadding
+    //       // fullWidthButton
+    //       // handleClick={handleClick}
+    //       // buttonTitle={buttonTitle}
+    //       // showLoader={isLoading}
+    //       // classOverRideContainer='fd-container'
+    //       title={fundDetails?.performance?.friendly_name}
+    //       hidePageTitle={true}
+    //       hideInPageTitle={true}
+    //       noPadding
+    //       // fullWidthButton
+    //       handleClick={handleClick}
+    //       handleClickOne={handleClick}
+    //       buttonTitle={buttonTitle}
+    //       buttonOneTitle={buttonTitle}
+    //       skelton={isLoading || loading} // new container field
+    //       classOverRideContainer='fd-container'
+    //       classOverRide="fd-container"
+    //       twoButton= {status === 'FUND_ADDED' && productType !== 'finity' }
+    //       buttonTwoTitle={ ENTER_AMOUNT }
+    //       handleClickTwo={handleClick2}
+    //       // handleClick2={handleClick2} // old container field
+    //       // buttonTitle2={ENTER_AMOUNT} // old container field
+    //       showLoader={isApiRunning} // new container field
+    //       // showLoader={isLoading || loading} // old container field
+    //       type={status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : ""}
+    //     >
+    //       {fundDetails && ContainerData()}
+    //     </Container>
+    //   ) : (
+    //     <IframeContainer
+    //       hideInPageTitle={true}
+    //       noPadding
+    //       fullWidthButton
+    //       handleClick={handleInvest}
+    //       buttonTitle={'INVEST NOW'}
+    //       showLoader={isLoading}
+    //       classOverRideContainer='fd-container-iframe'
+    //     >
+    //       {fundDetails && ContainerData()}
+    //     </IframeContainer>
+    //   )}
+    // </div>
   );
 };
 
