@@ -7,6 +7,7 @@ import {
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
 import { navigate as navigateFunc } from "../../utils/functions";
+import { storageService } from "../../utils/validators";
 
 class Container extends Component {
   constructor(props) {
@@ -54,6 +55,11 @@ class Container extends Component {
 
     if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
+      return;
+    }
+
+    if(fromState === "/kyc/native" && storageService().get("native")) {
+      nativeCallback({action: "exit"})
       return;
     }
 
