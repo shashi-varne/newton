@@ -1,28 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPurchaseProcessData, storageConstants } from "../constants";
 import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
+import { getSummaryV2 } from "../common/api";
+import { getConfig } from "../../utils/functions";
 
 const Redeemed = (props) => {
-  const transactions = storageService().getObject(
-    storageConstants.PENDING_REDEMPTION
-  );
-  if (!transactions) {
-    props.history.goBack();
-  }
+  const stateParams = props.location?.state || {};
+  const [transactions, setTransactions] = useState({});
   const [openProcess, setOpenProcess] = useState(false);
   const [selectedRedeemed, setSelectedRedeemed] = useState({});
+  const [showSkelton, setShowSkelton] = useState(true);
+
+  useEffect(() => {
+    const transactionsData = storageService().getObject(
+      storageConstants.PENDING_REDEMPTION
+    );
+    if (!isEmpty(transactionsData) && stateParams.fromPath === "reports") {
+      setTransactions(transactionsData);
+      setShowSkelton(false);
+    } else {
+      initialize();
+    }
+  }, []);
+
+  const initialize = async () => {
+    const result = await getSummaryV2();
+    if (!result) {
+      setShowSkelton(false);
+      return;
+    }
+    setTransactions(result.report?.pending?.redeemed_transactions || {});
+    storageService().setObject(
+      storageConstants.PENDING_REDEMPTION,
+      result.report?.pending?.redeemed_transactions || {}
+    );
+    setShowSkelton(false);
+  };
 
   const handleProcess = (redeemed) => {
     setSelectedRedeemed(redeemed);
     setOpenProcess(true);
   };
 
+  const goBack = () => {
+    props.history.push({
+      pathname: "/reports",
+      search: getConfig().searchParams,
+    });
+  };
+
   return (
-    <Container noFooter={true} title="Pending withdrawals">
+    <Container
+      noFooter={true}
+      title="Pending withdrawals"
+      skelton={showSkelton}
+      headerData={{ goBack }}
+    >
       <div className="report-purchase">
         {!isEmpty(transactions) &&
           transactions.map((redeemed, index) => {

@@ -47,7 +47,7 @@
 }
 
 @media only screen and (min-width: 768px) {
-  .MuiModal-root {
+  .MuiModal-root[role='dialog'] {
     top: 60px !important;
     margin-left: 300px !important;
     position: fixed !important;
@@ -88,6 +88,23 @@
       margin-left: 300px !important;
       max-width: 640px !important;
       margin-top: 56px !important;
+    }
+  }
+
+  .MuiModal-root{
+    .MuiPopover-paper{
+      min-width: 160px;
+      max-width: 400px !important;
+      max-height: 256px !important;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, .175) !important;
+      ul{
+        padding: 5px 0px !important;
+
+        li{
+          overflow: hidden !important;
+          height: 46px !important;
+        }
+      }
     }
   }
 }
