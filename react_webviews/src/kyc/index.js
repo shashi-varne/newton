@@ -151,7 +151,7 @@ const Kyc = (props) => {
           component={Nominee}
         />
         <Route 
-          exact   // from here do properly
+          exact
           path={`${url}/report`} 
           component={Report} 
         />

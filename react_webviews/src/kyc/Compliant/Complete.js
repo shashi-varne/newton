@@ -26,16 +26,17 @@ const Complete = (props) => {
       buttonTitle="OK"
       handleClick={handleClick}
       force_hide_inpage_title={true}
+      data-aid='kyc-compliant-complete-screen'
     >
-      <div className="kyc-compliant-complete">
-        <header>
+      <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete-container'>
+        <header data-aid='header'>
           <img
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""
           />
-          <div className="title" id='title'>Kudos, KYC is completed!</div>
+          <div className="title">Kudos, KYC is completed!</div>
           <div
-            className="subtitle" id='application-details-text'
+            className="subtitle"
             onClick={() => navigate(getPathname.kycReport)}
           >
             See KYC application details {" >"}
@@ -45,6 +46,7 @@ const Complete = (props) => {
           variant="warning"
           title="Note"
           message="Your bank verification is still pending. You will be able to invest once your bank is verified."
+          dataAid='kyc-pending'
         />
       </div>
     </Container>

@@ -25,16 +25,17 @@ const Verify = (props) => {
       buttonTitle="INVEST NOW"
       handleClick={handleClick}
       title="KYC verified"
+      data-aid='kyc-compliant-verify-screen'
     >
-      <div className="kyc-compliant-complete">
-        <header>
+      <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete-container'>
+        <header data-aid='kyc-compliant-complete'>
           <img
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""
           />
-          <div className="title" id='title'>You're ready to invest!</div>
+          <div className="title" data-aid='title'>You're ready to invest!</div>
           <div
-            className="subtitle margin-top" id='application-details-text'
+            className="subtitle margin-top" data-aid='application-details-text'
             onClick={() => navigate(getPathname.compliantReport)}
           >
             See KYC application details {" >"}

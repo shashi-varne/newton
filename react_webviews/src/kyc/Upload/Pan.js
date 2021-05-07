@@ -36,11 +36,11 @@ const getTitleList = ({ kyc }) => {
 const MessageComponent = (kyc) => {
   const titleList = getTitleList(kyc);
   return (
-    <section className="pan-alert">
+    <section className="pan-alert" data-aid='Kyc-pan-alert'>
       {titleList.map((title, idx) => (
-        <div className="row" key={idx} id={`row_${idx+1}`}>
-          <div className="order" id={`order_${idx+1}`}>{idx + 1}.</div>
-          <div className="value" id={`value_${idx+1}`}>{title}</div>
+        <div className="row" key={idx} data-aid={`row_${idx+1}`}>
+          <div className="order" data-aid={`order_${idx+1}`}>{idx + 1}.</div>
+          <div className="value" data-aid={`value_${idx+1}`}>{title}</div>
         </div>
       ))}
     </section>
@@ -167,10 +167,11 @@ const Pan = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload PAN"
+      data-aid='Kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
-          <div className="sub-title" id='sub-title'>
+        <section data-aid='Kyc-upload-pan-container'>
+          <div className="sub-title" data-aid='Kyc-pan-card'>
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
           <Alert
@@ -183,17 +184,17 @@ const Pan = (props) => {
           />
           {!isWeb && (
             <div
-              className="kyc-doc-upload-container"
+              className="kyc-doc-upload-container" data-aid='Kyc-doc-upload-container'
             >
               {file && fileToShow && (
                 <img src={fileToShow} className="preview" alt="" />
               )}
               {!file && (
-                <div className="caption" id='caption-text'>Upload front side of PAN Card</div>
+                <div className="caption" data-aid='Kyc-caption-text'>Upload front side of PAN Card</div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='Kyc-upload-doc-actions'>
                 <div className="mobile-actions">
-                  <div className="open-camera" id='open-camera'>
+                  <div className="open-camera" data-aid='Kyc-open-camera'>
                     <input
                       ref={inputEl}
                       type="file"
@@ -220,10 +221,10 @@ const Pan = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" id='open-camera-text'>open camera</div>
+                      <div className="upload-action" data-aid='Kyc-open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery" id='open-gallery'>
+                  <div className="open-gallery" data-aid='Kyc-open-gallery'>
                     <input
                       ref={inputEl}
                       type="file"
@@ -247,7 +248,7 @@ const Pan = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
+                      <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -255,7 +256,7 @@ const Pan = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='Kyc-doc-upload-container'>
               {file && fileToShow && (
                 <img
                   src={fileToShow}
@@ -264,9 +265,9 @@ const Pan = (props) => {
                 />
               )}
               {!file && (
-                <div className="caption" id='caption-text'>Upload front side of PAN Card</div>
+                <div className="caption" data-aid='Kyc-caption-text'>Upload front side of PAN Card</div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='Kyc-upload-doc-actions'>
                 <input
                   ref={inputEl}
                   type="file"
@@ -287,7 +288,7 @@ const Pan = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
+                  <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>

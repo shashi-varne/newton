@@ -129,10 +129,10 @@ const NriAddressDetails1 = (props) => {
       current={3}
       count={3}
       total={4}
+      data-aid='Kyc-NRIAddressDetails-screen-1'
     >
-      <div className="kyc-personal-details kyc-address-details">
-        <main id='main'>
-          <span id='textfeild'>
+      <div className="kyc-personal-details kyc-address-details" data-aid='Kyc-nri-address-details-container'>
+        <main data-aid='Kyc-nri-address-details'>
           <Input
             label="Contact number"
             class="input"
@@ -142,7 +142,7 @@ const NriAddressDetails1 = (props) => {
             onChange={handleChange("mobile_number")}
             type="text"
             disabled={isApiRunning}
-          /></span>
+          />
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.address_doc_type_error ? true : false}

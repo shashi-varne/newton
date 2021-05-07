@@ -16,16 +16,16 @@ const CompliantHelpDialog = ({ close, isOpen, pan }) => {
       className="help-dialog"
       id="kyc-pan-help-dialog"
     >
-      <DialogContent className="help-content">
-        <div className="title" id='title'>Hey,</div>
-        <div className="subtitle" id='subtitle'>
+      <DialogContent className="help-content" data-aid='help-content'>
+        <div className="title">Hey,</div>
+        <div className="subtitle">
           To change the PAN: {pan}, <br />
           please reach us at :
         </div>
-        <div className="partner-info">
-          <div id='mobile_no'>{config.mobile}</div>
+        <div className="partner-info" data-aid='partner-info'>
+          <div data-aid='mobile_no'>{config.mobile}</div>
           <div>|</div>
-          <div id='email_id'>{config.email}</div>
+          <div data-aid='email_id'>{config.email}</div>
         </div>
         <Button onClick={() => close()}>OK</Button>
       </DialogContent>

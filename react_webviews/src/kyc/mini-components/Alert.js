@@ -26,11 +26,12 @@ let alertVariants = {
   },
 };
 
-const Alert = ({ message = '', variant, title, renderMessage = null }) => {
+const Alert = ({ message = '', variant, title, renderMessage = null, dataAid }) => {
   return (
     <div
       className="alert-status-info"
       style={{ backgroundColor: alertVariants[variant].bgColor }}
+      data-aid={dataAid}
     >
       <img
         src={require(`assets/${alertVariants[variant].icon}`)}

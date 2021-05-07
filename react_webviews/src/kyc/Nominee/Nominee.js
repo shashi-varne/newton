@@ -110,11 +110,11 @@ const Nominee = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      data-aid='nominee-details-page'
     >
-      <div className="kyc-nominee">
+      <div className="kyc-nominee" data-aid='kyc-nominee-container'>
         {!isEmpty(kyc) && (
-          <main id='main'>
-            <span id='input-feild_1'>
+          <main data-aid='kyc-nominee'>
             <Input
               label="Name"
               class="input"
@@ -124,8 +124,7 @@ const Nominee = (props) => {
               onChange={handleChange("name")}
               maxLength={20}
               type="text"
-            /></span>
-            <span id='input-feild_2'>
+            />
             <Input
               label="Date of birth(DD/MM/YYYY)"
               class="input"
@@ -136,8 +135,8 @@ const Nominee = (props) => {
               maxLength={10}
               type="text"
               id="dob"
-            /></span>
-            <div className="input" id='DropdownWithoutIcon'>
+            />
+            <div className="input" data-aid='DropdownWithoutIcon'>
               <DropdownWithoutIcon
                 error={form_data.relationship_error ? true : false}
                 helperText={form_data.relationship_error}

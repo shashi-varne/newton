@@ -169,8 +169,9 @@ const AddBankVerify = (props) => {
       noFooter={showLoader}
       handleClick={handleClick}
       title="Verify your bank account"
+      data-aid='kyc-approved-bank-verify-screen'
     >
-      <div className="kyc-approved-bank-verify">
+      <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify-container'>
         <Alert
           variant="info"
           title="Important"
@@ -186,7 +187,7 @@ const AddBankVerify = (props) => {
         )}
         {!showLoader && (
           <>
-            <div className="item">
+            <div className="item" data-aid='bank_name'>
               <div className="flex">
                 <div className="left">
                   <img
@@ -197,24 +198,24 @@ const AddBankVerify = (props) => {
                 </div>
                 <div className="right">
                   <div id='bank_name'>{bankData.bank_name}</div>
-                  <div className="text" id='branch_name'>{bankData.branch_name} </div>
+                  <div className="text">{bankData.branch_name} </div>
                 </div>
               </div>
-              <div className="edit" id='edit' onClick={edit()}>
+              <div className="edit" onClick={edit()}>
                 EDIT
               </div>
             </div>
-            <div className="item">
-              <div className="left" id='account_number_title'>Account number</div>
-              <div className="right" id='account_number'> {bankData.account_number} </div>
+            <div className="item" data-aid='account_number'>
+              <div className="left">Account number</div>
+              <div className="right"> {bankData.account_number} </div>
             </div>
-            <div className="item">
-              <div className="left" id='ifsc_code_title'>IFSC code</div>
-              <div className="right" id='ifsc_code'>{bankData.ifsc_code} </div>
+            <div className="item" data-aid='ifsc_code'>
+              <div className="left">IFSC code</div>
+              <div className="right">{bankData.ifsc_code} </div>
             </div>
-            <div className="item">
-              <div className="left" id='account_type_text'>Account type</div>
-              <div className="right" id='account_type'> {bankData.account_type} </div>
+            <div className="item" data-aid='account_type'>
+              <div className="left">Account type</div>
+              <div className="right"> {bankData.account_type} </div>
             </div>
           </>
         )}

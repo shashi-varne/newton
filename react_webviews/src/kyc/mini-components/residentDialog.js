@@ -13,10 +13,11 @@ const ResidentDialog = ({ close, open, cancel, aadhaarKyc }) => {
       keepMounted
       aria-describedby="resident-dialog"
       id="kyc-bottom-dialog"
+      data-aid='kyc-bottom-dialog'
     >
-      <DialogContent className="resident-dialog-content">
+      <DialogContent className="resident-dialog-content" data-aid='resident-dialog-content'>
         <main>
-          <h1 id='nationality'>Are you an Indian resident?</h1>
+          <h1 >Are you an Indian resident?</h1>
           <img
             src={require(`assets/${productName}/ic_indian_resident.svg`)}
             alt=""

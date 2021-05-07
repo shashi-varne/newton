@@ -228,8 +228,9 @@ const AddBank = (props) => {
       disable={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      data-aid='kyc-add-bank-screen'
     >
-      <div className="kyc-approved-bank">
+      <div className="kyc-approved-bank" data-aid='kyc-approved-bank-container'>
         {!isLoading && (
           <>
             <Alert
@@ -237,8 +238,7 @@ const AddBank = (props) => {
               title="Note"
               message={note.info_text}
             />
-            <main id='main'>
-            <span id='input-feild1'>
+            <main data-aid='kyc-approved-bank'>
               <Input
                 label="Account Holder name"
                 class="input"
@@ -249,8 +249,7 @@ const AddBank = (props) => {
                 type="text"
                 disabled
                 id="name"
-              /></span>
-              <span id='input-feild2'>
+              />
               <TextField
                 label="IFSC Code"
                 id="ifsc_code"
@@ -274,8 +273,7 @@ const AddBank = (props) => {
                   ),
                 }}
                 disabled={isApiRunning}
-              /></span>
-              <span id='input-feild3'>
+              />
               <Input
                 label="Account Number"
                 class="input"
@@ -287,8 +285,7 @@ const AddBank = (props) => {
                 type="password"
                 id="account_number"
                 disabled={isApiRunning}
-              /></span>
-              <span id='input-feild4'>
+              />
               <Input
                 label="Confirm Account Number"
                 class="input"
@@ -300,7 +297,7 @@ const AddBank = (props) => {
                 type="text"
                 id="c_account_number"
                 disabled={isApiRunning}
-              /></span>
+              />
               <div className="input">
                 <DropdownWithoutIcon
                   error={form_data.account_type_error ? true : false}

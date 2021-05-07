@@ -145,11 +145,11 @@ const NRIAddressDetails2 = (props) => {
       current={4}
       count={4}
       total={4}
+      data-aid='Kyc-NRIAddressDetails-screen-2'
     >
-      <section id="kyc-address-details-2">
-        <div className="sub-title" id='sub-title'>Address as per {address_proof}</div>
-        <form className="form-container" id='form-container'>
-          <span id='TextField_1'>
+      <section id="kyc-address-details-2" data-aid='Kyc-address-details-container'>
+        <div className="sub-title">Address as per {address_proof}</div>
+        <form className="form-container" data-aid='Kyc-form-container'>
           <TextField
             label="Pincode"
             name="nri_pincode"
@@ -158,8 +158,7 @@ const NRIAddressDetails2 = (props) => {
             margin="normal"
             helperText={form_data.nri_pincode_error || ""}
             error={form_data.nri_pincode_error ? true : false}
-          /></span>
-          <span id='TextField_3'>
+          />
           <TextField
             label="Address"
             name="addressline"
@@ -170,8 +169,7 @@ const NRIAddressDetails2 = (props) => {
             onChange={handleChange}
             margin="normal"
             multiline
-          /></span>
-          <span id='TextField_3'>
+          />
           <TextField
             label="City"
             name="city"
@@ -181,8 +179,7 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.city_error ? true : false}
             margin="normal"
             onChange={handleChange}
-          /></span>
-          <span id='TextField_4'>
+          />
           <TextField
             label="State"
             name="state"
@@ -192,8 +189,7 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.state_error ? true : false}
             margin="normal"
             onChange={handleChange}
-          /></span>
-          <span id='TextField_5'>
+          />
           <TextField
             label="Country"
             name="country"
@@ -202,7 +198,7 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.country_error ? true : false}
             margin="normal"
             onChange={handleChange}
-          /></span>
+          />
         </form>
       </section>
     </Container>

@@ -118,10 +118,11 @@ const PersonalDetails2 = (props) => {
       count={2}
       current={2}
       total={3}
+      data-aid='kyc-personal-details-screen-2'
     >
-      <div className="kyc-personal-details">
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-container'>
         {!isLoading && (
-          <main id='main'>
+          <main  data-aid='kyc-personal-details'>
             <div className={`input ${isApiRunning && `disabled`}`}>
               <RadioWithoutIcon
                 error={form_data.marital_status_error ? true : false}
@@ -136,7 +137,6 @@ const PersonalDetails2 = (props) => {
                 disabled={isApiRunning}
               />
             </div>
-            <span id='input-feild1'>
             <Input
               label="Mother's name"
               class="input"
@@ -146,9 +146,8 @@ const PersonalDetails2 = (props) => {
               onChange={handleChange("mother_name")}
               type="text"
               disabled={isApiRunning}
-            /></span>
+            />
             {form_data.marital_status === "MARRIED" && (
-              <span id='input-feild2'>
               <Input
                 label="Spouse"
                 class="input"
@@ -158,7 +157,7 @@ const PersonalDetails2 = (props) => {
                 onChange={handleChange("spouse_name")}
                 type="text"
                 disabled={isApiRunning}
-              /></span>
+              />
             )}
           </main>
         )}

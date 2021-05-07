@@ -145,10 +145,11 @@ const PersonalDetails4 = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      data-aid='kyc-personal-details-screen-4'
     >
-      <div className="kyc-nominee">
-        <main id='main'>
-          <div className="nominee-checkbox" id='nominee-checkbox'>
+      <div className="kyc-nominee" data-aid='kyc-nominee-container'>
+        <main data-aid='kyc-nominee'>
+          <div className="nominee-checkbox" data-aid='nominee-checkbox'>
             <Checkbox
               defaultChecked
               checked={isChecked}
@@ -157,11 +158,10 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-            <span id='no-nominee-text'>
+            <span data-aid='no-nominee-text'>
               I do not wish to add a <b>nominee</b>
             </span>
           </div>
-          <span id='input-feild1'>
           <Input
             label="Name"
             class="input"
@@ -172,8 +172,7 @@ const PersonalDetails4 = (props) => {
             maxLength={20}
             type="text"
             disabled={isChecked || isApiRunning}
-          /></span>
-          <span id='input-feild1'>
+          />
           <Input
             label="Date of birth(DD/MM/YYYY)"
             class="input"
@@ -185,7 +184,7 @@ const PersonalDetails4 = (props) => {
             type="text"
             id="dob"
             disabled={isChecked || isApiRunning}
-          /></span>
+          />
           <div className="input">
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}

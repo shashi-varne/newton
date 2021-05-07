@@ -63,6 +63,7 @@ const BanksList = (props) => {
       }
       title="Bank accounts"
       type="outlined"
+      data-aid='kyc-add-other-bank-page'
     >
       <div className="banks-list">
         {banks.map((bank, index) => {

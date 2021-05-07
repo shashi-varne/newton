@@ -294,12 +294,12 @@ const Home = (props) => {
       showLoader={showLoader}
       handleClick={handleClick}
       title={homeData.title}
+      data-aid='kyc-home-screen'
     >
       {!isEmpty(homeData) && (
-        <div className="kyc-home">
-          <div className="kyc-main-subtitle" id='kyc-main-subtitle'>{homeData.subtitle}</div>
-          <main id='main'>
-            <span id='input-feild'>
+        <div className="kyc-home" data-aid='kyc-home-container'>
+          <div className="kyc-main-subtitle">{homeData.subtitle}</div>
+          <main data-aid='kyc-home'>
             <Input
               label="Enter PAN"
               class="input"
@@ -311,23 +311,23 @@ const Home = (props) => {
               type="text"
               disabled={showLoader}
               autoFocus
-            /></span>
-            <span id='alert_success'>
+            />
             {isStartKyc && isUserCompliant && (
               <Alert
                 variant="success"
                 message={renderData.success.subtitle}
                 title={renderData.success.title}
+                dataAid='alert_success'
               />
-            )}</span>
-            <span id='alert_failed'>
+            )}
             {isStartKyc && !isUserCompliant && (
               <Alert
                 variant="danger"
                 message={renderData.incomplete.subtitle}
                 title={renderData.incomplete.title}
+                dataAid='alert_failed'
               />
-            )}</span>
+            )}
           </main>
           <ResidentDialog
             open={openResident}

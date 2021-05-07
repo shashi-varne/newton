@@ -37,11 +37,11 @@ const getTitleList = ({ kyc }) => {
 const MessageComponent = (kyc) => {
   const [titleList, ] = useState(getTitleList(kyc))
   return (
-    <section className="pan-alert">
+    <section className="pan-alert" data-aid='Kyc-pan-alert'>
       {titleList.map((title, idx) => (
-        <div className="row" key={idx} id={`row_${idx + 1}`}>
-          <div className="order" id={`order_${idx + 1}`}>{idx + 1}.</div>
-          <div className="value" id={`value_${idx + 1}`}>{title}</div>
+        <div className="row" key={idx} data-aid={`row_${idx + 1}`}>
+          <div className="order" data-aid={`order_${idx + 1}`}>{idx + 1}.</div>
+          <div className="value" data-aid={`value_${idx + 1}`}>{title}</div>
         </div>
       ))}
     </section>
@@ -267,13 +267,14 @@ const NRIAddressUpload = (props) => {
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
+      data-aid='Kyc-Upload-foreign-address-proof-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-address">
+        <section idata-aid='Kyc-upload-address-container'>
           <div className="sub-title">
             {getFullAddress()}
             {getFullAddress() && (
-              <div className="edit" id='edit' onClick={editAddress}>
+              <div className="edit" data-aid='Kyc-edit' onClick={editAddress}>
                 EDIT
               </div>
             )}
@@ -284,7 +285,7 @@ const NRIAddressUpload = (props) => {
             renderMessage={() => <MessageComponent kyc={kyc} />}
           />
           {!isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='Kyc-doc-upload'>
               {frontDoc && state.frontFileShow && (
                 <img
                   src={state.frontFileShow}
@@ -294,13 +295,13 @@ const NRIAddressUpload = (props) => {
                 />
               )}
               {!frontDoc && (
-                <div className="caption" id='caption-text'>
+                <div className="caption" data-aid='Kyc-caption-text'>
                   Upload front side of {addressProof}
                 </div>
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
-                  <div className="open-camera" id='open-camera'>
+                  <div className="open-camera" data-aid='Kyc-open-camera'>
                     <input
                       ref={frontDocRef}
                       type="file"
@@ -313,7 +314,7 @@ const NRIAddressUpload = (props) => {
                       data-click-type="camera-front"
                       onClick={handleUpload('open_camera','front')}
                       className="kyc-upload-button"
-                      id="kyc-upload-button"
+                      data-aid='Kyc-upload-button'
                     >
                       {!frontDoc && (
                         <svg
@@ -328,10 +329,10 @@ const NRIAddressUpload = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" id='open-camera-text'>open camera</div>
+                      <div className="upload-action" data-aid='Kyc-open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery" id='open-gallery'>
+                  <div className="open-gallery" data-aid='Kyc-open-gallery'>
                     <input
                       ref={frontDocRef}
                       type="file"
@@ -341,7 +342,7 @@ const NRIAddressUpload = (props) => {
                     <button
                       onClick={handleUpload('open_gallery','front')}
                       className="kyc-upload-button"
-                      id='kyc-upload-button'
+                      data-aid='Kyc-upload-button'
                     >
                       {!frontDoc && (
                         <svg
@@ -356,7 +357,7 @@ const NRIAddressUpload = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
+                      <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -364,7 +365,7 @@ const NRIAddressUpload = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='Kyc-doc-upload'>
               {frontDoc && state.frontFileShow && (
                 <img
                   src={state.frontFileShow}
@@ -374,7 +375,7 @@ const NRIAddressUpload = (props) => {
                 />
               )}
               {!frontDoc && (
-                <div className="caption" id='caption-text'>
+                <div className="caption" data-aid='Kyc-caption-text'>
                   Upload front side of {addressProof}
                 </div>
               )}
@@ -388,7 +389,7 @@ const NRIAddressUpload = (props) => {
                 <button
                   onClick={handleUpload('open_gallery','front')}
                   className="kyc-upload-button"
-                  id="kyc-upload-button"
+                  data-aid='Kyc-upload-button'
                 >
                   {!frontDoc && (
                     <svg
@@ -403,13 +404,13 @@ const NRIAddressUpload = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
+                  <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>
           )}
           {!isWeb && !onlyFrontDocRequired && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='Kyc-doc-upload'>
               {backDoc && state.backFileShow && (
                 <img
                   src={state.backFileShow}
@@ -425,7 +426,7 @@ const NRIAddressUpload = (props) => {
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
-                  <div className="open-camera" id='open-camera'>
+                  <div className="open-camera" data-aid='Kyc-open-camera'>
                     <input
                       ref={backDocRef}
                       type="file"
@@ -438,7 +439,7 @@ const NRIAddressUpload = (props) => {
                       data-click-type="camera-front"
                       onClick={handleUpload('open_camera','back')}
                       className="kyc-upload-button"
-                      id="kyc-upload-button"
+                      data-aid='Kyc-upload-button'
                     >
                       {!backDoc && (
                         <svg
@@ -453,10 +454,10 @@ const NRIAddressUpload = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" id='open-camera-text'>open camera</div>
+                      <div className="upload-action" data-aid='Kyc-open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery" id='open-gallery'>
+                  <div className="open-gallery" data-aid='Kyc-open-gallery'>
                     <input
                       ref={backDocRef}
                       type="file"
@@ -466,7 +467,7 @@ const NRIAddressUpload = (props) => {
                     <button
                       onClick={handleUpload('open_gallery','back')}
                       className="kyc-upload-button"
-                      id="kyc-upload-button"
+                      data-aid='Kyc-upload-button'
                     >
                       {!backDoc && (
                         <svg
@@ -481,7 +482,7 @@ const NRIAddressUpload = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" id='open-gallery-text'>Open Gallery</div>
+                      <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -499,7 +500,7 @@ const NRIAddressUpload = (props) => {
                 />
               )}
               {!backDoc && (
-                <div className="caption" id='caption-text'>
+                <div className="caption" data-aid='Kyc-caption-text'>
                   Upload back side of {addressProof}
                 </div>
               )}
@@ -513,7 +514,7 @@ const NRIAddressUpload = (props) => {
                 <button
                   onClick={handleUpload('open_gallery','back')}
                   className="kyc-upload-button"
-                  id="kyc-upload-button"
+                  data-aid='Kyc-upload-button'
                 >
                   {!backDoc && (
                     <svg
@@ -528,7 +529,7 @@ const NRIAddressUpload = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action" id='open-gallery'>Open Gallery</div>
+                  <div className="upload-action" data-aid='Kyc-open-gallery'>Open Gallery</div>
                 </button>
               </div>
             </div>

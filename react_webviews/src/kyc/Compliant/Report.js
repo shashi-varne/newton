@@ -61,18 +61,18 @@ const CompliantReport = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.pan.meta_data.name}</div>
-        <div className="unzipped-box">
-          <div className="title" id='Email-text'>Email</div>
-          <div className="subtitle" id='email-id'>{kyc.identification.meta_data.email}</div>
+        <div className="unzipped-title" data-aid='unzipped-title'>{kyc.pan.meta_data.name}</div>
+        <div className="unzipped-box" data-aid='Email'>
+          <div className="title">Email</div>
+          <div className="subtitle">{kyc.identification.meta_data.email}</div>
         </div>
-        <div className="unzipped-box">
-          <div className="title" id='Dob-text'>Dob</div>
-          <div className="subtitle" id='dob'>{kyc.pan.meta_data.dob}</div>
+        <div className="unzipped-box" data-aid='Dob'>
+          <div className="title">Dob</div>
+          <div className="subtitle">{kyc.pan.meta_data.dob}</div>
         </div>
-        <div className="unzipped-box">
-          <div className="title" id='Mobile-text'>Mobile</div>
-          <div className="subtitle" id='mobile_number'>
+        <div className="unzipped-box" data-aid='mobile_number'>
+          <div className="title">Mobile</div>
+          <div className="subtitle">
             {kyc.identification.meta_data.mobile_number}
           </div>
         </div>
@@ -84,9 +84,9 @@ const CompliantReport = (props) => {
     return (
       <>
         {is_nri && (
-          <div className="unzipped-box">
-            <div className="title" id='address_proof_nri'>Foreign Address</div>
-            <div className="subtitle" id='address_nri'>
+          <div className="unzipped-box" data-aid='address_proof_nri'>
+            <div className="title">Foreign Address</div>
+            <div className="subtitle">
               {kyc.nri_address.meta_data.addressline},
               {kyc.nri_address.meta_data.city},{kyc.nri_address.meta_data.state}
               ,{kyc.nri_address.meta_data.country},
@@ -103,16 +103,16 @@ const CompliantReport = (props) => {
       <>
         <div className="unzipped-title">{kyc.nomination.meta_data.name}</div>
         <div className="row-align">
-          <div className="unzipped-box">
-            <div className="title" id='Relationship-text'>Relationship</div>
-            <div className="subtitle" id='relationship'>
+          <div className="unzipped-box" data-aid='relationship'>
+            <div className="title">Relationship</div>
+            <div className="subtitle">
               {kyc.nomination.meta_data.relationship}
             </div>
           </div>
 
-          <div className="unzipped-box">
-            <div className="title" id='Dob-text'>Dob</div>
-            <div className="subtitle" id='dob'>{kyc.nomination.meta_data.dob}</div>
+          <div className="unzipped-box" data-aid='dob'>
+            <div className="title">Dob</div>
+            <div className="subtitle">{kyc.nomination.meta_data.dob}</div>
           </div>
         </div>
       </>
@@ -123,13 +123,13 @@ const CompliantReport = (props) => {
     return (
       <>
         <div className="unzipped-title">{kyc.bank.meta_data.bank_name}</div>
-        <div className="unzipped-box">
-          <div className="title" id='a/c-number'>A/C number</div>
-          <div className="subtitle" id='account_number'>{kyc.bank.meta_data.account_number}</div>
+        <div className="unzipped-box" data-aid='account_number'>
+          <div className="title">A/C number</div>
+          <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
         </div>
-        <div className="unzipped-box">
-          <div className="title" id='IFSC-text'>IFSC</div>
-          <div className="subtitle" id='ifsc_code'>{kyc.bank.meta_data.ifsc_code}</div>
+        <div className="unzipped-box" data-aid='ifsc_code'>
+          <div className="title">IFSC</div>
+          <div className="subtitle">{kyc.bank.meta_data.ifsc_code}</div>
         </div>
       </>
     );
@@ -152,7 +152,7 @@ const CompliantReport = (props) => {
 
   return (
     <Container id="kyc-home" noFooter={true} title={topTitle}>
-      <div className="kyc-report">
+      <div className="kyc-report" data-aid='kyc-report'>
         <main>
           <section>
             {cardDetails &&
@@ -175,7 +175,7 @@ const CompliantReport = (props) => {
                       />
                     </div>
                     {openIndex === index && (
-                      <div className="unzipped" id='unzipped'>{renderCards(item.key)}</div>
+                      <div className="unzipped" data-aid='unzipped'>{renderCards(item.key)}</div>
                     )}
                   </div>
                 );

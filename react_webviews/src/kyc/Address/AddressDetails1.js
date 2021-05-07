@@ -155,9 +155,10 @@ const AddressDetails1 = (props) => {
       current={1}
       count={1}
       total={getTotalPages(form_data.residential_status)}
+      data-aid='Kyc-address-details-1'
     >
-      <div className="kyc-personal-details kyc-address-details">
-        <main>
+      <div className="kyc-personal-details kyc-address-details" data-aid='Kyc-address-details-container'>
+        <main data-aid='Kyc-address-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.residential_status_error ? true : false}
@@ -172,8 +173,8 @@ const AddressDetails1 = (props) => {
               disabled={isApiRunning}
             />
           </div>
-          <div className="input">
-            <div className="address-label" id='address-label'>Address proof:</div>
+          <div className="input" data-aid='Kyc-address-proof'>
+            <div className="address-label">Address proof:</div>
             <div className="address-proof">
               {addressProofOptions.map((data, index) => {
                 const selected = form_data.address_doc_type === data.value;
@@ -181,7 +182,7 @@ const AddressDetails1 = (props) => {
                   form_data.residential_status === "NRI" || isApiRunning;
                 return (
                   <span
-                    id={`address-proof_${index+1}`}
+                    data-aid={`kyc-address-proof_${index+1}`}
                     key={index}
                     className={`address-proof-option ${
                       selected && `selected`
@@ -209,7 +210,7 @@ const AddressDetails1 = (props) => {
                 );
               })}
               {form_data.address_doc_type_error && (
-                <div className="helper-text">
+                <div className="helper-text" data-aid='Kyc-helper-text'>
                   {form_data.address_doc_type_error}
                 </div>
               )}
