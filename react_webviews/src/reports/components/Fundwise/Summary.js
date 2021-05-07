@@ -105,7 +105,6 @@ const FundswiseSummary = (props) => {
                     <div className="content">
                       <h5>
                         {formatAmountInr(fund.current)}
-                        {fund.current === 0 && 0}
                       </h5>
                       <div>Current Value</div>
                     </div>
@@ -124,7 +123,6 @@ const FundswiseSummary = (props) => {
                     <div className="content">
                       <h5>
                         {formatAmountInr(fund.current_invested)}
-                        {fund.current_invested === 0 && 0}
                       </h5>
                       <div>Invested Cost</div>
                     </div>

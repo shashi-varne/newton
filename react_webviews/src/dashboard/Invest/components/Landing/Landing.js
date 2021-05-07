@@ -14,6 +14,7 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 
+const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,8 @@ class Landing extends Component {
       openKycPremiumLanding: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      isWeb: getConfig().Web
+      isWeb: getConfig().Web,
+      stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -118,6 +120,7 @@ class Landing extends Component {
       openKycStatusDialog,
       modalData,
       openKycPremiumLanding,
+      stateParams,
     } = this.state;
     const {
       ourRecommendations,
@@ -133,7 +136,7 @@ class Landing extends Component {
         noFooter={true}
         title="Start Investing"
         showLoader={this.state.show_loader}
-        noBackIcon={true}
+        noBackIcon={fromLoginStates.includes(stateParams.fromState)}
       >
         <div className="invest-landing">
           {
