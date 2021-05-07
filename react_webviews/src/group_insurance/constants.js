@@ -789,11 +789,11 @@ export function getCssMapperReport(policy) {
   let obj = {};
   let policy_status = policy.status;
 
-  var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending'];
+  var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted'];
   var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
 
   var backgroundColor = "";
-  if(issued_statuses.indexOf(policy_status) > -1){
+  if(issued_statuses.indexOf(policy_status.toLowerCase()) > -1){
     backgroundColor = "#F5FBED"
   }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
     backgroundColor = "#FFFDF2"
@@ -894,4 +894,31 @@ export function ProviderName(name) {
 
   return ProviderName[NameData] ? ProviderName[NameData] : NameData
 
+}
+
+export function reportsfrequencyMapper(key, frequency, product_key){
+  var freqMapper = {
+    'monthly': '/mth', 
+    'yearly': '/yr', 
+    'annually':'/yr',
+    'quarterly': '/qr', 
+    'quaterly': '/qr',
+    'half yearly': '/HY',
+    'half-yearly': '/HY',
+    'at once': '', 
+    'single': ''
+  } 
+  if((['hdfc_ergo', 'star', 'religare' ].indexOf(key) > -1 || key === "BHARTIAXA") && product_key !== 'offline_insurance'){
+    return '/yr'
+  }else if(key === 'care_plus' && frequency){
+    return frequency.toLowerCase() === 'monthly' ? '/mth' : '/yr'
+  }else if((key === 'FYNTUNE' && frequency) || product_key === 'offline_insurance'){
+     return freqMapper[frequency.toLowerCase()]
+  }
+}
+
+export var reportTopTextMapper = {
+  'activeReports' : 'Issued policies for which claim can be made',
+  'pendingReports': 'Applications under process with insurance company', 
+  'inactiveReports': 'Expired, rejected and cancelled policies for which claim cannot be made'
 }

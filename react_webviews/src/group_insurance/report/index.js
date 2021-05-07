@@ -6,12 +6,20 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { getDateBreakup, capitalizeFirstLetter } from 'utils/validators';
 import {
-  inrFormatDecimalWithoutIcon , inrFormatDecimal, isEmpty
+  inrFormatDecimalWithoutIcon , inrFormatDecimal, isEmpty, sortArrayOfObjectsByTime
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-import { getCssMapperReport , TitleMaper , ProviderName, productNameMapper} from '../constants';
-import ReportCard from '../../common/ui/ReportCard';
+import { getCssMapperReport , TitleMaper , ProviderName, reportTopTextMapper} from '../constants';
+import DetailsCard from '../../common/ui/DetailsCard';
 import { Fragment } from 'react';
+import {filterReportData, getReportCardsData, setReportData, getProviderObject, getProviderObject_offline} from '../products/group_health/common_data';
+
+var healthkeyMapper = {
+  'hdfc_ergo': 'HDFCERGO',
+   'religare': 'RELIGARE', 
+   'star': 'STAR', 
+   'care_plus': 'GMC'
+}
 
 class Report extends Component {
 
@@ -22,12 +30,14 @@ class Report extends Component {
       reportData: [],
       productName: getConfig().productName,
     };
-
-    this.renderReportCards = this.renderReportCards.bind(this);
+    this.getReportCardsData = getReportCardsData.bind(this);
+    this.setReportData = setReportData.bind(this);
+    this.getProviderObject = getProviderObject.bind(this);
+    this.getProviderObject_offline = getProviderObject_offline.bind(this);
   }
 
 
-  navigate = (pathname, provider, base_plan_title) => {
+  navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams,
@@ -37,223 +47,6 @@ class Report extends Component {
     });
   }
 
-  getProviderObject = (policy) => {
-    let provider = policy.vendor || policy.provider;
-    let obj = policy;
-    let formatted_valid_from = ''
-    obj.key = provider;
-
-    if(['hdfc_ergo','star','religare'].indexOf(provider) !== -1 ){
-      let valid_from = obj.valid_from ? getDateBreakup(obj.valid_from): '';
-      let formatted_day = valid_from && valid_from.plainDate.toString().length === 1 ? '0'+valid_from.plainDate : valid_from.plainDate ;
-      formatted_valid_from = formatted_day +' '+ valid_from.month +' '+ valid_from.year;
-    }
-    
-    if (provider === 'hdfc_ergo') {
-      obj = {
-        ...obj,
-        product_name: policy.base_plan_title + ' ' + policy.product_title,
-        top_title: 'Health insurance',
-        key: policy.vendor,
-        id: policy.application_id,
-        premium: Math.round(policy.total_amount),
-        provider: policy.vendor,
-        valid_from: formatted_valid_from
-      };
-    }else if( provider === 'FYNTUNE'){
-      obj = {
-        ...obj,
-        product_name: policy.base_plan_title,
-        top_title: 'Life Insurance',
-        key: 'FYNTUNE',
-        id: policy.fyntune_ref_id, 
-        premium: policy.total_amount,
-        frequency: policy.frequency ? policy.frequency.toLowerCase() : 'annually'
-      };
-    } else if (provider === 'care_plus') {
-      obj = {
-        ...obj,
-        product_name: policy.product_title,
-        top_title: 'Health insurance',
-        key: policy.vendor,
-        id: policy.application_id,
-        premium: Math.round(policy.total_amount),
-        provider: policy.vendor,
-        valid_from: formatted_valid_from
-      };
-    } else if (provider === 'religare') {
-      obj = {
-        ...obj,
-        product_name: policy.base_plan_title + ' ' + policy.product_title,
-        top_title: 'Health insurance',
-        key: policy.vendor,
-        id: policy.application_id,
-        premium: Math.round(policy.total_amount),
-        provider: policy.vendor,
-        valid_from: formatted_valid_from
-      };
-    }  else if (provider === 'star') {
-      obj = {
-        ...obj,
-        product_name: policy.base_plan_title + ' ' + policy.product_title,
-        top_title: 'Health insurance',
-        key: policy.vendor,
-        id: policy.application_id,
-        premium: Math.round(policy.total_amount),
-        provider: policy.vendor,
-        valid_from: formatted_valid_from
-      };
-    }  else if (provider === 'BHARTIAXA') {
-      obj = {
-        ...obj,
-        // product_name: policy.product_title,
-        product_name: 'Bharti AXA General Insurances',
-        top_title: policy.product_title,
-        product_key: policy.product_name,
-        id: policy.policy_id
-      }
-    } else if (provider === 'EDELWEISS') {
-      obj = {
-        ...obj,
-        product_name: 'Term insurance (Edelweiss tokio life zindagi plus)',
-        top_title: 'Term insurance',
-        id: policy.policy_id
-      }
-    }
-
-    var product_category_key = provider === 'BHARTIAXA' ? obj.product_key: obj.key;
-    obj['product_category'] = productNameMapper(product_category_key)
-
-    let data = getCssMapperReport(obj);
-    obj.status = data.status;
-    obj.cssMapper = data.cssMapper;
-
-    return obj;
-  }
-
-  getProviderObject_offline(o2o_details){
-    let obj = o2o_details;
-    obj.key = 'insurance';
-    let top_title  = TitleMaper(o2o_details.policy_type)
-    obj.top_title = top_title
-    obj.sum_assured = o2o_details.cover_amount
-    let data = getCssMapperReport(obj);
-    obj.premium = o2o_details.total_amount;
-    obj.status = data.status;
-    obj.cssMapper = data.cssMapper;
-    obj.product_key = 'offline_insurance' 
-    return obj;
-  }
-  
-  filterReportData = (reportData) =>{
-    var activeReports = [], pendingReports = [], inactiveReports = [];
-    var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending'];
-    var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
-
-    reportData.forEach(report =>{
-      let policy_status = report.status;
-      if(issued_statuses.indexOf(policy_status) > -1){
-        activeReports.push(report)
-      }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
-        pendingReports.push(report)
-      }else{
-        inactiveReports.push(report)
-      }
-    })
-    return {activeReports, pendingReports, inactiveReports};
-  }
-
-  setReportData(termData, group_insurance_policies, health_insurance_policies  , o2o_applications ) {
-    let canShowReport = false;
-    let application;
-    let pathname = ''
-
-    if (!termData.error) {
-      canShowReport = true;
-      let insurance_apps = termData.insurance_apps;
-      if (insurance_apps.complete.length > 0) {
-        canShowReport = true;
-        application = insurance_apps.complete[0];
-
-        pathname = 'report';
-      } else if (insurance_apps.failed.length > 0) {
-        canShowReport = true;
-        application = insurance_apps.failed[0];
-        pathname = 'report';
-      } else if (insurance_apps.init.length > 0) {
-        canShowReport = true;
-        application = insurance_apps.init[0];
-        pathname = 'journey';
-      } else if (insurance_apps.submitted.length > 0) {
-        canShowReport = true;
-        application = insurance_apps.submitted[0];
-        pathname = 'journey';
-      } else {
-        // intro
-        pathname = 'intro';
-      }
-
-    } 
-
-    let fullPath = '/group-insurance/term/' + pathname;
-
-    let reportData = [];
-
-    if (canShowReport && application) {
-      let termReport = {
-        status: application.status,
-        product_name: application.quote.insurance_title,
-        sum_assured: application.quote.sum_assured,
-        premium: application.quote.quote_json.premium,
-        key: 'TERM_INSURANCE',
-        id: application.id
-      }
-
-      if (!termReport.product_name) {
-        termReport.product_name = application.quote.quote_provider + ' ' + application.quote.quote_json.cover_plan;
-      }
-
-      let data = getCssMapperReport(termReport);
-      termReport.status = data.status;
-      termReport.cssMapper = data.cssMapper;
-
-      reportData.push(termReport)
-    }
-
-
-    let hs_policies = health_insurance_policies.insurance_apps || [];
-    for (let i = 0; i < hs_policies.length; i++) {
-      let policy = this.getProviderObject(hs_policies[i]);
-      reportData.push(policy);
-    } 
-
-    let ins_policies = group_insurance_policies.ins_policies || [];
-    for (let i = 0; i < ins_policies.length; i++) {
-      let policy = this.getProviderObject(ins_policies[i]);
-      reportData.push(policy);
-    }
-
-    let o2o_details = o2o_applications || []; 
-    for(let i = 0; i< o2o_details.length; i++){
-      let policy = this.getProviderObject_offline(o2o_details[i]);
-      reportData.push(policy);
-    }
-    
-    var filteredReportData = this.filterReportData(reportData);
-    var selectedReports = filteredReportData.activeReports;
-    this.setState({
-      reportData,
-      selectedTab: 'activeReports',
-      reportCount: {
-        active: filteredReportData.activeReports.length,
-        pending: filteredReportData.pendingReports.length,
-        inactive: filteredReportData.inactiveReports.length
-      },
-      selectedReports : selectedReports,
-      filteredReportData,
-      termRedirectionPath: fullPath
-    })
-  }
   setErrorData = (type) => {
 
     this.setState({
@@ -288,58 +81,8 @@ class Report extends Component {
     this.onload();
   }
 
-  onload = async() =>{
-    let error = '';
-    let errorType = '';
-    this.setErrorData('onload');
-    try {
-
-      let res = await Api.get('api/ins_service/api/insurance/get/report');
-
-      
-      if (res.pfwresponse.status_code === 200) {
-
-        var policyData = res.pfwresponse.result.response;
-        var next_page = policyData.group_insurance.next_page;
-        var has_more = policyData.group_insurance.more;
-
-        this.setState({
-          nextPage: (has_more) ? next_page : ''
-        })
-
-        let o2o_applications = policyData.o2o_applications;          
-        // this.setReportData(policyData.term_insurance, ins_policies, o2o_applications);
-        let group_insurance_policies = policyData.group_insurance || {};
-        let health_insurance_policies = policyData.health_insurance || {};
-        let term_insurance_policies = policyData.term_insurance || {};
-        this.setState({
-          skelton: false
-        })
-        this.setReportData(term_insurance_policies, group_insurance_policies, health_insurance_policies , o2o_applications);
-      } else {
-        error=res.pfwresponse.result.error || res.pfwresponse.result.message
-          || true;
-        // this.setState({ nextPage: ''})
-      }
-
-    } catch (err) {
-      console.log(err)
-      this.setState({
-        skelton: false
-      });
-      error=true;
-    }
-    if(error) {
-      this.setState({
-        errorData: {
-          ...this.state.errorData,
-          title2: error,
-          type: errorType
-        },
-        showError:'page'
-      })
-    }
-    window.addEventListener("scroll", this.onScroll, false);
+  onload = () =>{
+    this.getReportCardsData();
   }
 
   componentWillUnmount() {
@@ -350,103 +93,93 @@ class Report extends Component {
     nativeCallback({ action: 'take_control_reset' });
   }
 
-  redirectCards(policy) {
+  redirectCards = (policy) => {
     let policy_type = policy.policy_type ? policy.policy_type : ''
     this.sendEvents('next', policy.key, policy_type , policy);
     let path = '';
     let key = policy.key;
+    console.log(policy)
 
-    if (key === 'TERM_INSURANCE') {
-      if (this.state.termRedirectionPath) {
-        path = this.state.termRedirectionPath;
-      }
-    } else if (['HDFCERGO', 'RELIGARE', 'STAR', 'GMC'].indexOf(key) !== -1) {
-      path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
-    } else if(key === 'insurance'){
+    if(policy.product_key === 'offline_insurance'){
       path = `/group-insurance/group-health/offline-to-online-report-details/${policy.id}`;
-    } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star', 'care_plus'].indexOf(key) !== -1) {
-      if(key === 'hdfc_ergo'){
-        key = 'HDFCERGO';
-      }else if(key === 'star'){
-        key = 'STAR';
-      }else if(key === 'religare'){
-        key = 'RELIGARE';
-      }else if(key === 'care_plus'){
-        key = 'GMC';
-      }
+    }else if (key === 'TERM_INSURANCE' && this.state.termRedirectionPath) {
+        path = this.state.termRedirectionPath;
+    }else if (['hdfc_ergo','religare','star','care_plus'].indexOf(key) > -1) {
+      key = healthkeyMapper[key];
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;    
     }else if(key === 'FYNTUNE'){
       path =`/group-insurance/life-insurance/savings-plan/report-details/${policy.id}`;
     }else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
-    this.navigate(path, policy.provider);
+    console.log(path)
+    // this.navigate(path);
   }
 
-  renderReportCards(props, index) {
-    let health_providers = ['hdfc_ergo', 'religare', 'star', 'care_plus'];
-    return (
-      <div className="group-insurance-report card"
-        onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }}>
+  // renderReportCards(props, index) {
+  //   let health_providers = ['hdfc_ergo', 'religare', 'star', 'care_plus'];
+  //   return (
+  //     <div className="group-insurance-report card"
+  //       onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }}>
 
-        <div className="top-title">{props.top_title}</div>
-        <div className={`report-color-state ${(props.cssMapper.color)}`}>
-          <div className="circle" style={{ backgroundColor: props.cssMapper.color}}></div>
-          <div className="report-color-state-title" style={{ color: props.cssMapper.color}}>{(props.cssMapper.disc)}</div>
-        </div>
+  //       <div className="top-title">{props.top_title}</div>
+  //       <div className={`report-color-state ${(props.cssMapper.color)}`}>
+  //         <div className="circle" style={{ backgroundColor: props.cssMapper.color}}></div>
+  //         <div className="report-color-state-title" style={{ color: props.cssMapper.color}}>{(props.cssMapper.disc)}</div>
+  //       </div>
 
-        <div className="flex">
-          <div>
-            <img style={{ width: 50 }} src={props.logo} alt="" />
-          </div>
+  //       <div className="flex">
+  //         <div>
+  //           <img style={{ width: 50 }} src={props.logo} alt="" />
+  //         </div>
 
-          <div style={{ margin: '0 0 0 20px' }}>
-            <div className="report-ins-name">{props.product_name}</div>
-            {props.provider !== 'EDELWEISS' && health_providers.indexOf(props.provider) === -1 &&
-              <div className="report-cover">
-                <div className="report-cover-amount"><span className="sub-text-bold">Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
-                  {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
-                </div>
-                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span className="sub-text-bold">Premium:</span> {inrFormatDecimal(props.premium)}
-                {props.key !== 'TERM_INSURANCE' ? ` ${props.frequency}`: ''}
-                </div>}
-                {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span className="sub-text-bold">Premium:</span> {inrFormatDecimal(props.premium)}
-                  {props.key !== 'TERM_INSURANCE' && props.frequency !== 'Single' &&
-                  <span style={{textTransform : "lowercase", fontWeight : 'normal'}}> {props.frequency}</span>
-                  }
-                   {props.key !== 'TERM_INSURANCE' && props.frequency === 'Single' &&
-                  <span style={{textTransform : "lowercase", fontWeight : 'normal'}}> (One Time Payment)</span>
-                  }
-                </div>}
-                {props.product_key === 'CORONA' &&
-                  <div className="report-cover-amount"><span className="sub-text-bold">Cover Peroid:</span> {props.tenure} year</div>
-                }
-              </div>
-            }
-            {props.provider === 'EDELWEISS' &&
-              <div className="report-cover">
-                <div className="report-cover-amount"><span className="sub-text-bold">Transaction ID:</span> {props.transaction_id}
-                </div>
-              </div>
-            }
+  //         <div style={{ margin: '0 0 0 20px' }}>
+  //           <div className="report-ins-name">{props.product_name}</div>
+  //           {props.provider !== 'EDELWEISS' && health_providers.indexOf(props.provider) === -1 &&
+  //             <div className="report-cover">
+  //               <div className="report-cover-amount"><span className="sub-text-bold">Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
+  //                 {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
+  //               </div>
+  //               {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span className="sub-text-bold">Premium:</span> {inrFormatDecimal(props.premium)}
+  //               {props.key !== 'TERM_INSURANCE' ? ` ${props.frequency}`: ''}
+  //               </div>}
+  //               {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span className="sub-text-bold">Premium:</span> {inrFormatDecimal(props.premium)}
+  //                 {props.key !== 'TERM_INSURANCE' && props.frequency !== 'Single' &&
+  //                 <span style={{textTransform : "lowercase", fontWeight : 'normal'}}> {props.frequency}</span>
+  //                 }
+  //                  {props.key !== 'TERM_INSURANCE' && props.frequency === 'Single' &&
+  //                 <span style={{textTransform : "lowercase", fontWeight : 'normal'}}> (One Time Payment)</span>
+  //                 }
+  //               </div>}
+  //               {props.product_key === 'CORONA' &&
+  //                 <div className="report-cover-amount"><span className="sub-text-bold">Cover Peroid:</span> {props.tenure} year</div>
+  //               }
+  //             </div>
+  //           }
+  //           {props.provider === 'EDELWEISS' &&
+  //             <div className="report-cover">
+  //               <div className="report-cover-amount"><span className="sub-text-bold">Transaction ID:</span> {props.transaction_id}
+  //               </div>
+  //             </div>
+  //           }
 
-            {health_providers.indexOf(props.provider) !== -1 &&
-              <div className="report-cover">
-                <div className="report-cover-amount"><span className="sub-text-bold">Sum insured:</span>
-                    ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
-                </div>
-                <div className="report-cover-amount" style={{marginTop: '-8px'}}>
-                  {props.provider !== 'care_plus' ? 
-                  <p><span className="sub-text-bold">Premium: </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year{props.tenure > 1 && (<span>s</span>)}</p>
-                  : <p><span className="sub-text-bold">Premium: </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} {props.payment_frequency === 'Yearly' ? 'annually' : 'monthly'}</p>}
-                  </div>
-              </div>
-            }
-          </div>
-        </div>
-      </div>
-    )
-  }
+  //           {health_providers.indexOf(props.provider) !== -1 &&
+  //             <div className="report-cover">
+  //               <div className="report-cover-amount"><span className="sub-text-bold">Sum insured:</span>
+  //                   ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
+  //               </div>
+  //               <div className="report-cover-amount" style={{marginTop: '-8px'}}>
+  //                 {props.provider !== 'care_plus' ? 
+  //                 <p><span className="sub-text-bold">Premium: </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year{props.tenure > 1 && (<span>s</span>)}</p>
+  //                 : <p><span className="sub-text-bold">Premium: </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} {props.payment_frequency === 'Yearly' ? 'annually' : 'monthly'}</p>}
+  //                 </div>
+  //             </div>
+  //           }
+  //         </div>
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   loadMore = async () => {
     try {
@@ -543,7 +276,8 @@ class Report extends Component {
       })
       var filteredReportData = this.state.filteredReportData;
       var selectedReports = filteredReportData[selectedTab]
-      this.setState({selectedReports, selectedTab})
+      var reportTopText = reportTopTextMapper[selectedTab];
+      this.setState({selectedReports, selectedTab, reportTopText })
     }
   }
 
@@ -568,10 +302,16 @@ class Report extends Component {
           </ul>
       
           <div className="insurance-cards-container">
-            {this.state.selectedReports && this.state.selectedReports.length > 0 ? 
-              this.state.selectedReports.map((report, index) =>(
-                  <ReportCard report={report}/>
-              )): (
+            
+            {this.state.selectedReports && this.state.selectedReports.length > 0 ?
+
+              <div>
+                <p className="report-top-text">{this.state.reportTopText}</p>
+              {this.state.selectedReports.map((report, index) =>(
+                  <DetailsCard key={index} handleClick={this.redirectCards} item={report}/>
+              ))}
+              </div>
+              : (
                 <Fragment>
                 <img className="inactive-policy-background" src={require(`assets/${this.state.productName}/inactive-policy-background.svg`)}/>
                 <p className="empty-state-text"> {this.state.selectedTab === 'activeReports'? 'No active policy': 'No pending application'} </p>

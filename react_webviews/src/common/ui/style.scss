@@ -1261,7 +1261,7 @@ label{
 padding-right: 12px !important;
 }
 
-.report-card-container{
+.details-card-container{
   padding: 20px 20px 20px 20px;
   background-color: rgb(231, 248, 236);
   border-radius: 6px;
@@ -1292,7 +1292,7 @@ padding-right: 12px !important;
         text-transform: uppercase;
       }
     }
-    .product-category{
+    .status-bar-right{
       text-transform: uppercase;
       font-size: 8px;
       color: #AD95D6;
@@ -1347,6 +1347,9 @@ padding-right: 12px !important;
     }
     .info-subtitle{
       font-size: 13px;
+    }
+    .capitalize{
+      text-transform: capitalize;
     }
   }
   .card-info-one:last-child{

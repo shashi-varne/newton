@@ -11,6 +11,7 @@ import { setRecommendationData } from '../advisory/common_data'
 import '../common/Style.scss'
 import { isEmpty } from 'utils/validators';
 import Button from 'material-ui/Button';
+import {setReportData, getReportCardsData, getProviderObject, getProviderObject_offline} from '../products/group_health/common_data';
 
 class Landing extends Component {
 
@@ -26,6 +27,10 @@ class Landing extends Component {
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
+    this.getReportCardsData = getReportCardsData.bind(this);
+    this.setReportData = setReportData.bind(this);
+    this.getProviderObject = getProviderObject.bind(this);
+    this.getProviderObject_offline = getProviderObject_offline.bind(this);
   }
 
   componentWillMount() {
@@ -117,11 +122,6 @@ class Landing extends Component {
         var resultData = res.pfwresponse.result;
 
         if (res.pfwresponse.status_code === 200) {
-
-          this.setState({
-            skelton: false,
-          })
-          
           var advisory_resume_present = resultData.resume_present;
           var advisory_resume_status = resultData.insurance_advisory.status;
           var advisory_id = resultData.insurance_advisory.id;
@@ -149,6 +149,25 @@ class Landing extends Component {
             next_advisory_page: next_advisory_page, 
             advisory_id: advisory_id
           })
+          await this.getReportCardsData();
+          var filteredReportData = this.state.filteredReportData;
+          var showCustomReportCardText = false;
+          var customReportCardText = '';
+          
+          if(!isEmpty(filteredReportData.activeReports)){
+            showCustomReportCardText = true;
+            customReportCardText = filteredReportData.activeReports[0].product_category;
+          }else if(!isEmpty(filteredReportData.pendingReports)){
+            showCustomReportCardText = true;
+            customReportCardText = filteredReportData.pendingReports[0].product_category;
+          }
+          
+          if((this.state.reportCount.active + this.state.reportCount.pending) > 1){
+            var noOfReports = this.state.reportCount.active + this.state.reportCount.pending;
+            this.setState({noOfReports})
+          }
+          
+          this.setState({customReportCardText, showCustomReportCardText})
         } else {
           error = resultData.error || resultData.message || true;
       }
@@ -298,7 +317,7 @@ class Landing extends Component {
               <img alt="inactive-policy-card" src={require(`assets/${this.state.type}/policy_icon.svg`)} />
               <div className="inactive-right">
                 <p className="inactive-title">Your policies</p>
-                <p className="inactive-subtitle">Looks like you have zero coverage</p>
+                <p className="inactive-subtitle">{this.state.showCustomReportCardText ? `${this.state.customReportCardText} ${this.state.noOfReports > 1   ? '+' + this.state.noOfReports + ' more': '' }` :'Looks like you have zero coverage'}</p>
               </div>
             </div>
             <div className="advisory-entry-container" onClick={(e)=>this.goToAdvisory(e)}>  
