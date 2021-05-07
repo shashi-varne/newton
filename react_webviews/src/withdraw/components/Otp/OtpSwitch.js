@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import Input from 'common/ui/Input'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '../../common/Container'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import toast from 'common/ui/Toast'
 import { navigate as navigateFunc } from '../../common/commonFunction'
-import Button from '@material-ui/core/Button'
+import Button from 'common/ui/Button'
 
 import './OtpSwitch.scss';
 import '../commonStyles.scss';
@@ -22,7 +21,11 @@ const OtpSwitch = (props) => {
     if (!touched) {
       setTouched(true)
     }
-    setOtp(event.target.value)
+    const value = event.target?.value || "";
+    if(value.length > 4) {
+      return;
+    }
+    setOtp(value)
   }
 
   const getHelperText = () => {
@@ -42,7 +45,7 @@ const OtpSwitch = (props) => {
   const resendOtp = async () => {
     try {
       if (!isEmpty(stateParams?.resend_redeem_otp_link)) {
-        setIsApiRunning(true)
+        setIsApiRunning("button")
         const result = await resend(stateParams?.resend_redeem_otp_link)
         toast(result?.message)
       }
@@ -54,6 +57,7 @@ const OtpSwitch = (props) => {
   }
 
   const verifyOtp = async () => {
+    setIsApiRunning("button")
     try {
       let result
       if (!isEmpty(stateParams?.verification_link) && !isEmpty(otp)) {
@@ -104,7 +108,6 @@ const OtpSwitch = (props) => {
             helperText={getHelperText()}
             class="input"
             onChange={handleChange}
-            className="input"
             required
             minLength={4}
             maxLength={4}
@@ -112,21 +115,18 @@ const OtpSwitch = (props) => {
           <div className="resend-otp" onClick={resendOtp}>
             Resend OTP
           </div>
+          {stateParams.message && <div>{stateParams.message}</div>}
         </div>
         <footer className="page-footer">
         <Button
-          className={disabled ? 'disabled' : 'button'}
-          disabled={disabled}
+          disable={disabled}
           onClick={verifyOtp}
-          className="cta-button"
-        >
-          VERIFY{' '}
-          {isApiRunning && (
-            <div className="loader">
-              <CircularProgress size={20} thickness={3} />
-            </div>
-          )}
-        </Button>
+          buttonTitle="VERIFY"
+          showLoader={isApiRunning}
+          style={{
+            width: "180px"
+          }}
+        />
         </footer>
         
       </section>

@@ -18,6 +18,11 @@
     width: 150px;
     font-size: 22px;
   }
+
+  input {
+    text-align: center;
+    width: 150px;
+  }
   .otp-input {
     margin-bottom: 50px;
     margin-top: 50px;
@@ -51,10 +56,5 @@
     letter-spacing: 1px;
     background-color: var(--secondary);
     color: white;
-  }
-
-  .MuiButton-root.MuiButton-disabled {
-    background-color: #bfc1c1 !important;
-    color: rgba(0, 0, 0, 0.38) !important;
   }
 }
