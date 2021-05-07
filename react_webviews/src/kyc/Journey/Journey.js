@@ -616,7 +616,7 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
-      data-aid='Kyc-journey-page'
+      data-aid='kyc-journey-page'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
         <div className="kyc-journey">
@@ -626,7 +626,7 @@ const Journey = (props) => {
             </div>
           )}
           {kyc?.kyc_status === 'compliant' && (
-            <div className="kyc-pj-content" data-aid='Kyc-pj-content'>
+            <div className="kyc-pj-content" data-aid='kyc-pj-content'>
               <div className="left">
                 <div className="pj-header">Premium Onboarding</div>
                 <div className="pj-bottom-info-box">
@@ -658,7 +658,7 @@ const Journey = (props) => {
             </div>
           )}
           {show_aadhaar && (
-            <div className="kyc-pj-content" data-aid='Kyc-pj-content'>
+            <div className="kyc-pj-content" data-aid='kyc-pj-content'>
               <div className="left">
                 <div className="pj-header">Aadhaar KYC</div>
                 <div className="pj-sub-text">
@@ -693,7 +693,7 @@ const Journey = (props) => {
               />
             </div>
           )}
-          <div className="kyc-journey-title" data-aid='Kyc-journey-title'>{topTitle}</div>
+          <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
           {!show_aadhaar && (
             <div className="kyc-journey-subtitle">
               Please keep your PAN ({kyc?.pan?.meta_data?.pan_number}) and
@@ -709,7 +709,7 @@ const Journey = (props) => {
           {isCompliant &&
             user.active_investment &&
             user.kyc_registration_v2 !== 'submitted' && (
-              <span data-aid='Kyc-alert-box'>
+              <span data-aid='kyc-alert-box'>
               <Alert
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."

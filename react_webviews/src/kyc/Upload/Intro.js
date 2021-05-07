@@ -19,17 +19,17 @@ const Intro = (props) => {
       buttonTitle="CONTINUE"
       handleClick={handleClick}
       title='Upload documents'
-      data-aid='Kyc-intro-screen'
+      data-aid='kyc-intro-screen'
     >
       <section id="kyc-upload-intro">
         <div className="banner">
           <img src={require(`assets/${productName}/upload_doc_banner.svg`)} alt="" />
         </div>
-        <div className="intro" data-aid='Kyc-intro'>
+        <div className="intro" data-aid='kyc-intro'>
           Securely upload required documents to verify personal and address
           details.
         </div>
-        <footer className="trust" data-aid='Kyc-trust'>
+        <footer className="trust" data-aid='kyc-trust'>
           <img
             src={require(`assets/${productName}/trust_icons.svg`)}
             alt="Trust Icons."

@@ -66,10 +66,10 @@ const Progress = (props) => {
       }}
       title="Upload documents"
       headerData={{goBack}}
-      data-aid='Kyc-Progress-screen'
+      data-aid='kyc-Progress-screen'
     >
       <section id="kyc-upload-progress">
-        <main className="documents" data-aid='Kyc-Progress-screen-documents'>
+        <main className="documents" data-aid='kyc-Progress-screen-documents'>
           {documents.map((document, index) => (
             <div key={index} className="document" data-aid={`kyc-document_${index+1}`}>
               <UploadCard

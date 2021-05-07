@@ -37,7 +37,7 @@ const getTitleList = ({ kyc }) => {
 const MessageComponent = (kyc) => {
   const titleList = getTitleList(kyc)
   return (
-    <section className="pan-alert" data-aid='Kyc-pan-alert'>
+    <section className="pan-alert" data-aid='kyc-pan-alert'>
       {titleList.map((title, idx) => (
         <div className="row" key={idx} data-aid={`row_${idx + 1}`}>
           <div className="order" data-aid={`order_${idx + 1}`}>{idx + 1}.</div>
@@ -244,10 +244,10 @@ const ChangeAddressDetails2 = (props) => {
       count={2}
       current={2}
       total={2}
-      data-aid='Kyc-ChangeAddressDetails-screen2'
+      data-aid='kyc-ChangeAddressDetails-screen2'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-address" data-aid='Kyc-upload-address'>
+        <section id="kyc-upload-address" data-aid='kyc-upload-address'>
           <Alert
             variant="attention"
             title="Note"
@@ -264,13 +264,13 @@ const ChangeAddressDetails2 = (props) => {
                 />
               )}
               {!frontDoc && (
-                <div className="caption" data-aid='Kyc-caption-text'>
+                <div className="caption" data-aid='kyc-caption-text'>
                   Upload front side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions" data-aid='Kyc-upload-doc-actions'>
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
-                  <div className="open-camera" data-aid='Kyc-open-gallery'>
+                  <div className="open-camera" data-aid='kyc-open-gallery'>
                     <input
                       ref={frontDocRef}
                       type="file"
@@ -297,10 +297,10 @@ const ChangeAddressDetails2 = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" data-aid='Kyc-open-camera-text'>open camera</div>
+                      <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery" data-aid='Kyc-open-gallery'>
+                  <div className="open-gallery" data-aid='kyc-open-gallery'>
                     <input
                       ref={frontDocRef}
                       type="file"
@@ -324,7 +324,7 @@ const ChangeAddressDetails2 = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
+                      <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -342,11 +342,11 @@ const ChangeAddressDetails2 = (props) => {
                 />
               )}
               {!frontDoc && (
-                <div className="caption" data-aid='Kyc-caption-text'>
+                <div className="caption" data-aid='kyc-caption-text'>
                   Upload front side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions" data-aid='Kyc-upload-doc-actions'>
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={frontDocRef}
                   type="file"
@@ -370,7 +370,7 @@ const ChangeAddressDetails2 = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>
@@ -390,9 +390,9 @@ const ChangeAddressDetails2 = (props) => {
                   Upload back side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions" data-aid='Kyc-upload-doc-actions'>
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
-                  <div className="open-camera" data-aid='Kyc-open-camera'>
+                  <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
                       ref={backDocRef}
                       type="file"
@@ -419,10 +419,10 @@ const ChangeAddressDetails2 = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" data-aid='Kyc-open-camera-text'>open camera</div>
+                      <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery" data-aid='Kyc-open-gallery'>
+                  <div className="open-gallery" data-aid='kyc-open-gallery'>
                     <input
                       ref={backDocRef}
                       type="file"
@@ -446,7 +446,7 @@ const ChangeAddressDetails2 = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
+                      <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -468,7 +468,7 @@ const ChangeAddressDetails2 = (props) => {
                   Upload back side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions" data-aid='Kyc-upload-doc-actions'>
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={backDocRef}
                   type="file"
@@ -492,7 +492,7 @@ const ChangeAddressDetails2 = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action" data-aid='Kyc-open-gallery'>Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-open-gallery'>Open Gallery</div>
                 </button>
               </div>
             </div>

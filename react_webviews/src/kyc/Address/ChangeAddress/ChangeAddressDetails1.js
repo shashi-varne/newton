@@ -75,10 +75,10 @@ const ChangeAddressDetails1 = (props) => {
       count={1}
       current={1}
       total={2}
-      data-aid='Kyc-ChangeAddressDetails-screen1'
+      data-aid='kyc-ChangeAddressDetails-screen1'
     >
       <div className="kyc-personal-details kyc-address-details">
-        <main data-aid='Kyc-personal-details'>
+        <main data-aid='kyc-personal-details'>
           <div className={`input ${disabled && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.address_doc_type_error ? true : false}

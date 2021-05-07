@@ -129,7 +129,7 @@ const Sign = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Share Signature"
-      data-aid='Kyc-Signature-screen'
+      data-aid='kyc-Signature-screen'
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">
@@ -140,7 +140,7 @@ const Sign = (props) => {
             <div
               className="kyc-doc-upload-container"
               style={{ border: 'none' }}
-              data-aid='Kyc-doc-upload'
+              data-aid='kyc-doc-upload'
             >
               {file && fileToShow && (
                 <img src={fileToShow} className="preview" alt="" />
@@ -156,7 +156,7 @@ const Sign = (props) => {
               )}
               <div className="kyc-upload-doc-actions">
                 <div className="mobile-actions">
-                  <div className="open-camera" data-aid='Kyc-open-camera'>
+                  <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
                       ref={inputEl}
                       type="file"
@@ -183,7 +183,7 @@ const Sign = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" data-aid='Kyc-open-camera-text'>open camera</div>
+                      <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
                     </button>
                   </div>
                   <div className="open-gallery">
@@ -210,7 +210,7 @@ const Sign = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
+                      <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -221,7 +221,7 @@ const Sign = (props) => {
             <div
               className="kyc-doc-upload-container noBorder"
               style={{ marginTop: '70px' }}
-              data-aid='Kyc-doc-upload'
+              data-aid='kyc-doc-upload'
             >
               {file && (
                 <img
@@ -260,7 +260,7 @@ const Sign = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action" data-aid='Kyc-open-gallery-text'>Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>

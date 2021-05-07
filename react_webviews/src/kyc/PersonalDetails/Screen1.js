@@ -148,13 +148,13 @@ const PersonalDetails1 = (props) => {
       count="1"
       current="1"
       total="4"
-      data-aid='Kyc-personal-details-screen-1'
+      data-aid='kyc-personal-details-screen-1'
     >
       <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">
           We need basic details to verify identity
         </div>
-        <main data-aid='Kyc-personal-details'>
+        <main data-aid='kyc-personal-details'>
           <Input
             label="Name"
             class="input"

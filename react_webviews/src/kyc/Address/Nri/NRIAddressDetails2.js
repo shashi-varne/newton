@@ -145,7 +145,7 @@ const NRIAddressDetails2 = (props) => {
       current={4}
       count={4}
       total={4}
-      data-aid='Kyc-NRIAddressDetails-screen-2'
+      data-aid='kyc-NRIAddressDetails-screen-2'
     >
       <section id="kyc-address-details-2">
         <div className="sub-title">Address as per {address_proof}</div>

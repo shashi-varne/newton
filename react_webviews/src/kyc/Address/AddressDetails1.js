@@ -155,10 +155,10 @@ const AddressDetails1 = (props) => {
       current={1}
       count={1}
       total={getTotalPages(form_data.residential_status)}
-      data-aid='Kyc-address-details-1'
+      data-aid='kyc-address-details-1'
     >
       <div className="kyc-personal-details kyc-address-details">
-        <main data-aid='Kyc-address-details'>
+        <main data-aid='kyc-address-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.residential_status_error ? true : false}
@@ -173,7 +173,7 @@ const AddressDetails1 = (props) => {
               disabled={isApiRunning}
             />
           </div>
-          <div className="input" data-aid='Kyc-address-proof'>
+          <div className="input" data-aid='kyc-address-proof'>
             <div className="address-label">Address proof:</div>
             <div className="address-proof">
               {addressProofOptions.map((data, index) => {
@@ -210,7 +210,7 @@ const AddressDetails1 = (props) => {
                 );
               })}
               {form_data.address_doc_type_error && (
-                <div className="helper-text" data-aid='Kyc-helper-text'>
+                <div className="helper-text" data-aid='kyc-helper-text'>
                   {form_data.address_doc_type_error}
                 </div>
               )}
