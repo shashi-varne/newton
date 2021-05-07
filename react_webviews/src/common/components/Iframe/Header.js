@@ -4,8 +4,8 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Close from '@material-ui/icons/Close';
 import SVG from 'react-inlinesvg';
-import back_arrow from 'assets/back_arrow.svg';
-import close_icn from 'assets/close_icn.svg';
+import back_arrow from 'assets/iframe_back.svg';
+import close_icn from 'assets/iframe_close.svg';
 import '../../theme/Style.scss';
 import './style.scss';
 import { getConfig } from 'utils/functions';
@@ -15,6 +15,7 @@ const headerIconMapper = {
 };
 const logo = getConfig().logo;
 const partnerCode = getConfig().partner_code;
+const partnerPrimaryColor = getConfig().styles.primaryColor;
 
 const Header = ({
   classes,
@@ -51,7 +52,7 @@ const Header = ({
         >
           {!disableBack && !headerData.hide_icon && (
             <SVG
-              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=white')}
+              preProcessor={(code) => code.replace(/stroke=".*?"/g, 'stroke=white')}
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
             />
           )}
@@ -81,6 +82,7 @@ const styles = {
     flexGrow: 1,
     height: '80px',
     boxShadow: 'none',
+    backgroundColor: `${partnerPrimaryColor} !important`
   },
   flex: {
     flex: 1,

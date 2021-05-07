@@ -42,6 +42,7 @@ export const exploreMFMappings = [
     src: isIframe() ? goal_icon : diy_goal_icon,
   },
 ]
+const partnerCode = getConfig().partner_code;
 
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
@@ -93,7 +94,7 @@ const InvestExplore = (props) => {
       handleTopIcon={handleRightIconClick}
     >
       {
-        iframe ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
+        iframe && partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
       <section className="invest-explore-cards" id="invest-explore">
         <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (
