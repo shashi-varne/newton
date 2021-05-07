@@ -92,7 +92,8 @@ export async function initialize() {
     "main_landing_screen",
     "eligibility_screen",
     "recommended",
-    "system_error"
+    "system_error",
+    "bt_info_screen"
   ];
 
   let idfc_dmi_screens = [
@@ -116,7 +117,7 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  if (this.state.screen_name === "calculator") {
+  if (this.state.screen_name === "calculator" || this.state.screen_name === "bt_info_screen") {
     this.onload();
   }
 
@@ -842,6 +843,7 @@ export async function submitApplication(
       "eligible_loan",
       "bank_upload",
       "perfios_state",
+      'bt_info_screen'
     ];
     this.setState({
       loaderWithData: screens.includes(this.state.screen_name),
