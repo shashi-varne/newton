@@ -170,10 +170,8 @@ class GroupHealthPlanDetails extends Component {
         groupHealthPlanData.plan_selected.common_data = this.state.common_data;
         groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;
         groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
-        groupHealthPlanData.post_body.base_premium = groupHealthPlanData.plan_selected.base_premium;
-        groupHealthPlanData.post_body.premium = groupHealthPlanData.plan_selected.net_premium;
         let post_body = groupHealthPlanData.post_body;
-        
+
         if(isEmpty(groupHealthPlanData.sum_assured_screen)){
           this.setErrorData("submit");
           let error = "";
@@ -183,11 +181,6 @@ class GroupHealthPlanDetails extends Component {
             show_loader: "button"
           })
 
-          let keys_to_remove = ['base_premium', 'premium']// removed si from here for star
-          for(let key in keys_to_remove){
-              delete groupHealthPlanData.post_body[keys_to_remove[key]];
-          }
-        
           let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type'];
           let body = {};
           if(this.state.provider === 'STAR'){
