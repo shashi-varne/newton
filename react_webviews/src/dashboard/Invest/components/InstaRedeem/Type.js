@@ -17,7 +17,7 @@ const Type = (props) => {
       investTypeDisplay: investType,
       order_type: investType
     });
-    navigate(`instaredeem/amount`);
+    navigate(`/invest/instaredeem/amount`);
   };
 
   return (

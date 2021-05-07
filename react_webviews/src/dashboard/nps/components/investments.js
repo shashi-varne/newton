@@ -140,15 +140,15 @@ class NpsInvestments extends Component {
       cardClicked: cardClicked
     })
 
-    this.navigate(route, '', true);
+    this.navigate(route);
   }
 
   investMore = () => {
-    this.navigate('amount/one-time')
+    this.navigate('/nps/amount/one-time')
   }
 
   goBack = () => {
-    this.navigate('/invest', '', true);
+    this.navigate('/invest');
   };
 
   render() {

@@ -36,16 +36,7 @@ import { commonBackMapper } from "utils/constants";
   // }
 
 export const backMapper = (state) => {
-  const backStatesMapper = {
-    '/reports/redeemed-transaction': '/reports',
-    '/reports/switched-transaction': '/reports',
-    '/reports/sip/pause-request': '/reports/sip',
-    '/reports/sip/details': '/reports/sip',
-    '/reports/sip': '/reports',
-    ...commonBackMapper,
-  }
-
-  return backStatesMapper[state] || "";
+  return commonBackMapper[state] || "";
 }
 
 export const checkBeforeRedirection = (props, fromState, toState) => {
@@ -100,34 +91,9 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   const landingRedirectPaths = ["/kyc/report", "/notification", "/nps/payment/callback",
     "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"];
 
-  const fromStateArray = ['/payment/callback', '/nps/payment/callback', '/sip/payment/callback', '/invest', '/reports',
-   '/landing', '', '/new/mandate', '/otm-options', '/mandate', '/nps/mandate/callback', '/nps/success',
-    '/nps/sip', '/my-account', '/modal', '/page/callback', '/nps/pran', '/invest/recommendations', '/reports/sip/pause-request', '/kyc/journey'];
-    
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
     navigate("/landing");
     return true;
-  }
-
-  if ("/payment/callback".indexOf(currentState) !== -1) {
-    if (fromStateArray.indexOf(fromState) !== -1) {
-      let currentUser = storageService().getObject("user") || {}
-      if (
-        currentUser.kyc_registration_v2 === "init" ||
-        currentUser.kyc_registration_v2 === "incomplete"
-      ) {
-        navigate("/kyc/journey");
-        return true;
-      } else {
-        if (config?.code === 'moneycontrol') {
-          navigate("/invest/money-control");
-          return true;
-        } else {
-          navigate("/landing");
-          return true;
-        }
-      }
-    }
   }
 
   if (currentState === "/kyc/digilocker/failed") {
@@ -161,7 +127,6 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         navigate("/landing");
         return true;
       }
-      break;
     case "/account/merge/linked/success":
       if (config?.code === 'moneycontrol') {
         var message = JSON.stringify({

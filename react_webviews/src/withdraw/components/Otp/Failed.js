@@ -12,7 +12,7 @@ const Failed = (props) => {
 
   const goTo = () => {
     const navigate = navigateFunc.bind(props)
-    navigate('insta-redeem')
+    navigate('/withdraw/insta-redeem')
   }
 
   return (

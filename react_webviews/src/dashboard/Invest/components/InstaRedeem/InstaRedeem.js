@@ -45,7 +45,7 @@ const InstaRedeem = (props) => {
   }, [funnelData])
 
   const handleClick = () => {
-    navigate("instaredeem/type");
+    navigate("/invest/instaredeem/type");
   };
 
   const showFundInfo = (data) => {
@@ -58,8 +58,7 @@ const InstaRedeem = (props) => {
       "/fund-details",
       {
         searchParams: `${getConfig().searchParams}&isins=${data.isin}`,
-      },
-      true
+      }
     );
   }
 

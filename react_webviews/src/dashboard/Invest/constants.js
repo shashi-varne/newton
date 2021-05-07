@@ -438,7 +438,7 @@ export const sdkInvestCardMapper = [
     title: 'My portfolio',
     subtitle: 'Track investment, Withdraw',
     img: 'ic_db_portfolio.svg',
-    path: 'reports'
+    path: '/reports'
   },
   {
     key: 'account',

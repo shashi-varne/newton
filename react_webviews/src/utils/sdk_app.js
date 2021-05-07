@@ -1,19 +1,11 @@
 
-import { getConfig, navigate as navigateFunc, isNpsOutsideSdk } from "utils/functions";
+import { navigate as navigateFunc, isNpsOutsideSdk } from "utils/functions";
 import { storageService } from "utils/validators";
 import { nativeCallback } from "./native_callback";
 import { commonBackMapper } from "utils/constants";
 
 export const backMapper = (state) => {
-  const backStatesMapper = {
-   '/reports/switched-transaction': '/reports',
-   '/reports/sip/pause-request': '/reports/sip',
-   '/reports/sip/details': '/reports/sip',
-   '/reports/sip': '/reports',
-   ...commonBackMapper,
-  }
-
-  return backStatesMapper[state] || "";
+  return commonBackMapper[state] || "";
 }
 
 export const checkBeforeRedirection = (fromState, toState) => {
@@ -56,23 +48,6 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     }
   }
 
-  if ("/payment/callback".indexOf(currentState) !== -1) {
-    if (fromStateArray.indexOf(fromState) !== -1) {
-      let currentUser = storageService().getObject("user") || {}
-      if (
-        currentUser.kyc_registration_v2 === "init" ||
-        currentUser.kyc_registration_v2 === "incomplete"
-      ) {
-        navigate("/kyc/journey");
-        return true;
-      } else {
-        nativeCallback({ action: "clear_history" });
-        navigate("/");
-        return true;
-      }
-    }
-  }
-
   if ("/diy/fundinfo/direct".indexOf(currentState)) {
     nativeCallback({ action: "clear_history" });
   }
@@ -97,7 +72,6 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         state: { show_aadhaar: true }
       });
       return true;
-      break;
     case "/kyc-esign/nsdl":
       if (params?.status === "success") {
         if (storageService().get('native')) {

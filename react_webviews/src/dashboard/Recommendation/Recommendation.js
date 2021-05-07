@@ -179,7 +179,6 @@ const Recommendations = (props) => {
       navigate(
         "/invest-journey",
         { state: { investment: JSON.stringify(investmentObject) } },
-        true
       );
       return;
     } else if (sipOrOneTime === "onetime") {
@@ -246,11 +245,11 @@ const Recommendations = (props) => {
   }, [recommendations]);
 
   const editFund = () => {
-    navigate("recommendations/edit-funds");
+    navigate("/invest/recommendations/edit-funds");
   };
 
   const checkHow = () => {
-    navigate("recommendations/how-we-recommend");
+    navigate("/invest/recommendations/how-we-recommend");
   }
 
   return (
@@ -339,12 +338,12 @@ const Recommendations = (props) => {
           </div>
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPendind}
-            handleClick={() => navigate("/kyc/add-bank", null, true)}
+            handleClick={() => navigate("/kyc/add-bank")}
           />
           <InvestError
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
-            handleClick={() => navigate("/invest", null, true)}
+            handleClick={() => navigate("/invest")}
             close={() => handleDialogStates("openInvestError", false)}
           />
           <InvestReferralDialog

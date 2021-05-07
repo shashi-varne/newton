@@ -485,24 +485,6 @@ export async function verifyForgotOtp(body) {
   }
 }
 
-export function navigate(pathname, data = {}) {
-  if (data.edit) {
-    this.props.history.replace({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
-  } else {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
-  }
-}
-
 export async function getKycFromSummary() {
   const res = await Api.post(`/api/user/account/summary`, {
     kyc: ["kyc"],

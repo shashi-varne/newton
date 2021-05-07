@@ -6,15 +6,15 @@ const PageCallback = (props) => {
   const params = props.match.params || {};
   let { investment_type, status, message } = params;
   if (!status) {
-    navigate("/invest", null, true);
+    navigate("/invest");
   } else {
     if (!message) message = "";
     if (investment_type === "sip") {
-      navigate(`/sip/payment/callback/${status}/${message}`, null, true);
+      navigate(`/sip/payment/callback/${status}/${message}`);
     } else if (investment_type === "onetime") {
-      navigate(`/payment/callback/${status}/${message}`, null, true);
+      navigate(`/payment/callback/${status}/${message}`);
     } else {
-      navigate("/invest", null, true);
+      navigate("/invest");
     }
   }
   return <div></div>;

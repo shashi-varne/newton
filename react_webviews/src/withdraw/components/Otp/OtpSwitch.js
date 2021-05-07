@@ -66,8 +66,7 @@ const OtpSwitch = (props) => {
             type: stateParams?.type,
             message: result?.message,
           }
-        },
-        true
+        }
       )
     } catch (err) {
       toast(err.message)
@@ -78,8 +77,7 @@ const OtpSwitch = (props) => {
             type: stateParams?.type,
             message: err.message,
           }
-        },
-        true
+        }
       )
     } finally {
       setIsApiRunning(false)

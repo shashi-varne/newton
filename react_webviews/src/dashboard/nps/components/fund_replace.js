@@ -59,7 +59,7 @@ class ReplaceFund extends Component {
   handleClick = () => {
     storageService().setObject('nps-recommend', this.state.nps_recommended);
     storageService().set('nps-prevpath', 'fund-replace');
-    this.navigate('recommendation/one-time')
+    this.navigate('/nps/recommendation/one-time')
   };
 
   render() {

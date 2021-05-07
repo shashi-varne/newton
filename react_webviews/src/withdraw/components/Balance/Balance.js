@@ -36,7 +36,7 @@ const Balance = (props) => {
   const redirect = (url, openModal) => {
     setType(url)
     if (!openModal) {
-      navigate(url, null, false)
+      navigate(url)
     } else {
       setAmount('');
       setOpen(true)
@@ -72,14 +72,14 @@ const Balance = (props) => {
   const handleProceed = () => {
     if (amount) {
       if (type === 'systematic') {
-        navigate(type, {state: {amount} })
+        navigate("/withdraw/systematic", {state: {amount} })
       } else {
         // eslint-disable-next-line radix
         if( amount < 5000 ){
           setError(true);
           setHelperText('minimum switch amount is 5000');
         } else{
-          navigate('switch', {state: {amount} })
+          navigate('/withdraw/switch', {state: {amount} })
         }
       }
     } else {

@@ -70,9 +70,9 @@ const RiskSelect = ({
   const goNext = async (skipRiskUpdate) => {
     await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
-    let state = 'recommendations';
+    let state = '/invest/recommendations';
     if (funnelData.investType === 'saveforgoal') {
-      state = `savegoal/${funnelData.subtype}/amount`;
+      state = `/invest/savegoal/${funnelData.subtype}/amount`;
     }
     navigate(state);
   };
@@ -91,7 +91,7 @@ const RiskSelect = ({
         year: funnelData.year, // only applicable for 'saveforgoal'
         term: funnelData.term
       }
-    }, true);
+    });
   };
 
   return (

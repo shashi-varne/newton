@@ -62,16 +62,16 @@ const CustomGoalTarget = (props) => {
         // RP enabled flow, when user has no risk profile
         updateFunnelData({ corpus });
         if (data.msg_code === 0) {
-          navigate(`${funnelGoalData.id}/risk-select`);
+          navigate(`/invest/${funnelGoalData.id}/risk-select`);
         } else if (data.msg_code === 1) {
-          navigate(`${funnelGoalData.id}/risk-select-skippable`);
+          navigate(`/invest/${funnelGoalData.id}/risk-select-skippable`);
         }
         return;
       }
 
       updateFunnelData({ ...data, corpus });
 
-      navigate(`savegoal/${subtype}/amount`);
+      navigate(`/invest/savegoal/${subtype}/amount`);
     } catch (err) {
       console.log(err);
       setLoader(false);

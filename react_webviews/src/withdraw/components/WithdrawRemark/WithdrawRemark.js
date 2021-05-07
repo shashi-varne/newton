@@ -23,7 +23,7 @@ const WithdrawRemark = ({ location, ...props }) => {
   const navigate = navigateFunc.bind(props);
   useEffect(() => {
     if (isEmpty(subQstn)) {
-      navigate('reason');
+      navigate('/withdraw/reason');
     }
   }, []);
 
@@ -31,7 +31,7 @@ const WithdrawRemark = ({ location, ...props }) => {
     try {
       setIsLoading("button");
       await postWithdrawReasons(param);
-      navigate('');
+      navigate('/withdraw');
     } catch (err) {
       toast(err);
     } finally{
@@ -95,7 +95,7 @@ const WithdrawRemark = ({ location, ...props }) => {
 
   return (
     <Container
-      buttonTitle='Continue'
+      buttonTitle='CONTINUE'
       fullWidthButton
       // hideInPageTitle
       title="Withdraw"

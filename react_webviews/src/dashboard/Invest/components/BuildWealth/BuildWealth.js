@@ -65,7 +65,7 @@ const Landing = (props) => {
   };
 
   const goNext = () => {
-    navigate('buildwealth/amount');
+    navigate('/invest/buildwealth/amount');
   };
 
   const handleChange = (type) => {

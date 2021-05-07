@@ -1,7 +1,7 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig, navigate as navigateFunc } from "utils/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { isReadyToInvest, initData } from "../../kyc/services";
 
 const genericErrorMessage = "Something went wrong!";
@@ -150,22 +150,6 @@ export async function getMyAccount() {
     console.log(error);
     toast(genericErrorMessage);
     this.setState({ showLoader: false });
-  }
-}
-
-export function navigate(pathname, data = {}) {
-  if (this.props.edit || data.edit) {
-    this.props.history.replace({
-      pathname: pathname,
-      search: getConfig().searchParams,
-    });
-  } else {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
   }
 }
 

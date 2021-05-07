@@ -62,7 +62,7 @@ const RiskCustomize = (props) => {
   const goNext = async () => {
     try {
       await fetchRecommendations();
-      navigate('recommendations');
+      navigate('/invest/recommendations');
     } catch (err) {
       console.log(err);
       toast(err)

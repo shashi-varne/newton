@@ -50,7 +50,7 @@ const SelfSummary = (props) => {
         investments: [{ itype, subtype, allocations }],
       })
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('verify', { state:{...result} })
+        navigate('/withdraw/verify', { state:{...result} })
         return
       }
     } catch (err) {

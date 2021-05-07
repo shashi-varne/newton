@@ -26,8 +26,7 @@ const FundCard = ({
       {
         searchParams: `${parentProps.location.search}&isins=${isins}&selected_isin=${isin}&type=mf`,
         state:{flow:"mf journey"}
-      },
-      true
+      }
     )
     return;
   };
