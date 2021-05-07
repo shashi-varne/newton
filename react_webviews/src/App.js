@@ -20,7 +20,7 @@ import EMandate from './e_mandate';
 import RiskProfiler from './risk_profiler';
 import HNI from './external_portfolio';
 import IsipBIller from './isip';
-import HelpSupport from './help_support';
+import HelpSupport from './help_support_v2';
 import CommonLanding from './common/components/landing';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
