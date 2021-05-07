@@ -505,9 +505,13 @@ function getPartnerConfig(partner_code) {
     },
   };
 
+  let origin = window.location.origin;
+
   const ismyway =
     search.indexOf('api.mywaywealth.com') >= 0 ||
-    search.indexOf('plutus-finwizard-pro.appspot.com') >= 0;
+    search.indexOf('plutus-finwizard-pro.appspot.com') >= 0 || 
+    origin.indexOf('wv.mywaywealth.com') >= 0 || 
+    origin.indexOf('wv.finity.in') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';

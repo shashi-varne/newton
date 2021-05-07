@@ -33,6 +33,9 @@ class RecommendationResult extends Component {
             this.handleClose(key);
             return;
         }
+        if(key === 'corona'){
+            return;
+        }
         storageService().setObject('from_advisory', true);
         this.sendEvents('next', this.state.recommendation_bottom_sheet_data[key].heading, screen_name);
         this.state.parent.navigate(advisoryConstants.get_plan_path[key])
@@ -120,7 +123,7 @@ class RecommendationResult extends Component {
                     </div>
                     </div>
                     <div style={{margin: '0 5px', marginTop: '20px', width: '100%'}}>
-                        <button  className="call-back-popup-button" onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet', adequate_coverage_present )}>{this.state.more_details_cta_text}</button> 
+                        <button  className="call-back-popup-button" style={{opacity : key === 'corona' && !adequate_coverage_present ? '0.4' : '1'}} onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet', adequate_coverage_present )}>{this.state.more_details_cta_text}</button> 
                     </div>
                 </div>
          
@@ -164,7 +167,7 @@ class RecommendationResult extends Component {
                     }
                     <div className="recommendation-cta-container">
                         <div className="more-details" onClick={()=>this.openMoreDetailsDialog(recommendation_data.key)}>MORE DETAILS</div>
-                        <div className="get-the-plan" onClick={()=>this.getPlan(recommendation_data.key, 'recommendations', adequate_coverage_present)}>GET THE PLAN</div>
+                        <div className="get-the-plan" style={{opacity: recommendation_data.key === 'corona' ? '0.4': '1'}} onClick={()=>this.getPlan(recommendation_data.key, 'recommendations', adequate_coverage_present)}>GET THE PLAN</div>
                     </div>
                     </div>
                 ):(
