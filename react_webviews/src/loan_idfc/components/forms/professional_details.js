@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropDownNew from "../../../common/ui/DropDownNew";
 import { numDifferentiationInr, formatAmount } from "utils/validators";
 import Autosuggest from "../../../common/ui/SearchBar";
 import Api from "utils/api";
@@ -294,7 +294,7 @@ class ProfessionalDetails extends Component {
 
             {employment_type === "salaried" && (
               <div className="InputField">
-                <DropdownWithoutIcon
+                <DropDownNew
                   width="40"
                   options={this.state.salaryRecieptOptions}
                   id="salary-receipt-mode"
@@ -309,7 +309,7 @@ class ProfessionalDetails extends Component {
             )}
 
             <div className="InputField">
-              <DropdownWithoutIcon
+              <DropDownNew
                 width="40"
                 options={this.state.organisationTypeOptions}
                 id="organisation"
@@ -324,7 +324,7 @@ class ProfessionalDetails extends Component {
 
             {employment_type === "salaried" && (
               <div className="InputField">
-                <DropdownWithoutIcon
+                <DropDownNew
                   options={industryOptions}
                   label="Industry"
                   id="industry"
