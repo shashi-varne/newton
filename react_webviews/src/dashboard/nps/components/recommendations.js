@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import PieChart from "./piegraph";
 import Slide from "@material-ui/core/Slide";
+import { getBasePath } from "../../../utils/functions";
 import { keyBy } from 'lodash';
 
 const isMobileDevice = getConfig().isMobileDevice;
@@ -252,7 +253,7 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran } = this.state;
+    let { pran, pension_house, recommendations } = this.state;
 
     let data = {
       amount: this.state.amount,
@@ -260,12 +261,13 @@ class Recommendations extends Component {
     };
 
     if (!pran) {
-      data.pension_house_id = (!this.state.display_summary_only &&
-        this.state.pension_house &&
-        this.state.pension_house.pension_house_id) ||
-      this.state.recommendations.pension_house
-        ? this.state.recommendations.pension_house.pension_house_id
-        : "";
+      data.pension_house_id =
+      !this.state.display_summary_only &&
+      (pension_house
+        ? pension_house.pension_house_id
+        : recommendations.pension_house
+        ? recommendations.pension_house.pension_house_id
+        : "");
       data.risk = this.state.risk;
     } else {
       data.pran = pran;
@@ -277,7 +279,7 @@ class Recommendations extends Component {
       let pgLink = result.investments.pg_link;
 
       let plutus_redirect_url = encodeURIComponent(
-        window.location.origin + `/nps/redirect` + getConfig().searchParams
+        getBasePath() + `/nps/redirect` + getConfig().searchParams
       );
 
       pgLink +=
@@ -289,7 +291,7 @@ class Recommendations extends Component {
       if (this.state.display_summary_only) {
         this.setState({
           url: pgLink,
-          show_loader: false,
+          skelton: false,
           openInvestmentSummary: true,
         });
       } else {
@@ -301,6 +303,13 @@ class Recommendations extends Component {
   goBack = () => {
     this.navigate("amount/one-time");
   };
+
+  handleReplace = () => {
+    const { recommendations, pension_house } = this.state;
+    const replaceObject = pension_house || recommendations?.pension_house;
+    storageService().setObject("nps-current", replaceObject);
+    this.navigate("fundreplace");
+  }
 
   render() {
     const {
@@ -335,7 +344,7 @@ class Recommendations extends Component {
               <div
                 className="replace"
                 onClick={() => {
-                  this.navigate("fundreplace");
+                  this.handleReplace();
                 }}
               >
                 Replace
