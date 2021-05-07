@@ -9,6 +9,7 @@ import toast from '../../common/ui/Toast'
 import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -94,7 +95,8 @@ const Pan = (props) => {
     })
   }
   
-  const handleChange = (event) => {
+  const handleChange = (type) => (event) => {
+    sendEvents('get_image', type)
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -118,6 +120,7 @@ const Pan = (props) => {
   }
 
   const handleSubmit = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
       const result = await upload(file, 'pan')
@@ -152,9 +155,26 @@ const Pan = (props) => {
 
   const isWeb = getConfig().isWebOrSdk
 
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "pan_doc",
+        "type": type || "",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       classOverRideContainer="pr-container"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
@@ -192,7 +212,7 @@ const Pan = (props) => {
                       ref={inputEl}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange}
+                      onChange={handleChange('open-camera')}
                       accept="image/*"
                       capture
                     />
@@ -222,7 +242,7 @@ const Pan = (props) => {
                       ref={inputEl}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange}
+                      onChange={handleChange('open-gallery')}
                     />
                     <button
                       onClick={handleUpload}
@@ -265,7 +285,7 @@ const Pan = (props) => {
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange}
+                  onChange={handleChange('open-gallery')}
                 />
                 <button onClick={handleUpload} className="kyc-upload-button">
                   {!file && (

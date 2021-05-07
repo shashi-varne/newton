@@ -143,8 +143,8 @@ const NRIAddressDetails2 = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "nri_address_details_2",
-        "pincode_entered": kyc.nri_address.meta_data.pincode ? "yes" : "no",
-        "address_entered": kyc.nri_address.meta_data.addressline ? "yes" : "no"
+        "pincode_entered": form_data.nri_pincode ? "yes" : "no",
+        "address_entered": form_data.addressline ? "yes" : "no"
       }
     };
     if (userAction === 'just_set_events') {
@@ -153,7 +153,7 @@ const NRIAddressDetails2 = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
-  console.log(kyc)
+
   return (
     <Container
       events={sendEvents("just_set_events")}

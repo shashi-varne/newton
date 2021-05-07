@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { getFlow, navigate as navigateFunc } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -12,6 +12,7 @@ import PennySuccessDialog from "../mini-components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -49,6 +50,7 @@ const KycBankVerify = (props) => {
   };
 
   const handleClick = async () => {
+    sendEvents('next')// to be verified
     try {
       setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bankData.bank_id });
@@ -168,9 +170,27 @@ const KycBankVerify = (props) => {
     navigate(`/kyc/${userType}/bank-details`);
   };
 
+  const sendEvents = (userAction, screen_name) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": screen_name || "verify_bank_account",
+        "initial_kyc_status": kyc.initial_kyc_status,
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="VERIFY BANK ACCOUNT"
+      events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}

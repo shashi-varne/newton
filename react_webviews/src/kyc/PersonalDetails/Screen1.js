@@ -144,7 +144,7 @@ const PersonalDetails1 = (props) => {
     let eventObj = {
       "event_name": 'KYC_registration',
       "properties": {
-        "user_action": userAction ,
+        "user_action": userAction || "" ,
         "screen_name": "personal_details_1",
         "name": form_data.name ? "yes" : "no",
         "mobile": form_data.mobile_number ? "yes" : "no",

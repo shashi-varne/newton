@@ -111,6 +111,7 @@ const PersonalDetails2 = (props) => {
         "screen_name": "personal_details_2",
         "mother_name": form_data.mother_name ? "yes" : "no",
         "father_name": form_data.father_name ? "yes" : "no",
+        "spouse_name": form_data.spouse_name ? "yes" : "no",
         "flow": 'general'
       }
     };

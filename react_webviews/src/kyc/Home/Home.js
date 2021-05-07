@@ -235,7 +235,7 @@ const Home = (props) => {
   };
 
   const savePan = async (is_nri) => {
-    sendEvents(`${is_nri ? "yes" : "no"}`,'resident popup')
+    sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
     try {
       setShowLoader("button");
       if (is_nri) {
@@ -295,7 +295,7 @@ const Home = (props) => {
         "user_action": userAction,
         "screen_name": screenName || "pan_entry",
         "pan": pan ? "yes" : "no",
-        "initial_kyc_status": kyc?.kyc_status || ""
+        "initial_kyc_status": kyc?.initial_kyc_status || ""
       }
     };
     if (userAction === 'just_set_events') {
@@ -304,7 +304,6 @@ const Home = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
-
   return (
     <Container
       events={sendEvents("just_set_events")}

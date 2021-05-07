@@ -9,6 +9,7 @@ import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
+  getFlow
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
@@ -156,9 +157,9 @@ const PersonalDetails4 = (props) => {
         "name": form_data.name ? "yes" : "no",
         "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
         "relationship": form_data.relationship ? "yes" : "no",
-        "flow": type || "",// to be checked
+        "flow": getFlow(kyc) || "",
         "add_nominee":isChecked ? "no":"yes",
-        "initial_kyc_status" : kyc.initial_kyc_status || ""
+        "initial_kyc_status" : kyc.kyc_status || ""
       }
     };
     if (userAction === 'just_set_events') {
@@ -167,7 +168,6 @@ const PersonalDetails4 = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
-
   return (
     <Container
       events={sendEvents("just_set_events")}
