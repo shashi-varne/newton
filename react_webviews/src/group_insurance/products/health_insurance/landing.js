@@ -45,10 +45,10 @@ class HealthInsuranceLanding extends Component {
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)),
-      Comprehensive: false,
-      DiseasesSpecificPlan: false,
-      lastClickedItem: "",
-      title: "Health insurance"
+      Comprehensive : false,
+      DiseasesSpecificPlan : false,
+      lastClickedItem:"",
+      title:"Health insurance"
     }
 
     this.setTermInsData = setTermInsData.bind(this);
@@ -78,8 +78,8 @@ class HealthInsuranceLanding extends Component {
         title: 'Comprehensive',
         subtitle: 'Complete healthcare in one policy',
         icon: health_suraksha_icon,
-        dropdown: back_nav_bar_icon,
-        uparrow: back_nav_bar_icon_up,
+        dropdown : back_nav_bar_icon,
+        uparrow : back_nav_bar_icon_up,
         component: [{
           key: 'GMC',
           title: 'Care Health',
@@ -117,8 +117,8 @@ class HealthInsuranceLanding extends Component {
         title: 'Disease specific plans',
         subtitle: 'Tailor-made plans for specific needs',
         icon: icn_diseases,
-        dropdown: back_nav_bar_icon,
-        uparrow: back_nav_bar_icon_up,
+        dropdown : back_nav_bar_icon,
+        uparrow : back_nav_bar_icon_up,
         component: [
           {
             key: 'CRITICAL_HEALTH_INSURANCE',
@@ -150,7 +150,7 @@ class HealthInsuranceLanding extends Component {
         title: 'Hospital Daily Cash',
         subtitle: 'Get guaranteed cash on hospitalisation',
         icon: ic_hospicash
-      },
+      }
     ];
 
 
