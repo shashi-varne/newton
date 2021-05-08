@@ -85,7 +85,8 @@ class HealthInsuranceLanding extends Component {
           title: 'Care Health',
           subtitle: 'fisdom Care Health+',
           Product_name: 'care_plus',
-          icon: religare_logo
+          icon: religare_logo,
+          tag: 'Recommended'
         },
         {
           key: 'HDFCERGO',
@@ -118,7 +119,6 @@ class HealthInsuranceLanding extends Component {
         icon: icn_diseases,
         dropdown: back_nav_bar_icon,
         uparrow: back_nav_bar_icon_up,
-        // component : DiseasesSpecificPlan,
         component: [
           {
             key: 'CRITICAL_HEALTH_INSURANCE',
@@ -521,7 +521,7 @@ class HealthInsuranceLanding extends Component {
           <div>
             <p style={{ fontSize: '20px', marginBottom: '24px', fontWeight: '700' }}>Health Insurance</p>
           </div>
-          <MenuListDropDown insuranceProducts={this.state.insuranceProducts} parent={this} title='Explore best plans for your health' />
+          <MenuListDropDown menulistProducts={this.state.insuranceProducts} value={this.state.value} parent={this} title='Explore best plans for your health' />
         </div>
       </Container>
     );
