@@ -37,7 +37,7 @@ import PersonalDetails2 from "./PersonalDetails/Screen2";
 import PersonalDetails3 from "./PersonalDetails/Screen3";
 import PersonalDetails4 from "./PersonalDetails/Screen4";
 import KycUploadDocuments from "./BankKyc/KycUploadDocuments";
-import SampleDocuments from "./BankKyc/SampleDocuments";
+import BankSampleDocuments from "./BankKyc/BankSampleDocuments";
 import AddressDetails2 from "./Address/AddressDetails2";
 import AddressDetails1 from "./Address/AddressDetails1";
 import DigilockerPersonalDetails1 from "./Digilocker/PersonalDetails1";
@@ -64,6 +64,7 @@ import AccountInfo from "./Equity/components/AccountInfo";
 import PanInstructions from "./Equity/components/PanInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
+import FAndOSampleDocument from "./Equity/components/F&OSampleDocuments";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -255,7 +256,7 @@ const Kyc = (props) => {
         <Route
           exact
           path={`${url}/sample-documents`}
-          component={SampleDocuments}
+          component={BankSampleDocuments}
         />
         <Route
           exact
@@ -346,6 +347,11 @@ const Kyc = (props) => {
           exact 
           path={`${url}/manual-signature`} 
           component={ManualSignature} 
+        />
+        <Route 
+          exact 
+          path={`${url}/fno-sample-documents`} 
+          component={FAndOSampleDocument} 
         />
         <Route component={NotFound} />
       </Switch>
