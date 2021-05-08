@@ -41,10 +41,21 @@ class ReplaceFund extends Component {
         return el;
       });
 
+      const npsCurrent = storageService().getObject("nps-current") || {};
+
+      let selectedIndex = 0;
+      data.pension_houses.forEach((element, index) => {
+        if(element.pension_house_id === npsCurrent.pension_house_id) {
+          selectedIndex = index;
+          return;
+        }
+      })
+
       this.setState({
         recommended: data.recommended[0].pension_house,
         pension_houses: data.pension_houses,
         show_loader: false,
+        selectedValue: selectedIndex,
       });
       
   };
