@@ -83,7 +83,7 @@ class HealthInsuranceLanding extends Component {
         component: [{
           key: 'GMC',
           title: 'Care Health',
-          subtitle: 'fisdom Care Health+',
+          subtitle: 'fisdom HealthProtect',
           Product_name: 'care_plus',
           icon: religare_logo,
           tag: 'Recommended'
