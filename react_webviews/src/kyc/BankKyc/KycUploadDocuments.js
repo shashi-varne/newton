@@ -11,6 +11,7 @@ import { getBase64, getConfig } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { getPathname } from "../constants";
 import "./KycUploadDocuments.scss";
+import toast from "../../common/ui/Toast";
 
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -19,7 +20,7 @@ const KycUploadDocuments = (props) => {
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, setKycToSession} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
   const isWeb = getConfig().Web;
@@ -133,14 +134,16 @@ const KycUploadDocuments = (props) => {
     if (selected === null || !file) return;
     try {
       setIsApiRunning("button");
-      await uploadBankDocuments(
+      const result = await uploadBankDocuments(
         file,
         verificationDocOptions[selected].value,
         bank_id
       );
+      if(!isEmpty(result))
+        setKycToSession(result.kyc)
       setShowPendingModal(true);
     } catch (err) {
-      setShowPendingModal(true);
+      toast("Image upload failed, please retry")
     } finally {
       setIsApiRunning(false);
     }
