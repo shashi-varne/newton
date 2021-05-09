@@ -11,7 +11,6 @@ import { getBase64, getConfig } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { getPathname } from "../constants";
 import "./KycUploadDocuments.scss";
-import toast from "../../common/ui/Toast";
 
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
