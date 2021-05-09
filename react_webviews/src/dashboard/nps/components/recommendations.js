@@ -17,6 +17,7 @@ import PieChart from "./piegraph";
 import Slide from "@material-ui/core/Slide";
 import { getBasePath } from "../../../utils/functions";
 import { keyBy } from 'lodash';
+import { isEmpty } from "../../../utils/validators";
 
 const isMobileDevice = getConfig().isMobileDevice;
 
@@ -89,7 +90,7 @@ class Recommendations extends Component {
     let data = res;
     if (data && !pran) {
       const [recommendations] = data.recommended;
-      const altRiskOptsMap = keyBy(data.alternatives, 'risk');
+      const altRiskOptsMap = keyBy([...data.alternatives, ...data.recommended], 'risk');
       const assetAlloc = altRiskOptsMap[recommendations.risk || this.state.risk]
 
       this.setState(
@@ -109,7 +110,7 @@ class Recommendations extends Component {
       );
     } else {
       this.setState({
-        all_charges: data.all_charges,
+        all_charges: data?.all_charges,
       },
       () => {
         this.state.display_summary_only && this.handleClick();
@@ -263,7 +264,7 @@ class Recommendations extends Component {
     if (!pran) {
       data.pension_house_id =
       !this.state.display_summary_only &&
-      (pension_house
+      (!isEmpty(pension_house)
         ? pension_house.pension_house_id
         : recommendations.pension_house
         ? recommendations.pension_house.pension_house_id
@@ -513,25 +514,25 @@ const createPieChartData = (allocData) => {
     {
       id: "E",
       label: "E",
-      value: allocData.e_allocation,
+      value: allocData?.e_allocation,
       color: classColorMap['E'],
     },
     {
       id: "G",
       label: "G",
-      value: allocData.g_allocation,
+      value: allocData?.g_allocation,
       color: classColorMap['G'],
     },
     {
       id: "C",
       label: "C",
-      value: allocData.c_allocation,
+      value: allocData?.c_allocation,
       color: classColorMap['C'],
     },
     {
       id: "A",
       label: "A",
-      value: allocData.a_allocation,
+      value: allocData?.a_allocation,
       color: classColorMap['A'],
     },
   ]
