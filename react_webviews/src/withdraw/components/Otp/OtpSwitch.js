@@ -40,7 +40,7 @@ const OtpSwitch = (props) => {
     return ''
   }
 
-  const disabled = isApiRunning || otp.length !== 4
+  const disabled = otp.length !== 4
 
   const resendOtp = async () => {
     try {

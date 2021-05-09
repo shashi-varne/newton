@@ -26,6 +26,7 @@
   .otp-input {
     margin-bottom: 50px;
     margin-top: 50px;
+    text-align: center;
   }
 
   .resend-otp {
@@ -33,10 +34,8 @@
     cursor: pointer;
     color: purple;
     text-align: center;
-    margin-left: auto;
     display: table;
-    margin-right: auto;
-    margin-top: 32px;
+    margin: 32px auto;
   }
 
   .page-footer {
