@@ -23,6 +23,7 @@ import { isFunction } from 'lodash';
 
 let start_time = '';
 const iframe = isIframe();
+const isMobileDevice = getConfig().isMobileDevice;
 
 export function didMount() {
     start_time = new Date();
@@ -49,7 +50,7 @@ export function didMount() {
         force_show_inpage_title: true,
         inPageTitle: true
     }, () => {
-        if(!iframe){
+        if(!iframe || isMobileDevice){
             this.onScroll();
         }
     })
@@ -63,7 +64,7 @@ export function didMount() {
             that.historyGoBack();
         }
     });
-    if(!iframe){   
+    if(!iframe || isMobileDevice){   
         window.addEventListener("scroll", this.onScroll, true);
         this.check_hide_header_title();
     }
@@ -74,7 +75,7 @@ export function headerGoBack() {
 }
 
 function addContainerClass (props_base){
-    const containerClass = !iframe ? 'ContainerWrapper' : 'iframeContainerWrapper';
+    const containerClass = !iframe || isMobileDevice ? 'ContainerWrapper' : 'iframeContainerWrapper';
     return `${containerClass} ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
 }
 
@@ -119,7 +120,7 @@ export function commonRender(props_base) {
    <div className={this.addContainerClass(props_base)}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && !iframe && !this.props.loaderWithData && <Header
+                && !this.props.showLoaderModal && !iframe  && !this.props.loaderWithData && <Header
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
@@ -215,7 +216,7 @@ export function commonRender(props_base) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`${!iframe ? 'Container' : 'IframeContainer'}  ${this.props.background || ''} 
+                    className={`${!iframe || isMobileDevice ? 'Container' : 'IframeContainer'}  ${this.props.background || ''} 
                     ${props_base && props_base.classOverRideContainer ? props_base.classOverRideContainer : ''} 
                     ${this.props.classOverRideContainer || '' } 
                     ${this.props.noPadding ? "no-padding" : ""}
@@ -228,7 +229,7 @@ export function commonRender(props_base) {
                         {this.props.children}
                     </div>
                     {
-                        this.props.iframeRightContent &&  iframe &&
+                        this.props.iframeRightContent &&  iframe && !isMobileDevice &&
                         <div className='iframe-right-content'>
                             <img src={this.props.iframeRightContent} alt="right_img" />
                         </div>
@@ -279,7 +280,7 @@ export function commonRender(props_base) {
 
 export function unmount() {
     window.callbackWeb.remove_listener({});
-    if(!iframe){
+    if(!iframe || isMobileDevice){
         window.removeEventListener("scroll", this.onScroll, false);
     }
 
@@ -317,9 +318,12 @@ export function check_hide_header_title() {
 }
 
 export function getHeightFromTop() {
-    const Container = !iframe ? 'Container' : 'IframeContainer';
+    const Container = !iframe || isMobileDevice ? 'Container' : 'IframeContainer';
+    console.log("container is", Container);
     var el = document.getElementsByClassName(Container)[0];
+    console.log("el is", el);
     var height = el.getBoundingClientRect().top;
+    console.log("height is", height);
     return height;
 }
 

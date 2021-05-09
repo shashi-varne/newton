@@ -16,7 +16,7 @@ const headerIconMapper = {
 const logo = getConfig().logo;
 const partnerCode = getConfig().partner_code;
 const partnerPrimaryColor = getConfig().styles.primaryColor;
-
+const isMobileDevice = getConfig().isMobileDevice;
 const Header = ({
   classes,
   title,
@@ -42,7 +42,7 @@ const Header = ({
 }) => {
 
   return (
-    <AppBar position='fixed' color='primary' classes={{ root: classes.root }}>
+    <AppBar position='fixed' color='primary' classes={{ root: classes.root }} className='IframeHeader'>
       <Toolbar classes={{ root: classes.toolbarRoot }}>
         <div
           className='iframe-top-action-button'
@@ -52,7 +52,7 @@ const Header = ({
         >
           {!disableBack && !headerData.hide_icon && (
             <SVG
-              preProcessor={(code) => code.replace(/stroke=".*?"/g, 'stroke=white')}
+              preProcessor={(code) => code.replace(/stroke=".*?"/g, isMobileDevice ? `stroke=${partnerPrimaryColor}` : 'stroke=white')}
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
             />
           )}
@@ -60,12 +60,14 @@ const Header = ({
             <Close />
           )}
         </div>
-
-        <div>
-          <img src={require(`assets/${logo}`)} className={classes.img} alt='moneycontrol' />
-        </div>
         {
-          partnerCode === 'moneycontrol' ?
+          !isMobileDevice &&
+          <div>
+            <img src={require(`assets/${logo}`)} className={classes.img} alt='moneycontrol' height={50}/>
+          </div>
+        }
+        {
+          partnerCode === 'moneycontrol' && !isMobileDevice ?
           <div>
           <img src={require(`assets/finity_white_logo_2.png`)} alt='' />
         </div>
@@ -80,9 +82,9 @@ const Header = ({
 const styles = {
   root: {
     flexGrow: 1,
-    height: '80px',
+    height: isMobileDevice ? '56px': '80px',
     boxShadow: 'none',
-    backgroundColor: `${partnerPrimaryColor} !important`
+    backgroundColor: isMobileDevice ? 'white' : `${partnerPrimaryColor} !important`
   },
   flex: {
     flex: 1,
@@ -94,8 +96,8 @@ const styles = {
   },
   toolbarRoot: {
     display: 'flex',
-    paddingLeft: '80px !important',
-    paddingRight: '80px !important',
+    paddingLeft: isMobileDevice ? '0px' : '80px !important',
+    paddingRight: isMobileDevice ? '0px' : '80px !important',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '100%',

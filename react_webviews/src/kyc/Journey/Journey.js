@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getConfig } from 'utils/functions'
+import { getConfig, isIframe } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
@@ -12,12 +12,13 @@ import {
 } from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
-import { isIframe } from 'utils/functions'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 
+const isMobileDevice = getConfig().isMobileDevice;
+const iframe = isIframe();
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -25,7 +26,6 @@ const Journey = (props) => {
   const stateParams = props?.location?.state;
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [aadhaarLinkDialog, setAadhaarLinkDialog] = useState(false)
-  const iframe = isIframe();
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
@@ -691,11 +691,13 @@ const Journey = (props) => {
                   </div>
                 </div>
               </div>
-
-              <img
-                src={require(`assets/${productName}/icn_aadhaar_kyc.svg`)}
-                alt="Premium Onboarding"
-              />
+              {
+                (!iframe || isMobileDevice) &&
+                  <img
+                  src={require(`assets/${productName}/icn_aadhaar_kyc.svg`)}
+                  alt="Premium Onboarding"
+                  />
+              }
             </div>
           )}
           <div className="kyc-journey-title">{topTitle}</div>

@@ -389,9 +389,10 @@ export function manageDialog(id, display, aboutScroll) {
 }
 
 export function setHeights(data) {
+  const headerClass = isIframe() && getConfig().isMobileDevice ? 'IframeHeader' : 'Header';
   let head =
-    document.getElementsByClassName('Header') && document.getElementsByClassName('Header')[0]
-      ? document.getElementsByClassName('Header')[0].offsetHeight
+    document.getElementsByClassName(headerClass) && document.getElementsByClassName(headerClass)[0]
+      ? document.getElementsByClassName(headerClass)[0].offsetHeight
       : 0;
   let banner = document.getElementsByClassName('Banner')[0];
   let bannerHeight = banner ? banner.offsetHeight : 0;
@@ -442,7 +443,7 @@ export function capitalize(string) {
 }
 
 export function isIframe() {
-  // return true;
+  //  return true;
   if (window.top !== window.self) {
     return true;
   } else {

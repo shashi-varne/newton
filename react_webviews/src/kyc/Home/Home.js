@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { storageService, validatePan, isEmpty } from "utils/validators";
+import { storageService, validatePan } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { getPathname, storageConstants } from "../constants";
@@ -13,6 +13,7 @@ import { getConfig, isIframe } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import internalStorage from './InternalStorage';
+import isEmpty from 'lodash/isEmpty';
 
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -39,7 +40,9 @@ const Home = (props) => {
 
   const savedPan = storageService().get('pan');
   useEffect(() => {
-    setPan(savedPan);
+    if(savedPan){
+      setPan(savedPan);
+    }
   },[])
 
   useEffect(() => {
@@ -232,14 +235,14 @@ const Home = (props) => {
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (config.isIframe && false) {
+    if (config.isIframe && config.partner_code !== 'moneycontrol') {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
       if (!response) return;
       let { result, status_code } = response;
       let { different_login, auth_ids} = result;
-      if (status_code !== 200) {
+      if (status_code === 200) {
         const accountDetail = {
           title: "PAN Already Exists",
           message: "Sorry! this PAN is already registered with another account.",
@@ -256,6 +259,7 @@ const Home = (props) => {
             status: 'linkAccount'
           }
           storageService().set('pan',pan);
+          storageService().setObject(storageConstants.AUTH_IDS, auth_ids);
           internalStorage.setData('handleClickOne', reEnterPan);
           internalStorage.setData('handleClickTwo', handleMerge);
           navigate('pan-status',{state:{...accountDetail, ...newData}});

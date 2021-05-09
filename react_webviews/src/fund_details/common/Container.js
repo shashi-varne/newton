@@ -23,6 +23,7 @@ import './Style.scss';
 import UiSkelton from '../../common/ui/Skelton';
 import IframeHeader from 'common/components/Iframe/Header';
 const iframe = isIframe();
+const isMobileDevice = getConfig().isMobileDevice;
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const x = React.useRef(true);
@@ -123,7 +124,7 @@ const Container = (props) => {
 
   return (
     <div
-      className={`${iframe ? 'iframeContainerWrapper' :'ContainerWrapper'}   ${props.classOverRide}  ${
+      className={`${iframe && !isMobileDevice ? 'iframeContainerWrapper' :'ContainerWrapper'}   ${props.classOverRide}  ${
         getConfig().productName !== 'fisdom' ? 'blue' : ''
       }`}
     >
@@ -175,7 +176,7 @@ const Container = (props) => {
 
       {/* Below Header Block */}
       {
-        !iframe &&
+        (!iframe || isMobileDevice)&&
         <div id='HeaderHeight' style={{ top: 56 }}>
         {/* Loader Block */}
         {/* {renderPageLoader()} */}
@@ -224,7 +225,7 @@ const Container = (props) => {
         <div
           style={props.styleContainer}
           className={`
-            ${iframe ? 'IframeContainer' :'Container'} 
+            ${iframe && !isMobileDevice ? 'IframeContainer' :'Container'} 
             ${props.classOverRideContainer}
             ${props.noPadding ? 'no-padding' : ''}
           `}

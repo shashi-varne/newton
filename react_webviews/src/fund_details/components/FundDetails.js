@@ -664,7 +664,7 @@ const FundDetails = ({ classes, history }) => {
     setOpen(!open);
   };
 
-  const ContainerProps = !iframe ?
+  const ContainerProps = !iframe || getConfig().isMobileDevice ?
   {
     // title={fundDetails?.performance?.friendly_name},
     // hideInPageTitle={true},
