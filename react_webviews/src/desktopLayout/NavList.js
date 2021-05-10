@@ -168,7 +168,7 @@ const NavList = (props) => {
               return null;
             }
             return (
-              <ListItem key={idx} onClick={handleClick(el)} className={`nav-link-listItem ${activePath === el.id ? 'navlink-active': ''}`} data-aid={`${el.id}_btn`}>
+              <ListItem key={idx} onClick={handleClick(el)} className={`nav-link-listItem ${activePath === el.id ? 'navlink-active': ''}`} data-aid={`${el.id}-btn`}>
                 <ListItemIcon>
                   <img className='nav-link-icons' src={el.icon} alt={el.name} />
                 </ListItemIcon>

@@ -38,9 +38,9 @@ const MessageComponent = (kyc) => {
   return (
     <section className="pan-alert" data-aid='kyc-pan-alert'>
       {titleList.map((title, idx) => (
-        <div className="row" key={idx} data-aid={`row_${idx+1}`}>
-          <div className="order" data-aid={`order_${idx+1}`}>{idx + 1}.</div>
-          <div className="value" data-aid={`value_${idx+1}`}>{title}</div>
+        <div className="row" key={idx} data-aid={`row-${idx+1}`}>
+          <div className="order" data-aid={`order-${idx+1}`}>{idx + 1}.</div>
+          <div className="value" data-aid={`value-${idx+1}`}>{title}</div>
         </div>
       ))}
     </section>

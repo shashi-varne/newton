@@ -182,7 +182,7 @@ const AddressDetails1 = (props) => {
                   form_data.residential_status === "NRI" || isApiRunning;
                 return (
                   <span
-                    data-aid={`kyc-address-proof_${index+1}`}
+                    data-aid={`kyc-address-proof-${index+1}`}
                     key={index}
                     className={`address-proof-option ${
                       selected && `selected`

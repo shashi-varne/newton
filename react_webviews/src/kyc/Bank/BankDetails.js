@@ -120,7 +120,7 @@ const BankDetails = (props) => {
                 className={`status ${
                   bank.bank_status === "rejected" && "failed"
                 } ${bank.bank_status === "verified" && "verified"}`}
-                data-aid={`mapped_bank_status`}
+                data-aid={`mapped-bank-status`}
               >
                 {bank.mapped_bank_status}
               </div>

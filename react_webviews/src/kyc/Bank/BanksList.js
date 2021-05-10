@@ -72,7 +72,7 @@ const BanksList = (props) => {
               className="block"
               key={index}
               onClick={bank_details(bank.bank_id)}
-              data-aid={`bank_${index+1}`}
+              data-aid={`bank-${index+1}`}
             >
               <div className="bank-details" data-aid='kyc-bank-details'>
                 <img src={bank.bank_image} className="left-icon" alt="" />
@@ -98,7 +98,7 @@ const BanksList = (props) => {
                     className={`status  ${
                       bank.bank_status === "rejected" && "failed"
                     } ${bank.bank_status === "verified" && "verified"}`}
-                    data-aid={`mapped_bank_status_${index+1}`}
+                    data-aid={`mapped-bank-status-${index+1}`}
                   >
                     {bank.mapped_bank_status}
                   </div>
