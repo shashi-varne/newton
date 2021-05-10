@@ -120,18 +120,9 @@ WVBottomSheet.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
   buttonLayout: PropTypes.oneOf(['stacked', 'stackedOR', 'horizontal']),
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
-  subtitle: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
-  children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
+  title: PropTypes.node,
+  subtitle: PropTypes.node,
+  children: PropTypes.node
 };
 
 WVBottomSheet.defaultProps = {

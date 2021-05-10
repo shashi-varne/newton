@@ -112,14 +112,8 @@ export const WVLoadingBottomSheet = ({
 
 WVLoadingBottomSheet.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]).isRequired,
-  subtitle: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
+  title: PropTypes.node.isRequired,
+  subtitle: PropTypes.node,
   timerDuration: PropTypes.number,
   onTimerEnd: PropTypes.func,
   onTimerChange: PropTypes.func,
