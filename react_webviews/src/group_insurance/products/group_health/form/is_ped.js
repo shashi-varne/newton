@@ -235,7 +235,10 @@ class GroupHealthPlanIsPed extends Component {
                         current_state[`${insured_data[x].relation_key}`]  = insured_data[x].ped
                     }
                 }
-    
+                if(form_data.is_ped === 'NO'){
+                    current_state = {'none': true}
+                }
+
                 this.updateLead(body, '' , current_state);
             })
         }

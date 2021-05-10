@@ -159,6 +159,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             }else if((provider === 'HDFCERGO' || provider === 'RELIGARE') && account_type !== 'self'){
                 next_state = 'cover_type_screen'
                 allowed_post_body_keys.push('city')
+                groupHealthPlanData.add_ons_screen = {};
             }else if(provider === 'GMC'){
                 next_state = 'plan_payment_frequency'
             }
