@@ -92,7 +92,6 @@ export const WVBottomSheet = ({
             left in a 'horizontal' layout
           */}
           <WVButtonLayout.Button
-            order="1"
             title={button1Props.title}
             type={button1Props.type}
             {...button1Props}
@@ -104,7 +103,6 @@ export const WVBottomSheet = ({
           */}
           {!isEmpty(button2Props) &&
             <WVButtonLayout.Button
-              order="2"
               title={button2Props.title}
               type={button2Props.type}
               {...button2Props}

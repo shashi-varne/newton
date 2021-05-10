@@ -1,10 +1,38 @@
+/*
+
+Use:
+- To create button layouts/groupings (stacked vertically or spread horizontally)
+- Buttons are automatically organised (spacing, alignment) within the layout container
+- Can add additional components/text/elements within the layout
+
+Example syntax:
+  <WVButtonLayout
+    layout="stacked" [default="horizontal"]
+    className="someClass"
+  >
+    <WVButtonLayout.Button
+      type="primary" (primary/secondary/text) ***required***
+      title="Button title/text" ***required***
+    />
+    <WVButtonLayout.ORDivider />
+    <WVButtonLayout.Button
+      type="secondary" (primary/secondary/text) ***required***
+      title="Button title/text" ***required***
+    />
+  </WVButtonLayout>
+*/
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
 
 /* ButtonLayout Component */
 
-const WVButtonLayout = ({ layout, className, children }) => {
+const WVButtonLayout = ({
+  layout, // "stacked" or "horizontal"
+  className, // classes for layout container
+  children // any combination of button, text, elements, components
+}) => {
   return (
     <div className={`wv-button-layout-${layout} ${className}`}>
       {children}
@@ -34,11 +62,15 @@ const BUTTON_TYPE_PROPS = {
   text: {}
 };
 
-const LayoutButton = ({ order, title, classes, type, ...props }) => {
+const LayoutButton = ({
+  title, // Button title/text content
+  classes, // Button classes (refer MUI Button classes API)
+  type, // "primary", "secondary", "text" button types
+  ...props // MUI Button props
+}) => {
   let modifiedClasses = {
     root: `
       wv-layout-button
-      wv-layout-button${order}
       wv-layout-button-${type}
       ${classes.root || ''}
     `,
@@ -61,16 +93,16 @@ const LayoutButton = ({ order, title, classes, type, ...props }) => {
 }
 
 LayoutButton.propTypes = {
-  order: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]),
+  // order: PropTypes.oneOfType([
+  //   PropTypes.number,
+  //   PropTypes.string
+  // ]),
   type: PropTypes.oneOf(['primary', 'secondary', 'text']).isRequired,
   title: PropTypes.string.isRequired,
 };
 
 LayoutButton.defaultProps = {
-  order: 1,
+  // order: 1,
   classes:{}
 };
 
