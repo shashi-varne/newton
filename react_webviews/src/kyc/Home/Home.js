@@ -317,7 +317,7 @@ const Home = (props) => {
                 variant="success"
                 message={renderData.success.subtitle}
                 title={renderData.success.title}
-                dataAid='alert_success'
+                dataAid='alert-success'
               />
             )}
             {isStartKyc && !isUserCompliant && (
@@ -325,7 +325,7 @@ const Home = (props) => {
                 variant="danger"
                 message={renderData.incomplete.subtitle}
                 title={renderData.incomplete.title}
-                dataAid='alert_failed'
+                dataAid='alert-failed'
               />
             )}
           </main>

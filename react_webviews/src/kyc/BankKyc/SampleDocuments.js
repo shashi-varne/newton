@@ -8,7 +8,7 @@ const SampleDocument = () => {
     { name: 'Bank account statement', doc: 'bank_statement' },
   ]
   return (
-    <Container noFooter title="Sample bank documents">
+    <Container noFooter title="Sample bank documents" data-aid='sample-bank-documents-screen'>
       <section id="kyc-bank-sample-docs">
         <div className="description" data-aid='kyc-description'>
           Please ensure that the documents you are uploading must have your
