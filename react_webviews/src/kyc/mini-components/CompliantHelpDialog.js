@@ -23,9 +23,9 @@ const CompliantHelpDialog = ({ close, isOpen, pan }) => {
           please reach us at :
         </div>
         <div className="partner-info" data-aid='kyc-partner-info'>
-          <div data-aid='kyc-mobile_no'>{config.mobile}</div>
+          <div data-aid='kyc-mobile-no'>{config.mobile}</div>
           <div>|</div>
-          <div data-aid='kyc-email_id'>{config.email}</div>
+          <div data-aid='kyc-email-id'>{config.email}</div>
         </div>
         <Button onClick={() => close()}>OK</Button>
       </DialogContent>

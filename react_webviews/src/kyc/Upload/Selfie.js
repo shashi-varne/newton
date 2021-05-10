@@ -111,7 +111,7 @@ const Sign = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload Selfie"
-      data-aid='kyc-Upload-Selfie-screen'
+      data-aid='kyc-upload-selfie-screen'
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">

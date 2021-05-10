@@ -25,7 +25,7 @@ const ResidentDialog = ({ close, open, cancel, aadhaarKyc }) => {
         </main>
         <footer>
           <Button
-            data-aid='no_btn'
+            data-aid='no-btn'
             variant="contained"
             fullWidth
             onClick={() => cancel()}
@@ -34,7 +34,7 @@ const ResidentDialog = ({ close, open, cancel, aadhaarKyc }) => {
             NO
           </Button>
           <Button
-            data-aid='yes_btn'
+            data-aid='yes-btn'
             variant="contained"
             fullWidth
             color="secondary"

@@ -189,7 +189,7 @@ const AddressDetails2 = (props) => {
       data-aid='kyc-bank-kyc-address-details-2'
     >
       <section id="kyc-bank-kyc-address-details-2">
-        <div className="sub-title" data-aid='kyc-getAddressProof-text'>Address as per {getAddressProof(kyc)}</div>
+        <div className="sub-title" data-aid='kyc-get-addressproof-text'>Address as per {getAddressProof(kyc)}</div>
         <form className="form-container" data-aid='kyc-form-container'>
           <TextField
             label="Pincode"

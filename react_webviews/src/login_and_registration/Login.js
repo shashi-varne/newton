@@ -157,7 +157,7 @@ class Login extends Component {
                     />
                   </div>
                   <div
-                    className="forgot_password" data-aid='forgot_password'
+                    className="forgot_password" data-aid='forgot-password'
                     onClick={() => this.navigate("forgot-password")}
                   >
                     FORGOT PASSWORD?
@@ -179,12 +179,12 @@ class Login extends Component {
               {productName !== "finity" && (
                 <div className="social-block" data-aid='social-block'>
                   <a
-                    className="socialSignupBtns facebookBtn" data-aid='socialSignupBtns facebookBtn'
+                    className="socialSignupBtns facebookBtn" data-aid='social-signupbtns-facebookbtn'
                     href={facebookUrl}
                   >
                     FACEBOOK
                   </a>
-                  <a className="socialSignupBtns googleBtn" data-aid='socialSignupBtns googleBtn' href={googleUrl}>
+                  <a className="socialSignupBtns googleBtn" data-aid='social-signupbtns-googlebtn' href={googleUrl}>
                     GOOGLE
                   </a>
                 </div>
@@ -192,7 +192,7 @@ class Login extends Component {
             </div>
             {productName !== "finity" && (
               <div className="footer" data-aid='footer' onClick={() => this.navigate("register")}>
-                NEW USER? <span data-aid='Register_btn'>REGISTER</span>
+                NEW USER? <span data-aid='register-btn'>REGISTER</span>
               </div>
             )}
             {productName === "finity" && (

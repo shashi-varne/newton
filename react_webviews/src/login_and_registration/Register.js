@@ -76,7 +76,7 @@ class Register extends Component {
       googleUrl,
     } = this.state;
     return (
-      <div className="login" data-aid='login-REGISTER'>
+      <div className="login" data-aid='login-register'>
         <div className="header">
           <img src={require(`assets/${config.logo}`)} alt="logo" />
         </div>
@@ -258,16 +258,16 @@ class Register extends Component {
                 </div>
               )}
               <div className="social-block" data-aid='social-block'>
-                <a className="socialSignupBtns facebookBtn" data-aid='socialSignupBtns facebookBtn' href={facebookUrl}>
+                <a className="socialSignupBtns facebookBtn" data-aid='social-signupbtns-facebookbtn' href={facebookUrl}>
                   FACEBOOK
                 </a>
-                <a className="socialSignupBtns googleBtn" data-aid='socialSignupBtns googleBtn' href={googleUrl}>
+                <a className="socialSignupBtns googleBtn" data-aid='social-signupbtns-googlebtn' href={googleUrl}>
                   GOOGLE
                 </a>
               </div>
             </div>
             <div className="footer"  data-aid='footer' onClick={() => this.navigate("login")}>
-              EXISTING USER? <span data-aid='Login_btn'>LOGIN</span>
+              EXISTING USER? <span data-aid='login-btn'>LOGIN</span>
             </div>
             <div className="agree-terms" data-aid='agree-terms'>
               By signing in, you agree to fisdom's{" "}

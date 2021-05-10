@@ -129,7 +129,7 @@ const Sign = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Share Signature"
-      data-aid='kyc-Signature-screen'
+      data-aid='kyc-signature-screen'
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">

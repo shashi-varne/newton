@@ -165,24 +165,24 @@ const Report = (props) => {
               </div>
             </div>
           )}
-          <div className="unzipped-box" data-aid='kyc-Dob'>
+          <div className="unzipped-box" data-aid='kyc-dob'>
             <div className="title">Dob</div>
             <div className="subtitle">{kyc.pan.meta_data.dob}</div>
           </div>
         </div>
         {!isCompliant && (
           <>
-            <div className="unzipped-box" data-aid='kyc-Marital-Status'>
+            <div className="unzipped-box" data-aid='kyc-marital-status'>
               <div className="title">Marital Status</div>
               <div className="subtitle">
                 {kyc.identification.meta_data.marital_status}
               </div>
             </div>
-            <div className="unzipped-box" data-aid='kyc-fatherName'>
+            <div className="unzipped-box" data-aid='kyc-father-name'>
               <div className="title">Father’s name</div>
               <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
             </div>
-            <div className="unzipped-box" data-aid='kyc-motherName'>
+            <div className="unzipped-box" data-aid='kyc-mother-name'>
               <div className="title">Mother’s name</div>
               <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
             </div>
@@ -205,7 +205,7 @@ const Report = (props) => {
       <>
         {!isCompliant && (
           <>
-            <div className="unzipped-box" data-aid='kyc-address_proof'>
+            <div className="unzipped-box" data-aid='kyc-address-proof'>
               <div className="title">
                 {is_nri && <span>Indian </span>} Address as per{" "}
                 {addressProof.address_proof}
@@ -217,7 +217,7 @@ const Report = (props) => {
               </div>
             </div>
             {is_nri && (
-              <div className="unzipped-box" data-aid='kyc-address_proof_nri'>
+              <div className="unzipped-box" data-aid='kyc-address-proof-nri'>
                 <div className="title">
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
@@ -232,7 +232,7 @@ const Report = (props) => {
           </>
         )}
         {isCompliant && (
-          <div className="unzipped-box" data-aid='kyc-address_proof_nri'>
+          <div className="unzipped-box" data-aid='kyc-address-proof-nri'>
             <div className="title">Foreign Address</div>
             <div className="subtitle">
               {kyc.nri_address.meta_data.addressline},
@@ -249,7 +249,7 @@ const Report = (props) => {
   const nomineeDetails = () => {
     return (
       <>
-        <div className="unzipped-title" data-aid='kyc-Relationship'>{kyc.nomination.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-relationship'>{kyc.nomination.meta_data.name}</div>
         <div className="row-align">
           <div className="unzipped-box">
             <div className="title">Relationship</div>
@@ -271,11 +271,11 @@ const Report = (props) => {
     return (
       <>
         <div className="unzipped-title">{kyc.bank.meta_data.bank_name}</div>
-        <div className="unzipped-box" data-aid='kyc-account_number'>
+        <div className="unzipped-box" data-aid='kyc-account-number'>
           <div className="title">A/C number</div>
           <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
         </div>
-        <div className="unzipped-box" data-aid='kyc-ifsc_code'>
+        <div className="unzipped-box" data-aid='kyc-ifsc-code'>
           <div className="title">IFSC</div>
           <div className="subtitle">{kyc.bank.meta_data.ifsc_code}</div>
         </div>
@@ -323,8 +323,8 @@ const Report = (props) => {
             alt="img"
             className="img"
           />
-          <div className="congrats" data-aid='kyc-Congratulations-text'>Congratulations!</div>
-          <div className="text" data-aid='kyc-appText'>{appText}</div>
+          <div className="congrats" data-aid='kyc-congratulations-text'>Congratulations!</div>
+          <div className="text" data-aid='kyc-app-text'>{appText}</div>
           <div className="text message" data-aid='kyc-text-message'>
             <img src={require(`assets/eta_icon.svg`)} alt="" />
             Approves in one working day

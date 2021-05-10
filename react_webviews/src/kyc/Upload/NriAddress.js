@@ -267,7 +267,7 @@ const NRIAddressUpload = (props) => {
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
-      data-aid='kyc-Upload-foreign-address-proof-screen'
+      data-aid='kyc-upload-foreign-address-proof-screen'
     >
       {!isEmpty(kyc) && (
         <section>

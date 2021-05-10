@@ -187,7 +187,7 @@ const AddBankVerify = (props) => {
         )}
         {!showLoader && (
           <>
-            <div className="item" data-aid='kyc-bank_name'>
+            <div className="item" data-aid='kyc-bank-name'>
               <div className="flex">
                 <div className="left">
                   <img
@@ -196,7 +196,7 @@ const AddBankVerify = (props) => {
                     alt="bank-logo"
                   />
                 </div>
-                <div className="right" data-aid='bank_name'>
+                <div className="right" data-aid='bank-name'>
                   <div>{bankData.bank_name}</div>
                   <div className="text">{bankData.branch_name} </div>
                 </div>
@@ -205,15 +205,15 @@ const AddBankVerify = (props) => {
                 EDIT
               </div>
             </div>
-            <div className="item" data-aid='kyc-account_number'>
+            <div className="item" data-aid='kyc-account-number'>
               <div className="left">Account number</div>
               <div className="right"> {bankData.account_number} </div>
             </div>
-            <div className="item" data-aid='kyc-ifsc_code'>
+            <div className="item" data-aid='kyc-ifsc-code'>
               <div className="left">IFSC code</div>
               <div className="right">{bankData.ifsc_code} </div>
             </div>
-            <div className="item" data-aid='kyc-account_type'>
+            <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
               <div className="right"> {bankData.account_type} </div>
             </div>

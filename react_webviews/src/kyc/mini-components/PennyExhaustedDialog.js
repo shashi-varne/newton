@@ -24,7 +24,7 @@ const PennyExhaustedDialog = ({ isOpen, redirect, uploadDocuments }) => {
             className="img"
           />
         </div>
-        <div className="subtitle" data-aid='kyc-subtitle_details' >
+        <div className="subtitle" data-aid='kyc-subtitle-details' >
           Oops! You have exhausted all the 3 attempts. Continue by uploading
           your documents or check back later
         </div>

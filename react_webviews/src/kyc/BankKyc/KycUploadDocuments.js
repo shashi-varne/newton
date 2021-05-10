@@ -305,7 +305,7 @@ const KycUploadDocuments = (props) => {
                       </g>
                     </svg>
 
-                    <div className="upload-action"  data-aid='kyc-Upload-file-text'>Upload file</div>
+                    <div className="upload-action"  data-aid='kyc-upload-file-text'>Upload file</div>
                   </div>
                 </div>
               ) : (

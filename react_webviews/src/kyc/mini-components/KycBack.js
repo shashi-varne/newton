@@ -22,8 +22,8 @@ const KycBackModal = ({ id, open, confirm, cancel, ...props }) => {
             KYC is mandatory for investment, are you sure you want to go back?
           </article>
           <footer className="actions" data-aid='kyc-actions'>
-            <Button data-aid='kyc-Later' onClick={confirm}>Later</Button>
-            <Button data-aid='kyc-Complete-KYC' onClick={cancel} variant="flat">Complete KYC</Button>
+            <Button data-aid='kyc-later' onClick={confirm}>Later</Button>
+            <Button data-aid='kyc-complete-kyc' onClick={cancel} variant="flat">Complete KYC</Button>
           </footer>
         </section>
       </DialogContent>

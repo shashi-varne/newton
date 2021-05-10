@@ -28,7 +28,7 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
           Bank account verification failed! No worries, please check if you've
           entered correct details.
         </div>
-        <Button className="button bg-full" data-aid='kyc-check_bank_details' onClick={() => checkBankDetails()}>
+        <Button className="button bg-full" data-aid='kyc-check-bank-details' onClick={() => checkBankDetails()}>
           CHECK BANK DETAILS
         </Button>
         <div className="divider">
@@ -36,7 +36,7 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
         </div>
         <Button
           className="button border-button"
-          data-aid='kyc-upload_bank_documents'
+          data-aid='kyc-upload-bank-documents'
           onClick={() => uploadDocuments()}
         >
           UPLOAD BANK DOCUMENTS

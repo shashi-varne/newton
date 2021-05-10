@@ -62,15 +62,15 @@ const CompliantReport = (props) => {
     return (
       <>
         <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
-        <div className="unzipped-box" data-aid='kyc-Email'>
+        <div className="unzipped-box" data-aid='kyc-email'>
           <div className="title">Email</div>
           <div className="subtitle">{kyc.identification.meta_data.email}</div>
         </div>
-        <div className="unzipped-box" data-aid='kyc-Dob'>
+        <div className="unzipped-box" data-aid='kyc-eob'>
           <div className="title">Dob</div>
           <div className="subtitle">{kyc.pan.meta_data.dob}</div>
         </div>
-        <div className="unzipped-box" data-aid='kyc-mobile_number'>
+        <div className="unzipped-box" data-aid='kyc-mobile-number'>
           <div className="title">Mobile</div>
           <div className="subtitle">
             {kyc.identification.meta_data.mobile_number}
@@ -84,7 +84,7 @@ const CompliantReport = (props) => {
     return (
       <>
         {is_nri && (
-          <div className="unzipped-box" data-aid='kyc-address_proof_nri'>
+          <div className="unzipped-box" data-aid='kyc-address-proof-nri'>
             <div className="title">Foreign Address</div>
             <div className="subtitle">
               {kyc.nri_address.meta_data.addressline},
@@ -123,11 +123,11 @@ const CompliantReport = (props) => {
     return (
       <>
         <div className="unzipped-title" data-aid='kyc-bank-name'>{kyc.bank.meta_data.bank_name}</div>
-        <div className="unzipped-box" data-aid='kyc-account_number'>
+        <div className="unzipped-box" data-aid='kyc-account-number'>
           <div className="title">A/C number</div>
           <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
         </div>
-        <div className="unzipped-box" data-aid='kyc-ifsc_code'>
+        <div className="unzipped-box" data-aid='kyc-ifsc-code'>
           <div className="title">IFSC</div>
           <div className="subtitle">{kyc.bank.meta_data.ifsc_code}</div>
         </div>

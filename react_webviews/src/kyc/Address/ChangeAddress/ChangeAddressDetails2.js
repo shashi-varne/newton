@@ -244,7 +244,7 @@ const ChangeAddressDetails2 = (props) => {
       count={2}
       current={2}
       total={2}
-      data-aid='kyc-ChangeAddressDetails-screen2'
+      data-aid='kyc-change-addressdetails-screen2'
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" data-aid='kyc-upload-address'>

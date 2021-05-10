@@ -25,7 +25,7 @@ const KnowMore = ({ isOpen, close }) => {
             className="close-icon"
           />
         </header>
-        <main data-aid='kyc-ipvVideoknowmore'>
+        <main data-aid='kyc-ipv-videoknowmore'>
           <div className="title">How to make a selfie Video?</div>
           <div className="content">
             <div className="text"> 

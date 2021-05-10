@@ -75,7 +75,7 @@ const BankDetails = (props) => {
       handleClick={handleClick}
       noFooter={bank.bank_status !== "rejected"}
       title="Bank accounts"
-      data-aid='kyc-bankDetails-page'
+      data-aid='kyc-bank-details-page'
     >
       <div className="bank-details">
         {!showLoader && (
@@ -102,15 +102,15 @@ const BankDetails = (props) => {
                 <div className="branch-name">{bank.branch_name}</div>
               </div>
             </div>
-            <div className="item" data-aid='kyc-account_number'>
+            <div className="item" data-aid='kyc-account-number'>
               <div className="left">Account number</div>
               <div className="right"> {bank.account_number} </div>
             </div>
-            <div className="item" data-aid='kyc-ifsc_code'>
+            <div className="item" data-aid='kyc-ifsc-code'>
               <div className="left">IFSC code</div>
               <div className="right">{bank.ifsc_code} </div>
             </div>
-            <div className="item" data-aid='kyc-account_type'>
+            <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
               <div className="right"> {bank.account_type} </div>
             </div>
@@ -132,7 +132,7 @@ const BankDetails = (props) => {
                   bank.mandates.map((mandate, index) => {
                     return (
                       <div key={index} className="content">
-                        <div className="item" data-aid='kyc-ID'>
+                        <div className="item" data-aid='kyc-id'>
                           <div className="left">ID</div>
                           <div className="right">{mandate.id} </div>
                         </div>
@@ -143,7 +143,7 @@ const BankDetails = (props) => {
                             {formatAmountInr(mandate.amount)}{" "}
                           </div>
                         </div>
-                        <div className="item" data-aid='kyc-Status'>
+                        <div className="item" data-aid='kyc-status'>
                           <div className="left">Status</div>
                           <div
                             className={`status ${
@@ -151,7 +151,7 @@ const BankDetails = (props) => {
                             } ${mandate.status === "verified" && "verified"} ${
                               mandate.status === "init" && "underprocess"
                             }`}
-                            data-aid='kyc-mapped_mandate_status'
+                            data-aid='kyc-mapped-mandate-status'
                           >
                             {mandate.mapped_mandate_status}
                           </div>

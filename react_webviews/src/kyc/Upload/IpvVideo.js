@@ -268,7 +268,7 @@ const IpvVideo = (props) => {
             </div>
           )}
           {!file && (
-            <div className="ipv_footer_instructions" data-aid='kyc-ipv_footer_instructions_nofile'>
+            <div className="ipv_footer_instructions" data-aid='kyc-ipv-footer-instructions-nofile'>
               While recording,{' '}
               <strong>read the following verification numbers loud</strong>{' '}
               while looking at the camera
@@ -276,14 +276,14 @@ const IpvVideo = (props) => {
           )}
 
           {file && (
-            <div className="ipv_footer_instructions" data-aid='kyc-ipv_footer_instructions_file'>
+            <div className="ipv_footer_instructions" data-aid='kyc-ipv-footer-instructions-file'>
               Please ensure that you've read aloud the below number for a
               seamless verification experience.
             </div>
           )}
-          <div className="ipv_code" data-aid='kyc-ipv_code'>{ipvcode}</div>
+          <div className="ipv_code" data-aid='kyc-ipv-code'>{ipvcode}</div>
           <div className="flex-between-center">
-            <div className="know_more" data-aid='kyc-know_more-text'>How to make a selfie video ?</div>
+            <div className="know_more" data-aid='kyc-know-more-text'>How to make a selfie video ?</div>
             <div className="link" data-aid='kyc-link' onClick={() => open()}>
               KNOW MORE
             </div>

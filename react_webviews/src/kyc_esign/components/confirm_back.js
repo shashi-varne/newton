@@ -21,8 +21,8 @@ const ConfirmBackModal = ({ id, open, confirm, cancel, ...props }) => {
             You are almost there, do you really want to go back?
           </article>
           <footer className="actions">
-            <Button data-aid='yes_btn' onClick={confirm}>Yes</Button>
-            <Button data-aid="no_btn" onClick={cancel} variant="flat">No</Button>
+            <Button data-aid='yes-btn' onClick={confirm}>Yes</Button>
+            <Button data-aid="no-btn" onClick={cancel} variant="flat">No</Button>
           </footer>
         </section>
       </DialogContent>

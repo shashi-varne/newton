@@ -197,7 +197,7 @@ const PersonalDetails4 = (props) => {
             id="dob"
             disabled={isChecked || isApiRunning}
           />
-          <div className="input" data-aid='kyc-DropdownWithoutIcon'>
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
