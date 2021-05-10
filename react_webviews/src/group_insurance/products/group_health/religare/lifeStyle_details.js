@@ -357,6 +357,10 @@ class GroupHealthPlanLifestyleDetail extends Component {
       body['insured_people_details'] = insured_people_details;
     }
 
+    if(member_base.length === 1 && member_base[0].relation === 'self' && member_base[0].life_style_question_exists === 'No'){
+      none_option_selected = true;
+    }
+
     var current_state = {}
     if(!none_option_selected){
       for(var x in body.answers){
