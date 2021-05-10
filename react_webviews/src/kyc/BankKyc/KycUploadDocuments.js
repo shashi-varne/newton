@@ -207,24 +207,25 @@ const KycUploadDocuments = (props) => {
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title="Upload documents"
+      data-aid='kyc-upload-documents-page'
     >
       <section id="kyc-bank-kyc-upload-docs">
-        <div className="banner">
+        <div className="banner" data-aid='kyc-banner'>
           <div className="left">
             <img src={bankData?.ifsc_image} alt="bank" className="icon" />
             <div className="acc_no">
-              <div className="title"id='account_number_title'>Account number</div>
-              <div className="value" id='account_number'>{bankData?.account_number}</div>
+              <div className="title">Account number</div>
+              <div className="value">{bankData?.account_number}</div>
             </div>
           </div>
 
-          <div className="edit" id='edit' onClick={handleEdit}>
+          <div className="edit" onClick={handleEdit}>
             edit
           </div>
         </div>
-        <main>
-          <div className="doc-title" id='doc-title'>Select the document for verification</div>
-          <div className="subtitle" id='subtitle'>
+        <main data-aid='kyc-upload-documents'>
+          <div className="doc-title">Select the document for verification</div>
+          <div className="subtitle">
             Ensure your name is clearly visible in the document
           </div>
           <div className="options">
@@ -261,7 +262,7 @@ const KycUploadDocuments = (props) => {
             })}
           </div>
           {!isEmpty(selected) && selected >= 0 && (
-            <div className="docs-image-container">
+            <div className="docs-image-container" data-aid='kyc-docs-image-container'>
               <div className="preview">
                 {file && fileToShow ? (
                   <img
@@ -279,7 +280,7 @@ const KycUploadDocuments = (props) => {
                 )}
               </div>
               {isWeb ? (
-                <div className="web-upload-container">
+                <div className="web-upload-container" data-aid='kyc-web-upload-container'>
                   <div
                     className="upload-container"
                     onClick={() => handleUpload("open_gallery")}
@@ -304,11 +305,11 @@ const KycUploadDocuments = (props) => {
                       </g>
                     </svg>
 
-                    <div className="upload-action"  id='Upload-file-text'>Upload file</div>
+                    <div className="upload-action"  data-aid='kyc-Upload-file-text'>Upload file</div>
                   </div>
                 </div>
               ) : (
-                <div className="camera-upload-container">
+                <div className="camera-upload-container" data-aid='kyc-camera-upload-container'>
                   <div
                     className="upload-container"
                     onClick={() => handleUpload("open_camera")}
@@ -367,11 +368,11 @@ const KycUploadDocuments = (props) => {
           )}
         </main>
         {selectedDocValue && (
-          <div className="sample-document" id='sample-document-text' onClick={handleSampleDocument}>
+          <div className="sample-document" data-aid='kyc-sample-document-text' onClick={handleSampleDocument}>
             view sample document
           </div>
         )}
-        <footer className="ssl-container">
+        <footer className="ssl-container" data-aid='kyc-footer'>
           <img
             src={require("assets/ssl_icon_new.svg")}
             alt="SSL Secure Encryption"

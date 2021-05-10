@@ -110,7 +110,7 @@ const Nominee = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
-      data-aid='nominee-details-page'
+      data-aid='kyc-nominee-details-page'
     >
       <div className="kyc-nominee">
         {!isEmpty(kyc) && (
@@ -136,7 +136,7 @@ const Nominee = (props) => {
               type="text"
               id="dob"
             />
-            <div className="input" data-aid='DropdownWithoutIcon'>
+            <div className="input" data-aid='kyc-DropdownWithoutIcon'>
               <DropdownWithoutIcon
                 error={form_data.relationship_error ? true : false}
                 helperText={form_data.relationship_error}

@@ -271,10 +271,10 @@ const NRIAddressUpload = (props) => {
     >
       {!isEmpty(kyc) && (
         <section>
-          <div className="sub-title">
+          <div className="sub-title" data-aid='kyc-edit'>
             {getFullAddress()}
             {getFullAddress() && (
-              <div className="edit" data-aid='kyc-edit' onClick={editAddress}>
+              <div className="edit" onClick={editAddress}>
                 EDIT
               </div>
             )}
@@ -285,7 +285,7 @@ const NRIAddressUpload = (props) => {
             renderMessage={() => <MessageComponent kyc={kyc} />}
           />
           {!isWeb && (
-            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload'>
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {frontDoc && state.frontFileShow && (
                 <img
                   src={state.frontFileShow}
@@ -365,7 +365,7 @@ const NRIAddressUpload = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload'>
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {frontDoc && state.frontFileShow && (
                 <img
                   src={state.frontFileShow}
@@ -410,7 +410,7 @@ const NRIAddressUpload = (props) => {
             </div>
           )}
           {!isWeb && !onlyFrontDocRequired && (
-            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload'>
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {backDoc && state.backFileShow && (
                 <img
                   src={state.backFileShow}
@@ -490,7 +490,7 @@ const NRIAddressUpload = (props) => {
             </div>
           )}
           {isWeb && !onlyFrontDocRequired && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {backDoc && state.backFileShow && (
                 <img
                   src={state.backFileShow}

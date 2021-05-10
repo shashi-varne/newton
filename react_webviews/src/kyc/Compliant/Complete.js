@@ -29,7 +29,7 @@ const Complete = (props) => {
       data-aid='kyc-compliant-complete-screen'
     >
       <div className="kyc-compliant-complete">
-        <header data-aid='header'>
+        <header data-aid='kyc-header'>
           <img
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""

@@ -17,12 +17,13 @@ const Success = (props) => {
       buttonTitle="PROCEED"
       handleClick={proceed}
       headerData={{goBack: proceed }}
+      data-aid='kyc-success-page'
     >
       <section id="digilocker-success">
-        <div className="page-desc" id='page-desc-text'>
+        <div className="page-desc" data-aid='kyc-page-desc-text'>
           Tap on Proceed to allow fisdom to access your following documents
         </div>
-        <main className="esign-steps" id='main'>
+        <main className="esign-steps" data-aid='kyc-esign-steps'>
           {dlDocs.map(({ name, icon }, idx) => (
             <div className="doc flex-center" key={icon}>
               <img
@@ -34,8 +35,8 @@ const Success = (props) => {
             </div>
           ))}
         </main>
-        <footer className="footer">
-          <div className="bottom-text flex-center-center center" id='Initiative-text'>Initiative by</div>
+        <footer className="footer" data-aid='kyc-footer'>
+          <div className="bottom-text flex-center-center center">Initiative by</div>
           <img
             src={require(`assets/ic_gov_meit.svg`)}
             alt="Initiative by Ministry of Electronics and Information Technology"

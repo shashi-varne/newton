@@ -149,7 +149,7 @@ const PersonalDetails4 = (props) => {
     >
       <div className="kyc-nominee">
         <main data-aid='kyc-nominee'>
-          <div className="nominee-checkbox" data-aid='nominee-checkbox'>
+          <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
               checked={isChecked}
@@ -158,7 +158,7 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-            <span data-aid='no-nominee-text'>
+            <span data-aid='kyc-no-nominee-text'>
               I do not wish to add a <b>nominee</b>
             </span>
           </div>

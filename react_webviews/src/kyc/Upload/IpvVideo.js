@@ -141,7 +141,7 @@ const IpvVideo = (props) => {
             Person Verification Process).
           </div>
           {!isWeb && (
-            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload'>
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {file && (
                 <img
                   src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
@@ -158,7 +158,7 @@ const IpvVideo = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '320px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
                   <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
@@ -224,7 +224,7 @@ const IpvVideo = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {file && (
                 <img
                   src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
@@ -241,7 +241,7 @@ const IpvVideo = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '320px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={inputEl}
                   type="file"

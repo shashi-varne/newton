@@ -122,13 +122,13 @@ const RtaCompliantPersonalDetails = (props) => {
       title={title}
       data-aid='kyc-rtaCompliant-screen'
     >
-      <div className="kyc-personal-details">
+      <div className="kyc-personal-details" data-aid='kyc-personal-details'>
         <div className="kyc-main-subtitle">
-          <div data-aid='share-dob'>
+          <div data-aid='kyc-share-dob'>
             <div>Share your date of birth as per PAN:</div>
             <div className="pan">{form_data.pan}</div>
           </div>
-          <div className="help" onClick={() => setIsOpen(true)}>
+          <div className="help" data-aid='kyc-Help' onClick={() => setIsOpen(true)}>
             HELP
           </div>
         </div>

@@ -133,14 +133,14 @@ const Sign = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">
-          <div className="sub-title">
+          <div className="sub-title" data-aid='kyc-sub-title'>
             Signature should match with your PAN’s signature
           </div>
           {!isWeb && (
             <div
               className="kyc-doc-upload-container"
               style={{ border: 'none' }}
-              data-aid='kyc-doc-upload'
+              data-aid='kyc-doc-upload-container'
             >
               {file && fileToShow && (
                 <img src={fileToShow} className="preview" alt="" />
@@ -154,7 +154,7 @@ const Sign = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '143px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
                   <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
@@ -221,7 +221,7 @@ const Sign = (props) => {
             <div
               className="kyc-doc-upload-container noBorder"
               style={{ marginTop: '70px' }}
-              data-aid='kyc-doc-upload'
+              data-aid='kyc-doc-upload-container'
             >
               {file && (
                 <img
@@ -239,7 +239,7 @@ const Sign = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '143px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={inputEl}
                   type="file"

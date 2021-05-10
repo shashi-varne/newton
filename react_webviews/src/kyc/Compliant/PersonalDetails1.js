@@ -172,7 +172,7 @@ const PersonalDetails1 = (props) => {
       data-aid='kyc-personal-details-screen-1'
     >
       <div className="kyc-personal-details">
-        <div className="kyc-main-subtitle" data-aid='share-dob'>
+        <div className="kyc-main-subtitle" data-aid='kyc-share-dob'>
           <div>
             <div>Share your date of birth as per PAN:</div>
             <div className="pan">{form_data.pan}</div>

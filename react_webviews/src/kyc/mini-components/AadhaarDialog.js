@@ -96,6 +96,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
             variant="raised"
             onClick={handleProceed}
             fullWidth
+            data-aid="PROCEED"
           >
             PROCEED
           </Button>

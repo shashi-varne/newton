@@ -619,7 +619,7 @@ const Journey = (props) => {
       data-aid='kyc-journey-page'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
-        <div className="kyc-journey">
+        <div className="kyc-journey" data-aid='kyc-journey-data'>
           {journeyStatus === 'ground_premium' && (
             <div className="kyc-journey-caption">
               fast track your investment!
@@ -695,13 +695,13 @@ const Journey = (props) => {
           )}
           <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
           {!show_aadhaar && (
-            <div className="kyc-journey-subtitle">
+            <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle-pan-number'>
               Please keep your PAN ({kyc?.pan?.meta_data?.pan_number}) and
               address proof handy to complete KYC
             </div>
           )}
           {kyc?.kyc_status === 'compliant' && !investmentPending && (
-            <div className="kyc-journey-subtitle">
+            <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle-complete-steps'>
               To unlock premium onboarding, complete these simple steps
             </div>
           )}
@@ -709,14 +709,13 @@ const Journey = (props) => {
           {isCompliant &&
             user.active_investment &&
             user.kyc_registration_v2 !== 'submitted' && (
-              <span data-aid='kyc-alert-box'>
               <Alert
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."
                 title={`Hey ${user.name}`}
-              /></span>
+              />
             )}
-          <main className="steps-container">
+          <main  data-aid='kyc-journey' className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
                 className={

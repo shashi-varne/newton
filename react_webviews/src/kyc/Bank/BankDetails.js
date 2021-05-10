@@ -80,7 +80,7 @@ const BankDetails = (props) => {
       <div className="bank-details">
         {!showLoader && (
           <>
-            <div className="bank-info" data-aid='bank-info'>
+            <div className="bank-info" data-aid='kyc-bank-info'>
               <img src={bank.bank_image} className="left-icon" alt="" />
               <div className="content">
                 <div className="bank-name">
@@ -102,19 +102,19 @@ const BankDetails = (props) => {
                 <div className="branch-name">{bank.branch_name}</div>
               </div>
             </div>
-            <div className="item" data-aid='account_number'>
+            <div className="item" data-aid='kyc-account_number'>
               <div className="left">Account number</div>
               <div className="right"> {bank.account_number} </div>
             </div>
-            <div className="item" data-aid='ifsc_code'>
+            <div className="item" data-aid='kyc-ifsc_code'>
               <div className="left">IFSC code</div>
               <div className="right">{bank.ifsc_code} </div>
             </div>
-            <div className="item" data-aid='account_type'>
+            <div className="item" data-aid='kyc-account_type'>
               <div className="left">Account type</div>
               <div className="right"> {bank.account_type} </div>
             </div>
-            <div className="item" data-aid='status'>
+            <div className="item" data-aid='kyc-status'>
               <div className="left">Status</div>
               <div
                 className={`status ${
@@ -126,24 +126,24 @@ const BankDetails = (props) => {
               </div>
             </div>
             {bank.bank_status !== "rejected" && (
-              <div className="mandate-section" data-aid='mandate-section'>
+              <div className="mandate-section" data-aid='kyc-mandate-section'>
                 <div className="title">Mandates</div>
                 {bank.mandates && bank.mandates.length > 0 ? (
                   bank.mandates.map((mandate, index) => {
                     return (
                       <div key={index} className="content">
-                        <div className="item" data-aid='ID'>
+                        <div className="item" data-aid='kyc-ID'>
                           <div className="left">ID</div>
                           <div className="right">{mandate.id} </div>
                         </div>
-                        <div className="item" data-aid='account-type'>
+                        <div className="item" data-aid='kyc-account-type'>
                           <div className="left">Account type</div>
                           <div className="right">
                             {" "}
                             {formatAmountInr(mandate.amount)}{" "}
                           </div>
                         </div>
-                        <div className="item" data-aid='Status'>
+                        <div className="item" data-aid='kyc-Status'>
                           <div className="left">Status</div>
                           <div
                             className={`status ${
@@ -151,7 +151,7 @@ const BankDetails = (props) => {
                             } ${mandate.status === "verified" && "verified"} ${
                               mandate.status === "init" && "underprocess"
                             }`}
-                            data-aid='mapped_mandate_status'
+                            data-aid='kyc-mapped_mandate_status'
                           >
                             {mandate.mapped_mandate_status}
                           </div>
@@ -160,7 +160,7 @@ const BankDetails = (props) => {
                     );
                   })
                 ) : (
-                  <div className="info-text" data-aid='info-text'>
+                  <div className="info-text" data-aid='kyc-info-text'>
                     You do not have any mandates associated with this bank
                     account
                   </div>

@@ -149,47 +149,47 @@ const Report = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title" data-aid='unzipped-title'>{kyc.pan.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
         {isCompliant && (
-          <div className="unzipped-box" data-aid='email'>
+          <div className="unzipped-box" data-aid='kyc-email'>
             <div className="title">Email</div>
             <div className="subtitle">{kyc.identification.meta_data.email}</div>
           </div>
         )}
         <div className="row-align">
           {!isCompliant && (
-            <div className="unzipped-box" data-aid='gender'>
+            <div className="unzipped-box" data-aid='kyc-gender'>
               <div className="title">Gender</div>
               <div className="subtitle">
                 {kyc.identification.meta_data.gender}
               </div>
             </div>
           )}
-          <div className="unzipped-box" data-aid='Dob'>
+          <div className="unzipped-box" data-aid='kyc-Dob'>
             <div className="title">Dob</div>
             <div className="subtitle">{kyc.pan.meta_data.dob}</div>
           </div>
         </div>
         {!isCompliant && (
           <>
-            <div className="unzipped-box" data-aid='Marital-Status'>
+            <div className="unzipped-box" data-aid='kyc-Marital-Status'>
               <div className="title">Marital Status</div>
               <div className="subtitle">
                 {kyc.identification.meta_data.marital_status}
               </div>
             </div>
-            <div className="unzipped-box" data-aid='fatherName'>
+            <div className="unzipped-box" data-aid='kyc-fatherName'>
               <div className="title">Father’s name</div>
               <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
             </div>
-            <div className="unzipped-box" data-aid='motherName'>
+            <div className="unzipped-box" data-aid='kyc-motherName'>
               <div className="title">Mother’s name</div>
               <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
             </div>
           </>
         )}
         {isCompliant && (
-          <div className="unzipped-box" data-aid='mobile'>
+          <div className="unzipped-box" data-aid='kyc-mobile'>
             <div className="title">Mobile</div>
             <div className="subtitle">
               {kyc.identification.meta_data.mobile_number}
@@ -205,7 +205,7 @@ const Report = (props) => {
       <>
         {!isCompliant && (
           <>
-            <div className="unzipped-box" data-aid='address_proof'>
+            <div className="unzipped-box" data-aid='kyc-address_proof'>
               <div className="title">
                 {is_nri && <span>Indian </span>} Address as per{" "}
                 {addressProof.address_proof}
@@ -217,7 +217,7 @@ const Report = (props) => {
               </div>
             </div>
             {is_nri && (
-              <div className="unzipped-box" data-aid='address_proof_nri'>
+              <div className="unzipped-box" data-aid='kyc-address_proof_nri'>
                 <div className="title">
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
@@ -232,7 +232,7 @@ const Report = (props) => {
           </>
         )}
         {isCompliant && (
-          <div className="unzipped-box" data-aid='address_proof_nri'>
+          <div className="unzipped-box" data-aid='kyc-address_proof_nri'>
             <div className="title">Foreign Address</div>
             <div className="subtitle">
               {kyc.nri_address.meta_data.addressline},
@@ -249,7 +249,7 @@ const Report = (props) => {
   const nomineeDetails = () => {
     return (
       <>
-        <div className="unzipped-title" data-aid='Relationship'>{kyc.nomination.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-Relationship'>{kyc.nomination.meta_data.name}</div>
         <div className="row-align">
           <div className="unzipped-box">
             <div className="title">Relationship</div>
@@ -258,7 +258,7 @@ const Report = (props) => {
             </div>
           </div>
 
-          <div className="unzipped-box" data-aid='dob'>
+          <div className="unzipped-box" data-aid='kyc-dob'>
             <div className="title">Dob</div>
             <div className="subtitle">{kyc.nomination.meta_data.dob}</div>
           </div>
@@ -271,11 +271,11 @@ const Report = (props) => {
     return (
       <>
         <div className="unzipped-title">{kyc.bank.meta_data.bank_name}</div>
-        <div className="unzipped-box" data-aid='account_number'>
+        <div className="unzipped-box" data-aid='kyc-account_number'>
           <div className="title">A/C number</div>
           <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
         </div>
-        <div className="unzipped-box" data-aid='ifsc_code'>
+        <div className="unzipped-box" data-aid='kyc-ifsc_code'>
           <div className="title">IFSC</div>
           <div className="subtitle">{kyc.bank.meta_data.ifsc_code}</div>
         </div>
@@ -323,9 +323,9 @@ const Report = (props) => {
             alt="img"
             className="img"
           />
-          <div className="congrats" data-aid='Congratulations-text'>Congratulations!</div>
-          <div className="text" data-aid='appText'>{appText}</div>
-          <div className="text message" data-aid='text-message'>
+          <div className="congrats" data-aid='kyc-Congratulations-text'>Congratulations!</div>
+          <div className="text" data-aid='kyc-appText'>{appText}</div>
+          <div className="text message" data-aid='kyc-text-message'>
             <img src={require(`assets/eta_icon.svg`)} alt="" />
             Approves in one working day
           </div>
@@ -359,7 +359,7 @@ const Report = (props) => {
                       />
                     </div>
                     {openIndex === index && (
-                      <div className="unzipped" data-aid='unzipped'>{renderCards(item.key)}</div>
+                      <div className="unzipped" data-aid='kyc-unzipped'>{renderCards(item.key)}</div>
                     )}
                   </div>
                 );

@@ -17,7 +17,7 @@ const AccountMerge = ({ isOpen, close, data, handleClick }) => {
       id="kyc-bottom-dialog"
       data-aid='kyc-bottom-dialog'
     >
-      <DialogContent className="account-merge-dialog-content" data-aid='account-merge-dialog-content'>
+      <DialogContent className="account-merge-dialog-content" data-aid='kyc-account-merge-dialog-content'>
         <div className="title">
           <div className="text">{data.title}</div>
           <img

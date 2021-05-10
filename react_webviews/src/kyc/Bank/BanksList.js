@@ -65,7 +65,7 @@ const BanksList = (props) => {
       type="outlined"
       data-aid='kyc-add-other-bank-screen'
     >
-      <div className="banks-list">
+      <div className="banks-list" data-aid='kyc-banks-list'>
         {banks.map((bank, index) => {
           return (
             <div
@@ -74,7 +74,7 @@ const BanksList = (props) => {
               onClick={bank_details(bank.bank_id)}
               data-aid={`bank_${index+1}`}
             >
-              <div className="bank-details" data-aid='bank-details'>
+              <div className="bank-details" data-aid='kyc-bank-details'>
                 <img src={bank.bank_image} className="left-icon" alt="" />
                 <div className="content">
                   <div className="bank-name">

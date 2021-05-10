@@ -15,7 +15,7 @@ const ResidentDialog = ({ close, open, cancel, aadhaarKyc }) => {
       id="kyc-bottom-dialog"
       data-aid='kyc-bottom-dialog'
     >
-      <DialogContent className="resident-dialog-content" data-aid='resident-dialog-content'>
+      <DialogContent className="resident-dialog-content" data-aid='kyc-resident-dialog-content'>
         <main>
           <h1 >Are you an Indian resident?</h1>
           <img

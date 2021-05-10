@@ -254,7 +254,7 @@ const ChangeAddressDetails2 = (props) => {
             renderMessage={() => <MessageComponent kyc={kyc} />}
           />
           {!isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {frontDoc && state.frontFileShow && (
                 <img
                   src={state.frontFileShow}
@@ -332,7 +332,7 @@ const ChangeAddressDetails2 = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {frontDoc && state.frontFileShow && (
                 <img
                   src={state.frontFileShow}
@@ -376,7 +376,7 @@ const ChangeAddressDetails2 = (props) => {
             </div>
           )}
           {!isWeb && !onlyFrontDocRequired && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {backDoc && state.backFileShow && (
                 <img
                   src={state.backFileShow}
@@ -454,7 +454,7 @@ const ChangeAddressDetails2 = (props) => {
             </div>
           )}
           {isWeb && !onlyFrontDocRequired && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {backDoc && state.backFileShow && (
                 <img
                   src={state.backFileShow}

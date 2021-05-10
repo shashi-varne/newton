@@ -171,7 +171,7 @@ const AddBankVerify = (props) => {
       title="Verify your bank account"
       data-aid='kyc-approved-bank-verify-screen'
     >
-      <div className="kyc-approved-bank-verify">
+      <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
         <Alert
           variant="info"
           title="Important"
@@ -187,7 +187,7 @@ const AddBankVerify = (props) => {
         )}
         {!showLoader && (
           <>
-            <div className="item" data-aid='bank_name'>
+            <div className="item" data-aid='kyc-bank_name'>
               <div className="flex">
                 <div className="left">
                   <img
@@ -205,15 +205,15 @@ const AddBankVerify = (props) => {
                 EDIT
               </div>
             </div>
-            <div className="item" data-aid='account_number'>
+            <div className="item" data-aid='kyc-account_number'>
               <div className="left">Account number</div>
               <div className="right"> {bankData.account_number} </div>
             </div>
-            <div className="item" data-aid='ifsc_code'>
+            <div className="item" data-aid='kyc-ifsc_code'>
               <div className="left">IFSC code</div>
               <div className="right">{bankData.ifsc_code} </div>
             </div>
-            <div className="item" data-aid='account_type'>
+            <div className="item" data-aid='kyc-account_type'>
               <div className="left">Account type</div>
               <div className="right"> {bankData.account_type} </div>
             </div>
