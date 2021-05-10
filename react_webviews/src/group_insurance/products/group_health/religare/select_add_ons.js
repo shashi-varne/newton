@@ -278,7 +278,7 @@ class GroupHealthPlanAddOns extends Component {
         this.setState({
             current_state
         }, ()=>{
-            var sameData = compareObjects(Object.keys(current_state), current_state, groupHealthPlanData.previous_add_ons_data);
+            var sameData = compareObjects(Object.keys(current_state), groupHealthPlanData.previous_add_ons_data, current_state);
             if(!sameData || isEmpty(groupHealthPlanData['cover_period_screen'])){
                 this.getCoverPeriodData();
             }else{

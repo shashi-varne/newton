@@ -696,6 +696,9 @@ export async function getAddOnsData(){
                     
                     groupHealthPlanData['add_ons_screen'] = add_ons_data;
                     groupHealthPlanData['add_ons_previous_data'] = this.state.current_state;
+                    if(!isEmpty(groupHealthPlanData.previous_add_ons_data)){
+                        groupHealthPlanData.previous_add_ons_data = {}
+                    }
                     this.setLocalProviderData(groupHealthPlanData);
                     this.navigate('plan-select-add-ons')
                 } else {

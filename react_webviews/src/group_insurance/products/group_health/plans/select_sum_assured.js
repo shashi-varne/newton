@@ -135,7 +135,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
                 next_state = 'cover_period_screen'
                 allowed_post_body_keys.push('city')
                 body['floater_type'] = 'non_floater'
-            }else if(provider === 'RELIGARE' && account_type === 'self'){
+            }else if(provider === 'RELIGARE' && (account_type === 'self' || total_member === 1)){
                 groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
                 groupHealthPlanData.post_body.floater_type = 'non_floater';
                 this.setLocalProviderData(groupHealthPlanData)
@@ -182,7 +182,9 @@ class GroupHealthPlanSelectSumAssured extends Component {
                     if(provider === 'GMC'){
                         groupHealthPlanData.paymentFrequencySelected = '';
                     }
-
+                    if(!isEmpty(groupHealthPlanData.previous_add_ons_data)){
+                        groupHealthPlanData.previous_add_ons_data = {}
+                    }
                     this.setLocalProviderData(groupHealthPlanData);
                     if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
                         groupHealthPlanData.post_body.floater_type = 'non_floater';
