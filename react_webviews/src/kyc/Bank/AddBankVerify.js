@@ -196,8 +196,8 @@ const AddBankVerify = (props) => {
                     alt="bank-logo"
                   />
                 </div>
-                <div className="right">
-                  <div id='bank_name'>{bankData.bank_name}</div>
+                <div className="right" data-aid='bank_name'>
+                  <div>{bankData.bank_name}</div>
                   <div className="text">{bankData.branch_name} </div>
                 </div>
               </div>

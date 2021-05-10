@@ -122,6 +122,7 @@ class ESignInfo extends Component {
         handleClick={this.handleClick}
         buttonTitle='PROCEED'
         headerData={headerData}
+        data-aid='kyc-esign-screen'
       >
         <div className="esign-image">
           <img
@@ -130,16 +131,16 @@ class ESignInfo extends Component {
             alt="eSign KYC icon"
           />
         </div>
-        <div className="esign-desc" id='esign-desc'>
+        <div className="esign-desc" data-aid='esign-desc'>
           eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
         </div>
-        <div className="esign-subtitle" id='esign-subtitle'>How to eSign documents</div>
-        <div className="esign-steps">
+        <div className="esign-subtitle" data-aid='esign-subtitle'>How to eSign documents</div>
+        <div className="esign-steps" data-aid='esign-steps'>
           <div className="step">
             <div className="icon-container">
               <img src={require(`assets/ic_verify_otp_${productName}.svg`)} alt="Verify OTP" />
             </div>
-            <div className="step-text" id='step-text-1'>
+            <div className="step-text">
               1. Verify mobile and enter Aadhaar number
                 </div>
           </div>
@@ -147,7 +148,7 @@ class ESignInfo extends Component {
             <div className="icon-container">
               <img src={require(`assets/ic_esign_otp_${productName}.svg`)} alt="Esign OTP icon" />
             </div>
-            <div className="step-text" id='step-text-2'>
+            <div className="step-text">
               2. Enter OTP recieved on your Aadhaar linked mobile number
                 </div>
           </div>
@@ -155,12 +156,12 @@ class ESignInfo extends Component {
             <div className="icon-container">
               <img src={require(`assets/ic_esign_done_${productName}.svg`)} alt="Esign Done icon" />
             </div>
-            <div className="step-text" id='step-text-3'>
+            <div className="step-text">
               3. e-Sign is successfully done
                 </div>
           </div>
-          <div className="esign-bottom">
-            <div className="bottom-text" id='bottom-text'>
+          <div className="esign-bottom" data-aid='esign-bottom'>
+            <div className="bottom-text">
               Initiative by
                 </div>
             <div className="bottom-image">

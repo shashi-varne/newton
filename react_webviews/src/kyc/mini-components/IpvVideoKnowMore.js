@@ -25,10 +25,10 @@ const KnowMore = ({ isOpen, close }) => {
             className="close-icon"
           />
         </header>
-        <main>
+        <main data-aid='kyc-ipvVideoknowmore'>
           <div className="title">How to make a selfie Video?</div>
           <div className="content">
-            <div className="text" id='text_1'> 
+            <div className="text"> 
               <b>Step 1 - </b> Hold your PAN card and start recording.
             </div>
             <img
@@ -37,7 +37,7 @@ const KnowMore = ({ isOpen, close }) => {
             />
           </div>
           <div className="content">
-            <div className="text" id='text_2'>
+            <div className="text">
               <b>Step 2 - </b> Say your Name and stop recording video
             </div>
             <img
