@@ -46,3 +46,29 @@
     width: 90%;
   }
 }
+
+.risk-select-header {
+  padding: 18px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  p {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 30px;
+    color: #0A1D32;
+  }
+
+  .risk-sh-info {
+    border: 1px solid #C8C8C8;
+    border-radius: 15px;
+    height: 20px;
+    width: 48px;
+    font-size: 13px;
+    color: #C8C8C8;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+}

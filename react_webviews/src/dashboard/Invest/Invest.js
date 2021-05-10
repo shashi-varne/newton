@@ -23,6 +23,7 @@ import CustomGoalTarget from "./components/InvestGoal/CustomGoalTarget";
 import RiskSelect from "./components/RiskPages/RiskSelect";
 import RiskModify from "./components/RiskPages/RiskModify";
 import RiskCustomize from "./components/RiskPages/RiskCustomize";
+import RiskInfo from "./components/RiskPages/RiskInfo";
 import HowWeRecommend from "../Recommendation/HowWeRecommend";
 
 const Invest = (props) => {
@@ -106,6 +107,10 @@ const Invest = (props) => {
       <Route
         path={`${url}/:type/risk-select`}
         component={RiskSelect}
+      />
+      <Route
+        path={`${url}/risk-info`}
+        component={RiskInfo}
       />
       <Route
         path={`${url}/:type/risk-select-skippable`}

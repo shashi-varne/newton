@@ -95,6 +95,10 @@ const RiskSelect = ({
     }, true);
   };
 
+  const showInfo = () => {
+    navigate('risk-info');
+  }
+
   return (
     <Container
       classOverRide='pr-error-container'
@@ -102,10 +106,16 @@ const RiskSelect = ({
       buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
       helpContact
       disable={loader}
-      title='Please select your Risk Profile'
+      hidePageTitle
       handleClick={goNext}
       classOverRideContainer='pr-container'
-    >
+    > 
+      <div className="risk-select-header">
+        <p>Please select your risk profile</p>
+        <div className="risk-sh-info" onClick={showInfo}>
+          Info
+        </div>
+      </div>
       <div style={{ marginTop: '10px' }}>
         <FSelect
           preselectFirst
