@@ -272,6 +272,9 @@ class GroupHealthPlanAddOns extends Component {
             current_state[`${x}`] = add_ons_json[x].price;
         }
         
+        if(isEmpty(current_state)){
+            current_state = {'none': true}
+        }
         this.setState({
             current_state
         }, ()=>{
