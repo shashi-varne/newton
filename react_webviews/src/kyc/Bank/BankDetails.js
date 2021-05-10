@@ -75,7 +75,7 @@ const BankDetails = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "add bank/mandate",
-        "primary_account": banks[0]?.bank_name
+        "primary_account": banks[0]?.bank_name || ""
       }
     };
     if (userAction === 'just_set_events') {

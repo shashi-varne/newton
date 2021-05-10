@@ -28,7 +28,7 @@ const Verify = (props) => {
         "user_action": userAction || "",
         "screen_name": "kyc_verified",
         "initial_kyc_status": kyc.initial_kyc_status || '' ,
-        "channel": productName    
+        "channel": getConfig().code    
       }
     };
     if (userAction === 'just_set_events') {

@@ -591,7 +591,6 @@ const Journey = (props) => {
       }
     }
   }
-
   if (!isEmpty(kyc) && !isEmpty(user)) {
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
       navigate('/nps/identity')
@@ -611,16 +610,15 @@ const Journey = (props) => {
   }
 
   const sendEvents = (userAction, screen_name) => {
-    let journeyData = getJourneyData()
     let stageData=0;
     let stageDetailData='';
-    for (var i = 0; i < journeyData.length; i++) {
+    for (var i = 0; i < kycJourneyData?.length; i++) {
       if (
-        journeyData[i].status === 'init' ||
-        journeyData[i].status === 'pending'
+        kycJourneyData[i].status === 'init' ||
+        kycJourneyData[i].status === 'pending'
       ) {
         stageData = i + 1
-        stageDetailData = journeyData[i].key
+        stageDetailData = kycJourneyData[i].key
         break
       }
     }
@@ -642,7 +640,7 @@ const Journey = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
-  console.log(getJourneyData())
+
   return (
     <Container
       force_hide_inpage_title

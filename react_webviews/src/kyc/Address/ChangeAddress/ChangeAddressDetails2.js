@@ -235,14 +235,14 @@ const ChangeAddressDetails2 = (props) => {
 
   const isWeb = getConfig().isWebOrSdk
 
-  const sendEvents = (userAction, openType, type) => {
+  const sendEvents = (userAction, source, docSide) => {
     let eventObj = {
       "event_name": 'my_account',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "change address",
-        "picture": openType || "",
-        "doc_side": type || "",
+        "screen_name": "upload address proof",
+        "picture": source || "",
+        "doc_side": docSide || "",
         "doc_type": addressProof || ""
       }
     };

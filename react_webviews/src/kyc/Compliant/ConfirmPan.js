@@ -81,7 +81,7 @@ const ConfirmPan = (props) => {
         "user_action": userAction || "",
         "screen_name": "confirm_pan",
         "initial_kyc_status":  "compliant",
-        "channel": getConfig().productName    
+        "channel": getConfig().code    
       }
     };
     if (userAction === 'just_set_events') {
