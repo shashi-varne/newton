@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { inrFormatDecimal2 } from "utils/validators";
@@ -262,13 +262,11 @@ class Recommendations extends Component {
     };
 
     if (!pran) {
-      data.pension_house_id =
-      !this.state.display_summary_only &&
-      (!isEmpty(pension_house)
+      data.pension_house_id = !isEmpty(pension_house)
         ? pension_house.pension_house_id
         : recommendations.pension_house
         ? recommendations.pension_house.pension_house_id
-        : "");
+        : "";
       data.risk = this.state.risk;
     } else {
       data.pran = pran;
@@ -563,6 +561,10 @@ const RiskSelectDialog = ({
   onApply
 }) => {
   const [selectedRisk, setSelectedRisk] = useState(currentRisk);
+
+  useEffect(() => {
+    setSelectedRisk(currentRisk)
+  }, [currentRisk])
 
   return (
     <Dialog
