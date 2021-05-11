@@ -124,7 +124,7 @@ class SdkLanding extends Component {
     } else if (kycJourneyStatus === "rejected") {
       this.navigate("/kyc/upload/progress", {
         state: {
-          toState: "/",
+          fromState: "/",
         },
       });
     }
