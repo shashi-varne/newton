@@ -229,7 +229,7 @@ const KycUploadDocuments = (props) => {
           <div className="subtitle">
             Ensure your name is clearly visible in the document
           </div>
-          <div className="options">
+          <div className="kyc-upload-doc-options">
             {verificationDocOptions.map((data, index) => {
               const selectedType = data.value === selectedDocValue;
               const disableField =
@@ -237,8 +237,8 @@ const KycUploadDocuments = (props) => {
               return (
                 <div
                   key={index}
-                  className={`option-type ${selectedType && "selected-doc"} ${
-                    disableField && "disabled"
+                  className={`kyc-upload-doc-option-type ${selectedType && "selected-doc"} ${
+                    disableField && "disabled-doc"
                   }`}
                   onClick={() => {
                     if (!disableField) handleDocType(index);
@@ -247,7 +247,7 @@ const KycUploadDocuments = (props) => {
                   {data.name}
                   {selectedType && (
                     <SVG
-                      className="check-icon"
+                      className="kyc-upload-doc-check-icon"
                       preProcessor={(code) =>
                         code.replace(
                           /fill=".*?"/g,

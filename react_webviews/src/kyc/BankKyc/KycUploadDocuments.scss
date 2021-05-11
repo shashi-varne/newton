@@ -44,14 +44,14 @@
     margin-bottom: 20px;
   }
   
-  .options {
+  .kyc-upload-doc-options {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     line-height: 1.5;
     padding-bottom: 20px;
 
-    .option-type {
+    .kyc-upload-doc-option-type {
       color: #160d2e;
       border: 1px solid #767e86;
       padding: 9px 10px;
@@ -65,11 +65,11 @@
       cursor: pointer;
     }
 
-    .option-type:nth-child(3) {
+    .kyc-upload-doc-option-type:nth-child(3) {
       min-width: 170px;
     }
 
-    .disabled {
+    .disabled-doc {
       border-color: #9b98a2;
       color: #9b98a2;
     }
@@ -78,7 +78,7 @@
       color: var(--primary);
       font-weight: 600;
 
-      .check-icon {
+      .kyc-upload-doc-check-icon {
         width: 10px;
       }
     }
