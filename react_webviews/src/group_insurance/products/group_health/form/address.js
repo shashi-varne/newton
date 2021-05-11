@@ -667,6 +667,19 @@ class GroupHealthPlanAddressDetails extends Component {
                                     onChange={this.handleChange()} />
                             </div>
                             <div className="InputField">
+                                <Input
+                                    type="number"
+                                    width="40"
+                                    label="Pincode *"
+                                    id="p_pincode"
+                                    name="p_pincode"
+                                    maxLength="6"
+                                    error={(this.state.form_data.p_pincode_error) ? true : false}
+                                    helperText={this.state.form_data.p_pincode_error}
+                                    value={this.state.form_data.p_pincode || ''}
+                                    onChange={this.handlePincodeReligare('p_pincode')} />
+                            </div>
+                            <div className="InputField">
                                 <DropDownNew
                                     width="40"
                                     dataType="AOB"
