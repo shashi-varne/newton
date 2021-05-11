@@ -165,12 +165,8 @@ const Home = (props) => {
     let limit = target?.maxLength;
 
     // added event listener to remove the character after limit is reached
-    if (value.length === limit) {
-      target.addEventListener('input', function (e) {
-        if (value.length >= limit) {
-          value = value.substr(0, limit);
-        }
-      })
+    if (value.length > limit) {
+      return
     }  
      
     setPan(value);
