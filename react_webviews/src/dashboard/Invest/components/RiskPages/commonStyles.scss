@@ -6,7 +6,6 @@
 .risk-opt-desc {
   color: #767E86;
   line-height: 21px;
-  margin-bottom: 5px;
 }
 .risk-opt-split {
   color: #767E86;
@@ -48,12 +47,11 @@
 }
 
 .risk-select-header {
-  padding: 18px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   
-  p {
+  span {
     font-size: 20px;
     font-weight: bold;
     line-height: 30px;
@@ -71,4 +69,15 @@
     justify-content: center;
     align-items: flex-end;
   }
+}
+
+.risk-select-skip {
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: right;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-top: 20px;
 }

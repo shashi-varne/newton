@@ -70,6 +70,7 @@ export const getPotentialValue = (...params) => {
 };
 
 export const getRateOfInterest = (stockSplitVal) => {
+  if (!stockSplitVal) return 0;
   const { stockReturns, bondReturns } = getReturnRates();
   // TODO: Handle edge cases / negative scenarios
   var range = Math.abs(stockReturns - bondReturns);

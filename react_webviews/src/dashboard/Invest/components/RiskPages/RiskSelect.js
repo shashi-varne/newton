@@ -51,7 +51,7 @@ const RiskSelect = ({
     }
 
     try {
-      setLoader(true);
+      setLoader("button");
       const res = await get_recommended_funds(params);
 
       if (res.updated) {
@@ -103,20 +103,23 @@ const RiskSelect = ({
     <Container
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'SHOW MY FUNDS'}
+      buttonTitle="SHOW MY FUNDS"
       helpContact
-      disable={loader}
+      showLoader={loader}
       hidePageTitle
       handleClick={goNext}
       classOverRideContainer='pr-container'
     > 
       <div className="risk-select-header">
-        <p>Please select your risk profile</p>
+        <span>Please select your risk profile</span>
         <div className="risk-sh-info" onClick={showInfo}>
           Info
         </div>
       </div>
-      <div style={{ marginTop: '10px' }}>
+      {canSkip &&
+        <div className="risk-select-skip" onClick={() => goNext(true)}>Skip for now</div>
+      }
+      <div style={{ marginTop: '30px' }}>
         <FSelect
           preselectFirst
           options={riskProfiles}

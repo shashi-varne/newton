@@ -13,9 +13,9 @@ const RecommendationTopCard = ({
   const navigate = navigateFunc.bind(parentProps);
   const { userRiskProfile, funnelData } = data;
   const [showRiskInfo, setShowRiskInfo] = useState(false);
-  console.log(funnelData.investType)
+
   const renderContent = () => {
-    if (userRiskProfile) {
+    if (userRiskProfile || funnelData.investType === 'investsurplus') {
       const { equity, debt, investType } = funnelData;
       const toggleRiskInfoDialog = () => setShowRiskInfo(!showRiskInfo);
 

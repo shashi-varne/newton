@@ -54,7 +54,10 @@ const Recommendations = (props) => {
     if (isArray(funnelData.recommendation)) {
       setRecommendations(funnelData.recommendation);
     }
-    if (['savetax', 'savetaxsip'].includes(funnelData.investType) || userRiskProfile) {
+    if (
+      ['savetax', 'savetaxsip', 'investsurplus'].includes(funnelData.investType) ||
+      userRiskProfile
+    ) {
       setRenderTopCard(true);
     }
   }, [funnelData]);
