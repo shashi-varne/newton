@@ -237,7 +237,7 @@ const KycUploadDocuments = (props) => {
               return (
                 <div
                   key={index}
-                  className={`option-type ${selectedType && "selected"} ${
+                  className={`option-type ${selectedType && "selected-doc"} ${
                     disableField && "disabled"
                   }`}
                   onClick={() => {

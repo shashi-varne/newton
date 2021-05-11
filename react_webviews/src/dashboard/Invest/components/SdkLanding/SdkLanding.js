@@ -10,6 +10,8 @@ import { applyReferralCode } from '../../common/api';
 import toast from 'common/ui/Toast';
 import CampaignDialog from '../../mini-components/CampaignDialog';
 import './SdkLanding.scss';
+import VerificationFailedDialog from '../../mini-components/VerificationFailedDialog';
+import KycStatusDialog from '../../mini-components/KycStatusDialog';
 
 class SdkLanding extends Component {
   constructor(props) {
@@ -98,6 +100,36 @@ class SdkLanding extends Component {
     handleCampaignRedirection(campLink);
   }
 
+  addBank = () => {
+    const userKyc = this.state.userKyc || {};
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+  };
+
+  updateDocument = () => {
+    this.navigate("/kyc/add-bank");
+  };
+
+  closeVerificationFailed = () => {
+    this.setState({ verificationFailed: false });
+  };
+
+  closeKycStatusDialog = () => {
+    this.setState({ openKycStatusDialog: false });
+  };
+
+  handleKycStatus = () => {
+    let { kycJourneyStatus } = this.state;
+    if (kycJourneyStatus === "submitted") {
+      this.closeKycStatusDialog();
+    } else if (kycJourneyStatus === "rejected") {
+      this.navigate("/kyc/upload/progress", {
+        state: {
+          toState: "/",
+        },
+      });
+    }
+  };
+
   render() {
     let {
       isReadyToInvestBase,
@@ -107,6 +139,9 @@ class SdkLanding extends Component {
       referral,
       kycJourneyStatusMapperData,
       kycJourneyStatus,
+      verificationFailed,
+      openKycStatusDialog,
+      modalData
     } = this.state;
 
     return (
@@ -207,6 +242,23 @@ class SdkLanding extends Component {
           data={this.state.bottom_sheet_dialog_data}
           handleClick={this.handleCampaign}
         />
+        {verificationFailed && (
+          <VerificationFailedDialog
+            isOpen={verificationFailed}
+            close={this.closeVerificationFailed}
+            addBank={this.addBank}
+            updateDocument={this.updateDocument}
+          />
+        )}
+        {openKycStatusDialog && (
+          <KycStatusDialog
+            isOpen={openKycStatusDialog}
+            data={modalData}
+            close={this.closeKycStatusDialog}
+            handleClick={this.handleKycStatus}
+            cancel={this.closeKycStatusDialog}
+          />
+        )}
       </Container>
     );
   }

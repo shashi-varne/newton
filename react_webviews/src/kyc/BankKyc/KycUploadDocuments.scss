@@ -54,16 +54,15 @@
     .option-type {
       color: #160d2e;
       border: 1px solid #767e86;
-      text-align: left;
       padding: 9px 10px;
       font-size: 13px;
       border-radius: 4px;
       margin: 10px 10px 0 0;
       min-width: 140px;
-      max-width: fit-content;
       display: flex;
       justify-content: space-between;
       column-gap: 10px;
+      cursor: pointer;
     }
 
     .option-type:nth-child(3) {
@@ -75,7 +74,7 @@
       color: #9b98a2;
     }
 
-    .selected {
+    .selected-doc {
       color: var(--primary);
       font-weight: 600;
 
