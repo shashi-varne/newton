@@ -103,7 +103,7 @@ const RiskSelect = ({
     <Container
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
+      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'SHOW MY FUNDS'}
       helpContact
       disable={loader}
       hidePageTitle

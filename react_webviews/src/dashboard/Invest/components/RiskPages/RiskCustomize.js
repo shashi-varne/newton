@@ -80,7 +80,7 @@ const RiskCustomize = (props) => {
     <Container
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
+      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Save Changes'}
       helpContact
       disable={loader}
       title='Customise Equity-Debt distribution'

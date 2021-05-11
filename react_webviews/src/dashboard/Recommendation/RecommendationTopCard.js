@@ -63,7 +63,7 @@ const RecommendationTopCard = ({
     } else if (['savetax', 'savetaxsip'].includes(funnelData.investType)) {
       return (
         <div className="tax-card">
-          <img src="assets/img/sale.svg" alt="" />
+          <img src={require('assets/sale.svg')} alt="" />
           <div className="text">Tax savings for {getFinancialYear()}</div>
           <div className="amount">{formatAmountInr(funnelData.corpus)}</div>
         </div>

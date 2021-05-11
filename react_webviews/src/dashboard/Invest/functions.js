@@ -253,8 +253,10 @@ export function clickCard(state, title) {
       this.navigate(fhcPath)
       break;
     case "risk_profile":
-      let riskProfilePath = "/risk/result";
-      this.navigate(riskProfilePath)
+      let riskProfilePath = "/risk/result-new";
+      this.navigate(riskProfilePath, {
+        state: { fromExternalSrc: true }
+      });
       break;
     case "top_equity":
       this.navigate(`/diy/fundlist/Equity/Multi_Cap`);

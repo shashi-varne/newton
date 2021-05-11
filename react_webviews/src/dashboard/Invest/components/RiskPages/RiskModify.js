@@ -86,7 +86,7 @@ const RiskModify = ({
     <Container
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
+      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Proceed'}
       helpContact
       disable={loader}
       title='Change risk profile'
@@ -100,7 +100,7 @@ const RiskModify = ({
             root: 'risk-info'
           }}
         >
-          <div className="risk-info-title">Info</div>
+          <div className="risk-info-title">Note</div>
           <div className="risk-info-desc">
             If you change your risk profile, fund recommendations will change accordingly.
           </div>
