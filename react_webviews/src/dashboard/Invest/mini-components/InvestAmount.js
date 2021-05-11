@@ -138,7 +138,7 @@ const InvestAmount = (props) => {
         return;
       }
       
-      updateFunnelData({ ...data, userEnteredAmt: amount })
+      updateFunnelData({ ...data, corpus, userEnteredAmt: amount })
       
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully
@@ -163,8 +163,6 @@ const InvestAmount = (props) => {
   };
 
   const calculateTax = (eligibleAmount) => {
-    // let d = new Date();
-    // let month = d.getMonth();
     const currentMonth = month;
     let duration = currentMonth > 3 ? 15 - currentMonth : 3 - currentMonth;
     if (duration === 0) {
