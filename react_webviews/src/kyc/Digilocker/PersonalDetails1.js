@@ -191,6 +191,7 @@ const PersonalDetails1 = (props) => {
               onChange={handleChange("mobile")}
               maxLength={10}
               type="text"
+              inputMode="numeric"
               disabled={showLoader}
             />
           )}
