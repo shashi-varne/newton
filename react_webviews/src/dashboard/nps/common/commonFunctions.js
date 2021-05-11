@@ -346,11 +346,6 @@ export async function getInvestmentData(params, pageError = false) {
     }
     const { result, status_code: status } = res.pfwresponse;
 
-    this.setState({
-      show_loader: false,
-      skelton: false,
-    });
-
     if (status === 200) {
       storageService().set("npsInvestId", result.id);
       return result;
@@ -365,6 +360,9 @@ export async function getInvestmentData(params, pageError = false) {
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      skelton: false,
+    });
     error = true;
     errorType = "crash";
   }
