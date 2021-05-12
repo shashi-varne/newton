@@ -3,11 +3,11 @@ import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { getPathname, addressProofOptions } from "../constants";
 import { isEmpty } from "utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import { validateFields } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import SVG from "react-inlinesvg";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 

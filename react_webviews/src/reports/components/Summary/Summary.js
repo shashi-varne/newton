@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Button from "common/ui/Button";
 import {
-  navigate as navigateFunc,
   getProjectedValue,
   getAmountInInr,
 } from "../../common/functions";
@@ -155,7 +154,6 @@ const Summary = (props) => {
                   <div className="title">Current Value</div>
                   <div className="amount">
                     {formatAmountInr(report.current.current)}
-                    {report.current.current === 0 && 0}
                   </div>
                   {report.current.invested > 0 && (
                     <>

@@ -54,7 +54,7 @@ class EnterAmount extends Component {
       let res = await this.get_recommended_funds(amount);
 
       if (res) {
-        this.navigate('recommendation/one-time', {amount: this.state.amount})
+        this.navigate('/nps/recommendation/one-time', {amount: this.state.amount})
       }
     }
   };

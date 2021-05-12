@@ -1,7 +1,7 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import {
   apiConstants,
   investCardsBase,
@@ -24,7 +24,7 @@ export async function initialize() {
   this.getRecommendations = getRecommendations.bind(this);
   this.getRateOfInterest = getRateOfInterest.bind(this);
   this.corpusValue = corpusValue.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.clickCard = clickCard.bind(this);
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);

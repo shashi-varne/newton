@@ -6,7 +6,8 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
-import { getConfig } from "../../utils/functions";
+import { navigate as navigateFunc } from "../../utils/functions";
+import { storageService } from "../../utils/validators";
 
 class Container extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class Container extends Component {
 
   componentDidMount() {
     this.didMount();
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentWillUnmount() {
@@ -36,8 +38,20 @@ class Container extends Component {
   }
 
   historyGoBack = (backData) => {
+    const fromState = this.props.location?.state?.fromState || "";
+    const toState = this.props.location?.state?.toState || "";
+    const params = this.props.location?.params || {};
+    const pathname = this.props.location?.pathname || "";
+
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
+    }
+    
+    if (toState) {
+      let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
+      if (isRedirected) {
+        return;
+      }
     }
 
     if (this.props.headerData && this.props.headerData.goBack) {
@@ -47,11 +61,21 @@ class Container extends Component {
 
     const goBackPath = this.props.location?.state?.goBack || "";
 
-    if(goBackPath) {
-      this.props.history.push({
-        pathname: goBackPath,
-        search: getConfig().searchParams,
-      });
+    if (goBackPath) {
+      if (goBackPath === "exit" && storageService().get("native")) {
+        switch (pathname) {
+          case "/kyc/home":
+          case "/kyc/add-bank":
+          case "/kyc/approved/banks/doc":
+          case "/kyc/journey":
+            nativeCallback({ action: "exit_web" });
+            break;
+          default:
+            this.props.history.goBack();
+        }
+        return;
+      }
+      this.navigate(goBackPath);
       return;
     }
 

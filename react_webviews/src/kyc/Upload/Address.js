@@ -4,10 +4,9 @@ import Alert from '../mini-components/Alert'
 import { storageService, isEmpty } from '../../utils/validators'
 import { storageConstants, docMapper } from '../constants'
 import { upload } from '../common/api'
-import { getBase64, getConfig } from '../../utils/functions'
+import { getBase64, getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
 import { combinedDocBlob } from '../common/functions'
-import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 

@@ -1,7 +1,6 @@
 import React from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
-import { navigate as navigateFunc } from "../common/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "../../utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import { nativeCallback } from "utils/native_callback";

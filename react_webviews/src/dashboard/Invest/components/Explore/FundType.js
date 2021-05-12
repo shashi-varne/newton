@@ -9,8 +9,7 @@ import DiyCartButton from '../../../DIY/mini-components/CartButton'
 import Cart from '../../../DIY/mini-components/Cart'
 import './FundType.scss';
 
-import { navigate as navigateFunc } from '../../common/commonFunctions'
-import { getConfig } from '../../../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions'
 
 const isMobileDevice = getConfig().isMobileDevice;
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
@@ -22,8 +21,7 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
     storageService().setObject("diystore_fundInfo", dataCopy);
     navigate(
       `/fund-details`,
-      { searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy` },
-      true
+      { searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy` }
     )
   }
   const handleAddToCart = () => {
@@ -76,12 +74,8 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
 const CategoryCard = ({ label, name, trivia, icon, type, ...props }) => {
   const navigate = navigateFunc.bind(props)
   const handleNavigate = () => {
-    console.log(props.location.search)
     navigate(
       `/diy/fundlist/${type}/${label}`,
-      null,
-      true,
-      props.location.search
     )
   }
 

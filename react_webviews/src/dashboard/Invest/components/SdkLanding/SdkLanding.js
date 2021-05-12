@@ -154,7 +154,7 @@ class SdkLanding extends Component {
         skelton={this.state.show_loader}
         noFooter={true}
         title='Hello'
-        logo
+        noBackIcon={true}
         notification
         handleNotification={this.handleNotification}
         background='sdk-background'

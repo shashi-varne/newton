@@ -2,11 +2,10 @@ import './GoalTarget.scss';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import toast from "common/ui/Toast"
-import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { numDifferentiationInr } from 'utils/validators';
 import useFunnelDataHook from '../../common/funnelDataHook';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import { saveGoalMapper, customGoalTargetMap } from './constants';
-import { getConfig } from '../../../../utils/functions';
 import { get_recommended_funds } from '../../common/api';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
@@ -38,16 +37,16 @@ const GoalTarget = (props) => {
         // RP enabled flow, when user has no risk profile
         updateFunnelData({ corpus });
         if (data.msg_code === 0) {
-          navigate(`${funnelGoalData.id}/risk-select`);
+          navigate(`/invest/${funnelGoalData.id}/risk-select`);
         } else if (data.msg_code === 1) {
-          navigate(`${funnelGoalData.id}/risk-select-skippable`);
+          navigate(`/invest/${funnelGoalData.id}/risk-select-skippable`);
         }
         return;
       }
 
       updateFunnelData({ ...data, corpus });
 
-      navigate(`savegoal/${subtype}/amount`);
+      navigate(`/invest/savegoal/${subtype}/amount`);
     } catch (err) {
       console.log(err);
       setLoader(false);
@@ -67,7 +66,7 @@ const GoalTarget = (props) => {
 
   const setYourTarget = () => {
     updateFunnelData({ corpus: customGoalTargetMap[subtype] });
-    navigate(`savegoal/${subtype}/${year}/target`);
+    navigate(`/invest/savegoal/${subtype}/${year}/target`);
   };
 
   return (

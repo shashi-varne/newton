@@ -8,7 +8,8 @@ import {
   isEmpty,
   validateNumber,
 } from "../../utils/validators";
-import { validateFields, navigate as navigateFunc, compareObjects } from "../common/functions";
+import { validateFields, compareObjects } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { getCVL, kycSubmit } from "../common/api";
 import { getPathname } from "../constants";
 import useUserKycHook from "../common/hooks/userKycHook";

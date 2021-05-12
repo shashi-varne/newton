@@ -4,7 +4,7 @@ import UploadCard from "./UploadCard";
 import { getDocuments } from "../services";
 import { isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 

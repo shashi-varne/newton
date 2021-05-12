@@ -1,5 +1,5 @@
 import { storageService } from "utils/validators";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
@@ -9,7 +9,7 @@ import toast from "../../../common/ui/Toast";
 const genericErrMsg = "Something went wrong";
 
 export async function initialize() {
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.formCheckUpdate = formCheckUpdate.bind(this);
   this.get_recommended_funds = get_recommended_funds.bind(this);
   this.kyc_submit = kyc_submit.bind(this);
@@ -89,22 +89,6 @@ export function handleError(error, errorType, fullScreen = true) {
     },
     showError: fullScreen ? "page" : true,
   });
-}
-
-export function navigate(pathname, data = {}, redirect) {
-  if (redirect) {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
-      state: data,
-    });
-  } else {
-    this.props.history.push({
-      pathname: `/nps/${pathname}`,
-      search: data.searchParams || getConfig().searchParams,
-      state: data,
-    });
-  }
 }
 
 export function formCheckUpdate(keys_to_check, form_data) {
@@ -217,7 +201,7 @@ export async function kyc_submit(params) {
       show_loader: false,
     });
     if (status === 200) {
-      this.navigate("amount/one-time");
+      this.navigate("/nps/amount/one-time");
     } else {
       switch (status) {
         case 402:
@@ -316,9 +300,9 @@ export async function updateMeta(params, next_state) {
         storageService().setObject("kyc_app", kyc_app);
 
         if (result.user.is_doc_required) {
-          this.navigate("upload");
+          this.navigate("/nps/upload");
         } else {
-          this.navigate("success");
+          this.navigate("/nps/success");
         }
       } else {
         this.navigate(next_state);
@@ -413,10 +397,10 @@ export async function submitPran(params) {
     } else {
       switch(status) {
         case 301: 
-          this.navigate('pan');
+          this.navigate('/nps/pan');
           break;
         case 303:
-          this.navigate('/kyc/journey', '', true)
+          this.navigate('/kyc/journey')
           break;
         default: 
           let title1 = result.error || result.message || "Something went wrong!";
@@ -460,7 +444,7 @@ export async function getNPSInvestmentStatus() {
       if (this.state.screen_name === "npsPaymentStatus") {
         return result;
       } else {
-        this.navigate("identity");
+        this.navigate("/nps/identity");
       }
     } else {
       toast(result.error || result.message || genericErrMsg);
@@ -571,7 +555,7 @@ export async function uploadDocs(file) {
       if (this.state.screen_name === "nps-identity") {
         return resultData;
       } else {
-        this.navigate("success");
+        this.navigate("/nps/success");
       }
     } else {
       let title1 =

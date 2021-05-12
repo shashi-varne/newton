@@ -1,11 +1,10 @@
 import './commonStyles.scss';
 import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
-import { getConfig } from '../../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
 
@@ -71,9 +70,9 @@ const RiskSelect = ({
   const goNext = async (skipRiskUpdate) => {
     await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
-    let state = 'recommendations';
+    let state = '/invest/recommendations';
     if (funnelData.investType === 'saveforgoal') {
-      state = `savegoal/${funnelData.subtype}/amount`;
+      state = `/invest/savegoal/${funnelData.subtype}/amount`;
     }
     navigate(state);
   };
@@ -92,7 +91,7 @@ const RiskSelect = ({
         year: funnelData.year, // only applicable for 'saveforgoal'
         term: funnelData.term
       }
-    }, true);
+    });
   };
 
   return (

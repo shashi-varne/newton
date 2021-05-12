@@ -1,5 +1,5 @@
 import React from "react";
-import { navigate as navigateFunc } from "../../common/commonFunctions";
+import { navigate as navigateFunc } from "utils/functions";
 
 const PageCallback = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -10,9 +10,9 @@ const PageCallback = (props) => {
   } else {
     if (!message) message = "";
     if (investment_type === "sip") {
-      navigate(`/sip/payment/callback/${status}/${message}`, null, true);
+      navigate(`/sip/payment/callback/${status}/${message}`);
     } else if (investment_type === "onetime") {
-      navigate(`/payment/callback/${status}/${message}`, null, true);
+      navigate(`/payment/callback/${status}/${message}`);
     } else {
       navigate("/landing", null, true);
     }

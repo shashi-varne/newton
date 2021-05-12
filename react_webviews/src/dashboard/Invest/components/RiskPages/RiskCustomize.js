@@ -3,7 +3,7 @@ import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
-import { navigate as navigateFunc } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import EquityDebtSlider from '../../mini-components/EquityDebtSlider';
 import toast from 'common/ui/Toast'
 import InfoBox from '../../../../common/ui/F-InfoBox';
@@ -62,7 +62,7 @@ const RiskCustomize = (props) => {
   const goNext = async () => {
     try {
       await fetchRecommendations();
-      navigate('recommendations');
+      navigate('/invest/recommendations');
     } catch (err) {
       console.log(err);
       toast(err)

@@ -33,7 +33,7 @@ class NpsPaymentCallback extends Component {
 
   handleClick = async () => {
     if (this.state.status !== 'success') {
-      this.navigate('/invest', '', true)
+      this.navigate('/invest')
     } else {
       const result = await this.getNPSInvestmentStatus();
       storageService().set('nps_additional_details_required', true);
@@ -44,14 +44,14 @@ class NpsPaymentCallback extends Component {
  
       if (!result.registration_details.additional_details_status) {
         if (currentUser.kyc_registration_v2 === 'init') {
-          this.navigate('/kyc/journey', '', true);
+          this.navigate('/kyc/journey');
         } else if (currentUser.kyc_registration_v2 === 'incomplete') {
-          this.navigate('/kyc/journey', '', true);
+          this.navigate('/kyc/journey');
         } else {
-          this.navigate('identity');
+          this.navigate('/nps/identity');
         }
       } else {
-        this.navigate('investments');
+        this.navigate('/nps/investments');
       }
     }
   };

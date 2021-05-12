@@ -1,9 +1,8 @@
 import React from "react";
-import { getConfig, isIframe } from "utils/functions";
+import { getConfig, isIframe, navigate as navigateFunc } from "utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import { nativeCallback } from "../../utils/native_callback";
 import Container from "../common/Container";
-import { navigate as navigateFunc } from "../Invest/common/commonFunctions";
 import "./Linked.scss";
 
 const AccountLinked = (props) => {

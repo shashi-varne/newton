@@ -1,7 +1,6 @@
 import React from 'react'
 import Container from '../../common/Container'
-import { navigate as navigateFunc } from '../../common/commonFunction'
-import { getConfig } from 'utils/functions'
+import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import { getUrlParams } from '../../../utils/validators'
 
 import './Failed.scss';
@@ -13,7 +12,7 @@ const Failed = (props) => {
 
   const goTo = () => {
     const navigate = navigateFunc.bind(props)
-    navigate('insta-redeem')
+    navigate('/withdraw/insta-redeem')
   }
 
   return (

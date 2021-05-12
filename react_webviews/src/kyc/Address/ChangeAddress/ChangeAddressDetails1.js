@@ -5,8 +5,8 @@ import { getPathname, addressProofOptions } from "../../constants";
 import { isEmpty } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import "../commonStyles.scss";
 

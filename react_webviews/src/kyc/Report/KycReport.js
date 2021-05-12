@@ -9,7 +9,7 @@ import {
   storageConstants,
 } from "../constants";
 import ContactUs from "../mini-components/ContactUs";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
@@ -33,8 +33,8 @@ const Report = (props) => {
       navigate(getPathname.uploadProgress, {
         state: {
           disableNext: true,
-          fromState: "kyc-report",
-          toState: "landing",
+          fromState: "/kyc/report",
+          toState: "/landing",
         },
       });
       return;

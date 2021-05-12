@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
-import { navigate as navigateFunc } from "../common/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -9,10 +8,13 @@ import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import DotDotLoaderNew from '../../common/ui/DotDotLoaderNew';
 import "./Digilocker.scss";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [isBackDialogOpen, setBackDialogOpen] = useState(false);
+  const navigate = navigateFunc.bind(props);
 
   const close = () => {
     setOpen(false);
@@ -23,7 +25,6 @@ const Failed = (props) => {
   };
 
   const manual = async () => {
-    const navigate = navigateFunc.bind(props);
     try {
       setIsApiRunning(true);
       await setKycType("manual");
@@ -35,11 +36,26 @@ const Failed = (props) => {
     }
   };
 
+  const goBack = () => {
+    if (getConfig().isSdk) {
+      setBackDialogOpen(true);
+    } else {
+      navigate("/kyc/journey", {
+        state: { show_aadhaar: true },
+      });
+    }
+  };
+
   const {kyc, isLoading} = useUserKycHook();
 
   const productName = getConfig().productName;
   return (
-    <Container title="Aadhaar KYC Failed!" noFooter skelton={isLoading}>
+    <Container 
+      title="Aadhaar KYC Failed!" 
+      noFooter 
+      skelton={isLoading}
+      headerData={{goBack}}
+    >
       <section id="digilocker-failed">
         <img
           className="digi-image"
@@ -89,6 +105,11 @@ const Failed = (props) => {
         id="kyc-aadhaar-dialog"
         close={close}
         kyc={kyc}
+      />
+      <ConfirmBackDialog
+        isOpen={isBackDialogOpen}
+        close={() => setBackDialogOpen(false)}
+        goBack={() => navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }})}
       />
     </Container>
   );
