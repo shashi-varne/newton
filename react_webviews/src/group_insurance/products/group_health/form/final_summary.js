@@ -940,7 +940,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     <p style={{color: '#0A1D32'}}>You will lose your progress till now. Are you sure you want to restart?</p>
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions className="final-summary-dialog-options">
                     <Button onClick={this.resetQuote} color="default">
                         YES
                     </Button>
