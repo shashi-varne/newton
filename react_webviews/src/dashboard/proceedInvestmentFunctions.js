@@ -59,8 +59,7 @@ export async function proceedInvestment(data) {
           // eslint-disable-next-line
           (pgLink.match(/[\?]/g) ? "&" : "?") +
           "redirect_url=" +
-          paymentRedirectUrl +
-          getConfig().searchParams;
+          paymentRedirectUrl;
 
         investmentEventData["payment_id"] = result.investments[0].id;
         storageService().setObject("mf_invest_data", investmentEventData);
