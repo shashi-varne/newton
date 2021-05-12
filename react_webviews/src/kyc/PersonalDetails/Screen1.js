@@ -173,6 +173,7 @@ const PersonalDetails1 = (props) => {
             helperText={form_data.dob_error || ""}
             onChange={handleChange("dob")}
             maxLength={10}
+            inputMode="numeric"
             type="text"
             id="dob"
             disabled={isApiRunning}
@@ -199,6 +200,7 @@ const PersonalDetails1 = (props) => {
               onChange={handleChange("mobile")}
               maxLength={10}
               type="text"
+              inputMode="numeric"
               disabled={isApiRunning}
             />
           )}
@@ -208,7 +210,6 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.gender_error}
               width="40"
               label="Gender:"
-              class="gender"
               options={genderOptions}
               id="account_type"
               value={form_data.gender || ""}
@@ -222,7 +223,6 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.marital_status_error}
               width="40"
               label="Marital status:"
-              class="marital_status"
               options={maritalStatusOptions}
               id="account_type"
               value={form_data.marital_status || ""}
