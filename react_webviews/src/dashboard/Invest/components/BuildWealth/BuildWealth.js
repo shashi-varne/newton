@@ -7,6 +7,7 @@ import { navigate as navigateFunc } from '../../common/commonFunctions';
 import "../../commonStyles.scss"
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
+import {nativeCallback} from '../../../../utils/native_callback'
 
 const term = 5;
 
@@ -35,6 +36,7 @@ const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
   
   const fetchRecommendedFunds = async () => {
+    sendEvents('next')
     const params = {
       type: investTypeDisplay === "sip" ? 'buildwealth' : 'buildwealthot',
     };
@@ -72,8 +74,26 @@ const Landing = (props) => {
     setInvestTypeDisplay(type);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select order type",
+        "order_type": investTypeDisplay === "sip" ? "SIP" : "OT",
+        "flow": "build wealth"
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle='NEXT'
       title='Build Wealth'
       handleClick={fetchRecommendedFunds}

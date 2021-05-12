@@ -16,6 +16,7 @@ import toast from "../../../../common/ui/Toast";
 import { isEmpty, cloneDeep, get } from "lodash";
 import { getInstaRecommendation } from "../../common/api";
 import useFunnelDataHook from "../../common/funnelDataHook";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const { partner_code, productName } = getConfig();
 
@@ -46,10 +47,13 @@ const InstaRedeem = (props) => {
   }, [funnelData])
 
   const handleClick = () => {
+    sendEvents('next')
+    storageService().remove('know_more_clicked')
     navigate("instaredeem/type");
   };
 
   const showFundInfo = (data) => {
+    sendEvents('fund details card')
     const recommendation = { mf: data };
     let dataCopy = cloneDeep(recommendation);
     dataCopy.diy_type = "recommendation";
@@ -122,7 +126,10 @@ const InstaRedeem = (props) => {
         </DialogContent>
         <DialogActions className="action">
           <Button
-            onClick={() => setOpenDialog(false)}
+            onClick={() => {
+              sendEvents("next", "insta popup");
+              setOpenDialog(false);
+            }}
             classes={{ button: "invest-dialog-button" }}
             buttonTitle="OKAY"
           />
@@ -131,8 +138,28 @@ const InstaRedeem = (props) => {
     );
   };
 
+  const sendEvents = (userAction, screenName) => {
+    let eventObj = {
+      "event_name": 'insta_redemption_Investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": screenName || "introduction",
+        }
+    };
+    if(screenName !== "insta popup")
+      eventObj.properties["know_more_clicked"] = storageService().get('know_more_clicked') ? "yes" : "no"
+    if(screenName === "insta popup")
+      eventObj.properties["intent"] = "withdrawal information"
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="START INVESTING"
       handleClick={handleClick}
       title={
@@ -155,7 +182,7 @@ const InstaRedeem = (props) => {
               <div className="text">
                 {data.disc}
                 {data.key === "withdrawal" && (
-                  <div className="insta-redeem-know-more" onClick={() => setOpenDialog(true)}>
+                  <div className="insta-redeem-know-more" onClick={() => {storageService().set('know_more_clicked',true);setOpenDialog(true)}}>
                     KNOW MORE
                   </div>
                 )}

@@ -10,6 +10,7 @@ import InfoBox from '../../../../common/ui/F-InfoBox';
 import { getConfig } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import useFunnelDataHook from '../../common/funnelDataHook';
+import { nativeCallback } from '../../../../utils/native_callback';
 
 const { productName } = getConfig();
 
@@ -60,6 +61,7 @@ const RiskCustomize = (props) => {
 
 
   const goNext = async () => {
+    sendEvents('next')
     try {
       await fetchRecommendations();
       navigate('recommendations');
@@ -76,9 +78,30 @@ const RiskCustomize = (props) => {
 
   const toggleConfirmDialog = () => setShowConfirmDialog(!showConfirmDialog);
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "custom profile",
+        "flow": funnelData.flow || funnelData.investType || "",
+        "custom_stock%": equity,
+        "custom_bond%": debt,
+        }
+    };
+    if(funnelData.investType === "saveforgoal")
+      eventObj.properties["flow"] = "invest for goal"
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  console.log(funnelData)
   return (
     <Container
       classOverRide='pr-error-container'
+      events={sendEvents("just_set_events")}
       fullWidthButton
       buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Save Changes'}
       helpContact

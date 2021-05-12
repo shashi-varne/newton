@@ -9,6 +9,7 @@ import FSelect from './FSelect';
 import { getConfig } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import useFunnelDataHook from '../../common/funnelDataHook';
+import { nativeCallback } from '../../../../utils/native_callback';
 
 const { productName } = getConfig();
 
@@ -65,6 +66,7 @@ const RiskModify = ({
   }
 
   const goNext = async () => {
+    sendEvents('next')
     if (selectedRisk !== 'Custom' && selectedRisk !== userRiskProfile) {
       await updateRiskAndFetchRecommendations();
     }
@@ -82,9 +84,30 @@ const RiskModify = ({
     })
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "changerisk profile",
+        "flow": funnelData.flow || funnelData.investType || "",
+        "profile": selectedRisk,
+        "info_clicked": 'no'
+        }
+    };
+    if(funnelData.investType === "saveforgoal")
+      eventObj.properties["flow"] = "invest for goal"
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       classOverRide='pr-error-container'
+      events={sendEvents("just_set_events")}
       fullWidthButton
       buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Proceed'}
       helpContact
@@ -117,7 +140,7 @@ const RiskModify = ({
         }
         <div
           className="risk-customize-cta"
-          onClick={() => navigate(`${funnelGoalData.id}/risk-customize`)}>
+          onClick={() => {sendEvents('custom profile'); navigate(`${funnelGoalData.id}/risk-customize`)}}>
           Customise EQUITY to DEBT DISTRIBUTION
         </div>
         <BottomSheet

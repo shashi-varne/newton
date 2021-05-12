@@ -21,6 +21,7 @@ import {
 } from '../../../utils/validators';
 import useFunnelDataHook from '../common/funnelDataHook';
 import './mini-components.scss';
+import { nativeCallback } from '../../../utils/native_callback';
 
 const date = new Date();
 const month = date.getMonth();
@@ -156,6 +157,7 @@ const InvestAmount = (props) => {
   };
 
   const goNext = () => {
+    sendEvents('next')
     if (!amount) {
       return;
     }
@@ -182,8 +184,31 @@ const InvestAmount = (props) => {
     setCorpus(taxsaved);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select invest amount",
+        "amount": amount || "",
+        "flow": funnelData.flow || funnelData.investType || ""
+        }
+    };
+    if(funnelData.investType === 'saveforgoal')
+    {
+      eventObj.properties["flow"] = "invest for goal";
+      eventObj.properties["goal_purposse"] = funnelData.subtype || ""
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
       title={title}

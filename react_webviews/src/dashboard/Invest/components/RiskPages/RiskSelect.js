@@ -8,6 +8,8 @@ import useFunnelDataHook from '../../common/funnelDataHook';
 import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
+import { nativeCallback } from '../../../../utils/native_callback';
+import { storageService } from '../../../../utils/validators'
 
 const { productName } = getConfig();
 
@@ -69,6 +71,8 @@ const RiskSelect = ({
   }
 
   const goNext = async (skipRiskUpdate) => {
+    sendEvents('next')
+    storageService().remove('risk-info-clicked');
     await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
     let state = 'recommendations';
@@ -79,6 +83,7 @@ const RiskSelect = ({
   };
 
   const gotToRiskProfiler = () => {
+    sendEvents('risk profiler')
     navigate('/risk/result-new', {
       state: {
         hideRPReset: true,
@@ -96,11 +101,33 @@ const RiskSelect = ({
   };
 
   const showInfo = () => {
+    storageService().set("risk-info-clicked", true);
     navigate('risk-info');
+  }
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select risk profile",
+        "flow": funnelData.flow || funnelData.investType || "",
+        "profile": userRiskProfile,
+        "info_clicked": storageService().get('risk-info-clicked') ? 'yes' : 'no',
+        }
+    };
+    if(funnelData.investType === "saveforgoal")
+      eventObj.properties["flow"] = "invest for goal"
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle="SHOW MY FUNDS"
