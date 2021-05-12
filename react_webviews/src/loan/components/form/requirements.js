@@ -10,7 +10,7 @@ import {
 } from 'utils/validators';
 import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
-import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../common/ui/DropDownNew';
 
 class ContactDetails extends Component {
 
@@ -177,7 +177,7 @@ class ContactDetails extends Component {
                             />
                     </div>
                     <div className="InputField">
-                        <DropdownWithoutIcon
+                        <DropDownNew
                             width="40"
                             options={this.state.purposeOptions}
                             id="purpose"
@@ -189,7 +189,7 @@ class ContactDetails extends Component {
                             onChange={this.handleChange('purpose')} />
                     </div>
                     <div className="InputField">
-                        <DropdownWithoutIcon
+                        <DropDownNew
                             width="40"
                             options={this.state.tenorOptions}
                             id="tenor"
@@ -202,7 +202,7 @@ class ContactDetails extends Component {
                     </div>
 
                     <div className="InputField">
-                        <DropdownWithoutIcon
+                        <DropDownNew
                             width="40"
                             dataType="AOB"
                             options={this.state.empTypeOptions}

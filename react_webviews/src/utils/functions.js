@@ -350,6 +350,21 @@ const partnersConfigBase = {
     close_button: 'close_nav_icon.svg',
     search_button: 'search.png',
     white_header: true,
+    webAppUrl: 'https://google-dot-plutus-web.appspot.com/#!/'
+  },
+  gpay: {
+    logo: 'logo_white.png',
+    primary_color: '#4f2da7',
+    code: 'gpay',
+    email: 'ask@fisdom.com',
+    mobile: '+80-48-093070',
+    message: '',
+    banner: 'obc_banner.png',
+    back_button: 'back_icon_white.png',
+    close_button: 'close_nav_icon.svg',
+    search_button: 'search.png',
+    white_header: true,
+    webAppUrl: 'https://google-dot-plutus-web.appspot.com/#!/'
   },
   indb: {
     logo: 'logo_white.png',
@@ -375,6 +390,18 @@ const partnersConfigBase = {
     back_button: "back_icon_white.png",
     close_button: "close_nav_icon.svg",
     search_button: "search.png"
+  },
+  quesscorp: {
+    logo: 'logo_white.png',
+    primary_color: '#4f2da7',
+    code: 'quesscorp',
+    email: 'ask@fisdom.com',
+    mobile: '+91-7829228886',
+    message: '',
+    banner: 'obc_banner.png',
+    back_button: 'back_icon_white.png',
+    close_button: 'close_nav_icon.svg',
+    search_button: 'search.png'
   }
 };
 
@@ -478,9 +505,14 @@ function getPartnerConfig(partner_code) {
     },
   };
 
+  let origin = window.location.origin;
+
   const ismyway =
     search.indexOf('api.mywaywealth.com') >= 0 ||
-    search.indexOf('plutus-finwizard-pro.appspot.com') >= 0;
+    search.indexOf('plutus-finwizard-pro.appspot.com') >= 0 || 
+    origin.indexOf('wv.mywaywealth.com') >= 0 || 
+    origin.indexOf('wv.finity.in') >= 0 || 
+    origin.indexOf('api.mywaywealth.com') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
@@ -514,6 +546,7 @@ function getPartnerConfig(partner_code) {
     header_title_color: 'header_title_color',
     inputFocusedColor: 'inputFocusedColor',
     white_header: 'white_header',
+    webAppUrl: 'webAppUrl'
   };
 
   config_to_return.isFinwiz = true;
