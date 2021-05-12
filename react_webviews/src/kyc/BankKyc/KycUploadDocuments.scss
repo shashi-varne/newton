@@ -61,7 +61,6 @@
       min-width: 140px;
       display: flex;
       justify-content: space-between;
-      column-gap: 10px;
       cursor: pointer;
     }
 
@@ -80,6 +79,7 @@
 
       .kyc-upload-doc-check-icon {
         width: 10px;
+        margin-left: 10px;
       }
     }
   }
