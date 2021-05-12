@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BottomSheet from '../../common/ui/BottomSheet';
-import { formatAmountInr } from '../../utils/validators';
+import { formatAmountInr, storageService } from '../../utils/validators';
 import {
   getInvestedValue,
   getPotentialValue,
@@ -58,7 +58,7 @@ const PeriodWiseReturns = ({
     setInvestedValue(value);
   };
 
-  const toggleInfoSheet = () => setOpenInfoSheet(!openInfoSheet);
+  const toggleInfoSheet = () => {storageService().set('info_clicked',true); setOpenInfoSheet(!openInfoSheet)};
 
   return (
     <div className='invested-amount-return-container'>
@@ -72,7 +72,7 @@ const PeriodWiseReturns = ({
               currentTerm >= termOpt && currentTerm < (termOptions[idx + 1] || 100) ?
               'selected' : ''
             }
-            onClick={() => setCurrentTerm(termOpt)}>
+            onClick={() => {storageService().set("period_changed",true); setCurrentTerm(termOpt)}}>
             {termOpt}YRS
           </span>
         ))}

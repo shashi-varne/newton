@@ -90,13 +90,11 @@ const RiskModify = ({
       "properties": {
         "user_action": userAction || "",
         "screen_name": "changerisk profile",
-        "flow": funnelData.flow || funnelData.investType || "",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
         "profile": selectedRisk,
         "info_clicked": 'no'
         }
     };
-    if(funnelData.investType === "saveforgoal")
-      eventObj.properties["flow"] = "invest for goal"
     if (userAction === 'just_set_events') {
       return eventObj;
     } else {

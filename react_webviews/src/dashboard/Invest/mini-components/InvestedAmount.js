@@ -91,7 +91,7 @@ const InvestedAmount = (props) => {
         "screen_name": "projected value",
         "years": term,
         "risk apetite": risk,
-        "flow": funnelData.flow || funnelData.investType || "",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
         }
     };
     if (funnelData.investType === "saveforgoal") {

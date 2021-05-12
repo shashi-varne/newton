@@ -22,6 +22,7 @@ import { get, isArray } from 'lodash';
 import { get_recommended_funds } from '../Invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
+import { nativeCallback } from '../../utils/native_callback';
 
 const sipTypesKeys = [
   "buildwealth",
@@ -118,6 +119,7 @@ const Recommendations = (props) => {
   }, []);
 
   const goNext = (investReferralData, isReferralGiven, handleGraph) => {
+    sendEvents('next')
     let investmentObject = {};
     if (funnelData.type !== "riskprofile") {
       var allocations = [];
@@ -249,15 +251,43 @@ const Recommendations = (props) => {
   }, [recommendations]);
 
   const editFund = () => {
+    sendEvents("fund edit")
     navigate("recommendations/edit-funds");
   };
 
   const checkHow = () => {
+    storageService().set('check_how_clicked',true)
     navigate("recommendations/how-we-recommend");
+  }
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "recommended funds",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
+        "check_how_clicked": storageService().get("check_how_clicked") ? "yes" : "no",
+        "period_changed": storageService().get("period_changed") ? "yes" : "no",
+        "info_clicked": storageService().get("info_clicked") ? "yes" : "no",
+        }
+    };
+    storageService().remove("check_how_clicked") 
+    storageService().remove("period_changed")
+    storageService().remove("info_clicked")
+    if (funnelData.investType === "saveforgoal") {
+      eventObj.properties['goal_purpose'] = funnelData.subtype || "";
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle={
         currentUser &&
         !currentUser.active_investment &&
@@ -281,6 +311,7 @@ const Recommendations = (props) => {
                   funnelData
                 }}
                 parentProps={props}
+                sendEvents={sendEvents}
               />
             }
             <PeriodWiseReturns

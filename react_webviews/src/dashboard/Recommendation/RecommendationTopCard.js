@@ -8,7 +8,8 @@ const { productName } = getConfig();
 
 const RecommendationTopCard = ({
   data = {},
-  parentProps
+  parentProps,
+  sendEvents
 }) => {
   const navigate = navigateFunc.bind(parentProps);
   const { userRiskProfile, funnelData } = data;
@@ -45,7 +46,7 @@ const RecommendationTopCard = ({
           </div>
           <div
             className="risk-profile-change-btn"
-            onClick={() => navigate(`${investType}/risk-${userRiskProfile ? 'modify' : 'select'}`)}>
+            onClick={() => {sendEvents("change_risk_profile"); navigate(`${investType}/risk-${userRiskProfile ? 'modify' : 'select'}`)}}>
             {userRiskProfile ? "Change" : "Select"}
           </div>
           <BottomSheet

@@ -191,12 +191,11 @@ const InvestAmount = (props) => {
         "user_action": userAction || "",
         "screen_name": "select invest amount",
         "amount": amount || "",
-        "flow": funnelData.flow || funnelData.investType || ""
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || ""
         }
     };
     if(funnelData.investType === 'saveforgoal')
     {
-      eventObj.properties["flow"] = "invest for goal";
       eventObj.properties["goal_purposse"] = funnelData.subtype || ""
     }
     if (userAction === 'just_set_events') {

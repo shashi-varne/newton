@@ -111,13 +111,11 @@ const RiskSelect = ({
       "properties": {
         "user_action": userAction || "",
         "screen_name": "select risk profile",
-        "flow": funnelData.flow || funnelData.investType || "",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
         "profile": userRiskProfile,
         "info_clicked": storageService().get('risk-info-clicked') ? 'yes' : 'no',
         }
     };
-    if(funnelData.investType === "saveforgoal")
-      eventObj.properties["flow"] = "invest for goal"
     if (userAction === 'just_set_events') {
       return eventObj;
     } else {

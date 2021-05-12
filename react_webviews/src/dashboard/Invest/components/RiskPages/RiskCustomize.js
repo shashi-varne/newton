@@ -84,13 +84,11 @@ const RiskCustomize = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "custom profile",
-        "flow": funnelData.flow || funnelData.investType || "",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
         "custom_stock%": equity,
         "custom_bond%": debt,
         }
     };
-    if(funnelData.investType === "saveforgoal")
-      eventObj.properties["flow"] = "invest for goal"
     if (userAction === 'just_set_events') {
       return eventObj;
     } else {
