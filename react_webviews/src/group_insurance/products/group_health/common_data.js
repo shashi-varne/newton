@@ -834,7 +834,7 @@ export function setReportData(termData, group_insurance_policies, health_insuran
     var activeReports = sortArrayOfObjectsByTime(filteredReportData.activeReports, 'dt_updated_cmp');
     var pendingReports = sortArrayOfObjectsByTime(filteredReportData.pendingReports, 'dt_updated_cmp');
     var inactiveReports = sortArrayOfObjectsByTime(filteredReportData.inactiveReports, 'dt_updated_cmp');
-    filteredReportData = {activeReports: [], pendingReports, inactiveReports}
+    filteredReportData = {activeReports , pendingReports, inactiveReports}
     
     for(var x in filteredReportData){
         var tabData = filteredReportData[x];

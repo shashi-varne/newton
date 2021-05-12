@@ -8,7 +8,6 @@ import {
     numDifferentiationInr, formatAmountInr , capitalizeFirstLetter
 } from 'utils/validators';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import {fyntuneConstants} from './constants';
 
 class FyntuneReportDetails extends Component {
