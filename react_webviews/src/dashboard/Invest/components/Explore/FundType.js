@@ -3,6 +3,7 @@ import Container from '../../../common/Container'
 import Typography from '@material-ui/core/Typography'
 import Button from 'common/ui/Button'
 import { storageService } from 'utils/validators'
+import { getConfig } from 'utils/functions'
 import heart_icon from 'assets/trending_heart_icon.png'
 import { CART } from '../../../DIY/constants'
 import DiyCartButton from '../../../DIY/mini-components/CartButton'
@@ -12,7 +13,7 @@ import './FundType.scss';
 import { navigate as navigateFunc } from '../../common/commonFunctions'
 
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
-  const navigate = navigateFunc.bind(parentProps)
+  const navigate = navigateFunc.bind(parentProps);
   const handleNavigate = (data) => {
     let dataCopy = Object.assign({}, data);
     dataCopy.category = "scheme carousel";
@@ -100,6 +101,7 @@ const FundType = (props) => {
   const [cartActive, setCartActive] = useState(false)
   const trendingFunds = storageService().getObject('diystore_trending') || [];
   const categories = storageService().getObject('diystore_categoryList') || [];
+  const productType = getConfig().productName
   const { sub_categories } = categories?.find(
     (el) => el.category.toLowerCase() === type
   ) || [];
@@ -134,23 +136,26 @@ const FundType = (props) => {
           </div>
         </section>
       </section>
-      <footer className="diy-cart-footer">
-        {cart.length > 0 && (
-          <DiyCartButton
-            className="button"
-            onClick={() => setCartActive(true)}
-            cartlength={cart.length}
-          />
-        )}
+      {
+        productType !== 'finity' &&
+        <footer className="diy-cart-footer">
+          {cart.length > 0 && (
+            <DiyCartButton
+              className="button"
+              onClick={() => setCartActive(true)}
+              cartlength={cart.length}
+            />
+          )}
 
-        <Cart
-          isOpen={cartActive && cart.length > 0}
-          setCartActive={setCartActive}
-          cart={cart}
-          setCart={setCart}
-          {...props}
-        />
-      </footer>
+          <Cart
+            isOpen={cartActive && cart.length > 0}
+            setCartActive={setCartActive}
+            cart={cart}
+            setCart={setCart}
+            {...props}
+          />
+        </footer>
+      }
     </Container>
   )
 }

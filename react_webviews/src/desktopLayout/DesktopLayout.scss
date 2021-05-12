@@ -122,3 +122,16 @@
     width: 100% !important;
   }
 }
+
+@media only screen and (min-width: 500px) {
+  body.IframeBody { 
+    background-color: red !important;
+    .MuiModal-root[role='dialog']{
+      top: 0px !important;
+      margin-left: 0px !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+}

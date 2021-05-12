@@ -12,8 +12,12 @@ import { isMobile } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import './common/theme/Style.scss';
 import "./common/ui/style.scss";
-import { getConfig } from './utils/functions';
+import { getConfig, isIframe } from './utils/functions';
 $(document).ready(function () {
+  if(isIframe()){
+    let bodyElement =  document.getElementsByTagName('body');
+    bodyElement[0].classList.add('IframeBody');
+  }
   if (isMobile.Android()) {
     window.addEventListener('resize', function () {
       let body =  document.getElementsByTagName('body') && document.getElementsByTagName('body')[0] ?document.getElementsByTagName('body')[0].offsetHeight : 0;
