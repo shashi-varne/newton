@@ -4,7 +4,7 @@ import './TaxLiability.scss';
 const TaxLiability = (props) => {
   const { stcg, ltcg } = props
   return (
-    <section className="withdraw-summary-liability Card">
+    <section className="withdraw-summary-liability Card" data-aid='withdraw-summary-liability'>
       <div className="title">Tax liability</div>
       <main className="breakdown">
         <div className="item flex-between-center">

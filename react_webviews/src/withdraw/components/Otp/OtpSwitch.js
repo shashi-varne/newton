@@ -88,14 +88,15 @@ const OtpSwitch = (props) => {
 
   return (
     <Container
+      data-aid='otp-switch-verify-screen'
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
       hideInPageTitle
       type="withProvider"
       noFooter
     >
-      <section id="withdraw-otp-switch" className="page otp">
-        <div className="otp-input">
+      <section id="withdraw-otp-switch" className="page otp" data-aid='withdraw-otp-switch'>
+        <div className="otp-input" data-aid='otp-input'>
           <div className="otp-text">Enter OTP</div>
           <Input
             error={touched && otp.length !== 4 ? true : false}
@@ -113,12 +114,13 @@ const OtpSwitch = (props) => {
             Resend OTP
           </div>
         </div>
-        <footer className="page-footer">
+        <footer className="page-footer" data-aid='page-footer'>
         <Button
           className={disabled ? 'disabled' : 'button'}
           disabled={disabled}
           onClick={verifyOtp}
           className="cta-button"
+          data-aid='cta-button'
         >
           VERIFY{' '}
           {isApiRunning && (

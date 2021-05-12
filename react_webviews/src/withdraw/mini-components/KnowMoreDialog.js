@@ -9,7 +9,7 @@ const KnowMoreDialog = ({ open, onClose, message }) => {
 
   return (
     <Dialog open={open} onClose={onClose} id="withdraw-know-more">
-      <section className="withdraw-know-more-content">
+      <section className="withdraw-know-more-content" data-aid='withdraw-know-more-content'>
         <div className="header">
           <div className="title">
             Avoid taxes for better returns  
@@ -29,6 +29,7 @@ const KnowMoreDialog = ({ open, onClose, message }) => {
           fullWidth
           className="action-btn"
           onClick={onClose}
+          data-aid='action-btn'
         >
           GOT IT
         </Button>

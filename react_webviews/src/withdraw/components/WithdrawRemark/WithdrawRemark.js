@@ -96,6 +96,7 @@ const WithdrawRemark = ({ location, ...props }) => {
 
   return (
     <Container
+      data-aid='withdraw-remark-screen'
       buttonTitle='Continue'
       fullWidthButton
       // hideInPageTitle
@@ -106,19 +107,19 @@ const WithdrawRemark = ({ location, ...props }) => {
       classOverRide='wremark-container'
     >
       {!isEmpty(subQstn?.action) && (
-        <section className='withdraw-remark'>
+        <section className='withdraw-remark' data-aid='withdraw-remark'>
           <div className='withdraw-remark-title'>{subQstn?.action?.sub_question?.title}</div>
           {subQstn?.tag !== 'app_concerns' ? (
             <div className='withdraw-remark-list'>
               {subQstn?.action?.sub_question?.options?.map((el, idx) => (
-                <div className='withdraw-remark-items' key={idx}>
+                <div className='withdraw-remark-items' data-aid={`withdraw-remark-items-${idx+1}`} key={idx}>
                   <FiberManualRecordIcon color='primary' />
                   <div>{el.title}</div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className='withdraw-fisdom-radio'>
+            <div className='withdraw-fisdom-radio' data-aid='withdraw-fisdom-radio'>
               <FormControl component='fieldset'>
                 <RadioGroup
                   aria-label='fisdom-reasons'

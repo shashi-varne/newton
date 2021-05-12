@@ -81,6 +81,7 @@ const Balance = (props) => {
   const noInvestments = isEmpty(balance?.balance) || balance === 0
   return (
     <Container
+      data-aid='withdraw-screen'
       title='Withdraw'
       noFooter
       noPadding
@@ -93,7 +94,7 @@ const Balance = (props) => {
     >
       {!isEmpty(balance) && !noInvestments && (
         <>
-          <section id="withdraw-balance">
+          <section id="withdraw-balance" data-aid='withdraw-balance'>
             <div className="report-header">
               <div className="title">Withdrawable Balance</div>
               <div className="amount">
@@ -120,7 +121,7 @@ const Balance = (props) => {
                 </div>
               </div>
             </div>
-            <main className="Card">
+            <main className="Card" data-aid='card-block'>
               <img
                 src={require(`assets/surplus_graph.png`)}
                 className="withdraw-mid-tile-img"
@@ -137,7 +138,7 @@ const Balance = (props) => {
                 type="outlined"
               />
             </main>
-            <footer className="footer Card">
+            <footer className="footer Card" data-aid='footer-card'>
               <div className="title">Withdraw</div>
               {withdrawOptions.map(
                 ({ title, desc, redirectUrl, openModal }, idx) => (

@@ -97,7 +97,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
   };
 
   return (
-    <div className='withdraw-fund-card'>
+    <div className='withdraw-fund-card' data-aid='withdraw-fund-card'>
       <div className='withdraw-fund-header' onClick={handleToggle}>
         <div>
           <div className='withdraw-fund-icon'>
@@ -123,7 +123,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
         )}
       </div>
 
-      <div className='withdraw-investment-container'>
+      <div className='withdraw-investment-container' data-aid='withdraw-investment-container'>
         <div className='withdraw-amount-container'>
           <div className='amount-header-text'>WITHDRAWABLE AMOUNT</div>
           <div>{inrFormatDecimal(Math.ceil(type === 'systematic' ? balance : amount))}</div>
@@ -134,7 +134,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
         </div>
       </div>
       <Collapse in={open}>
-        <div className='withdraw-input'>
+        <div className='withdraw-input' data-aid='withdraw-input'>
           <Input
             id='amount'
             label='Withdraw Amount'

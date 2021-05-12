@@ -16,7 +16,7 @@ import './System.scss';
 const TaxLiability = (props) => {
   const { stcg, ltcg } = props
   return (
-    <section className="withdraw-summary-liability Card">
+    <section className="withdraw-summary-liability Card" data-aid='withdraw-summary-liability Card'>
       <div className="title">Tax liability</div>
       <main className="breakdown">
         <div className="item flex-between-center">
@@ -39,7 +39,7 @@ const TaxLiability = (props) => {
 
 const ExitLoad = ({ exit_load }) => {
   return (
-    <section className="withdraw-summary-exitload Card">
+    <section className="withdraw-summary-exitload Card" data-aid='withdraw-summary-exitload Card'>
       <div className="title">Exit Load</div>
       <div className="total flex-between-center">
         <div className="name">Exit load</div>
@@ -124,6 +124,7 @@ const SystemSummary = (props) => {
   console.log(taxes)
   return (
     <Container
+      data-aid='system-summary-screen'
       buttonTitle={'CONTINUE'}
       fullWidthButton
       classOverRideContainer="pr-container"
@@ -142,11 +143,11 @@ const SystemSummary = (props) => {
       type="withProvider"
     >
       {!isEmpty(taxes) && (
-        <section id="withdraw-system-summary">
+        <section id="withdraw-system-summary" data-aid='withdraw-system-summary'>
           <TaxLiability stcg={taxes?.stcg_tax} ltcg={taxes?.ltcg_tax} />
           <ExitLoad exit_load={taxes.ltcg} />
           <div className="tax-summary">Tax Summary</div>
-          <main className="fund-list">
+          <main className="fund-list" data-aid='fund-list'>
             {taxes?.liabilities?.map((item, idx) => (
               <TaxSummaryCard
                 key={item.isin}

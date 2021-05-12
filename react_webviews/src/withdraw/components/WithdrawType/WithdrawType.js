@@ -168,6 +168,7 @@ const Landing = (props) => {
   }
   return (
     <Container
+      data-aid='withdraw-type-screen'
       buttonTitle={buttonTitle}
       fullWidthButton
       classOverRideContainer="pr-container"
@@ -210,7 +211,7 @@ const Landing = (props) => {
           )}
 
           {limitCrossed && (
-            <section className="withdraw-insta-exceed">
+            <section className="withdraw-insta-exceed" data-aid='withdraw-insta-exceed'>
               <div className="withdraw-insta-exceed-icon">
                 <img src={require('assets/error_icon.svg')} alt="error" />
               </div>
@@ -233,7 +234,7 @@ const Landing = (props) => {
       {type === 'insta-redeem' &&
         !fetchFailed &&
         !isEmpty(recommendedFunds?.allocations) && (
-          <section className="withdraw-instant-msg">
+          <section className="withdraw-instant-msg" data-aid='withdraw-instant-msg'>
             <div>Instant in bank account</div>
             <div>|</div>
             <div>Get it in 30 mins</div>
@@ -247,7 +248,7 @@ export default Landing
 
 const InstaRedeemZero = () => {
   return (
-    <section className="withdraw-insta">
+    <section className="withdraw-insta" data-aid='withdraw-insta-redeem-zero'>
       <div className="withdraw-insta-icon">
         <img src={require('assets/piggy_bank@4x.png')} alt="" />
       </div>
@@ -264,7 +265,7 @@ const InstaRedeemFailed = () => {
   const product_name = getConfig().productName
 
   return (
-    <div className="pr-error-container withdraw-insta-failed">
+    <div className="pr-error-container withdraw-insta-failed" data-aid='withdraw-insta-failed'>
       <section className="image-cover">
         <img
           src={require(`assets/${product_name}/server_error_page.svg`)}

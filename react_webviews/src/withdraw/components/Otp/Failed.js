@@ -17,8 +17,8 @@ const Failed = (props) => {
   }
 
   return (
-    <Container hidePageTitle buttonTitle="RETRY" handleClick={goTo}>
-      <section id="withdraw-otp-failed">
+    <Container hidePageTitle buttonTitle="RETRY" handleClick={goTo} data-aid='otp-failed-screen'>
+      <section id="withdraw-otp-failed" data-aid='withdraw-otp-failed'>
         {partnerCode === 'bfdlmobile' && (
           <div className="header">Money + Withdraw</div>
         )}
@@ -36,7 +36,7 @@ const Failed = (props) => {
           If instant withdraw was successful, you will get the money within 30
           mins. Otherwise, please try again after some time.
         </div>
-        <div className="contact-us">
+        <div className="contact-us" data-aid='contact-us'>
           <div className="contact-us-bottom1">For any query, reach us at</div>
           <div className="contact-us-bottom2 flex-center">
             <div className="contact-number">+91-7829228886</div>
