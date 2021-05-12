@@ -5,7 +5,7 @@ import { storageService } from "utils/validators";
 
 export const backMapper = (state) => {
   const backStatesMapper = {
-   '/add-bank': '/my-account',
+   '/kyc/add-bank': '/my-account',
    '/account/merge/linked/success': '/logout',
    '/diy/fundinfo/direct': '/',
    ...commonBackMapper

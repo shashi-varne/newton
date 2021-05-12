@@ -59,7 +59,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         return true;
       }
       break;
-    case "/add-bank":
+    case "/kyc/add-bank":
       if (storageService().get('native')) {
         nativeCallback({ action: "exit_web" });
       } else {

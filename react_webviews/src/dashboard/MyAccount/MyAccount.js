@@ -33,29 +33,7 @@ class MyAccount extends Component {
   };
 
   handleClick = (route) => {
-    switch (route) {
-      case "change-kyc-address-details-1":
-        this.navigate("kyc/change-address-details1");
-        break;
-      case "add-bank":
-        this.navigate("kyc/add-bank");
-        break;
-      case "capital-gain":
-        this.navigate("capital-gain");
-        break;
-      case "investment-proof":
-        this.navigate("investment-proof");
-        break;
-      case "blank-mandate-upload":
-        this.navigate("blank-mandate/upload");
-        break;
-      case "nps-identity":
-        this.navigate("nps/identity");
-        break;
-      default:
-        this.navigate(route);
-        break;
-    }
+    this.navigate(route);
   };
 
   handleClose = () => {
@@ -153,7 +131,7 @@ class MyAccount extends Component {
                 <div
                   className="account-options"
                   onClick={() =>
-                    this.handleClick("change-kyc-address-details-1")
+                    this.handleClick("/kyc/change-address-details1")
                   }
                 >
                   <img src={require(`assets/address_icon.svg`)} alt="" />
@@ -163,7 +141,7 @@ class MyAccount extends Component {
               {(isReadyToInvestBase || bank.doc_status === "rejected") && (
                 <div
                   className="account-options"
-                  onClick={() => this.handleClick("add-bank")}
+                  onClick={() => this.handleClick("/kyc/add-bank")}
                 >
                   <img src={require(`assets/add_bank_icn.svg`)} alt="" />
                   <div>Add Bank/Mandate</div>
@@ -174,7 +152,7 @@ class MyAccount extends Component {
                 Capitalgain && (
                   <div
                     className="account-options"
-                    onClick={() => this.handleClick("capital-gain")}
+                    onClick={() => this.handleClick("/capital-gain")}
                   >
                     <img
                       src={require(`assets/capital_gains_icon.svg`)}
@@ -188,7 +166,7 @@ class MyAccount extends Component {
                 investment80C && (
                   <div
                     className="account-options"
-                    onClick={() => this.handleClick("investment-proof")}
+                    onClick={() => this.handleClick("/investment-proof")}
                   >
                     <img src={require(`assets/80c_icon.svg`)} alt="" />
                     <div>80C Investment Proof</div>
@@ -208,7 +186,7 @@ class MyAccount extends Component {
               )}
               <div
                 className="account-options"
-                onClick={() => this.handleClick("blank-mandate-upload")}
+                onClick={() => this.handleClick("/blank-mandate/upload")}
               >
                 <img
                   src={require(`assets/export_transaction_icon.svg`)}
@@ -246,7 +224,7 @@ class MyAccount extends Component {
                 {npsUpload && (
                   <div
                     className="account-options"
-                    onClick={() => this.handleClick("nps-identity")}
+                    onClick={() => this.handleClick("/nps/identity")}
                   >
                     <img src={require(`assets/alert_icon.svg`)} alt="" />
                     <div className="pending">Upload NPS Details</div>
