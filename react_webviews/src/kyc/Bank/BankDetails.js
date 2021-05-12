@@ -75,11 +75,12 @@ const BankDetails = (props) => {
       handleClick={handleClick}
       noFooter={bank.bank_status !== "rejected"}
       title="Bank accounts"
+      data-aid='kyc-bank-details-page'
     >
       <div className="bank-details">
         {!showLoader && (
           <>
-            <div className="bank-info">
+            <div className="bank-info" data-aid='kyc-bank-info'>
               <img src={bank.bank_image} className="left-icon" alt="" />
               <div className="content">
                 <div className="bank-name">
@@ -101,47 +102,48 @@ const BankDetails = (props) => {
                 <div className="branch-name">{bank.branch_name}</div>
               </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-account-number'>
               <div className="left">Account number</div>
               <div className="right"> {bank.account_number} </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-ifsc-code'>
               <div className="left">IFSC code</div>
               <div className="right">{bank.ifsc_code} </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
               <div className="right"> {bank.account_type} </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-status'>
               <div className="left">Status</div>
               <div
                 className={`status ${
                   bank.bank_status === "rejected" && "failed"
                 } ${bank.bank_status === "verified" && "verified"}`}
+                data-aid={`mapped-bank-status`}
               >
                 {bank.mapped_bank_status}
               </div>
             </div>
             {bank.bank_status !== "rejected" && (
-              <div className="mandate-section">
+              <div className="mandate-section" data-aid='kyc-mandate-section'>
                 <div className="title">Mandates</div>
                 {bank.mandates && bank.mandates.length > 0 ? (
                   bank.mandates.map((mandate, index) => {
                     return (
                       <div key={index} className="content">
-                        <div className="item">
+                        <div className="item" data-aid='kyc-id'>
                           <div className="left">ID</div>
                           <div className="right">{mandate.id} </div>
                         </div>
-                        <div className="item">
+                        <div className="item" data-aid='kyc-account-type'>
                           <div className="left">Account type</div>
                           <div className="right">
                             {" "}
                             {formatAmountInr(mandate.amount)}{" "}
                           </div>
                         </div>
-                        <div className="item">
+                        <div className="item" data-aid='kyc-status'>
                           <div className="left">Status</div>
                           <div
                             className={`status ${
@@ -149,6 +151,7 @@ const BankDetails = (props) => {
                             } ${mandate.status === "verified" && "verified"} ${
                               mandate.status === "init" && "underprocess"
                             }`}
+                            data-aid='kyc-mapped-mandate-status'
                           >
                             {mandate.mapped_mandate_status}
                           </div>
@@ -157,7 +160,7 @@ const BankDetails = (props) => {
                     );
                   })
                 ) : (
-                  <div className="info-text">
+                  <div className="info-text" data-aid='kyc-info-text'>
                     You do not have any mandates associated with this bank
                     account
                   </div>

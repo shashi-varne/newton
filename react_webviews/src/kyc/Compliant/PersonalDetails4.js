@@ -145,10 +145,11 @@ const PersonalDetails4 = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      data-aid='kyc-personal-details-screen-4'
     >
       <div className="kyc-nominee">
-        <main>
-          <div className="nominee-checkbox">
+        <main data-aid='kyc-nominee'>
+          <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
               checked={isChecked}
@@ -157,7 +158,7 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-            <span>
+            <span data-aid='kyc-no-nominee-text'>
               I do not wish to add a <b>nominee</b>
             </span>
           </div>

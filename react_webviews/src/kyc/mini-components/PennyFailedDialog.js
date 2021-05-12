@@ -15,8 +15,8 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
       className="kyc-penny-failed-dialog"
       id="kyc-bottom-dialog"
     >
-      <DialogContent className="penny-failed-dialog-content">
-        <div className="title">
+      <DialogContent className="penny-failed-dialog-content" data-aid='kyc-penny-failed-dialog-content'>
+        <div className="title" data-aid='kyc-title'>
           <div className="text">Unable to add bank!</div>
           <img
             src={require(`assets/${productName}/ic_bank_not_added.svg`)}
@@ -24,11 +24,11 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
             className="img"
           />
         </div>
-        <div className="subtitle">
+        <div className="subtitle"  data-aid='kyc-subtitle'>
           Bank account verification failed! No worries, please check if you've
           entered correct details.
         </div>
-        <Button className="button bg-full" onClick={() => checkBankDetails()}>
+        <Button className="button bg-full" data-aid='kyc-check-bank-details' onClick={() => checkBankDetails()}>
           CHECK BANK DETAILS
         </Button>
         <div className="divider">
@@ -36,6 +36,7 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
         </div>
         <Button
           className="button border-button"
+          data-aid='kyc-upload-bank-documents'
           onClick={() => uploadDocuments()}
         >
           UPLOAD BANK DOCUMENTS

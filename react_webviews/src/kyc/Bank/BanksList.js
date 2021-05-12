@@ -63,16 +63,18 @@ const BanksList = (props) => {
       }
       title="Bank accounts"
       type="outlined"
+      data-aid='kyc-add-other-bank-screen'
     >
-      <div className="banks-list">
+      <div className="banks-list" data-aid='kyc-banks-list'>
         {banks.map((bank, index) => {
           return (
             <div
               className="block"
               key={index}
               onClick={bank_details(bank.bank_id)}
+              data-aid={`bank-${index+1}`}
             >
-              <div className="bank-details">
+              <div className="bank-details" data-aid='kyc-bank-details'>
                 <img src={bank.bank_image} className="left-icon" alt="" />
                 <div className="content">
                   <div className="bank-name">
@@ -96,13 +98,14 @@ const BanksList = (props) => {
                     className={`status  ${
                       bank.bank_status === "rejected" && "failed"
                     } ${bank.bank_status === "verified" && "verified"}`}
+                    data-aid={`mapped-bank-status-${index+1}`}
                   >
                     {bank.mapped_bank_status}
                   </div>
                 </div>
               </div>
               <img
-                src={require(`assets/${productName}/icon_color.svg`)}
+                src={require(`assets/${productName}/right_icon.svg`)}
                 alt=""
                 className="right-icon"
               />

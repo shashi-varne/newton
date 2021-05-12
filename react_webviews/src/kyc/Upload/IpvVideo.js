@@ -42,8 +42,49 @@ const IpvVideo = (props) => {
       setLoading(false)
     }
   }
+
+  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
+    window.callbackWeb[method_name]({
+      type: 'doc',
+      doc_type: doc_type,
+      doc_name: doc_name,
+      doc_side: doc_side,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
+          switch (file.type) {
+            case "video/mp4":
+            case "video/webm":
+            case "video/ogg":
+            case "video/x-flv":
+            case "video/x-ms-wmv":
+            setFile(file)
+            setTimeout(
+              function () {
+                setLoading(false);
+              },
+              1000
+            );
+            break;
+            default:
+              toast('Please select a valid video file')
+          }
+        } catch (e) {
+          //
+        }
+      },
+    })
+
+    window.callbackWeb.add_listener({
+      type: 'native_receiver_image',
+      show_loader: function (show_loader) {
+        setLoading(true)
+      },
+    })
+  }
+  
   const handleChange = (event) => {
-    console.log(event.target.files)
+    event.preventDefault();
     const uploadedFile = event.target.files[0]
     let acceptedTypes = [
       'video/mp4',
@@ -59,8 +100,11 @@ const IpvVideo = (props) => {
     }
   }
 
-  const handleUpload = () => {
-    inputEl.current.click()
+  const handleUpload = (method_name) => {
+    if(getConfig().html_camera)
+      inputEl.current.click()
+    else
+      native_call_handler(method_name, 'ipvvideo', 'ipvvideo.jpg', 'front')
   }
 
   const handleSubmit = async () => {
@@ -88,15 +132,16 @@ const IpvVideo = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload video (IPV)"
+      data-aid='kyc-upload-video-ipv'
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-ipv-video">
-          <div className="sub-title" id='sub-title'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             As per SEBI, it's compulsory for all investors to go through IPV (In
             Person Verification Process).
           </div>
           {!isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {file && (
                 <img
                   src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
@@ -113,9 +158,9 @@ const IpvVideo = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '320px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
-                  <div className="open-camera">
+                  <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
                       ref={inputEl}
                       type="file"
@@ -126,8 +171,9 @@ const IpvVideo = (props) => {
                     />
                     <button
                       data-click-type="camera-front"
-                      onClick={handleUpload}
+                      onClick={() => handleUpload("open_video_camera")}
                       className="kyc-upload-button"
+                      data-aid='kyc-upload-button'
                     >
                       {!file && (
                         <svg
@@ -142,10 +188,10 @@ const IpvVideo = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
                     </button>
                   </div>
-                  <div className="open-gallery">
+                  <div className="open-gallery" data-aid='kyc-open-gallery'>
                     <input
                       ref={inputEl}
                       type="file"
@@ -153,8 +199,9 @@ const IpvVideo = (props) => {
                       onChange={handleChange}
                     />
                     <button
-                      onClick={handleUpload}
+                      onClick={() => handleUpload("open_gallery")}
                       className="kyc-upload-button"
+                      data-aid='kyc-upload-button'
                     >
                       {!file && (
                         <svg
@@ -169,7 +216,7 @@ const IpvVideo = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" data-aid='kyc-open-gallery-text' >Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -177,7 +224,7 @@ const IpvVideo = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {file && (
                 <img
                   src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
@@ -194,14 +241,14 @@ const IpvVideo = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '320px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
                   onChange={handleChange}
                 />
-                <button onClick={handleUpload} className="kyc-upload-button">
+                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button" data-aid='kyc-upload-button'>
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -215,13 +262,13 @@ const IpvVideo = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>
           )}
           {!file && (
-            <div className="ipv_footer_instructions" id='ipv_footer_instructions'>
+            <div className="ipv_footer_instructions" data-aid='kyc-ipv-footer-instructions-nofile'>
               While recording,{' '}
               <strong>read the following verification numbers loud</strong>{' '}
               while looking at the camera
@@ -229,15 +276,15 @@ const IpvVideo = (props) => {
           )}
 
           {file && (
-            <div className="ipv_footer_instructions">
+            <div className="ipv_footer_instructions" data-aid='kyc-ipv-footer-instructions-file'>
               Please ensure that you've read aloud the below number for a
               seamless verification experience.
             </div>
           )}
-          <div className="ipv_code" id='ipv_code'>{ipvcode}</div>
+          <div className="ipv_code" data-aid='kyc-ipv-code'>{ipvcode}</div>
           <div className="flex-between-center">
-            <div className="know_more" id='know_more'>How to make a selfie video ?</div>
-            <div className="link" onClick={() => open()}>
+            <div className="know_more" data-aid='kyc-know-more-text'>How to make a selfie video ?</div>
+            <div className="link" data-aid='kyc-link' onClick={() => open()}>
               KNOW MORE
             </div>
           </div>

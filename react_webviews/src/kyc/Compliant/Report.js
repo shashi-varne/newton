@@ -61,16 +61,16 @@ const CompliantReport = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.pan.meta_data.name}</div>
-        <div className="unzipped-box">
+        <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
+        <div className="unzipped-box" data-aid='kyc-email'>
           <div className="title">Email</div>
           <div className="subtitle">{kyc.identification.meta_data.email}</div>
         </div>
-        <div className="unzipped-box">
+        <div className="unzipped-box" data-aid='kyc-eob'>
           <div className="title">Dob</div>
           <div className="subtitle">{kyc.pan.meta_data.dob}</div>
         </div>
-        <div className="unzipped-box">
+        <div className="unzipped-box" data-aid='kyc-mobile-number'>
           <div className="title">Mobile</div>
           <div className="subtitle">
             {kyc.identification.meta_data.mobile_number}
@@ -84,7 +84,7 @@ const CompliantReport = (props) => {
     return (
       <>
         {is_nri && (
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-address-proof-nri'>
             <div className="title">Foreign Address</div>
             <div className="subtitle">
               {kyc.nri_address.meta_data.addressline},
@@ -101,16 +101,16 @@ const CompliantReport = (props) => {
   const nomineeDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.nomination.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-nomination-data'>{kyc.nomination.meta_data.name}</div>
         <div className="row-align">
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-relationship'>
             <div className="title">Relationship</div>
             <div className="subtitle">
               {kyc.nomination.meta_data.relationship}
             </div>
           </div>
 
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-dob'>
             <div className="title">Dob</div>
             <div className="subtitle">{kyc.nomination.meta_data.dob}</div>
           </div>
@@ -122,12 +122,12 @@ const CompliantReport = (props) => {
   const bankDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.bank.meta_data.bank_name}</div>
-        <div className="unzipped-box">
+        <div className="unzipped-title" data-aid='kyc-bank-name'>{kyc.bank.meta_data.bank_name}</div>
+        <div className="unzipped-box" data-aid='kyc-account-number'>
           <div className="title">A/C number</div>
           <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
         </div>
-        <div className="unzipped-box">
+        <div className="unzipped-box" data-aid='kyc-ifsc-code'>
           <div className="title">IFSC</div>
           <div className="subtitle">{kyc.bank.meta_data.ifsc_code}</div>
         </div>
@@ -153,7 +153,7 @@ const CompliantReport = (props) => {
   return (
     <Container id="kyc-home" noFooter={true} title={topTitle}>
       <div className="kyc-report">
-        <main>
+        <main data-aid='kyc-report'>
           <section>
             {cardDetails &&
               cardDetails.map((item, index) => {
@@ -162,6 +162,7 @@ const CompliantReport = (props) => {
                     key={index}
                     className="tile-info"
                     onClick={() => handleTiles(index, item.key)}
+                    data-aid='kyc-title-info'
                   >
                     <div className="unzipped-title">
                       <div>{item.title}</div>
@@ -175,7 +176,7 @@ const CompliantReport = (props) => {
                       />
                     </div>
                     {openIndex === index && (
-                      <div className="unzipped">{renderCards(item.key)}</div>
+                      <div className="unzipped" data-aid='kyc-unzipped'>{renderCards(item.key)}</div>
                     )}
                   </div>
                 );

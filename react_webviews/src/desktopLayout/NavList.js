@@ -143,7 +143,7 @@ const NavList = (props) => {
     if (id === 'fhc' && productName === 'finity') {
       return null;
     }
-    if (id === 'myAccount' && (!isReadyToInvestBase || userKyc?.bank?.doc_status !== 'rejected')) {
+    if (id === 'myAccount' && (!isReadyToInvestBase && userKyc?.bank?.doc_status !== 'rejected')) {
       return null;
     }
     if (id === 'refer' && !showReferral) {
@@ -168,11 +168,11 @@ const NavList = (props) => {
               return null;
             }
             return (
-              <ListItem key={idx} onClick={handleClick(el)} className={`nav-link-listItem ${activePath === el.id ? 'navlink-active': ''}`}>
+              <ListItem key={idx} onClick={handleClick(el)} className={`nav-link-listItem ${activePath === el.id ? 'navlink-active': ''}`} data-aid={`${el.id}-btn`}>
                 <ListItemIcon>
                   <img className='nav-link-icons' src={el.icon} alt={el.name} />
                 </ListItemIcon>
-                <ListItemText className='nav-link-text' id={`${el.id}_btn`} primary={el.name} />
+                <ListItemText className='nav-link-text' primary={el.name} />
               </ListItem>
             );
           })}

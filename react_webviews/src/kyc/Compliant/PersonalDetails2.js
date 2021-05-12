@@ -118,10 +118,11 @@ const PersonalDetails2 = (props) => {
       count={2}
       current={2}
       total={3}
+      data-aid='kyc-personal-details-screen-2'
     >
       <div className="kyc-personal-details">
         {!isLoading && (
-          <main>
+          <main  data-aid='kyc-personal-details'>
             <div className={`input ${isApiRunning && `disabled`}`}>
               <RadioWithoutIcon
                 error={form_data.marital_status_error ? true : false}

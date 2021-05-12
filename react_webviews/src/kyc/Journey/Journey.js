@@ -14,7 +14,6 @@ import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
-import { getBasePath } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 
@@ -27,7 +26,6 @@ const Journey = (props) => {
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
-  const basePath = getBasePath()
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -548,6 +546,7 @@ const Journey = (props) => {
   if (!isEmpty(kyc) && !isEmpty(user)) {
     var topTitle = ''
     var stage = 0
+    // eslint-disable-next-line
     var stageDetail = ''
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
@@ -617,23 +616,23 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
+      data-aid='kyc-journey-page'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
-        <div className="kyc-journey">
+        <div className="kyc-journey" data-aid='kyc-journey-data'>
           {journeyStatus === 'ground_premium' && (
             <div className="kyc-journey-caption">
               fast track your investment!
             </div>
           )}
           {kyc?.kyc_status === 'compliant' && (
-            <div className="kyc-pj-content">
+            <div className="kyc-pj-content" data-aid='kyc-pj-content'>
               <div className="left">
                 <div className="pj-header">Premium Onboarding</div>
                 <div className="pj-bottom-info-box">
                   <img
                     src={require(`assets/${productName}/ic_instant.svg`)}
                     alt="Instant Investment"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
@@ -644,7 +643,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_no_doc.svg`)}
                     alt="No document asked"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
@@ -660,7 +658,7 @@ const Journey = (props) => {
             </div>
           )}
           {show_aadhaar && (
-            <div className="kyc-pj-content">
+            <div className="kyc-pj-content" data-aid='kyc-pj-content'>
               <div className="left">
                 <div className="pj-header">Aadhaar KYC</div>
                 <div className="pj-sub-text">
@@ -671,7 +669,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_instant.svg`)}
                     alt="Instant Investment"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
@@ -682,7 +679,6 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/ic_no_doc.svg`)}
                     alt="No document asked"
-                    role="i"
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
@@ -697,15 +693,15 @@ const Journey = (props) => {
               />
             </div>
           )}
-          <div className="kyc-journey-title" id='kyc-journey-title'>{topTitle}</div>
+          <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
           {!show_aadhaar && (
-            <div className="kyc-journey-subtitle" id='kyc-journey-subtitle'>
+            <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle-pan-number'>
               Please keep your PAN ({kyc?.pan?.meta_data?.pan_number}) and
               address proof handy to complete KYC
             </div>
           )}
           {kyc?.kyc_status === 'compliant' && !investmentPending && (
-            <div className="kyc-journey-subtitle" id='kyc-journey-subtitle'>
+            <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle-complete-steps'>
               To unlock premium onboarding, complete these simple steps
             </div>
           )}
@@ -713,14 +709,13 @@ const Journey = (props) => {
           {isCompliant &&
             user.active_investment &&
             user.kyc_registration_v2 !== 'submitted' && (
-              <span id='alert-box'>
               <Alert
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."
                 title={`Hey ${user.name}`}
-              /></span>
+              />
             )}
-          <main className="steps-container">
+          <main  data-aid='kyc-journey' className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
                 className={
@@ -748,12 +743,12 @@ const Journey = (props) => {
                   }
                 >
                   <div className="flex flex-between">
-                    <span className="field_key" id='field_key'>
+                    <span className="field_key">
                       {item.title}
                       {item?.value ? ':' : ''}
                     </span>
                     {item?.value && (
-                      <span className="field_value" id='field_value'> {item?.value}</span>
+                      <span className="field_value"> {item?.value}</span>
                     )}
                   </div>
 
@@ -769,7 +764,7 @@ const Journey = (props) => {
                   )}
                 </div>
 
-                {item?.disc && <div className="disc" id='disc'>{item?.disc}</div>}
+                {item?.disc && <div className="disc">{item?.disc}</div>}
               </div>
             ))}
           </main>

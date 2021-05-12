@@ -64,7 +64,7 @@ class Otp extends Component {
     let { isApiRunning, otp, otp_error } = this.state;
     let disabled = otp.length !== 4;
     return (
-      <div className="login otp">
+      <div className="login otp" data-aid='login-otp'>
         {!isMobileView && (
           <div className="header">
             <img src={require(`assets/${config.logo}`)} alt="logo" />
@@ -84,8 +84,7 @@ class Otp extends Component {
                 <h5>Join 1000’s of Smart Investors</h5>
               </div>
             )}
-            <div className="otp-text" id='otp-text'>Enter OTP</div>
-            <span id='input-feild'>
+            <div className="otp-text" data-aid='otp-text'>Enter OTP</div>
             <Input
               error={otp_error ? true : false}
               type="text"
@@ -94,11 +93,10 @@ class Otp extends Component {
               class="input"
               onChange={this.handleChange("otp")}
               autoFocus
-            /></span>
-            <div className="resend-otp" id='resend-otp' onClick={() => this.resendOtp()}>
+            />
+            <div className="resend-otp" data-aid='resend-otp' onClick={() => this.resendOtp()}>
               Resend OTP
             </div>
-            <span id='submit-button'>
             <Button
               buttonTitle="VERIFY"
               onClick={this.handleClick}
@@ -113,7 +111,7 @@ class Otp extends Component {
                   config?.uiElements?.button?.borderRadius || "2px"
                 }`,
               }}
-            /></span>
+            />
           </div>
         </div>
       </div>

@@ -157,12 +157,12 @@ const PersonalDetails4 = (props) => {
       count={type === "digilocker" ? 3 : 4}
       current={type === "digilocker" ? 3 : 4}
       total={type === "digilocker" ? 3 : 4}
+      data-aid='kyc-personal-details-screen-4'
     >
-      <div className="kyc-nominee" id='kyc-nominee'>
-        <main id='main'>
-          <div className="nominee-checkbox" id='nominee-checkbox'>
+      <div className="kyc-nominee">
+        <main data-aid='kyc-nominee-details'>
+          <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
-              id='check-box'
               defaultChecked
               checked={isChecked}
               value={isChecked}
@@ -170,11 +170,10 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-            <span id='check-box-text'>
+            <span>
               I do not wish to add a <b>nominee</b>
             </span>
           </div>
-          <span id='input-feild1'>
           <Input
             label="Name"
             class="input"
@@ -185,8 +184,7 @@ const PersonalDetails4 = (props) => {
             maxLength={20}
             type="text"
             disabled={isChecked || isApiRunning}
-          /></span>
-          <span id='input-feild2'>
+          />
           <Input
             label="Date of birth(DD/MM/YYYY)"
             class="input"
@@ -198,8 +196,8 @@ const PersonalDetails4 = (props) => {
             type="text"
             id="dob"
             disabled={isChecked || isApiRunning}
-          /></span>
-          <div className="input">
+          />
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}

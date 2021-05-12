@@ -13,7 +13,7 @@ const PennyDialog = ({ isOpen, count }) => {
       className="kyc-penny-dialog"
       id="kyc-bottom-dialog"
     >
-      <DialogContent className="penny-dialog-content">
+      <DialogContent className="penny-dialog-content" data-aid='penny-dialog-content'>
         <Imgc
           src={require(`assets/ic_verfication_in_progress.gif`)}
           alt=""

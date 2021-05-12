@@ -118,7 +118,7 @@ const Summary = (props) => {
   };
 
   const flowOptions = (name) => {
-    navigate(getPathname[name]);
+    navigate(getPathname[name], { state: { fromPath: "reports" } });
   };
 
   const redirectWithdraw = () => {
@@ -155,7 +155,7 @@ const Summary = (props) => {
                   <div className="title">Current Value</div>
                   <div className="amount">
                     {formatAmountInr(report.current.current)}
-                    {report.current.current == 0 && 0}
+                    {report.current.current === 0 && 0}
                   </div>
                   {report.current.invested > 0 && (
                     <>
@@ -366,18 +366,14 @@ const Summary = (props) => {
               />
               {data.insurance_active && investCards.insurance && (
                 <SummaryCard
-                  goNext={() =>
-                    navigate("/group-insurance/common/report")
-                  }
+                  goNext={() => navigate("/group-insurance/common/report")}
                   icon="ic_pf_insurance.svg"
                   title="Insurance"
                 />
               )}
               {data.gold_active_investment && investCards.gold && (
                 <SummaryCard
-                  goNext={() =>
-                    navigate("/gold/my-gold")
-                  }
+                  goNext={() => navigate("/gold/my-gold")}
                   icon="ic_pf_gold.svg"
                   title="Gold"
                   subtitle={`${data?.gold_details?.total_balance || 0} gm`}

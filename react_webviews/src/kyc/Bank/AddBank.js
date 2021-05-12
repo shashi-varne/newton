@@ -228,6 +228,7 @@ const AddBank = (props) => {
       disable={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      data-aid='kyc-add-bank-screen'
     >
       <div className="kyc-approved-bank">
         {!isLoading && (
@@ -237,7 +238,7 @@ const AddBank = (props) => {
               title="Note"
               message={note.info_text}
             />
-            <main>
+            <main data-aid='kyc-approved-bank'>
               <Input
                 label="Account Holder name"
                 class="input"
