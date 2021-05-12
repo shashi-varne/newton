@@ -834,7 +834,14 @@ export const getConfig = () => {
     searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
   let isProdEnv = false;
-  if(base_url === 'http://my.fisdom.com/' || base_url === 'http://api.mywaywealth.com/' || base_url === 'https://api.finity.in/')
+  if (
+    base_url.indexOf("my.fisdom.com") >= 0 ||
+    base_url.indexOf("api.mywaywealth.com") >= 0 ||
+    base_url.indexOf("api.finity.in") >= 0 ||
+    base_url_default.indexOf("my.fisdom.com") >= 0 ||
+    base_url_default.indexOf("api.mywaywealth.com") >= 0 ||
+    base_url_default.indexOf("api.finity.in") >= 0
+  )
     isProdEnv = true;
   // should be last
   returnConfig.current_params = main_query_params;
