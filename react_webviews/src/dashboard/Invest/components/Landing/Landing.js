@@ -15,6 +15,7 @@ import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
+const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -137,6 +138,18 @@ class Landing extends Component {
         title="Start Investing"
         showLoader={this.state.show_loader}
         noBackIcon={fromLoginStates.includes(stateParams.fromState)}
+        background={
+          isMobileDevice &&
+          fromLoginStates.includes(stateParams.fromState) &&
+          "invest-landing-background"
+        }
+        classHeader={
+          isMobileDevice &&
+          fromLoginStates.includes(stateParams.fromState) &&
+          (this.state.headerStyle
+            ? "invest-landing-partner-header"
+            : "invest-landing-header")
+        }
       >
         <div className="invest-landing">
           {

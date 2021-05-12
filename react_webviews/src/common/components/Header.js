@@ -165,7 +165,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           isMobileDevice && isWeb &&
           <div className='mobile-navbar-menu'>
             <IconButton onClick={handleMobileViewDrawer}>
-              <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'}}/>
+              <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (noBackIcon ? 'white' : getConfig().styles.primaryColor) : 'white'}}/>
             </IconButton>
             <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal}/>
           </div>
