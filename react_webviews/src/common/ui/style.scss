@@ -1272,7 +1272,7 @@ padding-right: 12px !important;
     display: flex;
     align-items: center;
     justify-content: space-between ;
-    margin-bottom: 14px;
+    margin-bottom: 13px;
     .status-container{
       display: flex;
       align-items: center;
@@ -1305,17 +1305,25 @@ padding-right: 12px !important;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
+    .heading-left{
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      align-self: flex-start;
+    }
     img{
       width: 36px;
       height: 36px;
       object-fit: cover;
+      align-self: flex-start;
     }
     .heading-title{
       font-size: 15px;
-      padding-top: 5px;
+      align-self: flex-start;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       color: #160D2E;
+      align-self: flex-start;
     }
     .heading-subtitle{
       font-size: 11px;

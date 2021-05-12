@@ -7,11 +7,9 @@ import {
     inrFormatDecimal, capitalizeFirstLetter , numDifferentiationInr
 } from 'utils/validators';
 import Api from 'utils/api';
-import toast from  '../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import ReactHtmlParser from 'react-html-parser';
-
 import { getCssMapperReport ,  TitleMaper , ProviderName } from '../constants'
 
 class GroupHealthReportDetails extends Component {
@@ -24,10 +22,8 @@ class GroupHealthReportDetails extends Component {
             policy_data: {
                 cssMapper: {}
             },
-            show_loader: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
             ic_hs_main_benefits: ic_hs_main_benefits,
-            // TitleMaper : {}
         }
     }
 
@@ -39,12 +35,19 @@ class GroupHealthReportDetails extends Component {
     }
 
     async componentDidMount() {
+        this.onload();
+    }
 
+    onload = async () => {
+        this.setErrorData("onload");
+        let error='';
+        let errorType='';
+        this.setState({skelton: true})
         try {
             const res = await Api.get(`api/insurancev2/api/insurance/o2o/get/applications?o2o_app_id=${this.state.policy_id}`);
 
             this.setState({
-                show_loader: false
+                skelton: false
             });
             var resultData = res.pfwresponse.result.result[0];
             var policy_data = getCssMapperReport(resultData)
@@ -53,20 +56,27 @@ class GroupHealthReportDetails extends Component {
                     lead: resultData,
                     policy_data : policy_data
                 })
-
-
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error=resultData.error || resultData.message || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
         }
-
+        if (error) {
+            this.setState({
+                errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                },
+                showError: "page",
+            });
+        }
     }
 
     navigate = (pathname) => {
@@ -76,7 +86,35 @@ class GroupHealthReportDetails extends Component {
         });
     }
 
+    setErrorData = (type) => {
 
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Fetch again',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    }
     sendEvents(user_action) {
         let providor_name = ProviderName(this.state.lead.provider)
         let eventObj = {
@@ -120,7 +158,9 @@ class GroupHealthReportDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                // title={ this.state.TitleMaper[this.state.lead.policy_type] ? this.state.TitleMaper[this.state.lead.policy_type]  : ''}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title = {TitleMaper(this.state.lead.policy_type)}
                 fullWidthButton={true}
                 buttonTitle="OK"

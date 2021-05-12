@@ -535,8 +535,6 @@
 .insurance-common-report-page{
   margin-top: -20px;
 .report-list-tab-container{
-  // position: sticky;
-  // top: 56px;
   background-color: white;
   list-style-type: none;
   padding: 30px 0 0 0;
@@ -1401,6 +1399,7 @@
   border-radius: 4.5px;
   padding: 20px;
   background-color: #4F2DA7;
+  margin: 10px 0 40px 0;
   cursor: pointer;
   img, p{margin: 0}
   
@@ -1413,7 +1412,7 @@
       margin-bottom: 5px;
     }
     .inactive-subtitle{
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 500;
     }
   }

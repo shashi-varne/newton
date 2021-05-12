@@ -15,7 +15,7 @@ class DetailsCard extends Component {
                 </div>
 
                 <div className="heading-container">
-                    <div>
+                    <div className="heading-left">
                         <p className="heading-title">{item.headingTitle}</p>
                         <p className="heading-subtitle">{item.headingSubtitle}</p>
                     </div>

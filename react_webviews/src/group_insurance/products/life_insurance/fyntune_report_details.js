@@ -19,29 +19,57 @@ class FyntuneReportDetails extends Component {
             policy_data: {
                 cssMapper: {}
             },
-            show_loader: false,
             productName: getConfig().productName,
             fyntune_ref_id: this.props.match.params.policy_id
         }
     }
 
-    async componentDidMount() {
+    setErrorData = (type) => {
 
         this.setState({
-            show_loader: true
+          showError: false
         });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Fetch again',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    }
+
+
+    onload = async () =>{
+        this.setErrorData("onload");
+        let error='';
+        let errorType='';
+        this.setState({skelton: true})
         
         try {
 
             const res = await Api.get(`api/ins_service/api/insurance/fyntune/get/policy/${this.state.fyntune_ref_id}`);
-            
-            this.setState({
-                show_loader: false
-            });
             var resultData = res.pfwresponse.result;
 
-
             if(res.pfwresponse.status_code === 200){
+                this.setState({
+                    skelton: false
+                });
                 let policy_data = resultData.policy_data || {};
                 
                 policy_data.dt_policy_end = policy_data.dt_policy_end && policy_data.dt_policy_end.substring(0,10);
@@ -59,16 +87,29 @@ class FyntuneReportDetails extends Component {
 
 
             } else {
-                toast(resultData.error || resultData.message || 'Something went wrong');
+                error = resultData.error || resultData.message || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
         }
-
+        if (error) {
+            this.setState({
+                errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                },
+                showError: "page",
+            });
+        }
+    }
+    async componentDidMount() {
+        this.onload()        
     }
 
     navigate = (pathname) => {
@@ -113,6 +154,9 @@ class FyntuneReportDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title={'Insurance Savings Plan'}
                 fullWidthButton={true}
                 buttonTitle="OK"

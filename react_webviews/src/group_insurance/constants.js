@@ -1,4 +1,4 @@
-import {isEmpty} from 'utils/validators';
+import {isEmpty, numDifferentiationInr, inrFormatDecimal} from 'utils/validators';
 
 export const maritalOptions = [
   {
@@ -912,8 +912,20 @@ export function reportsfrequencyMapper(key, frequency, product_key){
     return '/yr'
   }else if(key === 'care_plus' && frequency){
     return frequency.toLowerCase() === 'monthly' ? '/mth' : '/yr'
-  }else if((key === 'FYNTUNE' && frequency) || product_key === 'offline_insurance'){
+  }else if((key === 'FYNTUNE' && frequency) || product_key === 'offline_insurance' || product_key === 'TERM_INSURANCE'){
      return freqMapper[frequency.toLowerCase()]
+  }
+}
+
+export function reportCoverAmountValue(val){
+  if(val < 100000){
+    if(Number.isInteger(val)){
+      return inrFormatDecimal(val)
+    }else{
+      return inrFormatDecimal(val, 2)
+    }
+  }else{
+    return numDifferentiationInr(val)
   }
 }
 

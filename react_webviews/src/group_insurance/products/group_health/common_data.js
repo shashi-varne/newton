@@ -6,9 +6,9 @@ import { ghGetMember, getCssMapperReport } from '../../constants';
 import Api from 'utils/api';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
-import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, numDifferentiationInr, capitalizeFirstLetter} from '../../../utils/validators';
+import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter} from '../../../utils/validators';
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
-import {TitleMaper, reportsfrequencyMapper, reportTopTextMapper} from '../../../group_insurance/constants'
+import {TitleMaper, reportsfrequencyMapper, reportTopTextMapper, reportCoverAmountValue} from '../../../group_insurance/constants'
 
 export async function initialize() {
     this.setErrorData =setErrorData.bind(this)
@@ -758,7 +758,6 @@ export function setReportData(termData, group_insurance_policies, health_insuran
       if (insurance_apps.complete.length > 0) {
         canShowReport = true;
         application = insurance_apps.complete[0];
-
         pathname = 'report';
       } else if (insurance_apps.failed.length > 0) {
         canShowReport = true;
@@ -783,14 +782,23 @@ export function setReportData(termData, group_insurance_policies, health_insuran
 
     let reportData = [];
 
-    if (canShowReport && application) {
+    if (canShowReport && !isEmpty(application)) {
       let termReport = {
         status: application.status,
         product_name: application.quote.insurance_title,
-        sum_assured: application.quote.sum_assured,
+        sum_assured: application.quote.cover_amount, //TODO
         premium: application.quote.quote_json.premium,
         key: 'TERM_INSURANCE',
-        id: application.id
+        product_key: 'TERM_INSURANCE',
+        product_category: application.quote.cover_plan + ' insurance',
+        id: application.id, 
+        logo: application.quote.quote_describer.image,
+        product_title: application.quote.insurance_title,
+        frequency: application.quote.quote_json.payment_frequency,
+        company_name: 'HDFC Life Insurance',
+        name: application.profile.name
+        //TODO
+        ///  , valid upto, date_cmp,
       }
 
       if (!termReport.product_name) {
@@ -826,37 +834,37 @@ export function setReportData(termData, group_insurance_policies, health_insuran
     var activeReports = sortArrayOfObjectsByTime(filteredReportData.activeReports, 'dt_updated_cmp');
     var pendingReports = sortArrayOfObjectsByTime(filteredReportData.pendingReports, 'dt_updated_cmp');
     var inactiveReports = sortArrayOfObjectsByTime(filteredReportData.inactiveReports, 'dt_updated_cmp');
-    filteredReportData = {activeReports, pendingReports, inactiveReports}
+    filteredReportData = {activeReports: [], pendingReports, inactiveReports}
     
     for(var x in filteredReportData){
         var tabData = filteredReportData[x];
         var reports = [];
         for(var y of tabData){
             var temp = {}
+            var frequency = y.frequency || y.payment_frequency;
+            var provider = y.provider || y.vendor;
             temp = {
                 //data
-                ... y,
+                ...y,
                 topTextLeft: y.cssMapper.disc, 
                 topTextRight:  y.product_category,
                 headingTitle:  capitalizeFirstLetter(y.product_title),
                 headingSubtitle: y.company_name,
                 headingLogo: y.logo,
                 line1TitleLeft: "COVER AMOUNT",
-                line1SubtitleLeft: numDifferentiationInr(y.sum_assured),
+                line1SubtitleLeft: reportCoverAmountValue(y.sum_assured),
                 line1TitleRight: "PREMIUM AMOUNT", 
-                line1SubtitleRight: inrFormatDecimal(y.premium) + `${reportsfrequencyMapper(y.provider || y.vendor, y.frequency, y.product_key)}`,
+                line1SubtitleRight: inrFormatDecimal(y.premium) + `${reportsfrequencyMapper(provider,frequency,y.product_key)}`,
                 line2TitleLeft: "Policy issued to",
                 line2SubtitleLeft: y.name,
                 line2TitleRight: "Valid upto",
-                line2SubtitleRight: (!y.dt_policy_end || y.main_status === 'pending') ? 'Not available' :y.dt_policy_end.replace(/-/g, '/'),
+                line2SubtitleRight: !y.dt_policy_end ? 'Not available' : y.dt_policy_end.replace(/-/g, '/'),
                 status: y.status,
-                key: y.provider || y.vendor,
+                key: provider,
                 //css
                 backgroundColor: y.cssMapper.backgroundColor,
                 color: y.cssMapper.color,
             }
-            console.log(y.provider)
-            console.log(y.vendor)
             reports.push(temp);
         }
         filteredReportData[x] = reports;
@@ -896,6 +904,7 @@ export function getProviderObject(policy) {
       obj = {
         ...obj,
         product_name: policy.base_plan_title + ' ' + policy.product_title,
+        product_title : 'my:health Suraksha',
         top_title: 'Health insurance',
         key: policy.vendor,
         id: policy.application_id,
@@ -980,7 +989,7 @@ export function getProviderObject(policy) {
     let top_title  = TitleMaper(o2o_details.policy_type)
     obj.top_title = top_title
     obj.sum_assured = o2o_details.cover_amount
-    obj.product_category = o2o_details.product_category + ' insurance',
+    obj.product_category = o2o_details.product_category + ' insurance'
     obj.product_title = capitalizeFirstLetter(o2o_details.product_name)
     let data = getCssMapperReport(obj);
     obj.premium = o2o_details.total_amount;

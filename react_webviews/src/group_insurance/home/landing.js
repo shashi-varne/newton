@@ -107,6 +107,9 @@ class Landing extends Component {
 
   componentDidMount(){
     this.onload();
+    //for report page routing
+    storageService().remove('report_from_landing');
+    storageService().remove('advisory_from_landing');
   }
 
   onload = async() => {
@@ -248,7 +251,7 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked, advisory_clicked) {
+  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked, advisory_clicked, policies_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -258,7 +261,8 @@ class Landing extends Component {
         'banner_clicked' : banner_clicked ? true : false,
         'callback_clicked' : callback_clicked ?  true : false,
         'advisory_card_cta' : this.state.advisory_button_text,
-        'insurance_advisory_card_clicked': advisory_clicked ? true : false
+        'insurance_advisory_card_clicked': advisory_clicked ? true : false,
+        'policies': policies_clicked ? true : false
       }
     };
 
@@ -272,11 +276,14 @@ class Landing extends Component {
   goToAdvisory = (e) =>{
     e.preventDefault();
     this.sendEvents('next', "", "", "", true);
+    storageService().setObject('advisory_from_landing', true)
+    storageService().remove('report_from_landing')
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
     return;
   }
   toToReports = () =>{
-    // this.sendEvents()
+    this.sendEvents('next', "", "", "", "", true);
+    storageService().setObject('report_from_landing', true);
     this.navigate('/group-insurance/common/report')
     return;
   }
@@ -317,7 +324,7 @@ class Landing extends Component {
               <img alt="inactive-policy-card" src={require(`assets/${this.state.type}/policy_icon.svg`)} />
               <div className="inactive-right">
                 <p className="inactive-title">Your policies</p>
-                <p className="inactive-subtitle">{this.state.showCustomReportCardText ? `${this.state.customReportCardText} ${this.state.noOfReports > 1   ? '+' + this.state.noOfReports + ' more': '' }` :'Looks like you have zero coverage'}</p>
+                <p className="inactive-subtitle">{this.state.showCustomReportCardText ? `${this.state.customReportCardText} ${this.state.noOfReports > 1   ? '+' + (this.state.noOfReports - 1) + ' more': '' }` :'Looks like you have zero coverage'}</p>
               </div>
             </div>
             <div className="advisory-entry-container" onClick={(e)=>this.goToAdvisory(e)}>  

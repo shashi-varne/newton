@@ -153,7 +153,20 @@ class Container extends Component {
         this.navigate('/group-insurance/health/landing');
         return;
       }
-     
+    
+    var reportFromLanding = storageService().getObject('report_from_landing');
+    if(reportFromLanding && pathname === "/group-insurance/common/report"){
+      nativeCallback({events: this.getEvents('back') });
+      this.navigate('/group-insurance')
+      return;
+    }
+
+    if(this.checkStringInString('advisory/landing') && reportFromLanding){
+      nativeCallback({events: this.getEvents('back') });
+      this.navigate('/group-insurance/common/report')
+      return;
+    }
+
     if(this.checkStringInString('group-health')) {
       // #TODO need to handle back accoridng to entry/landing
       let group_health_landing = '/group-insurance/group-health/landing';
