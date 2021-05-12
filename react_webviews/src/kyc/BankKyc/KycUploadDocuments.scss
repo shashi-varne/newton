@@ -62,6 +62,8 @@
       display: flex;
       justify-content: space-between;
       cursor: pointer;
+      max-height: 40px;
+      align-items: center;
     }
 
     .kyc-upload-doc-option-type:nth-child(3) {
@@ -80,6 +82,7 @@
       .kyc-upload-doc-check-icon {
         width: 10px;
         margin-left: 10px;
+        height: 10px;
       }
     }
   }
