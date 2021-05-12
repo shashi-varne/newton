@@ -26,7 +26,6 @@ class FyntuneLanding extends Component {
       stepsContentMapper: fyntuneConstants.stepsContentMapper,
       stepsToFollow: fyntuneConstants.stepsToFollow,
       faq_data: fyntuneConstants.faq_data,
-      logo_cta: fyntuneConstants.logo_cta,
       openDialogRefresh: false
     };
   }
@@ -430,7 +429,7 @@ class FyntuneLanding extends Component {
                 <div className="rc-tile-left">
                   <div className="">
                     <img
-                      src={require(`assets/${this.state.logo_cta}`)}
+                      src={this.state.resume_data.lead.logo}
                       alt=""
                     />
                   </div>
