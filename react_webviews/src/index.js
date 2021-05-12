@@ -63,7 +63,7 @@ else if(getConfig().productName === "finity" && getConfig().isProdEnv){
   Sentry.init({
     dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
     integrations: [new Integrations.BrowserTracing()],
-    allowUrls:["wv.mywaywealth.com"],
+    allowUrls:["wv.mywaywealth.com", "wv.finity.in"],
     tracesSampleRate: 1.0,
   });
 }
