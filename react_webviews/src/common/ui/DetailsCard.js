@@ -11,7 +11,7 @@ class DetailsCard extends Component {
                         <p className="status-circle" style={{backgroundColor: item.color}}></p>
                         <p className="status-text" style={{color: item.color}}>{item.topTextLeft}</p>
                     </div>
-                    <p className="status-bar-right">{item.topTextRight}</p>
+                    <p className="status-bar-right" style={{color: item.topTextRightColor}}>{item.topTextRight}</p>
                 </div>
 
                 <div className="heading-container">

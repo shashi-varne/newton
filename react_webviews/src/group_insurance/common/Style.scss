@@ -557,8 +557,8 @@
     }
   }
   li.active{
-    border-bottom: 2px solid #4F2DA7;
-    color: #4F2DA7;
+    border-bottom: 2px solid var(--primary);
+    color: var(--primary);
     font-weight: 700;
     span{
       color: #A998D2;
@@ -1044,7 +1044,7 @@
 .group-health-select-ped {
   margin: 0 0 50px 0;
 }
-.MuiDialogActions-root.final-summary-dialog-options{
+.MuiDialogActions-root{
   text-align: right;
 }
 .group-health-final-summary {
@@ -1398,7 +1398,7 @@
   justify-content: left;
   border-radius: 4.5px;
   padding: 20px;
-  background-color: #4F2DA7;
+  background-color: var(--primary);
   margin: 10px 0 40px 0;
   cursor: pointer;
   img, p{margin: 0}

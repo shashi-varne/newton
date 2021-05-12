@@ -238,9 +238,9 @@ class Report extends Component {
       >
         <div className="insurance-common-report-page">
           <ul className="report-list-tab-container">
-            <li className="active" onClick={()=>this.selectTab('activeReports')} id="activeReports" data-tab-target="tab-element" >Active<span>({reportCount && reportCount.active})</span></li>
-            <li onClick={()=>this.selectTab('pendingReports')} id="pendingReports" data-tab-target="tab-element">Pending<span>({reportCount && reportCount.pending})</span></li>
-            <li onClick={()=>this.selectTab('inactiveReports')} id="inactiveReports" data-tab-target="tab-element">Inactive<span>({reportCount && reportCount.inactive})</span></li>
+            <li className="active" onClick={()=>this.selectTab('activeReports')} id="activeReports" data-tab-target="tab-element" >Active<span style={{ color: this.state.selectedTab === 'activeReports' ? this.state.bracketColor : '' }}>({reportCount && reportCount.active})</span></li>
+            <li onClick={()=>this.selectTab('pendingReports')} id="pendingReports" data-tab-target="tab-element">Pending<span style={{ color: this.state.selectedTab === 'pendingReports' ? this.state.bracketColor : '' }}>({reportCount && reportCount.pending})</span></li>
+            <li onClick={()=>this.selectTab('inactiveReports')} id="inactiveReports" data-tab-target="tab-element">Inactive<span style={{ color: this.state.selectedTab === 'inactiveReports' ? this.state.bracketColor : '' }}>({reportCount && reportCount.inactive})</span></li>
           </ul>
       
           <div className="insurance-cards-container">

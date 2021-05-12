@@ -835,7 +835,7 @@ export function setReportData(termData, group_insurance_policies, health_insuran
     var pendingReports = sortArrayOfObjectsByTime(filteredReportData.pendingReports, 'dt_updated_cmp');
     var inactiveReports = sortArrayOfObjectsByTime(filteredReportData.inactiveReports, 'dt_updated_cmp');
     filteredReportData = {activeReports , pendingReports, inactiveReports}
-    
+    var bracketColor = this.state.productName === 'fisdom' ? '#A998D2' : '#94C5FF'
     for(var x in filteredReportData){
         var tabData = filteredReportData[x];
         var reports = [];
@@ -864,6 +864,7 @@ export function setReportData(termData, group_insurance_policies, health_insuran
                 //css
                 backgroundColor: y.cssMapper.backgroundColor,
                 color: y.cssMapper.color,
+                topTextRightColor: bracketColor
             }
             reports.push(temp);
         }
@@ -884,7 +885,8 @@ export function setReportData(termData, group_insurance_policies, health_insuran
       selectedReports : selectedReports,
       filteredReportData,
       termRedirectionPath: fullPath,
-      reportTopText
+      reportTopText,
+      bracketColor
     })
   }
 
