@@ -4,7 +4,7 @@ import { isArray, isFunction } from 'lodash';
 import toast from '../Toast';
 
 const openFileHandler = (filepickerId, methodName, docType, nativeHandler) => {
-  if (true || getConfig().html_camera) {
+  if (getConfig().html_camera) {
     const filepicker = document.getElementById(filepickerId);
     if (filepicker){
       filepicker.click();

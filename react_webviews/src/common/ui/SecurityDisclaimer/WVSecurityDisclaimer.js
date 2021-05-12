@@ -1,6 +1,7 @@
+import './WVSecurityDisclaimer.scss';
 import React from 'react';
 
-export const WVSecurityDisclaimer = ({
+const WVSecurityDisclaimer = ({
   alignCenter = true // Center aligns component [default=true]
 }) => {
   return (
@@ -24,3 +25,5 @@ export const WVSecurityDisclaimer = ({
     </div>
   );
 }
+
+export default WVSecurityDisclaimer;

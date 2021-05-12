@@ -11,6 +11,7 @@ Example syntax:
   </WVSteps>
 */
 
+import './WVSteps.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -19,7 +20,6 @@ const WVSteps = ({
   stepNum, // Number to show for the step
   children // Content to show within step
 }) => {
-  console.log(typeof children, children);
   return (
     <div className="wv-step">
       <div className="wv-step-header">
@@ -45,3 +45,4 @@ WVSteps.defaultProps = {
   children: ''
 };
 
+export default WVSteps

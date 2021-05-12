@@ -24,7 +24,7 @@ Example syntax:
 
 */
 
-
+import './WVBottomSheet.scss';
 import React from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import Dialog, {
@@ -36,7 +36,7 @@ import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import WVButtonLayout from '../ButtonLayout';
 
-export const WVBottomSheet = ({
+const WVBottomSheet = ({
   isOpen,
   onClose, // Callback for when bottomsheet is being closed
   buttonLayout, // Sets button layout - stacked/stackedOR/horizontal [default=horizontal]
@@ -131,5 +131,5 @@ WVBottomSheet.defaultProps = {
   },
 };
 
-
+export default WVBottomSheet;
 

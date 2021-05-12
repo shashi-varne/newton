@@ -15,7 +15,7 @@ Example syntax:
 
 */
 
-
+import './WVInfoBubble.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 // import { getConfig } from 'utils/functions';
@@ -53,7 +53,7 @@ const TYPES = {
   }
 }
 
-export const WVInfoBubble = ({
+const WVInfoBubble = ({
   isDismissable, // Set this flag if dismiss feature (cross on top right) is required
   isOpen, // Only required when isDismissable is true
   onDismissClick, // callback for when cross is clicked
@@ -114,3 +114,5 @@ WVInfoBubble.defaultProps = {
   hasTitle: false,
   type: 'info',
 };
+
+export default WVInfoBubble;

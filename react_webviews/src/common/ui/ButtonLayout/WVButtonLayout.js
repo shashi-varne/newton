@@ -22,6 +22,7 @@ Example syntax:
   </WVButtonLayout>
 */
 
+import './WVButtonLayout.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
@@ -123,4 +124,4 @@ WVButtonLayout.ORDivider = ORDivider;
 
 /* EXPORTS */
 
-export { WVButtonLayout };
+export default WVButtonLayout;
