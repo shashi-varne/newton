@@ -267,6 +267,8 @@ const Recommendations = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       hidePageTitle
+      noPadding
+      classOverRide="invest-recommendations-container"
     > 
       <div className="recommendation-page">
         {riskEnabledFunnel && funnelData.showRecommendationTopCards &&
@@ -322,38 +324,39 @@ const Recommendations = (props) => {
             {funnelData.investTypeDisplay === 'sip' && <div className='amount-per-month'>per month</div>}
             </div>
           </div>
-          <div className="recommendations-disclaimers">
-            <div className="recommendations-disclaimer-morning">
-              <img alt="single_star" src={single_star} />
-              {partner_code !== "hbl" ? (
-                <img alt="morning_star" width="100" src={morning_text} />
-              ) : (
-                <div>BL Portfolio Star Track MF Ratings</div>
-              )}
-            </div>
-            <TermsAndCond />
-            <div className='recommendations-trust-icons'>
-              <div>Investments with fisdom are 100% secure</div>
-              <img alt='trust_sebi_secure' src={trust_icons} />
-            </div>
-          </div>
-          <PennyVerificationPending
-            isOpen={dialogStates.openPennyVerificationPendind}
-            handleClick={() => navigate("/kyc/add-bank", null, true)}
-          />
-          <InvestError
-            isOpen={dialogStates.openInvestError}
-            errorMessage={dialogStates.errorMessage}
-            handleClick={() => navigate("/invest", null, true)}
-            close={() => handleDialogStates("openInvestError", false)}
-          />
-          <InvestReferralDialog
-            isOpen={dialogStates.openInvestReferral}
-            goNext={goNext}
-            close={() => handleDialogStates("openInvestReferral", false)}
-          />
         </section>
       </div>
+      <div className="recommendations-disclaimers">
+        <div className="recommendations-paper-cut"></div>
+        <div className="recommendations-disclaimer-morning">
+          <img alt="single_star" src={single_star} />
+          {partner_code !== "hbl" ? (
+            <img alt="morning_star" width="100" src={morning_text} />
+          ) : (
+            <div>BL Portfolio Star Track MF Ratings</div>
+          )}
+        </div>
+        <TermsAndCond />
+        <div className="recommendations-trust-icons">
+          <div>Investments with fisdom are 100% secure</div>
+          <img alt="trust_sebi_secure" src={trust_icons} />
+        </div>
+      </div>
+      <PennyVerificationPending
+        isOpen={dialogStates.openPennyVerificationPendind}
+        handleClick={() => navigate("/kyc/add-bank", null, true)}
+      />
+      <InvestError
+        isOpen={dialogStates.openInvestError}
+        errorMessage={dialogStates.errorMessage}
+        handleClick={() => navigate("/invest", null, true)}
+        close={() => handleDialogStates("openInvestError", false)}
+      />
+      <InvestReferralDialog
+        isOpen={dialogStates.openInvestReferral}
+        goNext={goNext}
+        close={() => handleDialogStates("openInvestReferral", false)}
+      />
     </Container>
   );
 };
