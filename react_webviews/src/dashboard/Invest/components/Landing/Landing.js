@@ -161,6 +161,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isReadyToInvestBase && kycStatusData && !kycStatusLoader && (
                         <div
+                          data-aid='kyc-invest-sections-cards'
                           className="kyc"
                           style={{
                             backgroundImage: `url(${require(`assets/${productName}/${kycStatusData.icon}`)})`,
@@ -237,6 +238,7 @@ class Landing extends Component {
                           bottomScrollCards.map((item, index) => {
                             return (
                               <div
+                                data-aid={item.key}
                                 key={index}
                                 className="card scroll-card"
                                 onClick={() =>
@@ -291,6 +293,7 @@ class Landing extends Component {
                               {financialTools.map((data, index) => {
                                 return (
                                   <div
+                                    data-aid={`financial-tool-${data.key}`}
                                     className="card invest-card financial-card"
                                     onClick={() => this.clickCard(data.key)}
                                     key={index}
@@ -335,6 +338,7 @@ class Landing extends Component {
                               {popularCards.map((item, index) => {
                                 return (
                                   <div
+                                    data-aid={`popular-cards-${item.key}`}
                                     key={index}
                                     className="card popular"
                                     onClick={() =>

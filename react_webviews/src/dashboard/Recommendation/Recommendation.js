@@ -255,6 +255,7 @@ const Recommendations = (props) => {
 
   return (
     <Container
+      data-aid='recommended-funds-screen'
       buttonTitle={
         currentUser &&
         !currentUser.active_investment &&
@@ -268,7 +269,7 @@ const Recommendations = (props) => {
       showLoader={isApiRunning}
       hidePageTitle
     > 
-      <div className="recommendation-page">
+      <div className="recommendation-page" data-aid='recommendation-page'>
         {riskEnabledFunnel && funnelData.showRecommendationTopCards &&
           <>
             {renderTopCard &&
@@ -291,8 +292,8 @@ const Recommendations = (props) => {
             />
           </>
         }
-        <section className='recommendations-section'>
-          <div className='recommendations-header'>
+        <section className='recommendations-section' data-aid='recommendations-section'>
+          <div className='recommendations-header' data-aid='recommendations-header'>
             <div className="recommendation-title">Our Recommendation</div>
             <div className="recommendation-how-button" onClick={checkHow}>
               <span>How?</span>
@@ -303,7 +304,7 @@ const Recommendations = (props) => {
               </div>
             )}
           </div>
-          <div className='recommendations-funds-lists'>
+          <div className='recommendations-funds-lists' data-aid='recommendations-funds-lists'>
             {recommendations &&
               recommendations?.map((el, idx) => (
                 <FundCard 
@@ -315,14 +316,14 @@ const Recommendations = (props) => {
                   parentProps={props} />
               ))}
           </div>
-          <div className='recommendations-total-investment'>
+          <div className='recommendations-total-investment' data-aid='recommendations-total-investment'>
             <div>Total investment</div>
             <div>
             <div>{recommendations?.length ? formatAmountInr(funnelData.amount) : '₹0'}</div>
             {funnelData.investTypeDisplay === 'sip' && <div className='amount-per-month'>per month</div>}
             </div>
           </div>
-          <div className="recommendations-disclaimers">
+          <div className="recommendations-disclaimers" data-aid='recommendations-disclaimers'>
             <div className="recommendations-disclaimer-morning">
               <img alt="single_star" src={single_star} />
               {partner_code !== "hbl" ? (

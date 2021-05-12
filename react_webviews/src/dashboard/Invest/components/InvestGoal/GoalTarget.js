@@ -75,6 +75,7 @@ const GoalTarget = (props) => {
 
   return (
     <Container
+      data-aid='goal-target-screem'
       classOverRide='pr-error-container'
       title='Save for a Goal'
       handleClick={goNext}
@@ -82,7 +83,7 @@ const GoalTarget = (props) => {
       classOverRideContainer='pr-container'
       skelton={loader}
     >
-      <section className='invest-goal-save-container'>
+      <section className='invest-goal-save-container' data-aid='invest-goal-save-container'>
         <div className='invest-goal-save-header'>
           How much money do you want to save for {subtype}?
         </div>
@@ -90,7 +91,7 @@ const GoalTarget = (props) => {
         <div className='invest-goal-save-list'>
           {saveGoalMapper[subtype]?.map((el, idx) => {
             return (
-              <div key={idx} className='invest-goal-save-item' onClick={handleInvestedAmount(el)}>
+              <div key={idx} className='invest-goal-save-item' onClick={handleInvestedAmount(el)} data-aid={`invest-goal-save-item-${idx+1}`}>
                 <img src={el.icon} alt={el.name} width='80' />
                 <p>{el.name}</p>
                 <div className='invest-goal-save-item-corpus'>

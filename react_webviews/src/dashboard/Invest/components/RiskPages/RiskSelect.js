@@ -97,6 +97,7 @@ const RiskSelect = ({
 
   return (
     <Container
+      data-aid='please-select-your-risk-profile-screen'
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
@@ -106,7 +107,7 @@ const RiskSelect = ({
       handleClick={goNext}
       classOverRideContainer='pr-container'
     >
-      <div style={{ marginTop: '10px' }}>
+      <div style={{ marginTop: '10px' }} data-aid='pick-risk-profile'>
         <FSelect
           preselectFirst
           options={riskProfiles}

@@ -12,14 +12,15 @@ const HowWeRecommend = (props) => {
       title='How we recommend funds'
       handleClick={() => props.history.goBack()}
       hidePageTitle
+      data-aid='how-we-recommend-funds-screen'
     >
-      <div className="risk_profiler-recommendation">
+      <div className="risk_profiler-recommendation" data-aid='risk-profiler-recommendation'>
         <h1 className="risk_profiler-heading">How we recommend funds?</h1>
         <p className="risk_profiler-desc">
             We have a robust and tested research methodology to recommend the best
             set of funds to you.
         </p>
-        <div className="risk_profiler-points">
+        <div className="risk_profiler-points" data-aid='risk-profiler-points'>
           <h1 className="risk_profiler-points-heading">We take into account</h1>
           <div className="risk_profiler-point">
             <img src={require(`assets/${productName}/rec_point1.svg`)} alt="" className="risk_profiler-point-img" />

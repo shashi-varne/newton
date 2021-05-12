@@ -580,6 +580,7 @@ export function new_header_scroll() {
     return (
 
         <div id="header-title-page"
+            data-aid='header-title-page'
             style={this.props.styleHeader}
             className={`header-title-page  ${this.props.classHeader}`}>
             <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '' }}>

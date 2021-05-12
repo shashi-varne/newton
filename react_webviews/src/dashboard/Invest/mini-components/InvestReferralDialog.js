@@ -83,7 +83,7 @@ const InvestReferralDialog = ({ isOpen, close, goNext }) => {
       className="invest-refferal-dialog"
       id="invest-bottom-dialog"
     >
-      <DialogContent className="invest-refferal-dialog-content">
+      <DialogContent className="invest-refferal-dialog-content" data-aid='invest-refferal-dialog-content'>
         <header>
           <div>Bank Referral Code</div>
           <img src={require(`assets/internet_banking_icon.svg`)} alt="" />

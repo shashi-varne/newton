@@ -28,7 +28,7 @@ const EquityDebtSlider = ({
   }, [equity]);
 
   return (
-    <div className='invest-slider-container'>
+    <div className='invest-slider-container' data-aid='invest-slider-container'>
       <div className='invest-slider-head'>{risk}</div>
       <div className='invest-slider'>
         <Slider

@@ -49,6 +49,7 @@ const EditFunds = (props) => {
 
   return (
     <Container
+      data-aid='edit-funds-screen'
       classOverRide='pr-error-container'
       buttonTitle='Done'
       title='Edit Funds'
@@ -58,7 +59,7 @@ const EditFunds = (props) => {
       <section className='recommendation-section-edit'>
         <div className='recommendations-funds-lists-edit'>
           {recommendation?.map((el, idx) => (
-            <div key={idx} className='recommendations-funds-item-edit'>
+            <div key={idx} className='recommendations-funds-item-edit'  data-aid={`recommendations-funds-item-edi-${idx+1}`}>
               <FundCard classOverRide='recommendation-edit-replace' fund={el} />
               <div className='recommendations-funds-item-replace' onClick={showAlternateFunds(el)}>
                 <img alt='replaceFund' src={replaceFund} />

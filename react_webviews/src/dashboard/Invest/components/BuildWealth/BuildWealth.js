@@ -78,6 +78,7 @@ const Landing = (props) => {
       title='Build Wealth'
       handleClick={fetchRecommendedFunds}
       showLoader={loader}
+      data-aid='buildwealth-screen'
     >
       <section className='invest-amount-common'>
         <InvestType

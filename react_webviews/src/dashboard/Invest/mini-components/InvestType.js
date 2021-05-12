@@ -4,7 +4,7 @@ import './mini-components.scss';
 let productName = getConfig().productName;
 const InvestType = (props) => {
   return (
-    <div className="invest-type">
+    <div className="invest-type" data-aid='invest-type'>
       {props.baseData.subtitle && (
         <div className="generic-page-subtitle">{props.baseData.subtitle}</div>
       )}
@@ -13,6 +13,7 @@ const InvestType = (props) => {
           props.baseData.options.map((data, index) => {
             return (
               <div
+                data-aid={`${data.value}-type`}
                 key={index}
                 className="content"
                 onClick={() => props.handleChange(data.value)}

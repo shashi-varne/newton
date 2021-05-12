@@ -35,13 +35,14 @@ const ReplaceFunds = (props) => {
   
   return (
     <Container
+      data-aid='replace-fund-screen'
       classOverRide='pr-error-container'
       buttonTitle='Done'
       title='Replace fund'
       handleClick={replaceFund}
       classOverRideContainer='pr-container'
     >
-      <section className='recommendations-replace-funds-container'>
+      <section className='recommendations-replace-funds-container' data-aid='recommendations-replace-funds-containe'>
         <FormControl component='fieldset'>
           <RadioGroup
             aria-label='alternateFund'
@@ -51,6 +52,7 @@ const ReplaceFunds = (props) => {
           >
             {alternateFunds?.map((el, idx) => (
               <FormControlLabel
+                data-aid={`replace-funds--item-${idx+1}`}
                 className='alternate-funds-item'
                 key={idx}
                 value={el?.mf?.mfid}

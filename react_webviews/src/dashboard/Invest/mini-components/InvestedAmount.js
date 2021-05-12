@@ -74,6 +74,7 @@ const InvestedAmount = (props) => {
 
   return (
     <Container
+      data-aid='show-my-funds-screem'
       classOverRide='pr-error-container'
       buttonTitle='SHOW MY FUNDS'
       title={title}
@@ -81,8 +82,8 @@ const InvestedAmount = (props) => {
       classOverRideContainer='pr-container'
       showLoader={loader}
     >
-      <section className='invested-amount-common-container'>
-        <div className='invested-amount-display'>
+      <section className='invested-amount-common-container' data-aid='invested-amount-common-container'>
+        <div className='invested-amount-display' data-aid='invested-amount-display'>
           <div className='invested-amount-display-left'>
             <div className='invested-amount-display-left-text'>Invested Amount</div>
             <div className='invested-amount-display-left-val'>
@@ -106,7 +107,7 @@ const InvestedAmount = (props) => {
           principalAmount={amount}
           isRecurring={isRecurring}
         />
-        <div className="invested-amount-placeholder-icons">
+        <div className="invested-amount-placeholder-icons" data-aid='invested-amount-placeholder-icons'>
           {funnelGoalData.id !== "savetax" && (
             <>
               <div className="invested-amount-placeholder-left">

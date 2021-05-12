@@ -16,7 +16,7 @@ const PennyVerificationPending = ({ isOpen, handleClick }) => {
       className="invest-common-dialog penny-verification-pending-dialog"
       id="invest-bottom-dialog"
     >
-      <DialogContent className="dialog-content">
+      <DialogContent className="dialog-content" data-aid='penny-verification-pending'>
         <div className="head-bar">
           <div className="text-left">Bank account verification pending!</div>
           <img

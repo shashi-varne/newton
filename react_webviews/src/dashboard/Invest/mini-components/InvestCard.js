@@ -4,7 +4,7 @@ import Button from "../../../common/ui/Button";
 let productName = getConfig().productName;
 const InvestCard = (props) => {
   return (
-    <div className="card invest-card" onClick={() => props.handleClick()}>
+    <div className="card invest-card" onClick={() => props.handleClick()} data-aid={`${props.data.key}`}>
       <div className="content">
         <div className="title">{props.data.title}</div>
         <div className="subtitle">{props.data.subtitle}</div>

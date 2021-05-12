@@ -133,13 +133,14 @@ const InstaRedeem = (props) => {
 
   return (
     <Container
+      data-aid='start-investing'
       buttonTitle="START INVESTING"
       handleClick={handleClick}
       title={
         partner_code === "bfdlmobile" ? "Money +" : "Insta redemption fund"
       }
     >
-      <div className="insta-redeem">
+      <div className="insta-redeem" data-aid='insta-redeem'>
         <div className="generic-page-subtitle">
           Instant withdrawal facility with superior return compared to savings
           bank account
@@ -147,7 +148,7 @@ const InstaRedeem = (props) => {
         <div className="title">Benefits</div>
         {benefits.map((data, index) => {
           return (
-            <div key={index} className="benefit">
+            <div key={index} className="benefit" data-aid={`${data.key}-benefits`}>
               <img
                 src={require(`assets/${productName}/${data.icon}`)}
                 alt=""
@@ -166,6 +167,7 @@ const InstaRedeem = (props) => {
         <div className="title">Money will be deposited in</div>
         {!isEmpty(recommendation) && !showLoader && (
           <div
+            data-aid='recommendation-fund-card'
             className="card fund-card"
             onClick={() => showFundInfo(recommendation)}
           >

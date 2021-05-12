@@ -23,7 +23,7 @@ const InvestError = ({ isOpen, handleClick, errorMessage, close }) => {
       id="invest-error"
       onClose={close}
     >
-      <DialogContent className="dialog-content">
+      <DialogContent className="dialog-content" data-aid='invest-error'>
         <div className="error-message" id="error-message"></div>
       </DialogContent>
       <DialogActions className="action">

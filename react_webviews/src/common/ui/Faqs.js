@@ -44,7 +44,7 @@ class FaqsClass extends Component {
     renderList = (option, index) => {
         let isSelected = this.state.selectedIndex === index;
         return (
-            <div key={index} className="common-faqs-tile"
+            <div key={index} className="common-faqs-tile" data-aid={`common-faqs-tile-${index}`}
                style={{borderTop: index === 0 ? '1px solid #d7d4d4' : ''}}
                 onClick={() => this.showHideSteps(index)}>
                 <div className="top-tile">
@@ -74,7 +74,7 @@ class FaqsClass extends Component {
 
         return (
 
-                <div className='common-faqs'>
+                <div className='common-faqs' data-aid='common-faqs'>
                     {this.state.options.map(this.renderList)}
                 </div>
 

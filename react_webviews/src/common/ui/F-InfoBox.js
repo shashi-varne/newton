@@ -42,6 +42,7 @@ const InfoBox = ({
 
   return (
     <div
+      data-aid='f-info-box'
       id="f-info-box"
       className={classes.root}
       style={boxStyle}>

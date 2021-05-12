@@ -186,6 +186,7 @@ const InvestAmount = (props) => {
 
   return (
     <Container
+      data-aid='i-want-to-invest-screen'
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
       title={title}
@@ -194,7 +195,7 @@ const InvestAmount = (props) => {
       handleClick={goNext}
       classOverRideContainer='pr-container'
     >
-      <section className='invest-amount-common'>
+      <section className='invest-amount-common'data-aid='invest-amount-common'>
         <div className='invest-amount-input'>
           <p className='invest-amount-input-head'>I want to invest</p>
           <div className='invest-amount-container'>
