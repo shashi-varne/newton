@@ -73,6 +73,10 @@
 
   .alert-status-info {
     margin-top: 20px;
+
+    .text {
+      line-height: 1.5;
+    }
   }
 
   .sub-title {
@@ -142,6 +146,12 @@
   margin-top: 20px;
   border: 1px dashed var(--skelton-color);
   padding: 10px 0;
+
+  .icon {
+    display: block;
+    margin: 70px auto 20px auto;
+    width: 143px;
+  }
 }
 
 .kyc-doc-upload-container.noBorder {
@@ -193,6 +203,10 @@
 
     .open-gallery {
       flex: 1 1 50%;
+    }
+
+    .open-canvas {
+      flex: 1 1 100%;
     }
   }
 
