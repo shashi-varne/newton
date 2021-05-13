@@ -8,7 +8,6 @@ import ForgotPassword from './login_and_registration/ForgotPassword';
 import Logout from './login_and_registration/Logout';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
 import WealthReport from './wealth_report';
-import ProtectedRoute from './common/components/ProtectedRoute';
 import SocialCallback from './login_and_registration/SocialCallback';
 
 
@@ -91,7 +90,7 @@ const App = () => {
               <Route path='/register' component={Register} />
               <Route path='/mobile/verify' component={Otp} />
               <Route path='/forgot-password' component={ForgotPassword} />
-              <ProtectedRoute path='/social/callback' component={SocialCallback} />
+              <Route path='/social/callback' component={SocialCallback} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               {
