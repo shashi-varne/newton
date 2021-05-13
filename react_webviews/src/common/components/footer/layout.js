@@ -18,7 +18,7 @@ import SVG from 'react-inlinesvg';
 import {getConfig} from 'utils/functions';
 import logo_safegold from 'assets/logo_safegold.svg';
 import logo_mmtc from 'assets/logo_mmtc.svg';
-import WVButtonLayout from '../../ui/ButtonLayout';
+import WVButtonLayout from '../../ui/ButtonLayout/WVButtonLayout';
 
 export class FooterLayoutBase extends Component {
   constructor(props) {
