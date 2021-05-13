@@ -1,10 +1,5 @@
-.invest-recommendations-container {
-  background-color: #f8f8f8;
-}
-
 .recommendation-page {
-  background-color: white;
-  padding-top: 20px;
+  margin: 0 -20px;
 }
 
 .recommendation-page {
@@ -17,7 +12,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 0 20px 10px;
+  padding: 0 20px 30px;
 
   .recommendations-header {
     width: 100%;
@@ -72,18 +67,7 @@
 }
 
 .recommendations-disclaimers {
-  padding: 0 20px;
-  margin: 0 0 60px 0;
-  background-color: #F8F8F8;
-
-  .recommendations-paper-cut {
-    background-image: url(../../assets/white_triangle_bg.png);
-    background-size: 30px;
-    background-repeat: repeat-x;
-    background-position: top;
-    height: 65px;
-    margin: 0 -20px;
-  }
+  margin: 60px 0;
 }
 
 .recommendations-disclaimer-morning {
