@@ -144,16 +144,12 @@ class Result extends Component {
     const entryParams = this.state.params || {};
 
     if (entryParams.type === 'saveforgoal') {
-      this.navigate(`invest/savegoal/${entryParams.subType}/amount`);
+      this.navigate(`/invest/savegoal/${entryParams.subType}/amount`);
     } else {
       this.navigate(
         '/invest/recommendations',
         false,
         {
-          amount: entryParams.amount,
-          type: entryParams.type,
-          term: entryParams.term,
-          flow: entryParams.flow,
           fromRiskProfiler: true,
         }
       );

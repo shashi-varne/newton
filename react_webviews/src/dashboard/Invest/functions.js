@@ -380,7 +380,6 @@ export async function getRecommendations(amount) {
       graphType: this.state.investType,
       investTypeDisplay: this.state.investTypeDisplay,
       showRecommendationTopCards: true,
-      recommendedTotalAmount: result.amount,
       ...result
     };
     storageService().setObject("funnelData", funnelData);

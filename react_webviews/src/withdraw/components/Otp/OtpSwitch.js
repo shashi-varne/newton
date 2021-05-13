@@ -115,10 +115,9 @@ const OtpSwitch = (props) => {
         </div>
         <footer className="page-footer">
         <Button
-          className={disabled ? 'disabled' : 'button'}
+          className={`cta-button ${disabled ? 'disabled' : 'button'}`}
           disabled={disabled}
           onClick={verifyOtp}
-          className="cta-button"
         >
           VERIFY{' '}
           {isApiRunning && (
