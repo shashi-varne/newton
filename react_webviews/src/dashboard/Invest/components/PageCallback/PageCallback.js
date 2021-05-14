@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getUrlParams, isEmpty } from "../../../../utils/validators";
+import { getUrlParams } from "../../../../utils/validators";
 import Container from "../../../common/Container";
 import { getPaymentStatus } from "../../common/api";
 import { navigate as navigateFunc } from "../../common/commonFunctions";
 import Dialog, { DialogContent, DialogActions } from "material-ui/Dialog";
 import Button from "common/ui/Button";
 import "../../commonStyles.scss";
+import { isEmpty } from "lodash";
 
 const FailureDialog = ({ isOpen, handleClick, errorMessage }) => {
   return (
@@ -56,14 +57,13 @@ const PageCallback = (props) => {
           if (isEmpty(result)) {
             return;
           }
-          const order_type = result?.investment?.order_type;
-          if (order_type === "sip") {
+          const orderType = result?.investment?.order_type;
+          if (orderType === "sip") {
             navigate(`/sip/payment/callback/success`, null, true);
-          } else if (order_type === "onetime") {
+          } else if (orderType === "onetime") {
             navigate(`/payment/callback/success`, null, true);
           }
         } catch (err) {
-          console.log(err);
           setErrorMessage(err);
           setOpenDialog(true);
         } finally {

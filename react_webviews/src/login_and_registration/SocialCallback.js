@@ -30,9 +30,9 @@ const SocialCallback = (props) => {
     if (!isEmpty(user) && goNext) {
       storageService().set("dataSettedInsideBoot", true);
       let nextState = "/invest";
-      if (user.kyc_registration_v2 == "init") {
+      if (user.kyc_registration_v2 === "init") {
         nextState = "/kyc/home";
-      } else if (user.kyc_registration_v2 == "incomplete") {
+      } else if (user.kyc_registration_v2 === "incomplete") {
         nextState = "/kyc/journey";
       } else if (user.active_investment) {
         nextState = "/reports";
