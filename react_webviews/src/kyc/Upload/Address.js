@@ -211,6 +211,7 @@ const AddressUpload = (props) => {
       navigate('/kyc/upload/progress')
     } catch (err) {
       console.error(err)
+      toast(err?.message)
     } finally {
       console.log('uploaded')
       setIsApiRunning(false)
