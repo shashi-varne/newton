@@ -184,12 +184,10 @@ class Answers extends Component {
 
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
 
-    if (index !== 0 && index !== faqs[sub_category_id].length - 1) {
-      this.sendEvents("next", {
-        related_questions_clicked: "yes",
-        related_questions_id: faq_id,
-      });
-    }
+    this.sendEvents("next", {
+      related_questions_clicked: "yes",
+      related_questions_id: faq_id,
+    });
 
     this.handleDescription(faq_id);
   };
