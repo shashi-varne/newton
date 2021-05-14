@@ -19,6 +19,8 @@ import {
 import Grid from "material-ui/Grid";
 import { storageService } from "utils/validators";
 import Dialog, { DialogContent } from "material-ui/Dialog";
+import { getConfig } from "../../../../utils/functions";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const yesOrNo_options = [
   {
@@ -225,11 +227,16 @@ class PanDetails extends Component {
   };
 
   cta_action = () => {
-    let { btn_text, form_data } = this.state;
-    if (btn_text === 'SIGN OUT') {
-      this.navigate(`/account/merge/${form_data.pan_number}`)
-    } else {
-      this.navigate('accountmerge') // check this
+    let { btn_text, form_data, auth_ids } = this.state;
+    if (btn_text === "SIGN OUT") {
+      if (getConfig().Web) {
+        this.navigate("/logout");
+      } else {
+        nativeCallback({ action: "session_expired" });
+      }
+    } else if(btn_text === "LINK ACCOUNT") {
+      storageService().setObject("auth_ids", auth_ids)
+      this.navigate(`/account/merge/${form_data.pan.toUpperCase()}`)
     }
   }
 

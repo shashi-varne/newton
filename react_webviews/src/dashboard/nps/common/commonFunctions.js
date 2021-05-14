@@ -460,6 +460,12 @@ export async function getNPSInvestmentStatus() {
 
 export async function accountMerge() {
   if (this.state.isIframe) {
+    let config = getConfig();
+    let email = config.email;
+    let name = "fisdom";
+    if (config.productName === "finity") name = "finity";
+    const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
+    toast(toastMessage)
   } else {
     this.setState({
       show_loader: true,
@@ -490,6 +496,7 @@ export async function checkMerge(pan_number) {
     });
     if (status === 200) {
       this.setState({
+        auth_ids: result.auth_ids,
         openDialog: true,
         title: "PAN Already Exists",
         subtitle: "Sorry! this PAN is already registered with another account.",

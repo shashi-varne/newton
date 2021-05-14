@@ -130,23 +130,28 @@ const FundType = (props) => {
           </div>
         </section>
       </section>
-      <footer className="diy-cart-footer" style={{marginLeft: isMobileDevice && 0}}>
-        {cart.length > 0 && (
-          <DiyCartButton
-            className="button"
-            onClick={() => setCartActive(true)}
-            cartlength={cart.length}
-          />
-        )}
+      {getConfig().productName !== "finity" && (
+        <footer
+          className="diy-cart-footer"
+          style={{ marginLeft: isMobileDevice && 0 }}
+        >
+          {cart.length > 0 && (
+            <DiyCartButton
+              className="button"
+              onClick={() => setCartActive(true)}
+              cartlength={cart.length}
+            />
+          )}
 
-        <Cart
-          isOpen={cartActive && cart.length > 0}
-          setCartActive={setCartActive}
-          cart={cart}
-          setCart={setCart}
-          {...props}
-        />
-      </footer>
+          <Cart
+            isOpen={cartActive && cart.length > 0}
+            setCartActive={setCartActive}
+            cart={cart}
+            setCart={setCart}
+            {...props}
+          />
+        </footer>
+      )}
     </Container>
   )
 }
