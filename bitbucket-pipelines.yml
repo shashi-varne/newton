@@ -1,13 +1,18 @@
 image:
   name: node:12.20.0
+memory: 8000
 
 definitions:
+  services:
+    docker:
+      memory: 2500 
   caches:
     image: node
-
+  
   steps:
     - step: &pod-deploy
         name: Pipeline-on-demand deploy steps
+        size: 2x
         script:
           - apt-get update
           - apt-get install -y curl
