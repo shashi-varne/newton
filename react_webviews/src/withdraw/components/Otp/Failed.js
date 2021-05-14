@@ -4,6 +4,7 @@ import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import { getUrlParams } from '../../../utils/validators'
 
 import './Failed.scss';
+import ContactUs from '../../../common/components/contact_us'
 
 const Failed = (props) => {
   const productName = getConfig().productName
@@ -35,14 +36,7 @@ const Failed = (props) => {
           If instant withdraw was successful, you will get the money within 30
           mins. Otherwise, please try again after some time.
         </div>
-        <div className="contact-us">
-          <div className="contact-us-bottom1">For any query, reach us at</div>
-          <div className="contact-us-bottom2 flex-center">
-            <div className="contact-number">+91-7829228886</div>
-            <div className="icon">|</div>
-            <div className="email">ASK@FISDOM.COM</div>
-          </div>
-        </div>
+        <ContactUs />
       </section>
     </Container>
   )
