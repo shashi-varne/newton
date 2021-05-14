@@ -8,7 +8,7 @@ import { getPathname } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
-  navigate as navigateFunc, pollProgress, popupWindowCenter,
+  navigate as navigateFunc, pollProgress, popupWindowCenter, updateQueryStringParameter,
 } from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -16,6 +16,7 @@ import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
+import { getBasePath, isIframe } from '../../utils/functions'
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -540,7 +541,22 @@ const Journey = (props) => {
   }
 
   const proceed = () => {
-    setAadhaarLinkDialog(true)
+    if (isIframe() && getConfig().code === "moneycontrol" && !getConfig().isMobileDevice) {
+      const redirect_url = encodeURIComponent(
+        `${getBasePath()}/digilocker/callback${
+          getConfig().searchParams
+        }&is_secure=${storageService().get("is_secure")}`
+      );
+      handleIframeKyc(
+        updateQueryStringParameter(
+          kyc.digilocker_url,
+          "redirect_url",
+          redirect_url
+        )
+      )
+    } else {
+      setAadhaarLinkDialog(true)
+    }
   }
 
   const handleIframeKyc = (url) => {
