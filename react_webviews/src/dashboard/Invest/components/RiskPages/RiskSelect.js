@@ -112,7 +112,7 @@ const RiskSelect = ({
         "user_action": userAction || "",
         "screen_name": "select risk profile",
         "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
-        "profile": userRiskProfile,
+        "profile": selectedRisk,
         "info_clicked": storageService().get('risk-info-clicked') ? 'yes' : 'no',
         }
     };
@@ -122,7 +122,7 @@ const RiskSelect = ({
       nativeCallback({ events: eventObj });
     }
   }
-
+  
   return (
     <Container
       events={sendEvents("just_set_events")}
