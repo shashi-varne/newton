@@ -24,6 +24,7 @@ import add_cart_icon from '../../../assets/add_cart_icon.png'
 import remove_cart_icon from '../../../assets/remove_cart_icon.png'
 
 import "./FundList.scss";
+import { nativeCallback } from '../../../utils/native_callback'
 
 const returnField = [
   'one_month_return',
@@ -53,6 +54,7 @@ const FundList = (props) => {
 
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [showLoader, setShowLoader] = useState(false)
+  const [initialCartCount, setInitialCartCount] = useState(cart.length)
   const productType = getConfig().productName
   const handleChange = (_, value) => {
     setValue(value)
@@ -156,8 +158,54 @@ const FundList = (props) => {
       return -1;
     })
 
+  const sendEvents = (userAction, screenName, cartCount, fundName) => {
+    const yearsOptions = ["1M", "3M", "6M", "1Y", "3Y", "5Y"];
+    let eventObj = {
+      event_name: "mf_investment",
+      properties:
+        screenName !== "card_bottom_sheet"
+          ? {
+              "screen_name": "fund list",
+              "user_action": userAction || "",
+              "years_selected": yearsOptions[value - 1],
+              "category_name": titleCase(match.params?.key?.replace(/_/g, " ")),
+              "fund_name": "", //to be checked
+              "scheme_type": titleCase(match.params.type) || "",
+              "add_to_cart": cart.length,
+              "additonal_cart_value": cart.length - initialCartCount || 0,
+              "filter_clicked": storageService().get("filter_clicked")
+                ? "yes"
+                : "no",
+              "flow": "diy",
+            }
+          : {
+              "userAction": userAction,
+              "fund_name": fundName || "",
+              "screen_name": screenName || "",
+              "flow": "diy",
+              "cart_count": cartCount,
+            },
+    };
+    storageService().remove("filter_clicked");
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
+  const titleCase = (text) =>{
+    if(!text)
+    return;
+    return text.toLowerCase()
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ');
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       classOverRIde="pr-error-container"
       noFooter
       title={match.params?.key?.replace(/_/g, ' ') || ''}
@@ -223,6 +271,7 @@ const FundList = (props) => {
           setFundHouse={setFundHouse}
           setFundsList={setFundOption}
           setFundOption={setFundOption}
+          sendEvents={sendEvents}
           {...parentProps}
         />
       )}

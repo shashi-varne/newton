@@ -10,6 +10,7 @@ import Cart from '../../../DIY/mini-components/Cart'
 import './FundType.scss';
 
 import { navigate as navigateFunc } from '../../common/commonFunctions'
+import { nativeCallback } from '../../../../utils/native_callback'
 
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   const navigate = navigateFunc.bind(parentProps)
@@ -71,9 +72,10 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   )
 }
 
-const CategoryCard = ({ label, name, trivia, icon, type, ...props }) => {
+const CategoryCard = ({ label, name, trivia, sendEvents, icon, type, ...props }) => {
   const navigate = navigateFunc.bind(props)
   const handleNavigate = () => {
+    sendEvents('next', name)
     console.log(props.location.search)
     navigate(
       `/diy/fundlist/${type}/${label}`,
@@ -103,8 +105,41 @@ const FundType = (props) => {
   const { sub_categories } = categories?.find(
     (el) => el.category.toLowerCase() === type
   ) || [];
+  const initialCartCount = (storageService().getObject(CART)).length
+
+  const sendEvents = (userAction, cardClicked, cartCount, fundName) => {
+    let eventObj = {
+      event_name: "mf_investment",
+      properties:
+        cardClicked !== "card_bottom_sheet"
+          ? {
+              "screen_name": "scheme type categories",
+              "user_action": userAction || "",
+              "primary_category": "scheme type category" || "",
+              "card_clicked": cardClicked || "",
+              "scheme_type": props.match.params?.type || "",
+              "add_to_cart": cart.length || "none",
+              "additonal_cart_value": cart.length - initialCartCount || 0,
+              "flow": "diy",
+            }
+          : {
+              "userAction": userAction,
+              "fund_name": fundName || "",
+              "screen_name": cardClicked || "",
+              "flow": "diy",
+              "cart_count": cartCount,
+            },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       classOverRIde="pr-error-container"
       noFooter
       title={props.match.params?.type || ""}
@@ -126,6 +161,7 @@ const FundType = (props) => {
                 label={category.key}
                 name={category.name}
                 trivia={category.trivia}
+                sendEvents={sendEvents}
                 icon={require(`assets/fisdom/${category.key}.svg`)}
                 type={type}
                 {...props}
@@ -138,7 +174,7 @@ const FundType = (props) => {
         {cart.length > 0 && (
           <DiyCartButton
             className="button"
-            onClick={() => setCartActive(true)}
+            onClick={() => {sendEvents('cart') ;setCartActive(true)}}
             cartlength={cart.length}
           />
         )}
@@ -148,6 +184,7 @@ const FundType = (props) => {
           setCartActive={setCartActive}
           cart={cart}
           setCart={setCart}
+          sendEvents={sendEvents}
           {...props}
         />
       </footer>

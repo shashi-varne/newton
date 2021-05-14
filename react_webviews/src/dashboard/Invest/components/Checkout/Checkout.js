@@ -231,6 +231,7 @@ class Checkout extends Component {
 
   deleteFund = (index) => {
     let { fundsData } = this.state;
+    this.sendEvents('delete', fundsData[index].legal_name)
     fundsData.splice(index, 1);
     const cartCount = fundsData.length;
     this.setState({
@@ -240,17 +241,17 @@ class Checkout extends Component {
     storageService().set("diystore_cartCount", cartCount);
   };
 
-  sendEvents = (userAction) => {
+  sendEvents = (userAction, fundName) => {
     let eventObj = {
       "event_name": 'mf_investment',
       "properties": {
         "screen_name": "your mutual fund plan",
         "user_action": userAction || "",
-        "amount_selected": this.state.fundsData[0]?.amount || "",
+        "amount_selected": (this.state.type !== 'diy' ? this.state.fundsData[0]?.amount : "" ) || "",
         "order_type": this.state.investType || "",
-        "scheme_type": this.state.fundsData[0]?.growth_or_dividend || "",
-        "category_name": "",
-        "fund_name": this.state.fundsData[0]?.name || "",
+        "scheme_type": (this.state.type !== 'diy' ? this.state.fundsData[0]?.growth_or_dividend : this.titleCase(storageService().get('diystore_category'))) || "",
+        "category_name": (this.state.type !== 'diy' ? "" : this.titleCase(storageService().get('diystore_subCategory').replace(/_/g, " "))) || "",
+        "fund_name": fundName || (this.state.type !== 'diy' ? this.state.fundsData[0]?.name : "") || "",
         "flow": this.state.type || ""
         }
     };
@@ -260,6 +261,16 @@ class Checkout extends Component {
       nativeCallback({ events: eventObj });
     }
   }
+
+  titleCase = (text) =>{
+    if(!text)
+    return;
+    return text.toLowerCase()
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ');
+  }
+  
   render() {
     let {
       form_data,

@@ -14,6 +14,7 @@ import { getTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
 import isEmpty from 'lodash/isEmpty';
 import './Explore.scss';
+import { nativeCallback } from '../../../../utils/native_callback'
 
 export const exploreMFMappings = [
   {
@@ -66,6 +67,7 @@ const InvestExplore = (props) => {
   }
   const navigate = navigateFunc.bind(props)
   const goNext = (title) => () => {
+    sendEvents('next', title)
     navigate(`explore/${title}`, null, false, props.location.search)
   }
 
@@ -76,8 +78,27 @@ const InvestExplore = (props) => {
     });
   }
 
+  const sendEvents = (userAction, cardClicked) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "explore all mutual fund",
+        "user_action": userAction || "",
+        "card_clicked": cardClicked || "",
+        "flow": "diy",
+        "source": ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       classOverRIde="pr-error-container"
       noFooter
       title="Explore All Mutual Funds"
