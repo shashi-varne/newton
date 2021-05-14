@@ -57,7 +57,7 @@ class NpsPaymentCallback extends Component {
   };
 
   goBack = () => {
-    this.navigate('/landing', "", true);
+    this.navigate('/landing');
   }
  
   render() {
