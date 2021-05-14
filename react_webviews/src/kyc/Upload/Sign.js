@@ -112,6 +112,7 @@ const Sign = (props) => {
         }
       }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
       setIsApiRunning(false)

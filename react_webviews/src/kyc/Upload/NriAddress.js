@@ -184,6 +184,7 @@ const NRIAddressUpload = (props) => {
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/upload/progress')
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
       console.log('uploaded')

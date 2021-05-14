@@ -155,9 +155,9 @@ const Pan = (props) => {
         }
       }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
