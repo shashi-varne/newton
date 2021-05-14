@@ -119,9 +119,8 @@ body[data-device="web"] {
   }
 
   .MuiDialogActions-root {
-    margin: 0 auto;
+    margin: 20px auto;
     width: fit-content;
-    margin-bottom: 20px;
   }
 
   .FooterImage {
@@ -1737,10 +1736,6 @@ $header-title-font-size: 20px;
       border: 1px solid var(--primary);
     }
   }
-}
-
-.mobile-navbar-menu{
-  margin-left: auto;
 }
   
 .OTP-title{

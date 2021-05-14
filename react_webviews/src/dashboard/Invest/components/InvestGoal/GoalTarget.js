@@ -5,8 +5,12 @@ import toast from "common/ui/Toast"
 import { numDifferentiationInr } from 'utils/validators';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
-import { saveGoalMapper, customGoalTargetMap } from './constants';
 import { get_recommended_funds } from '../../common/api';
+import {
+  SAVE_GOAL_MAPPER,
+  CUSTOM_GOAL_TARGET_MAP,
+  SUBTYPE_NAME_MAP
+} from './constants';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
 
@@ -65,7 +69,7 @@ const GoalTarget = (props) => {
   };
 
   const setYourTarget = () => {
-    updateFunnelData({ corpus: customGoalTargetMap[subtype] });
+    updateFunnelData({ corpus: CUSTOM_GOAL_TARGET_MAP[subtype] });
     navigate(`/invest/savegoal/${subtype}/${year}/target`);
   };
 
@@ -79,11 +83,11 @@ const GoalTarget = (props) => {
     >
       <section className='invest-goal-save-container'>
         <div className='invest-goal-save-header'>
-          How much money do you want to save for {subtype}?
+          How much money do you want to save for your {SUBTYPE_NAME_MAP[subtype]}?
         </div>
 
         <div className='invest-goal-save-list'>
-          {saveGoalMapper[subtype]?.map((el, idx) => {
+          {SAVE_GOAL_MAPPER[subtype]?.map((el, idx) => {
             return (
               <div key={idx} className='invest-goal-save-item' onClick={handleInvestedAmount(el)}>
                 <img src={el.icon} alt={el.name} width='80' />

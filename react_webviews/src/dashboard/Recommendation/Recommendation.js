@@ -22,6 +22,7 @@ import { get, isArray } from 'lodash';
 import { get_recommended_funds } from '../Invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
+import toast from 'common/ui/Toast'
 
 const sipTypesKeys = [
   "buildwealth",
@@ -54,7 +55,10 @@ const Recommendations = (props) => {
     if (isArray(funnelData.recommendation)) {
       setRecommendations(funnelData.recommendation);
     }
-    if (['savetax', 'savetaxsip'].includes(funnelData.investType) || userRiskProfile) {
+    if (
+      ['savetax', 'savetaxsip', 'investsurplus'].includes(funnelData.investType) ||
+      userRiskProfile
+    ) {
       setRenderTopCard(true);
     }
   }, [funnelData]);
@@ -84,9 +88,9 @@ const Recommendations = (props) => {
   }
 
   const getRecommendations = async () => {
-    const { amount, investType: type, term } = storageService().getObject('funnelData');
+    const { userEnteredAmt, amount, investType: type, term } = funnelData
     var params = {
-      amount,
+      amount: userEnteredAmt || amount,
       term,
       type,
       rp_enabled: true,
@@ -104,7 +108,7 @@ const Recommendations = (props) => {
       setIsApiRunning(false);
     } catch (err) {
       console.log(err);
-      
+      toast(err);
     }
   };
 
@@ -316,9 +320,9 @@ const Recommendations = (props) => {
           </div>
           <div className='recommendations-total-investment'>
             <div>Total investment</div>
-            <div>
-            <div>{recommendations?.length ? formatAmountInr(funnelData.amount) : '₹0'}</div>
-            {funnelData.investTypeDisplay === 'sip' && <div className='amount-per-month'>per month</div>}
+            <div style={{ textAlign: 'right' }}>
+              <div>{recommendations?.length ? formatAmountInr(funnelData.amount) : '₹0'}</div>
+              {funnelData.investTypeDisplay === 'sip' && <div className='amount-per-month'>per month</div>}
             </div>
           </div>
           <div className="recommendations-disclaimers">

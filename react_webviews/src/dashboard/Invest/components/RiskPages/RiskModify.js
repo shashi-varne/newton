@@ -8,6 +8,7 @@ import FSelect from './FSelect';
 import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import useFunnelDataHook from '../../common/funnelDataHook';
+import toast from 'common/ui/Toast';
 
 const { productName } = getConfig();
 
@@ -60,6 +61,7 @@ const RiskModify = ({
       setLoader(false);
     } catch (err) {
       console.log(err);
+      toast(err);
     }
   }
 
@@ -70,7 +72,10 @@ const RiskModify = ({
     navigate('/invest/recommendations');
   };
 
-  const toggleConfirmDialog = () => setShowConfirmDialog(!showConfirmDialog);
+  const toggleConfirmDialog = () => {
+    if (loader) return;
+    setShowConfirmDialog(!showConfirmDialog);
+  }
 
   if (userRiskProfile === 'Custom') {
     riskOptions.push({
@@ -85,9 +90,8 @@ const RiskModify = ({
     <Container
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
+      buttonTitle='Proceed'
       helpContact
-      disable={loader}
       title='Change risk profile'
       handleClick={toggleConfirmDialog}
       classOverRideContainer='pr-container'
@@ -99,7 +103,7 @@ const RiskModify = ({
             root: 'risk-info'
           }}
         >
-          <div className="risk-info-title">Info</div>
+          <div className="risk-info-title">Note</div>
           <div className="risk-info-desc">
             If you change your risk profile, fund recommendations will change accordingly.
           </div>
@@ -125,7 +129,7 @@ const RiskModify = ({
             header_title: 'Save changes',
             content: 'Are you sure you want to change your risk profile?',
             src: require(`assets/${productName}/ic_save.svg`),
-            button_text1: 'Confirm',
+            button_text1: loader ? <CircularProgress size={20} thickness={4} color="white" /> : 'Confirm',
             handleClick1: goNext,
             button_text2: 'Cancel',
             handleClick2: toggleConfirmDialog,

@@ -106,7 +106,7 @@ export const themeConfig = {
                 touchAction: 'none'
             },
             label: {
-                textTransform: 'capitalize'
+                textTransform: 'uppercase'
             },
             root: {
                 borderRadius: getConfig().uiElements?.button?.borderRadius || 4,

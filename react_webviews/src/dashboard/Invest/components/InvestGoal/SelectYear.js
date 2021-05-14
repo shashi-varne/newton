@@ -82,7 +82,7 @@ const SelectYear = (props) => {
         setErrorMsg('The year should be more than the current year');
       } else if (year > (currentYear + 100)) {
         setError(true);
-        setErrorMsg(`The max year you can invest for is ${currentYear + 100} years`);
+        setErrorMsg(`The max year you can invest for is ${currentYear + 100}`);
       } else {
         setError(false);
         setErrorMsg('');

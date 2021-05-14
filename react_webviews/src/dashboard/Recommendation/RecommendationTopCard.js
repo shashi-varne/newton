@@ -12,9 +12,9 @@ const RecommendationTopCard = ({
   const navigate = navigateFunc.bind(parentProps);
   const { userRiskProfile, funnelData } = data;
   const [showRiskInfo, setShowRiskInfo] = useState(false);
-  console.log(funnelData.investType)
+
   const renderContent = () => {
-    if (userRiskProfile) {
+    if (userRiskProfile || funnelData.investType === 'investsurplus') {
       const { equity, debt, investType } = funnelData;
       const toggleRiskInfoDialog = () => setShowRiskInfo(!showRiskInfo);
 
@@ -62,7 +62,7 @@ const RecommendationTopCard = ({
     } else if (['savetax', 'savetaxsip'].includes(funnelData.investType)) {
       return (
         <div className="tax-card">
-          <img src="assets/img/sale.svg" alt="" />
+          <img src={require('assets/sale.svg')} alt="" />
           <div className="text">Tax savings for {getFinancialYear()}</div>
           <div className="amount">{formatAmountInr(funnelData.corpus)}</div>
         </div>
