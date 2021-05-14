@@ -804,7 +804,18 @@
     margin: 20px 0 0 0;
     text-transform: uppercase;
   }
-
+  .plan-list-cta{
+    width: 190px;
+    margin-top: 18px;
+    
+    button{
+      border-radius: 5px;
+      height: 44px;
+      span{
+        white-space: nowrap;
+      }
+    }
+  }
 }
 
 .group-health-recommendation {

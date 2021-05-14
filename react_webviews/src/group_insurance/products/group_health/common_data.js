@@ -1,4 +1,4 @@
-import { storageService, inrFormatDecimal, getEditTitle } from 'utils/validators';
+import { storageService, inrFormatDecimal, getEditTitle, compareObjects } from 'utils/validators';
 import { getConfig, 
     // isFeatureEnabled
  } from 'utils/functions';
@@ -7,6 +7,7 @@ import Api from 'utils/api';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
 import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter} from '../../../utils/validators';
+import ReactTooltip from "react-tooltip";
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 import {TitleMaper, reportsfrequencyMapper, reportTopTextMapper, reportCoverAmountValue} from '../../../group_insurance/constants'
 
@@ -17,6 +18,7 @@ export async function initialize() {
     this.setEditTitle = setEditTitle.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
     this.memberKeyMapper = memberKeyMapper.bind(this);
+    this.getApplicationDetails = getApplicationDetails.bind(this);
     
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     
@@ -83,14 +85,15 @@ export async function initialize() {
             let application_id = storageService().get('health_insurance_application_id');
             let url;
   
+            var resultData = {}
             if (resume && !application_id) {
                 url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
                 const res = await Api.get(url);
-                var resultData = res.pfwresponse.result;
+                resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
                     
                     lead = resultData;
-                    lead.member_base = ghGetMember(lead, this.state.providerConfig);               
+                    lead.member_base = ghGetMember(lead, providerConfig);               
                     this.setState({
                         lead: resultData || {},
                     }, () => {
@@ -106,28 +109,19 @@ export async function initialize() {
                         true;
                 }
                 
-            } else if(application_id) {
-                url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
-   
-                if (this.state.screen_name === 'final_summary_screen') {
-                    url += `&form_submitted=true`;
-                }
-                const res = await Api.get(url);
-                // eslint-disable-next-line
-                var resultData = res.pfwresponse.result;
-
-               
-                if (res.pfwresponse.status_code === 200) {
-                    lead = resultData.quotation_details;
-                    var member_base = ghGetMember(lead, this.state.providerConfig);
-                                   
+            }else if(isEmpty(groupHealthPlanData.application_form_data)){
+                this.getApplicationDetails(application_id, providerConfig);
+            } else if(application_id && this.state.screen_name !== 'final_summary_screen') {
+                var application_form_data = groupHealthPlanData.application_form_data;
+                    lead = application_form_data.quotation_details;
+                    var member_base = ghGetMember(lead, providerConfig);
                     this.setState({
-                        lead: resultData || {},
+                        lead: application_form_data || {},
                         member_base: member_base,
-                        quotation: resultData.quotation_details || {},
+                        quotation: application_form_data.quotation_details || {},
                         common_data: {
-                            ...resultData.common,
-                            tnc: resultData.common.tnc || resultData.tnc
+                            ...application_form_data.common,
+                            tnc: application_form_data.common.tnc || application_form_data.tnc
                         },
                         insured_account_type: lead.insurance_type || ''
                     }, () => {
@@ -139,11 +133,8 @@ export async function initialize() {
                     this.setState({
                         skelton: false
                     });
-
-                } else {
-                    error=resultData.error || resultData.message ||
-                        true;
-                }
+            }else if(application_id && this.state.screen_name === 'final_summary_screen'){
+                this.getApplicationDetails(application_id, providerConfig);
             }
         } catch (err) {
             console.log(err);
@@ -188,7 +179,7 @@ export async function initialize() {
             }
             
             if(provider === 'HDFCERGO'){
-                leftTitle = this.state.providerConfig.hdfc_plan_title_mapper[lead.plan_id];
+                leftTitle = providerConfig.hdfc_plan_title_mapper[lead.plan_id];
             }else if(provider === 'RELIGARE'){
                 leftTitle = 'Care'
             }else if(provider === 'STAR'){
@@ -320,7 +311,527 @@ export function updateBottomPremiumAddOns(premium) {
     }
 }
 
-export async function updateLead( body, quote_id) {
+export async function getApplicationDetails(application_id, providerConfig) {
+    let error="";
+    let errorType="";
+    this.setErrorData("submit")
+
+    this.setState({
+        skelton: true
+    });
+    try{
+        var url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}&form_submitted=true`;
+        const res = await Api.get(url);
+        var resultData = res.pfwresponse.result;
+        if (res.pfwresponse.status_code === 200) {
+            var lead = resultData.quotation_details;
+            
+            var member_base = ghGetMember(lead, providerConfig);
+                           
+            this.setState({
+                lead: resultData || {},
+                member_base: member_base,
+                quotation: resultData.quotation_details || {},
+                common_data: {
+                    ...resultData.common,
+                    tnc: resultData.common.tnc || resultData.tnc
+                },
+                insured_account_type: lead.insurance_type || ''
+            }, () => {
+                if (this.onload && !this.state.ctaWithProvider) {
+                    this.onload();
+                }
+    
+            })
+            this.setState({
+                skelton: false
+            });
+        }else{
+            error=resultData.error || resultData.message ||true;
+        }
+    }catch(err){
+        console.log(err)
+        this.setState({
+            show_loader: false
+        });
+        error=true;
+        errorType="crash";
+    }
+    if(error)
+    {
+        this.setState({
+            errorData: {
+              ...this.state.errorData,
+              title2: error,
+              type: errorType
+            },
+            showError: true,
+          });
+    }
+}
+
+export function checkCity(city, proceed, suggestions_list){
+    if(!city) {
+        if(proceed) {
+            this.setState({
+                city_error: 'Please select city from provided list'
+            });
+        }
+        
+        return;
+    }
+    let data  = suggestions_list.filter(data => (data.key).toUpperCase() === (city).toUpperCase());
+    if(data.length === 0) {
+        this.setState({
+            city_error: 'Please select city from provided list'
+        });
+    } else if(proceed) {
+        this.getPlanList();
+    }
+}
+
+export async function getPlanList(){
+    this.setErrorData("submit");
+        this.setState({ show_loader: 'button' });
+        let error = "";
+        let errorType = "";
+        let {groupHealthPlanData : {post_body}} = this.state;
+        let {groupHealthPlanData} = this.state;
+
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details'];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
+        try {
+
+             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`,
+             body);
+
+            var resultData = res.pfwresponse.result;
+            if (res.pfwresponse.status_code === 200) {
+
+                this.setState({
+                    plan_data: resultData,
+                    common: resultData.common,
+                    show_loader: false
+                }, () => {
+                    ReactTooltip.rebuild()
+                    var plan_list = {}
+                    
+                    plan_list['plan_data'] = resultData;
+                    plan_list['common'] = resultData.common;
+                    groupHealthPlanData['plan_list'] = plan_list;
+                    groupHealthPlanData['list_previous_data'] = this.state.current_state;
+                    this.setLocalProviderData(groupHealthPlanData);
+                    this.navigate('plan-list')
+                })
+
+
+            } else {
+                error = resultData.error || resultData.message
+                    || true;
+            }
+        } catch (err) {
+            console.log(err)
+            this.setState({
+                skelton: false
+            });
+            error = true;
+            errorType = "crash";
+        }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: "page",
+              show_loader: false
+            });
+          }
+}
+
+export async function getPlanDetails(){
+    var groupHealthPlanData = this.state.groupHealthPlanData;
+    var post_body = groupHealthPlanData.post_body;
+    var provider = this.state.provider;
+    let allowed_post_body_keys = ['adults', 'children', 'member_details', 'plan_id'];
+    
+    
+    if(this.state.screen_name === 'plan_list_screen'){
+        this.setErrorData("submit", '', this.selectPlan); 
+    }else{
+        this.setErrorData("submit"); 
+    }
+
+            let error = "";
+            let errorType = "";
+            
+            let keys_to_empty = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
+            for(var x of keys_to_empty){
+                groupHealthPlanData[x] = ""
+            }
+        
+            let keys_to_remove = ['sum_assured', 'discount_amount', 'insured_pattern','tax_amount', 'tenure','total_amount', 'type_of_plan']
+            for(let key in keys_to_remove){
+              delete post_body[keys_to_remove[key]]
+            }
+
+            if(provider === 'GMC'){
+              post_body.plan_id = "fisdom_health_protect";
+              var plan_selected = {};
+              plan_selected['plan_title'] = 'fisdom HealthProtect'
+              plan_selected['copay'] = '0% copay is applicable only where insured age is less than 60 yrs, there will be 20% copay for insured whose age at the time of entry is 61 yrs and above';
+            
+              this.setState({
+                plan_selected: plan_selected
+              })
+              groupHealthPlanData.plan_selected = plan_selected;
+            }
+            if(provider === 'HDFCERGO'){
+                allowed_post_body_keys.push('city');
+            }
+            if(provider === 'STAR'){
+                allowed_post_body_keys.push('postal_code');
+            }
+            let body = {};
+
+            for(let key of allowed_post_body_keys){
+                body[key] = post_body[key];
+            }
+            groupHealthPlanData.post_body = post_body;
+
+            this.setState({
+                groupHealthPlanData: groupHealthPlanData
+            })
+                this.setState({ show_loader: "button"});
+                try {
+                    const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,body);
+                    var resultData = res.pfwresponse.result;
+                    if (res.pfwresponse.status_code === 200) {
+                        
+                        groupHealthPlanData['plan_details_screen'] = resultData;
+                        groupHealthPlanData['plan_list_current_state'] = this.state.current_state;
+                        delete groupHealthPlanData['sum_assured_screen'];
+                        this.setLocalProviderData(groupHealthPlanData);
+                        this.navigate(this.state.next_screen);
+                        
+                    } else {
+                        error = resultData.error || resultData.message
+                            || true;
+                    }
+                } catch (err) {
+                    console.log(err)
+                    this.setState({
+                        show_loader: false
+                    });
+                    error = true;
+                    errorType = "crash";
+                }
+                if (error) {
+                    this.setState({
+                      errorData: {
+                        ...this.state.errorData,
+                        title2: error,
+                        type: errorType
+                      },
+                      showError: "page",
+                      show_loader: false
+                    });
+                }
+}
+
+export async function getCityDetails(){
+    this.setErrorData("onload");
+    this.setState({ show_loader : 'button' });
+    let error = "";
+    let errorType = "";
+    var groupHealthPlanData = this.state.groupHealthPlanData;
+    let body = {
+        "provider": this.state.providerConfig.provider_api
+      };
+    var city = '';
+    try {
+            try {
+
+                const res = await Api.post(
+                    `api/insurancev2/api/insurance/health/quotation/account_summary`,
+                    body
+                );
+                if (res.pfwstatus_code === 200) {
+                    
+                    var resultData = res.pfwresponse.result;
+                    if(this.state.groupHealthPlanData.city){
+                        city = this.state.groupHealthPlanData.city || '';
+                    }else if(Object.keys(resultData.quotation).length > 0 && resultData.quotation.city_postal_code){
+                        city = resultData.quotation.city_postal_code || '';
+                    }else if(Object.keys(resultData.address_details).length > 0 && resultData.address_details.city){
+                        city = resultData.address_details.city || '';
+                    }
+                    groupHealthPlanData.city = city;
+                    this.setLocalProviderData(groupHealthPlanData)
+                    this.setState({
+                        city: city
+                    });
+                } else {
+                    error=
+                        resultData.error ||
+                        resultData.message ||
+                        true
+                    
+                }
+            } catch (err) {
+                console.log(err);
+                error=true;
+                errorType= "crash";
+            }
+        const res2 = await Api.get('api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo');
+        
+        var resultData2 = res2.pfwresponse.result
+        var city_object =  resultData2.map(element => {
+            return {
+                key: element,
+                value: element
+            }
+        });
+        
+        if (res2.pfwresponse.status_code === 200) {
+
+            var select_city = {}
+            select_city['suggestions_list'] = city_object;
+            select_city['city'] = city;
+            groupHealthPlanData.select_city = select_city;
+            this.setState({
+                show_loader:false
+            });    
+            this.setLocalProviderData(groupHealthPlanData);
+            this.navigate('plan-select-city');
+            return;
+        
+        } else {
+            error=resultData2.error || resultData2.message
+                || true;
+        }
+    } catch (err) {
+    console.log(err)
+       error=true;
+       errorType="crash";
+    }
+    if (error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+            type: errorType
+          },
+          showError: "page",
+          show_loader: false
+        });
+      }
+}
+
+
+export async function getAddOnsData(){
+    this.setErrorData("submit");
+        
+        let error = "";
+        let errorType = "";
+        let post_body = this.state.groupHealthPlanData.post_body;
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "si"];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
+        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
+            body['floater_type'] = 'non_floater';
+        }
+
+        let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
+        // eslint-disable-next-line radix
+        this.setState({show_loader: 'button'})
+            try {
+                const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_add_ons/religare', body);
+
+                var resultData = res.pfwresponse.result;
+                if (res.pfwresponse.status_code === 200) {
+                    this.setState({
+                        skelton: false
+                    });
+                    add_ons_data = resultData.compulsary.concat(resultData.optional)  || [];
+
+                    
+                    let options = [];
+                    let opd_data_options = add_ons_data[1].price;
+                    for(var key in opd_data_options){
+                        let opt = {
+                            name: key,
+                            premium: add_ons_data[1].price[key]
+                        }
+                        options.push(opt);
+                    }
+
+                    let temp = add_ons_data[2];
+                        add_ons_data[2] = add_ons_data[3];
+                        add_ons_data[3] = temp;
+                    
+                    
+                    if(this.state.groupHealthPlanData.post_body.si === "400000"){
+                        
+                        for(var item in add_ons_data){
+                            if(add_ons_data[item].id === "ncb"){
+                                add_ons_data[item].checked = true;
+                                add_ons_data[item].disabled = true;
+                                add_ons_data[item].bottom_text = "This benefit is mandatory with your selected plan";
+                            }
+                        }    
+                    }
+                    
+                    
+                    add_ons_data[1].price = options;
+                    add_ons_data[1].default_premium = add_ons_data[1].price[0].premium;
+                    add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].name;
+                    
+                    groupHealthPlanData['add_ons_screen'] = add_ons_data;
+                    groupHealthPlanData['add_ons_previous_data'] = this.state.current_state;
+                    if(!isEmpty(groupHealthPlanData.previous_add_ons_data)){
+                        groupHealthPlanData.previous_add_ons_data = {}
+                    }
+                    this.setLocalProviderData(groupHealthPlanData);
+                    this.navigate('plan-select-add-ons')
+                } else {
+                    error=resultData.error || resultData.message
+                        || true;
+                }
+            } catch (err) {
+                console.log(err)
+                this.setState({
+                    show_loader: false
+                });
+                error=true;
+                errorType="crash";
+            }
+            if (error) {
+                this.setState({
+                  errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                  },
+                  showError: "page",
+                  show_loader: false
+                });
+              }
+}
+export async function getCoverPeriodData(){
+                this.setErrorData("submit");
+                this.setState({ show_loader: 'button' });
+                let error = "";
+                let errorType = "";
+                let post_body = this.state.groupHealthPlanData.post_body;
+                let groupHealthPlanData = this.state.groupHealthPlanData;
+                let type_of_plan = ''
+                
+                let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id", "si"];        
+                let body = {};
+                for(let key of allowed_post_body_keys){
+                    body[key] = post_body[key];
+                }
+                if(this.state.provider === 'RELIGARE'){
+                    body['add_ons'] = post_body.add_ons_array;
+                }
+                if(this.state.screen_name === 'cover_type_screen'){
+                    type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
+                    body['floater_type'] = this.state.premium_data_floater[this.state.selectedIndex].key;
+                }
+
+                if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
+                    body['floater_type'] = 'non_floater';
+                }
+                try {
+               
+                    const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
+                    body);
+                    
+                    var resultData = res.pfwresponse.result;
+                    
+                    if (res.pfwresponse.status_code === 200){
+                        groupHealthPlanData['cover_period_screen']  = resultData;
+                        
+                        if(this.state.screen_name === 'cover_type_screen'){
+                            groupHealthPlanData.type_of_plan = type_of_plan;
+                            groupHealthPlanData.post_body.floater_type = type_of_plan;
+                        }
+                        if(this.state.screen_name === 'add_ons_screen'){
+                            groupHealthPlanData.previous_add_ons_data = this.state.current_state;
+                        }
+                        
+                        this.setLocalProviderData(groupHealthPlanData)
+                        this.navigate('plan-select-cover-period')
+                        this.setState({
+                            show_loader: false
+                        });
+                    } else {
+                        error = resultData.error || resultData.message
+                            || true;
+                    }
+                } catch (err) {
+                    console.log(err)
+                    this.setState({
+                        show_loader: false
+                    });
+                    error = true;
+                    errorType = "crash";
+                }
+                if (error) {
+                    this.setState({
+                      errorData: {
+                        ...this.state.errorData,
+                        title2: error,
+                        type: errorType
+                      },
+                      showError: "page",
+                      show_loader: false
+                    });
+                }
+}
+
+export async function updateLead( body, quote_id, current_state) {
+
+    var groupHealthPlanData = this.state.groupHealthPlanData;
+    var current_form_data = current_state || {};
+    var prev_form_data = {}
+    if(this.state.screen_name === 'personal_details_screen' || this.state.screen_name === 'select_ped_screen'){
+        prev_form_data = groupHealthPlanData['application_data'][this.state.screen_name][`${this.state.member_key}`] || {};
+    }else{
+        prev_form_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data[this.state.screen_name] || {}: {};
+    }
+
+    var isFormDataSame = false;
+    var keys_to_check = isEmpty(Object.keys(current_form_data)) ? Object.keys(prev_form_data) : Object.keys(current_form_data)
+    isFormDataSame = compareObjects(keys_to_check, prev_form_data, current_form_data);
+
+    if(isEmpty(current_form_data) && isEmpty(prev_form_data)){
+        isFormDataSame = true;
+    }
+    
+    if(isFormDataSame){
+        this.navigate(this.state.next_state);
+        return;
+    }else{
+        if(this.state.screen_name === 'personal_details_screen' || this.state.screen_name === 'select_ped_screen'){
+            var personal_details_screen = groupHealthPlanData['application_data'][this.state.screen_name];
+            personal_details_screen[`${this.state.member_key}`] = current_form_data; 
+            groupHealthPlanData.personal_details_screen = personal_details_screen;   
+        }else{
+            groupHealthPlanData['application_data'][`${this.state.screen_name}`] = current_form_data;    
+        }
+        this.setLocalProviderData(groupHealthPlanData)
+    }   
+
     let error="";
     let errorType="";
     this.setErrorData("submit")
@@ -339,7 +850,10 @@ export async function updateLead( body, quote_id) {
          body.application_id = application_id
 
         const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
+        
         var resultData = res.pfwresponse.result;
+        
+
         this.setState({
             show_loader: false
         })
@@ -348,6 +862,10 @@ export async function updateLead( body, quote_id) {
                 skelton:false
             })
         if (res.pfwresponse.status_code === 200) {
+            groupHealthPlanData = this.state.groupHealthPlanData;
+            groupHealthPlanData.application_form_data = resultData;
+            this.setLocalProviderData(groupHealthPlanData);
+            
             if (body.pedcase) { 
                 this.initialize(); 
                 return}
@@ -359,6 +877,8 @@ export async function updateLead( body, quote_id) {
             
         } else {
             if (resultData.error && resultData.error.length > 0 && resultData.error[0]==='BMI check failed.') {
+                groupHealthPlanData['application_data'][this.state.screen_name][this.state.member_key] = {} 
+                this.setLocalProviderData(groupHealthPlanData)
                 this.setState({
                     openBmiDialog: true
                 }, () => {
@@ -383,8 +903,13 @@ export async function updateLead( body, quote_id) {
         error=true;
         errorType="crash";
     }
-    if(error)
-    {
+    if(error){
+        if(this.state.screen_name === 'personal_details_screen' || this.state.screen_name === 'select_ped_screen'){
+            groupHealthPlanData['application_data'][`${this.state.screen_name}`][this.state.member_key] = {}
+        }else{
+            groupHealthPlanData['application_data'][`${this.state.screen_name}`] = {}
+        }
+        this.setLocalProviderData(groupHealthPlanData);
         this.setState({
             errorData: {
               ...this.state.errorData,
@@ -399,10 +924,7 @@ export async function updateLead( body, quote_id) {
 export function navigate(pathname, data = {}) {
 
     if ((this.props.edit || data.edit) && ['select_ped_screen', 'is_ped'].indexOf(this.state.screen_name) === -1) {
-        this.props.history.replace({
-            pathname: pathname,
-            search: getConfig().searchParams
-        });
+        this.props.history.goBack();
     } else {
         this.props.history.push({
             pathname: pathname,
@@ -462,10 +984,14 @@ export async function resetQuote() {
         if (res.pfwresponse.status_code === 200) {
             
             let next_state = `/group-insurance/group-health/${this.state.provider}/insure-type`;
+            var groupHealthPlanData = this.state.groupHealthPlanData || {};
             if(this.state.provider === 'GMC'){
-                var groupHealthPlanData = this.state.groupHealthPlanData || {};
                 groupHealthPlanData['goodHDec'] = false;
                 this.setLocalProviderData(groupHealthPlanData)
+            }
+            if(!isEmpty(groupHealthPlanData.application_data)){
+              groupHealthPlanData.application_data = {};
+              this.setLocalProviderData(groupHealthPlanData)
             }
             this.navigate(next_state);
             this.setState({
