@@ -16,6 +16,7 @@ import {
   formatAmountInr,
 } from "../../../../utils/validators";
 import "./Checkout.scss";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 class Checkout extends Component {
   constructor(props) {
@@ -155,6 +156,7 @@ class Checkout extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next')
     let { fundsData, type, investType } = this.state;
     let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (fundsData.length === 0 || allowedFunds.length === 0) {
@@ -238,6 +240,26 @@ class Checkout extends Component {
     storageService().set("diystore_cartCount", cartCount);
   };
 
+  sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "your mutual fund plan",
+        "user_action": userAction || "",
+        "amount_selected": this.state.fundsData[0]?.amount || "",
+        "order_type": this.state.investType || "",
+        "scheme_type": this.state.fundsData[0]?.growth_or_dividend || "",
+        "category_name": "",
+        "fund_name": this.state.fundsData[0]?.name || "",
+        "flow": this.state.type || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
   render() {
     let {
       form_data,
@@ -254,6 +276,7 @@ class Checkout extends Component {
     if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         skelton={this.state.show_loader}
         buttonTitle={ctc_title}
         handleClick={this.handleClick}

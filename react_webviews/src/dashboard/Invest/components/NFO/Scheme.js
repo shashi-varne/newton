@@ -3,6 +3,7 @@ import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import { nfoData } from "../../constants";
 import './Scheme.scss';
+import { nativeCallback } from "../../../../utils/native_callback";
 
 class NfoScheme extends Component {
   constructor(props) {
@@ -14,15 +15,34 @@ class NfoScheme extends Component {
   }
 
   handleClick = (value) => {
+    this.sendEvents('next', value)
     this.props.history.push({
       pathname: `${value}/funds`,
       search: getConfig().searchParams,
     });
   };
 
+  sendEvents = (userAction, value) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "select scheme type",
+        "user_action": userAction || "",
+        "scheme_type": value || "",
+        "flow": "nfo"
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         noFooter={true}
         title="Select Scheme"

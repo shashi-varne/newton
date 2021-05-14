@@ -12,6 +12,7 @@ import { getConfig } from "../../../../utils/functions";
 import toast from "../../../../common/ui/Toast";
 import { isEmpty } from "../../../../utils/validators";
 import "./Funds.scss";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 class NfoFunds extends Component {
   constructor(props) {
@@ -66,11 +67,13 @@ class NfoFunds extends Component {
   };
 
   handleClick = (fund) => () => {
+    this.sendEvents('next', fund.amfi)
     storageService().setObject("nfo_detail_fund", fund);
     this.navigate("/advanced-investing/new-fund-offers/funds/checkout");
   };
 
   detailView = (fund) => {
+    this.sendEvents("next",fund.amfi)
     storageService().setObject("nfo_detail_fund", fund);
     this.props.history.push(
       {
@@ -82,11 +85,30 @@ class NfoFunds extends Component {
       }
     );
   };
+  
+  sendEvents = (userAction, fundNo) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "select scheme",
+        "user_action": userAction || "",
+        "scheme_type": this.state.scheme || "",
+        "flow": "nfo",
+        "fund number": fundNo || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let { nfoFunds } = this.state;
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         skelton={this.state.show_loader}
         noFooter={true}
         title="NFO Funds"
