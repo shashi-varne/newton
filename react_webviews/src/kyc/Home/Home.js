@@ -106,6 +106,11 @@ const Home = (props) => {
         return;
       }
 
+      if (pan.length > 10) {
+        setPanError("Maximum length is 10");
+        return;
+      }
+
       if (!validatePan(pan)) {
         setPanError("Invalid PAN number");
         return;
@@ -185,7 +190,15 @@ const Home = (props) => {
   };
 
   const handleChange = (event) => {
-    let value = event.target ? event.target.value.trim() : event;
+    let target = event.target;
+    let value = target ? target.value.trim() : event;
+    let limit = target?.maxLength;
+
+    // added event listener to remove the character after limit is reached
+    if (value.length > limit) {
+      return
+    }  
+     
     setPan(value);
     if (value) setPanError("");
     else setPanError("This is required");
@@ -369,6 +382,7 @@ const Home = (props) => {
               error={panError ? true : false}
               helperText={panError || ""}
               onChange={handleChange}
+              minLenth={10}
               maxLength={10}
               type="text"
               disabled={showLoader}

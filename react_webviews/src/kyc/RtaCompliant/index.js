@@ -165,6 +165,7 @@ const RtaCompliantPersonalDetails = (props) => {
                 helperText={form_data.mobile_error || ""}
                 onChange={handleChange("mobile")}
                 maxLength={10}
+                inputMode="numeric"
                 type="text"
               />
             )}

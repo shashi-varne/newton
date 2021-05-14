@@ -52,6 +52,7 @@ const Pan = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
+  const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
   const [showLoader, setShowLoader] = useState(false)
   const {kyc, isLoading} = useUserKycHook();
@@ -126,8 +127,14 @@ const Pan = (props) => {
 
   const handleSubmit = async () => {
     try {
+      const data = {};
+      if (kyc.kyc_status !== 'compliant' && kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null) {
+        if (kyc.all_dl_doc_statuses.pan_fetch_status === null || kyc.all_dl_doc_statuses.pan_fetch_status === '' || kyc.all_dl_doc_statuses.pan_fetch_status === 'failed') {
+          data.kyc_flow =  'dl';
+        }
+      }
       setIsApiRunning("button")
-      const result = await upload(file, 'pan')
+      const result = await upload(file, 'pan', data);
       storageService().setObject(storageConstants.KYC, result.kyc)
       if (
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
@@ -136,7 +143,7 @@ const Pan = (props) => {
         setSubTitle(
           'Photo of PAN should be clear and it should not have the exposure of flash light'
         )
-        setSubTitle('PAN mismatch!')
+        setTitle('PAN mismatch!')
       } else {
         if (
           result.kyc.kyc_status !== 'compliant' &&
@@ -177,7 +184,7 @@ const Pan = (props) => {
           </div>
           <Alert
             variant="attention"
-            title={'Note'}
+            title={title}
             message={subTitle}
             renderMessage={
               !subTitle ? () => <MessageComponent kyc={kyc} /> : null
