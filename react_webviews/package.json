@@ -112,7 +112,7 @@
   },
   "scripts": {
     "start": "NODE_PATH=./src node scripts/start.js",
-    "build": "NODE_PATH=./src node scripts/build.js",
+    "build": "NODE_PATH=./src node --max_old_space_size=2000 scripts/build.js",
     "test": "NODE_PATH=./src node scripts/test.js --env=jsdom"
   },
   "jest": {
