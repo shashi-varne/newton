@@ -7,43 +7,41 @@ class DetailsCard extends Component {
             <div className="details-card-container" onClick={() => this.props.handleClick(item)} style={{backgroundColor: item.backgroundColor}}>
                 
                 <div className="status-bar">
-                    <div className="status-container">
+                    {item.topTextLeft && <div className="status-container">
                         <p className="status-circle" style={{backgroundColor: item.color}}></p>
                         <p className="status-text" style={{color: item.color}}>{item.topTextLeft}</p>
                     </div>
-                    <p className="status-bar-right" style={{color: item.topTextRightColor}}>{item.topTextRight}</p>
+                    }
+                    {
+                        item.topTextRight && <p className="status-bar-right" style={{color: item.topTextRightColor}}>{item.topTextRight}</p>
+                    }
                 </div>
 
                 <div className="heading-container">
                     <div className="heading-left">
-                        <p className="heading-title">{item.headingTitle}</p>
-                        <p className="heading-subtitle">{item.headingSubtitle}</p>
+                        {
+                            item.headingTitle && <p className="heading-title">{item.headingTitle}</p>
+                        }
+                        {
+                            item.headingSubtitle && <p className="heading-subtitle">{item.headingSubtitle}</p>
+                        }
+                        
                     </div>
-                    <img alt="product-icon" src={`${item.headingLogo}`}/>
+                    {
+                        item.headingLogo && <img alt="product-icon" src={`${item.headingLogo}`}/>
+                    }
                 </div>
 
-                <div className="card-info-one">
-                    <div className="info-left">
-                        <p className="info-title">{item.line1TitleLeft}</p>
-                        <p className="info-subtitle">{item.line1SubtitleLeft}</p>
-                    </div>
-                    <div className="info-right">
-                        <p className="info-title">{item.line1TitleRight}</p>
-                        <p className="info-subtitle">{item.line1SubtitleRight}</p>
-                    </div>
+                <div className="card-bottom-info">
+                    {
+                        item.bottomValues.map( (val, index) =>(
+                            <div className="individual-card-info" key={index}>
+                                <p className="info-title">{val.title}</p>
+                                <p className="info-subtitle">{val.subtitle}{val.postfix && <span>{val.postfix}</span>}  </p>
+                            </div>
+                        ))
+                    }
                 </div>
-
-                <div className="card-info-one">
-                    <div className="info-left">
-                        <p className="info-title">{item.line2TitleLeft}</p>
-                        <p className="info-subtitle capitalize">{item.line2SubtitleLeft}</p>
-                    </div>
-                    <div className="info-right">
-                        <p className="info-title">{item.line2TitleRight}</p>
-                        <p className="info-subtitle">{item.line2SubtitleRight}</p>
-                    </div>
-                </div>
-                
             </div>
         )
     }

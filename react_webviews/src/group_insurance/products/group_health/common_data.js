@@ -1,4 +1,5 @@
 import { storageService, inrFormatDecimal, getEditTitle, compareObjects } from 'utils/validators';
+import React from 'react'
 import { getConfig, 
     // isFeatureEnabled
  } from 'utils/functions';
@@ -6,7 +7,7 @@ import { ghGetMember, getCssMapperReport } from '../../constants';
 import Api from 'utils/api';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
-import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter} from '../../../utils/validators';
+import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter, capitalize} from '../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 import {TitleMaper, reportsfrequencyMapper, reportTopTextMapper, reportCoverAmountValue} from '../../../group_insurance/constants'
@@ -1360,7 +1361,7 @@ export function setReportData(termData, group_insurance_policies, health_insuran
     var activeReports = sortArrayOfObjectsByTime(filteredReportData.activeReports, 'dt_updated_cmp');
     var pendingReports = sortArrayOfObjectsByTime(filteredReportData.pendingReports, 'dt_updated_cmp');
     var inactiveReports = sortArrayOfObjectsByTime(filteredReportData.inactiveReports, 'dt_updated_cmp');
-    filteredReportData = {activeReports , pendingReports, inactiveReports}
+    filteredReportData = {activeReports, pendingReports, inactiveReports}
     var bracketColor = this.state.productName === 'fisdom' ? '#A998D2' : '#94C5FF'
     for(var x in filteredReportData){
         var tabData = filteredReportData[x];
@@ -1373,18 +1374,10 @@ export function setReportData(termData, group_insurance_policies, health_insuran
                 //data
                 ...y,
                 topTextLeft: y.cssMapper.disc, 
-                topTextRight:  y.product_category,
+                topTextRight:  (y.product_category && y.product_category.toUpperCase()) || '',
                 headingTitle:  capitalizeFirstLetter(y.product_title),
                 headingSubtitle: y.company_name,
                 headingLogo: y.logo,
-                line1TitleLeft: "COVER AMOUNT",
-                line1SubtitleLeft: reportCoverAmountValue(y.sum_assured),
-                line1TitleRight: "PREMIUM AMOUNT", 
-                line1SubtitleRight: inrFormatDecimal(y.premium) + `${reportsfrequencyMapper(provider,frequency,y.product_key)}`,
-                line2TitleLeft: "Policy issued to",
-                line2SubtitleLeft: y.name,
-                line2TitleRight: "Valid upto",
-                line2SubtitleRight: !y.dt_policy_end ? 'Not available' : y.dt_policy_end.replace(/-/g, '/'),
                 status: y.status,
                 key: provider,
                 //css
@@ -1392,6 +1385,27 @@ export function setReportData(termData, group_insurance_policies, health_insuran
                 color: y.cssMapper.color,
                 topTextRightColor: bracketColor
             }
+
+            var bottomValues = [
+             {
+                'title': 'COVER AMOUNT',
+                'subtitle': reportCoverAmountValue(y.sum_assured),
+            },
+            {
+                'title': 'PREMIUM AMOUNT',
+                'subtitle': inrFormatDecimal(y.premium),
+                'postfix': <span className="details-card-postfix">{reportsfrequencyMapper(provider,frequency,y.product_key)}</span>
+            },
+            {
+                'title': 'Policy issued to',
+                'subtitle': capitalize(y.name),
+            },
+            {
+                'title': 'Valid upto',
+                'subtitle': !y.dt_policy_end ? 'Not available' : y.dt_policy_end.replace(/-/g, '/'),
+            },
+            ]
+            temp.bottomValues = bottomValues; 
             reports.push(temp);
         }
         filteredReportData[x] = reports;
@@ -1412,7 +1426,8 @@ export function setReportData(termData, group_insurance_policies, health_insuran
       filteredReportData,
       termRedirectionPath: fullPath,
       reportTopText,
-      bracketColor
+      bracketColor, 
+      tabIndex: 0
     })
   }
 

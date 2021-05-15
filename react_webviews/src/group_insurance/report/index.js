@@ -2,14 +2,32 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import {storageService} from "utils/validators";
 import Api from 'utils/api';
+import SwipeableViews from "react-swipeable-views";
 import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { capitalizeFirstLetter } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { TitleMaper , ProviderName, reportTopTextMapper} from '../constants';
-import DetailsCard from '../../common/ui/DetailsCard';
-import { Fragment } from 'react';
+
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from "@material-ui/core/Typography";
 import {getReportCardsData, setReportData, getProviderObject, getProviderObject_offline} from '../products/group_health/common_data';
+import PropTypes from "prop-types";
+import RenderReports from './renderReports';
+import { isEmpty } from '../../utils/validators';
+function TabContainer({ children, dir }) {
+  return (
+    <Typography component="div" dir={dir}>
+      {children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+  dir: PropTypes.string.isRequired,
+};
 
 var healthkeyMapper = {
   'hdfc_ergo': 'HDFCERGO',
@@ -17,7 +35,7 @@ var healthkeyMapper = {
    'star': 'STAR', 
    'care_plus': 'GMC'
 }
-var topTextMapper = {
+var emptyStateText = {
   'activeReports': 'No active policy',
   'pendingReports': 'No pending application',
   'inactiveReports': 'No inactive policy'
@@ -82,15 +100,29 @@ class Report extends Component {
     this.onload();
   }
 
+  componentDidUpdate(){
+    //updating tabview height dynamically
+    // document.getElementsByClassName('ContainerWrapper')[0].style.over
+    var tabContainer = document.getElementsByClassName('tab-wrapper')[0];
+    var tabs = tabContainer.childNodes[0].childNodes;
+    var {tabIndex = 0} = this.state;
+    var tabsMap = ['activeReports', 'pendingReports', 'inactiveReports']
+    var mainTab = document.getElementById('tab-wrapper');
+    if(!isEmpty(this.state.filteredReportData) && this.state.filteredReportData[tabsMap[tabIndex]].length){
+      for( var i = 0; i < tabs.length; i++){
+        mainTab.style.height = `${tabs[tabIndex].firstChild.offsetHeight + 10}px`;
+      }
+    }else{
+      mainTab.style.height = `${document.getElementsByClassName('MuiTypography-root')[0].offsetHeight + 60}px`;
+    }
+  }
+
   onload = () =>{
     this.getReportCardsData();
   }
 
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.onScroll, false);
-  }
-
   componentWillMount() {
+    window.removeEventListener("scroll", this.onScroll, false);
     nativeCallback({ action: 'take_control_reset' });
   }
 
@@ -199,32 +231,34 @@ class Report extends Component {
     }
   };
 
-  selectTab = (selectedTab) =>{
-    var target = document.getElementById(`${selectedTab}`);
-    if(target){
-      target.classList.add('active');
-      var tabs = document.querySelectorAll('[data-tab-target]')
-      tabs.forEach((tab) =>{
-        if(tab.id !== selectedTab){
-          tab.classList.remove('active');
-        }
-      })
-      this.sendEvents('policy_type_switched', '', '', '', selectedTab)
-      var filteredReportData = this.state.filteredReportData;
-      var selectedReports = filteredReportData[selectedTab]
-      var reportTopText = reportTopTextMapper[selectedTab];
-      this.setState({selectedReports, selectedTab, reportTopText })
-    }
-  }
-
   toAdvisory = () =>{
     storageService().remove('advisory_from_landing');
     this.navigate('/group-insurance/advisory/landing');
     return;
   }
 
+  setSwipe = (index) =>{
+    var tabsMap = ['activeReports', 'pendingReports', 'inactiveReports']
+    var selectedTab = tabsMap[index]
+    this.sendEvents('policy_type_switched', '', '', '', selectedTab)
+    var filteredReportData = this.state.filteredReportData;
+    var selectedReports = filteredReportData[selectedTab]
+    var reportTopText = reportTopTextMapper[selectedTab];
+    
+    this.setState({selectedReports, selectedTab, reportTopText, tabIndex: index })
+  }
+
+  handleChangeIndex = (event, index) => {
+    this.setSwipe(index);    
+  };
+
+  handleChangeSwipe =(index) =>{
+    this.setSwipe(index);
+  }
   render() {
     var reportCount = this.state.reportCount;
+    if(this.state.filteredReportData)
+    var {activeReports, pendingReports, inactiveReports} = this.state.filteredReportData;
     return (
       <Container
         noFooter={true}
@@ -233,40 +267,60 @@ class Report extends Component {
         showLoader={this.state.show_loader}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        classOverRideContainer="report"
+        classOverRide="report-list-page"
         skelton={this.state.skelton}
       >
-        <div className="insurance-common-report-page">
-          <ul className="report-list-tab-container">
-            <li className="active" onClick={()=>this.selectTab('activeReports')} id="activeReports" data-tab-target="tab-element" >Active<span style={{ color: this.state.selectedTab === 'activeReports' ? this.state.bracketColor : '' }}>({reportCount && reportCount.active})</span></li>
-            <li onClick={()=>this.selectTab('pendingReports')} id="pendingReports" data-tab-target="tab-element">Pending<span style={{ color: this.state.selectedTab === 'pendingReports' ? this.state.bracketColor : '' }}>({reportCount && reportCount.pending})</span></li>
-            <li onClick={()=>this.selectTab('inactiveReports')} id="inactiveReports" data-tab-target="tab-element">Inactive<span style={{ color: this.state.selectedTab === 'inactiveReports' ? this.state.bracketColor : '' }}>({reportCount && reportCount.inactive})</span></li>
-          </ul>
-      
-          <div className="insurance-cards-container">
-            
-            {this.state.selectedReports && this.state.selectedReports.length > 0 ?
+          <div className="insurance-common-report-page">
 
-              <div>
-                <p className="report-top-text">{this.state.reportTopText}</p>
-              {this.state.selectedReports.map((report, index) =>(
-                  <DetailsCard key={index} handleClick={this.redirectCards} item={report}/>
-              ))}
-              </div>
-              : (
-                <Fragment>
-                <img className="inactive-policy-background" alt="empty-policy-background" src={require(`assets/${this.state.productName}/inactive-policy-background.svg`)}/>
-                <p className="empty-state-text"> {topTextMapper[this.state.selectedTab]} </p>
+            <ul className="report-list-tab-container">
 
-                {this.state.selectedTab === 'activeReports' ? (
-                  <p className="advisory-link" onClick={() => this.toAdvisory()}>
-                    CHECK THE RIGHT COVERAGE
-                  </p>
-                ): null}
-                </Fragment>
-              )
-            }
-          </div>
+            <Tabs value={this.state.tabIndex}  onChange={this.handleChangeIndex} className="tab-swipe">
+              <Tab className="individual-tab" label={
+                <li className={`${this.state.tabIndex === 0 ? "selected" : ""}`} onClick={()=>this.handleChangeIndex(0)} >
+                  Active<span style={{ color: this.state.selectedTab === 'activeReports' ? this.state.bracketColor : '' }}>({reportCount && reportCount.active})</span>
+                </li>
+              } />
+              <Tab className="individual-tab" label={
+                <li className={`${this.state.tabIndex === 1 ? "selected" : ""}`} onClick={()=>this.handleChangeIndex(1)} >
+                 Pending<span style={{ color: this.state.selectedTab === 'pendingReports' ? this.state.bracketColor : '' }}>({reportCount && reportCount.pending})</span>
+               </li>
+              } />
+              <Tab className="individual-tab" label={
+                <li
+                className={`${this.state.tabIndex === 2 ? "selected" : ""}`}
+                onClick={()=>this.handleChangeIndex(2)}  
+                >
+                 Inactive<span style={{ color: this.state.selectedTab === 'inactiveReports' ? this.state.bracketColor : '' }}>({reportCount && reportCount.inactive})</span>
+               </li>
+              } />
+            </Tabs>
+            </ul>
+
+            <SwipeableViews
+              ref={this.swipeableViewsRef}
+              index={this.state.tabIndex}
+              onChangeIndex={this.handleChangeSwipe}
+              action={actions => {this.swipeableActions = actions;}}
+              className="tab-wrapper"
+              id="tab-wrapper"
+              enableMouseEvents
+             >
+              <TabContainer dir={"ltr"}>
+              <RenderReports redirectCards={this.redirectCards} topText={reportTopTextMapper['activeReports']} bottomText={emptyStateText['activeReports']} reports={activeReports}/>
+              {
+                activeReports && activeReports.length === 0 && <p className="advisory-link" onClick={() => this.toAdvisory()}>
+                CHECK THE RIGHT COVERAGE
+                </p>
+              }
+              </TabContainer>
+              <TabContainer dir={"ltr"}>
+                  <RenderReports redirectCards={this.redirectCards} topText={reportTopTextMapper['inactiveReports']} bottomText={emptyStateText['pendingReports']} reports={pendingReports}/>
+              </TabContainer>
+              <TabContainer dir={"ltr"}>
+                  <RenderReports redirectCards={this.redirectCards} topText={reportTopTextMapper['pendingReports']} bottomText={emptyStateText['inactiveReports']} reports={inactiveReports}/>
+              </TabContainer>
+
+            </SwipeableViews>
         </div>
       </Container>
     );

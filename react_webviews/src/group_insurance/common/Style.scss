@@ -533,20 +533,43 @@
   }
 }
 .insurance-common-report-page{
+  font-family: 'Rubik', sans-serif;
+  .tab-wrapper{
+    margin: 0 -20px;
+    height: 50%;
+    overflow: hidden;
+  }
   margin-top: -20px;
+  .MuiTypography-root{
+    padding: 0 -20px !important;
+  }
 .report-list-tab-container{
   background-color: white;
   list-style-type: none;
-  padding: 30px 0 0 0;
-  margin: 0 -20px 20px -20px;
+  padding: 0;
+  font-family: 'Rubik', sans-serif;
+  margin: 30px -20px 20px -20px;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #D6D6D6;
   cursor: pointer;
-  
+
+  .tab-swipe{
+    padding-top: 0;
+    .MuiTabs-indicator{
+      background-color: var(--primary);
+    }
+    width: 100%;
+    border-bottom: 1px solid #D6D6D6;
+    .individual-tab{
+      margin: 0;
+      flex: 1;
+    }
+  }
   li{
+    text-transform: capitalize;
     flex: 1;
     text-align: center;
+    font-family: 'Rubik', sans-serif;
     padding-bottom: 20px;
     color: #161A2E;
     font-size: 13px;
@@ -556,8 +579,8 @@
       margin-left: 3px;
     }
   }
-  li.active{
-    border-bottom: 2px solid var(--primary);
+  li.selected{
+    display: flex;font-family: 'Rubik', sans-serif;
     color: var(--primary);
     font-weight: 700;
     span{
@@ -586,8 +609,10 @@
 .report-top-text{
   text-align: left;
   color: #767E86;
-  margin: 20px 0 30px 0;
+  font-family: 'Rubik', sans-serif;
+  margin: 0 0 30px 0;
   font-size: 13px;
+  margin: 0 20px 30px 20px;
 }
 }
 .report-detail-header {
