@@ -238,14 +238,15 @@ class Report extends Component {
   }
 
   setSwipe = (index) =>{
-    var tabsMap = ['activeReports', 'pendingReports', 'inactiveReports']
-    var selectedTab = tabsMap[index]
-    this.sendEvents('policy_type_switched', '', '', '', selectedTab)
-    var filteredReportData = this.state.filteredReportData;
-    var selectedReports = filteredReportData[selectedTab]
-    var reportTopText = reportTopTextMapper[selectedTab];
-    
-    this.setState({selectedReports, selectedTab, reportTopText, tabIndex: index })
+    if(index !== undefined){
+      var tabsMap = ['activeReports', 'pendingReports', 'inactiveReports']
+      var selectedTab = tabsMap[index]
+      this.sendEvents('policy_type_switched', '', '', '', selectedTab)
+      var filteredReportData = this.state.filteredReportData;
+      var selectedReports = filteredReportData[selectedTab]
+      var reportTopText = reportTopTextMapper[selectedTab];
+      this.setState({selectedReports, selectedTab, reportTopText, tabIndex: index })
+    }
   }
 
   handleChangeIndex = (event, index) => {
@@ -255,6 +256,7 @@ class Report extends Component {
   handleChangeSwipe =(index) =>{
     this.setSwipe(index);
   }
+
   render() {
     var reportCount = this.state.reportCount;
     if(this.state.filteredReportData)
