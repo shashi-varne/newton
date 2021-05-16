@@ -25,8 +25,7 @@ import RiskModify from "./components/RiskPages/RiskModify";
 import RiskCustomize from "./components/RiskPages/RiskCustomize";
 import HowWeRecommend from "../Recommendation/HowWeRecommend";
 
-import { isIframe } from 'utils/functions';
-import { getConfig } from "utils/functions";
+import { isIframe, getConfig } from 'utils/functions';
 
 const Invest = (props) => {
   const { url } = props.match;

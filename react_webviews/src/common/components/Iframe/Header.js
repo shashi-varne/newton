@@ -7,7 +7,7 @@ import SVG from 'react-inlinesvg';
 import back_arrow from 'assets/iframe_back.svg';
 import close_icn from 'assets/iframe_close.svg';
 import '../../theme/Style.scss';
-import './style.scss';
+import './Header.scss';
 import { getConfig } from 'utils/functions';
 const headerIconMapper = {
   back: back_arrow,
@@ -17,32 +17,14 @@ const logo = getConfig().logo;
 const partnerCode = getConfig().partner_code;
 const partnerPrimaryColor = getConfig().styles.primaryColor;
 const isMobileDevice = getConfig().isMobileDevice;
-const Header = ({
-  classes,
-  title,
-  count,
-  total,
-  current,
-  goBack,
-  edit,
-  type,
-  resetpage,
-  handleReset,
-  smallTitle,
-  disableBack,
-  provider,
-  inPageTitle,
-  force_hide_inpage_title,
-  topIcon,
-  handleTopIcon,
-  className,
-  style,
-  headerData = {},
-  new_header,
-}) => {
-
+const Header = ({ classes, goBack, disableBack, headerData = {} }) => {
   return (
-    <AppBar position='fixed' color='primary' classes={{ root: classes.root }} className='IframeHeader'>
+    <AppBar
+      position='fixed'
+      color='primary'
+      classes={{ root: classes.root }}
+      className='IframeHeader'
+    >
       <Toolbar classes={{ root: classes.toolbarRoot }}>
         <div
           className='iframe-top-action-button'
@@ -52,7 +34,12 @@ const Header = ({
         >
           {!disableBack && !headerData.hide_icon && (
             <SVG
-              preProcessor={(code) => code.replace(/stroke=".*?"/g, isMobileDevice ? `stroke=${partnerPrimaryColor}` : 'stroke=white')}
+              preProcessor={(code) =>
+                code.replace(
+                  /stroke=".*?"/g,
+                  isMobileDevice ? `stroke=${partnerPrimaryColor}` : 'stroke=white'
+                )
+              }
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
             />
           )}
@@ -60,20 +47,23 @@ const Header = ({
             <Close />
           )}
         </div>
-        {
-          !isMobileDevice &&
+        {!isMobileDevice && (
           <div>
-            <img src={require(`assets/${logo}`)} className={classes.img} alt='moneycontrol' height={50}/>
+            <img
+              src={require(`assets/${logo}`)}
+              className={classes.img}
+              alt='partnerLogo'
+              height={50}
+            />
           </div>
-        }
-        {
-          partnerCode === 'moneycontrol' && !isMobileDevice ?
+        )}
+        {partnerCode === 'moneycontrol' && !isMobileDevice ? (
           <div>
-          <img src={require(`assets/finity_white_logo_2.png`)} alt='' />
-        </div>
-        :
-        <div/>
-        }
+            <img src={require(`assets/finity_white_logo_2.png`)} alt='' />
+          </div>
+        ) : (
+          <div />
+        )}
       </Toolbar>
     </AppBar>
   );
@@ -82,9 +72,9 @@ const Header = ({
 const styles = {
   root: {
     flexGrow: 1,
-    height: isMobileDevice ? '56px': '80px',
+    height: isMobileDevice ? '56px' : '80px',
     boxShadow: 'none',
-    backgroundColor: isMobileDevice ? 'white' : `${partnerPrimaryColor} !important`
+    backgroundColor: isMobileDevice ? 'white' : `${partnerPrimaryColor} !important`,
   },
   flex: {
     flex: 1,

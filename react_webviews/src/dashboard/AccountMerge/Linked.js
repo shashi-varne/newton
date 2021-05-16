@@ -10,23 +10,21 @@ const AccountLinked = (props) => {
   const navigate = navigateFunc.bind(props);
   const config = getConfig();
   const productName = config.productName;
-  const code = config.code;
   const handleClick = () => {
     if (config.Web) {
-      if (isIframe()) {
-        // handle Iframe
-      } else {
-        navigate("/logout");
-      }
+      navigate("/logout");
     } else {
       nativeCallback({ action: "session_expired" });
     }
   };
 
-  const hideImage =
-    isIframe() && code === "moneycontrol" && config.isMobileDevice;
+  const hideImage = isIframe() && !config.isMobileDevice;
   return (
-    <Container buttonTitle="CLOSE" hidePageTitle handleClick={handleClick}>
+    <Container
+      buttonTitle="CLOSE"
+      hidePageTitle handleClick={handleClick}
+      iframeRightContent={require(`assets/${productName}/account_linked.svg`)}
+    >
       <div className="account-merge-linked">
         {!hideImage && (
           <div className="outline">

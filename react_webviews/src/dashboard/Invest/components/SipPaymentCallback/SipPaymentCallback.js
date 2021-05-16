@@ -179,7 +179,7 @@ const SipPaymentCallback = (props) => {
               <div>Units will be allotted by next working day</div>
             </div>
             {
-              true && 
+              config.partner_code === 'moneycontrol' && 
               <div className='important-message'>
               <div className='info-icon'>
                 <img src={require(`assets/${config.productName}/info_icon.svg`)} alt="" />
@@ -198,7 +198,6 @@ const SipPaymentCallback = (props) => {
         )}
         {paymentError && (
           <div className={`content ${iframe && 'content-iframe-style'}`}>
-            {/* <div className="title">Payment failed</div> */}
           {
             !hideImage &&
             <Imgc

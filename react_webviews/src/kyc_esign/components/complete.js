@@ -3,13 +3,13 @@ import { getConfig, isIframe } from "utils/functions";
 
 const Complete = ({ navigateToReports, dl_flow, show_note }) => {
   const productName = getConfig().productName;
-  const iframe = isIframe();
+  const hideImage = isIframe() && !getConfig().isMobileDevice;
 
   return (
     <div className="kyc-esign-complete">
       <header>
         {
-          !iframe && 
+          hideImage &&
           <img
           src={require(`assets/${productName}/ic_process_done.svg`)}
           alt=""

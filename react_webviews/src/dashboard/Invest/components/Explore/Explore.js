@@ -20,33 +20,33 @@ import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
 import isEmpty from 'lodash/isEmpty';
 import './Explore.scss';
 
+const iframe = isIframe();
 export const exploreMFMappings = [
   {
     title: 'Equity',
     description: 'Invest in large, mid and small-sized companies',
-    src: isIframe() ? equity_icon : diy_equity_icon,
+    src: iframe ? equity_icon : diy_equity_icon,
   },
   {
     title: 'Debt',
     description: 'Stable returns with bonds and securities',
-    src: isIframe() ? debt_icon : diy_debt_icon,
+    src: iframe ? debt_icon : diy_debt_icon,
   },
   {
     title: 'Hybrid',
     description: 'Perfect balance of equity and debt',
-    src: isIframe() ? hybrid_icon : diy_hybrid_icon,
+    src: iframe ? hybrid_icon : diy_hybrid_icon,
   },
   {
     title: 'Goal Oriented',
     description: 'Align investments with your life goals',
-    src: isIframe() ? goal_icon : diy_goal_icon,
+    src: iframe ? goal_icon : diy_goal_icon,
   },
 ]
 const partnerCode = getConfig().partner_code;
 
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
-  const iframe = isIframe();
   useEffect(() => {
     storageService().remove(FUNDSLIST)
     storageService().remove(CART)
@@ -67,7 +67,6 @@ const InvestExplore = (props) => {
       setLoader(false)        
     } catch (err) {
       setLoader(false)
-      console.log('the error is', err)
     }
   }
   const navigate = navigateFunc.bind(props)
@@ -89,7 +88,7 @@ const InvestExplore = (props) => {
       title="Explore All Mutual Funds"
       classOverRideContainer="pr-container"
       handleClick={goNext}
-      skelton={false}
+      skelton={loader}
       rightIcon="search"
       handleTopIcon={handleRightIconClick}
       disableBack={iframe && partnerCode === 'moneycontrol'}

@@ -14,7 +14,7 @@ import './common/theme/Style.scss';
 import "./common/ui/style.scss";
 import { getConfig, isIframe } from './utils/functions';
 $(document).ready(function () {
-  if(isIframe()){
+  if(isIframe()) {
     let bodyElement =  document.getElementsByTagName('body');
     bodyElement[0].classList.add('IframeBody');
   }

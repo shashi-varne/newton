@@ -20,14 +20,10 @@ const KycUploadDocuments = (props) => {
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
-<<<<<<< HEAD
-  const {kyc, isLoading} = useUserKycHook();
   const navigate = navigateFunc.bind(props);
   const productName = getConfig().productName;
   const iframe = isIframe();
-=======
   const {kyc, isLoading, setKycToSession} = useUserKycHook();
->>>>>>> 91b266d5aca845fbe4e125a70998fc3b3e6f78c0
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
   const isWeb = getConfig().Web;

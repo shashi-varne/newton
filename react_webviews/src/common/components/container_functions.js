@@ -154,29 +154,9 @@ export function commonRender(props_base) {
                     iframe &&
                     <IframeHeader
                         disableBack={this.props.disableBack}
-                        title={this.props.title}
-                        smallTitle={this.props.smallTitle}
-                        provider={this.props.provider}
-                        count={this.props.count}
-                        total={this.props.total}
-                        current={this.props.current}
-                        edit={this.props.edit}
-                        noBack={this.props.noBack}
                         type={getConfig().productName}
-                        resetpage={this.props.resetpage}
-                        handleReset={this.props.handleReset}
-                        topIcon={this.props.topIcon || this.props.rightIcon}
-                        handleTopIcon={this.handleTopIcon}
-                        inPageTitle={this.state.inPageTitle}
-                        force_hide_inpage_title={this.state.force_hide_inpage_title}
-                        style={this.props.styleHeader}
-                        className={this.props.classHeader}
                         headerData={this.props.headerData}
-                        new_header={this.state.new_header || this.state.project === 'help'}
                         goBack={this.headerGoBack || this.historyGoBack}
-                        filterPage={this.props.filterPage}
-                        handleFilter={this.props.handleFilter} 
-                        hideBack={this.props.hideBack}
                     />
                 }
                 {/* Below Header Block */}
@@ -319,11 +299,8 @@ export function check_hide_header_title() {
 
 export function getHeightFromTop() {
     const Container = !iframe || isMobileDevice ? 'Container' : 'IframeContainer';
-    console.log("container is", Container);
     var el = document.getElementsByClassName(Container)[0];
-    console.log("el is", el);
     var height = el.getBoundingClientRect().top;
-    console.log("height is", height);
     return height;
 }
 

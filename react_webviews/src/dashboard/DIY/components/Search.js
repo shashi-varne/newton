@@ -20,7 +20,6 @@ const Search = (props) => {
   const iframe = isIframe();
 
   const handleChange = (event) => {
-    console.log("hello");
     let value = event.target.value || "";
     setValue(value);
     if (!value) setShowErrorMessage(false);
@@ -125,7 +124,7 @@ const Search = (props) => {
                 {fundResult.map((fund, index) => {
                   return (
                     <div
-                    key={index}
+                      key={index}
                       className="text"
                       onClick={() => showFundInfo(fund)}
                     >
