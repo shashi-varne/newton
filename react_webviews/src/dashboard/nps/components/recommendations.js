@@ -275,6 +275,10 @@ class Recommendations extends Component {
     let result = await this.getInvestmentData(data, true);
 
     if (result) {
+      const partnerCode = getConfig().partner_code;
+      if(partnerCode) {
+        storageService().set("partner", partnerCode)
+      }
       let pgLink = result.investments.pg_link;
 
       let plutus_redirect_url = encodeURIComponent(
