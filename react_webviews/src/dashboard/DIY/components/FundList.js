@@ -167,11 +167,11 @@ const FundList = (props) => {
           ? {
               "screen_name": "fund list",
               "user_action": userAction || "",
-              "years_selected": yearsOptions[value - 1],
+              "years_selected": yearsOptions[value],
               "category_name": titleCase(match.params?.key?.replace(/_/g, " ")),
-              "fund_name": "", //to be checked
+              "fund_name": fundName || "",
               "scheme_type": titleCase(match.params.type) || "",
-              "add_to_cart": cart.length,
+              "add_to_cart": productType === 'finity' ? 0 : cart.length,
               "additonal_cart_value": cart.length - initialCartCount || 0,
               "filter_clicked": storageService().get("filter_clicked")
                 ? "yes"
@@ -255,6 +255,7 @@ const FundList = (props) => {
                 handleCart={handleCart}
                 addedToCart={cart.map(({ isin }) => isin).includes(item.isin)}
                 parentProps={parentProps}
+                sendEvents={sendEvents}
               />
             ))}
         </TabContainer>
@@ -286,11 +287,13 @@ const DiyFundCard = ({
   handleCart,
   addedToCart,
   parentProps,
+  sendEvents,
   ...props
 }) => {
   const productType = getConfig().productName
 
   const handleClick = (data) => {
+    sendEvents('next', "", "", props.legal_name)
     const navigate = navigateFunc.bind(parentProps)
     let dataCopy = Object.assign({}, data)
     dataCopy.diy_type = 'categories'
@@ -304,6 +307,7 @@ const DiyFundCard = ({
     )
   }
   const handleInvest = () => {
+    sendEvents('next', "", "", props.legal_name)
     storageService().setObject('diystore_cart', [props])
     const navigate = navigateFunc.bind(parentProps)
     navigate('/diy/invest', null, true, parentProps.location.search)

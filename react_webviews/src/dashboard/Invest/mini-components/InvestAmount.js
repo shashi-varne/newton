@@ -45,6 +45,7 @@ const InvestAmount = (props) => {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loader, setLoader] = useState(false);
+  const [amountChanged, setAmountChanged]= useState(false);
   const [saveTaxYear, setSaveTaxYear] = useState(date.getFullYear());
   const navigate = navigateFunc.bind(props);
   useEffect(() => {
@@ -64,6 +65,7 @@ const InvestAmount = (props) => {
   }, []);
 
   const handleChange = (e) => {
+    setAmountChanged(true);
     let value = e.target.value || "";
     // eslint-disable-next-line radix
     value = parseInt(convertInrAmountToNumber(value));
@@ -196,7 +198,8 @@ const InvestAmount = (props) => {
     };
     if(funnelData.investType === 'saveforgoal')
     {
-      eventObj.properties["goal_purposse"] = funnelData.subtype || ""
+      eventObj.properties["goal_purposse"] = funnelData.subtype || "";
+      eventObj.properties['amount_changed'] = amountChanged ? "yes" : "no";
     }
     if (userAction === 'just_set_events') {
       return eventObj;

@@ -175,7 +175,7 @@ class SipDates extends Component {
       "properties": {
         "screen_name": screenName || 'investment date',
         "user_action": userAction || "",
-        "flow": this.state.orderType || "",
+        "flow": (this.state.orderType === "savetaxsip" ? "tax saving" : this.state.orderType) || "",
         ...additionalData
         }
     };
@@ -195,7 +195,7 @@ class SipDates extends Component {
       isApiRunning,
       dialogStates,
     } = this.state;
-    console.log(this.state.orderType)
+
     return (
       <Container
         events={this.sendEvents("just_set_events")}

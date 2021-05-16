@@ -48,7 +48,6 @@ const InstaRedeem = (props) => {
 
   const handleClick = () => {
     sendEvents('next')
-    storageService().remove('know_more_clicked')
     navigate("instaredeem/type");
   };
 
@@ -147,7 +146,10 @@ const InstaRedeem = (props) => {
         }
     };
     if(screenName !== "insta popup")
-      eventObj.properties["know_more_clicked"] = storageService().get('know_more_clicked') ? "yes" : "no"
+    {
+      eventObj.properties["know_more_clicked"] = storageService().get('know_more_clicked') ? "yes" : "no";
+      storageService().remove('know_more_clicked')
+    }
     if(screenName === "insta popup")
       eventObj.properties["intent"] = "withdrawal information"
     if (userAction === 'just_set_events') {
@@ -182,7 +184,7 @@ const InstaRedeem = (props) => {
               <div className="text">
                 {data.disc}
                 {data.key === "withdrawal" && (
-                  <div className="insta-redeem-know-more" onClick={() => {storageService().set('know_more_clicked',true);setOpenDialog(true)}}>
+                  <div className="insta-redeem-know-more" onClick={() => {storageService().set('know_more_clicked',true); setOpenDialog(true)}}>
                     KNOW MORE
                   </div>
                 )}
