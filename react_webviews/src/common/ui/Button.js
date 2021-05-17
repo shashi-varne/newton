@@ -21,8 +21,9 @@ class CustomButton extends Component {
     let showLoader = props.showLoader;
     showLoader = showLoader === 'button' ? true : false;
 
-    
-    if(!showLoader || !props.showError){
+    if(props.multipleCTA && showLoader){
+      disableBodyTouch(); //disable touch
+    }else if((!showLoader || !props.showError) && !props.multipleCTA){
       disableBodyTouch(true); //touch enabled
     }
 
@@ -136,8 +137,9 @@ class CustomButton extends Component {
             onClick={props.onClick}
           >
             {!showLoader && props.buttonTitle}
-            {showLoader && <DotDotLoaderNew
-            styleBounce={{backgroundColor:'white'}}
+            {showLoader && 
+            <DotDotLoaderNew
+              styleBounce={{backgroundColor:'white'}}
             />}
             {
               props.arrow &&
