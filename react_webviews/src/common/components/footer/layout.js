@@ -338,7 +338,7 @@ WithProviderLayoutGold = (props) => {
 
     if(!props.noFooter) {
         return (
-            <div>
+            <div data-aid='cta-button-parent'>
               {renderFunction(props)}
               {this.renderDialog()}
             </div>
