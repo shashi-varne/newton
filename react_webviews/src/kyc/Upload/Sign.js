@@ -8,6 +8,7 @@ import { getConfig, getBase64 } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
+import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -132,9 +133,16 @@ const Sign = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">
-          <div className="sub-title">
+          {/* <div className="sub-title">
             Signature should match with your PAN’s signature
-          </div>
+          </div> */}
+          <WVInfoBubble
+              isDismissable
+              isOpen={true}
+              type="info"
+            >
+              Signature should be as per your PAN. Invalid signature can lead to investment rejection
+            </WVInfoBubble>
           {!isWeb && (
             <div
               className="kyc-doc-upload-container"
