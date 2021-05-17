@@ -13,10 +13,10 @@ class RenderReports extends Component {
     render() {
         var selectedReport = this.props.reports;
         return (
-            <Fragment>
+            <div className={this.props.class}>
                 {selectedReport && selectedReport.length > 0 ?
                   <Fragment>
-                    <p className="report-top-text">{this.props.topText}</p>
+                    <p className="report-top-text" id={`id_${this.props.class}`}>{this.props.topText}</p>
                   {selectedReport.map((report, index) =>(
                       <DetailsCard key={index} handleClick={this.props.redirectCards} item={report}/>
                   ))}
@@ -28,7 +28,7 @@ class RenderReports extends Component {
                     </Fragment>
                   )
               }
-            </Fragment>
+            </div>
         )
     }
 }

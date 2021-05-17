@@ -532,19 +532,27 @@
     margin: 0 5px 0 0;
   }
 }
+.Container.report-list-page {
+  overflow: visible;
+}
 .insurance-common-report-page{
   font-family: 'Rubik', sans-serif;
   .tab-wrapper{
     margin: 0 -20px;
     height: 50%;
-    overflow: hidden;
   }
   margin-top: -20px;
   .MuiTypography-root{
-    padding: 0 -20px !important;
+    overflow: scroll;
   }
+  
 .report-list-tab-container{
   background-color: white;
+  z-index: 999;
+  position: sticky;
+  left: 0;
+  right: 0;
+  top: 50px;
   list-style-type: none;
   padding: 0;
   font-family: 'Rubik', sans-serif;

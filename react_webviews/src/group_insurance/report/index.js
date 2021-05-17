@@ -8,7 +8,6 @@ import { getConfig } from 'utils/functions';
 import { capitalizeFirstLetter } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { TitleMaper , ProviderName, reportTopTextMapper} from '../constants';
-
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from "@material-ui/core/Typography";
@@ -101,20 +100,20 @@ class Report extends Component {
   }
 
   componentDidUpdate(){
-    //updating tabview height dynamically
-    // document.getElementsByClassName('ContainerWrapper')[0].style.over
-    var tabContainer = document.getElementsByClassName('tab-wrapper')[0];
-    var tabs = tabContainer.childNodes[0].childNodes;
-    var {tabIndex = 0} = this.state;
-    var tabsMap = ['activeReports', 'pendingReports', 'inactiveReports']
-    var mainTab = document.getElementById('tab-wrapper');
-    if(!isEmpty(this.state.filteredReportData) && this.state.filteredReportData[tabsMap[tabIndex]].length){
-      for( var i = 0; i < tabs.length; i++){
-        mainTab.style.height = `${tabs[tabIndex].firstChild.offsetHeight + 10}px`;
-      }
-    }else{
-      mainTab.style.height = `${document.getElementsByClassName('MuiTypography-root')[0].offsetHeight + 60}px`;
+    this.swipeableActions.updateHeight();
+    var {filteredReportData, selectedTab} =  this.state;
+    
+    //if only 1 item is present, add extra swipeable area below the item to cover whole screen
+    if(!isEmpty(filteredReportData) && !isEmpty(filteredReportData[selectedTab]) &&  filteredReportData[selectedTab].length === 1 ){
+      setTimeout(()=>{
+        var current_tab = document.getElementsByClassName(selectedTab)[0]
+        var tabContainer = document.getElementsByClassName('react-swipeable-view-container')[0];
+        tabContainer.style.height = '70vh'
+      },0)
     }
+    //always scroll to top on tab switch
+    window.scrollTo({top:'0px' , behavior: 'smooth'});
+    
   }
 
   onload = () =>{
@@ -238,11 +237,11 @@ class Report extends Component {
   }
 
   setSwipe = (index) =>{
-    if(index !== undefined){
-      var tabsMap = ['activeReports', 'pendingReports', 'inactiveReports']
+    var filteredReportData = this.state.filteredReportData;
+    var tabsMap = ['activeReports', 'pendingReports', 'inactiveReports']
+    if(index !== undefined && index <= tabsMap.length && !isEmpty(filteredReportData)){
       var selectedTab = tabsMap[index]
       this.sendEvents('policy_type_switched', '', '', '', selectedTab)
-      var filteredReportData = this.state.filteredReportData;
       var selectedReports = filteredReportData[selectedTab]
       var reportTopText = reportTopTextMapper[selectedTab];
       this.setState({selectedReports, selectedTab, reportTopText, tabIndex: index })
@@ -271,6 +270,7 @@ class Report extends Component {
         errorData={this.state.errorData}
         classOverRide="report-list-page"
         skelton={this.state.skelton}
+        background="report-list-page"
       >
           <div className="insurance-common-report-page">
 
@@ -305,10 +305,11 @@ class Report extends Component {
               action={actions => {this.swipeableActions = actions;}}
               className="tab-wrapper"
               id="tab-wrapper"
+              animateHeight
               enableMouseEvents
              >
               <TabContainer dir={"ltr"}>
-              <RenderReports redirectCards={this.redirectCards} topText={reportTopTextMapper['activeReports']} bottomText={emptyStateText['activeReports']} reports={activeReports}/>
+              <RenderReports class="activeReports" redirectCards={this.redirectCards} topText={reportTopTextMapper['activeReports']} bottomText={emptyStateText['activeReports']} reports={activeReports}/>
               {
                 activeReports && activeReports.length === 0 && <p className="advisory-link" onClick={() => this.toAdvisory()}>
                 CHECK THE RIGHT COVERAGE
@@ -316,10 +317,10 @@ class Report extends Component {
               }
               </TabContainer>
               <TabContainer dir={"ltr"}>
-                  <RenderReports redirectCards={this.redirectCards} topText={reportTopTextMapper['inactiveReports']} bottomText={emptyStateText['pendingReports']} reports={pendingReports}/>
+                  <RenderReports  class="pendingReports" redirectCards={this.redirectCards} topText={reportTopTextMapper['inactiveReports']} bottomText={emptyStateText['pendingReports']} reports={pendingReports}/>
               </TabContainer>
               <TabContainer dir={"ltr"}>
-                  <RenderReports redirectCards={this.redirectCards} topText={reportTopTextMapper['pendingReports']} bottomText={emptyStateText['inactiveReports']} reports={inactiveReports}/>
+                  <RenderReports class="inactiveReports"  redirectCards={this.redirectCards} topText={reportTopTextMapper['pendingReports']} bottomText={emptyStateText['inactiveReports']} reports={inactiveReports}/>
               </TabContainer>
 
             </SwipeableViews>

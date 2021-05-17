@@ -1394,11 +1394,11 @@ export function setReportData(termData, group_insurance_policies, health_insuran
             {
                 'title': 'PREMIUM AMOUNT',
                 'subtitle': inrFormatDecimal(y.premium),
-                'postfix': <span className="details-card-postfix">{reportsfrequencyMapper(provider,frequency,y.product_key)}</span>
+                'postfix': <span className="details-card-postfix">{reportsfrequencyMapper(provider, frequency, y.product_key)}</span>
             },
             {
                 'title': 'Policy issued to',
-                'subtitle': capitalize(y.name),
+                'subtitle': y.name && capitalize(y.name),
             },
             {
                 'title': 'Valid upto',
