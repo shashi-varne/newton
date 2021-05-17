@@ -159,6 +159,12 @@ class GroupHealthPlanAddMembers extends Component {
             ui_members[keys_to_reset[kr]] = false;
         }
 
+        //reset
+        var groupHealthPlanData = this.state.groupHealthPlanData;
+            let keys_to_empty = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
+            for(var x of keys_to_empty){
+                groupHealthPlanData[x] = ""
+            }
         ui_members.son_total = 0;
         ui_members.daughter_total = 0;
 

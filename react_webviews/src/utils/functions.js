@@ -49,19 +49,19 @@ export const isMobile = {
 
 function getPartnerConfig(partner_code) {
   let search = window.location.search;
+  let origin = window.location.origin;
+
   const ismyway =
-    search.indexOf("api.mywaywealth.com") >= 0 ||
-    search.indexOf("plutus-finwizard-pro.appspot.com") >= 0;
-  const isminvest = search.indexOf("my.barodaminvest.com") >= 0;
-  const isStaging = search.indexOf("staging") >= 0;
-  let productType = "fisdom";
-  if (
-    ismyway ||
-    partner_code === "bfdlmobile" ||
-    partner_code === "finity" ||
-    partner_code === "moneycontrol"
-  ) {
-    productType = "finity";
+    search.indexOf('api.mywaywealth.com') >= 0 ||
+    search.indexOf('plutus-finwizard-pro.appspot.com') >= 0 || 
+    origin.indexOf('wv.mywaywealth.com') >= 0 || 
+    origin.indexOf('wv.finity.in') >= 0 || 
+    origin.indexOf('api.mywaywealth.com') >= 0;
+  const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
+  const isStaging = search.indexOf('staging') >= 0;
+  let productType = 'fisdom';
+  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
+    productType = 'finity';
   }
 
   if (isminvest) {

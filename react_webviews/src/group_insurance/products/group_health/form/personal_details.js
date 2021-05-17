@@ -197,6 +197,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   async componentDidUpdate(prevState) {
     if (this.state.member_key && this.state.member_key !== this.props.member_key) {
       this.onload();
+      this.initialize();
     }
     storageService().setObject('applicationPhaseReached', true);
   }
@@ -205,7 +206,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     this.pageTitle()
     this.initialize()
   }
-
 
   handleChange = name => event => {
 
@@ -380,8 +380,9 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let weight_limit = form_data.weight ? form_data.weight.toString() : ''
-    // .weight.toString()
-
+    if(form_data.weight){
+      form_data.weight = form_data.weight.toString();
+    }
     if(weight_limit.length > 3){
       form_data.weight_error = "Invalid weight";
     }
@@ -485,8 +486,21 @@ class GroupHealthPlanPersonalDetails extends Component {
           } 
         }
       }
+      //for api optimization
+      var current_state = {};
+      var keys_to_add = ['name', 'dob', 'gender', 'height', 'weight', 'pan_no', 'occupation']
+      var current_member = this.state.member_key === 'applicant' ? body.buyer_details : body.insured_people_details[0];
+      
 
-      this.updateLead(body);
+      for(var x in current_member){
+        if(keys_to_add.indexOf(x) >= 0){
+          current_state[x] = current_member[x];
+        }
+      }
+      if(this.state.pan_needed){
+        current_state['pan_no'] = form_data.pan_no
+      }
+      this.updateLead(body, '', current_state );
     }
   }
 
