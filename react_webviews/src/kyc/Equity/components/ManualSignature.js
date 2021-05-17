@@ -4,7 +4,7 @@ import Container from '../../common/Container'
 import { navigate as navigateFunc } from '../../common/functions';
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Button from 'material-ui/Button';
-import WVInfoBubble from "../../../common/ui/InfoBubble/index";
+import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 import ContactUs from "../../../common/components/contact_us";
 import { getConfig } from '../../../utils/functions';
 import { companyDetails } from "../../constants";

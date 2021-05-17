@@ -3,7 +3,7 @@ import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
-import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer"
+import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
 
 const productName = getConfig().productName;
 const benefits = [

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Container from '../../common/Container'
 import { navigate as navigateFunc } from '../../common/functions';
 import { StatusInfo } from "../mini-components/StatusInfo";
-import WVInfoBubble from "../../../common/ui/InfoBubble/index";
+import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 import "./commonStyles.scss";
 
 const Allow = (props) => {
