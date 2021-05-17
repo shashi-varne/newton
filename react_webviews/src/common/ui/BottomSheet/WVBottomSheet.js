@@ -24,7 +24,7 @@ Example syntax:
 
 */
 
-
+import './WVBottomSheet.scss';
 import React from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import Dialog, {
@@ -36,7 +36,7 @@ import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import WVButtonLayout from '../ButtonLayout';
 
-export const WVBottomSheet = ({
+const WVBottomSheet = ({
   isOpen,
   onClose, // Callback for when bottomsheet is being closed
   buttonLayout, // Sets button layout - stacked/stackedOR/horizontal [default=horizontal]
@@ -92,7 +92,6 @@ export const WVBottomSheet = ({
             left in a 'horizontal' layout
           */}
           <WVButtonLayout.Button
-            order="1"
             title={button1Props.title}
             type={button1Props.type}
             {...button1Props}
@@ -104,7 +103,6 @@ export const WVBottomSheet = ({
           */}
           {!isEmpty(button2Props) &&
             <WVButtonLayout.Button
-              order="2"
               title={button2Props.title}
               type={button2Props.type}
               {...button2Props}
@@ -120,18 +118,9 @@ WVBottomSheet.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
   buttonLayout: PropTypes.oneOf(['stacked', 'stackedOR', 'horizontal']),
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
-  subtitle: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
-  children: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
+  title: PropTypes.node,
+  subtitle: PropTypes.node,
+  children: PropTypes.node
 };
 
 WVBottomSheet.defaultProps = {
@@ -142,5 +131,5 @@ WVBottomSheet.defaultProps = {
   },
 };
 
-
+export default WVBottomSheet;
 

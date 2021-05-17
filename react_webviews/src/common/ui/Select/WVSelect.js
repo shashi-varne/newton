@@ -26,12 +26,12 @@ Example syntax:
 /* Asset Imports */
 import completed_step from "assets/completed_step.svg";
 /* ------------- */
-
+import './WVSelect.scss';
 import React, { useEffect, useState } from 'react';
 import { isFunction, findIndex } from 'lodash';
 import PropTypes from 'prop-types';
 
-export const WVSelect = ({
+const WVSelect = ({
   preselectFirst, // Set this to preselect the first option from 'options' list
   options, // Array of objects to be displayed as select options
   indexBy, // Prop name to track select option by (used for equality comparison) 
@@ -155,3 +155,4 @@ WVSelect.defaultProps = {
   preselectFirst: false,
 }
 
+export default WVSelect;

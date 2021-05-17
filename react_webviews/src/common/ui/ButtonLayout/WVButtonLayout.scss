@@ -12,20 +12,22 @@
 /* Button Layouts */
 
 .wv-button-layout-stacked {
+  display: flex;
   flex-direction: column;
 
   .wv-layout-button + .wv-layout-button {
-    /* Add margin between consecutive buttons in
-    a 'stacked' layout */
+    /* Add margin between consecutive buttons */
     margin-top: 20px;
   }
 }
 
 .wv-button-layout-horizontal {
+  display: flex;
   flex-direction: row;
 
-  .wv-layout-button2 {
-    margin-left: 30px; // Margin between left and right buttons in a 'horizontal' layout 
+  .wv-layout-button + .wv-layout-button {
+    /* Add margin between consecutive buttons */
+    margin-left: 30px;
   }
 
   .wv-layout-button-secondary {

@@ -19,13 +19,14 @@ Example syntax:
 */
 
 // TODO: Move timer into its own component (could help with optimizing re-renders)
+import './WVLoadingBottomSheet.scss';
 import React, { useEffect, useState } from 'react';
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import { Imgc } from "common/ui/Imgc";
 import PropTypes from 'prop-types';
 import { isFunction, noop } from 'lodash';
 
-export const WVLoadingBottomSheet = ({
+const WVLoadingBottomSheet = ({
   isOpen,
   gifSrc,
   title,
@@ -112,14 +113,8 @@ export const WVLoadingBottomSheet = ({
 
 WVLoadingBottomSheet.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]).isRequired,
-  subtitle: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
+  title: PropTypes.node.isRequired,
+  subtitle: PropTypes.node,
   timerDuration: PropTypes.number,
   onTimerEnd: PropTypes.func,
   onTimerChange: PropTypes.func,
@@ -135,3 +130,5 @@ WVLoadingBottomSheet.defaultProps = {
   onTimerChange: () => {},
   classes: {}
 };
+
+export default WVLoadingBottomSheet;
