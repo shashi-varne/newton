@@ -1,6 +1,4 @@
-.result-container-risk {
-  background-color: #155acf !important;
-  /* autoprefixer: off */
+.result-container-risk {  /* autoprefixer: off */
   height: -webkit-fill-available;
   margin-bottom: 0px;
   padding-bottom: 0;
@@ -39,7 +37,33 @@
 }
 .meter-img {
   text-align: center;
+  margin: 50px 0;
+}
+.meter-img img {
+  width: 70%;
+}
+.risk-result-error {
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  width: 100%;
   margin-top: 50px;
+}
+.risk-meter-desc {
+  text-align: center;
+}
+.risk-meter-desc .risk-meter-desc-title {
+  color: #0a1d32;
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+.risk-meter-desc .risk-meter-desc-content {
+  color: #0a1d32;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.2px;
 }
 .fund-details {
   cursor: pointer;

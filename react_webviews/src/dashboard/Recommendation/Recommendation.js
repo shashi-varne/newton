@@ -150,7 +150,7 @@ const Recommendations = (props) => {
 
     let 
     paymentRedirectUrl = encodeURIComponent(
-      `${getBasePath()}/page/callback/${sipOrOneTime}/${investmentObject.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investmentObject.amount}${getConfig().searchParams}`
     );
 
     window.localStorage.setItem("investment", JSON.stringify(investmentObject));

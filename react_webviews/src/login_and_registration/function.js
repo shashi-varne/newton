@@ -22,13 +22,33 @@ export function initialize() {
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
   let main_query_params = getUrlParams();
-  let { referrer, redirect_url } = main_query_params;
-  let referrerParam = referrer || "";
+  let { referrer = "" } = main_query_params;
+
+  let redirectUrl = encodeURIComponent(`${window.location.origin}/`);
+  const partners = [
+    "hbl",
+    "sbm",
+    "flexi",
+    "medlife",
+    "life99",
+    "taxwin",
+    "ippb",
+    "quesscorp",
+  ];
+  const partner = storageService().get("partner") || "";
+  if (partners.includes(partner)) {
+    referrer = partner;
+    const deeplinkUrl = storageService().get("deeplink_url") || "";
+    if (deeplinkUrl) {
+      redirectUrl = deeplinkUrl;
+    }
+  }
+  const rebalancingRedirectUrl = main_query_params.redirect_url
+    ? `?redirect_url=${main_query_params.redirect_url}`
+    : "";
 
   let socialRedirectUrl = encodeURIComponent(
-    window.location.origin + "/social/callback" + redirect_url
-      ? "?redirect_url=" + redirect_url
-      : ""
+    window.location.origin + "/social/callback" + rebalancingRedirectUrl
   );
 
   let facebookUrl =
@@ -36,17 +56,19 @@ export function initialize() {
     "/auth/facebook?redirect_url=" +
     socialRedirectUrl +
     "&referrer=" +
-    referrerParam;
+    referrer;
   let googleUrl =
     getConfig().base_url +
     "/auth/google?redirect_url=" +
     socialRedirectUrl +
     "&referrer=" +
-    referrerParam;
+    referrer;
   this.setState({
-    referrer: referrerParam,
+    referrer: referrer,
     facebookUrl: facebookUrl,
     googleUrl: googleUrl,
+    redirectUrl: redirectUrl,
+    rebalancingRedirectUrl: main_query_params.redirect_url,
   });
 }
 
@@ -97,17 +119,7 @@ export function formCheckFields(
     }
   }
 
-  let redirectUrl = encodeURIComponent(`${window.location.origin}/`);
-  let referrer = this.state.referrer || "";
-  const partners = ["hbl", "sbm", "flexi", "medlife", "life99", "taxwin"];
-  const partner = storageService().get("partner") || "";
-  if(partners.includes(partner)) {
-    referrer = partner;
-    const deeplinkUrl = storageService().get("deeplink_url") || "";
-    if(deeplinkUrl) {
-      redirectUrl = deeplinkUrl;
-    }
-  }
+  let { redirectUrl, referrer = "" } = this.state;
 
   let body = {};
   this.setState({ isApiRunning: "button" });
@@ -141,10 +153,10 @@ export async function emailLogin(body) {
     const res = await Api.post(`/api/user/login`, body);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      // if (getConfig().redirect_url !== undefined) {
-      //   window.location.href = getConfig().redirect_url;
-      //   return;
-      // }
+      if (this.state.rebalancingRedirectUrl) {
+        window.location.href = this.state.rebalancingRedirectUrl;
+        return;
+      }
       storageService().setObject("user", result.user);
       if (!isMobileView && result.firstLogin) {
         storageService().setObject("first_login", result.firstLogin);
@@ -217,13 +229,12 @@ export async function mobileLogin(body) {
         };
         storageService().setObject("user_promo", item);
       }
-      let rebalancing_redirect_url = false;
 
       this.setState({ isApiRunning: false });
       this.navigate("mobile/verify", {
         state: {
           mobile_number: body.mobile_number,
-          rebalancing_redirect_url: rebalancing_redirect_url,
+          rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
           forgot: false,
         },
       });
@@ -246,10 +257,10 @@ export async function emailRegister(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      // if (getConfig().redirect_url !== undefined) {
-      //   window.location.href = getConfig().redirect_url;
-      //   return;
-      // }
+      if (this.state.rebalancingRedirectUrl) {
+        window.location.href = this.state.rebalancingRedirectUrl;
+        return;
+      }
       if (this.state.isPromoSuccess) {
         var item = {
           user_id: result.user.user_id,
