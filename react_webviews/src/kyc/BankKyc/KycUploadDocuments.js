@@ -334,7 +334,7 @@ const KycUploadDocuments = (props) => {
                       </g>
                     </svg>
 
-                    <div className="upload-action">Open camera</div>
+                    <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
                   </div>
                   <div
                     className="upload-container"
@@ -360,7 +360,7 @@ const KycUploadDocuments = (props) => {
                       </g>
                     </svg>
 
-                    <div className="upload-action">Upload file</div>
+                    <div className="upload-action" data-aid='kyc-upload-file-text'>Upload file</div>
                   </div>
                 </div>
               )}

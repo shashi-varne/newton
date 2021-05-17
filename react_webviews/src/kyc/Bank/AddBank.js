@@ -237,6 +237,7 @@ const AddBank = (props) => {
               variant={note.variant}
               title="Note"
               message={note.info_text}
+              dataAid='kyc-addbank-alertbox'
             />
             <main data-aid='kyc-approved-bank'>
               <Input

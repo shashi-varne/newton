@@ -270,7 +270,7 @@ const Report = (props) => {
   const bankDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.bank.meta_data.bank_name}</div>
+        <div className="unzipped-title" data-aid='kyc-bank-name'>{kyc.bank.meta_data.bank_name}</div>
         <div className="unzipped-box" data-aid='kyc-account-number'>
           <div className="title">A/C number</div>
           <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
