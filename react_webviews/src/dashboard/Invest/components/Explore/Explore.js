@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import Container from '../../../common/Container'
-import IframeView from '../IframeView'
+import IframeView from './IframeView'
 
 import diy_equity_icon from 'assets/diy_equity_icon.svg'
 import diy_debt_icon from 'assets/diy_debt_icon.svg'
@@ -21,6 +21,7 @@ import isEmpty from 'lodash/isEmpty';
 import './Explore.scss';
 
 const iframe = isIframe();
+const isMobileDevice = getConfig().isMobileDevice;
 export const exploreMFMappings = [
   {
     title: 'Equity',
@@ -44,7 +45,6 @@ export const exploreMFMappings = [
   },
 ]
 const partnerCode = getConfig().partner_code;
-
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
   useEffect(() => {
@@ -85,8 +85,9 @@ const InvestExplore = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      title="Explore All Mutual Funds"
+      title={iframe && isMobileDevice ? "" : "Explore All Mutual Funds"}
       classOverRideContainer="pr-container"
+      force_hide_inpage_title={iframe && isMobileDevice}
       handleClick={goNext}
       skelton={loader}
       rightIcon="search"

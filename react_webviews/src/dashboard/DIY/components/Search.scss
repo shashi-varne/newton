@@ -110,3 +110,20 @@
     color:red;
   }
 }
+
+.diy-search-mob{
+  background-color: white;
+  .diy-iframe-search-input{
+    .diy-fund-search{
+      padding: 12px 20px !important;
+    }
+  }
+
+  .search-list {
+    margin-top: 10px;
+  }
+
+  .search-loader {
+    margin-top: 40px;
+  }
+}

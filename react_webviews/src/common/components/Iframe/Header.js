@@ -44,7 +44,7 @@ const Header = ({ classes, goBack, disableBack, headerData = {} }) => {
             />
           )}
           {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon && (
-            <Close />
+            <Close color={isMobileDevice ? 'primary': 'default'}/>
           )}
         </div>
         {!isMobileDevice && (

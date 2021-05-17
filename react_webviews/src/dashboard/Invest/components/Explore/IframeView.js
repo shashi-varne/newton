@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import SVG from 'react-inlinesvg';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import diy_kyc from 'assets/finity/diy_kyc.svg';
 import search from 'assets/icon_search.svg';
-
+import { getConfig } from 'utils/functions';
 import './IframeView.scss';
 import { initialize } from '../../functions';
+import InvestExploreCard from './InvestExploreCard';
+const isMobileDevice = getConfig().isMobileDevice;
 
 class IframeView extends Component {
   constructor(props) {
@@ -27,17 +29,19 @@ class IframeView extends Component {
   };
 
   checkKyc = () => {
-    if (this.state.kycJourneyStatus === "ground") {
-      this.navigate("/kyc/home");
+    if (this.state.kycJourneyStatus === 'ground') {
+      this.navigate('/kyc/home');
     } else {
-      this.navigate("/kyc/journey");
+      this.navigate('/kyc/journey');
     }
-  }
+  };
 
   render() {
     const { kycStatusData, isReadyToInvestBase } = this.state;
     return (
       <div className='diy-iframe-view'>
+        {isMobileDevice && <div className='title'>Where do you want to invest?</div>}
+
         <div className='diy-iframe-search' onClick={this.props.handleRightIconClick}>
           <span className='diy-iframe-search-placeholder'>
             Search for direct mutual fund schemes
@@ -51,22 +55,37 @@ class IframeView extends Component {
           </span>
         </div>
 
-        <section className='diy-iframe-categories-container'>
-          <div className='diy-iframe-category-head'>Explore by category</div>
-          <div className='diy-iframe-categories'>
-            {this.props.exploreMFMappings?.map((el, idx) => (
-              <div key={idx} className='diy-iframe-category' onClick={this.props.goNext(el.title)}>
-                <div className='diy-iframe-category-icon'>
-                  <img src={el.src} alt={el.title} />
+        <section
+          className={`diy-iframe-categories-container ${
+            isMobileDevice ? 'diy-iframe-categories-container-mob' : ''
+          }`}
+        >
+          {!isMobileDevice && <div className='diy-iframe-category-head'>Explore by category</div>}
+          <div
+            className={`diy-iframe-categories ${isMobileDevice ? 'diy-iframe-categories-mob' : ''}`}
+          >
+            {this.props.exploreMFMappings?.map((el, idx) => {
+              return !isMobileDevice ? (
+                <div
+                  key={idx}
+                  className='diy-iframe-category'
+                  onClick={this.props.goNext(el.title)}
+                >
+                  <div className='diy-iframe-category-icon'>
+                    <img src={el.src} alt={el.title} />
+                  </div>
+                  <div className='diy-iframe-category-title'>{el.title}</div>
+                  <div className='diy-iframe-category-desc'>{el.description}</div>
                 </div>
-                <div className='diy-iframe-category-title'>{el.title}</div>
-                <div className='diy-iframe-category-desc'>{el.description}</div>
-              </div>
-            ))}
+              ) : (
+                <div key={idx} onClick={this.props.goNext(el.title)}>
+                  <InvestExploreCard title={el.title} description={el.description} src={el.src} />
+                </div>
+              );
+            })}
           </div>
         </section>
-        {
-          !isReadyToInvestBase &&
+        {!isReadyToInvestBase && (
           <div className='diy-kyc-status-card' onClick={this.checkKyc}>
             <div className='diy-kyc-status-title'>{kycStatusData.title}</div>
             <div className='diy-kyc-status-subtitle'>{kycStatusData.subtitle}</div>
@@ -74,7 +93,7 @@ class IframeView extends Component {
               <img src={diy_kyc} alt='diy_kyc' />
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }

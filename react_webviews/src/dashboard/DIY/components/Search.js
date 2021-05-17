@@ -18,6 +18,7 @@ const Search = (props) => {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [showNoFundmessage, setShowNoFundmessage] = useState(false);
   const iframe = isIframe();
+  const isMobileDevice = getConfig().isMobileDevice;
 
   const handleChange = (event) => {
     let value = event.target.value || "";
@@ -66,11 +67,11 @@ const Search = (props) => {
   return (
     <Container
       noFooter
-      title={iframe ? '' : "Search"}
+      title={iframe ? isMobileDevice ? 'Where do you want to invest?' : "" : "Search"}
       classOverRideContainer="diy-search-container-main"
       classOverRide="diy-search-container"
     >
-        <div className="diy-search">
+        <div className={`diy-search ${isMobileDevice ? "diy-search-mob" : ""}`}>
       {
         iframe ? < IframeSearch value={value} handleChange={handleChange} />
         :

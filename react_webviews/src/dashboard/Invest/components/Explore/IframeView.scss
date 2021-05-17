@@ -1,5 +1,9 @@
 .diy-iframe-view {
   padding-bottom: 20px;
+  .title{
+    font-weight: 600;
+    padding-bottom: 20px;
+  }
 }
 .diy-iframe-search {
   width: 100%;
@@ -76,6 +80,15 @@
       }
     }
   }
+
+  .diy-iframe-categories-mob{
+    flex-direction: column;
+    margin-top: 15px;
+  }
+}
+
+.diy-iframe-categories-container-mob{
+  margin-top: 0px;
 }
 
 .diy-kyc-status-card{
