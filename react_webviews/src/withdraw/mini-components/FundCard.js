@@ -33,7 +33,6 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
   };
   const checkLimit = (num, compNum, isin) => {
     if(num === 0) {
-      console.log("the num is", num)
       calcTotalAmount(isin,num);
       setError(false);
       checkError(false);

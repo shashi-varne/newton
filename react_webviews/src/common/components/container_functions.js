@@ -111,8 +111,7 @@ export function commonRender(props_base) {
 
     if (this.state.mounted) {
         return (
-
-   <div className={this.addContainerClass(props_base)}>
+            <div className={this.addContainerClass(props_base)} data-aid={`${this.props['data-aid']}-parent-container`}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && !this.props.loaderWithData && <Header

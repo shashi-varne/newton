@@ -10,7 +10,9 @@ import Cart from '../../../DIY/mini-components/Cart'
 import './FundType.scss';
 
 import { navigate as navigateFunc } from '../../common/commonFunctions'
+import { getConfig } from '../../../../utils/functions'
 
+const isMobileDevice = getConfig().isMobileDevice;
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   const navigate = navigateFunc.bind(parentProps)
   const handleNavigate = (data) => {
@@ -98,11 +100,11 @@ const FundType = (props) => {
   const type = props.match.params?.type.toLowerCase()
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [cartActive, setCartActive] = useState(false)
-  const trendingFunds = storageService().getObject('diystore_trending')
-  const categories = storageService().getObject('diystore_categoryList')
+  const trendingFunds = storageService().getObject('diystore_trending') || [];
+  const categories = storageService().getObject('diystore_categoryList') || [];
   const { sub_categories } = categories?.find(
     (el) => el.category.toLowerCase() === type
-  )
+  ) || [];
   return (
     <Container
       classOverRIde="pr-error-container"
@@ -111,7 +113,7 @@ const FundType = (props) => {
       classOverRideContainer="pr-container"
     >
       <section id="invest-explore-fund-type">
-        <h6 className="heading top-title">Top trending {type} funds</h6>
+        {trendingFunds[type]?.length > 0 && <h6 className="heading top-title">Top trending {type} funds</h6>}
         <div className="scroll">
           {trendingFunds[type]?.map((fund, idx) => (
             <TrendingCard key={idx} cart={cart} setCart={setCart} type={type} {...fund} parentProps={props} />
@@ -134,23 +136,28 @@ const FundType = (props) => {
           </div>
         </section>
       </section>
-      <footer className="diy-cart-footer">
-        {cart.length > 0 && (
-          <DiyCartButton
-            className="button"
-            onClick={() => setCartActive(true)}
-            cartlength={cart.length}
-          />
-        )}
+      {getConfig().productName !== "finity" && (
+        <footer
+          className="diy-cart-footer"
+          style={{ marginLeft: isMobileDevice && 0 }}
+        >
+          {cart.length > 0 && (
+            <DiyCartButton
+              className="button"
+              onClick={() => setCartActive(true)}
+              cartlength={cart.length}
+            />
+          )}
 
-        <Cart
-          isOpen={cartActive && cart.length > 0}
-          setCartActive={setCartActive}
-          cart={cart}
-          setCart={setCart}
-          {...props}
-        />
-      </footer>
+          <Cart
+            isOpen={cartActive && cart.length > 0}
+            setCartActive={setCartActive}
+            cart={cart}
+            setCart={setCart}
+            {...props}
+          />
+        </footer>
+      )}
     </Container>
   )
 }

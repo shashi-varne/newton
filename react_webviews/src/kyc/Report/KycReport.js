@@ -8,7 +8,7 @@ import {
   reportCardDetails,
   storageConstants,
 } from "../constants";
-import ContactUs from "../mini-components/ContactUs";
+import ContactUs from "../../common/components/contact_us";
 import { navigate as navigateFunc } from "../common/functions";
 import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
@@ -149,47 +149,47 @@ const Report = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.pan.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
         {isCompliant && (
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-email'>
             <div className="title">Email</div>
             <div className="subtitle">{kyc.identification.meta_data.email}</div>
           </div>
         )}
         <div className="row-align">
           {!isCompliant && (
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-gender'>
               <div className="title">Gender</div>
               <div className="subtitle">
                 {kyc.identification.meta_data.gender}
               </div>
             </div>
           )}
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-dob'>
             <div className="title">Dob</div>
             <div className="subtitle">{kyc.pan.meta_data.dob}</div>
           </div>
         </div>
         {!isCompliant && (
           <>
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-marital-status'>
               <div className="title">Marital Status</div>
               <div className="subtitle">
                 {kyc.identification.meta_data.marital_status}
               </div>
             </div>
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-father-name'>
               <div className="title">Father’s name</div>
               <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
             </div>
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-mother-name'>
               <div className="title">Mother’s name</div>
               <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
             </div>
           </>
         )}
         {isCompliant && (
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-mobile'>
             <div className="title">Mobile</div>
             <div className="subtitle">
               {kyc.identification.meta_data.mobile_number}
@@ -205,7 +205,7 @@ const Report = (props) => {
       <>
         {!isCompliant && (
           <>
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-address-proof'>
               <div className="title">
                 {is_nri && <span>Indian </span>} Address as per{" "}
                 {addressProof.address_proof}
@@ -217,7 +217,7 @@ const Report = (props) => {
               </div>
             </div>
             {is_nri && (
-              <div className="unzipped-box">
+              <div className="unzipped-box" data-aid='kyc-address-proof-nri'>
                 <div className="title">
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
@@ -232,7 +232,7 @@ const Report = (props) => {
           </>
         )}
         {isCompliant && (
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-address-proof-nri'>
             <div className="title">Foreign Address</div>
             <div className="subtitle">
               {kyc.nri_address.meta_data.addressline},
@@ -249,7 +249,7 @@ const Report = (props) => {
   const nomineeDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.nomination.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-relationship'>{kyc.nomination.meta_data.name}</div>
         <div className="row-align">
           <div className="unzipped-box">
             <div className="title">Relationship</div>
@@ -258,7 +258,7 @@ const Report = (props) => {
             </div>
           </div>
 
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-dob'>
             <div className="title">Dob</div>
             <div className="subtitle">{kyc.nomination.meta_data.dob}</div>
           </div>
@@ -270,12 +270,12 @@ const Report = (props) => {
   const bankDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.bank.meta_data.bank_name}</div>
-        <div className="unzipped-box">
+        <div className="unzipped-title" data-aid='kyc-bank-name'>{kyc.bank.meta_data.bank_name}</div>
+        <div className="unzipped-box" data-aid='kyc-account-number'>
           <div className="title">A/C number</div>
           <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
         </div>
-        <div className="unzipped-box">
+        <div className="unzipped-box" data-aid='kyc-ifsc-code'>
           <div className="title">IFSC</div>
           <div className="subtitle">{kyc.bank.meta_data.ifsc_code}</div>
         </div>
@@ -314,17 +314,18 @@ const Report = (props) => {
       title={topTitle}
       noFooter={isEmpty(cardDetails)}
       headerData={{goBack}}
+      data-aid='kyc-report-screen'
     >
       <div className="kyc-report">
-        <main>
+        <main data-aid='kyc-report'>
           <Imgc
             src={require(`assets/${productName}/congratulations_illustration.svg`)}
             alt="img"
             className="img"
           />
-          <div className="congrats">Congratulations!</div>
-          <div className="text">{appText}</div>
-          <div className="text message">
+          <div className="congrats" data-aid='kyc-congratulations-text'>Congratulations!</div>
+          <div className="text" data-aid='kyc-app-text'>{appText}</div>
+          <div className="text message" data-aid='kyc-text-message'>
             <img src={require(`assets/eta_icon.svg`)} alt="" />
             Approves in one working day
           </div>
@@ -344,6 +345,7 @@ const Report = (props) => {
                     key={index}
                     className="tile-info"
                     onClick={() => handleTiles(index, item.key)}
+                    data-aid={`${cardDetails}-${index}`}
                   >
                     <div className="unzipped-title">
                       <div>{item.title}</div>
@@ -357,7 +359,7 @@ const Report = (props) => {
                       />
                     </div>
                     {openIndex === index && (
-                      <div className="unzipped">{renderCards(item.key)}</div>
+                      <div className="unzipped" data-aid='kyc-unzipped'>{renderCards(item.key)}</div>
                     )}
                   </div>
                 );

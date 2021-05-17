@@ -4,6 +4,8 @@ import Disclaimer from './Disclaimer'
 import TaxSummaryCard from '../../mini-components/TaxSummaryCard'
 import { Redirect } from 'react-router-dom'
 import toast from 'common/ui/Toast'
+import ExitLoad from './ExitLoad'
+import TaxLiability from './TaxLiability'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { isEmpty } from 'utils/validators'
 import { getConfig } from 'utils/functions'
@@ -13,45 +15,9 @@ import { formatAmountInr } from '../../../utils/validators'
 import '../commonStyles.scss';
 import './System.scss';
 
-const TaxLiability = (props) => {
-  const { stcg, ltcg } = props
-  return (
-    <section className="withdraw-summary-liability Card" data-aid='withdraw-summary-liability Card'>
-      <div className="title">Tax liability</div>
-      <main className="breakdown">
-        <div className="item flex-between-center">
-          <div className="name">STCG tax**</div>
-          <div className="value">₹ {stcg}</div>
-        </div>
-        <div className="item flex-between-center">
-          <div className="name">LTCG tax**</div>
-          <div className="value">₹ {ltcg}</div>
-        </div>
-      </main>
-      <hr className="ruler" />
-      <footer className="total flex-between-center">
-        <div className="name">Total tax</div>
-        <div className="value">₹ {stcg + ltcg}</div>
-      </footer>
-    </section>
-  )
-}
-
-const ExitLoad = ({ exit_load }) => {
-  return (
-    <section className="withdraw-summary-exitload Card" data-aid='withdraw-summary-exitload Card'>
-      <div className="title">Exit Load</div>
-      <div className="total flex-between-center">
-        <div className="name">Exit load</div>
-        <div className="value">₹ {exit_load || 0}</div>
-      </div>
-    </section>
-  )
-}
-
 const SystemSummary = (props) => {
   const navigate = navigateFunc.bind(props)
-  const [taxes, setTaxes] = useState(taxes)
+  const [taxes, setTaxes] = useState('')
   const [open, setOpen] = useState({})
   const [isApiRunning, setIsApiRunning] = useState(false)
 
@@ -69,22 +35,9 @@ const SystemSummary = (props) => {
   const handleClick = async () => {
     try {
       setIsApiRunning("button")
-      // const itype = props?.location?.state?.itype
-      // const subtype = props?.location?.state?.subtype
-      // const name = props?.location?.state?.name
-      // const allocations = Object.keys(props?.location?.state?.amounts).reduce(
-      //   (acc, cur) => {
-      //     return [
-      //       ...acc,
-      //       { mfid: cur, amount: props?.location?.state?.amounts[cur] },
-      //     ]
-      //   },
-      //   []
-      // )
       const result = await redeemOrders('system', {
         investments: [{ ...props.location.state }],
       })
-      console.log(result)
 
       if (result?.resend_redeem_otp_link && result?.verification_link) {
         navigate('verify', {state:{...result} })
@@ -99,7 +52,7 @@ const SystemSummary = (props) => {
 
   const fetchTaxes = async () => {
     try {
-      const taxes = await getTaxes(props?.location?.state?.amounts)
+      const taxes = await getTaxes(props?.location?.state?.amounts);
       setTaxes(taxes)
     } catch (err) {
       toast(err.message, 'error')
@@ -121,7 +74,6 @@ const SystemSummary = (props) => {
   useEffect(() => {
     fetchTaxes()
   }, [])
-  console.log(taxes)
   return (
     <Container
       data-aid='system-summary-screen'
@@ -132,9 +84,6 @@ const SystemSummary = (props) => {
       hidePageTitle
       handleClick={handleClick}
       skelton={isEmpty(taxes)}
-      // twoButton={true}
-      // footerText1={getTotalAmount()}
-      // isApiRunning={isApiRunning}
       showLoader={isApiRunning}
       buttonData={{
         leftTitle: "Withdraw amount",
@@ -145,7 +94,7 @@ const SystemSummary = (props) => {
       {!isEmpty(taxes) && (
         <section id="withdraw-system-summary" data-aid='withdraw-system-summary'>
           <TaxLiability stcg={taxes?.stcg_tax} ltcg={taxes?.ltcg_tax} />
-          <ExitLoad exit_load={taxes.ltcg} />
+          <ExitLoad exit_load={taxes.exit_load} />
           <div className="tax-summary">Tax Summary</div>
           <main className="fund-list" data-aid='fund-list'>
             {taxes?.liabilities?.map((item, idx) => (

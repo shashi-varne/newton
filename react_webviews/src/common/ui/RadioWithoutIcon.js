@@ -47,7 +47,7 @@ class RadioGrp extends Component {
     const allOptions = options.map((option, i) => {
       if (this.props.type === 'professional') {
         return (
-          <Grid item xs={5} key={i} className="RadioGrpGrid"  id={`RadioGrpGrid_${i+1}`} style={{ flexBasis: 'auto' }}>
+          <Grid item xs={5} key={i} className="RadioGrpGrid"  data-aid={`radiogrp-grid-${i+1}`} style={{ flexBasis: 'auto' }}>
             <RadioBtn
               isChecked={(this.state.selectedIndex === i || option.value === this.props.value)}
               text={option.name}
@@ -59,7 +59,7 @@ class RadioGrp extends Component {
         );
       } else {
         return (
-          <Grid item xs={this.props.isVertical ? 7 : 5} key={i} id={`RadioGrpGrid_${i+1}`}>
+          <Grid item xs={this.props.isVertical ? 7 : 5} key={i} data-aid={`radiogrp-grid-${i+1}`}>
             <RadioBtn
               isChecked={(this.state.selectedIndex === i || option.value === this.props.value)}
               text={option.name}

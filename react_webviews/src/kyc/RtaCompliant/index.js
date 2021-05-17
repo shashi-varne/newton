@@ -120,19 +120,20 @@ const RtaCompliantPersonalDetails = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      data-aid='kyc-rta-compliant-screen'
     >
-      <div className="kyc-personal-details">
+      <div className="kyc-personal-details" data-aid='kyc-personal-details'>
         <div className="kyc-main-subtitle">
-          <div>
+          <div data-aid='kyc-share-dob'>
             <div>Share your date of birth as per PAN:</div>
             <div className="pan">{form_data.pan}</div>
           </div>
-          <div className="help" onClick={() => setIsOpen(true)}>
+          <div className="help" data-aid='kyc-help' onClick={() => setIsOpen(true)}>
             HELP
           </div>
         </div>
         {!isLoading && (
-          <main>
+          <main data-aid='kyc-personal-details'>
             <Input
               label="Date of birth(DD/MM/YYYY)"
               class="input"
@@ -165,6 +166,7 @@ const RtaCompliantPersonalDetails = (props) => {
                 helperText={form_data.mobile_error || ""}
                 onChange={handleChange("mobile")}
                 maxLength={10}
+                inputMode="numeric"
                 type="text"
               />
             )}

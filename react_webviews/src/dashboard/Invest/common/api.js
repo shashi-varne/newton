@@ -195,3 +195,22 @@ export const getInstaRecommendation = async () => {
       throw result.error || result.message || genericErrMsg
   }
 }
+
+export const getPaymentStatus = async (data) => {
+  const res = await Api.post(data.link, data.obj);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse) ||
+    isEmpty(res.pfwresponse.result)
+  ) {
+    throw res.pfwmessage || genericErrMsg
+  }
+  const { result, status_code: status } = res.pfwresponse
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrMsg
+  }
+}

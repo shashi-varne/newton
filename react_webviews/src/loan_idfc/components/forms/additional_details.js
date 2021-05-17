@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropDownNew from "../../../common/ui/DropDownNew";
 import { validateNumber } from "utils/validators";
 import { changeNumberFormat } from "utils/validators";
 import Api from "utils/api";
@@ -297,7 +297,7 @@ class AdditionalDetails extends Component {
         <div className="additional-details">
           {employment_type === "self_employed" && (
             <div className="InputField">
-              <DropdownWithoutIcon
+              <DropDownNew
                 width="40"
                 options={this.state.businessOptions}
                 error={!!this.state.form_data.nature_of_business_error}
@@ -403,7 +403,7 @@ class AdditionalDetails extends Component {
             </div>
 
             <div className="InputField">
-              <DropdownWithoutIcon
+              <DropDownNew
                 width="40"
                 options={this.state.mailingAddressPreferenceOptions}
                 label="Mailing address preference"

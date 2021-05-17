@@ -283,6 +283,28 @@ WithProviderLayoutGold = (props) => {
   )
 }
 
+  WithProviderLayoutLoan = (props) => {
+    return(
+      <div className="FooterDefaultLayout">
+        {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer loan-with-provider" 
+        onClick={props.handleClick2}
+        style={props.buttonData.leftStyle}>
+          <div className="text-block">
+          <div className="text-block-1">{props.buttonData.leftTitle}</div>
+            <div className="text-block-2">
+              {props.buttonData.leftSubtitle}
+              </div>
+          </div>
+        </div>}
+        <div className="FlexItem2 FlexItem2-withProvider-footer" onClick={props.handleClick}>
+          <Button
+            type={props.type}
+            {...props} />
+        </div>
+        {this.renderDialog()}
+      </div>
+    )
+  }
 
   render() {
     const props = this.props;
@@ -322,6 +344,11 @@ WithProviderLayoutGold = (props) => {
       }
     }
 
+    if(project === 'lending') {
+      if(type === 'withProvider') {
+        type = 'withProviderLoan';
+      }
+    }
     let renderMapper = {
         'summary': this.renderInsuranceSummary,
         'twobutton': this.TwoButtonLayout,
@@ -331,6 +358,7 @@ WithProviderLayoutGold = (props) => {
         'withProviderGold': this.WithProviderLayoutGold,
         'fundDetailsDualButton': this.fundDetailsDualButton,
         'withProviderWithdraw': this.WithProviderLayoutWithdraw,
+        'withProviderLoan': this.WithProviderLayoutLoan
     }
 
     let renderFunction = renderMapper[type] || renderMapper['default'];
@@ -338,7 +366,7 @@ WithProviderLayoutGold = (props) => {
 
     if(!props.noFooter) {
         return (
-            <div>
+            <div data-aid='cta-button-parent'>
               {renderFunction(props)}
               {this.renderDialog()}
             </div>

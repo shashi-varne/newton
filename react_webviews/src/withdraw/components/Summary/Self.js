@@ -16,7 +16,7 @@ import './Self.scss';
 
 const SelfSummary = (props) => {
   const navigate = navigateFunc.bind(props)
-  const [taxes, setTaxes] = useState(taxes)
+  const [taxes, setTaxes] = useState('')
   const [open, setOpen] = useState({})
   const [isApiRunning, setIsApiRunning] = useState(false)
 
@@ -49,7 +49,6 @@ const SelfSummary = (props) => {
       const result = await redeemOrders('manual', {
         investments: [{ itype, subtype, allocations }],
       })
-      console.log(result)
       if (result?.resend_redeem_otp_link && result?.verification_link) {
         navigate('verify', { state:{...result} })
         return
@@ -86,7 +85,6 @@ const SelfSummary = (props) => {
     fetchTaxes()
   }, [])
 
-  console.log(taxes)
 
   return (
     <Container

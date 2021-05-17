@@ -294,6 +294,7 @@ const KycBankDetails = (props) => {
       skelton={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      data-aid='kyc-enter-bank-account-details-page'
     >
       <div className="kyc-approved-bank">
         {!isLoading && (
@@ -302,9 +303,9 @@ const KycBankDetails = (props) => {
               variant={note.variant}
               title="Note"
               message={note.info_text}
+              dataAid='kyc-bankdetails-alertbox'
             />
-            <main id='main'>
-            <span id='input-feild1'>
+            <main data-aid='kyc-enter-bank-account-details'>
               <Input
                 label="Account Holder name"
                 class="input"
@@ -315,8 +316,7 @@ const KycBankDetails = (props) => {
                 type="text"
                 disabled
                 id="name"
-              /></span>
-              <span id='input-feild2'>
+              />
               <TextField
                 label="IFSC Code"
                 id="ifsc_code"
@@ -340,8 +340,7 @@ const KycBankDetails = (props) => {
                   ),
                 }}
                 disabled={isApiRunning || disableFields.ifsc_code_disabled || ifscDisabled}
-              /></span>
-              <span id='input-feild3'>
+              />
               <Input
                 label="Account Number"
                 class="input"
@@ -350,11 +349,11 @@ const KycBankDetails = (props) => {
                 helperText={form_data.account_number_error || ""}
                 onChange={handleChange("account_number")}
                 maxLength={16}
+                inputMode="numeric"
                 type="password"
                 id="account_number"
                 disabled={isApiRunning || disableFields.account_number_disabled}
-              /></span>
-              <span id='input-feild4'>
+              />
               <Input
                 label="Confirm Account Number"
                 class="input"
@@ -364,11 +363,12 @@ const KycBankDetails = (props) => {
                 onChange={handleChange("c_account_number")}
                 maxLength={16}
                 type="text"
+                inputMode="numeric"
                 id="c_account_number"
                 disabled={
                   isApiRunning || disableFields.c_account_number_disabled
                 }
-              /></span>
+              />
               <div className="input">
                 <DropdownWithoutIcon
                   error={form_data.account_type_error ? true : false}

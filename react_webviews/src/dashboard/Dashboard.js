@@ -26,6 +26,8 @@ import AccountLinked from "./AccountMerge/Linked";
 import SdkLanding from './Invest/components/SdkLanding';
 import NPS from "./nps";
 import {getConfig} from 'utils/functions';
+import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
+import InvestmentProof from "./MyAccount/InvestmentProof";
 
 const Home = (props) => {
   const { url } = props.match;
@@ -65,20 +67,44 @@ const Home = (props) => {
         <Route path={`${url}notification`} component={Notification} />
 
         <Route
+          exact
+          path={`${url}payment/callback/:status`}
+          component={PaymentCallback}
+        />
+        <Route
+          exact
           path={`${url}payment/callback/:status/:message`}
           component={PaymentCallback}
         />
         <Route
+          exact
+          path={`${url}sip/payment/callback/:status`}
+          component={SipPaymentCallback}
+        />
+        <Route
+          exact
           path={`${url}sip/payment/callback/:status/:message`}
           component={SipPaymentCallback}
         />
         <Route path={`${url}payment/options`} component={PaymentOptions} />
         <Route
-          path={[
-            `${url}page/callback/:investment_type/:investment_amount`,
-            `${url}page/callback/:investment_type/:investment_amount/:status`,
-            `${url}page/callback/:investment_type/:investment_amount/:status/:message`,
-          ]}
+          exact
+          path={`${url}sdk/page/callback`}
+          render={(props) => <PageCallback {...props} type="sdk" />} 
+        />
+        <Route
+          exact
+          path={`${url}page/callback/:investment_type/:investment_amount`}
+          component={PageCallback}
+        />
+        <Route
+          exact
+          path={`${url}page/callback/:investment_type/:investment_amount/:status`}
+          component={PageCallback}
+        />
+        <Route
+          exact
+          path={`${url}page/callback/:investment_type/:investment_amount/:status/:message`}
           component={PageCallback}
         />
         <Route
@@ -89,6 +115,15 @@ const Home = (props) => {
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
         <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />
         <Route exact path={`${url}account/merge/linked/success`} component={AccountLinked} />
+        <Route exact path={`${url}blank-mandate/upload`} component={BlankMandateUpload} />
+        <Route 
+          exact path={`${url}investment-proof`} 
+          render={(props) => <InvestmentProof {...props} type="investment-proof" />} 
+        />
+        <Route 
+          exact path={`${url}capital-gain`} 
+          render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
+        />
         <Route component={NotFound} />
       </Switch>
     </Fragment>

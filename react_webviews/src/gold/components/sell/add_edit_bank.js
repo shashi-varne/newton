@@ -10,7 +10,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import GoldLivePrice from '../ui_components/live_price';
 import ConfirmDialog from '../ui_components/confirm_dialog';
-import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../common/ui/DropDownNew';
 import { bankAccountTypeOptions } from 'utils/constants';
 import TextField from 'material-ui/TextField';
 import { storageService, getUrlParams } from "utils/validators";
@@ -402,7 +402,7 @@ class SellAddEditBank extends Component {
             </div>
           </div>
           <div className="InputField">
-            <DropdownWithoutIcon
+            <DropDownNew
               error={(this.state.formData.account_type_error) ? true : false}
               helperText={this.state.formData.account_type_error}
               width="40"

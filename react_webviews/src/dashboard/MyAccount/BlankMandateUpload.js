@@ -55,6 +55,12 @@ const BlankMandateUpload = (props) => {
               getBase64(file, function (img) {
                 setFileToShow(img);
               });
+              setTimeout(
+                function () {
+                  setShowLoader(false);
+                },
+                1000
+              );
               break;
             default:
               toast("Please select image file");
@@ -74,6 +80,7 @@ const BlankMandateUpload = (props) => {
   };
 
   const handleChange = (event) => {
+    event.preventDefault();
     const uploadedFile = event.target.files[0];
     let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
 
@@ -82,23 +89,17 @@ const BlankMandateUpload = (props) => {
       return;
     }
 
-    if (config.html_camera) {
-      native_call_handler(
-        "open_camera",
-        "blank_mandate",
-        "blank_mandate.jpg",
-        "front"
-      );
-    } else {
-      setFile(uploadedFile);
-      getBase64(uploadedFile, function (img) {
-        setFileToShow(img);
-      });
-    }
+    setFile(uploadedFile)
+    getBase64(uploadedFile, function (img) {
+      setFileToShow(img)
+    })
   };
 
-  const handleUpload = () => {
-    inputEl.current.click();
+  const handleUpload = (method_name) => {
+    if(getConfig().html_camera)
+      inputEl.current.click()
+    else
+      native_call_handler(method_name, 'blank_mandate', 'blank_mandate.jpg', 'front')
   };
 
   const handleClick = async () => {
@@ -148,11 +149,11 @@ const BlankMandateUpload = (props) => {
                   />
                   <button
                     data-click-type="camera-front"
-                    onClick={handleUpload}
+                    onClick={() => handleUpload("open_camera")}
                     className="blank-mandate-upload-button"
                   >
                     <img alt="" src={require(`assets/take_pic_green.svg`)} />
-                    <div className="upload-action">open camera</div>
+                    <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
                   </button>
                 </div>
                 <div>- OR -</div>
@@ -164,14 +165,14 @@ const BlankMandateUpload = (props) => {
                     onChange={handleChange}
                   />
                   <button
-                    onClick={handleUpload}
+                    onClick={() => handleUpload("open_gallery")}
                     className="blank-mandate-upload-button"
                   >
                     <img
                       alt=""
                       src={require(`assets/go_to_gallery_green.svg`)}
                     />
-                    <div className="upload-action">Open Gallery</div>
+                    <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                   </button>
                 </div>
               </div>
@@ -188,11 +189,11 @@ const BlankMandateUpload = (props) => {
                 onChange={handleChange}
               />
               <button
-                onClick={handleUpload}
+                onClick={() => handleUpload("open_gallery")}
                 className="blank-mandate-upload-button"
               >
                 <img alt="" src={require(`assets/go_to_gallery_green.svg`)} />
-                <div className="upload-action">Open Gallery</div>
+                <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
               </button>
             </div>
           </div>
