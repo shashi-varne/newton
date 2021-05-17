@@ -190,6 +190,7 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.dob_error || ""}
               onChange={handleChange("dob")}
               maxLength={10}
+              inputMode="numeric"
               type="text"
               id="dob"
               disabled={isApiRunning}
@@ -216,6 +217,7 @@ const PersonalDetails1 = (props) => {
                 onChange={handleChange("mobile")}
                 maxLength={10}
                 type="text"
+                inputMode="numeric"
                 disabled={isApiRunning}
               />
             )}

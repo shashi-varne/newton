@@ -10,7 +10,9 @@ import Cart from '../../../DIY/mini-components/Cart'
 import './FundType.scss';
 
 import { navigate as navigateFunc } from '../../common/commonFunctions'
+import { getConfig } from '../../../../utils/functions'
 
+const isMobileDevice = getConfig().isMobileDevice;
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   const navigate = navigateFunc.bind(parentProps)
   const handleNavigate = (data) => {
@@ -134,23 +136,28 @@ const FundType = (props) => {
           </div>
         </section>
       </section>
-      <footer className="diy-cart-footer">
-        {cart.length > 0 && (
-          <DiyCartButton
-            className="button"
-            onClick={() => setCartActive(true)}
-            cartlength={cart.length}
-          />
-        )}
+      {getConfig().productName !== "finity" && (
+        <footer
+          className="diy-cart-footer"
+          style={{ marginLeft: isMobileDevice && 0 }}
+        >
+          {cart.length > 0 && (
+            <DiyCartButton
+              className="button"
+              onClick={() => setCartActive(true)}
+              cartlength={cart.length}
+            />
+          )}
 
-        <Cart
-          isOpen={cartActive && cart.length > 0}
-          setCartActive={setCartActive}
-          cart={cart}
-          setCart={setCart}
-          {...props}
-        />
-      </footer>
+          <Cart
+            isOpen={cartActive && cart.length > 0}
+            setCartActive={setCartActive}
+            cart={cart}
+            setCart={setCart}
+            {...props}
+          />
+        </footer>
+      )}
     </Container>
   )
 }

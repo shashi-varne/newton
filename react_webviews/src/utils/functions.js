@@ -214,6 +214,10 @@ export const getConfig = () => {
     project = 'iw-dashboard';
   }
 
+  if(!partner_code) {
+    partner_code = storageService().get("partner") || ""
+  }
+
   if (is_secure === "true") storageService().set("is_secure", true);
 
   let returnConfig = getPartnerConfig(partner_code);
