@@ -9,7 +9,6 @@ import {
 import ContactUs from "../../../common/components/contact_us";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import Slide from "@material-ui/core/Slide";
-import { getConfig } from "utils/functions";
 
 const Transition = (props) => {
   return <Slide direction="up" {...props} />;
@@ -23,6 +22,7 @@ class FinalOffer extends Component {
       screen_name: "final_loan",
       first_name: "",
       vendor_info: {},
+      openConfirmDialog: false
     };
 
     this.initialize = initialize.bind(this);
@@ -41,6 +41,7 @@ class FinalOffer extends Component {
     this.setState({
       vendor_info: vendor_info,
       first_name: personal_info.first_name,
+      email: personal_info.email_id,
       application_id: application_id,
     });
   };
@@ -62,8 +63,9 @@ class FinalOffer extends Component {
   }
 
   handleClick = () => {
-    // this.sendEvents("next");
-    // this.navigate("reports");
+    this.setState({
+      openConfirmDialog: true,
+    });
   };
 
   setErrorData = (type) => {
@@ -85,11 +87,17 @@ class FinalOffer extends Component {
     }
   };
 
+  handleClose = () => {
+    this.setState({
+      openConfirmDialog: false,
+    });
+  };
+
   renderDialog = () => {
     return (
       <Dialog
         id="bottom-popup"
-        open={true}
+        open={this.state.openConfirmDialog || false}
         onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -97,12 +105,14 @@ class FinalOffer extends Component {
       >
         <DialogContent>
           <div
-            className="group-health-bmi-dialog help-query-dialog"
+            className="group-health-bmi-dialog email-verification-dialog"
             id="alert-dialog-description"
           >
             <div className="top-content flex-between">
               <div className="generic-page-title">
-                <div className="call-back-popup-heading">Query sent!</div>
+                <div className="call-back-popup-heading">
+                  Email verification required!
+                </div>
               </div>
               <img
                 className=""
@@ -111,20 +121,24 @@ class FinalOffer extends Component {
               />
             </div>
             <div className="content-mid">
-            IDFC First Bank has sent a verification email to your company id xxx. Validate it to help us fasten your loan application process. Please ignore, if already done.
+              IDFC FIRST Bank has sent a verification email to your company id{" "}
+              <b>{this.state.email}</b>. Validate it to help us fasten your loan
+              application process. Please ignore, if already done.
             </div>
             <div>
               <button
-                style={{ cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}
+                style={{
+                  cursor: "pointer",
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                }}
                 onClick={() => {
-                  this.props.history.push(
-                    { pathname: "queries", search: getConfig().searchParams },
-                    { fromScreen: "send_query" }
-                  );
+                  this.sendEvents("next");
+                  this.navigate("reports");
                 }}
                 className="call-back-popup-button"
               >
-                OKAY
+                CONTINUE
               </button>
             </div>
           </div>

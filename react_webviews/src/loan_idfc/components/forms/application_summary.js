@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import { timeStampToDate, capitalize, capitalizeFirstLetter, formatAmountInr } from "utils/validators"
+import { timeStampToDate, capitalize, capitalizeFirstLetter, formatAmountInr } from "utils/validators";
+import Collapse from "@material-ui/core/Collapse";
 
 class ApplicationSummary extends Component {
   constructor(props) {
@@ -172,7 +173,7 @@ class ApplicationSummary extends Component {
           </div>
         </div>
 
-        {props.open && (
+        <Collapse in={props.open}>
           <div className="bct-content">
             {props.data.map(this.renderAccordiansubData)}
             {this.state.idfc_loan_status === "basic_details_uploaded" && props.edit &&  (
@@ -187,7 +188,7 @@ class ApplicationSummary extends Component {
               </div>
             )}
           </div>
-        )}
+        </Collapse>
       </div>
     );
   };
