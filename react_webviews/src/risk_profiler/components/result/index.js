@@ -355,7 +355,6 @@ class Result extends Component {
           handleClick={this.handleClick}
           edit={this.props.edit}
           buttonTitle="Invest Now"
-          topIcon={this.state.params.hideRPReset !== "true" ? '' : "restart"}
           handleReset={this.showDialog}
           resetpage={this.allowReset()}
           events={this.sendEvents('just_set_events')}

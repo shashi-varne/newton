@@ -33,11 +33,11 @@ const RiskIntroContent = () => {
       <p className="risk_profiler-intro-des">
         Risk Profile is an indication of your willingness and ability to
         take on risk in your investments.
-          </p>
+      </p>
       <div className="risk_profiler-benefit-outer">
         <h1 className="risk_profiler-benefit-heading">
           How does it help you?
-            </h1>
+        </h1>
         <div style={{ margin: "17.9px 0 0 0" }}>
           {BENEFITS_LIST.map((benefit, idx) => (
             <RenderBenefit data={benefit} key={idx} />
