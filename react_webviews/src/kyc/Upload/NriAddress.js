@@ -285,7 +285,7 @@ const NRIAddressUpload = (props) => {
                   Upload front side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
                   <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
@@ -365,7 +365,7 @@ const NRIAddressUpload = (props) => {
                   Upload front side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={frontDocRef}
                   type="file"
@@ -410,7 +410,7 @@ const NRIAddressUpload = (props) => {
                   Upload back side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
                   <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
@@ -490,7 +490,7 @@ const NRIAddressUpload = (props) => {
                   Upload back side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={backDocRef}
                   type="file"

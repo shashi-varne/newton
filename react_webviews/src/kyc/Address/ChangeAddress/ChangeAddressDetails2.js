@@ -449,7 +449,7 @@ const ChangeAddressDetails2 = (props) => {
                 />
               )}
               {!backDoc && (
-                <div className="caption">
+                <div className="caption" data-aid='caption-text'>
                   Upload back side of {addressProof}
                 </div>
               )}

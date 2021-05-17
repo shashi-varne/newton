@@ -172,7 +172,7 @@ const BlankMandateUpload = (props) => {
                       alt=""
                       src={require(`assets/go_to_gallery_green.svg`)}
                     />
-                    <div className="upload-action">Open Gallery</div>
+                    <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                   </button>
                 </div>
               </div>
@@ -193,7 +193,7 @@ const BlankMandateUpload = (props) => {
                 className="blank-mandate-upload-button"
               >
                 <img alt="" src={require(`assets/go_to_gallery_green.svg`)} />
-                <div className="upload-action">Open Gallery</div>
+                <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
               </button>
             </div>
           </div>
