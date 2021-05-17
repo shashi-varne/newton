@@ -6,7 +6,7 @@ import { FormControl } from 'material-ui/Form';
 
 import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
-import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../common/ui/DropDownNew';
 import Api from 'utils/api';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
@@ -248,7 +248,7 @@ class AddressDetails extends Component {
                         Current Residence Address
                     </div>
                     <div className="InputField">
-                        <DropdownWithoutIcon
+                        <DropDownNew
                             width="40"
                             options={this.state.residentialOptions}
                             id="residence_type"
