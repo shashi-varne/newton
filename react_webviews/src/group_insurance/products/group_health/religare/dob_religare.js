@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { initialize } from '../common_data';
+import { initialize, getPlanDetails, getPlanList } from '../common_data';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
-import { formatDate, dobFormatTest, isValidDate, capitalizeFirstLetter } from 'utils/validators';
-import { calculateAge } from '../../../../utils/validators';
+import { isEmpty, formatDate, dobFormatTest, isValidDate, capitalizeFirstLetter } from 'utils/validators';
+import { calculateAge, compareObjects } from '../../../../utils/validators';
 import {getInsuredMembersUi, resetInsuredMembers} from '../constants';
 
 const eldMemOptionMapper = {
@@ -28,6 +28,8 @@ class GroupHealthPlanDobReligare extends Component {
         }
 
         this.initialize = initialize.bind(this);
+        this.getPlanDetails = getPlanDetails.bind(this);
+        this.getPlanList = getPlanList.bind(this);
     }
 
     componentWillMount() {
@@ -104,9 +106,10 @@ class GroupHealthPlanDobReligare extends Component {
         }
     }
 
-    handleClick = () => {
+    handleClick = async () => {
         this.sendEvents('next');
         let {validation_props, groupHealthPlanData } = this.state || {};
+        var {provider} = this.state;
 
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData) || {};
         var post_body = groupHealthPlanData.post_body;
@@ -142,8 +145,6 @@ class GroupHealthPlanDobReligare extends Component {
             canProceed = false;
         }
 
-       
-
         if (canProceed) {
             let post_body = groupHealthPlanData.post_body || {};
 
@@ -174,12 +175,55 @@ class GroupHealthPlanDobReligare extends Component {
             post_body.eldest_member = this.memberKeyMapper(this.state.eldest_member).backend_key;
             post_body.eldest_dob = this.state.eldest_dob;
             
-            if(this.state.provider === 'GMC'){
-                post_body.plan_id = 'fisdom_health_protect'
+            if(provider === 'GMC'){
+                post_body.plan_id = 'fisdom_health_protect';
             }
             groupHealthPlanData.post_body = post_body;
             this.setLocalProviderData(groupHealthPlanData);
-            this.navigate(this.state.next_screen);
+
+            var keys_to_check = ['account_type']
+            var current_state = {}
+            for(var x in post_body){
+                if(keys_to_check.indexOf(x) >= 0){
+                    current_state[x] = post_body[x]
+                }
+            }
+            for(var y in post_body.member_details){
+                current_state[`${y}_dob`] = post_body.member_details[y].dob;
+            }
+            if(provider === 'GMC'){
+                this.setState({
+                    current_state
+                }, ()=>{
+                    var sameData = compareObjects( Object.keys(current_state),current_state, groupHealthPlanData.plan_list_current_state);
+                    if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
+                        this.getPlanDetails();
+                    }else{
+                        this.setLocalProviderData(groupHealthPlanData);
+                        this.navigate(this.state.next_screen);
+                        return;
+                    }
+                })
+            }else if(provider === 'RELIGARE'){
+                this.setLocalProviderData(groupHealthPlanData);
+                let current_state = {}
+                current_state['account_type'] = post_body['account_type'];
+                for(let x in post_body.member_details){
+                    current_state[`${x}`] = post_body.member_details[x]['dob'];
+                }
+                var previousData = groupHealthPlanData.list_previous_data || {};
+                var sameData = compareObjects(Object.keys(current_state), current_state, previousData)
+                this.setState({
+                    current_state
+                }, ()=>{
+                    if(!sameData || isEmpty(groupHealthPlanData.plan_list)){
+                        this.getPlanList();
+                    }else{
+                        this.navigate('plan-list')
+                    }
+                })
+                return;
+            }
         }
 
     }
@@ -219,7 +263,7 @@ class GroupHealthPlanDobReligare extends Component {
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
-                show_loader={this.state.show_loader}
+                showLoader={this.state.show_loader}
                 title={isSelf ? 'Your date of birth' : 'Date of birth details'}
                 fullWidthButton={true}
                 buttonTitle="CONTINUE"
