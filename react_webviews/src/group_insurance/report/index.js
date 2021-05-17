@@ -106,7 +106,6 @@ class Report extends Component {
     //if only 1 item is present, add extra swipeable area below the item to cover whole screen
     if(!isEmpty(filteredReportData) && !isEmpty(filteredReportData[selectedTab]) &&  filteredReportData[selectedTab].length === 1 ){
       setTimeout(()=>{
-        var current_tab = document.getElementsByClassName(selectedTab)[0]
         var tabContainer = document.getElementsByClassName('react-swipeable-view-container')[0];
         tabContainer.style.height = '70vh'
       },0)
