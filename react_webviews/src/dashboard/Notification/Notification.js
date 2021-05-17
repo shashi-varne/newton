@@ -104,22 +104,24 @@ class Notification extends Component {
         noFooter={true}
         skelton={this.state.showLoader}
         title="Notification"
+        data-aid='notification-screen'
       >
-        <div className="notification">
+        <div className="notification" data-aid='notification'>
           {notifications.length === 0 && (
-            <div className="message">
+            <div className="message" data-aid='message'>
               <h4>You do not have any notifications.</h4>
             </div>
           )}
 
           {notifications.length !== 0 && (
-            <div className="list">
+            <div className="list" data-aid='list'>
               {notifications.map((target, index) => {
                 return (
                   <div
                     key={index}
                     className="content"
                     onClick={() => this.handleClick(target)}
+                    data-aid={`notification-content-${index+1}`}
                   >
                     <div className="icon">
                       {!target.image && (
