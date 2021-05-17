@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { getConfig, isIframe } from "../utils/functions";
+import { getConfig } from "../utils/functions";
 import { nativeCallback } from "../utils/native_callback";
 import { storageService } from "../utils/validators";
 import { logout } from "./function";
