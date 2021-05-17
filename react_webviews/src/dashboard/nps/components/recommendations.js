@@ -19,7 +19,9 @@ import { getBasePath } from "../../../utils/functions";
 import { keyBy } from 'lodash';
 import { isEmpty } from "../../../utils/validators";
 
-const isMobileDevice = getConfig().isMobileDevice;
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
+const partnerCode = config.partner_code;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -275,6 +277,9 @@ class Recommendations extends Component {
     let result = await this.getInvestmentData(data, true);
 
     if (result) {
+      if(partnerCode) {
+        storageService().set("partner", partnerCode)
+      }
       let pgLink = result.investments.pg_link;
 
       let plutus_redirect_url = encodeURIComponent(

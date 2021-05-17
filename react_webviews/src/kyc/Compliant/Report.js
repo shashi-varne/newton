@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { reportCardDetails } from "../constants";
-import ContactUs from "../mini-components/ContactUs";
+import ContactUs from "../../common/components/contact_us";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isEmpty } from "../../utils/validators";
