@@ -37,7 +37,7 @@ import PersonalDetails2 from "./PersonalDetails/Screen2";
 import PersonalDetails3 from "./PersonalDetails/Screen3";
 import PersonalDetails4 from "./PersonalDetails/Screen4";
 import KycUploadDocuments from "./BankKyc/KycUploadDocuments";
-import SampleDocuments from "./BankKyc/SampleDocuments";
+import BankSampleDocuments from "./BankKyc/BankSampleDocuments";
 import AddressDetails2 from "./Address/AddressDetails2";
 import AddressDetails1 from "./Address/AddressDetails1";
 import DigilockerPersonalDetails1 from "./Digilocker/PersonalDetails1";
@@ -52,6 +52,19 @@ import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
 import Native from "./Native/Native";
+
+// Equity Components
+import AllowLocation from  "./Equity/components/AllowLocation";
+import Experience from "./Equity/components/Experience";
+import SelfieInstructions from "./Equity/components/SelfieInstructions";
+import StocksStatus from "./Equity/components/StocksStatus";
+import NriError from "./Equity/components/NriError";
+import LocationError from "./Equity/components/LocationError";
+import AccountInfo from "./Equity/components/AccountInfo";
+import PanInstructions from "./Equity/components/PanInstructions";
+import DocumentVerification from "./Equity/components/DocumentVerification";
+import ManualSignature from "./Equity/components/ManualSignature";
+import FAndOSampleDocument from "./Equity/components/F&OSampleDocuments";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -243,7 +256,7 @@ const Kyc = (props) => {
         <Route
           exact
           path={`${url}/sample-documents`}
-          component={SampleDocuments}
+          component={BankSampleDocuments}
         />
         <Route
           exact
@@ -284,6 +297,61 @@ const Kyc = (props) => {
           exact
           path={`${url}/nri-address-details2`}
           component={NRIAddressDetails2}
+        />
+        <Route 
+          exact 
+          path={`${url}/location/allow`} 
+          component={AllowLocation} 
+        />
+        <Route 
+          exact 
+          path={`${url}/trading-experience`} 
+          component={Experience} 
+        />
+        <Route 
+          exact 
+          path={`${url}/selfie-instructions`} 
+          component={SelfieInstructions} 
+        />
+        <Route 
+          exact 
+          path={`${url}/stocks-status`} 
+          component={StocksStatus} 
+        />
+        <Route 
+          exact 
+          path={`${url}/nri-error`} 
+          component={NriError} 
+        />
+        <Route 
+          exact 
+          path={`${url}/location-error`} 
+          component={LocationError} 
+        />
+        <Route 
+          exact 
+          path={`${url}/account-info`} 
+          component={AccountInfo} 
+        />
+        <Route 
+          exact 
+          path={`${url}/pan-instructions`} 
+          component={PanInstructions} 
+        />
+        <Route 
+          exact 
+          path={`${url}/document-verification`} 
+          component={DocumentVerification} 
+        />
+        <Route 
+          exact 
+          path={`${url}/manual-signature`} 
+          component={ManualSignature} 
+        />
+        <Route 
+          exact 
+          path={`${url}/fno-sample-documents`} 
+          component={FAndOSampleDocument} 
         />
         <Route component={NotFound} />
       </Switch>
