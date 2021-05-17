@@ -198,14 +198,12 @@ class EligibleLoan extends Component {
         hidePageTitle={true}
         buttonTitle="VIEW FINAL OFFER"
         handleClick={this.handleClick}
-        // headerData={{
-        //   progressHeaderData: this.state.progressHeaderData,
-        // }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        title="Congrats!"
       >
         <div className="eligible-loan" id="max-amount">
           <img

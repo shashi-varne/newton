@@ -7,7 +7,13 @@ import {
   capitalizeFirstLetter,
 } from "../../../utils/validators";
 import ContactUs from "../../../common/components/contact_us";
+import Dialog, { DialogContent } from "material-ui/Dialog";
+import Slide from "@material-ui/core/Slide";
+import { getConfig } from "utils/functions";
 
+const Transition = (props) => {
+  return <Slide direction="up" {...props} />;
+};
 class FinalOffer extends Component {
   constructor(props) {
     super(props);
@@ -56,8 +62,8 @@ class FinalOffer extends Component {
   }
 
   handleClick = () => {
-    this.sendEvents("next");
-    this.navigate("reports");
+    // this.sendEvents("next");
+    // this.navigate("reports");
   };
 
   setErrorData = (type) => {
@@ -77,6 +83,54 @@ class FinalOffer extends Component {
         errorData: { ...mapper[type], setErrorData: this.setErrorData },
       });
     }
+  };
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        id="bottom-popup"
+        open={true}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        TransitionComponent={Transition}
+      >
+        <DialogContent>
+          <div
+            className="group-health-bmi-dialog help-query-dialog"
+            id="alert-dialog-description"
+          >
+            <div className="top-content flex-between">
+              <div className="generic-page-title">
+                <div className="call-back-popup-heading">Query sent!</div>
+              </div>
+              <img
+                className=""
+                src={require(`assets/${this.state.productName}/icn_msg_sent.svg`)}
+                alt=""
+              />
+            </div>
+            <div className="content-mid">
+            IDFC First Bank has sent a verification email to your company id xxx. Validate it to help us fasten your loan application process. Please ignore, if already done.
+            </div>
+            <div>
+              <button
+                style={{ cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}
+                onClick={() => {
+                  this.props.history.push(
+                    { pathname: "queries", search: getConfig().searchParams },
+                    { fromScreen: "send_query" }
+                  );
+                }}
+                className="call-back-popup-button"
+              >
+                OKAY
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
   };
 
   render() {
@@ -122,6 +176,7 @@ class FinalOffer extends Component {
           </div>
           <ContactUs />
         </div>
+        {this.renderDialog()}
       </Container>
     );
   }
