@@ -13,6 +13,7 @@ import { getConfig } from '../../../../utils/functions';
 import { CUSTOM_GOAL_TARGET_MAP } from './constants';
 import { get_recommended_funds } from '../../common/api';
 import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
 
@@ -92,7 +93,7 @@ const CustomGoalTarget = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "select target amount",
-        "flow": "invest for goal",
+        "flow": flowName['investForGoal'],
         "goal_purpose": subtype || "",
         "target_amount_selected": targetAmount || ""
         }

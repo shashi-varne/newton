@@ -12,6 +12,7 @@ import './FundType.scss';
 import { navigate as navigateFunc } from '../../common/commonFunctions'
 import { nativeCallback } from '../../../../utils/native_callback'
 import { getConfig } from '../../../../utils/functions'
+import { flowName } from '../../constants'
 
 const isMobileDevice = getConfig().isMobileDevice;
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
@@ -128,7 +129,7 @@ const FundType = (props) => {
               "userAction": userAction,
               "fund_name": fundName || "",
               "screen_name": cardClicked || "",
-              "flow": "diy",
+              "flow": flowName['diy'],
               "cart_count": cartCount,
             },
     };

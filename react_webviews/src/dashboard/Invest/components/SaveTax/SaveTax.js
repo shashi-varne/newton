@@ -6,6 +6,7 @@ import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
 import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const term = 15;
 // TODO: What does this code do?
@@ -84,7 +85,7 @@ const Landing = (props) => {
         "user_action": userAction || "",
         "screen_name": "select order type",
         "order_type": investTypeDisplay === "sip" ? "SIP" : "OT",
-        "flow": "tax saving"
+        "flow": flowName['saveTax']
         }
     };
     if (userAction === 'just_set_events') {

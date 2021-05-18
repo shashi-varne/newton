@@ -16,6 +16,7 @@ import { getBasePath } from "../../utils/functions";
 import { proceedInvestment } from "../proceedInvestmentFunctions";
 import "./SipDates.scss";
 import { nativeCallback } from "../../utils/native_callback";
+import { flowName } from "../Invest/constants";
 
 class SipDates extends Component {
   constructor(props) {
@@ -175,7 +176,7 @@ class SipDates extends Component {
       "properties": {
         "screen_name": screenName || 'investment date',
         "user_action": userAction || "",
-        "flow": (this.state.orderType === "savetaxsip" ? "tax saving" : this.state.orderType) || "",
+        "flow": (this.state.orderType === "savetaxsip" ? flowName['saveTax'] : this.state.orderType) || "",
         ...additionalData
         }
     };

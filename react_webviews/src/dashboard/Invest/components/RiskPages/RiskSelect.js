@@ -5,7 +5,7 @@ import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { navigate as navigateFunc } from '../../common/commonFunctions';
-import { riskProfiles } from '../../constants';
+import { flowName, riskProfiles } from '../../constants';
 import FSelect from './FSelect';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { storageService } from '../../../../utils/validators'
@@ -119,7 +119,7 @@ const RiskSelect = ({
       "properties": {
         "user_action": userAction || "",
         "screen_name": "selectrisk profile",
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || "",
         "profile": selectedRisk,
         "info_clicked": storageService().get('risk-info-clicked') ? 'yes' : 'no',
         }

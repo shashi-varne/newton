@@ -11,6 +11,7 @@ import BottomSheet from '../../../../common/ui/BottomSheet';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { nativeCallback } from '../../../../utils/native_callback';
 import toast from 'common/ui/Toast';
+import { flowName } from '../../constants';
 
 const { productName } = getConfig();
 
@@ -95,7 +96,7 @@ const RiskModify = ({
       "properties": {
         "user_action": userAction || "",
         "screen_name": "changerisk profile",
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || "",
         "profile": selectedRisk,
         "info_clicked": 'no'
         }

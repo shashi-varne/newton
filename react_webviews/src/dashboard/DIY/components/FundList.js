@@ -19,6 +19,7 @@ import {
   CATEGORY,
   SUBCATEGORY,
 } from '../constants'
+import {flowName} from '../../Invest/constants'
 
 import add_cart_icon from '../../../assets/add_cart_icon.png'
 import remove_cart_icon from '../../../assets/remove_cart_icon.png'
@@ -176,13 +177,13 @@ const FundList = (props) => {
               "filter_clicked": storageService().get("filter_clicked")
                 ? "yes"
                 : "no",
-              "flow": "diy",
+              "flow": flowName['diy'],
             }
           : {
               "userAction": userAction,
               "fund_name": fundName || "",
               "screen_name": screenName || "",
-              "flow": "diy",
+              "flow": flowName['diy'],
               "cart_count": cartCount,
             },
     };

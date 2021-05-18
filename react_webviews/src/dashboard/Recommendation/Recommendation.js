@@ -24,6 +24,7 @@ import RecommendationTopCard from './RecommendationTopCard';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import { nativeCallback } from '../../utils/native_callback';
 import toast from 'common/ui/Toast'
+import { flowName } from '../Invest/constants';
 
 const sipTypesKeys = [
   "buildwealth",
@@ -267,7 +268,7 @@ const Recommendations = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "recommended funds",
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || "",
         "check_how_clicked": storageService().get("check_how_clicked") ? "yes" : "no",
         "period_changed": storageService().get("period_changed") ? "yes" : "no",
         "info_clicked": storageService().get("info_clicked") ? "yes" : "no",
@@ -279,9 +280,7 @@ const Recommendations = (props) => {
     if (userAction === 'just_set_events') {
       return eventObj;
     } else {
-      storageService().remove("check_how_clicked") 
-      storageService().remove("period_changed")
-      storageService().remove("info_clicked")
+      removeEventData();
       nativeCallback({ events: eventObj });
     }
   }

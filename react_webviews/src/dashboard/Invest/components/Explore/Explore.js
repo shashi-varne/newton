@@ -15,6 +15,7 @@ import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
 import isEmpty from 'lodash/isEmpty';
 import './Explore.scss';
 import { nativeCallback } from '../../../../utils/native_callback'
+import { flowName } from '../../constants'
 
 export const exploreMFMappings = [
   {
@@ -85,7 +86,7 @@ const InvestExplore = (props) => {
         "screen_name": "explore all mutual fund",
         "user_action": userAction || "",
         "card_clicked": cardClicked || "",
-        "flow": "diy",
+        "flow": flowName['diy'],
         "source": ""
         }
     };

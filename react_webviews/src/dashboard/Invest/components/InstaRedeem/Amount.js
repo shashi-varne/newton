@@ -5,7 +5,7 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
-import { investRedeemData } from "../../constants";
+import { flowName, investRedeemData } from "../../constants";
 import {
   getGoalRecommendation,
   navigate as navigateFunc,
@@ -95,7 +95,7 @@ const InvestAmount = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": 'select invest amount',
-        "flow": "insta-redeem",
+        "flow": flowName['instaRedeem'],
         "amount_value": amount
         }
     };

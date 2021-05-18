@@ -469,3 +469,13 @@ export const sdkInvestCardMapper = [
     path: '/help'
   }
 ]
+
+export const flowName = {
+  buildWealth: "build wealth",
+  diy: "diy",
+  instaRedeem: "insta-redeem",
+  investForGoal: "invest for goal",
+  nfo: "nfo",
+  parkMoney: "park my savings",
+  saveTax: "tax saving"
+}

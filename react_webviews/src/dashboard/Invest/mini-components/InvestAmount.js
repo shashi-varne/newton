@@ -22,6 +22,7 @@ import {
 import useFunnelDataHook from '../common/funnelDataHook';
 import './mini-components.scss';
 import { nativeCallback } from '../../../utils/native_callback';
+import { flowName } from '../constants';
 
 const date = new Date();
 const month = date.getMonth();
@@ -195,7 +196,7 @@ const InvestAmount = (props) => {
         "user_action": userAction || "",
         "screen_name": "select invest amount",
         "amount": userEnteredAmt || "",
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || ""
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || ""
         }
     };
     if(funnelData.investType === 'saveforgoal')

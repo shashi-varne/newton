@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
-import { nfoData } from "../../constants";
+import { flowName, nfoData } from "../../constants";
 import './NFO.scss';
 import { nativeCallback } from "../../../../utils/native_callback";
 
@@ -29,7 +29,7 @@ class NfoInfo extends Component {
         "screen_name": "invest in nfo",
         "user_action": userAction || "",
         "scheme_type": "",
-        "flow": "nfo"
+        "flow": flowName['nfo']
         }
     };
     if (userAction === 'just_set_events') {

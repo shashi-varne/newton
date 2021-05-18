@@ -6,6 +6,7 @@ import { getFormattedDate, getSchemeOption } from "./nfoFunctions";
 import Button from "common/ui/Button";
 import "./FundDetail.scss";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { flowName } from "../../constants";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ class FundDetail extends Component {
         "screen_name": "fund detail",
         "user_action": userAction || "",
         "scheme_type": "",
-        "flow": "nfo"
+        "flow": flowName['nfo']
         }
     };
     if (userAction === 'just_set_events') {

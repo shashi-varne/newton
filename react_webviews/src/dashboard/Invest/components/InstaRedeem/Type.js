@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Container from "../../../common/Container";
 import InvestType from "../../mini-components/InvestType";
-import { investRedeemData } from "../../constants";
+import { flowName, investRedeemData } from "../../constants";
 import { navigate as navigateFunc } from "../../common/commonFunctions";
 import useFunnelDataHook from "../../common/funnelDataHook";
 import { nativeCallback } from "../../../../utils/native_callback";
@@ -28,7 +28,7 @@ const Type = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": 'select order type',
-        "flow": "insta-redeem",
+        "flow": flowName['instaRedeem'],
         "order_type": investType
         }
     };

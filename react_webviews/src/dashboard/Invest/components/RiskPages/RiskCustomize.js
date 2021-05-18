@@ -11,6 +11,7 @@ import { getConfig } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const { productName } = getConfig();
 
@@ -87,7 +88,7 @@ const RiskCustomize = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "custom profile",
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || "",
         "custom_stock%": equity,
         "custom_bond%": debt,
         }

@@ -13,6 +13,7 @@ import toast from "../../../../common/ui/Toast";
 import { isEmpty } from "../../../../utils/validators";
 import "./Funds.scss";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { flowName } from "../../constants";
 
 class NfoFunds extends Component {
   constructor(props) {
@@ -93,7 +94,7 @@ class NfoFunds extends Component {
         "screen_name": "select scheme",
         "user_action": userAction || "",
         "scheme_type": this.state.scheme || "",
-        "flow": "nfo",
+        "flow": flowName['nfo'],
         "fund number": fundNo || ""
         }
     };

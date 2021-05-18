@@ -4,6 +4,7 @@ import Container from '../../../common/Container';
 
 import { navigate as navigateFunc} from '../../common/commonFunctions';
 import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const goalTypes = {
   "Retirement":{
@@ -40,7 +41,7 @@ const GoalType = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "goal select",
-        "flow": "invest for goal",
+        "flow": flowName['investForGoal'],
         "goal_purpose": purpose || ""
         }
     };

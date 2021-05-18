@@ -8,6 +8,7 @@ import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import "../../commonStyles.scss"
 import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const term = 3;
 const currentYear = moment().year();
@@ -76,7 +77,7 @@ const Landing = (props) => {
         "user_action": userAction || "",
         "screen_name": "select years",
         "years_selected": investTypeDisplay === "1Y" ? "less than 1" : "1 to 3 years",
-        "flow": "park my savings"
+        "flow": flowName['parkMoney']
         }
     };
     if (userAction === 'just_set_events') {

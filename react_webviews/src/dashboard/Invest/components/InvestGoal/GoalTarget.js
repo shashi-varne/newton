@@ -13,6 +13,7 @@ import {
   SUBTYPE_NAME_MAP
 } from './constants';
 import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
 
@@ -83,7 +84,7 @@ const GoalTarget = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "select target type",
-        "flow": "invest for goal",
+        "flow": flowName['investForGoal'],
         "goal_purpose": subtype || "",
         "target_type": type?.toLowerCase() || ""
         }

@@ -8,6 +8,7 @@ import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import toast from 'common/ui/Toast'
 import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const currentYear = moment().year();
 const SelectYear = (props) => {
@@ -100,7 +101,7 @@ const SelectYear = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "select years",
-        "flow": "invest for goal",
+        "flow": flowName['investForGoal'],
         "goal_purpose": subtype || "",
         "years_selected": year || ""
         }

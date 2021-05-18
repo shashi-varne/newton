@@ -15,6 +15,7 @@ import PeriodWiseReturns from '../../mini-components/PeriodWiseReturns';
 import EquityDebtSlider from './EquityDebtSlider';
 import useFunnelDataHook from '../common/funnelDataHook';
 import { nativeCallback } from '../../../utils/native_callback';
+import { flowName } from '../constants';
 
 const { stockReturns, bondReturns } = getReturnRates();
 
@@ -91,7 +92,7 @@ const InvestedAmount = (props) => {
         "screen_name": "projected value",
         "years": term,
         "risk apetite": risk,
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || "",
+        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || "",
         }
     };
     if (funnelData.investType === "saveforgoal") {
