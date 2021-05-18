@@ -534,6 +534,9 @@
 }
 .Container.report-list-page {
   overflow: visible;
+  ::-webkit-scrollbar{
+    display: none !important;
+  }
 }
 .insurance-common-report-page{
   font-family: 'Rubik', sans-serif;
@@ -544,6 +547,9 @@
   margin-top: -20px;
   .MuiTypography-root{
     overflow: scroll;
+  }
+  .react-swipeable-view-container{
+    min-height: 70vh;
   }
   
 .report-list-tab-container{
