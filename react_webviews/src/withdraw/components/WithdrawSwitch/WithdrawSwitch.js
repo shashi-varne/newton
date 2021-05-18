@@ -34,7 +34,7 @@ const WithdrawSwitch = (props) => {
     try {
       setIsLoading(true);
       const response = await postSwitchOrders({switch_orders});
-      navigate('verify', { state:{...response} });
+      navigate('verify', { state:{...response, type: 'switch'} });
     } catch (err) {
       toast(err);
     } finally {

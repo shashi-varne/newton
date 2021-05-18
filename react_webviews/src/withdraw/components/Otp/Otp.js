@@ -103,21 +103,13 @@ const Otp = (props) => {
   }
 
   const sendEvents = (userAction) => {
-    var redemptionType = "";
-    if(stateParams?.type === "insta-redeem") 
-      redemptionType = "instaredeem"
-    else if(stateParams?.type === "systematic")
-      redemptionType = "system"
-    else if(stateParams?.type === "manual")
-      redemptionType = "self"
-
     let eventObj = {
       "event_name": "withdraw_flow",
       properties: {
         "user_action": userAction,
         "screen_name": 'withdrawl_otp_screen',
         "resend_clicked": resendClicked ? 'yes' : 'no',
-        'flow': redemptionType,
+        'flow': stateParams?.type || "",
         'otp': state.otp || ''
       },
     };
