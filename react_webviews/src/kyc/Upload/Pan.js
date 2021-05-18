@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
+import Button from '../../common/ui/Button'
 import Alert from '../mini-components/Alert'
 import { storageService, isEmpty } from '../../utils/validators'
 import { storageConstants } from '../constants'
@@ -163,8 +164,9 @@ const Pan = (props) => {
     }
   }
 
-  const isWeb = getConfig().isWebOrSdk
-
+  const config = getConfig();
+  const isWeb = config.isWebOrSdk
+  const productName = config.productName;
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -180,14 +182,14 @@ const Pan = (props) => {
           <div className="sub-title">
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
-          <Alert
+          {/* <Alert
             variant="attention"
             title={title}
             message={subTitle}
             renderMessage={
               !subTitle ? () => <MessageComponent kyc={kyc} /> : null
             }
-          />
+          /> */}
           {!isWeb && (
             <div
               className="kyc-doc-upload-container"
@@ -262,16 +264,21 @@ const Pan = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container noBorder">
+              <div className="caption">Your PAN card should be clearly visible in your pic</div>
+              {!file && 
+                <img
+                src={require(`assets/${productName}/pan_card.svg`)}
+                className=""
+                alt="Default PAN Card"
+              />
+              }
               {file && fileToShow && (
                 <img
                   src={fileToShow}
                   className="preview"
                   alt="Uploaded PAN Card"
                 />
-              )}
-              {!file && (
-                <div className="caption">Upload front side of PAN Card</div>
               )}
               <div className="kyc-upload-doc-actions">
                 <input
@@ -280,7 +287,7 @@ const Pan = (props) => {
                   className="kyc-upload"
                   onChange={handleChange}
                 />
-                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
+                {/* <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -295,7 +302,21 @@ const Pan = (props) => {
                     </svg>
                   )}
                   <div className="upload-action">Open Gallery</div>
-                </button>
+                </button> */}
+                <Button
+                  type="outlined"
+                  buttonTitle="ATTACH DOCUMENT"
+                  onClick={() => handleUpload("open_gallery")}
+                />
+              </div>
+              <div className="doc-upload-note-row">
+                <div className="upload-note"> How to take picture of your PAN document? </div>
+                <Button
+                  type="textonly"
+                  buttonTitle="KNOW MORE"
+                  classes={{ root: "know-more-button" }}
+                  onClick={() => navigate("/kyc/pan-instructions")}
+                />
               </div>
             </div>
           )}

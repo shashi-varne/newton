@@ -1,3 +1,8 @@
+@mixin d-flex-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
 #kyc-upload-intro {
   .banner {
     display: flex;
@@ -80,7 +85,7 @@
   }
 
   .sub-title {
-    margin-top: -18px;
+    margin-top: -15px;
     font-size: 13px;
   }
 
@@ -146,11 +151,27 @@
   margin-top: 20px;
   border: 1px dashed var(--skelton-color);
   padding: 10px 0;
+  text-align: center;
 
   .icon {
     display: block;
     margin: 70px auto 20px auto;
     width: 143px;
+  }
+
+  .doc-upload-note-row {
+    margin-top: 40px;
+    @include d-flex-space-between();
+    column-gap: 20px;
+
+    .upload-note {
+      max-width: 70%;
+      text-align: left;
+    }
+
+    .know-more-button {
+      justify-content: flex-end !important;
+    }
   }
 }
 
@@ -162,6 +183,7 @@
   text-align: center;
   line-height: 1.5;
   color: #160d2e;
+  margin-bottom: 10px;
 }
 
 .kyc-doc-upload-container .preview {
