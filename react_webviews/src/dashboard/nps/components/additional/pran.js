@@ -45,6 +45,7 @@ class NpsPran extends Component {
   render() {
     return (
       <Container
+        data-aid='nps-pran-details-screen'
         buttonTitle="CONTINUE"
         title="PRAN Details"
         showLoader={this.state.show_loader}
@@ -53,7 +54,7 @@ class NpsPran extends Component {
         skelton={this.state.skelton}
         handleClick={this.handleClick}
       >
-        <div className="pran-details">
+        <div className="pran-details" data-aid='nps-pran-details'>
           <div className="InputField">
             <InputWithIcon
               icon={card}
@@ -66,7 +67,7 @@ class NpsPran extends Component {
               onChange={this.handleChange("pran")}
             />
           </div>
-          <div className="tnc">
+          <div className="tnc" data-aid='nps-tnc'>
             PRAN is unique account number allotted to every NPS account
             subscriber, check for it on your PAN card
           </div>

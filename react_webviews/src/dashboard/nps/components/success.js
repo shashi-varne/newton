@@ -44,6 +44,7 @@ class NpsSuccess extends Component {
   render() {
     return (
       <Container
+        data-aid='nps-success-screen'
         buttonTitle="CONTINUE"
         hideInPageTitle
         hidePageTitle
@@ -51,10 +52,10 @@ class NpsSuccess extends Component {
         handleClick={this.handleClick}
       >
         <div>
-          <section className="page invest nps">
+          <section className="page invest nps" data-aid='nps-invest-page'>
             <div className="container-padding">
               <div className="payment-sucess">
-                <div className="container-padding">
+                <div className="container-padding" data-aid='nps-payment-sucess'>
                   <div ng-show="!paymentError">
                     <div className="icon">
                       <img
@@ -80,7 +81,7 @@ class NpsSuccess extends Component {
                     <p>{"{paymentMessage}"}</p>
                   </div> */}
                 </div>
-                <div className="contact container-padding">
+                <div className="contact container-padding" data-aid='nps-contact'>
                   <p>For any query, reach us at</p>
                   <div className="flex-box">
                     <div className="item">{getConfig().mobile}</div>

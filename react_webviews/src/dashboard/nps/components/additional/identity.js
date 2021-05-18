@@ -260,6 +260,7 @@ class NpsIdentity extends Component {
 
     return (
       <Container
+        data-aid='nps-additional-detais'
         buttonTitle="PROCEED"
         title="Additional Details"
         showLoader={this.state.show_loader}
@@ -271,9 +272,9 @@ class NpsIdentity extends Component {
         banner={true}
         bannerText={this.bannerText()}
       >
-        {selfie_needed && (
-          <div className="image-prev-container">
-            <div className="heading">Share your selfie</div>
+        {!selfie_needed && (
+          <div className="image-prev-container" data-aid='nps-image-prev-block'>
+            <div className="heading" data-aid='nps-share-your-selfie'>Share your selfie</div>
             <div className="display-flex">
               <img
                 className={uploaded ? "uploaded" : "upload-img"}
@@ -282,7 +283,7 @@ class NpsIdentity extends Component {
               />
               <div className="display-flex">
                 {!getConfig().Web && (
-                  <div>
+                  <div data-aid='nps-upload-file'>
                     <div className="image-upload-container"
                       onClick={() => this.startUpload('open_camera', 'address', 'address.jpg')}
                     >
@@ -292,7 +293,7 @@ class NpsIdentity extends Component {
                           alt="Document"
                           width="30"
                         />
-                        <div className="text-center label">Camera</div>
+                        <div className="text-center label" data-aid='nps-label-camera'>Camera</div>
                       </div>
                     </div>
                     <div className="image-upload-container"
@@ -304,13 +305,14 @@ class NpsIdentity extends Component {
                           alt="Document"
                           width="30"
                         />
-                        <div className="text-center label">Gallery</div>
+                        <div className="text-center label" data-aid='nps-label-gallery'>Gallery</div>
                       </div>
                     </div>
                   </div>
                 )}
                 {getConfig().Web && (
                   <div
+                    data-aid='nps-upload-file'
                     className="image-upload-container"
                     onClick={() =>
                       this.startUpload("open_file", "bank_statement")
@@ -327,7 +329,7 @@ class NpsIdentity extends Component {
                         style={{ display: "none" }}
                         onChange={this.getPhoto}
                       />
-                      <span className="text-center label">Gallery</span>
+                      <span className="text-center label" data-aid='nps-label-gallery'>Gallery</span>
                     </div>
                   </div>
                 )}
@@ -336,7 +338,7 @@ class NpsIdentity extends Component {
           </div>
         )}
 
-        <div className="nps-identity">
+        <div className="nps-identity" data-aid='nps-identity'>
           <div className="InputField">
             <InputWithIcon
               icon={person}

@@ -63,6 +63,7 @@ class NpsPaymentCallback extends Component {
   render() {
     return (
       <Container
+        data-aid='nps-payment-status'
         showLoader={this.state.show_loader}
         buttonTitle="OK"
         title="Payment Status"
@@ -71,12 +72,12 @@ class NpsPaymentCallback extends Component {
           goBack: this.goBack
         }}
       >
-        <div className="nps-payment-callback">
+        <div className="nps-payment-callback" data-aid='nps-payment-callback'>
           <div
             className="invest-sucess container-padding"
             style={{ padding: "20px" }}
           >
-            {this.state.status === 'success' && <div>
+            {this.state.status === 'success' && <div data-aid='nps-payment-successful'>
               <div className="icon">
                 <img
                   alt=""
@@ -90,7 +91,7 @@ class NpsPaymentCallback extends Component {
                 Payment of <b>{formatAmountInr(this.state.amount)}</b> towards NPS is successful
               </div>
             </div>}
-            {this.state.status !== 'success' && <div className="invest-error">
+            {this.state.status !== 'success' && <div className="invest-error" data-aid='nps-invest-error'>
               <h2>Error</h2>
               <p>Payment Failed</p>
             </div>}
