@@ -251,7 +251,7 @@ const Summary = (props) => {
                       onClick={() => navigate(getPathname.invest)}
                       buttonTitle="Explore Mutual Funds"
                       style={{
-                        width: "170px",
+                        width: "180px",
                         height: "40px",
                       }}
                     />

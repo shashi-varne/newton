@@ -116,6 +116,7 @@ class ForgotPassword extends Component {
                     label="Enter mobile number"
                     name="mobile"
                     onChange={this.handleChange("mobile")}
+                    inputMode="numeric"
                     autoFocus
                   />
                 </div>

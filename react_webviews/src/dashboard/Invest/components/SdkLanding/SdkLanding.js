@@ -12,6 +12,7 @@ import CampaignDialog from '../../mini-components/CampaignDialog';
 import './SdkLanding.scss';
 import VerificationFailedDialog from '../../mini-components/VerificationFailedDialog';
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
+import { nativeCallback } from '../../../../utils/native_callback';
 
 class SdkLanding extends Component {
   constructor(props) {
@@ -130,6 +131,10 @@ class SdkLanding extends Component {
     }
   };
 
+  goBack = () => {
+    nativeCallback({action: "exit_web"})
+  }
+
   render() {
     let {
       isReadyToInvestBase,
@@ -155,6 +160,7 @@ class SdkLanding extends Component {
         background='sdk-background'
         classHeader={this.state.headerStyle ? 'sdk-partner-header' : 'sdk-header'}
         showLoader={this.state.show_loader}
+        headerData={{goBack:this.goBack}}
       >
         <div className='sdk-landing'>
           {!this.state.kycStatusLoader ? (
