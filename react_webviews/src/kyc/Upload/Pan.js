@@ -313,7 +313,7 @@ const Pan = (props) => {
                   )}
                   <div className="upload-action">Open Gallery</div>
                 </button> */}
-                <div style={{padding: "0 10px"}}>
+                <div className="button-container">
                   <Button
                     type="outlined"
                     buttonTitle="ATTACH DOCUMENT"
