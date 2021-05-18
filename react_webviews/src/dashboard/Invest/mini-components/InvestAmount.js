@@ -194,7 +194,7 @@ const InvestAmount = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "select invest amount",
-        "amount": amount || "",
+        "amount": userEnteredAmt || "",
         "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? "invest for goal" : funnelData.investType) || ""
         }
     };

@@ -26,6 +26,7 @@ const InstaRedeem = (props) => {
 
   const [showLoader, setShowLoader] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [knowMoreClicked, setKnowMoreClicked] = useState(false);
   const {
     funnelData,
     setFunnelData,
@@ -147,7 +148,7 @@ const InstaRedeem = (props) => {
     };
     if(screenName !== "insta popup")
     {
-      eventObj.properties["know_more_clicked"] = storageService().get('know_more_clicked') ? "yes" : "no";
+      eventObj.properties["know_more_clicked"] = knowMoreClicked ? "yes" : "no";
       storageService().remove('know_more_clicked')
     }
     if(screenName === "insta popup")
@@ -155,6 +156,7 @@ const InstaRedeem = (props) => {
     if (userAction === 'just_set_events') {
       return eventObj;
     } else {
+      
       nativeCallback({ events: eventObj });
     }
   }
@@ -185,7 +187,7 @@ const InstaRedeem = (props) => {
               <div className="text">
                 {data.disc}
                 {data.key === "withdrawal" && (
-                  <div className="insta-redeem-know-more" onClick={() => {storageService().set('know_more_clicked',true); setOpenDialog(true)}}>
+                  <div className="insta-redeem-know-more" onClick={() => {setKnowMoreClicked(true); setOpenDialog(true)}}>
                     KNOW MORE
                   </div>
                 )}
