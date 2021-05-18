@@ -22,13 +22,14 @@ const Request = (props) => {
 
   return (
     <Container
+      data-aid='reports-pause-request-screen'
       hidePageTitle={true}
       buttonTitle="OK"
       handleClick={() => handleClick()}
       headerData={{goBack: handleClick}}
     >
       {!isEmpty(requestData) && (
-        <div className="reports-sip-request">
+        <div className="reports-sip-request" data-aid='reports-sip-request'>
           <Imgc
             alt=""
             className="img"
@@ -38,30 +39,30 @@ const Request = (props) => {
                 : "order_placed_illustration"
             }.svg`)}
           />
-          <div className="title">{requestData.title}</div>
+          <div className="title" data-aid='reports-title'>{requestData.title}</div>
           {requestData.data && (
             <>
-              <div className="note">{requestData.data.note}</div>
+              <div className="note" data-aid='reports-note'>{requestData.data.note}</div>
               {requestData.data.pause_period && (
-                <div className="text">
+                <div className="text" data-aid='reports-pause-period'>
                   <b>Pause Period: </b>
                   {requestData.data.pause_period}
                 </div>
               )}
               {requestData.data.resume_date && (
-                <div className="text">
+                <div className="text" data-aid='reports-resume-date'>
                   <b>Resume Date: </b>
                   {requestData.data.resume_date}
                 </div>
               )}
               {requestData.data.restart_date && (
-                <div className="text">
+                <div className="text" data-aid='reports-restart-date'>
                   <b>Restart Date: </b>
                   {requestData.data.restart_date}
                 </div>
               )}
               {requestData.data.cancel_date && (
-                <div className="text">
+                <div className="text" data-aid='reports-cancel-date'>
                   <b>Cancel Date: </b>
                   {requestData.data.cancel_date}
                 </div>

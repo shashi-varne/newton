@@ -55,16 +55,17 @@ const PauseResumeRestart = (props) => {
 
   return (
     <Container
+      data-aid='reports-pause-resume-restart-screen'
       title={title}
       buttonTitle="CONTINUE"
       handleClick={() => handleClick()}
       showLoader={isApiRunning}
     >
       {!isEmpty(sip) && (
-        <div className="reports-sip-pause-cancel-detail">
+        <div className="reports-sip-pause-cancel-detail" data-aid='reports-sip-pause-cancel-detail'>
           <div className="mf-name">{sip.mfname}</div>
 
-          <div className="content">
+          <div className="content" data-aid='reports-nextspidate-content'>
             <img
               src={require(`assets/${productName}/sip_date_icon.svg`)}
               alt=""
@@ -74,7 +75,7 @@ const PauseResumeRestart = (props) => {
               <div>{next_sip_date}</div>
             </div>
           </div>
-          <div className="content">
+          <div className="content" data-aid='reports-amount-content'>
             <img
               src={require(`assets/${productName}/amount_icon.svg`)}
               alt=""

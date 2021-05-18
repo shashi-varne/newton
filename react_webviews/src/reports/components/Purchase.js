@@ -22,19 +22,19 @@ const Purchase = (props) => {
   };
 
   return (
-    <Container noFooter={true} title="Pending Purchase">
-      <div className="report-purchase">
+    <Container noFooter={true} title="Pending Purchase" data-aid='reports-pending-purchase'>
+      <div className="report-purchase" data-aid='report-purchase'>
         {!isEmpty(transactions) &&
           transactions.map((purchased, index) => {
             return (
-              <div className="purchased" key={index}>
-                <div className="head">
+              <div className="purchased" key={index} data-aid='reports-purchased'>
+                <div className="head" data-aid='reports-head'>
                   <div>{purchased.mfname}</div>
                   {purchased.status === "upcoming" && (
                     <img src={require(`assets/auto_debit.png`)} alt="" />
                   )}
                 </div>
-                <div className="head-info">
+                <div className="head-info" data-aid='head-info'>
                   <div className="content">
                     <img alt="" src={require(`assets/invested_amount.png`)} />
                     <div className="text">
@@ -51,7 +51,7 @@ const Purchase = (props) => {
                   </div>
                 </div>
                 {purchased.status !== "upcoming" ? (
-                  <div className="progress-bar">
+                  <div className="progress-bar" data-aid='reports-progress-bar'>
                     <ProgressStep
                       isCompleted={true}
                       text="PAYMENT SUCCESSFUL"
@@ -73,7 +73,7 @@ const Purchase = (props) => {
                     />
                   </div>
                 ) : (
-                  <div className="progress-bar upcoming">
+                  <div className="progress-bar upcoming" data-aid='reports-progress-bar-upcoming'>
                     <ProgressStep
                       isCompleted={true}
                       text="AUTO DEBIT REQUEST RAISED"
@@ -85,7 +85,7 @@ const Purchase = (props) => {
                     />
                   </div>
                 )}
-                <div className="check-process">
+                <div className="check-process" data-aid='reports-check-process'>
                   <div
                     className="text"
                     onClick={() => handleProcess(purchased)}

@@ -145,11 +145,12 @@ const Summary = (props) => {
       title="My Money"
       noFooter={true}
       skelton={showSkelton || isLoading}
+      data-aid='reports-summary-screen'
     >
-      <div className="reports">
+      <div className="reports" data-aid='reports'>
         {!isEmpty(report) && (
           <>
-            <header className="reports-header">
+            <header className="reports-header" data-aid='reports-header'>
               {current && (
                 <>
                   <div className="title">Current Value</div>
@@ -159,7 +160,7 @@ const Summary = (props) => {
                   </div>
                   {report.current.invested > 0 && (
                     <>
-                      <div className="title ">
+                      <div className="title " data-aid='reports-current-invested'>
                         1 Day Change:{" "}
                         {report.current.one_day_earnings.amount >= 0 ? (
                           <span className="summary-green-text">
@@ -182,7 +183,7 @@ const Summary = (props) => {
                           </span>
                         )}
                       </div>
-                      <div className="row">
+                      <div className="row" data-aid='reports-row'>
                         <div className="content">
                           <div>Amount Invested</div>
                           <div>{formatAmountInr(report.current.invested)}</div>
@@ -200,7 +201,7 @@ const Summary = (props) => {
                         </div>
                       </div>
                       {report.past.redeemed > 0 && (
-                        <div className="pointer" onClick={toggleheader()}>
+                        <div className="pointer" data-aid='reports-pointer' onClick={toggleheader()}>
                           View redeemed investments
                         </div>
                       )}
@@ -210,11 +211,11 @@ const Summary = (props) => {
               )}
               {!current && (
                 <>
-                  <div className="title">Redeemed Value</div>
-                  <div className="amount">
+                  <div className="title" data-aid='reports-redeemed-value'>Redeemed Value</div>
+                  <div className="amount" data-aid='reports-amount-value'>
                     {formatAmountInr(report.past.redeemed)}
                   </div>
-                  <div className="row">
+                  <div className="row" data-aid='reports-row'>
                     <div className="content">
                       <div>Purchase Cost</div>
                       <div>
@@ -232,15 +233,15 @@ const Summary = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="pointer" onClick={toggleheader()}>
+                  <div className="pointer" data-aid='reports-pointer' onClick={toggleheader()}>
                     View current investments
                   </div>
                 </>
               )}
             </header>
-            <main>
+            <main data-aid='reports-summary-main'>
               {!currentUser.active_investment && report.pending.invested === 0 && (
-                <div className="invest-more">
+                <div className="invest-more" data-aid='reports-invest-more'>
                   <div className="invest-more-content">
                     <p>
                       You have not invested in Mutual Funds!
@@ -248,6 +249,7 @@ const Summary = (props) => {
                       <b>Invest today & grow your wealth</b>
                     </p>
                     <Button
+                      dataAid='reports-explore-mf-btn'
                       onClick={() => navigate(getPathname.invest)}
                       buttonTitle="Explore Mutual Funds"
                       style={{
@@ -268,6 +270,7 @@ const Summary = (props) => {
                 <>
                   {currentUser.nps_investment && investCards.nps && (
                     <SummaryCard
+                      dataAid='nps-investments'
                       goNext={() => flowOptions("npsInvestments")}
                       icon={`nps_report_icon.${imageMapper[productName]}`}
                       title="NPS Investments"
@@ -277,6 +280,7 @@ const Summary = (props) => {
                     />
                   )}
                   <SummaryCard
+                    dataAid='track-my-goals'
                     goNext={showGoals}
                     icon={`goalwise.${imageMapper[productName]}`}
                     title="Track my goals"
@@ -287,6 +291,7 @@ const Summary = (props) => {
                   />
                   {data.showPendingPurchase && (
                     <SummaryCard
+                      dataAid='pending-purchase'
                       goNext={() => flowOptions("reportsPurchased")}
                       icon={`pending_purchase.${imageMapper[productName]}`}
                       title="Pending Purchase"
@@ -298,6 +303,7 @@ const Summary = (props) => {
                   )}
                   {data.showPendingRedemption && (
                     <SummaryCard
+                      dataAid='pending-withdrawals'
                       goNext={() => flowOptions("reportsRedeemed")}
                       icon={`pending_redemption.${imageMapper[productName]}`}
                       title="Pending Withdrawals"
@@ -309,6 +315,7 @@ const Summary = (props) => {
                   )}
                   {data.showPendingSwitched && (
                     <SummaryCard
+                      dataAid='pending-switch'
                       goNext={() => flowOptions("reportsSwitched")}
                       icon={`pending_purchase.${imageMapper[productName]}`}
                       title="Pending Switch"
@@ -320,6 +327,7 @@ const Summary = (props) => {
                   )}
                   {data.showSipSchedule && (
                     <SummaryCard
+                      dataAid='existing-sip'
                       goNext={() => flowOptions("reportsSip")}
                       icon={`sip.${imageMapper[productName]}`}
                       title="Existing SIPs"
@@ -332,6 +340,7 @@ const Summary = (props) => {
                   {data.showTransactions && (
                     <>
                       <SummaryCard
+                        dataAid='transactions'
                         goNext={() => flowOptions("reportsTransactions")}
                         icon={`transactions.${imageMapper[productName]}`}
                         title="Transactions"
@@ -340,6 +349,7 @@ const Summary = (props) => {
                         }
                       />
                       <SummaryCard
+                        dataAid='track-fund-performance'
                         goNext={() => flowOptions("reportsFundswiseSummary")}
                         icon={`fundwise.${imageMapper[productName]}`}
                         title="Track Fund Performance"
@@ -359,6 +369,7 @@ const Summary = (props) => {
                 />
               )}
               <SummaryCard
+                dataAid='withdraw'
                 goNext={() => redirectWithdraw()}
                 icon="ic_pf_withdraw.svg"
                 title="Withdraw"
@@ -366,6 +377,7 @@ const Summary = (props) => {
               />
               {data.insurance_active && investCards.insurance && (
                 <SummaryCard
+                  dataAid='insurance'
                   goNext={() => navigate("/group-insurance/common/report")}
                   icon="ic_pf_insurance.svg"
                   title="Insurance"
@@ -373,6 +385,7 @@ const Summary = (props) => {
               )}
               {data.gold_active_investment && investCards.gold && (
                 <SummaryCard
+                  dataAid='gold'
                   goNext={() => navigate("/gold/my-gold")}
                   icon="ic_pf_gold.svg"
                   title="Gold"
@@ -395,9 +408,10 @@ export const SummaryCard = ({
   title,
   subtitle,
   iconClassName,
+  dataAid,
 }) => {
   return (
-    <div className="content" onClick={goNext}>
+    <div className="content" data-aid={dataAid} onClick={goNext}>
       <img
         alt=""
         src={require(`assets/${productName}/${icon}`)}
