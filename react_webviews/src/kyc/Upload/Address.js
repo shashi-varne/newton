@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
+import Button from '../../common/ui/Button'
 import Alert from '../mini-components/Alert'
 import { storageService, isEmpty } from '../../utils/validators'
 import { storageConstants, docMapper } from '../constants'
@@ -259,7 +260,7 @@ const AddressUpload = (props) => {
     }
 
     if (kyc?.address?.meta_data?.pincode) {
-      addressFull += setComma(kyc?.address?.meta_data?.pincode)
+      addressFull += kyc?.address?.meta_data?.pincode
     }
 
     return addressFull
@@ -273,7 +274,9 @@ const AddressUpload = (props) => {
     });
   };
   
-  const isWeb = getConfig().isWebOrSdk
+  const config = getConfig();
+  const isWeb = config.isWebOrSdk
+  const productName = config.productName
 
   return (
     <Container
@@ -287,18 +290,19 @@ const AddressUpload = (props) => {
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address">
           <div className="sub-title">
-            {getFullAddress()}
-            {getFullAddress() && (
+            <span>{addressProof}</span>
+            {addressProof && (
               <div className="edit" onClick={editAddress}>
                 EDIT
               </div>
             )}
           </div>
-          <Alert
+          <div className="address-detail">{getFullAddress()}</div>
+          {/* <Alert
             variant="attention"
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
-          />
+          /> */}
           {!isWeb && (
             <div className="kyc-doc-upload-container">
               {frontDoc && state.frontFileShow && (
@@ -378,7 +382,18 @@ const AddressUpload = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container noBorder">
+              <div className="align-left">
+                <span><b>Front side</b></span> of your {addressProof}
+              </div>
+              {!frontDoc && (
+                <img
+                  src={require(`assets/${productName}/address_proof_front.svg`)}
+                  className="default"
+                  onLoad={handleImageLoad}
+                  alt="Default Address Proof Front"
+                />
+              )}
               {frontDoc && state.frontFileShow && (
                 <img
                   src={state.frontFileShow}
@@ -387,11 +402,6 @@ const AddressUpload = (props) => {
                   onLoad={handleImageLoad}
                 />
               )}
-              {!frontDoc && (
-                <div className="caption">
-                  Upload front side of {addressProof}
-                </div>
-              )}
               <div className="kyc-upload-doc-actions">
                 <input
                   ref={frontDocRef}
@@ -399,7 +409,7 @@ const AddressUpload = (props) => {
                   className="kyc-upload"
                   onChange={handleChange('front')}
                 />
-                <button
+                {/* <button
                   onClick={handleUpload('open_gallery','front')}
                   className="kyc-upload-button"
                 >
@@ -417,7 +427,14 @@ const AddressUpload = (props) => {
                     </svg>
                   )}
                   <div className="upload-action">Open Gallery</div>
-                </button>
+                </button> */}
+                <div style={{padding: "0 10px"}}>
+                  <Button
+                    type="outlined"
+                    buttonTitle="ATTACH DOCUMENT"
+                    onClick={handleUpload("open_gallery", "front")}
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -500,28 +517,34 @@ const AddressUpload = (props) => {
             </div>
           )}
           {isWeb && !onlyFrontDocRequired && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container noBorder">
+              <div className="align-left">
+                <span><b>Back side</b></span> of your {addressProof}
+              </div>
+              {!backDoc && (
+                <img
+                  src={require(`assets/${productName}/address_proof_rear.svg`)}
+                  className="default"
+                  onLoad={handleImageLoad}
+                  alt="Default Address Proof Rear"
+                />
+              )}
               {backDoc && state.backFileShow && (
                 <img
                   src={state.backFileShow}
                   className="preview"
-                  alt="Uploaded Addres  s Document"
+                  alt="Uploaded Address Document"
                   onLoad={handleImageLoad}
                 />
               )}
-              {!backDoc && (
-                <div className="caption">
-                  Upload back side of {addressProof}
-                </div>
-              )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions noBorder">
                 <input
                   ref={backDocRef}
                   type="file"
                   className="kyc-upload"
                   onChange={handleChange('back')}
                 />
-                <button
+                {/* <button
                   onClick={handleUpload('open_gallery','back')}
                   className="kyc-upload-button"
                 >
@@ -539,10 +562,26 @@ const AddressUpload = (props) => {
                     </svg>
                   )}
                   <div className="upload-action">Open Gallery</div>
-                </button>
+                </button> */}
+                <div style={{padding: "0 10px"}}>
+                  <Button
+                    type="outlined"
+                    buttonTitle="ATTACH DOCUMENT"
+                    onClick={handleUpload("open_gallery", "back")}
+                  />
+                </div>
               </div>
             </div>
           )}
+          <div className="doc-upload-note-row">
+            <div className="upload-note"> How to take picture of your address proof? </div>
+            <Button
+              type="textonly"
+              buttonTitle="KNOW MORE"
+              classes={{ root: "know-more-button" }}
+              // onClick={() => navigate("path")} Todo: Add path
+            />
+          </div>
         </section>
       )}
     </Container>

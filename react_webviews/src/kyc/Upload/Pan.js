@@ -60,6 +60,14 @@ const Pan = (props) => {
   
   const inputEl = useRef(null)
 
+  const handleImageLoad = (event) => {
+    const img = new Image()
+    if (fileToShow) {
+      img.src = fileToShow
+      setFile(img)
+    }
+  }
+
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
     window.callbackWeb[method_name]({
       type: 'doc',
@@ -270,7 +278,8 @@ const Pan = (props) => {
               {!file && 
                 <img
                 src={require(`assets/${productName}/pan_card.svg`)}
-                className=""
+                className="default"
+                onLoad={handleImageLoad}
                 alt="Default PAN Card"
               />
               }
@@ -304,23 +313,25 @@ const Pan = (props) => {
                   )}
                   <div className="upload-action">Open Gallery</div>
                 </button> */}
-                <Button
-                  type="outlined"
-                  buttonTitle="ATTACH DOCUMENT"
-                  onClick={() => handleUpload("open_gallery")}
-                />
-              </div>
-              <div className="doc-upload-note-row">
-                <div className="upload-note"> How to take picture of your PAN document? </div>
-                <Button
-                  type="textonly"
-                  buttonTitle="KNOW MORE"
-                  classes={{ root: "know-more-button" }}
-                  onClick={() => navigate("/kyc/pan-instructions")}
-                />
+                <div style={{padding: "0 10px"}}>
+                  <Button
+                    type="outlined"
+                    buttonTitle="ATTACH DOCUMENT"
+                    onClick={() => handleUpload("open_gallery")}
+                  />
+                </div>
               </div>
             </div>
           )}
+          <div className="doc-upload-note-row">
+            <div className="upload-note"> How to take picture of your PAN document? </div>
+            <Button
+              type="textonly"
+              buttonTitle="KNOW MORE"
+              classes={{ root: "know-more-button" }}
+              onClick={() => navigate("/kyc/pan-instructions")}
+            />
+          </div>
         </section>
       )}
     </Container>
