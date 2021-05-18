@@ -1,5 +1,4 @@
 import './commonStyles.scss';
-import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import { getConfig } from '../../../../utils/functions';
 import Container from '../../../common/Container';
@@ -10,6 +9,7 @@ import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { storageService } from '../../../../utils/validators'
+import toast from 'common/ui/Toast'
 
 const { productName } = getConfig();
 
@@ -34,15 +34,22 @@ const RiskSelect = ({
   // }, []);
 
   const updateRiskAndFetchRecommendations = async (skipRiskUpdate) => {
-    const { amount, investType: type, term } = funnelData;
+    const { userEnteredAmt, amount, investType: type, term } = funnelData;
     var params = {
-      amount,
+      amount: userEnteredAmt || amount,
       term,
       type,
       rp_enabled: true,
     };
 
     if (type === 'saveforgoal') {
+      /* Since in saveforgoal flow, the next screen is the monthly amount screen unlike
+      in other flows where next screen is recommendations screen, we remove amount
+      to prevent server from responding with recommendations list for this flow.
+      
+      Also, technically the property 'amount'/'userEnteredAmt' does not even exist 
+      in funnelData yet for 'saveforgoal' flow since the monthly amount is entered
+      only in the next screen*/
       delete params.amount;
     }
 
@@ -67,6 +74,7 @@ const RiskSelect = ({
       setLoader(false);
     } catch (err) {
       console.log(err);
+      toast(err);
     }
   }
 
@@ -91,7 +99,7 @@ const RiskSelect = ({
         fromExternalSrc: true,
         internalRedirect: true,
         flow: funnelData.flow,
-        amount: funnelData.amount,
+        amount: funnelData.userEnteredAmt || funnelData.amount,
         type: funnelData.investType,
         subType: funnelData.subtype, // only applicable for 'saveforgoal'
         year: funnelData.year, // only applicable for 'saveforgoal'

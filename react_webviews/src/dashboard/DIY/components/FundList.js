@@ -143,17 +143,17 @@ const FundList = (props) => {
     })
     .sort((a, b) => {
       if (sortFilter === 'returns') {
-        return Number(b[returnField[value]]) - Number(a[returnField[value]]) > 0
+        return Number(b[returnField[value]]) - Number(a[returnField[value]]) >= 0
           ? 1
           : -1
       }
       if (sortFilter === 'rating') {
-        return Number(b.morning_star_rating) - Number(a.morning_star_rating) > 0
+        return Number(b.morning_star_rating) - Number(a.morning_star_rating) >= 0
           ? 1
           : -1
       }
       if (sortFilter === 'fundsize') {
-        return Number(b.aum) - Number(a.aum) > 0 ? 1 : -1
+        return Number(b.aum) - Number(a.aum) >= 0 ? 1 : -1
       }
       return -1;
     })

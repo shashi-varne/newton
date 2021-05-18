@@ -35,7 +35,7 @@ const InvestAmount = (props) => {
     setUserRiskProfile
   } = useFunnelDataHook();
   const { investType, year, equity, term, isRecurring, investTypeDisplay } = funnelData;
-  const [amount, setAmount] = useState(
+  const [userEnteredAmt, setUserEnteredAmt] = useState(
     funnelData?.userEnteredAmt ||
     funnelData?.amount ||
     ''
@@ -48,11 +48,12 @@ const InvestAmount = (props) => {
   const [amountChanged, setAmountChanged]= useState(false);
   const [saveTaxYear, setSaveTaxYear] = useState(date.getFullYear());
   const navigate = navigateFunc.bind(props);
+
   useEffect(() => {
     const investTitle = selectTitle(investType);
     setTitle(investTitle);
-    if (!amount && investType === 'saveforgoal') {
-      setAmount(
+    if (!userEnteredAmt && investType === 'saveforgoal') {
+      setUserEnteredAmt(
         getMonthlyCommitmentNew(term, funnelData.corpus, funnelData.equity)
       );
     }
@@ -70,20 +71,20 @@ const InvestAmount = (props) => {
     // eslint-disable-next-line radix
     value = parseInt(convertInrAmountToNumber(value));
     if (!isNaN(value)) {
-      setAmount(value);
+      setUserEnteredAmt(value);
     } else {
-      setAmount('');
+      setUserEnteredAmt('');
       setCorpus(0);
     }
   };
 
   useEffect(() => {
-    if (!amount) {
+    if (!userEnteredAmt) {
       setErrorMsg('This is a required field');
       setError(true);
       return;
     }
-    if (isNaN(amount)) {
+    if (isNaN(userEnteredAmt)) {
       return;
     }
     if(error){
@@ -91,9 +92,9 @@ const InvestAmount = (props) => {
     }
     let result;
     if (investTypeDisplay === "sip") {
-      result = validateSipAmount(amount);
+      result = validateSipAmount(userEnteredAmt);
     } else {
-      result = validateOtAmount(amount);
+      result = validateOtAmount(userEnteredAmt);
     }
     if (result?.error) {
       setError(true);
@@ -107,18 +108,18 @@ const InvestAmount = (props) => {
     } else {
       const valueOfCorpus = getCorpusValue(
         equity,
-        amount,
+        userEnteredAmt,
         isRecurring,
         term
       );
       setCorpus(valueOfCorpus);
     }
-  }, [amount]);
+  }, [userEnteredAmt]);
 
   const fetchRecommendedFunds = async () => {
     try {
       const params = {
-        amount,
+        amount: userEnteredAmt,
         type: investType,
         term: funnelData?.term,
         rp_enabled: riskEnabledFunnel,
@@ -133,6 +134,7 @@ const InvestAmount = (props) => {
       if (!data.recommendation) {
         // RP enabled flow, when user has no risk profile
         setUserRiskProfile(''); // clearing risk profile stored in session
+        updateFunnelData({ corpus, userEnteredAmt });
         if (data.msg_code === 0) {
           navigate(`${funnelGoalData.id}/risk-select`);
         } else if (data.msg_code === 1) {
@@ -141,7 +143,7 @@ const InvestAmount = (props) => {
         return;
       }
       
-      updateFunnelData({ ...data, corpus, userEnteredAmt: amount })
+      updateFunnelData({ ...data, corpus, userEnteredAmt})
       
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully
@@ -160,7 +162,7 @@ const InvestAmount = (props) => {
 
   const goNext = () => {
     sendEvents('next')
-    if (!amount) {
+    if (!userEnteredAmt) {
       return;
     }
     fetchRecommendedFunds();
@@ -174,10 +176,10 @@ const InvestAmount = (props) => {
     }
     let tempAmount = 0;
     if (investType === "savetaxsip") {
-      tempAmount = amount;
+      tempAmount = userEnteredAmt;
       tempAmount = tempAmount * duration;
     } else {
-      tempAmount = amount;
+      tempAmount = userEnteredAmt;
     }
     if (tempAmount > eligibleAmount) {
       tempAmount = eligibleAmount;
@@ -226,7 +228,7 @@ const InvestAmount = (props) => {
             <Input
               id='invest-amount'
               class='invest-amount-num'
-              value={amount ? formatAmountInr(amount) : ""}
+              value={userEnteredAmt ? formatAmountInr(userEnteredAmt) : ""}
               onChange={handleChange}
               type='text'
               error={error}

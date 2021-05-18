@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {  calculateAge, isValidDate,
      IsFutureDate, formatDate, dobFormatTest, capitalizeFirstLetter } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
-import { initialize } from '../common_data';
+import { initialize, getCityDetails, getPlanDetails, getPlanList } from '../common_data';
 import toast from '../../../../common/ui/Toast';
 import {resetInsuredMembers, getInsuredMembersUi} from '../constants';
 import { childeNameMapper } from '../../../constants';
+import { isEmpty, compareObjects } from '../../../../utils/validators';
+
 
 class GroupHealthPlanDob extends Component {
 
@@ -23,6 +24,9 @@ class GroupHealthPlanDob extends Component {
         }
 
         this.initialize = initialize.bind(this);
+        this.getCityDetails = getCityDetails.bind(this);
+        this.getPlanDetails = getPlanDetails.bind(this);
+        this.getPlanList = getPlanList.bind(this);
     }
 
     componentWillMount() {
@@ -49,7 +53,6 @@ class GroupHealthPlanDob extends Component {
 
         let final_dob_data = [];
 
-
         let ui_members = groupHealthPlanData.ui_members || {};
         for (var i = 0; i < dob_data.length; i++) {
             let key = dob_data[i].key;
@@ -60,7 +63,6 @@ class GroupHealthPlanDob extends Component {
                 final_dob_data.push(dob_data[i]);
             }
         }
-       
         this.setState({
             final_dob_data: final_dob_data,
             dob_data: dob_data
@@ -108,7 +110,7 @@ class GroupHealthPlanDob extends Component {
         });
     }
 
-    handleClick = () => {
+    handleClick = async () => {
 
         this.sendEvents('next');
 
@@ -226,9 +228,69 @@ class GroupHealthPlanDob extends Component {
             }
 
             groupHealthPlanData.post_body = post_body;
-            
+
+            if(provider === 'HDFCERGO'){
+                this.setLocalProviderData(groupHealthPlanData)
+                if(isEmpty(groupHealthPlanData.city)){
+                    this.getCityDetails();
+                }else{
+                    this.navigate('plan-select-city');
+                }
+                return;
+            }
+
+            if (provider === 'STAR') {
+                this.setLocalProviderData(groupHealthPlanData);
+                this.navigate(this.state.next_screen)
+                return;
+            }
+            if(provider === 'RELIGARE'){
+                this.setLocalProviderData(groupHealthPlanData);
+                var current_state = {}
+                current_state['account_type'] = post_body['account_type'];
+                for(var i in post_body.member_details){
+                    current_state[`${i}`] = post_body.member_details[i]['dob'];
+                }
+                var previousData = groupHealthPlanData.list_previous_data || {};
+                var sameData = compareObjects(Object.keys(current_state), current_state, previousData)
+                this.setState({
+                    current_state
+                }, ()=>{
+                    if(!sameData || isEmpty(groupHealthPlanData.plan_list)){
+                        this.getPlanList();
+                    }else{
+                        this.navigate('plan-list')
+                    }
+                })
+                return;
+            }
+
+            //GMC
             this.setLocalProviderData(groupHealthPlanData);
-            this.navigate(this.state.next_screen);
+            var keys_to_check = ['account_type', 'adults', 'children', 'plan_id']
+            // eslint-disable-next-line
+            var current_state = {}
+            for(var y in post_body){
+                if(keys_to_check.indexOf(y) >= 0){
+                    current_state[y] = post_body[y]
+                }
+            }
+            for(var x in post_body.member_details){
+                current_state[`${x}_dob`] = post_body.member_details[x].dob;
+            }
+            this.setState({
+                current_state
+            },()=>{
+                var sameData = compareObjects( Object.keys(current_state),current_state, groupHealthPlanData.plan_list_current_state);
+                if(!sameData || isEmpty(groupHealthPlanData.plan_details_screen)){
+                    this.getPlanDetails();
+                    return;
+                }else{
+                    this.setLocalProviderData(groupHealthPlanData);
+                    this.navigate(this.state.next_screen);
+                    return;
+                }
+            })
         }
     };
 

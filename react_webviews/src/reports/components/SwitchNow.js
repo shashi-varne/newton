@@ -105,9 +105,10 @@ const SwitchNow = (props) => {
       ) {
         navigate(getPathname.otpSwitch, {
           state: {
-            resend_link: result.resend_redeem_otp_link,
-            verify_link: result.verification_link,
+            resend_redeem_otp_link: result.resend_redeem_otp_link,
+            verification_link: result.verification_link,
             message: result.message,
+            type: "switch"
           },
         });
       }

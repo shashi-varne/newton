@@ -76,7 +76,10 @@ const RiskCustomize = (props) => {
     setDebt(100 - value);
   };
 
-  const toggleConfirmDialog = () => setShowConfirmDialog(!showConfirmDialog);
+  const toggleConfirmDialog = () => {
+    if (loader) return;
+    setShowConfirmDialog(!showConfirmDialog);
+  }
 
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -101,9 +104,8 @@ const RiskCustomize = (props) => {
       classOverRide='pr-error-container'
       events={sendEvents("just_set_events")}
       fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Save Changes'}
+      buttonTitle='Save Changes'
       helpContact
-      disable={loader}
       title='Customise Equity-Debt distribution'
       handleClick={toggleConfirmDialog}
       classOverRideContainer='pr-container'
@@ -131,7 +133,7 @@ const RiskCustomize = (props) => {
             header_title: 'Save changes',
             content: 'Are you sure you want to change your equity to debt distribution for your investment profile?',
             src: require(`assets/${productName}/ic_save.svg`),
-            button_text1: 'Confirm',
+            button_text1: loader ? <CircularProgress size={20} thickness={4} color="white" /> : 'Confirm',
             handleClick1: goNext,
             button_text2: 'Cancel',
             handleClick2: toggleConfirmDialog,

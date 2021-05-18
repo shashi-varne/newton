@@ -10,6 +10,7 @@ import { getConfig } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { nativeCallback } from '../../../../utils/native_callback';
+import toast from 'common/ui/Toast';
 
 const { productName } = getConfig();
 
@@ -62,6 +63,7 @@ const RiskModify = ({
       setLoader(false);
     } catch (err) {
       console.log(err);
+      toast(err);
     }
   }
 
@@ -73,7 +75,10 @@ const RiskModify = ({
     navigate('recommendations');
   };
 
-  const toggleConfirmDialog = () => setShowConfirmDialog(!showConfirmDialog);
+  const toggleConfirmDialog = () => {
+    if (loader) return;
+    setShowConfirmDialog(!showConfirmDialog);
+  }
 
   if (userRiskProfile === 'Custom') {
     riskOptions.push({
@@ -107,9 +112,8 @@ const RiskModify = ({
       classOverRide='pr-error-container'
       events={sendEvents("just_set_events")}
       fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Proceed'}
+      buttonTitle='Proceed'
       helpContact
-      disable={loader}
       title='Change risk profile'
       handleClick={toggleConfirmDialog}
       classOverRideContainer='pr-container'
@@ -147,7 +151,7 @@ const RiskModify = ({
             header_title: 'Save changes',
             content: 'Are you sure you want to change your risk profile?',
             src: require(`assets/${productName}/ic_save.svg`),
-            button_text1: 'Confirm',
+            button_text1: loader ? <CircularProgress size={20} thickness={4} color="white" /> : 'Confirm',
             handleClick1: goNext,
             button_text2: 'Cancel',
             handleClick2: toggleConfirmDialog,

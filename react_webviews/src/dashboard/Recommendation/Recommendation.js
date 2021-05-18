@@ -23,6 +23,7 @@ import { get_recommended_funds } from '../Invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import { nativeCallback } from '../../utils/native_callback';
+import toast from 'common/ui/Toast'
 
 const sipTypesKeys = [
   "buildwealth",
@@ -88,9 +89,9 @@ const Recommendations = (props) => {
   }
 
   const getRecommendations = async () => {
-    const { amount, investType: type, term } = storageService().getObject('funnelData');
+    const { userEnteredAmt, amount, investType: type, term } = funnelData
     var params = {
-      amount,
+      amount: userEnteredAmt || amount,
       term,
       type,
       rp_enabled: true,
@@ -108,7 +109,7 @@ const Recommendations = (props) => {
       setIsApiRunning(false);
     } catch (err) {
       console.log(err);
-      
+      toast(err);
     }
   };
 
@@ -151,7 +152,7 @@ const Recommendations = (props) => {
 
     let 
     paymentRedirectUrl = encodeURIComponent(
-      `${getBasePath()}/page/callback/${sipOrOneTime}/${investmentObject.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investmentObject.amount}${getConfig().searchParams}`
     );
 
     window.localStorage.setItem("investment", JSON.stringify(investmentObject));
@@ -351,9 +352,9 @@ const Recommendations = (props) => {
           </div>
           <div className='recommendations-total-investment'>
             <div>Total investment</div>
-            <div>
-            <div>{recommendations?.length ? formatAmountInr(funnelData.amount) : '₹0'}</div>
-            {funnelData.investTypeDisplay === 'sip' && <div className='amount-per-month'>per month</div>}
+            <div style={{ textAlign: 'right' }}>
+              <div>{recommendations?.length ? formatAmountInr(funnelData.amount) : '₹0'}</div>
+              {funnelData.investTypeDisplay === 'sip' && <div className='amount-per-month'>per month</div>}
             </div>
           </div>
           <div className="recommendations-disclaimers">

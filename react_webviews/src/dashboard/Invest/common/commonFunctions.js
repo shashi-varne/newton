@@ -35,17 +35,17 @@ export const getReturnRates = () => {
 };
 
 export const getMonthlyCommitmentNew = (term, corpusValue, stockSplitVal) => {
-  var n = term * 12;
-  var r = getRateOfInterest(stockSplitVal);
-  var a = corpusValue;
-  var i = r / 12 / 100;
-  var tmp = Math.pow(1 + i, n) - 1;
-  var monthlyInvestment = (a * i) / tmp;
-  var monthlyAmount = monthlyInvestment;
-  if (monthlyAmount < 500) {
-    monthlyAmount = 500;
+  const n = term * 12;
+  const r = getRateOfInterest(stockSplitVal);
+  const a = corpusValue;
+  const i = r / 12 / 100;
+  const tmp = Math.pow(1 + i, n) - 1;
+  let monthlyInvestment = (a * i) / tmp;
+
+  if (monthlyInvestment < 500) {
+    monthlyInvestment = 500;
   }
-  return Math.floor(monthlyAmount);
+  return Math.floor(monthlyInvestment);
 };
 
 export const getCorpusValue = (stockSplitVal, amount, isRecurring, term) => {
@@ -70,7 +70,6 @@ export const getPotentialValue = (...params) => {
 };
 
 export const getRateOfInterest = (stockSplitVal) => {
-  if (!stockSplitVal) return 0;
   const { stockReturns, bondReturns } = getReturnRates();
   // TODO: Handle edge cases / negative scenarios
   var range = Math.abs(stockReturns - bondReturns);

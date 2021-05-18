@@ -4,6 +4,8 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
 import ReactHtmlParser from "react-html-parser";
+import { idfc_config } from "../../constants";
+import { getConfig } from "utils/functions";
 
 const yesOrNo_options = [
   {
@@ -23,11 +25,12 @@ class BtInformation extends Component {
       show_loader: false,
       screen_name: "bt_info_screen",
       loaderWithData: false,
-      skelton: 'g',
+      // skelton: 'g',
       loaderData: {},
       isBtOpted: "",
       accordianData: [],
       detail_clicked: [],
+      productName: getConfig().productName,
     };
 
     this.initialize = initialize.bind(this);
@@ -38,9 +41,7 @@ class BtInformation extends Component {
   }
 
   onload = () => {
-    let lead = this.state.lead || {};
-    let vendor_info = lead.vendor_info || {};
-
+    let screenData = idfc_config[this.state.screen_name];
     let loaderData = {
       title: `Hang on while IDFC FIRST Bank calculates the eligible loan offer`,
       subtitle: "It usually takes around 2 minutes!",
@@ -49,7 +50,7 @@ class BtInformation extends Component {
     let options = [
       {
         title: `Benefits`,
-        subtitle: `${this.state.screenData.benefits.options.map(
+        subtitle: `${screenData.benefits.options.map(
           (el) =>
             `<div class="bt-faq">
               <img
@@ -62,7 +63,7 @@ class BtInformation extends Component {
       },
       {
         title: `What information do I need to provide?`,
-        subtitle: `${this.state.screenData.required_info.options.map(
+        subtitle: `${screenData.required_info.options.map(
           (el) =>
             `<div class="bt-faq bt">
               <img
@@ -77,7 +78,6 @@ class BtInformation extends Component {
 
     this.setState(
       {
-        idfc_07_state: vendor_info.idfc_07_state,
         loaderData: loaderData,
         accordianData: options,
       },

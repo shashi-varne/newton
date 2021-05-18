@@ -132,6 +132,7 @@ const InvestedAmount = (props) => {
         </div>
 
         <PeriodWiseReturns
+          title="Expected returns"
           initialTerm={term}
           equity={stockSplitVal}
           stockReturns={stockReturns}

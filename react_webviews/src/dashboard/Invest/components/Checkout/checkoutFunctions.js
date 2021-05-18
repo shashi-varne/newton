@@ -1,6 +1,6 @@
 import toast from "../../../../common/ui/Toast";
 import Api from "../../../../utils/api";
-import { getBasePath } from "../../../../utils/functions";
+import { getBasePath, getConfig } from "../../../../utils/functions";
 import { formatAmountInr, storageService } from "../../../../utils/validators";
 import { apiConstants } from "../../constants";
 import {
@@ -187,7 +187,7 @@ export async function goNext(investReferralData, isReferralGiven) {
   }
 
   let paymentRedirectUrl = encodeURIComponent(
-    `${getBasePath()}/page/callback/${investment_type}/${investment.amount}`
+    `${getBasePath()}/page/callback/${investment_type}/${investment.amount}${getConfig().searchParams}`
   );
 
   investment.allocations = allocations;
