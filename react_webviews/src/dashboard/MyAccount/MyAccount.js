@@ -141,11 +141,12 @@ class MyAccount extends Component {
     let bank = userKyc.bank || {};
     return (
       <Container
+        data-aid='my-account-screen'
         noFooter={true}
         skelton={this.state.showLoader}
         title="My Account"
       >
-        <div className="my-account">
+        <div className="my-account" data-aid='my-account'>
           <div className="my-account-content">
             <div className="account">
               <div className="account-head-title">Account options</div>

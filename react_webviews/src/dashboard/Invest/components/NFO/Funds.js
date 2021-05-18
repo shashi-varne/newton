@@ -87,39 +87,42 @@ class NfoFunds extends Component {
     let { nfoFunds } = this.state;
     return (
       <Container
+        data-aid='nfo-funds-screen'
         skelton={this.state.show_loader}
         noFooter={true}
         title="NFO Funds"
       >
-        <div className="nfo-funds">
+        <div className="nfo-funds" data-aid='nfo-funds-page'>
           {isEmpty(nfoFunds) && (
-            <div className="message">
+            <div className="message" data-aid='nfo-message'>
               We are sorry ! There are no funds that match your requirements.
             </div>
           )}
           {!isEmpty(nfoFunds) &&
             nfoFunds.map((data, index) => {
               return (
-                <div key={index} className="content">
+                <div key={index} className="content" data-aid='nfo-content'>
                   <div
+                    data-aid='nfo-detailview-one'
                     className="card icon"
                     onClick={() => this.detailView(data)}
                   >
                     <img alt={data.friendly_name} src={data.amc_logo_small} />
                   </div>
-                  <div className="text">
+                  <div className="text" data-aid='nfo-text'>
                     <div
+                      data-aid='nfo-detailview-one'
                       className="title"
                       onClick={() => this.detailView(data)}
                     >
                       {data.friendly_name}
                     </div>
-                    <div className="item">
+                    <div className="item" data-aid='nfo-item'>
                       <div className="sub-item">
                         <p>Type: {getSchemeOption(data.scheme_option)}</p>
                         <p>Category: {data.tax_plan}</p>
                       </div>
-                      <div className="invest">
+                      <div className="invest" data-aid='nfo-invest'>
                         <Button
                           onClick={this.handleClick(data)}
                           buttonTitle="INVEST"
@@ -127,7 +130,7 @@ class NfoFunds extends Component {
                         />
                       </div>
                     </div>
-                    <div className="date">
+                    <div className="date" data-aid='nfo-date'>
                       from {getFormattedDate(data.start_date)} - to{" "}
                       {getFormattedDate(data.end_date, true)}
                     </div>

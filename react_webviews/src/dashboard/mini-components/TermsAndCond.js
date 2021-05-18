@@ -51,7 +51,7 @@ const TermsAndCond = () => {
       <div className='recommendations-disclaimer'>
         <div className='recommendations-disclaimer-tc'>
           <img alt='check_mark' src={check_mark} width='15' />
-          <span>
+          <span data-aid='terms-and-conditions'>
             By clicking on the button below, I agree that I have read and accepted the{' '}
             {isWeb && partner_code !== 'finity' && (
               <>
