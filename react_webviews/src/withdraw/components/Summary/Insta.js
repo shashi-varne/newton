@@ -8,12 +8,14 @@ import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { formatAmountInr, isEmpty } from '../../../utils/validators'
 import { getConfig } from '../../../utils/functions'
+import { navigate as navigateFunc } from '../../common/commonFunction'
 
 import './Insta.scss';
 import '../commonStyles.scss';
 import { nativeCallback } from '../../../utils/native_callback'
 
 const Insta = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [taxes, setTaxes] = useState('');
   const [open, setOpen] = useState({})
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -38,9 +40,13 @@ const Insta = (props) => {
         },
         []
       )
-      await redeemOrders('insta_redeem', {
+      const result = await redeemOrders('insta_redeem', {
         investments: [{ itype, name, subtype, allocations }],
       })
+      if (result?.resend_redeem_otp_link && result?.verification_link) {
+        navigate('verify', { state:{...result, type: 'instaredeem'} })
+        return
+      }
     } catch (err) {
       toast(err.message, 'error')
     } finally {
