@@ -103,7 +103,7 @@ const RiskSelect = ({
   };
 
   const showInfo = () => {
-    navigate('risk-info');
+    navigate('/invest/risk-info');
   }
 
   return (
