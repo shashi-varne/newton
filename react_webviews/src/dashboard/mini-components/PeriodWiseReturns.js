@@ -62,7 +62,7 @@ const PeriodWiseReturns = ({
 
   return (
     <div className='invested-amount-return-container'>
-      <div className='invested-amount-return-text'>{title || 'Expected returns'}</div>
+      <div className='invested-amount-return-text'>{title || 'Average returns'}</div>
       <div className='invested-amount-year-tabs'>
         {termOptions.map((termOpt, idx) => (
           <span
@@ -81,7 +81,7 @@ const PeriodWiseReturns = ({
         <div className='invested-amount-corpus-invested'>
           <div className="color-box"></div>
           <div className="text">
-            <h1>Invested value</h1>
+            <h1>Amount Invested</h1>
             <div>{formatAmountInr(investedValue)}</div>
           </div>
         </div>
@@ -90,7 +90,7 @@ const PeriodWiseReturns = ({
           <div className="color-box"></div>
           <div className="text">
             <h1>
-              Projected Value
+              Estimated Return
               {showInfo &&
                 <img
                   alt="i"
@@ -105,7 +105,7 @@ const PeriodWiseReturns = ({
           <BottomSheet
             open={openInfoSheet}
             data={{
-              header_title: 'Expected returns',
+              header_title: 'Average returns',
               button_text1: 'Okay',
               handleClick1: toggleInfoSheet,
               handleClose: toggleInfoSheet,
@@ -113,7 +113,7 @@ const PeriodWiseReturns = ({
           >
             <>
               <div className="avg-return-ror">
-                <span className="value">{getRateOfInterest(equity)}%*</span>
+                <span className="value">{getRateOfInterest(equity).toFixed(2)}%*</span>
                 <span className="text">is the Rate of Return (RoR) used to estimate projected returns.</span>
               </div>
               <div className="avg-return-content">
