@@ -145,13 +145,23 @@
 .kyc-doc-upload-container {
   margin-top: 20px;
   border: 1px dashed var(--skelton-color);
-  padding: 10px 0;
+  padding: 10px;
+  border-radius: 6px;
 
-  .icon {
-    display: block;
-    margin: 70px auto 20px auto;
+  .kduc-sign-icon {
     width: 143px;
+    margin: 55px auto;
+    display: block;
   }
+
+  .kduc-selfie-placeholder {
+    width: 100%;
+    display: block;
+  }
+}
+
+.kyc-doc-upload-container.with-bg-color {
+  background-color: var(--highlight);
 }
 
 .kyc-doc-upload-container.noBorder {
@@ -174,7 +184,8 @@
 }
 
 .kyc-upload-doc-actions {
-  margin-top: 20px;
+  margin-top: 10px;
+
   .kyc-upload {
     display: none;
   }
@@ -217,4 +228,19 @@
     font-weight: 800;
     margin-top: 5px;
   }
+}
+
+.kyc-upload-selfie-title {
+  font-size: 13px;
+  line-height: 21px;
+  text-align: center;
+  color: var(--steelgrey);
+  margin-bottom: 10px;
+}
+
+.kyc-selfie-intructions {
+  font-size: 13px;
+  line-height: 21px;
+  color: var(--dark);
+  margin-top: 20px;
 }

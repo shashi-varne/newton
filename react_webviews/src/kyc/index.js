@@ -52,6 +52,7 @@ import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
 import Native from "./Native/Native";
+import SelfieV2 from "./Upload/Selfie_v2";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -123,7 +124,7 @@ const Kyc = (props) => {
         <Route 
           exact 
           path={`${url}/upload/selfie`} 
-          component={Selfie} 
+          component={SelfieV2}
         />
         <Route 
           exact 

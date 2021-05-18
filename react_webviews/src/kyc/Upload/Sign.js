@@ -192,7 +192,7 @@ const Sign = (props) => {
               )}
               {!file && (
                 <img
-                  className="icon"
+                  className="kduc-sign-icon"
                   src={require(`assets/signature_icon.svg`)}
                   alt="Upload Signature"
                 />
