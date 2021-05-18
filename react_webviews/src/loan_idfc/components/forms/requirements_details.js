@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropDownNew from "../../../common/ui/DropDownNew";
 import {
   numDifferentiationInr,
   formatAmount,
@@ -170,7 +170,7 @@ class LoanRequirementDetails extends Component {
             </div>
 
             <div className="InputField">
-              <DropdownWithoutIcon
+              <DropDownNew
                 width="40"
                 options={this.state.screenData.tenorOptions}
                 id="tenor"

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { navigate as navigateFunc } from '../common/functions'
 import { isEmpty, getUrlParams, storageService } from '../../utils/validators'
 import { getKycAppStatus } from '../services'

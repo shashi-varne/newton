@@ -64,6 +64,18 @@ import { getConfig } from './functions';
     }
   }
 
+  exports.open_canvas = function (listener) {
+    listeners.push(listener);
+    var callbackData = {};
+    callbackData.action = "open_canvas";
+    callbackData.action_data = { file_name: listener.doc_type };
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
   exports.open_camera = function (listener) {
     listeners.push(listener);
     let callbackData = {};

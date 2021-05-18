@@ -121,12 +121,13 @@ const DialogTC = ({ open, handleClose, data }) => {
           </DialogContentText>
         </DialogContent>
         {data && (
-          <DialogActions>
+          <DialogActions style={{ margin: '20px' }}>
             <Button
               className='DialogButtonFullWidth'
               onClick={handleClose}
               color='default'
               autoFocus
+              style={{ margin: 0 }}
             >
               DONE
             </Button>

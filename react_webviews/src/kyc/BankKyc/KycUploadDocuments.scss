@@ -44,43 +44,45 @@
     margin-bottom: 20px;
   }
   
-  .options {
+  .kyc-upload-doc-options {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     line-height: 1.5;
     padding-bottom: 20px;
 
-    .option-type {
+    .kyc-upload-doc-option-type {
       color: #160d2e;
       border: 1px solid #767e86;
-      text-align: left;
       padding: 9px 10px;
       font-size: 13px;
       border-radius: 4px;
       margin: 10px 10px 0 0;
       min-width: 140px;
-      max-width: fit-content;
       display: flex;
       justify-content: space-between;
-      column-gap: 10px;
+      cursor: pointer;
+      max-height: 40px;
+      align-items: center;
     }
 
-    .option-type:nth-child(3) {
+    .kyc-upload-doc-option-type:nth-child(3) {
       min-width: 170px;
     }
 
-    .disabled {
+    .disabled-doc {
       border-color: #9b98a2;
       color: #9b98a2;
     }
 
-    .selected {
+    .selected-doc {
       color: var(--primary);
       font-weight: 600;
 
-      .check-icon {
+      .kyc-upload-doc-check-icon {
         width: 10px;
+        margin-left: 10px;
+        height: 10px;
       }
     }
   }

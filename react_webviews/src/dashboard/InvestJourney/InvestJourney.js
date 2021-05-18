@@ -59,7 +59,7 @@ const InvestJourney = (props) => {
 
   const goNext = (investReferralData, isReferralGiven) => {
     let paymentRedirectUrl = encodeURIComponent(
-      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}${getConfig().searchParams}`
     );
 
     if (
