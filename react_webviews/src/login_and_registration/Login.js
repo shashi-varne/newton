@@ -122,6 +122,7 @@ class Login extends Component {
                     id="mobile"
                     label="Enter mobile number"
                     name="mobile"
+                    inputMode="numeric"
                     onChange={this.handleChange("mobile")}
                     autoFocus
                   />

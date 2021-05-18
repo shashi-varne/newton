@@ -182,6 +182,7 @@ const KycBankVerify = (props) => {
           variant="info"
           title="Important"
           message="We will credit ₹1 to verify your bank account."
+          dataAid='kyc-bankverify'
         />
         {isEmpty(bankData) && (
           <>

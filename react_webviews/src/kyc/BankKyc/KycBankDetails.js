@@ -303,6 +303,7 @@ const KycBankDetails = (props) => {
               variant={note.variant}
               title="Note"
               message={note.info_text}
+              dataAid='kyc-bankdetails-alertbox'
             />
             <main data-aid='kyc-enter-bank-account-details'>
               <Input
@@ -348,6 +349,7 @@ const KycBankDetails = (props) => {
                 helperText={form_data.account_number_error || ""}
                 onChange={handleChange("account_number")}
                 maxLength={16}
+                inputMode="numeric"
                 type="password"
                 id="account_number"
                 disabled={isApiRunning || disableFields.account_number_disabled}
@@ -361,6 +363,7 @@ const KycBankDetails = (props) => {
                 onChange={handleChange("c_account_number")}
                 maxLength={16}
                 type="text"
+                inputMode="numeric"
                 id="c_account_number"
                 disabled={
                   isApiRunning || disableFields.c_account_number_disabled

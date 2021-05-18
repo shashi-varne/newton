@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { inrFormatDecimal2 } from "utils/validators";
@@ -15,9 +15,13 @@ import {
 } from "@material-ui/core";
 import PieChart from "./piegraph";
 import Slide from "@material-ui/core/Slide";
+import { getBasePath } from "../../../utils/functions";
 import { keyBy } from 'lodash';
+import { isEmpty } from "../../../utils/validators";
 
-const isMobileDevice = getConfig().isMobileDevice;
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
+const partnerCode = config.partner_code;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -88,7 +92,7 @@ class Recommendations extends Component {
     let data = res;
     if (data && !pran) {
       const [recommendations] = data.recommended;
-      const altRiskOptsMap = keyBy(data.alternatives, 'risk');
+      const altRiskOptsMap = keyBy([...data.alternatives, ...data.recommended], 'risk');
       const assetAlloc = altRiskOptsMap[recommendations.risk || this.state.risk]
 
       this.setState(
@@ -108,7 +112,7 @@ class Recommendations extends Component {
       );
     } else {
       this.setState({
-        all_charges: data.all_charges,
+        all_charges: data?.all_charges,
       },
       () => {
         this.state.display_summary_only && this.handleClick();
@@ -252,7 +256,7 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran } = this.state;
+    let { pran, pension_house, recommendations } = this.state;
 
     let data = {
       amount: this.state.amount,
@@ -260,11 +264,10 @@ class Recommendations extends Component {
     };
 
     if (!pran) {
-      data.pension_house_id = (!this.state.display_summary_only &&
-        this.state.pension_house &&
-        this.state.pension_house.pension_house_id) ||
-      this.state.recommendations.pension_house
-        ? this.state.recommendations.pension_house.pension_house_id
+      data.pension_house_id = !isEmpty(pension_house)
+        ? pension_house.pension_house_id
+        : recommendations.pension_house
+        ? recommendations.pension_house.pension_house_id
         : "";
       data.risk = this.state.risk;
     } else {
@@ -274,10 +277,13 @@ class Recommendations extends Component {
     let result = await this.getInvestmentData(data, true);
 
     if (result) {
+      if(partnerCode) {
+        storageService().set("partner", partnerCode)
+      }
       let pgLink = result.investments.pg_link;
 
       let plutus_redirect_url = encodeURIComponent(
-        window.location.origin + `/nps/redirect` + getConfig().searchParams
+        getBasePath() + `/nps/redirect` + getConfig().searchParams
       );
 
       pgLink +=
@@ -289,7 +295,7 @@ class Recommendations extends Component {
       if (this.state.display_summary_only) {
         this.setState({
           url: pgLink,
-          show_loader: false,
+          skelton: false,
           openInvestmentSummary: true,
         });
       } else {
@@ -301,6 +307,13 @@ class Recommendations extends Component {
   goBack = () => {
     this.navigate("amount/one-time");
   };
+
+  handleReplace = () => {
+    const { recommendations, pension_house } = this.state;
+    const replaceObject = pension_house || recommendations?.pension_house;
+    storageService().setObject("nps-current", replaceObject);
+    this.navigate("fundreplace");
+  }
 
   render() {
     const {
@@ -335,7 +348,7 @@ class Recommendations extends Component {
               <div
                 className="replace"
                 onClick={() => {
-                  this.navigate("fundreplace");
+                  this.handleReplace();
                 }}
               >
                 Replace
@@ -504,25 +517,25 @@ const createPieChartData = (allocData) => {
     {
       id: "E",
       label: "E",
-      value: allocData.e_allocation,
+      value: allocData?.e_allocation,
       color: classColorMap['E'],
     },
     {
       id: "G",
       label: "G",
-      value: allocData.g_allocation,
+      value: allocData?.g_allocation,
       color: classColorMap['G'],
     },
     {
       id: "C",
       label: "C",
-      value: allocData.c_allocation,
+      value: allocData?.c_allocation,
       color: classColorMap['C'],
     },
     {
       id: "A",
       label: "A",
-      value: allocData.a_allocation,
+      value: allocData?.a_allocation,
       color: classColorMap['A'],
     },
   ]
@@ -553,6 +566,10 @@ const RiskSelectDialog = ({
   onApply
 }) => {
   const [selectedRisk, setSelectedRisk] = useState(currentRisk);
+
+  useEffect(() => {
+    setSelectedRisk(currentRisk)
+  }, [currentRisk])
 
   return (
     <Dialog

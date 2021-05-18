@@ -94,7 +94,7 @@ const InvestAmount = (props) => {
       buttonTitle="CONTINUE"
       handleClick={handleClick}
       disable={amountError ? true : false}
-      title="How would you like to invest?"
+      title="How much would you like to invest?"
       count="2"
       current="2"
       total="2"

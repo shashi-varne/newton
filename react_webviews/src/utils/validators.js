@@ -1107,6 +1107,25 @@ export function convertDateFormat(inputFormat) {
   var d = new Date(inputFormat)
   return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
 }
+
+
+export const compareObjects = (keysToCheck, oldState, newState) => {
+  let compare = true;
+  if(isEmpty(oldState) && isEmpty(newState)) return true;
+  if(isEmpty(oldState) || isEmpty(newState)) return false;
+  if(Object.keys(oldState).length !== Object.keys(newState).length) return false;
+
+  keysToCheck.forEach((key) => {
+    if ((oldState[key] && !newState[key]) || 
+        (newState[key] && !oldState[key]) || 
+         (oldState[key] && newState[key] && (oldState[key].toString().trim() !== newState[key].toString().trim()))) 
+        {
+        compare = false;
+        }
+  });
+  return compare;
+};
+
 export function Casesensitivity(str){
   if(!str || !isNaN(str)){
     return str

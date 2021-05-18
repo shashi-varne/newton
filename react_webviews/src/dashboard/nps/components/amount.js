@@ -20,7 +20,10 @@ class EnterAmount extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    storageService().remove("nps-prevpath");
+    storageService().remove("nps-recommend");
+  };
 
   handleChange = name => (event) => {
     let value = (name === "custom-amt") ? event.target.id : event.target.value;

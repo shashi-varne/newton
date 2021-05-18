@@ -291,6 +291,7 @@ const AddressUpload = (props) => {
             )}
           </div>
           <Alert
+            dataAid='kyc-address-alertbox'
             variant="attention"
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
@@ -310,7 +311,7 @@ const AddressUpload = (props) => {
                   Upload front side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
                   <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
@@ -388,7 +389,7 @@ const AddressUpload = (props) => {
                   Upload front side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={frontDocRef}
                   type="file"
@@ -412,7 +413,7 @@ const AddressUpload = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>
@@ -432,7 +433,7 @@ const AddressUpload = (props) => {
                   Upload back side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
                   <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
@@ -512,7 +513,7 @@ const AddressUpload = (props) => {
                   Upload back side of {addressProof}
                 </div>
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={backDocRef}
                   type="file"

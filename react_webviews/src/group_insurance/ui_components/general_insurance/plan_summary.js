@@ -85,8 +85,6 @@ class PlanSummaryClass extends Component {
     }
 
     var lead = this.state.leadData;
-    console.log(lead)
-    console.log(this)
    
     if(!this.state.leadData) {
       this.setState({

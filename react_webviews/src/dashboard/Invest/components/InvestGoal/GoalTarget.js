@@ -26,7 +26,7 @@ const GoalTarget = (props) => {
     try {
       const params = {
         type: funnelData.investType,
-        subtye: funnelData.subtype,
+        subtype: funnelData.subtype,
         term: funnelData?.term,
         rp_enabled: riskEnabled,
       };

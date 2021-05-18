@@ -134,6 +134,7 @@ const Nominee = (props) => {
               onChange={handleChange("dob")}
               maxLength={10}
               type="text"
+              inputMode="numeric"
               id="dob"
             />
             <div className="input" data-aid='kyc-dropdown-withouticon'>

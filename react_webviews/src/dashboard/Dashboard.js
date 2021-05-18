@@ -89,6 +89,11 @@ const Home = (props) => {
         <Route path={`${url}payment/options`} component={PaymentOptions} />
         <Route
           exact
+          path={`${url}sdk/page/callback`}
+          render={(props) => <PageCallback {...props} type="sdk" />} 
+        />
+        <Route
+          exact
           path={`${url}page/callback/:investment_type/:investment_amount`}
           component={PageCallback}
         />
