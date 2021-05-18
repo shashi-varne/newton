@@ -39,7 +39,26 @@ const Failed = (props) => {
 
   const productName = getConfig().productName;
   return (
-    <Container title="Aadhaar KYC Failed!" noFooter skelton={isLoading}>
+    <Container
+      title="Aadhaar KYC Failed!"
+      twoButtonVertical={true}
+      button1Props={{
+        type: 'primary',
+        order: "1",
+        title: "RETRY",
+        onClick: {retry},
+        classes: { root: 'digilocker-failed-button'}
+      }}
+      button2Props={{
+        type: 'secondary',
+        order: "2",
+        title: "UPLOAD DOCUMENTS MANUALLY",
+        onClick: {manual},
+        classes: { root: 'digilocker-failed-button'}
+      }}
+      skelton={isLoading}
+      disableBack
+    >
       <section id="digilocker-failed">
         <img
           className="digi-image"
@@ -54,7 +73,7 @@ const Failed = (props) => {
           However, you can <strong>still complete your KYC</strong> and start
           investing in mutual funds.
         </div>
-        {!isLoading && (
+        {/* {!isLoading && (
           <footer className="footer">
             <Button
               variant="raised"
@@ -82,7 +101,7 @@ const Failed = (props) => {
               }
             </Button>
           </footer>
-        )}
+        )} */}
       </section>
       <AadhaarDialog
         open={open}
