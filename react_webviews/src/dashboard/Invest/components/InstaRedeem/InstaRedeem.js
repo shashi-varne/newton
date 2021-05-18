@@ -149,7 +149,6 @@ const InstaRedeem = (props) => {
     if(screenName !== "insta popup")
     {
       eventObj.properties["know_more_clicked"] = knowMoreClicked ? "yes" : "no";
-      storageService().remove('know_more_clicked')
     }
     if(screenName === "insta popup")
       eventObj.properties["intent"] = "withdrawal information"

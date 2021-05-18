@@ -273,17 +273,38 @@ const Recommendations = (props) => {
         "info_clicked": storageService().get("info_clicked") ? "yes" : "no",
         }
     };
-    storageService().remove("check_how_clicked") 
-    storageService().remove("period_changed")
-    storageService().remove("info_clicked")
     if (funnelData.investType === "saveforgoal") {
       eventObj.properties['goal_purpose'] = funnelData.subtype || "";
     }
     if (userAction === 'just_set_events') {
       return eventObj;
     } else {
+      storageService().remove("check_how_clicked") 
+      storageService().remove("period_changed")
+      storageService().remove("info_clicked")
       nativeCallback({ events: eventObj });
     }
+  }
+
+  const removeEventData = () => {
+    storageService().remove("check_how_clicked") 
+    storageService().remove("period_changed")
+    storageService().remove("info_clicked")
+  }
+
+  const goBack = () => {
+    sendEvents('back')
+    removeEventData();
+    //TODO below code to be checked
+    const goBackPath = props.location?.state?.goBack || "";
+    if(goBackPath) {
+      props.history.push({
+        pathname: goBackPath,
+        search: getConfig().searchParams,
+      });
+      return;
+    }
+    props.history.goBack();
   }
 
   return (
@@ -301,6 +322,7 @@ const Recommendations = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       hidePageTitle
+      headerData={{goBack}}
     > 
       <div className="recommendation-page">
         {riskEnabledFunnel && funnelData.showRecommendationTopCards &&
