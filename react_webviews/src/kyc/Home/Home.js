@@ -55,7 +55,7 @@ const Home = (props) => {
 
   const initialize = () => {
     setPan(kyc.pan?.meta_data?.pan_number || "");
-    setResidentialStatus(kyc.address?.meta_data?.is_nri);
+    setResidentialStatus(!kyc.address?.meta_data?.is_nri);
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,

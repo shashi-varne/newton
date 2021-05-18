@@ -18,7 +18,7 @@ const StocksStatus = (props) => {
           <h3>Complete your KYC application</h3>
           <img
             alt=""
-            src={require(`assets/${productName}/stocks_status_icon.svg`)}
+            src={require(`assets/${productName}/kyc_status_icon.svg`)}
           />
         </div>
         <p className="stocks-subtitle">
