@@ -154,8 +154,7 @@ const Summary = (props) => {
                 <>
                   <div className="title">Current Value</div>
                   <div className="amount">
-                    {formatAmountInr(report.current.current)}
-                    {report.current.current === 0 && 0}
+                    {formatAmountInr(report.current?.current || 0)}
                   </div>
                   {report.current.invested > 0 && (
                     <>
@@ -250,9 +249,8 @@ const Summary = (props) => {
                     <Button
                       onClick={() => navigate(getPathname.invest)}
                       buttonTitle="Explore Mutual Funds"
-                      style={{
-                        width: "180px",
-                        height: "40px",
+                      classes={{
+                        button: "reports-invest-button",
                       }}
                     />
                   </div>
