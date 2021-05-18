@@ -88,29 +88,38 @@ const Sign = (props) => {
   const handleSubmit = async () => {
     try {
       setIsApiRunning("button")
-      const result = await upload(file, 'sign')
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      const dlFlow =
-        result.kyc.kyc_status !== 'compliant' &&
-        !result.kyc.address.meta_data.is_nri &&
-        result.kyc.dl_docs_status !== '' &&
-        result.kyc.dl_docs_status !== 'init' &&
-        result.kyc.dl_docs_status !== null
-      if (
-        props?.location?.state?.fromState === 'kyc/dl/personal-details3' ||
-        dlFlow
-      ) {
-        const type =
-          result?.kyc?.kyc_status === 'compliant'
-            ? 'compliant'
-            : 'non-compliant'
-        navigate(`/kyc/${type}/bank-details`)
-      } else {
-        if (props?.location?.state?.backToJourney) {
-          navigate('/kyc/journey')
+      const response = await upload(file, 'sign')
+      if (response.status_code === 200) {
+        const result = response.result;
+        storageService().setObject(storageConstants.KYC, result.kyc);
+        const dlFlow =
+          result.kyc.kyc_status !== "compliant" &&
+          !result.kyc.address.meta_data.is_nri &&
+          result.kyc.dl_docs_status !== "" &&
+          result.kyc.dl_docs_status !== "init" &&
+          result.kyc.dl_docs_status !== null;
+        if (
+          props?.location?.state?.fromState === "kyc/dl/personal-details3" ||
+          dlFlow
+        ) {
+          const type =
+            result?.kyc?.kyc_status === "compliant"
+              ? "compliant"
+              : "non-compliant";
+          navigate(`/kyc/${type}/bank-details`);
         } else {
-          navigate('/kyc/upload/progress')
+          if (props?.location?.state?.backToJourney) {
+            navigate("/kyc/journey");
+          } else {
+            navigate("/kyc/upload/progress");
+          }
         }
+      } else {
+        throw new Error(
+          response?.result?.error ||
+            response?.result?.message ||
+            "Something went wrong"
+        );
       }
     } catch (err) {
       toast(err?.message)
