@@ -96,7 +96,7 @@ const Balance = (props) => {
   const noInvestments = isEmpty(balance?.balance) || balance === 0
 
   const sendEvents = (userAction, cardClicked, screenName) => {
-    var cardClickedName = "";
+    let cardClickedName = "";
     if(cardClicked === "Instant Withdraw") 
       cardClickedName = "instant withdraw"
     else if(cardClicked === "System Selected")

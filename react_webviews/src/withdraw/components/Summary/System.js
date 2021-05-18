@@ -42,7 +42,6 @@ const SystemSummary = (props) => {
       })
 
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        console.log(result)
         navigate('verify', {state:{...result, type: "system"} })
         return
       }

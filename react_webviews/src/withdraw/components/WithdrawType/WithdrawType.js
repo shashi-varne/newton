@@ -170,7 +170,7 @@ const Landing = (props) => {
   
   const sendEvents = (userAction) => {
 
-    var redemptionType = "";
+    let redemptionType = "";
     if(type === "insta-redeem") 
       redemptionType = "instaredeem"
     else if(type === "systematic")
@@ -179,7 +179,7 @@ const Landing = (props) => {
       redemptionType = "self"
     else redemptionType = type;
     
-    var statusEvent = '';
+    let statusEvent = '';
     if(limitCrossed)
       statusEvent = 'exhaust limit'
     if(zeroInvested)
