@@ -148,6 +148,16 @@ export function formCheckFields(
   }
 }
 
+export function setBaseHref() {
+  var myBaseHref =  document.getElementById('myBaseHref');
+  var pathname = window.location.pathname;
+  if(pathname.indexOf('appl/webview') !== -1) {
+    var myBaseHrefUrl = '/appl/webview/' + pathname.split('/')[3] +'/' ;
+    myBaseHref.href = myBaseHrefUrl;
+    window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+  }
+}
+
 export async function emailLogin(body) {
   try {
     const res = await Api.post(`/api/user/login`, body);
@@ -183,6 +193,7 @@ export async function emailLogin(body) {
         "campaign",
         kycResult.data.campaign.user_campaign.data
       );
+      setBaseHref();
 
       this.setState({
         currentUser: true,
@@ -388,6 +399,7 @@ export async function otpVerification(body) {
         "campaign",
         kycResult.data.campaign.user_campaign.data
       );
+      setBaseHref();
 
       this.setState({
         currentUser: true,
