@@ -81,7 +81,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
             };
             same_address = lead.buyer_details.perm_addr_correspondence_addr_same ? "YES" : "NO";
-
+            form_data['same_address'] = same_address;
             if(form_data.pincode) {
                 this.getCityListReligare({form_data, name: 'pincode'});
             };
@@ -223,6 +223,7 @@ class GroupHealthPlanAddressDetails extends Component {
         }
 
         let { provider, form_data, same_address } = this.state;
+        form_data['same_address'] = this.state.same_address;
 
         this.sendEvents('next');
         let keysMapper = {
@@ -371,8 +372,26 @@ class GroupHealthPlanAddressDetails extends Component {
                     }
                 }
             }
+            var keys_to_add = ['addr_line1', 'addr_line2','city', 'pincode', 'state']
+            var address = body.address_details;
+            var address_data = provider === 'HDFCERGO' ? address.permanent_address : address.correspondence_address
+            var current_state = {}
+            
+            for(var x in address_data){
+                if(keys_to_add.indexOf(x) >= 0){
+                    current_state[x] = address_data[x]
+                }
+            }
 
-            this.updateLead(body);
+            if(this.state.same_address === 'NO'){
+                for(var y in address.permanent_address){
+                    if(keys_to_add.indexOf(y) >= 0){
+                        current_state[`p_${y}`] = address.permanent_address[y]
+                    }
+                }
+            }
+            
+            this.updateLead(body , '', current_state);
         }
     }
 
@@ -575,9 +594,12 @@ class GroupHealthPlanAddressDetails extends Component {
     }
 
     handleChangeRadio = name => event => {
-
+        var form_data = this.state.form_data; 
         let options = yesNoOptions;
+        form_data[name] = options[event] ? options[event].value : '';
+
         this.setState({
+            form_data: form_data,
             [name]: options[event] ? options[event].value : '',
             [name + '_error']: ''
         }, () => {
