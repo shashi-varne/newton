@@ -41,10 +41,20 @@ const jss = create(jssPreset());
 
 const theme = createMuiTheme(themeConfig);
 
-var basename = window.sessionStorage.getItem('base_href') || '';
-if (basename && basename.indexOf('appl/webview') !== -1) {
-  basename = basename ? basename + 'view/' : '';
+var myBaseHref =  document.getElementById('myBaseHref');
+var pathname = window.location.pathname;
+
+if(pathname.indexOf('appl/webview') !== -1) {
+  var myBaseHrefUrl = '/appl/webview/' + window.location.pathname.split('/')[3] +'/' ;
+  myBaseHref.href = myBaseHrefUrl;
+  window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+  var basename = myBaseHrefUrl ? myBaseHrefUrl + 'view/' : '';
 }
+
+// var basename = window.sessionStorage.getItem('base_href') || '';
+// if (basename && basename.indexOf('appl/webview') !== -1) {
+//   basename = basename ? basename + 'view/' : '';
+// }
 const isMobileDevice = getConfig().isMobileDevice;
 
 const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
