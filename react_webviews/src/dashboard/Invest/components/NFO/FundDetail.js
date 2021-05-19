@@ -83,27 +83,27 @@ class FundDetail extends Component {
               )}
             </div>
             <p className="overview">
-              <b>Overview: </b>
+              <b>Overview:</b>
               {fund.overview}
             </p>
             <p className="date">
-              <b>Allotment date: </b>
+              <b>Allotment date:</b>
               {fund.allotment_date}
             </p>
             <p className="lock-in">
-              <b>Lock-in: </b>
+              <b>Lock-in:</b>
               {getFormattedDate(fund.lockin_in, true)}
             </p>
             <p className="load">
-              <b>Exit load: </b>
+              <b>Exit load:</b>
               {fund.exit_load === 0 ? "Nil" : fund.exit_load}
             </p>
             <p className="disclosure">
-              <b>Redemption disclosure: </b>
+              <b>Redemption disclosure:</b>
               {fund.redemption_disclosure}
             </p>
             <p className="more">
-              <b>Read more: </b>{" "}
+              <b>Read more:</b>
               <a target="_blank" href={fund.sid_link}>
                 {fund.sid_link}
               </a>

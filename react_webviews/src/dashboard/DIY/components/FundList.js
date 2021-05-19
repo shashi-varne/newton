@@ -41,6 +41,7 @@ function TabContainer(props) {
 }
 const FundList = (props) => {
   const { match, classes, ...parentProps } = props
+  const name = props?.location?.state?.name || "";
   const [value, setValue] = useState(4)
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
@@ -158,7 +159,7 @@ const FundList = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      title={match.params?.key?.replace(/_/g, ' ') || ''}
+      title={name || match.params?.key?.replace(/_/g, ' ') || ''}
       skelton={showLoader}
       classOverRideContainer="pr-container"
       id="diy-fundlist-container"
