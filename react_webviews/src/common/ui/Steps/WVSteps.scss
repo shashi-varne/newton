@@ -40,12 +40,14 @@
       line-height: 21px;
       color: var(--dark);
       text-align: left;
+      text-transform: capitalize;
     }
   }
-
+  
   .wv-step-content {
     text-align: left;
     margin-left: 40px;
+    text-transform: capitalize;
   }
 }
 
