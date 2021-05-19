@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
+import Button from '../../common/ui/Button'
 import { storageService, isEmpty } from '../../utils/validators'
 import { storageConstants } from '../constants'
 import { getIpvCode, upload } from '../common/api'
@@ -43,12 +44,14 @@ const IpvVideo = (props) => {
     }
   }
 
-  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
+  const native_call_handler = (method_name, doc_type, doc_name, doc_side, msg, ipv_code) => {
     window.callbackWeb[method_name]({
       type: 'doc',
       doc_type: doc_type,
       doc_name: doc_name,
       doc_side: doc_side,
+      message: msg,
+      ipv_code: ipv_code,
       // callbacks from native
       upload: function upload(file) {
         try {
@@ -104,7 +107,7 @@ const IpvVideo = (props) => {
     if(getConfig().html_camera)
       inputEl.current.click()
     else
-      native_call_handler(method_name, 'ipvvideo', 'ipvvideo.jpg', 'front')
+      native_call_handler(method_name, 'ipvvideo', '', '', 'Look at the screen and read the verification number loud', ipvcode)
   }
 
   const handleSubmit = async () => {
@@ -127,6 +130,98 @@ const IpvVideo = (props) => {
     }
   }
 
+  async function startRecording(stream, lengthInMS) {
+    let recorder = new MediaRecorder(stream);
+    let data = [];
+  
+    recorder.ondataavailable = event => data.push(event.data);
+    recorder.start();
+    console.log(recorder.state + " for " + (lengthInMS/1000) + " seconds...");
+  
+    let stopped = new Promise((resolve, reject) => {
+      recorder.onstop = resolve;
+      recorder.onerror = event => reject(event.name);
+    });
+  
+    setTimeout((e) => {
+      recorder.state == "recording" && recorder.stop()
+    }, lengthInMS)
+  
+    return Promise.all([
+      stopped,
+    ])
+    .then(() => data);
+  }
+
+  const handleVideoCapture = () => {
+    const supported = 'mediaDevices' in navigator;
+    const player = document.getElementById('ipv_video');
+
+    const constraints = {
+      video: true,
+      // audio: true
+    };
+
+    function stop(e) {
+      var stream = player.srcObject;
+      var tracks = stream.getTracks();
+    
+      for (var i = 0; i < tracks.length; i++) {
+        var track = tracks[i];
+        track.stop();
+      }
+    
+      player.srcObject = null;
+    }
+
+    const successCallback = (stream) => {
+      player.srcObject = stream;
+      player.play();
+      player.captureStream = player.captureStream || player.mozCaptureStream;
+      return new Promise(resolve => player.onplaying = resolve);
+    }
+
+    const errorCallback = (err) => {
+      console.log(err || "Something went wrong!");
+      toast("Something went wrong!");
+      stop();
+    }
+
+    const recorderCallback = (recordedChunks) => {
+      let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
+      player.src = URL.createObjectURL(recordedBlob);
+      const blob = new Blob(recordedChunks, {
+        type: "video/webm"
+      });
+      const fileFromBlob = new File([blob], "test.webm");
+      setFile(fileFromBlob);
+      // downloadButton.href = player.src;
+      // downloadButton.download = "RecordedVideo.webm";
+  
+      console.log("Successfully recorded " + recordedBlob.size + " bytes of " +
+          recordedBlob.type + " media.");
+    }
+
+    if(supported) {
+      navigator.mediaDevices.getUserMedia(constraints)
+      .then(successCallback)
+      .then(() => startRecording(player.captureStream(), 9000))
+      .then(recorderCallback)
+      .catch(errorCallback);
+    } else {
+      navigator.getMedia = navigator.getUserMedia ||
+        navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+      navigator.getMedia(constraints)
+      .then(successCallback)
+      .catch(errorCallback);
+    }
+
+    setTimeout((e) => {
+      stop(e)
+    }, 9000);
+  }
+
   const productName = getConfig().productName
   const isWeb = getConfig().isWebOrSdk
 
@@ -137,7 +232,7 @@ const IpvVideo = (props) => {
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
-      title="Upload video (IPV)"
+      title="Upload selfie video (IPV)"
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-ipv-video">
@@ -198,31 +293,42 @@ const IpvVideo = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
-              {file && (
+            <div className="kyc-doc-upload-container noBorder">
+              {/* {file && (
                 <img
                   src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
                   className="preview"
                   alt="Uploaded IPV Video"
                 />
-              )}
+              )} */}
               {!file && (
-                <img
-                  className="icon"
-                  src={require(`assets/${productName}/card_upload_selfie.svg`)}
-                  alt="Upload Selfie"
-                  width="320px"
-                  style={{ display: 'block', margin: '0 auto', width: '320px' }}
-                />
+                <div className="instructions-container">
+                  <div className="ipv_footer_instructions">
+                    Start recording,{' '}
+                    <strong>by reading the following verification numbers loud</strong>{' '}
+                    while looking at the camera
+                  </div>
+                  <div className="ipv_code">{ipvcode}</div>
+                  <img
+                    className="icon"
+                    src={require(`assets/${productName}/state__ipv_number.svg`)}
+                    alt="Upload Selfie"
+                    // style={{ display: 'block', margin: '0 auto', width: '320px' }}
+                    className="default"
+                  />
+                </div>
               )}
+              <video id="ipv_video" controls className="video-controls"></video>
               <div className="kyc-upload-doc-actions">
                 <input
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
                   onChange={handleChange}
+                  accept="video/*"
+                  capture
                 />
-                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
+                {/* <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -237,34 +343,43 @@ const IpvVideo = (props) => {
                     </svg>
                   )}
                   <div className="upload-action">Open Gallery</div>
-                </button>
+                </button> */}
+                {!file && 
+                  <div className="button-container">
+                    <Button
+                      type="outlined"
+                      buttonTitle="OPEN CAMERA"
+                      onClick={handleVideoCapture}
+                    />
+                  </div>
+                }
               </div>
             </div>
           )}
-          {!file && (
+          {/* {!file && (
             <div className="ipv_footer_instructions">
               While recording,{' '}
               <strong>read the following verification numbers loud</strong>{' '}
               while looking at the camera
             </div>
-          )}
+          )} */}
 
-          {file && (
+          {/* {file && (
             <div className="ipv_footer_instructions">
               Please ensure that you've read aloud the below number for a
               seamless verification experience.
             </div>
-          )}
-          <div className="ipv_code">{ipvcode}</div>
-          <div className="flex-between-center">
+          )} */}
+          
+          {/* <div className="flex-between-center">
             <div className="know_more">How to make a selfie video ?</div>
             <div className="link" onClick={() => open()}>
               KNOW MORE
             </div>
-          </div>
+          </div> */}
         </section>
       )}
-      <KnowMore isOpen={showKnowMoreDialog} close={close} />
+      {/* <KnowMore isOpen={showKnowMoreDialog} close={close} /> */}
     </Container>
   )
 }
