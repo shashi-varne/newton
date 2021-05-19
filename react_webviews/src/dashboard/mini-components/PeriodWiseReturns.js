@@ -81,7 +81,7 @@ const PeriodWiseReturns = ({
         <div className='invested-amount-corpus-invested'>
           <div className="color-box"></div>
           <div className="text">
-            <h1>Invested value</h1>
+            <h1>Amount Invested</h1>
             <div>{formatAmountInr(investedValue)}</div>
           </div>
         </div>
@@ -90,7 +90,7 @@ const PeriodWiseReturns = ({
           <div className="color-box"></div>
           <div className="text">
             <h1>
-              Projected value
+              Estimated Return
               {showInfo &&
                 <img
                   alt="i"
