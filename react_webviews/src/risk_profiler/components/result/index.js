@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 import { getConfig } from 'utils/functions';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
-import conservative from 'assets/meter-conservative.svg';
-import moderatelyConservative from 'assets/meter-moderately-conservative.svg';
-import moderate from 'assets/meter-moderate.svg';
-import moderatelyAggresive from 'assets/meter-moderately-aggresive.svg';
-import aggresive from 'assets/meter-aggresive.svg';
 import { nativeCallback } from 'utils/native_callback';
-
 import Api from 'utils/api';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -18,6 +12,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import { getUrlParams, isEmpty, storageService } from '../../../utils/validators';
 import { pick, get } from 'lodash';
+import { riskProfileMap } from '../../constants';
 
 class Result extends Component {
   constructor(props) {
@@ -47,10 +42,10 @@ class Result extends Component {
 
     return urlParams;
   }
-
+  
   async componentDidMount() {
+    storageService().setObject('useNewFlow', this.props.useNewFlow);
     try {
-
       // let score = JSON.parse(window.sessionStorage.getItem('score'));
       const res = await Api.get('/api/risk/profile/user/recommendation');
       const score = get(res, 'pfwresponse.result.score');
@@ -76,7 +71,6 @@ class Result extends Component {
           show_loader: false,
         });
       } else {
-        storageService().setObject('useNewFlow', this.props.useNewFlow);
         this.navigate('intro', true);
       }
     } catch (err) {
@@ -135,7 +129,29 @@ class Result extends Component {
     if (openWebModule) {
       window.location.href = this.redirectUrlBuilder();
     } else {
-      nativeCallback({ action: 'exit' });
+      const entryParams = this.state.params || {};
+
+      if (!entryParams.type) {
+        // When coming from anywhere except from within funnel
+        nativeCallback({ action: 'exit' });
+        return;
+      }
+
+      let messageBody = pick(
+        entryParams,
+        ['amount', 'flow', 'term', 'type', 'year', 'subType']
+      );
+      if (entryParams.type === 'saveforgoal') {
+        const monthlyAmount = this.calculateMonthlyAmount(
+          parseInt(entryParams.year - new Date().getFullYear(), 10),
+          entryParams.amount
+        );
+        messageBody.monthlyAmount = monthlyAmount;
+      }
+      nativeCallback({
+        action: 'on_success',
+        message: messageBody,
+      });
     }
   }
 
@@ -167,11 +183,6 @@ class Result extends Component {
 
   redirectUrlBuilder = () => {
     const entryParams = this.state.params;
-    // const webview_redirect_url = encodeURIComponent(
-    //   window.location.origin +
-    //   '/risk/recommendation' +
-    //   getConfig().searchParams
-    // );
     let webPath = '';
 
     if (entryParams.type === 'saveforgoal') {
@@ -200,7 +211,6 @@ class Result extends Component {
       '&term=' + entryParams.term +
       '&flow=' + entryParams.flow +
       '&fromRisk=true';
-      // '&webview_redirect_url=' + webview_redirect_url;
   }
 
   renderDialog = () => {
@@ -272,48 +282,11 @@ class Result extends Component {
     this.setState({ openDialogReset: true });
   }
 
-  getScoreData(score) {
-    let map = {
-      1: {
-        title: 'Conservative Investor',
-        contennt: 'Investor like you are comfortable in accepting lower returns for a higher degree of liquidity or stability. Typically, a Conservative investor primarly seeks to minimize risk and loss of money.',
-        img: conservative
-      },
-      2: {
-        title: 'Moderately Conservative Investor',
-        contennt: 'You have a low risk appetite. Consistent and sustainable returns are what you as an investor need.',
-        img: moderatelyConservative
-      },
-      3: {
-        title: 'Moderate Investor',
-        contennt: 'You have a moderate tolerance for risk, investors like you values reducing risks and enhancing returns equally. Also, moderate investors are willing to accept modest risks to seek higher long-term returns.',
-        img: moderate
-      },
-      4: {
-        title: 'Moderately Aggresive Investor',
-        contennt: 'You are ready to take high risk by investing in risky bets. You seem to be okay with risks as long as the reward compensates well.',
-        img: moderatelyAggresive
-      },
-      5: {
-        title: 'Aggressive Investor',
-        contennt: 'You have a very high tolerance for risk, investors like you prefer to stay in the market in times of extreme volatility in exchange for the possibility of receiving high relative returns over the time to outpace inflation.',
-        img: aggresive
-      }
+  getScoreDataProp(prop) {
+    const score = this.state?.score?.score;
+    if (score) {
+      return riskProfileMap[score][prop] || '';
     }
-
-    return map[score];
-  }
-
-  getImg(score) {
-    let map = {
-      1: conservative,
-      2: moderatelyConservative,
-      3: moderate,
-      4: moderatelyAggresive,
-      5: aggresive
-
-    }
-    return map[score];
   }
 
   renderPageLoader = () => {
@@ -340,19 +313,32 @@ class Result extends Component {
           classOverRideContainer="result-container-risk"
           handleClick={this.handleClick}
           edit={this.props.edit}
-          buttonTitle="Fund Recommendation"
+          buttonTitle="Invest Now"
           topIcon={this.state.params.hideRPReset !== "true" ? '' : "restart"}
           handleReset={this.showDialog}
           resetpage={this.state.params.hideRPReset !== "true"}
           events={this.sendEvents('just_set_events')}
         >
-          <div className="meter-img">
-            {this.state.score && <img style={{ width: '70%' }} src={this.getScoreData(this.state.score.score).img} alt="meter" />}
-          </div>
-          <div style={{ textAlign: 'center', marginTop: 50 }}>
-            <div style={{ color: '#ffffff', fontSize: 16, marginBottom: 20 }}>{this.getScoreData(this.state.score.score).title}</div>
-            <div style={{ color: '#f2f2f2', fontSize: 14 }}>{this.getScoreData(this.state.score.score).contennt}</div>
-          </div>
+          {this.state.score ?
+            <>
+              <div className="meter-img">
+                <img
+                  src={this.getScoreDataProp('img')}
+                  alt="meter"
+                />
+              </div>
+              <div className="risk-meter-desc" style={{ textAlign: 'center' }}>
+                <div className="risk-meter-desc-title">{this.getScoreDataProp('title')}</div>
+                <div className="risk-meter-desc-content" style={{}}>{this.getScoreDataProp('contennt')}</div>
+              </div>
+            </> :
+            <div className="risk-result-error">
+              <b>Oops! No risk profile found.</b>
+              <br />
+              <br />
+              Please click the restart icon to redo your risk questionnaire
+            </div>
+          }
         </Container>
       )
     } else {
