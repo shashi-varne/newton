@@ -69,35 +69,6 @@ const Failed = (props) => {
           Aadhaar KYC has been failed because we were not able to connect to
           your Digilocker.
         </div>
-        {/* {!isLoading && (
-          <footer className="footer">
-            <Button
-              variant="raised"
-              fullWidth
-              color="secondary"
-              className="raised"
-              onClick={retry}
-            >
-              RETRY
-            </Button>
-            <Button
-              variant="outlined"
-              fullWidth
-              color="secondary"
-              className="outlined"
-              onClick={manual}
-            >
-              {!isApiRunning && 'CONTINUE WITH MANUAL KYC'}
-              {isApiRunning && 
-                <div className="flex-justify-center">
-                  <DotDotLoaderNew
-                    styleBounce={{backgroundColor:'white'}}
-                  />
-                </div>
-              }
-            </Button>
-          </footer>
-        )} */}
       </section>
       <AadhaarDialog
         open={open}
