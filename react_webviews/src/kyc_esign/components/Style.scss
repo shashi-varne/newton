@@ -1,10 +1,16 @@
 $status-text-margin: 20px 0 10px 0;
-$text-color1: #767E86;
+$text-color1: var(--steelgrey);
 $text-color2: #8D879B;
 
 @mixin status_text {
     font-size: 14px;
     line-height: 21px;
+}
+
+@mixin d-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .digi-status {
@@ -89,7 +95,7 @@ $text-color2: #8D879B;
       line-height: 9px;
       letter-spacing: 1px;
       text-transform: uppercase;
-      color: #767E86;
+      color: $text-color1;
     }
 
     .bottom-image {
@@ -130,9 +136,7 @@ $text-color2: #8D879B;
     }
 
     .text {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include d-flex-center();
       font-size: 14px;
       line-height: 19px;
       color: #8d879b;
@@ -149,7 +153,7 @@ $text-color2: #8D879B;
       font-size: 13px;
       line-height: 22px;
       text-align: center;
-      color: #767e86;
+      color: $text-color1;
       margin-top: 30px;
     }
 
@@ -159,6 +163,13 @@ $text-color2: #8D879B;
       color: #4f2da7;
       margin: 30px 0 0 0;
       cursor: pointer;
+    }
+
+    .sub-title {
+      @include d-flex-center();
+      font-size: 13px;
+      line-height: 22px;
+      color: $text-color1
     }
   }
 

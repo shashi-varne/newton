@@ -23,6 +23,11 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
             Approves in one working day
           </div>
         )}
+        {dl_flow && (
+          <div className="sub-title">
+            Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds
+          </div>
+        )}
         <div className="subtitle" onClick={() => navigateToReports()}>
           View your KYC application details {" >"}
         </div>
