@@ -69,10 +69,6 @@ const Failed = (props) => {
           Aadhaar KYC has been failed because we were not able to connect to
           your Digilocker.
         </div>
-        <div className="body-text2">
-          However, you can <strong>still complete your KYC</strong> and start
-          investing in mutual funds.
-        </div>
         {/* {!isLoading && (
           <footer className="footer">
             <Button
