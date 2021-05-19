@@ -18,7 +18,7 @@ function PartnerReferral() {
   ]);
   const [referralUrl, setReferralUrl] = useState("");
   const [showLoader, setShowLoader] = useState(false);
-  
+
   const handleChange = (name) => (event) => {
     if (!name) {
       name = event.target.name;
@@ -32,6 +32,11 @@ function PartnerReferral() {
       setReferralCode(value);
       setReferralCodeError("");
     }
+  };
+
+  const copyText = () => {
+    navigator.clipboard.writeText(referralUrl);
+    toast("Copied", "success");
   };
 
   const handleClick = async () => {
@@ -60,15 +65,17 @@ function PartnerReferral() {
         var resultData = res.pfwresponse.result;
 
         if (res.pfwresponse.status_code === 200) {
-          setReferralUrl(`https://play.google.com/store/apps/details?id=com.finwizard.fisdom&referrer=utm_source=%7B%22referrer%22%3A%22${referralCode}%22%2C%22campaign_name%22%3A%22%22%2C%22product_name%22%3A%22%22%2C%22agency_name%22%3A%22%22%7D`);
+          setReferralUrl(
+            `https://play.google.com/store/apps/details?id=com.finwizard.fisdom&referrer=utm_source=%7B%22referrer%22%3A%22${referralCode}%22%2C%22campaign_name%22%3A%22%22%2C%22product_name%22%3A%22%22%2C%22agency_name%22%3A%22%22%7D`
+          );
         } else {
           error =
             resultData.error || resultData.message || "Something went wrong";
-          toast(error.toUpperCase(), "error");
+          throw error;
         }
       } catch (err) {
-        setShowLoader(false)
-        toast(err)
+        setShowLoader(false);
+        toast(err);
       }
     }
   };
@@ -119,13 +126,7 @@ function PartnerReferral() {
           <div className="referral-url-left">
             <p>{referralUrl}</p>
           </div>
-          <div
-            onClick={() => {
-              navigator.clipboard.writeText(referralUrl);
-              toast("Copied", "success");
-            }}
-            className="referral-url-right"
-          >
+          <div onClick={copyText} className="referral-url-right">
             <DescriptionIcon />
           </div>
         </div>
