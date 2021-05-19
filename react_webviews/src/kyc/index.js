@@ -65,6 +65,7 @@ import PanInstructions from "./Equity/components/PanInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
 import FAndOSampleDocument from "./Equity/components/F&OSampleDocuments";
+import CommunicationDetails from "./Equity/components/CommunicationDetails";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -352,6 +353,11 @@ const Kyc = (props) => {
           exact 
           path={`${url}/fno-sample-documents`} 
           component={FAndOSampleDocument} 
+        />
+        <Route 
+          exact 
+          path={`${url}/communication-details`} 
+          component={CommunicationDetails} 
         />
         <Route component={NotFound} />
       </Switch>

@@ -332,3 +332,76 @@ $generic-subtitle-margin-top: -10px;
     }
   }
 }
+
+.kyc-communication-details {
+  .kyc-main-subtitle {
+    padding-bottom: 30px;
+  }
+
+  .kcd-google-button {
+    width: 100%;
+    padding: 15px !important;
+
+    .kcd-google-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4a4a4a;
+      font-weight: normal;
+      font-size: 13px;
+      text-transform: initial;
+
+      img {
+        width: 18px;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .kcd-or-divider {
+    margin: 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .kcd-divider-line {
+      border: 1px solid #eeeeee;
+      width: 100%;
+    }
+
+    .kcd-divider-text {
+      margin: 0 40px;
+      font-size: 11px;
+      line-height: 18px;
+      color: #4a4a4a;
+    }
+  }
+
+  .kcd-input-field {
+    .kcd-input-edit {
+      color: var(--secondary);
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+  }
+
+  .kcd-email-subtext {
+    font-size: 11px;
+    line-height: 18px;
+    color: #878787;
+    padding-top: 5px;
+  }
+
+  .kcd-otp-container {
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0;
+
+    .kcd-otp-content {
+      display: flex;
+    }
+  }
+}
