@@ -3,9 +3,9 @@ import Container from "../group_insurance/common/Container";
 import DropDownNew from "../common/ui/DropDownNew";
 import Input from "../common/ui/Input";
 import toast from "../common/ui/Toast";
-import Api from "utils/api";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "./partner-referral.scss";
+import { verifyReferralCode } from "./services";
 
 function PartnerReferral() {
   const [partner, setPartner] = useState("");
@@ -40,7 +40,6 @@ function PartnerReferral() {
   };
 
   const handleClick = async () => {
-    let error = "";
     var canSubmitForm = true;
     if (!partner) {
       setPartnerError("Please select the partner name!");
@@ -55,28 +54,9 @@ function PartnerReferral() {
     }
     if (canSubmitForm) {
       setShowLoader("button");
-
-      try {
-        var res = await Api.get(
-          `/api/referral/${partnerIndex}/validate?referral=${referralCode}`
-        );
-        setShowLoader(false);
-
-        var resultData = res.pfwresponse.result;
-
-        if (res.pfwresponse.status_code === 200) {
-          setReferralUrl(
-            `https://play.google.com/store/apps/details?id=com.finwizard.fisdom&referrer=utm_source=%7B%22referrer%22%3A%22${referralCode}%22%2C%22campaign_name%22%3A%22%22%2C%22product_name%22%3A%22%22%2C%22agency_name%22%3A%22%22%7D`
-          );
-        } else {
-          error =
-            resultData.error || resultData.message || "Something went wrong";
-          throw error;
-        }
-      } catch (err) {
-        setShowLoader(false);
-        toast(err);
-      }
+      const result = await verifyReferralCode(partnerIndex, referralCode)
+      setReferralUrl(result)
+      setShowLoader(false)
     }
   };
 
