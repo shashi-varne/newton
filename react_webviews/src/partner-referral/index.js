@@ -39,6 +39,8 @@ function PartnerReferral() {
     toast("Copied", "success");
   };
 
+  const goBack = () => {}
+
   const handleClick = async () => {
     var canSubmitForm = true;
     if (!partner) {
@@ -69,6 +71,7 @@ function PartnerReferral() {
       disableBack={true}
       headerData={{
         hide_icon: true,
+        goBack: goBack,
       }}
       showLoader={showLoader}
       handleClick={() => handleClick()}
