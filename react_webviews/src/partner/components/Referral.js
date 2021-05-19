@@ -13,7 +13,7 @@ function Referral() {
   const [partnerIndex, setPartnerIndex] = useState("");
   const [referralCode, setReferralCode] = useState("");
   const [referralCodeError, setReferralCodeError] = useState("");
-  const [partnerOptions, setPartnerOptions] = useState([
+  const [partnerOptions] = useState([
     { name: "India Post Payments Bank", value: "ippb" },
   ]);
   const [referralUrl, setReferralUrl] = useState("");
