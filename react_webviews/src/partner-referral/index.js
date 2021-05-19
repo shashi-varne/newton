@@ -3,8 +3,9 @@ import Container from "../group_insurance/common/Container";
 import DropDownNew from "../common/ui/DropDownNew";
 import Input from "../common/ui/Input";
 import toast from "../common/ui/Toast";
-import DescriptionIcon from '@material-ui/icons/Description';
-import './partner-referral.scss'
+import Api from "utils/api";
+import DescriptionIcon from "@material-ui/icons/Description";
+import "./partner-referral.scss";
 
 function PartnerReferral() {
   const [partner, setPartner] = useState("");
@@ -13,13 +14,11 @@ function PartnerReferral() {
   const [referralCode, setReferralCode] = useState("");
   const [referralCodeError, setReferralCodeError] = useState("");
   const [partnerOptions, setPartnerOptions] = useState([
-    { name: "Allahabad Bank", value: "allahabad_bank" },
-    { name: "Karnataka Bank", value: "karnataka_bank" },
-    { name: "Oriental Bank", value: "oriental_bank" },
-    { name: "Punjab National Bank", value: "pnb" },
+    { name: "India Post Payments Bank", value: "ippb" },
   ]);
   const [referralUrl, setReferralUrl] = useState("");
-
+  const [showLoader, setShowLoader] = useState(false);
+  
   const handleChange = (name) => (event) => {
     if (!name) {
       name = event.target.name;
@@ -35,22 +34,41 @@ function PartnerReferral() {
     }
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    let error = "";
     var canSubmitForm = true;
     if (!partner) {
       setPartnerError("Please select the partner name!");
       canSubmitForm = false;
     }
     if (!referralCode) {
-      setReferralCodeError("Please enter the valid code!");
+      setReferralCodeError("Please enter the valid referral code!");
       canSubmitForm = false;
-    } else if (referralCode.length < 8) {
-      setReferralCodeError("Please enter a valid referral code!");
+    } else if (referralCode.length < 3) {
+      setReferralCodeError("Referral code must be greater than 3 characters!");
       canSubmitForm = false;
     }
     if (canSubmitForm) {
-      setReferralUrl("app.fisdom.com/baiotfs");
-      toast("Referral code entered was incorrect", "error");
+      setShowLoader("button");
+
+      try {
+        var res = await Api.get(
+          `/api/referral/${partnerIndex}/validate?referral=${referralCode}`
+        );
+        setShowLoader(false);
+
+        var resultData = res.pfwresponse.result;
+
+        if (res.pfwresponse.status_code === 200) {
+          setReferralUrl("app.fisdom.com/baiotfs");
+        } else {
+          error =
+            resultData.error || resultData.message || "Something went wrong";
+          toast(error.toUpperCase(), "error");
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -60,14 +78,13 @@ function PartnerReferral() {
       onlyButton={true}
       title="Partner Referral"
       buttonTitle="GENERATE LINK"
-      headerData = {{
-        hide_icon: true
+      headerData={{
+        hide_icon: true,
       }}
-      // showLoader={show_loader}
-      // skelton={skelton}
+      showLoader={showLoader}
       handleClick={() => handleClick()}
     >
-        <div className="partner-dropdown">
+      <div className="partner-dropdown">
         <DropDownNew
           parent={this}
           header_title="Partner name?"
@@ -83,19 +100,19 @@ function PartnerReferral() {
           value={partner || ""}
           onChange={handleChange("partner_name")}
         />
-        </div>
-        <Input
-          type="text"
-          width="40"
-          label="Enter the referral code"
-          class="Name"
-          id="name"
-          name="name"
-          error={referralCodeError ? true : false}
-          helperText={referralCodeError}
-          value={referralCode || ""}
-          onChange={handleChange()}
-        />
+      </div>
+      <Input
+        type="text"
+        width="40"
+        label="Enter the referral code"
+        class="Name"
+        id="name"
+        name="name"
+        error={referralCodeError ? true : false}
+        helperText={referralCodeError}
+        value={referralCode || ""}
+        onChange={handleChange()}
+      />
       {referralUrl && (
         <div className="partner-referral-url">
           <div className="referral-url-left">
@@ -117,4 +134,3 @@ function PartnerReferral() {
 }
 
 export default PartnerReferral;
-
