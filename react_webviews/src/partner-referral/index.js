@@ -66,6 +66,7 @@ function PartnerReferral() {
       onlyButton={true}
       title="Partner Referral"
       buttonTitle="GENERATE LINK"
+      disableBack={true}
       headerData={{
         hide_icon: true,
       }}
