@@ -67,7 +67,8 @@ function PartnerReferral() {
           toast(error.toUpperCase(), "error");
         }
       } catch (err) {
-        console.log(err);
+        setShowLoader(false)
+        toast(err)
       }
     }
   };
