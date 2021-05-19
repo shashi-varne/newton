@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Container from "../group_insurance/common/Container";
-import DropDownNew from "../common/ui/DropDownNew";
-import Input from "../common/ui/Input";
-import toast from "../common/ui/Toast";
+import Container from "../../group_insurance/common/Container";
+import DropDownNew from "../../common/ui/DropDownNew";
+import Input from "../../common/ui/Input";
+import toast from "../../common/ui/Toast";
 import DescriptionIcon from "@material-ui/icons/Description";
-import "./partner-referral.scss";
-import { verifyReferralCode } from "./services";
+import "../common/style.scss";
+import { verifyReferralCode } from "../services";
 
-function PartnerReferral() {
+function Referral() {
   const [partner, setPartner] = useState("");
   const [partnerError, setPartnerError] = useState("");
   const [partnerIndex, setPartnerIndex] = useState("");
@@ -119,4 +119,4 @@ function PartnerReferral() {
   );
 }
 
-export default PartnerReferral;
+export default Referral;
