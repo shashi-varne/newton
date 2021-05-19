@@ -7,11 +7,10 @@ import Disclaimer from './Disclaimer'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { formatAmountInr, isEmpty } from '../../../utils/validators'
-import { getConfig } from '../../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions'
 
 import './Insta.scss';
 import '../commonStyles.scss';
-import { navigate as navigateFunc } from '../../common/commonFunction'
 
 const Insta = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -42,7 +41,7 @@ const Insta = (props) => {
         investments: [{ itype, name, subtype, allocations }],
       })
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('verify', { state:{...result} })
+        navigate('/withdraw/verify', { state:{...result} })
         return
       }
     } catch (err) {
