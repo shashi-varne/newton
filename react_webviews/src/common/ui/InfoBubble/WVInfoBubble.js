@@ -6,7 +6,7 @@ Example syntax:
   <WVInfoBubble
     isDismissable
     type="warning"
-    isOpen={openBubble}
+    isOpen={openBubble} // Set this only if visbility of infoBubble is to be changed dynamically
     hasTitle
     {...}
   >
@@ -55,7 +55,7 @@ const TYPES = {
 
 const WVInfoBubble = ({
   isDismissable, // Set this flag if dismiss feature (cross on top right) is required
-  isOpen, // Only required when isDismissable is true
+  isOpen, // Use this if InfoBubble visibility is to be changed dynamically [default=true]
   onDismissClick, // callback for when cross is clicked
   hasTitle, // Sets this to use the default title value from 'TYPES'
   customTitle, // Overrirdes default title value
@@ -65,7 +65,7 @@ const WVInfoBubble = ({
   const typeConfig = TYPES[type] || {};
 
   return (
-    <Fade in={isDismissable && isOpen} timeout={350}>
+    <Fade in={isOpen} timeout={350}>
       <div className='wv-info-bubble' style={{ backgroundColor: typeConfig.bgColor }}>
         {typeConfig.icon &&
           <SVG
@@ -110,6 +110,7 @@ WVInfoBubble.propTypes = {
 
 WVInfoBubble.defaultProps = {
   isDismissable: false,
+  isOpen: true,
   onDismissClick: () => {},
   hasTitle: false,
   type: 'info',
