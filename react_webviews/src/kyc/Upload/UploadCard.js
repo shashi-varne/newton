@@ -14,7 +14,7 @@ const UploadCard = (props) => {
     index,
   } = props;
   return (
-    <div className="kyc-upload-card" onClick={onClick}>
+    <div className="kyc-upload-card" data-aid='kyc-upload-card' onClick={onClick}>
       <div className="image">
         <img
           src={require(`assets/${productName}/${
@@ -42,8 +42,8 @@ const UploadCard = (props) => {
         )}
       </div>
       <div>
-        <div className="title" id={`title_${index+1}`}>{title}</div>
-        {subtitle && <div className="subtitle" id={`subtitle_${index+1}`}>{subtitle}</div>}
+        <div className="title" id={`title_${index+1}`} data-aid={`title_${index+1}`}>{title}</div>
+        {subtitle && <div className="subtitle" id={`subtitle_${index+1}`} data-aid={`subtitle_${index+1}`}>{subtitle}</div>}
       </div>
     </div>
   );

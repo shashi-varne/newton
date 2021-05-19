@@ -78,7 +78,7 @@ const BanksList = (props) => {
                 <img src={bank.bank_image} className="left-icon" alt="" />
                 <div className="content">
                   <div className="bank-name">
-                    <div className="name">
+                    <div className="name" data-aid='bank-name'>
                       {bank.bank_name}
                       {bank.bank_status === "rejected" && (
                         <img
@@ -93,12 +93,12 @@ const BanksList = (props) => {
                         <div className="tag">PRIMARY</div>
                       )}
                   </div>
-                  <div className="account">Account: {bank.account_number}</div>
+                  <div className="account" data-aid='account'>Account: {bank.account_number}</div>
                   <div
                     className={`status  ${
                       bank.bank_status === "rejected" && "failed"
                     } ${bank.bank_status === "verified" && "verified"}`}
-                    data-aid={`mapped-bank-status-${index+1}`}
+                    data-aid={`mapped-bank-status`}
                   >
                     {bank.mapped_bank_status}
                   </div>

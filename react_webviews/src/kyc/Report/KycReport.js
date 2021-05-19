@@ -345,9 +345,9 @@ const Report = (props) => {
                     key={index}
                     className="tile-info"
                     onClick={() => handleTiles(index, item.key)}
-                    data-aid={`${cardDetails}-${index}`}
+                    data-aid={`kyc-${item.key}`}
                   >
-                    <div className="unzipped-title">
+                    <div className="unzipped-title" data-aid={`kyc-${item.key}-title`}>
                       <div>{item.title}</div>
                       <img
                         alt=""

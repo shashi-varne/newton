@@ -311,7 +311,7 @@ const Home = (props) => {
     >
       {!isEmpty(homeData) && (
         <div className="kyc-home" data-aid='kyc-home-screen-page'>
-          <div className="kyc-main-subtitle">{homeData.subtitle}</div>
+          <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
           <main data-aid='kyc-home'>
             <Input
               label="Enter PAN"

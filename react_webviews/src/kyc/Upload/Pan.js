@@ -182,6 +182,7 @@ const Pan = (props) => {
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
           <Alert
+            dataAid='kyc-alertbox'
             variant="attention"
             title={title}
             message={subTitle}

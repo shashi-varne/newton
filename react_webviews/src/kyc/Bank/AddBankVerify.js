@@ -173,6 +173,7 @@ const AddBankVerify = (props) => {
     >
       <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
         <Alert
+          dataAid='kyc-verification-alertbox'
           variant="info"
           title="Important"
           message="We will credit ₹1 to your bank account for verification."

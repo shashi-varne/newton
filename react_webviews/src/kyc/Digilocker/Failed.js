@@ -63,6 +63,7 @@ const Failed = (props) => {
               className="raised"
               onClick={retry}
               id='RETRY'
+              data-aid='re-try-btn'
             >
               RETRY
             </Button>
@@ -72,6 +73,7 @@ const Failed = (props) => {
               color="secondary"
               className="outlined"
               onClick={manual}
+              data-aid='kyc-cont-manual-btn'
             >
               {!isApiRunning && 'CONTINUE WITH MANUAL KYC'}
               {isApiRunning && 

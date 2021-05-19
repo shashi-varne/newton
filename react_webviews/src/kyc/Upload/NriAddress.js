@@ -266,6 +266,7 @@ const NRIAddressUpload = (props) => {
             )}
           </div>
           <Alert
+            dataAid='kyc-nriaddress-alertbox'
             variant="attention"
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
@@ -515,7 +516,7 @@ const NRIAddressUpload = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action" data-aid='kyc-open-gallery'>Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>

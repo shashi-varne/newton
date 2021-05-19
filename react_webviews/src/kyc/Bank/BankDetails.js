@@ -84,7 +84,7 @@ const BankDetails = (props) => {
               <img src={bank.bank_image} className="left-icon" alt="" />
               <div className="content">
                 <div className="bank-name">
-                  <div className="name">
+                  <div className="name" data-aid='bank-name'>
                     {bank.bank_name}
                     {bank.bank_status === "rejected" && (
                       <img

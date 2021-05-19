@@ -616,7 +616,7 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
-      data-aid='kyc-journey-page'
+      data-aid='kyc-journey-screen'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
         <div className="kyc-journey" data-aid='kyc-journey-data'>
@@ -710,6 +710,7 @@ const Journey = (props) => {
             user.active_investment &&
             user.kyc_registration_v2 !== 'submitted' && (
               <Alert
+                dataAid='kyc-registration-v2'
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."
                 title={`Hey ${user.name}`}
@@ -718,6 +719,7 @@ const Journey = (props) => {
           <main  data-aid='kyc-journey' className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
+                data-aid={`kyc-${item.key}`}
                 className={
                   item.status === 'completed' ? 'step step__completed' : 'step'
                 }
