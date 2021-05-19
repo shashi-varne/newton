@@ -11,43 +11,6 @@ import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
-const getTitleList = ({ kyc }) => {
-  let titleList = [
-    'Photo of PAN card should have your signature',
-    'Photo of PAN should be clear and it should not have the exposure of flash light',
-  ]
-  if (
-    kyc?.kyc_status !== 'compliant' &&
-    kyc?.dl_docs_status !== '' &&
-    kyc?.dl_docs_status !== 'init' &&
-    kyc?.dl_docs_status !== null
-  ) {
-    if (
-      kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-      kyc.all_dl_doc_statuses.pan_fetch_status === '' ||
-      kyc.all_dl_doc_statuses.pan_fetch_status === 'failed'
-    ) {
-      titleList[0] =
-        'Oops! seems like Digilocker is down, please upload your PAN card to proceed further'
-    }
-  }
-  return titleList
-}
-
-const MessageComponent = (kyc) => {
-  const titleList = getTitleList(kyc);
-  return (
-    <section className="pan-alert">
-      {titleList.map((title, idx) => (
-        <div className="row" key={idx}>
-          <div className="order">{idx + 1}.</div>
-          <div className="value">{title}</div>
-        </div>
-      ))}
-    </section>
-  )
-}
-
 const Pan = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -191,14 +154,11 @@ const Pan = (props) => {
           <div className="sub-title">
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
-          {/* <Alert
+          {file && subTitle && <Alert
             variant="attention"
             title={title}
             message={subTitle}
-            renderMessage={
-              !subTitle ? () => <MessageComponent kyc={kyc} /> : null
-            }
-          /> */}
+          />}
           {!isWeb && (
             <div
               className="kyc-doc-upload-container"
