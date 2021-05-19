@@ -76,6 +76,9 @@ const CategoryCard = ({ label, name, trivia, icon, type, ...props }) => {
   const handleNavigate = () => {
     navigate(
       `/diy/fundlist/${type}/${label}`,
+      {state: {
+        name: name
+      }},
     )
   }
 

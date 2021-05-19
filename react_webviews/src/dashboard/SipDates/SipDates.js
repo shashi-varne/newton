@@ -16,6 +16,8 @@ import { getBasePath } from "../../utils/functions";
 import { proceedInvestment } from "../proceedInvestmentFunctions";
 import "./SipDates.scss";
 
+const partnerCode = getConfig().partner_code;
+/* eslint-disable */
 class SipDates extends Component {
   constructor(props) {
     super(props);
@@ -115,11 +117,7 @@ class SipDates extends Component {
   handleSuccessDialog = () => {
     let { investResponse, paymentRedirectUrl } = this.state;
     let pgLink = investResponse.investments[0].pg_link;
-    pgLink +=
-      // eslint-disable-next-line
-      (pgLink.match(/[\?]/g) ? "&" : "?") +
-      "redirect_url=" +
-      paymentRedirectUrl;
+    pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}${partnerCode ? "&partner_code="+partnerCode : ""}`
     if (getConfig().Web) {
       // handleIframe
       window.location.href = pgLink;

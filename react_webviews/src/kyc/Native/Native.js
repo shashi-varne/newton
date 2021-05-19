@@ -1,14 +1,15 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { navigate as navigateFunc } from 'utils/functions'
 import { isEmpty, getUrlParams, storageService } from '../../utils/validators'
 import { getKycAppStatus } from '../services'
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from '../../utils/native_callback';
+import Container from '../common/Container';
 
 function Native(props) {
   const navigate = navigateFunc.bind(props);
   const urlParams = getUrlParams(props?.location?.search);
-  const {kyc} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const fromState = props?.location?.state?.fromState || "";
 
   if (fromState) {
@@ -46,7 +47,7 @@ function Native(props) {
   }, [kyc])
 
   return (
-    <></>
+    <Container skelton={isLoading} noHeader noFooter />
   )
 }
 

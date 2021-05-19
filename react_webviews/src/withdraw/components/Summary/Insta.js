@@ -7,12 +7,13 @@ import Disclaimer from './Disclaimer'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { formatAmountInr, isEmpty } from '../../../utils/validators'
-import { getConfig } from '../../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions'
 
 import './Insta.scss';
 import '../commonStyles.scss';
 
 const Insta = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [taxes, setTaxes] = useState('');
   const [open, setOpen] = useState({})
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -36,9 +37,13 @@ const Insta = (props) => {
         },
         []
       )
-      await redeemOrders('insta_redeem', {
+      const result = await redeemOrders('insta_redeem', {
         investments: [{ itype, name, subtype, allocations }],
       })
+      if (result?.resend_redeem_otp_link && result?.verification_link) {
+        navigate('/withdraw/verify', { state:{...result} })
+        return
+      }
     } catch (err) {
       toast(err.message, 'error')
     } finally {

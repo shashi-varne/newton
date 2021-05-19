@@ -1,10 +1,9 @@
 import React from "react";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
 import "./PaymentCallback.scss";
-import { navigate as navigateFunc } from "../../common/commonFunctions";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { isIframe } from "../../../../utils/functions";
 import { nativeCallback } from "../../../../utils/native_callback";
@@ -36,7 +35,7 @@ const PaymentCallback = (props) => {
       navigate("/kyc/journey");
     } else {
       if(isIframe() && config?.code === 'moneycontrol') {
-        navigate("/invest/money-control"); // no screen with this url
+        navigate("/invest/money-control");
         return;
       }
       if(config.isSdk) {
@@ -85,7 +84,7 @@ const PaymentCallback = (props) => {
           </div>
         )}
         <div className="contact-us">
-          <div>For any query, react us at</div>
+          <div>For any query, reach us at</div>
           <div className="info">
             <div className="text border-right">{config.mobile}</div>
             <div className="text">{config.email}</div>
