@@ -147,6 +147,9 @@ const Summary = (props) => {
       case "npsInvestments":
         sendEvents("next", "NPS Investments");
         break;
+      default:
+        sendEvents('next');
+        break;
     }
     navigate(getPathname[name], { state: { fromPath: "reports" } });
   };
