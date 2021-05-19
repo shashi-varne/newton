@@ -3,7 +3,7 @@
 
   .wv-step-header {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: left;
     margin-bottom: 10px;
     
@@ -24,6 +24,14 @@
       line-height: 14px;
       letter-spacing: 1px;
       color: white;
+    }
+
+    .wv-sh-number-completed {
+      background-color: var(--secondary) !important;
+    }
+    
+    .wv-sh-number-pending {
+      background-color: #FFDA2C !important;
     }
 
     #wv-sh-title {

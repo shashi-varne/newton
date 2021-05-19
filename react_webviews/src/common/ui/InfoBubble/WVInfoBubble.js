@@ -59,7 +59,7 @@ const WVInfoBubble = ({
   onDismissClick, // callback for when cross is clicked
   hasTitle, // Sets this to use the default title value from 'TYPES'
   customTitle, // Overrirdes default title value
-  type, // Sets bubble type - info/warning/error/success [default='info']
+  type, // Sets bubble type - values: info/warning/error/success [default='info']
   children // Info bubble content
 }) => {
   const typeConfig = TYPES[type] || {};
