@@ -756,6 +756,7 @@ const Journey = (props) => {
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
+                      data-aid='kyc-edit'
                       className="edit"
                       onClick={() =>
                         handleEdit(item.key, idx, item.isEditAllowed)

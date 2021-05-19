@@ -178,7 +178,7 @@ const Pan = (props) => {
       data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
-        <section>
+        <section data-aid='kyc-upload-pan'>
           <div className="sub-title" data-aid='kyc-pan-card'>
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>

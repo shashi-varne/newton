@@ -155,7 +155,7 @@ const AddressDetails1 = (props) => {
       current={1}
       count={1}
       total={getTotalPages(form_data.residential_status)}
-      data-aid='kyc-address-details-1'
+      data-aid='kyc-address-details-screen-1'
     >
       <div className="kyc-personal-details kyc-address-details">
         <main data-aid='kyc-address-details'>

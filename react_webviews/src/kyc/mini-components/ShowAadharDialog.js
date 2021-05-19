@@ -10,7 +10,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
   return (
     <Dialog open={open} onClose={onClose} id='kyc-bottom-dialog'  data-aid='kyc-bottom-dialog'>
       <section className="kyc-show-aadhar" data-aid='kyc-show-aadhar'>
-        <header className="header">
+        <header className="header" data-aid='kyc-dialog-header'>
           <h1>Aadhar KYC</h1>
           <img
             src={require(`assets/${productName}/icn_aadhaar_kyc_small.svg`)}

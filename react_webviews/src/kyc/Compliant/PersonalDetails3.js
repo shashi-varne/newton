@@ -139,7 +139,7 @@ const PersonalDetails3 = (props) => {
       total={3}
       data-aid='kyc-personal-details-screen-3'
     >
-      <div className="kyc-personal-details">
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         <main data-aid='kyc-personal-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

@@ -120,7 +120,7 @@ const PersonalDetails2 = (props) => {
       total={3}
       data-aid='kyc-personal-details-screen-2'
     >
-      <div className="kyc-personal-details">
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         {!isLoading && (
           <main  data-aid='kyc-personal-details'>
             <div className={`input ${isApiRunning && `disabled`}`}>

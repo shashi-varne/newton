@@ -142,7 +142,7 @@ const Sign = (props) => {
       data-aid='kyc-signature-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
           <div className="sub-title" data-aid='kyc-sub-title'>
             Signature should match with your PAN’s signature
           </div>

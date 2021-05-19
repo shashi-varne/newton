@@ -75,9 +75,9 @@ const BankDetails = (props) => {
       handleClick={handleClick}
       noFooter={bank.bank_status !== "rejected"}
       title="Bank accounts"
-      data-aid='kyc-bank-details-page'
+      data-aid='kyc-bank-details-screen'
     >
-      <div className="bank-details">
+      <div className="bank-details" data-aid='kyc-bank-details-page'>
         {!showLoader && (
           <>
             <div className="bank-info" data-aid='kyc-bank-info'>

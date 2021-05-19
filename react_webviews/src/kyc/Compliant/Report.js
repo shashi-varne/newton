@@ -61,7 +61,7 @@ const CompliantReport = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-personal-details-title'>{kyc.pan.meta_data.name}</div>
         <div className="unzipped-box" data-aid='kyc-email'>
           <div className="title">Email</div>
           <div className="subtitle">{kyc.identification.meta_data.email}</div>
@@ -151,10 +151,10 @@ const CompliantReport = (props) => {
   };
 
   return (
-    <Container id="kyc-home" noFooter={true} title={topTitle}>
+    <Container id="kyc-home" noFooter={true} title={topTitle} data-aid='kyc-reports-screen'>
       <div className="kyc-report">
         <main data-aid='kyc-report'>
-          <section>
+          <section data-aid='kyc-reports-screen-page'>
             {cardDetails &&
               cardDetails.map((item, index) => {
                 return (

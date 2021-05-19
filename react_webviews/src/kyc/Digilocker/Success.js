@@ -19,7 +19,7 @@ const Success = (props) => {
       headerData={{goBack: proceed }}
       data-aid='kyc-success-page'
     >
-      <section id="digilocker-success">
+      <section id="digilocker-success" data-aid='kyc-digilocker-success'>
         <div className="page-desc" data-aid='kyc-page-desc-text'>
           Tap on Proceed to allow fisdom to access your following documents
         </div>
@@ -31,7 +31,7 @@ const Success = (props) => {
                 className="doc-icon"
                 alt=""
               />
-              <div className="doc-name" id={`name_${idx+1}`}>{idx + 1}{'. '}{name}</div>
+              <div className="doc-name" id={`name_${idx+1}`} data-aid={`name_${idx+1}`}>{idx + 1}{'. '}{name}</div>
             </div>
           ))}
         </main>

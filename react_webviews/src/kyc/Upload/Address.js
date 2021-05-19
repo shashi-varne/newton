@@ -286,8 +286,8 @@ const AddressUpload = (props) => {
       data-aid='kyc-upload-adress-proof-page'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-address">
-          <div className="sub-title">
+        <section id="kyc-upload-address" data-aid='kyc-upload-address'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             {getFullAddress()}
             {getFullAddress() && (
               <div className="edit" data-aid='kyc-edit' onClick={editAddress}>

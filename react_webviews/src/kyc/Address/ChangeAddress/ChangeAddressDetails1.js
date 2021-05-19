@@ -75,7 +75,7 @@ const ChangeAddressDetails1 = (props) => {
       count={1}
       current={1}
       total={2}
-      data-aid='kyc-change-addressdetails-screen1'
+      data-aid='kyc-change-addressdetails-screen-1'
     >
       <div className="kyc-personal-details kyc-address-details">
         <main data-aid='kyc-personal-details'>

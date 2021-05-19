@@ -40,7 +40,7 @@ const Failed = (props) => {
   const productName = getConfig().productName;
   return (
     <Container title="Aadhaar KYC Failed!" noFooter skelton={isLoading} data-aid='kyc-aadhaar-kyc-failed'>
-      <section id="digilocker-failed">
+      <section id="digilocker-failed" data-aid='kyc-digilocker-failed'>
         <img
           className="digi-image"
           alt=""

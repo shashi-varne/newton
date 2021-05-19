@@ -154,7 +154,7 @@ const PersonalDetails1 = (props) => {
       total={3}
       data-aid='kyc-personal-details-screen-1'
     >
-      <div className="kyc-personal-details">
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle-text'>
           Please fill your basic details for further verification
         </div>

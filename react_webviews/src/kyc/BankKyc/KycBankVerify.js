@@ -208,7 +208,7 @@ const KycBankVerify = (props) => {
                   <div className="text">{bankData.branch_name} </div>
                 </div>
               </div>
-              <div className="edit" onClick={edit()}>
+              <div className="edit" data-aid='kyc-edit' onClick={edit()}>
                 EDIT
               </div>
             </div>

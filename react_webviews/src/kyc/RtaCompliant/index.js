@@ -124,7 +124,7 @@ const RtaCompliantPersonalDetails = (props) => {
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details'>
         <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>
-          <div data-aid='kyc-share-dob'>
+          <div data-aid='kyc-share-pan-dob'>
             <div>Share your date of birth as per PAN:</div>
             <div className="pan">{form_data.pan}</div>
           </div>

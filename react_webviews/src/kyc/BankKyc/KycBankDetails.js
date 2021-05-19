@@ -294,9 +294,9 @@ const KycBankDetails = (props) => {
       skelton={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
-      data-aid='kyc-enter-bank-account-details-page'
+      data-aid='kyc-enter-bank-account-details-screen'
     >
-      <div className="kyc-approved-bank">
+      <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
             <Alert

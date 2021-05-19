@@ -262,11 +262,11 @@ const NRIAddressUpload = (props) => {
       data-aid='kyc-upload-foreign-address-proof-screen'
     >
       {!isEmpty(kyc) && (
-        <section>
-          <div className="sub-title" data-aid='kyc-edit'>
+        <section data-aid='kyc-upload-foreign-address-proof-page' id="kyc-upload-address">
+          <div className="sub-title" data-aid='kyc-sub-title'>
             {getFullAddress()}
             {getFullAddress() && (
-              <div className="edit" onClick={editAddress}>
+              <div className="edit"  data-aid='kyc-edit' onClick={editAddress}>
                 EDIT
               </div>
             )}
