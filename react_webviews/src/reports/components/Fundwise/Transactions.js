@@ -24,21 +24,14 @@ const FundswiseTransactions = (props) => {
       return;
     }
     setTransactions(data.transactions);
-    if (props.type === "fundswise") {
-      const result = await getTransactions();
-      if (result) {
-        setReportData(result);
-      }
-    } else {
-      setReportData(data);
-    }
+    setReportData(data);
     setShowSkelton(false);
   };
 
   const handleClick = async () => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
-      const result = await getNextTransactions(reportData.next_page);
+      const result = await getNextTransactions({ url: reportData.next_page });
       if (!result) {
         setIsApiRunning(false);
         return;
@@ -63,10 +56,9 @@ const FundswiseTransactions = (props) => {
       title="Transactions"
       noFooter={!reportData.more}
       buttonTitle="SHOW MORE"
-      handleClick={() => handleClick()}
+      handleClick={handleClick}
       skelton={showSkelton}
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showSkelton}
+      showLoader={isApiRunning}
     >
       <div className="reports-fundswise-transactions">
         {!isEmpty(transactions) &&

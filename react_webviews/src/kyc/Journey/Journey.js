@@ -104,12 +104,12 @@ const Journey = (props) => {
         ) {
           for (j = 0; j < journeyData[i].inputsForStatus.length; j++) {
             let data = journeyData[i].inputsForStatus[j]
-            if (data !== 'bank' && kyc[data].doc_status === 'init') {
+            if (data !== 'bank' && (kyc[data].doc_status === 'init' || kyc[data].doc_status === 'rejected')) {
               status = 'init'
               break
             }
 
-            if (data === 'bank' && kyc[data].meta_data_status === 'init') {
+            if (data === 'bank' && (kyc[data].meta_data_status === 'init' || kyc[data].meta_data_status === 'rejected')) {
               status = 'init'
               break
             }

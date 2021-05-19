@@ -3,22 +3,23 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation, calculateAge } from 'utils/validators';
-import { initialize, updateBottomPremium } from '../common_data';
-import Api from 'utils/api';
+import { initialize, updateBottomPremium, getAddOnsData, getCoverPeriodData } from '../common_data';
 import { childeNameMapper } from '../../../constants';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import { compareObjects, isEmpty } from '../../../../utils/validators';
 class GroupHealthPlanSelectFloater extends Component {
     constructor(props) {
         super(props);
         this.state = {
             ctaWithProvider: true,
             premium_data_floater: [],
-            skelton: true,
             disableFloaterOption: false,
             screen_name: 'cover_type_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
+        this.getAddOnsData = getAddOnsData.bind(this);
+        this.getCoverPeriod = getCoverPeriodData.bind(this);
     }
     componentWillMount() {
         this.initialize();
@@ -28,9 +29,7 @@ class GroupHealthPlanSelectFloater extends Component {
         }
 
         onload = async() =>{
-            let error="";
-            let errorType="";
-            this.setErrorData("onload");
+            
             let {groupHealthPlanData} = this.state;
             groupHealthPlanData.add_ons_data = [];
             groupHealthPlanData.post_body.add_ons_json = {};
@@ -50,49 +49,30 @@ class GroupHealthPlanSelectFloater extends Component {
                         }
                 }
             }
-            
-            if(post_body.floater_type){
-                delete post_body['floater_type'];
-            }
 
             let total_number = post_body.adults + post_body.children;
+            let resultData = groupHealthPlanData[this.state.screen_name];
 
-            let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','si'];
-            let body = {};
-            for(let key of allowed_post_body_keys){
-                body[key] = post_body[key];
-            }
-
-
-            try {
-                
-                const res2 = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
-                    body);
-                
-                var resultData = res2.pfwresponse.result;
-                if (res2.pfwresponse.status_code === 200) {
-                    let premium_data_wf = resultData.premium_details['floater'][0];
-                    let premium_data_nf = resultData.premium_details['non_floater'][0];
-                    
-                    let premium_data_floater = [{
-                            'title': `${numDifferentiationInr(this.state.sum_assured)} for entire family`,
-                            'premium': premium_data_wf.premium,
-                            'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.premium),
-                            'discount': premium_data_wf.discount.family[0] ? parseFloat(premium_data_wf.discount.family[0]) : '',
-                            'key': 'floater'
-                        },
-                        {
-                            'title': `${numDifferentiationInr(this.state.sum_assured)} for each member`,
-                            'premium': premium_data_nf.premium,
-                            'subtitle': `${numDifferentiationInr(this.state.sum_assured * total_number)}
-                                        sum insured in ${inrFormatDecimal(premium_data_nf.premium)} `,
-                            'discount': premium_data_nf.discount.family[0] ? parseFloat(premium_data_nf.discount.family[0]) : '',
-                            'key': 'non_floater'
-                        }
-                    ];
-                    
-
-                    let ind_pre_data = [];
+            let premium_data_wf = resultData.premium_details['floater'][0];
+            let premium_data_nf = resultData.premium_details['non_floater'][0];
+            let sum_assured = groupHealthPlanData.sum_assured || post_body.sum_assured;
+            let premium_data_floater = [{
+                    'title': `${numDifferentiationInr(sum_assured)} for entire family`,
+                    'premium': premium_data_wf.premium,
+                    'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.premium),
+                    'discount': premium_data_wf.discount.family[0] ? parseFloat(premium_data_wf.discount.family[0]) : '',
+                    'key': 'floater'
+                },
+                {
+                    'title': `${numDifferentiationInr(sum_assured)} for each member`,
+                    'premium': premium_data_nf.premium,
+                    'subtitle': `${numDifferentiationInr(sum_assured * total_number)}
+                                sum insured in ${inrFormatDecimal(premium_data_nf.premium)} `,
+                    'discount': premium_data_nf.discount.family[0] ? parseFloat(premium_data_nf.discount.family[0]) : '',
+                    'key': 'non_floater'
+                }
+            ];
+            let ind_pre_data = [];
                     let final_dob_data = this.state.groupHealthPlanData.final_dob_data;
                     
                     var individual_premiums = premium_data_nf.insured_individual_premium;
@@ -114,32 +94,6 @@ class GroupHealthPlanSelectFloater extends Component {
                         premium_data_wf: premium_data_wf,
                         premium_base: resultData.premium_details
                     })
-                    this.setState({
-                        skelton: false
-                    });
-                } else {
-                    error= resultData.error || resultData.message ||
-                        true;
-                }
-            } catch (err) {
-                console.log(err)
-                this.setState({
-                    skelton: false
-                });
-                error = true;
-                errorType = "crash"
-                }
-                if(error)
-                {
-                    this.setState({
-                        errorData: {
-                        ...this.state.errorData,
-                        title2: error,
-                        type: errorType
-                        },
-                        showError: "page",
-                    });
-                }
         }
 
        sendEvents(user_action) {
@@ -159,18 +113,49 @@ class GroupHealthPlanSelectFloater extends Component {
                nativeCallback({ events: eventObj });
            }
        }
-       handleClick = () => {
-           this.sendEvents('next');
-           let groupHealthPlanData = this.state.groupHealthPlanData;
-           let type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
-           let selectedPlan = this.state.premium_base[type_of_plan]; //first of WF or NF;
-           groupHealthPlanData.net_premium_addons = selectedPlan.premium;
-           groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
-           groupHealthPlanData.type_of_plan = type_of_plan;
-           groupHealthPlanData.post_body.floater_type = type_of_plan;
-           groupHealthPlanData.post_body.premium = this.state.premium_data_floater[this.state.selectedIndex].premium
-           this.setLocalProviderData(groupHealthPlanData);
-           this.navigate(this.state.next_screen || 'plan-select-cover-period');
+       handleClick = async () => {
+            this.sendEvents('next');
+            let groupHealthPlanData = this.state.groupHealthPlanData;
+            let type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
+            let selectedPlan = this.state.premium_base[type_of_plan][0]; //first of WF or NF;
+            groupHealthPlanData.net_premium_addons = selectedPlan.premium;
+            groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
+            groupHealthPlanData.selectedIndexFloater = this.state.selectedIndex;
+
+            groupHealthPlanData.post_body.premium = this.state.premium_data_floater[this.state.selectedIndex].premium
+            this.setLocalProviderData(groupHealthPlanData);
+
+            if(this.state.provider === 'RELIGARE'){
+                groupHealthPlanData.type_of_plan = type_of_plan;
+                groupHealthPlanData.post_body.floater_type = type_of_plan;
+
+                var current_state = {}
+                var keys_to_check = ['account_type', 'si', 'plan_id', 'floater_type'];
+
+                for(var x of keys_to_check){
+                    current_state[x] = groupHealthPlanData.post_body[x]
+                }
+                
+                this.setLocalProviderData(groupHealthPlanData);
+                this.setState({
+                    current_state
+                }, ()=>{
+                    var sameData = compareObjects(Object.keys(current_state), current_state, groupHealthPlanData.add_ons_previous_data)
+                    if(!sameData || isEmpty(groupHealthPlanData['add_ons_screen'])){
+                        this.getAddOnsData();
+                    }else{
+                        this.navigate('plan-select-add-ons')
+                    }
+                })
+                return;
+            }
+
+            if(groupHealthPlanData.type_of_plan !== type_of_plan){ //HDFCERGO
+                this.getCoverPeriod();
+            }else{
+                this.setLocalProviderData(groupHealthPlanData)
+                this.navigate('plan-select-cover-period')   
+            }
        }
        choosePlan = (index, props) => {
            if(props.key === "non_floater" && this.state.disableFloaterOption){
@@ -191,7 +176,7 @@ class GroupHealthPlanSelectFloater extends Component {
            );
        }
        renderPlans = (props, index) => {
-           
+        
            return (
                <div onClick={() => this.choosePlan(index, props)}
                    className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''} ${this.state.disableFloaterOption && props.key === "non_floater" ? 'tile-disabled': ''}`} key={index}>
@@ -250,6 +235,7 @@ class GroupHealthPlanSelectFloater extends Component {
            )
        }
        render() {
+           
            return (
              <Container
                events={this.sendEvents("just_set_events")}

@@ -68,6 +68,7 @@ class PerfiosStatus extends Component {
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
+    let account_info = lead.account_info || {};
     let application_info = lead.application_info || {};
     let personal_info = lead.personal_info || {};
     let name = personal_info.first_name;
@@ -88,6 +89,7 @@ class PerfiosStatus extends Component {
     this.setState({
       commonMapper: mapper,
       application_info: application_info,
+      account_info: account_info,
       perfios_display_rejection_reason: perfios_display_rejection_reason,
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
@@ -107,7 +109,7 @@ class PerfiosStatus extends Component {
   };
 
   sendEvents(user_action) {
-    let { application_info, bt_eligible, perfios_state, commonMapper } = this.state;
+    let { account_info, bt_eligible, perfios_state, commonMapper } = this.state;
     let eventObj = {
       event_category: "Lending IDFC",
       event_name: "idfc_bank_statement_verification",
@@ -115,7 +117,7 @@ class PerfiosStatus extends Component {
         user_action: user_action,
         event_name: "idfc_bank_statement_verification",
         status: this.state.commonMapper.status,
-        employment_type: application_info.application_status,
+        employment_type: account_info.employment_type,
         cta_value:
           bt_eligible &&
           perfios_state !== "failure" &&
