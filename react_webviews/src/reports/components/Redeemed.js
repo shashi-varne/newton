@@ -7,6 +7,7 @@ import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
 import { getSummaryV2 } from "../common/api";
 import { getConfig } from "../../utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
 
 const Redeemed = (props) => {
   const stateParams = props.location?.state || {};
@@ -47,11 +48,27 @@ const Redeemed = (props) => {
   };
 
   const goBack = () => {
+    sendEvents('back')
     props.history.push({
       pathname: "/reports",
       search: getConfig().searchParams,
     });
   };
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'my_portfolio',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "Pending withdrawals",
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   return (
     <Container

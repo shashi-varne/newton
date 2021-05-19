@@ -5,6 +5,7 @@ import { getPurchaseProcessData, storageConstants } from "../constants";
 import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
+import { nativeCallback } from "../../utils/native_callback";
 
 const Purchase = (props) => {
   const transactions = storageService().getObject(
@@ -21,8 +22,23 @@ const Purchase = (props) => {
     setOpenProcess(true);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'my_portfolio',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "Pending Purchase",
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
-    <Container noFooter={true} title="Pending Purchase">
+    <Container events={sendEvents("just_set_events")} noFooter={true} title="Pending Purchase">
       <div className="report-purchase">
         {!isEmpty(transactions) &&
           transactions.map((purchased, index) => {

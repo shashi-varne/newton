@@ -8,6 +8,7 @@ import { getPathname, storageConstants } from "../../constants";
 import { initData } from "../../../kyc/services";
 import { resendOtp, submitOtp } from "../../common/api";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 class Otp extends Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class Otp extends Component {
   };
 
   handleClick = async () => {
+    this.sendEvents('next')
     let { urls, otp, action, title } = this.state;
     if (otp.length !== 4) {
       toast("You have entered invalid OTP.");
@@ -96,6 +98,7 @@ class Otp extends Component {
   };
 
   resendOtp = async () => {
+    this.sendEvents('resend')
     this.setState({ otp: "" });
     let { urls } = this.state;
     if (urls && urls.api_resend_otp) {
@@ -116,11 +119,28 @@ class Otp extends Component {
       }
     } else this.goBack();
   };
+  
+  sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": "sip_pause_cancel",
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "Otp",
+        "operation": this.state.action
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let { userKyc, showSkelton, isApiRunning, otp_error } = this.state;
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         skelton={showSkelton}
         title="Enter OTP"
         buttonTitle="SUBMIT"

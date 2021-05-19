@@ -6,6 +6,7 @@ import Slider from "common/ui/Slider";
 import { getPathname } from "../constants";
 import { getReportGoals } from "../common/api";
 import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
+import { nativeCallback } from "../../utils/native_callback";
 
 const sliderConstants = {
   min: 0,
@@ -31,6 +32,7 @@ const Goals = (props) => {
   };
 
   const redirectToInvestType = (goal) => {
+    sendEvents('next', goal)
     let pathname = getPathname[goal?.itag?.itype] || "";
     if (!pathname) return;
     if (goal.itag.itype === "saveforgoal")
@@ -38,8 +40,24 @@ const Goals = (props) => {
     navigate(pathname);
   };
 
+  const sendEvents = (userAction, data) => {
+    let eventObj = {
+      "event_name": 'my_portfolio',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "Track my goals",
+        goal: data || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
-    <Container hidePageTitle={true} noFooter={true} skelton={showSkelton}>
+    <Container hidePageTitle={true} noFooter={true} events={sendEvents("just_set_events")} skelton={showSkelton}>
       <div className="report-goals">
         {!isEmpty(goals) &&
           goals.map((goal, index) => {
