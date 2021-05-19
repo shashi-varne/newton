@@ -1,8 +1,14 @@
 import React from "react";
 import { getConfig } from "utils/functions";
+import WVSteps from "../../common/ui/Steps/WVSteps"
 
-const Complete = ({ navigateToReports, dl_flow, show_note }) => {
+const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const productName = getConfig().productName;
+  const steps = [
+    { title: "Mutual fund" },
+    { title: "Stocks & IPO" },
+    { title: "Futures & Options" }
+  ]
 
   return (
     <div className="kyc-esign-complete">
@@ -50,6 +56,22 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
           </div>
         </div>
       )}
+      {dl_flow && 
+        <div className="account-status-container">
+          <div className="account-status">Account status</div>
+          {steps.map((step, index) => (
+            <WVSteps
+            title={step.title}
+            key={step.title}
+          >
+            {step.title === "Mutual fund" && 
+              <div className="status">{kyc.application_status_v2 === "complete" ? "Ready to invest" : "Under process"}</div>
+            }
+            {/* Todo: add other conditions */}
+          </WVSteps>
+          ))}
+        </div>
+      }
     </div>
   );
 };

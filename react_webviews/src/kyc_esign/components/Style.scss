@@ -159,8 +159,8 @@ $text-color2: #8D879B;
 
     .subtitle {
       font-size: 14px;
-      font-weight: 400;
-      color: #4f2da7;
+      font-weight: 500;
+      color: var(--primary);
       margin: 30px 0 0 0;
       cursor: pointer;
     }
@@ -195,6 +195,22 @@ $text-color2: #8D879B;
         font-weight: 700;
         margin: -2px 0 0 0;
       }
+    }
+  }
+
+  .account-status-container {
+    margin: 40px 0;
+
+    .account-status {
+      font-weight: 500;
+      font-size: 17px;
+      line-height: 20px;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+
+    .status {
+      color: $text-color1;
     }
   }
 }

@@ -151,7 +151,7 @@ class DigiStatus extends Component {
   };
 
   render() {
-    let { show_loader, skelton, dl_flow, show_note } = this.state;
+    let { show_loader, skelton, dl_flow, show_note, kyc } = this.state;
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
@@ -196,6 +196,7 @@ class DigiStatus extends Component {
             navigateToReports={this.navigateToReports}
             dl_flow={dl_flow}
             show_note={show_note}
+            kyc={kyc}
           />
         ) : (
           <Fragment>
