@@ -60,7 +60,7 @@ function PartnerReferral() {
         var resultData = res.pfwresponse.result;
 
         if (res.pfwresponse.status_code === 200) {
-          setReferralUrl("app.fisdom.com/baiotfs");
+          setReferralUrl(`https://play.google.com/store/apps/details?id=com.finwizard.fisdom&referrer=utm_source=%7B%22referrer%22%3A%22${referralCode}%22%2C%22campaign_name%22%3A%22%22%2C%22product_name%22%3A%22%22%2C%22agency_name%22%3A%22%22%7D`);
         } else {
           error =
             resultData.error || resultData.message || "Something went wrong";
