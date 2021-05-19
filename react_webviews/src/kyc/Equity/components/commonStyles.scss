@@ -334,6 +334,10 @@ $generic-subtitle-margin-top: -10px;
 }
 
 .kyc-communication-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   .kyc-main-subtitle {
     padding-bottom: 30px;
   }
@@ -403,5 +407,24 @@ $generic-subtitle-margin-top: -10px;
     .kcd-otp-content {
       display: flex;
     }
+  }
+
+  .kcd-whatsapp-consent {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    line-height: 21px;
+    color: #767E86;
+    margin-top: 40px;
+
+    .kcd-whatsapp-consent-checkbox {
+      margin-left: -12px;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .kyc-communication-details {
+    height: calc(100vh - 220px);
   }
 }

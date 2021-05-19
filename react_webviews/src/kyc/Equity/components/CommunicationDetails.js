@@ -1,18 +1,21 @@
 import InputAdornment from "@material-ui/core/InputAdornment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../../common/ui/Button";
-import Input from "../../../common/ui/Input";
-import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
 import OtpDefault from "../../../common/ui/otp";
 import "./commonStyles.scss";
 import { resendOtp, sendOtp } from "../../common/api";
 import toast from "../../../common/ui/Toast";
-import { validateEmail } from "../../../utils/validators";
+import {
+  isEmpty,
+  validateEmail,
+  validateNumber,
+} from "../../../utils/validators";
 import { verifyOtp } from "../../../wealth_report/common/ApiCalls";
+import useUserKycHook from "../../common/hooks/userKycHook";
+import CheckBox from "../../../common/ui/Checkbox";
 
-const productName = getConfig().productName;
 const googleButtonTitle = (
   <div className="kcd-google-text">
     <img src={require(`assets/google.svg`)} />
@@ -20,7 +23,9 @@ const googleButtonTitle = (
   </div>
 );
 const CommunicationDetails = (props) => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    whatsappConsent: true,
+  });
   const [state, setState] = useState({
     otp: "",
     totalTime: 30,
@@ -30,14 +35,47 @@ const CommunicationDetails = (props) => {
   const [buttonTitle, setButtonTitle] = useState("CONTINUE");
   const [showLoader, setShowLoader] = useState(false);
   const [showOtpContainer, setShowOtpContainer] = useState(false);
+  const { user, kyc, isLoading } = useUserKycHook();
+  const [communicationType, setCommunicationType] = useState("");
+
+  useEffect(() => {
+    if (!isEmpty(user)) {
+      const type = user.mobile === null ? "mobile" : "email";
+      setCommunicationType(type);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!isEmpty(kyc)) {
+      const data = { ...formData };
+      data.email = kyc.identification.meta_data.email;
+      let mobile_number = kyc.identification.meta_data.mobile_number || "";
+      if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
+        mobile_number = mobile_number.split("|")[1];
+      }
+      data.mobile = mobile_number;
+      setFormData({ ...data });
+    }
+  }, [kyc]);
 
   const handleChange = (name) => (event) => {
-    if (name === "email" && showOtpContainer) {
+    if (showOtpContainer) {
       return;
     }
-    const value = event.target ? event.target.value : event;
     let data = { ...formData };
-    data[name] = value;
+    if (name === "whatsappConsent") {
+      data[name] = !formData[name];
+    } else {
+      const value = event.target ? event.target.value : event;
+      if (
+        name === "mobile" &&
+        value &&
+        (!validateNumber(value) || value.length > 10)
+      ) {
+        return;
+      }
+      data[name] = value;
+    }
     data[`${name}_error`] = "";
     setFormData({ ...data });
   };
@@ -45,7 +83,7 @@ const CommunicationDetails = (props) => {
   const resendOtpVerification = async () => {
     setShowLoader("button");
     try {
-      const result = await resendOtpVerification(otpId);
+      const result = await resendOtp(otpId);
       if (!result) return;
       setOtpId(result.otp_id);
       setState({
@@ -81,12 +119,23 @@ const CommunicationDetails = (props) => {
         if (!otpResult) return;
         toast("succussful");
       } else {
-        if (!validateEmail(formData.email)) {
-          toast("Please enter valid email");
-          return;
+        let body = {};
+        if (communicationType === "email") {
+          if (!validateEmail(formData.email)) {
+            toast("Please enter valid email");
+            return;
+          }
+          body.email = formData.email;
+        } else {
+          if (formData.mobile.length !== 10) {
+            toast("Mobile number must contains 10 digits");
+            return;
+          }
+          body.mobile = formData.mobile;
+          body.whatsapp_consent = formData.whatsappConsent;
         }
         setShowLoader("button");
-        const result = await sendOtp({ email: formData.email });
+        const result = await sendOtp(body);
         if (!result) return;
         setShowOtpContainer(true);
         setOtpId(result.otp_id);
@@ -118,54 +167,104 @@ const CommunicationDetails = (props) => {
       total="5"
       handleClick={handleClick}
       showLoader={showLoader}
+      skelton={isLoading}
     >
       <div className="kyc-communication-details">
-        <div className="kyc-main-subtitle">
-          Email verification is mandatory for investment as per SEBI
-        </div>
-        <Button
-          classes={{ button: "kcd-google-button" }}
-          buttonTitle={googleButtonTitle}
-          type="outlined"
-        />
-        <div className="kcd-or-divider">
-          <div className="kcd-divider-line"></div>
-          <div className="kcd-divider-text">OR</div>
-          <div className="kcd-divider-line"></div>
-        </div>
-        <TextField
-          label="Email address"
-          value={formData.email || ""}
-          error={formData.email_error ? true : false}
-          helperText={formData.email_error}
-          onChange={handleChange("email")}
-          type="text"
-          disabled={showLoader}
-          autoFocus
-          className="kcd-input-field"
-          InputProps={{
-            endAdornment: showOtpContainer && (
-              <InputAdornment position="end">
-                <div className="kcd-input-edit" onClick={handleEdit}>
-                  EDIT
-                </div>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <div className="kcd-email-subtext">
-          We'll keep you updated on your investments
-        </div>
-        {showOtpContainer && (
-          <div className="kcd-otp-container">
-            <div className="kcd-email-subtext">
-              Enter OTP sent to above email address
-            </div>
-            <div className="kcd-otp-content">
-              <OtpDefault
-                parent={{ state, handleOtp, resendOtp: resendOtpVerification }}
-                class1="center"
+        <div>
+          <div className="kyc-main-subtitle">
+            {communicationType === "email" ? "Email" : "Mobile"} verification is
+            mandatory for investment as per SEBI
+          </div>
+          {communicationType === "email" ? (
+            <>
+              <Button
+                classes={{ button: "kcd-google-button" }}
+                buttonTitle={googleButtonTitle}
+                type="outlined"
               />
+              <div className="kcd-or-divider">
+                <div className="kcd-divider-line"></div>
+                <div className="kcd-divider-text">OR</div>
+                <div className="kcd-divider-line"></div>
+              </div>
+              <TextField
+                label="Email address"
+                value={formData.email || ""}
+                error={formData.email_error ? true : false}
+                helperText={formData.email_error}
+                onChange={handleChange("email")}
+                type="text"
+                disabled={showLoader}
+                autoFocus
+                className="kcd-input-field"
+                InputProps={{
+                  endAdornment: showOtpContainer && (
+                    <InputAdornment position="end">
+                      <div className="kcd-input-edit" onClick={handleEdit}>
+                        EDIT
+                      </div>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </>
+          ) : (
+            <TextField
+              label="Mobile number"
+              value={formData.mobile || ""}
+              error={formData.mobile_error ? true : false}
+              helperText={formData.mobile_error}
+              onChange={handleChange("mobile")}
+              type="text"
+              inputMode="numeric"
+              disabled={showLoader}
+              autoFocus
+              className="kcd-input-field"
+              InputProps={{
+                endAdornment: showOtpContainer && (
+                  <InputAdornment position="end">
+                    <div className="kcd-input-edit" onClick={handleEdit}>
+                      EDIT
+                    </div>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+          <div className="kcd-email-subtext">
+            We'll keep you updated on your investments
+          </div>
+          {showOtpContainer && (
+            <div className="kcd-otp-container">
+              <div className="kcd-email-subtext">
+                Enter OTP sent to above{" "}
+                {communicationType === "email"
+                  ? "email address"
+                  : "mobile number"}
+              </div>
+              <div className="kcd-otp-content">
+                <OtpDefault
+                  parent={{
+                    state,
+                    handleOtp,
+                    resendOtp: resendOtpVerification,
+                  }}
+                  class1="center"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+        {communicationType === "mobile" && (
+          <div className="kcd-whatsapp-consent">
+            <CheckBox
+              checked={formData.whatsappConsent}
+              value={formData.whatsappConsent}
+              handleChange={handleChange("whatsappConsent")}
+              class="kcd-whatsapp-consent-checkbox"
+            />
+            <div>
+              I agree to receive important investment updates on WhatsApp
             </div>
           </div>
         )}
