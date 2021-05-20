@@ -12,8 +12,9 @@ import KnowMore from '../mini-components/IpvVideoKnowMore'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
-const productName = getConfig().productName
-const isWeb = getConfig().isWebOrSdk
+const config = getConfig();
+const productName = config.productName
+const isWeb = config.Web
 
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -170,7 +171,7 @@ const IpvVideo = (props) => {
                 />
               </div>
             )}
-            {showVideoRecoreder && 
+            {isWeb && showVideoRecoreder && 
               <VideoRecorder
                 showReplayControls
                 replayVideoAutoplayAndLoopOff

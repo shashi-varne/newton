@@ -51,7 +51,7 @@ const MessageComponent = (kyc) => {
 }
 
 const config = getConfig();
-const isWeb = config.isWebOrSdk
+const isWeb = config.Web
 const productName = config.productName
 
 const AddressUpload = (props) => {

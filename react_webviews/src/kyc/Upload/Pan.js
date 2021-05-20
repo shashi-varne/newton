@@ -13,7 +13,7 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
 const config = getConfig();
-const isWeb = config.isWebOrSdk
+const isWeb = config.Web
 const productName = config.productName;
 
 const Pan = (props) => {
@@ -26,7 +26,7 @@ const Pan = (props) => {
   const [showLoader, setShowLoader] = useState(false)
   const [isAccessDialogOpen, setIsAccessDialogOpen] = useState(false)
   const {kyc, isLoading} = useUserKycHook();
-  
+
   const inputEl = useRef(null)
 
   const handleImageLoad = (event) => {
