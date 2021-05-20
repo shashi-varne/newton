@@ -446,7 +446,8 @@ const Journey = (props) => {
   }
 
   const handleEdit = (key, index, isEdit) => {
-    sendEvents('edit')
+    if(isEdit)
+      sendEvents('edit')
     console.log('Inside handleEdit')
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {

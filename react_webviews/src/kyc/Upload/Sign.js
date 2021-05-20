@@ -3,7 +3,7 @@ import Container from '../common/Container'
 import { storageService, isEmpty } from '../../utils/validators'
 import { storageConstants } from '../constants'
 import { upload } from '../common/api'
-import { navigate as navigateFunc } from '../common/functions'
+import { getFlow, navigate as navigateFunc } from '../common/functions'
 import { getConfig, getBase64 } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
@@ -131,6 +131,8 @@ const Sign = (props) => {
         "user_action": userAction || "",
         "screen_name": "sign_doc",
         "type": type || "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": getFlow(kyc) || ""
       }
     };
     if (userAction === 'just_set_events') {
@@ -139,6 +141,7 @@ const Sign = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
+
 
   return (
     <Container
@@ -209,7 +212,7 @@ const Sign = (props) => {
                       ref={inputEl}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('open-gallery')}
+                      onChange={handleChange('gallery')}
                     />
                     <button
                       onClick={() => handleUpload("open_gallery")}
@@ -261,7 +264,7 @@ const Sign = (props) => {
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('open-gallery')}
+                  onChange={handleChange('gallery')}
                 />
                 <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
                   {!file && (

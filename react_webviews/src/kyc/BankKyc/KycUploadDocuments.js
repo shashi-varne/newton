@@ -314,7 +314,7 @@ const KycUploadDocuments = (props) => {
                       ref={inputEl}
                       capture
                       style={{ display: "none" }}
-                      onChange={handleChange('open-gallery')}
+                      onChange={handleChange('gallery')}
                     />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -369,7 +369,7 @@ const KycUploadDocuments = (props) => {
                       ref={inputEl}
                       capture
                       style={{ display: "none" }}
-                      onChange={handleChange('open-gallery')}
+                      onChange={handleChange('gallery')}
                     />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

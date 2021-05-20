@@ -84,7 +84,7 @@ const Home = (props) => {
   };
 
   const handleClick = async () => {
-    sendEvents("next")
+    
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
@@ -98,6 +98,7 @@ const Home = (props) => {
 
       const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
       if (!isStartKyc) {
+        sendEvents("next")
         if (skipApiCall) {
           setIsStartKyc(true);
           setUserName(kyc?.pan?.meta_data?.name)
@@ -293,7 +294,7 @@ const Home = (props) => {
       "event_name": 'KYC_registration',
       "properties": {
         "user_action": userAction,
-        "screen_name": screenName || "pan_entry",
+        "screen_name": screenName || "pan_check",
         "pan": pan ? "yes" : "no",
         "initial_kyc_status": kyc?.initial_kyc_status || ""
       }

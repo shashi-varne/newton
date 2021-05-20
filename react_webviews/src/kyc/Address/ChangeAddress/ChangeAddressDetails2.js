@@ -326,7 +326,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front','open-gallery')}
+                      onChange={handleChange('front','gallery')}
                     />
                     <button
                       onClick={handleUpload('front')}
@@ -372,7 +372,7 @@ const ChangeAddressDetails2 = (props) => {
                   ref={frontDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('front','open-gallery')}
+                  onChange={handleChange('front','gallery')}
                 />
                 <button
                   onClick={handleUpload('front')}
@@ -448,7 +448,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back','open-gallery')}
+                      onChange={handleChange('back','gallery')}
                     />
                     <button
                       onClick={handleUpload('back')}
@@ -494,7 +494,7 @@ const ChangeAddressDetails2 = (props) => {
                   ref={backDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('back','open-gallery')}
+                  onChange={handleChange('back','gallery')}
                 />
                 <button
                   onClick={handleUpload('back')}

@@ -265,6 +265,7 @@ const AddressUpload = (props) => {
   }
 
   const editAddress = () => {
+    sendEvents('edit')
     navigate("/kyc/address-details1", {
       state: {
         backToJourney: true,
@@ -369,7 +370,7 @@ const AddressUpload = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front','open-gallery')}
+                      onChange={handleChange('front','gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','front')}
@@ -415,7 +416,7 @@ const AddressUpload = (props) => {
                   ref={frontDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('front','open-gallery')}
+                  onChange={handleChange('front','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','front')}
@@ -491,7 +492,7 @@ const AddressUpload = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back','open-gallery')}
+                      onChange={handleChange('back','gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','back')}
@@ -537,7 +538,7 @@ const AddressUpload = (props) => {
                   ref={backDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('back','open-gallery')}
+                  onChange={handleChange('back','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','back')}

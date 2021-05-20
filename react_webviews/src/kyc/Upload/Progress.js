@@ -80,6 +80,7 @@ const Progress = (props) => {
       skelton={isLoading}
       skeltonType="p"
       handleClick={() => {
+        sendEvents('next')
         navigate(getPathname.journey);
       }}
       title="Upload documents"

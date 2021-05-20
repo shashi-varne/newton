@@ -253,6 +253,7 @@ const NRIAddressUpload = (props) => {
   }
 
   const editAddress = () => {
+    sendEvents('edit')
     navigate("/kyc/nri-address-details1", {
       state: {
         backToJourney: true,
@@ -357,7 +358,7 @@ const NRIAddressUpload = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front', 'open-gallery')}
+                      onChange={handleChange('front', 'gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','front')}
@@ -403,7 +404,7 @@ const NRIAddressUpload = (props) => {
                   ref={frontDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('front','open-gallery')}
+                  onChange={handleChange('front','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','front')}
@@ -479,7 +480,7 @@ const NRIAddressUpload = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back','open-gallery')}
+                      onChange={handleChange('back','gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','back')}
@@ -525,7 +526,7 @@ const NRIAddressUpload = (props) => {
                   ref={backDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('back','open-gallery')}
+                  onChange={handleChange('back','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','back')}

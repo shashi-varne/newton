@@ -248,7 +248,7 @@ const Pan = (props) => {
                       ref={inputEl}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('open-gallery')}
+                      onChange={handleChange('gallery')}
                     />
                     <button
                       onClick={() => handleUpload("open_gallery")}
@@ -291,7 +291,7 @@ const Pan = (props) => {
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('open-gallery')}
+                  onChange={handleChange('gallery')}
                 />
                 <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
                   {!file && (
