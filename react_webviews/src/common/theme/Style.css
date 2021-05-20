@@ -71,9 +71,8 @@ body[data-device="web"] .quote-filter-dialog-head {
   max-width: var(--desktop-width);
 }
 body[data-device="web"] .MuiDialogActions-root {
-  margin: 0 auto;
+  margin: 20px auto;
   width: fit-content;
-  margin-bottom: 20px;
 }
 body[data-device="web"] .FooterImage {
   width: auto;

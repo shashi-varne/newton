@@ -299,6 +299,7 @@ const AddBank = (props) => {
                 helperText={form_data.account_number_error || ""}
                 onChange={handleChange("account_number")}
                 maxLength={16}
+                inputMode="numeric"
                 type="password"
                 id="account_number"
                 disabled={isApiRunning}
@@ -311,6 +312,7 @@ const AddBank = (props) => {
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
                 maxLength={16}
+                inputMode="numeric"
                 type="text"
                 id="c_account_number"
                 disabled={isApiRunning}

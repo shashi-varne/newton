@@ -43,6 +43,7 @@ function TabContainer(props) {
 }
 const FundList = (props) => {
   const { match, classes, ...parentProps } = props
+  const name = props?.location?.state?.name || "";
   const [value, setValue] = useState(4)
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
@@ -141,17 +142,17 @@ const FundList = (props) => {
     })
     .sort((a, b) => {
       if (sortFilter === 'returns') {
-        return Number(b[returnField[value]]) - Number(a[returnField[value]]) > 0
+        return Number(b[returnField[value]]) - Number(a[returnField[value]]) >= 0
           ? 1
           : -1
       }
       if (sortFilter === 'rating') {
-        return Number(b.morning_star_rating) - Number(a.morning_star_rating) > 0
+        return Number(b.morning_star_rating) - Number(a.morning_star_rating) >= 0
           ? 1
           : -1
       }
       if (sortFilter === 'fundsize') {
-        return Number(b.aum) - Number(a.aum) > 0 ? 1 : -1
+        return Number(b.aum) - Number(a.aum) >= 0 ? 1 : -1
       }
       return -1;
     })
@@ -160,7 +161,7 @@ const FundList = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      title={match.params?.key?.replace(/_/g, ' ') || ''}
+      title={name || match.params?.key?.replace(/_/g, ' ') || ''}
       skelton={showLoader}
       classOverRideContainer="pr-container"
       id="diy-fundlist-container"

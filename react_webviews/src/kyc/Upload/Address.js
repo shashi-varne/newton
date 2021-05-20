@@ -199,22 +199,27 @@ const AddressUpload = (props) => {
     sendEvents('next')
     try {
       setIsApiRunning("button")
-      let result
+      let result, response
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'address', {
+        response = await upload(frontDoc, 'address', {
           address_proof_key: addressProofKey,
         })
       } else {
-        result = await upload(file, 'address', {
+        response = await upload(file, 'address', {
           address_proof_key: addressProofKey,
         })
       }
-      console.log(result)
-      setKyc(result.kyc)
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      if(response.status_code === 200) {
+        result = response.result;
+        setKyc(result.kyc)
+        storageService().setObject(storageConstants.KYC, result.kyc)
+        navigate('/kyc/upload/progress')
+      } else {
+        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
+      }
     } catch (err) {
       console.error(err)
+      toast(err?.message)
     } finally {
       console.log('uploaded')
       setIsApiRunning(false)

@@ -1,6 +1,4 @@
-.result-container-risk {
-  background-color: #155acf !important;
-  /* autoprefixer: off */
+.result-container-risk {  /* autoprefixer: off */
   height: -webkit-fill-available;
   margin-bottom: 0px;
   padding-bottom: 0;
@@ -39,7 +37,33 @@
 }
 .meter-img {
   text-align: center;
+  margin: 50px 0;
+}
+.meter-img img {
+  width: 70%;
+}
+.risk-result-error {
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  width: 100%;
   margin-top: 50px;
+}
+.risk-meter-desc {
+  text-align: center;
+}
+.risk-meter-desc .risk-meter-desc-title {
+  color: #0a1d32;
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+.risk-meter-desc .risk-meter-desc-content {
+  color: #0a1d32;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.2px;
 }
 .fund-details {
   cursor: pointer;
@@ -77,51 +101,6 @@
 }
 .question-container {
   margin-top: 20px;
-}
-
-.risk_profiler-intro {
-  margin-top: 4px;
-}
-.risk_profiler-intro-heading {
-  font-weight: 700;
-  color: #0a1d32;
-  font-size: 20px;
-  margin: 13px 0 0 0;
-  line-height: 23.7px;
-}
-.risk_profiler-intro-image {
-  margin: 20px 0 0 2px;
-  width: 100%;
-}
-.risk_profiler-intro-des {
-  margin: 20px 4px 0 4px;
-  color: #767e86;
-  line-height: 20px;
-  font-size: 13px;
-}
-.risk_profiler-benefit-outer {
-  margin: 30px 4px 0 2px;
-}
-.risk_profiler-benefit-heading {
-  font-size: 17px;
-  line-height: 24px;
-  font-weight: 500;
-  color: #0a1d32;
-  margin: 0;
-}
-.risk_profiler-benefitList {
-  display: flex;
-  margin-bottom: 25.72px;
-}
-.risk_profiler-benefitList-img {
-  margin-right: 20px;
-}
-.risk_profiler-benefitList-des {
-  margin: 0;
-  color: #767e86;
-  font-size: 13px;
-  line-height: 20px;
-  font-weight: 400;
 }
 .risk-question {
   font-size: 16px !important;

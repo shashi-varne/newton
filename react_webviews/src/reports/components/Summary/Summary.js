@@ -154,8 +154,7 @@ const Summary = (props) => {
                 <>
                   <div className="title">Current Value</div>
                   <div className="amount">
-                    {formatAmountInr(report.current.current)}
-                    {report.current.current === 0 && 0}
+                    {formatAmountInr(report.current?.current || 0)}
                   </div>
                   {report.current.invested > 0 && (
                     <>
@@ -200,7 +199,7 @@ const Summary = (props) => {
                         </div>
                       </div>
                       {report.past.redeemed > 0 && (
-                        <div className="pointer" onClick={toggleheader()}>
+                        <div className="pointer" onClick={toggleheader}>
                           View redeemed investments
                         </div>
                       )}
@@ -232,7 +231,7 @@ const Summary = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="pointer" onClick={toggleheader()}>
+                  <div className="pointer" onClick={toggleheader}>
                     View current investments
                   </div>
                 </>
@@ -250,9 +249,8 @@ const Summary = (props) => {
                     <Button
                       onClick={() => navigate(getPathname.invest)}
                       buttonTitle="Explore Mutual Funds"
-                      style={{
-                        width: "170px",
-                        height: "40px",
+                      classes={{
+                        button: "reports-invest-button",
                       }}
                     />
                   </div>
