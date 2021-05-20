@@ -30,7 +30,7 @@ class FaqsClass extends Component {
 
     renderPoints = (option, index) => {
         return (
-            <div key={index} style={{display:'flex'}}>
+            <div key={index} style={{display:'flex'}} data-aid={'render-points'+index+1} >
               <div className='subtitle' style={{margin: '10px 0 0px 0',marginRight:5}}>
                         {index + 1}.
                </div>
@@ -47,7 +47,7 @@ class FaqsClass extends Component {
             <div key={index} className="common-faqs-tile" data-aid={`common-faqs-tile-${index}`}
                style={{borderTop: index === 0 ? '1px solid #d7d4d4' : ''}}
                 onClick={() => this.showHideSteps(index)}>
-                <div className="top-tile">
+                <div className="top-tile" data-aid='faq-top-tile'>
                     <div className="top-title-text">
                         {option.title}
                     </div>
@@ -57,7 +57,7 @@ class FaqsClass extends Component {
                 </div>
 
                 {isSelected && !option.points &&
-                    <div className='subtitle'>
+                    <div className='subtitle' data-aid='faq-subtitle'>
                         {ReactHtmlParser(option.subtitle)}
                     </div>
                 }

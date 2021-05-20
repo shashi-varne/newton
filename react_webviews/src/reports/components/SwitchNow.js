@@ -129,46 +129,47 @@ const SwitchNow = (props) => {
 
   return (
     <Container
+      data-aid='reports-switch-now-screen'
       title="Switch Fund"
       skelton={showSkelton}
       buttonTitle="SWITCH NOW"
       handleClick={handleClick}
       showLoader={isApiRunning}
     >
-      <div className="reports-switch-now">
+      <div className="reports-switch-now" data-aid='reports-switch-now'>
         {!isEmpty(fundDetails) && (
           <>
-            <header>
-              <div className="content">
+            <header data-aid='reports-friendly-name-header'>
+              <div className="content" data-aid='reports-switchable-amount'>
                 <div className="name">{fundDetails.mf.friendly_name}</div>
                 <div className="text">Switchable amount</div>
                 <div className="amount">{fundDetails.switchable_amount}</div>
               </div>
               <img alt="" src={require(`assets/direction_icn.png`)} />
-              <div className="content">
+              <div className="content" data-aid='reports-mftype'>
                 <div className="name">{fundTo.mfname}</div>
                 <div className="type">{fundTo.mftype}</div>
               </div>
             </header>
-            <main>
+            <main data-aid='reports-switchfunds-main'>
               {fundDetails.folio_wise_details &&
                 fundDetails.folio_wise_details.map((folio, index) => {
                   return (
                     <Fragment key={index}>
                       {folio.switch_possible && (
-                        <div className="reports-folio">
-                          <div className="title">
+                        <div className="reports-folio" data-aid='reports-folio'>
+                          <div className="title" data-aid='reports-title'>
                             <span className="text">Folio : </span>
                             <span>{folio.folio}</span>
                           </div>
-                          <div className="flex">
+                          <div className="flex" data-aid='reports-folio-wise-details'>
                             <div className="content">
                               <div className="text">Switchable Amount</div>
                               <div className="sub-text">
                                 {formatAmountInr(folio.switchable_amount)}
                               </div>
                             </div>
-                            <div className="content">
+                            <div className="content" data-aid='reports-long-term-amount'>
                               <div className="text">Long Term Amount</div>
                               <div className="sub-text">{folio.current}</div>
                             </div>
@@ -179,6 +180,7 @@ const SwitchNow = (props) => {
                               endAdornment: (
                                 <InputAdornment position="end">
                                   <Button
+                                    data-aid='input-button'
                                     className="input-button"
                                     onClick={() => fullSwitch(index)}
                                   >

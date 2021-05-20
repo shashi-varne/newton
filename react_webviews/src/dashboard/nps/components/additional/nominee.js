@@ -89,7 +89,7 @@ class NpsNominee extends Component {
 
   bannerText = () => {
     return (
-      <span>
+      <span data-aid='nps-banner-text'>
         Please <span className="bold">confirm</span> the nominee details.
       </span>
     );
@@ -99,6 +99,7 @@ class NpsNominee extends Component {
     let { form_data } = this.state;
     return (
       <Container
+        data-aid='nps-nominee-details'
         title="Nominee Details"
         buttonTitle="SAVE AND CONTINUE"
         showLoader={this.state.show_loader}
@@ -109,7 +110,7 @@ class NpsNominee extends Component {
         banner={true}
         bannerText={this.bannerText()}
       >       
-        <div className="nps-nominee">
+        <div className="nps-nominee" data-aid='nps-nominee'>
           <div className="InputField">
             <InputWithIcon
               icon={nominee}

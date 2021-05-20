@@ -27,8 +27,8 @@ const TaxSummaryCard = ({
   }
   const productName = getConfig().productName
   return (
-    <section className="withdraw-tax-summary">
-      <div className="top flex-between-center">
+    <section className="withdraw-tax-summary" data-aid='withdraw-tax-summary'>
+      <div className="top flex-between-center" data-aid='top flex-between-center'>
         <div className="flex-center">
           <img className="fund-image" src={amc_logo_small} alt="" />
           <div className="fund-name">{friendly_name}</div>
@@ -53,7 +53,7 @@ const TaxSummaryCard = ({
         )}
       </div>
       {open && (
-        <div className={!open ? 'item item_hide' : 'item'}>
+        <div className={!open ? 'item item_hide' : 'item'} data-aid='item-data'>
           <div className="tile flex-between-center">
             <div className="name">Withdraw Amount</div>
             <div className="value">{formatAmountInr(withdrawal_amount)}</div>
@@ -77,7 +77,7 @@ const TaxSummaryCard = ({
         </div>
       )}
       {know_how_msg && (
-        <footer className="summary-bottom-info flex-between">
+        <footer className="summary-bottom-info flex-between" data-aid='summary-bottom-info'>
           <div className="flex-center">
             <img
               className="icon"

@@ -39,7 +39,7 @@ const AccountMerge = (props) => {
               OTP will be sent to{" "}
               {auth_id.type === "mobile" ? "Mobile Number" : "Email ID"}
             </div>
-            <div>{auth_id.auth_id}</div>
+            <div data-aid='account-merge-auth-id'>{auth_id.auth_id}</div>
           </div>
         </div>
       </div>

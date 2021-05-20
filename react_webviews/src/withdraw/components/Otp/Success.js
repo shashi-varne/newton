@@ -20,8 +20,8 @@ const Success = (props) => {
     }
   }
   return (
-    <Container hidepageTitle buttonTitle="Okay" handleClick={goTo}>
-      <section id="withdraw-otp-success">
+    <Container hidepageTitle buttonTitle="Okay" handleClick={goTo} data-aid='opt-success-screen' >
+      <section id="withdraw-otp-success" data-aid='withdraw-otp-success'>
         <img
           className="thumb-img"
           src={require(`assets/thumb.svg`)}

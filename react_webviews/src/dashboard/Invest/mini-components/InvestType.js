@@ -6,9 +6,9 @@ const InvestType = (props) => {
   return (
     <div className="invest-type" data-aid='invest-type'>
       {props.baseData.subtitle && (
-        <div className="generic-page-subtitle">{props.baseData.subtitle}</div>
+        <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>{props.baseData.subtitle}</div>
       )}
-      <div className="type">
+      <div className="type" data-aid='invest-type'>
         {props.baseData.options &&
           props.baseData.options.map((data, index) => {
             return (

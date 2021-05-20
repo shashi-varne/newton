@@ -80,7 +80,7 @@ const Landing = (props) => {
       showLoader={loader}
       data-aid='buildwealth-screen'
     >
-      <section className='invest-amount-common'>
+      <section className='invest-amount-common' data-aid='invest-amount-common'>
         <InvestType
           baseData={renderData}
           selected={investTypeDisplay}

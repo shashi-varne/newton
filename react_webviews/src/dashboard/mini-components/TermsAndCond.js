@@ -107,6 +107,7 @@ const DialogTC = ({ open, handleClose, data }) => {
         onClose={handleClose}
         aria-labelledby='responsive-dialog-title'
         fullWidth
+        data-aid='responsive-dialog-title'
       >
         <DialogTitle classes={{ root: 't_and_c_title' }}>Terms and Conditions</DialogTitle>
         <DialogContent>
@@ -128,6 +129,7 @@ const DialogTC = ({ open, handleClose, data }) => {
               color='default'
               autoFocus
               style={{ margin: 0 }}
+              data-aid='done-btn'
             >
               DONE
             </Button>

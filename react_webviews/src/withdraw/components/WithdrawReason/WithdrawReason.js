@@ -107,7 +107,8 @@ const Landing = (props) => {
   };
 
   return (
-    <Container 
+    <Container
+      data-aid='withdraw-reason-screen' 
       buttonTitle='Continue' 
       fullWidthButton       
       title="Withdraw"
@@ -116,12 +117,12 @@ const Landing = (props) => {
       skelton={isLoading}
     >
       {!isEmpty(reasons) && (
-        <section className='withdraw-reasons'>
+        <section className='withdraw-reasons' data-aid='withdraw-reason'>
           <div className='withdraw-reason-title'>{reasons?.title}</div>
 
           <div className='withdraw-reason-list'>
             {reasons?.options?.map((el, idx) => (
-              <div className='withdraw-reason-items' onClick={getSubQuestions(el)} key={idx}>
+              <div className='withdraw-reason-items' data-aid={`withdraw-reason-items-${idx+1}`} onClick={getSubQuestions(el)} key={idx}>
                 <div>{el?.title}</div>
                 <KeyboardArrowRightIcon />
               </div>

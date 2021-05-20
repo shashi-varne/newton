@@ -35,7 +35,7 @@ const InfoBox = ({
   }
 
   if (btnText && isCopiable) {
-    return (<span style={{ color: 'red' }}>
+    return (<span style={{ color: 'red' }} data-aid='f-info-box-error'>
       Error: Cannot use both <b>ctrlText</b> and <b>isCopiable</b>
     </span>)
   }
@@ -57,12 +57,14 @@ const InfoBox = ({
       }
       <div
         id="f-info-box-body"
+        data-aid='f-info-box-body'
         className={classes.body}>
         {children}
       </div>
       {btnTitle &&
         <div
           id="f-info-box-ctrl"
+          data-aid='f-info-box-ctrl'
           className={classes.ctrl}
           onClick={onBtnClick}
         >

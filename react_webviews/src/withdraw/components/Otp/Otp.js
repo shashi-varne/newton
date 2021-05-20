@@ -100,13 +100,14 @@ const Otp = (props) => {
 
   return (
     <Container
+      data-aid='verify-otp-screen'
       hidePageTitle
       buttonTitle="VERIFY"
       disable={state.otp.length !== 4}
       handleClick={verifyOtp}
       showLoader={isApiRunning}
     >
-      <section id="withdraw-verify" className="withdraw-verification">
+      <section id="withdraw-verify" className="withdraw-verification" data-aid='withdraw-verification'>
         <div className="header">Enter OTP to verify</div>
         <div className="info">
           OTP has been sent to <strong>{stateParams?.mobile}</strong>, please enter it

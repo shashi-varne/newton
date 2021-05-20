@@ -30,6 +30,7 @@ const Action = (props) => {
 
   return (
     <Container
+      data-aid='reports-action-screen'
       hidePageTitle={true}
       twoButton={true}
       buttonOneTitle="YES"
@@ -38,17 +39,17 @@ const Action = (props) => {
       handleClickTwo={() => goBack()}
       dualbuttonwithouticon
     >
-      <div className="reports-sip-action">
+      <div className="reports-sip-action" data-aid='reports-sip-action'>
         <Imgc
           src={require(`assets/${productName}/sip_action_illustration.svg`)}
           className="top-img"
         />
-        <p className="light-text">
+        <p className="light-text" data-aid='reports-light-text'>
           We highly recommend to stay invested for at least 3 years to get the
           best benefit of SIP.
         </p>
         {action === "cancel" && (
-          <div className="cancel">
+          <div className="cancel" data-aid='reports-cancel'>
             <div className="light-text">
               Or, you can also Pause for few months and restart later.
             </div>
@@ -61,7 +62,7 @@ const Action = (props) => {
             </div>
           </div>
         )}
-        <div>Do you still want to {action} SIP?</div>
+        <div data-aid='reports-action-message'>Do you still want to {action} SIP?</div>
       </div>
     </Container>
   );

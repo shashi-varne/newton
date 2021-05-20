@@ -322,7 +322,7 @@ class Checkout extends Component {
                     <div className="icon">
                       <img alt={fund.friendly_name} src={fund.amc_logo_small} />
                     </div>
-                    <div className="text">
+                    <div className="text" data-aid='checkout-text'>
                       <h4>
                         {fund.friendly_name || fund.legal_name}
                         {type === "diy" && (
@@ -365,7 +365,7 @@ class Checkout extends Component {
             handleClick={() => this.navigate("/kyc/add-bank")}
           />
           <InvestError
-            isOpen={dialogStates.openInvestError}
+            isOpen={!dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
             close={() => this.handleDialogStates("openInvestError", false)}

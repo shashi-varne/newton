@@ -193,8 +193,8 @@ class PanDetails extends Component {
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <div className="nps-dialog" id="alert-dialog-description">
-            <div className="nps-dialog-content">
+          <div className="nps-dialog" id="alert-dialog-description" data-aid='alert-dialog-description'>
+            <div className="nps-dialog-content" data-aid='nps-dialog-content'>
               <div className="content">
                 <div className="title">{this.state.title}</div>
                 <div className="sub-title">{this.state.subtitle}</div>
@@ -204,7 +204,7 @@ class PanDetails extends Component {
                 alt=""
               />
             </div>
-            <div className="btn">
+            <div className="btn" data-aid='nps-btn'>
               <button
                 style={{ cursor: "pointer" }}
                 onClick={() => this.handleClose()}
@@ -248,6 +248,7 @@ class PanDetails extends Component {
     const { form_data, is_nps_contributed, currentUser, isKycApproved } = this.state;
     return (
       <Container
+        data-aid='nps-pan-details-screen'
         classOverRIde="pr-error-container"
         buttonTitle="PROCEED"
         hideInPageTitle
@@ -256,7 +257,7 @@ class PanDetails extends Component {
         handleClick={this.handleClick}
         goBack={this.goBack}
       >
-        <div className="pan-details">
+        <div className="pan-details" data-aid='pan-details-page'>
           {/* <div className="top-title">Your Details</div> */}
           <FormControl fullWidth>
             <div className="InputField">

@@ -76,6 +76,7 @@ const WithdrawSwitch = (props) => {
   };
   return (
     <Container
+      data-aid='swith-recommendations-screen'
       buttonTitle={`SWITCH: ${inrFormatDecimal(switchFunds?.total_switched_amount)}`}
       skelton={isLoading}
       fullWidthButton
@@ -86,7 +87,7 @@ const WithdrawSwitch = (props) => {
       {!isEmpty(switchFunds?.recommendations) && (
         <section>
           {switchFunds?.recommendations?.map((el, idx) => (
-            <div className='withdraw-switch' key={idx}>
+            <div className='withdraw-switch' data-aid={`withdraw-switch-${idx+1}`} key={idx} >
               <div className='withdraw-mf'>
                 <div className='withdraw-mf-icon'>
                   <img src={stock_icon} alt='stock icon' />

@@ -68,7 +68,7 @@ class OtpDefaultClass extends Component {
 
   render() {
     return (
-      <div>
+      <div data-aid='opt-input-container'>
         <div>
           <OtpInput
             numInputs={4}

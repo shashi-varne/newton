@@ -15,16 +15,17 @@ const PennyVerificationPending = ({ isOpen, handleClick }) => {
       aria-describedby="success-dialog"
       className="invest-common-dialog penny-verification-pending-dialog"
       id="invest-bottom-dialog"
+      data-aid='invest-bottom-dialog'
     >
       <DialogContent className="dialog-content" data-aid='penny-verification-pending'>
-        <div className="head-bar">
+        <div className="head-bar" data-aid='head-bar'>
           <div className="text-left">Bank account verification pending!</div>
           <img
             src={require(`assets/${productName}/ic_bank_partial_added.svg`)}
             alt=""
           />
         </div>
-        <div className="subtitle text">
+        <div className="subtitle text" data-aid='pvp-subtitle'>
           You can invest only after you have a verified bank added. Upload
           document or add new bank to start investing.
         </div>
@@ -34,6 +35,7 @@ const PennyVerificationPending = ({ isOpen, handleClick }) => {
           onClick={handleClick}
           classes={{ button: "invest-dialog-button" }}
           buttonTitle="MANAGE BANK ACCOUNT"
+          data-aid='manage-bank-account'
         />
       </DialogActions>
     </Dialog>

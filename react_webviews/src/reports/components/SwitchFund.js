@@ -106,13 +106,13 @@ const SwitchFund = (props) => {
   };
 
   return (
-    <Container title="Available Funds" noFooter={true} skelton={showSkelton}>
-      <div className="reports-switch">
+    <Container title="Available Funds" noFooter={true} skelton={showSkelton} data-aid='reports-available-funds-screen'>
+      <div className="reports-switch" data-aid='reports-switch'>
         {!isEmpty(fundDetails) && (
           <>
-            <header>
+            <header data-aid='reports-friendly-name-header'>
               <h4>{fundDetails.mf.friendly_name}</h4>
-              <div className="fund-info">
+              <div className="fund-info" data-aid='reports-fund-info'>
                 <div className="content">
                   <div className="text">Total Units</div>
                   <div className="sub-text">{fundDetails.units}</div>
@@ -130,7 +130,7 @@ const SwitchFund = (props) => {
                   </div>
                 </div>
               </div>
-              <div className="filter-options">
+              <div className="filter-options" data-aid='reports-filter-options'>
                 <span className="text">Switch your fund with</span>
                 <img src={require(`assets/switch_arrow_down.svg`)} alt="" />
                 <div className="dropdown">
@@ -144,10 +144,10 @@ const SwitchFund = (props) => {
               </div>
             </header>
             {!isEmpty(filteredFunds) && (
-              <main>
+              <main data-aid='reports-switchfunds-main'>
                 {filteredFunds.map((fund, index) => {
                   return (
-                    <div key={index} className="reports-switch-fund">
+                    <div key={index} className="reports-switch-fund" data-aid='reports-switch-fund'>
                       <h4>{fund.mfname}</h4>
                       <div className="details">
                         <div className="mf-type">{fund.mftype_name}</div>
@@ -165,7 +165,7 @@ const SwitchFund = (props) => {
                             src={require(`assets/know_more_new.png`)}
                           />
                         </div>
-                        <Button onClick={() => switchFund(fund)}>
+                        <Button onClick={() => switchFund(fund)} data-aid='reports-switch-fund-btn'>
                           Switch Fund
                         </Button>
                       </div>

@@ -29,16 +29,17 @@ class NpsPending extends Component {
   render() {
     return (
       <Container
+        data-aid='nps-pending-orders-screen'
         noFooter
         title="Pending Orders"
         showLoader={this.state.show_loader}
       >
         <section className="page nps">
-          <div className="pending container-padding">
+          <div className="pending container-padding" data-aid='nps-pending-orders-page'>
             {this.state.nps_pending_orders && this.state.nps_pending_orders.map((item, index) =>
-              <div className="list" key={index}>
+              <div className="list" data-aid='nps-list' key={index}>
                 <div className="fund">
-                  <div className="list-item">
+                  <div className="list-item" data-aid='nps-list-item'>
                     <div className="text">
                       <div className="tier">TIER {item.tier}</div>
                       <h1>{item.pf_house.name}</h1>
@@ -47,7 +48,7 @@ class NpsPending extends Component {
                       <img src={item.pf_house.image} alt='' />
                     </div>
                   </div>
-                  <div className="display-flex">
+                  <div className="display-flex" data-aid='nps-amount'>
                     <div>
                       <h3>Total invested value</h3>
                       <span>{formatAmountInr(item.amount)}</span>
@@ -55,7 +56,7 @@ class NpsPending extends Component {
                   </div>
                 </div>
               </div>)}
-            <div className="tnc">
+            <div className="tnc" data-aid='nps-tnc'>
               *It might take upto 5 working days for your contribution to
               reflect in your portfolio.
             </div>
