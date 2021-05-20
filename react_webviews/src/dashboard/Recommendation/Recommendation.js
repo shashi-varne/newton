@@ -328,7 +328,7 @@ const Recommendations = (props) => {
             </div>
           </div>
           <div className="recommendations-disclaimers" data-aid='recommendations-disclaimers'>
-            <div className="recommendations-disclaimer-morning">
+            <div className="recommendations-disclaimer-morning" data-aid='recommendations-disclaimer-morning'>
               <img alt="single_star" src={single_star} />
               {partner_code !== "hbl" ? (
                 <img alt="morning_star" width="100" src={morning_text} />
@@ -337,7 +337,7 @@ const Recommendations = (props) => {
               )}
             </div>
             <TermsAndCond />
-            <div className='recommendations-trust-icons'>
+            <div className='recommendations-trust-icons' data-aid='recommendations-trust-icons'>
               <div>Investments with fisdom are 100% secure</div>
               <img alt='trust_sebi_secure' src={trust_icons} />
             </div>

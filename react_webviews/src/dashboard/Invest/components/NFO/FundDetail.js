@@ -67,6 +67,7 @@ class FundDetail extends Component {
               {fund.tax_plan === "elss" && <span>Tax saving</span>}
             </div>
             <Button
+              dataAid='invest-btn'
               onClick={this.handleClick}
               buttonTitle="INVEST"
               classes={{ button: "nfo-invest-button" }}

@@ -72,6 +72,7 @@ class MyAccount extends Component {
         onClose={this.handleClose}
         aria-labelledby="responsive-dialog-title"
         className="my-account-dialog"
+        data-aid='my-account-dialog'
       >
         <DialogContent className="content" data-aid='dialog-content'>
           <DialogContentText className="subtitle">

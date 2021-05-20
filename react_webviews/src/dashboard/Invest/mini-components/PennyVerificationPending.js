@@ -35,7 +35,7 @@ const PennyVerificationPending = ({ isOpen, handleClick }) => {
           onClick={handleClick}
           classes={{ button: "invest-dialog-button" }}
           buttonTitle="MANAGE BANK ACCOUNT"
-          data-aid='manage-bank-account'
+          dataAid='manage-bank-account-btn'
         />
       </DialogActions>
     </Dialog>

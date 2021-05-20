@@ -16,6 +16,7 @@ const FailureDialog = ({ isOpen, handleClick, errorMessage }) => {
       </DialogContent>
       <DialogActions className="action" data-aid='action'>
         <Button
+          dataAid='please-retry-btn'
           onClick={handleClick}
           classes={{ button: "invest-dialog-button" }}
           buttonTitle="PLEASE RETRY"

@@ -85,10 +85,11 @@ const DialogContainer = ({ open, onClose }) => {
       onClose={onClose}
       aria-labelledby='responsive-dialog-title'
       className="edit-funds-dialog"
+      data-aid='edit-funds-dialog'
     >
-      <DialogTitle id='form-dialog-title'>No alternative funds available</DialogTitle>
+      <DialogTitle id='form-dialog-title' data-aid='form-dialog-title'>No alternative funds available</DialogTitle>
       <DialogActions className="edit-funds-dialog-bottom">
-        <Button buttonTitle="GOT IT" style={{width: "100px", height: "45px"}} onClick={onClose} />
+        <Button buttonTitle="GOT IT" style={{width: "100px", height: "45px"}} onClick={onClose} dataAid='got-it-btn' />
        </DialogActions>
     </Dialog>
   );

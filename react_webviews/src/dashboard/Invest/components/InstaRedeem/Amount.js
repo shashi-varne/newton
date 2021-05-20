@@ -131,9 +131,9 @@ const InvestAmount = (props) => {
             </div>
           )}
         </FormControl>
-        <div className="tags">
+        <div className="tags" data-aid='amt-tags'>
           {tags &&
-            tags.map((data, index) => { console.log(data)
+            tags.map((data, index) => {
               return (
                 <div
                   data-aid={`amount-tag-${data.value}`}

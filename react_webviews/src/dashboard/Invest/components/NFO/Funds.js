@@ -103,7 +103,7 @@ class NfoFunds extends Component {
               return (
                 <div key={index} className="content" data-aid='nfo-content'>
                   <div
-                    data-aid='nfo-detailview-one'
+                    data-aid='nfo-detailview-img'
                     className="card icon"
                     onClick={() => this.detailView(data)}
                   >
@@ -111,19 +111,20 @@ class NfoFunds extends Component {
                   </div>
                   <div className="text" data-aid='nfo-text'>
                     <div
-                      data-aid='nfo-detailview-one'
+                      data-aid='nfo-detailview-text'
                       className="title"
                       onClick={() => this.detailView(data)}
                     >
                       {data.friendly_name}
                     </div>
                     <div className="item" data-aid='nfo-item'>
-                      <div className="sub-item">
+                      <div className="sub-item" data-aid='sub-item'>
                         <p>Type: {getSchemeOption(data.scheme_option)}</p>
                         <p>Category: {data.tax_plan}</p>
                       </div>
                       <div className="invest" data-aid='nfo-invest'>
                         <Button
+                          dataAid='invest-btn'
                           onClick={this.handleClick(data)}
                           buttonTitle="INVEST"
                           classes={{ button: "nfo-funds-button" }}

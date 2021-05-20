@@ -82,13 +82,14 @@ const InvestReferralDialog = ({ isOpen, close, goNext }) => {
       aria-describedby="invest-refferal-dialog"
       className="invest-refferal-dialog"
       id="invest-bottom-dialog"
+      data-aid='invest-bottom-dialog'
     >
       <DialogContent className="invest-refferal-dialog-content" data-aid='invest-refferal-dialog-content'>
-        <header>
+        <header data-aid='invest-bottom-dialog-header'>
           <div>Bank Referral Code</div>
           <img src={require(`assets/internet_banking_icon.svg`)} alt="" />
         </header>
-        <p className="sub-text ">
+        <p className="sub-text " data-aid='dialog-sub-text'>
           Ask Bank employee for their assisted referral code.
         </p>
         <div className="input">
@@ -111,16 +112,16 @@ const InvestReferralDialog = ({ isOpen, close, goNext }) => {
                 <InputAdornment position="end">
                   <div className="text">
                     {!form_data.referral_code_error && !isReferralApplied && (
-                      <div className="verify" onClick={() => applyReferral()}>
+                      <div className="verify" data-aid='dialog-verify' onClick={() => applyReferral()}>
                         Verify
                       </div>
                     )}
                     {(form_data.referral_code_error || isReferralApplied) && (
-                      <div onClick={() => clearReferral()}>Clear</div>
+                      <div onClick={() => clearReferral()} data-aid='dialog-clear'>Clear</div>
                     )}
                   </div>
                   {isApiRunning && (
-                    <div className="referral-loader">
+                    <div className="referral-loader" data-aid='referral-loader'>
                       <DotDotLoader className="dot-spinner" />
                     </div>
                   )}
@@ -130,14 +131,16 @@ const InvestReferralDialog = ({ isOpen, close, goNext }) => {
             disabled={isApiRunning}
           />
         </div>
-        <footer>
+        <footer data-aid='dialog-footer'>
           <Button
+            data-aid='skip-referral-btn'
             onClick={cancel}
             className={`trasparent-button ${isApiRunning && "disabled"}`}
           >
             SKIP REFERRAL
           </Button>
           <Button
+            data-aid='continue-btn'
             onClick={handleClick}
             className={`full-button ${
               (isApiRunning || !isReferralApplied) && "disabled"

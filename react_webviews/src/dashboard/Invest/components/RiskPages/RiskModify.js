@@ -105,8 +105,8 @@ const RiskModify = ({
             root: 'risk-info'
           }}
         >
-          <div className="risk-info-title">Note</div>
-          <div className="risk-info-desc">
+          <div className="risk-info-title" data-aid='risk-info-title'>Note</div>
+          <div className="risk-info-desc" data-aid='risk-info-desc'>
             If you change your risk profile, fund recommendations will change accordingly.
           </div>
         </InfoBox>
@@ -147,13 +147,13 @@ export default RiskModify;
 
 const RiskOption = ({ data }) => {
   return [
-    <div className="risk-opt-title">
+    <div className="risk-opt-title" data-aid='risk-opt-title'>
       {data.rp_indicator}
     </div>,
-    <div className="risk-opt-desc">
+    <div className="risk-opt-desc" data-aid='risk-opt-desc'>
       {data.subtitle}
     </div>,
-    <div className="risk-opt-split">
+    <div className="risk-opt-split" data-aid='risk-opt-split'>
       <span>Distribution: </span>
       {data.equity}% Equity
       &nbsp;&nbsp;|&nbsp;&nbsp;

@@ -133,7 +133,7 @@ const InstaRedeem = (props) => {
 
   return (
     <Container
-      data-aid='start-investing'
+      data-aid='start-investing-screen'
       buttonTitle="START INVESTING"
       handleClick={handleClick}
       title={
@@ -142,7 +142,7 @@ const InstaRedeem = (props) => {
       disable={showLoader}
     >
       <div className="insta-redeem" data-aid='insta-redeem'>
-        <div className="generic-page-subtitle">
+        <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
           Instant withdrawal facility with superior return compared to savings
           bank account
           </div>
@@ -157,7 +157,7 @@ const InstaRedeem = (props) => {
               <div className="text">
                 {data.disc}
                 {data.key === "withdrawal" && (
-                  <div className="insta-redeem-know-more" onClick={() => setOpenDialog(true)}>
+                  <div className="insta-redeem-know-more" data-aid={`insta-redeem-know-more-${data.key}`} onClick={() => setOpenDialog(true)}>
                     KNOW MORE
                   </div>
                 )}
@@ -173,13 +173,13 @@ const InstaRedeem = (props) => {
             onClick={() => showFundInfo(recommendation)}
           >
             <div className="text">
-              <h1>{recommendation.mfname}</h1>
+              <h1 data-aid='recommendation-name'>{recommendation.mfname}</h1>
               <div className="flex">
                 <div className="common-badge bond">
                   {recommendation.mftype_name}
                 </div>
                 {partner_code !== "hbl" && recommendation.rating > 0 && (
-                  <div className="common-badge rating">
+                  <div className="common-badge rating" data-aid='rating'>
                     <div className="img">
                       <img src={require(`assets/ic_star.svg`)} alt="" />
                     </div>
@@ -188,7 +188,7 @@ const InstaRedeem = (props) => {
                 )}
                 {partner_code === "hbl" &&
                   recommendation.the_hindu_rating > 0 && (
-                    <div className="common-badge rating">
+                    <div className="common-badge rating" data-aid='the-hindu-rating'>
                       <div className="img">
                         <img src={require(`assets/ic_star.svg`)} alt="" />
                       </div>
@@ -197,7 +197,7 @@ const InstaRedeem = (props) => {
                       </div>
                     </div>
                   )}
-                <div className="returns">
+                <div className="returns" data-aid='returns'>
                   {recommendation.returns &&
                     recommendation.returns.five_year && (
                       <span className="highlight-return">
@@ -216,8 +216,8 @@ const InstaRedeem = (props) => {
           </div>
         )}
         {showLoader && <SkeltonRect className="skelton-loader" />}
-        <div className="title">Frequently asked questions</div>
-        <div className="generic-render-faqs">
+        <div className="title" data-aid='f-a-q'>Frequently asked questions</div>
+        <div className="generic-render-faqs" data-aid='generic-render-faqs'>
           <Faqs options={faqData} />
         </div>
         <SecureInvest />

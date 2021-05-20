@@ -63,7 +63,7 @@ const ReplaceFunds = (props) => {
             ))}
           </RadioGroup>
         </FormControl>
-        <div>{alternateFunds?.length === 0 && <h1>No alternative fund</h1>}</div>
+        <div>{alternateFunds?.length === 0 && <h1 data-aid='no-alternate-funds'>No alternative fund</h1>}</div>
       </section>
     </Container>
   );

@@ -40,9 +40,9 @@ const GoalType = (props) => {
       noFooter
       classOverRideContainer='pr-container'
     >
-     <section className="invest-goal-container" data-aid='invest-goal-container'>
+     <section className="invest-goal-container" data-aid='invest-goal-page'>
        <div className='title'>What is the purpose of this goal?</div>
-       <div className="invest-goal-list-type">
+       <div className="invest-goal-list-type" data-aid='invest-goal-list-type'>
         {
           Object.keys(goalTypes).map((key,idx) => {
             return <div key={idx} className="invest-goal-list-item" onClick={goNext(goalTypes[key].name)} data-aid={`invest-goal-list-item-${idx+1}`}>

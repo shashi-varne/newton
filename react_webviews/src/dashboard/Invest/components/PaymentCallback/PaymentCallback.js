@@ -39,7 +39,7 @@ const PaymentCallback = (props) => {
 
   return (
     <Container
-      data-aid='payment-call-back'
+      data-aid='payment-call-back-screen'
       buttonTitle="DONE"
       hidePageTitle
       handleClick={handleClick}

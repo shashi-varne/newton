@@ -365,7 +365,7 @@ class Checkout extends Component {
             handleClick={() => this.navigate("/kyc/add-bank")}
           />
           <InvestError
-            isOpen={!dialogStates.openInvestError}
+            isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
             close={() => this.handleDialogStates("openInvestError", false)}

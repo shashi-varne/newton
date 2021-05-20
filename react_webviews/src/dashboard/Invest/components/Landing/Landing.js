@@ -133,11 +133,12 @@ class Landing extends Component {
         noFooter={true}
         title="Start Investing"
         showLoader={this.state.show_loader}
+        data-aid='start-investing'
       >
-        <div className="invest-landing">
+        <div className="invest-landing" data-aid='invest-landing'>
           {
             !kycStatusLoader &&
-            <div className="generic-page-subtitle">
+            <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
               {isReadyToInvestBase 
                 ? " Your KYC is verified, You’re ready to invest"
                 : "Invest in your future"}
@@ -189,7 +190,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEmpty(ourRecommendations) && (
                         <>
-                          <div className="invest-main-top-title">
+                          <div className="invest-main-top-title" data-aid='recommendations-title'>
                             Our recommendations
                           </div>
                           {ourRecommendations.map((item, index) => {
@@ -212,7 +213,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEmpty(diy) && (
                         <>
-                          <div className="invest-main-top-title">
+                          <div className="invest-main-top-title" data-aid='diy-title'>
                             Do it yourself
                           </div>
                           {diy.map((item, index) => {
@@ -232,8 +233,8 @@ class Landing extends Component {
                   );
                 case "bottomScrollCards":
                   return (
-                    <div className="bottom-scroll-cards" key={index}>
-                      <div className="list">
+                    <div className="bottom-scroll-cards" key={index} data-aid='bottomScrollCards-title'>
+                      <div className="list" data-aid='bottomScrollCards-list'>
                         {!isEmpty(bottomScrollCards) &&
                           bottomScrollCards.map((item, index) => {
                             return (
@@ -285,11 +286,11 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEmpty(financialTools) && (
                         <>
-                          <div className="invest-main-top-title">
+                          <div className="invest-main-top-title" data-aid='financial-tools-title'>
                             Financial tools
                           </div>
                           <div className="bottom-scroll-cards">
-                            <div className="list">
+                            <div className="list" data-aid='financial-tools-list'>
                               {financialTools.map((data, index) => {
                                 return (
                                   <div
@@ -330,11 +331,11 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEmpty(popularCards) && (
                         <>
-                          <div className="invest-main-top-title">
+                          <div className="invest-main-top-title" data-aid='popularCards-tools-title'>
                             More investment options
                           </div>
                           <div className="bottom-scroll-cards">
-                            <div className="list">
+                            <div className="list" data-aid='popularCards-tools-list'>
                               {popularCards.map((item, index) => {
                                 return (
                                   <div
@@ -366,7 +367,7 @@ class Landing extends Component {
           {productName !== "fisdom" &&
             productName !== "finity" &&
             productName !== "ktb" && (
-              <div className="invest-contact-us">
+              <div className="invest-contact-us" data-aid='invest-contact-us'>
                 In partnership with
                 <span>
                   {productName === "bfdlmobile" ||

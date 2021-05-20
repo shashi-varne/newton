@@ -55,6 +55,7 @@ const InvestmentProof = (props) => {
       open={openDialog}
       onClose={handleClose}
       className="investment-proof-dialog"
+      data-aid='investment-proof-dialog'
     >
       <DialogContent className="content" data-aid='content'>{dialogMessage}</DialogContent>
       <DialogActions className="action" data-aid='action'>

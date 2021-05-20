@@ -38,7 +38,7 @@ class NfoScheme extends Component {
                   className="content card"
                   onClick={() => this.handleClick(data.value)}
                 >
-                  <div className="text">
+                  <div className="text" data-aid={`nfo-nfoData-text-${index+1}`}>
                     <div className="title">{data.title}</div>
                     <div className="subtitle">{data.subtitle}</div>
                   </div>
