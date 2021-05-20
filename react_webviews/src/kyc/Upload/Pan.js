@@ -151,6 +151,10 @@ const Pan = (props) => {
       handleUpload("open_gallery");
     }
   }
+
+  const handleAccessDialogClose = (event, reason) => {
+    setIsAccessDialogOpen(false);
+  }
   
   return (
     <Container
@@ -212,13 +216,14 @@ const Pan = (props) => {
               buttonTitle="KNOW MORE"
               classes={{ root: "know-more-button" }}
               onClick={() => navigate("/kyc/upload-instructions", {
-                state: "pan"
+                state: { document: "pan" }
               })}
             />
           </div>
           <FileAccessDialog 
             isOpen={isAccessDialogOpen}
             handleUpload={handleUpload}
+            onClose={handleAccessDialogClose}
           />
         </section>
       )}
