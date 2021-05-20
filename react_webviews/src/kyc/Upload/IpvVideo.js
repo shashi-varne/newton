@@ -219,7 +219,7 @@ const IpvVideo = (props) => {
                   </div>
                   <div className="ipv_code">{ipvcode}</div>
                   <img
-                    src={require(`assets/${productName}/state__ipv_number.svg`)}
+                    src={require(`assets/${productName}/state_ipv_number.svg`)}
                     alt="Upload Selfie"
                     className="default"
                   />
