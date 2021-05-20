@@ -188,12 +188,12 @@ const Journey = (props) => {
         journeyData[i].status = status
       }
 
-      if (isCompliant) {
-        journeyData[0].status = 'init'
-        if (customerVerified) {
-          journeyData[0].status = 'completed'
-        }
-      }
+      // if (isCompliant) {
+      //   journeyData[0].status = 'init'
+      //   if (customerVerified) {
+      //     journeyData[0].status = 'completed'
+      //   }
+      // }
 
       for (i = 0; i < journeyData.length - 1; i++) {
         if (journeyData[i].status === 'init') {
@@ -258,7 +258,8 @@ const Journey = (props) => {
       journeyData = [
         {
           key: 'pan',
-          title: 'Confirm PAN',
+          title: 'PAN',
+          value: <b>{kyc?.pan?.meta_data?.pan_number}</b>,
           status: 'completed',
           isEditAllowed: false,
           inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
@@ -472,10 +473,10 @@ const Journey = (props) => {
     console.log('Inside handleEdit')
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {
-      if (key === 'pan' && !customerVerified) {
-        navigate('/kyc/compliant-confirm-pan')
-        return
-      }
+      // if (key === 'pan' && !customerVerified) {
+      //   navigate('/kyc/compliant-confirm-pan')
+      //   return
+      // }
       stateMapper = {
         personal: '/kyc/compliant-personal-details',
         nominee: '/kyc/compliant-nominee-details',
@@ -768,7 +769,7 @@ const Journey = (props) => {
                       {item?.value ? ':' : ''}
                     </span>
                     {item?.value && (
-                      <span className="field_value"> {item?.value}</span>
+                      <span className="field_value">{item?.value}</span>
                     )}
                   </div>
 
