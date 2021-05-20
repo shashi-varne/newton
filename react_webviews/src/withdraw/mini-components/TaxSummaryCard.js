@@ -6,7 +6,6 @@ import './mini-components.scss';
 
 const TaxSummaryCard = ({
   openCard,
-  handleToggle,
   stcg_tax,
   ltcg_tax,
   stcg_percent,
@@ -26,9 +25,6 @@ const TaxSummaryCard = ({
   const openDialog = () => {
     setShowKnowMoreDialog(true)
   }
-  console.log(handleToggle)
-  console.log(openCard)
-  console.log(onClick)
   const productName = getConfig().productName
   return (
     <section className="withdraw-tax-summary">

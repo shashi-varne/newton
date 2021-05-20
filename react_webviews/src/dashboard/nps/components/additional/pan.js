@@ -80,7 +80,8 @@ class PanDetails extends Component {
       isKycApproved: isKycApproved,
       userKyc: userKyc,
       form_data: form_data,
-      is_nps_contributed
+      is_nps_contributed,
+      isKycIdentificationApproved
     });
   };
 
