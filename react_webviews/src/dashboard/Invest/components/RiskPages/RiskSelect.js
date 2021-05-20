@@ -119,7 +119,7 @@ const RiskSelect = ({
       handleClick={goNext}
       classOverRideContainer='pr-container'
     > 
-      <div className="risk-select-header"  data-aid='pick-risk-profile'>
+      <div className="risk-select-header" data-aid='pick-risk-profile'>
         <span>Please select your risk profile</span>
         <div className="risk-sh-info" onClick={showInfo}>
           Info
