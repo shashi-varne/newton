@@ -7,6 +7,7 @@ import Dialog, { DialogContent, DialogActions } from "material-ui/Dialog";
 import Button from "common/ui/Button";
 import "../../commonStyles.scss";
 import { isEmpty } from "lodash";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const FailureDialog = ({ isOpen, handleClick, errorMessage }) => {
   return (
@@ -28,7 +29,7 @@ const FailureDialog = ({ isOpen, handleClick, errorMessage }) => {
 const PageCallback = (props) => {
   const navigate = navigateFunc.bind(props);
   const params = props.match.params || {};
-  let { investment_type, status, message } = params;
+  let { investment_type, status, investment_amount, message } = params;
   const [skelton, setSkelton] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -46,6 +47,26 @@ const PageCallback = (props) => {
     initialize();
   }, []);
 
+  const sendEvents = (eventName, data) => {
+    let eventObj = {
+      event_name: eventName,
+      properties:
+        eventName === "payment completed"
+          ? {
+              investment_type: data,
+              investment_amount: investment_amount,
+            }
+          : {
+              error_message: data || "",
+            },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   const initialize = async () => {
     switch (type) {
       case "bank":
@@ -58,6 +79,7 @@ const PageCallback = (props) => {
             return;
           }
           const orderType = result?.investment?.order_type;
+          sendEvents("payment completed", orderType);
           if (orderType === "sip") {
             navigate(`/sip/payment/callback/success`, null, true);
           } else if (orderType === "onetime") {
@@ -74,9 +96,11 @@ const PageCallback = (props) => {
       default:
         setSkelton(false);
         if (!status) {
+          sendEvents("payment failed", message);
           navigate("/landing", null, true);
         } else {
           if (!message) message = "";
+          sendEvents("payment completed", investment_type);
           if (investment_type === "sip") {
             navigate(`/sip/payment/callback/${status}/${message}`, null, true);
           } else if (investment_type === "onetime") {
