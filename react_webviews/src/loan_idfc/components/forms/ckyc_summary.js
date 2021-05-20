@@ -3,7 +3,6 @@ import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import { capitalizeFirstLetter, timeStampToDate } from "../../../utils/validators";
-import Collapse from "@material-ui/core/Collapse";
 
 class ApplicationSummary extends Component {
   constructor(props) {
@@ -263,11 +262,11 @@ class ApplicationSummary extends Component {
           </div>
         </div>
 
-        <Collapse in={props.open}>
+        {props.open && (
           <div className="bct-content">
             {props.data.map(this.renderAccordiansubData)}
           </div>
-        </Collapse>
+        )}
       </div>
     );
   };
