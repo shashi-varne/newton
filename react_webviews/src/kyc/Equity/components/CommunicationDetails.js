@@ -5,17 +5,19 @@ import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
 import OtpDefault from "../../../common/ui/otp";
 import "./commonStyles.scss";
-import { resendOtp, sendOtp } from "../../common/api";
+import { resendOtp, sendOtp, socialAuth, verifyOtp } from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import {
   isEmpty,
   validateEmail,
   validateNumber,
 } from "../../../utils/validators";
-import { verifyOtp } from "../../../wealth_report/common/ApiCalls";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
+import { apiConstants } from "../../constants";
+import { getConfig } from "../../../utils/functions";
 
+const config = getConfig();
 const googleButtonTitle = (
   <div className="kcd-google-text">
     <img src={require(`assets/google.svg`)} />
@@ -37,7 +39,7 @@ const CommunicationDetails = (props) => {
   const [showOtpContainer, setShowOtpContainer] = useState(false);
   const { user, kyc, isLoading } = useUserKycHook();
   const [communicationType, setCommunicationType] = useState("");
-
+  const [buttonLoader, setButtonLoader] = useState(false);
   useEffect(() => {
     if (!isEmpty(user)) {
       const type = user.mobile === null ? "mobile" : "email";
@@ -59,7 +61,7 @@ const CommunicationDetails = (props) => {
   }, [kyc]);
 
   const handleChange = (name) => (event) => {
-    if (showOtpContainer) {
+    if (showOtpContainer || buttonLoader) {
       return;
     }
     let data = { ...formData };
@@ -108,6 +110,23 @@ const CommunicationDetails = (props) => {
     });
   };
 
+  const handleGoogleAuth = async () => {
+    const provider = "google";
+    try {
+      setButtonLoader("button");
+      const result = await socialAuth({
+        provider: provider,
+        redirectUrl: `${config.base_url}${apiConstants.socialAuth}/${provider}/callback`,
+      });
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+      toast(err.message);
+    } finally {
+      setButtonLoader(false);
+    }
+  };
+
   const handleClick = async () => {
     try {
       if (showOtpContainer) {
@@ -154,6 +173,7 @@ const CommunicationDetails = (props) => {
   };
 
   const handleEdit = () => {
+    if (buttonLoader) return;
     setShowOtpContainer(false);
     setButtonTitle("CONTINUE");
   };
@@ -168,6 +188,7 @@ const CommunicationDetails = (props) => {
       handleClick={handleClick}
       showLoader={showLoader}
       skelton={isLoading}
+      disable={buttonLoader}
     >
       <div className="kyc-communication-details">
         <div>
@@ -181,6 +202,8 @@ const CommunicationDetails = (props) => {
                 classes={{ button: "kcd-google-button" }}
                 buttonTitle={googleButtonTitle}
                 type="outlined"
+                showLoader={buttonLoader}
+                onClick={handleGoogleAuth}
               />
               <div className="kcd-or-divider">
                 <div className="kcd-divider-line"></div>

@@ -10,8 +10,9 @@ export const apiConstants = {
   getCVL: '/api/kyc/updatecvl/mine',
   getMerge: '/api/user/account/merge?pan_number=',
   sendOtp: '/api/communication/send/otp',
-  resendOtp: '/api/communication/resend/otp/',
-  verifyOtp: '/api/communication/verify/otp/',
+  resendOtp: '/api/communication/resend/otp',
+  verifyOtp: '/api/communication/verify/otp',
+  socialAuth: '/api/communication'
 }
 
 export const getPathname = {
