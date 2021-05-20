@@ -43,12 +43,14 @@ const IpvVideo = (props) => {
     }
   }
 
-  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
+  const native_call_handler = (method_name, doc_type, doc_name, doc_side, msg, ipv_code) => {
     window.callbackWeb[method_name]({
       type: 'doc',
       doc_type: doc_type,
       doc_name: doc_name,
       doc_side: doc_side,
+      message: msg,
+      ipv_code: ipv_code,
       // callbacks from native
       upload: function upload(file) {
         try {
@@ -58,6 +60,8 @@ const IpvVideo = (props) => {
             case "video/ogg":
             case "video/x-flv":
             case "video/x-ms-wmv":
+            case "video/x-m4v":
+            case "video/*":
             setFile(file)
             setTimeout(
               function () {
@@ -92,6 +96,8 @@ const IpvVideo = (props) => {
       'video/ogg',
       'video/x-flv',
       'video/x-ms-wmv',
+      'video/x-m4v',
+      'video/*'
     ]
     if (acceptedTypes.includes(uploadedFile.type)) {
       setFile(event.target.files[0])
@@ -104,7 +110,7 @@ const IpvVideo = (props) => {
     if(getConfig().html_camera)
       inputEl.current.click()
     else
-      native_call_handler(method_name, 'ipvvideo', 'ipvvideo.jpg', 'front')
+      native_call_handler(method_name, 'ipvvideo', '', '', 'Look at the screen and read the verification number loud', ipvcode)
   }
 
   const handleSubmit = async () => {
