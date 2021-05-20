@@ -15,6 +15,10 @@ const AccountLinked = (props) => {
     if (config.Web) {
       if (isIframe()) {
         // handle Iframe
+        let message = JSON.stringify({
+          type: "iframe_close"
+        });
+        nativeCallback({events: message})// to be checked
       } else {
         navigate("/logout");
       }
