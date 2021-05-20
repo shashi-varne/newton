@@ -10,6 +10,7 @@ import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import Button from '../../common/ui/Button';
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 
 const productName = getConfig().productName;
 const isWeb = getConfig().isWebOrSdk;
@@ -21,7 +22,8 @@ const SelfieV2 = (props) => {
   const [isLiveCamOpen, setIsLiveCamOpen] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const { kyc, isLoading } = useUserKycHook();
-
+  const navigate = navigateFunc.bind(props)
+  
   const handleChange = (event) => {
     event.preventDefault();
     const uploadedFile = event.target.files[0]
@@ -39,7 +41,6 @@ const SelfieV2 = (props) => {
   }
 
   const handleSubmit = async () => {
-    const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
       const result = await upload(file, 'identification')
@@ -53,14 +54,41 @@ const SelfieV2 = (props) => {
     }
   }
 
+  const locationCallbackSuccess = (data) => {
+    if (data.location_permission_denied) {
+      navigate('/kyc/upload/selfie-location');
+    } else {
+      // TODO: Call location country fetch API here
+      let country = '';
+      // if (country !== 'India') {
+      //   navigate('/kyc/upload/selfie-location/invalid-region');
+      // } else {
+        setIsLiveCamOpen(true);
+      // }
+    }
+  }
+
   const openLiveCamera = () => {
-    setIsLiveCamOpen(true);
+    window.callbackWeb.get_device_data({
+      type: 'location_nsp_received',
+      location_nsp_received: locationCallbackSuccess
+    });
   }
 
   const onFileUploadSuccess = (result) => {
     // TODO: send liveness score to API
+    setIsLiveCamOpen(false);
     setFile(result.imgBase64);
     setFileToShow(result.imgBase64);
+  }
+
+  const onFileUploadFailure = (error) => {
+    setIsLiveCamOpen(false);
+    toast(error.errorMsg || 'Something went wrong!');
+  }
+
+  const showSelfieSteps = () => {
+    navigate('/kyc/upload/selfie-steps');
   }
 
   return (
@@ -106,10 +134,15 @@ const SelfieV2 = (props) => {
             </div>
           </div>
           <div className="kyc-selfie-intructions">
-            How to take selfie?                    KNOW MORE
+            <span id="kyc-si-text">How to take selfie?</span>
+            <WVClickableTextElement onClick={showSelfieSteps}>
+              Know More
+            </WVClickableTextElement>
           </div>
           <WVLiveCamera
             open={isLiveCamOpen}
+            onClose={() => setIsLiveCamOpen(false)}
+            onFailure={onFileUploadFailure}
             onSuccess={onFileUploadSuccess}
           />
         </section>

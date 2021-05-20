@@ -53,6 +53,8 @@ import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
 import Native from "./Native/Native";
 import SelfieV2 from "./Upload/Selfie_v2";
+import LocationPermission from "./Upload/LocationPermission";
+import SelfieSteps from "./Upload/SelfieSteps";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -120,6 +122,16 @@ const Kyc = (props) => {
           exact 
           path={`${url}/upload/sign`} 
           component={Sign} 
+        />
+        <Route 
+          exact 
+          path={`${url}/upload/selfie-location/:type?`} 
+          component={LocationPermission}
+        />
+        <Route 
+          exact 
+          path={`${url}/upload/selfie-steps`} 
+          component={SelfieSteps}
         />
         <Route 
           exact 
