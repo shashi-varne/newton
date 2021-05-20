@@ -134,6 +134,7 @@ const CommunicationDetails = (props) => {
           toast("Minimum otp length is 4");
           return;
         }
+        setShowLoader("button");
         const otpResult = await verifyOtp({ otpId, otp: state.otp });
         if (!otpResult) return;
         toast("succussful");
@@ -190,7 +191,13 @@ const CommunicationDetails = (props) => {
       skelton={isLoading}
       disable={buttonLoader}
     >
-      <div className="kyc-communication-details">
+      <div
+        className={`kyc-communication-details ${
+          communicationType === "mobile" &&
+          !showOtpContainer &&
+          "kyc-communication-details-mobile"
+        }`}
+      >
         <div>
           <div className="kyc-main-subtitle">
             {communicationType === "email" ? "Email" : "Mobile"} verification is
@@ -278,7 +285,7 @@ const CommunicationDetails = (props) => {
             </div>
           )}
         </div>
-        {communicationType === "mobile" && (
+        {communicationType === "mobile" && !showOtpContainer && (
           <div className="kcd-whatsapp-consent">
             <CheckBox
               checked={formData.whatsappConsent}

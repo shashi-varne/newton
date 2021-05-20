@@ -424,7 +424,7 @@ $generic-subtitle-margin-top: -10px;
 }
 
 @media only screen and (max-width: 767px) {
-  .kyc-communication-details {
+  .kyc-communication-details-mobile{
     height: calc(100vh - 220px);
   }
 }
