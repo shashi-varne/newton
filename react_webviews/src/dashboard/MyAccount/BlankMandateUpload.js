@@ -6,6 +6,7 @@ import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import "./MyAccount.scss";
 import { getBase64, getConfig } from "../../utils/functions";
 import { upload } from "./MyAccountFunctions";
+import { nativeCallback } from "../../utils/native_callback";
 
 const BlankMandateUpload = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -79,8 +80,9 @@ const BlankMandateUpload = (props) => {
     });
   };
 
-  const handleChange = (event) => {
+  const handleChange = (source) => (event) => {
     event.preventDefault();
+    sendEvents('get_image', source)
     const uploadedFile = event.target.files[0];
     let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
 
@@ -103,6 +105,7 @@ const BlankMandateUpload = (props) => {
   };
 
   const handleClick = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button");
       const result = await upload(file);
@@ -118,8 +121,25 @@ const BlankMandateUpload = (props) => {
     }
   };
 
+  const sendEvents = (userAction, source) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction,
+        "screen_name": 'upload mandate',
+        "picture": source || "",
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="Upload Mandate"
       skelton={showLoader}
       buttonTitle={uploadImageError ? "RETRY UPLOAD" : "PROCEED"}
@@ -143,7 +163,7 @@ const BlankMandateUpload = (props) => {
                     ref={inputEl}
                     type="file"
                     className="blank-mandate-upload"
-                    onChange={handleChange}
+                    onChange={handleChange('camera')}
                     accept="image/*"
                     capture
                   />
@@ -162,7 +182,7 @@ const BlankMandateUpload = (props) => {
                     ref={inputEl}
                     type="file"
                     className="blank-mandate-upload"
-                    onChange={handleChange}
+                    onChange={handleChange('gallery')}
                   />
                   <button
                     onClick={() => handleUpload("open_gallery")}
@@ -186,7 +206,7 @@ const BlankMandateUpload = (props) => {
                 ref={inputEl}
                 type="file"
                 className="blank-mandate-upload"
-                onChange={handleChange}
+                onChange={handleChange('gallery')}
               />
               <button
                 onClick={() => handleUpload("open_gallery")}

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { getConfig } from "utils/functions";
+import {nativeCallback} from '../../utils/native_callback'
 import { initializeComponentFunctions } from "./MyAccountFunctions";
 import Container from "../common/Container";
 import Button from "material-ui/Button";
@@ -35,21 +36,27 @@ class MyAccount extends Component {
   handleClick = (route) => {
     switch (route) {
       case "change-kyc-address-details-1":
+        this.sendEvents('change address', 'my_accout')
         this.navigate("kyc/change-address-details1");
         break;
       case "add-bank":
+        this.sendEvents('add bank/mandate', 'my_accout')
         this.navigate("kyc/add-bank");
         break;
       case "capital-gain":
+        this.sendEvents('capital gain statement', 'my_accout')
         this.navigate("capital-gain");
         break;
       case "investment-proof":
+        this.sendEvents('elss statement', 'my_accout')
         this.navigate("investment-proof");
         break;
       case "blank-mandate-upload":
+        this.sendEvents('upload mandate', 'my_accout')
         this.navigate("blank-mandate/upload");
         break;
       case "nps-identity":
+        // this.sendEvents('upload mandate', 'my_accout') to be checked 
         this.navigate("nps/identity");
         break;
       default:
@@ -113,6 +120,7 @@ class MyAccount extends Component {
   };
 
   handleClick1 = (result) => {
+    this.sendEvents("ok", "export transaction history")
     if (result) {
       this.exportTransactions();
     } else {
@@ -121,10 +129,30 @@ class MyAccount extends Component {
   };
 
   handleClick2 = () => {
+    this.sendEvents("cancel", "export transaction history")
     this.setState({
       openDialog: false,
     });
   };
+
+  sendEvents = (userAction, screenName) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "account_options": (userAction === 'just_set_events' ? 'back' : userAction ) || "",
+        "screen_name": screenName || 'my_account',
+        }
+    };
+    if (screenName === "export transaction history") {
+      delete eventObj.properties.account_options;
+      eventObj.properties.user_action = userAction
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let {
@@ -141,6 +169,7 @@ class MyAccount extends Component {
     let bank = userKyc.bank || {};
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         noFooter={true}
         skelton={this.state.showLoader}
         title="My Account"

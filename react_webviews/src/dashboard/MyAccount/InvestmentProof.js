@@ -28,6 +28,7 @@ const InvestmentProof = (props) => {
 
   const investmentData = investmentDataMapper[type] || {};
   const emailMe = async (year) => {
+    sendEvents('next', year)
     setIsApiRunning(true);
     try {
       const result = await sendInvestmentProof({
@@ -65,8 +66,25 @@ const InvestmentProof = (props) => {
     </Dialog>
   );
 
+  const sendEvents = (userAction, year) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction,
+        "screen_name": 'elss statement',
+        "year": year || "",
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title={investmentData.title}
       skelton={isApiRunning}
       noFooter={true}
