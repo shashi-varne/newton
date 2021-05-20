@@ -29,14 +29,6 @@ const Pan = (props) => {
 
   const inputEl = useRef(null)
 
-  const handleImageLoad = (event) => {
-    const img = new Image()
-    if (fileToShow) {
-      img.src = fileToShow
-      setFile(img)
-    }
-  }
-
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
     window.callbackWeb[method_name]({
       type: 'doc',
@@ -182,7 +174,6 @@ const Pan = (props) => {
               <img
               src={require(`assets/${productName}/pan_card.svg`)}
               className="default"
-              onLoad={handleImageLoad}
               alt="Default PAN Card"
             />
             }

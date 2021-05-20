@@ -376,7 +376,9 @@ const NRIAddressUpload = (props) => {
               type="textonly"
               buttonTitle="KNOW MORE"
               classes={{ root: "know-more-button" }}
-              // onClick={() => navigate("path")} Todo: Add path
+              onClick={() => navigate("/kyc/upload-instructions", {
+                state: { document: "address" }
+              })}
             />
           </div>
           <FileAccessDialog 
