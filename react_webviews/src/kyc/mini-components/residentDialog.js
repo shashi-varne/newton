@@ -16,14 +16,14 @@ const ResidentDialog = ({ close, open, cancel, aadhaarKyc }) => {
       data-aid='kyc-bottom-dialog'
     >
       <DialogContent className="resident-dialog-content" data-aid='kyc-resident-dialog-content'>
-        <main>
+        <main data-aid='kyc-resident-dialog-main'>
           <h1 >Are you an Indian resident?</h1>
           <img
             src={require(`assets/${productName}/ic_indian_resident.svg`)}
             alt=""
           />
         </main>
-        <footer>
+        <footer data-aid='dialog-footer'>
           <Button
             data-aid='no-btn'
             variant="contained"

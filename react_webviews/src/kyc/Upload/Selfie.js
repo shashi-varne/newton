@@ -89,13 +89,18 @@ const Sign = (props) => {
     const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
-      const result = await upload(file, 'identification')
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      const response = await upload(file, 'identification')
+      if(response.status_code === 200) {
+        const result = response.result
+        storageService().setObject(storageConstants.KYC, result.kyc)
+        navigate('/kyc/upload/progress')
+      } else {
+        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")
+      }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
@@ -114,7 +119,7 @@ const Sign = (props) => {
       data-aid='kyc-upload-selfie-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
           <div className="sub-title" data-aid='kyc-sub-title'>Ears must be visible</div>
           {!isWeb && (
             <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>

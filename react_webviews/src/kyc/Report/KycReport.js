@@ -249,9 +249,9 @@ const Report = (props) => {
   const nomineeDetails = () => {
     return (
       <>
-        <div className="unzipped-title" data-aid='kyc-relationship'>{kyc.nomination.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-nominee-name'>{kyc.nomination.meta_data.name}</div>
         <div className="row-align">
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-relationship'>
             <div className="title">Relationship</div>
             <div className="subtitle">
               {kyc.nomination.meta_data.relationship}
@@ -329,7 +329,7 @@ const Report = (props) => {
             <img src={require(`assets/eta_icon.svg`)} alt="" />
             Approves in one working day
           </div>
-          <section>
+          <section data-aid='kyc-report-screen-page'>
             {isEmpty(cardDetails) && (
               <>
                 <SkeltonRect className="report-skelton" />
@@ -345,9 +345,9 @@ const Report = (props) => {
                     key={index}
                     className="tile-info"
                     onClick={() => handleTiles(index, item.key)}
-                    data-aid={`${cardDetails}-${index}`}
+                    data-aid={`kyc-${item.key}`}
                   >
-                    <div className="unzipped-title">
+                    <div className="unzipped-title" data-aid={`kyc-${item.key}-title`}>
                       <div>{item.title}</div>
                       <img
                         alt=""

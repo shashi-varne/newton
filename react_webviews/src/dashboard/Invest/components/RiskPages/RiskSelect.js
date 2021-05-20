@@ -1,5 +1,4 @@
 import './commonStyles.scss';
-import { CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
 import { getConfig } from '../../../../utils/functions';
 import Container from '../../../common/Container';
@@ -8,6 +7,7 @@ import useFunnelDataHook from '../../common/funnelDataHook';
 import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
+import toast from 'common/ui/Toast'
 
 const { productName } = getConfig();
 
@@ -32,15 +32,22 @@ const RiskSelect = ({
   // }, []);
 
   const updateRiskAndFetchRecommendations = async (skipRiskUpdate) => {
-    const { amount, investType: type, term } = funnelData;
+    const { userEnteredAmt, amount, investType: type, term } = funnelData;
     var params = {
-      amount,
+      amount: userEnteredAmt || amount,
       term,
       type,
       rp_enabled: true,
     };
 
     if (type === 'saveforgoal') {
+      /* Since in saveforgoal flow, the next screen is the monthly amount screen unlike
+      in other flows where next screen is recommendations screen, we remove amount
+      to prevent server from responding with recommendations list for this flow.
+      
+      Also, technically the property 'amount'/'userEnteredAmt' does not even exist 
+      in funnelData yet for 'saveforgoal' flow since the monthly amount is entered
+      only in the next screen*/
       delete params.amount;
     }
 
@@ -51,7 +58,7 @@ const RiskSelect = ({
     }
 
     try {
-      setLoader(true);
+      setLoader("button");
       const res = await get_recommended_funds(params);
 
       if (res.updated) {
@@ -65,6 +72,7 @@ const RiskSelect = ({
       setLoader(false);
     } catch (err) {
       console.log(err);
+      toast(err);
     }
   }
 
@@ -86,7 +94,7 @@ const RiskSelect = ({
         fromExternalSrc: true,
         internalRedirect: true,
         flow: funnelData.flow,
-        amount: funnelData.amount,
+        amount: funnelData.userEnteredAmt || funnelData.amount,
         type: funnelData.investType,
         subType: funnelData.subtype, // only applicable for 'saveforgoal'
         year: funnelData.year, // only applicable for 'saveforgoal'
@@ -95,19 +103,32 @@ const RiskSelect = ({
     }, true);
   };
 
+  const showInfo = () => {
+    navigate('risk-info');
+  }
+
   return (
     <Container
       data-aid='please-select-your-risk-profile-screen'
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
+      buttonTitle="SHOW MY FUNDS"
       helpContact
-      disable={loader}
-      title='Please select your Risk Profile'
+      showLoader={loader}
+      hidePageTitle
       handleClick={goNext}
       classOverRideContainer='pr-container'
-    >
-      <div style={{ marginTop: '10px' }} data-aid='pick-risk-profile'>
+    > 
+      <div className="risk-select-header"  data-aid='pick-risk-profile'>
+        <span>Please select your risk profile</span>
+        <div className="risk-sh-info" onClick={showInfo}>
+          Info
+        </div>
+      </div>
+      {canSkip &&
+        <div className="risk-select-skip" data-aid='risk-select-skip' onClick={() => goNext(true)}>Skip for now</div>
+      }
+      <div style={{ marginTop: '30px' }}>
         <FSelect
           preselectFirst
           options={riskProfiles}
@@ -132,10 +153,10 @@ export default RiskSelect;
 
 const RiskOption = ({ data }) => {
   return [
-    <div className="risk-opt-title">
+    <div className="risk-opt-title" data-aid='risk-opt-title'>
       {data.name}
     </div>,
-    <div className="risk-opt-desc">
+    <div className="risk-opt-desc" data-aid='risk-opt-descy'>
       {data.desc}
     </div>
   ];

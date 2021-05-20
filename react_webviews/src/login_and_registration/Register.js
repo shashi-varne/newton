@@ -221,7 +221,7 @@ class Register extends Component {
                   )}
                 </div>
               )}
-              <div className="referral-code" data-aid='checkbox'>
+              <div className="referral-code" data-aid='referral-code-checkbox'>
                 <Checkbox
                   checked={referralCheck}
                   color="default"

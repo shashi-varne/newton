@@ -37,7 +37,7 @@ const Alert = ({ message = '', variant, title, renderMessage = null, dataAid }) 
         src={require(`assets/${alertVariants[variant].icon}`)}
         alt={variant}
       />
-      <div className="text" data-aid='kyc-title'>
+      <div className="text" data-aid='kyc-alertbox-title'>
         <div className="title">{title}</div>
         <div>{renderMessage ? renderMessage() : message}</div>
       </div>

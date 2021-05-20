@@ -211,7 +211,7 @@ const KycUploadDocuments = (props) => {
       title="Upload documents"
       data-aid='kyc-upload-documents-page'
     >
-      <section id="kyc-bank-kyc-upload-docs">
+      <section id="kyc-bank-kyc-upload-docs" data-aid='kyc-bank-kyc-upload-docs'>
         <div className="banner" data-aid='kyc-banner'>
           <div className="left">
             <img src={bankData?.ifsc_image} alt="bank" className="icon" />
@@ -221,16 +221,16 @@ const KycUploadDocuments = (props) => {
             </div>
           </div>
 
-          <div className="edit" onClick={handleEdit}>
+          <div className="edit" data-aid='kyc-edit' onClick={handleEdit}>
             edit
           </div>
         </div>
         <main data-aid='kyc-upload-documents'>
-          <div className="doc-title">Select the document for verification</div>
-          <div className="subtitle">
+          <div className="doc-title" data-aid='kyc-doc-title'>Select the document for verification</div>
+          <div className="subtitle" data-aid='kyc-subtitle'>
             Ensure your name is clearly visible in the document
           </div>
-          <div className="kyc-upload-doc-options">
+          <div className="kyc-upload-doc-options" data-aid='kyc-upload-doc-options'>
             {verificationDocOptions.map((data, index) => {
               const selectedType = data.value === selectedDocValue;
               const disableField =
@@ -245,6 +245,7 @@ const KycUploadDocuments = (props) => {
                     if (!disableField) handleDocType(index);
                   }}
                   id={`name_${index}`}
+                  data-aid={`name_${index}`}
                 >
                   {data.name}
                   {selectedType && (

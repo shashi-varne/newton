@@ -73,7 +73,7 @@ const RenderOption = (props) => {
         key={idx}
         onClick={() => onClick?.(idx)}
       >
-        <div className="fselect-item-content">
+        <div className="fselect-item-content" data-aid='fselect-item-content'>
           {
             renderItem(opt)
           }

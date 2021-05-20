@@ -40,7 +40,7 @@ const Failed = (props) => {
   const productName = getConfig().productName;
   return (
     <Container title="Aadhaar KYC Failed!" noFooter skelton={isLoading} data-aid='kyc-aadhaar-kyc-failed'>
-      <section id="digilocker-failed">
+      <section id="digilocker-failed" data-aid='kyc-digilocker-failed'>
         <img
           className="digi-image"
           alt=""
@@ -63,6 +63,7 @@ const Failed = (props) => {
               className="raised"
               onClick={retry}
               id='RETRY'
+              data-aid='re-try-btn'
             >
               RETRY
             </Button>
@@ -72,6 +73,7 @@ const Failed = (props) => {
               color="secondary"
               className="outlined"
               onClick={manual}
+              data-aid='kyc-cont-manual-btn'
             >
               {!isApiRunning && 'CONTINUE WITH MANUAL KYC'}
               {isApiRunning && 

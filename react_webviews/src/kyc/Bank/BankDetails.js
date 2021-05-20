@@ -75,16 +75,16 @@ const BankDetails = (props) => {
       handleClick={handleClick}
       noFooter={bank.bank_status !== "rejected"}
       title="Bank accounts"
-      data-aid='kyc-bank-details-page'
+      data-aid='kyc-bank-details-screen'
     >
-      <div className="bank-details">
+      <div className="bank-details" data-aid='kyc-bank-details-page'>
         {!showLoader && (
           <>
             <div className="bank-info" data-aid='kyc-bank-info'>
               <img src={bank.bank_image} className="left-icon" alt="" />
               <div className="content">
                 <div className="bank-name">
-                  <div className="name">
+                  <div className="name" data-aid='bank-name'>
                     {bank.bank_name}
                     {bank.bank_status === "rejected" && (
                       <img

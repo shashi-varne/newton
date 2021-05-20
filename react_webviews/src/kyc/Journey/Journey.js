@@ -104,12 +104,12 @@ const Journey = (props) => {
         ) {
           for (j = 0; j < journeyData[i].inputsForStatus.length; j++) {
             let data = journeyData[i].inputsForStatus[j]
-            if (data !== 'bank' && kyc[data].doc_status === 'init') {
+            if (data !== 'bank' && (kyc[data].doc_status === 'init' || kyc[data].doc_status === 'rejected')) {
               status = 'init'
               break
             }
 
-            if (data === 'bank' && kyc[data].meta_data_status === 'init') {
+            if (data === 'bank' && (kyc[data].meta_data_status === 'init' || kyc[data].meta_data_status === 'rejected')) {
               status = 'init'
               break
             }
@@ -616,7 +616,7 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
-      data-aid='kyc-journey-page'
+      data-aid='kyc-journey-screen'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
         <div className="kyc-journey" data-aid='kyc-journey-data'>
@@ -710,6 +710,7 @@ const Journey = (props) => {
             user.active_investment &&
             user.kyc_registration_v2 !== 'submitted' && (
               <Alert
+                dataAid='kyc-registration-v2'
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."
                 title={`Hey ${user.name}`}
@@ -718,6 +719,7 @@ const Journey = (props) => {
           <main  data-aid='kyc-journey' className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
+                data-aid={`kyc-${item.key}`}
                 className={
                   item.status === 'completed' ? 'step step__completed' : 'step'
                 }
@@ -754,6 +756,7 @@ const Journey = (props) => {
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
+                      data-aid='kyc-edit'
                       className="edit"
                       onClick={() =>
                         handleEdit(item.key, idx, item.isEditAllowed)

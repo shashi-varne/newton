@@ -9,14 +9,14 @@ const SampleDocument = () => {
   ]
   return (
     <Container noFooter title="Sample bank documents" data-aid='sample-bank-documents-screen'>
-      <section id="kyc-bank-sample-docs">
+      <section id="kyc-bank-sample-docs" data-aid='kyc-bank-sample-docs'>
         <div className="description" data-aid='kyc-description'>
           Please ensure that the documents you are uploading must have your
           name, account number and IFSC code
         </div>
         <main data-aid='kyc-sample-bank-doc'>
           {documents.map(({ name, doc }) => (
-            <div className="doc" key={doc}>
+            <div className="doc" data-aid='kyc-doc' key={doc}>
               <div className="doc-name" data-aid='kyc-doc-name'>{name}</div>
               <fieldset>
                 <legend data-aid='kyc-name'>{name}</legend>

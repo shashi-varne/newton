@@ -172,19 +172,25 @@ const NRIAddressUpload = (props) => {
   const handleSubmit = async () => {
     try {
       setIsApiRunning("button")
-      let result
+      let result, response
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'nri_address', {
+        response = await upload(frontDoc, 'nri_address', {
           address_proof_key: addressProofKey,
         })
       } else {
-        result = await upload(file, 'nri_address', {
+        response = await upload(file, 'nri_address', {
           addressProofKey,
         })
       }
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      if(response.status_code === 200) {
+        result = response.result;
+        storageService().setObject(storageConstants.KYC, result.kyc)
+        navigate('/kyc/upload/progress')
+      } else {
+        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
+      }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
       console.log('uploaded')
@@ -256,16 +262,17 @@ const NRIAddressUpload = (props) => {
       data-aid='kyc-upload-foreign-address-proof-screen'
     >
       {!isEmpty(kyc) && (
-        <section>
-          <div className="sub-title" data-aid='kyc-edit'>
+        <section data-aid='kyc-upload-foreign-address-proof-page' id="kyc-upload-address">
+          <div className="sub-title" data-aid='kyc-sub-title'>
             {getFullAddress()}
             {getFullAddress() && (
-              <div className="edit" onClick={editAddress}>
+              <div className="edit"  data-aid='kyc-edit' onClick={editAddress}>
                 EDIT
               </div>
             )}
           </div>
           <Alert
+            dataAid='kyc-nriaddress-alertbox'
             variant="attention"
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
@@ -515,7 +522,7 @@ const NRIAddressUpload = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action" data-aid='kyc-open-gallery'>Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>

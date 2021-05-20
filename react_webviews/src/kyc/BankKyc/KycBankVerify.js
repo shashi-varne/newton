@@ -194,7 +194,7 @@ const KycBankVerify = (props) => {
         )}
         {!isEmpty(bankData) && (
           <>
-            <div className="item" data-aid='kyc-bankdata'>
+            <div className="item" data-aid='kyc-bank-data'>
               <div className="flex">
                 <div className="left">
                   <img
@@ -208,7 +208,7 @@ const KycBankVerify = (props) => {
                   <div className="text">{bankData.branch_name} </div>
                 </div>
               </div>
-              <div className="edit" onClick={edit()}>
+              <div className="edit" data-aid='kyc-edit' onClick={edit()}>
                 EDIT
               </div>
             </div>

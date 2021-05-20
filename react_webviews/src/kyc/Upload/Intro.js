@@ -21,7 +21,7 @@ const Intro = (props) => {
       title='Upload documents'
       data-aid='kyc-intro-screen'
     >
-      <section id="kyc-upload-intro">
+      <section id="kyc-upload-intro" data-aid='kyc-upload-intro'>
         <div className="banner" data-aid='kyc-banner'>
           <img src={require(`assets/${productName}/upload_doc_banner.svg`)} alt="" />
         </div>

@@ -87,9 +87,7 @@ const NRIAddressDetails2 = (props) => {
   };
 
   const handleNavigation = () => {
-    if (stateParams?.toState) {
-      navigate(stateParams?.toState, { userType: stateParams?.userType });
-    } else if (stateParams?.backToJourney) {
+    if (stateParams?.backToJourney) {
       navigate("/kyc/upload/address");
     } else if (stateParams?.userType === "compliant") {
       navigate("/kyc/compliant-personal-details4");
@@ -147,7 +145,7 @@ const NRIAddressDetails2 = (props) => {
       total={4}
       data-aid='kyc-nri-address-details-screen-2'
     >
-      <section id="kyc-address-details-2">
+      <section data-aid="kyc-address-details-2">
         <div className="sub-title" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
         <form className="form-container" data-aid='kyc-form-container'>
           <TextField

@@ -171,13 +171,13 @@ const PersonalDetails1 = (props) => {
       headerData={{goBack}}
       data-aid='kyc-personal-details-screen-1'
     >
-      <div className="kyc-personal-details">
-        <div className="kyc-main-subtitle" data-aid='kyc-share-dob'>
-          <div>
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
+        <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>
+          <div data-aid='kyc-share-pan-dob'>
             <div>Share your date of birth as per PAN:</div>
             <div className="pan">{form_data.pan}</div>
           </div>
-          <div className="help" onClick={() => setIsOpen(true)}>
+          <div className="help" data-aid='kyc-help' onClick={() => setIsOpen(true)}>
             HELP
           </div>
         </div>

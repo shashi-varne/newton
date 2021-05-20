@@ -28,7 +28,7 @@ const Verify = (props) => {
       data-aid='kyc-compliant-verify-screen'
     >
       <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete'>
-        <header>
+        <header data-aid='kyc-compliant-verify-header'>
           <img
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""
