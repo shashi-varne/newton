@@ -55,7 +55,7 @@ const FundList = (props) => {
 
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [showLoader, setShowLoader] = useState(false)
-  const [initialCartCount, setInitialCartCount] = useState(cart.length)
+  const [initialCartCount] = useState(cart.length)
   const productType = getConfig().productName
   const handleChange = (_, value) => {
     setValue(value)
