@@ -197,9 +197,9 @@ const IpvVideo = (props) => {
               </div>}
             </div>
           </div>
-          <div className="flex-between-center">
-            <div className="know_more">How to make a selfie video ?</div>
-            <div className="link" onClick={() => open()}>
+          <div className="doc-upload-note-row">
+            <div className="upload-note">How to make a selfie video ?</div>
+            <div className="know-more-button" onClick={() => open()}>
               KNOW MORE
             </div>
           </div>

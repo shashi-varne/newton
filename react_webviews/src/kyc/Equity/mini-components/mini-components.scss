@@ -95,25 +95,3 @@ $subtitle-color: #767E86;
     color: #767e86;
   }
 }
-
-.kyc-file-access-dialog-content {
-  color: var(--steelgrey);
-
-  .kfadc-header {
-    font-size: 18px;
-  }
-
-  .kfadc-main {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px 20px 90px 20px;
-
-    .kfadc-info {
-      text-align: center;
-      img {
-        width: 70px;
-        padding: 20px 10px;
-      }
-    }
-  }
-}

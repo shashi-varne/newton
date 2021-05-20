@@ -127,37 +127,43 @@
     text-align: left;
   }
 
-  .flex-between-center {
+  .doc-upload-note-row {
+    @include d-flex-space-between();
+    align-items: center;
     margin-top: 40px;
 
-    .know_more {
-      font-size: 14px;
-      color: #160d2e;
+    .upload-note {
+      font-size: 13px;
+      line-height: 21px;
+      color: var(--dark);
+      text-align: left;
     }
 
-    .link {
+    .know-more-button {
       color: var(--secondary);
       font-size: 12px;
+      line-height: 14px;
       font-weight: bold;
+      justify-content: flex-end !important;
       margin: 5px 0 0;
       cursor: pointer;
     }
   }
 
-  .doc-upload-note-row {
-    margin-top: 40px;
-    @include d-flex-space-between();
-    column-gap: 20px;
+  // .doc-upload-note-row {
+  //   margin-top: 40px;
+  //   @include d-flex-space-between();
+  //   column-gap: 20px;
 
-    .upload-note {
-      max-width: 70%;
-      text-align: left;
-    }
+  //   .upload-note {
+  //     max-width: 70%;
+  //     text-align: left;
+  //   }
 
-    .know-more-button {
-      justify-content: flex-end !important;
-    }
-  }
+  //   .know-more-button {
+  //     justify-content: flex-end !important;
+  //   }
+  // }
 }
 
 #kyc-upload-address {
