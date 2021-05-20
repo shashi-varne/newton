@@ -71,7 +71,7 @@ const Balance = (props) => {
   }
   const handleProceed = () => {
     if (amount) {
-      if (type === 'systematic') {
+      if (type === '/withdraw/systematic') {
         navigate("/withdraw/systematic", {state: {amount} })
       } else {
         // eslint-disable-next-line radix
