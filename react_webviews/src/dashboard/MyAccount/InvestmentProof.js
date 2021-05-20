@@ -56,9 +56,9 @@ const InvestmentProof = (props) => {
       onClose={handleClose}
       className="investment-proof-dialog"
     >
-      <DialogContent className="content">{dialogMessage}</DialogContent>
-      <DialogActions className="action">
-        <Button className="button" onClick={handleClose} autoFocus>
+      <DialogContent className="content" data-aid='content'>{dialogMessage}</DialogContent>
+      <DialogActions className="action" data-aid='action'>
+        <Button className="button" data-aid='ok-btn' onClick={handleClose} autoFocus>
           OK
         </Button>
       </DialogActions>
@@ -67,17 +67,18 @@ const InvestmentProof = (props) => {
 
   return (
     <Container
+      data-aid='investment-proof-screen'
       title={investmentData.title}
       skelton={isApiRunning}
       noFooter={true}
     >
       {investmentData.investedYears.map((year, index) => {
         return (
-          <div className="investment-proof" key={index}>
+          <div className="investment-proof" key={index} data-aid='investment-proof'>
             <div>
               {year} - {year + 1}
             </div>
-            <Button className="button" onClick={() => emailMe(year)}>
+            <Button className="button" onClick={() => emailMe(year)} data-aid='email-btn'>
               EMAIL ME
             </Button>
           </div>

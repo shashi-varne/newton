@@ -10,11 +10,11 @@ import { isEmpty } from "lodash";
 
 const FailureDialog = ({ isOpen, handleClick, errorMessage }) => {
   return (
-    <Dialog open={isOpen} keepMounted className="invest-common-dialog">
-      <DialogContent className="dialog-content">
-        <div className="error-message">{errorMessage}</div>
+    <Dialog open={isOpen} keepMounted className="invest-common-dialog" data-aid='invest-common-dialog'>
+      <DialogContent className="dialog-content" data-aid='dialog-content'>
+        <div className="error-message" data-aid='error-message'>{errorMessage}</div>
       </DialogContent>
-      <DialogActions className="action">
+      <DialogActions className="action" data-aid='action'>
         <Button
           onClick={handleClick}
           classes={{ button: "invest-dialog-button" }}
@@ -94,7 +94,7 @@ const PageCallback = (props) => {
   };
 
   return (
-    <Container noFooter skelton={skelton} headerData={{ goBack }}>
+    <Container noFooter skelton={skelton} headerData={{ goBack }} data-aid='page-call-back-screen'>
       <FailureDialog
         isOpen={openDialog}
         handleClick={() => navigate("/invest", null, true)}

@@ -73,7 +73,7 @@ class MyAccount extends Component {
         aria-labelledby="responsive-dialog-title"
         className="my-account-dialog"
       >
-        <DialogContent className="content">
+        <DialogContent className="content" data-aid='dialog-content'>
           <DialogContentText className="subtitle">
             {this.state.subtitle}
           </DialogContentText>
@@ -85,6 +85,7 @@ class MyAccount extends Component {
               onClick={() => this.handleClick2()}
               color="secondary"
               autoFocus
+              data-aid='cancel-btn'
             >
               {this.state.buttonTitle2}
             </Button>
@@ -94,6 +95,7 @@ class MyAccount extends Component {
             onClick={() => this.handleClick1(this.state.twoButton)}
             color="secondary"
             autoFocus
+            data-aid='confirm-btn'
           >
             {this.state.buttonTitle1}
           </Button>
@@ -149,9 +151,10 @@ class MyAccount extends Component {
         <div className="my-account" data-aid='my-account'>
           <div className="my-account-content">
             <div className="account">
-              <div className="account-head-title">Account options</div>
+              <div className="account-head-title" data-aid='account-head-title'>Account options</div>
               {isReadyToInvestBase && (
                 <div
+                  data-aid='change-address'
                   className="account-options"
                   onClick={() =>
                     this.handleClick("change-kyc-address-details-1")
@@ -163,6 +166,7 @@ class MyAccount extends Component {
               )}
               {(isReadyToInvestBase || bank.doc_status === "rejected") && (
                 <div
+                  data-aid='add-bank-mandate'
                   className="account-options"
                   onClick={() => this.handleClick("add-bank")}
                 >
@@ -174,6 +178,7 @@ class MyAccount extends Component {
                 currentUser.active_investment &&
                 Capitalgain && (
                   <div
+                    data-aid='capital-gain-statement'
                     className="account-options"
                     onClick={() => this.handleClick("capital-gain")}
                   >
@@ -188,6 +193,7 @@ class MyAccount extends Component {
                 currentUser.active_investment &&
                 investment80C && (
                   <div
+                    data-aid='investment-proof'
                     className="account-options"
                     onClick={() => this.handleClick("investment-proof")}
                   >
@@ -197,6 +203,7 @@ class MyAccount extends Component {
                 )}
               {isReadyToInvestBase && currentUser.active_investment && (
                 <div
+                  data-aid='export-transaction-history'
                   className="account-options"
                   onClick={() => this.confirmTransactions()}
                 >
@@ -208,6 +215,7 @@ class MyAccount extends Component {
                 </div>
               )}
               <div
+                data-aid='upload-mandate'
                 className="account-options"
                 onClick={() => this.handleClick("blank-mandate-upload")}
               >
@@ -222,10 +230,11 @@ class MyAccount extends Component {
               pendingMandate.show_status ||
               mandateRequired ||
               npsUpload) && (
-              <div className="account">
-                <div className="account-head-title">Pending</div>
+              <div className="account" data-aid='account'>
+                <div className="account-head-title" data-aid='account-head-title'>Pending</div>
                 {pendingMandate.show_status && (
                   <div
+                    data-aid='pending-mandate'
                     className="account-options"
                     onClick={() => this.handleClick(pendingMandate.state)}
                   >
@@ -235,6 +244,7 @@ class MyAccount extends Component {
                 )}
                 {mandateRequired && (
                   <div
+                    data-aid='mandate-required'
                     className="account-options"
                     onClick={() => this.authenticate()}
                   >
@@ -246,6 +256,7 @@ class MyAccount extends Component {
                 )}
                 {npsUpload && (
                   <div
+                    data-aid='nps-upload'
                     className="account-options"
                     onClick={() => this.handleClick("nps-identity")}
                   >

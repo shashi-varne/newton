@@ -26,8 +26,8 @@ const AccountLinked = (props) => {
   const hideImage =
     isIframe() && code === "moneycontrol" && config.isMobileDevice;
   return (
-    <Container buttonTitle="CLOSE" hidePageTitle handleClick={handleClick}>
-      <div className="account-merge-linked">
+    <Container buttonTitle="CLOSE" hidePageTitle handleClick={handleClick} data-aid='account-linked-screen'>
+      <div className="account-merge-linked" data-aid='account-merge-linked'>
         {!hideImage && (
           <div className="outline">
             <Imgc
@@ -37,8 +37,8 @@ const AccountLinked = (props) => {
             />
           </div>
         )}
-        <h3>Accounts Linked</h3>
-        <p>
+        <h3 data-aid='account-linked'>Accounts Linked</h3>
+        <p data-aid='message'>
           Congratulations! Account linked. Please Close this page, and open
           ‘Mutual Fund’ again.
         </p>

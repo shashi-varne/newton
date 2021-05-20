@@ -21,19 +21,20 @@ const AccountMerge = (props) => {
 
   return (
     <Container
+      data-aid='account-merge-screen'
       buttonTitle="SEND OTP"
       title="Link Account"
       handleClick={handleClick}
     >
-      <div className="account-merge">
+      <div className="account-merge" data-aid='account-merge'>
         <p>We need to verify your account credentials to link account.</p>
-        <div className="auth-info">
+        <div className="auth-info" data-aid='auth-info'>
           {auth_id.type === "mobile" ? (
             <img src={require(`assets/${productName}/ic_mobile.svg`)} alt="" />
           ) : (
             <img src={require(`assets/${productName}/ic_email.svg`)} alt="" />
           )}
-          <div>
+          <div data-aid='auth-id'>
             <div>
               OTP will be sent to{" "}
               {auth_id.type === "mobile" ? "Mobile Number" : "Email ID"}
