@@ -162,7 +162,7 @@ class DigiStatus extends Component {
       <Container
         showLoader={show_loader}
         title={
-          status === "success" ? "eSign KYC completed" : "eSign KYC failed"
+          status === "success" ? "eSign KYC completed" : "Complete eSign"
         }
         handleClick={status === "success" ? this.handleClick : this.retry}
         buttonTitle={
@@ -174,6 +174,7 @@ class DigiStatus extends Component {
         }
         headerData={headerData}
         skelton={skelton}
+        hidePageTitle={status === "success" ? true : false}
       >
         {/* <div className="nsdl-status">
           <img

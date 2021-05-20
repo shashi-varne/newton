@@ -20,8 +20,11 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         {dl_flow && !show_note && (
           <div className="title">Kudos, KYC is completed!</div>
         )}
-        {(!dl_flow || show_note) && (
+        {!dl_flow && kyc?.kyc_status === "compliant" && (
           <div className="title">Great! Your KYC application is submitted!</div>
+        )}
+        {(!dl_flow || show_note) && (
+          <div className="title">Kudos! KYC application is submitted!</div>
         )}
         {!dl_flow && (
           <div className="text">
@@ -37,12 +40,6 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         <div className="subtitle" onClick={() => navigateToReports()}>
           View your KYC application details {" >"}
         </div>
-        {dl_flow && !show_note && (
-          <div className="message">
-            Click on <span>Continue Investing</span> & choose from 5000+ mutual
-            funds to invest in.
-          </div>
-        )}
       </header>
       {show_note && (
         <div className="alert-status-info">
