@@ -34,7 +34,7 @@ import Dialog, {
 import { Imgc } from '../Imgc';
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
-import WVButtonLayout from '../ButtonLayout';
+import WVButtonLayout from '../ButtonLayout/WVButtonLayout';
 
 const WVBottomSheet = ({
   isOpen,
