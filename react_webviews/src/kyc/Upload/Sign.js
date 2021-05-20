@@ -136,13 +136,10 @@ const Sign = (props) => {
           {/* <div className="sub-title">
             Signature should match with your PAN’s signature
           </div> */}
-          <WVInfoBubble
-              isDismissable
-              isOpen={true}
-              type="info"
-            >
-              Signature should be as per your PAN. Invalid signature can lead to investment rejection
-            </WVInfoBubble>
+          <WVInfoBubble type="info">
+            Signature should be as per your PAN. Invalid signature can lead to
+            investment rejection
+          </WVInfoBubble>
           {!isWeb && (
             <div
               className="kyc-doc-upload-container"

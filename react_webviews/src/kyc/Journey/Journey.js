@@ -606,8 +606,6 @@ const Journey = (props) => {
     ) {
       kycJourneyData[1].disc = (
         <WVInfoBubble
-          isDismissable
-          isOpen
           hasTitle
           customTitle="Please ensure your mobile is linked with Aadhaar"
           type="info"

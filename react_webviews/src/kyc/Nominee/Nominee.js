@@ -114,8 +114,6 @@ const Nominee = (props) => {
     >
       <div className="kyc-nominee">
         <WVInfoBubble
-          isDismissable
-          isOpen={true}
           type="info"
           customTitle="Nominee details will be applicable for mutual fund investments only"
           hasTitle
