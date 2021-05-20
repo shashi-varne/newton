@@ -159,8 +159,13 @@ export const upload = async (file, type, data = {}) => {
       case 'pan':
         formData.append('kyc_flow', data.kyc_flow)
         break
-       default:
-         break
+      case 'identification':
+        formData.append('kyc_product_type', data.kyc_product_type);
+        formData.append('location_coordinates', `${data.lat},${data.lng}`);
+        formData.append('live_score', data.live_score);
+        break;
+      default:
+        break
     }
   }
   const url = isEmpty(addressProofKey) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${addressProofKey}`

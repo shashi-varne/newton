@@ -395,3 +395,20 @@ export function isReadyToInvest() {
 
   return false;
 }
+
+export const getGeoLocation = async (params) => {
+  try {
+    const response = Api.get('https://maps.googleapis.com/maps/api/geocode/json?', {
+      result_type: 'country',
+      latlng: `${params.lat},${params.lng}`,
+      key: "AIzaSyBLGzIhQOVKdx7bp_ye_BJqlwsnqnTrzlg"
+    });
+    if (response.status === 'OK') {
+      return response.results;
+    } else {
+      throw (response.status);
+    }
+  } catch (err) {
+    throw (err);
+  }
+}

@@ -36,10 +36,6 @@ const WVLiveCamera = ({
   const openHVCamera = async () => {
     const hvFaceConfig = new window.HVFaceConfig();
     hvFaceConfig.setShouldShowInstructionPage(true);
-    hvFaceConfig.setLivenessAPIHeaders({
-      "appId": "fd4b70",
-      "appKey": "11fa986a43b5328ca2d3",
-    });
     hvFaceConfig.setLivenessAPIParameters({
       rejectFaceMask: 'yes',
       allowEyesClosed: 'no',

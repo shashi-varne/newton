@@ -1,7 +1,14 @@
+import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import Button from '@material-ui/core/Button';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getConfig } from '../../utils/functions';
 import Container from '../common/Container';
+import { getGeoLocation } from '../services';
+import Close from '@material-ui/icons/Close';
+import { navigate as navigateFunc } from '../common/functions';
+import { isFunction } from 'lodash';
 
 const { productName } = getConfig();
 const locationIcon = (
@@ -38,30 +45,54 @@ const PAGE_TYPE_CONTENT_MAP = {
   }
 };
 
-const LocationPermission = (props) => {
-  const type = props.match?.params?.type || '';
+const LocationPermission = ({
+  isOpen,
+  type,
+  onLocationFetchSuccess,
+  onLocationFetchFailure,
+  parentProps
+}) => {
   const [pageType, setPageType] = useState(type || 'no-permission');
   const [pageContent, setPageContent] = useState({});
-  const [country, setCountry] = useState('Uganda');
+  const [isApiRunning, setIsApiRunning] = useState(false);
+  const navigate = navigateFunc.bind(parentProps);
+
+  useEffect(() => {
+    if (isOpen) {
+      requestLocnPermission();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     setPageContent(PAGE_TYPE_CONTENT_MAP[pageType]);
   }, [pageType]);
 
-  const locationCallbackSuccess = (data) => {
+  const locationCallbackSuccess = async (data) => {
     if (data.location_permission_denied) {
       setPageType("permission-denied");
     } else {
-      // TODO: Call location country fetch API here
-      if (country !== 'India') {
-        setPageType("invalid-region")
-      } else {
-
+      try {
+        // const results = await getGeoLocation(data.location);
+        // const country = results[0]?.formatted_address;
+        
+        // if (country !== 'India') {
+        //   setPageType("invalid-region");
+        // } else {
+          onLocationFetchSuccess(data.location);
+        // }
+      } catch (err) {
+        console.log(err);
+        toast('Something went wrong! Please try again');
+        if (isFunction(onLocationFetchFailure)) {
+          onLocationFetchFailure();
+        }
       }
+      setIsApiRunning(false);
     }
   }
 
   const requestLocnPermission = () => {
+    setIsApiRunning(true);
     window.callbackWeb.get_device_data({
       type: 'location_nsp_received',
       location_nsp_received: locationCallbackSuccess
@@ -70,8 +101,7 @@ const LocationPermission = (props) => {
 
   const onCTAClick = () => {
     if (pageType === 'invalid-region') {
-      // TODO: Take user to journey screen
-      props.history.goBack();
+      navigate('/kyc/journey');
     } else {
       requestLocnPermission();
     }
@@ -79,15 +109,68 @@ const LocationPermission = (props) => {
 
   const goBack = () => {
     if (pageType === 'invalid-region') {
-      // TODO: Take user to journey screen
-      props.history.goBack();
+      navigate('/kyc/journey');
     } else {
-      props.history.goBack();
+      parentProps.history.goBack();
     }
   }
 
+  if (!isOpen) {
+    return '';
+  }
+
   return (
-    <Container
+    <Dialog
+      fullScreen={true}
+      open={isOpen}
+      onClose={goBack}
+      className="kyc-selfie-location-dialog"
+      aria-labelledby="responsive-dialog-title"
+    >
+      <DialogContent>
+        <Close />
+        {isApiRunning ?
+          LoadingContent :
+          <div className="kyc-loc-permission">
+            <div className="kyc-loc-perm-illustration">
+              {pageContent?.imgElem}
+            </div>
+            <div className="kyc-loc-perm-title">
+              {pageContent?.title}
+            </div>
+            <div className="kyc-loc-perm-subtitle">
+              {pageContent?.subtitle}
+            </div>
+            {pageType === 'permission-denied' &&
+              <WVInfoBubble type="error">
+                Location is required to continue the KYC
+            </WVInfoBubble>
+            }
+          </div>
+        }
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={onCTAClick}
+          variant="outlined"
+          color="secondary"
+          autoFocus
+          fullWidth
+        >
+          {pageType === 'invalid-region' ? "Okay" : "Allow"}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+export default LocationPermission;
+
+const LoadingContent = (
+  <div>Verifying Location</div>
+);
+
+/* <Container
       disableBack
       buttonTitle={pageType === 'invalid-region' ? "Okay" : "Allow"}
       handleClick={onCTAClick}
@@ -107,8 +190,4 @@ const LocationPermission = (props) => {
           </WVInfoBubble>
         }
       </div>
-    </Container>
-  );
-}
-
-export default LocationPermission;
+    </Container> */
