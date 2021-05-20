@@ -60,11 +60,7 @@ const PageCallback = (props) => {
               error_message: data || "",
             },
     };
-    if (userAction === "just_set_events") {
-      return eventObj;
-    } else {
       nativeCallback({ events: eventObj });
-    }
   };
 
   const initialize = async () => {
