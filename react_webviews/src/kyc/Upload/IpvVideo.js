@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import VideoRecorder from 'react-video-recorder'
 import Container from '../common/Container'
 import Button from '../../common/ui/Button'

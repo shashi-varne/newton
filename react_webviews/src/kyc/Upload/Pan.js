@@ -13,7 +13,7 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
 const config = getConfig();
-const isWeb = config.Web
+const isWeb = !config.Web
 const productName = config.productName;
 
 const Pan = (props) => {
