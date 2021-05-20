@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import VideoRecorder from 'react-video-recorder'
 import Container from '../common/Container'
 import Button from '../../common/ui/Button'
 import { storageService, isEmpty } from '../../utils/validators'
@@ -18,6 +19,7 @@ const IpvVideo = (props) => {
   const [ipvcode, setIpvCode] = useState('')
   const {kyc, isLoading} = useUserKycHook();
   const [showKnowMoreDialog, setKnowMoreDialog] = useState(false)
+  const [showVideoRecoreder, setShowVideoRecorder] = useState(false)
 
   const open = () => {
     setKnowMoreDialog(true)
@@ -130,96 +132,10 @@ const IpvVideo = (props) => {
     }
   }
 
-  async function startRecording(stream, lengthInMS) {
-    let recorder = new MediaRecorder(stream);
-    let data = [];
-  
-    recorder.ondataavailable = event => data.push(event.data);
-    recorder.start();
-    console.log(recorder.state + " for " + (lengthInMS/1000) + " seconds...");
-  
-    let stopped = new Promise((resolve, reject) => {
-      recorder.onstop = resolve;
-      recorder.onerror = event => reject(event.name);
-    });
-  
-    setTimeout((e) => {
-      recorder.state == "recording" && recorder.stop()
-    }, lengthInMS)
-  
-    return Promise.all([
-      stopped,
-    ])
-    .then(() => data);
-  }
-
-  const handleVideoCapture = () => {
-    const supported = 'mediaDevices' in navigator;
-    const player = document.getElementById('ipv_video');
-
-    const constraints = {
-      video: true,
-      // audio: true
-    };
-
-    function stop(e) {
-      var stream = player.srcObject;
-      var tracks = stream.getTracks();
-    
-      for (var i = 0; i < tracks.length; i++) {
-        var track = tracks[i];
-        track.stop();
-      }
-    
-      player.srcObject = null;
+  const handleClick = (e) => {
+    if (!showVideoRecoreder) {
+      setShowVideoRecorder(true);
     }
-
-    const successCallback = (stream) => {
-      player.srcObject = stream;
-      player.play();
-      player.captureStream = player.captureStream || player.mozCaptureStream;
-      return new Promise(resolve => player.onplaying = resolve);
-    }
-
-    const errorCallback = (err) => {
-      console.log(err || "Something went wrong!");
-      toast("Something went wrong!");
-      stop();
-    }
-
-    const recorderCallback = (recordedChunks) => {
-      let recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
-      player.src = URL.createObjectURL(recordedBlob);
-      const blob = new Blob(recordedChunks, {
-        type: "video/webm"
-      });
-      const fileFromBlob = new File([blob], "test.webm");
-      setFile(fileFromBlob);
-      // downloadButton.href = player.src;
-      // downloadButton.download = "RecordedVideo.webm";
-  
-      console.log("Successfully recorded " + recordedBlob.size + " bytes of " +
-          recordedBlob.type + " media.");
-    }
-
-    if(supported) {
-      navigator.mediaDevices.getUserMedia(constraints)
-      .then(successCallback)
-      .then(() => startRecording(player.captureStream(), 9000))
-      .then(recorderCallback)
-      .catch(errorCallback);
-    } else {
-      navigator.getMedia = navigator.getUserMedia ||
-        navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-      navigator.getMedia(constraints)
-      .then(successCallback)
-      .catch(errorCallback);
-    }
-
-    setTimeout((e) => {
-      stop(e)
-    }, 9000);
   }
 
   const productName = getConfig().productName
@@ -294,13 +210,6 @@ const IpvVideo = (props) => {
           )}
           {isWeb && (
             <div className="kyc-doc-upload-container noBorder">
-              {/* {file && (
-                <img
-                  src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
-                  className="preview"
-                  alt="Uploaded IPV Video"
-                />
-              )} */}
               {!file && (
                 <div className="instructions-container">
                   <div className="ipv_footer_instructions">
@@ -316,22 +225,26 @@ const IpvVideo = (props) => {
                   />
                 </div>
               )}
-              <video id="ipv_video" controls className="video-controls"></video>
-              <div className="kyc-upload-doc-actions">
-                <input
-                  ref={inputEl}
-                  type="file"
-                  className="kyc-upload"
-                  onChange={handleChange}
-                  accept="video/mp4,video/x-m4v,video/*"
-                  capture
+              {showVideoRecoreder && 
+                <VideoRecorder
+                  showReplayControls
+                  replayVideoAutoplayAndLoopOff
+                  onRecordingComplete={videoBlob => {
+                    // Do something with the video...
+                    console.log('videoBlob', videoBlob)
+                    const fileFromBlob = new File([videoBlob], "ipv-video.webm");
+                    setFile(fileFromBlob);
+                  }}
                 />
+              }
+              <div className="kyc-upload-doc-actions">
                 {!file && 
                   <div className="button-container">
                     <Button
                       type="outlined"
                       buttonTitle="OPEN CAMERA"
-                      onClick={handleVideoCapture}
+                      onClick={handleClick}
+                      disable={showVideoRecoreder}
                     />
                   </div>
                 }
