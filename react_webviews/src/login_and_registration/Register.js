@@ -13,6 +13,7 @@ import { initialize } from "./function";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
+import { nativeCallback } from "../utils/native_callback";
 
 const config = getConfig();
 class Register extends Component {
@@ -54,6 +55,8 @@ class Register extends Component {
   handleClick = () => {
     let { form_data, registerType } = this.state;
     let keys_to_check = ["mobile", "code"];
+    if(registerType !== "email")
+      nativeCallback({events: 'otp sent to user'}) // to be confirmed
     if (registerType === "email")
       keys_to_check = ["email", "password", "confirm_password"];
     this.formCheckFields(keys_to_check, form_data, "REGISTER", registerType);

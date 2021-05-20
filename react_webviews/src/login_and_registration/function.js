@@ -4,6 +4,7 @@ import Api from "utils/api";
 import { storageService, getUrlParams } from "utils/validators";
 import { getConfig } from "utils/functions";
 import { isEmpty } from "../utils/validators";
+import { nativeCallback } from "../utils/native_callback";
 
 const isMobileView = getConfig().isMobileDevice;
 const errorMessage = "Something went wrong!";
@@ -369,6 +370,7 @@ export async function otpVerification(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      nativeCallback({events: "user loggedin"}) // to be checked
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);

@@ -6,6 +6,7 @@ import { sendInvestmentProof } from "./MyAccountFunctions";
 import toast from "common/ui/Toast";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import "./MyAccount.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const InvestmentProof = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);

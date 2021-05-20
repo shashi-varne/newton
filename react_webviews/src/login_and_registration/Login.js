@@ -7,6 +7,7 @@ import { initialize } from "./function";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
+import { nativeCallback } from "../utils/native_callback";
 
 const config = getConfig();
 class Login extends Component {
@@ -46,6 +47,8 @@ class Login extends Component {
   handleClick = () => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
+    if(loginType !== "email")
+      nativeCallback({events: 'otp sent to user'}) // to be confirmed
     if (loginType === "email") keys_to_check = ["email", "password"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
   };
