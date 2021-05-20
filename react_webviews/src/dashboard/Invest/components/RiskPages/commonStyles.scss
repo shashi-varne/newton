@@ -1,13 +1,15 @@
 .risk-opt-title {
   color: #160D2E;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
+
 .risk-opt-desc {
   color: #767E86;
   line-height: 21px;
   margin-bottom: 5px;
 }
+
 .risk-opt-split {
   color: #767E86;
   line-height: 21px;
@@ -19,6 +21,7 @@
     font-weight: 500;
   }
 }
+
 .risk-customize-cta {
   margin: 30px 0;
   font-weight: bold;
@@ -45,4 +48,40 @@
     color: #767E86;
     width: 90%;
   }
+}
+
+.risk-select-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  span {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 30px;
+    color: #0A1D32;
+  }
+
+  .risk-sh-info {
+    border: 1px solid #C8C8C8;
+    border-radius: 15px;
+    height: 20px;
+    width: 48px;
+    font-size: 13px;
+    color: #C8C8C8;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+}
+
+.risk-select-skip {
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: right;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-top: 20px;
 }
