@@ -13,18 +13,19 @@ const ResidentDialog = ({ close, open, cancel, aadhaarKyc }) => {
       keepMounted
       aria-describedby="resident-dialog"
       id="kyc-bottom-dialog"
+      data-aid='kyc-bottom-dialog'
     >
-      <DialogContent className="resident-dialog-content">
-        <main>
-          <h1 id='nationality'>Are you an Indian resident?</h1>
+      <DialogContent className="resident-dialog-content" data-aid='kyc-resident-dialog-content'>
+        <main data-aid='kyc-resident-dialog-main'>
+          <h1 >Are you an Indian resident?</h1>
           <img
             src={require(`assets/${productName}/ic_indian_resident.svg`)}
             alt=""
           />
         </main>
-        <footer>
+        <footer data-aid='dialog-footer'>
           <Button
-            id='no_btn'
+            data-aid='no-btn'
             variant="contained"
             fullWidth
             onClick={() => cancel()}
@@ -33,7 +34,7 @@ const ResidentDialog = ({ close, open, cancel, aadhaarKyc }) => {
             NO
           </Button>
           <Button
-            id='yes_btn'
+            data-aid='yes-btn'
             variant="contained"
             fullWidth
             color="secondary"

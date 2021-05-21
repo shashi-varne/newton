@@ -26,19 +26,20 @@ let alertVariants = {
   },
 };
 
-const Alert = ({ message = '', variant, title, renderMessage = null }) => {
+const Alert = ({ message = '', variant, title, renderMessage = null, dataAid }) => {
   return (
     <div
       className="alert-status-info"
       style={{ backgroundColor: alertVariants[variant].bgColor }}
+      data-aid={dataAid}
     >
       <img
         src={require(`assets/${alertVariants[variant].icon}`)}
         alt={variant}
       />
-      <div className="text">
-        <div className="title" id='title'>{title}</div>
-        <div id='message'>{renderMessage ? renderMessage() : message}</div>
+      <div className="text" data-aid='kyc-alertbox-title'>
+        <div className="title">{title}</div>
+        <div>{renderMessage ? renderMessage() : message}</div>
       </div>
     </div>
   );

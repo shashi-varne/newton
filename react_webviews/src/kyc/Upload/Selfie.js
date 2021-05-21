@@ -116,12 +116,13 @@ const Sign = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload Selfie"
+      data-aid='kyc-upload-selfie-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
-          <div className="sub-title" id='sub-title'>Ears must be visible</div>
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
+          <div className="sub-title" data-aid='kyc-sub-title'>Ears must be visible</div>
           {!isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {file && fileToShow && (
                 <img src={fileToShow} className="preview" alt="" />
               )}
@@ -134,8 +135,8 @@ const Sign = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '320px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
-                <div className="open-camera">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
+                <div className="open-camera" data-aid='kyc-open-camera'>
                   <input
                     ref={inputEl}
                     type="file"
@@ -162,14 +163,14 @@ const Sign = (props) => {
                         </g>
                       </svg>
                     )}
-                    <div className="upload-action">open camera</div>
+                    <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
                   </button>
                 </div>
               </div>
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {file && fileToShow && (
                 <img
                   src={fileToShow}
@@ -186,14 +187,14 @@ const Sign = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '320px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
                   onChange={handleChange}
                 />
-                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
+                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button" data-aid='kyc-upload-button'>
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -207,7 +208,7 @@ const Sign = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>

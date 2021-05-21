@@ -110,10 +110,11 @@ const Nominee = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      data-aid='kyc-nominee-details-page'
     >
       <div className="kyc-nominee">
         {!isEmpty(kyc) && (
-          <main>
+          <main data-aid='kyc-nominee'>
             <Input
               label="Name"
               class="input"
@@ -136,7 +137,7 @@ const Nominee = (props) => {
               inputMode="numeric"
               id="dob"
             />
-            <div className="input">
+            <div className="input" data-aid='kyc-dropdown-withouticon'>
               <DropdownWithoutIcon
                 error={form_data.relationship_error ? true : false}
                 helperText={form_data.relationship_error}

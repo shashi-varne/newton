@@ -8,9 +8,9 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
   const productName = getConfig().productName
   
   return (
-    <Dialog open={open} onClose={onClose} id='kyc-bottom-dialog' >
-      <section className="kyc-show-aadhar">
-        <header className="header">
+    <Dialog open={open} onClose={onClose} id='kyc-bottom-dialog'  data-aid='kyc-bottom-dialog'>
+      <section className="kyc-show-aadhar" data-aid='kyc-show-aadhar'>
+        <header className="header" data-aid='kyc-dialog-header'>
           <h1>Aadhar KYC</h1>
           <img
             src={require(`assets/${productName}/icn_aadhaar_kyc_small.svg`)}
@@ -20,7 +20,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
         <p className="description">
           Link with Digilocker to complete paperless KYC
         </p>
-        <main className="content">
+        <main className="content" data-aid='kyc-content'>
           <div className="info-box">
             <img
               src={require(`assets/${productName}/ic_instant.svg`)}
@@ -38,7 +38,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
             <div className="title">No document asked</div>
           </div>
         </main>
-        <Button variant="contained" fullWidth className="action-btn" onClick={redirect}>
+        <Button variant="contained" fullWidth className="action-btn" data-aid='kyc-action-btn' onClick={redirect}>
           <span className="btn-text">connect digilocker</span>
         </Button>
       </section>

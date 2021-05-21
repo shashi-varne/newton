@@ -15,15 +15,15 @@ const KycBackModal = ({ id, open, confirm, cancel, ...props }) => {
       {...props}
     >
       <DialogContent>
-        <section className="kyc-journey-go-back-dailog">
+        <section className="kyc-journey-go-back-dailog" data-aid='kyc-journey-go-back-dailog'>
           <article
             className="text"
           >
             KYC is mandatory for investment, are you sure you want to go back?
           </article>
-          <footer className="actions">
-            <Button onClick={confirm}>Later</Button>
-            <Button onClick={cancel} variant="flat">Complete KYC</Button>
+          <footer className="actions" data-aid='kyc-actions'>
+            <Button data-aid='kyc-later-btn' onClick={confirm}>Later</Button>
+            <Button data-aid='kyc-complete-kyc-btn' onClick={cancel} variant="flat">Complete KYC</Button>
           </footer>
         </section>
       </DialogContent>

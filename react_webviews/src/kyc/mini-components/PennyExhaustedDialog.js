@@ -15,30 +15,29 @@ const PennyExhaustedDialog = ({ isOpen, redirect, uploadDocuments }) => {
       className="kyc-penny-failed-dialog"
       id="kyc-bottom-dialog"
     >
-      <DialogContent className="penny-failed-dialog-content">
-        <div className="title">
-          <div className="text" id='text_details'>Unable to add bank!</div>
+      <DialogContent className="penny-failed-dialog-content" data-aid='kyc-penny-failed-dialog-content'>
+        <div className="title" data-aid='kyc-title'>
+          <div className="text">Unable to add bank!</div>
           <img
             src={require(`assets/${productName}/ic_bank_not_added.svg`)}
             alt=""
             className="img"
           />
         </div>
-        <div className="subtitle" id='subtitle_details' >
+        <div className="subtitle" data-aid='kyc-subtitle-details' >
           Oops! You have exhausted all the 3 attempts. Continue by uploading
           your documents or check back later
         </div>
-        <span id='submit-button'>
         <Button
+          data-aid='kyc-button-bg-full'
           className="button bg-full bottom-margin"
           onClick={() => uploadDocuments()}
         >
           UPLOAD BANK DOCUMENTS
-        </Button></span>
-        <span id='try-again-button'>
-        <Button className="button highlight-bg" onClick={() => redirect()}>
+        </Button>
+        <Button className="button highlight-bg" onClick={() => redirect()} data-aid='kyc-try-again-button'>
           TRY AGAIN LATER
-        </Button></span>
+        </Button>
       </DialogContent>
     </Dialog>
   );

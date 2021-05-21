@@ -76,22 +76,22 @@ class Register extends Component {
       googleUrl,
     } = this.state;
     return (
-      <div className="login">
+      <div className="login" data-aid='login-register'>
         <div className="header">
           <img src={require(`assets/${config.logo}`)} alt="logo" />
         </div>
-        <div className="login-details">
+        <div className="login-details" data-aid='login-details'>
           <div className="left-image">
             <img
               src={require(`assets/${this.state.productName}/ils_register.svg`)}
               alt="register"
             />
           </div>
-          <div className="login-form">
-            <div className="header-text" id='REGISTER'>REGISTER</div>
+          <div className="login-form" data-aid='login-form'>
+            <div className="header-text">REGISTER</div>
             <div className="login-type">
               <div
-                className="text" id='mobile'
+                className="text"
                 style={{
                   fontWeight: registerType === "mobile" ? "bold" : "normal",
                 }}
@@ -101,7 +101,7 @@ class Register extends Component {
                 {registerType === "mobile" && <div className="underline"></div>}
               </div>
               <div
-                className="text" id='email'
+                className="text"
                 style={{
                   fontWeight: registerType === "email" ? "bold" : "normal",
                 }}
@@ -111,10 +111,10 @@ class Register extends Component {
                 {registerType === "email" && <div className="underline"></div>}
               </div>
             </div>
-            <div className="form">
+            <div className="form" data-aid='form'>
               {registerType === "mobile" && (
-                <div className="form-field" id='form-field'>
-                  <div className="country-code" id='country-code'>
+                <div className="form-field">
+                  <div className="country-code" data-aid='country-code'>
                     <DropdownWithoutIcon
                       onChange={this.handleChange("code")}
                       error={form_data.code_error ? true : false}
@@ -221,8 +221,7 @@ class Register extends Component {
                   )}
                 </div>
               )}
-              <div className="referral-code">
-                <span id='checkbox'>
+              <div className="referral-code" data-aid='referral-code-checkbox'>
                 <Checkbox
                   checked={referralCheck}
                   color="default"
@@ -230,10 +229,9 @@ class Register extends Component {
                   name="checked"
                   handleChange={this.handleCheckbox}
                   class="checkbox"
-                /></span>
+                />
                 <div>I have a referral/promo/partner code</div>
               </div>
-              <span id='submit-button'>
               <Button
                 buttonTitle="REGISTER"
                 onClick={this.handleClick}
@@ -246,7 +244,7 @@ class Register extends Component {
                     config?.uiElements?.button?.borderRadius || "2px"
                   }`,
                 }}
-              /></span>
+              />
               {this.state.resendVerification && (
                 <div
                   className="resend-verification"
@@ -260,19 +258,19 @@ class Register extends Component {
                   </span>
                 </div>
               )}
-              <div className="social-block" id='social-block'>
-                <a className="socialSignupBtns facebookBtn" id='socialSignupBtns facebookBtn' href={facebookUrl}>
+              <div className="social-block" data-aid='social-block'>
+                <a className="socialSignupBtns facebookBtn" data-aid='social-signupbtns-facebookbtn' href={facebookUrl}>
                   FACEBOOK
                 </a>
-                <a className="socialSignupBtns googleBtn" id='socialSignupBtns googleBtn' href={googleUrl}>
+                <a className="socialSignupBtns googleBtn" data-aid='social-signupbtns-googlebtn' href={googleUrl}>
                   GOOGLE
                 </a>
               </div>
             </div>
-            <div className="footer" onClick={() => this.navigate("login")}>
-              EXISTING USER? <span id='Login_btn'>LOGIN</span>
+            <div className="footer"  data-aid='footer' onClick={() => this.navigate("login")}>
+              EXISTING USER? <span data-aid='login-btn'>LOGIN</span>
             </div>
-            <div className="agree-terms" id='agree-terms'>
+            <div className="agree-terms" data-aid='agree-terms'>
               By signing in, you agree to fisdom's{" "}
               <a
                 href="https://www.fisdom.com/terms/"
