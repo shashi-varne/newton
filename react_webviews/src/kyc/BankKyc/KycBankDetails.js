@@ -299,8 +299,6 @@ const KycBankDetails = (props) => {
               message={note.info_text}
             /> */}
             <WVInfoBubble
-              isDismissable
-              isOpen={true}
               type={note.variant}
               hasTitle
               customTitle="Note"

@@ -79,8 +79,8 @@ const WVBottomSheet = ({
               />
             }
           </div>
-          {children}
         </div>
+        {children}
       </DialogContent>
       <DialogActions>
         <WVButtonLayout

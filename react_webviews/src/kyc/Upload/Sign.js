@@ -159,7 +159,7 @@ const Sign = (props) => {
           >
             Signature should be as per your PAN. Invalid signature can lead to investment rejection
           </WVInfoBubble>
-          <div className="kyc-doc-upload-container noBorder" >
+          <div className="kyc-doc-upload-container noBorder">
             {file && (
               <img
                 src={fileToShow}
