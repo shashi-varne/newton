@@ -285,7 +285,7 @@ export const getConfig = () => {
     returnConfig.iOS = true;
   } else {
     returnConfig.app = 'web';
-    returnConfig.Web = false;
+    returnConfig.Web = true;
   }
 
   // eslint-disable-next-line
