@@ -154,6 +154,12 @@ class Container extends Component {
         this.navigate('/group-insurance/health/landing');
         return;
       }
+
+    if(this.checkStringInString('/group-insurance/life-insurance/savings-plan/report-details/')){
+      this.navigate('/group-insurance/common/report');
+      nativeCallback({ events: this.getEvents('back') });
+      return;
+    }  
      
     if(this.checkStringInString('group-health')) {
       // #TODO need to handle back accoridng to entry/landing
