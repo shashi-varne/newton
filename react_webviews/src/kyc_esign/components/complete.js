@@ -1,8 +1,14 @@
 import React from "react";
 import { getConfig } from "utils/functions";
+import WVSteps from "../../common/ui/Steps/WVSteps"
 
-const Complete = ({ navigateToReports, dl_flow, show_note }) => {
+const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const productName = getConfig().productName;
+  const steps = [
+    { title: "Mutual fund" },
+    { title: "Stocks & IPO" },
+    { title: "Futures & Options" }
+  ]
 
   return (
     <div className="kyc-esign-complete">
@@ -14,8 +20,11 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
         {dl_flow && !show_note && (
           <div className="title">Kudos, KYC is completed!</div>
         )}
-        {(!dl_flow || show_note) && (
+        {!dl_flow && kyc?.kyc_status === "compliant" && (
           <div className="title">Great! Your KYC application is submitted!</div>
+        )}
+        {(!dl_flow || show_note) && (
+          <div className="title">Kudos! KYC application is submitted!</div>
         )}
         {!dl_flow && (
           <div className="text">
@@ -23,15 +32,14 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
             Approves in one working day
           </div>
         )}
+        {dl_flow && (
+          <div className="sub-title">
+            Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds
+          </div>
+        )}
         <div className="subtitle" onClick={() => navigateToReports()}>
           View your KYC application details {" >"}
         </div>
-        {dl_flow && !show_note && (
-          <div className="message">
-            Click on <span>Continue Investing</span> & choose from 5000+ mutual
-            funds to invest in.
-          </div>
-        )}
       </header>
       {show_note && (
         <div className="alert-status-info">
@@ -45,6 +53,22 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
           </div>
         </div>
       )}
+      {dl_flow && 
+        <div className="account-status-container">
+          <div className="account-status">Account status</div>
+          {steps.map((step, index) => (
+            <WVSteps
+            title={step.title}
+            key={step.title}
+          >
+            {step.title === "Mutual fund" && 
+              <div className="status">{kyc.application_status_v2 === "complete" ? "Ready to invest" : "Under process"}</div>
+            }
+            {/* Todo: add other conditions */}
+          </WVSteps>
+          ))}
+        </div>
+      }
     </div>
   );
 };

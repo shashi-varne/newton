@@ -12,12 +12,14 @@ const KycBackModal = ({ id, open, confirm, cancel, ...props }) => {
       aria-labelledby="kyc-journey-back"
       aria-describedby="kyc-journey-back-confirmation"
       id="kyc-journey-back"
+      data-aid='kyc-journey-back'
       {...props}
     >
       <DialogContent>
         <section className="kyc-journey-go-back-dailog" data-aid='kyc-journey-go-back-dailog'>
           <article
             className="text"
+            data-aid='kyc-article'
           >
             KYC is mandatory for investment, are you sure you want to go back?
           </article>

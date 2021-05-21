@@ -39,8 +39,28 @@ const Failed = (props) => {
 
   const productName = getConfig().productName;
   return (
-    <Container title="Aadhaar KYC Failed!" noFooter skelton={isLoading} data-aid='kyc-aadhaar-kyc-failed'>
-      <section id="digilocker-failed" data-aid='kyc-digilocker-failed'>
+    <Container
+      title="Aadhaar KYC Failed!"
+      data-aid='kyc-aadhaar-kyc-failed-screen'
+      twoButtonVertical={true}
+      button1Props={{
+        type: 'primary',
+        order: "1",
+        title: "RETRY",
+        onClick: {retry},
+        classes: { root: 'digilocker-failed-button'}
+      }}
+      button2Props={{
+        type: 'secondary',
+        order: "2",
+        title: "UPLOAD DOCUMENTS MANUALLY",
+        onClick: {manual},
+        classes: { root: 'digilocker-failed-button'}
+      }}
+      skelton={isLoading}
+      disableBack
+    >
+      <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         <img
           className="digi-image"
           alt=""
@@ -50,42 +70,6 @@ const Failed = (props) => {
           Aadhaar KYC has been failed because we were not able to connect to
           your Digilocker.
         </div>
-        <div className="body-text2" data-aid='kyc-body-text2'>
-          However, you can <strong>still complete your KYC</strong> and start
-          investing in mutual funds.
-        </div>
-        {!isLoading && (
-          <footer className="footer" data-aid='kyc-footer'>
-            <Button
-              variant="raised"
-              fullWidth
-              color="secondary"
-              className="raised"
-              onClick={retry}
-              id='RETRY'
-              data-aid='re-try-btn'
-            >
-              RETRY
-            </Button>
-            <Button
-              variant="outlined"
-              fullWidth
-              color="secondary"
-              className="outlined"
-              onClick={manual}
-              data-aid='kyc-cont-manual-btn'
-            >
-              {!isApiRunning && 'CONTINUE WITH MANUAL KYC'}
-              {isApiRunning && 
-                <div className="flex-justify-center" data-aid='kyc-flex-justify-center'>
-                  <DotDotLoaderNew
-                    styleBounce={{backgroundColor:'white'}}
-                  />
-                </div>
-              }
-            </Button>
-          </footer>
-        )}
       </section>
       <AadhaarDialog
         open={open}

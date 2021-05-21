@@ -14,6 +14,7 @@ import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -26,7 +27,7 @@ const PersonalDetails4 = (props) => {
   if (isEdit) {
     title = "Edit nominee detail";
   }
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -148,7 +149,12 @@ const PersonalDetails4 = (props) => {
       data-aid='kyc-personal-details-screen-4'
     >
       <div className="kyc-nominee">
-        <main data-aid='kyc-nominee'>
+        <main data-aid='kyc-nominee-page'>
+          <WVInfoBubble
+            type="info"
+            customTitle="Nominee details will be applicable for mutual fund investments only"
+            hasTitle
+          />
           <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
@@ -186,7 +192,7 @@ const PersonalDetails4 = (props) => {
             id="dob"
             disabled={isChecked || isApiRunning}
           />
-          <div className="input">
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}

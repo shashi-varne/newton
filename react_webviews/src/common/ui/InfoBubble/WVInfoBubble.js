@@ -6,7 +6,7 @@ Example syntax:
   <WVInfoBubble
     isDismissable
     type="warning"
-    isOpen={openBubble}
+    isOpen={openBubble} // Set this only if visbility of infoBubble is to be changed dynamically
     hasTitle
     {...}
   >
@@ -55,18 +55,18 @@ const TYPES = {
 
 const WVInfoBubble = ({
   isDismissable, // Set this flag if dismiss feature (cross on top right) is required
-  isOpen, // Only required when isDismissable is true
+  isOpen, // Use this if InfoBubble visibility is to be changed dynamically [default=true]
   onDismissClick, // callback for when cross is clicked
   hasTitle, // Sets this to use the default title value from 'TYPES'
   customTitle, // Overrirdes default title value
-  type, // Sets bubble type - info/warning/error/success [default='info']
+  type, // Sets bubble type - values: info/warning/error/success [default='info']
   children // Info bubble content
 }) => {
   const typeConfig = TYPES[type] || {};
 
   return (
-    <Fade in={isDismissable && isOpen} timeout={350}>
-      <div className='wv-info-bubble' style={{ backgroundColor: typeConfig.bgColor }}>
+    <Fade in={isOpen} timeout={350}>
+      <div className='wv-info-bubble' data-aid='wv-info-bubble' style={{ backgroundColor: typeConfig.bgColor }}>
         {typeConfig.icon &&
           <SVG
             className='wv-ib-icon'
@@ -74,9 +74,9 @@ const WVInfoBubble = ({
             src={require(`assets/${typeConfig.icon}.svg`)}
           />
         }
-        <div className='wv-ib-content'>
+        <div className='wv-ib-content' data-aid='wv-ib-content'>
           {hasTitle &&
-            <div className='wv-ib-content-title'>
+            <div className='wv-ib-content-title' data-aid='wv-ib-content-title'>
               <span style={{ color: typeConfig.titleColor }}>
                 {customTitle || typeConfig.title}
               </span>
@@ -89,7 +89,7 @@ const WVInfoBubble = ({
               }
             </div>
           }
-          <div className='wv-ib-content-desc'>
+          <div className='wv-ib-content-desc' data-aid='wv-ib-content-desc'>
             {children}
           </div>
         </div>
@@ -110,6 +110,7 @@ WVInfoBubble.propTypes = {
 
 WVInfoBubble.defaultProps = {
   isDismissable: false,
+  isOpen: true,
   onDismissClick: () => {},
   hasTitle: false,
   type: 'info',

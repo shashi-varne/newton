@@ -17,11 +17,11 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
             alt="Aadhar KYC"
           />
         </header>
-        <p className="description">
+        <p className="description" data-aid='kyc-description'>
           Link with Digilocker to complete paperless KYC
         </p>
         <main className="content" data-aid='kyc-content'>
-          <div className="info-box">
+          <div className="info-box" data-aid='info-box-one'>
             <img
               src={require(`assets/${productName}/ic_instant.svg`)}
               className="icon"
@@ -29,7 +29,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
             />
             <div className="title">Instant Investment</div>
           </div>
-          <div className="info-box">
+          <div className="info-box" data-aid='info-box-two'>
             <img
               src={require(`assets/${productName}/ic_no_doc.svg`)}
               className="icon"

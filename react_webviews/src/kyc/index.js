@@ -61,7 +61,7 @@ import StocksStatus from "./Equity/components/StocksStatus";
 import NriError from "./Equity/components/NriError";
 import LocationError from "./Equity/components/LocationError";
 import AccountInfo from "./Equity/components/AccountInfo";
-import PanInstructions from "./Equity/components/PanInstructions";
+import UploadInstructions from "./Equity/components/UploadInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
 import FAndOSampleDocument from "./Equity/components/F&OSampleDocuments";
@@ -335,8 +335,8 @@ const Kyc = (props) => {
         />
         <Route 
           exact 
-          path={`${url}/pan-instructions`} 
-          component={PanInstructions} 
+          path={`${url}/upload-instructions`} 
+          component={UploadInstructions} 
         />
         <Route 
           exact 

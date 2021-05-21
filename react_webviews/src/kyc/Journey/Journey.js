@@ -16,7 +16,31 @@ import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
+import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 
+const headerDataMapper = {
+  compliant: {
+    icon: "ic_premium_onboarding_mid",
+    title: "Premium onboarding",
+    subtitle: "",
+  },
+  dlFlow: {
+    icon: "icn_aadhaar_kyc",
+    title: "Aadhaar KYC",
+    subtitle: (
+      <>
+        <b>DigiLocker is now linked!</b> Complete the remaining steps to start
+        investing
+      </>
+    ),
+  },
+  default: {
+    icon: "kyc_status_icon",
+    title: "Your KYC is incomplete!",
+    subtitle:
+      "As per Govt norm. you need to do a one-time registration process to complete KYC.",
+  },
+};
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -164,12 +188,12 @@ const Journey = (props) => {
         journeyData[i].status = status
       }
 
-      if (isCompliant) {
-        journeyData[0].status = 'init'
-        if (customerVerified) {
-          journeyData[0].status = 'completed'
-        }
-      }
+      // if (isCompliant) {
+      //   journeyData[0].status = 'init'
+      //   if (customerVerified) {
+      //     journeyData[0].status = 'completed'
+      //   }
+      // }
 
       for (i = 0; i < journeyData.length - 1; i++) {
         if (journeyData[i].status === 'init') {
@@ -201,11 +225,12 @@ const Journey = (props) => {
         investmentPending = true
       } else if (isCompliant) {
         topTitle = 'What next?'
-      } else if (isCompliant && show_aadhaar) {
+      } else if (show_aadhaar) {
         topTitle = 'Steps to follow:'
-      } else {
-        topTitle = 'KYC journey'
       }
+      //  else {
+      //   topTitle = 'KYC journey'
+      // }
       return journeyData
     }
     return []
@@ -233,7 +258,8 @@ const Journey = (props) => {
       journeyData = [
         {
           key: 'pan',
-          title: 'Confirm PAN',
+          title: 'PAN',
+          value: <b>{kyc?.pan?.meta_data?.pan_number}</b>,
           status: 'completed',
           isEditAllowed: false,
           inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
@@ -447,10 +473,10 @@ const Journey = (props) => {
     console.log('Inside handleEdit')
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {
-      if (key === 'pan' && !customerVerified) {
-        navigate('/kyc/compliant-confirm-pan')
-        return
-      }
+      // if (key === 'pan' && !customerVerified) {
+      //   navigate('/kyc/compliant-confirm-pan')
+      //   return
+      // }
       stateMapper = {
         personal: '/kyc/compliant-personal-details',
         nominee: '/kyc/compliant-nominee-details',
@@ -563,6 +589,29 @@ const Journey = (props) => {
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var kycJourneyData = initJourneyData() || []
+    var headerKey = isCompliant ? "compliant" : dlCondition ? "dlFlow" : "default";
+    var headerData = headerDataMapper[headerKey];
+    if(isCompliant) {
+      if (journeyStatus === "ground_premium") {
+        headerData.title = "You’re eligible for premium onboarding!";
+      }
+      if (kyc.address.meta_data.is_nri) {
+        headerData.subtitle =
+          "You are investment ready, just share few details to start investing";
+      }
+    }
+    if (
+      kycJourneyData[1]?.key === "digilocker" &&
+      kycJourneyData[1]?.status === "init"
+    ) {
+      kycJourneyData[1].disc = (
+        <WVInfoBubble
+          hasTitle
+          customTitle="Please ensure your mobile is linked with Aadhaar"
+          type="info"
+        />
+      );
+    }
     var ctaText = ''
     if (canSubmit()) {
       ctaText = 'SUBMIT APPLICATION'
@@ -620,89 +669,60 @@ const Journey = (props) => {
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
         <div className="kyc-journey" data-aid='kyc-journey-data'>
-          {journeyStatus === 'ground_premium' && (
+          {/* {journeyStatus === 'ground_premium' && (
             <div className="kyc-journey-caption">
               fast track your investment!
             </div>
-          )}
-          {kyc?.kyc_status === 'compliant' && (
-            <div className="kyc-pj-content" data-aid='kyc-pj-content'>
-              <div className="left">
-                <div className="pj-header">Premium Onboarding</div>
-                <div className="pj-bottom-info-box">
-                  <img
-                    src={require(`assets/${productName}/ic_instant.svg`)}
-                    alt="Instant Investment"
-                    className="icon"
-                  />
-                  <div className="pj-bottom-info-content">
-                    Instant Investment
+          )} */}
+          <div className="kyc-pj-content" data-aid='kyc-pj-content'>
+            <div className="left">
+              <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
+              <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
+              {(show_aadhaar || isCompliant) && (
+                <>
+                  <div className="kyc-pj-bottom" data-aid='kyc-pj-bottom'>
+                    <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-one'>
+                      <img
+                        src={require(`assets/${productName}/ic_no_doc.svg`)}
+                        alt=""
+                        className="icon"
+                      />
+                      <div className="pj-bottom-info-content">
+                        100% paperless
+                      </div>
+                    </div>
+                    <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-two'>
+                      <img
+                        src={require(`assets/${productName}/ic_instant.svg`)}
+                        alt="No document asked"
+                        className="icon"
+                      />
+                      <div className="pj-bottom-info-content">
+                        Fast & secure
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="pj-bottom-info-box">
-                  <img
-                    src={require(`assets/${productName}/ic_no_doc.svg`)}
-                    alt="No document asked"
-                    className="icon"
-                  />
-                  <div className="pj-bottom-info-content">
-                    No document asked
-                  </div>
-                </div>
-              </div>
-
-              <img
-                src={require(`assets/${productName}/ic_premium_onboarding_mid.svg`)}
-                alt="Premium Onboarding"
-              />
+                </>
+              )}
             </div>
-          )}
-          {show_aadhaar && (
-            <div className="kyc-pj-content" data-aid='kyc-pj-content'>
-              <div className="left">
-                <div className="pj-header">Aadhaar KYC</div>
-                <div className="pj-sub-text">
-                  Link with Digilocker to complete Aadhaar KYC
-                </div>
-
-                <div className="pj-bottom-info-box">
-                  <img
-                    src={require(`assets/${productName}/ic_instant.svg`)}
-                    alt="Instant Investment"
-                    className="icon"
-                  />
-                  <div className="pj-bottom-info-content">
-                    Instant Investment
-                  </div>
-                </div>
-                <div className="pj-bottom-info-box">
-                  <img
-                    src={require(`assets/${productName}/ic_no_doc.svg`)}
-                    alt="No document asked"
-                    className="icon"
-                  />
-                  <div className="pj-bottom-info-content">
-                    No document asked
-                  </div>
-                </div>
-              </div>
-
-              <img
-                src={require(`assets/${productName}/icn_aadhaar_kyc.svg`)}
-                alt="Premium Onboarding"
-              />
-            </div>
-          )}
+            <img
+              src={require(`assets/${productName}/${headerData.icon}.svg`)}
+              alt=""
+            />
+          </div>
+          
           <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
-          {!show_aadhaar && (
-            <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle-pan-number'>
-              Please keep your PAN ({kyc?.pan?.meta_data?.pan_number}) and
-              address proof handy to complete KYC
+          {!show_aadhaar && !isCompliant && (
+            <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle'>
+              <WVInfoBubble isDismissable isOpen type="info">
+                Please keep your <b>PAN</b> {kyc?.pan?.meta_data?.pan_number}{" "}
+                and <b>address proof</b> handy to complete KYC
+              </WVInfoBubble>
             </div>
           )}
-          {kyc?.kyc_status === 'compliant' && !investmentPending && (
-            <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle-complete-steps'>
-              To unlock premium onboarding, complete these simple steps
+          {isCompliant && !investmentPending && (
+            <div className="kyc-compliant-subtitle" data-aid='kyc-compliant-subtitle'>
+              Complete the remaining steps to start investing
             </div>
           )}
 
@@ -744,13 +764,13 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  <div className="flex flex-between">
+                  <div className="flex flex-between" data-aid='kyc-field-value'>
                     <span className="field_key">
                       {item.title}
                       {item?.value ? ':' : ''}
                     </span>
                     {item?.value && (
-                      <span className="field_value"> {item?.value}</span>
+                      <span className="field_value">{item?.value}</span>
                     )}
                   </div>
 
@@ -767,7 +787,7 @@ const Journey = (props) => {
                   )}
                 </div>
 
-                {item?.disc && <div className="disc">{item?.disc}</div>}
+                {item?.disc && <div className="disc" data-aid='kyc-disc'>{item?.disc}</div>}
               </div>
             ))}
           </main>
