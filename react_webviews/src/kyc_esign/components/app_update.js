@@ -44,6 +44,7 @@ class AppUpdateInfo extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="UPDATE NOW"
+        data-aid='kyc-esign-update-screen'
       >
         <div style={{textAlign: 'center'}}>
             <div>
@@ -52,10 +53,10 @@ class AppUpdateInfo extends Component {
 
             <div style={{fontSize: 24,color: 'black' , fontWeight: 500,
                 margin: '20px 0 10px 0'}}>
-                <span>Update your application</span>
+                <span data-aid='kyc-esign-update-text'>Update your application</span>
             </div>
 
-            <div style={{color: '#6d7278', fontSize: 13}}>
+            <div style={{color: '#6d7278', fontSize: 13}} data-aid='kyc-esign-digilocker-text'>
                 Hey! Investing is now much easier with the latest update. Experience quick and seamless KYC process with Digilocker in your new {getConfig().productName} app.
             </div>
         </div>

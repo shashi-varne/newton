@@ -194,7 +194,7 @@ const Sign = (props) => {
                   className="kyc-upload"
                   onChange={handleChange}
                 />
-                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button" data-aid='kyc-upload-button'>
+                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button" data-aid='kyc-upload-btn'>
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

@@ -14,6 +14,7 @@ const PennyExhaustedDialog = ({ isOpen, redirect, uploadDocuments }) => {
       aria-describedby="kyc-dialog"
       className="kyc-penny-failed-dialog"
       id="kyc-bottom-dialog"
+      data-aid='kyc-bottom-dialog'
     >
       <DialogContent className="penny-failed-dialog-content" data-aid='kyc-penny-failed-dialog-content'>
         <div className="title" data-aid='kyc-title'>
@@ -29,13 +30,13 @@ const PennyExhaustedDialog = ({ isOpen, redirect, uploadDocuments }) => {
           your documents or check back later
         </div>
         <Button
-          data-aid='kyc-button-bg-full'
+          data-aid='kyc-upload-bank-doc-btn'
           className="button bg-full bottom-margin"
           onClick={() => uploadDocuments()}
         >
           UPLOAD BANK DOCUMENTS
         </Button>
-        <Button className="button highlight-bg" onClick={() => redirect()} data-aid='kyc-try-again-button'>
+        <Button className="button highlight-bg" onClick={() => redirect()} data-aid='kyc-try-again-btn'>
           TRY AGAIN LATER
         </Button>
       </DialogContent>

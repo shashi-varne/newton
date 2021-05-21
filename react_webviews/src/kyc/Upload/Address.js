@@ -396,7 +396,7 @@ const AddressUpload = (props) => {
             </div>
           )}
           <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
-            <div className="upload-note"> How to take picture of your address proof? </div>
+            <div className="upload-note" data-aid='upload-note-text'> How to take picture of your address proof? </div>
             <Button
               dataAid='know-more-btn'
               type="textonly"

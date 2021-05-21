@@ -140,7 +140,7 @@ class ESignInfo extends Component {
             <div className="icon-container">
               <img src={require(`assets/ic_verify_otp_${productName}.svg`)} alt="Verify OTP" />
             </div>
-            <div className="step-text">
+            <div className="step-text" data-aid='step-text-1'>
               1. Verify mobile and enter Aadhaar number
                 </div>
           </div>
@@ -148,7 +148,7 @@ class ESignInfo extends Component {
             <div className="icon-container">
               <img src={require(`assets/ic_esign_otp_${productName}.svg`)} alt="Esign OTP icon" />
             </div>
-            <div className="step-text">
+            <div className="step-text" data-aid='step-text-2'>
               2. Enter OTP recieved on your Aadhaar linked mobile number
                 </div>
           </div>
@@ -156,7 +156,7 @@ class ESignInfo extends Component {
             <div className="icon-container">
               <img src={require(`assets/ic_esign_done_${productName}.svg`)} alt="Esign Done icon" />
             </div>
-            <div className="step-text">
+            <div className="step-text" data-aid='step-text-3'>
               3. e-Sign is successfully done
                 </div>
           </div>

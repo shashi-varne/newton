@@ -33,13 +33,14 @@ const ManualSignature = (props) => {
       buttonTitle="HOME"
       handleClick={handleCTAClick}
       headerData={{ goBack }}
+      data-aid='kyc-manual-signature-screen'
     >
-      <section id="manual-signature">
-        <div className="generic-page-subtitle">
+      <section id="manual-signature" data-aid='manual-signature'>
+        <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
           Send us your signed documents through courier by following the steps below
         </div>
-        <div class="page-content">
-          <div className="step">
+        <div class="page-content" data-aid='kyc-page-content'>
+          <div className="step" data-aid='kyc-step-1'>
             <div className="step-header">
               {/* Todo: import component to show step */}
               <div style={{width: "20px", height: "20px", textAlign: "center", padding: "3px 0", color: "white", fontSize: "12px", backgroundColor: `${config.styles.primaryColor}`, borderRadius: "50%"}}>1</div>
@@ -52,6 +53,7 @@ const ManualSignature = (props) => {
                 variant='outlined'
                 size='large'
                 color='secondary'
+                data-aid='kyc-download-forms'
               >
                 Download Forms
               </Button>
@@ -60,7 +62,7 @@ const ManualSignature = (props) => {
               </div>
             </div>
           </div>
-          <div className="step">
+          <div className="step" data-aid='kyc-step-2'>
             <div className="step-header">
               {/* Todo: import component to show step */}
               <div style={{width: "20px", height: "20px", textAlign: "center", padding: "3px 0", color: "white", fontSize: "12px", backgroundColor: `${config.styles.primaryColor}`, borderRadius: "50%"}}>2</div>
@@ -76,7 +78,7 @@ const ManualSignature = (props) => {
               </WVInfoBubble>
             </div>
           </div>
-          <div className="step">
+          <div className="step" data-aid='kyc-step-3'>
             <div className="step-header">
               {/* Todo: import component to show step */}
               <div style={{width: "20px", height: "20px", textAlign: "center", padding: "3px 0", color: "white", fontSize: "12px", backgroundColor: `${config.styles.primaryColor}`, borderRadius: "50%"}}>3</div>
@@ -89,7 +91,7 @@ const ManualSignature = (props) => {
               </div>
             </div>
           </div>
-          <div className="page-note">
+          <div className="page-note" data-aid='kyc-page-note'>
             We will verify the documents. You will receive an email from us once you are successfully onboarded
           </div>
           <ContactUs />

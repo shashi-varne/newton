@@ -232,7 +232,7 @@ const KycUploadDocuments = (props) => {
         <div className="banner" data-aid='kyc-banner'>
           <div className="left">
             <img src={bankData?.ifsc_image} alt="bank" className="icon" />
-            <div className="acc_no">
+            <div className="acc_no" data-aid='kyc-acc-no'>
               <div className="title">Account number</div>
               <div className="value">{bankData?.account_number}</div>
             </div>

@@ -160,6 +160,7 @@ class DigiStatus extends Component {
 
     return (
       <Container
+        data-aid='esign-nsdl-screen'
         showLoader={show_loader}
         title={
           status === "success" ? "eSign KYC completed" : "Complete eSign"

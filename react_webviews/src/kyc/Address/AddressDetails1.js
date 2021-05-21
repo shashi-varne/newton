@@ -174,8 +174,8 @@ const AddressDetails1 = (props) => {
             />
           </div>
           <div className="input" data-aid='kyc-address-proof'>
-            <div className="address-label">Address proof:</div>
-            <div className="address-proof">
+            <div className="address-label" data-aid='address-label'>Address proof:</div>
+            <div className="address-proof" data-aid='address-proof'>
               {addressProofOptions.map((data, index) => {
                 const selected = form_data.address_doc_type === data.value;
                 const disabled =

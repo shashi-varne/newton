@@ -165,7 +165,7 @@ const Pan = (props) => {
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
           {file && subTitle && <Alert
-            dataAid='kyc-alertbox'
+            dataAid='kyc-upload-pan-alertbox'
             variant="attention"
             title={title}
             message={subTitle}

@@ -35,11 +35,11 @@ const UploadInstructions = (props) => {
   const state = props.location.state || {};
   const data = instructionsMapper[state.document] || instructionsMapper["pan"];
   return (
-    <Container buttonTitle="OKAY" title={data.title}>
+    <Container buttonTitle="OKAY" title={data.title} data-aid='kyc-upload-instructions-screen'>
       {data.instructions.map((data, index) => {
         return (
           <div key={index} className="stocks-pan-instructions">
-            <div className="spi-text">{data.text}</div>
+            <div className="spi-text" data-aid={`spi-text-${index}`}>{data.text}</div>
             <img
               alt=""
               className="left-img"

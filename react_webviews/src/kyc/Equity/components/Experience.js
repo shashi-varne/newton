@@ -27,9 +27,10 @@ const Experience = (props) => {
       buttonTitle="CONTINUE"
       title="Select trading experience"
       noPadding
+      data-aid='select-trading-experience-screen'
     >
-      <div className="trading-experience">
-        <div className="generic-page-subtitle te-subtitle">
+      <div className="trading-experience" data-aid='trading-experience'>
+        <div className="generic-page-subtitle te-subtitle" data-aid='generic-page-subtitle'>
           As per SEBI, it is mandatory to share your trading experience
         </div>
         {tradingExperienceValues.map((data, index) => {
@@ -40,7 +41,7 @@ const Experience = (props) => {
               key={index}
               onClick={() => setExperience(data.value)}
             >
-              <div>{data.name}</div>
+              <div data-aid='sebi-name'>{data.name}</div>
               {selected && (
                 <img alt="" src={require(`assets/completed_step.svg`)} />
               )}

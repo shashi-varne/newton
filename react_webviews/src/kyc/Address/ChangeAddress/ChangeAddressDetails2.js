@@ -240,6 +240,7 @@ const ChangeAddressDetails2 = (props) => {
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" data-aid='kyc-upload-address'>
           <Alert
+            dataAid='kyc-note-alertbox'
             variant="attention"
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
@@ -261,7 +262,7 @@ const ChangeAddressDetails2 = (props) => {
               )}
               <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <div className="mobile-actions">
-                  <div className="open-camera" data-aid='kyc-open-gallery'>
+                  <div className="open-camera" data-aid='kyc-open-camera'>
                     <input
                       ref={frontDocRef}
                       type="file"

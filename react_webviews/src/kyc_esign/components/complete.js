@@ -11,8 +11,8 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   ]
 
   return (
-    <div className="kyc-esign-complete">
-      <header>
+    <div className="kyc-esign-complete" data-aid='kyc-esign-complete'>
+      <header data-aid='kyc-esign-header'>
         <img
           src={require(`assets/${productName}/ic_process_done.svg`)}
           alt=""
@@ -42,7 +42,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         </div>
       </header>
       {show_note && (
-        <div className="alert-status-info">
+        <div className="alert-status-info" data-aid='alert-status-info'>
           <img src={require(`assets/attention_icon_new.svg`)} alt="" />
           <div className="text">
             <div className="title">Note</div>
@@ -54,7 +54,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         </div>
       )}
       {dl_flow && 
-        <div className="account-status-container">
+        <div className="account-status-container" data-aid='account-status-container'>
           <div className="account-status">Account status</div>
           {steps.map((step, index) => (
             <WVSteps
@@ -62,7 +62,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
             key={step.title}
           >
             {step.title === "Mutual fund" && 
-              <div className="status">{kyc.application_status_v2 === "complete" ? "Ready to invest" : "Under process"}</div>
+              <div className="status" data-aid='kyc-status'>{kyc.application_status_v2 === "complete" ? "Ready to invest" : "Under process"}</div>
             }
             {/* Todo: add other conditions */}
           </WVSteps>

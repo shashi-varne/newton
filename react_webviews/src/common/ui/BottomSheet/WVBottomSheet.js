@@ -50,6 +50,7 @@ const WVBottomSheet = ({
   return (
     <Dialog
       id="wv-bottomsheet"
+      data-aid='wv-bottomsheet'
       open={isOpen}
       onClose={onClose}
       className="wv-bottomsheet"
@@ -57,15 +58,15 @@ const WVBottomSheet = ({
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>
-        <div className="wv-bottomsheet-content">
+        <div className="wv-bottomsheet-content" data-aid='wv-bottomsheet-content'>
           <div className="wv-bc-left">
             {title &&
-              <div className="wv-bcl-title">
+              <div className="wv-bcl-title" data-aid='wv-bcl-title'>
                 {title}
               </div>
             }
             {subtitle &&
-              <div className="wv-bcl-subtitle">
+              <div className="wv-bcl-subtitle" data-aid='wv-bcl-subtitle'>
               {subtitle}
               </div>
             }

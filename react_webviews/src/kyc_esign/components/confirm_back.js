@@ -11,10 +11,11 @@ const ConfirmBackModal = ({ id, open, confirm, cancel, ...props }) => {
       aria-labelledby="kyc-esign-back"
       aria-describedby="kyc-esign-back-confirmation"
       id="kyc-esign-back-dialog"
+      data-aid='kyc-esign-back-dialog'
       {...props}
     >
       <DialogContent>
-        <section className="kyc-esign-gb-dailog">
+        <section className="kyc-esign-gb-dailog" data-aid='kyc-esign-gb-dailog'>
           <article
             className="text" data-aid='text'
           >

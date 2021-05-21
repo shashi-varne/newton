@@ -16,7 +16,7 @@ const FAndOSampleDocument = (props) => {
   }
 
   return (
-    <Container title="Sample documents" buttonTitle="OKAY" handleClick={handleCTAClick}>
+    <Container title="Sample documents" buttonTitle="OKAY" handleClick={handleCTAClick} data-aid='kyc-sample-doc-screen'>
       <SampleDocuments description={description} documents={documents} />
     </Container>
   )
