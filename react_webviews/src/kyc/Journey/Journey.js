@@ -8,6 +8,7 @@ import { getPathname } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
+  getFlow,
   navigate as navigateFunc,
 } from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
@@ -412,6 +413,7 @@ const Journey = (props) => {
   }
 
   const goNext = async () => {
+    sendEvents('next')
     try {
       if (!canSubmit()) {
         for (var i = 0; i < kycJourneyData.length; i++) {
@@ -444,6 +446,8 @@ const Journey = (props) => {
   }
 
   const handleEdit = (key, index, isEdit) => {
+    if(isEdit)
+      sendEvents('edit')
     console.log('Inside handleEdit')
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {
@@ -588,7 +592,6 @@ const Journey = (props) => {
       }
     }
   }
-
   if (!isEmpty(kyc) && !isEmpty(user)) {
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
       navigate('/nps/identity')
@@ -607,9 +610,42 @@ const Journey = (props) => {
     }
   }
 
+  const sendEvents = (userAction, screen_name) => {
+    let stageData=0;
+    let stageDetailData='';
+    for (var i = 0; i < kycJourneyData?.length; i++) {
+      if (
+        kycJourneyData[i].status === 'init' ||
+        kycJourneyData[i].status === 'pending'
+      ) {
+        stageData = i + 1
+        stageDetailData = kycJourneyData[i].key
+        break
+      }
+    }
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "" ,
+        "screen_name": screen_name || "kyc_journey",
+        stage: stageData,
+        details: stageDetailData,
+        "rti": "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       force_hide_inpage_title
+      events={sendEvents("just_set_events")}
       buttonTitle={ctaText}
       classOverRideContainer="pr-container"
       skelton={isLoading || isEmpty(kyc) || isEmpty(user)}

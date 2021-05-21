@@ -10,6 +10,7 @@ import { combinedDocBlob } from '../common/functions'
 import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -106,7 +107,8 @@ const NRIAddressUpload = (props) => {
     })
   }
 
-  const handleChange = (type) => (event) => {
+  const handleChange = (type, openType) => (event) => {
+    sendEvents('get_image', openType, type)
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -170,6 +172,7 @@ const NRIAddressUpload = (props) => {
   }
 
   const handleSubmit = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
       let result, response
@@ -242,6 +245,7 @@ const NRIAddressUpload = (props) => {
   }
 
   const editAddress = () => {
+    sendEvents('edit')
     navigate("/kyc/nri-address-details1", {
       state: {
         backToJourney: true,
@@ -251,10 +255,29 @@ const NRIAddressUpload = (props) => {
 
   const isWeb = getConfig().isWebOrSdk
 
+  const sendEvents = (userAction, type, docSide) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nri_address_doc",
+        "type": type || "",
+        "doc_side": docSide || "",
+        "doc_type": addressProofKey
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
+      events={sendEvents("just_set_events")}
       handleClick={handleSubmit}
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
@@ -297,7 +320,7 @@ const NRIAddressUpload = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front')}
+                      onChange={handleChange('front','open-camera')}
                       accept="image/*"
                       capture
                     />
@@ -327,7 +350,7 @@ const NRIAddressUpload = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front')}
+                      onChange={handleChange('front', 'gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','front')}
@@ -373,7 +396,7 @@ const NRIAddressUpload = (props) => {
                   ref={frontDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('front')}
+                  onChange={handleChange('front','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','front')}
@@ -419,7 +442,7 @@ const NRIAddressUpload = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back')}
+                      onChange={handleChange('back','open-camera')}
                       accept="image/*"
                       capture
                     />
@@ -449,7 +472,7 @@ const NRIAddressUpload = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back')}
+                      onChange={handleChange('back','gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','back')}
@@ -495,7 +518,7 @@ const NRIAddressUpload = (props) => {
                   ref={backDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('back')}
+                  onChange={handleChange('back','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','back')}

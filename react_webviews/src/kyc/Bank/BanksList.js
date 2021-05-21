@@ -8,6 +8,7 @@ import { getPathname, storageConstants } from "../constants";
 import toast from "../../common/ui/Toast";
 import { initData } from "../services";
 import "./BanksList.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const productName = getConfig().productName;
 const BanksList = (props) => {
@@ -43,18 +44,37 @@ const BanksList = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next")
     navigate(getPathname.addBank);
   };
 
   const bank_details = (bank_id) => () => {
+    sendEvents('next')
     navigate(`${getPathname.bankDetails}${bank_id}`);
   };
 
   const config = getConfig();
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "add bank/mandate",
+        "primary_account": banks[0]?.bank_name
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       skelton={showLoader}
+      events={sendEvents("just_set_events")}
       buttonTitle="ADD ANOTHER BANK"
       handleClick={handleClick}
       noFooter={
