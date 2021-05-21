@@ -18,6 +18,7 @@ import {
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
 const Nominee = (props) => {
   const genericErrorMessage = "Something went wrong!";
@@ -35,7 +36,7 @@ const Nominee = (props) => {
     title = "Edit nominee detail";
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -135,6 +136,11 @@ const Nominee = (props) => {
       title={title}
     >
       <div className="kyc-nominee">
+        <WVInfoBubble
+          type="info"
+          customTitle="Nominee details will be applicable for mutual fund investments only"
+          hasTitle
+        />
         {!isEmpty(kyc) && (
           <main>
             <Input

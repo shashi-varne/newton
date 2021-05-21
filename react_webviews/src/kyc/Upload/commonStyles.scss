@@ -1,3 +1,14 @@
+@mixin d-flex-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin block-fit {
+  display: block;
+  width: 100%;
+  object-fit: contain;
+}
+
 #kyc-upload-intro {
   .banner {
     display: flex;
@@ -80,8 +91,9 @@
   }
 
   .sub-title {
-    margin-top: -18px;
+    margin-top: -15px;
     font-size: 13px;
+    line-height: 21px;
   }
 
   .pan-alert {
@@ -95,9 +107,14 @@
     flex-wrap: nowrap;
   }
 
+  .instructions-container {
+    margin: 10px;
+  }
+
   .ipv_footer_instructions {
-    margin-top: 10px;
-    line-height: 1.5;
+    font-size: 15px;
+    line-height: 24px;
+    text-align: left;
   }
 
   .ipv_code {
@@ -105,25 +122,48 @@
     font-size: 26px;
     line-height: 31px;
     letter-spacing: 7.5px;
-    color: #331c6b;
+    color: var(--primary);
     margin-top: 10px;
+    text-align: left;
   }
 
-  .flex-between-center {
-    margin-top: 14px;
+  .doc-upload-note-row {
+    @include d-flex-space-between();
+    align-items: center;
+    margin-top: 40px;
 
-    .know_more {
-      font-size: 14px;
-      color: #160d2e;
+    .upload-note {
+      font-size: 13px;
+      line-height: 21px;
+      color: var(--dark);
+      text-align: left;
     }
 
-    .link {
+    .know-more-button {
       color: var(--secondary);
-      font-size: 10px;
+      font-size: 12px;
+      line-height: 14px;
+      font-weight: bold;
+      justify-content: flex-end !important;
       margin: 5px 0 0;
       cursor: pointer;
     }
   }
+
+  // .doc-upload-note-row {
+  //   margin-top: 40px;
+  //   @include d-flex-space-between();
+  //   column-gap: 20px;
+
+  //   .upload-note {
+  //     max-width: 70%;
+  //     text-align: left;
+  //   }
+
+  //   .know-more-button {
+  //     justify-content: flex-end !important;
+  //   }
+  // }
 }
 
 #kyc-upload-address {
@@ -133,6 +173,8 @@
     display: flex;
     justify-content: space-between;
     column-gap: 10px;
+    color: var(--dark);
+    font-weight: 500;
 
     .edit {
       color: var(--secondary);
@@ -140,17 +182,27 @@
       font-weight: 800;
     }
   }
+
+  .address-detail {
+    margin: 10px 0 30px 0;
+    color: var(--steelgrey);
+  }
 }
 
 .kyc-doc-upload-container {
   margin-top: 20px;
   border: 1px dashed var(--skelton-color);
   padding: 10px 0;
+  text-align: center;
 
   .icon {
     display: block;
     margin: 70px auto 20px auto;
     width: 143px;
+  }
+
+  .video-controls {
+    max-width: 100%;
   }
 }
 
@@ -162,14 +214,18 @@
   text-align: center;
   line-height: 1.5;
   color: #160d2e;
+  margin-bottom: 10px;
 }
 
 .kyc-doc-upload-container .preview {
-  display: block;
-  width: 100%;
-  object-fit: contain;
+  @include block-fit();
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  margin-top: 10px;
+}
+
+.kyc-doc-upload-container .default {
+  @include block-fit();
   margin-top: 10px;
 }
 
@@ -217,4 +273,12 @@
     font-weight: 800;
     margin-top: 5px;
   }
+
+  .button-container {
+    padding: 0 10px;
+  }
+}
+
+.align-left {
+  text-align: left;
 }

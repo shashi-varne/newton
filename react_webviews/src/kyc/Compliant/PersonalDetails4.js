@@ -15,6 +15,7 @@ import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -27,7 +28,7 @@ const PersonalDetails4 = (props) => {
   if (isEdit) {
     title = "Edit nominee detail";
   }
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -173,6 +174,11 @@ const PersonalDetails4 = (props) => {
     >
       <div className="kyc-nominee">
         <main>
+          <WVInfoBubble
+            type="info"
+            customTitle="Nominee details will be applicable for mutual fund investments only"
+            hasTitle
+          />
           <div className="nominee-checkbox">
             <Checkbox
               defaultChecked

@@ -39,7 +39,8 @@
 
   .subtitle {
     font-size: 13px;
-    color: #8d879b;
+    line-height: 21px;
+    color: var(--steelgrey);
     padding: 0 15px 0 0;
     margin-bottom: 20px;
   }
@@ -50,6 +51,8 @@
     align-items: center;
     line-height: 1.5;
     padding-bottom: 20px;
+    column-gap: 10px;
+    row-gap: 10px;
 
     .kyc-upload-doc-option-type {
       color: #160d2e;
@@ -135,8 +138,13 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    position: relative;
+    // position: relative;
     cursor: pointer;
+
+    .button-container {
+      margin-top: 10px;
+      width: 100%;
+    }
   }
 
   .upload-container svg {
@@ -152,7 +160,7 @@
   }
 
   .web-upload-container {
-    padding: 30px 0;
+    // padding: 30px 0;
   }
 
   .camera-upload-container {
