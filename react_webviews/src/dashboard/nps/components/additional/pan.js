@@ -21,6 +21,7 @@ import { storageService } from "utils/validators";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import { getConfig } from "../../../../utils/functions";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { isEmpty } from "../../../../utils/validators";
 
 const yesOrNo_options = [
   {
@@ -47,7 +48,8 @@ class PanDetails extends Component {
       openDialog: false,
       title: "",
       subtitle: "",
-      isKycApproved: false
+      isKycApproved: false,
+      isKycIdentificationApproved: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -59,20 +61,28 @@ class PanDetails extends Component {
   onload = () => {
     let currentUser = storageService().getObject("user");
     let userKyc = storageService().getObject("kyc");
-    let { form_data, isKycApproved } = this.state;
+    let { form_data, isKycApproved, is_nps_contributed, isKycIdentificationApproved } = this.state;
 
-    isKycApproved = userKyc.pan.meta_data_status === 'approved';;
+    isKycApproved = userKyc.pan.meta_data_status === 'approved';
+    isKycIdentificationApproved = userKyc.identification?.meta_data_status === 'approved';
     form_data.dob = userKyc.pan.meta_data.dob || "";
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 
     form_data.email = userKyc.address.meta_data.email || "";
     form_data.mobile_number = userKyc.address.meta_data.mobile_number || "";
 
+    form_data.pran = storageService().get("nps_pran_number") || ""
+    if(!isEmpty(form_data.pran)) {
+      is_nps_contributed = true;
+    }
+    
     this.setState({
       currentUser: currentUser,
       isKycApproved: isKycApproved,
       userKyc: userKyc,
       form_data: form_data,
+      is_nps_contributed,
+      isKycIdentificationApproved
     });
   };
 
@@ -245,7 +255,7 @@ class PanDetails extends Component {
   }
 
   render() {
-    const { form_data, is_nps_contributed, currentUser, isKycApproved } = this.state;
+    const { form_data, is_nps_contributed, currentUser, isKycApproved, isKycIdentificationApproved } = this.state;
     return (
       <Container
         classOverRIde="pr-error-container"
@@ -257,7 +267,6 @@ class PanDetails extends Component {
         goBack={this.goBack}
       >
         <div className="pan-details">
-          {/* <div className="top-title">Your Details</div> */}
           <FormControl fullWidth>
             <div className="InputField">
               <InputWithIcon
@@ -347,7 +356,7 @@ class PanDetails extends Component {
                   helperText={form_data.mobile_number_error}
                   value={form_data.mobile_number || ""}
                   onChange={this.handleChange("mobile_number")}
-                  disabled={isKycApproved}
+                  disabled={isKycIdentificationApproved}
                 />
               </div>
             )}
@@ -365,7 +374,7 @@ class PanDetails extends Component {
                   helperText={form_data.email_error}
                   value={form_data.email || ""}
                   onChange={this.handleChange("email")}
-                  disabled={isKycApproved}
+                  disabled={isKycIdentificationApproved}
                 />
               </div>
             )}

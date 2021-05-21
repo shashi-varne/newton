@@ -77,7 +77,7 @@ const Balance = (props) => {
         // eslint-disable-next-line radix
         if( amount < 5000 ){
           setError(true);
-          setHelperText('minimum switch amount is 5000');
+          setHelperText(`minimum switch amount is ${formatAmountInr(5000)}`);
         } else{
           navigate('/withdraw/switch', {state: {amount} })
         }
