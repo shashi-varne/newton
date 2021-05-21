@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { WVFilePickerWrapper } from '../FileUploadWrapper';
 import SVG from 'react-inlinesvg';
 import { isFunction } from 'lodash';
+import PropTypes from 'prop-types';
 
 const WVFileUploadCard = ({
   title,
@@ -64,6 +65,11 @@ const WVFileUploadCard = ({
       </div>
     </WVFilePickerWrapper>
   );
+}
+
+WVFilePickerWrapper.propTypes = {
+  title: PropTypes.node,
+  subtitle: PropTypes.node,
 }
 
 export default WVFileUploadCard;
