@@ -72,7 +72,6 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
               classes={{ stepContent: 'step-content'}}
             >
               <div className="status">{step.status}</div>
-              {/* Todo: add other conditions */}
             </WVSteps>
           ))}
         </div>
