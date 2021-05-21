@@ -100,10 +100,10 @@ const SipDetails = (props) => {
         "screen_name": "SIP Details",
         }
     };
-    if (typeof data !== 'undefined') {
+    if (data) {
       eventObj.properties['status'] = formatName(data);
     }
-    if (typeof flow !== 'undefined') {
+    if (flow) {
       eventObj.properties['flow'] = flow
     }
     if (userAction === 'just_set_events') {

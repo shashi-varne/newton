@@ -112,6 +112,7 @@ const Summary = (props) => {
     let investValues = { ...investData };
     investValues[name] = value;
     if (name === "investType") {
+      setIsAmountSliderUsed(false);
       investValues.amount = investValues.investType === "sip" ? 500 : 5000;
     }
     investValues[`${name}_error`] = "";
@@ -182,7 +183,7 @@ const Summary = (props) => {
         "user_action": userAction || "",
         "screen_name": "my money",
         "flow": flow || "",
-        "mode": (investData?.investType === "lumpsum" ? "ot" : investData?.investType) || '',
+        "mode": (investData?.investType === "sip" ? "sip" : "ot") || '',
         "invested_amount_slider": isAmountSliderUsed ? "yes" : "no",
         "years_slider": isYearSliderUsed ? "yes" : "no",
         // "investment_graph": $scope.isGraphUsed ? "yes" : "no", // To be checked
