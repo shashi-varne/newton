@@ -314,3 +314,8 @@ export const dlDocs = [
   {name: 'Pan Card', icon: 'ic_pan_card'},
   {name: 'Address Details', icon: 'ic_address_details'}
 ]
+
+export const companyDetails = {
+  NAME: "Finwizard technology Private Ltd.",
+  ADDRESS: "Queens Paradise, No. 16/1, 1st Floor, Curve Rd, Shivaji Nagar, Bengaluru, Karnataka 560051"
+}

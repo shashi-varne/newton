@@ -1,0 +1,55 @@
+.wv-bottomsheet {
+  .MuiDialog-paper {
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    left: -20px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .MuiDialogActions-root {
+    margin: 0;
+  }
+}
+
+/* Content Section */
+.wv-bottomsheet-content {
+  display: flex;
+  justify-content: space-between;
+
+  .wv-bc-left {
+    flex: 0 1 52%;
+
+    .wv-bcl-title {
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 32px;
+      color: var(--dark);
+      margin-top: 10px;
+      word-break: break-all;
+    }
+    
+    .wv-bcl-subtitle {
+      font-size: 13px;
+      line-height: 21px;
+      color: var(--steelgrey);
+      word-break: break-all;
+    }
+  }
+
+  .wv-bc-right {
+    margin-left: 20px;
+
+    // .wv-bcr-image {
+    // }
+  }
+  
+}
+
+/* Actions Section */
+.wv-bottomsheet-actions {
+  padding: 20px;
+  margin: 0 !important;
+  display: flex;
+}
