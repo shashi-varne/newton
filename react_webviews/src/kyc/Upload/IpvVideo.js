@@ -10,6 +10,9 @@ import KnowMore from '../mini-components/IpvVideoKnowMore'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
+const config = getConfig();
+const productName = config.productName
+const isWeb = config.Web
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
@@ -107,7 +110,7 @@ const IpvVideo = (props) => {
   }
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'ipvvideo', '', '', 'Look at the screen and read the verification number loud', ipvcode)
@@ -132,9 +135,6 @@ const IpvVideo = (props) => {
       setIsApiRunning(false)
     }
   }
-
-  const productName = getConfig().productName
-  const isWeb = getConfig().Web
 
   return (
     <Container
