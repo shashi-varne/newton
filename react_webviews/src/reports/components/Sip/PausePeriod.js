@@ -17,14 +17,14 @@ const sliderValues = {
   value: 2,
 };
 const productName = getConfig().productName;
-const PausePeriod = (props) => {  
+const PausePeriod = (props) => {
   const sip = storageService().getObject(storageConstants.PAUSE_SIP) || {};
   if (isEmpty(sip)) props.history.goBack();
   const navigate = navigateFunc.bind(props);
   const [period, setPeriod] = useState(sliderValues.value);
 
   const handleClick = () => () => {
-    sendEvents('next', period)
+    sendEvents("next", period);
     navigate(`${getPathname.pauseCancelDetail}pause/${period}`);
   };
 
@@ -32,20 +32,19 @@ const PausePeriod = (props) => {
 
   const sendEvents = (userAction, period) => {
     let eventObj = {
-      "event_name": "sip_pause_cancel",
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "Pause Period",
-        }
+      event_name: "sip_pause_cancel",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Pause Period",
+      },
     };
-    if(period)
-      eventObj.properties['period'] = period;
-    if (userAction === 'just_set_events') {
+    if (period) eventObj.properties["period"] = period;
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

@@ -18,26 +18,26 @@ const Request = (props) => {
   }
 
   const handleClick = () => {
-    sendEvents('next')
+    sendEvents("next");
     navigate(getPathname.reportsSip);
   };
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": "sip_pause_cancel",
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "Request Placed",
-        'operation': requestData?.action || ""
-        }
+      event_name: "sip_pause_cancel",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Request Placed",
+        operation: requestData?.action || "",
+      },
     };
 
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

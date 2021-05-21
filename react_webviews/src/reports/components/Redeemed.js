@@ -48,7 +48,7 @@ const Redeemed = (props) => {
   };
 
   const goBack = () => {
-    sendEvents('back')
+    sendEvents("back");
     props.history.push({
       pathname: "/reports",
       search: getConfig().searchParams,
@@ -57,18 +57,18 @@ const Redeemed = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'my_portfolio',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "Pending withdrawals",
-        }
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Pending withdrawals",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

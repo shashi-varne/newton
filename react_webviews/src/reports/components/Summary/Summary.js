@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
-import {nativeCallback} from '../../../utils/native_callback'
+import { nativeCallback } from "../../../utils/native_callback";
 import Button from "common/ui/Button";
 import {
   navigate as navigateFunc,
@@ -100,10 +100,8 @@ const Summary = (props) => {
   };
 
   const handleChange = (name) => (event) => {
-    if(name === "time")
-      setIsYearSliderUsed(true);
-    if(name === "amount")
-      setIsAmountSliderUsed(true);
+    if (name === "time") setIsYearSliderUsed(true);
+    if (name === "amount") setIsAmountSliderUsed(true);
     let value = event.target ? event.target.value : event;
     handleInvestData(name, value);
   };
@@ -126,15 +124,15 @@ const Summary = (props) => {
   };
 
   const flowOptions = (name) => {
-    switch(name) {
-      case "reportsSip": 
-        sendEvents('next','Existing SIPs');
+    switch (name) {
+      case "reportsSip":
+        sendEvents("next", "Existing SIPs");
         break;
-      case "reportsTransactions": 
-        sendEvents('next','Transactions');
+      case "reportsTransactions":
+        sendEvents("next", "Transactions");
         break;
-      case "reportsFundswiseSummary": 
-        sendEvents('next','Track Fund Performance');
+      case "reportsFundswiseSummary":
+        sendEvents("next", "Track Fund Performance");
         break;
       case "reportsSwitched":
         sendEvents("next", "Pending Switch");
@@ -149,14 +147,14 @@ const Summary = (props) => {
         sendEvents("next", "NPS Investments");
         break;
       default:
-        sendEvents('next');
+        sendEvents("next");
         break;
     }
     navigate(getPathname[name], { state: { fromPath: "reports" } });
   };
 
   const redirectWithdraw = () => {
-    sendEvents('next', 'Withdraw')
+    sendEvents("next", "Withdraw");
     if (currentUser.kyc_registration_v2 === "complete") {
       navigate(`${getPathname.withdrawReason}`);
       return;
@@ -171,30 +169,30 @@ const Summary = (props) => {
   };
 
   const showGoals = () => {
-    sendEvents('next', "Track my goals")
+    sendEvents("next", "Track my goals");
     if (report.invested === 0) return;
     navigate(getPathname.reportGoals);
   };
 
   const sendEvents = (userAction, flow) => {
     let eventObj = {
-      "event_name": 'my_portfolio',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "my money",
-        "flow": flow || "",
-        "mode": (investData?.investType === "sip" ? "sip" : "ot") || '',
-        "invested_amount_slider": isAmountSliderUsed ? "yes" : "no",
-        "years_slider": isYearSliderUsed ? "yes" : "no",
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "my money",
+        flow: flow || "",
+        mode: (investData?.investType === "sip" ? "sip" : "ot") || "",
+        invested_amount_slider: isAmountSliderUsed ? "yes" : "no",
+        years_slider: isYearSliderUsed ? "yes" : "no",
         // "investment_graph": $scope.isGraphUsed ? "yes" : "no", // To be checked
-        }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -304,7 +302,10 @@ const Summary = (props) => {
                       <b>Invest today & grow your wealth</b>
                     </p>
                     <Button
-                      onClick={() => {sendEvents('next', 'Explore Mutual Funds'); navigate(getPathname.invest)}}
+                      onClick={() => {
+                        sendEvents("next", "Explore Mutual Funds");
+                        navigate(getPathname.invest);
+                      }}
                       buttonTitle="Explore Mutual Funds"
                       classes={{
                         button: "reports-invest-button",
@@ -421,14 +422,20 @@ const Summary = (props) => {
               />
               {data.insurance_active && investCards.insurance && (
                 <SummaryCard
-                  goNext={() => {sendEvents('next', 'Insurance'); navigate("/group-insurance/common/report")}}
+                  goNext={() => {
+                    sendEvents("next", "Insurance");
+                    navigate("/group-insurance/common/report");
+                  }}
                   icon="ic_pf_insurance.svg"
                   title="Insurance"
                 />
               )}
               {data.gold_active_investment && investCards.gold && (
                 <SummaryCard
-                  goNext={() => {sendEvents('next', 'Gold'); navigate("/gold/my-gold")}}
+                  goNext={() => {
+                    sendEvents("next", "Gold");
+                    navigate("/gold/my-gold");
+                  }}
                   icon="ic_pf_gold.svg"
                   title="Gold"
                   subtitle={`${data?.gold_details?.total_balance || 0} gm`}

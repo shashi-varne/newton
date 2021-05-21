@@ -82,20 +82,20 @@ const FundswiseSummary = (props) => {
 
   const sendEvents = (userAction, data, flow) => {
     let eventObj = {
-      "event_name": 'my_portfolio',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "Track Fund Performance",
-        'fund': data?.current_invested || data?.invested_amount || "",
-        'over_flow_menu': flow || ""
-        }
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Track Fund Performance",
+        fund: data?.current_invested || data?.invested_amount || "",
+        over_flow_menu: flow || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container events={sendEvents("just_set_events")} title="Funds" noFooter={true} skelton={showSkelton}>

@@ -32,7 +32,7 @@ const Goals = (props) => {
   };
 
   const redirectToInvestType = (goal) => {
-    sendEvents('next', goal)
+    sendEvents("next", goal);
     let pathname = getPathname[goal?.itag?.itype] || "";
     if (!pathname) return;
     if (goal.itag.itype === "saveforgoal")
@@ -42,22 +42,27 @@ const Goals = (props) => {
 
   const sendEvents = (userAction, data) => {
     let eventObj = {
-      "event_name": 'my_portfolio',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "Track my goals",
-        goal: data || ""
-        }
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Track my goals",
+        goal: data || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
-    <Container hidePageTitle={true} noFooter={true} events={sendEvents("just_set_events")} skelton={showSkelton}>
+    <Container
+      hidePageTitle={true}
+      noFooter={true}
+      events={sendEvents("just_set_events")}
+      skelton={showSkelton}
+    >
       <div className="report-goals">
         {!isEmpty(goals) &&
           goals.map((goal, index) => {

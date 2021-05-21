@@ -48,25 +48,25 @@ const SipDetails = (props) => {
     return name.replace(/_/g, " ").toUpperCase();
   };
 
-  const handleClick = (name) => () => {    
+  const handleClick = (name) => () => {
     if (name === "FIRST") {
       if (sip_mandate_created.includes(report.friendly_status)) {
-        sendEvents('cancel', report)
+        sendEvents("cancel", report);
         navigate(`${getPathname.pauseAction}cancel`);
         return;
       }
       if (requested_pause.includes(report.friendly_status)) {
-        sendEvents('next', 'resume', report.friendly_status)
+        sendEvents("next", "resume", report.friendly_status);
         nextStep("resume");
         return;
       }
       if (requested_cancel.includes(report.friendly_status)) {
-        sendEvents('next', 'restart', report.friendly_status)
+        sendEvents("next", "restart", report.friendly_status);
         nextStep("restart");
         return;
       }
     } else {
-      sendEvents('pause', report)
+      sendEvents("pause", report);
       navigate(`${getPathname.pauseAction}pause`);
     }
   };
@@ -94,24 +94,24 @@ const SipDetails = (props) => {
 
   const sendEvents = (userAction, flow, data) => {
     let eventObj = {
-      "event_name": 'my_portfolio',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "SIP Details",
-        }
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "SIP Details",
+      },
     };
     if (data) {
-      eventObj.properties['status'] = formatName(data);
+      eventObj.properties["status"] = formatName(data);
     }
     if (flow) {
-      eventObj.properties['flow'] = flow
+      eventObj.properties["flow"] = flow;
     }
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

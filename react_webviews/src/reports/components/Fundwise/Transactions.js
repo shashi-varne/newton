@@ -54,18 +54,18 @@ const FundswiseTransactions = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'my_portfolio',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "transactions",
-        }
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "transactions",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

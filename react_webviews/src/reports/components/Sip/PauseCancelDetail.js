@@ -50,7 +50,7 @@ const PauseCancelDetail = (props) => {
   };
 
   const handleClick = async () => {
-    sendEvents('next')
+    sendEvents("next");
     setIsApiRunning("button");
     try {
       const result = await postSipAction({
@@ -77,19 +77,19 @@ const PauseCancelDetail = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": "sip_pause_cancel",
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "Request Summary",
-        "operation": action
-        }
+      event_name: "sip_pause_cancel",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Request Summary",
+        operation: action,
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
