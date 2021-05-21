@@ -521,7 +521,8 @@ class HealthInsuranceLanding extends Component {
           <div>
             <p style={{ fontSize: '20px', marginBottom: '24px', fontWeight: '700' }}>Health Insurance</p>
           </div>
-          <MenuListDropDown menulistProducts={this.state.insuranceProducts} value={this.state.value} parent={this} title='Explore best plans for your health' />
+          <MenuListDropDown menulistProducts={this.state.insuranceProducts} value={this.state.value} handleClick={this.handleClick}
+            handleClickEntry={this.handleClickEntry} parent={this} title='Explore best plans for your health' />
         </div>
       </Container>
     );

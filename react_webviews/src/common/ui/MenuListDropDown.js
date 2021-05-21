@@ -5,7 +5,6 @@ class MenuListDropDownClass extends Component {
         super(props);
         this.state = {
             menulistProducts: props.menulistProducts,
-            value: this.props.parent.state.value,
             type: getConfig().productName,
         }
         this.renderPorducts = this.renderPorducts.bind(this);
@@ -15,7 +14,7 @@ class MenuListDropDownClass extends Component {
     renderPorductList(props, index, array) {
         if (!props.disabled) {
             return (
-                <div className='menulist-dropdown' key={index + 1} onClick={() => this.props.parent.handleClickEntry(props)}>
+                <div className='menulist-dropdown' key={index + 1} onClick={() => this.props.handleClickEntry(props)}>
                     <div className='menulist-dropdown-types'>
                         <img src={props.icon} className="menulist-dropdown-logos_small" alt="" />
                         <div className='menulist-dropdown-line-style'
@@ -35,7 +34,7 @@ class MenuListDropDownClass extends Component {
 
         return (
             <div key={index}>
-                <div className='menu-list-dropdown' onClick={() => this.props.parent.handleClick(props, index)}>
+                <div className='menu-list-dropdown' onClick={() => this.props.handleClick(props, index)}>
                     <div className='menulist-block'>
                         <img src={props.icon} alt="" className='image-icon' />
                         <div className='dropdown-elements'
@@ -54,7 +53,7 @@ class MenuListDropDownClass extends Component {
                 <div className='menulist-block'>
                     {props.type === 'drop-down' && this.props.value === index &&
                         <div style={{width: '100%'}}
-                            onClick={() => this.props.parent.handleClick(props.key, props.title)}>
+                            onClick={() => this.props.handleClick(props.key, props.title)}>
                             {props.formate === 'object' &&
                                 <div className="menulist-dropdown-lists">
                                     <div className='products' style={{ marginTop: '-8px' }}>
