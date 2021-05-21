@@ -133,8 +133,8 @@ const Pan = (props) => {
         }
       }
       setIsApiRunning("button")
-      const result = await upload(file, 'pan', data);
-      storageService().setObject(storageConstants.KYC, result.kyc)
+      const response = await upload(file, 'pan', data);
+      const result = response.result;
       if (
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
         (result.error && !result.ocr_pan_kyc_matches)
@@ -144,6 +144,7 @@ const Pan = (props) => {
         )
         setTitle('PAN mismatch!')
       } else {
+        storageService().setObject(storageConstants.KYC, result.kyc)
         if (
           result.kyc.kyc_status !== 'compliant' &&
           result.kyc.dl_docs_status !== '' &&
@@ -156,9 +157,9 @@ const Pan = (props) => {
         }
       }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
