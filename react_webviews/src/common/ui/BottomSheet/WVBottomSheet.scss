@@ -1,3 +1,16 @@
+body[data-device="web"]{
+  .wv-bottomsheet{
+    .MuiDialog-paper {
+      position: unset;
+      width: 100%;
+      bottom: unset;
+      left: unset;
+      border-radius: 8px;
+    }
+  }
+}
+  
+
 .wv-bottomsheet {
   .MuiDialog-paper {
     position: fixed;
@@ -28,6 +41,7 @@
       color: var(--dark);
       margin-top: 10px;
       word-break: break-word;
+      text-transform: capitalize;
     }
     
     .wv-bcl-subtitle {
@@ -35,6 +49,8 @@
       line-height: 21px;
       color: var(--steelgrey);
       word-break: break-word;
+      margin: 10px 0 20px;
+      text-transform: capitalize;
     }
   }
 
