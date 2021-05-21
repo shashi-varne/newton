@@ -27,7 +27,7 @@ const NriAddressDetails1 = (props) => {
     title = "Edit foreign address details";
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   const addressProofOptions = [
     { name: "Driving license", value: "DL" },
@@ -56,7 +56,7 @@ const NriAddressDetails1 = (props) => {
   };
 
   const handleClick = () => {
-    sendEvents("next")
+    sendEvents("next");
     let keysToCheck = ["mobile_number", "address_doc_type"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
@@ -122,20 +122,20 @@ const NriAddressDetails1 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nri_address_details_1",
-        "address_proof": form_data.address_doc_type,
-        "mobile_number": kyc.nri_address.meta_data.mobile_number ? "Indian" : "NRI"
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nri_address_details_1",
+        doc_selected: form_data.address_doc_type ? form_data.address_doc_type.toLowerCase() : "",
+        residential_status: kyc?.address?.meta_data?.is_nri ? "nri" : "indian",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

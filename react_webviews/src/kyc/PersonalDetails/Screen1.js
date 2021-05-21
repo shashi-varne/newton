@@ -32,7 +32,7 @@ const PersonalDetails1 = (props) => {
     title = "Edit personal details";
   }
 
-  const {kyc, user, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -65,7 +65,7 @@ const PersonalDetails1 = (props) => {
     if (user.email === null) keysToCheck.push("email");
     if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
-    sendEvents("next")
+    sendEvents("next");
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -142,25 +142,31 @@ const PersonalDetails1 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "" ,
-        "screen_name": "personal_details_1",
-        "name": form_data.name ? "yes" : "no",
-        "mobile": form_data.mobile_number ? "yes" : "no",
-        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "gender": form_data.gender,
-        "marital_status": form_data.marital_status,
-        "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
-        "flow": 'general'
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "personal_details_1",
+        gender: form_data.gender
+          ? form_data.gender === "TRANSGENDER"
+            ? "others"
+            : form_data?.gender?.toLowerCase()
+          : "",
+        marital_status: form_data.marital_status
+          ? form_data.marital_status.toLowerCase()
+          : "",
+        // "name": form_data.name ? "yes" : "no",
+        // "mobile": form_data.mobile_number ? "yes" : "no",
+        // "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        // "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
+        // "flow": 'general'
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

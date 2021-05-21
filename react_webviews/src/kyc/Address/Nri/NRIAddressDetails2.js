@@ -16,7 +16,7 @@ import { nativeCallback } from "../../../utils/native_callback";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const [form_data, setFormData] = useState({
     nri_pincode: "",
   });
@@ -41,7 +41,7 @@ const NRIAddressDetails2 = (props) => {
   const stateParams = props?.location?.state;
 
   const handleSubmit = async () => {
-    sendEvents("next")
+    sendEvents("next");
     let keysToCheck = [
       "nri_pincode",
       "addressline",
@@ -65,7 +65,7 @@ const NRIAddressDetails2 = (props) => {
       return;
     }
 
-    let userKycDetails = {...kyc};
+    let userKycDetails = { ...kyc };
     userKycDetails.nri_address.meta_data.city = form_data.city;
     userKycDetails.nri_address.meta_data.state = form_data.state;
     userKycDetails.nri_address.meta_data.country = form_data.country;
@@ -137,20 +137,21 @@ const NRIAddressDetails2 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nri_address_details_2",
-        "pincode_entered": form_data.nri_pincode ? "yes" : "no",
-        "address_entered": form_data.addressline ? "yes" : "no"
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nri_address_details_2",
+        country: form_data.country || "",
+        // "pincode_entered": form_data.nri_pincode ? "yes" : "no",
+        // "address_entered": ''
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

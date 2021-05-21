@@ -8,6 +8,7 @@ import { getPathname } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
+  getDLFlow,
   getFlow,
   navigate as navigateFunc,
 } from '../common/functions'
@@ -661,28 +662,33 @@ const Journey = (props) => {
 
   const sendEvents = (userAction, screen_name) => {
     let stageData=0;
-    let stageDetailData='';
+    // let stageDetailData='';
     for (var i = 0; i < kycJourneyData?.length; i++) {
       if (
         kycJourneyData[i].status === 'init' ||
         kycJourneyData[i].status === 'pending'
       ) {
         stageData = i + 1
-        stageDetailData = kycJourneyData[i].key
+        // stageDetailData = kycJourneyData[i].key
         break
       }
     }
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "" ,
-        "screen_name": screen_name || "kyc_journey",
-        stage: stageData,
-        details: stageDetailData,
-        "rti": "",
-        "initial_kyc_status": kyc.initial_kyc_status || "",
-        "flow": getFlow(kyc) || ""
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: screen_name || "kyc_journey",
+        step: `step${stageData}`,
+        premium_onboarding: kyc.kyc_status === "compliant" ? "yes" : "no",
+        kyc_flow: getDLFlow(kyc) ? "digilocker" : "manual",
+        // resume_journey: To be checked
+
+        // "stage": stageData,
+        // "details": stageDetailData,
+        // "rti": "",
+        // "initial_kyc_status": kyc.initial_kyc_status || "",
+        // "flow": getFlow(kyc) || ""
+      },
     };
     if (userAction === 'just_set_events') {
       return eventObj;

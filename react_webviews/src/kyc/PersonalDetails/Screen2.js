@@ -24,7 +24,7 @@ const PersonalDetails2 = (props) => {
     title = "Edit personal details";
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -42,7 +42,7 @@ const PersonalDetails2 = (props) => {
   };
 
   const handleClick = () => {
-    sendEvents("next")
+    sendEvents("next");
     let keysToCheck = ["mother_name", "father_name"];
     if (form_data.marital_status === "MARRIED") keysToCheck.push("spouse_name");
     let result = validateFields(form_data, keysToCheck);
@@ -105,22 +105,22 @@ const PersonalDetails2 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "personal_details_2",
-        "mother_name": form_data.mother_name ? "yes" : "no",
-        "father_name": form_data.father_name ? "yes" : "no",
-        "spouse_name": form_data.spouse_name ? "yes" : "no",
-        "flow": 'general'
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "personal_details_2",
+        mother_name: form_data.mother_name ? "yes" : "no",
+        father_name: form_data.father_name ? "yes" : "no",
+        spouse_name: form_data.spouse_name ? "yes" : "no",
+        // "flow": 'general'
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

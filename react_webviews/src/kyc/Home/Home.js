@@ -102,7 +102,6 @@ const Home = (props) => {
   // };
 
   const handleClick = async () => {
-    
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
@@ -120,7 +119,7 @@ const Home = (props) => {
       }
       const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
       if (!isStartKyc) {
-        sendEvents("next")
+        sendEvents("next");
         if (skipApiCall) {
           setIsStartKyc(true);
           setUserName(kyc?.pan?.meta_data?.name);
@@ -190,10 +189,12 @@ const Home = (props) => {
   };
 
   const closeAccountMerge = () => {
+    sendEvents("re-enter_pan", "pan_aleady_exists");
     setOpenAccountMerge(false);
   };
 
   const handleMerge = async (step) => {
+    sendEvents("link_account", "pan_aleady_exists");
     if (step === "STEP1") {
       storageService().setObject(storageConstants.AUTH_IDS, authIds);
       navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
@@ -244,7 +245,6 @@ const Home = (props) => {
   };
 
   const savePan = async (is_nri) => {
-    // sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
     try {
       setShowLoader("button");
       if (is_nri) {
@@ -280,14 +280,14 @@ const Home = (props) => {
       (isUserCompliant || kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
-      sendEvents("next", "pan_entry")
+      // sendEvents("next", "pan_entry");
       navigate(getPathname.compliantPersonalDetails1);
     } else {
       if (isUserCompliant || kyc_status === "compliant") {
-        sendEvents("next", "pan_entry")
+        // sendEvents("next", "pan_entry");
         navigate(getPathname.journey);
       } else {
-        sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
+        // sendEvents(`${is_nri ? "no" : "yes"}`, "resident popup");
         if (is_nri) {
           navigate(`${getPathname.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=false`,
@@ -303,21 +303,24 @@ const Home = (props) => {
 
   const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction,
-        "screen_name": screenName || "pan_check",
-        "pan": pan ? "yes" : "no",
-        "initial_kyc_status": kyc?.initial_kyc_status || ""
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction,
+        screen_name: screenName || "pan_entry",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (eventObj.properties.screen_name === "pan_entry")
+      eventObj.properties.resident_indian =
+        (residentialStatus ? "yes" : "no") || "";
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+
   const handleConfirmPan = async () => {
+    sendEvents("next", "confirm_pan");
     const skipApiCall =
       pan === kyc?.pan?.meta_data?.pan_number &&
       kyc.address?.meta_data?.is_nri === !residentialStatus;
@@ -394,7 +397,10 @@ const Home = (props) => {
             isOpen={openConfirmPan}
             name={userName}
             pan={pan}
-            close={() => setOpenConfirmPan(false)}
+            close={() => {
+              sendEvents("edit_pan", "confirm_pan");
+              setOpenConfirmPan(false);
+            }}
             handleClick={handleConfirmPan}
           />
           <CheckCompliant isOpen={openCheckCompliant} />
