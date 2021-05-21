@@ -50,9 +50,13 @@ body[data-device="web"] {
     top: 60px;
   }
   .generic-error-dialog-page{
-    max-width: var(--desktop-width);
+    // max-width: var(--desktop-width);
+    width: 100%;
     margin: 0 auto;
-    margin-top: 56px;
+    margin-top: 124px;
+    margin-left: 300px;
+    max-width: 640px;
+
   }
   .MuiAppBar-positionFixed {
     left: 0 !important;
@@ -115,9 +119,8 @@ body[data-device="web"] {
   }
 
   .MuiDialogActions-root {
-    margin: 0 auto;
+    margin: 20px auto;
     width: fit-content;
-    margin-bottom: 20px;
   }
 
   .FooterImage {
@@ -1396,6 +1399,10 @@ $header-title-font-size: 20px;
   margin-left: 10px;
 }
 
+.loan-with-provider{
+  margin: 10px !important;
+  margin-left: 0px !important
+}
 .FlexItem1-withProvider-footer .text-block-2 {
   color: #0a1d32;
   font-size: 15px;
@@ -1733,10 +1740,6 @@ $header-title-font-size: 20px;
       border: 1px solid var(--primary);
     }
   }
-}
-
-.mobile-navbar-menu{
-  margin-left: auto;
 }
   
 .OTP-title{

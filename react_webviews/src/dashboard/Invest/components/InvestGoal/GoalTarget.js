@@ -5,9 +5,13 @@ import toast from "common/ui/Toast"
 import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { numDifferentiationInr } from 'utils/validators';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { saveGoalMapper } from './constants';
 import { getConfig } from '../../../../utils/functions';
 import { get_recommended_funds } from '../../common/api';
+import {
+  SAVE_GOAL_MAPPER,
+  CUSTOM_GOAL_TARGET_MAP,
+  SUBTYPE_NAME_MAP
+} from './constants';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
 
@@ -26,7 +30,7 @@ const GoalTarget = (props) => {
     try {
       const params = {
         type: funnelData.investType,
-        subtye: funnelData.subtype,
+        subtype: funnelData.subtype,
         term: funnelData?.term,
         rp_enabled: riskEnabled,
       };
@@ -54,10 +58,6 @@ const GoalTarget = (props) => {
       toast(err)
     }
   };
-
-  const goNext = () => {
-    navigate(`savegoal/${subtype}/amount`, true);
-  };
   
   const calculateCorpusValue = (amount) => {
     // eslint-disable-next-line radix
@@ -70,6 +70,7 @@ const GoalTarget = (props) => {
   };
 
   const setYourTarget = () => {
+    updateFunnelData({ corpus: CUSTOM_GOAL_TARGET_MAP[subtype] });
     navigate(`savegoal/${subtype}/${year}/target`);
   };
 
@@ -77,18 +78,17 @@ const GoalTarget = (props) => {
     <Container
       classOverRide='pr-error-container'
       title='Save for a Goal'
-      handleClick={goNext}
       noFooter
       classOverRideContainer='pr-container'
       skelton={loader}
     >
       <section className='invest-goal-save-container'>
         <div className='invest-goal-save-header'>
-          How much money do you want to save for {subtype}?
+          How much money do you want to save for your {SUBTYPE_NAME_MAP[subtype]}?
         </div>
 
         <div className='invest-goal-save-list'>
-          {saveGoalMapper[subtype]?.map((el, idx) => {
+          {SAVE_GOAL_MAPPER[subtype]?.map((el, idx) => {
             return (
               <div key={idx} className='invest-goal-save-item' onClick={handleInvestedAmount(el)}>
                 <img src={el.icon} alt={el.name} width='80' />

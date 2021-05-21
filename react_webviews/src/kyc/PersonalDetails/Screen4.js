@@ -196,6 +196,7 @@ const PersonalDetails4 = (props) => {
             onChange={handleChange("dob")}
             maxLength={10}
             type="text"
+            inputMode="numeric"
             id="dob"
             disabled={isChecked || isApiRunning}
           /></span>

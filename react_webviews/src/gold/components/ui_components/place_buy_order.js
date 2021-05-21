@@ -30,8 +30,10 @@ class PlaceBuyOrderClass extends Component {
         );
 
         // eslint-disable-next-line
-        pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl + '&back_url=' +
-         encodeURIComponent(nativeRedirectUrl) + '&order_type=buy' + '&generic_callback=' + getConfig().generic_callback;
+        pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') +
+        'plutus_redirect_url=' + paymentRedirectUrl +
+        '&back_url=' + encodeURIComponent(nativeRedirectUrl) +
+        '&order_type=buy&generic_callback=' + getConfig().generic_callback;
 
         if (getConfig().app === 'ios') {
             nativeCallback({

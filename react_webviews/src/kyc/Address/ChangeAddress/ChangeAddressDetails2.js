@@ -16,21 +16,6 @@ const getTitleList = ({ kyc }) => {
     'Photo of address card should have your signature',
     'Photo of address should be clear and it should not have the exposure of flash light',
   ]
-  if (
-    kyc?.kyc_status !== 'compliant' &&
-    kyc?.dl_docs_status !== '' &&
-    kyc?.dl_docs_status !== 'init' &&
-    kyc?.dl_docs_status !== null
-  ) {
-    if (
-      kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-      kyc.all_dl_doc_statuses.pan_fetch_status === '' ||
-      kyc.all_dl_doc_statuses.pan_fetch_status === 'failed'
-    ) {
-      titleList[0] =
-        'Oops! seems like Digilocker is down, please upload your address to proceed further'
-    }
-  }
   return titleList
 }
 
@@ -198,19 +183,25 @@ const ChangeAddressDetails2 = (props) => {
     : addressDocType
     try {
       setIsApiRunning('button')
-      let result
+      let result, response
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, type, {
+        response = await upload(frontDoc, type, {
           addressProofKey: addressKey,
         })
       } else {
-        result = await upload(file, type, {
+        response = await upload(file, type, {
           addressProofKey: addressKey,
         })
       }
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/my-account')
+      if(response.status_code === 200) {
+        result = response.result;
+        storageService().setObject(storageConstants.KYC, result.kyc)
+        navigate('/my-account')
+      } else {
+        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
+      }
     } catch (err) {
+      toast(err?.message)
     } finally {
       setIsApiRunning(false)
     }

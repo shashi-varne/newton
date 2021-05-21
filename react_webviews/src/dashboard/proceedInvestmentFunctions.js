@@ -4,7 +4,8 @@ import Api from "../utils/api";
 import { getConfig } from "../utils/functions";
 import { storageService, isFunction } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
-
+const partnerCode = getConfig().partner_code;
+/* eslint-disable */
 export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
     return true;
@@ -29,7 +30,7 @@ export async function proceedInvestment(data) {
 
   let isKycNeeded = false;
   if (
-    (getConfig().partner_code === "bfdlmobile" && !data.isInvestJourney) ||
+    (partnerCode === "bfdlmobile" && !data.isInvestJourney) ||
     data.isInvestJourney ||
     data.isSipDatesScreen
   ) {
@@ -49,22 +50,17 @@ export async function proceedInvestment(data) {
       investmentEventData = storageService().getObject("mf_invest_data") || {};
     }
     handleApiRunning("button");
+    if(partnerCode) {
+      storageService().set("partner", partnerCode)
+    }
     try {
       const res = await Api.post(apiConstants.triggerInvestment, body);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
-        // eslint-disable-next-line
         let pgLink = result.investments[0].pg_link;
-        pgLink +=
-          // eslint-disable-next-line
-          (pgLink.match(/[\?]/g) ? "&" : "?") +
-          "redirect_url=" +
-          paymentRedirectUrl +
-          getConfig().searchParams;
-
+        pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}${partnerCode ? "&partner_code="+partnerCode : ""}`
         investmentEventData["payment_id"] = result.investments[0].id;
         storageService().setObject("mf_invest_data", investmentEventData);
-
         if (isSipDatesScreen) {
           this.setState({
             openSuccessDialog: true,

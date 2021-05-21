@@ -93,6 +93,7 @@ class Otp extends Component {
               helperText={otp_error || ""}
               class="input"
               onChange={this.handleChange("otp")}
+              inputMode="numeric"
               autoFocus
             /></span>
             <div className="resend-otp" id='resend-otp' onClick={() => this.resendOtp()}>

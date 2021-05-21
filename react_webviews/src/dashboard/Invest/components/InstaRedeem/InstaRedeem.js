@@ -138,6 +138,7 @@ const InstaRedeem = (props) => {
       title={
         partner_code === "bfdlmobile" ? "Money +" : "Insta redemption fund"
       }
+      disable={showLoader}
     >
       <div className="insta-redeem">
         <div className="generic-page-subtitle">

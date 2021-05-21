@@ -10,7 +10,7 @@ import {
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { getConfig } from '../../../../utils/functions';
-import { customGoalTargetMap } from './constants';
+import { CUSTOM_GOAL_TARGET_MAP } from './constants';
 import { get_recommended_funds } from '../../common/api';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
@@ -30,8 +30,7 @@ const CustomGoalTarget = (props) => {
   useEffect(() => {
     setTargetAmount(
       funnelData.corpus ||
-      customGoalTargetMap[subtype] ||
-      0
+      CUSTOM_GOAL_TARGET_MAP[subtype] || 0
     );
   }, []);
 

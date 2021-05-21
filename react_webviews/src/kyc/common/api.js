@@ -156,6 +156,9 @@ export const upload = async (file, type, data = {}) => {
       case 'nri_address':
        addressProofKey = data?.addressProofKey
        break
+      case 'pan':
+        formData.append('kyc_flow', data.kyc_flow)
+        break
        default:
          break
     }
@@ -163,10 +166,9 @@ export const upload = async (file, type, data = {}) => {
   const url = isEmpty(addressProofKey) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${addressProofKey}`
   const res = await Api.post(url, formData)
   if (
-    res.pfwresponse.status_code === 200 &&
-    res.pfwresponse.result.message === 'success'
+    res?.pfwresponse?.status_code
   ) {
-    return res.pfwresponse.result
+    return res?.pfwresponse
   }
   throw new Error(
     res?.pfwresponse?.result?.message ||

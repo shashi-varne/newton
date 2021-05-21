@@ -254,7 +254,7 @@ const FundDetails = ({ classes, history }) => {
       sipOrOneTime = investment.order_type;
     }
     let paymentRedirectUrl = encodeURIComponent(
-      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}${getConfig().searchParams}`
     );
 
     if (
@@ -303,14 +303,6 @@ const FundDetails = ({ classes, history }) => {
       search: getConfig().searchParams,
     })
   }
-
-  const goBack = () => {
-    if(type === 'diy'){
-      handleInvest();
-    } else {
-      history.goBack();
-    }
-  };
 
   const handleInvest = () => {
     window.location.href =  getConfig().webAppUrl + 'diy/invest';

@@ -33,7 +33,6 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
   };
   const checkLimit = (num, compNum, isin) => {
     if(num === 0) {
-      console.log("the num is", num)
       calcTotalAmount(isin,num);
       setError(false);
       checkError(false);
@@ -43,7 +42,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
       if (compNum > 1000) {
         if (num < 1000) {
           setError(true);
-          setHelperText('Minimum withdrawal amount for each fund is 1000');
+          setHelperText(`Minimum withdrawal amount for each fund is ${formatAmountInr(1000)}`);
           checkError(true);
         } else if (num > compNum) {
           setError(true);
@@ -83,7 +82,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
         checkError(true);
       } else if (num <= 0) {
         setError(true);
-        setHelperText('Minimum withdrawal amount for fund is 1');
+        setHelperText(`Minimum withdrawal amount for fund is ${formatAmountInr(1000)}`);
         checkError(true);
         return;
       } else {
