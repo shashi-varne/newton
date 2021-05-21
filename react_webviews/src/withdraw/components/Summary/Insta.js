@@ -11,8 +11,10 @@ import { getConfig } from '../../../utils/functions'
 
 import './Insta.scss';
 import '../commonStyles.scss';
+import { navigate as navigateFunc } from '../../common/commonFunction'
 
 const Insta = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [taxes, setTaxes] = useState('');
   const [open, setOpen] = useState({})
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -36,9 +38,13 @@ const Insta = (props) => {
         },
         []
       )
-      await redeemOrders('insta_redeem', {
+      const result = await redeemOrders('insta_redeem', {
         investments: [{ itype, name, subtype, allocations }],
       })
+      if (result?.resend_redeem_otp_link && result?.verification_link) {
+        navigate('verify', { state:{...result} })
+        return
+      }
     } catch (err) {
       toast(err.message, 'error')
     } finally {
@@ -50,12 +56,17 @@ const Insta = (props) => {
     try {
       const taxes = await getTaxes(props?.location?.state?.amounts)
       setTaxes(taxes)
+      const firstIsin = taxes?.liabilities[0]?.isin || "";
+      setOpen((open) => {
+        return { ...open, [firstIsin]: true }
+      })
     } catch (err) {
       toast(err.message, 'error')
     }
   }
 
   const showOpenCard = (isin) => {
+    if(taxes?.liabilities?.length === 1) return;
     setOpen((open) => {
       return { ...open, [isin]: !!!open[isin] }
     })
@@ -94,20 +105,17 @@ const Insta = (props) => {
           <section id="withdraw-insta-summary">
             <div className="title">Tax Summary</div>
             <main className="fund-list">
-              {taxes?.liabilities?.map((item, idx) => (
+              {taxes?.liabilities?.map((item) => (
                 <TaxSummaryCard
                   key={item.isin}
                   {...item}
                   openCard={
-                    idx === 0
-                      ? isEmpty(open[item.isin])
-                        ? true
-                        : open[item.isin]
-                      : open[item.isin]
+                    open[item.isin]
                   }
                   onClick={() => {
                     showOpenCard(item.isin)
                   }}
+                  hideIcon={taxes?.liabilities?.length === 1}
                 />
               ))}
             </main>

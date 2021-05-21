@@ -62,7 +62,7 @@ const SipDetails = (props) => {
       }
       if (requested_cancel.includes(report.friendly_status)) {
         sendEvents('next', 'restart', report.friendly_status)
-        nextStep("cancel");// To be checked
+        nextStep("restart");
         return;
       }
     } else {
