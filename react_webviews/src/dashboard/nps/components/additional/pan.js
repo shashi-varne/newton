@@ -21,6 +21,7 @@ import { storageService } from "utils/validators";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import { getConfig } from "../../../../utils/functions";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { isEmpty } from "../../../../utils/validators";
 
 const yesOrNo_options = [
   {
@@ -71,7 +72,7 @@ class PanDetails extends Component {
     form_data.mobile_number = userKyc.address.meta_data.mobile_number || "";
 
     form_data.pran = storageService().get("nps_pran_number") || ""
-    if(form_data.pran) {
+    if(!isEmpty(form_data.pran)) {
       is_nps_contributed = true;
     }
     
