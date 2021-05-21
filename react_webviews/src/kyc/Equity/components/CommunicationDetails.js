@@ -15,14 +15,23 @@ import {
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
 import { apiConstants } from "../../constants";
-import { getConfig } from "../../../utils/functions";
+import { getBasePath, getConfig } from "../../../utils/functions";
 
 const config = getConfig();
 const googleButtonTitle = (
-  <div className="kcd-google-text">
-    <img src={require(`assets/google.svg`)} />
+  <a
+    className="kcd-google-text"
+    href={`${config.base_url}${
+      apiConstants.socialAuth
+    }/google?redirect_url=${encodeURIComponent(
+      `${getBasePath()}/kyc/communication-details/callback${
+        config.searchParams
+      }`
+    )}`}
+  >
+    <img src={require(`assets/google.svg`)} alt="google" />
     <div>Continue with Google</div>
-  </div>
+  </a>
 );
 const CommunicationDetails = (props) => {
   const [formData, setFormData] = useState({
@@ -210,7 +219,7 @@ const CommunicationDetails = (props) => {
                 buttonTitle={googleButtonTitle}
                 type="outlined"
                 showLoader={buttonLoader}
-                onClick={handleGoogleAuth}
+                // onClick={handleGoogleAuth}
               />
               <div className="kcd-or-divider">
                 <div className="kcd-divider-line"></div>
