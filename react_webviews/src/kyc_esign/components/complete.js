@@ -5,9 +5,9 @@ import WVSteps from "../../common/ui/Steps/WVSteps"
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const productName = getConfig().productName;
   const steps = [
-    { title: "Mutual fund" },
-    { title: "Stocks & IPO" },
-    { title: "Futures & Options" }
+    { title: "Mutual fund", status: "Ready to invest" },
+    { title: "Stocks & IPO", status: "Under process" },
+    { title: "Futures & Options", status: "Under process" }
   ]
 
   return (
@@ -58,14 +58,14 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
           <div className="account-status">Account status</div>
           {steps.map((step, index) => (
             <WVSteps
-            title={step.title}
-            key={step.title}
-          >
-            {step.title === "Mutual fund" && 
-              <div className="status">{kyc.application_status_v2 === "complete" ? "Ready to invest" : "Under process"}</div>
-            }
-            {/* Todo: add other conditions */}
-          </WVSteps>
+              title={step.title}
+              key={step.title}
+              stepType={step.status === "Ready to invest" ? "completed" : "pending"}
+              classes={{ stepContent: 'step-content'}}
+            >
+              <div className="status">{step.status}</div>
+              {/* Todo: add other conditions */}
+            </WVSteps>
           ))}
         </div>
       }

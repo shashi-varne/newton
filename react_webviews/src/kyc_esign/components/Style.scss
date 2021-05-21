@@ -212,5 +212,10 @@ $text-color2: #8D879B;
     .status {
       color: $text-color1;
     }
+
+    .step-content {
+      margin-top: -10px;
+      text-transform: initial;
+    }
   }
 }
