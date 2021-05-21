@@ -99,7 +99,7 @@ const IpvVideo = (props) => {
       'video/x-m4v',
       'video/*'
     ]
-    if (acceptedTypes.includes(uploadedFile.type)) {
+    if (acceptedTypes.indexOf(uploadedFile.type) !== -1) {
       setFile(event.target.files[0])
     } else {
       toast('Upload a valid file format')
