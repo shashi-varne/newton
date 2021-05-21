@@ -18,11 +18,12 @@ class FinalOffer extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      skelton: 'g',
+      skelton: "g",
       screen_name: "final_loan",
       first_name: "",
       vendor_info: {},
-      openConfirmDialog: false
+      openConfirmDialog: false,
+      employment_type: "",
     };
 
     this.initialize = initialize.bind(this);
@@ -35,6 +36,7 @@ class FinalOffer extends Component {
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
+    let employment_type = lead.application_info.employment_type || "";
     let personal_info = lead.personal_info || {};
     let application_id = lead.application_id || "";
 
@@ -43,6 +45,7 @@ class FinalOffer extends Component {
       first_name: personal_info.first_name,
       email: personal_info.email_id,
       application_id: application_id,
+      employment_type: employment_type,
     });
   };
 
@@ -63,9 +66,16 @@ class FinalOffer extends Component {
   }
 
   handleClick = () => {
-    this.setState({
-      openConfirmDialog: true,
-    });
+    let { employment_type } = this.state;
+
+    if (employment_type !== "salaried") {
+      this.setState({
+        openConfirmDialog: true,
+      });
+    } else {
+      this.sendEvents("next");
+      this.navigate("reports");
+    }
   };
 
   setErrorData = (type) => {
