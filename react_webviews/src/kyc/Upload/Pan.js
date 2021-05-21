@@ -163,7 +163,7 @@ const Pan = (props) => {
     }
   }
 
-  const isWeb = getConfig().isWebOrSdk
+  const isWeb = getConfig().Web
 
   return (
     <Container
