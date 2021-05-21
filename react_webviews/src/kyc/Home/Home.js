@@ -249,7 +249,7 @@ const Home = (props) => {
   };
 
   const savePan = async (is_nri) => {
-    sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
+    // sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
     try {
       setShowLoader("button");
       if (is_nri) {
@@ -284,11 +284,14 @@ const Home = (props) => {
       (isUserCompliant || kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
+      sendEvents("next", "pan_entry")
       navigate(getPathname.compliantPersonalDetails1);
     } else {
       if (isUserCompliant || kyc_status === "compliant") {
+        sendEvents("next", "pan_entry")
         navigate(getPathname.journey);
       } else {
+        sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
         if (is_nri) {
           navigate(`${getPathname.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=false`,

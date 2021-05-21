@@ -56,9 +56,9 @@ const PersonalDetails4 = (props) => {
 
   const handleClick = () => {
     let keysToCheck = ["dob", "name", "relationship"];
+    sendEvents('next')
     if (!isChecked) {
       let result = validateFields(form_data, keysToCheck);
-      sendEvents('next')
       if (!result.canSubmit) {
         let data = { ...result.formData };
         setFormData(data);

@@ -131,10 +131,12 @@ const KycBankVerify = (props) => {
   };
 
   const checkBankDetails = () => {
+    sendEvents("check bank details", "bottom_sheet");
     navigate(`/kyc/${userType}/bank-details`);
   };
 
   const uploadDocuments = () => {
+    sendEvents("upload documents", "bottom_sheet");
     navigate(`/kyc/${userType}/upload-documents`);
   };
 
@@ -164,9 +166,12 @@ const KycBankVerify = (props) => {
     }
   };
 
-  const goToJourney = () => navigate(getPathname.journey);
+  const goToJourney = () => {
+    sendEvents("next", "bottom_sheet")
+    navigate(getPathname.journey)};
 
   const edit = () => () => {
+    sendEvents('edit');
     navigate(`/kyc/${userType}/bank-details`);
   };
 
@@ -180,6 +185,18 @@ const KycBankVerify = (props) => {
         "flow": getFlow(kyc) || ""
       }
     };
+    if(screen_name === 'bottom_sheet') {
+        if(isPennySuccess)
+          eventObj.properties.status = 'bank added';
+        else if(isPennyFailed)
+          eventObj.properties.status = 'bank not added';          
+        //  else  if() // to be checked for error
+        //   eventObj.properties.status = 'error screen';         
+        else  if(isPennyExhausted)
+          eventObj.properties.status = 'unable to add bank attempts exhausted';         
+        else
+          eventObj.properties.status = '';
+    }
     if (userAction === 'just_set_events') {
       return eventObj;
     } else {
