@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getConfig } from "utils/functions";
 import WVSteps from "../../common/ui/Steps/WVSteps"
 
+const stepsData = [
+  { title: "Mutual fund", status: "Ready to invest" },
+  { title: "Stocks & IPO", status: "Under process" },
+  { title: "Futures & Options", status: "Under process" }
+]
+const productName = getConfig().productName;
+
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
-  const productName = getConfig().productName;
-  const steps = [
-    { title: "Mutual fund", status: "Ready to invest" },
-    { title: "Stocks & IPO", status: "Under process" },
-    { title: "Futures & Options", status: "Under process" }
-  ]
+  const [steps, setSteps] = useState(stepsData);
+
+  useEffect(() => {
+    if (dl_flow && kyc?.sign_status === "signed" && !kyc?.equity_data?.meta_data?.fno) {
+      setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
+    }
+  }, [kyc]);
 
   return (
     <div className="kyc-esign-complete">
@@ -18,7 +26,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
           alt=""
         />
         {dl_flow && !show_note && (
-          <div className="title">Kudos, KYC is completed!</div>
+          <div className="title">KYC complete!</div>
         )}
         {!dl_flow && kyc?.kyc_status === "compliant" && (
           <div className="title">Great! Your KYC application is submitted!</div>
