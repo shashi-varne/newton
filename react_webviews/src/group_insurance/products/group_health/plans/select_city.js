@@ -3,10 +3,10 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
-import Api from 'utils/api';
 import Autosuggests from '../../../../common/ui/Autosuggest';
 import { FormControl } from 'material-ui/Form';
-import { initialize } from '../common_data';
+import { initialize, checkCity, getPlanList } from '../common_data';
+import { isEmpty, compareObjects } from '../../../../utils/validators';
 class GroupHealthPlanSelectCity extends Component {
     constructor(props) {
         super(props);
@@ -17,122 +17,32 @@ class GroupHealthPlanSelectCity extends Component {
             suggestions_list: [],
             errors: [],
             fields: [],
-            skelton:true
+            screen_name: 'select_city'
         }
         this.initialize = initialize.bind(this);
+        this.checkCity = checkCity.bind(this);
+        this.getPlanList = getPlanList.bind(this);
     }
     componentWillMount() {
         this.initialize();
     }
-    checkCity = (city, proceed) => {
-        if(!city) {
-            if(proceed) {
-                this.setState({
-                    city_error: 'Please select city from provided list'
-                });
-            }
-            return;
-        }
-
-        let data  = this.state.suggestions_list.filter(data => (data.key).toUpperCase() === (city).toUpperCase());
-        if(data.length === 0) {
-            this.setState({
-                city_error: 'Please select city from provided list'
-            });
-        } else if(proceed) {
-            let groupHealthPlanData = this.state.groupHealthPlanData;
-            groupHealthPlanData.city = this.state.city;
-            groupHealthPlanData.post_body.city = this.state.city;
-            this.setLocalProviderData(groupHealthPlanData);
-            this.navigate('plan-list');
-        }
-    }
+    
     
     async componentDidMount() {
         this.onload();
     }
 
-    onload =async()=>{
-        this.setErrorData("onload");
-        this.setState({ skelton : true });
-        let error = "";
-        let errorType = "";
-        let body = {
-            "provider": this.state.providerConfig.provider_api
-          };
-        try {
-                try {
-
-                    const res = await Api.post(
-                        `api/insurancev2/api/insurance/health/quotation/account_summary`,
-                        body
-                    );
-                    if (res.pfwstatus_code === 200) {
-                        
-                        var resultData = res.pfwresponse.result;
-                        let city = ''
-                        
-                        if(this.state.groupHealthPlanData.city){
-                            city = this.state.groupHealthPlanData.city || '';
-                        }else if(Object.keys(resultData.quotation).length > 0 && resultData.quotation.city_postal_code){
-                            city = resultData.quotation.city_postal_code || '';
-                        }else if(Object.keys(resultData.address_details).length > 0 && resultData.address_details.city){
-                            city = resultData.address_details.city || '';
-                        }
-                        this.setState({
-                            city: city
-                        });
-                    } else {
-                        error=
-                            resultData.error ||
-                            resultData.message ||
-                            true
-                        
-                    }
-                } catch (err) {
-                    console.log(err);
-                    error=true;
-                    errorType= "crash";
-                }
-            const res2 = await Api.get('api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo');
-            
-            var resultData2 = res2.pfwresponse.result
-            var city_object =  resultData2.map(element => {
-                return {
-                    key: element,
-                    value: element
-                }
-            });
-
-            if (res2.pfwresponse.status_code === 200) {
-                this.setState({
-                    suggestions_list: city_object
-                }, () => {
-                    this.checkCity(this.state.city);
-                })
-
-            this.setState({
-                skelton:false
-            });    
-            } else {
-                error=resultData2.error || resultData2.message
-                    || true;
-            }
-        } catch (err) {
-        console.log(err)
-           error=true;
-           errorType="crash";
-        }
-        if (error) {
-            this.setState({
-              errorData: {
-                ...this.state.errorData,
-                title2: error,
-                type: errorType
-              },
-              showError: "page",
-            });
-          }
+    onload = ()=>{
+        var groupHealthPlanData = this.state.groupHealthPlanData;
+        var resultData = groupHealthPlanData[this.state.screen_name];
+        var city = resultData.city;
+        var suggestions_list = resultData.suggestions_list;
+        this.setState({
+            suggestions_list, city
+        },()=>{
+            this.checkCity(city, false, suggestions_list)
+        })
+        
     }
 
     navigate = (pathname) => {
@@ -143,7 +53,36 @@ class GroupHealthPlanSelectCity extends Component {
     }
     handleClick = () => {
         this.sendEvents('next');
-        this.checkCity(this.state.city, true);
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        groupHealthPlanData['select_city']['city'] = this.state.city;
+        groupHealthPlanData.city = this.state.city;
+        groupHealthPlanData.post_body.city = this.state.city;
+        var current_state = this.state.current_state || {};
+        current_state['city'] = this.state.city; 
+
+        this.setLocalProviderData(groupHealthPlanData);
+
+        // eslint-disable-next-line
+        var current_state = {}
+        var keys_to_add = ['account_type', 'city']
+        for(var x of keys_to_add){
+            current_state[x] = groupHealthPlanData.post_body[x]
+        }
+        for(var y in groupHealthPlanData.post_body.member_details){
+            current_state[`${y}`] = groupHealthPlanData.post_body.member_details[y]['dob'];
+        }
+
+        var previousData = groupHealthPlanData.list_previous_data || {};
+        var sameData = compareObjects(Object.keys(current_state), current_state, previousData)
+        this.setState({
+            current_state
+        }, ()=>{
+            if(!sameData || isEmpty(groupHealthPlanData.plan_list)){
+                this.checkCity(this.state.city, true, this.state.suggestions_list);
+            }else{
+                this.navigate('plan-list')
+            }
+        })
     }
     sendEvents(user_action) {
         let eventObj = {
@@ -175,6 +114,7 @@ class GroupHealthPlanSelectCity extends Component {
                 events={this.sendEvents('just_set_events')}
                 skelton={this.state.skelton}
                 showError={this.state.showError}
+                showLoader={this.state.show_loader}
                 errorData={this.state.errorData}
                 title="Where do you live?"
                 fullWidthButton={true}
