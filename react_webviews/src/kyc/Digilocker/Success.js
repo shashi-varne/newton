@@ -31,7 +31,7 @@ const Success = (props) => {
                 className="doc-icon"
                 alt=""
               />
-              <div className="doc-name" id={`name_${idx+1}`} data-aid={`name_${idx+1}`}>{idx + 1}{'. '}{name}</div>
+              <div className="doc-name" id={`name-${idx+1}`} data-aid={`name-${idx+1}`}>{idx + 1}{'. '}{name}</div>
             </div>
           ))}
         </main>

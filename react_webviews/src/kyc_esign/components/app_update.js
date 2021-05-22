@@ -46,7 +46,7 @@ class AppUpdateInfo extends Component {
         buttonTitle="UPDATE NOW"
         data-aid='kyc-esign-update-screen'
       >
-        <div style={{textAlign: 'center'}}>
+        <div style={{textAlign: 'center'}} data-aid='kyc-esign-update-page'>
             <div>
                 <img src={this.state.update_insurance_icon} alt="" />
             </div>

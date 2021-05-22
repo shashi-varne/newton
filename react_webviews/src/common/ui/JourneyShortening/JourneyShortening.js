@@ -16,16 +16,16 @@ const WVJourneyShortening = ({
   onStepActionClick
 }) => {
   return (
-    <div className="wv-journey-shortening">
+    <div className="wv-journey-shortening" data-aid='wv-journey-shortening'>
       <div className="wv-js-step-info">
-        <div className="wv-jssi-title">
+        <div className="wv-jssi-title" data-aid='"wv-jssi-title'>
           {title}
         </div>
-        <div className="wv-jssi-step-name">
+        <div className="wv-jssi-step-name" data-aid='wv-jssi-step-name'>
           {stepName}
         </div>
       </div>
-      <div className="wv-js-step-action">
+      <div className="wv-js-step-action" data-aid='wv-js-step-action'>
         <WVClickableTextElement
           onClick={onStepActionClick}
           color={STEP_ACTION_COLOR_MAP[stepActionType]}
