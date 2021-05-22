@@ -3,9 +3,9 @@ import { Button, withStyles } from '@material-ui/core';
 import { getConfig } from '../../../utils/functions';
 import DotDotLoaderNew from '../DotDotLoaderNew';
 
-const WVButton = ({ showLoader, children, ...props }) => {
+const WVButton = ({ showLoader, children, ...props , dataAid }) => {
   return (
-    <Button {...props}>
+    <Button {...props} data-aid={props.dataAid}>
       {showLoader ?
         <DotDotLoaderNew
           styleBounce={{
