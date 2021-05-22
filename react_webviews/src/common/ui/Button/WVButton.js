@@ -3,7 +3,7 @@ import { Button, withStyles } from '@material-ui/core';
 import { getConfig } from '../../../utils/functions';
 import DotDotLoaderNew from '../DotDotLoaderNew';
 
-const WVButton = ({ showLoader, children, ...props , dataAid }) => {
+const WVButton = ({ showLoader, children, ...props }) => {
   return (
     <Button {...props}>
       {showLoader ?
