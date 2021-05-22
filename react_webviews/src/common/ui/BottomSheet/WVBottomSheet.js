@@ -66,9 +66,9 @@ const WVBottomSheet = ({
               </div>
             }
             {subtitle &&
-              <div className="wv-bcl-subtitle" data-aid='wv-bcl-subtitle'>
-              {subtitle}
-              </div>
+              <Subtitle>
+                {subtitle}
+              </Subtitle>
             }
           </div>
           <div className="wv-bc-right">
@@ -115,6 +115,14 @@ const WVBottomSheet = ({
   );
 };
 
+const Subtitle = ({ children }) => {
+  return (
+    <div className="wv-bcl-subtitle" data-aid='wv-bcl-subtitle'>
+      {children}
+    </div>
+  );
+}
+
 WVBottomSheet.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
@@ -132,5 +140,8 @@ WVBottomSheet.defaultProps = {
   },
 };
 
+WVBottomSheet.Subtitle = Subtitle;
+
 export default WVBottomSheet;
+
 

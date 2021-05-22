@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import VideoRecorder from 'react-video-recorder'
 import Container from '../common/Container'
 import Button from '../../common/ui/Button'
+import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import { storageService, isEmpty } from '../../utils/validators'
 import { storageConstants } from '../constants'
 import { getIpvCode, upload } from '../common/api'
@@ -203,9 +204,13 @@ const IpvVideo = (props) => {
           </div>
           <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
             <div className="upload-note" data-aid='upload-note-text'>How to make a selfie video ?</div>
-            <div className="know-more-button" onClick={() => open()} data-aid='know-more-btn'>
+            <WVClickableTextElement
+              color="secondary"
+              className="know-more-button"
+              onClick={() => open()}
+            >
               KNOW MORE
-            </div>
+            </WVClickableTextElement>
           </div>
         </section>
       )}

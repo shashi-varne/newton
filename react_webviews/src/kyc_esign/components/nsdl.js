@@ -163,7 +163,7 @@ class DigiStatus extends Component {
         data-aid='esign-nsdl-screen'
         showLoader={show_loader}
         title={
-          status === "success" ? "eSign KYC completed" : "Complete eSign"
+          status === "success" ? "" : "Complete eSign"
         }
         handleClick={status === "success" ? this.handleClick : this.retry}
         buttonTitle={

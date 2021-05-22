@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
 import Button from '../../common/ui/Button'
+import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
 import FileAccessDialog from '../mini-components/FileAccessDialog'
 import { storageService, isEmpty } from '../../utils/validators'
@@ -397,15 +398,15 @@ const AddressUpload = (props) => {
           )}
           <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
             <div className="upload-note" data-aid='upload-note-text'> How to take picture of your address proof? </div>
-            <Button
-              dataAid='know-more-btn'
-              type="textonly"
-              buttonTitle="KNOW MORE"
-              classes={{ root: "know-more-button" }}
+            <WVClickableTextElement
+              color="secondary"
+              className="know-more-button"
               onClick={() => navigate("/kyc/upload-instructions", {
                 state: { document: "address" }
               })}
-            />
+            >
+              KNOW MORE
+            </WVClickableTextElement>
           </div>
           <FileAccessDialog 
             isOpen={isAccessDialogOpen}

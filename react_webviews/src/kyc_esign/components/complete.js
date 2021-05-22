@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getConfig } from "utils/functions";
 import WVSteps from "../../common/ui/Steps/WVSteps"
 
+const stepsData = [
+  { title: "Mutual fund", status: "Ready to invest" },
+  { title: "Stocks & IPO", status: "Under process" },
+  { title: "Futures & Options", status: "Under process" }
+]
+const productName = getConfig().productName;
+
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
-  const productName = getConfig().productName;
-  const steps = [
-    { title: "Mutual fund" },
-    { title: "Stocks & IPO" },
-    { title: "Futures & Options" }
-  ]
+  const [steps, setSteps] = useState(stepsData);
+
+  useEffect(() => {
+    if (dl_flow && kyc?.sign_status === "signed" && !kyc?.equity_data?.meta_data?.fno) {
+      setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
+    }
+  }, [kyc]);
 
   return (
     <div className="kyc-esign-complete" data-aid='kyc-esign-complete'>
@@ -18,7 +26,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
           alt=""
         />
         {dl_flow && !show_note && (
-          <div className="title">Kudos, KYC is completed!</div>
+          <div className="title">KYC complete!</div>
         )}
         {!dl_flow && kyc?.kyc_status === "compliant" && (
           <div className="title">Great! Your KYC application is submitted!</div>
@@ -58,14 +66,13 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
           <div className="account-status">Account status</div>
           {steps.map((step, index) => (
             <WVSteps
-            title={step.title}
-            key={step.title}
-          >
-            {step.title === "Mutual fund" && 
-              <div className="status" data-aid='kyc-status'>{kyc.application_status_v2 === "complete" ? "Ready to invest" : "Under process"}</div>
-            }
-            {/* Todo: add other conditions */}
-          </WVSteps>
+              title={step.title}
+              key={step.title}
+              stepType={step.status === "Ready to invest" ? "completed" : "pending"}
+              classes={{ stepContent: 'step-content'}}
+            >
+              <div className="status" data-aid='kyc-status'>{step.status}</div>
+            </WVSteps>
           ))}
         </div>
       }

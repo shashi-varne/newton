@@ -47,15 +47,16 @@ const Failed = (props) => {
         type: 'primary',
         order: "1",
         title: "RETRY",
-        onClick: {retry},
+        onClick: retry,
         classes: { root: 'digilocker-failed-button'}
       }}
       button2Props={{
         type: 'secondary',
         order: "2",
         title: "UPLOAD DOCUMENTS MANUALLY",
-        onClick: {manual},
-        classes: { root: 'digilocker-failed-button'}
+        onClick: manual,
+        classes: { root: 'digilocker-failed-button'},
+        showLoader: isApiRunning
       }}
       skelton={isLoading}
       disableBack
