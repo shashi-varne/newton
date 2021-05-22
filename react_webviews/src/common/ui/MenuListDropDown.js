@@ -70,7 +70,7 @@ class MenuListDropDownClass extends Component {
     render() {
         return (
             <Fragment>
-                <div className='products' style={{ marginTop: '10px' }}>
+                <div className='menulist-products'>
                     <h1 className='menulist-header-title'>{this.props.title}</h1>
                     {this.state.menulistProducts.map(this.renderPorducts)}
                 </div>
