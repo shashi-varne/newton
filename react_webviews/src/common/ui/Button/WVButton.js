@@ -5,7 +5,7 @@ import DotDotLoaderNew from '../DotDotLoaderNew';
 
 const WVButton = ({ showLoader, children, ...props , dataAid }) => {
   return (
-    <Button {...props} data-aid={props.dataAid}>
+    <Button {...props}>
       {showLoader ?
         <DotDotLoaderNew
           styleBounce={{
