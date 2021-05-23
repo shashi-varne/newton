@@ -12,6 +12,7 @@ import "./commonStyles.scss";
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 
 const isWeb = getConfig().Web
+const SUPPORTED_FILE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -108,7 +109,7 @@ const Sign = (props) => {
               fileName="pan"
               onFileSelectComplete={onFileSelectComplete}
               onFileSelectError={onFileSelectError}
-              supportedFormats={['jpeg', 'jpg', 'png', 'bmp']}
+              supportedFormats={SUPPORTED_FILE_TYPES}
             />
           </KycUploadContainer>
         </section>

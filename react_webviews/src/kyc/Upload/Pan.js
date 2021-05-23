@@ -14,6 +14,7 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 
 const config = getConfig();
 const productName = config.productName;
+const SUPPORTED_FILE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 const Pan = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -108,7 +109,7 @@ const Pan = (props) => {
               fileName="pan"
               onFileSelectComplete={onFileSelectComplete}
               onFileSelectError={onFileSelectError}
-              supportedFormats={['jpeg', 'jpg', 'png', 'bmp']}
+              supportedFormats={SUPPORTED_FILE_TYPES}
             />
           </KycUploadContainer>
           <div className="doc-upload-note-row">
