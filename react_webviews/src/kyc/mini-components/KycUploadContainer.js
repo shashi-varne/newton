@@ -63,6 +63,7 @@ const Button = ({
   showOptionsDialog,
   onFileSelectError,
   supportedFormats,
+  customPickerId,
   withPicker,
   children,
   ...props
@@ -76,6 +77,7 @@ const Button = ({
         onFileSelectComplete={onFileSelectComplete}
         onFileSelectError={onFileSelectError}
         supportedFormats={supportedFormats}
+        customPickerId={customPickerId}
       >
         <WVButton
           variant="outlined"

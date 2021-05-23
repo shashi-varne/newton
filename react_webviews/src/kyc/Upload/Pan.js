@@ -1,17 +1,15 @@
-import React, { useState, useRef } from 'react'
+import "./commonStyles.scss";
+import React, { useState } from 'react'
 import Container from '../common/Container'
-import Button from '../../common/ui/Button'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
-import FileAccessDialog from '../mini-components/FileAccessDialog'
 import { storageService, isEmpty } from '../../utils/validators'
 import { storageConstants } from '../constants'
 import { upload } from '../common/api'
-import { getBase64, getConfig } from '../../utils/functions'
+import { getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
 import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
-import "./commonStyles.scss";
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 
 const config = getConfig();
