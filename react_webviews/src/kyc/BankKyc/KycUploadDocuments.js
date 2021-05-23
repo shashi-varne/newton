@@ -103,7 +103,7 @@ const KycUploadDocuments = (props) => {
   }
 
   const handleChange = (type) => (event) => {
-    sendEvents('get_image', type)
+    // sendEvents('get_image', type)
     event.preventDefault();
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
@@ -176,7 +176,7 @@ const KycUploadDocuments = (props) => {
   }
 
   const proceed = () => {
-    sendEvents('next', "", 'bottom_sheet')
+    // sendEvents('next', "", 'bottom_sheet')
     const navigate = navigateFunc.bind(props);
     if (additional) {
       navigate("/kyc/add-bank");
@@ -224,24 +224,25 @@ const KycUploadDocuments = (props) => {
     selected !== null ? verificationDocOptions[selected].value : "";
 
     const sendEvents = (userAction, type, screen_name) => {
+      let docMapper = ["bank_statement", "cancelled_cheque", "passbook"];
       let eventObj = {
-        "event_name": 'KYC_registration',
-        "properties": {
-          "user_action": userAction || "",
-          "screen_name": screen_name || 'bank_docs',
-          "initial_kyc_status": kyc.initial_kyc_status,
-          "flow": getFlow(kyc) || "",
-          "document":verificationDocOptions[selected]?.name || "",
-          "type": type || '',
-          "status" : screen_name ? "verification pending":""
-        }
+        event_name: "kyc_registration",
+        properties: {
+          user_action: userAction || "",
+          screen_name: screen_name || "upload_documents",
+          document: selected ? docMapper[selected] : "",
+          // "initial_kyc_status": kyc.initial_kyc_status,
+          // "flow": getFlow(kyc) || "",
+          // "type": type || '',
+          // "status" : screen_name ? "verification pending":""
+        },
       };
-      if (userAction === 'just_set_events') {
+      if (userAction === "just_set_events") {
         return eventObj;
       } else {
         nativeCallback({ events: eventObj });
       }
-    }
+    };
 
     return (
     <Container

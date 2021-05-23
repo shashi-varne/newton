@@ -4,6 +4,7 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const productName = getConfig().productName;
 const benefits = [
@@ -21,8 +22,26 @@ const benefits = [
   },
 ];
 const AccountInfo = (props) => {
+  
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "trading_and_demat_info",
+        tnc_checked: true ? "yes" : "no", // to be done along with sendevents(next)
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       title={"Trading & demat account"}
       hidePageTitle

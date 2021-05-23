@@ -73,7 +73,7 @@ const Pan = (props) => {
   }
   
   const handleChange = (type) => (event) => {
-    sendEvents('get_image', type)
+    // sendEvents('get_image', type)
     event.preventDefault();
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
@@ -140,6 +140,7 @@ const Pan = (props) => {
   }
 
   const handleClick = () => {
+    sendEvents('attach_document')
     if (!isWeb) {
       setIsAccessDialogOpen(true);
     } else {
@@ -147,13 +148,14 @@ const Pan = (props) => {
     }
   }
 
-  const sendEvents = (userAction, type) => {
+  const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
+      // "event_name": 'KYC_registration',
+      "event_name": 'trading_onboarding',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "pan_doc",
-        "type": type || "",
+        "screen_name": "upload_pan",
+        // "type": type || "",
       }
     };
     if (userAction === 'just_set_events') {

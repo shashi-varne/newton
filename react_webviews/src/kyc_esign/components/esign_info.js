@@ -55,7 +55,8 @@ class ESignInfo extends Component {
   }
 
   handleClick = async () => {
-    this.sendEvents('next','e sign kyc')
+    // this.sendEvents('next','e sign kyc')
+    this.sendEvents('next')
     let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
       basepath + '/kyc-esign/nsdl' + getConfig().searchParams
@@ -110,15 +111,16 @@ class ESignInfo extends Component {
   }
 
   sendEvents = (userAction, screenName) => {
-    const kyc = storageService().getObject("kyc");
+    // const kyc = storageService().getObject("kyc");
     let eventObj = {
-      "event_name": 'KYC_registration',
+      // "event_name": 'KYC_registration',
+      event_name: 'trading_onboarding',
       "properties": {
         "user_action": userAction || "" ,
-        "screen_name": screenName || "",
-        "rti": "",
-        "initial_kyc_status": kyc.initial_kyc_status || "",
-        "flow": 'digi kyc'
+        "screen_name": screenName || "complete_esign",
+        // "rti": "",
+        // "initial_kyc_status": kyc.initial_kyc_status || "",
+        // "flow": 'digi kyc'
       }
     };
     if (userAction === 'just_set_events') {

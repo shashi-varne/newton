@@ -1,11 +1,29 @@
 import React from "react";
+import { nativeCallback } from "../../../utils/native_callback";
 import Container from "../../common/Container";
 import { StatusInfo } from "../mini-components/StatusInfo";
 import "./commonStyles.scss";
 
 const NriError = (props) => {
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "NRI_not_available",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       hidePageTitle
       twoButtonVertical={true}
       button1Props={{

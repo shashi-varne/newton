@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { nativeCallback } from "../../../utils/native_callback";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
 
@@ -22,9 +23,29 @@ const tradingExperienceValues = [
 ];
 const Experience = (props) => {
   const [experience, setExperience] = useState("0-1");
+  const [experienceName, setExperienceName] = useState("0 to 1 year");
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "select_trading_experience",
+        experience:
+          experienceName === "5 year +" ? "more than 5 years" : experienceName,
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
       buttonTitle="CONTINUE"
+      events={sendEvents("just_set_events")}
       title="Select trading experience"
       noPadding
     >
@@ -38,7 +59,10 @@ const Experience = (props) => {
             <div
               className={`te-tile ${selected && "te-selected-tile"}`}
               key={index}
-              onClick={() => setExperience(data.value)}
+              onClick={() => {
+                setExperience(data.value);
+                setExperienceName(data.name);
+              }}
             >
               <div>{data.name}</div>
               {selected && (

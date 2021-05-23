@@ -1,12 +1,29 @@
 import React from "react";
 import { getConfig } from "../../../utils/functions";
+import { nativeCallback } from "../../../utils/native_callback";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;
 const DocumentVerification = (props) => {
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "document_verification_under_process",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="HOME"
       title="Document verification is under process"
       hidePageTitle
