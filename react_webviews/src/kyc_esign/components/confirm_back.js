@@ -23,7 +23,7 @@ const ConfirmBackModal = ({ id, open, confirm, cancel, ...props }) => {
           </article>
           <footer className="actions">
             <Button data-aid='yes-btn' onClick={confirm}>Yes</Button>
-            <Button data-aid="no-btn" onClick={cancel} variant="flat">No</Button>
+            <Button data-aid='no-btn' onClick={cancel} variant="flat">No</Button>
           </footer>
         </section>
       </DialogContent>
