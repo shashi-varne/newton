@@ -67,6 +67,14 @@
 }
 
 .withdraw-tax-summary {
+  border-bottom: 1px solid #EDEDED;
+  padding: 20px 0 20px 0;
+  margin-bottom: 20px;
+
+  .top {
+    cursor: pointer;
+  }
+  
   .top .fund-image {
     display: block;
     width: 40px;
@@ -89,8 +97,6 @@
 
   .item {
     display: block;
-    border-bottom: 1px solid #EDEDED;
-    padding: 20px 0 20px 0;
   }
 
   .item .tile {

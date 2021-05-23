@@ -16,7 +16,7 @@ const Success = (props) => {
       title="Share Details"
       buttonTitle="PROCEED"
       handleClick={proceed}
-      headerData={{goBack: proceed }}
+      headerData={{goBack: proceed, icon: "close" }}
       data-aid='kyc-success-page'
     >
       <section id="digilocker-success" data-aid='kyc-digilocker-success'>
@@ -31,7 +31,7 @@ const Success = (props) => {
                 className="doc-icon"
                 alt=""
               />
-              <div className="doc-name" id={`name_${idx+1}`} data-aid={`name_${idx+1}`}>{idx + 1}{'. '}{name}</div>
+              <div className="doc-name" id={`name-${idx+1}`} data-aid={`name-${idx+1}`}>{idx + 1}{'. '}{name}</div>
             </div>
           ))}
         </main>

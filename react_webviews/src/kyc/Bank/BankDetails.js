@@ -96,10 +96,10 @@ const BankDetails = (props) => {
                   </div>
                   {bank.status === "default" &&
                     bank.bank_status !== "rejected" && (
-                      <div className="tag">PRIMARY</div>
+                      <div className="tag" data-aid='kyc-tag'>PRIMARY</div>
                     )}
                 </div>
-                <div className="branch-name">{bank.branch_name}</div>
+                <div className="branch-name" data-aid='branch-name'>{bank.branch_name}</div>
               </div>
             </div>
             <div className="item" data-aid='kyc-account-number'>

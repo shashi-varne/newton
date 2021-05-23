@@ -90,7 +90,7 @@ const BanksList = (props) => {
                     </div>
                     {bank.status === "default" &&
                       bank.bank_status !== "rejected" && (
-                        <div className="tag">PRIMARY</div>
+                        <div className="tag" data-aid='kyc-tag'>PRIMARY</div>
                       )}
                   </div>
                   <div className="account" data-aid='account'>Account: {bank.account_number}</div>

@@ -46,7 +46,7 @@ const Complete = (props) => {
           variant="warning"
           title="Note"
           message="Your bank verification is still pending. You will be able to invest once your bank is verified."
-          dataAid='kyc-pending'
+          dataAid='kyc-pending-alertbox'
         />
       </div>
     </Container>

@@ -301,7 +301,7 @@ const AddBank = (props) => {
                 id="c_account_number"
                 disabled={isApiRunning}
               />
-              <div className="input">
+              <div className="input" data-aid='kyc-dropdown-withouticon'>
                 <DropdownWithoutIcon
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}

@@ -93,7 +93,7 @@ class Recommendations extends Component {
     if (data && !pran) {
       const [recommendations] = data.recommended;
       const altRiskOptsMap = keyBy([...data.alternatives, ...data.recommended], 'risk');
-      const assetAlloc = altRiskOptsMap[recommendations.risk || this.state.risk]
+      const assetAlloc = altRiskOptsMap[recommendations?.risk || this.state.risk]
 
       this.setState(
         {
@@ -104,7 +104,7 @@ class Recommendations extends Component {
           assetAllocation: assetAlloc,
           pieChartData: createPieChartData(assetAlloc),
           skelton: this.state.display_summary_only,
-          risk: recommendations.risk || this.state.risk,
+          risk: recommendations?.risk || this.state.risk,
         },
         () => {
           this.state.display_summary_only && this.handleClick();

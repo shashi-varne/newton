@@ -12,6 +12,7 @@ const PennyDialog = ({ isOpen, count }) => {
       aria-describedby="kyc-dialog"
       className="kyc-penny-dialog"
       id="kyc-bottom-dialog"
+      data-aid='kyc-bottom-dialog'
     >
       <DialogContent className="penny-dialog-content" data-aid='penny-dialog-content'>
         <Imgc
@@ -19,10 +20,10 @@ const PennyDialog = ({ isOpen, count }) => {
           alt=""
           className="img"
         />
-        <div className="title">
+        <div className="title" data-aid='dialog-title'>
           Verifying your bank account <span>00:{count}</span>
         </div>
-        <div className="subtitle">
+        <div className="subtitle" data-aid='dialog-subtitle'>
           Hold on, while we verify your bank account. Please don’t close the
           app.
         </div>

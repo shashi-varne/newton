@@ -14,6 +14,7 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
       aria-describedby="kyc-dialog"
       className="kyc-penny-failed-dialog"
       id="kyc-bottom-dialog"
+      data-aid='kyc-bottom-dialog'
     >
       <DialogContent className="penny-failed-dialog-content" data-aid='kyc-penny-failed-dialog-content'>
         <div className="title" data-aid='kyc-title'>
@@ -28,7 +29,7 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
           Bank account verification failed! No worries, please check if you've
           entered correct details.
         </div>
-        <Button className="button bg-full" data-aid='kyc-check-bank-details' onClick={() => checkBankDetails()}>
+        <Button className="button bg-full" data-aid='kyc-check-bank-details-btn' onClick={() => checkBankDetails()}>
           CHECK BANK DETAILS
         </Button>
         <div className="divider">
@@ -36,7 +37,7 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
         </div>
         <Button
           className="button border-button"
-          data-aid='kyc-upload-bank-documents'
+          data-aid='kyc-upload-bank-documents-btn'
           onClick={() => uploadDocuments()}
         >
           UPLOAD BANK DOCUMENTS

@@ -128,6 +128,7 @@ const Landing = (props) => {
       case "insta-redeem": 
         return "Instant withdraw";
       case "self":
+      case "manual":
         return "Manual withdraw";
       default:
         return "Withdraw";

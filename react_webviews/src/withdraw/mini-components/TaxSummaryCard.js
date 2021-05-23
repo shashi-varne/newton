@@ -5,8 +5,7 @@ import { formatAmountInr } from 'utils/validators'
 import './mini-components.scss';
 
 const TaxSummaryCard = ({
-  open = true,
-  handleToggle,
+  openCard,
   stcg_tax,
   ltcg_tax,
   stcg_percent,
@@ -17,6 +16,7 @@ const TaxSummaryCard = ({
   exit_load,
   hideIcon = false,
   know_how_msg,
+  onClick
 }) => {
   const [showKnowMoreDialog, setShowKnowMoreDialog] = useState(false)
   const closeDialog = () => {
@@ -28,32 +28,30 @@ const TaxSummaryCard = ({
   const productName = getConfig().productName
   return (
     <section className="withdraw-tax-summary" data-aid='withdraw-tax-summary'>
-      <div className="top flex-between-center" data-aid='top flex-between-center'>
+      <div className="top flex-between-center" data-aid='top flex-between-center' onClick={onClick}>
         <div className="flex-center">
           <img className="fund-image" src={amc_logo_small} alt="" />
           <div className="fund-name">{friendly_name}</div>
         </div>
-        {open && !hideIcon && (
+        {openCard && !hideIcon && (
           <img
             className="icon"
             role="button"
             src={require(`assets/minus_icon.svg`)}
-            onClick={handleToggle}
             alt='minus-icon'
           />
         )}
-        {!open && !hideIcon && (
+        {!openCard && !hideIcon && (
           <img
             className="icon"
             role="button"
             src={require(`assets/plus_icon.svg`)}
-            onClick={handleToggle}
             alt='plus-icon'
           />
         )}
       </div>
-      {open && (
-        <div className={!open ? 'item item_hide' : 'item'} data-aid='item-data'>
+      {openCard && (
+        <div className={!openCard ? 'item item_hide' : 'item'} data-aid='item-data'>
           <div className="tile flex-between-center">
             <div className="name">Withdraw Amount</div>
             <div className="value">{formatAmountInr(withdrawal_amount)}</div>

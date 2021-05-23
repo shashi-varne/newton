@@ -166,6 +166,9 @@ const Funds = (props) => {
         },
       });
     } else if (invest_type === "ONE-TIME") {
+      if(recommendation.type === "buildwealth") {
+        recommendation.type = "buildwealthot"
+      }
       navigate(`${getPathname.investMore}${invest_type}`, {
         state: {
           recommendation: JSON.stringify(recommendation),

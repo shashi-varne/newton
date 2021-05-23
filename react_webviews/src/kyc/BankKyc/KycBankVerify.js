@@ -182,7 +182,7 @@ const KycBankVerify = (props) => {
           variant="info"
           title="Important"
           message="We will credit ₹1 to verify your bank account."
-          dataAid='kyc-bankverify'
+          dataAid='kyc-bankverify-alertbox'
         />
         {isEmpty(bankData) && (
           <>
@@ -203,7 +203,7 @@ const KycBankVerify = (props) => {
                     alt="bank-logo"
                   />
                 </div>
-                <div className="right">
+                <div className="right" data-aid='kyc-bank-name'>
                   <div>{bankData.bank_name}</div>
                   <div className="text">{bankData.branch_name} </div>
                 </div>

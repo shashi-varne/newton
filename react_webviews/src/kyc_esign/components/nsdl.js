@@ -151,7 +151,7 @@ class DigiStatus extends Component {
   };
 
   render() {
-    let { show_loader, skelton, dl_flow, show_note } = this.state;
+    let { show_loader, skelton, dl_flow, show_note, kyc } = this.state;
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
@@ -160,9 +160,10 @@ class DigiStatus extends Component {
 
     return (
       <Container
+        data-aid='esign-nsdl-screen'
         showLoader={show_loader}
         title={
-          status === "success" ? "eSign KYC completed" : "eSign KYC failed"
+          status === "success" ? "" : "Complete eSign"
         }
         handleClick={status === "success" ? this.handleClick : this.retry}
         buttonTitle={
@@ -174,6 +175,7 @@ class DigiStatus extends Component {
         }
         headerData={headerData}
         skelton={skelton}
+        hidePageTitle={status === "success" ? true : false}
       >
         {/* <div className="nsdl-status">
           <img
@@ -196,6 +198,7 @@ class DigiStatus extends Component {
             navigateToReports={this.navigateToReports}
             dl_flow={dl_flow}
             show_note={show_note}
+            kyc={kyc}
           />
         ) : (
           <Fragment>

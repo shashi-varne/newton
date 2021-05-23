@@ -142,7 +142,7 @@ const PersonalDetails3 = (props) => {
               disabled={isApiRunning}
             />
           </div>
-          <div className="input">
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.income_error ? true : false}
               helperText={form_data.income_error}

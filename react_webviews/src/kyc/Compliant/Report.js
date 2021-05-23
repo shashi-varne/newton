@@ -162,10 +162,10 @@ const CompliantReport = (props) => {
                     key={index}
                     className="tile-info"
                     onClick={() => handleTiles(index, item.key)}
-                    data-aid='kyc-title-info'
+                    data-aid={`kyc-title-info-${index+1}`}
                   >
                     <div className="unzipped-title">
-                      <div>{item.title}</div>
+                      <div data-aid={`kyc-item-title-${index+1}`}>{item.title}</div>
                       <img
                         src={require(`assets/${
                           openIndex === index && item.key !== "docs"
