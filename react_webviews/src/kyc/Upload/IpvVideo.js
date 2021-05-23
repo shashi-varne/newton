@@ -63,8 +63,6 @@ const IpvVideo = (props) => {
             case "video/ogg":
             case "video/x-flv":
             case "video/x-ms-wmv":
-            case "video/x-m4v":
-            case "video/*":
             setFile(file)
             setTimeout(
               function () {
@@ -99,8 +97,6 @@ const IpvVideo = (props) => {
       'video/ogg',
       'video/x-flv',
       'video/x-ms-wmv',
-      'video/x-m4v',
-      'video/*'
     ]
     if (acceptedTypes.indexOf(uploadedFile.type) !== -1) {
       setFile(event.target.files[0])
