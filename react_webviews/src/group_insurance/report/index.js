@@ -36,7 +36,7 @@ var healthkeyMapper = {
 }
 var emptyStateText = {
   'activeReports': 'No active policy',
-  'pendingReports': 'No pending application',
+  'pendingReports': 'No pending policy',
   'inactiveReports': 'No inactive policy'
 }
 class Report extends Component {
