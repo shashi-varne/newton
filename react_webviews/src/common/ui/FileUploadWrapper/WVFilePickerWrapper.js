@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getConfig } from "utils/functions";
 import { isArray, isFunction } from 'lodash';
 import toast from '../Toast';
+import FileAccessDialog from './FileAccessDialog';
 
-const openFileHandler = (filepickerId, methodName, docType, nativeHandler) => {
+const isWeb = getConfig().Web;
+
+const openFileHandler = (filepickerId, methodName, docName, nativeHandler) => {
   if (getConfig().html_camera) {
     const filepicker = document.getElementById(filepickerId);
     if (filepicker){
@@ -11,16 +14,14 @@ const openFileHandler = (filepickerId, methodName, docType, nativeHandler) => {
     }
   } else {
     window.callbackWeb[`open_${methodName}`]({
-      type: "doc",
-      doc_type: docType,
-      // callback from native
-      upload: nativeHandler
+      docName,
+      upload: nativeHandler // callback from native
     });
   }
 }
 
 function getBase64(file) {
-  const reader = new FileReader()
+  const reader = new FileReader();
   return new Promise(resolve => {
     reader.onload = ev => {
       resolve(ev.target.result)
@@ -36,26 +37,30 @@ const validateFileTypeAndSize = (file, supportedTypes, sizeLimit) => {
   if (!isArray(supportedTypes)) {
     supportedTypes = [supportedTypes]
   }
-
+  
   if (!supportedTypes.includes(fileType)) {
     return "File type not supported";
   } else if (file.size > sizeInBytes) {
     return `File size cannot exceed ${sizeLimit}MB`;
   }
-
+  
   return "";
 }
 
-
 export const WVFilePickerWrapper = ({
-  type = '', // 'file', 'camera', 'gallery'
+  pickerType = '', // 'file', 'camera', 'gallery', 'canvas'
+  customPickerId = 'wv-file-input',
+  showOptionsDialog,
   onFileSelectComplete,
   onFileSelectError,
   extraValidation,
-  sizeLimit,
+  sizeLimit = 100,
   supportedFormats,
+  fileName,
   children
 }) => {
+  const [openOptionsDialog, setOpenOptionsDialog] = useState(false);
+  const [filePickerType, setFilePickerType] = useState(pickerType);
 
   const onFileSelected = async (file) => {
     try {
@@ -69,12 +74,14 @@ export const WVFilePickerWrapper = ({
         if (extraErr) throw extraErr;
       }
 
+      let fileBase64 = '';
+
       if (file.type.split("/")[0] === 'image') {
-        file = await getBase64(file);
+        fileBase64 = await getBase64(file);
       }
 
       if (isFunction(onFileSelectComplete)) {
-        onFileSelectComplete(file);
+        onFileSelectComplete(file, fileBase64);
       }
     } catch(err) {
       if (isFunction(onFileSelectError)) {
@@ -86,17 +93,37 @@ export const WVFilePickerWrapper = ({
     }
   };
 
+  const onElementClick = () => {
+    if (!isWeb && showOptionsDialog) {
+      setOpenOptionsDialog(true);
+    } else {
+      openFileHandler(customPickerId, pickerType, fileName, onFileSelected);
+    }
+  }
+
+  const handleUploadFromDialog = (type) => {
+    setOpenOptionsDialog(false);
+    setFilePickerType(type);
+    openFileHandler(customPickerId, type, fileName, onFileSelected)
+  }
+
   return (
     <>
       <input
-        id="wv-file-input"
+        id={customPickerId}
         type="file"
-        style={{ 'visibility': "hidden" }}
+        style={{ visibility: 'hidden', display: 'none' }}
         onChange={(e) => onFileSelected(e.target.files[0])}
+        capture={filePickerType === 'camera'}
       />
       <ClickWrappedChild
         childElem={children}
-        onClickFunc={() => openFileHandler("wv-file-input", type, "", onFileSelected)}
+        onClickFunc={onElementClick}
+      />
+      <FileAccessDialog
+        isOpen={openOptionsDialog}
+        handleUpload={handleUploadFromDialog}
+        onClose={() => setOpenOptionsDialog(false)}
       />
     </>
   );
@@ -106,6 +133,7 @@ const ClickWrappedChild = ({ childElem, onClickFunc }) => (
   React.cloneElement(childElem, {
     onClick: onClickFunc,
     style: {
+      ...childElem.style,
       cursor: 'pointer'
     }
   })
