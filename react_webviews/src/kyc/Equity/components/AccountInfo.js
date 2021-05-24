@@ -24,12 +24,13 @@ const benefits = [
 const AccountInfo = (props) => {
   
   const sendEvents = (userAction) => {
+    // TODO sendEvents('next') and tnc_checked condition
     let eventObj = {
       event_name: "trading",
       properties: {
         user_action: userAction || "",
         screen_name: "trading_and_demat_info",
-        tnc_checked: true ? "yes" : "no", // to be done along with sendevents(next)
+        tnc_checked: true ? "yes" : "no",
       },
     };
     if (userAction === "just_set_events") {

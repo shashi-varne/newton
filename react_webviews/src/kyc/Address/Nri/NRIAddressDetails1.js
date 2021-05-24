@@ -121,12 +121,17 @@ const NriAddressDetails1 = (props) => {
   };
 
   const sendEvents = (userAction) => {
+    let addressProofMapper = {
+      'DL': 'driving_licence',
+      'UTILITY_BILL': 'utility_bill',
+      'LAT_BANK_PB': 'passbook'
+    }
     let eventObj = {
       event_name: "kyc_registration",
       properties: {
         user_action: userAction || "",
         screen_name: "nri_address_details_1",
-        doc_selected: form_data.address_doc_type ? form_data.address_doc_type.toLowerCase() : "",
+        doc_selected: form_data.address_doc_type ? addressProofMapper[form_data.address_doc_type] : "",
         residential_status: kyc?.address?.meta_data?.is_nri ? "nri" : "indian",
       },
     };

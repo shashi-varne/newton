@@ -186,8 +186,8 @@ const AddressDetails2 = (props) => {
         "screen_name": "address_details_2",
         "pincode_entered":  form_data.pincode ? "yes" : "no",
         "address_entered":  form_data.addressline ? "yes" : "no",
-        "nominee_pincode_entered":  form_data.pincode ? "yes" : "no",
-        "nominee_address_entered":  form_data.addressline ? "yes" : "no"
+        "nominee_pincode_entered":  kyc?.nomination?.meta_data?.pincode ? "yes" : "no",
+        "nominee_address_entered":  kyc?.nomination?.meta_data?.addressline ? "yes" : "no"
         }
     };
     if (userAction === 'just_set_events') {
@@ -196,6 +196,7 @@ const AddressDetails2 = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
+  
   return (
     <Container
       events={sendEvents("just_set_events")}
