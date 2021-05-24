@@ -204,7 +204,7 @@ class CategoryList extends Component {
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Please contact us to this number {getConfig().mobile}.
+            Please contact us to this number {this.state.contact || getConfig().mobile}.
           </DialogContentText>
         </DialogContent>
         <DialogActions style={{ display: "flex" }}>
