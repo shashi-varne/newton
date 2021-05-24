@@ -425,7 +425,7 @@ export const partnerConfigs = {
     },
   },
   moneycontrol: {
-    logo: "moneycontrol.svg",
+    logo: "moneycontrol_logo.svg",
     code: "moneycontrol",
     email: "moneycontrol@finity.in",
     mobile: "+91-7829228886", // check with satendra -> mobile is of fisdom

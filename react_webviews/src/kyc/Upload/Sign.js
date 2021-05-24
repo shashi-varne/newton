@@ -136,14 +136,6 @@ const Sign = (props) => {
     }
   }
 
-  const handleClick = () => {
-    if (!isWeb) {
-      handleUpload("open_canvas")
-    } else {
-      handleUpload("open_gallery");
-    }
-  }
-
   const sendEvents = (userAction, type) => {
     let eventObj = {
       "event_name": 'KYC_registration',
@@ -162,6 +154,7 @@ const Sign = (props) => {
     }
   }
 
+  const isWeb = getConfig().Web
 
   return (
     <Container

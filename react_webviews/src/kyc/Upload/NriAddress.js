@@ -271,10 +271,6 @@ const NRIAddressUpload = (props) => {
     });
   };
 
-  const handleAccessDialogClose = (event, reason) => {
-    setIsAccessDialogOpen(false);
-  }
-
   const sendEvents = (userAction, type, docSide) => {
     let eventObj = {
       "event_name": 'KYC_registration',
@@ -292,6 +288,7 @@ const NRIAddressUpload = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
+  const isWeb = getConfig().Web
 
   return (
     <Container

@@ -109,7 +109,7 @@ const Sign = (props) => {
   }
 
   const productName = getConfig().productName
-  const isWeb = getConfig().isWebOrSdk
+  const isWeb = getConfig().Web
 
   const sendEvents = (userAction, type) => {
     let eventObj = {

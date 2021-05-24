@@ -138,15 +138,8 @@ const Pan = (props) => {
       setIsApiRunning(false)
     }
   }
-
-  const handleClick = () => {
-    sendEvents('attach_document')
-    if (!isWeb) {
-      setIsAccessDialogOpen(true);
-    } else {
-      handleUpload("open_gallery");
-    }
-  }
+  
+  const isWeb = getConfig().Web
 
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -185,20 +178,20 @@ const Pan = (props) => {
           <div className="sub-title">
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
-          {file && subTitle && <Alert
-            variant="attention"
-            title={title}
-            message={subTitle}
-          />}
+          {file && subTitle && (
+            <Alert variant="attention" title={title} message={subTitle} />
+          )}
           <div className="kyc-doc-upload-container noBorder">
-            <div className="caption">Your PAN card should be clearly visible in your pic</div>
-            {!file && 
+            <div className="caption">
+              Your PAN card should be clearly visible in your pic
+            </div>
+            {!file && (
               <img
-              src={require(`assets/${productName}/pan_card.svg`)}
-              className="default"
-              alt="Default PAN Card"
-            />
-            }
+                src={require(`assets/${productName}/pan_card.svg`)}
+                className="default"
+                alt="Default PAN Card"
+              />
+            )}
             {file && fileToShow && (
               <img
                 src={fileToShow}
@@ -223,17 +216,23 @@ const Pan = (props) => {
             </div>
           </div>
           <div className="doc-upload-note-row">
-            <div className="upload-note"> How to take picture of your PAN document? </div>
+            <div className="upload-note">
+              {" "}
+              How to take picture of your PAN document?{" "}
+            </div>
             <Button
               type="textonly"
               buttonTitle="KNOW MORE"
               classes={{ root: "know-more-button" }}
-              onClick={() => navigate("/kyc/upload-instructions", {
-                state: { document: "pan" }
-              })}
+              onClick={() => {
+                sendEvents("attach_document");
+                navigate("/kyc/upload-instructions", {
+                  state: { document: "pan" },
+                });
+              }}
             />
           </div>
-          <FileAccessDialog 
+          <FileAccessDialog
             isOpen={isAccessDialogOpen}
             handleUpload={handleUpload}
             onClose={handleAccessDialogClose}
@@ -241,7 +240,7 @@ const Pan = (props) => {
         </section>
       )}
     </Container>
-  )
+  );
 }
 
 export default Pan

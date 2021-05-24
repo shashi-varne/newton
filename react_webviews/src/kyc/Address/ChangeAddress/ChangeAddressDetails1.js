@@ -51,9 +51,10 @@ const ChangeAddressDetails1 = (props) => {
       setFormData(data);
       return;
     }
-    navigate(getPathname.changeAddressDetails2, {
+    navigate(getPathname.uploadAddress, {
       state: {
-        address_doc_type: form_data.address_doc_type,
+        addressDocType: form_data.address_doc_type,
+        flow: "myAccount",
       },
     });
   };
