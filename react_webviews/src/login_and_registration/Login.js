@@ -166,6 +166,7 @@ class Login extends Component {
                 </>
               )}
               <Button
+                dataAid='login-btn'
                 buttonTitle="LOGIN"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}

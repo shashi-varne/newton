@@ -233,6 +233,7 @@ class Register extends Component {
                 <div>I have a referral/promo/partner code</div>
               </div>
               <Button
+                dataAid='register-btn'
                 buttonTitle="REGISTER"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
