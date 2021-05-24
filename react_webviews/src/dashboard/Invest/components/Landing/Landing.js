@@ -133,7 +133,7 @@ class Landing extends Component {
         noFooter={true}
         title="Start Investing"
         showLoader={this.state.show_loader}
-        data-aid='start-investing'
+        data-aid='start-investing-screen'
       >
         <div className="invest-landing" data-aid='invest-landing'>
           {
@@ -176,6 +176,7 @@ class Landing extends Component {
                             {kycStatusData.subtitle}
                           </div>
                           <Button
+                            dataAid='kyc-btn'
                             buttonTitle={kycStatusData.button_text}
                             classes={{
                               button: "invest-landing-button",
@@ -300,17 +301,18 @@ class Landing extends Component {
                                     key={index}
                                   >
                                     <div className="content">
-                                      <div className="title">{data.title}</div>
+                                      <div className="title"  data-aid={`financial-tool-title-${data.key}`}>{data.title}</div>
                                       <img
                                         src={require(`assets/${productName}/${data.icon}`)}
                                         alt=""
                                         className="icon"
                                       />
                                     </div>
-                                    <div className="subtitle">
+                                    <div className="subtitle" data-aid={`financial-tool-subtitle-${data.key}`}>
                                       {data.subtitle}
                                     </div>
                                     <Button
+                                      dataAid='financial-tool-btn'
                                       buttonTitle={data.button_text}
                                       classes={{
                                         button: "invest-landing-button",

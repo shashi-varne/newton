@@ -21,11 +21,11 @@ const InvestError = ({ isOpen, handleClick, errorMessage, close }) => {
       aria-describedby="success-dialog"
       className="invest-common-dialog"
       id="invest-error"
-      data-aid='"invest-error"'
+      data-aid='dialog-invest-error'
       onClose={close}
     >
       <DialogContent className="dialog-content" data-aid='invest-error'>
-        <div className="error-message" id="error-message"></div>
+        <div className="error-message" id="error-message" data-aid='error-message'></div>
       </DialogContent>
       <DialogActions className="action">
         <Button

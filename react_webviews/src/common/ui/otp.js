@@ -113,7 +113,7 @@ class OtpDefaultClass extends Component {
               data-aid='opt-resend-btn'
             >
               Didn’t receive?
-              <span style={{ color: getConfig().styles.primaryColor, fontWeight: 500, cursor: 'pointer' }}>
+              <span style={{ color: getConfig().styles.primaryColor, fontWeight: 500, cursor: 'pointer' }} data-aid='resend-opt-text'>
                 &nbsp; Resend OTP
               </span>
             </div>
