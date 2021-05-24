@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Button from "../../../common/ui/Button";
 import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
-import OtpDefault from "../../../common/ui/otp";
 import "./commonStyles.scss";
 import { resendOtp, sendOtp, socialAuth, verifyOtp } from "../../common/api";
 import toast from "../../../common/ui/Toast";
@@ -16,6 +15,7 @@ import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
 import { apiConstants } from "../../constants";
 import { getBasePath, getConfig } from "../../../utils/functions";
+import Otp from "../mini-components/Otp";
 
 const config = getConfig();
 const googleButtonTitle = (
@@ -46,6 +46,7 @@ const CommunicationDetails = (props) => {
   const [buttonTitle, setButtonTitle] = useState("CONTINUE");
   const [showLoader, setShowLoader] = useState(false);
   const [showOtpContainer, setShowOtpContainer] = useState(false);
+  const [showDotLoader, setShowDotLoader] = useState(false);
   const { user, kyc, isLoading } = useUserKycHook();
   const [communicationType, setCommunicationType] = useState("");
   const [buttonLoader, setButtonLoader] = useState(false);
@@ -92,7 +93,7 @@ const CommunicationDetails = (props) => {
   };
 
   const resendOtpVerification = async () => {
-    setShowLoader("button");
+    setShowDotLoader(true);
     try {
       const result = await resendOtp(otpId);
       if (!result) return;
@@ -105,8 +106,7 @@ const CommunicationDetails = (props) => {
     } catch (err) {
       toast(err.message);
     } finally {
-      setShowLoader(false);
-      setShowOtpContainer(true);
+      setShowDotLoader(false);
     }
   };
 
@@ -119,22 +119,22 @@ const CommunicationDetails = (props) => {
     });
   };
 
-  const handleGoogleAuth = async () => {
-    const provider = "google";
-    try {
-      setButtonLoader("button");
-      const result = await socialAuth({
-        provider: provider,
-        redirectUrl: `${config.base_url}${apiConstants.socialAuth}/${provider}/callback`,
-      });
-      console.log(result);
-    } catch (err) {
-      console.log(err);
-      toast(err.message);
-    } finally {
-      setButtonLoader(false);
-    }
-  };
+  // const handleGoogleAuth = async () => {
+  //   const provider = "google";
+  //   try {
+  //     setButtonLoader("button");
+  //     const result = await socialAuth({
+  //       provider: provider,
+  //       redirectUrl: `${config.base_url}${apiConstants.socialAuth}/${provider}/callback`,
+  //     });
+  //     console.log(result);
+  //   } catch (err) {
+  //     console.log(err);
+  //     toast(err.message);
+  //   } finally {
+  //     setButtonLoader(false);
+  //   }
+  // };
 
   const handleClick = async () => {
     try {
@@ -282,13 +282,11 @@ const CommunicationDetails = (props) => {
                   : "mobile number"}
               </div>
               <div className="kcd-otp-content">
-                <OtpDefault
-                  parent={{
-                    state,
-                    handleOtp,
-                    resendOtp: resendOtpVerification,
-                  }}
-                  class1="center"
+                <Otp
+                  state={state}
+                  showDotLoader={showDotLoader}
+                  handleOtp={handleOtp}
+                  resendOtp={resendOtpVerification}
                 />
               </div>
             </div>
