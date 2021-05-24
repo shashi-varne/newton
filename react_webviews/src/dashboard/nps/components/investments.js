@@ -5,6 +5,7 @@ import Api from "utils/api";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "../../../utils/validators";
 import { getConfig } from "utils/functions";
+import { isIframe } from "../../../utils/functions";
 
 class NpsInvestments extends Component {
   constructor(props) {

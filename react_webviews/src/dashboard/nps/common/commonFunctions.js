@@ -4,6 +4,7 @@ import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
 import toast from "../../../common/ui/Toast";
+import { isIframe } from "../../../utils/functions";
 // import { nps_config } from "../constants";
 
 const genericErrMsg = "Something went wrong";

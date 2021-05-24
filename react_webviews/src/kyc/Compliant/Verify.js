@@ -5,6 +5,7 @@ import { storageService } from "../../utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
+import { isIframe } from "../../utils/functions";
 
 const productName = getConfig().productName;
 const Verify = (props) => {

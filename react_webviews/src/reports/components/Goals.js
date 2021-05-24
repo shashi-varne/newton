@@ -7,6 +7,7 @@ import { getPathname } from "../constants";
 import { getReportGoals } from "../common/api";
 import { getAmountInInr } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
+import { getConfig, isIframe } from "../../utils/functions";
 
 const sliderConstants = {
   min: 0,
@@ -51,7 +52,7 @@ const Goals = (props) => {
       var message = JSON.stringify(_event);
       window.callbackWeb.sendEvent(_event);
     }
-    
+
     let pathname = getPathname[goal?.itag?.itype] || "";
     if (!pathname) return;
     if (goal.itag.itype === "saveforgoal")
