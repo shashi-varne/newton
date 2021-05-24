@@ -133,6 +133,8 @@ class Report extends Component {
     }else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
+
+    storageService().setObject('reportSelectedTab', this.state.selectedTab )
     this.navigate(path);
   }
 
@@ -222,6 +224,7 @@ class Report extends Component {
 
   toAdvisory = () =>{
     storageService().remove('advisory_from_landing');
+    storageService().setObject('reportSelectedTab', this.state.selectedTab )
     this.navigate('/group-insurance/advisory/landing');
     return;
   }
