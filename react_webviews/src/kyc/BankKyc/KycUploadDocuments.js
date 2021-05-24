@@ -1,73 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
-import Button from '../../common/ui/Button'
-import { verificationDocOptions } from "../constants";
+import { SUPPORTED_IMAGE_TYPES, verificationDocOptions } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
-import FileAccessDialog from '../mini-components/FileAccessDialog'
 import { getUrlParams, isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getBase64, getConfig } from "../../utils/functions";
+import { getConfig } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { getPathname } from "../constants";
 import "./KycUploadDocuments.scss";
+import KycUploadContainer from "../mini-components/KycUploadContainer";
 
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [selected, setSelected] = useState(null);
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [file, setFile] = useState(null);
-  const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
   const {kyc, isLoading, setKycToSession} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
-  const [isAccessDialogOpen, setIsAccessDialogOpen] = useState(false)
-  const isWeb = getConfig().Web;
-
-  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
-    window.callbackWeb[method_name]({
-      type: 'doc',
-      doc_type: doc_type,
-      doc_name: doc_name,
-      doc_side: doc_side,
-      // callbacks from native
-      upload: function upload(file) {
-        try {
-          switch (file.type) {
-            case 'image/jpeg':
-            case 'image/jpg':
-            case 'image/png':
-            case 'image/bmp':
-              setFile(file)
-              getBase64(file, function (img) {
-                setFileToShow(img)
-              })
-              setTimeout(
-                function () {
-                  setShowLoader(false);
-                },
-                1000
-              );
-              break;
-            default:
-              toast('Please select image file')
-          }
-        } catch (e) {
-          //
-        }
-      },
-    })
-
-    window.callbackWeb.add_listener({
-      type: 'native_receiver_image',
-      show_loader: function (show_loader) {
-        setShowLoader(true)
-      },
-    })
-  }
 
   useEffect(() => {
     if (
@@ -101,33 +55,17 @@ const KycUploadDocuments = (props) => {
     });
   }
 
-  const handleChange = (event) => {
-    event.preventDefault();
-    const uploadedFile = event.target.files[0]
-    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
-
-    if (acceptedType.indexOf(uploadedFile.type) === -1) {
-      toast('Please select image file only')
-      return
-    }
-
-    setFile(uploadedFile)
-    getBase64(uploadedFile, function (img) {
-      setFileToShow(img)
-    })
+  const onFileSelectComplete = (file, fileBase64) => {
+    setFile(file);
+    setFileToShow(fileBase64);
   };
+
+  const onFileSelectError = () => {
+    toast('Please select image file only');
+  }
 
   const handleDocType = (index) => {
     setSelected(index);
-  };
-
-  const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
-      inputEl.current.click()
-    else {
-      setIsAccessDialogOpen(false);
-      native_call_handler(method_name, 'doc', 'doc.jpg', 'front')
-    }
   };
 
   const handleImageLoad = (event) => {
@@ -162,14 +100,6 @@ const KycUploadDocuments = (props) => {
     const navigate = navigateFunc.bind(props);
     navigate("/kyc/sample-documents");
   };
-
-  const handleClick = () => {
-    if (!isWeb) {
-      setIsAccessDialogOpen(true);
-    } else {
-      handleUpload("open_gallery");
-    }
-  }
 
   const proceed = () => {
     const navigate = navigateFunc.bind(props);
@@ -210,10 +140,6 @@ const KycUploadDocuments = (props) => {
       }
     } 
   };
-
-  const handleAccessDialogClose = (event, reason) => {
-    setIsAccessDialogOpen(false);
-  }
 
   const selectedDocValue =
     selected !== null ? verificationDocOptions[selected].value : "";
@@ -279,40 +205,26 @@ const KycUploadDocuments = (props) => {
             })}
           </div>
           {!isEmpty(selected) && selected >= 0 && (
-            <div className="docs-image-container">
-              <div className="preview">
-                {file && fileToShow ? (
-                  <img
-                    className="preview-image"
-                    src={fileToShow}
-                    onLoad={handleImageLoad}
-                    alt="Uploaded Document"
-                  />
-                ) : (
-                  <img
-                    className="sign-img"
-                    src={require("assets/signature_icon.svg")}
-                    alt=""
-                  />
-                )}
-              </div>
-              <div className="upload-container" >
-                <input
-                  type="file"
-                  ref={inputEl}
-                  capture
-                  style={{ display: "none" }}
-                  onChange={handleChange}
+            <KycUploadContainer>
+              <div className="kuc-sign-image-container" style={{ height: fileToShow ? 'auto' : '250px' }}>
+                <KycUploadContainer.Image
+                  fileToShow={fileToShow}
+                  illustration={require("assets/signature_icon.svg")}
+                  alt={`${fileToShow ? 'Uploaded' : 'Upload'} Document`}
+                  className={fileToShow ? '' : 'kuc-sign-image'}
+                  onLoad={handleImageLoad}
                 />
-                <div className="button-container">
-                  <Button
-                    type="outlined"
-                    buttonTitle="ATTACH DOCUMENT"
-                    onClick={handleClick}
-                    />
-                </div>
               </div>
-            </div>
+              <KycUploadContainer.Button
+                withPicker
+                showOptionsDialog
+                nativePickerMethodName="open_gallery"
+                fileName="doc"
+                onFileSelectComplete={onFileSelectComplete}
+                onFileSelectError={onFileSelectError}
+                supportedFormats={SUPPORTED_IMAGE_TYPES}
+              />
+            </KycUploadContainer>
           )}
         </main>
         {selectedDocValue && (
@@ -326,11 +238,6 @@ const KycUploadDocuments = (props) => {
             alt="SSL Secure Encryption"
           />
         </footer>
-        <FileAccessDialog 
-            isOpen={isAccessDialogOpen}
-            handleUpload={handleUpload}
-            onClose={handleAccessDialogClose}
-          />
       </section>
       <PendingBankVerificationDialog
         open={showPendingModal}

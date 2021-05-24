@@ -1,15 +1,15 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import Container from '../common/Container'
-import Button from '../../common/ui/Button'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
-import { getConfig, getBase64 } from 'utils/functions'
+import { getConfig } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import "./commonStyles.scss";
+import KycUploadContainer from '../mini-components/KycUploadContainer'
 
 const isWeb = getConfig().Web
 
@@ -20,73 +20,15 @@ const Sign = (props) => {
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
 
-  const inputEl = useRef(null)
-
-  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
-    window.callbackWeb[method_name]({
-      type: 'doc',
-      doc_type: doc_type,
-      doc_name: doc_name,
-      doc_side: doc_side,
-      // callbacks from native
-      upload: function upload(file) {
-        try {
-          switch (file.type) {
-            case 'image/jpeg':
-            case 'image/jpg':
-            case 'image/png':
-            case 'image/bmp':
-              setFile(file)
-              getBase64(file, function (img) {
-                setFileToShow(img)
-              })
-              setTimeout(
-                function () {
-                  setShowLoader(false);
-                },
-                1000
-              );
-              break;
-            default:
-              toast('Please select image file')
-          }
-        } catch (e) {
-          //
-        }
-      },
-    })
-
-    window.callbackWeb.add_listener({
-      type: 'native_receiver_image',
-      show_loader: function () {
-        setShowLoader(true)
-      },
-    })
-  }
-
   const {kyc, isLoading} = useUserKycHook();
 
-  const handleChange = (event) => {
-    event.preventDefault();
-    const uploadedFile = event.target.files[0]
-    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
-
-    if (acceptedType.indexOf(uploadedFile.type) === -1) {
-      toast('Please select image file only')
-      return
-    }
-
-    setFile(uploadedFile)
-    getBase64(uploadedFile, function (img) {
-      setFileToShow(img)
-    })
+  const onFileSelectComplete = (file, fileBase64) => {
+    setFile(file);
+    setFileToShow(fileBase64)
   }
 
-  const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
-      inputEl.current.click()
-    else 
-      native_call_handler(method_name, 'sign', 'sign.jpg', 'front')
+  const onFileSelectError = () => {
+    toast('Please select image file only')
   }
 
   const handleSubmit = async () => {
@@ -133,14 +75,6 @@ const Sign = (props) => {
     }
   }
 
-  const handleClick = () => {
-    if (!isWeb) {
-      handleUpload("open_canvas")
-    } else {
-      handleUpload("open_gallery");
-    }
-  }
-
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -159,37 +93,24 @@ const Sign = (props) => {
           >
             Signature should be as per your PAN. Invalid signature can lead to investment rejection
           </WVInfoBubble>
-          <div className="kyc-doc-upload-container noBorder">
-            {file && (
-              <img
-                src={fileToShow}
-                className="preview"
-                alt="Uploaded Signature"
+          <KycUploadContainer>
+            <div className="kuc-sign-image-container" style={{ height: fileToShow ? 'auto' : '250px' }}>
+              <KycUploadContainer.Image
+                fileToShow={file && fileToShow}
+                illustration={require(`assets/signature_icon.svg`)}
+                alt={`${fileToShow ? 'Uploaded' : 'Upload'} Signature`}
+                className={fileToShow ? '' : 'kuc-sign-image'}
               />
-            )}
-            {!file && (
-              <img
-                className="icon"
-                src={require(`assets/signature_icon.svg`)}
-                alt="Upload Signature"
-              />
-            )}
-            <div className="kyc-upload-doc-actions">
-              <input
-                ref={inputEl}
-                type="file"
-                className="kyc-upload"
-                onChange={handleChange}
-              />
-              <div className="button-container" style={{marginTop: "60px"}}>
-                <Button
-                  type="outlined"
-                  buttonTitle="ATTACH DOCUMENT"
-                  onClick={handleClick}
-                />
-              </div>
             </div>
-          </div>
+            <KycUploadContainer.Button
+              withPicker
+              nativePickerMethodName={!isWeb ? 'open_canvas' : 'open_gallery'}
+              fileName="signature"
+              onFileSelectComplete={onFileSelectComplete}
+              onFileSelectError={onFileSelectError}
+              supportedFormats={SUPPORTED_IMAGE_TYPES}
+            />
+          </KycUploadContainer>
         </section>
       )}
     </Container>
