@@ -94,6 +94,7 @@
     margin-top: -15px;
     font-size: 13px;
     line-height: 21px;
+    margin-bottom: 20px;
   }
 
   .pan-alert {
@@ -144,26 +145,11 @@
       font-size: 12px;
       line-height: 14px;
       font-weight: bold;
-      justify-content: flex-end !important;
-      margin: 5px 0 0;
+      min-width: 112px;
+      text-align: right;
       cursor: pointer;
     }
   }
-
-  // .doc-upload-note-row {
-  //   margin-top: 40px;
-  //   @include d-flex-space-between();
-  //   column-gap: 20px;
-
-  //   .upload-note {
-  //     max-width: 70%;
-  //     text-align: left;
-  //   }
-
-  //   .know-more-button {
-  //     justify-content: flex-end !important;
-  //   }
-  // }
 }
 
 #kyc-upload-address {
@@ -281,4 +267,21 @@
 
 .align-left {
   text-align: left;
+}
+
+.kuc-sign-image-container {
+  position: relative;
+  border-radius: 6px;
+  background-color: white;
+  margin-bottom: 5px;
+
+  .kuc-sign-image {
+    height: 130px;
+    width: 152px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-bottom: 0;
+  }
 }

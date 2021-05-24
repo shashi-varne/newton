@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { getConfig } from 'utils/functions'
+import { getConfig, getBasePath, isMobile } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
-import { getPathname } from '../constants'
+import { getPathname, storageConstants } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
@@ -12,6 +12,7 @@ import {
   getFlow,
   navigate as navigateFunc,
 } from '../common/functions'
+import { updateQueryStringParameter } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
@@ -561,6 +562,69 @@ const Journey = (props) => {
   }
 
   const productName = getConfig().productName
+  const basePath = getBasePath();
+  const handleProceed = () => {
+    const redirect_url = encodeURIComponent(
+      `${basePath}/digilocker/callback${
+        getConfig().searchParams
+      }&is_secure=${storageService().get("is_secure")}`
+    );
+    const data = {
+      url: `${basePath}/kyc/journey${
+        getConfig().searchParams
+      }&show_aadhaar=true&is_secure=
+        ${storageService().get("is_secure")}`,
+      message: "You are almost there, do you really want to go back?",
+    };
+    if (isMobile.any() && storageService().get(storageConstants.NATIVE)) {
+      if (isMobile.iOS()) {
+        nativeCallback({
+          action: "show_top_bar",
+          message: { title: "Aadhaar KYC" },
+        });
+      }
+      nativeCallback({ action: "take_back_button_control", message: data });
+    } else if (!isMobile.any()) {
+      const redirectData = {
+        show_toolbar: false,
+        icon: "back",
+        dialog: {
+          message: "You are almost there, do you really want to go back?",
+          action: [
+            {
+              action_name: "positive",
+              action_text: "Yes",
+              action_type: "redirect",
+              redirect_url: encodeURIComponent(
+                `${basePath}/kyc/journey${
+                  getConfig().searchParams
+                }&show_aadhaar=true&is_secure=
+                  ${storageService().get("is_secure")}`
+              ),
+            },
+            {
+              action_name: "negative",
+              action_text: "No",
+              action_type: "cancel",
+              redirect_url: "",
+            },
+          ],
+        },
+        data: {
+          type: "server",
+        },
+      };
+      if (isMobile.iOS()) {
+        redirectData.show_toolbar = true;
+      }
+      nativeCallback({ action: "third_party_redirect", message: redirectData });
+    }
+    window.location.href = updateQueryStringParameter(
+      kyc.digilocker_url,
+      "redirect_url",
+      redirect_url
+    );
+  };
 
   const cancel = () => {
     setDlAadhaar(false)
@@ -571,7 +635,8 @@ const Journey = (props) => {
   }
 
   const proceed = () => {
-    setAadhaarLinkDialog(true)
+    // setAadhaarLinkDialog(true)
+    handleProceed();
   }
 
   if (!isEmpty(kyc) && !isEmpty(user)) {

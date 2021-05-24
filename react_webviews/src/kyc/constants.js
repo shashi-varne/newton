@@ -319,3 +319,5 @@ export const companyDetails = {
   NAME: "Finwizard technology Private Ltd.",
   ADDRESS: "Queens Paradise, No. 16/1, 1st Floor, Curve Rd, Shivaji Nagar, Bengaluru, Karnataka 560051"
 }
+
+export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
