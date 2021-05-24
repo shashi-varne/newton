@@ -133,7 +133,6 @@ const Report = (props) => {
     if (!getConfig().Web) {
       window.callbackWeb.eventCallback(_event);
     } else if (isIframe()) {
-      var message = JSON.stringify(_event);
       window.callbackWeb.sendEvent(_event);
     }
     if (getConfig().Web) {
@@ -165,7 +164,6 @@ const Report = (props) => {
       if (!getConfig().Web) {
         window.callbackWeb.eventCallback(_event);
       } else if (isIframe()) {
-        var message = JSON.stringify(_event);
         window.callbackWeb.sendEvent(_event);
       }
 
@@ -188,10 +186,9 @@ const Report = (props) => {
       if (!getConfig().Web) {
         window.callbackWeb.eventCallback(_event);
       } else if (isIframe()) {
-        var message = JSON.stringify(_event);
         window.callbackWeb.sendEvent(_event);
       }
-      
+
       if (getConfig().Web) {
         navigate(getPathname.invest);
       } else {

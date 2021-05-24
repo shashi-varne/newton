@@ -46,7 +46,6 @@ const Explore = (props) => {
     if (!getConfig().Web) {
       window.callbackWeb.eventCallback(_event);
     } else if (isIframe()) {
-      var message = JSON.stringify(_event);
       window.callbackWeb.sendEvent(_event);
     }
 

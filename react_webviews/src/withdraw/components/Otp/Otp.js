@@ -82,10 +82,9 @@ const Otp = (props) => {
       if (!getConfig().Web) {
         window.callbackWeb.eventCallback(_event);
       } else if (isIframe()) {
-        var message = JSON.stringify(_event);
         window.callbackWeb.sendEvent(_event);
       }
-      
+
       navigate("/withdraw/otp/success", {
         state: {
           type: stateParams?.type,

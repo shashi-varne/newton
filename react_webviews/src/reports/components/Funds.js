@@ -128,7 +128,6 @@ const Funds = (props) => {
           if (!getConfig().Web) {
             window.callbackWeb.eventCallback(_event);
           } else if (isIframe()) {
-            var message = JSON.stringify(_event);
             window.callbackWeb.sendEvent(_event);
           }
 
@@ -145,7 +144,6 @@ const Funds = (props) => {
           if (!getConfig().Web) {
             window.callbackWeb.eventCallback(_event);
           } else if (isIframe()) {
-            var message = JSON.stringify(_event);
             window.callbackWeb.sendEvent(_event);
           }
 
@@ -162,7 +160,6 @@ const Funds = (props) => {
           if (!getConfig().Web) {
             window.callbackWeb.eventCallback(_event);
           } else if (isIframe()) {
-            var message = JSON.stringify(_event);
             window.callbackWeb.sendEvent(_event);
           }
 
@@ -180,7 +177,6 @@ const Funds = (props) => {
         if (!getConfig().Web) {
           window.callbackWeb.eventCallback(_event);
         } else if (isIframe()) {
-          var message = JSON.stringify(_event);
           window.callbackWeb.sendEvent(_event);
         }
 
@@ -194,10 +190,9 @@ const Funds = (props) => {
         if (!getConfig().Web) {
           window.callbackWeb.eventCallback(_event);
         } else if (isIframe()) {
-          var message = JSON.stringify(_event);
           window.callbackWeb.sendEvent(_event);
         }
-        
+
         navigate(`${getPathname.investMore}SIP`, {
           state: {
             recommendation: JSON.stringify(item),
