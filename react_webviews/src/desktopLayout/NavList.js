@@ -153,15 +153,15 @@ const NavList = (props) => {
   };
   const isReadyToInvestBase = isReadyToInvest();
   return (
-    <div className='navlink-container'>
+    <div className='navlink-container' data-aid='navlink-container'>
       <div>
         {isMobileDevice && (
-          <div className='user-mobile-details'>
-            <div className='user-name'>{user?.name}</div>
-            <div className='user-contact'>{user?.email || user?.mobile}</div>
+          <div className='user-mobile-details' data-aid='user-mobile-details'>
+            <div className='user-name' data-aid='user-name'>{user?.name}</div>
+            <div className='user-contact' data-aid='user-contact'>{user?.email || user?.mobile}</div>
           </div>
         )}
-        <List className='navlink-lists'>
+        <List className='navlink-lists' data-aid='navlink-lists'>
           {data.map((el, idx) => {
             const hideNavItem = !filterNavList(el.id);
             if (hideNavItem) {
@@ -180,9 +180,9 @@ const NavList = (props) => {
       </div>
 
       <div>
-        <div className='navlink-footer-list'>
+        <div className='navlink-footer-list' data-aid='navlink-footer-list'>
           {productName === 'fisdom' && (
-            <div className='navlink-footer-item'>
+            <div className='navlink-footer-item' data-aid='navlink-faq'>
               <a
                 rel='noopener noreferrer'
                 target='_blank'
@@ -192,7 +192,7 @@ const NavList = (props) => {
               </a>
             </div>
           )}
-          <div className='navlink-footer-item'>
+          <div className='navlink-footer-item' data-aid='navlink-privacy-policy'>
             <a
               rel='noopener noreferrer'
               target='_blank'
@@ -201,7 +201,7 @@ const NavList = (props) => {
               Privacy Policy
             </a>
           </div>
-          <div className='navlink-footer-item'>
+          <div className='navlink-footer-item' data-aid='navlink-terms'>
             <a
               rel='noopener noreferrer'
               target='_blank'
@@ -210,7 +210,7 @@ const NavList = (props) => {
               Terms
             </a>
           </div>
-          <div className='navlink-footer-item'>
+          <div className='navlink-footer-item' data-aid='navlink-disclaimer'>
             <a
               rel='noopener noreferrer'
               target='_blank'
@@ -219,7 +219,7 @@ const NavList = (props) => {
               Disclaimer
             </a>
           </div>
-          <div className='navlink-footer-item'>
+          <div className='navlink-footer-item' data-aid='navlink-refund'>
             <a
               rel='noopener noreferrer'
               target='_blank'
@@ -228,7 +228,7 @@ const NavList = (props) => {
               Refund
             </a>
           </div>
-          <div className='navlink-footer-item'>
+          <div className='navlink-footer-item' data-aid='scheme-offer-documents'>
             <a
               rel='noopener noreferrer'
               target='_blank'
@@ -238,7 +238,7 @@ const NavList = (props) => {
             </a>
           </div>
         </div>
-        <div className='navlink-footer-abt'>
+        <div className='navlink-footer-abt' data-aid='navlink-footer-abt'>
           Finwizard Technology Pvt Ltd.
           <br />
           All rights reserved
