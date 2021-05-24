@@ -6,7 +6,7 @@ import shrink from 'assets/shrink_icn.png';
 import congratulations_fisdom from 'assets/ils_covid_success_fisdom.svg';
 import congratulations_myway from 'assets/ils_covid_success_myway.svg';
 import {
-  inrFormatDecimal
+  inrFormatDecimal, storageService
 } from '../../../utils/validators';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
@@ -324,6 +324,7 @@ class PlanSuccessClass extends Component {
 
   handleClickTwo() {
     this.sendEvents('check_details');
+    storageService().setObject('report_from_landing', true);
     let path = '/group-insurance/common/reportdetails/' + this.state.lead_data.bhariaxa_policy_id;
     this.navigate(path);
   }

@@ -227,6 +227,7 @@ class GroupHealthPayment extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
+    storageService().setObject('report_from_landing', true);
 
     let state = '';
     if(this.state.paymentFailed) {
@@ -242,11 +243,8 @@ class GroupHealthPayment extends Component {
       this.navigate(state);
     } else {
       state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.application_id}`;
-
       this.navigate(state);
     }
-
-    
   }
 
   handleClick2 = () => {
