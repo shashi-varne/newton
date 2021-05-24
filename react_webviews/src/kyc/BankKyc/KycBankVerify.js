@@ -50,7 +50,7 @@ const KycBankVerify = (props) => {
   };
 
   const handleClick = async () => {
-    sendEvents('next')// to be verified
+    sendEvents('next')
     try {
       setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bankData.bank_id });
@@ -131,12 +131,12 @@ const KycBankVerify = (props) => {
   };
 
   const checkBankDetails = () => {
-    sendEvents("check bank details", "bottom_sheet");
+    // sendEvents("check bank details", "bottom_sheet");
     navigate(`/kyc/${userType}/bank-details`);
   };
 
   const uploadDocuments = () => {
-    sendEvents("upload documents", "bottom_sheet");
+    // sendEvents("upload documents", "bottom_sheet");
     navigate(`/kyc/${userType}/upload-documents`);
   };
 
@@ -167,7 +167,7 @@ const KycBankVerify = (props) => {
   };
 
   const goToJourney = () => {
-    sendEvents("next", "bottom_sheet")
+    // sendEvents("next", "bottom_sheet")
     navigate(getPathname.journey)};
 
   const edit = () => () => {
@@ -177,12 +177,12 @@ const KycBankVerify = (props) => {
 
   const sendEvents = (userAction, screen_name) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
+      "event_name": 'kyc_registration',
       "properties": {
         "user_action": userAction || "",
         "screen_name": screen_name || "verify_bank_account",
-        "initial_kyc_status": kyc.initial_kyc_status,
-        "flow": getFlow(kyc) || ""
+        // "initial_kyc_status": kyc.initial_kyc_status,
+        // "flow": getFlow(kyc) || ""
       }
     };
     if(screen_name === 'bottom_sheet') {

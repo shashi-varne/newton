@@ -3,6 +3,7 @@ import Container from '../../common/Container'
 import { navigate as navigateFunc } from '../../common/functions';
 import { StatusInfo } from "../mini-components/StatusInfo";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
+import {nativeCallback} from '../../../utils/native_callback';
 import "./commonStyles.scss";
 
 const Allow = (props) => {
@@ -11,6 +12,7 @@ const Allow = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const accessHandler = () => {
+    sendEvents('next')
     if (navigator.onLine) {
       navigator.geolocation.getCurrentPosition(allowAccess, denyAccess)
     }
@@ -32,13 +34,31 @@ const Allow = (props) => {
     setShowLocationError(true);
   }
   const goBack = () => {
+    sendEvents('back')
     // navigate('path')
   }
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'trading_onboarding',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "allow_location_access",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
 
   return (
     <Container
       hidePageTitle
       buttonTitle="ALLOW"
+      events={sendEvents("just_set_events")}
       handleClick={accessHandler}
       headerData={{ goBack }}
       disableBack

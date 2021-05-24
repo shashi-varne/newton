@@ -9,10 +9,11 @@ import { storageConstants } from "../constants";
 import { getBasePath } from "../../utils/functions";
 import "./mini-components.scss";
 
-const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
+const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
   const productName = getConfig().productName;
   const basePath = getBasePath();
   const handleProceed = () => {
+    sendEvents('next', 'ensure_mobile_linked_to_aadhar')
     const redirect_url = encodeURIComponent(
       `${basePath}/digilocker/callback${
         getConfig().searchParams

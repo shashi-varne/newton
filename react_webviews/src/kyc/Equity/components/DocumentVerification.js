@@ -8,6 +8,7 @@ import "./commonStyles.scss";
 const productName = getConfig().productName;
 const DocumentVerification = (props) => {
   const sendEvents = (userAction) => {
+    // TODO sendEvents('next)
     let eventObj = {
       event_name: "trading_onboarding",
       properties: {

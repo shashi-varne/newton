@@ -200,6 +200,7 @@ const AddressUpload = (props) => {
   };
 
   const sendEvents = (userAction, type, docSide) => {
+    // callbackWeb.eventCallback to be added
     let eventObj = {
       "event_name": 'KYC_registration',
       "properties": {

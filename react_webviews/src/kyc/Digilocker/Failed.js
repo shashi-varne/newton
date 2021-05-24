@@ -9,6 +9,7 @@ import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import DotDotLoaderNew from '../../common/ui/DotDotLoaderNew';
 import "./Digilocker.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
@@ -19,10 +20,12 @@ const Failed = (props) => {
   };
 
   const retry = () => {
+    sendEvents('retry');
     setOpen(true);
   };
 
   const manual = async () => {
+    sendEvents('upload_manually')
     const navigate = navigateFunc.bind(props);
     try {
       setIsApiRunning(true);
@@ -38,8 +41,25 @@ const Failed = (props) => {
   const {kyc, isLoading} = useUserKycHook();
 
   const productName = getConfig().productName;
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "aadhar_kyc_failed",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="Aadhaar KYC Failed!"
       twoButtonVertical={true}
       button1Props={{

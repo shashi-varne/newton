@@ -726,41 +726,50 @@ const Journey = (props) => {
   }
 
   const sendEvents = (userAction, screen_name) => {
-    let stageData=0;
+    let stageData = 0;
     // let stageDetailData='';
     for (var i = 0; i < kycJourneyData?.length; i++) {
       if (
-        kycJourneyData[i].status === 'init' ||
-        kycJourneyData[i].status === 'pending'
+        kycJourneyData[i].status === "init" ||
+        kycJourneyData[i].status === "pending"
       ) {
-        stageData = i + 1
+        stageData = i + 1;
         // stageDetailData = kycJourneyData[i].key
-        break
+        break;
       }
     }
-    let eventObj = {
-      event_name: "kyc_registration",
-      properties: {
-        user_action: userAction || "",
-        screen_name: screen_name || "kyc_journey",
-        step: `step${stageData}`,
-        premium_onboarding: kyc.kyc_status === "compliant" ? "yes" : "no",
-        kyc_flow: getDLFlow(kyc) ? "digilocker" : "manual",
-        // resume_journey: To be checked
+    let eventObj =
+      screen_name === "ensure_mobile_linked_to_aadhar"
+        ? {
+            event_name: "kyc_registration",
+            properties: {
+              user_action: userAction || "",
+              screen_name: screen_name,
+            },
+          }
+        : {
+            event_name: "kyc_registration",
+            properties: {
+              user_action: userAction || "",
+              screen_name: screen_name || "kyc_journey",
+              step: `step${stageData}`,
+              premium_onboarding: kyc.kyc_status === "compliant" ? "yes" : "no",
+              kyc_flow: getDLFlow(kyc) ? "digilocker" : "manual",
+              // resume_journey: To be checked
 
-        // "stage": stageData,
-        // "details": stageDetailData,
-        // "rti": "",
-        // "initial_kyc_status": kyc.initial_kyc_status || "",
-        // "flow": getFlow(kyc) || ""
-      },
-    };
-    if (userAction === 'just_set_events') {
+              // "stage": stageData,
+              // "details": stageDetailData,
+              // "rti": "",
+              // "initial_kyc_status": kyc.initial_kyc_status || "",
+              // "flow": getFlow(kyc) || ""
+            },
+          };
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -904,8 +913,10 @@ const Journey = (props) => {
       <AadhaarDialog
         open={aadhaarLinkDialog}
         onClose={() => {
+          sendEvents('dont_have_linked', 'ensure_mobile_linked_to_aadhar')
           setAadhaarLinkDialog(false)
         }}
+        sendEvents={sendEvents}
         kyc={kyc}
       />
       <KycBackModal

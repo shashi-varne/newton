@@ -74,8 +74,25 @@ const ManualSignature = (props) => {
     { "id": 3, "title": "Courier the signed documents at our given address", render: renderStep3Content }
   ]
 
+  const sendEvents = (userAction) => {
+    // TODO DOWNLOAD FORMS events
+    let eventObj = {
+      "event_name": 'kyc_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "manual_signature",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={this.sendEvents("just_set_events")}
       title="Manual Signature"
       buttonTitle="HOME"
       handleClick={handleCTAClick}

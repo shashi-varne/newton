@@ -147,8 +147,9 @@ const IpvVideo = (props) => {
       "event_name": 'KYC_registration',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "selfie_video_doc",
+        "screen_name": "upload_ipv",
         "type": type || "",
+        // "screen_name": "selfie_video_doc",
       }
     };
     if (userAction === 'just_set_events') {

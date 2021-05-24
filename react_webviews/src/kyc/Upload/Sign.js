@@ -81,13 +81,13 @@ const Sign = (props) => {
 
   const sendEvents = (userAction, type) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
+      "event_name": 'kyc_registration',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "sign_doc",
-        "type": type || "",
-        "initial_kyc_status": kyc.initial_kyc_status || "",
-        "flow": getFlow(kyc) || ""
+        "screen_name": "share_signature",
+        // "type": type || "",
+        // "initial_kyc_status": kyc.initial_kyc_status || "",
+        // "flow": getFlow(kyc) || ""
       }
     };
     if (userAction === 'just_set_events') {

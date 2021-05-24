@@ -7,6 +7,7 @@ import "./commonStyles.scss";
 const NriError = (props) => {
 
   const sendEvents = (userAction) => {
+    // TODO complete_mf_kyc and home send events
     let eventObj = {
       event_name: "kyc_registration",
       properties: {

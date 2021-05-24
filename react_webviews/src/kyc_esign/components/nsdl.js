@@ -65,7 +65,7 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next')
+    this.sendEvents("next");
     /**
      * Need to handle this
      */
@@ -78,8 +78,9 @@ class DigiStatus extends Component {
   };
 
   retry = async () => {
+    this.sendEvents("retry", "esign_failed");
     let { kyc, dl_flow } = this.state;
-    this.sendEvents('next','e sign failed')
+    // this.sendEvents('next','e sign failed')
     if (
       kyc.application_status_v2 !== "init" &&
       kyc.application_status_v2 !== "submitted" &&
@@ -122,19 +123,22 @@ class DigiStatus extends Component {
         });
         window.location.href = resultData.esign_link;
       } else {
-        if (resultData && resultData.error === "all documents are not submitted") {
+        if (
+          resultData &&
+          resultData.error === "all documents are not submitted"
+        ) {
           toast("Document pending, redirecting to kyc");
           setTimeout(() => {
             if (dl_flow) {
-              this.navigate('/kyc/journey', {
+              this.navigate("/kyc/journey", {
                 state: {
                   show_aadhaar: true,
-                }
+                },
               });
             } else {
-              this.navigate('/kyc/journey');
+              this.navigate("/kyc/journey");
             }
-          }, 3000)
+          }, 3000);
         } else {
           toast(
             resultData.error || resultData.message || "Something went wrong",
@@ -166,23 +170,24 @@ class DigiStatus extends Component {
       ) {
         dl_flow = true;
       }
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "" ,
-        "screen_name": screenName || "kyc_verified",
-        "rti": "",
-        "initial_kyc_status": kyc.initial_kyc_status || "",
-        "flow": dl_flow ? 'digi kyc' : 'general'
+      let eventObj = {
+        // "event_name": 'KYC_registration',
+        event_name: "trading_onboarding",
+        properties: {
+          user_action: userAction || "",
+          screen_name: screenName || "kyc_verified",
+          rti: "",
+          initial_kyc_status: kyc.initial_kyc_status || "",
+          flow: dl_flow ? "digi kyc" : "general",
+        },
+      };
+      if (userAction === "just_set_events") {
+        return eventObj;
+      } else {
+        nativeCallback({ events: eventObj });
       }
-    };
-    if (userAction === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
     }
-  }
-}
+  };
 
   render() {
     let { show_loader, skelton, dl_flow, show_note, kyc } = this.state;
@@ -196,9 +201,7 @@ class DigiStatus extends Component {
       <Container
         showLoader={show_loader}
         events={this.sendEvents("just_set_events")}
-        title={
-          status === "success" ? "" : "Complete eSign"
-        }
+        title={status === "success" ? "" : "Complete eSign"}
         handleClick={status === "success" ? this.handleClick : this.retry}
         buttonTitle={
           status === "success"
