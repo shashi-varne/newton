@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { nativeCallback } from '../../../utils/native_callback';
 import Container from '../../common/Container'
-import { navigate as navigateFunc } from '../../common/functions';
+import { navigate as navigateFunc } from '../../common/functions'; // Todo: import from utils/functions after back handling merged
 import useUserKycHook from "../../common/hooks/userKycHook";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 import WVButton from "../../../common/ui/Button/WVButton"
@@ -9,9 +9,11 @@ import WVSteps from "../../../common/ui/Steps/WVSteps"
 import ContactUs from "../../../common/components/contact_us";
 import { getConfig } from '../../../utils/functions';
 import { companyDetails } from "../../constants";
+import { getKRAForm } from "../../common/api"
 import "./commonStyles.scss";
 
 const ManualSignature = (props) => {
+  const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const config = getConfig();
   const {kyc} = useUserKycHook();
@@ -24,7 +26,9 @@ const ManualSignature = (props) => {
           size='large'
           color="secondary"
           fullWidth
-          classes={{ label: 'form-download-btn' }}
+          classes={{ label: !isApiRunning ? 'form-download-btn' : '' }}
+          onClick={handleDownloadFormsClick}
+          showLoader={isApiRunning}
         >
           <div className="download-text">DOWNLOAD FORMS</div>
           <img
@@ -37,7 +41,7 @@ const ManualSignature = (props) => {
         </div>
       </>
     )
-  }, []);
+  }, [isApiRunning]);
 
   const renderStep2Content = useCallback(() => {
     return (
@@ -60,8 +64,21 @@ const ManualSignature = (props) => {
     )
   }, []);
 
-  const handleDownloadFormsClick = () => {
-
+  const handleDownloadFormsClick = async () => {
+    try {
+      setIsApiRunning(true);
+      const params = { "kyc_product_type": "equity" }
+      const result = await getKRAForm(params);
+      const formUrl = result?.filled_form_url;
+      const link = document.createElement("a");
+      link.href = formUrl;
+      link.setAttribute('download', "download");
+      link.click();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsApiRunning(false);
+    }
   }
 
   const handleCTAClick = () => {

@@ -9,6 +9,7 @@ export const apiConstants = {
   getBankStatus: '/api/account/penny-verification-status-check',
   getCVL: '/api/kyc/updatecvl/mine',
   getMerge: '/api/user/account/merge?pan_number=',
+  getKRAForm: '/api/kyc/formfiller2/kraformfiller/get_kraform'
 }
 
 export const getPathname = {
