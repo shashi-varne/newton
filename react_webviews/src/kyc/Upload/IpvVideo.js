@@ -18,9 +18,6 @@ const config = getConfig();
 const productName = config.productName
 const isWeb = config.Web
 
-const config = getConfig();
-const productName = config.productName
-const isWeb = config.Web
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
@@ -97,27 +94,7 @@ const IpvVideo = (props) => {
     })
   }
   
-  const handleChange = (event) => {
-    event.preventDefault();
-    const uploadedFile = event.target.files[0]
-    let acceptedTypes = [
-      'video/mp4',
-      'video/webm',
-      'video/ogg',
-      'video/x-flv',
-      'video/x-ms-wmv',
-    ]
-    if (acceptedTypes.indexOf(uploadedFile.type) !== -1) {
-      setFile(event.target.files[0])
-    } else {
-      toast('Upload a valid file format')
-    }
-  }
-
   const handleUpload = (method_name) => {
-    if(isWeb)
-      inputEl.current.click()
-    else
       native_call_handler(method_name, 'ipvvideo', '', '', 'Look at the screen and read the verification number loud', ipvcode)
   }
 
@@ -158,6 +135,24 @@ const IpvVideo = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
+
+  const handleClick = (e) => {
+    if (!isWeb) {
+      handleUpload("open_video_camera");
+    } else {
+      if (!showVideoRecoreder) {
+        setShowVideoRecorder(true);
+      }
+    }
+  }
+
+  const onRecordingComplete = (videoBlob) => {
+    const fileFromBlob = new File([videoBlob], "ipv-video.webm");
+    setFile(fileFromBlob);
+    setUploadCTAText("TAKE VIDEO AGAIN");
+    steIsRecordingComplete(true);
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -210,7 +205,7 @@ const IpvVideo = (props) => {
                   <Button
                     type="outlined"
                     buttonTitle="OPEN CAMERA"
-                    onClick={handleClick('open-camera')}
+                    onClick={handleClick}
                   />
                 </div>
               }
@@ -219,7 +214,7 @@ const IpvVideo = (props) => {
                 <Button
                   type="outlined"
                   buttonTitle={uploadCTAText}
-                  onClick={handleClick('gallery')}
+                  onClick={handleClick}
                 />
               </div>}
             </div>

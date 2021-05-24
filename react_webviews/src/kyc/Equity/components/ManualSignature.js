@@ -92,7 +92,7 @@ const ManualSignature = (props) => {
 
   return (
     <Container
-      events={this.sendEvents("just_set_events")}
+      events={sendEvents("just_set_events")}
       title="Manual Signature"
       buttonTitle="HOME"
       handleClick={handleCTAClick}

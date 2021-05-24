@@ -14,6 +14,7 @@ import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { isEmpty } from 'lodash';
+import Alert from "../mini-components/Alert";
 
 const getTitleList = ({ kyc, myAccountFlow }) => {
   let titleList = [
@@ -217,6 +218,10 @@ const AddressUpload = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
+  const title =
+    isMyAccountFlow && kyc?.address?.meta_data?.is_nri
+      ? "Upload Indian Address Proof"
+      : "Upload address proof";
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
