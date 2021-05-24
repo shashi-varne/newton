@@ -55,11 +55,12 @@ const TermsAndCond = () => {
             By clicking on the button below, I agree that I have read and accepted the{' '}
             {isWeb && partner_code !== 'finity' && (
               <>
-                <a target='_blank' rel='noopener noreferrer' href='https://www.fisdom.com/terms/'>
+                <a target='_blank' rel='noopener noreferrer' href='https://www.fisdom.com/terms/' data-aid='terms-offer-link'>
                   terms & conditions
                 </a>{' '}
                 and understood the
                 <a
+                  data-aid='scheme-offer-link'
                   target='_blank'
                   rel='noopener noreferrer'
                   href='https://www.fisdom.com/scheme-offer-documents/'
@@ -71,18 +72,18 @@ const TermsAndCond = () => {
             )}
             {isWeb && partner_code === 'finity' && (
               <>
-                <span className='tc_link' onClick={handleClickOpen('terms')}>
+                <span className='tc_link' data-aid='terms-link' onClick={handleClickOpen('terms')}>
                   terms
                 </span>{' '}
                 and understood the
-                <span className='tc_link' onClick={handleClickOpen('scheme')}>
+                <span className='tc_link' data-aid='scheme-link' onClick={handleClickOpen('scheme')}>
                   {' '}
                   scheme offer documents
                 </span>
               </>
             )}
             {!isWeb && partner_code === 'finity' && (
-              <span className='tc_link' onClick={handleClickOpen('terms')}>
+              <span className='tc_link' data-aid='terms-link' onClick={handleClickOpen('terms')}>
                 terms
               </span>
             )}
@@ -109,7 +110,7 @@ const DialogTC = ({ open, handleClose, data }) => {
         fullWidth
         data-aid='responsive-dialog-title'
       >
-        <DialogTitle classes={{ root: 't_and_c_title' }}>Terms and Conditions</DialogTitle>
+        <DialogTitle data-aid='terms-condition-title' classes={{ root: 't_and_c_title' }}>Terms and Conditions</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {data ? (

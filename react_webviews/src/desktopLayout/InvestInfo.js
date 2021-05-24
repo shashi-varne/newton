@@ -25,17 +25,17 @@ const InvestInfoData = [
 ];
 const InvestInfo = () => {
   return (
-    <div className='info-box'>
-      <div className='info-box-header'>Why invest with fisdom?</div>
-      <div className='info-box-content'>
+    <div className='info-box' data-aid='info-box'>
+      <div className='info-box-header' data-aid='info-box-header'>Why invest with fisdom?</div>
+      <div className='info-box-content' data-aid='info-box-content'>
         {InvestInfoData.map((el, idx) => (
           <div className='info-box-data' key={idx}>
             <div className='info-data-left'>
               <img src={el.icon} alt='smart-fund' />
             </div>
             <div className='info-box-right'>
-              <div className='info-box-right-title'>{el.title}</div>
-              <div className='info-box-right-subtitle'>{el.subtitle}</div>
+              <div className='info-box-right-title' data-aid={`info-box-right-title-${idx+1}`}>{el.title}</div>
+              <div className='info-box-right-subtitle' data-aid={`info-box-right-subtitle-${idx+1}`}>{el.subtitle}</div>
             </div>
           </div>
         ))}

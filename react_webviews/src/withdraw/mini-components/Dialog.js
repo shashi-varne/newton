@@ -6,7 +6,7 @@ import './mini-components.scss';
 
 const AmountDialog = ({ open, close, disableBackdropClick,title, id, placeholder,handleChange,handleProceed,value,error, helperText }) => {
   return (
-    <Dialog open={open} onClose={close} className="withdraw-amount-dialog" disableBackdropClick={disableBackdropClick}>
+    <Dialog open={open} onClose={close} className="withdraw-amount-dialog" disableBackdropClick={disableBackdropClick} data-aid='dialog-withdraw-amount'>
       <section className="withdraw-amount-dialog-content" data-aid='withdraw-amount-dialog-content'>
         <div className="title">{title}</div>
         <form className="withdraw-amount-form" data-aid='withdraw-amount-form'>
@@ -25,7 +25,7 @@ const AmountDialog = ({ open, close, disableBackdropClick,title, id, placeholder
             pattern='[0-9]*'
           />
           <div className="flex-between" data-aid='flex-between'>
-            <Button color="primary" onClick={close} className="cancel-btn">
+            <Button color="primary" onClick={close} className="cancel-btn" data-aid='cancel-btn'>
               cancel
             </Button>
             <Button
@@ -33,6 +33,7 @@ const AmountDialog = ({ open, close, disableBackdropClick,title, id, placeholder
               color="secondary"
               onClick={handleProceed}
               className="proceed-btn"
+              data-aid='proceed-btn'
             >
               continue
             </Button>

@@ -110,6 +110,7 @@ class OtpDefaultClass extends Component {
               onClick={this.resendOtp}
               style={{ color: '#4A494A', margin: '0 0 0 10px', fontSize: 14, textAlign: "center" }}
               className={this.props.parent.class}
+              data-aid='opt-resend-btn'
             >
               Didn’t receive?
               <span style={{ color: getConfig().styles.primaryColor, fontWeight: 500, cursor: 'pointer' }}>

@@ -129,7 +129,7 @@ class Notification extends Component {
                       )}
                       {target.image && <img alt="icon" src={target.image} />}
                     </div>
-                    <div className="text">
+                    <div className="text" data-aid={`notification-text-${index+1}`} >
                       <h4>{target.title}</h4>
                       <p>{target.subtitle}</p>
                     </div>

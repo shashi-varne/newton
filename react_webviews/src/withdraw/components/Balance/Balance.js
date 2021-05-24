@@ -141,6 +141,7 @@ const Balance = (props) => {
                 debt funds and get up to 4% more returns than bank!
               </div>
               <Button
+                dataAid='switch-now-btn'
                 buttonTitle="Switch Now"
                 onClick={handleSwitch}
                 classes={{ button: "withdraw-mid-tile-text2" }}
@@ -155,6 +156,7 @@ const Balance = (props) => {
                     className="withdraw-list-item flex"
                     key={idx}
                     onClick={() => redirect(redirectUrl, openModal)}
+                    data-aid={`withdraw-list-item flex-${idx}`}
                   >
                     <img
                       className="icon"
@@ -162,7 +164,7 @@ const Balance = (props) => {
                       width="40"
                       alt='withdraw-icon'
                     />
-                    <div className="text">
+                    <div className="text" data-aid={`withdraw-list-text-${idx}`}>
                       <div className="header">{title}</div>
                       <div className="desc">{desc}</div>
                     </div>

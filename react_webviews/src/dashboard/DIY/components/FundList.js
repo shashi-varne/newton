@@ -165,8 +165,9 @@ const FundList = (props) => {
       skelton={showLoader}
       classOverRideContainer="pr-container"
       id="diy-fundlist-container"
+      data-aid='diy-fundlist-screen'
     >
-      <div className="diy-tab-container">
+      <div className="diy-tab-container" data-aid='diy-tab-fundlist-page'>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -190,11 +191,11 @@ const FundList = (props) => {
         </Tabs>
         <TabContainer>
           {funds.length === 0 ? (
-            <div className="fund-change-message">
+            <div className="fund-change-message" data-aid='fund-change-message'>
               We are sorry! There are no funds that match your requirements
             </div>
           ) : (
-            <div className="fund-change-message">
+            <div className="fund-change-message" data-aid='fund-change-message'>
               Sorted on {sortFilter}, filtered for {fundOption} option
             </div>
           )}
@@ -261,7 +262,7 @@ const DiyFundCard = ({
     navigate('/diy/invest', null, true, parentProps.location.search)
   }
   return (
-    <div className="diy-fund-card">
+    <div className="diy-fund-card" data-aid='diy-fund-card'>
       <div className="diy-fund-card-img">
         <img
           src={props.amc_logo_small}
@@ -270,12 +271,12 @@ const DiyFundCard = ({
           onClick={() => handleClick(props)}
         />
       </div>
-      <div className="diy-fund-card-details">
-        <div className="diy-fund-card-name" onClick={() => handleClick(props)}>
+      <div className="diy-fund-card-details" data-aid='diy-fund-card-details'>
+        <div className="diy-fund-card-name" data-aid='diy-fund-card-name' onClick={() => handleClick(props)}>
           {props.legal_name}
         </div>
-        <div className="diy-fund-card-info-container">
-          <div className="diy-fund-card-info">
+        <div className="diy-fund-card-info-container" data-aid='diy-fund-card-info-container'>
+          <div className="diy-fund-card-info" data-aid='diy-fund-card-info'>
             <p>AUM: {Math.round(props.aum, 0)} Crs</p>
             <p>
               Return: 
@@ -295,16 +296,18 @@ const DiyFundCard = ({
               }
               role="button"
               onClick={handleCart(props)}
+              data-aid='diy-fund-card-btn'
             >
               <img
                 src={addedToCart ? remove_cart_icon : add_cart_icon}
                 alt={addedToCart ? 'Add to Cart' : 'Remove from cart'}
                 width="20"
               />
-              <div className="action">{!addedToCart ? '+' : '-'}</div>
+              <div className="action" data-aid='diy-action'>{!addedToCart ? '+' : '-'}</div>
             </div>
           ) : (
             <Button
+              dataAid='diy-fundlist-invest-btn'
               buttonTitle="Invest"
               style={{
                 height: '20px',

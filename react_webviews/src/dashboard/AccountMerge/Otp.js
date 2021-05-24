@@ -115,6 +115,7 @@ class AccountMergeOtp extends Component {
     let { auth_id, otp, isApiRunning, otpData } = this.state;
     return (
       <Container
+        data-aid='verify-otp-screen'
         skelton={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
@@ -124,7 +125,7 @@ class AccountMergeOtp extends Component {
       >
         {!isEmpty(otpData) && (
           <div className="account-merge-otp">
-            <p>
+            <p data-aid='account-merge-otp'>
               Please enter the OTP sent on{" "}
               {auth_id.type === "mobile" ? "Mobile Number" : "email ID"}{" "}
               {auth_id.auth_id}
