@@ -1,21 +1,17 @@
 import React, { useCallback, useState } from 'react'
 import { nativeCallback } from '../../../utils/native_callback';
 import Container from '../../common/Container'
-import { navigate as navigateFunc } from '../../common/functions'; // Todo: import from utils/functions after back handling merged
 import useUserKycHook from "../../common/hooks/userKycHook";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 import WVButton from "../../../common/ui/Button/WVButton"
 import WVSteps from "../../../common/ui/Steps/WVSteps"
 import ContactUs from "../../../common/components/contact_us";
-import { getConfig } from '../../../utils/functions';
 import { companyDetails } from "../../constants";
 import { getKRAForm } from "../../common/api"
 import "./commonStyles.scss";
 
 const ManualSignature = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const navigate = navigateFunc.bind(props);
-  const config = getConfig();
   const {kyc} = useUserKycHook();
 
   const renderStep1Content = useCallback(() => {
