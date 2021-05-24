@@ -310,10 +310,10 @@ class Report extends Component {
               }
               </TabContainer>
               <TabContainer dir={"ltr"}>
-                  <RenderReports  class="pendingReports" redirectCards={this.redirectCards} topText={reportTopTextMapper['inactiveReports']} bottomText={emptyStateText['pendingReports']} reports={pendingReports}/>
+                  <RenderReports  class="pendingReports" redirectCards={this.redirectCards} topText={reportTopTextMapper['pendingReports']} bottomText={emptyStateText['pendingReports']} reports={pendingReports}/>
               </TabContainer>
               <TabContainer dir={"ltr"}>
-                  <RenderReports class="inactiveReports"  redirectCards={this.redirectCards} topText={reportTopTextMapper['pendingReports']} bottomText={emptyStateText['inactiveReports']} reports={inactiveReports}/>
+                  <RenderReports class="inactiveReports"  redirectCards={this.redirectCards} topText={reportTopTextMapper['inactiveReports']} bottomText={emptyStateText['inactiveReports']} reports={inactiveReports}/>
               </TabContainer>
 
             </SwipeableViews>
