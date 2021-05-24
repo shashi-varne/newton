@@ -82,7 +82,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
         checkError(true);
       } else if (num <= 0) {
         setError(true);
-        setHelperText(`Minimum withdrawal amount for fund is ${formatAmountInr(1000)}`);
+        setHelperText(`Minimum withdrawal amount for fund is ${formatAmountInr(1)}`);
         checkError(true);
         return;
       } else {
