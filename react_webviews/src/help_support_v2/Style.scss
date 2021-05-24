@@ -213,6 +213,10 @@
         font-family: inherit !important;
       }
     }
+
+    a {
+      word-break: break-all;
+    }
   }
 
   .helpful-block {
@@ -427,6 +431,10 @@
       font-size: 11px;
       font-weight: 400;
       color: #979797;
+    }
+
+    a {
+      word-break: break-all;
     }
   }
 

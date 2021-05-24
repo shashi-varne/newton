@@ -75,8 +75,8 @@ class CategoryList extends Component {
     let categoryList = result ? result.categories : [];
 
     categoryList.map((item) => {
-      item.name = categories[item.cms_category_id].tag_name;
-      item.icon = categories[item.cms_category_id].icon;
+      item.name = item.cms_category_name;
+      item.icon = categories[item.cms_category_name].icon;
       storageService().set(item.cms_category_name, item.cms_category_id);
       return item;
     });
