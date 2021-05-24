@@ -1,3 +1,19 @@
+/*
+
+Use:
+  To provide a quick visual callback of the next step in a long journey
+  (Used mainly in KYC Journey) 
+
+Example syntax:
+  <WVJourneyShortening
+    title="Next step" ***required***
+    stepName="Complete esign and verify docs" ***required***
+    stepActionText="Continue" ***required***
+    stepActionType="completed" ('completed'/'pending')
+    onStepActionClick={any function to execute on click of the "step-action" element}
+  />
+*/
+
 import './JourneyShortening.scss';
 import React from 'react';
 import WVClickableTextElement from '../ClickableTextElement/WVClickableTextElement';
@@ -9,11 +25,11 @@ const STEP_ACTION_COLOR_MAP = {
 }
 
 const WVJourneyShortening = ({
-  title,
-  stepName,
-  stepActionText,
-  stepActionType,
-  onStepActionClick
+  title, // Title text for the step
+  stepName, // Name of the step
+  stepActionText, // Text for clickable element in the step-action section
+  stepActionType, // To set color of stepActionText - completed/pending [default=completed]
+  onStepActionClick // Function to call when step-action is clicked
 }) => {
   return (
     <div className="wv-journey-shortening" data-aid='wv-journey-shortening'>

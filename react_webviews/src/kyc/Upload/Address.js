@@ -1,18 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react'
+import "./commonStyles.scss";
+import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
-import Button from '../../common/ui/Button'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import Alert from '../mini-components/Alert'
-import FileAccessDialog from '../mini-components/FileAccessDialog'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, docMapper } from '../constants'
+import { storageService, } from '../../utils/validators'
+import { storageConstants, docMapper, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { getBase64, getConfig } from '../../utils/functions'
+import { getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
 import { combinedDocBlob } from '../common/functions'
 import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
-import "./commonStyles.scss";
+import KycUploadContainer from '../mini-components/KycUploadContainer'
+import { isEmpty } from 'lodash';
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -52,7 +51,6 @@ const MessageComponent = (kyc) => {
 }
 
 const config = getConfig();
-const isWeb = config.Web
 const productName = config.productName
 
 const AddressUpload = (props) => {
@@ -61,134 +59,36 @@ const AddressUpload = (props) => {
   const [frontDoc, setFrontDoc] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
   const [backDoc, setBackDoc] = useState(null)
-  const [isAccessDialogOpen, setIsAccessDialogOpen] = useState(false)
   const [file, setFile] = useState(null)
-  const [docSide, setDocSide] = useState("");
   const [state, setState] = useState({})
   const {kyc: kycData, isLoading} = useUserKycHook();
-  const [kyc, setKyc] = useState(
-    kycData
-  )
+  const [kyc, setKyc] = useState(kycData);
 
   useEffect(() => {
-    setKyc(kycData)
+    setKyc(kycData);
   }, [kycData])
 
-  const frontDocRef = useRef(null)
-  const backDocRef = useRef(null)
-
-  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
-    window.callbackWeb[method_name]({
-      type: 'doc',
-      doc_type: doc_type,
-      doc_name: doc_name,
-      doc_side: doc_side,
-      // callbacks from native
-      upload: function upload(file) {
-        try {
-          setState({
-            ...state,
-            docType: doc_type,
-            docName: doc_name,
-            doc_side: doc_side,
-            show_loader: true,
-          })
-          if (doc_side === 'back') {
-            setFrontDoc(file)
-          } else {
-            setBackDoc(file)
-          }
-          switch (file.type) {
-            case 'image/jpeg':
-            case 'image/jpg':
-            case 'image/png':
-            case 'image/bmp':
-              mergeDocs(file, doc_side);
-              setTimeout(
-                function () {
-                  setShowLoader(false);
-                },
-                1000
-              );
-              break
-            default:
-              toast('Please select image file')
-              setState({
-                ...state,
-                docType: doc_type,
-                show_loader: false,
-              })
-          }
-        } catch (e) {
-          //
-        }
-      },
-    })
-
-    window.callbackWeb.add_listener({
-      type: 'native_receiver_image',
-      show_loader: function (show_loader) {
-        setState({
-          ...state,
-          show_loader: true,
-        })
-      },
-    })
-  }
-
-  const handleChange = (type) => (event) => {
-    const uploadedFile = event.target.files[0]
-    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
-
-    if (acceptedType.indexOf(uploadedFile.type) === -1) {
-      toast('Please select image file only')
-      return
-    }
+  const onFileSelectComplete = (type) => (file, fileBase64) => {
     if (type === 'front') {
-      setFrontDoc(uploadedFile)
+      setFrontDoc(file);
+      setState({
+        ...state,
+        frontFileShow: fileBase64,
+      });
     } else {
-      setBackDoc(uploadedFile)
-    }
-    mergeDocs(uploadedFile, type);
-  }
-
-  const mergeDocs = (file, type) => {
-    if (type === 'front') {
-      setFrontDoc(file)
-    } else {
-      setBackDoc(file)
-    }
-
-    getBase64(file, function (img) {
-      if (type === 'front') {
-        setState({
-          ...state,
-          frontFileShow: img,
-        })
-      } else {
-        setState({
-          ...state,
-          backFileShow: img,
-        })
-      }
-    })
-  }
-
-  const handleUpload = (method_name, type) => {
-    if(getConfig().html_camera){
-      if (type === 'front') {
-        frontDocRef.current.click()
-      } else {
-        backDocRef.current.click()
-      }
-    }   
-    else {
-      setIsAccessDialogOpen(false);
-      native_call_handler(method_name, `address_${type}`, `address_${type}.jpg`, type)
+      setBackDoc(file);
+      setState({
+        ...state,
+        backFileShow: fileBase64,
+      });
     }
   }
 
-  const handleImageLoad = (event) => {
+  const onFileSelectError = () => {
+    return toast('Please select image file only');
+  }
+
+  const handleImageLoad = () => {
     const fr = new Image()
     const bc = new Image()
     if (state.frontFileShow && state.backFileShow) {
@@ -227,15 +127,6 @@ const AddressUpload = (props) => {
     } finally {
       console.log('uploaded')
       setIsApiRunning(false)
-    }
-  }
-
-  const handleClick = (method_name, type) => {
-    setDocSide(type);
-    if (!isWeb) {
-      setIsAccessDialogOpen(true);
-    } else {
-      handleUpload("open_gallery", type);
     }
   }
 
@@ -290,10 +181,6 @@ const AddressUpload = (props) => {
     });
   };
 
-  const handleAccessDialogClose = (event, reason) => {
-    setIsAccessDialogOpen(false);
-  }
-
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -320,82 +207,53 @@ const AddressUpload = (props) => {
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
           /> */}
-          <div className="kyc-doc-upload-container noBorder" data-aid='kyc-doc-upload-container'>
-            <div className="align-left">
-              <span data-aid='kyc-address-proof-front-side'><b>Front side</b></span> of your {addressProof}
-            </div>
-            {!frontDoc && (
-              <img
-                src={require(`assets/${productName}/address_proof_front.svg`)}
-                className="default"
-                onLoad={handleImageLoad}
-                alt="Default Address Proof Front"
-              />
-            )}
-            {frontDoc && state.frontFileShow && (
-              <img
-                src={state.frontFileShow}
-                className="preview"
-                alt="Uploaded PAN Card"
-                onLoad={handleImageLoad}
-              />
-            )}
-            <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
-              <input
-                ref={frontDocRef}
-                type="file"
-                className="kyc-upload"
-                onChange={handleChange('front')}
-              />
-              <div className="button-container">
-                <Button
-                  dataAid='attach-doc-btn'
-                  type="outlined"
-                  buttonTitle="ATTACH DOCUMENT"
-                  onClick={() => handleClick("open_gallery", "front")}
-                />
-              </div>
-            </div>
-          </div>
-          {!onlyFrontDocRequired && (
-            <div className="kyc-doc-upload-container noBorder" data-aid='kyc-doc-upload-container'>
-              <div className="align-left">
+          <KycUploadContainer.TitleText alignLeft>
+            <span data-aid='kyc-address-proof-front-side'><b>Front side</b></span> of your {addressProof}
+          </KycUploadContainer.TitleText>
+          <KycUploadContainer>
+            <KycUploadContainer.Image
+              fileToShow={frontDoc && state.frontFileShow}
+              illustration={require(`assets/${productName}/address_proof_front.svg`)}
+              onLoad={handleImageLoad}
+              alt="Address Proof Front"
+            />
+            <KycUploadContainer.Button
+              withPicker
+              showOptionsDialog
+              nativePickerMethodName="open_gallery"
+              fileName="address_proof_front"
+              customPickerId="wv-input-front"
+              onFileSelectComplete={onFileSelectComplete('front')}
+              onFileSelectError={onFileSelectError}
+              supportedFormats={SUPPORTED_IMAGE_TYPES}
+            />
+          </KycUploadContainer>
+
+          {!onlyFrontDocRequired &&
+            <>
+              <KycUploadContainer.TitleText alignLeft>
                 <span data-aid='kyc-address-proof-back-side'><b>Back side</b></span> of your {addressProof}
-              </div>
-              {!backDoc && (
-                <img
-                  src={require(`assets/${productName}/address_proof_rear.svg`)}
-                  className="default"
+              </KycUploadContainer.TitleText>
+              <KycUploadContainer>
+                <KycUploadContainer.Image
+                  fileToShow={backDoc && state.backFileShow}
+                  illustration={require(`assets/${productName}/address_proof_rear.svg`)}
                   onLoad={handleImageLoad}
-                  alt="Default Address Proof Rear"
+                  alt="Address Proof Rear"
                 />
-              )}
-              {backDoc && state.backFileShow && (
-                <img
-                  src={state.backFileShow}
-                  className="preview"
-                  alt="Uploaded Address Document"
-                  onLoad={handleImageLoad}
+                <KycUploadContainer.Button
+                  withPicker
+                  showOptionsDialog
+                  nativePickerMethodName="open_gallery"
+                  fileName="address_proof_rear"
+                  customPickerId="wv-input-back"
+                  onFileSelectComplete={onFileSelectComplete('back')}
+                  onFileSelectError={onFileSelectError}
+                  supportedFormats={SUPPORTED_IMAGE_TYPES}
                 />
-              )}
-              <div className="kyc-upload-doc-actions noBorder" data-aid='kyc-upload-doc-actions'>
-                <input
-                  ref={backDocRef}
-                  type="file"
-                  className="kyc-upload"
-                  onChange={handleChange('back')}
-                />
-                <div className="button-container">
-                  <Button
-                    dataAid='attach-doc-btn'
-                    type="outlined"
-                    buttonTitle="ATTACH DOCUMENT"
-                    onClick={() => handleClick("open_gallery", "back")}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+              </KycUploadContainer>
+            </>
+          }
           <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
             <div className="upload-note" data-aid='upload-note-text'> How to take picture of your address proof? </div>
             <WVClickableTextElement
@@ -408,12 +266,6 @@ const AddressUpload = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          <FileAccessDialog 
-            isOpen={isAccessDialogOpen}
-            handleUpload={handleUpload}
-            docSide={docSide}
-            onClose={handleAccessDialogClose}
-          />
         </section>
       )}
     </Container>
