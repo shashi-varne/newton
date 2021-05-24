@@ -68,10 +68,6 @@ const ManualSignature = (props) => {
     nativeCallback({ action: "exit" })
   }
 
-  const goBack = () => {
-    // navigate('path')
-  }
-
   const stepsToRender = [
     { "id": 1, "title": "Get all the forms", render: renderStep1Content },
     { "id": 2, "title": "Print all the forms & sign it", render: renderStep2Content },
@@ -83,7 +79,6 @@ const ManualSignature = (props) => {
       title="Manual Signature"
       buttonTitle="HOME"
       handleClick={handleCTAClick}
-      headerData={{ goBack }}
       data-aid='kyc-manual-signature-screen'
     >
       <section id="manual-signature" data-aid='manual-signature'>
