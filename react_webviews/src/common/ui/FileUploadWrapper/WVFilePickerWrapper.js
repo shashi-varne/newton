@@ -13,7 +13,7 @@ const openFileHandler = (filepickerId, methodName, docName, nativeHandler) => {
       filepicker.click();
     }
   } else {
-    window.callbackWeb[`open_${methodName}`]({
+    window.callbackWeb[methodName]({
       docName,
       upload: nativeHandler // callback from native
     });
@@ -48,7 +48,7 @@ const validateFileTypeAndSize = (file, supportedTypes, sizeLimit) => {
 }
 
 export const WVFilePickerWrapper = ({
-  pickerType = '', // 'file', 'camera', 'gallery', 'canvas'
+  nativePickerMethodName = '',
   customPickerId = 'wv-file-input',
   showOptionsDialog,
   onFileSelectComplete,
@@ -60,7 +60,7 @@ export const WVFilePickerWrapper = ({
   children
 }) => {
   const [openOptionsDialog, setOpenOptionsDialog] = useState(false);
-  const [filePickerType, setFilePickerType] = useState(pickerType);
+  const [filePickerType, setFilePickerType] = useState(nativePickerMethodName);
 
   const onFileSelected = async (file) => {
     try {
@@ -97,7 +97,7 @@ export const WVFilePickerWrapper = ({
     if (!isWeb && showOptionsDialog) {
       setOpenOptionsDialog(true);
     } else {
-      openFileHandler(customPickerId, pickerType, fileName, onFileSelected);
+      openFileHandler(customPickerId, nativePickerMethodName, fileName, onFileSelected);
     }
   }
 
