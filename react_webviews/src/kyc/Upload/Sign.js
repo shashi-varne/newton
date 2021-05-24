@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
@@ -12,7 +12,6 @@ import "./commonStyles.scss";
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 
 const isWeb = getConfig().Web
-const SUPPORTED_FILE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -105,11 +104,11 @@ const Sign = (props) => {
             </div>
             <KycUploadContainer.Button
               withPicker
-              pickerType={!isWeb ? 'canvas' : 'gallery'}
-              fileName="pan"
+              nativePickerMethodName={!isWeb ? 'open_canvas' : 'open_gallery'}
+              fileName="signature"
               onFileSelectComplete={onFileSelectComplete}
               onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_FILE_TYPES}
+              supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
         </section>

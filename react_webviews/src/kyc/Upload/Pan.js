@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -14,7 +14,6 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 
 const config = getConfig();
 const productName = config.productName;
-const SUPPORTED_FILE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 const Pan = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -105,11 +104,11 @@ const Pan = (props) => {
             <KycUploadContainer.Button
               withPicker
               showOptionsDialog
-              pickerType="gallery"
+              nativePickerMethodName="open_gallery"
               fileName="pan"
               onFileSelectComplete={onFileSelectComplete}
               onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_FILE_TYPES}
+              supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
           <div className="doc-upload-note-row">

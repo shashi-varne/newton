@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import { storageService } from '../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper } from '../constants'
+import { storageConstants, nriDocMapper as docMapper, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig } from '../../utils/functions'
 import toast from 'common/ui/Toast'
@@ -199,12 +199,12 @@ const NRIAddressUpload = (props) => {
             <KycUploadContainer.Button
               withPicker
               showOptionsDialog
-              pickerType="gallery"
+              nativePickerMethodName="open_gallery"
               fileName="nri_address_front"
               customPickerId="wv-input-front"
               onFileSelectComplete={onFileSelectComplete('front')}
               onFileSelectError={onFileSelectError}
-              supportedFormats={['jpeg', 'jpg', 'png', 'bmp']}
+              supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
           {!onlyFrontDocRequired &&
@@ -222,12 +222,12 @@ const NRIAddressUpload = (props) => {
                 <KycUploadContainer.Button
                   withPicker
                   showOptionsDialog
-                  pickerType="gallery"
+                  nativePickerMethodName="open_gallery"
                   fileName="nri_address_back"
                   customPickerId="wv-input-back"
                   onFileSelectComplete={onFileSelectComplete('back')}
                   onFileSelectError={onFileSelectError}
-                  supportedFormats={['jpeg', 'jpg', 'png', 'bmp']}
+                  supportedFormats={SUPPORTED_IMAGE_TYPES}
                 />
               </KycUploadContainer>
             </>

@@ -57,8 +57,8 @@ const Image = ({ fileToShow, illustration, alt, className, ...props }) => {
 KycUploadContainer.Image = Image;
 
 const Button = ({
-  pickerType,
   fileName,
+  nativePickerMethodName,
   onFileSelectComplete,
   showOptionsDialog,
   onFileSelectError,
@@ -71,8 +71,8 @@ const Button = ({
   if (withPicker) {
     return (
       <WVFilePickerWrapper
-        pickerType={pickerType}
         fileName={fileName}
+        nativePickerMethodName={nativePickerMethodName}
         showOptionsDialog={showOptionsDialog}
         onFileSelectComplete={onFileSelectComplete}
         onFileSelectError={onFileSelectError}

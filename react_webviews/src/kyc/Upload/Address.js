@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import { storageService, } from '../../utils/validators'
-import { storageConstants, docMapper } from '../constants'
+import { storageConstants, docMapper, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -12,8 +12,6 @@ import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { isEmpty } from 'lodash';
-
-const SUPPORTED_FILE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -221,12 +219,12 @@ const AddressUpload = (props) => {
             <KycUploadContainer.Button
               withPicker
               showOptionsDialog
-              pickerType="gallery"
+              nativePickerMethodName="open_gallery"
               fileName="address_proof_front"
               customPickerId="wv-input-front"
               onFileSelectComplete={onFileSelectComplete('front')}
               onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_FILE_TYPES}
+              supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
 
@@ -245,12 +243,12 @@ const AddressUpload = (props) => {
                 <KycUploadContainer.Button
                   withPicker
                   showOptionsDialog
-                  pickerType="gallery"
+                  nativePickerMethodName="open_gallery"
                   fileName="address_proof_rear"
                   customPickerId="wv-input-back"
                   onFileSelectComplete={onFileSelectComplete('back')}
                   onFileSelectError={onFileSelectError}
-                  supportedFormats={SUPPORTED_FILE_TYPES}
+                  supportedFormats={SUPPORTED_IMAGE_TYPES}
                 />
               </KycUploadContainer>
             </>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
-import { verificationDocOptions } from "../constants";
+import { SUPPORTED_IMAGE_TYPES, verificationDocOptions } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
@@ -12,8 +12,6 @@ import toast from '../../common/ui/Toast'
 import { getPathname } from "../constants";
 import "./KycUploadDocuments.scss";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
-
-const SUPPORTED_FILE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -220,11 +218,11 @@ const KycUploadDocuments = (props) => {
               <KycUploadContainer.Button
                 withPicker
                 showOptionsDialog
-                pickerType="gallery"
+                nativePickerMethodName="open_gallery"
                 fileName="doc"
                 onFileSelectComplete={onFileSelectComplete}
                 onFileSelectError={onFileSelectError}
-                supportedFormats={SUPPORTED_FILE_TYPES}
+                supportedFormats={SUPPORTED_IMAGE_TYPES}
               />
             </KycUploadContainer>
           )}
