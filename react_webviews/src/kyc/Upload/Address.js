@@ -13,7 +13,7 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { isEmpty } from 'lodash';
 
-const getTitleList = ({ kyc }) => {
+const getTitleList = ({ kyc, myAccountFlow }) => {
   let titleList = [
     'Photo of address card should have your signature',
     'Photo of address should be clear and it should not have the exposure of flash light',
@@ -22,7 +22,8 @@ const getTitleList = ({ kyc }) => {
     kyc?.kyc_status !== 'compliant' &&
     kyc?.dl_docs_status !== '' &&
     kyc?.dl_docs_status !== 'init' &&
-    kyc?.dl_docs_status !== null
+    kyc?.dl_docs_status !== null && 
+    !myAccountFlow
   ) {
     if (
       kyc.all_dl_doc_statuses.pan_fetch_status === null ||
@@ -36,8 +37,8 @@ const getTitleList = ({ kyc }) => {
   return titleList
 }
 
-const MessageComponent = (kyc) => {
-  const [titleList] = useState(getTitleList(kyc))
+const MessageComponent = (kyc, myAccountFlow) => {
+  const [titleList] = useState(getTitleList(kyc, myAccountFlow))
   return (
     <section className="pan-alert" data-aid='kyc-pan-alert'>
       {titleList.map((title, idx) => (
@@ -55,6 +56,11 @@ const productName = config.productName
 
 const AddressUpload = (props) => {
   const navigate = navigateFunc.bind(props)
+  const stateParams = props?.location?.state || {}
+  const isMyAccountFlow = stateParams.flow === "myAccount";
+  if(isMyAccountFlow &&  !stateParams.addressDocType) {
+    navigate("/kyc/change-address-details1");
+  }
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
@@ -106,18 +112,22 @@ const AddressUpload = (props) => {
       let result, response
       if (onlyFrontDocRequired) {
         response = await upload(frontDoc, 'address', {
-          address_proof_key: addressProofKey,
+          addressProofKey: addressProofKey,
         })
       } else {
         response = await upload(file, 'address', {
-          address_proof_key: addressProofKey,
+          addressProofKey: addressProofKey,
         })
       }
       if(response.status_code === 200) {
         result = response.result;
         setKyc(result.kyc)
         storageService().setObject(storageConstants.KYC, result.kyc)
-        navigate('/kyc/upload/progress')
+        if(isMyAccountFlow) {
+          navigate('/my-account');
+        } else {
+          navigate('/kyc/upload/progress');
+        }
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
       }
@@ -138,11 +148,15 @@ const AddressUpload = (props) => {
   }
 
   var addressProofKey = kyc?.address?.meta_data?.is_nri
-    ? 'passport'
-    : kyc?.address_doc_type
+    ? "passport"
+    : isMyAccountFlow
+    ? stateParams.addressDocType
+    : kyc?.address_doc_type;
   var addressProof = kyc?.address?.meta_data?.is_nri
-    ? 'Passport'
-    : docMapper[kyc?.address_doc_type]
+    ? "Passport"
+    : isMyAccountFlow
+    ? docMapper[stateParams.addressDocType]
+    : docMapper[kyc?.address_doc_type];
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -180,7 +194,6 @@ const AddressUpload = (props) => {
       },
     });
   };
-
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
