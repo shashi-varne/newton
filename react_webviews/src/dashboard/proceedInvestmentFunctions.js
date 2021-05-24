@@ -1,7 +1,7 @@
 import toast from "../common/ui/Toast";
 import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
-import { getConfig } from "../utils/functions";
+import { getConfig, isIframe } from "../utils/functions";
 import { storageService, isFunction } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
 const partnerCode = getConfig().partner_code;
@@ -126,6 +126,24 @@ export function canDoInvestment(kyc) {
 }
 
 export function redirectToKyc(kycJourneyStatus, history) {
+  let _event = {
+    event_name: "journey_details",
+    properties: {
+      journey: {
+        name: "mf",
+        trigger: "cta",
+        journey_status: "incomplete",
+        next_journey: "kyc",
+      },
+    },
+  };
+  // send event
+  if (!getConfig().Web) {
+    window.callbackWeb.eventCallback(_event);
+  } else if (isIframe()) {
+    var message = JSON.stringify(_event);
+    window.callbackWeb.sendEvent(_event);
+  }
   if (kycJourneyStatus === "ground") {
     navigation(history, "/kyc/home");
   } else {

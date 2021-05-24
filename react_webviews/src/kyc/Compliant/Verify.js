@@ -11,6 +11,25 @@ const Verify = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "kyc",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
+    // send event
+    if (!getConfig().Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (isIframe()) {
+      var message = JSON.stringify(_event);
+      window.callbackWeb.sendEvent(_event);
+    }
+
     if (storageService().get(storageConstants.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {

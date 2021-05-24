@@ -32,6 +32,26 @@ const Goals = (props) => {
   };
 
   const redirectToInvestType = (goal) => {
+    
+    var _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "reports",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
+    // send event
+    if (!getConfig().Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (isIframe()) {
+      var message = JSON.stringify(_event);
+      window.callbackWeb.sendEvent(_event);
+    }
+    
     let pathname = getPathname[goal?.itag?.itype] || "";
     if (!pathname) return;
     if (goal.itag.itype === "saveforgoal")

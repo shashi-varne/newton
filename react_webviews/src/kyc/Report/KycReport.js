@@ -14,6 +14,7 @@ import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { isIframe } from "../../utils/functions";
 
 const Report = (props) => {
   const productName = getConfig().productName;
@@ -117,6 +118,24 @@ const Report = (props) => {
   };
 
   const proceed = () => {
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "kyc",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf"
+        }
+      }
+    };
+    // send event
+    if (!getConfig().Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (isIframe()) {
+      var message = JSON.stringify(_event);
+      window.callbackWeb.sendEvent(_event);
+    }
     if (getConfig().Web) {
       navigate(getPathname.invest);
     } else {
@@ -129,11 +148,50 @@ const Report = (props) => {
   };
 
   const checkNPSAndProceed = () => {
+    let _event = {};
     if (user.nps_investment) {
+      _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "kyc",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "reports",
+          },
+        },
+      };
+      // send event
+      if (!getConfig().Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (isIframe()) {
+        var message = JSON.stringify(_event);
+        window.callbackWeb.sendEvent(_event);
+      }
+
       if (!getConfig().isIframe) {
         navigate(getPathname.reports);
       }
     } else {
+      _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "kyc",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "mf",
+          },
+        },
+      };
+      // send event
+      if (!getConfig().Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (isIframe()) {
+        var message = JSON.stringify(_event);
+        window.callbackWeb.sendEvent(_event);
+      }
+      
       if (getConfig().Web) {
         navigate(getPathname.invest);
       } else {

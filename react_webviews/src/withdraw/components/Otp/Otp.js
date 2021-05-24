@@ -6,6 +6,7 @@ import toast from 'common/ui/Toast'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import './Otp.scss';
+import { getConfig, isIframe } from '../../../utils/functions'
 
 function useInterval(callback, delay) {
   const savedCallback = useRef()
@@ -66,6 +67,25 @@ const Otp = (props) => {
       if (!isEmpty(stateParams?.verification_link) && !isEmpty(state?.otp)) {
         result = await verify(stateParams?.verification_link, state?.otp)
       }
+      var _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "withdraw",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "mf",
+          },
+        },
+      };
+      // send event
+      if (!getConfig().Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (isIframe()) {
+        var message = JSON.stringify(_event);
+        window.callbackWeb.sendEvent(_event);
+      }
+      
       navigate("/withdraw/otp/success", {
         state: {
           type: stateParams?.type,

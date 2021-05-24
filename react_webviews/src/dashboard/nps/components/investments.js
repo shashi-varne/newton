@@ -144,6 +144,25 @@ class NpsInvestments extends Component {
   }
 
   investMore = () => {
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "reports",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "nps",
+        },
+      },
+    };
+    // send event
+    if (!getConfig().Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (isIframe()) {
+      var message = JSON.stringify(_event);
+      window.callbackWeb.sendEvent(_event);
+    }
+
     this.navigate('/nps/amount/one-time')
   }
 

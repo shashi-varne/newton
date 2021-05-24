@@ -12,6 +12,7 @@ import { getSummaryV2 } from "../../common/api";
 import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import "./commonStyles.scss";
 import CheckInvestment from "../mini-components/CheckInvestment";
+import { isIframe } from "../../../utils/functions";
 
 const config = getConfig();
 const productName = config.productName;
@@ -139,6 +140,29 @@ const Summary = (props) => {
     navigate(getPathname.reportGoals);
   };
 
+  const investMore = () => {
+    var _event = {
+      'event_name': 'journey_details',
+      'properties': {
+        'journey': {
+          'name': 'reports',
+          'trigger': 'cta',
+          'journey_status': 'complete',
+          'next_journey': 'mf'
+        }
+      }
+    };
+    // send event
+    if (!getConfig().Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (isIframe()) {
+      var message = JSON.stringify(_event);
+      window.callbackWeb.sendEvent(_event);
+    }
+    
+    navigate(getPathname.invest)
+  }
+
   return (
     <Container
       title="My Money"
@@ -246,7 +270,7 @@ const Summary = (props) => {
                       <b>Invest today & grow your wealth</b>
                     </p>
                     <Button
-                      onClick={() => navigate(getPathname.invest)}
+                      onClick= {investMore}
                       buttonTitle="Explore Mutual Funds"
                       classes={{
                         button: "reports-invest-button",
