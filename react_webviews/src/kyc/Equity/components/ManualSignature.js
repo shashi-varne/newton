@@ -12,7 +12,7 @@ import "./commonStyles.scss";
 
 const ManualSignature = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const {kyc} = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   const renderStep1Content = useCallback(() => {
     return (
@@ -92,6 +92,7 @@ const ManualSignature = (props) => {
       title="Manual Signature"
       buttonTitle="HOME"
       handleClick={handleCTAClick}
+      skelton={isLoading}
     >
       <section id="manual-signature">
         <div className="generic-page-subtitle">
