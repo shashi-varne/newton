@@ -150,12 +150,20 @@ const CommunicationDetails = (props) => {
       } else {
         let body = {};
         if (communicationType === "email") {
+          if(!formData.email) {
+            toast("Email is mandatory!")
+            return;
+          }
           if (!validateEmail(formData.email)) {
             toast("Please enter valid email");
             return;
           }
           body.email = formData.email;
         } else {
+          if(!formData.mobile) {
+            toast("Mobile number is mandatory!")
+            return;
+          }
           if (formData.mobile.length !== 10) {
             toast("Mobile number must contains 10 digits");
             return;
