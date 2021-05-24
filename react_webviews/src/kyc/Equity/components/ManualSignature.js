@@ -33,7 +33,7 @@ const ManualSignature = (props) => {
           />
         </WVButton>
         <div className="step-note">
-          Form with instructions is emailed at <b style={{color: "#161A2E"}}>{kyc?.identification?.meta_data.email || "sharique@fisdom.com"}</b>
+          Form with instructions is emailed at <b style={{color: "#161A2E"}}>{kyc?.identification?.meta_data.email || ""}</b>
         </div>
       </>
     )
