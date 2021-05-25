@@ -125,7 +125,7 @@ const IpvVideo = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "upload_ipv",
-        "type": type || "",
+        // "type": type || "",
         // "screen_name": "selfie_video_doc",
       }
     };
