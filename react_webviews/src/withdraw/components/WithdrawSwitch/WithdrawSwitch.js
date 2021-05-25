@@ -16,7 +16,7 @@ const WithdrawSwitch = (props) => {
   const amount = props.location?.state?.amount;
   const [switchFunds, setSwitchFunds] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [startDate, setStartDate] = useState(new Date())
+  const [startDate] = useState(new Date())
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedSwitch = async () => {
     try {

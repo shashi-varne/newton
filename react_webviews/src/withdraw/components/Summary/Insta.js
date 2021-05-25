@@ -13,7 +13,6 @@ import { navigate as navigateFunc } from '../../common/commonFunction'
 import './Insta.scss';
 import '../commonStyles.scss';
 import { nativeCallback } from '../../../utils/native_callback'
-import { navigate as navigateFunc } from '../../common/commonFunction'
 
 const Insta = (props) => {
   const navigate = navigateFunc.bind(props)

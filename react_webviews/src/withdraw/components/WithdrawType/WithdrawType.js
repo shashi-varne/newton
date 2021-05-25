@@ -26,7 +26,7 @@ const Landing = (props) => {
   const [buttonTitle, setButtonTitle] = useState('CONTINUE')
   const navigate = navigateFunc.bind(props)
   const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
-  const [startDate, setStartDate] = useState(new Date())
+  const [startDate] = useState(new Date())
   const fetchRecommendedFunds = async () => {
     try {
       setShowSkeltonLoader(true)
@@ -197,7 +197,7 @@ const Landing = (props) => {
         'time_spent_on_screen': Math.ceil((new Date() - startDate) / 1000),
       },
     };
-    if(type == 'insta-redeem') {
+    if(type === 'insta-redeem') {
       eventObj.properties['status'] = statusEvent;
       eventObj.properties['amount_value'] = 0 // to be checked
     }
