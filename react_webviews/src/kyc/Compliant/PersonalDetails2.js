@@ -111,21 +111,24 @@ const PersonalDetails2 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "personal_details_2",
-        "marital_status": form_data.marital_status,
-        "mother_name": form_data.mother_name ? "yes" : "no",
-        "spouse_name": form_data.spouse_name ? "yes" : "no",
-        "flow": 'premium onboarding'      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "personal_details_2",
+        marital_status: form_data.marital_status
+          ? form_data.marital_status.toLowerCase()
+          : "",
+        mother_name: form_data.mother_name ? "yes" : "no",
+        spouse_name: form_data.spouse_name ? "yes" : "no",
+        // "flow": 'premium onboarding'
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

@@ -223,21 +223,21 @@ const ChangeAddressDetails2 = (props) => {
 
   const sendEvents = (userAction, source, docSide) => {
     let eventObj = {
-      "event_name": 'my_account',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "upload address proof",
-        "picture": source || "",
-        "doc_side": docSide || "",
-        "doc_type": addressProof || ""
-      }
+      event_name: "my_account",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload address proof",
+        picture: source || "",
+        doc_side: docSide || "",
+        doc_type: addressProof || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

@@ -61,7 +61,7 @@ const ManualSignature = (props) => {
   }, []);
 
   const handleDownloadFormsClick = () => {
-
+    sendEvents('download_forms')
   }
 
   const handleCTAClick = () => {
@@ -75,20 +75,19 @@ const ManualSignature = (props) => {
   ]
 
   const sendEvents = (userAction) => {
-    // TODO DOWNLOAD FORMS events
     let eventObj = {
-      "event_name": 'kyc_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "manual_signature",
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "manual_signature",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

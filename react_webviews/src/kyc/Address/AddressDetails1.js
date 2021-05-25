@@ -147,20 +147,20 @@ const AddressDetails1 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "address_details_1",
-        "address_proof": form_data.address_doc_type,
-        "residential_status": form_data.residential_status
-      }
+      event_name: "KYC_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "address_details_1",
+        address_proof: form_data.address_doc_type,
+        residential_status: form_data.residential_status,
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

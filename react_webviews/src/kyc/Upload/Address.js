@@ -203,21 +203,22 @@ const AddressUpload = (props) => {
   const sendEvents = (userAction, type, docSide) => {
     // callbackWeb.eventCallback to be added
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "address_doc",
-        "type": type || "",
-        "doc_side": docSide || "",
-        "doc_type": addressProofKey
-      }
+      event_name: "KYC_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "address_doc",
+        type: type || "",
+        doc_side: docSide || "",
+        doc_type: addressProofKey,
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+  
   const title =
     isMyAccountFlow && kyc?.address?.meta_data?.is_nri
       ? "Upload Indian Address Proof"

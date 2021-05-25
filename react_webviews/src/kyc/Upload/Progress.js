@@ -50,25 +50,26 @@ const Progress = (props) => {
   };
 
   const goBack = () => {
+    sendEvents("back");
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
   }
 
   const sendEvents = (userAction, docs) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "upload_docs",
-        "docs": docs || ""
-      }
+      event_name: "KYC_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload_docs",
+        docs: docs || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

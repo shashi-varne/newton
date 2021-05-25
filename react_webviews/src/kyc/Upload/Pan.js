@@ -28,11 +28,13 @@ const Pan = (props) => {
   const {kyc, isLoading} = useUserKycHook();
 
   const onFileSelectComplete = (newFile, fileBase64) => {
+    sendEvents("attach_document");
     setFile(newFile);
     setFileToShow(fileBase64);
   }
 
   const onFileSelectError = (error) => {
+    sendEvents("attach_document");
     toast('Please select image file only');
   }
 

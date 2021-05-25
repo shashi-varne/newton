@@ -177,32 +177,29 @@ const KycBankVerify = (props) => {
 
   const sendEvents = (userAction, screen_name) => {
     let eventObj = {
-      "event_name": 'kyc_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": screen_name || "verify_bank_account",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: screen_name || "verify_bank_account",
         // "initial_kyc_status": kyc.initial_kyc_status,
         // "flow": getFlow(kyc) || ""
-      }
+      },
     };
-    if(screen_name === 'bottom_sheet') {
-        if(isPennySuccess)
-          eventObj.properties.status = 'bank added';
-        else if(isPennyFailed)
-          eventObj.properties.status = 'bank not added';          
-        //  else  if() // to be checked for error
-        //   eventObj.properties.status = 'error screen';         
-        else  if(isPennyExhausted)
-          eventObj.properties.status = 'unable to add bank attempts exhausted';         
-        else
-          eventObj.properties.status = '';
+    if (screen_name === "bottom_sheet") {
+      if (isPennySuccess) eventObj.properties.status = "bank added";
+      else if (isPennyFailed) eventObj.properties.status = "bank not added";
+      //  else  if() // to be checked for error
+      //   eventObj.properties.status = 'error screen';
+      else if (isPennyExhausted)
+        eventObj.properties.status = "unable to add bank attempts exhausted";
+      else eventObj.properties.status = "";
     }
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

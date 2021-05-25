@@ -121,20 +121,20 @@ const IpvVideo = (props) => {
 
   const sendEvents = (userAction, type) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "upload_ipv",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload_ipv",
         // "type": type || "",
         // "screen_name": "selfie_video_doc",
-      }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   const handleClick = (e) => {
     if (!isWeb) {

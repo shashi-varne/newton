@@ -24,11 +24,13 @@ const Sign = (props) => {
   const {kyc, isLoading} = useUserKycHook();
 
   const onFileSelectComplete = (file, fileBase64) => {
+    sendEvents("sign");
     setFile(file);
     setFileToShow(fileBase64)
   }
 
   const onFileSelectError = () => {
+    sendEvents("sign");
     toast('Please select image file only')
   }
 
@@ -79,21 +81,21 @@ const Sign = (props) => {
 
   const sendEvents = (userAction, type) => {
     let eventObj = {
-      "event_name": 'kyc_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "share_signature",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "share_signature",
         // "type": type || "",
         // "initial_kyc_status": kyc.initial_kyc_status || "",
         // "flow": getFlow(kyc) || ""
-      }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

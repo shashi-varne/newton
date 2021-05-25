@@ -300,6 +300,7 @@ const Report = (props) => {
   };
 
   const goBack = () => {
+    sendEvents("back");
     if (goBackPage) {
       navigate(goBackPage);
     } else {
@@ -309,19 +310,19 @@ const Report = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "kyc_done",
-        "flow": getFlow(kyc) || ""
-      }
+      event_name: "KYC_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "kyc_done",
+        flow: getFlow(kyc) || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

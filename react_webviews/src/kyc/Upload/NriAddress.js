@@ -167,21 +167,22 @@ const NRIAddressUpload = (props) => {
 
   const sendEvents = (userAction, type, docSide) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nri_address_doc",
-        "type": type || "",
-        "doc_side": docSide || "",
-        "doc_type": addressProofKey
-      }
+      event_name: "KYC_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nri_address_doc",
+        type: type || "",
+        doc_side: docSide || "",
+        doc_type: addressProofKey,
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+  
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"

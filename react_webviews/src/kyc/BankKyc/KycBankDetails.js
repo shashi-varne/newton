@@ -301,7 +301,11 @@ const KycBankDetails = (props) => {
       },
     };
     if (screenName != "unable_to_add_bank") {
-      eventObj.properties["account_type"] = bankData.account_type || "";
+      eventObj.properties["account_type"] = bankData.account_type
+        ? bankData.account_type === "SB"
+          ? "savings"
+          : "current"
+        : "";
       eventObj.properties["bank_name"] = bankData.bank_name || "";
     }
     if (userAction === "just_set_events") {

@@ -40,19 +40,18 @@ const Allow = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'trading_onboarding',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "allow_location_access",
-      }
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "allow_location_access",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
-
+  };
 
   return (
     <Container
