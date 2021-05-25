@@ -1,49 +1,33 @@
 import "./commonStyles.scss";
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import Container from '../common/Container'
 import { storageService, isEmpty } from '../../utils/validators'
 import { storageConstants } from '../constants'
 import { upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
-import { getConfig, getBase64 } from 'utils/functions'
-import toast from '../../common/ui/Toast'
+import { getConfig } from 'utils/functions'
+import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
-import Button from '../../common/ui/Button';
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import { getGeoLocation, selfieUpload } from "../services";
 import LocationPermission from "./LocationPermission";
+import WVButton from "../../common/ui/Button/WVButton";
 
 const productName = getConfig().productName;
-const isWeb = getConfig().isWebOrSdk;
 
 const SelfieV2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [file, setFile] = useState(null);
   const [fileToShow, setFileToShow] = useState(null);
   const [isLiveCamOpen, setIsLiveCamOpen] = useState(false);
+  const [isCamInitialised, setIsCamInitialised] = useState(false);
+  const [isCamLoading, setIsCamLoading] = useState(true);
   const [isLocnPermOpen, setIsLocnPermOpen] = useState(false);
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
   const [showLoader, setShowLoader] = useState(false);
   const { kyc, isLoading } = useUserKycHook();
   const navigate = navigateFunc.bind(props)
-  
-  // const handleChange = (event) => {
-  //   event.preventDefault();
-  //   const uploadedFile = event.target.files[0]
-  //   let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
-
-  //   if (acceptedType.indexOf(uploadedFile.type) === -1) {
-  //     toast('Please select image file only')
-  //     return
-  //   }
-
-  //   setFile(uploadedFile)
-  //   getBase64(uploadedFile, function (img) {
-  //     setFileToShow(img)
-  //   })
-  // }
 
   const handleSubmit = async () => {
     try {
@@ -65,39 +49,19 @@ const SelfieV2 = (props) => {
     }
   }
 
-  // const locationCallbackSuccess = async (data) => {
-  //   if (data.location_permission_denied) {
-  //     navigate('/kyc/upload/selfie-location');
-  //   } else {
-  //     try {
-  //       const results = await getGeoLocation(data.location);
-  //       const country = results[0]?.formatted_address;
-  //       if (country.toLowerCase() !== 'india') {
-  //         navigate('/kyc/upload/selfie-location/invalid-region');
-  //       } else {
-    //       }
-    //     } catch (err) {
-      //       console.log(err);
-      //       toast('Something went wrong! Please try again');
-      //     }
-      //   }
-      // }
-
   const onLocationFetchSuccess = (data) => {
     setLocationData(data);
-    setIsLocnPermOpen(false);
+    closeLocnPermDialog();
     setIsLiveCamOpen(true);
   }
-      
+
   const openLiveCamera = () => {
-    // window.callbackWeb.get_device_data({
-    //   type: 'location_nsp_received',
-    //   location_nsp_received: locationCallbackSuccess
-    // });
-    setIsLocnPermOpen(true);
+    if (isCamInitialised) {
+      setIsLocnPermOpen(true);
+    }
   }
 
-  const onFileUploadSuccess = async (result) => {
+  const onCaptureSuccess = async (result) => {
     setIsLiveCamOpen(false);
     if (result.imgBase64 && result['liveness-score']) {
       setFile(result.imgBase64);
@@ -106,13 +70,26 @@ const SelfieV2 = (props) => {
     }
   }
 
-  const onFileUploadFailure = (error) => {
+  const onCaptureFailure = (error) => {
     setIsLiveCamOpen(false);
-    toast(error.errorMsg || 'Something went wrong!');
+    Toast(error.errorMsg || 'Something went wrong!');
   }
 
   const showSelfieSteps = () => {
     navigate('/kyc/upload/selfie-steps');
+  }
+
+  const closeLocnPermDialog = () => {
+    setIsLocnPermOpen(false);
+  }
+
+  const onCameraInit = (init) => {
+    setIsCamLoading(false);
+    if (init) {
+      setIsCamInitialised(true);
+    } else {
+      Toast('Something went wrong! Please try again in some time');
+    }
   }
 
   return (
@@ -145,16 +122,17 @@ const SelfieV2 = (props) => {
               />
             )}
             <div className="kyc-upload-doc-actions">
-              <Button
-                fullWidth={true}
-                variant="raised"
+              <WVButton
+                fullWidth
+                style={{ backgroundColor: 'white' }}
+                showLoader={isCamLoading}
+                variant="outlined"
                 size="large"
                 color="secondary"
                 onClick={openLiveCamera}
-                autoFocus
-                type="outlined"
-                buttonTitle={file ? "Retake" : "Open Camera"}
-              />
+              >
+                {file ? "Retake" : "Open Camera"}
+              </WVButton>
             </div>
           </div>
           <div className="kyc-selfie-intructions">
@@ -165,12 +143,14 @@ const SelfieV2 = (props) => {
           </div>
           <WVLiveCamera
             open={isLiveCamOpen}
+            onCameraInit={onCameraInit}
             onClose={() => setIsLiveCamOpen(false)}
-            onFailure={onFileUploadFailure}
-            onSuccess={onFileUploadSuccess}
+            onCaptureFailure={onCaptureFailure}
+            onCaptureSuccess={onCaptureSuccess}
           />
           <LocationPermission
             isOpen={isLocnPermOpen}
+            onClose={closeLocnPermDialog}
             onLocationFetchSuccess={onLocationFetchSuccess}
             parentProps={props}
           />

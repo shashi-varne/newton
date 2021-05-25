@@ -1,14 +1,12 @@
-import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import Button from '@material-ui/core/Button';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getConfig } from '../../utils/functions';
-import Container from '../common/Container';
 import { getGeoLocation } from '../services';
-import Close from '@material-ui/icons/Close';
 import { navigate as navigateFunc } from '../common/functions';
 import { isFunction } from 'lodash';
+import WVButton from '../../common/ui/Button/WVButton';
+import WVFullscreenDialog from '../../common/ui/FullscreenDialog/WVFullscreenDialog';
 
 const { productName } = getConfig();
 const locationIcon = (
@@ -28,11 +26,6 @@ const PAGE_TYPE_CONTENT_MAP = {
     title: 'Allow location access',
     subtitle: 'As per SEBI, we need to capture your location while you take the selfie',
   },
-  'no-permission': {
-    imgElem: locationIcon,
-    title: 'Enable phone location',
-    subtitle: 'You need to turn on your phone location before taking the selfie',
-  },
   'invalid-region': {
     imgElem: foreignLocationIcon,
     title: 'You cannot proceed with KYC',
@@ -47,14 +40,15 @@ const PAGE_TYPE_CONTENT_MAP = {
 
 const LocationPermission = ({
   isOpen,
+  onClose,
   type,
   onLocationFetchSuccess,
   onLocationFetchFailure,
   parentProps
 }) => {
-  const [pageType, setPageType] = useState(type || 'no-permission');
+  const [pageType, setPageType] = useState(type || 'permission-denied');
   const [pageContent, setPageContent] = useState({});
-  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [permissionWarning, setPermissionWarning] = useState(false);
   const navigate = navigateFunc.bind(parentProps);
 
   useEffect(() => {
@@ -69,12 +63,12 @@ const LocationPermission = ({
 
   const locationCallbackSuccess = async (data) => {
     if (data.location_permission_denied) {
-      setPageType("permission-denied");
+      setPermissionWarning(true);
     } else {
       try {
         // const results = await getGeoLocation(data.location);
         // const country = results[0]?.formatted_address;
-        
+
         // if (country !== 'India') {
         //   setPageType("invalid-region");
         // } else {
@@ -87,12 +81,10 @@ const LocationPermission = ({
           onLocationFetchFailure();
         }
       }
-      setIsApiRunning(false);
     }
   }
 
   const requestLocnPermission = () => {
-    setIsApiRunning(true);
     window.callbackWeb.get_device_data({
       type: 'location_nsp_received',
       location_nsp_received: locationCallbackSuccess
@@ -107,87 +99,45 @@ const LocationPermission = ({
     }
   }
 
-  const goBack = () => {
-    if (pageType === 'invalid-region') {
-      navigate('/kyc/journey');
-    } else {
-      parentProps.history.goBack();
-    }
-  }
-
   if (!isOpen) {
     return '';
   }
 
   return (
-    <Dialog
-      fullScreen={true}
+    <WVFullscreenDialog
       open={isOpen}
-      onClose={goBack}
-      className="kyc-selfie-location-dialog"
-      aria-labelledby="responsive-dialog-title"
+      onClose={onClose}
     >
-      <DialogContent>
-        <Close />
-        {isApiRunning ?
-          LoadingContent :
-          <div className="kyc-loc-permission">
-            <div className="kyc-loc-perm-illustration">
-              {pageContent?.imgElem}
-            </div>
-            <div className="kyc-loc-perm-title">
-              {pageContent?.title}
-            </div>
-            <div className="kyc-loc-perm-subtitle">
-              {pageContent?.subtitle}
-            </div>
-            {pageType === 'permission-denied' &&
-              <WVInfoBubble type="error">
-                Location is required to continue the KYC
-            </WVInfoBubble>
-            }
+      <WVFullscreenDialog.Content onCloseClick={onClose}>
+        <div className="kyc-loc-permission">
+          <div className="kyc-loc-perm-illustration">
+            {pageContent?.imgElem}
           </div>
-        }
-      </DialogContent>
-      <DialogActions>
-        <Button
+          <div className="kyc-loc-perm-title">
+            {pageContent?.title}
+          </div>
+          <div className="kyc-loc-perm-subtitle">
+            {pageContent?.subtitle}
+          </div>
+          {permissionWarning &&
+            <WVInfoBubble type="error">
+              Location is required to continue the KYC
+            </WVInfoBubble>
+          }
+        </div>
+      </WVFullscreenDialog.Content>
+      <WVFullscreenDialog.Action>
+        <WVButton
+          fullWidth
           onClick={onCTAClick}
           variant="outlined"
           color="secondary"
-          autoFocus
-          fullWidth
         >
           {pageType === 'invalid-region' ? "Okay" : "Allow"}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </WVButton>
+      </WVFullscreenDialog.Action>
+    </WVFullscreenDialog>
   );
 }
 
 export default LocationPermission;
-
-const LoadingContent = (
-  <div>Verifying Location</div>
-);
-
-/* <Container
-      disableBack
-      buttonTitle={pageType === 'invalid-region' ? "Okay" : "Allow"}
-      handleClick={onCTAClick}
-      headerData={{ goBack }}
-    >
-      <div className="kyc-loc-permission">
-        {pageContent?.imgElem}
-        <div className="kyc-loc-perm-title">
-          {pageContent?.title}
-        </div>
-        <div className="kyc-loc-perm-subtitle">
-          {pageContent?.subtitle}
-        </div>
-        {pageType === 'permission-denied' &&
-          <WVInfoBubble type="error">
-            Location is required to continue the KYC
-          </WVInfoBubble>
-        }
-      </div>
-    </Container> */
