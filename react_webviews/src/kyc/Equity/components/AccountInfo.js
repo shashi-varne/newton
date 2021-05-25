@@ -75,7 +75,7 @@ const AccountInfo = (props) => {
             </div>
           </div>
           <div className="kaim-terms">
-            <Checkbox checked={true} />
+            <Checkbox checked={true} handleChange={() => {}} />
             <div>
               I agree to have read and understood the{" "}
               <span>{"Terms & conditions"}</span> and{" "}
