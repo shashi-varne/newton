@@ -292,12 +292,13 @@ const AddressUpload = (props) => {
     isMyAccountFlow && kyc?.address?.meta_data?.is_nri
       ? "Upload Indian Address Proof"
       : "Upload address proof";
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title={title}
     >
