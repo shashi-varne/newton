@@ -12,7 +12,7 @@ const AccountLinked = (props) => {
   const code = config.code;
   const handleClick = () => {
     if (config.Web) {
-      if (isIframe()) {
+      if (config.isIframe) {
         let message = JSON.stringify({
           type: "iframe_close",
         });

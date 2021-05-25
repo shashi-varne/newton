@@ -8,7 +8,7 @@ import { navigate as navigateFunc } from "utils/functions";
 import FundNotAvailable from "./mini-components/FundNotAvailable";
 import AskInvestType from "./mini-components/AskInvestType";
 import Button from "../../common/ui/Button";
-import { getConfig, isIframe } from "../../utils/functions";
+import { getConfig } from "../../utils/functions";
 
 const Funds = (props) => {
   const params = props?.match?.params || {};
@@ -85,6 +85,7 @@ const Funds = (props) => {
   };
 
   const getMfDetails = async (fund) => {
+    const config = getConfig();
     let _event = {
       event_name: "journey_details",
       properties: {
@@ -125,9 +126,9 @@ const Funds = (props) => {
               ? "buildwealth"
               : dontAddSuffixInType(itype);
           // send event
-          if (!getConfig().Web) {
+          if (!config.Web) {
             window.callbackWeb.eventCallback(_event);
-          } else if (isIframe()) {
+          } else if (config.isIframe) {
             window.callbackWeb.sendEvent(_event);
           }
 
@@ -141,9 +142,9 @@ const Funds = (props) => {
           setAskInvestType(true);
         } else if (result.sip_flag) {
           // send event
-          if (!getConfig().Web) {
+          if (!config.Web) {
             window.callbackWeb.eventCallback(_event);
-          } else if (isIframe()) {
+          } else if (config.isIframe) {
             window.callbackWeb.sendEvent(_event);
           }
 
@@ -157,9 +158,9 @@ const Funds = (props) => {
           setAskInvestType(true);
         } else if (result.ot_flag) {
           // send event
-          if (!getConfig().Web) {
+          if (!config.Web) {
             window.callbackWeb.eventCallback(_event);
-          } else if (isIframe()) {
+          } else if (config.isIframe) {
             window.callbackWeb.sendEvent(_event);
           }
 
@@ -174,9 +175,9 @@ const Funds = (props) => {
         }
       } else if (canShowOnlyOt(itype) && result.ot_flag) {
         // send event
-        if (!getConfig().Web) {
+        if (!config.Web) {
           window.callbackWeb.eventCallback(_event);
-        } else if (isIframe()) {
+        } else if (config.isIframe) {
           window.callbackWeb.sendEvent(_event);
         }
 
@@ -187,9 +188,9 @@ const Funds = (props) => {
         });
       } else if (canShowOnlySip(itype) && result.sip_flag) {
         // send event
-        if (!getConfig().Web) {
+        if (!config.Web) {
           window.callbackWeb.eventCallback(_event);
-        } else if (isIframe()) {
+        } else if (config.isIframe) {
           window.callbackWeb.sendEvent(_event);
         }
 

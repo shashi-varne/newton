@@ -14,10 +14,10 @@ import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { isIframe } from "../../utils/functions";
 
 const Report = (props) => {
-  const productName = getConfig().productName;
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -130,9 +130,9 @@ const Report = (props) => {
       }
     };
     // send event
-    if (!getConfig().Web) {
+    if (!config.Web) {
       window.callbackWeb.eventCallback(_event);
-    } else if (isIframe()) {
+    } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
     if (getConfig().Web) {
@@ -161,9 +161,9 @@ const Report = (props) => {
         },
       };
       // send event
-      if (!getConfig().Web) {
+      if (!config.Web) {
         window.callbackWeb.eventCallback(_event);
-      } else if (isIframe()) {
+      } else if (config.isIframe) {
         window.callbackWeb.sendEvent(_event);
       }
 
@@ -183,9 +183,9 @@ const Report = (props) => {
         },
       };
       // send event
-      if (!getConfig().Web) {
+      if (!config.Web) {
         window.callbackWeb.eventCallback(_event);
-      } else if (isIframe()) {
+      } else if (config.isIframe) {
         window.callbackWeb.sendEvent(_event);
       }
 

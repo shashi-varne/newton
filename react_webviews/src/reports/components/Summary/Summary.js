@@ -12,7 +12,6 @@ import { getSummaryV2 } from "../../common/api";
 import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import "./commonStyles.scss";
 import CheckInvestment from "../mini-components/CheckInvestment";
-import { isIframe } from "../../../utils/functions";
 
 const config = getConfig();
 const productName = config.productName;
@@ -141,6 +140,7 @@ const Summary = (props) => {
   };
 
   const investMore = () => {
+    const config = getConfig();
     var _event = {
       'event_name': 'journey_details',
       'properties': {
@@ -153,9 +153,9 @@ const Summary = (props) => {
       }
     };
     // send event
-    if (!getConfig().Web) {
+    if (!config.Web) {
       window.callbackWeb.eventCallback(_event);
-    } else if (isIframe()) {
+    } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
 

@@ -5,9 +5,8 @@ import { storageService } from "../../utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
-import { isIframe } from "../../utils/functions";
-
-const productName = getConfig().productName;
+const config = getConfig();
+const productName = config.productName;
 const Verify = (props) => {
   const navigate = navigateFunc.bind(props);
 
@@ -24,9 +23,9 @@ const Verify = (props) => {
       },
     };
     // send event
-    if (!getConfig().Web) {
+    if (!config.Web) {
       window.callbackWeb.eventCallback(_event);
-    } else if (isIframe()) {
+    } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
 

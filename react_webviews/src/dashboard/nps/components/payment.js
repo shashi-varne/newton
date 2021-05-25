@@ -3,7 +3,7 @@ import { initialize } from "../common/commonFunctions";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "utils/validators";
-import { getConfig, isIframe } from "../../../utils/functions";
+import { getConfig } from "../../../utils/functions";
 
 class NpsPaymentCallback extends Component {
   constructor(props) {
@@ -33,6 +33,7 @@ class NpsPaymentCallback extends Component {
   };
 
   handleClick = async () => {
+    const config = getConfig();
     if (this.state.status !== 'success') {
       this.navigate('/invest')
     } else {
@@ -56,17 +57,17 @@ class NpsPaymentCallback extends Component {
       if (!result.registration_details.additional_details_status) {
         if (currentUser.kyc_registration_v2 === 'init') {
           // send event
-          if (!getConfig().Web) {
+          if (!config.Web) {
             window.callbackWeb.eventCallback(_event);
-          } else if (isIframe()) {
+          } else if (config.isIframe) {
             window.callbackWeb.sendEvent(_event);
           }
           this.navigate('/kyc/journey');
         } else if (currentUser.kyc_registration_v2 === 'incomplete') {
           // send event
-          if (!getConfig().Web) {
+          if (!config.Web) {
             window.callbackWeb.eventCallback(_event);
-          } else if (isIframe()) {
+          } else if (config.isIframe) {
             window.callbackWeb.sendEvent(_event);
           }
           this.navigate('/kyc/journey');
@@ -86,9 +87,9 @@ class NpsPaymentCallback extends Component {
           }
         };
         // send event
-        if (!getConfig().Web) {
+        if (!config.Web) {
           window.callbackWeb.eventCallback(_event);
-        } else if (isIframe()) {
+        } else if (config.isIframe) {
           window.callbackWeb.sendEvent(_event);
         }
         this.navigate('/nps/investments');

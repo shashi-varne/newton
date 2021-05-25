@@ -5,7 +5,6 @@ import Api from "utils/api";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "../../../utils/validators";
 import { getConfig } from "utils/functions";
-import { isIframe } from "../../../utils/functions";
 
 class NpsInvestments extends Component {
   constructor(props) {
@@ -145,6 +144,7 @@ class NpsInvestments extends Component {
   }
 
   investMore = () => {
+    const config = getConfig();
     let _event = {
       event_name: "journey_details",
       properties: {
@@ -157,9 +157,9 @@ class NpsInvestments extends Component {
       },
     };
     // send event
-    if (!getConfig().Web) {
+    if (!config.Web) {
       window.callbackWeb.eventCallback(_event);
-    } else if (isIframe()) {
+    } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
 

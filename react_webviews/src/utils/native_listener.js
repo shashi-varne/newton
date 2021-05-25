@@ -231,11 +231,10 @@ import { getConfig } from './functions';
     var callbackData = {};
     callbackData.action = "event_callback";
     callbackData.action_data = data;
-    // TO BE CHECKED ANDROID
-    // if (typeof Android !== "undefined") {
-    //   Android.callbackNative(JSON.stringify(callbackData));
-    // } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
-    //   window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
-    // }
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
   };
 })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));

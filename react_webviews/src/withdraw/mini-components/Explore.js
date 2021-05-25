@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '@material-ui/core/Button'
 import { navigate as navigateFunc } from 'utils/functions'
 import './mini-components.scss';
-import { getConfig, isIframe } from '../../utils/functions';
+import { getConfig } from '../../utils/functions';
 
 // Current Version of material ui does not have right alt icons
 const RightAltIcon = () => {
@@ -30,7 +30,7 @@ const tiles = [
 const Explore = (props) => {
   const navigate = navigateFunc.bind(props)
   const handleClick = () => {
-
+    const config = getConfig();
     let _event = {
       event_name: "journey_details",
       properties: {
@@ -43,9 +43,9 @@ const Explore = (props) => {
       },
     };
     // send event
-    if (!getConfig().Web) {
+    if (!config.Web) {
       window.callbackWeb.eventCallback(_event);
-    } else if (isIframe()) {
+    } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
 

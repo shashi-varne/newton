@@ -1,7 +1,7 @@
 import toast from "../common/ui/Toast";
 import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
-import { getConfig, isIframe } from "../utils/functions";
+import { getConfig } from "../utils/functions";
 import { storageService, isFunction } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
 const partnerCode = getConfig().partner_code;
@@ -126,6 +126,7 @@ export function canDoInvestment(kyc) {
 }
 
 export function redirectToKyc(kycJourneyStatus, history) {
+  const config = getConfig();
   let _event = {
     event_name: "journey_details",
     properties: {
@@ -138,9 +139,9 @@ export function redirectToKyc(kycJourneyStatus, history) {
     },
   };
   // send event
-  if (!getConfig().Web) {
+  if (!config.Web) {
     window.callbackWeb.eventCallback(_event);
-  } else if (isIframe()) {
+  } else if (config.isIframe) {
     var message = JSON.stringify(_event);
     window.callbackWeb.sendEvent(_event);
   }
