@@ -79,7 +79,9 @@ const CategoryCard = ({ label, name, trivia, icon, type, ...props }) => {
     console.log(props.location.search)
     navigate(
       `/diy/fundlist/${type}/${label}`,
-      null,
+      {state: {
+        name: name
+      }},
       true,
       props.location.search
     )

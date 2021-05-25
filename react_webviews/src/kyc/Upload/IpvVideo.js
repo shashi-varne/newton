@@ -10,6 +10,9 @@ import KnowMore from '../mini-components/IpvVideoKnowMore'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
+const config = getConfig();
+const productName = config.productName
+const isWeb = config.Web
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
@@ -43,12 +46,14 @@ const IpvVideo = (props) => {
     }
   }
 
-  const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
+  const native_call_handler = (method_name, doc_type, doc_name, doc_side, msg, ipv_code) => {
     window.callbackWeb[method_name]({
       type: 'doc',
       doc_type: doc_type,
       doc_name: doc_name,
       doc_side: doc_side,
+      message: msg,
+      ipv_code: ipv_code,
       // callbacks from native
       upload: function upload(file) {
         try {
@@ -93,7 +98,7 @@ const IpvVideo = (props) => {
       'video/x-flv',
       'video/x-ms-wmv',
     ]
-    if (acceptedTypes.includes(uploadedFile.type)) {
+    if (acceptedTypes.indexOf(uploadedFile.type) !== -1) {
       setFile(event.target.files[0])
     } else {
       toast('Upload a valid file format')
@@ -101,28 +106,31 @@ const IpvVideo = (props) => {
   }
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else
-      native_call_handler(method_name, 'ipvvideo', 'ipvvideo.jpg', 'front')
+      native_call_handler(method_name, 'ipvvideo', '', '', 'Look at the screen and read the verification number loud', ipvcode)
   }
 
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
-      const result = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      const response = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
+      if(response.status_code === 200) {
+        const result = response.result
+        storageService().setObject(storageConstants.KYC, result.kyc)
+        navigate('/kyc/upload/progress')
+      } else {
+        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")
+      }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
       setIsApiRunning(false)
     }
   }
-
-  const productName = getConfig().productName
-  const isWeb = getConfig().isWebOrSdk
 
   return (
     <Container

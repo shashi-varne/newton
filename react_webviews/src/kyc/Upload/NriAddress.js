@@ -172,19 +172,25 @@ const NRIAddressUpload = (props) => {
   const handleSubmit = async () => {
     try {
       setIsApiRunning("button")
-      let result
+      let result, response
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'nri_address', {
+        response = await upload(frontDoc, 'nri_address', {
           address_proof_key: addressProofKey,
         })
       } else {
-        result = await upload(file, 'nri_address', {
+        response = await upload(file, 'nri_address', {
           addressProofKey,
         })
       }
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      if(response.status_code === 200) {
+        result = response.result;
+        storageService().setObject(storageConstants.KYC, result.kyc)
+        navigate('/kyc/upload/progress')
+      } else {
+        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
+      }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
       console.log('uploaded')
@@ -243,7 +249,7 @@ const NRIAddressUpload = (props) => {
     });
   };
 
-  const isWeb = getConfig().isWebOrSdk
+  const isWeb = getConfig().Web
 
   return (
     <Container

@@ -168,7 +168,7 @@ export const upload = async (file, type, data = {}) => {
   if (
     res?.pfwresponse?.status_code
   ) {
-    return res?.pfwresponse?.result
+    return res?.pfwresponse
   }
   throw new Error(
     res?.pfwresponse?.result?.message ||
