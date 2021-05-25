@@ -71,7 +71,7 @@ const CommunicationDetails = (props) => {
   }, [kyc]);
 
   const handleChange = (name) => (event) => {
-    if (showOtpContainer || buttonLoader) {
+    if (showOtpContainer || buttonLoader || showDotLoader) {
       return;
     }
     let data = { ...formData };
@@ -150,8 +150,8 @@ const CommunicationDetails = (props) => {
       } else {
         let body = {};
         if (communicationType === "email") {
-          if(!formData.email) {
-            toast("Email is mandatory!")
+          if (!formData.email) {
+            toast("Email is mandatory!");
             return;
           }
           if (!validateEmail(formData.email)) {
@@ -160,8 +160,8 @@ const CommunicationDetails = (props) => {
           }
           body.email = formData.email;
         } else {
-          if(!formData.mobile) {
-            toast("Mobile number is mandatory!")
+          if (!formData.mobile) {
+            toast("Mobile number is mandatory!");
             return;
           }
           if (formData.mobile.length !== 10) {

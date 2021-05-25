@@ -31,14 +31,14 @@ class Otp extends Component {
     });
   }
 
-  resendOtp = () => {
+  resendOtp = async () => {
+    await this.props.resendOtp();
     let intervalId = setInterval(this.countdown, 1000);
 
     this.setState({
       timeAvailable: this.state.totalTime,
       countdownInterval: intervalId,
     });
-    this.props.resendOtp();
   };
 
   countdown = () => {
@@ -79,7 +79,7 @@ class Otp extends Component {
           />
         </div>
 
-        {timeAvailable > 0 && (
+        {timeAvailable > 0 && !this.props.showDotLoader && (
           <div className="cd-otp-time-text">
             OTP should arrive within{" "}
             {timeAvailable < 10 ? `0${timeAvailable}` : timeAvailable}s
