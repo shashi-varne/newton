@@ -39,7 +39,28 @@ const Failed = (props) => {
 
   const productName = getConfig().productName;
   return (
-    <Container title="Aadhaar KYC Failed!" noFooter skelton={isLoading}>
+    <Container
+      title="Aadhaar KYC Failed!"
+      twoButtonVertical={true}
+      button1Props={{
+        type: 'primary',
+        order: "1",
+        title: "RETRY",
+        onClick: retry,
+        classes: { root: 'digilocker-failed-button'}
+      }}
+      button2Props={{
+        type: 'secondary',
+        order: "2",
+        title: "UPLOAD DOCUMENTS MANUALLY",
+        onClick: manual,
+        classes: { root: 'digilocker-failed-button'},
+        showLoader: isApiRunning
+      }}
+      skelton={isLoading}
+      // disableBack
+      headerData={{ icon: "close" }}
+    >
       <section id="digilocker-failed">
         <img
           className="digi-image"
@@ -50,39 +71,6 @@ const Failed = (props) => {
           Aadhaar KYC has been failed because we were not able to connect to
           your Digilocker.
         </div>
-        <div className="body-text2">
-          However, you can <strong>still complete your KYC</strong> and start
-          investing in mutual funds.
-        </div>
-        {!isLoading && (
-          <footer className="footer">
-            <Button
-              variant="raised"
-              fullWidth
-              color="secondary"
-              className="raised"
-              onClick={retry}
-            >
-              RETRY
-            </Button>
-            <Button
-              variant="outlined"
-              fullWidth
-              color="secondary"
-              className="outlined"
-              onClick={manual}
-            >
-              {!isApiRunning && 'CONTINUE WITH MANUAL KYC'}
-              {isApiRunning && 
-                <div className="flex-justify-center">
-                  <DotDotLoaderNew
-                    styleBounce={{backgroundColor:'white'}}
-                  />
-                </div>
-              }
-            </Button>
-          </footer>
-        )}
       </section>
       <AadhaarDialog
         open={open}

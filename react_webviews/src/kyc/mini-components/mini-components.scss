@@ -512,3 +512,46 @@
 }
 
 ///////////// SAMPLE DOCUMENTS END //////////////
+
+// KycUploadContainer START --------------
+
+@mixin block-fit {
+  display: block;
+  width: 100%;
+  object-fit: contain;
+}
+
+.kuc-caption {
+  line-height: 1.5;
+  color: var(--dark);
+}
+
+.kyc-upload-container {  
+  .kuc-upload {
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 6px;
+    background-color: var(--highlight);
+
+    .kuc-image {
+      display: block;
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 5px;
+    }
+  }
+  
+  .kuc-action-btn {
+    background-color: white !important;
+  }
+}
+
+.kyc-upload-container + .kuc-caption {
+  margin-top: 30px;
+}
+
+.kyc-upload-container + .kyc-upload-container {
+  margin-top: 30px;
+}
+
+// KycUploadContainer END -----------------

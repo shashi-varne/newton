@@ -1,10 +1,16 @@
 $status-text-margin: 20px 0 10px 0;
-$text-color1: #767E86;
+$text-color1: var(--steelgrey);
 $text-color2: #8D879B;
 
 @mixin status_text {
     font-size: 14px;
     line-height: 21px;
+}
+
+@mixin d-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .digi-status {
@@ -89,7 +95,7 @@ $text-color2: #8D879B;
       line-height: 9px;
       letter-spacing: 1px;
       text-transform: uppercase;
-      color: #767E86;
+      color: $text-color1;
     }
 
     .bottom-image {
@@ -124,15 +130,13 @@ $text-color2: #8D879B;
     }
 
     .title {
-      font-size: 15px;
-      color: #160d2e;
+      font-size: 20px;
+      color: var(--dark);
       font-weight: 700;
     }
 
     .text {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include d-flex-center();
       font-size: 14px;
       line-height: 19px;
       color: #8d879b;
@@ -149,16 +153,23 @@ $text-color2: #8D879B;
       font-size: 13px;
       line-height: 22px;
       text-align: center;
-      color: #767e86;
+      color: $text-color1;
       margin-top: 30px;
     }
 
     .subtitle {
       font-size: 14px;
-      font-weight: 400;
-      color: #4f2da7;
+      font-weight: 500;
+      color: var(--primary);
       margin: 30px 0 0 0;
       cursor: pointer;
+    }
+
+    .sub-title {
+      @include d-flex-center();
+      font-size: 13px;
+      line-height: 22px;
+      color: $text-color1
     }
   }
 
@@ -184,6 +195,27 @@ $text-color2: #8D879B;
         font-weight: 700;
         margin: -2px 0 0 0;
       }
+    }
+  }
+
+  .account-status-container {
+    margin: 40px 0;
+
+    .account-status {
+      font-weight: 500;
+      font-size: 17px;
+      line-height: 20px;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+
+    .status {
+      color: $text-color1;
+    }
+
+    .step-content {
+      margin-top: -10px;
+      text-transform: initial;
     }
   }
 }

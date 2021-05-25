@@ -26,6 +26,7 @@ import DesktopLayout from './desktopLayout';
 
 import Feature from './Feature';
 
+import Partner from "./partner"
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
 import 'common/theme/Style.scss';
@@ -92,6 +93,7 @@ const App = () => {
               <Route path='/forgot-password' component={ForgotPassword} />
               <Route path='/social/callback' component={SocialCallback} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <Route path='/partner' component={Partner} />
               <Route path='/logout' component={Logout} />
               {
                 isMobileDevice ?

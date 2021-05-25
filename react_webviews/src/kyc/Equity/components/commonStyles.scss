@@ -17,6 +17,11 @@ $generic-subtitle-margin-top: -10px;
 @mixin d-flex-space-between {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.flex-between-center {
+  @include d-flex-space-between();
 }
 
 .stocks-status-card {
@@ -308,27 +313,35 @@ $generic-subtitle-margin-top: -10px;
     font-size: 13px;
 
     .step {
-      .step-header {
-        @include d-flex();
-        column-gap: 20px;
-
-        .step-title {
-          font-weight: bold;
-        }
-      }
-
       .step-content {
-        margin: 10px 0 30px 40px;
-        color: #767E86;
-
+        .form-download-btn {
+          @include d-flex-space-between();
+          width: 100%;
+          padding-left: 16px;
+          padding-right: 16px;
+    
+          .download-text {
+            font-size: 12px;
+            line-height: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-right: 10px;
+          }
+        }
+        
         .step-note {
+          color: var(--steelgrey);
+          margin-top: 16px;
           line-height: 21px;
+          text-transform: initial;
         }
       }
     }
 
     .page-note {
-      color: #767E86;
+      margin-top: 30px;
+      line-height: 21px;
+      color: var(--steelgrey);
     }
   }
 }

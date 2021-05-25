@@ -21,6 +21,7 @@ import { getIFSC, kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import { getConfig } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -44,7 +45,7 @@ const KycBankDetails = (props) => {
   const [name, setName] = useState("");
   const [note, setNote] = useState({
     info_text:
-      "As per SEBI, it is mandatory for you to add your add bank account details.",
+      "As per SEBI, it is mandatory for investors to provide their own bank account details",
     variant: "info",
   });
   const [disableFields, setDisableFields] = useState({
@@ -246,18 +247,12 @@ const KycBankDetails = (props) => {
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
     if (
-      (code === "ktb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-      (code === "lvb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-      (code === "cub" &&
-        bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
+      (code === "ktb" && bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
+      (code === "lvb" && bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
+      (code === "cub" && bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
       (code === "ippb" &&
         bankData.ifsc_code.toUpperCase().startsWith("IPOS")) ||
-      (code !== "ktb" &&
-        code !== "lvb" &&
-        code !== "cub" &&
-        code !== "ippb")
+      (code !== "ktb" && code !== "lvb" && code !== "cub" && code !== "ippb")
     ) {
       try {
         setIfscDisabled(true);
@@ -298,14 +293,21 @@ const KycBankDetails = (props) => {
       <div className="kyc-approved-bank">
         {!isLoading && (
           <>
-            <Alert
+            {/* <Alert
               variant={note.variant}
               title="Note"
               message={note.info_text}
-            />
+            /> */}
+            <WVInfoBubble
+              type={note.variant}
+              hasTitle
+              customTitle="Note"
+            >
+              {note.info_text}
+            </WVInfoBubble>
             <main>
               <Input
-                label="Account Holder name"
+                label="Account holder name"
                 class="input"
                 value={name || ""}
                 error={form_data.name_error ? true : false}
@@ -316,7 +318,7 @@ const KycBankDetails = (props) => {
                 id="name"
               />
               <TextField
-                label="IFSC Code"
+                label="IFSC code"
                 id="ifsc_code"
                 className="input"
                 value={bankData.ifsc_code}
@@ -340,7 +342,7 @@ const KycBankDetails = (props) => {
                 disabled={isApiRunning || disableFields.ifsc_code_disabled || ifscDisabled}
               />
               <Input
-                label="Account Number"
+                label="Account number"
                 class="input"
                 value={bankData.account_number}
                 error={form_data.account_number_error ? true : false}
@@ -353,7 +355,7 @@ const KycBankDetails = (props) => {
                 disabled={isApiRunning || disableFields.account_number_disabled}
               />
               <Input
-                label="Confirm Account Number"
+                label="Re-enter account number"
                 class="input"
                 value={bankData.c_account_number}
                 error={form_data.c_account_number_error ? true : false}
@@ -373,7 +375,7 @@ const KycBankDetails = (props) => {
                   helperText={form_data.account_type_error}
                   options={accountTypes}
                   id="account_type"
-                  label="Account Type"
+                  label="Account type"
                   isAOB={true}
                   value={bankData.account_type || ""}
                   name="account_type"

@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getConfig } from "utils/functions";
+import WVSteps from "../../common/ui/Steps/WVSteps"
 
-const Complete = ({ navigateToReports, dl_flow, show_note }) => {
-  const productName = getConfig().productName;
+const stepsData = [
+  { title: "Mutual fund", status: "Ready to invest" },
+  { title: "Stocks & IPO", status: "Under process" },
+  { title: "Futures & Options", status: "Under process" }
+]
+const productName = getConfig().productName;
+
+const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
+  const [steps, setSteps] = useState(stepsData);
+
+  useEffect(() => {
+    if (dl_flow && kyc?.sign_status === "signed" && !kyc?.equity_data?.meta_data?.fno) {
+      setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
+    }
+  }, [kyc]);
 
   return (
     <div className="kyc-esign-complete">
@@ -12,10 +26,13 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
           alt=""
         />
         {dl_flow && !show_note && (
-          <div className="title">Kudos, KYC is completed!</div>
+          <div className="title">KYC complete!</div>
+        )}
+        {!dl_flow && kyc?.kyc_status === "compliant" && (
+          <div className="title">Great! Your KYC application is submitted!</div>
         )}
         {(!dl_flow || show_note) && (
-          <div className="title">Great! Your KYC application is submitted!</div>
+          <div className="title">Kudos! KYC application is submitted!</div>
         )}
         {!dl_flow && (
           <div className="text">
@@ -23,15 +40,14 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
             Approves in one working day
           </div>
         )}
+        {dl_flow && (
+          <div className="sub-title">
+            Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds
+          </div>
+        )}
         <div className="subtitle" onClick={() => navigateToReports()}>
           View your KYC application details {" >"}
         </div>
-        {dl_flow && !show_note && (
-          <div className="message">
-            Click on <span>Continue Investing</span> & choose from 5000+ mutual
-            funds to invest in.
-          </div>
-        )}
       </header>
       {show_note && (
         <div className="alert-status-info">
@@ -45,6 +61,21 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
           </div>
         </div>
       )}
+      {dl_flow && 
+        <div className="account-status-container">
+          <div className="account-status">Account status</div>
+          {steps.map((step, index) => (
+            <WVSteps
+              title={step.title}
+              key={step.title}
+              stepType={step.status === "Ready to invest" ? "completed" : "pending"}
+              classes={{ stepContent: 'step-content'}}
+            >
+              <div className="status">{step.status}</div>
+            </WVSteps>
+          ))}
+        </div>
+      }
     </div>
   );
 };

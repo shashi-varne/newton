@@ -1,6 +1,7 @@
 import React from "react";
 import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
+import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening"
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;
@@ -27,13 +28,12 @@ const DocumentVerification = (props) => {
           </div>
           <div className="kdvm-title">Bank account</div>
           <div className="kdvm-subtitle">Bank statement</div>
-          <div className="kdvm-next-step">
-            <div className="kdvm-next-step-text">
-              <div className="kdvm-next-step-message">NEXT STEP</div>
-              <div>Complete eSign</div>
-            </div>
-            <div className="kdvm-next-step-status">PENDING</div>
-          </div>
+          <WVJourneyShortening
+            title="Next step"
+            stepName={<b>Complete esign</b>}
+            stepActionText="Pending"
+            stepActionType="pending"
+        />
         </main>
       </div>
     </Container>
