@@ -253,8 +253,10 @@ export function clickCard(state, title) {
       this.navigate(fhcPath)
       break;
     case "risk_profile":
-      let riskProfilePath = "/risk/result";
-      this.navigate(riskProfilePath)
+      let riskProfilePath = "/risk/result-new";
+      this.navigate(riskProfilePath, {
+        state: { fromExternalSrc: true }
+      });
       break;
     case "top_equity":
       this.navigate(`/diy/fundlist/Equity/Multi_Cap`);
@@ -378,7 +380,6 @@ export async function getRecommendations(amount) {
       graphType: this.state.investType,
       investTypeDisplay: this.state.investTypeDisplay,
       showRecommendationTopCards: true,
-      recommendedTotalAmount: result.amount,
       ...result
     };
     storageService().setObject("funnelData", funnelData);

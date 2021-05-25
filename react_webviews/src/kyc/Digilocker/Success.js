@@ -16,7 +16,7 @@ const Success = (props) => {
       title="Share Details"
       buttonTitle="PROCEED"
       handleClick={proceed}
-      headerData={{goBack: proceed }}
+      headerData={{goBack: proceed, icon: "close" }}
     >
       <section id="digilocker-success">
         <div className="page-desc">
