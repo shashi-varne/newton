@@ -513,35 +513,45 @@
 
 ///////////// SAMPLE DOCUMENTS END //////////////
 
+// KycUploadContainer START --------------
 
-// File Access Dialog
-.kyc-file-access-dialog {
-  @media only screen and (min-width: 768px) {
-    .MuiDialog-paper {
-      width: 50%;
+@mixin block-fit {
+  display: block;
+  width: 100%;
+  object-fit: contain;
+}
+
+.kuc-caption {
+  line-height: 1.5;
+  color: var(--dark);
+}
+
+.kyc-upload-container {  
+  .kuc-upload {
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 6px;
+    background-color: var(--highlight);
+
+    .kuc-image {
+      display: block;
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 5px;
     }
   }
-
-  .kyc-file-access-dialog-content {
-    color: var(--steelgrey);
   
-    .kfadc-header {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-  
-    .kfadc-main {
-      display: flex;
-      justify-content: space-between;
-      padding: 20px;
-  
-      .kfadc-info {
-        text-align: center;
-        img {
-          width: 70px;
-          padding: 10px;
-        }
-      }
-    }
+  .kuc-action-btn {
+    background-color: white !important;
   }
 }
+
+.kyc-upload-container + .kuc-caption {
+  margin-top: 30px;
+}
+
+.kyc-upload-container + .kyc-upload-container {
+  margin-top: 30px;
+}
+
+// KycUploadContainer END -----------------

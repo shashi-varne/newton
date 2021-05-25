@@ -99,7 +99,7 @@ class Otp extends Component {
               Resend OTP
             </div>
             <Button
-              data-aid='verify-btn'
+              dataAid='verify-btn'
               buttonTitle="VERIFY"
               onClick={this.handleClick}
               showLoader={isApiRunning}

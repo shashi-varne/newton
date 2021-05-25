@@ -16,7 +16,6 @@ import "./commonStyles.scss";
 const config = getConfig();
 const productName = config.productName
 const isWeb = config.Web
-
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)

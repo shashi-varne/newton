@@ -8,6 +8,7 @@ import { navigate as navigateFunc } from '../common/functions'
 import ConfirmBackModal from './confirm_back'
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
+import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 
 class ESignInfo extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class ESignInfo extends Component {
       show_loader: false,
       productName: getConfig().productName,
       backModal: false,
-      dl_flow: false
+      dl_flow: false,
+      showAadharDialog: false,
     }
 
     this.navigate = navigateFunc.bind(this.props);
@@ -54,7 +56,14 @@ class ESignInfo extends Component {
     this.setState({ backModal: false })
   }
 
+  closeAadharDialog = () => {
+    this.setState({showAadharDialog: false})
+  }
+
   handleClick = async () => {
+    if(this.state.showAadharDialog) {
+      this.closeAadharDialog();
+    }
     let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
       basepath + '/kyc-esign/nsdl' + getConfig().searchParams
@@ -108,6 +117,14 @@ class ESignInfo extends Component {
     }
   }
 
+  goNext = () => {
+    if(this.state.kyc?.address?.meta_data?.is_nri) {
+      this.handleClick()
+    } else {
+      this.setState({ showAadharDialog: true })
+    }
+  }
+
   render() {
     const { show_loader, productName } = this.state;
     const headerData = {
@@ -119,7 +136,7 @@ class ESignInfo extends Component {
       <Container
         showLoader={show_loader}
         title='eSign KYC'
-        handleClick={this.handleClick}
+        handleClick={this.goNext}
         buttonTitle='PROCEED'
         headerData={headerData}
         data-aid='kyc-esign-screen'
@@ -170,6 +187,20 @@ class ESignInfo extends Component {
           </div>
         </div>
         <ConfirmBackModal id="kyc-esign-confirm-modal" open={this.state.backModal} cancel={this.cancel} confirm={this.confirm} />
+        <WVBottomSheet
+          isOpen={this.state.showAadharDialog}
+          onClose={this.closeAadharDialog}
+          buttonLayout="stacked"
+          title="Please ensure your mobile is linked with your Aadhaar"
+          subtitle=""
+          button1Props={{ title: "PROCEED", type: "primary", onClick: this.handleClick }}
+          button2Props={{
+            title: "Don't have aadhaar linked mobile?",
+            type: "textOnly",
+            onClick: () => this.navigate("/kyc/manual-signature"),
+          }}
+          image={require(`assets/${productName}/ic_aadhaar_handy.svg`)}
+        />
       </Container>
     );
   };

@@ -233,7 +233,7 @@ class Register extends Component {
                   handleChange={this.handleCheckbox}
                   class="checkbox"
                 />
-                <div>I have a referral/promo/partner code</div>
+                <div data-aid='referral-code-checkbox-text'>I have a referral/promo/partner code</div>
               </div>
               <Button
                 dataAid='register-btn'
