@@ -87,7 +87,7 @@ class NpsDelivery extends Component {
         if (status === 200 && result[0]) {
           let data = result[0];
 
-          form_data.city = data?.district_name || data?.division_name;
+          form_data.city = data?.district_name || data?.division_name || data?.taluk;
           form_data.city_error = "";
           form_data.state = data?.state_name;
           form_data.state_error = "";
