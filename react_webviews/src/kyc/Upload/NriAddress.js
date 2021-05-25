@@ -63,7 +63,7 @@ const NRIAddressUpload = (props) => {
             doc_side: doc_side,
             show_loader: true,
           })
-          if (doc_side === 'back') {
+          if (doc_side === 'front') {
             setFrontDoc(file)
           } else {
             setBackDoc(file)
