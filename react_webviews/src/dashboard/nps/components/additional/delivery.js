@@ -25,6 +25,12 @@ class NpsDelivery extends Component {
     this.initialize();
   }
 
+  componentDidMount() {
+    this.setState({
+      keys_to_check: ["addressline", "pincode", "city", "state"]
+    })
+  }
+
   onload = () => {
     let kyc_app = storageService().getObject(
       "kyc_app"
@@ -66,6 +72,8 @@ class NpsDelivery extends Component {
     form_data[name] = value;
     form_data[name + '_error'] = "";
 
+    if (form_data.pincode.length > 6) return
+
     this.setState({
       form_data: form_data,
     });
@@ -76,20 +84,21 @@ class NpsDelivery extends Component {
 
         const { result, status_code: status } = res.pfwresponse;
 
-        if (status === 200) {
+        if (status === 200 && result[0]) {
           let data = result[0];
 
-          form_data.city = data.district_name || data.division_name;
+          form_data.city = data?.district_name || data?.division_name;
           form_data.city_error = "";
-          form_data.state = data.state_name;
+          form_data.state = data?.state_name;
           form_data.state_error = "";
         } else {
-          throw result.error || result.message;
+          form_data["pincode_error"] = "Please enter a valid Pincode."
+          // throw result.error || result.message;
         }
       } catch (err) {
         throw err;
       }
-    }
+    }else form_data["pincode_error"] = "Minlength is 6.";
 
     this.setState({
       form_data: form_data,
@@ -97,11 +106,9 @@ class NpsDelivery extends Component {
   };
 
   handleClick = () => {
-    let { form_data, canSubmit } = this.state;
+    let { form_data, keys_to_check } = this.state;
 
-    let keys_to_check = ["addressline", "pincode", "city", "state"];
-
-    this.formCheckUpdate(keys_to_check, form_data);
+    let canSubmit = this.formCheckUpdate(keys_to_check, form_data);
 
     if (canSubmit) {
       let data = {

@@ -140,6 +140,19 @@ export function formCheckUpdate(keys_to_check, form_data) {
       selectTypeInput.indexOf(key_check) !== -1
         ? "Please select "
         : "Please enter ";
+
+    if (key_check === "addressline" && form_data.addressline.length < 10) {
+      form_data[key_check + "_error"] = "Address should contain more than 10 characters";
+      canSubmit = false;
+    }
+
+    if (key_check === "pincode" && (form_data.pincode.length !== 6 || form_data.pincode_error.length)) {
+      if (form_data.pincode_error.length) {
+        form_data[key_check + "_error"] = form_data.pincode_error;
+      } else form_data[key_check + "_error"] = "Please enter a valid Pincode";
+      canSubmit = false;
+    }
+
     if (!form_data[key_check] || containsSpecialCharactersAndNumbers(keysMapperArrayName.includes(key_check) ? form_data[key_check] : false)) {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
       canSubmit = false;
