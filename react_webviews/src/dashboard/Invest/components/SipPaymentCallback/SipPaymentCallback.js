@@ -24,18 +24,19 @@ const SipPaymentCallback = (props) => {
 
   resetRiskProfileJourney();
   const config = getConfig();
+  const eventData = storageService().getObject('mf_invest_data')
   let _event = {
     'event_name': 'payment_status',
     'properties': {
       'status': status,
-      // 'amount': eventData.amount,
-      // 'payment_id': eventData.payment_id,
-      // 'journey': {
-      //   'name': eventData.journey_name,
-      //   'investment_type': eventData.investment_type,
-      //   'investment_subtype': eventData.investment_subtype,
-      //   'risk_type': ''
-      // }
+      'amount': eventData.amount,
+      'payment_id': eventData.payment_id,
+      'journey': {
+        'name': eventData.journey_name,
+        'investment_type': eventData.investment_type,
+        'investment_subtype': eventData.investment_subtype || "",
+        'risk_type': ''
+      }
     }
   };
   // send event

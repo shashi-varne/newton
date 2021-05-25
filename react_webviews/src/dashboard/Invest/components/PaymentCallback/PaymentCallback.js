@@ -7,6 +7,7 @@ import "./PaymentCallback.scss";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { isIframe } from "../../../../utils/functions";
 import { nativeCallback } from "../../../../utils/native_callback";
+import { storageService } from "../../../../utils/validators";
 
 const PaymentCallback = (props) => {
   const params = props.match.params || {};
@@ -16,19 +17,20 @@ const PaymentCallback = (props) => {
   let message = params.message || "";
   resetRiskProfileJourney()
   const config = getConfig();
+  const eventData = storageService().getObject('mf_invest_data')
   let _event = {
-    'event_name': 'payment_status',
-    'properties': {
-      'status': status,
-      // 'amount': eventData.amount,
-      // 'payment_id': eventData.payment_id,
-      // 'journey': {
-      //   'name': eventData.journey_name,
-      //   'investment_type': eventData.investment_type,
-      //   'investment_subtype': eventData.investment_subtype,
-      //   'risk_type': ''
-      // }
-    }
+    event_name: "payment_status",
+    properties: {
+      status: status,
+      amount: eventData.amount,
+      payment_id: eventData.payment_id,
+      journey: {
+        name: eventData.journey_name,
+        investment_type: eventData.investment_type,
+        investment_subtype: eventData.investment_subtype || "",
+        risk_type: "",
+      },
+    },
   };
   // send event
   if (!config.Web) {
