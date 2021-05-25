@@ -31,11 +31,11 @@ import InvestmentProof from "./MyAccount/InvestmentProof";
 
 const Home = (props) => {
   const { url } = props.match;
-  const isWeb = getConfig().Web;
+  const isSdk = getConfig().isSdk;
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}`} component={isWeb ? Invest : SdkLanding} />
+        <Route exact path={`${url}`} component={isSdk ? SdkLanding : Invest} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}diy`} component={DIY} />
