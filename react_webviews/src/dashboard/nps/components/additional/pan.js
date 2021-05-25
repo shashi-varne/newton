@@ -67,13 +67,24 @@ class PanDetails extends Component {
 
     form_data.email = userKyc.address.meta_data.email || "";
     form_data.mobile_number = userKyc.address.meta_data.mobile_number || "";
-
+    this.sendEvents();
     this.setState({
       currentUser: currentUser,
       isKycApproved: isKycApproved,
       userKyc: userKyc,
       form_data: form_data,
     });
+  };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "pan screen",
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
 
   handleChange = (name) => (event) => {

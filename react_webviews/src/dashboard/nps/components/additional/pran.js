@@ -3,6 +3,7 @@ import Container from "../../../common/Container";
 import InputWithIcon from "common/ui/InputWithIcon";
 import { initialize } from "../../common/commonFunctions";
 import card from "assets/card.png";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 class NpsPran extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class NpsPran extends Component {
   }
 
   onload = () => {
+    this.sendEvents();
     this.setState({
       skelton: false
     })
@@ -40,6 +42,17 @@ class NpsPran extends Component {
       pran: this.state.pran,
     };
     this.submitPran(data);
+  };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "pran screen",
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
 
   render() {
