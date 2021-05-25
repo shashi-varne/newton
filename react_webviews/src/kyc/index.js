@@ -55,6 +55,7 @@ import Native from "./Native/Native";
 import SelfieV2 from "./Upload/Selfie_v2";
 import LocationPermission from "./Upload/LocationPermission";
 import SelfieSteps from "./Upload/SelfieSteps";
+import FnOIncomeProof from "./Upload/F&OIncomeProof";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -152,6 +153,11 @@ const Kyc = (props) => {
           exact
           path={`${url}/upload/address-nri`}
           component={NRIAddressUpload}
+        />
+        <Route
+          exact
+          path={`${url}/upload/fno-income-proof`}
+          component={FnOIncomeProof}
         />
         <Route 
           exact 

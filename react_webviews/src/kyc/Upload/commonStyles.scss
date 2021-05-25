@@ -323,3 +323,81 @@
     justify-content: space-between;
   }
 }
+
+// F&OIncomeProof START ------------
+.kyc-fno-header-optional-text {
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 32px;
+  color: var(--steelgrey);
+}
+
+.kyc-fno-income-proof {
+  .kyc-fip-title {
+    margin: 20px 0 10px;
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--dark);
+  }
+
+  .kyc-fno-OR {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0.5;
+    margin: 8px 0;
+  }
+
+  .kyc-fi-sample {
+    text-align: center;
+    // TODO: Change margin if clickableElement becomoes a button
+    margin-top: 30px;
+  }
+
+  .kyc-fi-upload-card {
+    margin-bottom: 20px;
+  }
+
+  .kyc-fi-expand-options {
+    box-shadow: none;
+    border: 0px;
+    margin-top: 40px !important;
+
+    .MuiCollapse-container {
+      padding: 0 2px;
+    }
+
+    .MuiExpansionPanelSummary-root {
+      padding: 0;
+
+      .MuiExpansionPanelSummary-content {
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 21px;
+        color: var(--steelgrey);
+      }
+
+      .MuiExpansionPanelSummary-expandIcon {
+        right: -15px;
+      }
+    }
+
+    .MuiExpansionPanelDetails-root {
+      padding: 0 !important;
+      display: unset !important
+    }
+  }
+
+  .kyc-fi-expand-options::before {
+    display: none;
+  }
+}
+
+.kyc-fno-encryption-disclaimer {
+  display: block;
+  margin: 40px auto 0;
+}
+// F&OIncomeProof END ------------
