@@ -24,6 +24,26 @@ const SipPaymentCallback = (props) => {
 
   resetRiskProfileJourney();
   const config = getConfig();
+  let _event = {
+    'event_name': 'payment_status',
+    'properties': {
+      'status': status,
+      // 'amount': eventData.amount,
+      // 'payment_id': eventData.payment_id,
+      // 'journey': {
+      //   'name': eventData.journey_name,
+      //   'investment_type': eventData.investment_type,
+      //   'investment_subtype': eventData.investment_subtype,
+      //   'risk_type': ''
+      // }
+    }
+  };
+  // send event
+  if (!config.Web) {
+    window.callbackWeb.eventCallback(_event);
+  } else if (config.isIframe) {
+    window.callbackWeb.sendEvent(_event);
+  }
   let paymentError = false;
   if (status === "error" || status === "failed") {
     paymentError = true;

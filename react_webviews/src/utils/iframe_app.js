@@ -2,20 +2,19 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
 
-// required
-  // var _event = {
-  //   event_name: "hide_loader",
-  //   properties: {
-  //     journey: {
-  //       name: "",
-  //       trigger: "",
-  //       journey_status: "",
-  //       next_journey: ""
-  //     }
-  //   }
-  // };
+  let _event = {
+    event_name: "hide_loader",
+    properties: {
+      journey: {
+        name: "",
+        trigger: "",
+        journey_status: "",
+        next_journey: ""
+      }
+    }
+  };
 
-  // appService.sendEvent(_event);
+  window.callbackWeb.sendEvent(_event);
 // required
   // try {
   //   if ($rootScope.currentUser) {
@@ -77,7 +76,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     if(getConfig().code === 'moneycontrol' && ["/payment/callback","/sip/payment/callback"].includes(currentState)) {
       backButtonHandlerWeb(props, fromState, currentState, params)
     } else {
-      // appService.sendEvent(message);
+      window.callbackWeb.sendEvent(message);
     }
   } else {
     backButtonHandlerWeb(props, fromState, currentState, params)
@@ -129,10 +128,10 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
       }
     case "/account/merge/linked/success":
       if (config?.code === 'moneycontrol') {
-        var message = JSON.stringify({
+        let message = JSON.stringify({
           type: "iframe_close"
         });
-        // appService.sendEvent(message);
+        window.callbackWeb.sendEvent(message);
         storageService().clear();
       } else {
         navigate("/logout");
@@ -140,10 +139,10 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
       }
       break;
     case '/invest/money-control':
-      var message = JSON.stringify({
+      let message = JSON.stringify({
         type: "iframe_close"
       });
-      // appService.sendEvent(message);
+      window.callbackWeb.sendEvent(message);
       storageService().clear();
       break;
     case '/account/merge/linked/success':

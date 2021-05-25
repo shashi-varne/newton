@@ -3,6 +3,7 @@ import { initialize } from "../common/commonFunctions";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "utils/validators";
+import { getConfig, isIframe } from "../../../utils/functions";
 
 class NpsPaymentCallback extends Component {
   constructor(props) {
@@ -41,16 +42,55 @@ class NpsPaymentCallback extends Component {
       storageService().setObject('kyc_app', result.kyc_app);
   
       let currentUser = storageService().getObject("user");
- 
+      let _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "nps",
+            trigger: "cta",
+            journey_status: "incomplete",
+            next_journey: "kyc",
+          },
+        },
+      };
       if (!result.registration_details.additional_details_status) {
         if (currentUser.kyc_registration_v2 === 'init') {
+          // send event
+          if (!getConfig().Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (isIframe()) {
+            window.callbackWeb.sendEvent(_event);
+          }
           this.navigate('/kyc/journey');
         } else if (currentUser.kyc_registration_v2 === 'incomplete') {
+          // send event
+          if (!getConfig().Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (isIframe()) {
+            window.callbackWeb.sendEvent(_event);
+          }
           this.navigate('/kyc/journey');
         } else {
           this.navigate('/nps/identity');
         }
       } else {
+        let _event = {
+          'event_name': 'journey_details',
+          'properties': {
+            'journey': {
+              'name': 'nps',
+              'trigger': 'cta',
+              'journey_status': 'complete',
+              'next_journey': 'reports'
+            }
+          }
+        };
+        // send event
+        if (!getConfig().Web) {
+          window.callbackWeb.eventCallback(_event);
+        } else if (isIframe()) {
+          window.callbackWeb.sendEvent(_event);
+        }
         this.navigate('/nps/investments');
       }
     }
