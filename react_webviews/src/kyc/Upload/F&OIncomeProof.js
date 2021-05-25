@@ -9,6 +9,7 @@ import Toast from '../../common/ui/Toast';
 import WVHeaderText from '../../common/ui/HeaderText/WVHeaderText';
 import useUserKycHook from '../common/hooks/userKycHook';
 import { upload } from '../common/api';
+import { navigate as navigateFunc } from '../common/functions';
 
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
@@ -42,11 +43,12 @@ const OR = (
   <div className="kyc-fno-OR">OR</div>
 );
 
-const FnOIncomeProof = () => {
+const FnOIncomeProof = (props) => {
   const [selectedFile, setSelectedFile] = useState();
   const [selectedType, setSelectedType] = useState('');
   const [filePassword, setFilePassword] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const navigate = navigateFunc.bind(props);
   // const { setKycToSession } = useUserKycHook();
 
   useEffect(() => {
@@ -66,7 +68,7 @@ const FnOIncomeProof = () => {
     try {
       const data = {
         doc_password: filePassword || undefined,
-        doc_type: UPLOAD_OPTIONS_MAP[selectedType].api_doc_type
+        doc_type: UPLOAD_OPTIONS_MAP[selectedType]?.api_doc_type
       };
       setIsApiRunning("button")
       const result = await upload(selectedFile, 'income', data);
@@ -98,6 +100,7 @@ const FnOIncomeProof = () => {
       onSkipClick={onSkipClick}
       title="Provide income proof for F&O trading"
       buttonTitle="Upload"
+      disable={!selectedFile}
       showLoader={isApiRunning}
     >
       <WVHeaderText>
@@ -151,7 +154,7 @@ const FnOIncomeProof = () => {
             type="password"
             onChange={onPasswordChange}
             classes={{
-              root: 'wv-file-upload-input'
+              root: 'kyc-fi-file-upload-input'
             }}
           />
         }
@@ -163,7 +166,7 @@ const FnOIncomeProof = () => {
           />
         }
         <div className="kyc-fi-sample">
-          <WVClickableTextElement>
+          <WVClickableTextElement onClick={() => navigate('fno-sample-documents')}>
             VIEW SAMPLE DOCUMENTS
           </WVClickableTextElement>
         </div>

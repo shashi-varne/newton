@@ -155,7 +155,7 @@ const Header = ({
                   src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
                 />
               }
-              {isMobileDevice && isWeb &&
+              {isMobileDevice && isWeb && !hideHamburger &&
                 <div className='mobile-navbar-menu'>
                   <IconButton onClick={handleMobileViewDrawer}>
                     <MenuIcon style={{ color: backgroundColor ? getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white' }} />

@@ -67,7 +67,7 @@ import AccountInfo from "./Equity/components/AccountInfo";
 import UploadInstructions from "./Equity/components/UploadInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
-import FAndOSampleDocument from "./Equity/components/F&OSampleDocuments";
+import FnOSampleDocuments from "./Upload/F&OSampleDocuments";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -170,6 +170,11 @@ const Kyc = (props) => {
           exact
           path={`${url}/upload/fno-income-proof`}
           component={FnOIncomeProof}
+        />
+        <Route
+          exact
+          path={`${url}/upload/fno-sample-documents`}
+          component={FnOSampleDocuments}
         />
         <Route 
           exact 
@@ -365,11 +370,6 @@ const Kyc = (props) => {
           exact 
           path={`${url}/manual-signature`} 
           component={ManualSignature} 
-        />
-        <Route 
-          exact 
-          path={`${url}/fno-sample-documents`} 
-          component={FAndOSampleDocument} 
         />
         <Route component={NotFound} />
       </Switch>
