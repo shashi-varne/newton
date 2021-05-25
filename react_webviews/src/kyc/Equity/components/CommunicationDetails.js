@@ -4,7 +4,7 @@ import Button from "../../../common/ui/Button";
 import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
 import "./commonStyles.scss";
-import { resendOtp, sendOtp, socialAuth, verifyOtp } from "../../common/api";
+import { resendOtp, sendOtp, verifyOtp } from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import {
   isEmpty,
@@ -49,7 +49,6 @@ const CommunicationDetails = (props) => {
   const [showDotLoader, setShowDotLoader] = useState(false);
   const { user, kyc, isLoading } = useUserKycHook();
   const [communicationType, setCommunicationType] = useState("");
-  const [buttonLoader, setButtonLoader] = useState(false);
   useEffect(() => {
     if (!isEmpty(user)) {
       const type = user.mobile === null ? "mobile" : "email";
@@ -71,7 +70,7 @@ const CommunicationDetails = (props) => {
   }, [kyc]);
 
   const handleChange = (name) => (event) => {
-    if (showOtpContainer || buttonLoader || showDotLoader) {
+    if (showOtpContainer || showDotLoader) {
       return;
     }
     let data = { ...formData };
@@ -118,23 +117,6 @@ const CommunicationDetails = (props) => {
       };
     });
   };
-
-  // const handleGoogleAuth = async () => {
-  //   const provider = "google";
-  //   try {
-  //     setButtonLoader("button");
-  //     const result = await socialAuth({
-  //       provider: provider,
-  //       redirectUrl: `${config.base_url}${apiConstants.socialAuth}/${provider}/callback`,
-  //     });
-  //     console.log(result);
-  //   } catch (err) {
-  //     console.log(err);
-  //     toast(err.message);
-  //   } finally {
-  //     setButtonLoader(false);
-  //   }
-  // };
 
   const handleClick = async () => {
     try {
@@ -191,7 +173,7 @@ const CommunicationDetails = (props) => {
   };
 
   const handleEdit = () => {
-    if (buttonLoader) return;
+    if (showDotLoader) return;
     setShowOtpContainer(false);
     setButtonTitle("CONTINUE");
   };
@@ -206,7 +188,7 @@ const CommunicationDetails = (props) => {
       handleClick={handleClick}
       showLoader={showLoader}
       skelton={isLoading}
-      disable={buttonLoader}
+      disable={showDotLoader}
     >
       <div
         className={`kyc-communication-details ${
@@ -226,8 +208,6 @@ const CommunicationDetails = (props) => {
                 classes={{ button: "kcd-google-button" }}
                 buttonTitle={googleButtonTitle}
                 type="outlined"
-                showLoader={buttonLoader}
-                // onClick={handleGoogleAuth}
               />
               <div className="kcd-or-divider">
                 <div className="kcd-divider-line"></div>
