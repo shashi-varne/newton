@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { isEmpty, isFunction } from 'lodash';
 import useScript from '../../customHooks/useScript';
 import Api from '../../../utils/api';
-import Toast from '../Toast';
 
 const SCRIPT_SRC = "https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@latest/src/sdk.min.js";
 
@@ -11,9 +10,9 @@ const WVLiveCamera = ({
   open,
   title = 'Selfie Capture',
   onClose,
-  onCameraLoaded,
-  onSuccess,
-  onFailure,
+  onCameraInit,
+  onCaptureSuccess,
+  onCaptureFailure,
   children
 }) => {
   const { scriptLoaded } = useScript(SCRIPT_SRC);
@@ -31,13 +30,13 @@ const WVLiveCamera = ({
       if (status === 200) {
         window.HyperSnapSDK.init(result.hyperverge_token, window.HyperSnapParams.Region.India);
         window.HyperSnapSDK.startUserSession();
-        openHVCamera();
+        onCameraInit(true);
       } else {
         throw (result.error || result.message || 'Something went wrong!');
       }
     } catch (err) {
+      onCameraInit(false);
       console.log('Error fetching HV token: ', err);
-      Toast('Something went wrong! Please go back and try again');
     }
   }
 
@@ -58,11 +57,11 @@ const WVLiveCamera = ({
     if (HVError) {
       if (HVError.errorCode === "013") {
         onClose();
-      } else if (isFunction(onFailure)) {
-        onFailure(HVError);
+      } else if (isFunction(onCaptureFailure)) {
+        onCaptureFailure(HVError);
       }
-    } else if (isFunction(onSuccess)) {
-      onSuccess({
+    } else if (isFunction(onCaptureSuccess)) {
+      onCaptureSuccess({
         ...HVResponse.response.result,
         imgBase64: HVResponse.imgBase64
       });
@@ -70,15 +69,14 @@ const WVLiveCamera = ({
   };
 
   useEffect(() => {
-    // TODO: Check how to solve script loading time diff issue
     if (open && scriptLoaded) {
-      initHVCamera();
+      openHVCamera();
     }
   }, [open]);
 
   useEffect(() => {
     if (scriptLoaded) {
-      onCameraLoaded();
+      initHVCamera();
     }
   }, [scriptLoaded]);
 
