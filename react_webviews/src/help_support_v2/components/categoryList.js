@@ -33,7 +33,8 @@ class CategoryList extends Component {
       componentClicked: false,
       noResults: false,
       inputSelected: false,
-      kyc_status:""
+      kyc_status:"",
+      contact: ""
     };
     this.initialize = initialize.bind(this);
     this.getAllCategories = getAllCategories.bind(this);
@@ -83,7 +84,8 @@ class CategoryList extends Component {
 
     this.setState({
       categoryList: categoryList,
-      kyc_status: result.kyc_status
+      kyc_status: result.kyc_status,
+      contact: result.customer_care_no
     });
   };
 
@@ -202,7 +204,7 @@ class CategoryList extends Component {
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Please contact us to this number {getConfig().mobile}.
+            Please contact us to this number {this.state.contact || getConfig().mobile}.
           </DialogContentText>
         </DialogContent>
         <DialogActions style={{ display: "flex" }}>
@@ -228,7 +230,7 @@ class CategoryList extends Component {
         open: true,
       });
     } else {
-      this.openInBrowser(`tel:${getConfig().mobile}`);
+      this.openInBrowser(`tel:${this.state.contact || getConfig().mobile}`);
     }
   };
 
