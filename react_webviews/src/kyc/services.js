@@ -397,20 +397,20 @@ export function isReadyToInvest() {
   return false;
 }
 
-export function checkDocsPending(kyc) {
+export async function checkDocsPending(kyc) {
   let pendingDocs = [];
   const incompleteApplication = kyc.application_status_v2 !== "submitted" || kyc.application_status_v2 !== "complete" ||
     kyc.equity_application_status !== "submitted" || kyc.equity_application_status !== "complete";
 
   if (incompleteApplication) {
-    pendingDocs = pendingDocsList(kyc);
+    pendingDocs = await pendingDocsList(kyc);
     return !!pendingDocs.length;
   }
 
   return false;
 }
 
-export function pendingDocsList(kyc) {
+export async function pendingDocsList(kyc) {
   const docsToCheck = ["equity_pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
   
   if (kyc?.address?.meta_data.is_nri) {
@@ -420,8 +420,8 @@ export function pendingDocsList(kyc) {
   return docsToCheck.filter((doc) => kyc[doc].doc_status !== "approved");
 }
 
-export function getPendingDocuments(kyc) {
-  const pendingDocs = pendingDocsList(kyc)
+export async function getPendingDocuments(kyc) {
+  const pendingDocs = await pendingDocsList(kyc)
   const pendingDocsMapper = pendingDocs.map((group) => {
     return {
       title: eqkycDocsGroupMapper[group].title,
