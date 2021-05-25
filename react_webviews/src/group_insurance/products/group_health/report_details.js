@@ -176,6 +176,8 @@ class GroupHealthReportDetails extends Component {
 
         this.setState({
             download_policy: true
+        }, ()=>{
+            this.sendEvents('next');
         })
 
     }

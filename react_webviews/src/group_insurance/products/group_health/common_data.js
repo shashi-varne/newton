@@ -1375,7 +1375,7 @@ export function setReportData(termData, group_insurance_policies, health_insuran
                 ...y,
                 topTextLeft: y.cssMapper.disc, 
                 topTextRight:  (y.product_category && y.product_category.toUpperCase()) || '',
-                headingTitle:  capitalizeFirstLetter(y.product_title),
+                headingTitle:  y.product_title,
                 headingSubtitle: y.company_name,
                 headingLogo: y.logo,
                 status: y.status,
