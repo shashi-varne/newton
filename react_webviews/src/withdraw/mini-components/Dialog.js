@@ -24,7 +24,7 @@ const AmountDialog = ({ open, close, disableBackdropClick,title, id, placeholder
             inputMode='numeric'
             pattern='[0-9]*'
           />
-          <div className="flex-between" data-aid='flex-between'>
+          <div className="flex-between" data-aid='dialog-btn-withdraw'>
             <Button color="primary" onClick={close} className="cancel-btn" data-aid='cancel-btn'>
               cancel
             </Button>
@@ -33,7 +33,7 @@ const AmountDialog = ({ open, close, disableBackdropClick,title, id, placeholder
               color="secondary"
               onClick={handleProceed}
               className="proceed-btn"
-              data-aid='proceed-btn'
+              data-aid='continue-btn'
             >
               continue
             </Button>

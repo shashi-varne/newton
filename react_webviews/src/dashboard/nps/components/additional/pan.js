@@ -201,6 +201,7 @@ class PanDetails extends Component {
         onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        data-aid='dialog-bottom-popup'
       >
         <DialogContent>
           <div className="nps-dialog" id="alert-dialog-description" data-aid='alert-dialog-description'>
@@ -219,6 +220,7 @@ class PanDetails extends Component {
                 style={{ cursor: "pointer" }}
                 onClick={() => this.handleClose()}
                 className="call-back-popup-button not-now"
+                data-aid='not-now-btn'
               >
                 NOT NOW
               </button>
@@ -226,6 +228,7 @@ class PanDetails extends Component {
                 style={{ cursor: "pointer" }}
                 onClick={() => this.cta_action()}
                 className="call-back-popup-button"
+                data-aid='call-back-btn'
               >
                 {this.state.btn_text}
               </button>

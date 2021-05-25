@@ -29,7 +29,7 @@ const InvestInfo = () => {
       <div className='info-box-header' data-aid='info-box-header'>Why invest with fisdom?</div>
       <div className='info-box-content' data-aid='info-box-content'>
         {InvestInfoData.map((el, idx) => (
-          <div className='info-box-data' key={idx}>
+          <div className='info-box-data' key={idx} data-aid={`info-box-data-${idx+1}`}>
             <div className='info-data-left'>
               <img src={el.icon} alt='smart-fund' />
             </div>

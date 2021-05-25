@@ -66,7 +66,7 @@ const PeriodWiseReturns = ({
       <div className='invested-amount-year-tabs' data-aid='invested-amount-year-tabs'>
         {termOptions.map((termOpt, idx) => (
           <span
-            data-aid={`years-btn-${idx}`}
+            data-aid={`years-btn-${idx+1}`}
             key={idx}
             className={
               // Check "Explanation" above

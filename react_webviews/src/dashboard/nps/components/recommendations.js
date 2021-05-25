@@ -575,6 +575,7 @@ const RiskSelectDialog = ({
 
   return (
     <Dialog
+      data-aid='dialog-recommendations'
       fullScreen={false}
       open={open}
       onClose={onClose}
@@ -583,7 +584,7 @@ const RiskSelectDialog = ({
         paperScrollPaper: 'risk-level'
       }}
     >
-      <DialogTitle id="form-dialog-title" className="edit-title">
+      <DialogTitle id="form-dialog-title" className="edit-title" data-aid='form-dialog-title'>
         Choose Risk Level
       </DialogTitle>
       <DialogContent>
@@ -603,7 +604,7 @@ const RiskSelectDialog = ({
       </DialogContent>
       <DialogActions>
         <Button
-          data-aid='nps-dialog-btn'
+          data-aid='nps-dialog-apply-btn'
           className="DialogButtonFullWidth"
           color="default"
           autoFocus

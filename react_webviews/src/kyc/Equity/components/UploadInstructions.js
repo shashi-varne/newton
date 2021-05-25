@@ -39,7 +39,7 @@ const UploadInstructions = (props) => {
       {data.instructions.map((data, index) => {
         return (
           <div key={index} className="stocks-pan-instructions">
-            <div className="spi-text" data-aid={`spi-text-${index}`}>{data.text}</div>
+            <div className="spi-text" data-aid={`spi-text-${index+1}`}>{data.text}</div>
             <img
               alt=""
               className="left-img"

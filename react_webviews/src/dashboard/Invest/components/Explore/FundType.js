@@ -113,8 +113,9 @@ const FundType = (props) => {
       noFooter
       title={props.match.params?.type || ""}
       classOverRideContainer="pr-container"
+      data-aid='fund-type-screen'
     >
-      <section id="invest-explore-fund-type">
+      <section id="invest-explore-fund-type" data-aid='invest-explore-fund-type'>
         {trendingFunds[type]?.length > 0 && <h6 className="heading top-title">Top trending {type} funds</h6>}
         <div className="scroll">
           {trendingFunds[type]?.map((fund, idx) => (

@@ -52,23 +52,23 @@ const TaxSummaryCard = ({
       </div>
       {openCard && (
         <div className={!openCard ? 'item item_hide' : 'item'} data-aid='item-data'>
-          <div className="tile flex-between-center">
+          <div className="tile flex-between-center" data-aid='withdraw-amount'>
             <div className="name">Withdraw Amount</div>
             <div className="value">{formatAmountInr(withdrawal_amount)}</div>
           </div>
-          <div className="tile flex-between-center">
+          <div className="tile flex-between-center" data-aid='withdraw-liability'>
             <div className="name">Total tax liability</div>
             <div className="value">{formatAmountInr(stcg_tax + ltcg_tax)}</div>
           </div>
-          <div className="tile tile2 flex-between-center">
+          <div className="tile tile2 flex-between-center" data-aid='withdraw-stcg'>
             <div className="name">Equity STCG tax @{stcg_percent}</div>
             <div className="value">{formatAmountInr(stcg_tax)}</div>
           </div>
-          <div className="tile tile2 flex-between-center">
+          <div className="tile tile2 flex-between-center" data-aid='withdraw-ltcg'>
             <div className="name">Equity LTCG tax @{ltcg_percent}%</div>
             <div className="value">{formatAmountInr(ltcg_tax)}</div>
           </div>
-          <div className="tile flex-between-center">
+          <div className="tile flex-between-center" data-aid='withdraw-exit-load'>
             <div className="name">Exit load</div>
             <div className="value">{formatAmountInr(exit_load)}</div>
           </div>
@@ -82,9 +82,9 @@ const TaxSummaryCard = ({
               src={require(`assets/${productName}/info_icon.svg`)}
               alt=""
             />
-            <div className="content">Avoid taxes for better returns!</div>
+            <div className="content" data-aid='withdraw-avoid-tax-text'>Avoid taxes for better returns!</div>
           </div>
-          <div className="tax-summary-know-more" onClick={openDialog}>
+          <div className="tax-summary-know-more" onClick={openDialog} data-aid='withdraw-know-how-text'>
             KNOW HOW
           </div>
         </footer>

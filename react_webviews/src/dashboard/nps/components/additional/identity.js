@@ -260,7 +260,7 @@ class NpsIdentity extends Component {
 
     return (
       <Container
-        data-aid='nps-additional-detais'
+        data-aid='nps-additional-detais-screen'
         buttonTitle="PROCEED"
         title="Additional Details"
         showLoader={this.state.show_loader}

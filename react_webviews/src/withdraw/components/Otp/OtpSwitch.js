@@ -101,7 +101,7 @@ const OtpSwitch = (props) => {
     >
       <section id="withdraw-otp-switch" className="page otp" data-aid='withdraw-otp-switch'>
         <div className="otp-input" data-aid='otp-input'>
-          <div className="otp-text">Enter OTP</div>
+          <div className="otp-text" data-aid='otp-text'>Enter OTP</div>
           <Input
             error={touched && otp.length !== 4 ? true : false}
             type="number"
@@ -113,13 +113,14 @@ const OtpSwitch = (props) => {
             minLength={4}
             maxLength={4}
           />
-          <div className="resend-otp" onClick={resendOtp}>
+          <div className="resend-otp" data-aid='resend-otp' onClick={resendOtp}>
             Resend OTP
           </div>
-          {stateParams.message && <div>{stateParams.message}</div>}
+          {stateParams.message && <div data-aid='otp-switch-message-text'>{stateParams.message}</div>}
         </div>
         <footer className="page-footer" data-aid='page-footer'>
         <Button
+          dataAid='verify-btn'
           disable={disabled}
           onClick={verifyOtp}
           buttonTitle="VERIFY"

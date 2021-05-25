@@ -72,7 +72,7 @@ class Login extends Component {
             />
           </div>
           <div className="login-form" data-aid='login-form'>
-            <div className="header-text">LOGIN</div>
+            <div className="header-text" data-aid='login-text'>LOGIN</div>
             <div className="login-type" data-aid='login-type'>
               <div
                 className="text"
@@ -80,6 +80,7 @@ class Login extends Component {
                   fontWeight: loginType === "mobile" ? "bold" : "normal",
                 }}
                 onClick={() => this.setLoginType("mobile")}
+                data-aid='mobile-text'
               >
                 MOBILE
                 {loginType === "mobile" && <div className="underline"></div>}
@@ -91,6 +92,7 @@ class Login extends Component {
                     fontWeight: loginType === "email" ? "bold" : "normal",
                   }}
                   onClick={() => this.setLoginType("email")}
+                  data-aid='email-text'
                 >
                   EMAIL
                   {loginType === "email" && <div className="underline"></div>}
@@ -166,6 +168,7 @@ class Login extends Component {
                 </>
               )}
               <Button
+                dataAid='login-btn'
                 buttonTitle="LOGIN"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
@@ -197,7 +200,7 @@ class Login extends Component {
               </div>
             )}
             {productName === "finity" && (
-              <div className="features">
+              <div className="features" data-aid='login-features'>
                 <div className="item">
                   <img src={require(`assets/icons-07.png`)} alt="" />
                   <div className="title">Bank Grade Security</div>

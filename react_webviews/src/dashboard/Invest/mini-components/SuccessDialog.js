@@ -36,7 +36,7 @@ const SuccessDialog = ({ isOpen, handleClick, sips = [], close }) => {
           <span>{sips.length === 1 ? " is " : " are "}</span>
           {sips.map((sip, index) => {
             return (
-              <span key={index} data-aid={`sips-${index}`}>
+              <span key={index} data-aid={`sips-${index+1}`}>
                 {index === sips.length - 1 && index !== 0 && (
                   <span>&nbsp;and</span>
                 )}

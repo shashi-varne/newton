@@ -118,7 +118,7 @@ const Landing = (props) => {
     >
       {!isEmpty(reasons) && (
         <section className='withdraw-reasons' data-aid='withdraw-reason'>
-          <div className='withdraw-reason-title'>{reasons?.title}</div>
+          <div className='withdraw-reason-title' data-aid='withdraw-reason-title'>{reasons?.title}</div>
 
           <div className='withdraw-reason-list'>
             {reasons?.options?.map((el, idx) => (

@@ -297,7 +297,7 @@ class uploadAddressProof extends Component {
   render() {
     return (
       <Container
-        data-aid='nps-upload-address-proof'
+        data-aid='nps-upload-address-proof-screen'
         fullWidthButton
         buttonTitle="PROCEED"
         title="Upload Address Proof"

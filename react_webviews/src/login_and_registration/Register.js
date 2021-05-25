@@ -88,14 +88,15 @@ class Register extends Component {
             />
           </div>
           <div className="login-form" data-aid='login-form'>
-            <div className="header-text">REGISTER</div>
-            <div className="login-type">
+            <div className="header-text" data-aid='register-text'>REGISTER</div>
+            <div className="login-type" data-aid='login-type'>
               <div
                 className="text"
                 style={{
                   fontWeight: registerType === "mobile" ? "bold" : "normal",
                 }}
                 onClick={() => this.setRegistrationType("mobile")}
+                data-aid='mobile-text'
               >
                 MOBILE
                 {registerType === "mobile" && <div className="underline"></div>}
@@ -106,6 +107,7 @@ class Register extends Component {
                   fontWeight: registerType === "email" ? "bold" : "normal",
                 }}
                 onClick={() => this.setRegistrationType("email")}
+                data-aid='email-text'
               >
                 EMAIL
                 {registerType === "email" && <div className="underline"></div>}
@@ -187,8 +189,8 @@ class Register extends Component {
                 </>
               )}
               {referralCheck && (
-                <div className="form-field referral-code-input">
-                  <FormControl className="referral-form" id="referral-form">
+                <div className="form-field referral-code-input" data-aid='referral-code-input'>
+                  <FormControl className="referral-form" id="referral-form" data-aid='referral-form'>
                     <InputLabel>Enter referral/partner code</InputLabel>
                     <InputUI
                       className="input"
@@ -201,6 +203,7 @@ class Register extends Component {
                           <div
                             className="verify-button"
                             onClick={() => this.verifyCode(form_data)}
+                            data-aid='verify-btn'
                           >
                             {isPromoApiRunning ? (
                               <div className="loader">
@@ -215,7 +218,7 @@ class Register extends Component {
                     />
                   </FormControl>
                   {form_data.referral_code_error && (
-                    <div className="helper-text">
+                    <div className="helper-text" data-aid='helper-text'>
                       {form_data.referral_code_error}
                     </div>
                   )}
@@ -233,6 +236,7 @@ class Register extends Component {
                 <div>I have a referral/promo/partner code</div>
               </div>
               <Button
+                dataAid='register-btn'
                 buttonTitle="REGISTER"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
@@ -249,6 +253,7 @@ class Register extends Component {
                 <div
                   className="resend-verification"
                   onClick={() => this.resendVerificationLink()}
+                  data-aid='resend-verification'
                 >
                   <span>Resend verification link </span>
                   <span className="loader">

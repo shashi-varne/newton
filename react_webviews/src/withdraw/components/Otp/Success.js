@@ -28,8 +28,8 @@ const Success = (props) => {
           alt="Successful Operation"
           width="100"
         />
-        <div className="message">{pageHead} request placed</div>
-        <div className="withdraw-success-msg" dangerouslySetInnerHTML={{ __html: successMessage }}></div>
+        <div className="message" data-aid='withdraw-message-text'>{pageHead} request placed</div>
+        <div className="withdraw-success-msg" dangerouslySetInnerHTML={{ __html: successMessage }} data-aid='withdraw-success-msg'></div>
       </section>
     </Container>
   )

@@ -41,7 +41,7 @@ const Explore = (props) => {
         />
         <div className="top-text">You've not invested yet!</div>
         <Button className="cta-button" variant="raised" onClick={handleClick} data-aid='cta-button'>
-          <span className="cta-button-text">explore investment options</span>
+          <span className="cta-button-text" data-aid='cta-button-text'>explore investment options</span>
           <RightAltIcon className="cta-button-icon" />
         </Button>
       </main>

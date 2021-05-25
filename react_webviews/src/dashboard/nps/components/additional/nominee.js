@@ -99,7 +99,7 @@ class NpsNominee extends Component {
     let { form_data } = this.state;
     return (
       <Container
-        data-aid='nps-nominee-details'
+        data-aid='nps-nominee-details-screen'
         title="Nominee Details"
         buttonTitle="SAVE AND CONTINUE"
         showLoader={this.state.show_loader}

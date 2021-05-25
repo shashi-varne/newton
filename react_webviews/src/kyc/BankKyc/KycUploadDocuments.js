@@ -262,7 +262,7 @@ const KycUploadDocuments = (props) => {
                     if (!disableField) handleDocType(index);
                   }}
                   id={`name_${index}`}
-                  data-aid={`name_${index}`}
+                  data-aid={`name_${index+1}`}
                 >
                   {data.name}
                   {selectedType && (

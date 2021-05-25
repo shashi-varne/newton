@@ -94,34 +94,36 @@ const InstaRedeem = (props) => {
         onClose={() => setOpenDialog(false)}
         aria-labelledby="responsive-dialog-title"
         className="invest-common-dialog"
+        data-aid='invest-common-dialog'
       >
-        <DialogContent className="dialog-content">
-          <div className="head-bar insta-redeem-head-bar">
+        <DialogContent className="dialog-content" data-aid='dialog-content'>
+          <div className="head-bar insta-redeem-head-bar" data-aid='insta-redeem-head-bar'>
             <div className="text-left">Instant withdrawal</div>
             <img
               src={require(`assets/${productName}/ic_instant_withdrawal.svg`)}
               alt=""
             />
           </div>
-          <div className="subtitle">
+          <div className="subtitle" data-aid='insta-redeem-subtitle'>
             Get your money whenever you need in two easy steps
           </div>
           <HowToSteps
             baseData={investRedeemData.withdrawSteps}
             style={{ margin: "0", padding: "5px 0 0 0" }}
           />
-          <div className="sub-text">
+          <div className="sub-text" data-aid='sub-text-one'>
             Max limit is 50 k or 90% of folio value with redemption time of 30
             mins. Additional amount can be withdrawn from systematic/manual
             withdraw where amount is credited in 3-4 working days.
           </div>
-          <div className="sub-text">
+          <div className="sub-text" data-aid='sub-text-two'>
             Exit load on withdrawal amount is 0.0070% to 0.0045% before seven
             days and 0% seven days onwards
           </div>
         </DialogContent>
         <DialogActions className="action">
           <Button
+            dataAid='okay-btn'
             onClick={() => setOpenDialog(false)}
             classes={{ button: "invest-dialog-button" }}
             buttonTitle="OKAY"
@@ -146,7 +148,7 @@ const InstaRedeem = (props) => {
           Instant withdrawal facility with superior return compared to savings
           bank account
           </div>
-        <div className="title">Benefits</div>
+        <div className="title" data-aid='benifites-text'>Benefits</div>
         {benefits.map((data, index) => {
           return (
             <div key={index} className="benefit" data-aid={`${data.key}-benefits`}>
@@ -165,7 +167,7 @@ const InstaRedeem = (props) => {
             </div>
           );
         })}
-        <div className="title">Money will be deposited in</div>
+        <div className="title" data-aid='deposited-text'>Money will be deposited in</div>
         {!isEmpty(recommendation) && !showLoader && (
           <div
             data-aid='recommendation-fund-card'
@@ -175,7 +177,7 @@ const InstaRedeem = (props) => {
             <div className="text">
               <h1 data-aid='recommendation-name'>{recommendation.mfname}</h1>
               <div className="flex">
-                <div className="common-badge bond">
+                <div className="common-badge bond" data-aid='bond'>
                   {recommendation.mftype_name}
                 </div>
                 {partner_code !== "hbl" && recommendation.rating > 0 && (

@@ -119,7 +119,7 @@ const Search = (props) => {
                 {fundResult.map((fund, index) => {
                   return (
                     <div
-                      data-aid={`diy-fund-result-${index}`}
+                      data-aid={`diy-fund-result-${index+1}`}
                       key={index}
                       className="text"
                       onClick={() => showFundInfo(fund)}

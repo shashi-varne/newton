@@ -108,8 +108,8 @@ const Otp = (props) => {
       showLoader={isApiRunning}
     >
       <section id="withdraw-verify" className="withdraw-verification" data-aid='withdraw-verification'>
-        <div className="header">Enter OTP to verify</div>
-        <div className="info">
+        <div className="header" data-aid='withdraw-opt-text'>Enter OTP to verify</div>
+        <div className="info" data-aid='withdraw-opt-info'>
           OTP has been sent to <strong>{stateParams?.mobile}</strong>, please enter it
           below
         </div>

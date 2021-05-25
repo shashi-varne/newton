@@ -73,13 +73,13 @@ class Otp extends Component {
         <div className={`${!isMobileView && "content"} otp-content`}>
           <div className={`${isMobileView && "otp-model-mini"} otp-model`}>
             {productName === "finity" && (
-              <div class="logo">
+              <div class="logo" data-aid='logo-text'>
                 <img src={require(`assets/finity_navlogo.png`)} alt="finity" />
                 <h5>Direct Mutual Funds | NPS</h5>
               </div>
             )}
             {isMobileView && productName !== "finity" && (
-              <div class="logo">
+              <div class="logo" data-aid='logo-text'>
                 <img src={require(`assets/logo_highres_f.png`)} alt="fisdom" />
                 <h5>Join 1000’s of Smart Investors</h5>
               </div>
@@ -99,6 +99,7 @@ class Otp extends Component {
               Resend OTP
             </div>
             <Button
+              data-aid='verify-btn'
               buttonTitle="VERIFY"
               onClick={this.handleClick}
               showLoader={isApiRunning}

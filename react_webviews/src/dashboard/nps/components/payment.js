@@ -63,7 +63,7 @@ class NpsPaymentCallback extends Component {
   render() {
     return (
       <Container
-        data-aid='nps-payment-status'
+        data-aid='nps-payment-status-screen'
         showLoader={this.state.show_loader}
         buttonTitle="OK"
         title="Payment Status"

@@ -91,7 +91,7 @@ class NpsPerformance extends Component {
                 </div>)}
               </div>))}
             </div>
-            <div className="tnc">
+            <div className="tnc" data-aid='nps-tnc'>
               *Total invested value that you have invested for your PRAN:{" "}
               {this.state.pran} through any source.
             </div>

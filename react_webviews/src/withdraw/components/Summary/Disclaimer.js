@@ -7,7 +7,7 @@ const Disclaimer = ({ disclaimers }) => {
         Disclaimer
       </div>
       {disclaimers.map((disclaimer, idx) => (
-        <div className="disclaimer" key={idx}>
+        <div className="disclaimer" key={idx} data-aid={`disclaimer-${idx+1}`}>
           {disclaimer}
         </div>
       ))}
