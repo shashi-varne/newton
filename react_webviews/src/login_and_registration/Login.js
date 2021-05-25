@@ -48,10 +48,21 @@ class Login extends Component {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if(loginType !== "email")
-      nativeCallback({events: 'otp sent to user'}) // to be confirmed
+      this.sendEvents();
     if (loginType === "email") keys_to_check = ["email", "password"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
   };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'otp sent to user',
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let {

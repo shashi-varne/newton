@@ -370,7 +370,10 @@ export async function otpVerification(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      nativeCallback({events: "user loggedin"}) // to be checked
+      let eventObj = {
+        event_name: "user loggedin",
+      };
+      nativeCallback({ events: eventObj });
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);

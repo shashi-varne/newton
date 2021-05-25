@@ -56,7 +56,7 @@ class Register extends Component {
     let { form_data, registerType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if(registerType !== "email")
-      nativeCallback({events: 'otp sent to user'}) // to be confirmed
+      this.sendEvents()
     if (registerType === "email")
       keys_to_check = ["email", "password", "confirm_password"];
     this.formCheckFields(keys_to_check, form_data, "REGISTER", registerType);
@@ -67,6 +67,17 @@ class Register extends Component {
       referralCheck: !this.state.referralCheck,
     });
   };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'otp sent to user',
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let {
