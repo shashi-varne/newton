@@ -89,8 +89,14 @@ class PanDetails extends Component {
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
+    const phoneRegEx = /[0-9]+$/
+    if (name === "mobile_number" && value) {
+      if (!phoneRegEx.test(value)) {
+        return;
+      }
+    }
 
-    if (name === "mobile_number" || name === "pran") {
+    if (name === "pran") {
       value = !isNaN(parseInt(value, 10)) && parseInt(value, 10);
     }
 
@@ -124,19 +130,26 @@ class PanDetails extends Component {
     let { form_data, userKyc, is_nps_contributed, currentUser } = this.state;
     let canSubmit = true;
 
-    if (!validatePan(form_data.pan)) {
+    if (!form_data.pan) {
+      form_data.pan_error = "This is required."
+      canSubmit = false
+    } else
+    if (form_data.pan && !validatePan(form_data.pan)) {
       form_data.pan_error = "invalid pan";
       canSubmit = false;
     }
-
-    if (
-      is_nps_contributed &&
-      (!form_data.pran || form_data.pran.toString().length !== 12)
-    ) {
+    if (is_nps_contributed && !form_data.pran) {
+      form_data.pran_error = "This is required."
+      canSubmit = false;
+    } else
+    if (is_nps_contributed && form_data.pran.toString().length !== 12) {
       form_data.pran_error = "invalid pran";
       canSubmit = false;
     }
-
+    if (!currentUser.mobile && !form_data.mobile_number) {
+      form_data.mobile_number_error = "This is required."
+      canSubmit = false;
+    } else
     if (!currentUser.mobile && form_data.mobile_number.toString().length !== 10) {
       form_data.mobile_number_error = "invalid mobile number";
       canSubmit = false;
@@ -151,7 +164,11 @@ class PanDetails extends Component {
       form_data.dob_error = "future date not allowed";
       canSubmit = false;
     }
-    if (!isValidDate(form_data.dob) || !form_data.dob) {
+    if (!form_data.dob) {
+      form_data.dob_error = "This is required."
+      canSubmit = false
+    } else
+    if (form_data.dob && !isValidDate(form_data.dob)) {
       form_data.dob_error = "invalid date";
       canSubmit = false;
     }
@@ -265,6 +282,9 @@ class PanDetails extends Component {
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
         goBack={this.goBack}
+        handleClick1={this.handleClick}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="pan-details">
           <FormControl fullWidth>
@@ -313,7 +333,7 @@ class PanDetails extends Component {
                   id="pran"
                   label="Pran number"
                   inputMode="numeric"
-                  pattern="[0-9]*"
+                  pattern="[0-9]{12}"
                   name="pran"
                   maxLength={12}
                   error={!!form_data.pran_error}
@@ -350,7 +370,7 @@ class PanDetails extends Component {
                   inputMode="numeric"
                   maxLength={10}
                   label="Enter Mobile Number"
-                  pattern="[0-9]*"
+                  pattern="[0-9]{10}"
                   class="Mobile"
                   error={!!form_data.mobile_number_error}
                   helperText={form_data.mobile_number_error}
