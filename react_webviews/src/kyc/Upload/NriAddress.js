@@ -52,6 +52,7 @@ const NRIAddressUpload = (props) => {
   const {kyc, isLoading} = useUserKycHook();
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
+    sendEvents('get_image', 'gallery', type);
     if (type === 'front') {
       setFrontDoc(file);
       setState({
@@ -67,7 +68,8 @@ const NRIAddressUpload = (props) => {
     }
   }
 
-  const onFileSelectError = () => {
+  const onFileSelectError = (type) => () => {
+    sendEvents('get_image', 'gallery', type);
     return toast('Please select image file only');
   }
 
@@ -226,7 +228,7 @@ const NRIAddressUpload = (props) => {
               fileName="nri_address_front"
               customPickerId="wv-input-front"
               onFileSelectComplete={onFileSelectComplete('front')}
-              onFileSelectError={onFileSelectError}
+              onFileSelectError={onFileSelectError('front')}
               supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
@@ -249,7 +251,7 @@ const NRIAddressUpload = (props) => {
                   fileName="nri_address_back"
                   customPickerId="wv-input-back"
                   onFileSelectComplete={onFileSelectComplete('back')}
-                  onFileSelectError={onFileSelectError}
+                  onFileSelectError={onFileSelectError('back')}
                   supportedFormats={SUPPORTED_IMAGE_TYPES}
                 />
               </KycUploadContainer>

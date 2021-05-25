@@ -78,6 +78,7 @@ const AddressUpload = (props) => {
   }, [kycData])
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
+    sendEvents('get_image', 'gallery', type);
     if (type === 'front') {
       setFrontDoc(file);
       setState({
@@ -93,7 +94,8 @@ const AddressUpload = (props) => {
     }
   }
 
-  const onFileSelectError = () => {
+  const onFileSelectError = (type) => () => {
+    sendEvents('get_image', 'gallery', type);
     return toast('Please select image file only');
   }
 
@@ -267,7 +269,7 @@ const AddressUpload = (props) => {
               fileName="address_proof_front"
               customPickerId="wv-input-front"
               onFileSelectComplete={onFileSelectComplete('front')}
-              onFileSelectError={onFileSelectError}
+              onFileSelectError={onFileSelectError('front')}
               supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
@@ -291,7 +293,7 @@ const AddressUpload = (props) => {
                   fileName="address_proof_rear"
                   customPickerId="wv-input-back"
                   onFileSelectComplete={onFileSelectComplete('back')}
-                  onFileSelectError={onFileSelectError}
+                  onFileSelectError={onFileSelectError('back')}
                   supportedFormats={SUPPORTED_IMAGE_TYPES}
                 />
               </KycUploadContainer>
