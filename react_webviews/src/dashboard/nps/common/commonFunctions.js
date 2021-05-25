@@ -2,7 +2,7 @@ import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
-import { isEmpty } from "utils/validators";
+import { isEmpty, containsSpecialCharactersAndNumbers } from "utils/validators";
 import toast from "../../../common/ui/Toast";
 // import { nps_config } from "../constants";
 
@@ -132,6 +132,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
   };
 
   let selectTypeInput = ["relationship"];
+  let keysMapperArrayName = ["mother_name", "spouse_name", "nominee_name", "state", "city", "relationship", "marital_status"];
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];
@@ -139,7 +140,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
       selectTypeInput.indexOf(key_check) !== -1
         ? "Please select "
         : "Please enter ";
-    if (!form_data[key_check]) {
+    if (!form_data[key_check] || containsSpecialCharactersAndNumbers(keysMapperArrayName.includes(key_check) ? form_data[key_check] : false)) {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
       canSubmit = false;
     }
