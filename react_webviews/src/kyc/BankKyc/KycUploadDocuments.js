@@ -11,6 +11,8 @@ import toast from '../../common/ui/Toast'
 import { getPathname } from "../constants";
 import "./KycUploadDocuments.scss";
 
+const config = getConfig();
+const isWeb = config.Web;
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -21,7 +23,6 @@ const KycUploadDocuments = (props) => {
   const {kyc, isLoading, setKycToSession} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
-  const isWeb = getConfig().Web;
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
     window.callbackWeb[method_name]({
@@ -118,7 +119,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'doc', 'doc.jpg', 'front')
@@ -250,7 +251,7 @@ const KycUploadDocuments = (props) => {
                       preProcessor={(code) =>
                         code.replace(
                           /fill=".*?"/g,
-                          "fill=" + getConfig().styles.primaryColor
+                          "fill=" + config.styles.primaryColor
                         )
                       }
                       src={require(`assets/check_selected_blue.svg`)}

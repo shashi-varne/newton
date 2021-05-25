@@ -10,7 +10,8 @@ import { combinedDocBlob } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
-const getTitleList = ({ kyc }) => {
+const isWeb = getConfig().Web;
+const getTitleList = () => {
   let titleList = [
     'Photo of address card should have your signature',
     'Photo of address should be clear and it should not have the exposure of flash light',
@@ -144,7 +145,7 @@ const NRIAddressUpload = (props) => {
   }
 
   const handleUpload = (method_name, type) => () => {
-    if(getConfig().html_camera){
+    if(isWeb) {
       if (type === 'front') {
         frontDocRef.current.click()
       } else {
@@ -247,15 +248,13 @@ const NRIAddressUpload = (props) => {
       },
     });
   };
-
-  const isWeb = getConfig().Web
-
+  
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
     >

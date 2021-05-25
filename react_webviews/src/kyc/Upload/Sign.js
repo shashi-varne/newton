@@ -8,6 +8,7 @@ import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
+const isWeb = getConfig().Web
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -78,7 +79,7 @@ const Sign = (props) => {
   }
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else 
       native_call_handler(method_name, 'sign', 'sign.jpg', 'front')
@@ -127,8 +128,6 @@ const Sign = (props) => {
       setIsApiRunning(false)
     }
   }
-
-  const isWeb = getConfig().Web
 
   return (
     <Container

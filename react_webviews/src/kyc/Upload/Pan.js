@@ -9,6 +9,7 @@ import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
+const isWeb = getConfig().Web;
 const getTitleList = ({ kyc }) => {
   let titleList = [
     'Photo of PAN card should have your signature',
@@ -117,7 +118,7 @@ const Pan = (props) => {
   }
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'pan', 'pan.jpg', 'front')
@@ -162,8 +163,6 @@ const Pan = (props) => {
       setIsApiRunning(false)
     }
   }
-
-  const isWeb = getConfig().Web
 
   return (
     <Container
