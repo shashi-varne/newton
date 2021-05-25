@@ -1,6 +1,6 @@
 import './HowWeRecommend.scss';
 import React from 'react';
-import { getConfig } from '../../utils/functions';
+import { capitalize, getConfig } from '../../utils/functions';
 import Container from '../common/Container';
 
 const { productName } = getConfig();
@@ -55,7 +55,7 @@ const HowWeRecommend = (props) => {
           <div className="risk_profiler-point">
             <img src={require(`assets/${productName}/rec_point6.svg`)} alt="" className="risk_profiler-point-img" />
             <p className="risk_profiler-point-des">
-                Your risk taking ability and willingness as calculated by Myway's
+                Your risk taking ability and willingness as calculated by {capitalize(productName)}'s
                 proprietary profiler
             </p>
           </div>

@@ -139,16 +139,12 @@ class Result extends Component {
     const entryParams = this.state.params || {};
 
     if (entryParams.type === 'saveforgoal') {
-      this.navigate(`invest/savegoal/${entryParams.subType}/amount`);
+      this.navigate(`/invest/savegoal/${entryParams.subType}/amount`);
     } else {
       this.navigate(
         '/invest/recommendations',
         false,
         {
-          amount: entryParams.amount,
-          type: entryParams.type,
-          term: entryParams.term,
-          flow: entryParams.flow,
           fromRiskProfiler: true,
         }
       );
@@ -167,7 +163,7 @@ class Result extends Component {
       if (get(this.state, 'params.internalRedirect')) {
         this.redirectToInvestFlow();
       } else {
-        window.location.href = this.redirectUrlBuilder();
+        this.navigate('/');
       }
     } else {
       const entryParams = this.state.params || {};
@@ -344,6 +340,10 @@ class Result extends Component {
     }
   }
 
+  allowReset = () => {
+    return !["true", true].includes(this.state.params.hideRPReset);
+  }
+
   renderUi() {
     if (this.state.score) {
       return (
@@ -355,9 +355,8 @@ class Result extends Component {
           handleClick={this.handleClick}
           edit={this.props.edit}
           buttonTitle="Invest Now"
-          topIcon={this.state.params.hideRPReset !== "true" ? '' : "restart"}
           handleReset={this.showDialog}
-          resetpage={this.state.params.hideRPReset !== "true"}
+          resetpage={this.allowReset()}
           events={this.sendEvents('just_set_events')}
         >
           {this.state.score ?
