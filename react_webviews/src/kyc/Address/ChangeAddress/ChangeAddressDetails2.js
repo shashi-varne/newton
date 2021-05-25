@@ -11,6 +11,7 @@ import { navigate as navigateFunc } from '../../common/functions'
 import useUserKycHook from '../../common/hooks/userKycHook'
 import "../commonStyles.scss";
 
+const isWeb = getConfig().Web
 const getTitleList = () => {
   let titleList = [
     'Photo of address card should have your signature',
@@ -147,7 +148,7 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleUpload = (method_name, type) => () => {
-    if(getConfig().html_camera){
+    if(isWeb){
       if (type === 'front') {
         frontDocRef.current.click()
       } else {
@@ -216,15 +217,13 @@ const ChangeAddressDetails2 = (props) => {
     ? 'Upload Indian Address Proof'
     : 'Upload address proof'
 
-  const isWeb = getConfig().Web
-
   return (
     <Container
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title={title}
       count={2}
