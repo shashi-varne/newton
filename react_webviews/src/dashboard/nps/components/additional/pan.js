@@ -69,7 +69,14 @@ class PanDetails extends Component {
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 
     form_data.email = userKyc.address.meta_data.email || "";
-    form_data.mobile_number = userKyc.address.meta_data.mobile_number || "";
+    let mobile_number = userKyc.identification?.meta_data?.mobile_number || "";
+    let country_code = "";
+    if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
+      country_code = mobile_number.split("|")[0];
+      mobile_number = mobile_number.split("|")[1];
+    }
+    form_data.mobile_number = mobile_number || "";
+    form_data.country_code = country_code;
 
     form_data.pran = storageService().get("nps_pran_number") || ""
     if(!isEmpty(form_data.pran)) {
@@ -178,7 +185,7 @@ class PanDetails extends Component {
     });
 
     if (canSubmit) {
-      let { pan, address } = userKyc;
+      let { pan, address, identification } = userKyc;
 
       if (is_nps_contributed) {
         storageService().set("nps_pran_number", form_data.pran);
@@ -189,14 +196,18 @@ class PanDetails extends Component {
       pan.meta_data.pan_number = form_data.pan;
 
       address.meta_data.email = form_data.email;
-      address.meta_data.mobile_number = form_data.mobile_number;
 
-      storageService().setObject("kyc", userKyc);
+      let mobile_number = form_data.mobile_number?.toString();
+      if (form_data.country_code) {
+        mobile_number = form_data.country_code + "|" + mobile_number;
+      }
+      identification.meta_data.mobile_number = mobile_number;
 
       let data = {
         kyc: {
-          address: address.meta_data,
           pan: pan.meta_data,
+          address: address.meta_data,
+          identification: identification.meta_data,
         },
       };
 
@@ -331,7 +342,7 @@ class PanDetails extends Component {
                   icon={card}
                   width="30"
                   id="pran"
-                  label="Pran number"
+                  label="PRAN number"
                   inputMode="numeric"
                   pattern="[0-9]{12}"
                   name="pran"
@@ -350,7 +361,7 @@ class PanDetails extends Component {
                 width="30"
                 id="dob"
                 name="dob"
-                label="your date of birth"
+                label="Your date of birth"
                 error={!!form_data.dob_error}
                 helperText={form_data.dob_error}
                 value={form_data.dob || ""}
