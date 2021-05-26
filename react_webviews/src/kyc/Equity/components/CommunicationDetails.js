@@ -16,6 +16,7 @@ import CheckBox from "../../../common/ui/Checkbox";
 import { apiConstants } from "../../constants";
 import { getBasePath, getConfig } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const config = getConfig();
 const googleButtonTitle = (
@@ -92,6 +93,7 @@ const CommunicationDetails = (props) => {
   };
 
   const resendOtpVerification = async () => {
+    sendEvents("resend");
     setShowDotLoader(true);
     try {
       const result = await resendOtp(otpId);
@@ -119,6 +121,7 @@ const CommunicationDetails = (props) => {
   };
 
   const handleClick = async () => {
+    sendEvents("next");
     try {
       if (showOtpContainer) {
         if (state.otp.length !== 4) {
@@ -173,13 +176,51 @@ const CommunicationDetails = (props) => {
   };
 
   const handleEdit = () => {
+    sendEvents("edit");
     if (showDotLoader) return;
     setShowOtpContainer(false);
     setButtonTitle("CONTINUE");
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name:
+        communicationType === "email"
+          ? "kyc_registration"
+          : "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name:
+          communicationType === "email"
+            ? showOtpContainer
+              ? "communication_details_otp"
+              : "communication_details"
+            : showOtpContainer
+            ? "mobile_otp"
+            : "verify_mobile",
+      },
+    };
+    if (showOtpContainer) {
+      eventObj.properties.otp_entered = state.otp ? "yes" : "no";
+      // eventObj.properties.mode_entry  TO BE CHECKED
+    } else {
+      if (communicationType === "email")
+        eventObj.properties[`email_entered`] = formData.email ? "yes" : "no";
+      else
+        eventObj.properties["whatsapp_agree"] = formData.whatsappConsent
+          ? "yes"
+          : "no";
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       title="Communication details"
       count="3"

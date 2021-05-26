@@ -10,6 +10,7 @@ import WVHeaderText from '../../common/ui/HeaderText/WVHeaderText';
 import useUserKycHook from '../common/hooks/userKycHook';
 import { upload } from '../common/api';
 import { navigate as navigateFunc } from '../common/functions';
+import { nativeCallback } from '../../utils/native_callback';
 
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
@@ -65,6 +66,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const uploadDocument = async () => {
+    sendEvents("next");
     try {
       const data = {
         doc_password: filePassword || undefined,
@@ -84,6 +86,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const onSkipClick = () => {
+    sendEvents("skip");
     console.log("skip clicked")
   }
 
@@ -91,8 +94,25 @@ const FnOIncomeProof = (props) => {
     setFilePassword(event.target.value);
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "provide_income_proof",
+        bank_statement: selectedType === "bank-statement" ? "yes" : "no",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       canSkip
       hidePageTitle
       hideHamburger

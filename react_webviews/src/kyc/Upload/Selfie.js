@@ -28,10 +28,12 @@ const Selfie = (props) => {
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
   const [showLoader, setShowLoader] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const { kyc, isLoading } = useUserKycHook();
   const navigate = navigateFunc.bind(props)
 
   const handleSubmit = async () => {
+    sendEvents("next");
     try {
       setIsApiRunning("button")
       const result = await upload(file, 'identification', {
@@ -58,6 +60,7 @@ const Selfie = (props) => {
   }
 
   const openLiveCamera = () => {
+    setAttempt(attempt + 1);
     if (isCamInitialised) {
       setIsLocnPermOpen(true);
     }
@@ -94,24 +97,27 @@ const Selfie = (props) => {
     }
   }
 
-  const sendEvents = (userAction, type) => {
+  const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "selfie_doc",
-        "type": type || "",
-      }
+      // "event_name": 'KYC_registration',
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "take_a_selfie",
+        attempt: attempt
+        // "type": type || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="Upload"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
