@@ -34,13 +34,16 @@ const TradingExperience = (props) => {
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      setExperience(kyc?.equity_data?.trading_experience || "0-1");
-      setOldState(kyc?.equity_data?.trading_experience || "")
+      setExperience(kyc?.equity_data?.meta_data?.trading_experience || "0-1");
+      setOldState(kyc?.equity_data?.meta_data?.trading_experience || "")
     }
   }, [kyc]);
 
   const handleClick = () => {
-    if (oldState === experience) return;
+    if (oldState === experience) {
+      handleNavigation();
+      return;
+    }
     handleSubmit();
   }
 
@@ -57,7 +60,7 @@ const TradingExperience = (props) => {
       };
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
-      // navigate("path"); Todo: Add path
+      handleNavigation();
     } catch (err) {
       console.log(err);
       toast(err.message);
@@ -65,6 +68,10 @@ const TradingExperience = (props) => {
       setIsApiRunning(false);
     }
   };
+
+  const handleNavigation = () => {
+    // navigate("path"); Todo: Add path
+  }
 
   return (
     <Container
