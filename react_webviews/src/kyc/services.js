@@ -417,15 +417,15 @@ export async function pendingDocsList(kyc) {
     docsToCheck.push("nri_address");
   }
 
-  return docsToCheck.filter((doc) => kyc[doc].doc_status !== "approved");
+  return docsToCheck.filter((doc) => kyc[doc]?.doc_status !== "approved");
 }
 
 export async function getPendingDocuments(kyc) {
   const pendingDocs = await pendingDocsList(kyc)
-  const pendingDocsMapper = pendingDocs.map((group) => {
+  const pendingDocsMapper = pendingDocs.filter((group) => eqkycDocsGroupMapper[group]).map((group) => {
     return {
-      title: eqkycDocsGroupMapper[group].title,
-      doc: eqkycDocsGroupMapper[group].doc || kyc[group].meta_data.doc_type
+      title: eqkycDocsGroupMapper[group]?.title,
+      doc: eqkycDocsGroupMapper[group]?.doc || kyc[group]?.meta_data?.doc_type
     }
   });
 

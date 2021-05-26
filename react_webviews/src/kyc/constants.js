@@ -324,31 +324,31 @@ export const companyDetails = {
 export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 export const eqkycDocsGroupMapper = {
-  equity_pan: {
+  "equity_pan": {
     title: "PAN details",
     doc: "PAN card"
   },
-  sign: {
+  "sign": {
     title: "Signature",
     doc: "Signature"
   },
-  equity_identification: {
+  "equity_identification": {
     title: "Personal details",
     doc: "Selfie"
   },
-  address: {
+  "address": {
     title: "Address details",
     doc: ""
   },
-  ipvvideo: {
+  "ipvvideo": {
     title: "IPV video",
     doc: "IPV video"
   },
-  bank: {
+  "bank": {
     title: "Bank account",
     doc: ""
   },
-  nri_address: {
+  "nri_address": {
     title: "NRI Address Details",
     doc: ""
   }
