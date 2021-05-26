@@ -117,7 +117,7 @@ const Journey = (props) => {
           }
         } else if (
           journeyData[i].key === 'esign' ||
-          journeyData[i].key === 'bank_esign'
+          journeyData[i].key === 'trading_esign'
         ) {
           if (kyc.sign_status !== 'signed') {
             status = 'init'
@@ -354,8 +354,20 @@ const Journey = (props) => {
           ],
         },
         {
-          key: 'bank_esign',
-          title: 'Bank details & eSign',
+          key: 'bank',
+          title: 'Bank details',
+          status: 'pending',
+          isEditAllowed: false,
+          inputsForStatus: [
+            {
+              name: 'bank',
+              keys: ['account_number', 'account_type', 'ifsc_code'],
+            },
+          ],
+        },
+        {
+          key: 'trading_esign',
+          title: 'Trading details & eSign',
           status: 'pending',
           isEditAllowed: false,
           inputsForStatus: ['esign'],
@@ -497,7 +509,7 @@ const Journey = (props) => {
         stateMapper = {
           pan: '/kyc/home',
           personal: '/kyc/dl/personal-details1',
-          bank_esign: '/kyc/non-compliant/bank-details',
+          trading_esign: '/kyc/non-compliant/bank-details',
           address: '/kyc/address-details1',
           docs: '/kyc/upload/intro',
           esign: '/kyc-esign/info',
