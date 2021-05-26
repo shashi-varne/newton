@@ -178,18 +178,28 @@
 .kyc-doc-upload-container {
   margin-top: 20px;
   border: 1px dashed var(--skelton-color);
+  border-radius: 6px;
   padding: 10px 0;
   text-align: center;
 
-  .icon {
-    display: block;
-    margin: 70px auto 20px auto;
+  .kduc-sign-icon {
     width: 143px;
+    margin: 55px auto;
+    display: block;
+  }
+
+  .kduc-selfie-placeholder {
+    width: 100%;
+    display: block;
   }
 
   .video-controls {
     max-width: 100%;
   }
+}
+
+.kyc-doc-upload-container.with-bg-color {
+  background-color: var(--highlight);
 }
 
 .kyc-doc-upload-container.noBorder {
@@ -216,7 +226,8 @@
 }
 
 .kyc-upload-doc-actions {
-  margin-top: 20px;
+  margin-top: 10px;
+
   .kyc-upload {
     display: none;
   }
@@ -285,3 +296,179 @@
     margin-bottom: 0;
   }
 }
+
+.kyc-upload-selfie-title {
+  font-size: 13px;
+  line-height: 21px;
+  text-align: center;
+  color: var(--steelgrey);
+  margin-bottom: 10px;
+}
+
+.kyc-selfie-intructions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  #kyc-si-text {
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--dark);
+  }
+}
+
+.kyc-selfie-location-dialog {
+  .MuiDialog-paper {
+    margin: 0 !important;
+  }
+  .MuiDialogActions-root {
+    margin: 20px !important;
+  }
+}
+
+.kyc-loc-permission {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .kyc-loc-perm-illustration {
+    margin-top: 80px;
+    
+    .kyc-loc-perm-icon {
+      background: var(--highlight);
+      border-radius: 20px;
+      width: 116px;
+      height: 116px;
+      position: relative;
+  
+      img {
+        height: 55px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  
+  .kyc-loc-perm-title {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+    text-align: center;
+    color: var(--dark);
+    margin-top: 20px;
+  }
+  
+  .kyc-loc-perm-subtitle {
+    font-size: 13px;
+    line-height: 21px;
+    text-align: center;
+    color: var(--steelgrey);
+    margin: 20px 0;
+  }
+}
+
+.selfie-step:nth-child(1) {
+  margin-top: 20px;
+}
+
+.selfie-step {
+  margin-top: 40px;
+
+  .selfie-step-desc {
+    font-size: 13px;
+    line-height: 15px;
+    color: var(--dark);
+    margin-bottom: 10px;
+  }
+
+  .selfie-step-imgs {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+// F&OIncomeProof START ------------
+.kyc-fno-header-optional-text {
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 32px;
+  color: var(--steelgrey);
+}
+
+.kyc-fno-income-proof {
+  .kyc-fip-title {
+    margin: 20px 0 10px;
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--dark);
+  }
+
+  .kyc-fno-OR {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0.5;
+    margin: 8px 0;
+  }
+
+  .kyc-fi-sample {
+    text-align: center;
+    // TODO: Change margin if clickableElement becomoes a button
+    margin-top: 30px;
+  }
+
+  .kyc-fi-upload-card {
+    margin-bottom: 20px;
+  }
+
+  .kyc-fi-expand-options {
+    box-shadow: none;
+    border: 0px;
+    margin-top: 40px !important;
+
+    .MuiCollapse-container {
+      padding: 0 2px;
+    }
+
+    .MuiExpansionPanelSummary-root {
+      padding: 0;
+
+      .MuiExpansionPanelSummary-content {
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 21px;
+        color: var(--steelgrey);
+      }
+
+      .MuiExpansionPanelSummary-expandIcon {
+        right: -15px;
+      }
+    }
+
+    .MuiExpansionPanelDetails-root {
+      padding: 0 !important;
+      display: unset !important
+    }
+  }
+
+  .kyc-fi-expand-options::before {
+    display: none;
+  }
+
+  .kyc-fi-file-upload-input {
+    margin-top: 20px;
+  }
+}
+
+.kyc-fno-encryption-disclaimer {
+  display: block;
+  margin: 40px auto 0;
+}
+// F&OIncomeProof END ------------
