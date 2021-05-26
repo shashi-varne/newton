@@ -78,7 +78,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
     ]
     if (!getConfig().isSdk) {
       journeyData = journeyData.slice(0,3);
-      journeyData = [...journeyData, tradingJourneyData];
+      journeyData = [...journeyData, ...tradingJourneyData];
     }
   } else if (!isCompliant && show_aadhaar) {
     journeyData = [
@@ -146,7 +146,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
     ]
     if (!getConfig().isSdk) {
       journeyData = journeyData.slice(0,3);
-      journeyData = [...journeyData, tradingJourneyData];
+      journeyData = [...journeyData, ...tradingJourneyData];
     }
   } else {
     journeyData = [
