@@ -174,8 +174,6 @@ class PanDetails extends Component {
       address.meta_data.email = form_data.email;
       address.meta_data.mobile_number = form_data.mobile_number;
 
-      storageService().setObject("kyc", userKyc);
-
       let data = {
         kyc: {
           address: address.meta_data,
