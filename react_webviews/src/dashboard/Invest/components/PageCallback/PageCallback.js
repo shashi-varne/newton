@@ -74,7 +74,7 @@ const PageCallback = (props) => {
       default:
         setSkelton(false);
         if (!status) {
-          navigate("/landing", null, true);
+          navigate("/", null, true);
         } else {
           if (!message) message = "";
           if (investment_type === "sip") {
@@ -82,7 +82,7 @@ const PageCallback = (props) => {
           } else if (investment_type === "onetime") {
             navigate(`/payment/callback/${status}/${message}`, null, true);
           } else {
-            navigate("/landing", null, true);
+            navigate("/", null, true);
           }
         }
         break;
