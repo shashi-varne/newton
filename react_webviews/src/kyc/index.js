@@ -55,7 +55,7 @@ import Native from "./Native/Native";
 
 // Equity Components
 import AllowLocation from  "./Equity/components/AllowLocation";
-import Experience from "./Equity/components/Experience";
+import TradingExperience from "./Equity/components/TradingExperience";
 import SelfieInstructions from "./Equity/components/SelfieInstructions";
 import StocksStatus from "./Equity/components/StocksStatus";
 import NriError from "./Equity/components/NriError";
@@ -306,7 +306,7 @@ const Kyc = (props) => {
         <Route 
           exact 
           path={`${url}/trading-experience`} 
-          component={Experience} 
+          component={TradingExperience} 
         />
         <Route 
           exact 
