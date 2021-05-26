@@ -115,8 +115,7 @@ export function commonRender(props_base) {
    <div className={this.addContainerClass(props_base)}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && !this.props.loaderWithData &&
-                <Header
+                && !this.props.showLoaderModal && !this.props.loaderWithData && <Header
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
@@ -130,9 +129,6 @@ export function commonRender(props_base) {
                     resetpage={this.props.resetpage}
                     handleReset={this.props.handleReset}
                     topIcon={this.props.topIcon || this.props.rightIcon}
-                    canSkip={this.props.canSkip}
-                    hideHamburger={this.props.hideHamburger}
-                    onSkipClick={this.props.onSkipClick}
                     handleTopIcon={this.handleTopIcon}
                     inPageTitle={this.state.inPageTitle}
                     force_hide_inpage_title={this.state.force_hide_inpage_title}

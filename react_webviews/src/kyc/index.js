@@ -52,9 +52,6 @@ import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
 import Native from "./Native/Native";
-import LocationPermission from "./Upload/LocationPermission";
-import SelfieSteps from "./Upload/SelfieSteps";
-import FnOIncomeProof from "./Upload/F&OIncomeProof";
 
 // Equity Components
 import AllowLocation from  "./Equity/components/AllowLocation";
@@ -67,7 +64,7 @@ import AccountInfo from "./Equity/components/AccountInfo";
 import UploadInstructions from "./Equity/components/UploadInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
-import FnOSampleDocuments from "./Upload/F&OSampleDocuments";
+import FAndOSampleDocument from "./Equity/components/F&OSampleDocuments";
 
 const Kyc = (props) => {
   const { url } = props.match;
@@ -138,18 +135,8 @@ const Kyc = (props) => {
         />
         <Route 
           exact 
-          path={`${url}/upload/selfie-location/:type?`} 
-          component={LocationPermission}
-        />
-        <Route 
-          exact 
-          path={`${url}/upload/selfie-steps`} 
-          component={SelfieSteps}
-        />
-        <Route 
-          exact 
           path={`${url}/upload/selfie`} 
-          component={Selfie}
+          component={Selfie} 
         />
         <Route 
           exact 
@@ -165,16 +152,6 @@ const Kyc = (props) => {
           exact
           path={`${url}/upload/address-nri`}
           component={NRIAddressUpload}
-        />
-        <Route
-          exact
-          path={`${url}/upload/fno-income-proof`}
-          component={FnOIncomeProof}
-        />
-        <Route
-          exact
-          path={`${url}/upload/fno-sample-documents`}
-          component={FnOSampleDocuments}
         />
         <Route 
           exact 
@@ -370,6 +347,11 @@ const Kyc = (props) => {
           exact 
           path={`${url}/manual-signature`} 
           component={ManualSignature} 
+        />
+        <Route 
+          exact 
+          path={`${url}/fno-sample-documents`} 
+          component={FAndOSampleDocument} 
         />
         <Route component={NotFound} />
       </Switch>

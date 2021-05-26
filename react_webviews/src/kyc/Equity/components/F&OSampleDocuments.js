@@ -1,6 +1,6 @@
 import React from 'react'
-import Container from '../common/Container'
-import SampleDocuments from '../mini-components/SampleDocuments'
+import Container from '../../common/Container'
+import SampleDocuments from '../../mini-components/SampleDocuments'
 
 const description = "Please ensure the documents are as per the details required. If you have multiple documents please merge them into one.";
 const documents = [
@@ -10,7 +10,7 @@ const documents = [
   { title: 'Salary Slip (Last 3 months) ', name: "(PAYSLIP SAMPLE DOCUMENT)", doc: 'bank_statement' },
 ]
 
-const FnOSampleDocuments = (props) => {
+const FAndOSampleDocument = (props) => {
   const handleCTAClick = () => {
     props.history.goBack();
   }
@@ -22,4 +22,4 @@ const FnOSampleDocuments = (props) => {
   )
 }
 
-export default FnOSampleDocuments
+export default FAndOSampleDocument

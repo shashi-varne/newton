@@ -1446,8 +1446,8 @@ $header-title-font-size: 20px;
     margin: 0;
   }  
 }
-
 // TODO: Move this into WVBottomSheet.scss
+
 #bottom-popup .MuiDialog-paper {
   position: fixed;
   width: 100%;
@@ -1741,21 +1741,6 @@ $header-title-font-size: 20px;
       border: 1px solid var(--primary);
     }
   }
-}
-
-.header-skip-text {
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 14px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--steelgrey);
-  display: inline-block;
-  margin-right: 12px;
-}
-
-.mobile-navbar-menu{
-  margin-left: auto;
 }
   
 .OTP-title{

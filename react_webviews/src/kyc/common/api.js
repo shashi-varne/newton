@@ -144,35 +144,26 @@ export const addAdditionalBank = async (data) => {
 export const upload = async (file, type, data = {}) => {
   const formData = new FormData()
   formData.set('res', file)
-  let doc_type = ''
+  let addressProofKey = ''
   if (!isEmpty(data)) {
     switch (type) {
       case 'ipvvideo':
         formData.append('ipv_code', data.ipv_code)
         break
       case 'address':
-        doc_type = data?.addressProofKey
+        addressProofKey = data?.addressProofKey
         break
       case 'nri_address':
-        doc_type = data?.addressProofKey
-        break
+       addressProofKey = data?.addressProofKey
+       break
       case 'pan':
         formData.append('kyc_flow', data.kyc_flow)
         break
-      case 'income':
-        doc_type = data?.doc_type;
-        formData.append('doc_password', data.doc_password);
-        break;
-      case 'identification':
-        formData.append('kyc_product_type', data.kyc_product_type);
-        formData.append('location_coordinates', `${data.lat},${data.lng}`);
-        formData.append('live_score', data.live_score);
-        break;
-      default:
-        break
+       default:
+         break
     }
   }
-  const url = isEmpty(doc_type) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${doc_type}`
+  const url = isEmpty(addressProofKey) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${addressProofKey}`
   const res = await Api.post(url, formData)
   if (
     res?.pfwresponse?.status_code

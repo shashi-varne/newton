@@ -1,6 +1,6 @@
 import './WVFileUploadCard.scss';
 import React, { useEffect, useState } from 'react';
-import { WVFilePickerWrapper } from '../FileUploadWrapper/WVFilePickerWrapper';
+import { WVFilePickerWrapper } from '../FileUploadWrapper';
 import SVG from 'react-inlinesvg';
 import { isFunction } from 'lodash';
 import PropTypes from 'prop-types';
@@ -8,12 +8,9 @@ import PropTypes from 'prop-types';
 const WVFileUploadCard = ({
   title,
   subtitle,
-  file,
-  classes = {},
-  className,
   ...wrapperProps
 }) => {
-  const [selectedFile, setSelectedFile] = useState(file);
+  const [selectedFile, setSelectedFile] = useState('');
   const [truncatedFileName, setTruncatedFileName] = useState('');
   const [fileType, setFileType] = useState('');
 
@@ -31,50 +28,42 @@ const WVFileUploadCard = ({
     }
   }, [selectedFile]);
 
-  const onFileSelected = (file, fileBase64) => {
+  const onFileSelected = (file) => {
+    console.log(file);
     setSelectedFile(file);
-    if (isFunction(wrapperProps.onFileSelectComplete)) {
-      wrapperProps.onFileSelectComplete(file, fileBase64);
+    if (isFunction(wrapperProps.onFileSelected)) {
+      wrapperProps.onFileSelected(file);
     }
   }
 
   return (
-    <>
-      <WVFilePickerWrapper
-        {...wrapperProps}
-        onFileSelectComplete={onFileSelected}
-      >
-        <div
-          className={`
-          wv-file-upload-card
-          ${classes.container}
-          ${className}
-        `}
-          style={{ border: selectedFile ? '1px solid var(--primary)' : '' }}
-        >
-          <div className="wv-fuc-left">
-            <div className="wv-fuc-left-title">
-              {title}
-            </div>
-            <div className="wv-fuc-left-subtitle">
-              {subtitle}
-            </div>
+    <WVFilePickerWrapper
+      {...wrapperProps}
+      onFileSelectComplete={onFileSelected}
+    >
+      <div className="wv-file-upload-card">
+        <div className="wv-fuc-left">
+          <div className="wv-fuc-left-title">
+            {title}
           </div>
-          <div className="wv-fuc-right">
-            <SVG
-              preProcessor={code => code.replace(
-                /fill=".*?"/g, `fill=${selectedFile ? '#24154C' : '#767E86'}`
-              )}
-              className="arrow"
-              src={require('assets/paperclip.svg')}
-            />
-            {selectedFile?.name &&
-              <span>{truncatedFileName + `.${fileType}`}</span>
-            }
+          <div className="wv-fuc-left-subtitle">
+            {subtitle}
           </div>
         </div>
-      </WVFilePickerWrapper>
-    </>
+        <div className="wv-fuc-right">
+          <SVG
+            preProcessor={code => code.replace(
+              /fill=".*?"/g, `fill=${selectedFile ? '#24154C' : '#767E86'}`
+            )}
+            className="arrow"
+            src={require('assets/paperclip.svg')}
+          />
+          {selectedFile?.name &&
+            <span>{truncatedFileName + `.${fileType}`}</span>
+          }
+        </div>
+      </div>
+    </WVFilePickerWrapper>
   );
 }
 
