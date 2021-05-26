@@ -6,10 +6,11 @@ import { Add, Remove } from '@material-ui/icons';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, TextField } from '@material-ui/core';
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement';
 import Toast from '../../common/ui/Toast';
-import WVHeaderText from '../../common/ui/HeaderText/WVHeaderText';
 import useUserKycHook from '../common/hooks/userKycHook';
 import { upload } from '../common/api';
 import { navigate as navigateFunc } from '../common/functions';
+import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
+import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
@@ -103,10 +104,10 @@ const FnOIncomeProof = (props) => {
       disable={!selectedFile}
       showLoader={isApiRunning}
     >
-      <WVHeaderText>
-        Provide income proof for F&O trading
+      <WVInPageHeader>
+        <WVInPageTitle>Provide income proof for F&O trading</WVInPageTitle>
         <span className="kyc-fno-header-optional-text"> (Optional)</span>
-      </WVHeaderText>
+      </WVInPageHeader>
       <WVInfoBubble>
         In case of multiple files/images, merge them into a single pdf to upload
       </WVInfoBubble>
