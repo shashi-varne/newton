@@ -263,6 +263,8 @@ class PanDetails extends Component {
         hideInPageTitle
         title="PAN Details"
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={this.handleClick}
         goBack={this.goBack}
       >

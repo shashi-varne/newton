@@ -230,7 +230,7 @@ export async function kyc_submit(params) {
             title1: title1,
           });
           this.setErrorData("submit");
-          throw error;
+          throw result.error;
       }
     }
   } catch (err) {
@@ -240,7 +240,7 @@ export async function kyc_submit(params) {
   }
 
   if (error) {
-    this.handleError(error, errorType);
+    this.handleError(error, errorType, false);
   }
 }
 
