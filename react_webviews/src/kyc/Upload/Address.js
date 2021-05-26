@@ -237,21 +237,20 @@ const AddressUpload = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address">
-          {!isMyAccountFlow && (
-            <div className="sub-title">
-              {getFullAddress()}
-              {getFullAddress() && (
-                <div className="edit" onClick={editAddress}>
-                  EDIT
-                </div>
-              )}
-            </div>
-          )}
-          <Alert
+          <div className="sub-title">
+            <span><b>{addressProof}</b></span>
+            {addressProof && (
+              <div className="edit" onClick={editAddress}>
+                EDIT
+              </div>
+            )}
+          </div>
+          <div className="address-detail">{getFullAddress()}</div>
+          {/* <Alert
             variant="attention"
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
-          /> 
+          />  */}
           <KycUploadContainer.TitleText alignLeft>
             <span><b>Front side</b></span> of your {addressProof}
           </KycUploadContainer.TitleText>

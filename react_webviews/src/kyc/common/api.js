@@ -268,3 +268,23 @@ export const getMerge = async (pan_number) => {
   const res = await Api.post(`${apiConstants.getMerge}${pan_number}`)
   return handleApi(res);
 }
+
+export const sendOtp = async (body) => {
+  const res = await Api.post(apiConstants.sendOtp, body)
+  return handleApi(res);
+}
+
+export const resendOtp = async (otpId) => {
+  const res = await Api.post(`${apiConstants.resendOtp}/${otpId}`)
+  return handleApi(res);
+}
+
+export const verifyOtp = async (body) => {
+  const res = await Api.post(`${apiConstants.verifyOtp}/${body.otpId}?otp=${body.otp}`)
+  return handleApi(res);
+}
+
+export const socialAuth = async (body) => {
+  const res = await Api.post(`${apiConstants.socialAuth}/${body.provider}?redirect_url=${body.redirectUrl}`)
+  return handleApi(res);
+}

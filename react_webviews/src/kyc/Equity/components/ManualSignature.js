@@ -104,7 +104,7 @@ const ManualSignature = (props) => {
           {stepsToRender?.length && stepsToRender.map((step, index) => (
             <WVSteps
               stepNum={step.id}
-              title={step.title}
+              title={<b>{step.title}</b>}
               classes={{ stepContent: 'step' }}
               key={step.id}
             >

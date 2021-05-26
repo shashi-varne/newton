@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
@@ -40,12 +40,17 @@ const AccountInfo = (props) => {
     }
   };
 
+  const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
+  const handleCheckBox = () => {
+    setCheckTermsAndConditions(!checkTermsAndConditions);
+  };
   return (
     <Container
       events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       title={"Trading & demat account"}
       hidePageTitle
+      disable={!checkTermsAndConditions}
     >
       <div className="kyc-account-info">
         <header className="kyc-account-info-header">
@@ -95,7 +100,10 @@ const AccountInfo = (props) => {
             </div>
           </div>
           <div className="kaim-terms">
-            <Checkbox checked={true} />
+            <Checkbox
+              checked={checkTermsAndConditions}
+              handleChange={handleCheckBox}
+            />
             <div>
               I agree to have read and understood the{" "}
               <span>{"Terms & conditions"}</span> and{" "}

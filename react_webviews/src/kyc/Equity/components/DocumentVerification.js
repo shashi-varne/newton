@@ -48,7 +48,7 @@ const DocumentVerification = (props) => {
           <div className="kdvm-subtitle">Bank statement</div>
           <WVJourneyShortening
             title="Next step"
-            stepName="Complete esign"
+            stepName={<b>Complete esign</b>}
             stepActionText="Pending"
             stepActionType="pending"
         />
