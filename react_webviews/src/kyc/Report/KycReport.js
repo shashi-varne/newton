@@ -14,6 +14,7 @@ import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Report = (props) => {
+  const flowType = props?.type || ""
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -48,7 +49,7 @@ const Report = (props) => {
   }, [kyc, user]);
 
   const initialize = () => {
-    let is_compliant = kyc.kyc_status === "compliant" ? true : false;
+    let is_compliant = kyc.kyc_status === "compliant" ? true : true;
     setIsCompliant(is_compliant);
     if (
       is_compliant &&
@@ -91,13 +92,6 @@ const Report = (props) => {
       } else {
         reportCards.splice(3, 1);
       }
-    }
-    if (
-      is_compliant &&
-      user.active_investment &&
-      user.kyc_registration_v2 !== "submitted"
-    ) {
-      setTopTitle("Investment status");
     }
     setCardDetails(reportCards);
   };
@@ -329,6 +323,7 @@ const Report = (props) => {
       title={topTitle}
       headerData={{ goBack }}
       skelton={isLoading}
+      noFooter={flowType === "compliant"}
     >
       <div className="kyc-report">
         {cardDetails &&

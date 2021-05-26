@@ -201,7 +201,7 @@ const Kyc = (props) => {
         <Route
           exact
           path={`${url}/compliant-report-details`}
-          component={CompliantReport}
+          render={(props) => <Report {...props} type="compliant" />}
         />
         <Route
           exact
