@@ -250,7 +250,7 @@ class NpsIdentity extends Component {
   bannerText = () => {
     return (
       <span>
-        Please <span className="bold">confirm</span> your personal details.
+        Please <b>confirm</b> your personal details.
       </span>
     );
   }
