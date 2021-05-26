@@ -160,8 +160,7 @@ export const upload = async (file, type, data = {}) => {
         formData.append('kyc_flow', data.kyc_flow)
         break
       case 'income':
-        // doc_type = data?.doc_type;
-        formData.append('income_doc_type', data.doc_type); //TODO: remove this
+        doc_type = data?.doc_type;
         formData.append('doc_password', data.doc_password);
         break;
       case 'identification':
