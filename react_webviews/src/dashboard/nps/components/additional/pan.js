@@ -322,7 +322,7 @@ class PanDetails extends Component {
                   icon={card}
                   width="30"
                   id="pran"
-                  label="Pran number"
+                  label="PRAN number"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   name="pran"
@@ -341,7 +341,7 @@ class PanDetails extends Component {
                 width="30"
                 id="dob"
                 name="dob"
-                label="your date of birth"
+                label="Your date of birth"
                 error={!!form_data.dob_error}
                 helperText={form_data.dob_error}
                 value={form_data.dob || ""}
