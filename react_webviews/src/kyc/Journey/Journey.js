@@ -398,6 +398,10 @@ const Journey = (props) => {
         },
       ]
 
+      if(!isCompliant && !dlCondition && kyc?.address?.meta_data?.is_nri) {
+        journeyData[3].inputsForStatus.push('nri_address')
+      }
+
       if (
         isCompliant &&
         kyc?.identification?.meta_data?.marital_status &&

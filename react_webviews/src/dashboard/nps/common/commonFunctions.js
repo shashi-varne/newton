@@ -231,6 +231,8 @@ export async function kyc_submit(params) {
       show_loader: false,
     });
     if (status === 200) {
+      storageService().setObject("kyc", result.kyc);
+      storageService().setObject("user", result.user);
       this.navigate("amount/one-time");
     } else {
       switch (status) {
