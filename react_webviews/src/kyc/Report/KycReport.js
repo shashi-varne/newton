@@ -13,13 +13,14 @@ import { storageService, isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
+const config = getConfig();
 const Report = (props) => {
-  const flowType = props?.type || ""
+  const flowType = props?.type || "";
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
   const [isCompliant, setIsCompliant] = useState(false);
-  const [is_nri, setIsNri] = useState(false);
+  const [isNri, setIsNri] = useState(false);
   const [topTitle, setTopTitle] = useState("KYC details");
   const [addressProof, setAddressProof] = useState({});
   const [buttonTitle, setButtonTitle] = useState("OK");
@@ -49,10 +50,10 @@ const Report = (props) => {
   }, [kyc, user]);
 
   const initialize = () => {
-    let is_compliant = kyc.kyc_status === "compliant" ? true : true;
-    setIsCompliant(is_compliant);
+    let compliant = kyc.kyc_status === "compliant" ? true : true;
+    setIsCompliant(compliant);
     if (
-      is_compliant &&
+      compliant &&
       user.active_investment &&
       user.kyc_registration_v2 !== "submitted"
     ) {
@@ -61,8 +62,8 @@ const Report = (props) => {
 
     let address_proof = "";
     let address_proof_nri = "";
-    const isNri = kyc.address.meta_data.is_nri;
-    if (isNri) {
+    const nri = kyc.address.meta_data.is_nri;
+    if (nri) {
       address_proof = "Passport";
       address_proof_nri = kycDocNameMapper[kyc.address_doc_type];
     } else {
@@ -74,20 +75,20 @@ const Report = (props) => {
       address_proof_nri,
     });
 
-    if (is_compliant) {
+    if (compliant) {
       setButtonTitle("INVEST NOW");
     }
 
     let reportCards = [...reportCardDetails];
-    setIsNri(isNri);
-    if (is_compliant) {
+    setIsNri(nri);
+    if (compliant) {
       reportCards.splice(5, 1); //remove docs
-      if (!isNri) {
+      if (!nri) {
         reportCards.splice(2, 1); //remove address
       }
     }
     if (kyc.nomination.nominee_optional) {
-      if (is_compliant && !isNri) {
+      if (compliant && !nri) {
         reportCards.splice(2, 1);
       } else {
         reportCards.splice(3, 1);
@@ -105,7 +106,7 @@ const Report = (props) => {
   };
 
   const proceed = () => {
-    if (getConfig().Web) {
+    if (config.Web) {
       navigate(getPathname.invest);
     } else {
       if (storageService().get(storageConstants.NATIVE)) {
@@ -118,11 +119,11 @@ const Report = (props) => {
 
   const checkNPSAndProceed = () => {
     if (user.nps_investment) {
-      if (!getConfig().isIframe) {
+      if (!config.isIframe) {
         navigate(getPathname.reports);
       }
     } else {
-      if (getConfig().Web) {
+      if (config.Web) {
         navigate(getPathname.invest);
       } else {
         if (storageService().get(storageConstants.NATIVE)) {
@@ -195,7 +196,7 @@ const Report = (props) => {
           <>
             <div className="unzipped-box">
               <div className="title">
-                {is_nri && <span>Indian </span>} Address as per{" "}
+                {isNri && <span>Indian </span>} Address as per{" "}
                 {addressProof.address_proof}
               </div>
               <div className="subtitle">
@@ -204,7 +205,7 @@ const Report = (props) => {
                 {kyc.address.meta_data.pincode}
               </div>
             </div>
-            {is_nri && (
+            {isNri && (
               <div className="unzipped-box">
                 <div className="title">
                   Foreign Address as per {addressProof.address_proof_nri}
