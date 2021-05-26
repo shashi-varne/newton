@@ -69,13 +69,14 @@ const LayoutButton = ({
   type, // "primary", "secondary", "text" button types
   ...props // MUI Button props
 }) => {
-  let modifiedClasses = {
+  const { root: rootClass, ...otherClasses } = classes;
+  const modifiedClasses = {
     root: `
       wv-layout-button
       wv-layout-button-${type}
-      ${classes.root || ''}
+      ${rootClass || ''}
     `,
-    ...classes
+    ...otherClasses
   };
 
   return (
@@ -99,7 +100,7 @@ LayoutButton.propTypes = {
 };
 
 LayoutButton.defaultProps = {
-  classes:{}
+  classes: {}
 };
 
 WVButtonLayout.Button = LayoutButton;
