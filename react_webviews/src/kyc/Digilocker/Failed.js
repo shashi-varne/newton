@@ -1,14 +1,12 @@
+import "./Digilocker.scss";
 import React, { useState } from "react";
 import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import { navigate as navigateFunc } from "../common/functions";
-import Button from "@material-ui/core/Button";
 import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
-import DotDotLoaderNew from '../../common/ui/DotDotLoaderNew';
-import "./Digilocker.scss";
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
@@ -47,14 +45,12 @@ const Failed = (props) => {
         order: "1",
         title: "RETRY",
         onClick: retry,
-        classes: { root: 'digilocker-failed-button'}
       }}
       button2Props={{
         type: 'secondary',
         order: "2",
         title: "UPLOAD DOCUMENTS MANUALLY",
         onClick: manual,
-        classes: { root: 'digilocker-failed-button'},
         showLoader: isApiRunning
       }}
       skelton={isLoading}

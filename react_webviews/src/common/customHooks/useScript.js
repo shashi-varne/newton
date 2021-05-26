@@ -10,10 +10,12 @@ const useScript = (scriptSrc) => {
 
     script.src = scriptSrc;
     script.async = true;
-
+    script.onload = () => {
+      setScriptLoaded(true);
+    }
+    
     document.body.appendChild(script);
-
-    setScriptLoaded(true);
+    
 
     return () => {
       document.body.removeChild(script);
