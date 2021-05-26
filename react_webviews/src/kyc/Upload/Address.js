@@ -11,6 +11,7 @@ import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
+const isWeb = getConfig().Web
 const getTitleList = ({ kyc, myAccountFlow }) => {
   let titleList = [
     'Photo of address card should have your signature',
@@ -92,7 +93,7 @@ const AddressUpload = (props) => {
             doc_side: doc_side,
             show_loader: true,
           })
-          if (doc_side === 'back') {
+          if (doc_side === 'front') {
             setFrontDoc(file)
           } else {
             setBackDoc(file)
@@ -174,7 +175,7 @@ const AddressUpload = (props) => {
   }
 
   const handleUpload = (method_name, type) => () => {
-    if(getConfig().html_camera){
+    if(isWeb){
       if (type === 'front') {
         frontDocRef.current.click()
       } else {
@@ -287,17 +288,17 @@ const AddressUpload = (props) => {
     });
   };
   
-  const isWeb = getConfig().Web
   const title =
     isMyAccountFlow && kyc?.address?.meta_data?.is_nri
       ? "Upload Indian Address Proof"
       : "Upload address proof";
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title={title}
     >
