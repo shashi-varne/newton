@@ -130,7 +130,6 @@ const Home = (props) => {
           kyc: {
             pan_number: pan.toUpperCase(),
           },
-          set_kyc_product_type: "equity" // later add a check only if its equity flow (for b2c this is hardcoded)
         },
         accountMerge
       );
@@ -246,6 +245,7 @@ const Home = (props) => {
           pan: newObject,
           address: kyc.address.meta_data,
         },
+        set_kyc_product_type: "equity" // later add a check only if its equity flow (for b2c this is hardcoded)
       };
       let result = await kycSubmit(body);
       if (!result) return;
