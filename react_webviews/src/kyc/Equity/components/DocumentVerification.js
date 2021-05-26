@@ -6,7 +6,6 @@ import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneySho
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty } from "../../../utils/validators";
 import { getPendingDocuments } from "../../services";
-import { nativeCallback } from '../../../utils/native_callback';
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;

@@ -55,6 +55,7 @@ import Native from "./Native/Native";
 import LocationPermission from "./Upload/LocationPermission";
 import SelfieSteps from "./Upload/SelfieSteps";
 import FnOIncomeProof from "./Upload/F&OIncomeProof";
+import FAndOSampleDocument from "./Upload/F&OSampleDocuments";
 
 // Equity Components
 import AllowLocation from  "./Equity/components/AllowLocation";
@@ -67,7 +68,6 @@ import AccountInfo from "./Equity/components/AccountInfo";
 import UploadInstructions from "./Equity/components/UploadInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
-import FAndOSampleDocument from "./Equity/components/F&OSampleDocuments";
 import CommunicationDetails from "./Equity/components/CommunicationDetails";
 import CommunicationCallback from "./Equity/components/CommunicationCallback";
 import FnOSampleDocuments from "./Upload/F&OSampleDocuments";
