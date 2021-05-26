@@ -183,17 +183,22 @@ export const relationshipOptions = [
 export const reportCardDetails = [
   {
     key: "personal",
-    title: "Personal",
+    title: "Personal details",
+    click_image: "plus_icon.svg",
+  },
+  {
+    key: "professional",
+    title: "Professional details",
     click_image: "plus_icon.svg",
   },
   {
     key: "address",
-    title: "Address",
+    title: "Address details",
     click_image: "plus_icon.svg",
   },
   {
     key: "nominee",
-    title: "Nominee",
+    title: "Nominee details",
     click_image: "plus_icon.svg",
   },
   {

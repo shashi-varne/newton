@@ -34,8 +34,11 @@ const instructionsMapper = {
 const UploadInstructions = (props) => {
   const state = props.location.state || {};
   const data = instructionsMapper[state.document] || instructionsMapper["pan"];
+  const goBack = () => {
+    props.history.goBack();
+  };
   return (
-    <Container buttonTitle="OKAY" title={data.title}>
+    <Container buttonTitle="OKAY" title={data.title} handleClick={goBack}>
       {data.instructions.map((data, index) => {
         return (
           <div key={index} className="stocks-pan-instructions">
