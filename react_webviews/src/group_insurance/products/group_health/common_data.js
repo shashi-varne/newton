@@ -326,8 +326,15 @@ export async function getApplicationDetails(application_id, providerConfig) {
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
             var lead = resultData.quotation_details;
-            
             var member_base = ghGetMember(lead, providerConfig);
+
+            var groupHealthPlanData = this.state.groupHealthPlanData;
+            groupHealthPlanData.application_form_data = resultData;
+            var application_data = !isEmpty(groupHealthPlanData.application_data) ? groupHealthPlanData.application_data  : {} ;
+            application_data['personal_details_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.personal_details_screen) ? groupHealthPlanData.application_data.personal_details_screen : {}
+            application_data['select_ped_screen'] = groupHealthPlanData.application_data && !isEmpty(groupHealthPlanData.application_data.select_ped_screen) ? groupHealthPlanData.application_data.select_ped_screen : {}
+            groupHealthPlanData.application_data = application_data;
+            this.setLocalProviderData(groupHealthPlanData);
                            
             this.setState({
                 lead: resultData || {},
