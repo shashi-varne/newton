@@ -339,6 +339,15 @@ export async function updateMeta(params, next_state) {
       } else {
         this.navigate(next_state);
       }
+    } else if (status === 400) {
+      const errors = result?.errors;
+      const errorsObj = { ...this.state.form_data };
+      if (errors.length > 0) {
+        errors.forEach(err => {
+          errorsObj['nominee_' + err.field_name + '_error'] = err.error_description
+        });
+        this.setState({ form_data: { ...this.state.form_data, ...errorsObj }});
+      }
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
