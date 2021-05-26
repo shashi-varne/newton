@@ -58,7 +58,7 @@ const DocumentVerification = (props) => {
           ))}
           <WVJourneyShortening
             title="Next step"
-            stepName="Complete esign"
+            stepName={<b>Complete esign</b>}
             stepActionText="Pending"
             stepActionType="pending"
         />
