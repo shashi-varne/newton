@@ -9,10 +9,7 @@ export const apiConstants = {
   getBankStatus: '/api/account/penny-verification-status-check',
   getCVL: '/api/kyc/updatecvl/mine',
   getMerge: '/api/user/account/merge?pan_number=',
-  sendOtp: '/api/communication/send/otp',
-  resendOtp: '/api/communication/resend/otp',
-  verifyOtp: '/api/communication/verify/otp',
-  socialAuth: '/api/communication'
+  getKRAForm: '/api/kyc/formfiller2/kraformfiller/get_kraform'
 }
 
 export const getPathname = {
@@ -325,3 +322,34 @@ export const companyDetails = {
 }
 
 export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
+
+export const eqkycDocsGroupMapper = {
+  equity_pan: {
+    title: "PAN details",
+    doc: "PAN card"
+  },
+  sign: {
+    title: "Signature",
+    doc: "Signature"
+  },
+  equity_identification: {
+    title: "Personal details",
+    doc: "Selfie"
+  },
+  address: {
+    title: "Address details",
+    doc: ""
+  },
+  ipvvideo: {
+    title: "IPV video",
+    doc: "IPV video"
+  },
+  bank: {
+    title: "Bank account",
+    doc: ""
+  },
+  nri_address: {
+    title: "NRI Address Details",
+    doc: ""
+  }
+};

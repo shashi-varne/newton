@@ -1,12 +1,17 @@
-import React from "react";
+import React, {useEffect, useState, Fragment} from "react";
 import { getConfig } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
 import Container from "../../common/Container";
-import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening"
+import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening";
+import useUserKycHook from "../../common/hooks/userKycHook";
+import { isEmpty } from "../../../utils/validators";
+import { getPendingDocuments } from "../../services";
+import { nativeCallback } from '../../../utils/native_callback';
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;
 const DocumentVerification = (props) => {
+  
   const sendEvents = (userAction) => {
     // TODO sendEvents('next)
     let eventObj = {
@@ -22,14 +27,33 @@ const DocumentVerification = (props) => {
       nativeCallback({ events: eventObj });
     }
   };
+  const {kyc, isLoading} = useUserKycHook();
+  const [docs, setDocs] = useState([]);
+
+  useEffect(() => {
+    const init = async () => {
+      if (!isEmpty(kyc)) {
+        let pendingDocs = await getPendingDocuments(kyc);
+        setDocs([...docs, ...pendingDocs]);
+      }
+    }
+
+    init();
+  }, [kyc]);
+
+  const handleCTAClick = () => {
+    nativeCallback({ action: "exit" })
+  }
 
   return (
     <Container
       events={sendEvents("just_set_events")}
       buttonTitle="HOME"
+      handleClick={handleCTAClick}
       title="Document verification is under process"
       hidePageTitle
       type="outlined"
+      skelton={isLoading}
     >
       <div className="kyc-document-verification">
         <header className="kyc-document-verification-header">
@@ -44,8 +68,12 @@ const DocumentVerification = (props) => {
             Once the below documents are verified by us, you can complete eSign
             to start investing
           </div>
-          <div className="kdvm-title">Bank account</div>
-          <div className="kdvm-subtitle">Bank statement</div>
+          {docs.length && docs.map((docObj) => (
+            <Fragment key={docObj.title}>
+              <div className="kdvm-title">{docObj.title}</div>
+              <div className="kdvm-subtitle">{docObj.doc}</div>
+            </Fragment>
+          ))}
           <WVJourneyShortening
             title="Next step"
             stepName={<b>Complete esign</b>}

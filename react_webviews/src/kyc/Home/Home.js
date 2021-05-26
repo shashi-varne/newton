@@ -116,14 +116,14 @@ const Home = (props) => {
         return;
       }
       setShowLoader("button");
-      await checkCompliant(true);
+      await checkPanValidity(true);
       // }
     } catch (err) {
       toast(err.message || genericErrorMessage);
     }
   };
 
-  const checkCompliant = async (showConfirmPan = false) => {
+  const checkPanValidity = async (showConfirmPan = false) => {
     // setOpenCheckCompliant(true);
     try {
       let result = await getPan(
@@ -131,17 +131,18 @@ const Home = (props) => {
           kyc: {
             pan_number: pan.toUpperCase(),
           },
+          set_kyc_product_type: "equity" // later add a check only if its equity flow (for b2c this is hardcoded)
         },
         accountMerge
       );
       if (isEmpty(result)) return;
       setUserName(result.kyc.name);
       setIsStartKyc(true);
-      if (result?.kyc?.status) {
-        setIsUserCompliant(true);
-      } else {
-        setIsUserCompliant(false);
-      }
+      // if (result?.kyc?.status) {
+      //   setIsUserCompliant(true);
+      // } else {
+      //   setIsUserCompliant(false);
+      // }
       if (showConfirmPan) setOpenConfirmPan(true);
     } catch (err) {
       console.log(err);
@@ -251,6 +252,11 @@ const Home = (props) => {
       };
       let result = await kycSubmit(body);
       if (!result) return;
+      if (result?.kyc?.kyc_status === "compliant") {
+        setIsUserCompliant(true);
+      } else {
+        setIsUserCompliant(false);
+      }
       handleNavigation(is_nri, result.kyc.kyc_status);
     } catch (err) {
       console.log(err);
@@ -318,7 +324,6 @@ const Home = (props) => {
       );
     } else {
       setOpenCheckCompliant(true);
-      await checkCompliant();
       await savePan(!residentialStatus);
     }
   };
