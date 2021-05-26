@@ -32,10 +32,12 @@ const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor
 const backButtonColor = !isWeb ? getConfig().styles?.backButtonColor : '';
 const notificationsColor = !isWeb ? getConfig()?.styles.notificationsColor : '';
 
-const Header = ({ classes, title, count, total, current, goBack, 
-  edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
-  className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
+const Header = ({
+  classes, title, count, total, current, goBack, edit, type, resetpage,
+  handleReset, smallTitle, disableBack, provider, inPageTitle, hideHamburger,
+  force_hide_inpage_title, topIcon, handleTopIcon, canSkip, onSkipClick,
+  className ,style, headerData={}, new_header, logo, notification, handleNotification
+}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
@@ -127,29 +129,32 @@ const Header = ({ classes, title, count, total, current, goBack,
             <div className='header-right-nav-components'>
               {resetpage &&
                 <SVG
-                style={{marginLeft: 'auto', width:20}}
-                onClick={handleReset}
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
-                src={restart}
-              />
+                  style={{marginLeft: 'auto', width:20}}
+                  onClick={handleReset}
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
+                  src={restart}
+                />
+              }
+              {canSkip &&
+                <span className="header-skip-text" onClick={onSkipClick}>SKIP</span>
               }
               {topIcon &&
                 <SVG
-                style={{marginLeft: '20px', width:25, cursor:'pointer'}}
-                onClick={handleTopIcon}
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
-                src={rightIcon}
-              />
+                  style={{marginLeft: '20px', width:25, cursor:'pointer'}}
+                  onClick={handleTopIcon}
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
+                  src={rightIcon}
+                />
               }
               {notification &&
                 <SVG
-                style={{marginLeft: '20px', width:25, cursor:'pointer'}}
-                onClick={handleNotification}
-                preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + notificationsColor)}
-                src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
-              />
+                  style={{marginLeft: '20px', width:25, cursor:'pointer'}}
+                  onClick={handleNotification}
+                  preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (getConfig()?.notificationColor || 'white') : 'white'))}
+                  src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
+                />
               }
-              {isMobileDevice && isWeb &&
+              {isMobileDevice && isWeb && !hideHamburger &&
                 <div className='mobile-navbar-menu'>
                   <IconButton onClick={handleMobileViewDrawer}>
                     <MenuIcon style={{ color: backgroundColor ? getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white' }} />
@@ -172,7 +177,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           isMobileDevice &&
           <ReferDialog isOpen={referDialog} close={handleReferModal} />
         }
-      </AppBar >
+      </AppBar>
     )
   };
 
