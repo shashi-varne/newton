@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { Imgc } from "common/ui/Imgc";
 import { getConfig } from "utils/functions";
 import {
   getPathname,
@@ -11,21 +10,18 @@ import {
 import ContactUs from "../../common/components/contact_us";
 import { navigate as navigateFunc } from "../common/functions";
 import { storageService, isEmpty } from "../../utils/validators";
-import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Report = (props) => {
-  const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
-  const [isCompliant, setIsCompliant] = useState();
-  const [is_nri, setIsNri] = useState();
-  const [topTitle, setTopTitle] = useState("KYC status");
+  const [isCompliant, setIsCompliant] = useState(false);
+  const [is_nri, setIsNri] = useState(false);
+  const [topTitle, setTopTitle] = useState("KYC details");
   const [addressProof, setAddressProof] = useState({});
   const [buttonTitle, setButtonTitle] = useState("OK");
-  const appText = "Your application is submitted.";
   const goBackPage = props.location.state?.goBack || "";
 
   const handleTiles = (index, key) => {
@@ -43,7 +39,7 @@ const Report = (props) => {
     else setOpenIndex(index);
   };
 
-  const {kyc, user} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -84,18 +80,16 @@ const Report = (props) => {
     let reportCards = [...reportCardDetails];
     setIsNri(isNri);
     if (is_compliant) {
-      if (isNri) {
-        reportCards.splice(4, 1); //remove docs
-      } else {
-        reportCards.splice(1, 1); //remove address
-        reportCards.splice(3, 1); //remove docs
+      reportCards.splice(5, 1); //remove docs
+      if (!isNri) {
+        reportCards.splice(2, 1); //remove address
       }
     }
     if (kyc.nomination.nominee_optional) {
       if (is_compliant && !isNri) {
-        reportCards.splice(1, 1);
-      } else {
         reportCards.splice(2, 1);
+      } else {
+        reportCards.splice(3, 1);
       }
     }
     if (
@@ -283,6 +277,25 @@ const Report = (props) => {
     );
   };
 
+  const professionalDetails = () => {
+    return (
+      <>
+        <div className="unzipped-box">
+          <div className="title">Occupation detail</div>
+          <div className="subtitle">
+            {kyc.identification.meta_data.occupation}
+          </div>
+        </div>
+        <div className="unzipped-box">
+          <div className="title">Income range</div>
+          <div className="subtitle">
+            {kyc.identification.meta_data.gross_annual_income}
+          </div>
+        </div>
+      </>
+    );
+  };
+
   const renderCards = (key) => {
     switch (key) {
       case "personal":
@@ -293,6 +306,8 @@ const Report = (props) => {
         return nomineeDetails();
       case "bank":
         return bankDetails();
+      case "professional":
+        return professionalDetails();
       default:
         return <></>;
     }
@@ -304,7 +319,7 @@ const Report = (props) => {
     } else {
       props.history.goBack();
     }
-  }
+  };
 
   return (
     <Container
@@ -312,58 +327,35 @@ const Report = (props) => {
       buttonTitle={buttonTitle}
       handleClick={handleClick}
       title={topTitle}
-      noFooter={isEmpty(cardDetails)}
-      headerData={{goBack}}
+      headerData={{ goBack }}
+      skelton={isLoading}
     >
       <div className="kyc-report">
-        <main>
-          <Imgc
-            src={require(`assets/${productName}/congratulations_illustration.svg`)}
-            alt="img"
-            className="img"
-          />
-          <div className="congrats">Congratulations!</div>
-          <div className="text">{appText}</div>
-          <div className="text message">
-            <img src={require(`assets/eta_icon.svg`)} alt="" />
-            Approves in one working day
-          </div>
-          <section>
-            {isEmpty(cardDetails) && (
-              <>
-                <SkeltonRect className="report-skelton" />
-                <SkeltonRect className="report-skelton" />
-                <SkeltonRect className="report-skelton" />
-                <SkeltonRect className="report-skelton" />
-              </>
-            )}
-            {cardDetails &&
-              cardDetails.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="tile-info"
-                    onClick={() => handleTiles(index, item.key)}
-                  >
-                    <div className="unzipped-title">
-                      <div>{item.title}</div>
-                      <img
-                        alt=""
-                        src={require(`assets/${
-                          openIndex === index && item.key !== "docs"
-                            ? "minus_icon.svg"
-                            : item.click_image
-                        }`)}
-                      />
-                    </div>
-                    {openIndex === index && (
-                      <div className="unzipped">{renderCards(item.key)}</div>
-                    )}
-                  </div>
-                );
-              })}
-          </section>
-        </main>
+        {cardDetails &&
+          cardDetails.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className="tile-info"
+                onClick={() => handleTiles(index, item.key)}
+              >
+                <div className="unzipped-title">
+                  <div>{item.title}</div>
+                  <img
+                    alt=""
+                    src={require(`assets/${
+                      openIndex === index && item.key !== "docs"
+                        ? "minus_icon.svg"
+                        : item.click_image
+                    }`)}
+                  />
+                </div>
+                {openIndex === index && (
+                  <div className="unzipped">{renderCards(item.key)}</div>
+                )}
+              </div>
+            );
+          })}
         <ContactUs />
       </div>
     </Container>
