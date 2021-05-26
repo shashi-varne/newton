@@ -109,7 +109,9 @@ const Sign = (props) => {
               onFileSelectComplete={onFileSelectComplete}
               onFileSelectError={onFileSelectError}
               supportedFormats={SUPPORTED_IMAGE_TYPES}
-            />
+            >
+              {!file ? "SIGN" : "SIGN AGAIN"}
+            </KycUploadContainer.Button>
           </KycUploadContainer>
         </section>
       )}
