@@ -47,6 +47,13 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       //   ]
       // },
       {
+        key: 'sign',
+        title: 'Signature',
+        status: 'pending',
+        isEditAllowed: true,
+        inputsForStatus: ['sign'],
+      },
+      {
         key: 'bank',
         title: 'Bank details',
         status: 'pending',
@@ -57,13 +64,6 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
             keys: ['account_number', 'account_type', 'ifsc_code'],
           },
         ],
-      },
-      {
-        key: 'sign',
-        title: 'Signature',
-        status: 'pending',
-        isEditAllowed: true,
-        inputsForStatus: ['sign'],
       },
     ]
 
@@ -77,7 +77,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       }
     ]
     if (!getConfig().isSdk) {
-      journeyData = journeyData.slice(0,3);
+      journeyData.splice(2, 1);
       journeyData = [...journeyData, ...tradingJourneyData];
     }
   } else if (!isCompliant && show_aadhaar) {
