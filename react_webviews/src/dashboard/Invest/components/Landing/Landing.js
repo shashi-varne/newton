@@ -153,6 +153,15 @@ class Landing extends Component {
               }}
             />
           }
+          {
+            <InvestCard
+              data={data}
+              key={1}
+              handleClick={() =>
+                this.clickCard(data.key, data.title)
+              }
+            />
+          }
           {investSections &&
             investSections.map((element, index) => {
               switch (element) {
@@ -411,3 +420,11 @@ class Landing extends Component {
 }
 
 export default Landing;
+
+const data = {
+  button_text: "EXPLORE",
+  icon: "ic_insta_fund_redemption.svg",
+  key: "passive_index_funds",
+  subtitle: "Earn 2% more than actively managed fund",
+  title: "Passive index funds",
+}

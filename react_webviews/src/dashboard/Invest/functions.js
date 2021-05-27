@@ -261,6 +261,8 @@ export function clickCard(state, title) {
     case "top_equity":
       this.navigate(`/diy/fundlist/Equity/Multi_Cap`);
       break;
+    case "passive_index_funds":
+    this.navigate(`/passive-index-funds/landing`);
     default:
       this.navigate(keyPathMapper[state] || state);
       break;
