@@ -68,7 +68,7 @@ class FinalOffer extends Component {
   handleClick = () => {
     let { employment_type } = this.state;
 
-    if (employment_type !== "salaried") {
+    if (employment_type === "salaried") {
       this.setState({
         openConfirmDialog: true,
       });
