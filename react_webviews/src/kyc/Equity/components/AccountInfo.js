@@ -22,15 +22,20 @@ const benefits = [
   },
 ];
 const AccountInfo = (props) => {
-  
+
+  const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
+  const handleCheckBox = () => {
+    setCheckTermsAndConditions(!checkTermsAndConditions);
+  };
+
   const sendEvents = (userAction) => {
-    // TODO sendEvents('next') and tnc_checked condition
+    // TODO sendEvents('next')
     let eventObj = {
       event_name: "trading",
       properties: {
         user_action: userAction || "",
         screen_name: "trading_and_demat_info",
-        tnc_checked: true ? "yes" : "no",
+        tnc_checked: checkTermsAndConditions ? "yes" : "no",
       },
     };
     if (userAction === "just_set_events") {
@@ -40,10 +45,6 @@ const AccountInfo = (props) => {
     }
   };
 
-  const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
-  const handleCheckBox = () => {
-    setCheckTermsAndConditions(!checkTermsAndConditions);
-  };
   return (
     <Container
       events={sendEvents("just_set_events")}

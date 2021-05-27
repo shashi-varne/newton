@@ -10,22 +10,7 @@ import "./commonStyles.scss";
 
 const productName = getConfig().productName;
 const DocumentVerification = (props) => {
-  
-  const sendEvents = (userAction) => {
-    // TODO sendEvents('next)
-    let eventObj = {
-      event_name: "trading_onboarding",
-      properties: {
-        user_action: userAction || "",
-        screen_name: "document_verification_under_process",
-      },
-    };
-    if (userAction === "just_set_events") {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  };
+
   const {kyc, isLoading} = useUserKycHook();
   const [docs, setDocs] = useState([]);
 
@@ -41,8 +26,24 @@ const DocumentVerification = (props) => {
   }, [kyc]);
 
   const handleCTAClick = () => {
+    sendEvents("next");
     nativeCallback({ action: "exit" })
   }
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "document_verification_under_process",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
 
   return (
     <Container
