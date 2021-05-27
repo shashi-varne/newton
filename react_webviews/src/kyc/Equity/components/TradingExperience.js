@@ -5,6 +5,7 @@ import useUserKycHook from "../../common/hooks/userKycHook";
 import { navigate as navigateFunc } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
+import { getPathname } from "../../constants";
 import "./commonStyles.scss";
 
 const tradingExperienceValues = [
@@ -25,6 +26,7 @@ const tradingExperienceValues = [
     value: "5+",
   },
 ];
+
 const TradingExperience = (props) => {
   const [experience, setExperience] = useState("");
   const [oldState, setOldState] = useState("");
@@ -70,7 +72,9 @@ const TradingExperience = (props) => {
   };
 
   const handleNavigation = () => {
-    // navigate("path"); Todo: Add path
+    if (kyc.kyc_status === "compliant") {
+      navigate(getPathname.uploadPan);
+    }
   }
 
   return (

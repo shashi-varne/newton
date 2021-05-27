@@ -50,7 +50,7 @@ const FnOIncomeProof = (props) => {
   const [filePassword, setFilePassword] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
-  // const { setKycToSession } = useUserKycHook();
+  // const { updateKyc } = useUserKycHook();
 
   useEffect(() => {
     setFilePassword('');
@@ -73,7 +73,7 @@ const FnOIncomeProof = (props) => {
       };
       setIsApiRunning("button")
       const result = await upload(selectedFile, 'income', data);
-      // setKycToSession(result.kyc);
+      // updateKyc(result.kyc);
       // TODO: Add next behaviour here
     } catch (err) {
       console.error(err);
