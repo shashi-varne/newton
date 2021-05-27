@@ -256,7 +256,7 @@ export async function kyc_submit(params) {
   }
 
   if (error) {
-    this.handleError(error, errorType);
+    this.handleError(error, errorType, false);
   }
 }
 
