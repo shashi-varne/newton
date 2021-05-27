@@ -27,6 +27,7 @@ class uploadAddressProof extends Component {
       isSelected: false,
       sides: 1,
       doc_side: '',
+      screen_name: "nps_upload"
     };
     this.initialize = initialize.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -38,7 +39,7 @@ class uploadAddressProof extends Component {
 
   onload = () => {
     let kyc_app = storageService().getObject(
-      "kyc_app"
+      "kyc"
     );
     let { address } = kyc_app;
 
