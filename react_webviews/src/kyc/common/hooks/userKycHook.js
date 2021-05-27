@@ -38,7 +38,7 @@ function useUserKycHook() {
         setUserKyc(kycData);
     };
 
-    return {kyc,user, isLoading, updateKyc};
+    return {kyc, user, isLoading, updateKyc};
 }
 
 export default useUserKycHook
