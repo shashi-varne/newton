@@ -198,11 +198,12 @@ const CommunicationDetails = (props) => {
     } else {
       if (communicationType === "email")
         eventObj.properties[`email_entered`] = formData.email ? "yes" : "no";
-      else
+      else {
         eventObj.properties[`mobile_entered`] = formData.mobile ? "yes" : "no";
-      eventObj.properties["whatsapp_agree"] = formData.whatsappConsent
-        ? "yes"
-        : "no";
+        eventObj.properties["whatsapp_agree"] = formData.whatsappConsent
+          ? "yes"
+          : "no";
+      }
     }
     if (userAction === "just_set_events") {
       return eventObj;
