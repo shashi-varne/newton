@@ -184,32 +184,25 @@ const CommunicationDetails = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      event_name:
-        communicationType === "email"
-          ? "kyc_registration"
-          : "trading_onboarding",
+      event_name: "kyc_registration",
       properties: {
         user_action: userAction || "",
-        screen_name:
-          communicationType === "email"
-            ? showOtpContainer
-              ? "communication_details_otp"
-              : "communication_details"
-            : showOtpContainer
-            ? "mobile_otp"
-            : "verify_mobile",
+        screen_name: showOtpContainer
+          ? "communication_details_otp"
+          : "communication_details",
       },
     };
     if (showOtpContainer) {
       eventObj.properties.otp_entered = state.otp ? "yes" : "no";
-      // eventObj.properties.mode_entry  TO BE CHECKED
+      eventObj.properties.mode_entry = "manual";
     } else {
       if (communicationType === "email")
         eventObj.properties[`email_entered`] = formData.email ? "yes" : "no";
       else
-        eventObj.properties["whatsapp_agree"] = formData.whatsappConsent
-          ? "yes"
-          : "no";
+        eventObj.properties[`mobile_entered`] = formData.mobile ? "yes" : "no";
+      eventObj.properties["whatsapp_agree"] = formData.whatsappConsent
+        ? "yes"
+        : "no";
     }
     if (userAction === "just_set_events") {
       return eventObj;
