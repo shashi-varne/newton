@@ -27,7 +27,7 @@ class NpsDelivery extends Component {
 
   onload = () => {
     let kyc_app = storageService().getObject(
-      "kyc_app"
+      "kyc"
     );
     let { address } = kyc_app;
 
