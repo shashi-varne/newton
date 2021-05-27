@@ -20,6 +20,7 @@ import {
   getTotalPagesInPersonalDetails,
   navigate as navigateFunc,
 } from "../../common/functions";
+import { isReadyToInvest } from "../../services";
 
 const config = getConfig();
 const googleButtonTitle = (
@@ -59,15 +60,12 @@ const CommunicationDetails = (props) => {
   const { user, kyc, isLoading, setKycToSession } = useUserKycHook();
   const isNri = kyc.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
-  useEffect(() => {
-    if (!isEmpty(user)) {
-      const type = user.mobile === null ? "mobile" : "email";
-      setCommunicationType(type);
-    }
-  }, [user]);
+  const [isReadyToInvestBase, setIsReadyToInvest] = useState();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
+      const type = user.mobile === null ? "mobile" : "email";
+      setCommunicationType(type);
       const data = { ...formData };
       data.email = kyc.identification.meta_data.email;
       let mobile_number = kyc.identification.meta_data.mobile_number || "";
@@ -76,8 +74,9 @@ const CommunicationDetails = (props) => {
       }
       data.mobile = mobile_number;
       setFormData({ ...data });
+      setIsReadyToInvest(isReadyToInvest());
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const handleChange = (name) => (event) => {
     if (showOtpContainer || showDotLoader) {
@@ -190,6 +189,10 @@ const CommunicationDetails = (props) => {
   };
 
   const handleNavigation = () => {
+    if (!isReadyToInvestBase) {
+      navigate("/kyc/trading-experience");
+      return;
+    }
     const data = {
       state: {
         isEdit,
@@ -216,7 +219,7 @@ const CommunicationDetails = (props) => {
     <Container
       buttonTitle={buttonTitle}
       title="Communication details"
-      count={pageNumber}
+      count={!isReadyToInvestBase && pageNumber}
       current={pageNumber}
       total={getTotalPagesInPersonalDetails(kyc, user)}
       handleClick={handleClick}
