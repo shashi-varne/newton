@@ -3,6 +3,7 @@ import Container from '../../common/Container';
 import qs from 'qs';
 import { insuranceStateMapper, getBhartiaxaStatusToState } from '../../constants';
 import { capitalizeFirstLetter } from '../../../utils/validators'
+import MenuListDropDown from '../../../common/ui/MenuListDropDown'
 
 import health_suraksha_fisdom from 'assets/health_suraksha_fisdom.svg';
 import health_suraksha_myway from 'assets/health_suraksha_myway.svg';
@@ -16,9 +17,15 @@ import ic_hospicash_finity from '../../../assets/ic_hospicash_myway.svg'
 import icn_diseases_insurance_fisdom from '../../../assets/fisdom/icn_diseases_insurance.svg'
 import icn_diseases_insurance_finity from '../../../assets/finity/icn_diseases_insurance.svg'
 
-import HealthInsuranceEntry from '../group_health/plans/entry'
-import DiseasesSpecificPlan from '../health_insurance/diseases_specific_plan'
+import icn_dengue_fisdom from '../../../assets/icn_dengue_fisdom.svg'
+import icn_dengue_finity from '../../../assets/icn_dengue_finity.svg'
 
+import icn_critical_illness_fisdom from '../../../assets/icn_critical_illness_fisdom.svg'
+import icn_critical_illness_finity from '../../../assets/icn_critical_illness_finity.svg'
+
+import hdfc_logo from '../../../../src/assets/ic_hdfc_logo.svg';
+import religare_logo from '../../../../src/assets/ic_care.svg';
+import star_logo from '../../../../src/assets/ic_star_health.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -44,10 +51,9 @@ class HealthInsuranceLanding extends Component {
       title:"Health insurance"
     }
 
-    this.renderPorducts = this.renderPorducts.bind(this);
     this.setTermInsData = setTermInsData.bind(this);
   }
-  
+
 
   componentWillMount() {
 
@@ -63,6 +69,8 @@ class HealthInsuranceLanding extends Component {
     let ic_hospicash = this.state.type !== 'fisdom' ? ic_hospicash_finity : ic_hospicash_fisdom;
     let icn_diseases = this.state.type !== 'fisdom' ? icn_diseases_insurance_finity : icn_diseases_insurance_fisdom
 
+    let icn_dengue = this.state.type !== 'fisdom' ? icn_dengue_finity : icn_dengue_fisdom;
+    let icn_critical_illness = this.state.type !== 'fisdom' ? icn_critical_illness_finity : icn_critical_illness_fisdom;
 
     let insuranceProducts = [
       {
@@ -71,7 +79,38 @@ class HealthInsuranceLanding extends Component {
         subtitle: 'Complete healthcare in one policy',
         icon: health_suraksha_icon,
         dropdown : back_nav_bar_icon,
-        uparrow : back_nav_bar_icon_up
+        uparrow : back_nav_bar_icon_up,
+        component: [{
+          key: 'GMC',
+          title: 'Care Health',
+          subtitle: 'fisdom HealthProtect',
+          Product_name: 'care_plus',
+          icon: religare_logo,
+          tag: 'Recommended'
+        },
+        {
+          key: 'HDFCERGO',
+          title: 'HDFC ERGO',
+          subtitle: 'my: health Suraksha',
+          Product_name: 'Health_Suraksha',
+          icon: hdfc_logo
+        },
+        {
+          key: 'RELIGARE',
+          title: 'Care Health',
+          subtitle: 'Care',
+          Product_name: 'Care',
+          icon: religare_logo
+        },
+        {
+          key: 'STAR',
+          title: 'Star',
+          subtitle: 'Family health optima',
+          Product_name: 'Star',
+          icon: star_logo
+        }],
+        type: 'drop-down',
+        formate: 'object'
       },
       {
         key: 'DISEASE_SPECIFIC_PLANS',
@@ -79,7 +118,26 @@ class HealthInsuranceLanding extends Component {
         subtitle: 'Tailor-made plans for specific needs',
         icon: icn_diseases,
         dropdown : back_nav_bar_icon,
-        uparrow : back_nav_bar_icon_up
+        uparrow : back_nav_bar_icon_up,
+        component: [
+          {
+            key: 'CRITICAL_HEALTH_INSURANCE',
+            title: 'Critical illness insurance',
+            subtitle: 'Cover against life threatening diseases',
+            icon: icn_critical_illness,
+            Product_name: 'Critical illness'
+          },
+          {
+            key: 'DENGUE',
+            title: 'Dengue insurance',
+            subtitle: 'Starts from ₹50/year',
+            icon: icn_dengue,
+            Product_name: 'dengue insurance',
+            resume_flag: this.state.resumeFlagAll ? this.state.resumeFlagAll['DENGUE'] : false,
+          },
+        ],
+        type: 'drop-down',
+        formate: 'object'
       },
       {
         key: 'HEALTH_SUPER_TOPUP',
@@ -96,10 +154,16 @@ class HealthInsuranceLanding extends Component {
     ];
 
 
-
+    if (this.state.partner_code === 'hbl') {
+      let index = insuranceProducts.findIndex(obj => obj.key === "CORONA");
+      insuranceProducts.splice(index, 1);
+    }
     let { params } = this.props.location || {};
-    let openModuleData =  params ? params.openModuleData : {}
-
+    let openModuleData = params ? params.openModuleData : {}
+    let redirect_url =  decodeURIComponent(getConfig().redirect_url);
+    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+      window.location.href = redirect_url;
+    }
 
     // if(openModuleData && openModuleData.sub_module) {
     //   let pathname = openModuleData.sub_module;
@@ -111,6 +175,7 @@ class HealthInsuranceLanding extends Component {
     //     skelton: false
     //   })
     // }
+
 
     this.setState({
       openModuleData: openModuleData || {},
@@ -134,9 +199,9 @@ class HealthInsuranceLanding extends Component {
     this.setState({
       showError: false
     });
-    if(type) {
+    if (type) {
       let mapper = {
-        'onload':  {
+        'onload': {
           handleClick1: this.onload,
           button_text1: 'Retry',
           title1: ''
@@ -152,7 +217,7 @@ class HealthInsuranceLanding extends Component {
           button_text2: "Dismiss",
         },
       };
-  
+
       this.setState({
         errorData: { ...mapper[type], setErrorData: this.setErrorData },
       });
@@ -161,6 +226,11 @@ class HealthInsuranceLanding extends Component {
   }
 
   handleClickEntry = async (data) => {
+  let specificPlans = [ 'CRITICAL_HEALTH_INSURANCE' , 'DENGUE' , 'CORONA'  ]
+   if(specificPlans.includes(data.key))  {
+     this.handleClick(data)
+     return;
+   }
     if (data) {
       this.setState({
         lastClickedItem: data
@@ -169,9 +239,9 @@ class HealthInsuranceLanding extends Component {
     else {
       data = this.state.lastClickedItem
     }
-      this.setState({
-        title:''
-      })
+    this.setState({
+      title: ''
+    })
     this.setErrorData("submit");
     this.setState({
       skelton: true
@@ -182,12 +252,12 @@ class HealthInsuranceLanding extends Component {
       const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
 
       let resultData = res.pfwresponse
-      if(res.pfwresponse.status_code === 200){
+      if (res.pfwresponse.status_code === 200) {
         data.insurance_type = 'Comprehensive health insurance'
         this.sendEvents('next', data.insurance_type, data.Product_name);
         let fullPath = data.key + '/landing';
-        this.navigate('/group-insurance/group-health/' + fullPath);  
-      }else {
+        this.navigate('/group-insurance/group-health/' + fullPath);
+      } else {
         error = resultData.error || resultData.message || true;
       }
     } catch (err) {
@@ -198,9 +268,8 @@ class HealthInsuranceLanding extends Component {
       error = true;
       errorType = "crash";
     }
-    
-    if(error)
-    {
+
+    if (error) {
       this.setState({
         errorData: {
           ...this.state.errorData,
@@ -213,12 +282,13 @@ class HealthInsuranceLanding extends Component {
 
   }
 
+
   onload = async () => {
     this.setErrorData('onload');
 
 
     this.setState({ skelton: true });
-    
+
     let error = '';
     let errorType = '';
     try {
@@ -260,9 +330,14 @@ class HealthInsuranceLanding extends Component {
         }
 
         let insuranceProducts = this.state.insuranceProducts;
-  
+
         for (const ele of insuranceProducts) {
           ele.resume_flag = resumeFlagAll[ele.key];
+          if (ele.component) {
+            for (const item of ele.component) {
+              item.resume_flag = resumeFlagAll[item.key];
+            }
+          };
         }
 
         this.setState({
@@ -290,29 +365,29 @@ class HealthInsuranceLanding extends Component {
 
       } else {
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || true;
+          || true;
       }
 
-      
+
 
     } catch (err) {
       console.log(err)
       this.setState({
         skelton: false,
       });
-      error= true;
-      errorType= "crash";
+      error = true;
+      errorType = "crash";
     }
 
     // set error data
-    if(error) {
+    if (error) {
       this.setState({
         errorData: {
           ...this.state.errorData,
           title2: error,
-          type:errorType
+          type: errorType
         },
-        showError:'page'
+        showError: 'page'
       })
     }
   }
@@ -334,13 +409,7 @@ class HealthInsuranceLanding extends Component {
     return id;
   }
 
-  handleClick2 = () => {
-    this.setState({
-      skelton:true
-    })
-  }
-
-  handleClick = (product_key, title) => {
+  handleClick = (data, index) => {
 
     let stateMapper = {
       'HEALTH_SUPER_TOPUP': 'super_topup',
@@ -353,121 +422,60 @@ class HealthInsuranceLanding extends Component {
     var lead_id = '';
     var path = '';
     var fullPath = '';
+    let type = data.type
+    let product_key = data.key ? data.key : data;
 
     fullPath = 'health/' + stateMapper[product_key] + '/plan';
 
-    if ( (product_key === 'HealthInsuranceEntry' || product_key === 'HEALTH_SURAKSHA')) {
-      this.HealthInsuranceEntry();
-      return;
-    }
-
-    if (product_key === 'DISEASE_SPECIFIC_PLANS' || product_key === 'disease-Specific-plan' ) {
-      this.DISEASE_SPECIFIC_PLANS();
-      return;
-    }
-    this.sendEvents('next', title ? title : '')
-
-    if (product_key === 'HEALTH_SUPER_TOPUP') {
-      this.navigate('/group-insurance/' + fullPath);
+    if (type === 'drop-down') {
+      this.setState({ value: this.state.value === index ? null : index }) 
       return
     }
 
-    if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
-      if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
-        this.state.BHARTIAXA_APPS[product_key].length > 0) {
-        let data = this.state.BHARTIAXA_APPS[product_key][0];
-        lead_id = data.lead_id;
-        path = getBhartiaxaStatusToState(data);
-        if (data.status === 'complete') {
-          lead_id = '';
-        }
-      } else {
-        path = 'plan';
-      }
-
-      fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } else {
-      // this.navigate(this.state.redirectTermPath);
-      this.navigate('/group-insurance/term/intro');
+    if ( (product_key === 'HealthInsuranceEntry' || product_key === 'HEALTH_SURAKSHA')) {
+      this.setState({ value: 0 })
       return;
     }
 
-    window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
-    this.navigate('/group-insurance/' + fullPath);
+    if (product_key === 'DISEASE_SPECIFIC_PLANS' || product_key === 'disease-Specific-plan') {
+      this.setState({ value: 1 })
+      return;
+    }
+
+  this.setState({
+    show_loader : true
+  })
+
+  this.sendEvents('next', data ? data.title : '')
+
+
+  if (product_key === 'CRITICAL_HEALTH_INSURANCE') {
+    fullPath = 'health/critical_illness/plan';
   }
 
-  HealthInsuranceEntry = () => {
-    this.setState({
-      Comprehensive : !this.state.Comprehensive,
-      DiseasesSpecificPlan : false
-    })
+  if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
+    if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
+      this.state.BHARTIAXA_APPS[product_key].length > 0) {
+      let data = this.state.BHARTIAXA_APPS[product_key][0];
+      lead_id = data.lead_id;
+
+      path = getBhartiaxaStatusToState(data);
+      if (data.status === 'complete') {
+        lead_id = '';
+      }
+    } else {
+      path = 'plan';
+    }
+    fullPath = insuranceStateMapper[product_key] + '/' + path;
   }
 
-  DISEASE_SPECIFIC_PLANS = () => {
-    this.setState({
-      DiseasesSpecificPlan : !this.state.DiseasesSpecificPlan,
-      Comprehensive : false
-    })
-  }
-
-  renderPorducts(props, index) {
-    return (
-      <div key={index}>    
-      <div onClick={() => this.handleClick(props.key, props.title)} style={{
-        display: 'flex', alignItems: 'center'}}>
-        <div style={{ display: 'flex' , width : '100%'}}>
-          <img src={props.icon} alt="" style={{ marginRight: '15px' ,paddingTop: '20px', paddingBottom: '22px' }} />
-          <div style={ (props.key === 'HealthInsuranceEntry') ? {width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index  && !this.state.Comprehensive ? 'solid' : '',   
-                paddingTop: '20px', paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'} : (props.key === 'DISEASE_SPECIFIC_PLANS') ? {width : '100%' ,borderBottomWidth: '1px', 
-                borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index  && !this.state.DiseasesSpecificPlan ? 'solid' : '', paddingTop: '20px', paddingBottom: '22px', 
-                justifyContent: 'space-between', cursor: 'pointer'}  : {width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   
-                paddingTop: '20px', paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'} }>
-            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 , flexGrow : 1}}>{props.title} {' '}
-               {props.resume_flag && <span style={{background: '#ff6868', letterSpacing: 0.1, fontSize : '8px', lineHeight : '10.06px', position : 'relative', top:'-3px',
-                 borderRadius: 7 , padding: '2px 4px', marginTop : '-30px' , color : 'white', fontWeight : '700' , width :'40px' , left:'6px', height:'14px', 
-             }}>Resume</span>}
-                 {props.key === 'HealthInsuranceEntry'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
-                  </span>}
-
-                  {props.key === 'HealthInsuranceEntry'  &&  this.state.Comprehensive &&<span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.uparrow} alt="" style={{ marginLeft : '15px' }} />  
-                  </span>}
-
-                   { props.key === 'DISEASE_SPECIFIC_PLANS' && !this.state.DiseasesSpecificPlan && <span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
-                  </span>}
-
-                  {props.key === 'DISEASE_SPECIFIC_PLANS' && this.state.DiseasesSpecificPlan &&<span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.uparrow} alt="" style={{ marginLeft: '15px' }} />
-                  </span>}
-
-            </div>
-            <div style={{ color: '#7e7e7e', fontSize: '13px', fontWeight: '400', lineHeight: '15.41px' }}>{props.subtitle}</div>
-          </div>
-        </div>
-      </div>
-
-     <div style={{display : 'flex' , width : '100%'}}>  
-    {props.key === 'HealthInsuranceEntry' && this.state.Comprehensive && 
-       <div onClick={() => this.handleClick(props.key, props.title)} style={{  width : '100%'
-      }}>
-     <div onClick={() => this.handleClick2()} style={{ display: 'flex' , width : '100%' }}>{props.key === 'HealthInsuranceEntry' && <HealthInsuranceEntry onSelectEvent={this.handleEvent} parent={this}/> } </div>
-
-      </div>}
-      { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
-       <div onClick={() => this.handleClick(props.key, props.title)} style={{  width : '100%'
-      }}>
-     <div onClick={() => this.handleClick2()} style={{ display: 'flex' , width : '100%' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  onSelectEvent={this.handleEvent} parent={this}/> } </div>
-      </div>}
-      </div>
-      </div>
-    )
-  }
+  window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
+  this.navigate('/group-insurance/' + fullPath);
+}
 
   handleEvent = (val) => {
-    val.subtitle = val.insurance_type === 'Comprehensive health insurance' ? val.subtitle :  val.Product_name
-    this.sendEvents('next',val.insurance_type,val.subtitle)
+    val.subtitle = val.insurance_type === 'Comprehensive health insurance' ? val.subtitle : val.Product_name
+    this.sendEvents('next', val.insurance_type, val.subtitle)
   }
 
   sendEvents(user_action, insurance_type, product_selected) {
@@ -481,11 +489,11 @@ class HealthInsuranceLanding extends Component {
       }
     };
 
-    if(insurance_type){
-      eventObj.properties['insurance_type'] =  capitalizeFirstLetter(insurance_type.toLowerCase())
+    if (insurance_type) {
+      eventObj.properties['insurance_type'] = capitalizeFirstLetter(insurance_type.toLowerCase())
     }
 
-    if(product_selected){
+    if (product_selected) {
       eventObj.properties['product_selected'] = product_selected.toLowerCase();
     }
 
@@ -508,17 +516,13 @@ class HealthInsuranceLanding extends Component {
         errorData={this.state.errorData}
         title={this.state.title}
         force_hide_inpage_title={true}
-        >
+      >
         <div>
-        <div>
-          <p style={{fontSize: '20px', marginBottom: '24px', fontWeight: '700'}}>Health Insurance</p>
-        </div>
-          <div className='products' style={{marginTop : '10px'}}>
-            <h1 style={{ fontWeight: '500', color: '#160d2e', fontSize: '17px', lineHeight : '20.15px', marginBottom : '15px'}}>Explore best plans for your health</h1>
-            <div  style={{height : '100vh'}}>
-              {this.state.insuranceProducts.map(this.renderPorducts)}
-            </div>
+          <div>
+            <p style={{ fontSize: '20px', marginBottom: '24px', fontWeight: '700' }}>Health Insurance</p>
           </div>
+          <MenuListDropDown menulistProducts={this.state.insuranceProducts} value={this.state.value} handleClick={this.handleClick}
+            handleClickEntry={this.handleClickEntry} parent={this} />
         </div>
       </Container>
     );

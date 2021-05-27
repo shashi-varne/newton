@@ -1,8 +1,10 @@
 import "../../common/theme/Style.scss";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import "../../common/theme/Style.scss";
+import "./style.scss";
 import NotFound from "../../common/components/NotFound";
-import Landing from "../Invest/components/BuildWealth/BuildWealth";
+import Landing from "./components/Landing"
 
 const PassiveIndexFunds = (props) => {
   const { url } = props.match;
