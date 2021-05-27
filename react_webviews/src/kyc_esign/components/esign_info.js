@@ -38,7 +38,7 @@ class ESignInfo extends Component {
         kyc.dl_docs_status !== "init" &&
         kyc.dl_docs_status !== null
       ) {
-        this.setState({ dl_flow: true });
+        this.setState({ dl_flow: true, kyc: kyc });
       }
     }
   };
