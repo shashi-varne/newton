@@ -37,7 +37,7 @@ function useUserKycHook() {
         storageService().setObject("kyc", kycData);
     };
 
-    return {kyc,user, isLoading, setKycToSession};
+    return { kyc, user, isLoading, setKycToSession};
 }
 
 export default useUserKycHook
