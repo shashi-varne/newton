@@ -1416,6 +1416,7 @@ export function setReportData(termData, group_insurance_policies, health_insuran
 
     var prevSelectedTab = storageService().getObject('reportSelectedTab');
     var tabIndex = 0;
+    var selectedTab = 'activeReports';
     if(prevSelectedTab){
         var tabMap = {
             'activeReports': 0,
@@ -1423,18 +1424,20 @@ export function setReportData(termData, group_insurance_policies, health_insuran
             'inactiveReports': 2
           }
           tabIndex = tabMap[prevSelectedTab];
+          selectedTab = prevSelectedTab;
+          console.log({prevSelectedTab, tabIndex, selectedTab})
         storageService().remove('reportSelectedTab');
     }
     
     this.setState({
       reportData,
-      selectedTab: 'activeReports',
+      selectedTab,
       reportCount: {
         active: filteredReportData.activeReports.length,
         pending: filteredReportData.pendingReports.length,
         inactive: filteredReportData.inactiveReports.length
       },
-      selectedReports : selectedReports,
+      selectedReports,
       filteredReportData,
       termRedirectionPath: fullPath,
       reportTopText,

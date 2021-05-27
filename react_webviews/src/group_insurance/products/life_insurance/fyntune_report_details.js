@@ -9,6 +9,7 @@ import {
 } from 'utils/validators';
 import Api from 'utils/api';
 import {fyntuneConstants} from './constants';
+import { storageService } from '../../../utils/validators';
 
 class FyntuneReportDetails extends Component {
 
@@ -75,6 +76,10 @@ class FyntuneReportDetails extends Component {
                 policy_data.dt_policy_start = policy_data.dt_policy_start &&  policy_data.dt_policy_start.substring(0,11);
                 
                 let final_status = fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status]
+
+                if(storageService().getObject('report_from_landing')){
+                    storageService().setObject('reportSelectedTab', fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status].reportTab)
+                }
                 policy_data.final_status = final_status; 
                 
                 let sanchay_subtitle = policy_data.product_subtitle ? policy_data.product_subtitle : '';

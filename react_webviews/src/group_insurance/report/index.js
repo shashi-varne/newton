@@ -96,6 +96,7 @@ class Report extends Component {
 
   }
   async componentDidMount() {
+    storageService().remove('report_from_landing');
     this.onload();
   }
 

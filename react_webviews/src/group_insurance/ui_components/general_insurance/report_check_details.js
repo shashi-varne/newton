@@ -9,7 +9,7 @@ import icn_call_myway from 'assets/icn_call_myway.svg';
 
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
-import { numDifferentiation, inrFormatDecimal, getUrlParams, capitalizeFirstLetter } from '../../../utils/validators';
+import { numDifferentiation, inrFormatDecimal, getUrlParams, capitalizeFirstLetter, storageService } from '../../../utils/validators';
 import { insuranceStateMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -117,6 +117,9 @@ class ReportDetails extends Component {
           noFooter = true;
         }
 
+        if(storageService().getObject('report_from_landing')){
+          storageService().setObject('reportSelectedTab', 'activeReports')
+        }
         let redirectPath = '/group-insurance';
 
         if (path) {
