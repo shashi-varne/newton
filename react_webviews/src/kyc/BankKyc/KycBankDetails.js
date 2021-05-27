@@ -23,9 +23,11 @@ import { getConfig } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
+const config = getConfig();
+
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
-  const code = getConfig().code;
+  const code = config.code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
   const params = props.match.params || {};
@@ -167,15 +169,25 @@ const KycBankDetails = (props) => {
     }
   };
 
-  const handleNavigation = () => {
+  const handleOtherPlatformNavigation = () => {
     if (userType === "compliant") {
       if (isEdit) navigate(getPathname.journey);
-      else
-        navigate(getPathname.uploadSign, {
-          state: {
-            backToJourney: true,
-          },
-        });
+      else navigate(getPathname.tradingExperience)
+    } else {
+      
+    }
+  };
+
+  const handleSdkNavigation = () => {
+    if (userType === "compliant") {
+      navigate(getPathname.journey);
+      // if (isEdit) navigate(getPathname.journey);
+      // else
+      //   navigate(getPathname.uploadSign, {
+      //     state: {
+      //       backToJourney: true,
+      //     },
+      //   });handleSdkNavigation
     } else {
       if (dl_flow) {
         if (
@@ -187,6 +199,14 @@ const KycBankDetails = (props) => {
           navigate(getPathname.uploadPan);
         else navigate(getPathname.kycEsign);
       } else navigate(getPathname.uploadProgress);
+    }
+  };
+
+  const handleNavigation = () => {
+    if (!config.isSdk) {
+      handleOtherPlatformNavigation();
+    } else {
+      handleSdkNavigation();
     }
   };
 

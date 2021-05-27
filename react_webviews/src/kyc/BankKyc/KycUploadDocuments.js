@@ -22,6 +22,7 @@ const KycUploadDocuments = (props) => {
   const {kyc, isLoading, setKycToSession} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
+  const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
     if (
@@ -92,32 +93,41 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleEdit = () => {
-    const navigate = navigateFunc.bind(props);
     navigate(`/kyc/${userType}/bank-details`);
   };
 
   const handleSampleDocument = () => {
-    const navigate = navigateFunc.bind(props);
     navigate("/kyc/sample-documents");
   };
 
-  const proceed = () => {
-    const navigate = navigateFunc.bind(props);
+  const handleOtherPlatformNavigation = () => {
+    if (additional) {
+      navigate("/kyc/add-bank");
+    } else if (userType === "compliant") {
+      if (isEdit) navigate("/kyc/journey");
+      else navigate(getPathname.tradingExperience)
+    } else {
+      
+    }
+  };
+
+  const handleSdkNavigation = () => {
     if (additional) {
       navigate("/kyc/add-bank");
     } else {
       if (userType === "compliant") {
-        if (isEdit) {
-          navigate("/kyc/journey");
-        } else {
-          if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
-            navigate(getPathname.uploadSign, {
-              state: {
-                backToJourney: true,
-              },
-            });
-          } else navigate("/kyc/journey");
-        }
+        navigate("/kyc/journey");
+        // if (isEdit) {
+        //   navigate("/kyc/journey");
+        // } else {
+        //   if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+        //     navigate(getPathname.uploadSign, {
+        //       state: {
+        //         backToJourney: true,
+        //       },
+        //     });
+        //   } else navigate("/kyc/journey");
+        // }
       } else {
         if (dlFlow) {
           if (
@@ -139,6 +149,14 @@ const KycUploadDocuments = (props) => {
         }
       }
     } 
+  };
+
+  const proceed = () => {
+    if (!getConfig().isSdk) {
+      handleOtherPlatformNavigation();
+    } else {
+      handleSdkNavigation();
+    }
   };
 
   const selectedDocValue =

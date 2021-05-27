@@ -44,10 +44,7 @@ const Sign = (props) => {
           result.kyc.dl_docs_status !== "" &&
           result.kyc.dl_docs_status !== "init" &&
           result.kyc.dl_docs_status !== null;
-        if (
-          props?.location?.state?.fromState === "kyc/dl/personal-details3" ||
-          dlFlow
-        ) {
+        if (kyc.kyc_type !== "manual") {
           const type =
             result?.kyc?.kyc_status === "compliant"
               ? "compliant"

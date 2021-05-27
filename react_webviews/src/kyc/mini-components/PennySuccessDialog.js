@@ -4,8 +4,9 @@ import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import "./mini-components.scss";
 
+const config = getConfig();
+const productName = config.productName;
 const PennySuccessDialog = ({ isOpen, redirect }) => {
-  const productName = getConfig().productName;
   return (
     <Dialog
       open={isOpen}
@@ -25,7 +26,11 @@ const PennySuccessDialog = ({ isOpen, redirect }) => {
           />
         </div>
         <div className="subtitle">
-          Now, tell us your trading experience in the next step
+          {!config.isSdk ?
+            "Hurrah! Your bank account is added. Invest securely and safely with us."
+            :
+            "Now, tell us your trading experience in the next step"
+          }
         </div>
         <Button className="button bg-full" onClick={() => redirect()}>
           CONTINUE
