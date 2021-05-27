@@ -1,8 +1,8 @@
 import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
@@ -27,8 +27,16 @@ const Selfie = (props) => {
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
   const [showLoader, setShowLoader] = useState(false);
-  const { kyc, isLoading } = useUserKycHook();
+  const { kyc, isLoading, updateKyc } = useUserKycHook();
   const navigate = navigateFunc.bind(props)
+
+  const handleNavigation = () => {
+    if (kyc.kyc_type !== "manual") {
+      navigate(getPathname.uploadFnOIncomeProof);
+    } else {
+      navigate(getPathname.uploadProgress);
+    }
+  }
 
   const handleSubmit = async () => {
     try {      
@@ -44,8 +52,8 @@ const Selfie = (props) => {
 
       setIsApiRunning("button");
       const result = await upload(file, 'identification', params);
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      updateKyc(result.kyc);
+      handleNavigation();
     } catch (err) {
       console.error(err)
     } finally {
