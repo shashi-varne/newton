@@ -18,7 +18,7 @@ import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
-import { getJourneyData } from './constant';
+import { getJourneyData } from './JourneyFunction';
 
 const headerDataMapper = {
   compliant: {
