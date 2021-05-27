@@ -218,6 +218,7 @@ export async function get_recommended_funds(params, pageError = false) {
 export async function kyc_submit(params) {
   let error = "";
   let errorType = "";
+  this.setErrorData("submit");
 
   try {
     this.setState({
@@ -245,7 +246,6 @@ export async function kyc_submit(params) {
           this.setState({
             title1: title1,
           });
-          this.setErrorData("submit");
           throw result.error;
       }
     }
