@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import InputWithIcon from "common/ui/InputWithIcon";
-import calendar from "assets/calendar2.png";
-import phone from "assets/phone_black.png";
-import card from "assets/card.png";
-import email from "assets/email2.svg";
+import Input from "common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
@@ -16,12 +12,11 @@ import {
   validateEmail,
   validatePan,
 } from "utils/validators";
-import Grid from "material-ui/Grid";
 import { storageService } from "utils/validators";
 import Dialog, { DialogContent } from "material-ui/Dialog";
-import { getConfig } from "../../../../utils/functions";
-import { nativeCallback } from "../../../../utils/native_callback";
-import { isEmpty } from "../../../../utils/validators";
+import { getConfig } from "utils/functions";
+import { nativeCallback } from "utils/native_callback";
+import { isEmpty } from "utils/validators";
 
 const yesOrNo_options = [
   {
@@ -280,8 +275,7 @@ class PanDetails extends Component {
         <div className="pan-details">
           <FormControl fullWidth>
             <div className="InputField">
-              <InputWithIcon
-                icon={card}
+              <Input
                 width="30"
                 id="pan"
                 label="PAN number"
@@ -296,30 +290,22 @@ class PanDetails extends Component {
             </div>
 
             <div className="InputField">
-              <Grid container spacing={16} className="marital_status">
-                <Grid item xs={2}>
-                  {""}
-                </Grid>
-                <Grid item xs={10}>
-                  <RadioWithoutIcon
-                    width="40"
-                    label="Have you ever contributed in NPS before?"
-                    options={yesOrNo_options}
-                    id="is_nps_contributed"
-                    name="is_nps_contributed"
-                    error={this.state.is_nps_contributed_error ? true : false}
-                    helperText={this.state.is_nps_contributed_error}
-                    value={this.state.is_nps_contributed}
-                    onChange={this.handleChangeRadio}
-                  />
-                </Grid>
-              </Grid>
+              <RadioWithoutIcon
+                width="40"
+                label="Have you ever contributed in NPS before?"
+                options={yesOrNo_options}
+                id="is_nps_contributed"
+                name="is_nps_contributed"
+                error={this.state.is_nps_contributed_error ? true : false}
+                helperText={this.state.is_nps_contributed_error}
+                value={this.state.is_nps_contributed}
+                onChange={this.handleChangeRadio}
+              />
             </div>
 
             {is_nps_contributed && (
               <div className="InputField">
-                <InputWithIcon
-                  icon={card}
+                <Input
                   width="30"
                   id="pran"
                   label="PRAN number"
@@ -336,8 +322,7 @@ class PanDetails extends Component {
             )}
 
             <div className="InputField">
-              <InputWithIcon
-                icon={calendar}
+              <Input
                 width="30"
                 id="dob"
                 name="dob"
@@ -353,8 +338,7 @@ class PanDetails extends Component {
 
             {currentUser.mobile === null && (
               <div className="InputField">
-                <InputWithIcon
-                  icon={phone}
+                <Input
                   width="30"
                   id="number"
                   name="mobile_number"
@@ -374,8 +358,7 @@ class PanDetails extends Component {
 
             {currentUser.email === null && (
               <div className="InputField">
-                <InputWithIcon
-                  icon={email}
+                <Input
                   width="30"
                   type="email"
                   id="email"

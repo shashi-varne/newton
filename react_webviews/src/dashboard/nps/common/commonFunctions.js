@@ -246,12 +246,12 @@ export async function kyc_submit(params) {
             title1: title1,
           });
           this.setErrorData("submit");
-          throw error;
+          throw result.error;
       }
     }
   } catch (err) {
     console.log(err);
-    error = true;
+    error = err || true;
     errorType = "form";
   }
 
