@@ -304,10 +304,6 @@ class Recommendations extends Component {
     }
   };
 
-  goBack = () => {
-    this.navigate("/nps/amount/one-time");
-  };
-
   handleReplace = () => {
     const { recommendations, pension_house } = this.state;
     const replaceObject = pension_house || recommendations?.pension_house;
@@ -335,9 +331,6 @@ class Recommendations extends Component {
         noFooter={display_summary_only}
         showLoader={show_loader}
         handleClick={this.handleClick}
-        headerData={{
-          goBack: this.goBack
-        }}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}

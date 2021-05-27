@@ -284,7 +284,7 @@ class uploadAddressProof extends Component {
   bannerText = () => {
     return (
       <span>
-        Please upload the <span className="bold">proof</span> for updated
+        Please upload the <b>proof</b> for updated
             address: <br />
             <span>
               <b>Address:</b> {this.state.address.addressline}

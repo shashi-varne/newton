@@ -49,6 +49,10 @@ const Progress = (props) => {
   };
 
   const goBack = () => {
+    if(disableNext) {
+      props.history.goBack();
+      return;
+    }
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
   }

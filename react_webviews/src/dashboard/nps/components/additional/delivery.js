@@ -118,7 +118,7 @@ class NpsDelivery extends Component {
   bannerText = () => {
     return (
       <span>
-        You will get the <span className="bold">PRAN</span> card delivered to this address
+        You will get the <b>PRAN</b> card delivered to this address
       </span>
     );
   }

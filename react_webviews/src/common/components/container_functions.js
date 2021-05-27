@@ -240,6 +240,9 @@ export function commonRender(props_base) {
                         project={this.props.project || this.state.project}
                         dualbuttonwithouticon={this.props.dualbuttonwithouticon}
                         twoButton={this.props.twoButton}
+                        twoButtonVertical={this.props.twoButtonVertical}
+                        button1Props={this.props.button1Props}
+                        button2Props={this.props.button2Props}
                         buttonOneTitle={this.props.buttonOneTitle}
                         buttonTwoTitle={this.props.buttonTwoTitle}
                         handleClickOne={this.props.handleClickOne}

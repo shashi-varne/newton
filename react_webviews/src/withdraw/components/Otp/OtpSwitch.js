@@ -92,7 +92,7 @@ const OtpSwitch = (props) => {
     <Container
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      hideInPageTitle
+      title="OTP"
       type="withProvider"
       noFooter
     >
