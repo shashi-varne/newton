@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { Imgc } from "common/ui/Imgc";
 import { getConfig } from "utils/functions";
 import {
   getPathname,
@@ -11,21 +10,20 @@ import {
 import ContactUs from "../../common/components/contact_us";
 import { navigate as navigateFunc } from "../common/functions";
 import { storageService, isEmpty } from "../../utils/validators";
-import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
+const config = getConfig();
 const Report = (props) => {
-  const productName = getConfig().productName;
+  const flowType = props?.type || "";
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
-  const [isCompliant, setIsCompliant] = useState();
-  const [is_nri, setIsNri] = useState();
-  const [topTitle, setTopTitle] = useState("KYC status");
+  const [isCompliant, setIsCompliant] = useState(false);
+  const [isNri, setIsNri] = useState(false);
+  const [topTitle, setTopTitle] = useState("KYC details");
   const [addressProof, setAddressProof] = useState({});
   const [buttonTitle, setButtonTitle] = useState("OK");
-  const appText = "Your application is submitted.";
   const goBackPage = props.location.state?.goBack || "";
 
   const handleTiles = (index, key) => {
@@ -43,7 +41,7 @@ const Report = (props) => {
     else setOpenIndex(index);
   };
 
-  const {kyc, user} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -52,10 +50,10 @@ const Report = (props) => {
   }, [kyc, user]);
 
   const initialize = () => {
-    let is_compliant = kyc.kyc_status === "compliant" ? true : false;
-    setIsCompliant(is_compliant);
+    let compliant = kyc.kyc_status === "compliant" ? true : true;
+    setIsCompliant(compliant);
     if (
-      is_compliant &&
+      compliant &&
       user.active_investment &&
       user.kyc_registration_v2 !== "submitted"
     ) {
@@ -64,8 +62,8 @@ const Report = (props) => {
 
     let address_proof = "";
     let address_proof_nri = "";
-    const isNri = kyc.address.meta_data.is_nri;
-    if (isNri) {
+    const nri = kyc.address.meta_data.is_nri;
+    if (nri) {
       address_proof = "Passport";
       address_proof_nri = kycDocNameMapper[kyc.address_doc_type];
     } else {
@@ -77,33 +75,24 @@ const Report = (props) => {
       address_proof_nri,
     });
 
-    if (is_compliant) {
+    if (compliant) {
       setButtonTitle("INVEST NOW");
     }
 
     let reportCards = [...reportCardDetails];
-    setIsNri(isNri);
-    if (is_compliant) {
-      if (isNri) {
-        reportCards.splice(4, 1); //remove docs
-      } else {
-        reportCards.splice(1, 1); //remove address
-        reportCards.splice(3, 1); //remove docs
+    setIsNri(nri);
+    if (compliant) {
+      reportCards.splice(5, 1); //remove docs
+      if (!nri) {
+        reportCards.splice(2, 1); //remove address
       }
     }
     if (kyc.nomination.nominee_optional) {
-      if (is_compliant && !isNri) {
-        reportCards.splice(1, 1);
-      } else {
+      if (compliant && !nri) {
         reportCards.splice(2, 1);
+      } else {
+        reportCards.splice(3, 1);
       }
-    }
-    if (
-      is_compliant &&
-      user.active_investment &&
-      user.kyc_registration_v2 !== "submitted"
-    ) {
-      setTopTitle("Investment status");
     }
     setCardDetails(reportCards);
   };
@@ -117,7 +106,7 @@ const Report = (props) => {
   };
 
   const proceed = () => {
-    if (getConfig().Web) {
+    if (config.Web) {
       navigate(getPathname.invest);
     } else {
       if (storageService().get(storageConstants.NATIVE)) {
@@ -130,11 +119,11 @@ const Report = (props) => {
 
   const checkNPSAndProceed = () => {
     if (user.nps_investment) {
-      if (!getConfig().isIframe) {
+      if (!config.isIframe) {
         navigate(getPathname.reports);
       }
     } else {
-      if (getConfig().Web) {
+      if (config.Web) {
         navigate(getPathname.invest);
       } else {
         if (storageService().get(storageConstants.NATIVE)) {
@@ -207,7 +196,7 @@ const Report = (props) => {
           <>
             <div className="unzipped-box">
               <div className="title">
-                {is_nri && <span>Indian </span>} Address as per{" "}
+                {isNri && <span>Indian </span>} Address as per{" "}
                 {addressProof.address_proof}
               </div>
               <div className="subtitle">
@@ -216,7 +205,7 @@ const Report = (props) => {
                 {kyc.address.meta_data.pincode}
               </div>
             </div>
-            {is_nri && (
+            {isNri && (
               <div className="unzipped-box">
                 <div className="title">
                   Foreign Address as per {addressProof.address_proof_nri}
@@ -283,6 +272,25 @@ const Report = (props) => {
     );
   };
 
+  const professionalDetails = () => {
+    return (
+      <>
+        <div className="unzipped-box">
+          <div className="title">Occupation detail</div>
+          <div className="subtitle">
+            {kyc.identification.meta_data.occupation}
+          </div>
+        </div>
+        <div className="unzipped-box">
+          <div className="title">Income range</div>
+          <div className="subtitle">
+            {kyc.identification.meta_data.gross_annual_income}
+          </div>
+        </div>
+      </>
+    );
+  };
+
   const renderCards = (key) => {
     switch (key) {
       case "personal":
@@ -293,6 +301,8 @@ const Report = (props) => {
         return nomineeDetails();
       case "bank":
         return bankDetails();
+      case "professional":
+        return professionalDetails();
       default:
         return <></>;
     }
@@ -304,7 +314,7 @@ const Report = (props) => {
     } else {
       props.history.goBack();
     }
-  }
+  };
 
   return (
     <Container
@@ -312,58 +322,36 @@ const Report = (props) => {
       buttonTitle={buttonTitle}
       handleClick={handleClick}
       title={topTitle}
-      noFooter={isEmpty(cardDetails)}
-      headerData={{goBack}}
+      headerData={{ goBack }}
+      skelton={isLoading}
+      noFooter={flowType === "compliant"}
     >
       <div className="kyc-report">
-        <main>
-          <Imgc
-            src={require(`assets/${productName}/congratulations_illustration.svg`)}
-            alt="img"
-            className="img"
-          />
-          <div className="congrats">Congratulations!</div>
-          <div className="text">{appText}</div>
-          <div className="text message">
-            <img src={require(`assets/eta_icon.svg`)} alt="" />
-            Approves in one working day
-          </div>
-          <section>
-            {isEmpty(cardDetails) && (
-              <>
-                <SkeltonRect className="report-skelton" />
-                <SkeltonRect className="report-skelton" />
-                <SkeltonRect className="report-skelton" />
-                <SkeltonRect className="report-skelton" />
-              </>
-            )}
-            {cardDetails &&
-              cardDetails.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="tile-info"
-                    onClick={() => handleTiles(index, item.key)}
-                  >
-                    <div className="unzipped-title">
-                      <div>{item.title}</div>
-                      <img
-                        alt=""
-                        src={require(`assets/${
-                          openIndex === index && item.key !== "docs"
-                            ? "minus_icon.svg"
-                            : item.click_image
-                        }`)}
-                      />
-                    </div>
-                    {openIndex === index && (
-                      <div className="unzipped">{renderCards(item.key)}</div>
-                    )}
-                  </div>
-                );
-              })}
-          </section>
-        </main>
+        {cardDetails &&
+          cardDetails.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className="tile-info"
+                onClick={() => handleTiles(index, item.key)}
+              >
+                <div className="unzipped-title">
+                  <div>{item.title}</div>
+                  <img
+                    alt=""
+                    src={require(`assets/${
+                      openIndex === index && item.key !== "docs"
+                        ? "minus_icon.svg"
+                        : item.click_image
+                    }`)}
+                  />
+                </div>
+                {openIndex === index && (
+                  <div className="unzipped">{renderCards(item.key)}</div>
+                )}
+              </div>
+            );
+          })}
         <ContactUs />
       </div>
     </Container>

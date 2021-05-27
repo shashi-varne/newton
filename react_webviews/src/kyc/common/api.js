@@ -277,3 +277,8 @@ export const getMerge = async (pan_number) => {
   const res = await Api.post(`${apiConstants.getMerge}${pan_number}`)
   return handleApi(res);
 }
+
+export const getKRAForm = async (params) => {
+  const res = await Api.get(`${apiConstants.getKRAForm}`, params)
+  return handleApi(res);
+}

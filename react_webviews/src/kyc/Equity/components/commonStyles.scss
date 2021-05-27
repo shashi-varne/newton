@@ -35,7 +35,6 @@ $generic-subtitle-margin-top: -10px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    column-gap: 20px;
 
     h3 {
       margin: 0;
@@ -43,6 +42,10 @@ $generic-subtitle-margin-top: -10px;
       font-size: 17px;
       line-height: 20px;
       padding-top: 3px;
+    }
+
+    img {
+      margin-left: 20px;
     }
   }
 
@@ -143,13 +146,13 @@ $generic-subtitle-margin-top: -10px;
       display: flex;
       width: 100%;
       overflow-x: auto;
-      column-gap: 20px;
 
       .kaim-benefits-info {
         padding: 20px 0 10px 0;
         font-size: 13px;
         line-height: 21px;
         color: #767e86;
+        margin-right: 20px;
 
         img {
           border-radius: 8px;
@@ -170,7 +173,6 @@ $generic-subtitle-margin-top: -10px;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      column-gap: 20px;
       padding: 10px 0;
 
       .kaim-fees-info-text {
@@ -205,14 +207,17 @@ $generic-subtitle-margin-top: -10px;
       padding: 20px 0 30px;
       display: flex;
       align-items: center;
-      column-gap: 10px;
       font-size: 13px;
       line-height: 21px;
       color: #767e86;
 
-      span {
-        color: var(--primary);
-        font-weight: 600;
+      .kaim-terms-info {
+        margin-left: 10px;
+
+        span {
+          color: var(--primary);
+          font-weight: 600;
+        }
       }
     }
   }
@@ -235,6 +240,8 @@ $generic-subtitle-margin-top: -10px;
 }
 
 .kyc-document-verification {
+  margin-bottom: 50px;
+  
   .kyc-document-verification-header {
     display: flex;
     align-items: flex-start;
@@ -260,40 +267,6 @@ $generic-subtitle-margin-top: -10px;
       line-height: 24px;
       color: #160d2e;
       font-weight: 600;
-    }
-
-    .kdvm-next-step {
-      background-color: var(--highlight);
-      border-radius: 10px;
-      padding: 16px 20px 16px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      column-gap: 20px;
-
-      .kdvm-next-step-text {
-        color: #161a2e;
-        font-weight: 600;
-        font-size: 13px;
-        line-height: 21px;
-
-        .kdvm-next-step-message {
-          font-weight: normal;
-          font-size: 10px;
-          line-height: 16px;
-          letter-spacing: 1px;
-          padding-bottom: 3px;
-        }
-      }
-
-      .kdvm-next-step-status {
-        font-weight: bold;
-        font-size: 12px;
-        line-height: 14px;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        color: #b39712;
-      }
     }
   }
 }
@@ -325,6 +298,7 @@ $generic-subtitle-margin-top: -10px;
             line-height: 14px;
             letter-spacing: 1px;
             text-transform: uppercase;
+            margin-right: 10px;
           }
         }
         
