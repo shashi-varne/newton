@@ -542,11 +542,7 @@ const Journey = (props) => {
       navigate('/invest')
     }
   }
-  const stepMapper = {
-    compliant: ['step1', 'step3', 'step4', 'step5'],
-    showAadhar: ['step1', 'step2', 'step3', 'step5'],
-    nonShowAadhar: ['step1', 'step3', 'step6', 'step7', 'step5']
-  }
+
   const sendEvents = (userAction, screen_name) => {
     let stageData = 0;
     // let stageDetailData='';
@@ -555,7 +551,7 @@ const Journey = (props) => {
         kycJourneyData[i].status === "init" ||
         kycJourneyData[i].status === "pending"
       ) {
-        stageData = i;
+        stageData = i+1;
         // stageDetailData = kycJourneyData[i].key
         break;
       }
@@ -576,14 +572,10 @@ const Journey = (props) => {
               screen_name: screen_name || "kyc_journey",
               premium_onboarding: kyc.kyc_status === "compliant" ? "yes" : "no",
               kyc_flow: getDLFlow(kyc) ? "digilocker" : "manual",
-              step: kyc?.kyc_status
-                ? stepMapper.compliant[stageData]
-                : show_aadhaar
-                ? stepMapper.showAadhar[stageData]
-                : stepMapper.nonShowAadhar[stageData],
+              step: `step${stageData}`,
+
               // resume_journey: To be checked
 
-              // step: `step${stageData}`,
               // "stage": stageData,
               // "details": stageDetailData,
               // "rti": "",
