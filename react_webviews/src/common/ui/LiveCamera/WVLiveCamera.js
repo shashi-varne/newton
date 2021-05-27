@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { isEmpty, isFunction } from 'lodash';
 import useScript from '../../customHooks/useScript';
 import Api from '../../../utils/api';
+import { storageService } from '../../../utils/validators';
 
 const SCRIPT_SRC = "https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@latest/src/sdk.min.js";
 
@@ -19,21 +20,25 @@ const WVLiveCamera = ({
 
   const initHVCamera = async () => {
     try {
-      const res = await Api.get('api/kyc/hyperverge/token/fetch');
-      if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
-        // eslint-disable-next-line no-throw-literal
-        throw 'Something went wrong!';
+      let HVToken = storageService().get('HVToken');
+      if (!HVToken) {
+        const res = await Api.get('api/kyc/hyperverge/token/fetch');
+        if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
+          // eslint-disable-next-line no-throw-literal
+          throw 'Something went wrong!';
+        }
+  
+        const { result, status_code: status } = res.pfwresponse;
+        if (status === 200) {
+          HVToken = result.hyperverge_token;
+          storageService().set('HVToken', HVToken);
+        } else {
+          throw (result.error || result.message || 'Something went wrong!');
+        }
       }
-
-      const { result, status_code: status } = res.pfwresponse;
-
-      if (status === 200) {
-        window.HyperSnapSDK.init(result.hyperverge_token, window.HyperSnapParams.Region.India);
-        window.HyperSnapSDK.startUserSession();
-        onCameraInit(true);
-      } else {
-        throw (result.error || result.message || 'Something went wrong!');
-      }
+      window.HyperSnapSDK.init(HVToken, window.HyperSnapParams.Region.India, false, true);
+      window.HyperSnapSDK.startUserSession();
+      onCameraInit(true);
     } catch (err) {
       onCameraInit(false);
       console.log('Error fetching HV token: ', err);
@@ -53,7 +58,6 @@ const WVLiveCamera = ({
   }
 
   const callback = (HVError, HVResponse) => {
-    console.log(HVError, HVResponse);
     if (HVError) {
       if (HVError.errorCode === "013") {
         onClose();
