@@ -190,7 +190,7 @@ const CommunicationDetails = (props) => {
 
   const handleNavigation = () => {
     if (!isReadyToInvestBase) {
-      navigate("/kyc/trading-experience");
+      navigate(getPathname.tradingExperience);
       return;
     }
     const data = {
