@@ -108,11 +108,16 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleNavigation = () => {
-    if (isChecked) {
-      if (isEdit) navigate(getPathname.journey);
-      else navigate("/kyc/compliant/bank-details");
+    // if (isChecked) {
+    //   if (isEdit) navigate(getPathname.journey);
+    //   else navigate("/kyc/compliant/bank-details");
+    // } else {
+    //   navigate(getPathname.journey);
+    // }
+    if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+      navigate(getPathname.uploadSign);
     } else {
-      navigate(getPathname.journey);
+      navigate(getPathname.journey)
     }
   };
 

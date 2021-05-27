@@ -12,6 +12,7 @@ import PennySuccessDialog from "../mini-components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { getConfig } from "../../utils/functions";
 
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -136,18 +137,28 @@ const KycBankVerify = (props) => {
     navigate(`/kyc/${userType}/upload-documents`);
   };
 
-  const handleSuccess = () => {
+  const handleOtherPlatformNavigation = () => {
     if (userType === "compliant") {
       if (isEdit) goToJourney();
-      else {
-        if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
-          navigate(getPathname.uploadSign, {
-            state: {
-              backToJourney: true,
-            },
-          });
-        } else goToJourney();
-      }
+      else navigate(getPathname.tradingExperience)
+    } else {
+      
+    }
+  };
+
+  const handleSdkNavigation = () => {
+    if (userType === "compliant") {
+      goToJourney();
+      // if (isEdit) goToJourney();
+      // else {
+      //   if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+      //     navigate(getPathname.uploadSign, {
+      //       state: {
+      //         backToJourney: true,
+      //       },
+      //     });
+      //   } else goToJourney();
+      // }
     } else {
       if (dl_flow) {
         if (
@@ -159,6 +170,14 @@ const KycBankVerify = (props) => {
           navigate(getPathname.uploadPan);
         } else navigate(getPathname.kycEsign);
       } else navigate(getPathname.uploadProgress);
+    }
+  };
+
+  const handleSuccess = () => {
+    if (!getConfig().isSdk) {
+      handleOtherPlatformNavigation();
+    } else {
+      handleSdkNavigation();
     }
   };
 
