@@ -13,9 +13,13 @@ import {
 } from "../../../utils/validators";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
-import { apiConstants } from "../../constants";
+import { apiConstants, getPathname } from "../../constants";
 import { getBasePath, getConfig } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
+import {
+  getTotalPagesInPersonalDetails,
+  navigate as navigateFunc,
+} from "../../common/functions";
 
 const config = getConfig();
 const googleButtonTitle = (
@@ -34,6 +38,11 @@ const googleButtonTitle = (
   </a>
 );
 const CommunicationDetails = (props) => {
+  const navigate = navigateFunc.bind(props);
+  const stateParams = props.location?.state || {};
+  const isEdit = stateParams.isEdit || false;
+  const userType = stateParams.userType || "";
+  const flowType = stateParams.flowType || "";
   const [formData, setFormData] = useState({
     whatsappConsent: true,
   });
@@ -47,7 +56,8 @@ const CommunicationDetails = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [showOtpContainer, setShowOtpContainer] = useState(false);
   const [showDotLoader, setShowDotLoader] = useState(false);
-  const { user, kyc, isLoading } = useUserKycHook();
+  const { user, kyc, isLoading, setKycToSession } = useUserKycHook();
+  const isNri = kyc.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
   useEffect(() => {
     if (!isEmpty(user)) {
@@ -128,7 +138,8 @@ const CommunicationDetails = (props) => {
         setShowLoader("button");
         const otpResult = await verifyOtp({ otpId, otp: state.otp });
         if (!otpResult) return;
-        toast("succussful");
+        setKycToSession(otpResult.kyc);
+        handleNavigation();
       } else {
         let body = {};
         if (communicationType === "email") {
@@ -178,13 +189,36 @@ const CommunicationDetails = (props) => {
     setButtonTitle("CONTINUE");
   };
 
+  const handleNavigation = () => {
+    const data = {
+      state: {
+        isEdit,
+        userType,
+      },
+    };
+    if (userType === "compliant") {
+      if (isNri) {
+        navigate(getPathname.nriAddressDetails2, data);
+      } else {
+        navigate(getPathname.compliantPersonalDetails4, data);
+      }
+    } else {
+      if (flowType === "digilocker") {
+        navigate(getPathname.digilockerPersonalDetails3, data);
+      } else {
+        navigate(getPathname.personalDetails4, data);
+      }
+    }
+  };
+
+  const pageNumber = flowType === "digilocker" ? 3 : 4;
   return (
     <Container
       buttonTitle={buttonTitle}
       title="Communication details"
-      count="3"
-      current="3"
-      total="5"
+      count={pageNumber}
+      current={pageNumber}
+      total={getTotalPagesInPersonalDetails(kyc, user)}
       handleClick={handleClick}
       showLoader={showLoader}
       skelton={isLoading}

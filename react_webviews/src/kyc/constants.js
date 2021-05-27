@@ -58,6 +58,7 @@ export const getPathname = {
   uploadNriAddress: '/kyc/upload/address-nri',
   uploadSelfie: '/kyc/upload/selfie',
   uploadSelfieVideo: '/kyc/upload/selfie_video',
+  communicationDetails: '/kyc/communication-details'
 }
 
 export const storageConstants = {

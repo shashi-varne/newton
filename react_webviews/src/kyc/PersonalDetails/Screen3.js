@@ -11,6 +11,8 @@ import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
+  getTotalPagesInPersonalDetails,
+  getEmailOrMobileVerifiedStatus,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -29,7 +31,7 @@ const PersonalDetails3 = (props) => {
   }
   const type = props.type || "";
 
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -86,18 +88,15 @@ const PersonalDetails3 = (props) => {
   };
 
   const handleNavigation = () => {
+    const data = { state: { isEdit } };
+    if (!getEmailOrMobileVerifiedStatus(kyc, user)) {
+      navigate(getPathname.communicationDetails, data);
+      return;
+    }
     if (type === "digilocker") {
-      if (isEdit) {
-        navigate(getPathname.journey);
-      } else {
-        navigate(getPathname.digilockerPersonalDetails3);
-      }
+      navigate(getPathname.digilockerPersonalDetails3, data);
     } else {
-      navigate(getPathname.personalDetails4, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      navigate(getPathname.personalDetails4, data);
     }
   };
 
@@ -123,7 +122,7 @@ const PersonalDetails3 = (props) => {
       title={title}
       count={type === "digilocker" ? 2 : 3}
       current={type === "digilocker" ? 2 : 3}
-      total={type === "digilocker" ? 3 : 4}
+      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
     >
       <div className="kyc-personal-details">
         <main>
