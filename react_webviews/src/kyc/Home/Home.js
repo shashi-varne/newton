@@ -48,7 +48,7 @@ const Home = (props) => {
     };
     if (
       user.nps_investment &&
-      storageService().getObject("nps_additional_details_required")
+      storageService().get("nps_additional_details_required")
     ) {
       data.npsDetailsRequired = true;
     }
