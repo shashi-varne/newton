@@ -9,11 +9,11 @@ export const apiConstants = {
   getBankStatus: '/api/account/penny-verification-status-check',
   getCVL: '/api/kyc/updatecvl/mine',
   getMerge: '/api/user/account/merge?pan_number=',
+  getKRAForm: '/api/kyc/formfiller2/kraformfiller/get_kraform',
   sendOtp: '/api/communication/send/otp',
   resendOtp: '/api/communication/resend/otp',
   verifyOtp: '/api/communication/verify/otp',
-  socialAuth: '/api/communication',
-  getKRAForm: '/api/kyc/formfiller2/kraformfiller/get_kraform'
+  socialAuth: '/api/communication'
 }
 
 export const getPathname = {
@@ -187,17 +187,22 @@ export const relationshipOptions = [
 export const reportCardDetails = [
   {
     key: "personal",
-    title: "Personal",
+    title: "Personal details",
+    click_image: "plus_icon.svg",
+  },
+  {
+    key: "professional",
+    title: "Professional details",
     click_image: "plus_icon.svg",
   },
   {
     key: "address",
-    title: "Address",
+    title: "Address details",
     click_image: "plus_icon.svg",
   },
   {
     key: "nominee",
-    title: "Nominee",
+    title: "Nominee details",
     click_image: "plus_icon.svg",
   },
   {
@@ -328,31 +333,31 @@ export const companyDetails = {
 export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 export const eqkycDocsGroupMapper = {
-  equity_pan: {
+  "equity_pan": {
     title: "PAN details",
     doc: "PAN card"
   },
-  sign: {
+  "sign": {
     title: "Signature",
     doc: "Signature"
   },
-  equity_identification: {
+  "equity_identification": {
     title: "Personal details",
     doc: "Selfie"
   },
-  address: {
+  "address": {
     title: "Address details",
     doc: ""
   },
-  ipvvideo: {
+  "ipvvideo": {
     title: "IPV video",
     doc: "IPV video"
   },
-  bank: {
+  "bank": {
     title: "Bank account",
     doc: ""
   },
-  nri_address: {
+  "nri_address": {
     title: "NRI Address Details",
     doc: ""
   }

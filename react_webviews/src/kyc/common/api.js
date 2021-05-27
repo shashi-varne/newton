@@ -278,6 +278,10 @@ export const getMerge = async (pan_number) => {
   return handleApi(res);
 }
 
+export const getKRAForm = async (params) => {
+  const res = await Api.get(`${apiConstants.getKRAForm}`, params)
+  return handleApi(res);
+}
 export const sendOtp = async (body) => {
   const res = await Api.post(apiConstants.sendOtp, body);
   return handleApi(res);
@@ -299,10 +303,5 @@ export const socialAuth = async (body) => {
   const res = await Api.post(
     `${apiConstants.socialAuth}/${body.provider}?redirect_url=${body.redirectUrl}`
   );
-  return handleApi(res);
-};
-
-export const getKRAForm = async (params) => {
-  const res = await Api.get(`${apiConstants.getKRAForm}`, params)
   return handleApi(res);
 }

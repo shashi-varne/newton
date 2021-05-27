@@ -20,6 +20,7 @@ import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
+import { getJourneyData } from './JourneyFunction';
 
 const headerDataMapper = {
   compliant: {
@@ -105,7 +106,7 @@ const Journey = (props) => {
   const initJourneyData = () => {
     let i, j, k, data
     if (!isEmpty(kyc) && !isEmpty(user)) {
-      let journeyData = getJourneyData()
+      let journeyData = getJourneyData(kyc, isCompliant, show_aadhaar)
       for (i = 0; i < journeyData.length; i++) {
         let status = 'completed'
         if (journeyData[i].key === 'digilocker') {
@@ -119,7 +120,8 @@ const Journey = (props) => {
           }
         } else if (
           journeyData[i].key === 'esign' ||
-          journeyData[i].key === 'bank_esign'
+          journeyData[i].key === 'bank_esign' ||
+          journeyData[i].key === 'trading_esign'
         ) {
           if (kyc.sign_status !== 'signed') {
             status = 'init'
@@ -255,191 +257,6 @@ const Journey = (props) => {
     return false
   }
 
-  const getJourneyData = () => {
-    let journeyData = []
-    if (isCompliant) {
-      journeyData = [
-        {
-          key: 'pan',
-          title: 'PAN',
-          value: <b>{kyc?.pan?.meta_data?.pan_number}</b>,
-          status: 'completed',
-          isEditAllowed: false,
-          inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
-        },
-        {
-          key: 'personal',
-          title: 'Basic details',
-          status: 'init',
-          isEditAllowed: true,
-          inputsForStatus: [
-            { name: 'pan', keys: ['dob'] },
-            {
-              name: 'identification',
-              keys: [
-                'mobile_number',
-                'email',
-                'occupation',
-                'gross_annual_income',
-              ],
-            },
-            {
-              name: 'nomination',
-              keys: ['name', 'dob', 'relationship'],
-            },
-          ],
-        },
-        // {
-        //   key: "nominee",
-        //   title: "Assign nominee",
-        //   status: "pending",
-        //   isEditAllowed: true,
-        //   inputsForStatus: [
-        //     {
-        //       name: "nomination",
-        //       keys: ["name", "dob", "relationship", "address"]
-        //     }
-        //   ]
-        // },
-        {
-          key: 'bank',
-          title: 'Bank details',
-          status: 'pending',
-          isEditAllowed: false,
-          inputsForStatus: [
-            {
-              name: 'bank',
-              keys: ['account_number', 'account_type', 'ifsc_code'],
-            },
-          ],
-        },
-        {
-          key: 'sign',
-          title: 'Signature',
-          status: 'pending',
-          isEditAllowed: true,
-          inputsForStatus: ['sign'],
-        },
-      ]
-    } else if (!isCompliant && show_aadhaar) {
-      journeyData = [
-        {
-          key: 'pan',
-          title: 'PAN',
-          value: <b>{kyc?.pan?.meta_data?.pan_number}</b>,
-          status: 'completed',
-          isEditAllowed: true,
-          inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
-        },
-        {
-          key: 'digilocker',
-          title: 'Connect to digilocker',
-          status: 'init',
-          isEditAllowed: false,
-          inputsForStatus: ['dl_docs_status'],
-        },
-        {
-          key: 'personal',
-          title: 'Personal details',
-          status: 'pending',
-          isEditAllowed: true,
-          inputsForStatus: [
-            { name: 'pan', keys: ['name', 'father_name', 'mother_name'] },
-            {
-              name: 'identification',
-              keys: ['email', 'mobile_number', 'gender', 'marital_status'],
-            },
-            {
-              name: 'nomination',
-              keys: ['name', 'dob', 'relationship'],
-            },
-          ],
-        },
-        {
-          key: 'bank_esign',
-          title: 'Bank details & eSign',
-          status: 'pending',
-          isEditAllowed: false,
-          inputsForStatus: ['esign'],
-        },
-      ]
-    } else {
-      journeyData = [
-        {
-          key: 'pan',
-          title: 'PAN details',
-          status: 'completed',
-          isEditAllowed: true,
-          inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
-        },
-        {
-          key: 'personal',
-          title: 'Personal details',
-          status: 'init',
-          isEditAllowed: true,
-          inputsForStatus: [
-            {
-              name: 'pan',
-              keys: ['name', 'dob', 'father_name', 'mother_name'],
-            },
-            {
-              name: 'identification',
-              keys: ['email', 'mobile_number', 'gender', 'marital_status'],
-            },
-            {
-              name: 'nomination',
-              keys: ['name', 'dob', 'relationship'],
-            },
-            // { name: "nomination", keys: ["name", "dob", "relationship"] }
-          ],
-        },
-        {
-          key: 'address',
-          title: 'Address details',
-          status: 'pending',
-          isEditAllowed: true,
-          inputsForStatus: [
-            { name: 'address', keys: ['pincode'] },
-            { name: 'nomination', keys: ['address'] },
-          ],
-        },
-        {
-          key: 'docs',
-          title: 'Upload documents',
-          disc: 'PAN & proof of address',
-          status: 'pending',
-          isEditAllowed: true,
-          inputsForStatus: [
-            'pan',
-            'identification',
-            'address',
-            'bank',
-            'ipvvideo',
-            'sign',
-          ],
-        },
-        {
-          key: 'esign',
-          title: 'eSign',
-          status: 'init',
-          isEditAllowed: false,
-          inputsForStatus: ['esign'],
-        },
-      ]
-
-      if (
-        isCompliant &&
-        kyc?.identification?.meta_data?.marital_status &&
-        kyc?.identification?.meta_data?.marital_status?.toLowerCase() ===
-          'married'
-      ) {
-        journeyData[1].inputsForStatus[1].keys.push('spouse_name')
-      }
-    }
-
-    return journeyData
-  }
-
   const goNext = async () => {
     sendEvents('next')
     try {
@@ -503,6 +320,7 @@ const Journey = (props) => {
           pan: '/kyc/home',
           personal: '/kyc/dl/personal-details1',
           bank_esign: '/kyc/non-compliant/bank-details',
+          trading_esign: '/kyc/trading-experience',
           address: '/kyc/address-details1',
           docs: '/kyc/upload/intro',
           esign: '/kyc-esign/info',

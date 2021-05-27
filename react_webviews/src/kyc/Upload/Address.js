@@ -238,7 +238,7 @@ const AddressUpload = (props) => {
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address">
           <div className="sub-title">
-            <span><b>{addressProof}</b></span>
+            <span>{addressProof}</span>
             {addressProof && (
               <div className="edit" onClick={editAddress}>
                 EDIT

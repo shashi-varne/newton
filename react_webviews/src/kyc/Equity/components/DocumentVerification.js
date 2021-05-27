@@ -59,7 +59,7 @@ const DocumentVerification = (props) => {
         <header className="kyc-document-verification-header">
           <div className="kdv-text">Document verification is under process</div>
           <img
-            src={require(`assets/${productName}/upload_documents.svg`)}
+            src={require(`assets/${productName}/upload_documents_pending.svg`)}
             alt=""
           />
         </header>
@@ -76,7 +76,7 @@ const DocumentVerification = (props) => {
           ))}
           <WVJourneyShortening
             title="Next step"
-            stepName={<b>Complete esign</b>}
+            stepName="Complete esign"
             stepActionText="Pending"
             stepActionType="pending"
         />

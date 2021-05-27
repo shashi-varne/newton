@@ -105,7 +105,7 @@ const AccountInfo = (props) => {
               checked={checkTermsAndConditions}
               handleChange={handleCheckBox}
             />
-            <div>
+            <div className="kaim-terms-info">
               I agree to have read and understood the{" "}
               <span>{"Terms & conditions"}</span> and{" "}
               <span>Equity Annexure</span>{" "}
