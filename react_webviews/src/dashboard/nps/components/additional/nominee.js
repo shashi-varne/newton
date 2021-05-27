@@ -1,66 +1,75 @@
-import React, { Component } from "react";
-import Container from "../../../common/Container";
-import InputWithIcon from "common/ui/InputWithIcon";
-import nominee from "assets/nominee.png";
-import calendar from "assets/calendar2.png";
-import relationship from "assets/relationship.png";
-import Select from "common/ui/Select";
-import { initialize } from "../../common/commonFunctions";
-import { storageService, capitalize } from "utils/validators";
-import { formatDate } from "utils/validators";
+import React, { Component } from 'react'
+import Container from '../../../common/Container'
+import InputWithIcon from 'common/ui/InputWithIcon'
+import nominee from 'assets/nominee.png'
+import calendar from 'assets/calendar2.png'
+import relationship from 'assets/relationship.png'
+import Select from 'common/ui/Select'
+import { initialize } from '../../common/commonFunctions'
+import { storageService, capitalize } from 'utils/validators'
+import { formatDate } from 'utils/validators'
 
-const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
+const relationshipOptions = ['Wife', 'Husband', 'Mother', 'Father', 'Other']
 
 class NpsNominee extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       show_loader: false,
       form_data: {},
       nps_details: {},
-      screen_name: "nps_nominee",
-      skelton: 'g'
-    };
-    this.initialize = initialize.bind(this);
+      screen_name: 'nps_nominee',
+      skelton: 'g',
+    }
+    this.initialize = initialize.bind(this)
   }
 
   componentWillMount() {
-    this.initialize();
+    this.initialize()
   }
 
-  onload = () => {
+  onload = async () => {
     let nps_additional_details = storageService().getObject(
-      "nps_additional_details"
-    );
-    let { nps_details } = nps_additional_details;
+      'nps_additional_details'
+    )
+    if (!nps_additional_details) {
+      await this.getNPSInvestmentStatus()
+      storageService().set('nps_additional_details_required', true);
+    }
+    nps_additional_details = storageService().getObject(
+      'nps_additional_details'
+    )
 
-    let { form_data } = this.state;
-    let { nomination } = nps_details;
+    let { nps_details } = nps_additional_details
+
+    let { form_data } = this.state
+    let { nomination } = nps_details
 
     if (nomination) {
-      form_data.nominee_name = nomination.name || "";
-      form_data.nominee_dob = nomination.dob || "";
-      form_data.relationship = capitalize(nomination.relationship || "");
+      form_data.nominee_name = nomination.name || ''
+      form_data.nominee_dob = nomination.dob || ''
+      form_data.relationship = capitalize(nomination.relationship || '')
     }
 
     this.setState({
       nps_details: nps_details,
       form_data: form_data,
-      skelton: false
-    });
-  };
+      skelton: false,
+    })
+    
+  }
 
   handleChange = (name) => (event) => {
-    let value = event.target ? event.target.value : event;
-    let { form_data } = this.state;
+    let value = event.target ? event.target.value : event
+    let { form_data } = this.state
 
-    if (name === "nominee_dob") {
-      var input = document.getElementById("nominee_dob");
-      input.onkeyup = formatDate;
+    if (name === 'nominee_dob') {
+      var input = document.getElementById('nominee_dob')
+      input.onkeyup = formatDate
     }
 
-    form_data[name] = value;
-    form_data[name + "_error"] = "";
+    form_data[name] = value
+    form_data[name + '_error'] = ''
 
     this.setState({
       form_data: form_data,
@@ -68,11 +77,11 @@ class NpsNominee extends Component {
   };
 
   handleClick = async () => {
-    let { form_data } = this.state;
+    let { form_data } = this.state
 
-    let keys_to_check = ["nominee_name", "nominee_dob", "relationship"];
+    let keys_to_check = ['nominee_name', 'nominee_dob', 'relationship']
 
-    let canSubmit = this.formCheckUpdate(keys_to_check, form_data);
+    let canSubmit = this.formCheckUpdate(keys_to_check, form_data)
 
     if (canSubmit) {
       let data = {
@@ -81,22 +90,22 @@ class NpsNominee extends Component {
           name: form_data.nominee_name,
           relationship: form_data.relationship,
         },
-      };
+      }
 
-      this.updateMeta(data, "delivery");
+      await this.updateMeta(data, 'delivery')
     }
-  };
+  }
 
   bannerText = () => {
     return (
       <span>
         Please <span className="bold">confirm</span> the nominee details.
       </span>
-    );
+    )
   }
 
   render() {
-    let { form_data } = this.state;
+    let { form_data } = this.state
     return (
       <Container
         title="Nominee Details"
@@ -108,7 +117,7 @@ class NpsNominee extends Component {
         errorData={this.state.errorData}
         banner={true}
         bannerText={this.bannerText()}
-      >       
+      >
         <div className="nps-nominee">
           <div className="InputField">
             <InputWithIcon
@@ -119,8 +128,8 @@ class NpsNominee extends Component {
               label="Nominee Name"
               error={form_data.nominee_name_error ? true : false}
               helperText={form_data.nominee_name_error}
-              value={form_data.nominee_name || ""}
-              onChange={this.handleChange("nominee_name")}
+              value={form_data.nominee_name || ''}
+              onChange={this.handleChange('nominee_name')}
             />
           </div>
 
@@ -133,8 +142,8 @@ class NpsNominee extends Component {
               label="Nominee DOB (DD/MM/YYYY)"
               error={form_data.nominee_dob_error ? true : false}
               helperText={form_data.nominee_dob_error}
-              value={form_data.nominee_dob || ""}
-              onChange={this.handleChange("nominee_dob")}
+              value={form_data.nominee_dob || ''}
+              onChange={this.handleChange('nominee_dob')}
             />
           </div>
 
@@ -147,15 +156,15 @@ class NpsNominee extends Component {
               name="relationship"
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
-              value={form_data.relationship || ""}
+              value={form_data.relationship || ''}
               options={relationshipOptions}
-              onChange={this.handleChange("relationship")}
+              onChange={this.handleChange('relationship')}
             />
           </div>
         </div>
       </Container>
-    );
+    )
   }
 }
 
-export default NpsNominee;
+export default NpsNominee

@@ -340,6 +340,7 @@ class NpsIdentity extends Component {
           <div className="InputField">
             <InputWithIcon
               icon={person}
+              type="text"
               width="30"
               id="name"
               label="Mother's name"
@@ -374,6 +375,7 @@ class NpsIdentity extends Component {
             <div className="InputField">
               <InputWithIcon
                 icon={person}
+                type="text"
                 width="30"
                 id="name"
                 label="Spouse's name"

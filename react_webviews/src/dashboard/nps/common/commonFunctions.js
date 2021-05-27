@@ -2,7 +2,7 @@ import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
-import { isEmpty } from "utils/validators";
+import { isEmpty, containsSpecialCharactersAndNumbers } from "utils/validators";
 import toast from "../../../common/ui/Toast";
 // import { nps_config } from "../constants";
 
@@ -137,6 +137,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
   };
 
   let selectTypeInput = ["relationship"];
+  let keysMapperArrayName = ["mother_name", "spouse_name", "nominee_name", "state", "city", "relationship", "marital_status"];
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];
@@ -144,7 +145,20 @@ export function formCheckUpdate(keys_to_check, form_data) {
       selectTypeInput.indexOf(key_check) !== -1
         ? "Please select "
         : "Please enter ";
-    if (!form_data[key_check]) {
+
+    if (key_check === "addressline" && form_data.addressline.length < 10) {
+      form_data[key_check + "_error"] = "Address should contain more than 10 characters";
+      canSubmit = false;
+    }
+
+    if (key_check === "pincode" && (form_data.pincode.length !== 6 || form_data.pincode_error.length)) {
+      if (form_data.pincode_error.length) {
+        form_data[key_check + "_error"] = form_data.pincode_error;
+      } else form_data[key_check + "_error"] = "Please enter a valid Pincode";
+      canSubmit = false;
+    }
+
+    if (!form_data[key_check] || containsSpecialCharactersAndNumbers(keysMapperArrayName.includes(key_check) ? form_data[key_check] : false)) {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
       canSubmit = false;
     }
@@ -329,6 +343,15 @@ export async function updateMeta(params, next_state) {
         }
       } else {
         this.navigate(next_state);
+      }
+    } else if (status === 400) {
+      const errors = result?.errors;
+      const errorsObj = { ...this.state.form_data };
+      if (errors.length > 0) {
+        errors.forEach(err => {
+          errorsObj['nominee_' + err.field_name + '_error'] = err.error_description
+        });
+        this.setState({ form_data: { ...this.state.form_data, ...errorsObj }});
       }
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
