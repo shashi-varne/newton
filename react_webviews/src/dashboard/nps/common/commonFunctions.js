@@ -26,6 +26,11 @@ export async function initialize() {
   this.setErrorData = setErrorData.bind(this);
   this.handleError = handleError.bind(this);
 
+  const nps_additional_details = storageService().getObject("nps_additional_details") || {};
+  const npsAdditionalScreens = ["nps_delivery", "nps-identity", "nps_nominee", "nps_upload"]
+  if(isEmpty(nps_additional_details) && npsAdditionalScreens.indexOf(this.state.screen_name) !== -1) {
+    await this.getNPSInvestmentStatus();
+  }
   nativeCallback({ action: "take_control_reset" });
 
   this.setState(
@@ -325,11 +330,11 @@ export async function updateMeta(params, next_state) {
       );
 
       if (this.state.screen_name === "nps_delivery") {
-        let kyc_app = storageService().getObject("kyc_app") || {};
+        let kyc_app = storageService().getObject("kyc") || {};
 
         kyc_app.address.meta_data = result.user.address;
 
-        storageService().setObject("kyc_app", kyc_app);
+        storageService().setObject("kyc", kyc_app);
 
         if (result.user.is_doc_required) {
           this.navigate("upload");
@@ -338,6 +343,15 @@ export async function updateMeta(params, next_state) {
         }
       } else {
         this.navigate(next_state);
+      }
+    } else if (status === 400) {
+      const errors = result?.errors;
+      const errorsObj = { ...this.state.form_data };
+      if (errors.length > 0) {
+        errors.forEach(err => {
+          errorsObj['nominee_' + err.field_name + '_error'] = err.error_description
+        });
+        this.setState({ form_data: { ...this.state.form_data, ...errorsObj }});
       }
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
