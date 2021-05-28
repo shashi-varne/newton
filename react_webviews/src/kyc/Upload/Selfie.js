@@ -16,7 +16,7 @@ import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 
 const config = getConfig();
 const { productName, isSdk } = config;
-const TRADING_ENABLED = !isTradingEnabled();
+const TRADING_ENABLED = isTradingEnabled();
 
 const Selfie = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -35,7 +35,7 @@ const Selfie = (props) => {
   const navigate = navigateFunc.bind(props)
 
   const handleNavigation = () => {
-    if (kyc.kyc_type !== "manual" || !kyc.address.meta_data.is_nri) {
+    if (kyc.kyc_type !== "manual" && !kyc.address.meta_data.is_nri) {
       if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
         navigate(getPathname.uploadFnOIncomeProof);
       else navigate(getPathname.kycEsign)
