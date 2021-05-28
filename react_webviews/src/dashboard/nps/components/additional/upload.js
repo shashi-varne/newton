@@ -7,14 +7,14 @@ import { getConfig, getBase64 } from "utils/functions";
 import toast from "common/ui/Toast";
 import $ from "jquery";
 
-let options = [
-  'Passport',
-  'Driving License',
-  'Utility Bill',
-  'Bank Statement',
-  'Aadhar Card',
-  'Voter ID',
-]
+const options = [
+  { name: "Passport", value: "passport" },
+  { name: "Driving license", value: "dl" },
+  { name: "Utility Bill", value: "utilitybill" },
+  { name: "Bank Statement", value: "bankstatement" },
+  { name: "Aadhaar card", value: "aadhar" },
+  { name: "Voter ID", value: "voterid" }
+];
 
 class uploadAddressProof extends Component {
   constructor(props) {
@@ -195,7 +195,7 @@ class uploadAddressProof extends Component {
   handleChange = (event) => {
     let value = event || "";
     let sides = 1;
-    if (value === 'Utility Bill' || value === 'Bank Statement') {
+    if (value === 'utilitybill' || value === 'bankstatement') {
       sides = 2
     }
 
@@ -315,6 +315,7 @@ class uploadAddressProof extends Component {
               id="name"
               label="Address Proof Type"
               value={this.state.proof_type}
+              isAOB={true}
               options={options}
               onChange={this.handleChange}
             />

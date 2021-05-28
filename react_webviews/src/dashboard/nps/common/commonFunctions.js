@@ -598,7 +598,10 @@ export async function uploadDocs(file) {
     showError: false,
   });
 
-  var uploadurl = "/api/invest/folio/import/image";
+  let uploadurl = "/api/nps/register/update/v2";
+  if(this.state.screen_name === "nps_upload") {
+    uploadurl = `/api/nps/v2/doc/mine/address/${this.state.proof_type}`
+  }
   const data = new FormData();
   data.append("res", file);
   data.append("doc_type", file.doc_type);
