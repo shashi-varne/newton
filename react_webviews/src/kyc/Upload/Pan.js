@@ -120,7 +120,7 @@ const Pan = (props) => {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        if (isTradingEnabled()) {
+        if (isTradingEnabled() && !result.kyc.address.meta_data.is_nri) {
           setSubTitle("You're almost there, now take a selfie")
         } else {
           setSubTitle("You've successfully uploaded PAN!")

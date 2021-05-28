@@ -317,7 +317,7 @@ const Journey = (props) => {
           bank_esign: '/kyc/non-compliant/bank-details',
           trading_esign: '/kyc/trading-experience',
           address: '/kyc/address-details1',
-          docs: '/kyc/upload/intro',
+          docs: '/kyc/upload/progress',
           esign: '/kyc-esign/info',
         }
 
@@ -332,7 +332,7 @@ const Journey = (props) => {
           pan: '/kyc/home',
           personal: '/kyc/personal-details1',
           address: '/kyc/address-details1',
-          docs: '/kyc/upload/intro',
+          docs: '/kyc/upload/progress',
           esign: '/kyc-esign/info',
         }
         console.log(stateMapper[key])
