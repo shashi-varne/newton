@@ -7,7 +7,7 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { getPathname } from "../constants";
 import "./KycUploadDocuments.scss";
@@ -19,7 +19,7 @@ const KycUploadDocuments = (props) => {
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [file, setFile] = useState(null);
   const [dlFlow, setDlFlow] = useState(false);
-  const {kyc, isLoading, setKycToSession} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
   const navigate = navigateFunc.bind(props);
@@ -83,7 +83,7 @@ const KycUploadDocuments = (props) => {
         bank_id
       );
       if(!isEmpty(result))
-        setKycToSession(result.kyc)
+        updateKyc(result.kyc)
       setShowPendingModal(true);
     } catch (err) {
       toast("Image upload failed, please retry")
@@ -104,10 +104,27 @@ const KycUploadDocuments = (props) => {
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
-      if (isEdit) navigate("/kyc/journey");
+      if (isEdit) navigate(getPathname.journey);
       else navigate(getPathname.tradingExperience)
     } else {
-      
+      if (dlFlow) {
+        if (
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
+          kyc.pan.doc_status !== "approved"
+        ) {
+          navigate(getPathname.uploadPan);
+        } else {
+          if (kyc.sign_status !== 'signed') {
+            navigate(getPathname.tradingExperience);
+          } else {
+            navigate(getPathname.journey);
+          }
+        }
+      } else {
+        navigate(getPathname.uploadProgress);
+      }
     }
   };
 
@@ -116,7 +133,7 @@ const KycUploadDocuments = (props) => {
       navigate("/kyc/add-bank");
     } else {
       if (userType === "compliant") {
-        navigate("/kyc/journey");
+        navigate(getPathname.journey);
         // if (isEdit) {
         //   navigate("/kyc/journey");
         // } else {
@@ -152,7 +169,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const proceed = () => {
-    if (!getConfig().isSdk) {
+    if (isTradingEnabled()) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();

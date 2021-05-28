@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig, getBasePath } from 'utils/functions';
+import { getConfig, getBasePath, isTradingEnabled } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
 import { navigate as navigateFunc } from '../common/functions'
@@ -10,12 +10,15 @@ import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 
+const config = getConfig();
+const TRADING_ENABLED = isTradingEnabled();
+
 class ESignInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      productName: getConfig().productName,
+      productName: config.productName,
       backModal: false,
       dl_flow: false,
       showAadharDialog: false,
@@ -66,16 +69,21 @@ class ESignInfo extends Component {
     }
     let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
-      basepath + '/kyc-esign/nsdl' + getConfig().searchParams
+      basepath + '/kyc-esign/nsdl' + config.searchParams
     );
 
     this.setState({ show_loader: "button" });
 
     try {
-      let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
+      const params = {};
+      if (TRADING_ENABLED) {
+        params.kyc_product_type = "equity";
+      }
+      const url = `/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`;
+      let res = await Api.get(url, params);
       let resultData = res.pfwresponse.result;
       if (resultData && !resultData.error) {
-        if (getConfig().app === 'ios') {
+        if (config.app === 'ios') {
           nativeCallback({
             action: 'show_top_bar', message: {
               title: 'eSign KYC'
@@ -118,7 +126,7 @@ class ESignInfo extends Component {
   }
 
   goNext = () => {
-    if(this.state.kyc?.address?.meta_data?.is_nri) {
+    if(this.state.kyc?.address?.meta_data?.is_nri || !TRADING_ENABLED) {
       this.handleClick()
     } else {
       this.setState({ showAadharDialog: true })

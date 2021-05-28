@@ -19,7 +19,7 @@ import {
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, isTradingEnabled } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
@@ -174,7 +174,16 @@ const KycBankDetails = (props) => {
       if (isEdit) navigate(getPathname.journey);
       else navigate(getPathname.tradingExperience)
     } else {
-      
+      if (dl_flow) {
+        if (
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+          kyc.pan.doc_status !== "approved"
+        )
+          navigate(getPathname.uploadPan);
+        else navigate(getPathname.tradingExperience);
+      } else navigate(getPathname.uploadProgress);
     }
   };
 
@@ -203,7 +212,7 @@ const KycBankDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if (!config.isSdk) {
+    if (isTradingEnabled()) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();

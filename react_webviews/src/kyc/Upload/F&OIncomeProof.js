@@ -11,6 +11,7 @@ import { upload } from '../common/api';
 import { navigate as navigateFunc } from '../common/functions';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
+import { checkDocsPending } from '../services';
 
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
@@ -50,7 +51,7 @@ const FnOIncomeProof = (props) => {
   const [filePassword, setFilePassword] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
-  // const { setKycToSession } = useUserKycHook();
+  const { kyc, isLoading, updateKyc } = useUserKycHook();
 
   useEffect(() => {
     setFilePassword('');
@@ -73,8 +74,7 @@ const FnOIncomeProof = (props) => {
       };
       setIsApiRunning("button")
       const result = await upload(selectedFile, 'income', data);
-      // setKycToSession(result.kyc);
-      // TODO: Add next behaviour here
+      updateKyc(result.kyc);
     } catch (err) {
       console.error(err);
       Toast('Something went wrong! Please try again')
@@ -84,8 +84,17 @@ const FnOIncomeProof = (props) => {
     }
   }
 
-  const onSkipClick = () => {
-    console.log("skip clicked")
+  const goNext = async (skip) => {
+    if (!skip) {
+      await uploadDocument();
+    }
+    
+    const areDocsPending = checkDocsPending(kyc);
+    if (areDocsPending) {
+      navigate('/kyc/document-verification');
+    } else {
+      navigate('/kyc-esign/info');
+    }
   }
 
   const onPasswordChange = (event) => {
@@ -97,8 +106,8 @@ const FnOIncomeProof = (props) => {
       canSkip
       hidePageTitle
       hideHamburger
-      handleClick={uploadDocument}
-      onSkipClick={onSkipClick}
+      handleClick={goNext}
+      onSkipClick={() => goNext(true)}
       title="Provide income proof for F&O trading"
       buttonTitle="Upload"
       disable={!selectedFile}

@@ -44,7 +44,7 @@ const Sign = (props) => {
           result.kyc.dl_docs_status !== "" &&
           result.kyc.dl_docs_status !== "init" &&
           result.kyc.dl_docs_status !== null;
-        if (kyc.kyc_type !== "manual") {
+        if (kyc.kyc_type !== "manual" || !kyc.address.meta_data.is_nri) {
           const type =
             result?.kyc?.kyc_status === "compliant"
               ? "compliant"

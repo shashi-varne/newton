@@ -1,6 +1,6 @@
 import React from "react";
 import Dialog, { DialogContent } from "material-ui/Dialog";
-import { getConfig } from "utils/functions";
+import { getConfig, isTradingEnabled } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import "./mini-components.scss";
 
@@ -26,7 +26,7 @@ const PennySuccessDialog = ({ isOpen, redirect }) => {
           />
         </div>
         <div className="subtitle">
-          {!config.isSdk ?
+          {isTradingEnabled() ?
             "Hurrah! Your bank account is added. Invest securely and safely with us."
             :
             "Now, tell us your trading experience in the next step"

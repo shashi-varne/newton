@@ -58,8 +58,9 @@ export const getPathname = {
   uploadNriAddress: '/kyc/upload/address-nri',
   uploadSelfie: '/kyc/upload/selfie',
   uploadSelfieVideo: '/kyc/upload/selfie_video',
-  communicationDetails: '/kyc/communication-details',
+  uploadFnOIncomeProof: '/kyc/upload/fno-income-proof',
   tradingExperience: '/kyc/trading-experience',
+  nriError: '/kyc/nri-error',
 }
 
 export const storageConstants = {

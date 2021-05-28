@@ -1,11 +1,11 @@
 import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
-import { getConfig } from 'utils/functions'
+import { getConfig, isTradingEnabled } from 'utils/functions'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
@@ -13,7 +13,9 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 
-const productName = getConfig().productName;
+const config = getConfig();
+const { productName, isSdk } = config;
+const TRADING_ENABLED = !isTradingEnabled();
 
 const Selfie = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -26,21 +28,35 @@ const Selfie = (props) => {
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
   const [showLoader, setShowLoader] = useState(false);
-  const { kyc, isLoading } = useUserKycHook();
+  const { kyc, isLoading, updateKyc } = useUserKycHook();
   const navigate = navigateFunc.bind(props)
 
+  const handleNavigation = () => {
+    if (kyc.kyc_type !== "manual" || !kyc.address.meta_data.is_nri) {
+      if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
+        navigate(getPathname.uploadFnOIncomeProof);
+      else navigate(getPathname.kycEsign)
+    } else {
+      navigate(getPathname.uploadProgress);
+    }
+  }
+
   const handleSubmit = async () => {
-    try {
-      setIsApiRunning("button")
-      const result = await upload(file, 'identification', {
-        res: fileToShow,
-        lat: locationData.lat,
-        lng: locationData.lng,
-        live_score: selfieLiveScore,
-        kyc_product_type: 'equity'
-      });
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+    try {      
+      let params = {};
+      if (TRADING_ENABLED) {
+        params = {
+          lat: locationData?.lat,
+          lng: locationData?.lng,
+          live_score: selfieLiveScore,
+          kyc_product_type: 'equity'
+        };
+      }
+
+      setIsApiRunning("button");
+      const result = await upload(file, 'identification', params);
+      updateKyc(result.kyc);
+      handleNavigation();
     } catch (err) {
       console.error(err)
     } finally {
@@ -53,6 +69,15 @@ const Selfie = (props) => {
     setLocationData(data);
     closeLocnPermDialog();
     setIsLiveCamOpen(true);
+  }
+
+  const onFileSelectComplete = (newFile, fileBase64) => {
+    setFile(newFile);
+    setFileToShow(fileBase64);
+  }
+
+  const onFileSelectError = () => {
+    Toast('Please select image file only');
   }
 
   const openLiveCamera = () => {
@@ -114,12 +139,26 @@ const Selfie = (props) => {
               fileToShow={fileToShow}
               illustration={require(`assets/${productName}/selfie_placeholder.svg`)}
             />
-            <KycUploadContainer.Button
-              onClick={openLiveCamera}
-              showLoader={isCamLoading}
-            >
-              {file ? "Retake" : "Open Camera"}
-            </KycUploadContainer.Button>
+            {/* For SDK users, we currently do not use LiveCamera or Location */}
+            {!TRADING_ENABLED ?
+              <KycUploadContainer.Button
+                withPicker
+                showOptionsDialog
+                nativePickerMethodName="open_gallery"
+                fileName="pan"
+                onFileSelectComplete={onFileSelectComplete}
+                onFileSelectError={onFileSelectError}
+                supportedFormats={SUPPORTED_IMAGE_TYPES}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button> :
+              <KycUploadContainer.Button
+                onClick={openLiveCamera}
+                showLoader={isCamLoading}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button>
+            }
           </KycUploadContainer>
           <div className="kyc-selfie-intructions">
             <span id="kyc-si-text">How to take selfie?</span>
@@ -127,19 +166,23 @@ const Selfie = (props) => {
               Know More
             </WVClickableTextElement>
           </div>
-          <WVLiveCamera
-            open={isLiveCamOpen}
-            onCameraInit={onCameraInit}
-            onClose={() => setIsLiveCamOpen(false)}
-            onCaptureFailure={onCaptureFailure}
-            onCaptureSuccess={onCaptureSuccess}
-          />
-          <LocationPermission
-            isOpen={isLocnPermOpen}
-            onClose={closeLocnPermDialog}
-            onLocationFetchSuccess={onLocationFetchSuccess}
-            parentProps={props}
-          />
+          {TRADING_ENABLED &&
+            <>
+              <WVLiveCamera
+                open={isLiveCamOpen}
+                onCameraInit={onCameraInit}
+                onClose={() => setIsLiveCamOpen(false)}
+                onCaptureFailure={onCaptureFailure}
+                onCaptureSuccess={onCaptureSuccess}
+              />
+              <LocationPermission
+                isOpen={isLocnPermOpen}
+                onClose={closeLocnPermDialog}
+                onLocationFetchSuccess={onLocationFetchSuccess}
+                parentProps={props}
+              />
+            </>
+          }
         </section>
       )}
     </Container>

@@ -461,3 +461,7 @@ export function getBasePath() {
   }
   return window.location.origin + basename;
 }
+
+export function isTradingEnabled() {
+  return !getConfig().isSdk
+}

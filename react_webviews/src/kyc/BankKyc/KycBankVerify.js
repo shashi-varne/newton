@@ -12,7 +12,7 @@ import PennySuccessDialog from "../mini-components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -142,7 +142,16 @@ const KycBankVerify = (props) => {
       if (isEdit) goToJourney();
       else navigate(getPathname.tradingExperience)
     } else {
-      
+      if (dl_flow) {
+        if (
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+          kyc.pan.doc_status !== "approved"
+        ) {
+          navigate(getPathname.uploadPan);
+        } else navigate(getPathname.tradingExperience);
+      } else navigate(getPathname.uploadProgress);
     }
   };
 
@@ -174,7 +183,7 @@ const KycBankVerify = (props) => {
   };
 
   const handleSuccess = () => {
-    if (!getConfig().isSdk) {
+    if (isTradingEnabled()) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();
