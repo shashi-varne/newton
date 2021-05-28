@@ -97,7 +97,7 @@ class NpsNominee extends Component {
   bannerText = () => {
     return (
       <span>
-        Please <span className="bold">confirm</span> the nominee details.
+        Please <b>confirm</b> the nominee details.
       </span>
     );
   };
