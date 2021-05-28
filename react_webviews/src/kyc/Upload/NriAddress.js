@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER } from '../constants'
+import { STORAGE_CONSTANTS, NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER } from '../constants'
 import { upload } from '../common/api'
 import { getBase64, getConfig } from '../../utils/functions'
 import toast from 'common/ui/Toast'
@@ -185,7 +185,7 @@ const NRIAddressUpload = (props) => {
       }
       if(response.status_code === 200) {
         result = response.result;
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        storageService().setObject(STORAGE_CONSTANTS.KYC, result.kyc)
         navigate('/kyc/upload/progress')
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")

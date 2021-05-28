@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import { navigate as navigateFunc } from "../common/functions";
 import { storageService } from "../../utils/validators";
-import { PATHNAME_MAPPER, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
 
@@ -12,7 +12,7 @@ const Verify = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
-    if (storageService().get(storageConstants.NATIVE)) {
+    if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {
       navigate(PATHNAME_MAPPER.invest);

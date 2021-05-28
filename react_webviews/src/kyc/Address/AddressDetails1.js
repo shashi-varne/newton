@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { PATHNAME_MAPPER, addressProofOptions } from "../constants";
+import { PATHNAME_MAPPER, ADDRESS_PROOF_OPTIONS } from "../constants";
 import { isEmpty } from "utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { kycSubmit } from "../common/api";
@@ -175,7 +175,7 @@ const AddressDetails1 = (props) => {
           <div className="input">
             <div className="address-label">Address proof:</div>
             <div className="address-proof">
-              {addressProofOptions.map((data, index) => {
+              {ADDRESS_PROOF_OPTIONS.map((data, index) => {
                 const selected = form_data.address_doc_type === data.value;
                 const disabled =
                   form_data.residential_status === "NRI" || isApiRunning;

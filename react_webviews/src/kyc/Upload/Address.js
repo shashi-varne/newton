@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, DOCUMENTS_MAPPER } from '../constants'
+import { STORAGE_CONSTANTS, DOCUMENTS_MAPPER } from '../constants'
 import { upload } from '../common/api'
 import { getBase64, getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -215,7 +215,7 @@ const AddressUpload = (props) => {
       if(response.status_code === 200) {
         result = response.result;
         setKyc(result.kyc)
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        storageService().setObject(STORAGE_CONSTANTS.KYC, result.kyc)
         if(isMyAccountFlow) {
           navigate('/my-account');
         } else {

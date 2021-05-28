@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { STORAGE_CONSTANTS } from '../constants'
 import { upload } from '../common/api'
 import { getBase64, getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -145,7 +145,7 @@ const Pan = (props) => {
         )
         setTitle('PAN mismatch!')
       } else {
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        storageService().setObject(STORAGE_CONSTANTS.KYC, result.kyc)
         if (
           result.kyc.kyc_status !== 'compliant' &&
           result.kyc.dl_docs_status !== '' &&

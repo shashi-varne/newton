@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Container from "../common/Container";
-import { verificationDocOptions } from "../constants";
+import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
@@ -136,7 +136,7 @@ const KycUploadDocuments = (props) => {
       setIsApiRunning("button");
       const result = await uploadBankDocuments(
         file,
-        verificationDocOptions[selected].value,
+        VERIFICATION_DOC_OPTIONS[selected].value,
         bank_id
       );
       if(!isEmpty(result))
@@ -200,7 +200,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const selectedDocValue =
-    selected !== null ? verificationDocOptions[selected].value : "";
+    selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
   return (
     <Container
@@ -231,7 +231,7 @@ const KycUploadDocuments = (props) => {
             Ensure your name is clearly visible in the document
           </div>
           <div className="kyc-upload-doc-options">
-            {verificationDocOptions.map((data, index) => {
+            {VERIFICATION_DOC_OPTIONS.map((data, index) => {
               const selectedType = data.value === selectedDocValue;
               const disableField =
                 kyc.address?.meta_data?.is_nri && data.value !== "cheque";

@@ -4,9 +4,9 @@ import { Imgc } from "common/ui/Imgc";
 import { getConfig } from "utils/functions";
 import {
   PATHNAME_MAPPER,
-  kycDocNameMapper,
+  DOCUMENTS_MAPPER,
   REPORT_CARD_DETAILS,
-  storageConstants,
+  STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
 import { navigate as navigateFunc } from "../common/functions";
@@ -67,9 +67,9 @@ const Report = (props) => {
     const isNri = kyc.address.meta_data.is_nri;
     if (isNri) {
       address_proof = "Passport";
-      address_proof_nri = kycDocNameMapper[kyc.address_doc_type];
+      address_proof_nri = DOCUMENTS_MAPPER[kyc.address_doc_type];
     } else {
-      address_proof = kycDocNameMapper[kyc.address_doc_type];
+      address_proof = DOCUMENTS_MAPPER[kyc.address_doc_type];
     }
 
     setAddressProof({
@@ -120,7 +120,7 @@ const Report = (props) => {
     if (getConfig().Web) {
       navigate(PATHNAME_MAPPER.invest);
     } else {
-      if (storageService().get(storageConstants.NATIVE)) {
+      if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
         nativeCallback({ action: "exit_web" });
       } else {
         navigate(PATHNAME_MAPPER.landing);
@@ -137,7 +137,7 @@ const Report = (props) => {
       if (getConfig().Web) {
         navigate(PATHNAME_MAPPER.invest);
       } else {
-        if (storageService().get(storageConstants.NATIVE)) {
+        if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
           nativeCallback({ action: "exit_web" });
         } else {
           navigate(PATHNAME_MAPPER.landing);

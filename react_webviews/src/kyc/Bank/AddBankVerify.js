@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { storageService } from "utils/validators";
-import { storageConstants, PATHNAME_MAPPER } from "../constants";
+import { STORAGE_CONSTANTS, PATHNAME_MAPPER } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import {
   saveBankData,
@@ -40,7 +40,7 @@ const AddBankVerify = (props) => {
 
   const initialize = async () => {
     await getUserKycFromSummary();
-    let kyc = storageService().getObject(storageConstants.KYC) || {};
+    let kyc = storageService().getObject(STORAGE_CONSTANTS.KYC) || {};
     let data = kyc.additional_approved_banks.find(
       (obj) => obj.bank_id?.toString() === bank_id
     );

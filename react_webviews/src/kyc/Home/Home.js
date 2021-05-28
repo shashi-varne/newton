@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
-import { PATHNAME_MAPPER, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
@@ -198,7 +198,7 @@ const Home = (props) => {
 
   const handleMerge = async (step) => {
     if (step === "STEP1") {
-      storageService().setObject(storageConstants.AUTH_IDS, authIds);
+      storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
       navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {

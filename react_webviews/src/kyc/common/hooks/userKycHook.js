@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
-import { storageConstants, } from "../../constants";
+import { STORAGE_CONSTANTS, } from "../../constants";
 import { initData } from "../../services";
 import { isEmpty, storageService, } from "../../../utils/validators";
 
 function useUserKycHook() {
     const [kyc, setUserKyc] = useState(
-        storageService().getObject(storageConstants.KYC) || {}
+        storageService().getObject(STORAGE_CONSTANTS.KYC) || {}
     );
     const [user, setUser] = useState(
-        storageService().getObject(storageConstants.USER) || {}
+        storageService().getObject(STORAGE_CONSTANTS.USER) || {}
     );
     const [isLoading, setIsLoading] = useState(function () {
         if (isEmpty(user) || isEmpty(kyc)) {
@@ -22,8 +22,8 @@ function useUserKycHook() {
     useEffect(() => {
         const init = async () => {
             await initData();
-            kycDetails = storageService().getObject(storageConstants.KYC);
-            userDetails = storageService().getObject(storageConstants.USER);
+            kycDetails = storageService().getObject(STORAGE_CONSTANTS.KYC);
+            userDetails = storageService().getObject(STORAGE_CONSTANTS.USER);
             setIsLoading(false);
             setUser(userDetails);
             setUserKyc(kycDetails);
