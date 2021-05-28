@@ -185,3 +185,14 @@ export const getEmailOrMobileVerifiedStatus = (kyc = {}, user = {}) => {
       kyc.identification?.meta_data?.mobile_number_verified)
   );
 };
+
+export const isDigilockerFlow = (kyc = {}) => {
+  if (isEmpty(kyc)) return false;
+  return (
+    kyc.kyc_status !== "compliant" &&
+    !kyc.address.meta_data.is_nri &&
+    kyc.dl_docs_status !== "" &&
+    kyc.dl_docs_status !== "init" &&
+    kyc.dl_docs_status !== null
+  );
+};
