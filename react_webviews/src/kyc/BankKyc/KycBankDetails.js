@@ -22,7 +22,6 @@ import toast from "../../common/ui/Toast";
 import { getConfig, isTradingEnabled } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
-import { isTradingEnabled } from "../../utils/functions";
 
 const config = getConfig();
 
