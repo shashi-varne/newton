@@ -1,10 +1,49 @@
-import React from 'react';
-import ReactHighcharts from 'react-highcharts/ReactHighstock.src';
-import moment from 'moment';
+import React, { useState } from "react";
+import ReactHighcharts from "react-highcharts/ReactHighstock.src";
+import "./commonStyles.scss";
+import moment from "moment";
+import $ from "jquery";
+
+ReactHighcharts.Highcharts.setOptions({
+  lang: {
+    rangeSelectorZoom: "",
+  },
+  colors: ["#7ED321", "#ffffff"],
+});
+
+ReactHighcharts.Highcharts.addEvent(
+  ReactHighcharts.Highcharts.Axis,
+  "afterDrawCrosshair",
+  function (event) {
+    if (this.cross) {
+      $(this.cross.element)
+        .detach()
+        .insertAfter(this.chart.series[0].group.element);
+    }
+  }
+);
 
 const FundChart = (props) => {
+  const [format, setFormat] = useState("yyyy");
   const fundGraph = props?.graphData.graph_report[0].graph_data_for_amfi;
-
+  function calculateDurationType(max, min) {
+    var TotalDiff = max - min;
+    TotalDiff /= 60 * 60 * 24 * 1000;
+    var days = Math.abs(Math.round(TotalDiff));
+    if (days > 3 * 365) {
+      setFormat("yyyy");
+    } else if (days > 365 && days <= 3 * 365) {
+      setFormat("yyyy");
+    } else if (days > 30 * 6 && days <= 365) {
+      setFormat("ddmm");
+    } else if (days > 30 * 6 && days <= 365) {
+      setFormat("ddmm");
+    } else if (days > 30 * 3 && days <= 30 * 6) {
+      setFormat("ddmm");
+    } else if (days > 30 && days <= 30 * 3) {
+      setFormat("ddmm");
+    }
+  }
   let d1Series = [];
   let duration = 0;
   const chopDates = (dates1) => {
@@ -15,7 +54,7 @@ const FundChart = (props) => {
     let d1 = moment(minimum).utc();
     let d2 = moment(maximum).utc();
 
-    let days = d2.diff(d1, 'days');
+    let days = d2.diff(d1, "days");
 
     if (days > 3 * 365) {
       duration = 5;
@@ -37,55 +76,94 @@ const FundChart = (props) => {
       }
     }
   };
+
   chopDates(fundGraph);
 
   const configPrice = {
+    title: {
+      text: undefined,
+    },
     yAxis: {
+      opposite: false,
       crosshair: false,
       labels: {
         formatter: function () {
-          return (this.value > 0 ? ' Rs ' : '') + this.value;
+          return (
+            '<p class="yaxis-label">' +
+            (this.value > 0 ? " Rs " : "") +
+            this.value +
+            "</p>"
+          );
         },
       },
-      plotLines: [
-        {
-          value: 100000,
-          width: 2,
-        },
-      ],
+      gridLineColor: "#F7F3FF",
+      title: {
+        text: undefined,
+      },
     },
 
     tooltip: {
-      valueDecimals: 2,
-      split: false,
-      enabled: false,
-      animation: true,
-      shared: true,
+      backgroundColor: null,
+      borderWidth: 0,
+      shape: "square",
+      useHTML: true,
+      formatter: function () {
+        return (
+          '<div class="tooltip-container"><p class="date"><b>' +
+          moment(this.points[0].key).format("DD MMM YYYY").toUpperCase() +
+          '</b></p><div class="next-line-container"><div><p class="dot"></p></div><p class="content">NAV: ₹</p><p class="content">' +
+          this.y.toFixed(2) +
+          "</p></div></div>"
+        );
+      },
     },
     plotOptions: {
-      series: {
-        showInNavigator: true,
+      areaspline: {
+        fillColor: {
+          linearGradient: [0, 0, 0, 200],
+          stops: [
+            [
+              0,
+              ReactHighcharts.Highcharts.color(
+                ReactHighcharts.Highcharts.getOptions().colors[0]
+              )
+                .setOpacity(0.6)
+                .get("rgba"),
+            ],
+            [
+              1,
+              ReactHighcharts.Highcharts.color(
+                ReactHighcharts.Highcharts.getOptions().colors[1]
+              )
+                .setOpacity(0)
+                .get("rgba"),
+            ],
+          ],
+        },
+        lineColor: "#7ED321",
+        lineWidth: 1.2,
+        marker: {
+          enabled: false,
+          radius: 3,
+          lineWidth: 0,
+          zIndex: 100,
+        },
         states: {
           hover: {
-            enabled: false,
-            lineWidth: 0,
+            halo: {
+              size: 0,
+            },
+            lineWidthPlus: 0,
           },
         },
       },
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      lang: {
-        rangeSelectorZoom: '',
-      },
-    },
     chart: {
-      height: '230px',
+      type: "areaspline",
+      height: "250px",
       panning: false,
+      zoomType: false,
       pinchType: false,
-      zoomType: '',
-      zoomKey: '',
     },
     scrollbar: {
       enabled: false,
@@ -94,7 +172,7 @@ const FundChart = (props) => {
       enabled: false,
     },
     lang: {
-      rangeSelectorZoom: '',
+      rangeSelectorZoom: "",
     },
     exporting: {
       enabled: false,
@@ -103,107 +181,117 @@ const FundChart = (props) => {
       enabled: false,
     },
     legend: {
-      itemStyle: {
-        fontSize: '1px',
-        font: '9pt Trebuchet MS, Verdana, sans-serif',
-        color: '#555',
-
-        fill: '#3792FC',
-      },
-      itemHoverStyle: {
-        color: '#A1A1A1',
-      },
-      itemHiddenStyle: {
-        color: '#444',
-      },
-      itemMarginBottom: -24,
-      enabled: true,
-      align: 'center',
-      backgroundColor: '',
-      borderWidth: 0,
-      layout: 'horizontal',
-      verticalAlign: 'bottom',
-      shadow: false,
-      itemDistance: 30,
+      enabled: false,
     },
     xAxis: {
-      crosshair: false,
-      labels: {
-        enabled: true,
-        step: 1,
+      crosshair: {
+        color: "white",
+        width: 2,
+        zIndex: 3,
       },
-      tickColor: '',
-      tickLength: '',
-      tickWidth: '',
+      tickPositioner: function () {
+        // calculateDurationType(this.min, this.max)
+        var positions = [];
+        positions.push(this.min);
+        var difference = this.max - this.min;
+        positions.push(this.min + Math.round(difference / 3));
+        positions.push(this.max - Math.round(difference / 3));
+        positions.push(this.max);
+        return positions;
+      },
+      labels: {
+        formatter: function () {
+          if (this.isFirst)
+            return (
+              '<p class="xaxis-label">' +
+              moment(this.pos).format("DD MMM YYYY") +
+              "</p>"
+            );
+          if (this.isLast) return '<p class="xaxis-label">TODAY</p>';
+          if (format === "yyyy")
+            return (
+              '<p class="xaxis-label">' +
+              moment(this.pos).format("DD MMM") +
+              "</p>"
+            );
+          if (format === "ddmm")
+            return (
+              '<p class="xaxis-label">' +
+              moment(this.pos).format("DD MMM") +
+              "</p>"
+            );
+        },
+      },
+      tickColor: "",
+      tickLength: 0,
+      tickWidth: 0,
     },
     rangeSelector: {
+      verticalAlign: "bottom",
+      x: 0,
+      y: 0,
+      enabled: true,
       selected: duration,
       inputEnabled: false,
       buttonPosition: {
-        x: 0,
+        align: "center",
+        x: -50,
+        y: 10,
       },
       buttonTheme: {
-        // styles for the buttons
-        fill: 'none',
-        stroke: 'none',
-        'stroke-width': 0,
+        fill: "none",
+        stroke: "none",
         r: 4,
         width: 35,
         style: {
-          fontWeight: 'bold',
+          color: "#767E86",
         },
         states: {
           hover: {},
           select: {
+            fill: "#3792FC",
             style: {
-              color: 'white',
+              color: "white",
             },
           },
         },
       },
-      labelStyle: {
-        display: 'none',
-      },
       buttons: [
         {
-          type: 'month',
+          type: "month",
           count: 1,
-          text: '1M',
+          text: "1M",
         },
         {
-          type: 'month',
+          type: "month",
           count: 3,
-          text: '3M',
+          text: "3M",
         },
         {
-          type: 'month',
+          type: "month",
           count: 6,
-          text: '6M',
+          text: "6M",
         },
         {
-          type: 'year',
+          type: "year",
           count: 1,
-          text: '1Y',
+          text: "1Y",
         },
         {
-          type: 'year',
+          type: "year",
           count: 3,
-          text: '3Y',
+          text: "3Y",
         },
         {
-          type: 'year',
+          type: "year",
           count: 5,
-          text: '5Y',
+          text: "5Y",
         },
       ],
     },
     series: [
       {
-        type: 'spline',
         data: d1Series,
-        tooltip: {
-          valueDecimals: 2,
-        },
       },
     ],
   };
@@ -216,9 +304,9 @@ const FundChart = (props) => {
 };
 const RenderChart = (props) => {
   return (
-      <div style={{ padding: '0 15px' }}>
-        <FundChart graphData={props.graphData} />
-      </div>
+    <div style={{ padding: "0 15px" }}>
+      <FundChart graphData={props.graphData} />
+    </div>
   );
 };
 export default RenderChart;

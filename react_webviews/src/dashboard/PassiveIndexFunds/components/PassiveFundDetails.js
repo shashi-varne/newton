@@ -191,10 +191,10 @@ function PassiveFundDetails() {
         </section>
         <section
           style={{
-            height: "300px",
+            height: "250px",
             minHeight: "200px",
             minWidth: "100%",
-            marginTop: "2em",
+            marginTop: "20px",
           }}
         >
           {graph ? (
