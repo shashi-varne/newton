@@ -104,10 +104,27 @@ const KycUploadDocuments = (props) => {
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
-      if (isEdit) navigate("/kyc/journey");
+      if (isEdit) navigate(getPathname.journey);
       else navigate(getPathname.tradingExperience)
     } else {
-      
+      if (dlFlow) {
+        if (
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
+          kyc.pan.doc_status !== "approved"
+        ) {
+          navigate(getPathname.uploadPan);
+        } else {
+          if (kyc.sign_status !== 'signed') {
+            navigate(getPathname.tradingExperience);
+          } else {
+            navigate(getPathname.journey);
+          }
+        }
+      } else {
+        navigate(getPathname.uploadProgress);
+      }
     }
   };
 
@@ -116,7 +133,7 @@ const KycUploadDocuments = (props) => {
       navigate("/kyc/add-bank");
     } else {
       if (userType === "compliant") {
-        navigate("/kyc/journey");
+        navigate(getPathname.journey);
         // if (isEdit) {
         //   navigate("/kyc/journey");
         // } else {

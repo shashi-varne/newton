@@ -5,7 +5,7 @@ import { isEmpty } from '../../utils/validators'
 import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
-import { getConfig } from 'utils/functions'
+import { getConfig, isTradingEnabled } from 'utils/functions'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
@@ -15,6 +15,7 @@ import KycUploadContainer from "../mini-components/KycUploadContainer";
 
 const config = getConfig();
 const { productName, isSdk } = config;
+const TRADING_ENABLED = !isTradingEnabled();
 
 const Selfie = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -31,8 +32,10 @@ const Selfie = (props) => {
   const navigate = navigateFunc.bind(props)
 
   const handleNavigation = () => {
-    if (kyc.kyc_type !== "manual") {
-      navigate(getPathname.uploadFnOIncomeProof);
+    if (kyc.kyc_type !== "manual" || !kyc.address.meta_data.is_nri) {
+      if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
+        navigate(getPathname.uploadFnOIncomeProof);
+      else navigate(getPathname.kycEsign)
     } else {
       navigate(getPathname.uploadProgress);
     }
@@ -41,7 +44,7 @@ const Selfie = (props) => {
   const handleSubmit = async () => {
     try {      
       let params = {};
-      if (!isSdk) {
+      if (TRADING_ENABLED) {
         params = {
           lat: locationData?.lat,
           lng: locationData?.lng,
@@ -137,7 +140,7 @@ const Selfie = (props) => {
               illustration={require(`assets/${productName}/selfie_placeholder.svg`)}
             />
             {/* For SDK users, we currently do not use LiveCamera or Location */}
-            {isSdk ?
+            {!TRADING_ENABLED ?
               <KycUploadContainer.Button
                 withPicker
                 showOptionsDialog
@@ -163,7 +166,7 @@ const Selfie = (props) => {
               Know More
             </WVClickableTextElement>
           </div>
-          {!isSdk &&
+          {TRADING_ENABLED &&
             <>
               <WVLiveCamera
                 open={isLiveCamOpen}

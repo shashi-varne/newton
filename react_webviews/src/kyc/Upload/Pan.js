@@ -1,5 +1,5 @@
 import "./commonStyles.scss";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
@@ -28,7 +28,21 @@ const Pan = (props) => {
   const [isUploadSuccess, setIsUploadSuccess] = useState(false)
   const [isUploadError, setIsUploadError] = useState(false)
   const [bottomSheetImage, setBottomSheetImage] = useState(null)
+  const [dlFlow, setDlFlow] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+
+  useEffect(() => {
+    if (
+      !isEmpty(kyc) &&
+      kyc.kyc_status !== "compliant" &&
+      !kyc.address.meta_data.is_nri &&
+      kyc.dl_docs_status !== "" &&
+      kyc.dl_docs_status !== "init" &&
+      kyc.dl_docs_status !== null
+    ) {
+      setDlFlow(true);
+    }
+  }, [kyc]);
 
   const onFileSelectComplete = (newFile, fileBase64) => {
     setFile(newFile);
@@ -39,10 +53,28 @@ const Pan = (props) => {
     toast('Please select image file only');
   }
 
-  const handleNavigation = () => {
+  const handleOtherPlatformNavigation = () => {
     if (kyc.kyc_status === 'compliant') {
-      navigate(getPathname.uploadSelfie);
-    } else if (
+      if (kyc.equity_identification.doc_status !== "submitted" || kyc.equity_identification.doc_status !== "approved")
+        navigate(getPathname.uploadSelfie);
+      else {
+        if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
+          navigate(getPathname.uploadFnOIncomeProof);
+        else navigate(getPathname.kycEsign)
+      }
+    } else {
+      if (dlFlow) {
+        if (kyc.sign_status !== 'signed') {
+          navigate(getPathname.tradingExperience);
+        } else {
+          navigate(getPathname.journey);
+        }
+      } else navigate(getPathname.uploadProgress);
+    }
+  };
+
+  const handleSdkNavigation = () => {
+    if (
       kyc.kyc_status !== 'compliant' &&
       kyc.dl_docs_status !== '' &&
       kyc.dl_docs_status !== 'init' &&
@@ -51,6 +83,14 @@ const Pan = (props) => {
       navigate('/kyc-esign/info')
     } else {
       navigate('/kyc/upload/progress')
+    }
+  };
+
+  const handleNavigation = () => {
+    if (isTradingEnabled()) {
+      handleOtherPlatformNavigation();
+    } else {
+      handleSdkNavigation();
     }
   }
 

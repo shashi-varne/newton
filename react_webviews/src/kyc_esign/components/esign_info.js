@@ -11,6 +11,7 @@ import { isEmpty } from "../../utils/validators";
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 
 const config = getConfig();
+const TRADING_ENABLED = isTradingEnabled();
 
 class ESignInfo extends Component {
   constructor(props) {
@@ -74,7 +75,12 @@ class ESignInfo extends Component {
     this.setState({ show_loader: "button" });
 
     try {
-      let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
+      const params = {};
+      if (TRADING_ENABLED) {
+        params.kyc_product_type = "equity";
+      }
+      const url = `/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`;
+      let res = await Api.get(url, params);
       let resultData = res.pfwresponse.result;
       if (resultData && !resultData.error) {
         if (config.app === 'ios') {
@@ -120,7 +126,7 @@ class ESignInfo extends Component {
   }
 
   goNext = () => {
-    if(this.state.kyc?.address?.meta_data?.is_nri || isTradingEnabled()) {
+    if(this.state.kyc?.address?.meta_data?.is_nri || !TRADING_ENABLED) {
       this.handleClick()
     } else {
       this.setState({ showAadharDialog: true })

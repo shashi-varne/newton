@@ -72,8 +72,18 @@ const TradingExperience = (props) => {
   };
 
   const handleNavigation = () => {
-    if (kyc.kyc_status === "compliant") {
-      navigate(getPathname.uploadPan);
+    if (kyc.initial_kyc_status === "compliant") {
+      if (kyc.equity_pan.doc_status !== "submitted" || kyc.equity_pan.doc_status !== "approved") {
+        navigate(getPathname.uploadPan);
+        return;
+      }
+    } 
+    if (kyc.equity_identification.doc_status !== "submitted" || kyc.equity_identification.doc_status !== "approved")
+      navigate(getPathname.uploadSelfie);
+    else {
+      if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
+        navigate(getPathname.uploadFnOIncomeProof);
+      else navigate(getPathname.kycEsign)
     }
   }
 

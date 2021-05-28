@@ -174,7 +174,16 @@ const KycBankDetails = (props) => {
       if (isEdit) navigate(getPathname.journey);
       else navigate(getPathname.tradingExperience)
     } else {
-      
+      if (dl_flow) {
+        if (
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+          kyc.pan.doc_status !== "approved"
+        )
+          navigate(getPathname.uploadPan);
+        else navigate(getPathname.tradingExperience);
+      } else navigate(getPathname.uploadProgress);
     }
   };
 
