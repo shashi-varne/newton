@@ -6,7 +6,7 @@ import Alert from '../mini-components/Alert'
 import { storageService, isEmpty } from '../../utils/validators'
 import { getPathname, storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { getConfig } from '../../utils/functions'
+import { getConfig, isTradingEnabled } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
 import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
@@ -80,7 +80,7 @@ const Pan = (props) => {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        if (!getConfig().isSdk) {
+        if (isTradingEnabled()) {
           setSubTitle("You're almost there, now take a selfie")
         } else {
           setSubTitle("You've successfully uploaded PAN!")

@@ -19,9 +19,10 @@ import {
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, isTradingEnabled } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { isTradingEnabled } from "../../utils/functions";
 
 const config = getConfig();
 
@@ -203,7 +204,7 @@ const KycBankDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if (!config.isSdk) {
+    if (isTradingEnabled()) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();

@@ -7,7 +7,7 @@ import { getPathname, storageConstants } from "../constants";
 import toast from "../../common/ui/Toast";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -24,6 +24,9 @@ const residentialStatusOptions = [
     name: "No",
   },
 ];
+
+const TRADING_ENABLED = isTradingEnabled();
+
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -130,7 +133,7 @@ const Home = (props) => {
       }
     };
 
-    if(!config.isSdk) {
+    if(TRADING_ENABLED) {
       body.kyc_product_type = "equity"
     };
 
@@ -250,7 +253,7 @@ const Home = (props) => {
         },
       };
 
-      if(!config.isSdk) {
+      if(TRADING_ENABLED) {
         body.set_kyc_product_type = "equity";
       }
 

@@ -12,7 +12,7 @@ import PennySuccessDialog from "../mini-components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -174,7 +174,7 @@ const KycBankVerify = (props) => {
   };
 
   const handleSuccess = () => {
-    if (!getConfig().isSdk) {
+    if (isTradingEnabled()) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();

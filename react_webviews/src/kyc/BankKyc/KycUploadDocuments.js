@@ -7,7 +7,7 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { getPathname } from "../constants";
 import "./KycUploadDocuments.scss";
@@ -152,7 +152,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const proceed = () => {
-    if (!getConfig().isSdk) {
+    if (isTradingEnabled()) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();

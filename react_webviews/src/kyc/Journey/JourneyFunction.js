@@ -1,4 +1,6 @@
-import { getConfig } from "utils/functions";
+import { isTradingEnabled } from "utils/functions";
+
+const TRADING_ENABLED = isTradingEnabled();
 
 export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
   let journeyData = [];
@@ -76,7 +78,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: ['esign'],
       }
     ]
-    if (!getConfig().isSdk) {
+    if (TRADING_ENABLED) {
       journeyData.splice(2, 1);
       journeyData = [...journeyData, ...tradingJourneyData];
     }
@@ -144,7 +146,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: ['esign'],
       }
     ]
-    if (!getConfig().isSdk) {
+    if (TRADING_ENABLED) {
       journeyData = journeyData.slice(0,3);
       journeyData = [...journeyData, ...tradingJourneyData];
     }

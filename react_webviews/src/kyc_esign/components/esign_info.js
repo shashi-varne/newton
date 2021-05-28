@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig, getBasePath } from 'utils/functions';
+import { getConfig, getBasePath, isTradingEnabled } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
 import { navigate as navigateFunc } from '../common/functions'
@@ -120,7 +120,7 @@ class ESignInfo extends Component {
   }
 
   goNext = () => {
-    if(this.state.kyc?.address?.meta_data?.is_nri || config.isSdk) {
+    if(this.state.kyc?.address?.meta_data?.is_nri || isTradingEnabled()) {
       this.handleClick()
     } else {
       this.setState({ showAadharDialog: true })
