@@ -236,16 +236,20 @@ const CommunicationDetails = (props) => {
           </div>
           {communicationType === "email" ? (
             <>
-              <Button
-                classes={{ button: "kcd-google-button" }}
-                buttonTitle={googleButtonTitle}
-                type="outlined"
-              />
-              <div className="kcd-or-divider">
-                <div className="kcd-divider-line"></div>
-                <div className="kcd-divider-text">OR</div>
-                <div className="kcd-divider-line"></div>
-              </div>
+              {!showOtpContainer && (
+                <>
+                  <Button
+                    classes={{ button: "kcd-google-button" }}
+                    buttonTitle={googleButtonTitle}
+                    type="outlined"
+                  />
+                  <div className="kcd-or-divider">
+                    <div className="kcd-divider-line"></div>
+                    <div className="kcd-divider-text">OR</div>
+                    <div className="kcd-divider-line"></div>
+                  </div>
+                </>
+              )}
               <TextField
                 label="Email address"
                 value={formData.email || ""}
