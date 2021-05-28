@@ -2,7 +2,7 @@ import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
@@ -15,7 +15,8 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 
-const productName = getConfig().productName;
+const config = getConfig();
+const { productName, isSdk } = config;
 
 const Selfie = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -34,15 +35,19 @@ const Selfie = (props) => {
 
   const handleSubmit = async () => {
     sendEvents("next");
-    try {
-      setIsApiRunning("button")
-      const result = await upload(file, 'identification', {
-        res: fileToShow,
-        lat: locationData.lat,
-        lng: locationData.lng,
-        live_score: selfieLiveScore,
-        kyc_product_type: 'equity'
-      });
+    try {      
+      let params = {};
+      if (!isSdk) {
+        params = {
+          lat: locationData?.lat,
+          lng: locationData?.lng,
+          live_score: selfieLiveScore,
+          kyc_product_type: 'equity'
+        };
+      }
+
+      setIsApiRunning("button");
+      const result = await upload(file, 'identification', params);
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/upload/progress')
     } catch (err) {
@@ -57,6 +62,15 @@ const Selfie = (props) => {
     setLocationData(data);
     closeLocnPermDialog();
     setIsLiveCamOpen(true);
+  }
+
+  const onFileSelectComplete = (newFile, fileBase64) => {
+    setFile(newFile);
+    setFileToShow(fileBase64);
+  }
+
+  const onFileSelectError = () => {
+    Toast('Please select image file only');
   }
 
   const openLiveCamera = () => {
@@ -138,12 +152,26 @@ const Selfie = (props) => {
               fileToShow={fileToShow}
               illustration={require(`assets/${productName}/selfie_placeholder.svg`)}
             />
-            <KycUploadContainer.Button
-              onClick={openLiveCamera}
-              showLoader={isCamLoading}
-            >
-              {file ? "Retake" : "Open Camera"}
-            </KycUploadContainer.Button>
+            {/* For SDK users, we currently do not use LiveCamera or Location */}
+            {isSdk ?
+              <KycUploadContainer.Button
+                withPicker
+                showOptionsDialog
+                nativePickerMethodName="open_gallery"
+                fileName="pan"
+                onFileSelectComplete={onFileSelectComplete}
+                onFileSelectError={onFileSelectError}
+                supportedFormats={SUPPORTED_IMAGE_TYPES}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button> :
+              <KycUploadContainer.Button
+                onClick={openLiveCamera}
+                showLoader={isCamLoading}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button>
+            }
           </KycUploadContainer>
           <div className="kyc-selfie-intructions">
             <span id="kyc-si-text">How to take selfie?</span>
@@ -151,19 +179,23 @@ const Selfie = (props) => {
               Know More
             </WVClickableTextElement>
           </div>
-          <WVLiveCamera
-            open={isLiveCamOpen}
-            onCameraInit={onCameraInit}
-            onClose={() => setIsLiveCamOpen(false)}
-            onCaptureFailure={onCaptureFailure}
-            onCaptureSuccess={onCaptureSuccess}
-          />
-          <LocationPermission
-            isOpen={isLocnPermOpen}
-            onClose={closeLocnPermDialog}
-            onLocationFetchSuccess={onLocationFetchSuccess}
-            parentProps={props}
-          />
+          {!isSdk &&
+            <>
+              <WVLiveCamera
+                open={isLiveCamOpen}
+                onCameraInit={onCameraInit}
+                onClose={() => setIsLiveCamOpen(false)}
+                onCaptureFailure={onCaptureFailure}
+                onCaptureSuccess={onCaptureSuccess}
+              />
+              <LocationPermission
+                isOpen={isLocnPermOpen}
+                onClose={closeLocnPermDialog}
+                onLocationFetchSuccess={onLocationFetchSuccess}
+                parentProps={props}
+              />
+            </>
+          }
         </section>
       )}
     </Container>

@@ -436,7 +436,7 @@ export const getGeoLocation = async (params) => {
     const response = Api.get('https://maps.googleapis.com/maps/api/geocode/json?', {
       result_type: 'country',
       latlng: `${params.lat},${params.lng}`,
-      key: "AIzaSyBLGzIhQOVKdx7bp_ye_BJqlwsnqnTrzlg"
+      key: "AIzaSyCe5PrvBwabfWYOSftl0DlpGKan4o7se2A"
     });
     if (response.status === 'OK') {
       return response.results;
