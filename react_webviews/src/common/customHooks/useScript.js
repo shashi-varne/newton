@@ -1,22 +1,38 @@
 import { useEffect, useState } from 'react';
 
-const useScript = (scriptSrc) => {
-  if (!scriptSrc) return;
+const useScript = (scriptSrc, unmountOnExit) => {
+  if (!scriptSrc) return {};
 
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
+  const checkIsScriptPreloaded = () => {
+    const scriptElems = document.getElementsByTagName('script');
+    for (let i = scriptElems.length; i--; i > 0) {
+      if (scriptElems[i].src === scriptSrc) return true;
+    }
+  }
+
   useEffect(() => {
-    const script = document.createElement('script');
+    const isScriptPreLoaded = checkIsScriptPreloaded();
 
-    script.src = scriptSrc;
-    script.async = true;
-
-    document.body.appendChild(script);
-
-    setScriptLoaded(true);
-
-    return () => {
-      document.body.removeChild(script);
+    if (isScriptPreLoaded) {
+      setScriptLoaded(true);
+    } else {
+      const script = document.createElement('script');
+  
+      script.src = scriptSrc;
+      script.async = true;
+      script.onload = () => {
+        setScriptLoaded(true);
+      }
+      
+      document.body.appendChild(script);
+      
+      if (unmountOnExit) {
+        return () => {
+          document.body.removeChild(script);
+        }
+      }
     }
   }, []);
 
