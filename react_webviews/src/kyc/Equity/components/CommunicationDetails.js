@@ -189,7 +189,7 @@ const CommunicationDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if (!isReadyToInvestBase) {
+    if (isReadyToInvestBase) {
       navigate(getPathname.tradingExperience);
       return;
     }
@@ -205,12 +205,10 @@ const CommunicationDetails = (props) => {
       } else {
         navigate(getPathname.compliantPersonalDetails4, data);
       }
+    } else if (flowType === "digilocker") {
+      navigate(getPathname.digilockerPersonalDetails3, data);
     } else {
-      if (flowType === "digilocker") {
-        navigate(getPathname.digilockerPersonalDetails3, data);
-      } else {
-        navigate(getPathname.personalDetails4, data);
-      }
+      navigate(getPathname.personalDetails4, data);
     }
   };
 
@@ -241,16 +239,20 @@ const CommunicationDetails = (props) => {
           </div>
           {communicationType === "email" ? (
             <>
-              <Button
-                classes={{ button: "kcd-google-button" }}
-                buttonTitle={googleButtonTitle}
-                type="outlined"
-              />
-              <div className="kcd-or-divider">
-                <div className="kcd-divider-line"></div>
-                <div className="kcd-divider-text">OR</div>
-                <div className="kcd-divider-line"></div>
-              </div>
+              {!showOtpContainer && (
+                <>
+                  <Button
+                    classes={{ button: "kcd-google-button" }}
+                    buttonTitle={googleButtonTitle}
+                    type="outlined"
+                  />
+                  <div className="kcd-or-divider">
+                    <div className="kcd-divider-line"></div>
+                    <div className="kcd-divider-text">OR</div>
+                    <div className="kcd-divider-line"></div>
+                  </div>
+                </>
+              )}
               <TextField
                 label="Email address"
                 value={formData.email || ""}
