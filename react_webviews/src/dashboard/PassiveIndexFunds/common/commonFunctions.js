@@ -12,8 +12,8 @@ export async function initialize() {
   this.setErrorData = setErrorData.bind(this);
   this.handleError = handleError.bind(this);
   this.carouselSwipecount = carouselSwipe_count.bind(this);
-  this.productName = productName.bind(this)
-  this.handleClick = handleClick.bind(this)
+  this.productName = productName.bind(this);
+  this.handleClick = handleClick.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 

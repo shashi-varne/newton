@@ -25,4 +25,29 @@
    left: 0;
    top: 0;
    height: 400px;
+   padding: 0px 20px;
 }
+
+.player-wrapper {
+    position: relative;
+    padding-top: 56.25%
+  }
+  
+  .react-player {
+    top: 0;
+    margin: 0 auto;
+    left: 50%;
+    transform: translate(-50%,0); 
+    position: absolute; 
+    z-index: 1 
+  }
+
+  .play-icon{
+    margin-top: 50px;
+  }
+
+  .play-info{
+    top: 238px !important;
+    width: 100% !important;
+    height: 150px !important;
+  }
