@@ -41,6 +41,9 @@ body[data-device="web"]{
       color: var(--dark);
       margin-top: 10px;
       word-break: break-word;
+    }
+
+    .wv-bcl-title::first-letter {
       text-transform: capitalize;
     }
     
@@ -49,7 +52,10 @@ body[data-device="web"]{
       line-height: 21px;
       color: var(--steelgrey);
       word-break: break-word;
-      margin: 10px 0 20px;
+      margin: 20px 0;
+    }
+
+    .wv-bcl-subtitle::first-letter {
       text-transform: capitalize;
     }
   }

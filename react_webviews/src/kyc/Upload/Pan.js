@@ -23,7 +23,6 @@ const Pan = (props) => {
   const [fileToShow, setFileToShow] = useState(null)
   const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
-  const [showLoader, setShowLoader] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isUploadSuccess, setIsUploadSuccess] = useState(false)
   const [isUploadError, setIsUploadError] = useState(false)
@@ -142,7 +141,7 @@ const Pan = (props) => {
     <Container
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
