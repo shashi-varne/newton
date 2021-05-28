@@ -2,29 +2,32 @@ import React, { useEffect, useState } from "react";
 import UiSkelton from "../../../common/ui/Skelton";
 import toast from "../../../common/ui/Toast";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { getConfig } from "../../../utils/functions";
 import { getUrlParams, isEmpty } from "../../../utils/validators";
+import { navigate as navigateFunc } from "../../common/functions";
+import { isReadyToInvest } from "../../services";
+import { getPathname } from "../../constants";
 
 const CommunicationCallback = (props) => {
+  const navigate = navigateFunc.bind(props);
   const { error } = getUrlParams();
-  const { kyc, isLoading } = useUserKycHook();
-  const navigate = (pathname) => {
-    props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-    });
-  };
+  const { kyc, user, isLoading } = useUserKycHook();
+
   let checkUser = true;
   if (error) {
     checkUser = false;
     toast(error);
-    navigate("/kyc/communication-details");
+    navigate(getPathname.communicationDetails);
   }
 
   const [goNext] = useState(checkUser);
 
   useEffect(() => {
     if (!isEmpty(kyc) && goNext) {
+      const isReadyToInvestBase = isReadyToInvest();
+      if (isReadyToInvestBase) {
+        navigate(getPathname.tradingExperience);
+        return;
+      }
       const isCompliant = kyc?.kyc_status === "compliant";
       const dlCondition =
         !isCompliant &&
@@ -32,15 +35,17 @@ const CommunicationCallback = (props) => {
         kyc.dl_docs_status !== "" &&
         kyc.dl_docs_status !== "init" &&
         kyc.dl_docs_status !== null;
-      let nextState = "/kyc/personal-details4";
+      const isNri = kyc.address?.meta_data?.is_nri || false;
+      let nextState = getPathname.personalDetails4;
       if (isCompliant) {
-        nextState = "/kyc/compliant-personal-details4";
+        if (isNri) nextState = getPathname.nriAddressDetails2;
+        else nextState = getPathname.compliantPersonalDetails4;
       } else if (dlCondition) {
-        nextState = "/kyc/dl/personal-details3";
+        nextState = getPathname.digilockerPersonalDetails3;
       }
       navigate(nextState);
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   return (
     <div className="ContainerWrapper">
