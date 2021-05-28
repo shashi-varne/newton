@@ -8,6 +8,10 @@ import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
 import { getConfig } from "../../utils/functions";
 
+const KYC_PROPS_BASE = {
+  classOverRide: 'rubik'
+};
+
 class Container extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +26,6 @@ class Container extends Component {
       project: "kyc", //to use in common functions
     };
     this.historyGoBack = this.historyGoBack.bind(this);
-
     this.didMount = didMount.bind(this);
     this.commonRender = commonRender.bind(this);
   }
@@ -63,7 +66,7 @@ class Container extends Component {
   }
 
   render() {
-    return <Fragment>{this.commonRender()}</Fragment>;
+    return <Fragment>{this.commonRender(KYC_PROPS_BASE)}</Fragment>;
   }
 }
 

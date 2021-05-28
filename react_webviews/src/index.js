@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import "typeface-roboto";
 import "typeface-source-sans-pro";
 import "typeface-poppins";
+import "@fontsource/rubik/latin.css";
 import './index.css';
 import App from './App';
 import $ from 'jquery';
