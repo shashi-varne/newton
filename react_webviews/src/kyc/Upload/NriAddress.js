@@ -166,7 +166,7 @@ const NRIAddressUpload = (props) => {
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
     >

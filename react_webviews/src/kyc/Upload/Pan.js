@@ -23,7 +23,6 @@ const Pan = (props) => {
   const [fileToShow, setFileToShow] = useState(null)
   const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
-  const [showLoader, setShowLoader] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isUploadSuccess, setIsUploadSuccess] = useState(false)
   const [isUploadError, setIsUploadError] = useState(false)
@@ -120,7 +119,7 @@ const Pan = (props) => {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        if (isTradingEnabled()) {
+        if (isTradingEnabled() && !result.kyc.address.meta_data.is_nri) {
           setSubTitle("You're almost there, now take a selfie")
         } else {
           setSubTitle("You've successfully uploaded PAN!")
@@ -142,7 +141,7 @@ const Pan = (props) => {
     <Container
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}

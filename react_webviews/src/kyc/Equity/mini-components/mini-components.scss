@@ -32,42 +32,6 @@ $subtitle-color: #767E86;
   }
 }
 
-.kyc-selfie-upload-status {
-  .kyc-selfie-upload-status-content {
-    .kyc-selfie-upload-status-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-
-      .sus-info-title {
-        padding: 10px 0;
-        font-weight: bold;
-        font-size: 20px;
-        line-height: 32px;
-        width: 95%;
-        color: #161a2e;
-      }
-
-      .sus-info-subtitle {
-        font-size: 13px;
-        line-height: 21px;
-        width: 95%;
-        color: #767e86;
-        padding-bottom: 35px;
-      }
-
-      img {
-        margin-left: 20px;
-      }
-    }
-
-    .sus-button {
-      width: 100%;
-      min-height: 45px;
-    }
-  }
-}
-
 .kyc-confirm-pan-text {
   color: var(--primary);
   font-weight: bold;

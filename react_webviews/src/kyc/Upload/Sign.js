@@ -18,7 +18,7 @@ const Sign = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const [showLoader, setShowLoader] = useState(false)
+  // const [showLoader, setShowLoader] = useState(false)
 
   const {kyc, isLoading} = useUserKycHook();
 
@@ -44,7 +44,7 @@ const Sign = (props) => {
           result.kyc.dl_docs_status !== "" &&
           result.kyc.dl_docs_status !== "init" &&
           result.kyc.dl_docs_status !== null;
-        if (kyc.kyc_type !== "manual" || !kyc.address.meta_data.is_nri) {
+        if (kyc.kyc_type !== "manual" && !kyc.address.meta_data.is_nri) {
           const type =
             result?.kyc?.kyc_status === "compliant"
               ? "compliant"
@@ -75,7 +75,7 @@ const Sign = (props) => {
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}

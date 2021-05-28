@@ -78,7 +78,7 @@ class ESignInfo extends Component {
 
     try {
       const params = {};
-      if (TRADING_ENABLED) {
+      if (TRADING_ENABLED && !this.state.kyc?.address?.meta_data?.is_nri && this.state.kyc.kyc_type !== "manual") {
         params.kyc_product_type = "equity";
       }
       const url = `/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`;
@@ -146,7 +146,7 @@ class ESignInfo extends Component {
       <Container
         showLoader={show_loader}
         title='eSign KYC'
-        handleClick={this.goNext}
+        handleClick={() => this.goNext()}
         buttonTitle='PROCEED'
         headerData={headerData}
       >
