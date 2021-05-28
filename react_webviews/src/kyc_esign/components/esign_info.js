@@ -34,6 +34,7 @@ class ESignInfo extends Component {
   initialize = async () => {
     const kyc = storageService().getObject("kyc");
     if (!isEmpty(kyc)) {
+      let dl_flow = false;
       if (
         kyc.kyc_status !== "compliant" &&
         !kyc.address.meta_data.is_nri &&
@@ -41,8 +42,9 @@ class ESignInfo extends Component {
         kyc.dl_docs_status !== "init" &&
         kyc.dl_docs_status !== null
       ) {
-        this.setState({ dl_flow: true, kyc: kyc });
+        dl_flow = true;
       }
+      this.setState({ dl_flow, kyc });
     }
   };
 
