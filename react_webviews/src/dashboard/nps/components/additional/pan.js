@@ -291,8 +291,6 @@ class PanDetails extends Component {
         handleClick={this.handleClick}
         goBack={this.goBack}
         handleClick1={this.handleClick}
-        showError={this.state.showError}
-        errorData={this.state.errorData}
       >
         <div className="pan-details">
           <FormControl fullWidth>

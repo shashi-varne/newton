@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import InputWithIcon from "common/ui/InputWithIcon";
+import Input from "common/ui/Input";
 import person from "assets/location.png";
 import Api from "utils/api";
 import { initialize } from "../../common/commonFunctions";
@@ -150,7 +150,7 @@ class NpsDelivery extends Component {
           <div className="title" style={{marginBottom: '20px'}}>PRAN delivery address</div>
 
           <div className="InputField">
-            <InputWithIcon
+            <Input
               icon={person}
               type="number"
               width="30"
@@ -165,7 +165,7 @@ class NpsDelivery extends Component {
           </div>
 
           <div className="InputField">
-            <InputWithIcon
+            <Input
               width="30"
               id="address"
               label="Permanent address (house, building, street)"
@@ -179,7 +179,7 @@ class NpsDelivery extends Component {
           </div>
 
           <div className="InputField">
-            <InputWithIcon
+            <Input
               disabled
               width="30"
               id="name"
@@ -193,7 +193,7 @@ class NpsDelivery extends Component {
           </div>
 
           <div className="InputField">
-            <InputWithIcon
+            <Input
               disabled
               width="30"
               id="name"

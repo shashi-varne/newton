@@ -151,7 +151,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
       canSubmit = false;
     }
 
-    if (key_check === "pincode" && (form_data.pincode.length !== 6 || form_data.pincode_error.length)) {
+    if (key_check === "pincode" && (form_data.pincode?.length !== 6 || form_data.pincode_error?.length)) {
       if (form_data.pincode_error.length) {
         form_data[key_check + "_error"] = form_data.pincode_error;
       } else form_data[key_check + "_error"] = "Please enter a valid Pincode";
@@ -246,12 +246,11 @@ export async function kyc_submit(params) {
           this.accountMerge();
           break;
         default: 
-          let title1 =
-            result.error || result.message || "Something went wrong!";
+          let title1 = typeof result.error !== 'string' ? "Error" : result.messsage || result.error;
           this.setState({
             title1: title1,
           });
-          throw result.error;
+          throw typeof result.error !== 'string' ? "something went wrong" : result.messsage || result.error;
       }
     }
   } catch (err) {
