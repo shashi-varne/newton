@@ -101,14 +101,9 @@ const IpvVideo = (props) => {
     const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
-      const response = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
-      if(response.status_code === 200) {
-        const result = response.result
-        updateKyc(result.kyc)
-        navigate('/kyc/upload/progress')
-      } else {
-        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")
-      }
+      const result = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
+      updateKyc(result.kyc)
+      navigate('/kyc/upload/progress')
     } catch (err) {
       toast(err?.message)
       console.error(err)

@@ -103,8 +103,7 @@ const Pan = (props) => {
         }
       }
       setIsApiRunning("button")
-      const response = await upload(file, 'pan', data);
-      const result = response.result;
+      const result = await upload(file, 'pan', data);
       if (
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
         (result.error && !result.ocr_pan_kyc_matches)
