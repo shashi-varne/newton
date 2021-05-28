@@ -49,7 +49,6 @@ const BanksList = (props) => {
   };
 
   const bank_details = (bank_id) => () => {
-    sendEvents('next')
     navigate(`${getPathname.bankDetails}${bank_id}`);
   };
 
