@@ -64,7 +64,7 @@ export const storageConstants = {
   AUTH_IDS: 'auth_ids',
 }
 
-export const docMapper = {
+export const DOCUMENTS_MAPPER = {
   DL: "Driving license",
   PASSPORT: "Passport",
   AADHAAR: "Aadhaar card",

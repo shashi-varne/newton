@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, docMapper } from '../constants'
+import { storageConstants, DOCUMENTS_MAPPER } from '../constants'
 import { upload } from '../common/api'
 import { getBase64, getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -248,8 +248,8 @@ const AddressUpload = (props) => {
   var addressProof = kyc?.address?.meta_data?.is_nri
     ? "Passport"
     : isMyAccountFlow
-    ? docMapper[stateParams.addressDocType]
-    : docMapper[kyc?.address_doc_type];
+    ? DOCUMENTS_MAPPER[stateParams.addressDocType]
+    : DOCUMENTS_MAPPER[kyc?.address_doc_type];
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )

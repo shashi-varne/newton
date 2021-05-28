@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini-components/Alert'
 import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper, PATHNAME_MAPPER } from '../../constants'
+import { storageConstants, nriDocMapper as DOCUMENTS_MAPPER, PATHNAME_MAPPER } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
 import toast from '../../../common/ui/Toast'
@@ -208,7 +208,7 @@ const ChangeAddressDetails2 = (props) => {
     : addressDocType
   const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
-    : docMapper[addressDocType]
+    : DOCUMENTS_MAPPER[addressDocType]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
