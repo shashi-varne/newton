@@ -3,7 +3,7 @@ import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import SdkInvestCard from "../../mini-components/SdkInvestCard";
 import "./SdkLanding.scss";
-import { sdkInvestCardMapper } from "../../constants";
+import { prepareInvestMaaper } from "../../constants";
 
 const config = getConfig();
 class Prepare extends Component {
@@ -15,8 +15,8 @@ class Prepare extends Component {
   }
 
   handleCard = (path) => () => {
-    if (path === "/invest") {
-      this.navigate("/");
+    if (path) {
+      this.navigate(path);
     } else {
       return;
     }
@@ -37,7 +37,7 @@ class Prepare extends Component {
             Let’s make your money work for you!
           </div>
           <div className="sdk-landing-cards">
-            {sdkInvestCardMapper.map((el, idx) => {
+            {prepareInvestMaaper.map((el, idx) => {
               return (
                 <SdkInvestCard
                   key={idx}
