@@ -124,15 +124,18 @@ const Home = (props) => {
 
   const checkPanValidity = async (showConfirmPan = false) => {
     // setOpenCheckCompliant(true);
+    let body = {
+      kyc: {
+        pan_number: pan.toUpperCase(),
+      }
+    };
+
+    if(!config.isSdk) {
+      body.kyc_product_type = "equity"
+    };
+
     try {
-      let result = await getPan(
-        {
-          kyc: {
-            pan_number: pan.toUpperCase(),
-          },
-        },
-        accountMerge
-      );
+      let result = await getPan(body, accountMerge);
       if (isEmpty(result)) return;
       setUserName(result.kyc.name);
       setIsStartKyc(true);
@@ -245,8 +248,12 @@ const Home = (props) => {
           pan: newObject,
           address: kyc.address.meta_data,
         },
-        set_kyc_product_type: "equity" // later add a check only if its equity flow (for b2c this is hardcoded)
       };
+
+      if(!config.isSdk) {
+        body.set_kyc_product_type = "equity";
+      }
+
       let result = await kycSubmit(body);
       if (!result) return;
       if (result?.kyc?.kyc_status === "compliant") {
