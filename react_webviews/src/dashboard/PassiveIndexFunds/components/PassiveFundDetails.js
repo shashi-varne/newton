@@ -14,7 +14,7 @@ import Returns from "../../../fund_details/components/Returns";
 import FundInfo from "../../../fund_details/components/FundInfo";
 import FundPortfolio from "../../../fund_details/components/FundPortfolio";
 import RiskDetails from "../../../fund_details/components/RiskDetails";
-import FundChart from "../../../fund_details/components/FundChart";
+import FundChart from "../mini-components/PassiveFundChart";
 import Container from "../../common/Container";
 import Toast from "../../../common/ui/Toast";
 import { SkeltonRect } from "../../../common/ui/Skelton";
@@ -88,7 +88,7 @@ function PassiveFundDetails() {
                 fontWeight: "700",
               }}
             >
-              Tracking error: <span style={{ fontWeight: "400" }}>1.21%</span>
+              Tracking error: <span style={{ fontWeight: "400" }}>{fundDetails?.performance?.tracking_error !== "NA" ? `${fundDetails?.performance?.tracking_error}%` : "NA"}</span>
             </p>
             <p className="pfd-values" style={{ color: "#767E86" }}>
               The difference between the fund’s returns & the index it tries to
@@ -118,7 +118,7 @@ function PassiveFundDetails() {
 
             <button
               className="call-back-popup-button"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", fontSize: "12px" }}
               onClick={handleClose}
             >
               OKAY
@@ -139,7 +139,7 @@ function PassiveFundDetails() {
   return (
     <Container
       buttonTitle="INVEST NOW"
-      title={fundDetails?.performance?.legal_name}
+      title={fundDetails?.performance?.friendly_name}
       hidePageTitle
       handleClick={() => console.log("next")}
       noPadding
@@ -148,7 +148,7 @@ function PassiveFundDetails() {
       <div className="passive-funds-details">
         <section className="pfd-padding">
           <div className="pf-flex">
-            <p className="pfd-title">{fundDetails?.performance?.legal_name}</p>
+            <p className="pfd-title">{fundDetails?.performance?.friendly_name}</p>
             <img
               style={{ marginLeft: "40px", width: "50px", height: "50px" }}
               src={fundDetails?.performance?.amc_logo_small}
@@ -156,9 +156,9 @@ function PassiveFundDetails() {
             />
           </div>
           <div style={{ paddingBottom: "10px" }}>
-            <PassiveStarRating value={fundDetails?.performance?.fisdom_rating} />
+            <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
           </div>
-          <p className="pfd-info">{`Very high risk | Equity-Nifty Midcap 150`}</p>
+          <p className="pfd-info">{`${fundDetails?.performance.ms_risk} risk | ${fundDetails?.performance?.tracking_index}`}</p>
           <div className="pf-flex">
             <div style={{ color: "#161A2E" }}>
               <p className="pfd-points" style={{ color: "#161A2E" }}>
@@ -230,7 +230,7 @@ function PassiveFundDetails() {
           </div>
           <div>
             <p className="pfd-points">TRACKING ERROR</p>
-            <p className="pfd-values">1.21% (1Y)</p>
+            <p className="pfd-values">{fundDetails?.performance?.tracking_error !== "NA" ? `${fundDetails?.performance?.tracking_error}% (1Y)` : "NA"}</p>
           </div>
           <div>
             <p className="pfd-points">FUND SIZE</p>
