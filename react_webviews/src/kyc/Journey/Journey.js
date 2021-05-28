@@ -463,9 +463,11 @@ const Journey = (props) => {
         pan: '/kyc/home',
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        backToJourney: key === 'sign' ? true : null,
-        userType: 'compliant',
+        state: {
+          isEdit: isEdit,
+          backToJourney: key === 'sign' ? true : null,
+          userType: 'compliant',
+        }
       })
       return
     } else {
@@ -481,8 +483,10 @@ const Journey = (props) => {
         }
 
         navigate(stateMapper[key], {
-          isEdit: isEdit,
-          userType: 'non-compliant',
+          state: {
+            isEdit: isEdit,
+            userType: 'non-compliant',
+          }
         })
         return
       } else {
@@ -497,8 +501,10 @@ const Journey = (props) => {
         console.log(stateMapper[key])
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        userType: 'non-compliant',
+        state: {
+          isEdit: isEdit,
+          userType: 'non-compliant',
+        }
       })
       return
     }

@@ -87,11 +87,11 @@ const PersonalDetails3 = (props) => {
 
   const handleNavigation = () => {
     if (type === "digilocker") {
-      if (isEdit) {
-        navigate(getPathname.journey);
-      } else {
-        navigate(getPathname.digilockerPersonalDetails3);
-      }
+      navigate(getPathname.digilockerPersonalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
     } else {
       navigate(getPathname.personalDetails4, {
         state: {
