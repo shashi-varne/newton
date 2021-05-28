@@ -36,8 +36,8 @@ class NpsPaymentCallback extends Component {
     } else {
       const result = await this.getNPSInvestmentStatus();
       storageService().set('nps_additional_details_required', true);
-      storageService().setObject('nps_additional_details', result.registration_details);
-      storageService().setObject('kyc', result.kyc_app);
+      // storageService().setObject('nps_additional_details', result.registration_details);
+      // storageService().setObject('kyc', result.kyc_app);
   
       let currentUser = storageService().getObject("user");
  
