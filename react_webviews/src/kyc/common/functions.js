@@ -1,5 +1,6 @@
 import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { isEmpty } from '../../utils/validators'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -152,4 +153,15 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
     }
   });
   return compare;
+};
+
+export const isDigilockerFlow = (kyc = {}) => {
+  if (isEmpty(kyc)) return false;
+  return (
+    kyc.kyc_status !== "compliant" &&
+    !kyc.address.meta_data.is_nri &&
+    kyc.dl_docs_status !== "" &&
+    kyc.dl_docs_status !== "init" &&
+    kyc.dl_docs_status !== null
+  );
 };

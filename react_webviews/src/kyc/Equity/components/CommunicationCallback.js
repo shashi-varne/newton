@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import UiSkelton from "../../../common/ui/Skelton";
 import toast from "../../../common/ui/Toast";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { getUrlParams, isEmpty } from "../../../utils/validators";
-import { navigate as navigateFunc } from "../../common/functions";
+import {
+  isDigilockerFlow,
+  navigate as navigateFunc,
+} from "../../common/functions";
 import { isReadyToInvest } from "../../services";
 import { getPathname } from "../../constants";
+import Container from "../../common/Container";
 
 const CommunicationCallback = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -29,12 +32,7 @@ const CommunicationCallback = (props) => {
         return;
       }
       const isCompliant = kyc?.kyc_status === "compliant";
-      const dlCondition =
-        !isCompliant &&
-        !kyc.address.meta_data.is_nri &&
-        kyc.dl_docs_status !== "" &&
-        kyc.dl_docs_status !== "init" &&
-        kyc.dl_docs_status !== null;
+      const dlCondition = isDigilockerFlow(kyc);
       const isNri = kyc.address?.meta_data?.is_nri || false;
       let nextState = getPathname.personalDetails4;
       if (isCompliant) {
@@ -47,11 +45,7 @@ const CommunicationCallback = (props) => {
     }
   }, [kyc, user]);
 
-  return (
-    <div className="ContainerWrapper">
-      <UiSkelton type={isLoading} />
-    </div>
-  );
+  return <Container skelton={isLoading} noHeader noFooter />;
 };
 
 export default CommunicationCallback;

@@ -7,8 +7,8 @@ class Otp extends Component {
     super(props);
     this.state = {
       countdownInterval: null,
-      timeAvailable: this.props.state.timeAvailable,
-      totalTime: this.props.state.totalTime,
+      timeAvailable: this.props.otpData.timeAvailable,
+      totalTime: this.props.otpData.totalTime,
       error: this.props.isError,
       showDotLoader: this.props.showDotLoader,
     };
@@ -21,10 +21,6 @@ class Otp extends Component {
   }
 
   componentDidMount() {
-    var inputs = document.getElementsByTagName("input");
-    for (var index = 0; index < inputs.length; ++index) {
-      inputs[index].placeholder = "";
-    }
     let intervalId = setInterval(this.countdown, 1000);
     this.setState({
       countdownInterval: intervalId,
@@ -74,7 +70,7 @@ class Otp extends Component {
             onChange={this.props.handleOtp}
             hasErrored={true}
             placeholder="X"
-            value={this.props.state.otp}
+            value={this.props.otpData.otp}
             isDisabled={this.props.isDisabled || false}
           />
         </div>
@@ -85,7 +81,7 @@ class Otp extends Component {
             {timeAvailable < 10 ? `0${timeAvailable}` : timeAvailable}s
           </div>
         )}
-        {(timeAvailable <= 0 || !timeAvailable) && !this.props.isDisabled && (
+        {(timeAvailable <= 0 || !timeAvailable) && (
           <div
             className={`cd-otp-resend-text ${this.props.class}`}
             onClick={this.resendOtp}

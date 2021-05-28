@@ -1,6 +1,5 @@
 import InputAdornment from "@material-ui/core/InputAdornment";
 import React, { useEffect, useState } from "react";
-import Button from "../../../common/ui/Button";
 import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
 import "./commonStyles.scss";
@@ -18,6 +17,7 @@ import { getBasePath, getConfig } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
 import { navigate as navigateFunc } from "../../common/functions";
 import { isReadyToInvest } from "../../services";
+import WVButton from "../../../common/ui/Button/WVButton";
 
 const config = getConfig();
 const googleButtonTitle = (
@@ -44,7 +44,7 @@ const CommunicationDetails = (props) => {
   const [formData, setFormData] = useState({
     whatsappConsent: true,
   });
-  const [state, setState] = useState({
+  const [otpData, setOtpData] = useState({
     otp: "",
     totalTime: 30,
     timeAvailable: 30,
@@ -65,11 +65,10 @@ const CommunicationDetails = (props) => {
       setCommunicationType(type);
       const data = { ...formData };
       data.email = kyc.identification.meta_data.email;
-      let mobile_number = kyc.identification.meta_data.mobile_number || "";
-      if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
-        mobile_number = mobile_number.split("|")[1];
-      }
-      data.mobile = mobile_number;
+      let mobileNumber = kyc.identification.meta_data.mobile_number || "";
+      const [extension, number] = mobileNumber.toString().split("|");
+      if (extension) mobileNumber = number;
+      data.mobile = mobileNumber;
       setFormData({ ...data });
       setIsReadyToInvest(isReadyToInvest());
     }
@@ -103,7 +102,7 @@ const CommunicationDetails = (props) => {
       const result = await resendOtp(otpId);
       if (!result) return;
       setOtpId(result.otp_id);
-      setState({
+      setOtpData({
         otp: "",
         totalTime: 30,
         timeAvailable: 30,
@@ -116,23 +115,18 @@ const CommunicationDetails = (props) => {
   };
 
   const handleOtp = (otp) => {
-    setState((state) => {
-      return {
-        ...state,
-        otp,
-      };
-    });
+    setOtpData({ ...otpData, otp });
   };
 
   const handleClick = async () => {
     try {
       if (showOtpContainer) {
-        if (state.otp.length !== 4) {
+        if (otpData.otp.length !== 4) {
           toast("Minimum otp length is 4");
           return;
         }
         setShowLoader("button");
-        const otpResult = await verifyOtp({ otpId, otp: state.otp });
+        const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
         if (!otpResult) return;
         setKycToSession(otpResult.kyc);
         handleNavigation();
@@ -165,7 +159,7 @@ const CommunicationDetails = (props) => {
         if (!result) return;
         setShowOtpContainer(true);
         setOtpId(result.otp_id);
-        setState({
+        setOtpData({
           otp: "",
           totalTime: 30,
           timeAvailable: 30,
@@ -238,11 +232,14 @@ const CommunicationDetails = (props) => {
             <>
               {!showOtpContainer && (
                 <>
-                  <Button
-                    classes={{ button: "kcd-google-button" }}
-                    buttonTitle={googleButtonTitle}
-                    type="outlined"
-                  />
+                  <WVButton
+                    variant="outlined"
+                    color="secondary"
+                    fullWidth
+                    classes={{ root: "kcd-google-button" }}
+                  >
+                    {googleButtonTitle}
+                  </WVButton>
                   <div className="kcd-or-divider">
                     <div className="kcd-divider-line"></div>
                     <div className="kcd-divider-text">OR</div>
@@ -307,7 +304,7 @@ const CommunicationDetails = (props) => {
               </div>
               <div className="kcd-otp-content">
                 <Otp
-                  state={state}
+                  otpData={otpData}
                   showDotLoader={showDotLoader}
                   handleOtp={handleOtp}
                   resendOtp={resendOtpVerification}
