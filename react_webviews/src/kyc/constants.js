@@ -60,6 +60,7 @@ export const getPathname = {
   uploadSelfieVideo: '/kyc/upload/selfie_video',
   uploadFnOIncomeProof: '/kyc/upload/fno-income-proof',
   tradingExperience: '/kyc/trading-experience',
+  nriError: '/kyc/nri-error',
 }
 
 export const storageConstants = {

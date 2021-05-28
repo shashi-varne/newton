@@ -285,9 +285,13 @@ const Home = (props) => {
         navigate(getPathname.journey);
       } else {
         if (is_nri) {
-          navigate(`${getPathname.journey}`, {
-            searchParams: `${config.searchParams}&show_aadhaar=false`,
-          });
+          if (!TRADING_ENABLED) {
+            navigate(`${getPathname.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=false`,
+            });
+          } else {
+            navigate(getPathname.nriError);
+          }
         } else {
           navigate(`${getPathname.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=true`,
