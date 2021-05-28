@@ -123,7 +123,7 @@ class EligibleLoan extends Component {
       form_data.amount_required = vendor_info.display_loan_amount;
       form_data.amount_required_error = "";
     } else {
-      form_data.maxAmount = vendor_info.displayOffer;
+      form_data.maxAmount = vendor_info.idfc_display_offer;
     }
 
     let keys_to_check = ["amount_required"];
@@ -218,7 +218,7 @@ class EligibleLoan extends Component {
               <b>Congrats!</b> You’re eligible for a loan up to
             </div>
             <div className="max-loan-amt">
-              {formatAmountInr(vendor_info.displayOffer || "0")}
+              {formatAmountInr(vendor_info.idfc_display_offer || "0")}
             </div>
           </div>
 
@@ -305,12 +305,8 @@ class EligibleLoan extends Component {
                           helperText={
                             this.state.form_data.amount_required_error ||
                             (this.state.form_data.amount_required &&
-                              numDifferentiationInr(
-                                this.state.form_data.amount_required || 0
-                              )) ||
-                            `Min ₹1 lakh to max ₹${changeNumberFormat(
-                              vendor_info.displayOffer || "0"
-                            )}`
+                              numDifferentiationInr(this.state.form_data.amount_required  || 0)) ||
+                            `Min ₹1 lakh to max ₹${changeNumberFormat(vendor_info.idfc_display_offer || "0")}`
                           }
                           // type="number"
                           inputMode="numeric"
