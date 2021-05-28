@@ -21,7 +21,7 @@ const KycUploadDocuments = (props) => {
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
-  const {kyc, isLoading, setKycToSession} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
 
@@ -140,7 +140,7 @@ const KycUploadDocuments = (props) => {
         bank_id
       );
       if(!isEmpty(result))
-        setKycToSession(result.kyc)
+        updateKyc(result.kyc)
       setShowPendingModal(true);
     } catch (err) {
       toast("Image upload failed, please retry")

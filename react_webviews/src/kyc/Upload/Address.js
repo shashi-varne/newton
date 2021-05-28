@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { STORAGE_CONSTANTS, DOCUMENTS_MAPPER } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { DOCUMENTS_MAPPER } from '../constants'
 import { upload } from '../common/api'
 import { getBase64, getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -65,7 +65,7 @@ const AddressUpload = (props) => {
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
-  const {kyc: kycData, isLoading} = useUserKycHook();
+  const {kyc: kycData, isLoading, updateKyc} = useUserKycHook();
   const [kyc, setKyc] = useState(
     kycData
   )
@@ -214,8 +214,7 @@ const AddressUpload = (props) => {
       }
       if(response.status_code === 200) {
         result = response.result;
-        setKyc(result.kyc)
-        storageService().setObject(STORAGE_CONSTANTS.KYC, result.kyc)
+        updateKyc(result.kyc)
         if(isMyAccountFlow) {
           navigate('/my-account');
         } else {

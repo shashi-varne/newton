@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { STORAGE_CONSTANTS, NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER } from '../constants'
 import { upload } from '../common/api'
 import { getBase64, getConfig } from '../../utils/functions'
 import toast from 'common/ui/Toast'
@@ -43,7 +43,7 @@ const NRIAddressUpload = (props) => {
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
   const [showLoader, setShowLoader] = useState(false)
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -185,7 +185,7 @@ const NRIAddressUpload = (props) => {
       }
       if(response.status_code === 200) {
         result = response.result;
-        storageService().setObject(STORAGE_CONSTANTS.KYC, result.kyc)
+        updateKyc(result.kyc);
         navigate('/kyc/upload/progress')
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
