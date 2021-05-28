@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import Alert from "../mini-components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, storageConstants } from "../constants";
 import { storageService } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
@@ -16,7 +16,7 @@ const Complete = (props) => {
     if (storageService().get(storageConstants.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     }
   };
 
@@ -36,7 +36,7 @@ const Complete = (props) => {
           <div className="title">Kudos, KYC is completed!</div>
           <div
             className="subtitle"
-            onClick={() => navigate(getPathname.kycReport)}
+            onClick={() => navigate(PATHNAME_MAPPER.kycReport)}
           >
             See KYC application details {" >"}
           </div>

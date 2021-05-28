@@ -5,7 +5,7 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   occupationTypeOptions,
   incomeOptions,
-  getPathname,
+  PATHNAME_MAPPER,
 } from "../constants";
 import { isEmpty } from "utils/validators";
 import {
@@ -99,14 +99,14 @@ const PersonalDetails3 = (props) => {
 
   const handleNavigation = (is_nri) => {
     if (is_nri) {
-      navigate(getPathname.nriAddressDetails2, {
+      navigate(PATHNAME_MAPPER.nriAddressDetails2, {
         state: {
           isEdit: isEdit,
           userType: "compliant",
         },
       });
     } else {
-      navigate(getPathname.compliantPersonalDetails4, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails4, {
         state: {
           isEdit: isEdit,
           userType: "compliant",

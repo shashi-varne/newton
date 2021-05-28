@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { getPathname, addressProofOptions } from "../constants";
+import { PATHNAME_MAPPER, addressProofOptions } from "../constants";
 import { isEmpty } from "utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { kycSubmit } from "../common/api";
@@ -80,7 +80,7 @@ const AddressDetails1 = (props) => {
       is_nri === kyc.address.meta_data.is_nri &&
       kyc.address_doc_type === form_data.address_doc_type
     ) {
-      navigate(getPathname.addressDetails2, {
+      navigate(PATHNAME_MAPPER.addressDetails2, {
         state: {
           isEdit: isEdit,
           backToJourney: state.backToJourney,
@@ -105,7 +105,7 @@ const AddressDetails1 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.addressDetails2, {
+      navigate(PATHNAME_MAPPER.addressDetails2, {
         state: {
           isEdit: isEdit,
           backToJourney: state.backToJourney,

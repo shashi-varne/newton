@@ -4,7 +4,7 @@ import { getConfig } from "../../utils/functions";
 import { getMyAccount } from "../common/api";
 import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, storageConstants } from "../constants";
 import toast from "../../common/ui/Toast";
 import { initData } from "../services";
 import "./BanksList.scss";
@@ -43,11 +43,11 @@ const BanksList = (props) => {
   };
 
   const handleClick = () => {
-    navigate(getPathname.addBank);
+    navigate(PATHNAME_MAPPER.addBank);
   };
 
   const bank_details = (bank_id) => () => {
-    navigate(`${getPathname.bankDetails}${bank_id}`);
+    navigate(`${PATHNAME_MAPPER.bankDetails}${bank_id}`);
   };
 
   const config = getConfig();

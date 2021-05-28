@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { genderOptions, maritalStatusOptions, getPathname } from "../constants";
+import { genderOptions, maritalStatusOptions, PATHNAME_MAPPER } from "../constants";
 import {
   formatDate,
   dobFormatTest,
@@ -82,7 +82,7 @@ const PersonalDetails1 = (props) => {
     userkycDetails.identification.meta_data.marital_status =
       form_data.marital_status;
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.personalDetails2, {
+      navigate(PATHNAME_MAPPER.personalDetails2, {
         state: {
           isEdit: isEdit,
         },
@@ -104,7 +104,7 @@ const PersonalDetails1 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.personalDetails2, {
+      navigate(PATHNAME_MAPPER.personalDetails2, {
         state: {
           isEdit: isEdit,
         },

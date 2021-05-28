@@ -5,7 +5,7 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   occupationTypeOptions,
   incomeOptions,
-  getPathname,
+  PATHNAME_MAPPER,
 } from "../constants";
 import {
   validateFields,
@@ -87,13 +87,13 @@ const PersonalDetails3 = (props) => {
 
   const handleNavigation = () => {
     if (type === "digilocker") {
-      navigate(getPathname.digilockerPersonalDetails3, {
+      navigate(PATHNAME_MAPPER.digilockerPersonalDetails3, {
         state: {
           isEdit: isEdit,
         },
       });
     } else {
-      navigate(getPathname.personalDetails4, {
+      navigate(PATHNAME_MAPPER.personalDetails4, {
         state: {
           isEdit: isEdit,
         },

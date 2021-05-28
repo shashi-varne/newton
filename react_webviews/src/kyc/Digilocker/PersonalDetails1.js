@@ -5,7 +5,7 @@ import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import {
   genderOptions,
   maritalStatusOptions,
-  getPathname,
+  PATHNAME_MAPPER,
 } from "../constants";
 import { validateNumber, validateAlphabets, isEmpty} from "utils/validators";
 import {
@@ -93,7 +93,7 @@ const PersonalDetails1 = (props) => {
       userkycDetails.identification.meta_data.spouse_name =
         form_data.spouse_name;
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.digilockerPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.digilockerPersonalDetails2, {
         state: {
           isEdit: isEdit,
         },
@@ -114,7 +114,7 @@ const PersonalDetails1 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.digilockerPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.digilockerPersonalDetails2, {
         state: {
           isEdit: isEdit,
         },

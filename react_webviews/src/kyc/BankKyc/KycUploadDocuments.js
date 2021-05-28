@@ -9,7 +9,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getBase64, getConfig } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";
 
 const config = getConfig();
@@ -169,7 +169,7 @@ const KycUploadDocuments = (props) => {
           navigate("/kyc/journey");
         } else {
           if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
-            navigate(getPathname.uploadSign, {
+            navigate(PATHNAME_MAPPER.uploadSign, {
               state: {
                 backToJourney: true,
               },

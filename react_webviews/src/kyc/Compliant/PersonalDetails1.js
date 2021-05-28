@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { genderOptions, residentialOptions, getPathname } from "../constants";
+import { genderOptions, residentialOptions, PATHNAME_MAPPER } from "../constants";
 import CompliantHelpDialog from "../mini-components/CompliantHelpDialog";
 import {
   formatDate,
@@ -105,7 +105,7 @@ const PersonalDetails1 = (props) => {
       };
     }
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.compliantPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
       });
       return;
@@ -121,7 +121,7 @@ const PersonalDetails1 = (props) => {
         setIsApiRunning(false);
         return;
       }
-      navigate(getPathname.compliantPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
       });
     } catch (err) {

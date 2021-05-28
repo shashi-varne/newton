@@ -11,7 +11,7 @@ export const apiConstants = {
   getMerge: '/api/user/account/merge?pan_number=',
 }
 
-export const getPathname = {
+export const PATHNAME_MAPPER = {
   invest: '/invest',
   landing: '/',
   accountMerge: '/account/merge/',

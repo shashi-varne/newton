@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
-import { getPathname, maritalStatusOptions } from "../constants";
+import { PATHNAME_MAPPER, maritalStatusOptions } from "../constants";
 import { isEmpty, validateAlphabets } from "utils/validators";
 import {
   validateFields,
@@ -65,7 +65,7 @@ const PersonalDetails2 = (props) => {
       },
     };
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.compliantPersonalDetails3, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -80,7 +80,7 @@ const PersonalDetails2 = (props) => {
       setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
-      navigate(getPathname.compliantPersonalDetails3, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
         state: {
           isEdit: isEdit,
         },

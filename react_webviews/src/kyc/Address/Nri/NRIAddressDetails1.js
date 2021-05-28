@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { getPathname } from "../../constants";
+import { PATHNAME_MAPPER } from "../../constants";
 import { isEmpty, validateNumber } from "utils/validators";
 import {
   validateFields,
@@ -63,7 +63,7 @@ const NriAddressDetails1 = (props) => {
       return;
     }
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.nriAddressDetails2, {
+      navigate(PATHNAME_MAPPER.nriAddressDetails2, {
         state: {
           isEdit: isEdit,
           backToJourney: state.backToJourney,
@@ -92,7 +92,7 @@ const NriAddressDetails1 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.nriAddressDetails2, {
+      navigate(PATHNAME_MAPPER.nriAddressDetails2, {
         state: {
           isEdit: isEdit,
           backToJourney: state.backToJourney,

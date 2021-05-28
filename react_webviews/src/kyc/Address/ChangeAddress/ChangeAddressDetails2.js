@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini-components/Alert'
 import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper, getPathname } from '../../constants'
+import { storageConstants, nriDocMapper as docMapper, PATHNAME_MAPPER } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
 import toast from '../../../common/ui/Toast'
@@ -42,7 +42,7 @@ const ChangeAddressDetails2 = (props) => {
 
   const stateParams = props?.location?.state || {}
   if(!stateParams.address_doc_type) {
-    navigate(getPathname.changeAddressDetails1);
+    navigate(PATHNAME_MAPPER.changeAddressDetails1);
   }
   const { address_doc_type: addressDocType } = stateParams
 

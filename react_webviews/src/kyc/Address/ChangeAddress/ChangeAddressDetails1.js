@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { getPathname, addressProofOptions } from "../../constants";
+import { PATHNAME_MAPPER, addressProofOptions } from "../../constants";
 import { isEmpty } from "utils/validators";
 import {
   validateFields,
@@ -49,7 +49,7 @@ const ChangeAddressDetails1 = (props) => {
       setFormData(data);
       return;
     }
-    navigate(getPathname.uploadAddress, {
+    navigate(PATHNAME_MAPPER.uploadAddress, {
       state: {
         addressDocType: form_data.address_doc_type,
         flow: "myAccount",

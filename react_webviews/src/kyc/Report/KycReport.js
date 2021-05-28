@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { getConfig } from "utils/functions";
 import {
-  getPathname,
+  PATHNAME_MAPPER,
   kycDocNameMapper,
   reportCardDetails,
   storageConstants,
@@ -30,7 +30,7 @@ const Report = (props) => {
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
-      navigate(getPathname.uploadProgress, {
+      navigate(PATHNAME_MAPPER.uploadProgress, {
         state: {
           disableNext: true,
           fromState: "kyc-report",
@@ -118,12 +118,12 @@ const Report = (props) => {
 
   const proceed = () => {
     if (getConfig().Web) {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     } else {
       if (storageService().get(storageConstants.NATIVE)) {
         nativeCallback({ action: "exit_web" });
       } else {
-        navigate(getPathname.landing);
+        navigate(PATHNAME_MAPPER.landing);
       }
     }
   };
@@ -131,16 +131,16 @@ const Report = (props) => {
   const checkNPSAndProceed = () => {
     if (user.nps_investment) {
       if (!getConfig().isIframe) {
-        navigate(getPathname.reports);
+        navigate(PATHNAME_MAPPER.reports);
       }
     } else {
       if (getConfig().Web) {
-        navigate(getPathname.invest);
+        navigate(PATHNAME_MAPPER.invest);
       } else {
         if (storageService().get(storageConstants.NATIVE)) {
           nativeCallback({ action: "exit_web" });
         } else {
-          navigate(getPathname.landing);
+          navigate(PATHNAME_MAPPER.landing);
         }
       }
     }

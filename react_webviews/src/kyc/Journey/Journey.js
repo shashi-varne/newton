@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
-import { getPathname } from '../constants'
+import { PATHNAME_MAPPER } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
@@ -543,7 +543,7 @@ const Journey = (props) => {
 
   const cancel = () => {
     setDlAadhaar(false)
-    navigate(`${getPathname.journey}`, {
+    navigate(`${PATHNAME_MAPPER.journey}`, {
       searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })
