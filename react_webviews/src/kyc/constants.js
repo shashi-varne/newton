@@ -73,52 +73,13 @@ export const DOCUMENTS_MAPPER = {
   LAT_BANK_PB: "Passbook",
 };
 
-export const nriDocMapper = {
+export const NRI_DOCUMENTS_MAPPER = {
   DL: "Driving license",
   UTILITY_BILL: "Gas receipt",
   LAT_BANK_PB: "Passbook",
 }
 
-export const occupationOptions = [
-  {
-    name: "Private Sector",
-    value: "PRIVATE SECTOR",
-  },
-  {
-    name: "Professional",
-    value: "PROFESSIONAL",
-  },
-  {
-    name: "Business",
-    value: "BUSINESS",
-  },
-  {
-    name: "House Wife",
-    value: "HOUSE WIFE",
-  },
-  {
-    name: "Public Sector",
-    value: "PUBLIC SECTOR",
-  },
-  {
-    name: "Government",
-    value: "GOVERNMENT",
-  },
-  {
-    name: "Student",
-    value: "STUDENT",
-  },
-  {
-    name: "Retired",
-    value: "RETIRED",
-  },
-  {
-    name: "Others",
-    value: "OTHERS",
-  },
-];
-
-export const incomeOptions = [
+export const INCOME_OPTIONS = [
   {
     name: "Below 1L",
     value: "BELOW 1L",
@@ -145,7 +106,7 @@ export const incomeOptions = [
   },
 ];
 
-export const residentialOptions = [
+export const RESIDENTIAL_OPTIONS = [
   {
     name: 'Indian',
     value: 'INDIAN',
@@ -156,7 +117,7 @@ export const residentialOptions = [
   },
 ];
 
-export const relationshipOptions = [
+export const RELATIONSHIP_OPTIONS = [
   {
     name: "Wife",
     value: "WIFE",
@@ -179,7 +140,7 @@ export const relationshipOptions = [
   },
 ];
 
-export const reportCardDetails = [
+export const REPORT_CARD_DETAILS = [
   {
     key: "personal",
     title: "Personal",
@@ -240,19 +201,19 @@ export const bankAccountTypeOptions = (isNri) => {
   return account_types;
 };
 
-export const genderOptions = [
+export const GENDER_OPTIONS = [
   { name: "Male", value: "MALE" },
   { name: "Female", value: "FEMALE" },
   { name: "Transgender", value: "TRANSGENDER" },
 ];
 
-export const maritalStatusOptions = [
+export const MARITAL_STATUS_OPTIONS = [
   { name: "Single", value: "SINGLE" },
   { name: "Married", value: "MARRIED" },
   { name: "Unmarried", value: "UNMARRIED" },
 ];
 
-export const occupationTypeOptions = [
+export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Salaried", value: "SALARIED" },
   { name: "Self employed", value: "SELF EMPLOYED" },
   { name: "Business", value: "BUSINESS" },

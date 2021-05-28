@@ -3,8 +3,8 @@ import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import {
-  genderOptions,
-  maritalStatusOptions,
+  GENDER_OPTIONS,
+  MARITAL_STATUS_OPTIONS,
   PATHNAME_MAPPER,
 } from "../constants";
 import { validateNumber, validateAlphabets, isEmpty} from "utils/validators";
@@ -133,8 +133,8 @@ const PersonalDetails1 = (props) => {
     if (name === "mobile" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "marital_status")
-      formData[name] = maritalStatusOptions[value].value;
-    else if (name === "gender") formData[name] = genderOptions[value].value;
+      formData[name] = MARITAL_STATUS_OPTIONS[value].value;
+    else if (name === "gender") formData[name] = GENDER_OPTIONS[value].value;
     else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
@@ -222,7 +222,7 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.gender_error}
               width="40"
               label="Gender:"
-              options={genderOptions}
+              options={GENDER_OPTIONS}
               id="account_type"
               value={form_data.gender || ""}
               onChange={handleChange("gender")}
@@ -235,7 +235,7 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.marital_status_error}
               width="40"
               label="Marital status:"
-              options={maritalStatusOptions}
+              options={MARITAL_STATUS_OPTIONS}
               id="account_type"
               value={form_data.marital_status || ""}
               onChange={handleChange("marital_status")}

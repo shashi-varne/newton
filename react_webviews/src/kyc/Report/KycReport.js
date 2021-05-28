@@ -5,7 +5,7 @@ import { getConfig } from "utils/functions";
 import {
   PATHNAME_MAPPER,
   kycDocNameMapper,
-  reportCardDetails,
+  REPORT_CARD_DETAILS,
   storageConstants,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
@@ -81,7 +81,7 @@ const Report = (props) => {
       setButtonTitle("INVEST NOW");
     }
 
-    let reportCards = [...reportCardDetails];
+    let reportCards = [...REPORT_CARD_DETAILS];
     setIsNri(isNri);
     if (is_compliant) {
       if (isNri) {

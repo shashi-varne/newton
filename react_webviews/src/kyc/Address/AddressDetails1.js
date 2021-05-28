@@ -21,7 +21,7 @@ const AddressDetails1 = (props) => {
   const {kyc, isLoading} = useUserKycHook();
   const [title, setTitle] = useState("");
 
-  const residentialOptions = [
+  const RESIDENTIAL_OPTIONS = [
     {
       name: "Indian",
       value: "INDIAN",
@@ -62,7 +62,7 @@ const AddressDetails1 = (props) => {
     let formData = {
       address_doc_type: address_doc_type,
       residential_status:
-        residentialOptions[selectedIndexResidentialStatus].value || "",
+        RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value || "",
     };
     setFormData({ ...formData });
   };
@@ -123,7 +123,7 @@ const AddressDetails1 = (props) => {
     let value = event.target ? event.target.value : event;
     let formData = { ...form_data };
     if (name === "residential_status") {
-      formData[name] = residentialOptions[value].value;
+      formData[name] = RESIDENTIAL_OPTIONS[value].value;
       if (formData[name] === "NRI") {
         formData.address_doc_type = "PASSPORT";
       }
@@ -165,7 +165,7 @@ const AddressDetails1 = (props) => {
               width="40"
               label="Residential status:"
               class="residential_status"
-              options={residentialOptions}
+              options={RESIDENTIAL_OPTIONS}
               id="account_type"
               value={form_data.residential_status || ""}
               onChange={handleChange("residential_status")}
