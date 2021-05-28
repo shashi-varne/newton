@@ -227,7 +227,7 @@ class GroupHealthPayment extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    storageService().setObject('report_from_landing', true);
+    storageService().setObject('backToInsuranceLanding', true);
 
     let state = '';
     if(this.state.paymentFailed) {

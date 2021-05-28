@@ -103,23 +103,25 @@ class ReportDetails extends Component {
         var policyData = res.pfwresponse.result.policy;
         policyData.provider = this.state.provider;
         let buttonTitle = 'Resume';
+        var reportSelectedTab = 'activeReports';
 
         let path = '';
         let noFooter = false;
         if (policyData.status === 'expired') {
           buttonTitle = 'Buy Again';
           path = '';
+          reportSelectedTab = 'inactiveReports'
         } else if (policyData.status === 'init' && policyData.lead_payment_status === 'payment_done') {
           path = 'payment-success';
+          reportSelectedTab = 'pendingReports'
         } else if (policyData.status === 'init') {
           path = 'plan';
+          reportSelectedTab = 'pendingReports'
         } else {
           noFooter = true;
         }
 
-        if(storageService().getObject('report_from_landing')){
-          storageService().setObject('reportSelectedTab', 'activeReports')
-        }
+        storageService().setObject('reportSelectedTab', reportSelectedTab)
         let redirectPath = '/group-insurance';
 
         if (path) {

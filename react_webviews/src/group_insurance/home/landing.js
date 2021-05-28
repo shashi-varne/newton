@@ -108,7 +108,7 @@ class Landing extends Component {
   componentDidMount(){
     this.onload();
     //for report page routing
-    storageService().remove('report_from_landing');
+    storageService().remove('backToInsuranceLanding');
     storageService().remove('advisory_from_landing');
   }
 
@@ -277,13 +277,13 @@ class Landing extends Component {
     e.preventDefault();
     this.sendEvents('next', "", "", "", true);
     storageService().setObject('advisory_from_landing', true)
-    storageService().remove('report_from_landing')
+    storageService().remove('backToInsuranceLanding')
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
     return;
   }
   toToReports = () =>{
     this.sendEvents('next', "", "", "", "", true);
-    storageService().setObject('report_from_landing', true);
+    storageService().setObject('backToInsuranceLanding', true);
     this.navigate('/group-insurance/common/report')
     return;
   }

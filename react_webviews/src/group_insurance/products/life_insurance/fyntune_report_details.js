@@ -77,9 +77,7 @@ class FyntuneReportDetails extends Component {
                 
                 let final_status = fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status]
 
-                if(storageService().getObject('report_from_landing')){
-                    storageService().setObject('reportSelectedTab', fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status].reportTab)
-                }
+                storageService().setObject('reportSelectedTab', fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status].reportTab)
                 policy_data.final_status = final_status; 
                 
                 let sanchay_subtitle = policy_data.product_subtitle ? policy_data.product_subtitle : '';

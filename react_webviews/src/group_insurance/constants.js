@@ -1,4 +1,4 @@
-import {isEmpty, numDifferentiationInr, inrFormatDecimal, storageService} from 'utils/validators';
+import {isEmpty, numDifferentiationInr, inrFormatDecimal} from 'utils/validators';
 
 export const maritalOptions = [
   {
@@ -793,19 +793,12 @@ export function getCssMapperReport(policy) {
   var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
 
   var backgroundColor = "";
-  var reportSelectedTab = 'activeReports';
   if(issued_statuses.indexOf(policy_status.toLowerCase()) > -1){
     backgroundColor = "#F5FBED"
   }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
     backgroundColor = "#FFFDF2"
-    reportSelectedTab = 'pendingReports';
   }else{
     backgroundColor = "#FDF7F8"
-    reportSelectedTab = 'inactiveReports';
-  }
-  
-  if(storageService().getObject('report_from_landing')){
-    storageService().setObject('reportSelectedTab', reportSelectedTab)
   }
 
   if (policy.key === 'TERM_INSURANCE') {

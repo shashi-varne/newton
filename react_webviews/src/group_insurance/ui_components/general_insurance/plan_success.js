@@ -324,7 +324,7 @@ class PlanSuccessClass extends Component {
 
   handleClickTwo() {
     this.sendEvents('check_details');
-    storageService().setObject('report_from_landing', true);
+    storageService().setObject('backToInsuranceLanding', true);
     let path = '/group-insurance/common/reportdetails/' + this.state.lead_data.bhariaxa_policy_id;
     this.navigate(path);
   }
