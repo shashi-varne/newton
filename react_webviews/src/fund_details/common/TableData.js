@@ -64,12 +64,12 @@ const TableData = ({
               <TableCell
                 classes={{ root: classes.root }}
                 style={{
-                  color: headingColor,
-                  borderRight: isReturn && '1px solid rgb(226 226 226)',
+                  color: isReturn? "#161A2E" :  headingColor,
+                  // borderRight: isReturn && '1px solid rgb(226 226 226)',
                 }}
                 key={index}
               >
-                <div className={isReturn ? `return-table-header ${iframe && 'iframe-table-data-head'}` : null}>{heading}</div>
+                <div style={isReturn&&(index===1) ? {textAlign: "right", paddingRight: "15px"} : isReturn && iframe ? {textAlign: "left"} :{} } className={isReturn ? `return-table-header ${iframe && 'iframe-table-data-head'}` : null}>{heading}</div>
               </TableCell>
             ))}
           </TableRow>
@@ -141,21 +141,23 @@ const TableData = ({
                     scope='row'
                     style={{
                       fontSize: '12px',
-                      fontWeight: '700',
-                      borderRight: isReturn && '1px solid rgb(226 226 226)',
+                      fontWeight: isReturn? "400":  '700',
                       width: isReturn && '50%',
-                      textAlign: iframe && 'center'
+                      color: isReturn ? "#8D879B" : "#767E86",
+                      paddingLeft: "15px"
+                      // borderRight: isReturn && '1px solid rgb(226 226 226)',
+                      // textAlign: iframe && 'center'
                     }}
                   >
-                    <div style={{ paddingLeft: '15px' }}>{row.name}</div>
+                    <div>{row.name}</div>
                   </TableCell>
                   <TableCell
                     classes={{ root: classes.root }}
                     component='th'
                     scope='row'
-                    style={{ fontSize: '13px', fontWeight: '400', color: '#767E86' }}
+                    style={{ fontSize: '13px', fontWeight: '400', color: isReturn ? "#8D879B" : '#767E86' }}
                   >
-                    <div style={{ paddingLeft: isReturn && '15px', textAlign: iframe && 'center'}} className={isRiskMeasure ? 'risk-measure-table' : ''}>
+                    <div style={{ paddingRight: isReturn && '15px', textAlign: 'right'}} className={isRiskMeasure ? 'risk-measure-table' : ''}>
                       {row.display_value ? row.display_value : row.value}
                     </div>
                   </TableCell>
