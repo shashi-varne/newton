@@ -4,9 +4,25 @@
     font-weight: 700;
 }
 
+.category-subtitle{
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 21px;
+}
+
 .react-responsive-carousel{
     margin: "0 0 0 0";
     cursor: "pointer";
     height: 500px; 
     width: 100%;
+}
+
+.educational-video-block{
+   background-color: #002576;
+   color: white;
+   position: absolute;
+   width: 100%;
+   left: 0;
+   top: 0;
+   height: 400px;
 }

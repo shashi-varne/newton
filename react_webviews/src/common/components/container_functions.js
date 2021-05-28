@@ -127,6 +127,7 @@ export function commonRender(props_base) {
                     noBack={this.props.noBack}
                     type={getConfig().productName}
                     resetpage={this.props.resetpage}
+                    customBackButtonColor={this.props.customBackButtonColor}
                     handleReset={this.props.handleReset}
                     topIcon={this.props.topIcon || this.props.rightIcon}
                     handleTopIcon={this.handleTopIcon}

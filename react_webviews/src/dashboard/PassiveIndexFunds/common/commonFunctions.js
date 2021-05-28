@@ -4,7 +4,6 @@ import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
 import toast from "../../../common/ui/Toast";
-// import { nps_config } from "../constants";
 
 export const genericErrMsg = "Something went wrong";
 
@@ -14,9 +13,16 @@ export async function initialize() {
   this.handleError = handleError.bind(this);
   this.carouselSwipecount = carouselSwipe_count.bind(this);
   this.productName = productName.bind(this)
+  this.handleClick = handleClick.bind(this)
 
   nativeCallback({ action: "take_control_reset" });
 
+  if (this.state.screen_name === "fund_list") {
+    const state = this.props.location.state;
+    this.setState({
+      title: state
+    })
+  }
 }
 
 export const productName = () => getConfig().productName
@@ -75,25 +81,21 @@ export function handleError(error, errorType, fullScreen = true) {
 }
 
 export function navigate(pathname, data = {}, redirect) {
-  if (redirect) {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
-      state: data,
-    });
-  } else {
-    this.props.history.push({
-      pathname: `/nps/${pathname}`,
-      search: data.searchParams || getConfig().searchParams,
-      state: data,
-    });
-  }
+  this.props.history.push({
+    pathname: `/passive-index-funds/${pathname}`,
+    search: data.searchParams || getConfig().searchParams,
+    state: data,
+  });
 }
 
-export function  carouselSwipe_count(index) {
-    this.setState({
-      selectedIndex: index,
-      card_swipe: "yes",
-      card_swipe_count: this.state.card_swipe_count + 1,
-    });
-  };
+export function carouselSwipe_count(index) {
+  this.setState({
+    selectedIndex: index,
+    card_swipe: "yes",
+    card_swipe_count: this.state.card_swipe_count + 1,
+  });
+};
+
+export function handleClick(data) {
+  this.navigate(`${data.key}/fund-list`, data.title);
+}

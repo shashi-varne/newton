@@ -34,7 +34,7 @@ const notificationsColor = !isWeb ? getConfig()?.styles.notificationsColor : '';
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
+  inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, customBackButtonColor,
   className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
@@ -61,7 +61,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             goBack}>
             {!disableBack && !headerData.hide_icon &&
             <SVG
-            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backButtonColor ?  backButtonColor : new_header && !logo ? getConfig().styles.primaryColor : 'white'))}
+            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (customBackButtonColor ? customBackButtonColor : backButtonColor ?  backButtonColor : new_header && !logo ? getConfig().styles.primaryColor : 'white'))}
             src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
             />
             }

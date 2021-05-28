@@ -11,7 +11,7 @@ class Landing extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            screen_name: 'landing_screen',
         };
 
         this.initialize = initialize.bind(this);
@@ -22,7 +22,6 @@ class Landing extends Component {
     }
 
     render() {
-
         return (
             <Container
                 title="Passive index funds"
@@ -30,10 +29,14 @@ class Landing extends Component {
                 skelton={this.state.skelton}
                 showError={this.state.showError}
                 errorData={this.state.errorData}
-                force_hide_inpage_title={true}
+                classHeader='header-color-red'
+                customBackButtonColor='white'
             >
                 <div>
-                    <h1 className='category-title'>Top index funds</h1>
+                    <div className='educational-video-block'>
+                        <p style={{ marginLeft: '22px' }}>Get started with index funds</p>
+                    </div>
+                    <h1 className='category-title' style={{ marginTop: '400px' }}>Top index funds</h1>
                     <MenuListDropDown menulistProducts={fund_category} value={this.state.value} handleClick={this.handleClick} />
                     <h1 className='category-title'>Key insights</h1>
                     <div className='react-responsive-carousel'>
@@ -43,7 +46,7 @@ class Landing extends Component {
                             selectedIndexvalue={this.state.selectedIndex}
                         />
                     </div>
-                    <WVSecurityDisclaimer/>
+                    <WVSecurityDisclaimer />
                 </div>
             </Container>
         );
