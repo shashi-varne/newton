@@ -10,12 +10,14 @@ import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 
+const config = getConfig();
+
 class ESignInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      productName: getConfig().productName,
+      productName: config.productName,
       backModal: false,
       dl_flow: false,
       showAadharDialog: false,
@@ -66,7 +68,7 @@ class ESignInfo extends Component {
     }
     let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
-      basepath + '/kyc-esign/nsdl' + getConfig().searchParams
+      basepath + '/kyc-esign/nsdl' + config.searchParams
     );
 
     this.setState({ show_loader: "button" });
@@ -75,7 +77,7 @@ class ESignInfo extends Component {
       let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
       let resultData = res.pfwresponse.result;
       if (resultData && !resultData.error) {
-        if (getConfig().app === 'ios') {
+        if (config.app === 'ios') {
           nativeCallback({
             action: 'show_top_bar', message: {
               title: 'eSign KYC'
@@ -118,7 +120,7 @@ class ESignInfo extends Component {
   }
 
   goNext = () => {
-    if(this.state.kyc?.address?.meta_data?.is_nri) {
+    if(this.state.kyc?.address?.meta_data?.is_nri || config.isSdk) {
       this.handleClick()
     } else {
       this.setState({ showAadharDialog: true })
