@@ -61,7 +61,6 @@ class ESignInfo extends Component {
   }
 
   handleClick = async () => {
-    // this.sendEvents('next','e sign kyc')
     this.sendEvents('next')
     if(this.state.showAadharDialog) {
       this.closeAadharDialog();

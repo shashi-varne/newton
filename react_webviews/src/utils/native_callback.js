@@ -4,7 +4,6 @@ import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
-  console.log(events)
   let newAction = null;
   let callbackData = {};
   let project = getConfig().project;

@@ -142,8 +142,8 @@ const NRIAddressDetails2 = (props) => {
         user_action: userAction || "",
         screen_name: "nri_address_details_2",
         country: form_data.country || "",
-        // "pincode_entered": form_data.nri_pincode ? "yes" : "no",
-        // "address_entered": ''
+        pincode_entered: form_data.nri_pincode ? "yes" : "no",
+        address_entered: form_data.addressline ? "yes" : "no",
       },
     };
     if (userAction === "just_set_events") {

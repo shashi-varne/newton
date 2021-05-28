@@ -293,10 +293,14 @@ const KycBankDetails = (props) => {
       properties: {
         user_action: userAction || "",
         screen_name: screenName || "enter_bank_details",
-        // "account_number": bankData.account_number ? "yes" : "no",
-        // "c_account_number": bankData.c_account_number ? "yes" : "no",
-        // "ifsc_code": form_data.ifsc_code_error ? "invalid" : bankData.ifsc_code ? "yes" : "no",
-        // "attempt_no": kyc.bank.meta_data.user_rejection_attempts || "",
+        account_number: bankData.account_number ? "yes" : "no",
+        c_account_number: bankData.c_account_number ? "yes" : "no",
+        ifsc_code: form_data.ifsc_code_error
+          ? "invalid"
+          : bankData.ifsc_code
+          ? "yes"
+          : "no",
+        attempt_no: kyc.bank.meta_data.user_rejection_attempts || "",
         // "flow": getFlow(kyc) || ""
       },
     };

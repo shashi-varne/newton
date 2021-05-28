@@ -28,7 +28,6 @@ const IpvVideo = (props) => {
   const [showVideoRecoreder, setShowVideoRecorder] = useState(false)
   const [uploadCTAText, setUploadCTAText] = useState("OPEN CAMERA")
   const [isRecordingComplete, steIsRecordingComplete] = useState(false);
-  const [takeVideoAgain, setTakeVideoAgain] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const open = () => {
     setKnowMoreDialog(true)
@@ -126,8 +125,8 @@ const IpvVideo = (props) => {
       properties: {
         user_action: userAction || "",
         screen_name: "upload_ipv",
-        take_video_again: takeVideoAgain,
-        attempt: `attempt${attempt}`
+        take_video_again: attempt !== 0 && attempt !== 1 ? "yes" : "no",
+        attempt: `attempt${attempt}`,
         // "type": type || "",
         // "screen_name": "selfie_video_doc",
       },
@@ -151,10 +150,6 @@ const IpvVideo = (props) => {
 
   const onRecordingComplete = (videoBlob) => {
     setAttempt(attempt+1);
-    if(uploadCTAText === "TAKE VIDEO AGAIN")
-    {
-      setTakeVideoAgain(true);
-    }
     const fileFromBlob = new File([videoBlob], "ipv-video.webm");
     setFile(fileFromBlob);
     setUploadCTAText("TAKE VIDEO AGAIN");

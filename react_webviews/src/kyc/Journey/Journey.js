@@ -291,9 +291,9 @@ const Journey = (props) => {
   }
 
   const handleEdit = (key, index, isEdit) => {
-    if(isEdit)
+    if(isEdit) {
       sendEvents('edit')
-    console.log('Inside handleEdit')
+    }
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {
       // if (key === 'pan' && !customerVerified) {
@@ -551,38 +551,41 @@ const Journey = (props) => {
         kycJourneyData[i].status === "init" ||
         kycJourneyData[i].status === "pending"
       ) {
-        stageData = i+1;
+        stageData = i + 1;
         // stageDetailData = kycJourneyData[i].key
         break;
       }
     }
-    let eventObj =
-      screen_name === "ensure_mobile_linked_to_aadhar"
-        ? {
-            event_name: "kyc_registration",
-            properties: {
-              user_action: userAction || "",
-              screen_name: screen_name,
-            },
-          }
-        : {
-            event_name: "kyc_registration",
-            properties: {
-              user_action: userAction || "",
-              screen_name: screen_name || "kyc_journey",
-              premium_onboarding: kyc.kyc_status === "compliant" ? "yes" : "no",
-              kyc_flow: getDLFlow(kyc) ? "digilocker" : "manual",
-              step: `step${stageData}`,
+    let eventObj;
+    if (screen_name === "ensure_mobile_linked_to_aadhar") {
+      eventObj = {
+        event_name: "kyc_registration",
+        properties: {
+          user_action: userAction || "",
+          screen_name: screen_name,
+        },
+      };
+    } else {
+      eventObj = {
+        event_name: "kyc_registration",
+        properties: {
+          user_action: userAction || "",
+          screen_name: screen_name || "kyc_journey",
+          premium_onboarding: kyc.kyc_status === "compliant" ? "yes" : "no",
+          kyc_flow: getDLFlow(kyc) ? "digilocker" : "manual",
+          step: `step${stageData}`,
 
-              // resume_journey: To be checked
+          // resume_journey: To be checked
 
-              // "stage": stageData,
-              // "details": stageDetailData,
-              // "rti": "",
-              // "initial_kyc_status": kyc.initial_kyc_status || "",
-              // "flow": getFlow(kyc) || ""
-            },
-          };
+          // "stage": stageData,
+          // "details": stageDetailData,
+          // "rti": "",
+          // "initial_kyc_status": kyc.initial_kyc_status || "",
+          // "flow": getFlow(kyc) || ""
+        },
+      };
+    }
+
     if (userAction === "just_set_events") {
       return eventObj;
     } else {

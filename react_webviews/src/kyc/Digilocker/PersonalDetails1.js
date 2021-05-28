@@ -2,12 +2,8 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import {
-  genderOptions,
-  maritalStatusOptions,
-  getPathname,
-} from "../constants";
-import { validateNumber, validateAlphabets, isEmpty} from "utils/validators";
+import { genderOptions, maritalStatusOptions, getPathname } from "../constants";
+import { validateNumber, validateAlphabets, isEmpty } from "utils/validators";
 import {
   validateFields,
   navigate as navigateFunc,
@@ -25,7 +21,7 @@ const PersonalDetails1 = (props) => {
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
 
-  const {kyc, user, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   let title = "Personal details";
   if (isEdit) {
@@ -56,7 +52,7 @@ const PersonalDetails1 = (props) => {
       spouse_name: kyc.identification.meta_data.spouse_name || "",
     };
     setFormData({ ...formData });
-    setOldState({...formData});
+    setOldState({ ...formData });
   };
 
   const handleClick = () => {
@@ -71,7 +67,7 @@ const PersonalDetails1 = (props) => {
     if (user.email === null) keysToCheck.push("email");
     if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
-    sendEvents('next')
+    sendEvents("next");
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -150,13 +146,11 @@ const PersonalDetails1 = (props) => {
         user_action: userAction || "",
         screen_name: "personal_details_1",
         gender: form_data.gender
-        ? form_data.gender === "TRANSGENDER"
-        ? "others"
-        : form_data?.gender?.toLowerCase()
-        : "",
-        marital_status: form_data.marital_status
-        ? form_data.marital_status.toLowerCase()
-        : "",
+          ? form_data.gender === "TRANSGENDER"
+            ? "others"
+            : form_data.gender.toLowerCase()
+          : "",
+        marital_status: (form_data.marital_status || "").toLowerCase(),
         mother_name: form_data.mother_name ? "yes" : "no",
         father_name: form_data.father_name ? "yes" : "no",
         spouse_name: form_data.spouse_name ? "yes" : "no",

@@ -301,9 +301,9 @@ const Home = (props) => {
         screen_name: screenName || "pan_entry",
       },
     };
-    if (eventObj.properties.screen_name === "pan_entry")
-      eventObj.properties.resident_indian =
-        (residentialStatus ? "yes" : "no") || "";
+    if (eventObj.properties.screen_name === "pan_entry") {
+      eventObj.properties.resident_indian = residentialStatus ? "yes" : "no";
+    }
     if (userAction === "just_set_events") {
       return eventObj;
     } else {
@@ -326,6 +326,11 @@ const Home = (props) => {
       setOpenCheckCompliant(true);
       await savePan(!residentialStatus);
     }
+  };
+
+  const handleClose = () => {
+    sendEvents("edit_pan", "confirm_pan");
+    setOpenConfirmPan(false);
   };
 
   return (
@@ -371,10 +376,7 @@ const Home = (props) => {
             isOpen={openConfirmPan}
             name={userName}
             pan={pan}
-            close={() => {
-              sendEvents("edit_pan", "confirm_pan");
-              setOpenConfirmPan(false);
-            }}
+            close={handleClose}
             handleClick={handleConfirmPan}
           />
           <CheckCompliant isOpen={openCheckCompliant} />

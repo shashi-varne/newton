@@ -11,9 +11,9 @@ import "./commonStyles.scss";
 const productName = getConfig().productName;
 const Verify = (props) => {
   const navigate = navigateFunc.bind(props);
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const handleClick = () => {
-    sendEvents('next')
+    sendEvents("next");
     if (storageService().get(storageConstants.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {
@@ -21,6 +21,11 @@ const Verify = (props) => {
     }
   };
 
+  const applicationDetails = () => {
+    sendEvents("application_details");
+    navigate(getPathname.compliantReport);
+  };
+  
   const sendEvents = (userAction) => {
     let eventObj = {
       event_name: "premium_onboard",
@@ -53,10 +58,7 @@ const Verify = (props) => {
             alt=""
           />
           <div className="title">You're ready to invest!</div>
-          <div
-            className="subtitle margin-top"
-            onClick={() => {sendEvents('application_details'); navigate(getPathname.compliantReport)}}
-          >
+          <div className="subtitle margin-top" onClick={applicationDetails}>
             See KYC application details {" >"}
           </div>
         </header>

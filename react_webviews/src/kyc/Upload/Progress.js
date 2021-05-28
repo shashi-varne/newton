@@ -10,7 +10,7 @@ import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
 const Progress = (props) => {
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
 
@@ -32,7 +32,7 @@ const Progress = (props) => {
   }
 
   const handleCards = (key, index) => {
-    sendEvents("next", key)
+    sendEvents("next", key);
     if (disableNext) return;
     if (documents[index].doc_status === "approved") return;
     const stateMapper = {
@@ -51,9 +51,9 @@ const Progress = (props) => {
 
   const goBack = () => {
     sendEvents("back");
-    const navigate = navigateFunc.bind(props)
-    navigate('/kyc/journey')
-  }
+    const navigate = navigateFunc.bind(props);
+    navigate("/kyc/journey");
+  };
 
   const sendEvents = (userAction, docs) => {
     let eventObj = {
@@ -71,6 +71,11 @@ const Progress = (props) => {
     }
   };
 
+  const handleClick = () => {
+    sendEvents("next");
+    navigate(getPathname.journey);
+  };
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -80,12 +85,9 @@ const Progress = (props) => {
       classOverRideContainer="pr-container"
       skelton={isLoading}
       skeltonType="p"
-      handleClick={() => {
-        sendEvents('next')
-        navigate(getPathname.journey);
-      }}
+      handleClick={handleClick}
       title="Upload documents"
-      headerData={{goBack}}
+      headerData={{ goBack }}
     >
       <section id="kyc-upload-progress">
         <main className="documents">

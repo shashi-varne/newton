@@ -196,9 +196,9 @@ const CommunicationDetails = (props) => {
       eventObj.properties.otp_entered = state.otp ? "yes" : "no";
       eventObj.properties.mode_entry = "manual";
     } else {
-      if (communicationType === "email")
+      if (communicationType === "email") {
         eventObj.properties[`email_entered`] = formData.email ? "yes" : "no";
-      else {
+      } else {
         eventObj.properties[`mobile_entered`] = formData.mobile ? "yes" : "no";
         eventObj.properties["whatsapp_agree"] = formData.whatsappConsent
           ? "yes"

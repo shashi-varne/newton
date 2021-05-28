@@ -27,7 +27,20 @@ class DigiStatus extends Component {
   componentDidMount = () => {
     this.initialize();
   };
-
+  
+  checkDlFlow = (kyc) => {
+    if (
+      kyc.kyc_status !== "compliant" &&
+      !kyc.address.meta_data.is_nri &&
+      kyc.dl_docs_status !== "" &&
+      kyc.dl_docs_status !== "init" &&
+      kyc.dl_docs_status !== null
+    ) {
+      return true;
+    }
+    return false;
+  };
+  
   initialize = async () => {
     await getUserKycFromSummary();
     const kyc = storageService().getObject("kyc");
@@ -35,16 +48,7 @@ class DigiStatus extends Component {
     let dl_flow = false;
     let show_note = false;
     if (!isEmpty(kyc) && !isEmpty(user)) {
-      if (
-        kyc.kyc_status !== "compliant" &&
-        !kyc.address.meta_data.is_nri &&
-        kyc.dl_docs_status !== "" &&
-        kyc.dl_docs_status !== "init" &&
-        kyc.dl_docs_status !== null
-      ) {
-        dl_flow = true;
-      }
-
+      dl_flow = this.checkDlFlow(kyc)
       if (
         user.kyc_registration_v2 === "submitted" &&
         kyc.sign_status === "signed" &&
@@ -80,7 +84,6 @@ class DigiStatus extends Component {
   retry = async () => {
     this.sendEvents("retry", "esign_failed");
     let { kyc, dl_flow } = this.state;
-    // this.sendEvents('next','e sign failed')
     if (
       kyc.application_status_v2 !== "init" &&
       kyc.application_status_v2 !== "submitted" &&
@@ -161,15 +164,7 @@ class DigiStatus extends Component {
     const user = storageService().getObject("user");
     let dl_flow = false;
     if (!isEmpty(kyc) && !isEmpty(user)) {
-      if (
-        kyc.kyc_status !== "compliant" &&
-        !kyc.address.meta_data.is_nri &&
-        kyc.dl_docs_status !== "" &&
-        kyc.dl_docs_status !== "init" &&
-        kyc.dl_docs_status !== null
-      ) {
-        dl_flow = true;
-      }
+      dl_flow = this.checkDlFlow(kyc);
       let eventObj = {
         // "event_name": 'KYC_registration',
         event_name: "trading_onboarding",

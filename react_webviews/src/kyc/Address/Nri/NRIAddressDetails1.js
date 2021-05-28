@@ -121,7 +121,7 @@ const NriAddressDetails1 = (props) => {
   };
 
   const sendEvents = (userAction) => {
-    let addressProofMapper = {
+    const addressProofMapper = {
       'DL': 'driving_licence',
       'UTILITY_BILL': 'utility_bill',
       'LAT_BANK_PB': 'passbook'

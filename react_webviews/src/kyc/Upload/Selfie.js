@@ -113,7 +113,6 @@ const Selfie = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      // "event_name": 'KYC_registration',
       event_name: "trading_onboarding",
       properties: {
         user_action: userAction || "",

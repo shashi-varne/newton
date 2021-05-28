@@ -7,7 +7,6 @@ import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
-import DotDotLoaderNew from '../../common/ui/DotDotLoaderNew';
 import "./Digilocker.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
