@@ -7,7 +7,7 @@ import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 import {
     validateEmail, validateNumber, numberShouldStartWith,
-    validateEmpty, open_browser_web
+    validateEmpty, open_browser_web, storageService
 } from 'utils/validators';
 import { FormControl } from 'material-ui/Form';
 
@@ -177,6 +177,7 @@ class BasicDetailsRedirectionForm extends Component {
     async handleClickCurrent() {
 
         this.sendEvents('next');
+        storageService().setObject('report_from_landing', true);
         this.setErrorData('submit');
         let error = ''
 

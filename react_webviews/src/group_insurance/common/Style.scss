@@ -532,6 +532,106 @@
     margin: 0 5px 0 0;
   }
 }
+.Container.report-list-page {
+  padding-top: 12px;
+  overflow: visible;
+  ::-webkit-scrollbar{
+    display: none !important;
+  }
+}
+.insurance-common-report-page{
+  font-family: 'Rubik', sans-serif;
+  .tab-wrapper{
+    margin: 0 -20px;
+    height: 50%;
+  }
+  margin-top: -20px;
+  .MuiTypography-root{
+    overflow: scroll;
+  }
+  .react-swipeable-view-container{
+    min-height: 70vh;
+  }
+  
+.report-list-tab-container{
+  background-color: white;
+  z-index: 999;
+  position: sticky;
+  left: 0;
+  right: 0;
+  top: 50px;
+  list-style-type: none;
+  padding: 0;
+  font-family: 'Rubik', sans-serif;
+  margin: 30px -20px 0 -20px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+
+  .tab-swipe{
+    padding-top: 0;
+    .MuiTabs-indicator{
+      background-color: var(--primary);
+    }
+    width: 100%;
+    border-bottom: 1px solid #D6D6D6;
+    .individual-tab{
+      margin: 0;
+      flex: 1;
+    }
+  }
+  li{
+    text-transform: capitalize;
+    flex: 1;
+    text-align: center;
+    font-family: 'Rubik', sans-serif;
+    padding-bottom: 5px;
+    color: #161A2E;
+    font-size: 13px;
+    font-weight: 500;
+    span{
+      color: #767E86;
+      margin-left: 3px;
+    }
+  }
+  li.selected{
+    display: flex;font-family: 'Rubik', sans-serif;
+    color: var(--primary);
+    font-weight: 700;
+    span{
+      color: #A998D2;
+    }
+  }
+
+}
+
+.inactive-policy-background{
+  display: block;
+  margin: 50px auto 20px;
+}
+.empty-state-text{
+  text-align: center;
+  color: #767E86;
+}
+.advisory-link{
+  color: #35CB5D;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 42px;
+  cursor: pointer;
+}
+.report-top-text{
+  @media only screen and (min-width: 500px){
+    margin-top: 60px;
+  } 
+  text-align: left;
+  color: #767E86;
+  font-family: 'Rubik', sans-serif;
+  font-size: 13px;
+  margin: 20px 20px 30px 20px;
+}
+}
 .report-detail-header {
   display: flex;
 }
@@ -997,7 +1097,7 @@
 .group-health-select-ped {
   margin: 0 0 50px 0;
 }
-.MuiDialogActions-root.final-summary-dialog-options{
+.MuiDialogActions-root{
   text-align: right;
 }
 .group-health-final-summary {
@@ -1346,7 +1446,30 @@
   }
 }
 
-
+.inactive-entry-card{
+  display: flex;
+  justify-content: left;
+  border-radius: 4.5px;
+  padding: 20px;
+  background-color: var(--primary);
+  margin: 10px 0 40px 0;
+  cursor: pointer;
+  img, p{margin: 0}
+  
+  .inactive-right{
+    margin-left: 20px;
+    color: #F6F2FF;
+    .inactive-title{
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .inactive-subtitle{
+      font-size: 13px;
+      font-weight: 500;
+    }
+  }
+}
 .advisory-entry-container{
   width: 100%;
   margin: 20px 0;

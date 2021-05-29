@@ -11,6 +11,7 @@ import { setRecommendationData } from '../advisory/common_data'
 import '../common/Style.scss'
 import { isEmpty } from 'utils/validators';
 import Button from 'material-ui/Button';
+import {setReportData, getReportCardsData, getProviderObject, getProviderObject_offline} from '../products/group_health/common_data';
 
 class Landing extends Component {
 
@@ -26,6 +27,10 @@ class Landing extends Component {
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
+    this.getReportCardsData = getReportCardsData.bind(this);
+    this.setReportData = setReportData.bind(this);
+    this.getProviderObject = getProviderObject.bind(this);
+    this.getProviderObject_offline = getProviderObject_offline.bind(this);
   }
 
   componentWillMount() {
@@ -102,6 +107,9 @@ class Landing extends Component {
 
   componentDidMount(){
     this.onload();
+    //for report page routing
+    storageService().remove('backToInsuranceLanding');
+    storageService().remove('advisory_from_landing');
   }
 
   onload = async() => {
@@ -117,11 +125,6 @@ class Landing extends Component {
         var resultData = res.pfwresponse.result;
 
         if (res.pfwresponse.status_code === 200) {
-
-          this.setState({
-            skelton: false,
-          })
-          
           var advisory_resume_present = resultData.resume_present;
           var advisory_resume_status = resultData.insurance_advisory.status;
           var advisory_id = resultData.insurance_advisory.id;
@@ -149,6 +152,25 @@ class Landing extends Component {
             next_advisory_page: next_advisory_page, 
             advisory_id: advisory_id
           })
+          await this.getReportCardsData();
+          var filteredReportData = this.state.filteredReportData;
+          var showCustomReportCardText = false;
+          var customReportCardText = '';
+          
+          if(!isEmpty(filteredReportData.activeReports)){
+            showCustomReportCardText = true;
+            customReportCardText = filteredReportData.activeReports[0].product_category;
+          }else if(!isEmpty(filteredReportData.pendingReports)){
+            showCustomReportCardText = true;
+            customReportCardText = filteredReportData.pendingReports[0].product_category;
+          }
+          
+          if((this.state.reportCount.active + this.state.reportCount.pending) > 1){
+            var noOfReports = this.state.reportCount.active + this.state.reportCount.pending;
+            this.setState({noOfReports})
+          }
+          
+          this.setState({customReportCardText, showCustomReportCardText})
         } else {
           error = resultData.error || resultData.message || true;
       }
@@ -229,7 +251,7 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked, advisory_clicked) {
+  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked, advisory_clicked, policies_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -239,7 +261,8 @@ class Landing extends Component {
         'banner_clicked' : banner_clicked ? true : false,
         'callback_clicked' : callback_clicked ?  true : false,
         'advisory_card_cta' : this.state.advisory_button_text,
-        'insurance_advisory_card_clicked': advisory_clicked ? true : false
+        'insurance_advisory_card_clicked': advisory_clicked ? true : false,
+        'policies': policies_clicked ? true : false
       }
     };
 
@@ -253,7 +276,15 @@ class Landing extends Component {
   goToAdvisory = (e) =>{
     e.preventDefault();
     this.sendEvents('next', "", "", "", true);
+    storageService().setObject('advisory_from_landing', true)
+    storageService().remove('backToInsuranceLanding')
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
+    return;
+  }
+  toToReports = () =>{
+    this.sendEvents('next', "", "", "", "", true);
+    storageService().setObject('backToInsuranceLanding', true);
+    this.navigate('/group-insurance/common/report')
     return;
   }
   callBackScreen = () =>{
@@ -289,6 +320,13 @@ class Landing extends Component {
             </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
+            <div className="inactive-entry-card" onClick={this.toToReports}>
+              <img alt="inactive-policy-card" src={require(`assets/${this.state.type}/policy_icon.svg`)} />
+              <div className="inactive-right">
+                <p className="inactive-title">Your policies</p>
+                <p className="inactive-subtitle">{this.state.showCustomReportCardText ? `${this.state.customReportCardText} ${this.state.noOfReports > 1   ? '+' + (this.state.noOfReports - 1) + ' more': '' }` :'Looks like you have zero coverage'}</p>
+              </div>
+            </div>
             <div className="advisory-entry-container" onClick={(e)=>this.goToAdvisory(e)}>  
               <img className="advisory-entry" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt=""/>
               <p className="adivsory-card-heading">Do you have adequate insurance coverage?</p>
