@@ -15,6 +15,7 @@ import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../services';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import { getConfig } from '../../utils/functions';
+import { storageService } from '../../utils/validators';
 
 const { productName } = getConfig();
 const UPLOAD_OPTIONS_MAP = {
@@ -113,6 +114,12 @@ const FnOIncomeProof = (props) => {
     setFilePassword(event.target.value);
   }
 
+  const removeEventData = () => {
+    storageService().remove("view_sample_clicked") 
+  }
+
+
+
   const sendEvents = (userAction) => {
     let eventObj = {
       event_name: "trading_onboarding",
@@ -120,14 +127,33 @@ const FnOIncomeProof = (props) => {
         user_action: userAction || "",
         screen_name: "provide_income_proof",
         bank_statement: selectedType === "bank-statement" ? "yes" : "no",
+        itr: selectedType === "itr" ? "yes" : "no",
+        salary_slips: selectedType === "salary-slip" ? "yes" : "no",
+        view_sample_documets_clicked: storageService().get("view_sample_clicked") ? "yes" : "no"
       },
     };
     if (userAction === "just_set_events") {
       return eventObj;
     } else {
+      removeEventData();
       nativeCallback({ events: eventObj });
     }
   };
+
+  const goBack = () => {
+    sendEvents('back')
+    removeEventData();
+    //TODO below code to be checked
+    const goBackPath = props.location?.state?.goBack || "";
+    if(goBackPath) {
+      props.history.push({
+        pathname: goBackPath,
+        search: getConfig().searchParams,
+      });
+      return;
+    }
+    props.history.goBack();
+  }
 
   return (
     <Container
@@ -142,6 +168,7 @@ const FnOIncomeProof = (props) => {
       disable={!selectedFile}
       showLoader={isApiRunning}
       skelton={isLoading}
+      headerData={{goBack}}
     >
       <WVInPageHeader>
         <WVInPageTitle>Provide income proof for F&O trading</WVInPageTitle>
@@ -206,7 +233,10 @@ const FnOIncomeProof = (props) => {
           />
         }
         <div className="kyc-fi-sample">
-          <WVClickableTextElement onClick={() => navigate('fno-sample-documents')}>
+          <WVClickableTextElement onClick={() => {
+            storageService().set("view_sample_clicked", true);
+            navigate("fno-sample-documents");
+          }}>
             VIEW SAMPLE DOCUMENTS
           </WVClickableTextElement>
         </div>

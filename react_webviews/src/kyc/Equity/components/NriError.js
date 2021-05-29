@@ -7,9 +7,7 @@ import { getPathname } from "../../constants";
 import { nativeCallback } from "../../../utils/native_callback";
 
 const NriError = (props) => {
-
   const sendEvents = (userAction) => {
-    // TODO complete_mf_kyc and home send events
     let eventObj = {
       event_name: "kyc_registration",
       properties: {
@@ -25,7 +23,7 @@ const NriError = (props) => {
   };
 
   const navigate = navigateFunc.bind(props);
-  
+
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -35,13 +33,19 @@ const NriError = (props) => {
         type: "primary",
         order: "1",
         title: "COMPLETE MUTUAL FUND KYC",
-        onClick: () => navigate(getPathname.journey)
+        onClick: () => {
+          sendEvents("complete_mf_kyc");
+          navigate(getPathname.journey);
+        },
       }}
       button2Props={{
         type: "secondary",
         order: "2",
         title: "DONE",
-        onClick: () => nativeCallback({ action: "exit" })
+        onClick: () => {
+          sendEvents("home");
+          nativeCallback({ action: "exit" });
+        },
       }}
     >
       <StatusInfo

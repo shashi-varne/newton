@@ -90,6 +90,7 @@ const Pan = (props) => {
   };
 
   const handleNavigation = () => {
+    sendEvents("next", "pan_uploaded")
     if (isTradingEnabled()) {
       handleOtherPlatformNavigation();
     } else {
@@ -98,8 +99,12 @@ const Pan = (props) => {
   }
 
   const handleSubmit = async () => {
-    sendEvents('next')
-    if (isOpen) setIsOpen(false)
+    if (isOpen) {
+      sendEvents("next", "pan_details_mismatch")
+      setIsOpen(false)
+    } else {
+      sendEvents('next')
+    }
     try {
       const data = {};
       if (kyc.kyc_status !== 'compliant' && kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null) {
@@ -141,13 +146,13 @@ const Pan = (props) => {
     }
   }
 
-  const sendEvents = (userAction) => {
+  const sendEvents = (userAction, screenName) => {
     let eventObj = {
       // "event_name": 'KYC_registration',
       "event_name": 'trading_onboarding',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "upload_pan",
+        "screen_name": screenName || "upload_pan",
         // "type": type || "",
       }
     };
