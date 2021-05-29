@@ -24,7 +24,6 @@ const Pan = (props) => {
   const [fileToShow, setFileToShow] = useState(null)
   const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
-  const [showLoader, setShowLoader] = useState(false)
   const {kyc, isLoading} = useUserKycHook();
 
   const onFileSelectComplete = (newFile, fileBase64) => {
@@ -102,7 +101,7 @@ const Pan = (props) => {
       buttonTitle="SAVE AND CONTINUE"
       events={sendEvents("just_set_events")}
       classOverRideContainer="pr-container"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}

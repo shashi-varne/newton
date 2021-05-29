@@ -14,6 +14,7 @@ import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
+import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 
 const config = getConfig();
 const { productName, isSdk } = config;
@@ -28,7 +29,9 @@ const Selfie = (props) => {
   const [isLocnPermOpen, setIsLocnPermOpen] = useState(false);
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
-  const [showLoader, setShowLoader] = useState(false);
+  // const [showLoader, setShowLoader] = useState(false);
+  const [openBottomSheet, setOpenBottomSheet] = useState(false);
+  const [bottomSheetType, setBottomSheetType] = useState('');
   const [attempt, setAttempt] = useState(0);
   const { kyc, isLoading } = useUserKycHook();
   const navigate = navigateFunc.bind(props)
@@ -48,11 +51,13 @@ const Selfie = (props) => {
 
       setIsApiRunning("button");
       const result = await upload(file, 'identification', params);
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      storageService().setObject(storageConstants.KYC, result.kyc);
+      setBottomSheetType('success');
     } catch (err) {
-      console.error(err)
+      console.error(err);
+      setBottomSheetType('failed');
     } finally {
+      setOpenBottomSheet(true);
       console.log('uploaded')
       setIsApiRunning(false)
     }
@@ -132,13 +137,12 @@ const Selfie = (props) => {
     <Container
       events={sendEvents("just_set_events")}
       buttonTitle="Upload"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
       title="Take a selfie"
     >
-      {/* TODO: Create a header title/subtitle component to be used everywhere */}
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">
           <div className="sub-title">
@@ -195,6 +199,12 @@ const Selfie = (props) => {
               />
             </>
           }
+          <SelfieUploadStatus
+            status={bottomSheetType}
+            isOpen={openBottomSheet}
+            onClose={() => openBottomSheet(false)}
+            onCtaClick={() => navigate('/kyc/upload/progress')}
+          />
         </section>
       )}
     </Container>

@@ -19,7 +19,7 @@ const Sign = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const [showLoader, setShowLoader] = useState(false)
+  // const [showLoader, setShowLoader] = useState(false)
 
   const {kyc, isLoading} = useUserKycHook();
 
@@ -101,7 +101,7 @@ const Sign = (props) => {
     <Container
       buttonTitle="SAVE AND CONTINUE"
       events={sendEvents("just_set_events")}
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}

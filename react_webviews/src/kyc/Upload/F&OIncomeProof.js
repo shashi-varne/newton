@@ -13,7 +13,10 @@ import { nativeCallback } from '../../utils/native_callback';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../services';
+import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
+import { getConfig } from '../../utils/functions';
 
+const { productName } = getConfig();
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
     title: 'Bank statement',
@@ -50,6 +53,7 @@ const FnOIncomeProof = (props) => {
   const [selectedFile, setSelectedFile] = useState();
   const [selectedType, setSelectedType] = useState('');
   const [filePassword, setFilePassword] = useState('');
+  const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading, setKycToSession } = useUserKycHook();
@@ -97,7 +101,11 @@ const FnOIncomeProof = (props) => {
     if (areDocsPending) {
       navigate('/kyc/document-verification');
     } else {
-      navigate('/kyc-esign/info');
+      if (skip) {
+        navigate('/kyc-esign/info');
+      } else {
+        setOpenBottomSheet(true);
+      }
     }
   }
 
@@ -133,6 +141,7 @@ const FnOIncomeProof = (props) => {
       buttonTitle="Upload"
       disable={!selectedFile}
       showLoader={isApiRunning}
+      skelton={isLoading}
     >
       <WVInPageHeader>
         <WVInPageTitle>Provide income proof for F&O trading</WVInPageTitle>
@@ -207,6 +216,18 @@ const FnOIncomeProof = (props) => {
           alt="256 SSL SECURE ENCRYPTION"
         />
       </div>
+      <WVBottomSheet
+        isOpen={openBottomSheet}
+        onClose={() => setOpenBottomSheet(false)}
+        title="Income proof uploaded"
+        subtitle="Great, just one more step to go! Now complete eSign to get investment ready"
+        image={require(`assets/${productName}/doc-uploaded.svg`)}
+        button1Props={{
+          title: 'Continue',
+          type: 'primary',
+          onClick: () => navigate('/kyc-esign/info')
+        }}
+      />
     </Container>
   );
 }

@@ -66,7 +66,7 @@ const AddressUpload = (props) => {
   }
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
-  const [showLoader, setShowLoader] = useState(false)
+  // const [showLoader, setShowLoader] = useState(false)
   const [backDoc, setBackDoc] = useState(null)
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
@@ -229,7 +229,7 @@ const AddressUpload = (props) => {
     <Container
       buttonTitle="SAVE AND CONTINUE"
       events={sendEvents("just_set_events")}
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!frontDoc && !backDoc}
       showLoader={isApiRunning}
