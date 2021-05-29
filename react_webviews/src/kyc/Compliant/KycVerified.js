@@ -8,7 +8,7 @@ import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;
-const Verify = (props) => {
+const KycVerified = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
@@ -35,7 +35,7 @@ const Verify = (props) => {
           <div className="title">You're ready to invest!</div>
           <div
             className="subtitle margin-top"
-            onClick={() => navigate(getPathname.compliantReport)}
+            onClick={() => navigate(getPathname.kycReport)}
           >
             See KYC application details {" >"}
           </div>
@@ -45,4 +45,4 @@ const Verify = (props) => {
   );
 };
 
-export default Verify;
+export default KycVerified;

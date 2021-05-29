@@ -175,10 +175,12 @@ export const upload = async (file, type, data = {}) => {
   const url = isEmpty(doc_type) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${doc_type}`
   const res = await Api.post(url, formData)
   if (
-    res?.pfwresponse?.status_code
+    res?.pfwresponse?.status_code === 200 || 
+    (res?.pfwresponse?.status_code === 400 && res?.pfwresponse?.result?.pan_ocr)
   ) {
-    return res?.pfwresponse
+    return res?.pfwresponse?.result
   }
+
   throw new Error(
     res?.pfwresponse?.result?.message ||
       res?.pfwresponse?.result?.error ||
