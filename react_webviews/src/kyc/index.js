@@ -24,7 +24,7 @@ import CompliantPersonalDetails4 from "./Compliant/PersonalDetails4";
 import ConfirmPan from "./Compliant/ConfirmPan";
 import KycComplete from "./Compliant/Complete";
 import CompliantReport from "./Compliant/Report";
-import Verify from "./Compliant/Verify";
+import KycVerified from "./Compliant/KycVerified";
 import RtaCompliantPersonalDetails from "./RtaCompliant";
 
 import RegistrationSuccess from "./Success/RegistrationSuccess";
@@ -231,7 +231,7 @@ const Kyc = (props) => {
         <Route
           exact
           path={`${url}/compliant-report-verified`}
-          component={Verify}
+          component={KycVerified}
         />
         <Route
           exact

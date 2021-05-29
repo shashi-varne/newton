@@ -48,13 +48,13 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       //     }
       //   ]
       // },
-      {
-        key: 'sign',
-        title: 'Signature',
-        status: 'pending',
-        isEditAllowed: true,
-        inputsForStatus: ['sign'],
-      },
+      // {
+      //   key: 'sign',
+      //   title: 'Signature',
+      //   status: 'pending',
+      //   isEditAllowed: true,
+      //   inputsForStatus: ['sign'],
+      // },
       {
         key: 'bank',
         title: 'Bank details',
@@ -79,7 +79,6 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       }
     ]
     if (TRADING_ENABLED) {
-      journeyData.splice(2, 1);
       journeyData = [...journeyData, ...tradingJourneyData];
     }
   } else if (!isCompliant && show_aadhaar) {

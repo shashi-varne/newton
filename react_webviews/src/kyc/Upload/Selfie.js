@@ -38,7 +38,7 @@ const Selfie = (props) => {
     if (bottomSheetType === "failed") {
       setOpenBottomSheet(false)
     } else {
-      if (kyc.kyc_type !== "manual" && !kyc.address.meta_data.is_nri) {
+      if (TRADING_ENABLED) {
         if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
           navigate(getPathname.uploadFnOIncomeProof);
         else navigate(getPathname.kycEsign)

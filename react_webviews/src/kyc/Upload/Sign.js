@@ -36,11 +36,16 @@ const Sign = (props) => {
       setIsApiRunning("button")
       const result = await upload(file, 'sign')
       updateKyc(result.kyc);
-      if (kyc.kyc_type !== "manual" && !kyc.address.meta_data.is_nri) {
-        const type =
-          result?.kyc?.kyc_status === "compliant"
-            ? "compliant"
-            : "non-compliant";
+      const dlFlow =
+          result.kyc.kyc_status !== "compliant" &&
+          !result.kyc.address.meta_data.is_nri &&
+          result.kyc.dl_docs_status !== "" &&
+          result.kyc.dl_docs_status !== "init" &&
+          result.kyc.dl_docs_status !== null;
+
+      const type = result?.kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
+
+      if (dlFlow || type === "compliant") {
         navigate(`/kyc/${type}/bank-details`);
       } else {
         if (props?.location?.state?.backToJourney) {

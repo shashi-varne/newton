@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getConfig } from "utils/functions";
+import { getConfig, isTradingEnabled } from "utils/functions";
 import WVSteps from "../../common/ui/Steps/WVSteps"
 
 const stepsData = [
@@ -7,7 +7,10 @@ const stepsData = [
   { title: "Stocks & IPO", status: "Under process" },
   { title: "Futures & Options", status: "Under process" }
 ]
-const productName = getConfig().productName;
+
+const config = getConfig();
+const productName = config.productName;
+const TRADING_ENABLED = isTradingEnabled();
 
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
@@ -25,13 +28,13 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
           src={require(`assets/${productName}/ic_process_done.svg`)}
           alt=""
         />
-        {dl_flow && !show_note && (
+        {(dl_flow || kyc?.kyc_status === "compliant") && !show_note && (
           <div className="title">KYC complete!</div>
         )}
-        {!dl_flow && kyc?.kyc_status === "compliant" && (
+        {show_note && (
           <div className="title">Great! Your KYC application is submitted!</div>
         )}
-        {(!dl_flow || show_note) && (
+        {(!dl_flow && !show_note) && (
           <div className="title">Kudos! KYC application is submitted!</div>
         )}
         {!dl_flow && (
@@ -61,7 +64,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
           </div>
         </div>
       )}
-      {dl_flow && 
+      {(dl_flow || kyc?.kyc_status === "compliant") && TRADING_ENABLED && !show_note && 
         <div className="account-status-container">
           <div className="account-status">Account status</div>
           {steps.map((step, index) => (

@@ -43,6 +43,9 @@ const headerDataMapper = {
       "As per Govt norm. you need to do a one-time registration process to complete KYC.",
   },
 };
+
+const config = getConfig();
+
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -142,8 +145,6 @@ const Journey = (props) => {
             }
           }
         } else if (
-          !isCompliant &&
-          show_aadhaar &&
           journeyData[i].key === 'personal' &&
           (kyc.sign.doc_status === 'init' || kyc.sign.doc_status === 'rejected')
         ) {
@@ -362,7 +363,9 @@ const Journey = (props) => {
         if (kyc?.bank?.meta_data_status === 'approved') {
           navigate('/kyc/compliant-report-verified')
         } else {
-          navigate('/kyc/compliant-report-complete')
+          navigate('/kyc-esign/nsdl', {
+            searchParams: `${config.searchParams}&status=success`,
+          })
         }
       } else {
         navigate('/kyc/report')
@@ -374,17 +377,17 @@ const Journey = (props) => {
     }
   }
 
-  const productName = getConfig().productName
+  const productName = config.productName
   const basePath = getBasePath();
   const handleProceed = () => {
     const redirect_url = encodeURIComponent(
       `${basePath}/digilocker/callback${
-        getConfig().searchParams
+        config.searchParams
       }&is_secure=${storageService().get("is_secure")}`
     );
     const data = {
       url: `${basePath}/kyc/journey${
-        getConfig().searchParams
+        config.searchParams
       }&show_aadhaar=true&is_secure=
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
@@ -410,7 +413,7 @@ const Journey = (props) => {
               action_type: "redirect",
               redirect_url: encodeURIComponent(
                 `${basePath}/kyc/journey${
-                  getConfig().searchParams
+                  config.searchParams
                 }&show_aadhaar=true&is_secure=
                   ${storageService().get("is_secure")}`
               ),
@@ -442,7 +445,7 @@ const Journey = (props) => {
   const cancel = () => {
     setDlAadhaar(false)
     navigate(`${getPathname.journey}`, {
-      searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+      searchParams: `${config.searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })
   }

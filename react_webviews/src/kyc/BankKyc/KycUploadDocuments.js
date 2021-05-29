@@ -104,7 +104,7 @@ const KycUploadDocuments = (props) => {
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
-      if (isEdit) navigate(getPathname.journey);
+      if (isEdit || kyc.address.meta_data.is_nri) navigate(getPathname.journey);
       else navigate(getPathname.tradingExperience)
     } else {
       if (dlFlow) {

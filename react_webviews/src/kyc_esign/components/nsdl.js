@@ -47,7 +47,7 @@ class DigiStatus extends Component {
 
       if (
         user.kyc_registration_v2 === "submitted" &&
-        kyc.sign_status === "signed" &&
+        // kyc.sign_status === "signed" &&
         kyc.bank.meta_data_status !== "approved"
       ) {
         show_note = true;
