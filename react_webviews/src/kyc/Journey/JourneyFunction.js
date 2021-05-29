@@ -1,4 +1,6 @@
-import { getConfig } from "utils/functions";
+import { isTradingEnabled } from "utils/functions";
+
+const TRADING_ENABLED = isTradingEnabled();
 
 export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
   let journeyData = [];
@@ -46,6 +48,13 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       //     }
       //   ]
       // },
+      // {
+      //   key: 'sign',
+      //   title: 'Signature',
+      //   status: 'pending',
+      //   isEditAllowed: true,
+      //   inputsForStatus: ['sign'],
+      // },
       {
         key: 'bank',
         title: 'Bank details',
@@ -58,13 +67,6 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
           },
         ],
       },
-      {
-        key: 'sign',
-        title: 'Signature',
-        status: 'pending',
-        isEditAllowed: true,
-        inputsForStatus: ['sign'],
-      },
     ]
 
     const tradingJourneyData = [
@@ -76,8 +78,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: ['esign'],
       }
     ]
-    if (!getConfig().isSdk) {
-      journeyData = journeyData.slice(0,3);
+    if (TRADING_ENABLED) {
       journeyData = [...journeyData, ...tradingJourneyData];
     }
   } else if (!isCompliant && show_aadhaar) {
@@ -144,7 +145,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: ['esign'],
       }
     ]
-    if (!getConfig().isSdk) {
+    if (TRADING_ENABLED) {
       journeyData = journeyData.slice(0,3);
       journeyData = [...journeyData, ...tradingJourneyData];
     }
@@ -219,6 +220,21 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         'married'
     ) {
       journeyData[1].inputsForStatus[1].keys.push('spouse_name')
+    }
+
+    const tradingJourneyData = [
+      {
+        key: 'trading_esign',
+        title: 'Trading details & eSign',
+        status: 'pending',
+        isEditAllowed: false,
+        inputsForStatus: ['esign'],
+      }
+    ]
+
+    if (kyc.kyc_type === "manual" && TRADING_ENABLED) {
+      journeyData = journeyData.slice(0, 4);
+      journeyData = [...journeyData, ...tradingJourneyData];
     }
   }
 

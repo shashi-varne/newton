@@ -49,7 +49,7 @@ const NRIAddressUpload = (props) => {
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
   const [showLoader, setShowLoader] = useState(false)
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
     sendEvents('get_image', 'gallery', type);
@@ -89,23 +89,18 @@ const NRIAddressUpload = (props) => {
     sendEvents('next')
     try {
       setIsApiRunning("button")
-      let result, response
+      let result;
       if (onlyFrontDocRequired) {
-        response = await upload(frontDoc, 'nri_address', {
+        result = await upload(frontDoc, 'nri_address', {
           address_proof_key: addressProofKey,
         })
       } else {
-        response = await upload(file, 'nri_address', {
+        result = await upload(file, 'nri_address', {
           addressProofKey,
         })
       }
-      if(response.status_code === 200) {
-        result = response.result;
-        storageService().setObject(storageConstants.KYC, result.kyc)
-        navigate('/kyc/upload/progress')
-      } else {
-        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
-      }
+      updateKyc(result.kyc)
+      navigate('/kyc/upload/progress')
     } catch (err) {
       toast(err?.message)
       console.error(err)
@@ -188,10 +183,10 @@ const NRIAddressUpload = (props) => {
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       events={sendEvents("just_set_events")}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
     >

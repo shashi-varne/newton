@@ -10,6 +10,7 @@ import {
   navigate as navigateFunc,
   compareObjects,
   getFlow,
+  getTotalPagesInPersonalDetails,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
@@ -32,7 +33,7 @@ const PersonalDetails4 = (props) => {
   const type = props.type || "";
   const keysToCheck = ["dob", "name", "relationship"];
 
-  const { kyc, isLoading } = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -169,6 +170,7 @@ const PersonalDetails4 = (props) => {
       nativeCallback({ events: eventObj });
     }
   };
+  const pageNumber = getTotalPagesInPersonalDetails(kyc, user, isEdit)
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -179,9 +181,9 @@ const PersonalDetails4 = (props) => {
       skelton={isLoading}
       showLoader={isApiRunning}
       title={title}
-      count={type === "digilocker" ? 3 : 4}
-      current={type === "digilocker" ? 3 : 4}
-      total={type === "digilocker" ? 3 : 4}
+      count={pageNumber}
+      current={pageNumber}
+      total={pageNumber}
     >
       <div className="kyc-nominee">
         <main>

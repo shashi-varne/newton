@@ -9,7 +9,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;
-const Verify = (props) => {
+const KycVerified = (props) => {
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading } = useUserKycHook();
   const handleClick = () => {
@@ -23,7 +23,7 @@ const Verify = (props) => {
 
   const applicationDetails = () => {
     sendEvents("application_details");
-    navigate(getPathname.compliantReport);
+    navigate(getPathname.kycReport);
   };
   
   const sendEvents = (userAction) => {
@@ -67,4 +67,4 @@ const Verify = (props) => {
   );
 };
 
-export default Verify;
+export default KycVerified;

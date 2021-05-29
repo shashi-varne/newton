@@ -58,6 +58,9 @@ export const getPathname = {
   uploadNriAddress: '/kyc/upload/address-nri',
   uploadSelfie: '/kyc/upload/selfie',
   uploadSelfieVideo: '/kyc/upload/selfie_video',
+  uploadFnOIncomeProof: '/kyc/upload/fno-income-proof',
+  tradingExperience: '/kyc/trading-experience',
+  nriError: '/kyc/nri-error',
 }
 
 export const storageConstants = {
@@ -253,13 +256,14 @@ export const bankAccountTypeOptions = (isNri) => {
 export const genderOptions = [
   { name: "Male", value: "MALE" },
   { name: "Female", value: "FEMALE" },
-  { name: "Transgender", value: "TRANSGENDER" },
+  { name: "Other", value: "OTHER" },
 ];
 
 export const maritalStatusOptions = [
   { name: "Single", value: "SINGLE" },
   { name: "Married", value: "MARRIED" },
-  { name: "Unmarried", value: "UNMARRIED" },
+  { name: "Divorced", value: "DIVORCED" },
+  { name: "Widow", value: "WIDOW" },
 ];
 
 export const occupationTypeOptions = [

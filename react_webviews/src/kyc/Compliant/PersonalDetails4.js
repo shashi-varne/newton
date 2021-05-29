@@ -9,6 +9,7 @@ import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
+  getTotalPagesInPersonalDetails,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
@@ -28,7 +29,7 @@ const PersonalDetails4 = (props) => {
   if (isEdit) {
     title = "Edit nominee detail";
   }
-  const { kyc, isLoading } = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -110,11 +111,16 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleNavigation = () => {
-    if (isChecked) {
-      if (isEdit) navigate(getPathname.journey);
-      else navigate("/kyc/compliant/bank-details");
+    // if (isChecked) {
+    //   if (isEdit) navigate(getPathname.journey);
+    //   else navigate("/kyc/compliant/bank-details");
+    // } else {
+    //   navigate(getPathname.journey);
+    // }
+    if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+      navigate(getPathname.uploadSign);
     } else {
-      navigate(getPathname.journey);
+      navigate(getPathname.journey)
     }
   };
 
@@ -162,6 +168,7 @@ const PersonalDetails4 = (props) => {
     }
   };
 
+  const pageNumber = getTotalPagesInPersonalDetails(kyc, user, isEdit);
   return (
     <Container
       skelton={isLoading}
@@ -171,6 +178,9 @@ const PersonalDetails4 = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      current={pageNumber}
+      count={pageNumber}
+      total={pageNumber}
     >
       <div className="kyc-nominee">
         <main>
@@ -188,9 +198,7 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-            <span>
-              I do not wish to add a <b>nominee</b>
-            </span>
+            <span>I do not wish to add a nominee</span>
           </div>
           <Input
             label="Name"

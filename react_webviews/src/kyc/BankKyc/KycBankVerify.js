@@ -13,6 +13,7 @@ import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -140,6 +141,24 @@ const KycBankVerify = (props) => {
     navigate(`/kyc/${userType}/upload-documents`);
   };
 
+  const handleOtherPlatformNavigation = () => {
+    if (userType === "compliant") {
+      if (isEdit) goToJourney();
+      else navigate(getPathname.tradingExperience)
+    } else {
+      if (dl_flow) {
+        if (
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+          kyc.pan.doc_status !== "approved"
+        ) {
+          navigate(getPathname.uploadPan);
+        } else navigate(getPathname.tradingExperience);
+      } else navigate(getPathname.uploadProgress);
+    }
+  };
+
   const handleSuccess = () => {
     if (userType === "compliant") {
       if (isEdit) goToJourney();
@@ -152,6 +171,33 @@ const KycBankVerify = (props) => {
           });
         } else goToJourney();
       }
+    } else {
+      if (dl_flow) {
+        if (
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+          kyc.pan.doc_status !== "approved"
+        ) {
+          navigate(getPathname.uploadPan);
+        } else navigate(getPathname.kycEsign);
+      } else navigate(getPathname.uploadProgress);
+    }
+  };
+
+  const handleSdkNavigation = () => {
+    if (userType === "compliant") {
+      goToJourney();
+      // if (isEdit) goToJourney();
+      // else {
+      //   if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+      //     navigate(getPathname.uploadSign, {
+      //       state: {
+      //         backToJourney: true,
+      //       },
+      //     });
+      //   } else goToJourney();
+      // }
     } else {
       if (dl_flow) {
         if (

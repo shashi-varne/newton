@@ -51,7 +51,7 @@ class DigiStatus extends Component {
       dl_flow = this.checkDlFlow(kyc)
       if (
         user.kyc_registration_v2 === "submitted" &&
-        kyc.sign_status === "signed" &&
+        // kyc.sign_status === "signed" &&
         kyc.bank.meta_data_status !== "approved"
       ) {
         show_note = true;

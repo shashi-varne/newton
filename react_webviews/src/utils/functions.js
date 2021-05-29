@@ -461,3 +461,8 @@ export function getBasePath() {
   }
   return window.location.origin + basename;
 }
+
+export function isTradingEnabled() {
+  const kyc = storageService().getObject("kyc");
+  return !getConfig().isSdk && !kyc?.address?.meta_data.is_nri
+}

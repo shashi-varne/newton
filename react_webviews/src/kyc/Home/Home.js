@@ -7,7 +7,7 @@ import { getPathname, storageConstants } from "../constants";
 import toast from "../../common/ui/Toast";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -24,6 +24,9 @@ const residentialStatusOptions = [
     name: "No",
   },
 ];
+
+const TRADING_ENABLED = isTradingEnabled();
+
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -125,15 +128,18 @@ const Home = (props) => {
 
   const checkPanValidity = async (showConfirmPan = false) => {
     // setOpenCheckCompliant(true);
+    let body = {
+      kyc: {
+        pan_number: pan.toUpperCase(),
+      }
+    };
+
+    if(TRADING_ENABLED) {
+      body.kyc_product_type = "equity"
+    };
+
     try {
-      let result = await getPan(
-        {
-          kyc: {
-            pan_number: pan.toUpperCase(),
-          },
-        },
-        accountMerge
-      );
+      let result = await getPan(body, accountMerge);
       if (isEmpty(result)) return;
       setUserName(result.kyc.name);
       setIsStartKyc(true);
@@ -248,8 +254,12 @@ const Home = (props) => {
           pan: newObject,
           address: kyc.address.meta_data,
         },
-        set_kyc_product_type: "equity" // later add a check only if its equity flow (for b2c this is hardcoded)
       };
+
+      if(TRADING_ENABLED) {
+        body.set_kyc_product_type = "equity";
+      }
+
       let result = await kycSubmit(body);
       if (!result) return;
       if (result?.kyc?.kyc_status === "compliant") {
@@ -281,9 +291,13 @@ const Home = (props) => {
       } else {
         // sendEvents(`${is_nri ? "no" : "yes"}`, "resident popup");
         if (is_nri) {
-          navigate(`${getPathname.journey}`, {
-            searchParams: `${config.searchParams}&show_aadhaar=false`,
-          });
+          if (!TRADING_ENABLED) {
+            navigate(`${getPathname.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=false`,
+            });
+          } else {
+            navigate(getPathname.nriError);
+          }
         } else {
           navigate(`${getPathname.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=true`,

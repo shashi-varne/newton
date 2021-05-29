@@ -1,8 +1,10 @@
 import React from "react";
-import { nativeCallback } from "../../../utils/native_callback";
+import { navigate as navigateFunc } from "../../common/functions";
 import Container from "../../common/Container";
 import { StatusInfo } from "../mini-components/StatusInfo";
 import "./commonStyles.scss";
+import { getPathname } from "../../constants";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const NriError = (props) => {
 
@@ -22,6 +24,8 @@ const NriError = (props) => {
     }
   };
 
+  const navigate = navigateFunc.bind(props);
+  
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -31,11 +35,13 @@ const NriError = (props) => {
         type: "primary",
         order: "1",
         title: "COMPLETE MUTUAL FUND KYC",
+        onClick: () => navigate(getPathname.journey)
       }}
       button2Props={{
         type: "secondary",
         order: "2",
         title: "DONE",
+        onClick: () => nativeCallback({ action: "exit" })
       }}
     >
       <StatusInfo

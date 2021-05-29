@@ -7,6 +7,7 @@ import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
+  getTotalPagesInPersonalDetails,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -24,7 +25,7 @@ const PersonalDetails2 = (props) => {
     title = "Edit personal details";
   }
 
-  const { kyc, isLoading } = useUserKycHook();
+  const {kyc, user, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -133,7 +134,7 @@ const PersonalDetails2 = (props) => {
       title={title}
       count="2"
       current="2"
-      total="4"
+      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
     >
       <div className="kyc-personal-details">
         <main>

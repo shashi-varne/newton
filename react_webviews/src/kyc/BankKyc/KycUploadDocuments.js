@@ -7,7 +7,7 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { getFlow, navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { getPathname } from "../constants";
 import "./KycUploadDocuments.scss";
@@ -20,9 +20,10 @@ const KycUploadDocuments = (props) => {
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [file, setFile] = useState(null);
   const [dlFlow, setDlFlow] = useState(false);
-  const {kyc, isLoading, setKycToSession} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
+  const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
     if (
@@ -84,7 +85,7 @@ const KycUploadDocuments = (props) => {
         bank_id
       );
       if(!isEmpty(result))
-        setKycToSession(result.kyc)
+        updateKyc(result.kyc)
       setShowPendingModal(true);
     } catch (err) {
       toast("Image upload failed, please retry")
@@ -95,33 +96,58 @@ const KycUploadDocuments = (props) => {
 
   const handleEdit = () => {
     sendEvents('edit')
-    const navigate = navigateFunc.bind(props);
     navigate(`/kyc/${userType}/bank-details`);
   };
 
   const handleSampleDocument = () => {
-    const navigate = navigateFunc.bind(props);
     navigate("/kyc/sample-documents");
   };
 
-  const proceed = () => {
-    // sendEvents('next', "", 'bottom_sheet')
-    const navigate = navigateFunc.bind(props);
+  const handleOtherPlatformNavigation = () => {
+    if (additional) {
+      navigate("/kyc/add-bank");
+    } else if (userType === "compliant") {
+      if (isEdit || kyc.address.meta_data.is_nri) navigate(getPathname.journey);
+      else navigate(getPathname.tradingExperience)
+    } else {
+      if (dlFlow) {
+        if (
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
+          kyc.pan.doc_status !== "approved"
+        ) {
+          navigate(getPathname.uploadPan);
+        } else {
+          if (kyc.sign_status !== 'signed') {
+            navigate(getPathname.tradingExperience);
+          } else {
+            navigate(getPathname.journey);
+          }
+        }
+      } else {
+        navigate(getPathname.uploadProgress);
+      }
+    }
+  };
+
+  const handleSdkNavigation = () => {
     if (additional) {
       navigate("/kyc/add-bank");
     } else {
       if (userType === "compliant") {
-        if (isEdit) {
-          navigate("/kyc/journey");
-        } else {
-          if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
-            navigate(getPathname.uploadSign, {
-              state: {
-                backToJourney: true,
-              },
-            });
-          } else navigate("/kyc/journey");
-        }
+        navigate(getPathname.journey);
+        // if (isEdit) {
+        //   navigate("/kyc/journey");
+        // } else {
+        //   if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+        //     navigate(getPathname.uploadSign, {
+        //       state: {
+        //         backToJourney: true,
+        //       },
+        //     });
+        //   } else navigate("/kyc/journey");
+        // }
       } else {
         if (dlFlow) {
           if (
@@ -143,6 +169,14 @@ const KycUploadDocuments = (props) => {
         }
       }
     } 
+  };
+
+  const proceed = () => {
+    if (isTradingEnabled()) {
+      handleOtherPlatformNavigation();
+    } else {
+      handleSdkNavigation();
+    }
   };
 
   const selectedDocValue =

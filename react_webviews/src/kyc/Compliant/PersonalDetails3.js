@@ -12,6 +12,8 @@ import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
+  getTotalPagesInPersonalDetails,
+  getEmailOrMobileVerifiedStatus,
 } from "../common/functions";
 import { kycSubmit, getCVL } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -23,7 +25,7 @@ const PersonalDetails3 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
   const [oldState, setOldState] = useState({});
   let title = "Professional details";
   if (isEdit) {
@@ -100,21 +102,21 @@ const PersonalDetails3 = (props) => {
   };
 
   const handleNavigation = (is_nri) => {
-    if (is_nri) {
-      navigate(getPathname.nriAddressDetails2, {
-        state: {
-          isEdit: isEdit,
-          userType: "compliant",
-        },
-      });
-    } else {
-      navigate(getPathname.compliantPersonalDetails4, {
-        state: {
-          isEdit: isEdit,
-          userType: "compliant",
-        },
-      });
+    const data = {
+      state: {
+        isEdit: isEdit,
+        userType: "compliant",
+      },
+    };
+    if (getEmailOrMobileVerifiedStatus(kyc, user)) {
+      if (is_nri) {
+        navigate(getPathname.nriAddressDetails2, data);
+      } else {
+        navigate(getPathname.compliantPersonalDetails4, data);
+      }
+      return;
     }
+    navigate(getPathname.communicationDetails, data);
   };
 
   const handleChange = (name) => (event) => {
@@ -169,7 +171,7 @@ const PersonalDetails3 = (props) => {
       title={title}
       count={3}
       current={3}
-      total={3}
+      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
     >
       <div className="kyc-personal-details">
         <main>

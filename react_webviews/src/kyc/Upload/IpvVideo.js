@@ -23,7 +23,7 @@ const IpvVideo = (props) => {
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [ipvcode, setIpvCode] = useState('')
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [showKnowMoreDialog, setKnowMoreDialog] = useState(false)
   const [showVideoRecoreder, setShowVideoRecorder] = useState(false)
   const [uploadCTAText, setUploadCTAText] = useState("OPEN CAMERA")
@@ -103,14 +103,9 @@ const IpvVideo = (props) => {
     const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
-      const response = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
-      if(response.status_code === 200) {
-        const result = response.result
-        storageService().setObject(storageConstants.KYC, result.kyc)
-        navigate('/kyc/upload/progress')
-      } else {
-        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")
-      }
+      const result = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
+      updateKyc(result.kyc)
+      navigate('/kyc/upload/progress')
     } catch (err) {
       toast(err?.message)
       console.error(err)
