@@ -7,11 +7,12 @@ import {
   maritalStatusOptions,
   getPathname,
 } from "../constants";
-import { validateNumber, validateAlphabets, isEmpty} from "utils/validators";
+import { validateAlphabets, isEmpty} from "utils/validators";
 import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
+  getTotalPagesInPersonalDetails,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -67,8 +68,6 @@ const PersonalDetails1 = (props) => {
       "mother_name",
     ];
     if (form_data.marital_status === "MARRIED") keysToCheck.push("spouse_name");
-    if (user.email === null) keysToCheck.push("email");
-    if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
@@ -130,7 +129,6 @@ const PersonalDetails1 = (props) => {
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     if (value && name.includes("name") && !validateAlphabets(value)) return;
-    if (name === "mobile" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "marital_status")
       formData[name] = maritalStatusOptions[value].value;
@@ -151,7 +149,7 @@ const PersonalDetails1 = (props) => {
       title={title}
       count={1}
       current={1}
-      total={3}
+      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
     >
       <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">
@@ -169,32 +167,6 @@ const PersonalDetails1 = (props) => {
             type="text"
             disabled={showLoader}
           />
-          {user.email === null && (
-            <Input
-              label="Email"
-              class="input"
-              value={form_data.email || ""}
-              error={form_data.email_error ? true : false}
-              helperText={form_data.email_error || ""}
-              onChange={handleChange("email")}
-              type="text"
-              disabled={showLoader}
-            />
-          )}
-          {user.mobile === null && (
-            <Input
-              label="Mobile number"
-              class="input"
-              value={form_data.mobile || ""}
-              error={form_data.mobile_error ? true : false}
-              helperText={form_data.mobile_error || ""}
-              onChange={handleChange("mobile")}
-              maxLength={10}
-              type="text"
-              inputMode="numeric"
-              disabled={showLoader}
-            />
-          )}
           <Input
             label="Father's name"
             class="input"
@@ -221,7 +193,7 @@ const PersonalDetails1 = (props) => {
               error={form_data.gender_error ? true : false}
               helperText={form_data.gender_error}
               width="40"
-              label="Gender:"
+              label="Gender"
               options={genderOptions}
               id="account_type"
               value={form_data.gender || ""}
@@ -234,7 +206,7 @@ const PersonalDetails1 = (props) => {
               error={form_data.marital_status_error ? true : false}
               helperText={form_data.marital_status_error}
               width="40"
-              label="Marital status:"
+              label="Marital status"
               options={maritalStatusOptions}
               id="account_type"
               value={form_data.marital_status || ""}

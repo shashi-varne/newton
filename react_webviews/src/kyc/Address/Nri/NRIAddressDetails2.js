@@ -87,10 +87,11 @@ const NRIAddressDetails2 = (props) => {
   };
 
   const handleNavigation = () => {
+    const data = { state: { isEdit } };
     if (stateParams?.backToJourney) {
-      navigate("/kyc/upload/address");
+      navigate("/kyc/upload/address", data);
     } else if (stateParams?.userType === "compliant") {
-      navigate("/kyc/compliant-personal-details4");
+      navigate("/kyc/compliant-personal-details4", data);
     } else {
       navigate("/kyc/journey");
     }
@@ -133,6 +134,16 @@ const NRIAddressDetails2 = (props) => {
     address_proof = kycNRIDocNameMapper[kyc?.address_doc_type];
   }
 
+  const getPageDetails = (userKyc) => {
+    let pageDetails = {}
+    const isCompliant = userKyc.kyc_status === "compliant";
+    pageDetails.total = isCompliant ? (isEdit ? 5 : 6) : 4 ;
+    pageDetails.current = isCompliant && !isEdit ? 5 : 4;
+    return pageDetails;
+  }
+
+  const pageDetails = getPageDetails(kyc);
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -140,9 +151,9 @@ const NRIAddressDetails2 = (props) => {
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title={title}
-      current={4}
-      count={4}
-      total={4}
+      current={pageDetails.current}
+      count={pageDetails.current}
+      total={pageDetails.total}
     >
       <section id="kyc-address-details-2">
         <div className="sub-title">Address as per {address_proof}</div>

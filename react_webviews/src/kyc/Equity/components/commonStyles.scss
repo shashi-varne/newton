@@ -336,11 +336,12 @@ $generic-subtitle-margin-top: -10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #4a4a4a;
+      color: var(--default);
       font-weight: normal;
       font-size: 13px;
       text-transform: initial;
       text-decoration: none;
+      width: 100%;
 
       img {
         width: 18px;
@@ -364,7 +365,7 @@ $generic-subtitle-margin-top: -10px;
       margin: 0 40px;
       font-size: 11px;
       line-height: 18px;
-      color: #4a4a4a;
+      color: var(--default);
     }
   }
 
@@ -401,7 +402,7 @@ $generic-subtitle-margin-top: -10px;
     align-items: center;
     font-size: 13px;
     line-height: 21px;
-    color: #767E86;
+    color: var(--steelgrey);
     margin-top: 40px;
 
     .kcd-whatsapp-consent-checkbox {

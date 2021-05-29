@@ -1,6 +1,5 @@
 import InputAdornment from "@material-ui/core/InputAdornment";
 import React, { useEffect, useState } from "react";
-import Button from "../../../common/ui/Button";
 import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
 import "./commonStyles.scss";
@@ -13,9 +12,15 @@ import {
 } from "../../../utils/validators";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
-import { apiConstants } from "../../constants";
+import { apiConstants, getPathname } from "../../constants";
 import { getBasePath, getConfig } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
+import {
+  getTotalPagesInPersonalDetails,
+  navigate as navigateFunc,
+} from "../../common/functions";
+import { isReadyToInvest } from "../../services";
+import WVButton from "../../../common/ui/Button/WVButton";
 
 const config = getConfig();
 const googleButtonTitle = (
@@ -34,10 +39,15 @@ const googleButtonTitle = (
   </a>
 );
 const CommunicationDetails = (props) => {
+  const navigate = navigateFunc.bind(props);
+  const stateParams = props.location?.state || {};
+  const isEdit = stateParams.isEdit || false;
+  const userType = stateParams.userType || "";
+  const flowType = stateParams.flowType || "";
   const [formData, setFormData] = useState({
     whatsappConsent: true,
   });
-  const [state, setState] = useState({
+  const [otpData, setOtpData] = useState({
     otp: "",
     totalTime: 30,
     timeAvailable: 30,
@@ -47,27 +57,25 @@ const CommunicationDetails = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [showOtpContainer, setShowOtpContainer] = useState(false);
   const [showDotLoader, setShowDotLoader] = useState(false);
-  const { user, kyc, isLoading } = useUserKycHook();
+  const { user, kyc, isLoading, setKycToSession } = useUserKycHook();
+  const isNri = kyc.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
-  useEffect(() => {
-    if (!isEmpty(user)) {
-      const type = user.mobile === null ? "mobile" : "email";
-      setCommunicationType(type);
-    }
-  }, [user]);
+  const [isReadyToInvestBase, setIsReadyToInvest] = useState();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
+      const type = user.mobile === null ? "mobile" : "email";
+      setCommunicationType(type);
       const data = { ...formData };
       data.email = kyc.identification.meta_data.email;
-      let mobile_number = kyc.identification.meta_data.mobile_number || "";
-      if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
-        mobile_number = mobile_number.split("|")[1];
-      }
-      data.mobile = mobile_number;
+      let mobileNumber = kyc.identification.meta_data.mobile_number || "";
+      const [extension, number] = mobileNumber.toString().split("|");
+      if (extension) mobileNumber = number;
+      data.mobile = mobileNumber;
       setFormData({ ...data });
+      setIsReadyToInvest(isReadyToInvest());
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const handleChange = (name) => (event) => {
     if (showOtpContainer || showDotLoader) {
@@ -97,7 +105,7 @@ const CommunicationDetails = (props) => {
       const result = await resendOtp(otpId);
       if (!result) return;
       setOtpId(result.otp_id);
-      setState({
+      setOtpData({
         otp: "",
         totalTime: 30,
         timeAvailable: 30,
@@ -110,25 +118,21 @@ const CommunicationDetails = (props) => {
   };
 
   const handleOtp = (otp) => {
-    setState((state) => {
-      return {
-        ...state,
-        otp,
-      };
-    });
+    setOtpData({ ...otpData, otp });
   };
 
   const handleClick = async () => {
     try {
       if (showOtpContainer) {
-        if (state.otp.length !== 4) {
+        if (otpData.otp.length !== 4) {
           toast("Minimum otp length is 4");
           return;
         }
         setShowLoader("button");
-        const otpResult = await verifyOtp({ otpId, otp: state.otp });
+        const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
         if (!otpResult) return;
-        toast("succussful");
+        setKycToSession(otpResult.kyc);
+        handleNavigation();
       } else {
         let body = {};
         if (communicationType === "email") {
@@ -158,7 +162,7 @@ const CommunicationDetails = (props) => {
         if (!result) return;
         setShowOtpContainer(true);
         setOtpId(result.otp_id);
-        setState({
+        setOtpData({
           otp: "",
           totalTime: 30,
           timeAvailable: 30,
@@ -178,13 +182,38 @@ const CommunicationDetails = (props) => {
     setButtonTitle("CONTINUE");
   };
 
+  const handleNavigation = () => {
+    if (isReadyToInvestBase) {
+      navigate(getPathname.tradingExperience);
+      return;
+    }
+    const data = {
+      state: {
+        isEdit,
+        userType,
+      },
+    };
+    if (userType === "compliant") {
+      if (isNri) {
+        navigate(getPathname.nriAddressDetails2, data);
+      } else {
+        navigate(getPathname.compliantPersonalDetails4, data);
+      }
+    } else if (flowType === "digilocker") {
+      navigate(getPathname.digilockerPersonalDetails3, data);
+    } else {
+      navigate(getPathname.personalDetails4, data);
+    }
+  };
+
+  const pageNumber = flowType === "digilocker" ? 3 : 4;
   return (
     <Container
       buttonTitle={buttonTitle}
       title="Communication details"
-      count="3"
-      current="3"
-      total="5"
+      count={!isReadyToInvestBase && pageNumber}
+      current={pageNumber}
+      total={getTotalPagesInPersonalDetails(kyc, user)}
       handleClick={handleClick}
       showLoader={showLoader}
       skelton={isLoading}
@@ -204,16 +233,23 @@ const CommunicationDetails = (props) => {
           </div>
           {communicationType === "email" ? (
             <>
-              <Button
-                classes={{ button: "kcd-google-button" }}
-                buttonTitle={googleButtonTitle}
-                type="outlined"
-              />
-              <div className="kcd-or-divider">
-                <div className="kcd-divider-line"></div>
-                <div className="kcd-divider-text">OR</div>
-                <div className="kcd-divider-line"></div>
-              </div>
+              {!showOtpContainer && (
+                <>
+                  <WVButton
+                    variant="outlined"
+                    color="secondary"
+                    fullWidth
+                    classes={{ root: "kcd-google-button" }}
+                  >
+                    {googleButtonTitle}
+                  </WVButton>
+                  <div className="kcd-or-divider">
+                    <div className="kcd-divider-line"></div>
+                    <div className="kcd-divider-text">OR</div>
+                    <div className="kcd-divider-line"></div>
+                  </div>
+                </>
+              )}
               <TextField
                 label="Email address"
                 value={formData.email || ""}
@@ -271,7 +307,7 @@ const CommunicationDetails = (props) => {
               </div>
               <div className="kcd-otp-content">
                 <Otp
-                  state={state}
+                  otpData={otpData}
                   showDotLoader={showDotLoader}
                   handleOtp={handleOtp}
                   resendOtp={resendOtpVerification}

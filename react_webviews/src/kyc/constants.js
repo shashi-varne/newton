@@ -256,13 +256,14 @@ export const bankAccountTypeOptions = (isNri) => {
 export const genderOptions = [
   { name: "Male", value: "MALE" },
   { name: "Female", value: "FEMALE" },
-  { name: "Transgender", value: "TRANSGENDER" },
+  { name: "Other", value: "OTHER" },
 ];
 
 export const maritalStatusOptions = [
   { name: "Single", value: "SINGLE" },
   { name: "Married", value: "MARRIED" },
-  { name: "Unmarried", value: "UNMARRIED" },
+  { name: "Divorced", value: "DIVORCED" },
+  { name: "Widow", value: "WIDOW" },
 ];
 
 export const occupationTypeOptions = [

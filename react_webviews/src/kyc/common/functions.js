@@ -1,5 +1,6 @@
 import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { isEmpty } from '../../utils/validators'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -152,4 +153,46 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
     }
   });
   return compare;
+};
+
+export const getTotalPagesInPersonalDetails = (kyc = {}, user = {}, isEdit = false) => {
+  if (isEmpty(kyc) || isEmpty(user)) {
+    return "";
+  }
+  const isCompliant = kyc.kyc_status === "compliant";
+  const isNri = kyc?.address?.meta_data?.is_nri || false;
+  const isEmailAndMobileVerified = getEmailOrMobileVerifiedStatus(kyc, user)
+  const dlCondition =
+    !isCompliant &&
+    !isNri &&
+    kyc.dl_docs_status !== "" &&
+    kyc.dl_docs_status !== "init" &&
+    kyc.dl_docs_status !== null;
+  let totalPages = 5;
+  if (isNri && isCompliant) totalPages++;
+  if (isEmailAndMobileVerified && isEdit) totalPages--;
+  if (dlCondition) totalPages--;
+  return totalPages;
+};
+
+export const getEmailOrMobileVerifiedStatus = (kyc = {}, user = {}) => {
+  if (isEmpty(kyc) || isEmpty(user)) {
+    return false;
+  }
+  return (
+    (user.email === null && kyc.identification?.meta_data?.email_verified) ||
+    (user.mobile === null &&
+      kyc.identification?.meta_data?.mobile_number_verified)
+  );
+};
+
+export const isDigilockerFlow = (kyc = {}) => {
+  if (isEmpty(kyc)) return false;
+  return (
+    kyc.kyc_status !== "compliant" &&
+    !kyc.address.meta_data.is_nri &&
+    kyc.dl_docs_status !== "" &&
+    kyc.dl_docs_status !== "init" &&
+    kyc.dl_docs_status !== null
+  );
 };
