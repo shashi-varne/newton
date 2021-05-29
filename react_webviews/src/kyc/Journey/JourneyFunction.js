@@ -221,6 +221,21 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
     ) {
       journeyData[1].inputsForStatus[1].keys.push('spouse_name')
     }
+
+    const tradingJourneyData = [
+      {
+        key: 'trading_esign',
+        title: 'Trading details & eSign',
+        status: 'pending',
+        isEditAllowed: false,
+        inputsForStatus: ['esign'],
+      }
+    ]
+
+    if (kyc.kyc_type === "manual" && TRADING_ENABLED) {
+      journeyData = journeyData.slice(0, 4);
+      journeyData = [...journeyData, ...tradingJourneyData];
+    }
   }
 
   

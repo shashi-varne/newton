@@ -464,5 +464,5 @@ export function getBasePath() {
 
 export function isTradingEnabled() {
   const kyc = storageService().getObject("kyc");
-  return !getConfig().isSdk && !kyc.address.meta_data.is_nri
+  return !getConfig().isSdk && !kyc?.address?.meta_data.is_nri
 }

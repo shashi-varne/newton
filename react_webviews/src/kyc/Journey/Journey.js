@@ -145,6 +145,7 @@ const Journey = (props) => {
             }
           }
         } else if (
+          ((!isCompliant && show_aadhaar) || isCompliant) &&
           journeyData[i].key === 'personal' &&
           (kyc.sign.doc_status === 'init' || kyc.sign.doc_status === 'rejected')
         ) {
@@ -335,6 +336,7 @@ const Journey = (props) => {
           address: '/kyc/address-details1',
           docs: '/kyc/upload/progress',
           esign: '/kyc-esign/info',
+          trading_esign: '/kyc/trading-experience',
         }
         console.log(stateMapper[key])
       }
