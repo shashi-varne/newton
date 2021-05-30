@@ -43,7 +43,7 @@ class Landing extends Component {
                 skelton={this.state.skelton}
                 showError={this.state.showError}
                 errorData={this.state.errorData}
-                classHeader='header-color-red'
+                classHeader='header-color-blue'
                 customBackButtonColor='white'
             >
                 <div>

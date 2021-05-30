@@ -99,3 +99,33 @@ export function carouselSwipe_count(index) {
 export function handleClick(data) {
   this.navigate(`${data.key}/fund-list`, data.title);
 }
+
+
+
+
+export async function fetch_funddetails_list() {
+
+  let body = {
+    "subcategory": "all",
+    "sort_by": "high_to_low",
+    "filter_by": "expense_ratio"
+  }
+
+
+  try {
+    const res = await Api.post(`https://subham-dot-plutus-staging.appspot.com/api/funds/passive/index/category/${this.state.title}`, body);
+
+    let result = res.pfwresponse?.result?.funds;
+
+    if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200 && !isEmpty(result)) {
+
+        this.setState({
+          result: result
+        })
+
+    }
+
+  } catch (err) {
+    throw err;
+  }
+};

@@ -34,3 +34,30 @@ export const fund_category = [
         icon: require(`assets/${product_name}/global_indices.svg`)
     }
 ];
+
+export const year_filters = [
+    {
+        type: "month",
+        text: "1M",
+    },
+    {
+        type: "month",
+        text: "3M",
+    },
+    {
+        type: "month",
+        text: "6M",
+    },
+    {
+        type: "year",
+        text: "1Y",
+    },
+    {
+        type: "year",
+        text: "3Y",
+    },
+    {
+        type: "year",
+        text: "5Y",
+    },
+]

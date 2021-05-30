@@ -3,7 +3,7 @@ import StarIcon from "@material-ui/icons/Star";
 
 function PassiveStarRating({value}) {
     return (
-        <div>
+        <span style={{marginTop: '2px', position: 'absolute'}}>
            {[...Array(5)].map(
               (el, idx) => {
                 if (idx < value) {
@@ -32,7 +32,7 @@ function PassiveStarRating({value}) {
                 }
               }
             )} 
-        </div>
+        </span>
     )
 }
 

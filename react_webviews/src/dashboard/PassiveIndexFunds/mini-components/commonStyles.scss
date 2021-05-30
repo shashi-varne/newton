@@ -56,3 +56,99 @@
     opacity: 0.5;
   }
   
+
+  //Passive Funds List Style
+
+  .funds-card{
+    min-height: 215px !important;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 0px !important;
+  }
+
+  .funds-card-details{
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    padding-right: 0;
+
+    .content {
+      flex: 9;
+      .title {
+        font-size: 16px;
+        color: #160d2e;
+        font-weight: 600;
+      }
+
+      .subtitle {
+        color: #8D879B;
+        font-size: 14px;
+        margin: 20px 0 20px 0;
+      }
+    }
+
+    .image-wrapper {
+      flex: 3;
+      img {
+        width: 128px;
+      }
+    }
+
+    .split-img{
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+    .tc-title {
+      color: #767E86;
+      font-size: 12px;
+      line-height: 16px;
+      font-weight: 500;
+      margin: 0 0 7px 0;
+      font-family: Rubik;
+      font-style: normal;
+    }
+    .tc-subtitle {
+      color: #0A1D32;
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .return{
+      color: #7ED321 !important;
+      line-height: 21px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+  }
+
+
+.fundlist-data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px 0;
+}
+
+.year-filter {
+  display: flex !important;
+  justify-content: space-between;
+  cursor: pointer;
+  margin: 0 auto;
+
+.text-block {
+  width: 36px;
+  height: 24px;
+  background-color: #F0F7FF;
+  color: #767E86;
+  padding-top: 4px;
+  border-radius: 4px;
+}
+
+.selected {
+  color: #FFFFFF !important;
+  background-color: #3792FC !important;
+}
+
+p {
+  text-align: center !important;
+}
+
+}

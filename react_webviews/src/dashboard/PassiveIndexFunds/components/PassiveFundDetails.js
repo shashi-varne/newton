@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUrlParams } from "../../../utils/validators";
+import { storageService } from "../../../utils/validators";
 import "./PassiveFundDetails.scss";
 import Accordian from "../mini-components/Accordian";
 import { List, Slide } from "@material-ui/core";
@@ -29,7 +29,7 @@ function PassiveFundDetails() {
   const [fundDetails, setFundDetails] = useState(null);
   const [graph, setGraph] = useState(null);
   const [openMoreInfoDialog, setOpenMoreInfoDialog] = useState(false);
-  const { isins } = getUrlParams();
+  const isins =  storageService().getObject("isins_number").isins_no;
 
   useEffect(() => {
     (async () => {
