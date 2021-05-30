@@ -470,3 +470,45 @@ export const sdkInvestCardMapper = [
     path: '/help'
   }
 ]
+
+export const prepareInvestMaaper = [
+  {
+    key: "invest",
+    title: "Start investing",
+    titleImg: "ic_db_invest_solid.svg",
+    subtitle: "Mutual Funds, Save tax",
+    img: "ic_db_invest.svg",
+    height: "133px",
+    path: "/",
+  },
+  {
+    key: "portfolio",
+    title: "My portfolio",
+    subtitle: "Track investment, Withdraw",
+    img: "ic_db_portfolio.svg",
+  },
+  {
+    key: "account",
+    title: "My Account",
+    subtitle: "Account details, Mandate",
+    img: "ic_db_account.svg",
+  },
+  {
+    key: "kyc",
+    title: "KYC",
+    subtitle: "Create investment profile",
+    img: "ic_db_kyc.svg",
+  },
+  {
+    key: "refer",
+    title: "Refer & Earn",
+    subtitle: "Refer to your friends & earn rewards",
+    img: "ic_db_refer.svg",
+  },
+  {
+    key: "refer",
+    referralCode: true,
+    title: "Referral Code",
+    img: "ic_db_refer.svg",
+  },
+];

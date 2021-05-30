@@ -7,7 +7,7 @@ import YearFilter from "../mini-components/YearFilter";
 import { year_filters } from "../constants";
 import "./PassiveFundDetails.scss";
 
-class Landing extends Component {
+class FundList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -82,4 +82,4 @@ class Landing extends Component {
     }
 }
 
-export default Landing;
+export default FundList;

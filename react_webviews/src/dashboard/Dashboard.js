@@ -29,6 +29,7 @@ import PassiveIndexFunds from "./PassiveIndexFunds"
 import {getConfig} from 'utils/functions';
 import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
+import Prepare from "./Invest/components/SdkLanding/Prepare";
 
 const Home = (props) => {
   const { url } = props.match;
@@ -37,6 +38,7 @@ const Home = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}`} component={isSdk ? SdkLanding : Invest} />
+        <Route exact path={`${url}prepare`} component={Prepare} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}diy`} component={DIY} />
