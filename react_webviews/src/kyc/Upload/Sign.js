@@ -17,7 +17,7 @@ const Sign = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const [showLoader, setShowLoader] = useState(false)
+  // const [showLoader, setShowLoader] = useState(false)
 
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
@@ -77,7 +77,7 @@ const Sign = (props) => {
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
@@ -108,7 +108,9 @@ const Sign = (props) => {
               onFileSelectComplete={onFileSelectComplete}
               onFileSelectError={onFileSelectError}
               supportedFormats={SUPPORTED_IMAGE_TYPES}
-            />
+            >
+              {!file ? "SIGN" : "SIGN AGAIN"}
+            </KycUploadContainer.Button>
           </KycUploadContainer>
         </section>
       )}

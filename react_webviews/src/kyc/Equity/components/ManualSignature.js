@@ -1,20 +1,18 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { nativeCallback } from '../../../utils/native_callback';
 import Container from '../../common/Container'
-import { navigate as navigateFunc } from '../../common/functions';
 import useUserKycHook from "../../common/hooks/userKycHook";
 import WVInfoBubble from "../../../common/ui/InfoBubble/WVInfoBubble";
 import WVButton from "../../../common/ui/Button/WVButton"
 import WVSteps from "../../../common/ui/Steps/WVSteps"
 import ContactUs from "../../../common/components/contact_us";
-import { getConfig } from '../../../utils/functions';
 import { companyDetails } from "../../constants";
+import { getKRAForm } from "../../common/api"
 import "./commonStyles.scss";
 
 const ManualSignature = (props) => {
-  const navigate = navigateFunc.bind(props);
-  const config = getConfig();
-  const {kyc} = useUserKycHook();
+  const [isApiRunning, setIsApiRunning] = useState(false);
+  const {kyc, isLoading} = useUserKycHook();
 
   const renderStep1Content = useCallback(() => {
     return (
@@ -24,7 +22,9 @@ const ManualSignature = (props) => {
           size='large'
           color="secondary"
           fullWidth
-          classes={{ label: 'form-download-btn' }}
+          classes={{ label: !isApiRunning ? 'form-download-btn' : '' }}
+          onClick={handleDownloadFormsClick}
+          showLoader={isApiRunning}
         >
           <div className="download-text">DOWNLOAD FORMS</div>
           <img
@@ -33,11 +33,11 @@ const ManualSignature = (props) => {
           />
         </WVButton>
         <div className="step-note">
-          Form with instructions is emailed at <b style={{color: "#161A2E"}}>{kyc?.identification?.meta_data.email || "sharique@fisdom.com"}</b>
+          Form with instructions is emailed at <b style={{color: "#161A2E"}}>{kyc?.identification?.meta_data.email || ""}</b>
         </div>
       </>
     )
-  }, []);
+  }, [isApiRunning]);
 
   const renderStep2Content = useCallback(() => {
     return (
@@ -60,8 +60,21 @@ const ManualSignature = (props) => {
     )
   }, []);
 
-  const handleDownloadFormsClick = () => {
-
+  const handleDownloadFormsClick = async () => {
+    try {
+      setIsApiRunning(true);
+      const params = { "kyc_product_type": "equity" }
+      const result = await getKRAForm(params);
+      const formUrl = result?.filled_form_url;
+      const link = document.createElement("a");
+      link.href = formUrl;
+      link.setAttribute('download', "download");
+      link.click();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsApiRunning(false);
+    }
   }
 
   const handleCTAClick = () => {
@@ -79,6 +92,7 @@ const ManualSignature = (props) => {
       title="Manual Signature"
       buttonTitle="HOME"
       handleClick={handleCTAClick}
+      skelton={isLoading}
     >
       <section id="manual-signature">
         <div className="generic-page-subtitle">

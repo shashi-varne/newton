@@ -260,7 +260,7 @@ const Journey = (props) => {
         {
           key: 'pan',
           title: 'PAN',
-          value: <b>{kyc?.pan?.meta_data?.pan_number}</b>,
+          value: kyc?.pan?.meta_data?.pan_number,
           status: 'completed',
           isEditAllowed: false,
           inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],

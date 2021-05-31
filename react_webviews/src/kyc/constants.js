@@ -9,6 +9,7 @@ export const API_CONSTANTS = {
   getBankStatus: '/api/account/penny-verification-status-check',
   getCVL: '/api/kyc/updatecvl/mine',
   getMerge: '/api/user/account/merge?pan_number=',
+  getKRAForm: '/api/kyc/formfiller2/kraformfiller/get_kraform'
 }
 
 export const PATHNAME_MAPPER = {
@@ -143,17 +144,22 @@ export const RELATIONSHIP_OPTIONS = [
 export const REPORT_CARD_DETAILS = [
   {
     key: "personal",
-    title: "Personal",
+    title: "Personal details",
+    click_image: "plus_icon.svg",
+  },
+  {
+    key: "professional",
+    title: "Professional details",
     click_image: "plus_icon.svg",
   },
   {
     key: "address",
-    title: "Address",
+    title: "Address details",
     click_image: "plus_icon.svg",
   },
   {
     key: "nominee",
-    title: "Nominee",
+    title: "Nominee details",
     click_image: "plus_icon.svg",
   },
   {
@@ -267,3 +273,34 @@ export const companyDetails = {
 }
 
 export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
+
+export const eqkycDocsGroupMapper = {
+  "equity_pan": {
+    title: "PAN details",
+    doc: "PAN card"
+  },
+  "sign": {
+    title: "Signature",
+    doc: "Signature"
+  },
+  "equity_identification": {
+    title: "Personal details",
+    doc: "Selfie"
+  },
+  "address": {
+    title: "Address details",
+    doc: ""
+  },
+  "ipvvideo": {
+    title: "IPV video",
+    doc: "IPV video"
+  },
+  "bank": {
+    title: "Bank account",
+    doc: ""
+  },
+  "nri_address": {
+    title: "NRI Address Details",
+    doc: ""
+  }
+};

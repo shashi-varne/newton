@@ -1,5 +1,6 @@
 import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
+import { eqkycDocsGroupMapper } from './constants'
 import toast from '../common/ui/Toast'
 
 const DOCUMENTS_MAPPER = {
@@ -420,4 +421,55 @@ export function isReadyToInvest() {
   }
 
   return false;
+}
+
+export async function checkDocsPending(kyc) {
+  let pendingDocs = [];
+  const incompleteApplication = kyc.application_status_v2 !== "submitted" || kyc.application_status_v2 !== "complete" ||
+    kyc.equity_application_status !== "submitted" || kyc.equity_application_status !== "complete";
+
+  if (incompleteApplication) {
+    pendingDocs = await pendingDocsList(kyc);
+    return !!pendingDocs.length;
+  }
+
+  return false;
+}
+
+export async function pendingDocsList(kyc) {
+  const docsToCheck = ["equity_pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
+  
+  if (kyc?.address?.meta_data.is_nri) {
+    docsToCheck.push("nri_address");
+  }
+
+  return docsToCheck.filter((doc) => kyc[doc]?.doc_status !== "approved");
+}
+
+export async function getPendingDocuments(kyc) {
+  const pendingDocs = await pendingDocsList(kyc)
+  const pendingDocsMapper = pendingDocs.filter((group) => eqkycDocsGroupMapper[group]).map((group) => {
+    return {
+      title: eqkycDocsGroupMapper[group]?.title,
+      doc: eqkycDocsGroupMapper[group]?.doc || kyc[group]?.meta_data?.doc_type
+    }
+  });
+
+  return pendingDocsMapper;
+}
+export const getGeoLocation = async (params) => {
+  try {
+    const response = Api.get('https://maps.googleapis.com/maps/api/geocode/json?', {
+      result_type: 'country',
+      latlng: `${params.lat},${params.lng}`,
+      key: "AIzaSyCe5PrvBwabfWYOSftl0DlpGKan4o7se2A"
+    });
+    if (response.status === 'OK') {
+      return response.results;
+    } else {
+      throw (response.status);
+    }
+  } catch (err) {
+    throw (err);
+  }
 }

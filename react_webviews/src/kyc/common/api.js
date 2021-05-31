@@ -144,26 +144,35 @@ export const addAdditionalBank = async (data) => {
 export const upload = async (file, type, data = {}) => {
   const formData = new FormData()
   formData.set('res', file)
-  let addressProofKey = ''
+  let doc_type = ''
   if (!isEmpty(data)) {
     switch (type) {
       case 'ipvvideo':
         formData.append('ipv_code', data.ipv_code)
         break
       case 'address':
-        addressProofKey = data?.addressProofKey
+        doc_type = data?.addressProofKey
         break
       case 'nri_address':
-       addressProofKey = data?.addressProofKey
-       break
+        doc_type = data?.addressProofKey
+        break
       case 'pan':
         formData.append('kyc_flow', data.kyc_flow)
         break
-       default:
-         break
+      case 'income':
+        doc_type = data?.doc_type;
+        formData.append('doc_password', data.doc_password);
+        break;
+      case 'identification':
+        formData.append('kyc_product_type', data.kyc_product_type);
+        formData.append('location_coordinates', `${data.lat},${data.lng}`);
+        formData.append('live_score', data.live_score);
+        break;
+      default:
+        break
     }
   }
-  const url = isEmpty(addressProofKey) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${addressProofKey}`
+  const url = isEmpty(doc_type) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${doc_type}`
   const res = await Api.post(url, formData)
   if (
     res?.pfwresponse?.status_code
@@ -266,5 +275,10 @@ export const setKycType = async (type) => {
 
 export const getMerge = async (pan_number) => {
   const res = await Api.post(`${API_CONSTANTS.getMerge}${pan_number}`)
+  return handleApi(res);
+}
+
+export const getKRAForm = async (params) => {
+  const res = await Api.get(`${apiConstants.getKRAForm}`, params)
   return handleApi(res);
 }
