@@ -7,6 +7,7 @@ import CartFooter from  "../../../common/ui/Filter/CartFooter";
 import YearFilter from "../mini-components/YearFilter";
 import { year_filters } from "../constants";
 import "./PassiveFundDetails.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 class FundList extends Component {
     constructor(props) {
@@ -28,8 +29,9 @@ class FundList extends Component {
         this.fetch_funddetails_list()
     }
 
-    clickCard(isin) {
-        const isins_number = { "isins_no": isin }
+    clickCard(item) {
+        this.sendEvents("next", item.legal_name);
+        const isins_number = { "isins_no": item.isin }
         storageService().setObject("isins_number", isins_number);
         this.navigate(`fund-details`);
     }
@@ -40,13 +42,31 @@ class FundList extends Component {
         })
     }
 
+    sendEvents = (userAction, fundSelected) => {
+        let fundCategory = (this.state.title || "").toLowerCase().split(" ").join("_");
+        let eventObj = {
+          event_name: "passive_funds",
+          properties: {
+            user_action: userAction || "",
+            screen_name: "explore_funds",
+            fund_selected: fundSelected || "",
+            fund_category: (fundCategory === "global_indices" ? "global_index_funds" : fundCategory) || ""
+          },
+        };
+        if (userAction === "just_set_events") {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+      };
+
 
     render() {
 
         const { result } = this.state
-
         return (
             <Container
+                events={this.sendEvents("just_set_events")}
                 title={this.state.title}
                 noFooter={true}
                 skelton={this.state.skelton}
@@ -70,7 +90,7 @@ class FundList extends Component {
                                         data={item}
                                         key={index}
                                         handleClick={() =>
-                                            this.clickCard(item.isin)
+                                            this.clickCard(item)
                                         }
                                         selected={this.state.selected}
                                     />

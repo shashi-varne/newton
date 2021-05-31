@@ -97,6 +97,8 @@ export function carouselSwipe_count(index) {
 };
 
 export function handleClick(data) {
+  let categoryName = data.key === "global_indices" ? "global_index_funds" : data.key;
+  this.sendEvents("next", categoryName)
   this.navigate(`${data.key}/fund-list`, data.title);
 }
 

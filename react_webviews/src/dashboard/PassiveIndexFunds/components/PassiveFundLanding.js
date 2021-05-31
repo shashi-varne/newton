@@ -9,6 +9,7 @@ import { storageService } from "utils/validators";
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
 import { carousel_img, fund_category } from "../constants";
 import { initialize } from "../common/commonFunctions";
+import { nativeCallback } from "../../../utils/native_callback";
 
 class Landing extends Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class Landing extends Component {
     }
 
     handleClickFullscreen = () => {
+        storageService().set("video_clicked", true);
         screenfull.request(findDOMNode(this.player));
         this.setState({ playing: !this.state.playing });
     }
@@ -32,12 +34,33 @@ class Landing extends Component {
         this.player = player
     }
 
+    sendEvents = (userAction, fundCategory) => {
+        // VIDEO PAUSED EVENT LEFT
+        let eventObj = {
+          event_name: "passive_funds",
+          properties: {
+            user_action: userAction || "",
+            screen_name: "learn_more_passive_funds",
+            video_clicked: storageService().get("video_clicked") ? "yes" : "no",
+            passive_index_funds_clicked: fundCategory || "",
+            // video_duration: 
+          },
+        };
+        storageService().remove("video_clicked");
+        if (userAction === "just_set_events") {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+      };
+
     render() {
 
         const { playing } = this.state;
 
         return (
             <Container
+                events={this.sendEvents("just_set_events")}
                 title="Passive index funds"
                 noFooter={true}
                 skelton={this.state.skelton}
