@@ -11,7 +11,7 @@ import toast from '../../common/ui/Toast'
 import { isDigilockerFlow, navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
-import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet'
+import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
 
 const config = getConfig();
 const productName = config.productName;
@@ -21,13 +21,9 @@ const Pan = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const [title, setTitle] = useState("Note")
-  const [subTitle, setSubTitle] = useState('')
   const [isOpen, setIsOpen] = useState(false)
-  const [isUploadSuccess, setIsUploadSuccess] = useState(false)
-  const [isUploadError, setIsUploadError] = useState(false)
-  const [bottomSheetImage, setBottomSheetImage] = useState(null)
   const [dlFlow, setDlFlow] = useState(false);
+  const [bottomSheetType, setBottomSheetType] = useState('');
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   useEffect(() => {
@@ -98,24 +94,13 @@ const Pan = (props) => {
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
         (result.error && !result.ocr_pan_kyc_matches)
       ) {
-        
-        setSubTitle("PAN number doesn't match with the uploaded PAN image")
-        setTitle("PAN verification failed")
-        setBottomSheetImage("pan_verification_failed.svg");
-        setIsUploadError(true);
+        setBottomSheetType('failed');
         setIsOpen(true);
       } else {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        if (isTradingEnabled()) {
-          setSubTitle("You're almost there, now take a selfie")
-        } else {
-          setSubTitle("You've successfully uploaded PAN!")
-        }
-        setTitle("PAN uploaded")
-        setBottomSheetImage("ic_indian_resident.svg");
-        setIsUploadSuccess(true);
+        setBottomSheetType('success');
         setIsOpen(true);
       }
     } catch (err) {
@@ -175,18 +160,11 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          <WVBottomSheet
+          <PanUploadStatus
+            status={bottomSheetType}
             isOpen={isOpen}
-            title={title}
-            subtitle={subTitle}
-            button1Props={{ 
-              title: isUploadSuccess ? "CONTINUE" : "RETRY", 
-              type: "primary", 
-              onClick: isUploadSuccess ? handleNavigation : handleSubmit
-            }}
-            image={bottomSheetImage ? require(`assets/${productName}/${bottomSheetImage}`) : ""}
-          >
-          </WVBottomSheet>
+            onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
+          />
         </section>
       )}
     </Container>
