@@ -176,7 +176,6 @@ async function setNpsData(result) {
     if(!data) return;
     storageService().setObject("nps_additional_details", data.registration_details);
     storageService().setObject("nps_data", data);
-    console.log(data)
     if (!data.registration_details.additional_details_status) {
       storageService().set('nps_additional_details_required', true)
     } else {
