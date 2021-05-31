@@ -83,7 +83,7 @@ const KycBankDetails = (props) => {
       disableData.ifsc_code_disabled = true;
     }
     setDisableFields({ ...disableData });
-    if (isDigilockerFlow()) {
+    if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
     setName(kyc.pan.meta_data.name || "");

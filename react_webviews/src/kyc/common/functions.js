@@ -191,8 +191,7 @@ export const getEmailOrMobileVerifiedStatus = () => {
   );
 };
 
-export const isDigilockerFlow = () => {
-  const kyc = storageService().getObject("kyc") || {};
+export const isDigilockerFlow = (kyc = {}) => {
   if (isEmpty(kyc)) return false;
   return (
     kyc.kyc_status !== "compliant" &&

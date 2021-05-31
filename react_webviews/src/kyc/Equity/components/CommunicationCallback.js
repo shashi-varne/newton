@@ -32,7 +32,7 @@ const CommunicationCallback = (props) => {
         return;
       }
       const isCompliant = kyc?.kyc_status === "compliant";
-      const dlCondition = isDigilockerFlow();
+      const dlCondition = isDigilockerFlow(kyc);
       const isNri = kyc.address?.meta_data?.is_nri || false;
       let nextState = getPathname.personalDetails4;
       if (isCompliant) {
