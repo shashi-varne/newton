@@ -154,6 +154,20 @@ class Container extends Component {
         this.navigate('/group-insurance/health/landing');
         return;
       }
+      
+    var backToInsuranceLanding = storageService().getObject('backToInsuranceLanding');
+    var report_from_landing = storageService().getObject('report_from_landing');
+    if((backToInsuranceLanding || report_from_landing) && pathname === "/group-insurance/common/report"){
+      nativeCallback({events: this.getEvents('back') });
+      this.navigate('/group-insurance')
+      return;
+    }
+
+    if(this.checkStringInString('advisory/landing') && backToInsuranceLanding){
+      nativeCallback({events: this.getEvents('back') });
+      this.navigate('/group-insurance/common/report')
+      return;
+    }  
 
     if(this.checkStringInString('/group-insurance/life-insurance/savings-plan/report-details/')){
       this.navigate('/group-insurance/common/report');
