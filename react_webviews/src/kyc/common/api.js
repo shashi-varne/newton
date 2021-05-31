@@ -279,6 +279,6 @@ export const getMerge = async (pan_number) => {
 }
 
 export const getKRAForm = async (params) => {
-  const res = await Api.get(`${apiConstants.getKRAForm}`, params)
+  const res = await Api.get(`${API_CONSTANTS.getKRAForm}`, params)
   return handleApi(res);
 }
