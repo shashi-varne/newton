@@ -25,7 +25,7 @@ import DesktopLayout from './desktopLayout';
 
 
 import Feature from './Feature';
-
+import NotFound from './common/components/NotFound';
 import Partner from "./partner"
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
@@ -102,6 +102,7 @@ const App = () => {
                   <Feature />
                 </DesktopLayout>
               }
+              <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>
         </JssProvider>

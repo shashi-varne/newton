@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import InputWithIcon from "common/ui/InputWithIcon";
+import Input from "common/ui/Input";
 import toast from "common/ui/Toast";
 import RadioOptions from "common/ui/RadioOptions";
 import person from "assets/person.png";
 import { initialize } from "../../common/commonFunctions";
 import { getConfig, getBase64 } from "utils/functions";
 import { storageService } from "utils/validators";
-import Grid from "material-ui/Grid";
 import $ from "jquery";
 
 const marital_status_options = [
@@ -250,7 +249,7 @@ class NpsIdentity extends Component {
   bannerText = () => {
     return (
       <span>
-        Please <span className="bold">confirm</span> your personal details.
+        Please <b>confirm</b> your personal details.
       </span>
     );
   }
@@ -267,7 +266,7 @@ class NpsIdentity extends Component {
         showError={this.state.showError}
         errorData={this.state.errorData}
         handleClick={this.handleClick}
-        disable={(selfie_needed && !uploaded) ? true : false}
+        disable={selfie_needed && !uploaded ? true : false}
         banner={true}
         bannerText={this.bannerText()}
       >
@@ -283,8 +282,15 @@ class NpsIdentity extends Component {
               <div className="display-flex">
                 {!getConfig().Web && (
                   <div>
-                    <div className="image-upload-container"
-                      onClick={() => this.startUpload('open_camera', 'address', 'address.jpg')}
+                    <div
+                      className="image-upload-container"
+                      onClick={() =>
+                        this.startUpload(
+                          "open_camera",
+                          "address",
+                          "address.jpg"
+                        )
+                      }
                     >
                       <div className="icon">
                         <img
@@ -295,8 +301,15 @@ class NpsIdentity extends Component {
                         <div className="text-center label">Camera</div>
                       </div>
                     </div>
-                    <div className="image-upload-container"
-                      onClick={() => this.startUpload('open_gallery', 'address', 'address.jpg')}
+                    <div
+                      className="image-upload-container"
+                      onClick={() =>
+                        this.startUpload(
+                          "open_gallery",
+                          "address",
+                          "address.jpg"
+                        )
+                      }
                     >
                       <div className="icon">
                         <img
@@ -338,8 +351,9 @@ class NpsIdentity extends Component {
 
         <div className="nps-identity">
           <div className="InputField">
-            <InputWithIcon
+            <Input
               icon={person}
+              type="text"
               width="30"
               id="name"
               label="Mother's name"
@@ -351,29 +365,23 @@ class NpsIdentity extends Component {
           </div>
 
           <div className="InputField">
-            <Grid container spacing={16} className="marital_status">
-              <Grid item xs={2}>
-                {""}
-              </Grid>
-              <Grid item xs={10}>
-                <RadioOptions
-                  icon_type="blue_icon"
-                  width="40"
-                  label="Marital Status"
-                  error={form_data.marital_status_error ? true : false}
-                  helperText={form_data.marital_status_error}
-                  value={form_data.marital_status || ""}
-                  options={marital_status_options}
-                  onChange={this.handleChange("marital_status")}
-                />
-              </Grid>
-            </Grid>
+            <RadioOptions
+              icon_type="blue_icon"
+              width="40"
+              label="Marital Status"
+              error={form_data.marital_status_error ? true : false}
+              helperText={form_data.marital_status_error}
+              value={form_data.marital_status || ""}
+              options={marital_status_options}
+              onChange={this.handleChange("marital_status")}
+            />
           </div>
 
           {form_data.marital_status === "married" && (
             <div className="InputField">
-              <InputWithIcon
+              <Input
                 icon={person}
+                type="text"
                 width="30"
                 id="name"
                 label="Spouse's name"

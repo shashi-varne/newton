@@ -1,6 +1,6 @@
 import './WVLiveCamera.scss';
 import { useEffect } from 'react';
-import { isFunction } from 'lodash';
+import { isEmpty, isFunction } from 'lodash';
 import useScript from '../../customHooks/useScript';
 import Api from '../../../utils/api';
 
@@ -10,36 +10,39 @@ const WVLiveCamera = ({
   open,
   title = 'Selfie Capture',
   onClose,
-  onSuccess,
-  onFailure,
+  onCameraInit,
+  onCaptureSuccess,
+  onCaptureFailure,
   children
 }) => {
   const { scriptLoaded } = useScript(SCRIPT_SRC);
 
   const initHVCamera = async () => {
-    let jwtToken = '';
     try {
-      const { result } = await Api.post('https://auth.hyperverge.co/login', {
-        "appId": "fd4b70",
-        "appKey": "11fa986a43b5328ca2d3",
-        "expiry": 12000
-      });
-      jwtToken = result.token || '';
+      const res = await Api.get('api/kyc/hyperverge/token/fetch');
+      if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
+        // eslint-disable-next-line no-throw-literal
+        throw 'Something went wrong!';
+      }
+
+      const { result, status_code: status } = res.pfwresponse;
+
+      if (status === 200) {
+        window.HyperSnapSDK.init(result.hyperverge_token, window.HyperSnapParams.Region.India);
+        window.HyperSnapSDK.startUserSession();
+        onCameraInit(true);
+      } else {
+        throw (result.error || result.message || 'Something went wrong!');
+      }
     } catch (err) {
+      onCameraInit(false);
       console.log('Error fetching HV token: ', err);
     }
-    window.HyperSnapSDK.init(jwtToken, window.HyperSnapParams.Region.India);
-    window.HyperSnapSDK.startUserSession();
-    openHVCamera();
   }
 
   const openHVCamera = async () => {
     const hvFaceConfig = new window.HVFaceConfig();
     hvFaceConfig.setShouldShowInstructionPage(true);
-    hvFaceConfig.setLivenessAPIHeaders({
-      "appId": "fd4b70",
-      "appKey": "11fa986a43b5328ca2d3",
-    });
     hvFaceConfig.setLivenessAPIParameters({
       rejectFaceMask: 'yes',
       allowEyesClosed: 'no',
@@ -54,11 +57,11 @@ const WVLiveCamera = ({
     if (HVError) {
       if (HVError.errorCode === "013") {
         onClose();
-      } else if (isFunction(onFailure)) {
-        onFailure(HVError);
+      } else if (isFunction(onCaptureFailure)) {
+        onCaptureFailure(HVError);
       }
-    } else if (isFunction(onSuccess)) {
-      onSuccess({
+    } else if (isFunction(onCaptureSuccess)) {
+      onCaptureSuccess({
         ...HVResponse.response.result,
         imgBase64: HVResponse.imgBase64
       });
@@ -66,11 +69,16 @@ const WVLiveCamera = ({
   };
 
   useEffect(() => {
-    // TODO: Check how to solve script loading time diff issue
     if (open && scriptLoaded) {
+      openHVCamera();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (scriptLoaded) {
       initHVCamera();
     }
-  }, [open, scriptLoaded]);
+  }, [scriptLoaded]);
 
   return children || '';
 }

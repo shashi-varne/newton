@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
@@ -62,7 +62,7 @@ const Home = (props) => {
     };
     if (
       user.nps_investment &&
-      storageService().getObject("nps_additional_details_required")
+      storageService().get("nps_additional_details_required")
     ) {
       data.npsDetailsRequired = true;
     }
@@ -179,8 +179,8 @@ const Home = (props) => {
 
   const handleMerge = async (step) => {
     if (step === "STEP1") {
-      storageService().setObject(storageConstants.AUTH_IDS, authIds);
-      navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
+      storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
+      navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {
         navigate("/logout");
@@ -263,17 +263,17 @@ const Home = (props) => {
       (isUserCompliant || kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
-      navigate(getPathname.compliantPersonalDetails1);
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       if (isUserCompliant || kyc_status === "compliant") {
-        navigate(getPathname.journey);
+        navigate(PATHNAME_MAPPER.journey);
       } else {
         if (is_nri) {
-          navigate(`${getPathname.journey}`, {
+          navigate(`${PATHNAME_MAPPER.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=false`,
           });
         } else {
-          navigate(`${getPathname.journey}`, {
+          navigate(`${PATHNAME_MAPPER.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=true`,
           });
         }
