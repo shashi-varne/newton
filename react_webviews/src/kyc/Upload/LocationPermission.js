@@ -66,14 +66,14 @@ const LocationPermission = ({
       setPermissionWarning(true);
     } else {
       try {
-        // const results = await getGeoLocation(data.location);
-        // const country = results[0]?.formatted_address;
+        const results = await getGeoLocation(data.location);
+        const country = results[0]?.address_components?.[0]?.long_name;
 
-        // if (country !== 'India') {
-        //   setPageType("invalid-region");
-        // } else {
+        if (country !== 'India') {
+          setPageType("invalid-region");
+        } else {
           onLocationFetchSuccess(data.location);
-        // }
+        }
       } catch (err) {
         console.log(err);
         toast('Something went wrong! Please try again');

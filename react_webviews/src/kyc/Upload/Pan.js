@@ -22,7 +22,6 @@ const Pan = (props) => {
   const [fileToShow, setFileToShow] = useState(null)
   const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
-  const [showLoader, setShowLoader] = useState(false)
   const {kyc, isLoading} = useUserKycHook();
 
   const onFileSelectComplete = (newFile, fileBase64) => {
@@ -78,7 +77,7 @@ const Pan = (props) => {
     <Container
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
@@ -87,7 +86,7 @@ const Pan = (props) => {
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">
           <div className="sub-title">
-            PAN Card {kyc?.pan?.meta_data?.pan_number}
+            PAN Card: {kyc?.pan?.meta_data?.pan_number}
           </div>
           {file && subTitle && <Alert
             variant="attention"

@@ -11,7 +11,11 @@ import { upload } from '../common/api';
 import { navigate as navigateFunc } from '../common/functions';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
+import { checkDocsPending } from '../services';
+import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
+import { getConfig } from '../../utils/functions';
 
+const { productName } = getConfig();
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
     title: 'Bank statement',
@@ -48,9 +52,10 @@ const FnOIncomeProof = (props) => {
   const [selectedFile, setSelectedFile] = useState();
   const [selectedType, setSelectedType] = useState('');
   const [filePassword, setFilePassword] = useState('');
+  const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
-  // const { setKycToSession } = useUserKycHook();
+  const { kyc, isLoading, setKycToSession } = useUserKycHook();
 
   useEffect(() => {
     setFilePassword('');
@@ -73,8 +78,7 @@ const FnOIncomeProof = (props) => {
       };
       setIsApiRunning("button")
       const result = await upload(selectedFile, 'income', data);
-      // setKycToSession(result.kyc);
-      // TODO: Add next behaviour here
+      setKycToSession(result.kyc);
     } catch (err) {
       console.error(err);
       Toast('Something went wrong! Please try again')
@@ -84,8 +88,21 @@ const FnOIncomeProof = (props) => {
     }
   }
 
-  const onSkipClick = () => {
-    console.log("skip clicked")
+  const goNext = async (skip) => {
+    if (!skip) {
+      await uploadDocument();
+    }
+    
+    const areDocsPending = checkDocsPending(kyc);
+    if (areDocsPending) {
+      navigate('/kyc/document-verification');
+    } else {
+      if (skip) {
+        navigate('/kyc-esign/info');
+      } else {
+        setOpenBottomSheet(true);
+      }
+    }
   }
 
   const onPasswordChange = (event) => {
@@ -97,12 +114,13 @@ const FnOIncomeProof = (props) => {
       canSkip
       hidePageTitle
       hideHamburger
-      handleClick={uploadDocument}
-      onSkipClick={onSkipClick}
+      handleClick={goNext}
+      onSkipClick={() => goNext(true)}
       title="Provide income proof for F&O trading"
       buttonTitle="Upload"
       disable={!selectedFile}
       showLoader={isApiRunning}
+      skelton={isLoading}
     >
       <WVInPageHeader>
         <WVInPageTitle>Provide income proof for F&O trading</WVInPageTitle>
@@ -177,6 +195,18 @@ const FnOIncomeProof = (props) => {
           alt="256 SSL SECURE ENCRYPTION"
         />
       </div>
+      <WVBottomSheet
+        isOpen={openBottomSheet}
+        onClose={() => setOpenBottomSheet(false)}
+        title="Income proof uploaded"
+        subtitle="Great, just one more step to go! Now complete eSign to get investment ready"
+        image={require(`assets/${productName}/doc-uploaded.svg`)}
+        button1Props={{
+          title: 'Continue',
+          type: 'primary',
+          onClick: () => navigate('/kyc-esign/info')
+        }}
+      />
     </Container>
   );
 }

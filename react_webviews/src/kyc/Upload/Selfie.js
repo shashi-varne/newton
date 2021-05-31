@@ -2,7 +2,7 @@ import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
@@ -12,8 +12,10 @@ import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
+import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 
-const productName = getConfig().productName;
+const config = getConfig();
+const { productName, isSdk } = config;
 
 const Selfie = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -25,25 +27,33 @@ const Selfie = (props) => {
   const [isLocnPermOpen, setIsLocnPermOpen] = useState(false);
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
-  const [showLoader, setShowLoader] = useState(false);
+  // const [showLoader, setShowLoader] = useState(false);
+  const [openBottomSheet, setOpenBottomSheet] = useState(false);
+  const [bottomSheetType, setBottomSheetType] = useState('');
   const { kyc, isLoading } = useUserKycHook();
   const navigate = navigateFunc.bind(props)
 
   const handleSubmit = async () => {
-    try {
-      setIsApiRunning("button")
-      const result = await upload(file, 'identification', {
-        res: fileToShow,
-        lat: locationData.lat,
-        lng: locationData.lng,
-        live_score: selfieLiveScore,
-        kyc_product_type: 'equity'
-      });
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+    try {      
+      let params = {};
+      if (!isSdk) {
+        params = {
+          lat: locationData?.lat,
+          lng: locationData?.lng,
+          live_score: selfieLiveScore,
+          kyc_product_type: 'equity'
+        };
+      }
+
+      setIsApiRunning("button");
+      const result = await upload(file, 'identification', params);
+      storageService().setObject(storageConstants.KYC, result.kyc);
+      setBottomSheetType('success');
     } catch (err) {
-      console.error(err)
+      console.error(err);
+      setBottomSheetType('failed');
     } finally {
+      setOpenBottomSheet(true);
       console.log('uploaded')
       setIsApiRunning(false)
     }
@@ -53,6 +63,15 @@ const Selfie = (props) => {
     setLocationData(data);
     closeLocnPermDialog();
     setIsLiveCamOpen(true);
+  }
+
+  const onFileSelectComplete = (newFile, fileBase64) => {
+    setFile(newFile);
+    setFileToShow(fileBase64);
+  }
+
+  const onFileSelectError = () => {
+    Toast('Please select image file only');
   }
 
   const openLiveCamera = () => {
@@ -95,13 +114,12 @@ const Selfie = (props) => {
   return (
     <Container
       buttonTitle="Upload"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
       title="Take a selfie"
     >
-      {/* TODO: Create a header title/subtitle component to be used everywhere */}
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">
           <div className="sub-title">
@@ -114,12 +132,26 @@ const Selfie = (props) => {
               fileToShow={fileToShow}
               illustration={require(`assets/${productName}/selfie_placeholder.svg`)}
             />
-            <KycUploadContainer.Button
-              onClick={openLiveCamera}
-              showLoader={isCamLoading}
-            >
-              {file ? "Retake" : "Open Camera"}
-            </KycUploadContainer.Button>
+            {/* For SDK users, we currently do not use LiveCamera or Location */}
+            {isSdk ?
+              <KycUploadContainer.Button
+                withPicker
+                showOptionsDialog
+                nativePickerMethodName="open_gallery"
+                fileName="pan"
+                onFileSelectComplete={onFileSelectComplete}
+                onFileSelectError={onFileSelectError}
+                supportedFormats={SUPPORTED_IMAGE_TYPES}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button> :
+              <KycUploadContainer.Button
+                onClick={openLiveCamera}
+                showLoader={isCamLoading}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button>
+            }
           </KycUploadContainer>
           <div className="kyc-selfie-intructions">
             <span id="kyc-si-text">How to take selfie?</span>
@@ -127,18 +159,28 @@ const Selfie = (props) => {
               Know More
             </WVClickableTextElement>
           </div>
-          <WVLiveCamera
-            open={isLiveCamOpen}
-            onCameraInit={onCameraInit}
-            onClose={() => setIsLiveCamOpen(false)}
-            onCaptureFailure={onCaptureFailure}
-            onCaptureSuccess={onCaptureSuccess}
-          />
-          <LocationPermission
-            isOpen={isLocnPermOpen}
-            onClose={closeLocnPermDialog}
-            onLocationFetchSuccess={onLocationFetchSuccess}
-            parentProps={props}
+          {!isSdk &&
+            <>
+              <WVLiveCamera
+                open={isLiveCamOpen}
+                onCameraInit={onCameraInit}
+                onClose={() => setIsLiveCamOpen(false)}
+                onCaptureFailure={onCaptureFailure}
+                onCaptureSuccess={onCaptureSuccess}
+              />
+              <LocationPermission
+                isOpen={isLocnPermOpen}
+                onClose={closeLocnPermDialog}
+                onLocationFetchSuccess={onLocationFetchSuccess}
+                parentProps={props}
+              />
+            </>
+          }
+          <SelfieUploadStatus
+            status={bottomSheetType}
+            isOpen={openBottomSheet}
+            onClose={() => openBottomSheet(false)}
+            onCtaClick={() => navigate('/kyc/upload/progress')}
           />
         </section>
       )}

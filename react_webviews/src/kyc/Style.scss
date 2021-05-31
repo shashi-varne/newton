@@ -49,97 +49,56 @@
 //// KYC REPORT START ////
 
 .kyc-report {
-  padding-bottom: 40px;
+  padding: 30px 0;
   line-height: 1.5;
 
-  main {
-    .img {
-      width: 100%;
-      margin: 20px 0 10px 0;
-    }
+  .tile-info {
+    border-top: 1px solid #f6f2ff;
+    padding: 20px 0;
+    cursor: pointer;
 
-    .congrats {
-      font-size: 14px;
-      color: #160d2e;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .text {
-      font-size: 14px;
-      color: #8d879b;
-      margin: 1px 0 10px 0px;
-      text-align: center;
-    }
-
-    .message {
+    .unzipped-title {
       display: flex;
-      justify-content: center;
-      margin: 0 0 20px 0;
-      column-gap: 2px;
-
-      img {
-        width: 24px;
-      }
+      justify-content: space-between;
+      color: #160d2e;
+      font-size: 14px;
     }
 
-    section {
-      margin-top: 20px;
-
-      .report-skelton {
-        margin: 25px 0;
-        height: 30px !important;
+    .unzipped {
+      margin: 20px 0 0 10px;
+      .unzipped-title {
+        color: #8d879b;
+        font-size: 16px;
+        margin: 0 0 10px 0;
       }
 
-      .tile-info {
-        border-top: 1px solid #f6f2ff;
-        padding: 15px 0 15px 0;
-        cursor: pointer;
+      .unzipped-box {
+        margin: 20px 0 0 0;
 
-        .unzipped-title {
-          display: flex;
-          justify-content: space-between;
-          color: #160d2e;
+        .title {
+          color: #8d879b;
+          font-size: 10px;
+          font-weight: bold;
+          margin: 0 0 3px 0;
+        }
+        .subtitle {
+          color: #8d879b;
           font-size: 14px;
-        }
-
-        .unzipped {
-          margin: 20px 0 0 10px;
-          .unzipped-title {
-            color: #8d879b;
-            font-size: 16px;
-            margin: 0 0 10px 0;
-          }
-
-          .unzipped-box {
-            margin: 20px 0 0 0;
-
-            .title {
-              color: #8d879b;
-              font-size: 10px;
-              font-weight: bold;
-              margin: 0 0 3px 0;
-            }
-            .subtitle {
-              color: #8d879b;
-              font-size: 14px;
-              word-break: break-word;
-            }
-          }
-
-          .row-align {
-            display: flex;
-            .unzipped-box {
-              width: 50%;
-            }
-          }
+          word-break: break-word;
         }
       }
 
-      .tile-info:last-child {
-        border-bottom: 1px solid #f6f2ff;
+      .row-align {
+        display: flex;
+        .unzipped-box {
+          width: 50%;
+        }
       }
     }
+  }
+
+  .tile-info:last-child {
+    border-bottom: 1px solid #f6f2ff;
   }
 }
 
