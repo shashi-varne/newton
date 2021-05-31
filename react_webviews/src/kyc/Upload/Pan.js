@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { getPathname, storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { navigate as navigateFunc } from '../common/functions'
+import { isDigilockerFlow, navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet'
@@ -31,15 +31,10 @@ const Pan = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   useEffect(() => {
-    if (
-      !isEmpty(kyc) &&
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
-      setDlFlow(true);
+    if (!isEmpty(kyc)) {
+      if (isDigilockerFlow(kyc)) {
+        setDlFlow(true);
+      }
     }
   }, [kyc]);
 
@@ -73,12 +68,7 @@ const Pan = (props) => {
   };
 
   const handleSdkNavigation = () => {
-    if (
-      kyc.kyc_status !== 'compliant' &&
-      kyc.dl_docs_status !== '' &&
-      kyc.dl_docs_status !== 'init' &&
-      kyc.dl_docs_status !== null
-    ) {
+    if (dlFlow) {
       navigate('/kyc-esign/info')
     } else {
       navigate('/kyc/upload/progress')
@@ -97,7 +87,7 @@ const Pan = (props) => {
     if (isOpen) setIsOpen(false)
     try {
       const data = {};
-      if (kyc.kyc_status !== 'compliant' && kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null) {
+      if (dlFlow) {
         if (kyc.all_dl_doc_statuses.pan_fetch_status === null || kyc.all_dl_doc_statuses.pan_fetch_status === '' || kyc.all_dl_doc_statuses.pan_fetch_status === 'failed') {
           data.kyc_flow =  'dl';
         }

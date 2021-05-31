@@ -198,8 +198,10 @@ export const isDigilockerFlow = (kyc = {}) => {
   );
 };
 
-export async function checkDocsPending(kyc) {
+export async function checkDocsPending(kyc = {}) {
+  if (isEmpty(kyc)) return false;
   let pendingDocs = [];
+
   const incompleteApplication = kyc.application_status_v2 !== "submitted" || kyc.application_status_v2 !== "complete" ||
     kyc.equity_application_status !== "submitted" || kyc.equity_application_status !== "complete";
 
@@ -211,7 +213,8 @@ export async function checkDocsPending(kyc) {
   return false;
 }
 
-export async function pendingDocsList(kyc) {
+export async function pendingDocsList(kyc = {}) {
+  if (isEmpty(kyc)) return false;
   const docsToCheck = ["equity_pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
   
   if (kyc?.address?.meta_data.is_nri) {
@@ -221,7 +224,8 @@ export async function pendingDocsList(kyc) {
   return docsToCheck.filter((doc) => kyc[doc]?.doc_status !== "approved");
 }
 
-export async function getPendingDocuments(kyc) {
+export async function getPendingDocuments(kyc = {}) {
+  if (isEmpty(kyc)) return false;
   const pendingDocs = await pendingDocsList(kyc)
   const pendingDocsMapper = pendingDocs.filter((group) => eqkycDocsGroupMapper[group]).map((group) => {
     return {
@@ -233,7 +237,8 @@ export async function getPendingDocuments(kyc) {
   return pendingDocsMapper;
 }
 
-export function checkPanFetchStatus(kyc) {
+export function checkPanFetchStatus(kyc = {}) {
+  if (isEmpty(kyc)) return false;
   return (
     (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
     kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
