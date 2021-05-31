@@ -46,11 +46,8 @@ const Filter = ({
 
   return (
     <DiyDialog close={close} open={isOpen}>
-      <section className="diy-bottom-sheet diy-filter-bottom-sheet">
-        <header className="header">
-          <b className="text">Filter</b>
-          <div onClick={reset} className="reset">Reset</div>
-        </header>
+      <section className="diy-bottom-sheet diy-filter-bottom-sheet filter-bottom-sheet">
+        <p className="heading">FILTERS</p>
         <main className="filter">
           <div className="title">
             <ul>
@@ -58,7 +55,7 @@ const Filter = ({
                 role="button"
                 tabIndex="0"
                 onClick={() => setActiveTab('sort')}
-                className={activeTab === 'sort' ? 'selected' : ''}
+                className={activeTab === 'sort' ? 'selected' : 'notselected'}
               >
                 Sort
               </li>
@@ -66,7 +63,7 @@ const Filter = ({
                 role="button"
                 tabIndex="0"
                 onClick={() => setActiveTab('fundOption')}
-                className={activeTab === 'fundOption' ? 'selected' : ''}
+                className={activeTab === 'fundOption' ? 'selected' : 'notselected'}
               >
                 Fund Option
               </li>
@@ -74,7 +71,7 @@ const Filter = ({
                 role="button"
                 tabIndex="0"
                 onClick={() => setActiveTab('fundHouse')}
-                className={activeTab === 'fundHouse' ? 'selected' : ''}
+                className={activeTab === 'fundHouse' ? 'selected' : 'notselected'}
               >
                 Fund House
               </li>
@@ -101,14 +98,14 @@ const Filter = ({
             )}
           </div>
         </main>
-        <footer>
+        <footer className="filter-buttons">
           <Button
-            fullWidth
-            onClick={apply}
-            buttonTitle="Apply"
-            classes={{
-              button: "filter-button"
-            }}
+            twoButton
+            dualbuttonwithouticon
+            handleClickOne={reset}
+            handleClickTwo={apply}
+            buttonOneTitle="CLEAR ALL"
+            buttonTwoTitle="APPLY"
           />
         </footer>
       </section>

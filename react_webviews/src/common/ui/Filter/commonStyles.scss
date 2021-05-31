@@ -1,0 +1,45 @@
+.filter-buttons {
+//   padding: 20px;
+  .FlexButton {
+    display: flex;
+    justify-content: space-around;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    margin-left: 20px;
+    button {
+      width: 35%;
+    }
+    button:first-child{
+        background-color: white;
+    }
+  }
+}
+.filter-bottom-sheet {
+    position: relative;
+    min-height: 375px !important;
+  .heading {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: 0px;
+  }
+  .filter {
+      .body{
+          height: 340px !important;
+          .diy-sort-filter div label:last-child{
+              margin-bottom: 70px;
+          }
+      }
+    .title {
+      .notselected {
+        background-color: transparent !important;
+      }
+      background-color: transparent !important;
+      background-image: linear-gradient(
+        rgba(223, 223, 223, 0.3),
+        rgba(255, 255, 255, 0)
+      );
+    }
+  }
+}
