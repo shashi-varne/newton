@@ -100,7 +100,6 @@ const CommunicationDetails = (props) => {
     setShowDotLoader(true);
     try {
       const result = await resendOtp(otpId);
-      if (!result) return;
       setOtpId(result.otp_id);
       setOtpData({
         otp: "",
@@ -127,7 +126,6 @@ const CommunicationDetails = (props) => {
         }
         setShowLoader("button");
         const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
-        if (!otpResult) return;
         setKycToSession(otpResult.kyc);
         handleNavigation();
       } else {
@@ -156,7 +154,6 @@ const CommunicationDetails = (props) => {
         }
         setShowLoader("button");
         const result = await sendOtp(body);
-        if (!result) return;
         setShowOtpContainer(true);
         setOtpId(result.otp_id);
         setOtpData({
