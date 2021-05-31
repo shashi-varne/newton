@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Container from '../common/Container'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { DL_DOCS } from '../constants'
-import { navigate as navigateFunc } from '../common/functions'
 import "./Digilocker.scss";
 import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
 
