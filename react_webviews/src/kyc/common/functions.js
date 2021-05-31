@@ -246,3 +246,8 @@ export function checkPanFetchStatus(kyc = {}) {
     kyc.pan.doc_status !== "approved"
   );
 }
+
+export function isNotManualAndNriUser(kyc = {}) {
+  if (isEmpty(kyc)) return false;
+  return kyc.kyc_type !== "manual" && !kyc.address?.meta_data?.is_nri
+}

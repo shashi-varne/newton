@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
 import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { navigate as navigateFunc } from '../common/functions'
+import { isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
 import { getConfig, isTradingEnabled } from 'utils/functions'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
@@ -33,12 +33,13 @@ const Selfie = (props) => {
   const [bottomSheetType, setBottomSheetType] = useState('');
   const { kyc, isLoading, updateKyc } = useUserKycHook();
   const navigate = navigateFunc.bind(props)
+  const TRADING_FLOW = TRADING_ENABLED && kyc.kyc_type !== "manual";
 
   const handleNavigation = () => {
     if (bottomSheetType === "failed") {
       setOpenBottomSheet(false)
     } else {
-      if (TRADING_ENABLED) {
+      if (TRADING_FLOW) {
         if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
           navigate(getPathname.uploadFnOIncomeProof);
         else navigate(getPathname.kycEsign)
@@ -51,7 +52,7 @@ const Selfie = (props) => {
   const handleSubmit = async () => {
     try {      
       let params = {};
-      if (TRADING_ENABLED) {
+      if (TRADING_FLOW) {
         params = {
           lat: locationData?.lat,
           lng: locationData?.lng,
@@ -63,12 +64,17 @@ const Selfie = (props) => {
       setIsApiRunning("button");
       const result = await upload(file, 'identification', params);
       updateKyc(result.kyc);
-      setBottomSheetType('success');
+      if (isNotManualAndNriUser(result.kyc)) {
+        setBottomSheetType('success');
+        setOpenBottomSheet(true);
+      } else {
+        handleNavigation();
+      }
     } catch (err) {
       console.error(err);
       setBottomSheetType('failed');
-    } finally {
       setOpenBottomSheet(true);
+    } finally {
       console.log('uploaded')
       setIsApiRunning(false)
     }
@@ -148,7 +154,7 @@ const Selfie = (props) => {
               illustration={require(`assets/${productName}/selfie_placeholder.svg`)}
             />
             {/* For SDK users, we currently do not use LiveCamera or Location */}
-            {!TRADING_ENABLED ?
+            {!TRADING_FLOW ?
               <KycUploadContainer.Button
                 withPicker
                 showOptionsDialog
@@ -174,7 +180,7 @@ const Selfie = (props) => {
               Know More
             </WVClickableTextElement>
           </div>
-          {TRADING_ENABLED &&
+          {TRADING_FLOW &&
             <>
               <WVLiveCamera
                 open={isLiveCamOpen}
@@ -194,7 +200,7 @@ const Selfie = (props) => {
           <SelfieUploadStatus
             status={bottomSheetType}
             isOpen={openBottomSheet}
-            onClose={() => openBottomSheet(false)}
+            onClose={() => setOpenBottomSheet(false)}
             onCtaClick={handleNavigation}
           />
         </section>
