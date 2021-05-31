@@ -106,6 +106,31 @@ async function setSummaryData(result) {
     result.data.campaign.user_campaign.data
   )
   storageService().setObject('campaign', campaignData)
+  storageService().setObject("npsUser", result.data.nps.nps_user.data);
+  storageService().setObject("banklist", result.data.bank_list.bank_list.data);
+  storageService().setObject("referral", result.data.referral);
+  let partner = "";
+  let consent_required = false;
+  if (result.data.partner.partner.data) {
+    partner = result.data.partner.partner.data.name;
+    consent_required = result.data.partner.partner.data.consent_required;
+  }
+  storageService().set("consent_required", consent_required);
+  const subBrokerCodePartersList = ["hbl", "sbm", "flexi", "medlife", "life99"]
+  if (partner === "bfdl") {
+    storageService().set("partner", "bfdlmobile");
+  } else if (partner === "obcweb") {
+    storageService().set("partner", "obc");
+  } else if (
+    subBrokerCodePartersList.indexOf(result.data.referral.subbroker.data.subbroker_code) !== -1
+  ) {
+    storageService().set(
+      "partner",
+      result.data.referral.subbroker.data.subbroker_code
+    );
+  } else {
+    storageService().set("partner", partner);
+  }
   setNpsData(result)
 }
 
@@ -148,7 +173,8 @@ async function setNpsData(result) {
     result?.data?.nps?.nps_user?.data?.is_doc_required
   ) {
     const data = await getNPSInvestmentStatus()
-    if(!data) return
+    if(!data) return;
+    storageService().setObject("nps_additional_details", data.registration_details);
     if (!data.registration_details.additional_details_status) {
       storageService().set('nps_additional_details_required', true)
     } else {
