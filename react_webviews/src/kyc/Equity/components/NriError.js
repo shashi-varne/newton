@@ -22,7 +22,7 @@ const NriError = (props) => {
       button2Props={{
         type: "secondary",
         order: "2",
-        title: "DONE",
+        title: "HOME",
         onClick: () => nativeCallback({ action: "exit" })
       }}
     >

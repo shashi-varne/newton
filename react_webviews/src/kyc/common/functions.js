@@ -1,7 +1,7 @@
 import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
 import { isEmpty } from '../../utils/validators'
-import { eqkycDocsGroupMapper } from './constants'
+import { eqkycDocsGroupMapper } from '../constants'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
