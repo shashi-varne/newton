@@ -31,9 +31,16 @@ class FundList extends Component {
 
     clickCard(item) {
         this.sendEvents("next", item.legal_name);
+        // TO BE CHECKED
         const isins_number = { "isins_no": item.isin }
         storageService().setObject("isins_number", isins_number);
-        this.navigate(`fund-details`);
+        // --
+        let dataCopy = Object.assign({}, item)
+        dataCopy.diy_type = 'categories'
+        storageService().setObject('diystore_fundInfo', dataCopy)
+        this.navigate(`fund-details`,{
+            searchParams: `${this.props.location.search}&isins=${item.isin}`,
+          });
     }
 
     yearFilter = (time) => {
@@ -64,6 +71,7 @@ class FundList extends Component {
     render() {
 
         const { result } = this.state
+        console.log(this.state.fundDescription)
         return (
             <Container
                 events={this.sendEvents("just_set_events")}

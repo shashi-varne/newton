@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { storageService } from "../../../utils/validators";
+import { getUrlParams, storageService } from "../../../utils/validators";
 import "./PassiveFundDetails.scss";
 import Accordian from "../mini-components/Accordian";
 import { List, Slide } from "@material-ui/core";
@@ -20,17 +20,19 @@ import Toast from "../../../common/ui/Toast";
 import { SkeltonRect } from "../../../common/ui/Skelton";
 import PassiveStarRating from "../mini-components/PassiveStarRating";
 import { nativeCallback } from "../../../utils/native_callback";
+import { getConfig } from "../../../utils/functions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function PassiveFundDetails() {
+function PassiveFundDetails({ history }) {
   const [isLoading, setLoading] = useState(true);
   const [fundDetails, setFundDetails] = useState(null);
   const [graph, setGraph] = useState(null);
   const [openMoreInfoDialog, setOpenMoreInfoDialog] = useState(false);
-  const isins = storageService().getObject("isins_number").isins_no;
+  const { isins } = getUrlParams();
+  const fund = storageService().getObject("diystore_fundInfo") || {};
 
   useEffect(() => {
     (async () => {
@@ -172,9 +174,16 @@ function PassiveFundDetails() {
     }
   };
 
+  const navigate = (pathname) => {
+    history.push({
+      pathname: pathname,
+      search: getConfig().searchParams,
+    });
+  };
+
   const handleClick = () => {
-    sendEvents("next");
-    console.log("clicked");
+    storageService().setObject("diystore_cart", [fund]);
+    navigate("/diy/invest");
   };
 
   return (
