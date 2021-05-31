@@ -9,7 +9,7 @@ const uploadStatus = {
     icon: "ic_indian_resident.svg",
     title: "PAN uploaded",
     subtitle: !TRADING_ENABLED ? 
-      "You’re almost there, eSign your KYC form" : "You're almost there, now take a selfie",
+      "You're almost there, eSign your KYC form" : "You're almost there, now take a selfie",
     ctaText: "CONTINUE",
   },
   failed: {

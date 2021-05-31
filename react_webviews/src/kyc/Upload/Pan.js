@@ -15,6 +15,7 @@ import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
 
 const config = getConfig();
 const productName = config.productName;
+const TRADING_ENABLED = isTradingEnabled();
 
 const Pan = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -72,7 +73,7 @@ const Pan = (props) => {
   };
 
   const handleNavigation = () => {
-    if (isTradingEnabled()) {
+    if (TRADING_ENABLED) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();
@@ -84,7 +85,7 @@ const Pan = (props) => {
     try {
       const data = {};
       if (dlFlow) {
-        if (kyc.all_dl_doc_statuses.pan_fetch_status === null || kyc.all_dl_doc_statuses.pan_fetch_status === '' || kyc.all_dl_doc_statuses.pan_fetch_status === 'failed') {
+        if ([null, "", "failed"].includes(kyc.all_dl_doc_statuses.pan_fetch_status)) {
           data.kyc_flow =  'dl';
         }
       }
@@ -94,14 +95,22 @@ const Pan = (props) => {
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
         (result.error && !result.ocr_pan_kyc_matches)
       ) {
-        setBottomSheetType('failed');
-        setIsOpen(true);
+        if (TRADING_ENABLED && kyc.kyc_type !== "manual") {
+          setBottomSheetType('failed');
+          setIsOpen(true);
+        } else {
+          throw new Error(result.message || result.error);
+        }
       } else {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        setBottomSheetType('success');
-        setIsOpen(true);
+        if (TRADING_ENABLED && result.kyc.kyc_type !== "manual") {
+          setBottomSheetType('success');
+          setIsOpen(true);
+        } else {
+          handleNavigation();
+        }
       }
     } catch (err) {
       toast(err?.message)
@@ -160,11 +169,13 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          <PanUploadStatus
-            status={bottomSheetType}
-            isOpen={isOpen}
-            onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
-          />
+          {TRADING_ENABLED && kyc.kyc_type !== "manual" &&
+            <PanUploadStatus
+              status={bottomSheetType}
+              isOpen={isOpen}
+              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
+            />
+          }
         </section>
       )}
     </Container>
