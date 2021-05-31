@@ -65,6 +65,16 @@ import { getConfig } from './functions';
     }
   }
 
+  exports.login_required = function () {
+    var callbackData = {};
+    callbackData.action = "login";
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
   exports.open_canvas = function (listener) {
     listeners.push(listener);
     var callbackData = {};
@@ -121,6 +131,112 @@ import { getConfig } from './functions';
     if (typeof window.Android !== "undefined") {
       window.Android.callbackNative(JSON.stringify(callbackData));
     } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.clear_history = function () {
+    var callbackData = {};
+    callbackData.action = "clear_history";
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.get_partner_code = function () {
+    var callbackData = {};
+    callbackData.action = "get_partner_code";
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.third_party_redirect = function (data) {
+    var callbackData = {};
+    callbackData.action = "third_party_redirect";
+    callbackData.action_data = data;
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.set_partner_code = function (data) {
+    document.body.setAttribute("id", data);
+    document.getElementById("logo").src = "assets/img/" + data + ".png";
+  };
+
+  exports.post_error = function (data) {
+    console.log("action_name -" + data.err_action_name);
+    console.log("error -" + data.err_message);
+  };
+
+  exports.make_bank_payment = function (data) {
+    var callbackData = {};
+    callbackData.action = "make_bank_payment";
+    callbackData.action_data = data;
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.show_top_bar = function (data) {
+    var callbackData = {};
+    callbackData.action = "show_top_bar";
+    if (data) {
+      callbackData.action_data = data;
+    }
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.hide_top_bar = function () {
+    var callbackData = {};
+    callbackData.action = "hide_top_bar";
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.logout = function () {
+    var callbackData = {};
+    callbackData.action = "session_expired";
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+  exports.open_browser = function (data) {
+    var callbackData = {};
+    callbackData.action = "open_browser";
+    callbackData.action_data = data;
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.share_text = function (data) {
+    var callbackData = {};
+    callbackData.action = "share_text";
+    callbackData.action_data = data;
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
       window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
     }
   };
