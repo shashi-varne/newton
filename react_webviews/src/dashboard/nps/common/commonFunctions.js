@@ -2,7 +2,7 @@ import { storageService } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
-import { isEmpty } from "utils/validators";
+import { isEmpty, containsSpecialCharactersAndNumbers } from "utils/validators";
 import toast from "../../../common/ui/Toast";
 // import { nps_config } from "../constants";
 
@@ -26,6 +26,16 @@ export async function initialize() {
   this.setErrorData = setErrorData.bind(this);
   this.handleError = handleError.bind(this);
 
+  const nps_additional_details =
+    storageService().getObject("nps_additional_details") || {};
+  const npsAdditionalScreens = ["nps_delivery", "nps_nominee", "nps_upload"];
+  if (
+    (isEmpty(nps_additional_details) &&
+      npsAdditionalScreens.indexOf(this.state.screen_name) !== -1) ||
+    this.state.screen_name === "nps-identity"
+  ) {
+    await this.getNPSInvestmentStatus();
+  }
   nativeCallback({ action: "take_control_reset" });
 
   this.setState(
@@ -116,6 +126,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
   };
 
   let selectTypeInput = ["relationship"];
+  let keysMapperArrayName = ["mother_name", "spouse_name", "nominee_name", "state", "city", "relationship", "marital_status"];
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];
@@ -123,7 +134,20 @@ export function formCheckUpdate(keys_to_check, form_data) {
       selectTypeInput.indexOf(key_check) !== -1
         ? "Please select "
         : "Please enter ";
-    if (!form_data[key_check]) {
+
+    if (key_check === "addressline" && form_data.addressline.length < 10) {
+      form_data[key_check + "_error"] = "Address should contain more than 10 characters";
+      canSubmit = false;
+    }
+
+    if (key_check === "pincode" && (form_data.pincode?.length !== 6 || form_data.pincode_error?.length)) {
+      if (form_data.pincode_error.length) {
+        form_data[key_check + "_error"] = form_data.pincode_error;
+      } else form_data[key_check + "_error"] = "Please enter a valid Pincode";
+      canSubmit = false;
+    }
+
+    if (!form_data[key_check] || containsSpecialCharactersAndNumbers(keysMapperArrayName.includes(key_check) ? form_data[key_check] : false)) {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
       canSubmit = false;
     }
@@ -188,6 +212,7 @@ export async function get_recommended_funds(params, pageError = false) {
 export async function kyc_submit(params) {
   let error = "";
   let errorType = "";
+  this.setErrorData("submit");
 
   try {
     this.setState({
@@ -201,6 +226,8 @@ export async function kyc_submit(params) {
       show_loader: false,
     });
     if (status === 200) {
+      storageService().setObject("kyc", result.kyc);
+      storageService().setObject("user", result.user);
       this.navigate("/nps/amount/one-time");
     } else {
       switch (status) {
@@ -208,23 +235,21 @@ export async function kyc_submit(params) {
           this.accountMerge();
           break;
         default: 
-          let title1 =
-            result.error || result.message || "Something went wrong!";
+          let title1 = typeof result.error !== 'string' ? "Error" : result.messsage || result.error;
           this.setState({
             title1: title1,
           });
-          this.setErrorData("submit");
-          throw error;
+          throw typeof result.error !== 'string' ? "something went wrong" : result.messsage || result.error;
       }
     }
   } catch (err) {
     console.log(err);
-    error = true;
+    error = err || true;
     errorType = "form";
   }
 
   if (error) {
-    this.handleError(error, errorType);
+    this.handleError(error, errorType, false);
   }
 }
 
@@ -293,11 +318,11 @@ export async function updateMeta(params, next_state) {
       );
 
       if (this.state.screen_name === "nps_delivery") {
-        let kyc_app = storageService().getObject("kyc_app") || {};
+        // let kyc_app = storageService().getObject("kyc") || {};
 
-        kyc_app.address.meta_data = result.user.address;
+        // kyc_app.address.meta_data = result.user.address;
 
-        storageService().setObject("kyc_app", kyc_app);
+        // storageService().setObject("kyc", kyc_app);
 
         if (result.user.is_doc_required) {
           this.navigate("/nps/upload");
@@ -306,6 +331,15 @@ export async function updateMeta(params, next_state) {
         }
       } else {
         this.navigate(next_state);
+      }
+    } else if (status === 400) {
+      const errors = result?.errors;
+      const errorsObj = { ...this.state.form_data };
+      if (errors.length > 0) {
+        errors.forEach(err => {
+          errorsObj['nominee_' + err.field_name + '_error'] = err.error_description
+        });
+        this.setState({ form_data: { ...this.state.form_data, ...errorsObj }});
       }
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
@@ -441,11 +475,13 @@ export async function getNPSInvestmentStatus() {
         "nps_additional_details",
         result.registration_details
       );
-      if (this.state.screen_name === "npsPaymentStatus") {
-        return result;
-      } else {
-        this.navigate("/nps/identity");
-      }
+      storageService().setObject("kyc", result.kyc_app);
+      // if (this.state.screen_name === "npsPaymentStatus") {
+      //   return result;
+      // } else {
+      //   this.navigate("identity");
+      // }
+      return result;
     } else {
       toast(result.error || result.message || genericErrMsg);
     }
@@ -546,10 +582,12 @@ export async function uploadDocs(file) {
     showError: false,
   });
 
-  var uploadurl = "/api/invest/folio/import/image";
+  let uploadurl = "/api/nps/register/update/v2";
+  if(this.state.screen_name === "nps_upload") {
+    uploadurl = `/api/nps/v2/doc/mine/address/${this.state.proof_type}`
+  }
   const data = new FormData();
   data.append("res", file);
-  data.append("doc_type", file.doc_type);
 
   let error = "";
   let errorType = "";
@@ -583,4 +621,39 @@ export async function uploadDocs(file) {
   if (error) {
     this.handleError(error, errorType, false);
   }
+}
+
+export const combinedDocBlob = (fr, bc, docName) => {
+  let canvas = document.createElement('canvas')
+  let context = canvas.getContext('2d')
+  canvas.width = fr.width > bc.width ? fr.width : bc.width
+  canvas.height = fr.height + bc.height
+  context.fillStyle = 'rgba(255, 255, 255, 0.5)'
+  context.fillRect(0, 0, canvas.width, canvas.height)
+  context.drawImage(fr, 0, 0, fr.width, fr.height)
+  context.drawImage(bc, 0, fr.height, bc.width, bc.height)
+
+  let combined_image = dataURLtoBlob(canvas.toDataURL('image/jpeg'))
+  let blob = blobToFile(combined_image, docName)
+  return blob
+}
+
+
+export const blobToFile = (theBlob, fileName) => {
+  theBlob.lastModifiedDate = new Date()
+  theBlob.name = fileName
+  return theBlob
+}
+
+export const dataURLtoBlob = (dataurl) => {
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n)
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
+  }
+
+  return new Blob([u8arr], { type: mime })
 }

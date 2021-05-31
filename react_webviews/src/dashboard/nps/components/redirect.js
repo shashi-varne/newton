@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Container from "fund_details/common/Container";
 import { getUrlParams } from "utils/validators";
 import { initialize } from "../common/commonFunctions";
+import { storageService } from "utils/validators";
 
 export default class NpsPaymentRedirect extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ export default class NpsPaymentRedirect extends Component {
   onload = () => {
     let params = getUrlParams();
     let payment_status = "";
+    let amount = storageService().get('npsAmount');
 
     for (var i in params) {
       let key = i.split(";")[1] || i.split(";")[0];
@@ -27,7 +29,7 @@ export default class NpsPaymentRedirect extends Component {
         payment_status = params[i].split("/")[1];
       }
     }
-    this.navigate(`/nps/payment/callback/one-time/${payment_status}`)
+    this.navigate(`/nps/payment/callback/one-time/${amount}/${payment_status}`)
   };
 
   render() {

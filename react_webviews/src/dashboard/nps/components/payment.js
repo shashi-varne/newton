@@ -20,10 +20,9 @@ class NpsPaymentCallback extends Component {
   }
 
   onload = () => {
-    let amount = storageService().get('npsAmount');
-
     let pathname = this.props.history.location.pathname.split('/');
     let status = pathname[pathname.length - 1];
+    let amount = pathname[pathname.length - 2] || storageService().get('npsAmount');
 
     this.setState({
       amount: amount,
@@ -37,8 +36,8 @@ class NpsPaymentCallback extends Component {
     } else {
       const result = await this.getNPSInvestmentStatus();
       storageService().set('nps_additional_details_required', true);
-      storageService().setObject('nps_additional_details', result.registration_details);
-      storageService().setObject('kyc_app', result.kyc_app);
+      // storageService().setObject('nps_additional_details', result.registration_details);
+      // storageService().setObject('kyc', result.kyc_app);
   
       let currentUser = storageService().getObject("user");
  

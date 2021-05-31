@@ -163,6 +163,7 @@ export async function setNpsData(response) {
       const res = await Api.get(apiConstants.npsInvestStatus);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
+        storageService().setObject("nps_additional_details", result.registration_details);
         if (!result.registration_details.additional_details_status) {
           storageService().set("nps_additional_details_required", true);
         } else {

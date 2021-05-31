@@ -489,7 +489,7 @@ class Recommendations extends Component {
                 <img src={require("assets/terms_agree.png")} alt="" width="25" />
                 <div>
                   By tapping on proceed, I agree that I have read the {" "}
-                  <span onClick={() => this.openInBrowser("https://www.fisdom.com")} style={{textDecoration:'underline', cursor:'pointer'}}>
+                  <span onClick={() => this.openInBrowser("https://www.fisdom.com/terms/")} style={{textDecoration:'underline', cursor:'pointer'}}>
                     terms & conditions
                   </span>
                 </div>

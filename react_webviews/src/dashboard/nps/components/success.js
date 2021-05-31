@@ -44,7 +44,7 @@ class NpsSuccess extends Component {
   render() {
     return (
       <Container
-        buttonTitle="CONTINUE"
+        buttonTitle="PROCEED"
         hideInPageTitle
         hidePageTitle
         showLoader={this.state.show_loader}
