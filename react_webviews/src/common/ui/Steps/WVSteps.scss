@@ -1,7 +1,9 @@
 .wv-step {
+  word-break: break-word;
+
   .wv-step-header {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: left;
     margin-bottom: 10px;
     
@@ -24,18 +26,28 @@
       color: white;
     }
 
+    .wv-sh-number-completed {
+      background-color: var(--secondary) !important;
+    }
+    
+    .wv-sh-number-pending {
+      background-color: #FFDA2C !important;
+    }
+
     #wv-sh-title {
       font-weight: 500;
       font-size: 13px;
       line-height: 21px;
       color: var(--dark);
       text-align: left;
+      text-transform: capitalize;
     }
   }
-
+  
   .wv-step-content {
     text-align: left;
     margin-left: 40px;
+    text-transform: capitalize;
   }
 }
 

@@ -16,6 +16,7 @@
   
   .wv-select-item-content {
     flex-basis: 90%;
+    word-break: break-word;
   }
 
   .wv-select-item-title {
@@ -23,12 +24,14 @@
     font-weight: 500;
     font-size: 15px;
     line-height: 24px;
+    word-break: break-word;
   }
   
   .wv-select-item-subtitle {
     font-size: 15px;
     color: var(--steelgrey);
     line-height: 1.4;
+    word-break: break-word;
   }
 
   .wv-select-selected-icon {

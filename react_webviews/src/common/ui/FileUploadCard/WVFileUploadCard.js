@@ -1,15 +1,19 @@
 import './WVFileUploadCard.scss';
 import React, { useEffect, useState } from 'react';
-import { WVFilePickerWrapper } from '../FileUploadWrapper';
+import { WVFilePickerWrapper } from '../FileUploadWrapper/WVFilePickerWrapper';
 import SVG from 'react-inlinesvg';
 import { isFunction } from 'lodash';
+import PropTypes from 'prop-types';
 
 const WVFileUploadCard = ({
   title,
   subtitle,
+  file,
+  classes = {},
+  className,
   ...wrapperProps
 }) => {
-  const [selectedFile, setSelectedFile] = useState('');
+  const [selectedFile, setSelectedFile] = useState(file);
   const [truncatedFileName, setTruncatedFileName] = useState('');
   const [fileType, setFileType] = useState('');
 
@@ -27,43 +31,56 @@ const WVFileUploadCard = ({
     }
   }, [selectedFile]);
 
-  const onFileSelected = (file) => {
-    console.log(file);
+  const onFileSelected = (file, fileBase64) => {
     setSelectedFile(file);
-    if (isFunction(wrapperProps.onFileSelected)) {
-      wrapperProps.onFileSelected(file);
+    if (isFunction(wrapperProps.onFileSelectComplete)) {
+      wrapperProps.onFileSelectComplete(file, fileBase64);
     }
   }
 
   return (
-    <WVFilePickerWrapper
-      {...wrapperProps}
-      onFileSelectComplete={onFileSelected}
-    >
-      <div className="wv-file-upload-card">
-        <div className="wv-fuc-left">
-          <div className="wv-fuc-left-title">
-            {title}
+    <>
+      <WVFilePickerWrapper
+        {...wrapperProps}
+        onFileSelectComplete={onFileSelected}
+      >
+        <div
+          className={`
+          wv-file-upload-card
+          ${classes.container}
+          ${className}
+        `}
+          style={{ border: selectedFile ? '1px solid var(--primary)' : '' }}
+        >
+          <div className="wv-fuc-left">
+            <div className="wv-fuc-left-title">
+              {title}
+            </div>
+            <div className="wv-fuc-left-subtitle">
+              {subtitle}
+            </div>
           </div>
-          <div className="wv-fuc-left-subtitle">
-            {subtitle}
+          <div className="wv-fuc-right">
+            <SVG
+              preProcessor={code => code.replace(
+                /fill=".*?"/g, `fill=${selectedFile ? '#24154C' : '#767E86'}`
+              )}
+              className="arrow"
+              src={require('assets/paperclip.svg')}
+            />
+            {selectedFile?.name &&
+              <span>{truncatedFileName + `.${fileType}`}</span>
+            }
           </div>
         </div>
-        <div className="wv-fuc-right">
-          <SVG
-            preProcessor={code => code.replace(
-              /fill=".*?"/g, `fill=${selectedFile ? '#24154C' : '#767E86'}`
-            )}
-            className="arrow"
-            src={require('assets/paperclip.svg')}
-          />
-          {selectedFile?.name &&
-            <span>{truncatedFileName + `.${fileType}`}</span>
-          }
-        </div>
-      </div>
-    </WVFilePickerWrapper>
+      </WVFilePickerWrapper>
+    </>
   );
+}
+
+WVFilePickerWrapper.propTypes = {
+  title: PropTypes.node,
+  subtitle: PropTypes.node,
 }
 
 export default WVFileUploadCard;

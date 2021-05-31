@@ -25,7 +25,7 @@ Example syntax:
 import './WVButtonLayout.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
+import WVButton from '../Button/WVButton';
 
 /* ButtonLayout Component */
 
@@ -69,17 +69,18 @@ const LayoutButton = ({
   type, // "primary", "secondary", "text" button types
   ...props // MUI Button props
 }) => {
-  let modifiedClasses = {
+  const { root: rootClass, ...otherClasses } = classes;
+  const modifiedClasses = {
     root: `
       wv-layout-button
       wv-layout-button-${type}
-      ${classes.root || ''}
+      ${rootClass || ''}
     `,
-    ...classes
+    ...otherClasses
   };
 
   return (
-    <Button
+    <WVButton
       {...BUTTON_TYPE_PROPS[type]}
       fullWidth={true}
       autoFocus={true}
@@ -89,27 +90,22 @@ const LayoutButton = ({
       {...props}
     >
       {title}
-    </Button>
+    </WVButton>
   );
 }
 
 LayoutButton.propTypes = {
-  // order: PropTypes.oneOfType([
-  //   PropTypes.number,
-  //   PropTypes.string
-  // ]),
   type: PropTypes.oneOf(['primary', 'secondary', 'text']).isRequired,
   title: PropTypes.string.isRequired,
 };
 
 LayoutButton.defaultProps = {
-  // order: 1,
-  classes:{}
+  classes: {}
 };
 
 WVButtonLayout.Button = LayoutButton;
 
-/* OR Divider Component */
+/* OR-Divider Component */
 
 const ORDivider = () => (
   <img

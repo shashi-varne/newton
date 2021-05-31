@@ -4,7 +4,7 @@ import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { relationshipOptions, getPathname } from "../constants";
+import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
   navigate as navigateFunc,
@@ -110,9 +110,9 @@ const PersonalDetails4 = (props) => {
 
   const handleNavigation = () => {
     if (type === "digilocker") {
-      navigate(getPathname.uploadSign);
+      navigate(PATHNAME_MAPPER.uploadSign);
     } else {
-      navigate(getPathname.journey);
+      navigate(PATHNAME_MAPPER.journey);
     }
   };
 
@@ -201,7 +201,7 @@ const PersonalDetails4 = (props) => {
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
-              options={relationshipOptions}
+              options={RELATIONSHIP_OPTIONS}
               id="relationship"
               label="Relationship"
               isAOB={true}

@@ -71,7 +71,7 @@ import { getConfig } from './functions';
     callbackData.action_data = { file_name: listener.doc_type };
     if (typeof window.Android !== "undefined") {
       window.Android.callbackNative(JSON.stringify(callbackData));
-    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
       window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
     }
   };

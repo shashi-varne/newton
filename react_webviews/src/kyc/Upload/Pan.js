@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
 import { getBase64, getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -10,6 +9,7 @@ import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
+const isWeb = getConfig().Web;
 const getTitleList = ({ kyc }) => {
   let titleList = [
     'Photo of PAN card should have your signature',
@@ -55,7 +55,7 @@ const Pan = (props) => {
   const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
   const [showLoader, setShowLoader] = useState(false)
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   
   const inputEl = useRef(null)
 
@@ -118,7 +118,7 @@ const Pan = (props) => {
   }
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'pan', 'pan.jpg', 'front')
@@ -144,7 +144,7 @@ const Pan = (props) => {
         )
         setTitle('PAN mismatch!')
       } else {
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc)
         if (
           result.kyc.kyc_status !== 'compliant' &&
           result.kyc.dl_docs_status !== '' &&
@@ -163,8 +163,6 @@ const Pan = (props) => {
       setIsApiRunning(false)
     }
   }
-
-  const isWeb = getConfig().isWebOrSdk
 
   return (
     <Container
