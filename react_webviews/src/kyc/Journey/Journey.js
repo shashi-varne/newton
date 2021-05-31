@@ -119,11 +119,7 @@ const Journey = (props) => {
             status = 'init'
             break
           }
-        } else if (
-          journeyData[i].key === 'esign' ||
-          journeyData[i].key === 'bank_esign' ||
-          journeyData[i].key === 'trading_esign'
-        ) {
+        } else if (['esign', 'bank_esign', 'trading_esign'].includes(journeyData[i].key)) {
           if (kyc.sign_status !== 'signed') {
             status = 'init'
             break
@@ -298,11 +294,11 @@ const Journey = (props) => {
       //   return
       // }
       stateMapper = {
-        personal: '/kyc/compliant-personal-details',
-        nominee: '/kyc/compliant-nominee-details',
+        personal: getPathname.compliantPersonalDetails1,
+        nominee: getPathname.compliantPersonalDetails4,
         bank: '/kyc/compliant/bank-details',
-        sign: '/kyc/upload/sign',
-        pan: '/kyc/home',
+        sign: getPathname.uploadSign,
+        pan: getPathname.homeKyc,
       }
       navigate(stateMapper[key], {
         state: {
@@ -314,15 +310,14 @@ const Journey = (props) => {
       return
     } else {
       if (show_aadhaar) {
-        console.log(key)
         stateMapper = {
-          pan: '/kyc/home',
-          personal: '/kyc/dl/personal-details1',
+          pan: getPathname.homeKyc,
+          personal: getPathname.digilockerPersonalDetails1,
           bank_esign: '/kyc/non-compliant/bank-details',
-          trading_esign: '/kyc/trading-experience',
-          address: '/kyc/address-details1',
-          docs: '/kyc/upload/progress',
-          esign: '/kyc-esign/info',
+          trading_esign: getPathname.tradingExperience,
+          address: getPathname.addressDetails1,
+          docs: getPathname.uploadProgress,
+          esign: getPathname.kycEsign,
         }
 
         navigate(stateMapper[key], {
@@ -335,12 +330,12 @@ const Journey = (props) => {
       } else {
         console.log('Non show aadhaar')
         stateMapper = {
-          pan: '/kyc/home',
-          personal: '/kyc/personal-details1',
-          address: '/kyc/address-details1',
-          docs: '/kyc/upload/progress',
-          esign: '/kyc-esign/info',
-          trading_esign: '/kyc/trading-experience',
+          pan: getPathname.homeKyc,
+          personal: getPathname.personalDetails1,
+          address: getPathname.addressDetails1,
+          docs: getPathname.uploadProgress,
+          esign: getPathname.kycEsign,
+          trading_esign: getPathname.tradingExperience,
         }
         console.log(stateMapper[key])
       }
