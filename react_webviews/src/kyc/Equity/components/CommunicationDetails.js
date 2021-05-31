@@ -237,11 +237,7 @@ const CommunicationDetails = (props) => {
                   >
                     {googleButtonTitle}
                   </WVButton>
-                  <div className="kcd-or-divider">
-                    <div className="kcd-divider-line"></div>
-                    <div className="kcd-divider-text">OR</div>
-                    <div className="kcd-divider-line"></div>
-                  </div>
+                  <img src={require("assets/ORDivider.svg")} alt="" className="kcd-or-divider" />
                 </>
               )}
               <TextField
