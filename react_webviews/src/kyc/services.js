@@ -2,7 +2,7 @@ import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 
-const docMapper = {
+const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
   PASSPORT: 'Passport',
   AADHAAR: 'Aadhaar card',
@@ -366,7 +366,7 @@ export function getDocuments(userKyc) {
     const data = {
       key: "nriaddress",
       title: "Foreign Address proof",
-      subtitle: docMapper[userKyc.address_doc_type],
+      subtitle: DOCUMENTS_MAPPER[userKyc.address_doc_type],
       doc_status: userKyc.nri_address.doc_status,
       default_image: "regi_default.svg",
       approved_image:"regi_approved.svg",
@@ -381,7 +381,7 @@ function getAddressProof(userKyc) {
   if (userKyc.address.meta_data.is_nri) {
     return "Passport"
   }
-  return docMapper[userKyc.address_doc_type]
+  return DOCUMENTS_MAPPER[userKyc.address_doc_type]
 }
 
 export function isReadyToInvest() {
