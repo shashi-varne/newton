@@ -49,6 +49,10 @@ class NpsInfo extends Component {
     }
   };
 
+  goBack = () => {
+    this.navigate('/invest')
+  }
+
   render() {
     let { benefits, withdraw } = this.state;
     return (
@@ -56,6 +60,9 @@ class NpsInfo extends Component {
         buttonTitle="CONTINUE"
         title="Why NPS?"
         handleClick={this.handleClick}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div className="nps-info">
           <ul>
