@@ -219,6 +219,7 @@ class FyntuneLanding extends Component {
     if (!this.state.resume_data.resume_present) {
       return;
     }
+    storageService().setObject('backToInsuranceLanding', true);
     let basepath = getBasePath();
     this.sendEvents("next", {resume_clicked: "yes"});
     var resume_redirection_url = this.state.resume_data.redirection_url;
@@ -304,6 +305,7 @@ class FyntuneLanding extends Component {
 
       return;
     }
+    storageService().setObject('backToInsuranceLanding', true);
     this.setErrorData('submit');
     let error = '';
     let errorType = '';

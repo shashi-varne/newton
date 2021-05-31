@@ -4,7 +4,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter, convertDateFormat
+    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter, convertDateFormat, storageService
 } from 'utils/validators';
 import Api from 'utils/api';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
@@ -60,6 +60,23 @@ class GroupHealthReportDetails extends Component {
     }
     async componentDidMount() {
         this.onload();
+    }
+    componentDidUpdate(){
+        var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted'];
+        var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
+        var reportSelectedTab = '';
+        var policy_status = this.state.policy_data.status;
+        if(policy_status){
+            if(issued_statuses.indexOf(policy_status.toLowerCase()) > -1){
+                reportSelectedTab = 'activeReports';
+            }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
+              reportSelectedTab = 'pendingReports';
+            }else{
+              reportSelectedTab = 'inactiveReports';
+            }
+            storageService().setObject('reportSelectedTab', reportSelectedTab)    
+        }
+        
     }
     onload = async()=>{
         this.setErrorData("onload");
@@ -176,6 +193,8 @@ class GroupHealthReportDetails extends Component {
 
         this.setState({
             download_policy: true
+        }, ()=>{
+            this.sendEvents('next');
         })
 
     }

@@ -23,19 +23,23 @@ export var fyntuneConstants = {
     fyntune_policy_report_status_mapper: {
       issued: {
         text: 'ISSUED',
-        color: '#78CE5D'
+        color: '#78CE5D',
+        reportTab: 'activeReports'
       },
       pending: {
         text: 'PENDING',
-        color: '#d3bd13'
+        color: '#d3bd13',
+        reportTab: 'pendingReports'
       },
       expired: {
         text: 'EXPIRED',
-        color: 'orange'
+        color: 'orange',
+        reportTab: 'inactiveReports'
       },
       rejected: {
         text: 'EXPIRED',
-        color: 'red'
+        color: 'red',
+        reportTab: 'inactiveReports'
       }
     },
     stepsToFollow : [

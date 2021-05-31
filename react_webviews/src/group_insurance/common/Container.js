@@ -4,9 +4,8 @@ import { getConfig, manageDialog } from 'utils/functions';
 
 import { nativeCallback, openModule } from 'utils/native_callback';
 import '../../utils/native_listner';
-import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
-import { storageService } from '../../utils/validators';
+import { storageService, checkStringInString } from '../../utils/validators';
 import {didMount ,commonRender} from '../../common/components/container_functions';
 
 class Container extends Component {
@@ -51,6 +50,7 @@ class Container extends Component {
        || pathname === '/group-insurance/advisory/recommendations'
        || pathname === '/group-insurance/advisory/email-report'
        || pathname === '/group-insurance/call-back-details'
+       || pathname === '/group-insurance/common/report'
        ) {
       this.setState({
         new_header: true,
@@ -326,13 +326,16 @@ class Container extends Component {
       }
     }
 
-
     switch (pathname) {
       case "/group-insurance":
         nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/group-insurance/common/report":
-        openModule('app/portfolio')
+        if(!getConfig().from_notification){
+          openModule('app/portfolio')
+        }else{
+          nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        }
         break;
       case "/group-insurance/term/resume":
       case "/group-insurance/term/journey":
