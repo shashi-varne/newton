@@ -31,7 +31,6 @@ const StocksStatus = (props) => {
   useEffect(() => {
     const kycAppStatusData = getKycAppStatus(kyc);
     const status = kycAppStatusData.status;
-    console.log(kycAppStatusData);
     if (status === "ground") {
       setData(STATUS_MAPPER["init"]);
     } else {
