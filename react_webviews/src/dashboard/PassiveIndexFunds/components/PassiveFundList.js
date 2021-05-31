@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import { storageService, isEmpty } from "utils/validators";
 import { initialize, fetch_funddetails_list } from "../common/commonFunctions";
 import FundListCard from "../mini-components/FundListCard";
+import CartFooter from  "../../../common/ui/Filter/CartFooter";
 import YearFilter from "../mini-components/YearFilter";
 import { year_filters } from "../constants";
 import "./PassiveFundDetails.scss";
@@ -76,6 +77,20 @@ class FundList extends Component {
                                 );
                             })}
                     </React.Fragment>
+
+                    <CartFooter
+                        // cart={cart}
+                        fundsList={result}
+                    // setCart={setCart}
+                    // sortFilter={sortFilter}
+                    // fundHouse={fundHouse}
+                    // fundOption={fundOption}
+                    // setSortFilter={setSortFilter}
+                    // setFundHouse={setFundHouse}
+                    // setFundsList={setFundOption}
+                    // setFundOption={setFundOption}
+                    // {...parentProps}
+                    />
                 </div>
             </Container>
         );
