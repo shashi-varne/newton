@@ -61,12 +61,7 @@ const AddressUpload = (props) => {
   const [backDoc, setBackDoc] = useState(null)
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
-  const {kyc: kycData, isLoading} = useUserKycHook();
-  const [kyc, setKyc] = useState(kycData);
-
-  useEffect(() => {
-    setKyc(kycData);
-  }, [kycData])
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
     if (type === 'front') {
@@ -113,8 +108,7 @@ const AddressUpload = (props) => {
           address_proof_key: addressProofKey,
         })
       }
-      setKyc(result.kyc)
-      storageService().setObject(storageConstants.KYC, result.kyc)
+      updateKyc(result.kyc)
       navigate('/kyc/upload/progress')
     } catch (err) {
       console.error(err)
