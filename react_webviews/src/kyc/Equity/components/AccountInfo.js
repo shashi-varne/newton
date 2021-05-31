@@ -31,7 +31,6 @@ const AccountInfo = (props) => {
   };
 
   const sendEvents = (userAction) => {
-    // TODO sendEvents('next')
     let eventObj = {
       event_name: "trading",
       properties: {
@@ -48,6 +47,7 @@ const AccountInfo = (props) => {
   }
   
   const handleClick = () => {
+    sendEvents("next");
     navigate(getPathname.homeKyc);
   };
 
