@@ -1,6 +1,6 @@
 import { productName } from "./common/commonFunctions";
 
-export const product_name = productName()
+export const product_name = 'finity'  //productName()
 
 export const carousel_img = [
     { src: 'passive_index_keyinsight_1.svg' },
