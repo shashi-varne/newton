@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { getPathname, storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { isDigilockerFlow, navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
@@ -43,9 +43,9 @@ const Sign = (props) => {
         navigate(`/kyc/${type}/bank-details`);
       } else {
         if (props?.location?.state?.backToJourney) {
-          navigate("/kyc/journey");
+          navigate(getPathname.journey);
         } else {
-          navigate("/kyc/upload/progress");
+          navigate(getPathname.uploadProgress);
         }
       }
     } catch (err) {
