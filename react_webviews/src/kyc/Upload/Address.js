@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import { storageService, } from '../../utils/validators'
-import { storageConstants, docMapper, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { storageConstants, docMapper, SUPPORTED_IMAGE_TYPES, getPathname } from '../constants'
 import { upload } from '../common/api'
 import { getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -109,7 +109,7 @@ const AddressUpload = (props) => {
         })
       }
       updateKyc(result.kyc)
-      navigate('/kyc/upload/progress')
+      navigate(getPathname.uploadProgress)
     } catch (err) {
       console.error(err)
       toast(err?.message)
