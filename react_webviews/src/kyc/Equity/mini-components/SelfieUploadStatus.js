@@ -27,7 +27,7 @@ const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick }) => {
   return (
     <WVBottomSheet
       isOpen={isOpen}
-      onClose={onClose}
+      // onClose={onClose}
       title={data.title}
       subtitle={data.subtitle}
       image={data.icon && require(`assets/${productName}/${data.icon}`)}
