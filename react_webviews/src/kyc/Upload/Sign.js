@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { getPathname, storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { navigate as navigateFunc } from '../common/functions'
+import { isDigilockerFlow, navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
@@ -40,22 +40,16 @@ const Sign = (props) => {
       setIsApiRunning("button")
       const result = await upload(file, 'sign')
       updateKyc(result.kyc);
-      const dlFlow =
-          result.kyc.kyc_status !== "compliant" &&
-          !result.kyc.address.meta_data.is_nri &&
-          result.kyc.dl_docs_status !== "" &&
-          result.kyc.dl_docs_status !== "init" &&
-          result.kyc.dl_docs_status !== null;
-
+      const dlFlow = isDigilockerFlow(result.kyc);
       const type = result?.kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
 
       if (dlFlow || type === "compliant") {
         navigate(`/kyc/${type}/bank-details`);
       } else {
         if (props?.location?.state?.backToJourney) {
-          navigate("/kyc/journey");
+          navigate(getPathname.journey);
         } else {
-          navigate("/kyc/upload/progress");
+          navigate(getPathname.uploadProgress);
         }
       }
     } catch (err) {

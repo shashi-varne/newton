@@ -12,6 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini-components/Alert";
 import {
+  checkPanFetchStatus,
+  isDigilockerFlow,
   // compareObjects,
   navigate as navigateFunc,
   validateFields,
@@ -83,13 +85,7 @@ const KycBankDetails = (props) => {
       disableData.ifsc_code_disabled = true;
     }
     setDisableFields({ ...disableData });
-    if (
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
+    if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
     setName(kyc.pan.meta_data.name || "");
@@ -180,15 +176,15 @@ const KycBankDetails = (props) => {
       else navigate(getPathname.tradingExperience)
     } else {
       if (dl_flow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-          kyc.pan.doc_status !== "approved"
-        )
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
           navigate(getPathname.uploadPan);
-        else navigate(getPathname.tradingExperience);
-      } else navigate(getPathname.uploadProgress);
+        } else {
+          navigate(getPathname.tradingExperience);
+        }
+      } else {
+        navigate(getPathname.uploadProgress);
+      }
     }
   };
 
@@ -204,12 +200,8 @@ const KycBankDetails = (props) => {
       //   });handleSdkNavigation
     } else {
       if (dl_flow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-          kyc.pan.doc_status !== "approved"
-        )
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved)
           navigate(getPathname.uploadPan);
         else navigate(getPathname.kycEsign);
       } else navigate(getPathname.uploadProgress);

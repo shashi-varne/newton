@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import { storageService, } from '../../utils/validators'
-import { storageConstants, docMapper, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { storageConstants, docMapper, SUPPORTED_IMAGE_TYPES, getPathname } from '../constants'
 import { upload } from '../common/api'
 import { getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -70,12 +70,7 @@ const AddressUpload = (props) => {
   const [backDoc, setBackDoc] = useState(null)
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
-  const {kyc: kycData, isLoading} = useUserKycHook();
-  const [kyc, setKyc] = useState(kycData);
-
-  useEffect(() => {
-    setKyc(kycData);
-  }, [kycData])
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
     sendEvents('get_image', 'gallery', type);
@@ -125,9 +120,8 @@ const AddressUpload = (props) => {
           address_proof_key: addressProofKey,
         })
       }
-      setKyc(result.kyc)
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      updateKyc(result.kyc)
+      navigate(getPathname.uploadProgress)
     } catch (err) {
       console.error(err)
       toast(err?.message)

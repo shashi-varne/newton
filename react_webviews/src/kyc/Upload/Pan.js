@@ -3,45 +3,37 @@ import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { getPathname, storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { navigate as navigateFunc } from '../common/functions'
+import { isDigilockerFlow, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
-import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet'
+import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
 
 const config = getConfig();
 const productName = config.productName;
+const TRADING_ENABLED = isTradingEnabled();
 
 const Pan = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const [title, setTitle] = useState("Note")
-  const [subTitle, setSubTitle] = useState('')
   const [isOpen, setIsOpen] = useState(false)
-  const [isUploadSuccess, setIsUploadSuccess] = useState(false)
-  const [isUploadError, setIsUploadError] = useState(false)
-  const [bottomSheetImage, setBottomSheetImage] = useState(null)
   const [dlFlow, setDlFlow] = useState(false);
+  const [bottomSheetType, setBottomSheetType] = useState('');
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   useEffect(() => {
-    if (
-      !isEmpty(kyc) &&
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
-      setDlFlow(true);
+    if (!isEmpty(kyc)) {
+      if (isDigilockerFlow(kyc)) {
+        setDlFlow(true);
+      }
     }
   }, [kyc]);
 
@@ -77,12 +69,7 @@ const Pan = (props) => {
   };
 
   const handleSdkNavigation = () => {
-    if (
-      kyc.kyc_status !== 'compliant' &&
-      kyc.dl_docs_status !== '' &&
-      kyc.dl_docs_status !== 'init' &&
-      kyc.dl_docs_status !== null
-    ) {
+    if (dlFlow) {
       navigate('/kyc-esign/info')
     } else {
       navigate('/kyc/upload/progress')
@@ -91,7 +78,7 @@ const Pan = (props) => {
 
   const handleNavigation = () => {
     sendEvents("next", "pan_uploaded")
-    if (isTradingEnabled()) {
+    if (TRADING_ENABLED) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();
@@ -107,8 +94,8 @@ const Pan = (props) => {
     }
     try {
       const data = {};
-      if (kyc.kyc_status !== 'compliant' && kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null) {
-        if (kyc.all_dl_doc_statuses.pan_fetch_status === null || kyc.all_dl_doc_statuses.pan_fetch_status === '' || kyc.all_dl_doc_statuses.pan_fetch_status === 'failed') {
+      if (dlFlow) {
+        if ([null, "", "failed"].includes(kyc.all_dl_doc_statuses.pan_fetch_status)) {
           data.kyc_flow =  'dl';
         }
       }
@@ -118,25 +105,18 @@ const Pan = (props) => {
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
         (result.error && !result.ocr_pan_kyc_matches)
       ) {
-        
-        setSubTitle("PAN number doesn't match with the uploaded PAN image")
-        setTitle("PAN verification failed")
-        setBottomSheetImage("pan_verification_failed.svg");
-        setIsUploadError(true);
+        setBottomSheetType('failed');
         setIsOpen(true);
       } else {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        if (isTradingEnabled()) {
-          setSubTitle("You're almost there, now take a selfie")
+        if (isNotManualAndNriUser(result.kyc)) {
+          setBottomSheetType('success');
+          setIsOpen(true);
         } else {
-          setSubTitle("You've successfully uploaded PAN!")
+          handleNavigation();
         }
-        setTitle("PAN uploaded")
-        setBottomSheetImage("ic_indian_resident.svg");
-        setIsUploadSuccess(true);
-        setIsOpen(true);
       }
     } catch (err) {
       toast(err?.message)
@@ -214,18 +194,13 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          <WVBottomSheet
-            isOpen={isOpen}
-            title={title}
-            subtitle={subTitle}
-            button1Props={{ 
-              title: isUploadSuccess ? "CONTINUE" : "RETRY", 
-              type: "primary", 
-              onClick: isUploadSuccess ? handleNavigation : handleSubmit
-            }}
-            image={bottomSheetImage ? require(`assets/${productName}/${bottomSheetImage}`) : ""}
-          >
-          </WVBottomSheet>
+          {TRADING_ENABLED && kyc.kyc_type !== "manual" &&
+            <PanUploadStatus
+              status={bottomSheetType}
+              isOpen={isOpen}
+              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
+            />
+          }
         </section>
       )}
     </Container>

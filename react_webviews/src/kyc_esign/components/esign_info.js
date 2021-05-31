@@ -9,6 +9,7 @@ import ConfirmBackModal from './confirm_back'
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
+import { isDigilockerFlow } from '../../kyc/common/functions';
 
 const config = getConfig();
 const TRADING_ENABLED = isTradingEnabled();
@@ -35,13 +36,7 @@ class ESignInfo extends Component {
     const kyc = storageService().getObject("kyc");
     if (!isEmpty(kyc)) {
       let dl_flow = false;
-      if (
-        kyc.kyc_status !== "compliant" &&
-        !kyc.address.meta_data.is_nri &&
-        kyc.dl_docs_status !== "" &&
-        kyc.dl_docs_status !== "init" &&
-        kyc.dl_docs_status !== null
-      ) {
+      if (isDigilockerFlow(kyc)) {
         dl_flow = true;
       }
       this.setState({ dl_flow, kyc });
@@ -168,7 +163,7 @@ class ESignInfo extends Component {
         events={this.sendEvents("just_set_events")}
         showLoader={show_loader}
         title='eSign KYC'
-        handleClick={() => this.goNext()}
+        handleClick={this.goNext}
         buttonTitle='PROCEED'
         headerData={headerData}
       >

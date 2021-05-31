@@ -5,6 +5,8 @@ import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
 import { nativeCallback } from "../../../utils/native_callback";
+import { navigate as navigateFunc } from "../../common/functions";
+import { getPathname } from "../../constants";
 
 const productName = getConfig().productName;
 const benefits = [
@@ -22,7 +24,7 @@ const benefits = [
   },
 ];
 const AccountInfo = (props) => {
-
+  const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
   const handleCheckBox = () => {
     setCheckTermsAndConditions(!checkTermsAndConditions);
@@ -43,6 +45,10 @@ const AccountInfo = (props) => {
     } else {
       nativeCallback({ events: eventObj });
     }
+  }
+  
+  const handleClick = () => {
+    navigate(getPathname.homeKyc);
   };
 
   return (
@@ -52,6 +58,7 @@ const AccountInfo = (props) => {
       title={"Trading & demat account"}
       hidePageTitle
       disable={!checkTermsAndConditions}
+      handleClick={handleClick}
     >
       <div className="kyc-account-info">
         <header className="kyc-account-info-header">

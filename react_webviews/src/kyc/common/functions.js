@@ -1,6 +1,7 @@
 import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
 import { isEmpty } from '../../utils/validators'
+import { eqkycDocsGroupMapper } from '../constants'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -233,3 +234,57 @@ export const isDigilockerFlow = (kyc = {}) => {
     kyc.dl_docs_status !== null
   );
 };
+
+export async function checkDocsPending(kyc = {}) {
+  if (isEmpty(kyc)) return false;
+  let pendingDocs = [];
+
+  const incompleteApplication = kyc.application_status_v2 !== "submitted" || kyc.application_status_v2 !== "complete" ||
+    kyc.equity_application_status !== "submitted" || kyc.equity_application_status !== "complete";
+
+  if (incompleteApplication) {
+    pendingDocs = await pendingDocsList(kyc);
+    return !!pendingDocs.length;
+  }
+
+  return false;
+}
+
+export async function pendingDocsList(kyc = {}) {
+  if (isEmpty(kyc)) return false;
+  const docsToCheck = ["equity_pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
+  
+  if (kyc?.address?.meta_data.is_nri) {
+    docsToCheck.push("nri_address");
+  }
+
+  return docsToCheck.filter((doc) => kyc[doc]?.doc_status !== "approved");
+}
+
+export async function getPendingDocuments(kyc = {}) {
+  if (isEmpty(kyc)) return false;
+  const pendingDocs = await pendingDocsList(kyc)
+  const pendingDocsMapper = pendingDocs.filter((group) => eqkycDocsGroupMapper[group]).map((group) => {
+    return {
+      title: eqkycDocsGroupMapper[group]?.title,
+      doc: eqkycDocsGroupMapper[group]?.doc || kyc[group]?.meta_data?.doc_type
+    }
+  });
+
+  return pendingDocsMapper;
+}
+
+export function checkPanFetchStatus(kyc = {}) {
+  if (isEmpty(kyc)) return false;
+  return (
+    (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+    kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+    kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+    kyc.pan.doc_status !== "approved"
+  );
+}
+
+export function isNotManualAndNriUser(kyc = {}) {
+  if (isEmpty(kyc)) return false;
+  return kyc.kyc_type !== "manual" && !kyc.address?.meta_data?.is_nri
+}

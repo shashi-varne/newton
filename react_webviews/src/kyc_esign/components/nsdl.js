@@ -12,6 +12,7 @@ import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
 import { getBasePath } from "../../utils/functions";
+import { isDigilockerFlow } from "../../kyc/common/functions";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -48,7 +49,10 @@ class DigiStatus extends Component {
     let dl_flow = false;
     let show_note = false;
     if (!isEmpty(kyc) && !isEmpty(user)) {
-      dl_flow = this.checkDlFlow(kyc)
+      if (isDigilockerFlow(kyc)) {
+        dl_flow = true;
+      }
+
       if (
         user.kyc_registration_v2 === "submitted" &&
         // kyc.sign_status === "signed" &&

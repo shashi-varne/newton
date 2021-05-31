@@ -4,7 +4,7 @@ import { SUPPORTED_IMAGE_TYPES, verificationDocOptions } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { getFlow, navigate as navigateFunc } from "../common/functions";
+import { checkPanFetchStatus, isDigilockerFlow, navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
@@ -22,19 +22,14 @@ const KycUploadDocuments = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
-  const [showLoader, setShowLoader] = useState(false)
+  // const [showLoader, setShowLoader] = useState(false)
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
-    if (
-      !isEmpty(kyc) &&
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
-      setDlFlow(true);
+    if (!isEmpty(kyc)) {
+      if (isDigilockerFlow(kyc)) {
+        setDlFlow(true);
+      }
     }
   }, [kyc]);
 
@@ -111,12 +106,8 @@ const KycUploadDocuments = (props) => {
       else navigate(getPathname.tradingExperience)
     } else {
       if (dlFlow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
-          kyc.pan.doc_status !== "approved"
-        ) {
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
           navigate(getPathname.uploadPan);
         } else {
           if (kyc.sign_status !== 'signed') {
@@ -150,12 +141,8 @@ const KycUploadDocuments = (props) => {
         // }
       } else {
         if (dlFlow) {
-          if (
-            (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
-            kyc.pan.doc_status !== "approved"
-          ) {
+          const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+          if (isPanFailedAndNotApproved) {
             navigate("/kyc/upload/pan");
           } else {
             if (kyc.sign_status !== 'signed') {
@@ -206,7 +193,7 @@ const KycUploadDocuments = (props) => {
     return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       events={sendEvents("just_set_events")}
       hideInPageTitle
       handleClick={handleSubmit}

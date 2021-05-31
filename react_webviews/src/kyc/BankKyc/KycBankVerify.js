@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
-import { getFlow, navigate as navigateFunc } from "../common/functions";
+import { checkPanFetchStatus, isDigilockerFlow, navigate as navigateFunc } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -38,13 +38,7 @@ const KycBankVerify = (props) => {
   }, [kyc]);
 
   const initialize = async () => {
-    if (
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
+    if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
     setBankData({ ...kyc.bank.meta_data });
@@ -147,15 +141,15 @@ const KycBankVerify = (props) => {
       else navigate(getPathname.tradingExperience)
     } else {
       if (dl_flow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-          kyc.pan.doc_status !== "approved"
-        ) {
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
           navigate(getPathname.uploadPan);
-        } else navigate(getPathname.tradingExperience);
-      } else navigate(getPathname.uploadProgress);
+        } else {
+          navigate(getPathname.tradingExperience);
+        }
+      } else {
+        navigate(getPathname.uploadProgress);
+      }
     }
   };
 
@@ -200,12 +194,8 @@ const KycBankVerify = (props) => {
       // }
     } else {
       if (dl_flow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-          kyc.pan.doc_status !== "approved"
-        ) {
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
           navigate(getPathname.uploadPan);
         } else navigate(getPathname.kycEsign);
       } else navigate(getPathname.uploadProgress);

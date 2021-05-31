@@ -5,7 +5,7 @@ import Container from "../../common/Container";
 import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty } from "../../../utils/validators";
-import { getPendingDocuments } from "../../services";
+import { getPendingDocuments } from "../../common/functions";
 import "./commonStyles.scss";
 
 const productName = getConfig().productName;
