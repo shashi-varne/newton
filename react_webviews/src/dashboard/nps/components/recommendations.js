@@ -308,7 +308,7 @@ class Recommendations extends Component {
     const { recommendations, pension_house } = this.state;
     const replaceObject = pension_house || recommendations?.pension_house;
     storageService().setObject("nps-current", replaceObject);
-    this.navigate("fundreplace");
+    this.navigate("/nps/fundreplace");
   }
 
   render() {

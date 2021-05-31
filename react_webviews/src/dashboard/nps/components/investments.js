@@ -35,7 +35,7 @@ class NpsInvestments extends Component {
     };
 
     campaigns.forEach(item => {
-      if (item.campaign === 'nps_esign') {
+      if (item.campaign.name === 'nps_esign') {
         npscampaign = true;
         npsCampaignData = item;
       }
@@ -104,15 +104,14 @@ class NpsInvestments extends Component {
     }
   }
 
-  redirection = (url) => {
+  redirection = (url, name='') => {
     let paymentRedirectUrl = encodeURIComponent(
       window.location.origin + `/nps/investments` + getConfig().searchParams
     );
 
     let back_url = paymentRedirectUrl;
 
-    // for web no issue
-    if(getConfig().Web) {
+    if(getConfig().Web && name !== 'e-sign') {
       this.openInBrowser(url)
     } else {
       var payment_link = url;
@@ -170,7 +169,7 @@ class NpsInvestments extends Component {
           <div className="nps-investments">
             {this.state.npscampaign && <div
               className="list"
-              onClick={() => this.redirection(this.state.npsCampActionUrl)}
+              onClick={() => this.redirection(this.state.npsCampActionUrl, 'e-sign')}
             >
               <div className="icon">
                 <img
