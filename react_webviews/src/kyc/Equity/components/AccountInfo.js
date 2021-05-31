@@ -4,6 +4,8 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
+import { navigate as navigateFunc } from "../../common/functions";
+import { getPathname } from "../../constants";
 
 const productName = getConfig().productName;
 const benefits = [
@@ -21,16 +23,23 @@ const benefits = [
   },
 ];
 const AccountInfo = (props) => {
+  const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
   const handleCheckBox = () => {
     setCheckTermsAndConditions(!checkTermsAndConditions);
   };
+
+  const handleClick = () => {
+    navigate(getPathname.homeKyc);
+  };
+
   return (
     <Container
       buttonTitle="CONTINUE"
       title={"Trading & demat account"}
       hidePageTitle
       disable={!checkTermsAndConditions}
+      handleClick={handleClick}
     >
       <div className="kyc-account-info">
         <header className="kyc-account-info-header">

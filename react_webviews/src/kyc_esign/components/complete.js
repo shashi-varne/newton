@@ -43,7 +43,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
             Approves in one working day
           </div>
         )}
-        {dl_flow && (
+        {(dl_flow || kyc?.kyc_status === "compliant") && TRADING_ENABLED && !show_note && (
           <div className="sub-title">
             Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds
           </div>

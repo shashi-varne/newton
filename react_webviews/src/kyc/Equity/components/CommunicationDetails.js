@@ -57,7 +57,7 @@ const CommunicationDetails = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [showOtpContainer, setShowOtpContainer] = useState(false);
   const [showDotLoader, setShowDotLoader] = useState(false);
-  const { user, kyc, isLoading, setKycToSession } = useUserKycHook();
+  const { user, kyc, isLoading, updateKyc } = useUserKycHook();
   const isNri = kyc.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
   const [isReadyToInvestBase, setIsReadyToInvest] = useState();
@@ -131,7 +131,7 @@ const CommunicationDetails = (props) => {
         setShowLoader("button");
         const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
         if (!otpResult) return;
-        setKycToSession(otpResult.kyc);
+        updateKyc(otpResult.kyc);
         handleNavigation();
       } else {
         let body = {};
