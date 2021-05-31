@@ -68,10 +68,11 @@ class Landing extends Component {
                 errorData={this.state.errorData}
                 classHeader='header-color-blue'
                 customBackButtonColor='white'
+                noPadding
             >
                 <div>
                     <div className='educational-video-block'>
-                        <p>Get started with index funds</p>
+                        <p style={{padding: "5px 0 30px 20px"}}>Get started with index funds</p>
                         <div className='player-wrapper' onClick={this.handleClickFullscreen}>
                             <ReactPlayer
                                 className='react-player'
@@ -86,9 +87,12 @@ class Landing extends Component {
                                 playIcon={<img src={require(`assets/icon_play_btn.svg`)} className='react-player play-icon' alt="" />}
                             />
                         </div>
+                        <div style={{width: "100%",display: "flex", justifyContent: "center", padding: "30px 0px"}}>
                         <img src={require(`assets/passive_index_video_info.svg`)} className='react-player play-info' alt="" />
+                        </div>
                     </div>
-                    <h1 className='category-title' style={{ marginTop: '400px' }}>Top index funds</h1>
+                    <div style={{padding: "10px 20px",backgroundColor: "white",zIndex: "1", borderRadius: "7px", marginTop: "-25px"}}>
+                    <h1 className='category-title'>Top index funds</h1>
                     <MenuListDropDown menulistProducts={fund_category} value={this.state.value} handleClick={this.handleClick} />
                     <h1 className='category-title'>Key insights</h1>
                     <div className='react-responsive-carousel'>
@@ -99,6 +103,7 @@ class Landing extends Component {
                         />
                     </div>
                     <WVSecurityDisclaimer />
+                    </div>
                 </div>
             </Container>
         );

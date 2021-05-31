@@ -34,34 +34,42 @@
 .educational-video-block {
   background-color: #002576;
   color: white;
-  position: absolute;
+  // padding: -20px;
+  // position: absolute;
   width: 100%;
-  left: 0;
-  top: 0;
-  height: 400px;
-  padding: 0px 20px;
+  padding-bottom: 20px;
+  // left: 0;
+  // top: 0;
+  // height: 400px;
+  p{
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .player-wrapper {
-  position: relative;
-  padding-top: 56.25%;
+//   position: relative;
+//   padding-top: 56.25%;
+  padding: 0px 20px;
+
 }
 
-.react-player {
-  top: 0;
-  margin: 0 auto;
-  left: 50%;
-  transform: translate(-50%, 0);
-  position: absolute;
-  z-index: 1;
-}
+// .react-player {
+//   top: 0;
+//   margin: 0 auto;
+//   left: 50%;
+//   transform: translate(-50%, 0);
+//   position: absolute;
+//   z-index: 1;
+// }
 
-.play-icon {
-  margin-top: 50px;
-}
+// .play-icon {
+//   margin-top: 50px;
+// }
 
 .play-info {
-  top: 238px !important;
-  width: 100% !important;
-  height: 150px !important;
+  // top: 238px !important;
+  // width: 100% !important;
+  max-height: 150px !important;
+  width: auto;
 }
