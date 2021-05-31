@@ -4,7 +4,7 @@ import { SUPPORTED_IMAGE_TYPES, verificationDocOptions } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { navigate as navigateFunc } from "../common/functions";
+import { checkPanFetchStatus, navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig, isTradingEnabled } from "../../utils/functions";
@@ -108,12 +108,8 @@ const KycUploadDocuments = (props) => {
       else navigate(getPathname.tradingExperience)
     } else {
       if (dlFlow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
-          kyc.pan.doc_status !== "approved"
-        ) {
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
           navigate(getPathname.uploadPan);
         } else {
           if (kyc.sign_status !== 'signed') {

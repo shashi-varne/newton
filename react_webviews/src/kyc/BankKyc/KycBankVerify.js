@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { checkPanFetchStatus, navigate as navigateFunc } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -143,15 +143,15 @@ const KycBankVerify = (props) => {
       else navigate(getPathname.tradingExperience)
     } else {
       if (dl_flow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-          kyc.pan.doc_status !== "approved"
-        ) {
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
           navigate(getPathname.uploadPan);
-        } else navigate(getPathname.tradingExperience);
-      } else navigate(getPathname.uploadProgress);
+        } else {
+          navigate(getPathname.tradingExperience);
+        }
+      } else {
+        navigate(getPathname.uploadProgress);
+      }
     }
   };
 

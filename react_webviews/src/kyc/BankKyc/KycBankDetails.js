@@ -12,6 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini-components/Alert";
 import {
+  checkPanFetchStatus,
   // compareObjects,
   navigate as navigateFunc,
   validateFields,
@@ -175,15 +176,15 @@ const KycBankDetails = (props) => {
       else navigate(getPathname.tradingExperience)
     } else {
       if (dl_flow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-          kyc.pan.doc_status !== "approved"
-        )
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
           navigate(getPathname.uploadPan);
-        else navigate(getPathname.tradingExperience);
-      } else navigate(getPathname.uploadProgress);
+        } else {
+          navigate(getPathname.tradingExperience);
+        }
+      } else {
+        navigate(getPathname.uploadProgress);
+      }
     }
   };
 
