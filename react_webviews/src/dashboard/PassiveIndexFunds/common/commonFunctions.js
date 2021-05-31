@@ -116,10 +116,10 @@ export async function fetch_funddetails_list() {
 
   try {
     const res = await Api.post(`https://subham-dot-plutus-staging.appspot.com/api/funds/passive/index/category/${this.state.title}`, body);
-
+    this.setState({skelton: false})
     let result = res.pfwresponse?.result?.funds;
     let fundDescription =  res.pfwresponse?.result?.category_explainer
-
+    
     if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200 && !isEmpty(result)) {
 
         this.setState({
@@ -130,6 +130,7 @@ export async function fetch_funddetails_list() {
     }
 
   } catch (err) {
+    this.setState({skelton: false})
     throw err;
   }
 };
