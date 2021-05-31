@@ -63,7 +63,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/nps/payment/callback",
     "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"];
 
-  if (landingRedirectPaths.indexOf(currentState) !== -1) {
+  if (landingRedirectPaths.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
      navigate("/landing");
      return true;
   }

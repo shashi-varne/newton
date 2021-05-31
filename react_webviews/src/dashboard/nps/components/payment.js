@@ -54,10 +54,6 @@ class NpsPaymentCallback extends Component {
       }
     }
   };
-
-  goBack = () => {
-    this.navigate('/landing');
-  }
  
   render() {
     return (
@@ -66,9 +62,6 @@ class NpsPaymentCallback extends Component {
         buttonTitle="OK"
         title="Payment Status"
         handleClick={this.handleClick}
-        headerData={{
-          goBack: this.goBack
-        }}
       >
         <div className="nps-payment-callback">
           <div
