@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
 import { getConfig, getBase64, navigate as navigateFunc } from 'utils/functions'
 import toast from '../../common/ui/Toast'
@@ -62,7 +61,7 @@ const Sign = (props) => {
     })
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const handleUpload = (method_name) => {
     if(isWeb)
@@ -94,7 +93,7 @@ const Sign = (props) => {
       const response = await upload(file, 'identification')
       if(response.status_code === 200) {
         const result = response.result
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc);
         navigate('/kyc/upload/progress')
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")

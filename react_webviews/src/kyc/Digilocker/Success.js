@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
-import { dlDocs } from '../constants'
+import { DL_DOCS } from '../constants'
+import { navigate as navigateFunc } from '../common/functions'
 import "./Digilocker.scss";
 import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
 
@@ -24,7 +25,7 @@ const Success = (props) => {
           Tap on Proceed to allow fisdom to access your following documents
         </div>
         <main className="esign-steps">
-          {dlDocs.map(({ name, icon }, idx) => (
+          {DL_DOCS.map(({ name, icon }, idx) => (
             <div className="doc flex-center" key={icon}>
               <img
                 src={require(`assets/${productName}/${icon}.svg`)}

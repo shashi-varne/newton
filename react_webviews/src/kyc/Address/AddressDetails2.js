@@ -4,7 +4,7 @@ import Toast from "../../common/ui/Toast";
 import { isEmpty } from "utils/validators";
 import { getPinCodeData, submit } from "../common/api";
 import Container from "../common/Container";
-import { kycDocNameMapper } from "../constants";
+import { DOCUMENTS_MAPPER } from "../constants";
 import {
   compareObjects,
   validateFields,
@@ -175,7 +175,7 @@ const AddressDetails2 = (props) => {
     if (isNri) {
       return "Passport";
     }
-    return kycDocNameMapper[kyc?.address_doc_type];
+    return DOCUMENTS_MAPPER[kyc?.address_doc_type];
   };
 
   return (

@@ -2,7 +2,7 @@ import React from "react";
 import Container from "../common/Container";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Alert from "../mini-components/Alert";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { storageService } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
@@ -12,10 +12,10 @@ const Complete = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
-    if (storageService().get(storageConstants.NATIVE)) {
+    if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     }
   };
 
@@ -35,7 +35,7 @@ const Complete = (props) => {
           <div className="title">Kudos, KYC is completed!</div>
           <div
             className="subtitle"
-            onClick={() => navigate(getPathname.kycReport)}
+            onClick={() => navigate(PATHNAME_MAPPER.kycReport)}
           >
             See KYC application details {" >"}
           </div>
