@@ -311,6 +311,10 @@ class Recommendations extends Component {
     this.navigate("/nps/fundreplace");
   }
 
+  goBack = () => {
+    this.navigate('/nps/amount/one-time')
+  }
+ 
   render() {
     const {
       assetAllocation,
@@ -334,6 +338,9 @@ class Recommendations extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         {!display_summary_only && (
           <div>

@@ -59,6 +59,14 @@ class EnterAmount extends Component {
     }
   };
 
+  goBack = () => {
+    let currentUser = storageService().getObject("user");
+
+    let backState = currentUser.nps_investment ? '/nps/info' : '/nps/pan';
+
+    this.navigate(backState);
+  }
+
   render() {
     return (
       <Container
@@ -69,6 +77,9 @@ class EnterAmount extends Component {
         disable={this.state.amount < 500 || this.state.amount > 500000}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div className="enter-amount">
           <section className="page nps">
