@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
 import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
+import { isDocSubmittedOrApproved, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
 import { getConfig, isTradingEnabled } from 'utils/functions'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
@@ -40,7 +40,7 @@ const Selfie = (props) => {
       setOpenBottomSheet(false)
     } else {
       if (TRADING_FLOW) {
-        if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
+        if (!isDocSubmittedOrApproved("equity_income"))
           navigate(getPathname.uploadFnOIncomeProof);
         else navigate(getPathname.kycEsign)
       } else {

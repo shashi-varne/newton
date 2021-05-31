@@ -337,7 +337,7 @@ export const companyDetails = {
 export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 export const eqkycDocsGroupMapper = {
-  "equity_pan": {
+  "pan": {
     title: "PAN details",
     doc: "PAN card"
   },
@@ -345,7 +345,7 @@ export const eqkycDocsGroupMapper = {
     title: "Signature",
     doc: "Signature"
   },
-  "equity_identification": {
+  "identification": {
     title: "Personal details",
     doc: "Selfie"
   },

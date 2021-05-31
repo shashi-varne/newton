@@ -8,7 +8,7 @@ import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
+import { isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
@@ -46,10 +46,10 @@ const Pan = (props) => {
 
   const handleOtherPlatformNavigation = () => {
     if (kyc.kyc_status === 'compliant') {
-      if (kyc.equity_identification.doc_status !== "submitted" || kyc.equity_identification.doc_status !== "approved")
+      if (!isDocSubmittedOrApproved("identification"))
         navigate(getPathname.uploadSelfie);
       else {
-        if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
+        if (!isDocSubmittedOrApproved("equity_income"))
           navigate(getPathname.uploadFnOIncomeProof);
         else navigate(getPathname.kycEsign)
       }
