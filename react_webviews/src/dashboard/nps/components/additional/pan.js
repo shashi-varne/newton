@@ -274,7 +274,7 @@ class PanDetails extends Component {
   }
 
   goBack = () => {
-    this.navigate('/invest')
+    this.navigate('/nps/info')
   }
 
   render() {
@@ -291,6 +291,9 @@ class PanDetails extends Component {
         handleClick={this.handleClick}
         goBack={this.goBack}
         handleClick1={this.handleClick}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div className="pan-details">
           <FormControl fullWidth>
