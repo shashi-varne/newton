@@ -102,7 +102,7 @@ function PassiveFundDetails() {
                 fontWeight: "700",
               }}
             >
-              Expense ratio:
+              Expense ratio:{" "}
               <span style={{ fontWeight: "400" }}>
                 {fundDetails?.portfolio?.expense_ratio}%
               </span>
@@ -297,7 +297,7 @@ function PassiveFundDetails() {
         ) : null}
         <section className="pfd-padding">
         <img src={MorningStar} style={{paddingBottom: "10px"}} alt="" />
-        <PassiveStarRating value={fundDetails?.performance?.fisdom_rating} />
+        <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
         <p className="pfd-values" style={{color: "#767E86", paddingBottom:"20px"}}>
         Funds are rated by Morningstar based on their past performance as compared to other funds in the same category. Ratings are from 1 – 5 stars with 5 being the highest for the best performing funds and 1 being the lowest for poor-performing funds.
         </p>

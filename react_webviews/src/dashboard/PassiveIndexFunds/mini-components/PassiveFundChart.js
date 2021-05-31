@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import ReactHighcharts from "react-highcharts/ReactHighstock.src";
-import "./commonStyles.scss";
 import moment from "moment";
 import $ from "jquery";
+import { nativeCallback } from "../../../utils/native_callback";
+import { getConfig } from "../../../utils/functions";
+import "./commonStyles.scss";
 
 ReactHighcharts.Highcharts.setOptions({
   lang: {
@@ -22,30 +24,29 @@ ReactHighcharts.Highcharts.addEvent(
     }
   }
 );
-
 const FundChart = (props) => {
-  const [format, setFormat] = useState("yyyy");
   const fundGraph = props?.graphData.graph_report[0].graph_data_for_amfi;
-  function calculateDurationType(max, min) {
-    var TotalDiff = max - min;
-    TotalDiff /= 60 * 60 * 24 * 1000;
-    var days = Math.abs(Math.round(TotalDiff));
-    if (days > 3 * 365) {
-      setFormat("yyyy");
-    } else if (days > 365 && days <= 3 * 365) {
-      setFormat("yyyy");
-    } else if (days > 30 * 6 && days <= 365) {
-      setFormat("ddmm");
-    } else if (days > 30 * 6 && days <= 365) {
-      setFormat("ddmm");
-    } else if (days > 30 * 3 && days <= 30 * 6) {
-      setFormat("ddmm");
-    } else if (days > 30 && days <= 30 * 3) {
-      setFormat("ddmm");
-    }
-  }
+  const productName = getConfig().productName;
+  let format = "yyyy";
   let d1Series = [];
   let duration = 0;
+
+  const prevSelectedMonth = useRef();
+  const sendEvents = (monthValue) => {
+    if (prevSelectedMonth.current !== monthValue) {
+      let eventObj = {
+        event_name: "fund_detail",
+        properties: {
+          investment_horizon: monthValue,
+          channel: productName,
+        },
+      };
+
+      nativeCallback({ events: eventObj });
+    }
+    prevSelectedMonth.current = monthValue;
+  };
+
   const chopDates = (dates1) => {
     let seriesAMin = dates1[0][0];
     let seriesAMax = dates1[dates1.length - 1][0];
@@ -190,7 +191,6 @@ const FundChart = (props) => {
         zIndex: 3,
       },
       tickPositioner: function () {
-        // calculateDurationType(this.min, this.max)
         var positions = [];
         positions.push(this.min);
         var difference = this.max - this.min;
@@ -211,7 +211,7 @@ const FundChart = (props) => {
           if (format === "yyyy")
             return (
               '<p class="xaxis-label">' +
-              moment(this.pos).format("DD MMM") +
+              moment(this.pos).format("YYYY") +
               "</p>"
             );
           if (format === "ddmm")
@@ -239,7 +239,7 @@ const FundChart = (props) => {
         y: 10,
       },
       buttonTheme: {
-        fill: "none",
+        fill: "#F0F7FF",
         stroke: "none",
         r: 4,
         width: 35,
@@ -261,31 +261,67 @@ const FundChart = (props) => {
           type: "month",
           count: 1,
           text: "1M",
+          events: {
+            click: function () {
+              format = "ddmm";
+              sendEvents("1m");
+            },
+          },
         },
         {
           type: "month",
           count: 3,
           text: "3M",
+          events: {
+            click: function () {
+              format = "ddmm";
+              sendEvents("3m");
+            },
+          },
         },
         {
           type: "month",
           count: 6,
           text: "6M",
+          events: {
+            click: function () {
+              format = "ddmm";
+              sendEvents("6m");
+            },
+          },
         },
         {
           type: "year",
           count: 1,
           text: "1Y",
+          events: {
+            click: function () {
+              format = "ddmm";
+              sendEvents("1y");
+            },
+          },
         },
         {
           type: "year",
           count: 3,
           text: "3Y",
+          events: {
+            click: function () {
+              format = "yyyy";
+              sendEvents("3y");
+            },
+          },
         },
         {
           type: "year",
           count: 5,
           text: "5Y",
+          events: {
+            click: function () {
+              format = "yyyy";
+              sendEvents("5y");
+            },
+          },
         },
       ],
     },
