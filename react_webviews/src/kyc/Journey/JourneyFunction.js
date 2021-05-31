@@ -48,13 +48,13 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       //     }
       //   ]
       // },
-      {
-        key: 'sign',
-        title: 'Signature',
-        status: 'pending',
-        isEditAllowed: true,
-        inputsForStatus: ['sign'],
-      },
+      // {
+      //   key: 'sign',
+      //   title: 'Signature',
+      //   status: 'pending',
+      //   isEditAllowed: true,
+      //   inputsForStatus: ['sign'],
+      // },
       {
         key: 'bank',
         title: 'Bank details',
@@ -79,7 +79,6 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       }
     ]
     if (TRADING_ENABLED) {
-      journeyData.splice(2, 1);
       journeyData = [...journeyData, ...tradingJourneyData];
     }
   } else if (!isCompliant && show_aadhaar) {
@@ -221,6 +220,21 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         'married'
     ) {
       journeyData[1].inputsForStatus[1].keys.push('spouse_name')
+    }
+
+    const tradingJourneyData = [
+      {
+        key: 'trading_esign',
+        title: 'Trading details & eSign',
+        status: 'pending',
+        isEditAllowed: false,
+        inputsForStatus: ['esign'],
+      }
+    ]
+
+    if (kyc.kyc_type === "manual" && TRADING_ENABLED) {
+      journeyData = journeyData.slice(0, 4);
+      journeyData = [...journeyData, ...tradingJourneyData];
     }
   }
 

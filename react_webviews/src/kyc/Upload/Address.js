@@ -103,24 +103,19 @@ const AddressUpload = (props) => {
   const handleSubmit = async () => {
     try {
       setIsApiRunning("button")
-      let result, response
+      let result;
       if (onlyFrontDocRequired) {
-        response = await upload(frontDoc, 'address', {
+        result = await upload(frontDoc, 'address', {
           address_proof_key: addressProofKey,
         })
       } else {
-        response = await upload(file, 'address', {
+        result = await upload(file, 'address', {
           address_proof_key: addressProofKey,
         })
       }
-      if(response.status_code === 200) {
-        result = response.result;
-        setKyc(result.kyc)
-        storageService().setObject(storageConstants.KYC, result.kyc)
-        navigate('/kyc/upload/progress')
-      } else {
-        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
-      }
+      setKyc(result.kyc)
+      storageService().setObject(storageConstants.KYC, result.kyc)
+      navigate('/kyc/upload/progress')
     } catch (err) {
       console.error(err)
       toast(err?.message)

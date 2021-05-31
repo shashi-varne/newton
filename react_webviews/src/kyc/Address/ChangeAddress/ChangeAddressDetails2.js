@@ -49,7 +49,7 @@ const ChangeAddressDetails2 = (props) => {
 
   const [state, setState] = useState({})
 
-  const { kyc, isLoading } = useUserKycHook()
+  const { kyc, isLoading, updateKyc } = useUserKycHook()
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -183,23 +183,18 @@ const ChangeAddressDetails2 = (props) => {
     : addressDocType
     try {
       setIsApiRunning('button')
-      let result, response
+      let result;
       if (onlyFrontDocRequired) {
-        response = await upload(frontDoc, type, {
+        result = await upload(frontDoc, type, {
           addressProofKey: addressKey,
         })
       } else {
-        response = await upload(file, type, {
+        result = await upload(file, type, {
           addressProofKey: addressKey,
         })
       }
-      if(response.status_code === 200) {
-        result = response.result;
-        storageService().setObject(storageConstants.KYC, result.kyc)
-        navigate('/my-account')
-      } else {
-        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
-      }
+      updateKyc(result.kyc)
+      navigate('/my-account')
     } catch (err) {
       toast(err?.message)
     } finally {

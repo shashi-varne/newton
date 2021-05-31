@@ -26,7 +26,7 @@ const PennySuccessDialog = ({ isOpen, redirect }) => {
           />
         </div>
         <div className="subtitle">
-          {isTradingEnabled() ?
+          {!isTradingEnabled() ?
             "Hurrah! Your bank account is added. Invest securely and safely with us."
             :
             "Now, tell us your trading experience in the next step"

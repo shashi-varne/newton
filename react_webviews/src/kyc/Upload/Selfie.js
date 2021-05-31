@@ -15,7 +15,7 @@ import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 
 const config = getConfig();
-const { productName, isSdk } = config;
+const { productName } = config;
 const TRADING_ENABLED = isTradingEnabled();
 
 const Selfie = (props) => {
@@ -35,12 +35,16 @@ const Selfie = (props) => {
   const navigate = navigateFunc.bind(props)
 
   const handleNavigation = () => {
-    if (kyc.kyc_type !== "manual" && !kyc.address.meta_data.is_nri) {
-      if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
-        navigate(getPathname.uploadFnOIncomeProof);
-      else navigate(getPathname.kycEsign)
+    if (bottomSheetType === "failed") {
+      setOpenBottomSheet(false)
     } else {
-      navigate(getPathname.uploadProgress);
+      if (TRADING_ENABLED) {
+        if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
+          navigate(getPathname.uploadFnOIncomeProof);
+        else navigate(getPathname.kycEsign)
+      } else {
+        navigate(getPathname.uploadProgress);
+      }
     }
   }
 
