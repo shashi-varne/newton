@@ -46,3 +46,38 @@
 .sdk-partner-header{
   background-color: var(--header-background) !important;
 }
+
+.sdk-refer {
+  text-align: center;
+
+  .img {
+    margin: 50px 0 10px;
+    min-height: 50px;
+  }
+
+  .refer-message-title {
+    font-size: 20px;
+    color: #160d2e;
+    margin: 20px 0 20px 0;
+  }
+
+  .refer-share-code {
+    border: 1px dashed var(--primary);
+    color: #878787;
+    border-radius: 4px;
+    padding: 6px;
+    margin: 15px 0 0 0;
+
+    .refer-share-code-text {
+      color: #160d2e;
+      font-weight: 600;
+      font-size: 16px;
+      text-transform: uppercase;
+      line-height: 30px;
+    }
+  }
+
+  .no-refer-message {
+    margin-top: 70px;
+  }
+}

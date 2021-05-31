@@ -28,6 +28,8 @@ import NPS from "./nps";
 import {getConfig} from 'utils/functions';
 import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
+import Prepare from "./Invest/components/SdkLanding/Prepare";
+import Refer from "./Invest/components/SdkLanding/Refer";
 
 const Home = (props) => {
   const { url } = props.match;
@@ -36,6 +38,8 @@ const Home = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}`} component={isSdk ? SdkLanding : Invest} />
+        <Route exact path={`${url}prepare`} component={Prepare} />
+        <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}diy`} component={DIY} />
