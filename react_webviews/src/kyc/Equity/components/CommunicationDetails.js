@@ -105,7 +105,6 @@ const CommunicationDetails = (props) => {
     setShowDotLoader(true);
     try {
       const result = await resendOtp(otpId);
-      if (!result) return;
       setOtpId(result.otp_id);
       setOtpData({
         otp: "",
@@ -132,7 +131,6 @@ const CommunicationDetails = (props) => {
         }
         setShowLoader("button");
         const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
-        if (!otpResult) return;
         updateKyc(otpResult.kyc);
         handleNavigation();
       } else {
@@ -161,7 +159,6 @@ const CommunicationDetails = (props) => {
         }
         setShowLoader("button");
         const result = await sendOtp(body);
-        if (!result) return;
         setShowOtpContainer(true);
         setOtpId(result.otp_id);
         setOtpData({
@@ -245,11 +242,7 @@ const CommunicationDetails = (props) => {
                   >
                     {googleButtonTitle}
                   </WVButton>
-                  <div className="kcd-or-divider">
-                    <div className="kcd-divider-line"></div>
-                    <div className="kcd-divider-text">OR</div>
-                    <div className="kcd-divider-line"></div>
-                  </div>
+                  <img src={require("assets/ORDivider.svg")} alt="" className="kcd-or-divider" />
                 </>
               )}
               <TextField
