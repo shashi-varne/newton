@@ -11,7 +11,7 @@ import { upload } from '../common/api';
 import { navigate as navigateFunc } from '../common/functions';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
-import { checkDocsPending } from '../services';
+import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import { getConfig } from '../../utils/functions';
 
