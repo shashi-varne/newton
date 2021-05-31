@@ -208,7 +208,7 @@ function PassiveFundDetails({ history }) {
               alt=""
             />
           </div>
-          <div style={{ paddingBottom: "10px" }}>
+          <div style={{paddingTop: "8px", paddingBottom: "10px"}}>
             <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
           </div>
           <p className="pfd-info">{`${fundDetails?.performance.ms_risk} risk | ${fundDetails?.performance?.tracking_index}`}</p>
@@ -357,7 +357,9 @@ function PassiveFundDetails({ history }) {
         ) : null}
         <section className="pfd-padding">
           <img src={MorningStar} style={{ paddingBottom: "10px" }} alt="" />
-          <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
+          <div style={{paddingBottom: "10px"}}>
+            <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
+          </div>
           <p
             className="pfd-values"
             style={{ color: "#767E86", paddingBottom: "20px" }}
