@@ -146,7 +146,7 @@ class ESignInfo extends Component {
       <Container
         showLoader={show_loader}
         title='eSign KYC'
-        handleClick={() => this.goNext()}
+        handleClick={this.goNext}
         buttonTitle='PROCEED'
         headerData={headerData}
       >
