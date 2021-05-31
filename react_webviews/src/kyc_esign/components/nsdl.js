@@ -36,7 +36,7 @@ class DigiStatus extends Component {
     let dl_flow = false;
     let show_note = false;
     if (!isEmpty(kyc) && !isEmpty(user)) {
-      if (isDigilockerFlow(kyc)) {
+      if (isDigilockerFlow()) {
         dl_flow = true;
       }
 

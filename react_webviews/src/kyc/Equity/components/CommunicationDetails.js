@@ -61,6 +61,7 @@ const CommunicationDetails = (props) => {
   const isNri = kyc.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
   const [isReadyToInvestBase, setIsReadyToInvest] = useState();
+  const [totalPages, setTotalPages] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -74,6 +75,7 @@ const CommunicationDetails = (props) => {
       data.mobile = mobileNumber;
       setFormData({ ...data });
       setIsReadyToInvest(isReadyToInvest());
+      setTotalPages(getTotalPagesInPersonalDetails())
     }
   }, [kyc, user]);
 
@@ -213,7 +215,7 @@ const CommunicationDetails = (props) => {
       title="Communication details"
       count={!isReadyToInvestBase && pageNumber}
       current={pageNumber}
-      total={getTotalPagesInPersonalDetails(kyc, user)}
+      total={totalPages}
       handleClick={handleClick}
       showLoader={showLoader}
       skelton={isLoading}

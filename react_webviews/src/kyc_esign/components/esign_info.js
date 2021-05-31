@@ -36,7 +36,7 @@ class ESignInfo extends Component {
     const kyc = storageService().getObject("kyc");
     if (!isEmpty(kyc)) {
       let dl_flow = false;
-      if (isDigilockerFlow(kyc)) {
+      if (isDigilockerFlow()) {
         dl_flow = true;
       }
       this.setState({ dl_flow, kyc });

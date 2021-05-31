@@ -25,6 +25,7 @@ const PersonalDetails3 = (props) => {
   const [form_data, setFormData] = useState({});
   const [oldState, setOldState] = useState({});
   const isEdit = props.location.state?.isEdit || false;
+  const [totalPages, setTotalPages] = useState();
   let title = "Professional details";
   if (isEdit) {
     title = "Edit professional details";
@@ -34,8 +35,8 @@ const PersonalDetails3 = (props) => {
   const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) initialize();
-  }, [kyc]);
+    if (!isEmpty(kyc) && !isEmpty(user)) initialize();
+  }, [kyc, user]);
 
   const initialize = async () => {
     let formData = {
@@ -44,6 +45,7 @@ const PersonalDetails3 = (props) => {
     };
     setFormData({ ...formData });
     setOldState(formData);
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit));
   };
 
   const handleClick = () => {
@@ -89,7 +91,7 @@ const PersonalDetails3 = (props) => {
 
   const handleNavigation = () => {
     const data = { state: { isEdit } };
-    if (!getEmailOrMobileVerifiedStatus(kyc, user)) {
+    if (!getEmailOrMobileVerifiedStatus()) {
       navigate(getPathname.communicationDetails, data);
       return;
     }
@@ -122,7 +124,7 @@ const PersonalDetails3 = (props) => {
       title={title}
       count={type === "digilocker" ? 2 : 3}
       current={type === "digilocker" ? 2 : 3}
-      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
+      total={totalPages}
     >
       <div className="kyc-personal-details">
         <main>

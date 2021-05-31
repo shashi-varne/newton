@@ -26,14 +26,15 @@ const PersonalDetails3 = (props) => {
   const isEdit = props.location.state?.isEdit || false;
   const { kyc, user, isLoading } = useUserKycHook();
   const [oldState, setOldState] = useState({});
+  const [totalPages, setTotalPages] = useState();
   let title = "Professional details";
   if (isEdit) {
     title = "Edit professional details";
   }
 
   useEffect(() => {
-    if (!isEmpty(kyc)) initialize();
-  }, [kyc]);
+    if (!isEmpty(kyc) && !isEmpty(user)) initialize();
+  }, [kyc, user]);
 
   const initialize = () => {
     let formData = {
@@ -42,6 +43,7 @@ const PersonalDetails3 = (props) => {
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit));
   };
 
   const handleClick = () => {
@@ -99,15 +101,15 @@ const PersonalDetails3 = (props) => {
     }
   };
 
-  const handleNavigation = (is_nri) => {
+  const handleNavigation = (isNri) => {
     const data = {
       state: {
         isEdit: isEdit,
         userType: "compliant",
       },
     };
-    if (getEmailOrMobileVerifiedStatus(kyc, user)) {
-      if (is_nri) {
+    if (getEmailOrMobileVerifiedStatus()) {
+      if (isNri) {
         navigate(getPathname.nriAddressDetails2, data);
       } else {
         navigate(getPathname.compliantPersonalDetails4, data);
@@ -138,7 +140,7 @@ const PersonalDetails3 = (props) => {
       title={title}
       count={3}
       current={3}
-      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
+      total={totalPages}
     >
       <div className="kyc-personal-details">
         <main>

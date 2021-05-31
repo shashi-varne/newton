@@ -29,7 +29,7 @@ const Pan = (props) => {
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      if (isDigilockerFlow(kyc)) {
+      if (isDigilockerFlow()) {
         setDlFlow(true);
       }
     }

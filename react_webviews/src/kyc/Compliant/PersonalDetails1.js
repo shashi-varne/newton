@@ -7,7 +7,6 @@ import {
   formatDate,
   dobFormatTest,
   isEmpty,
-  validateNumber,
 } from "utils/validators";
 import {
   validateFields,
@@ -26,6 +25,7 @@ const PersonalDetails1 = (props) => {
   const [oldState, setOldState] = useState({});
   let title = "Personal details";
   const [isNri, setIsNri] = useState();
+  const [totalPages, setTotalPages] = useState();
   if (isEdit) {
     title = "Edit personal details";
   }
@@ -36,7 +36,7 @@ const PersonalDetails1 = (props) => {
     if (!isEmpty(kyc)) {
       initialize();
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const initialize = async () => {
     let nri = kyc.address.meta_data.is_nri;
@@ -55,6 +55,7 @@ const PersonalDetails1 = (props) => {
     setIsNri(nri);
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
   const handleClick = () => {
@@ -143,7 +144,7 @@ const PersonalDetails1 = (props) => {
       title={title}
       count={1}
       current={1}
-      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
+      total={totalPages}
       headerData={{ goBack }}
     >
       <div className="kyc-personal-details">

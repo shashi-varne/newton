@@ -26,7 +26,7 @@ const KycUploadDocuments = (props) => {
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      if (isDigilockerFlow(kyc)) {
+      if (isDigilockerFlow()) {
         setDlFlow(true);
       }
     }

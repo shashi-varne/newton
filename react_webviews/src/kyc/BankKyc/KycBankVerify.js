@@ -37,7 +37,7 @@ const KycBankVerify = (props) => {
   }, [kyc]);
 
   const initialize = async () => {
-    if (isDigilockerFlow(kyc)) {
+    if (isDigilockerFlow()) {
       setDlFlow(true);
     }
     setBankData({ ...kyc.bank.meta_data });

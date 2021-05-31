@@ -36,7 +36,7 @@ const Sign = (props) => {
       setIsApiRunning("button")
       const result = await upload(file, 'sign')
       updateKyc(result.kyc);
-      const dlFlow = isDigilockerFlow(result.kyc);
+      const dlFlow = isDigilockerFlow();
       const type = result?.kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
 
       if (dlFlow || type === "compliant") {
