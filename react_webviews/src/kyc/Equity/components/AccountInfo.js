@@ -5,7 +5,7 @@ import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
 import { navigate as navigateFunc } from "../../common/functions";
-import { getPathname } from "../../constants";
+import { PATHNAME_MAPPER } from "../../constants";
 
 const productName = getConfig().productName;
 const benefits = [
@@ -30,7 +30,7 @@ const AccountInfo = (props) => {
   };
 
   const handleClick = () => {
-    navigate(getPathname.homeKyc);
+    navigate(PATHNAME_MAPPER.homeKyc);
   };
 
   return (

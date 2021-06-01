@@ -285,21 +285,21 @@ export const getKRAForm = async (params) => {
   return handleApi(res);
 }
 export const sendOtp = async (body) => {
-  const res = await Api.post(apiConstants.sendOtp, body)
+  const res = await Api.post(API_CONSTANTS.sendOtp, body)
   return handleApi(res);
 }
 
 export const resendOtp = async (otpId) => {
-  const res = await Api.post(`${apiConstants.resendOtp}/${otpId}`)
+  const res = await Api.post(`${API_CONSTANTS.resendOtp}/${otpId}`)
   return handleApi(res);
 }
 
 export const verifyOtp = async (body) => {
-  const res = await Api.post(`${apiConstants.verifyOtp}/${body.otpId}?otp=${body.otp}`)
+  const res = await Api.post(`${API_CONSTANTS.verifyOtp}/${body.otpId}?otp=${body.otp}`)
   return handleApi(res);
 }
 
 export const socialAuth = async (body) => {
-  const res = await Api.post(`${apiConstants.socialAuth}/${body.provider}?redirect_url=${body.redirectUrl}`)
+  const res = await Api.post(`${API_CONSTANTS.socialAuth}/${body.provider}?redirect_url=${body.redirectUrl}`)
   return handleApi(res);
 }

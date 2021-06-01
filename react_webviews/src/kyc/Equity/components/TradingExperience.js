@@ -5,7 +5,7 @@ import useUserKycHook from "../../common/hooks/userKycHook";
 import { isDocSubmittedOrApproved, navigate as navigateFunc } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
-import { getPathname } from "../../constants";
+import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
 
 const tradingExperienceValues = [
@@ -74,16 +74,16 @@ const TradingExperience = (props) => {
   const handleNavigation = () => {
     if (kyc.initial_kyc_status === "compliant") {
       if (!isDocSubmittedOrApproved("pan")) {
-        navigate(getPathname.uploadPan);
+        navigate(PATHNAME_MAPPER.uploadPan);
         return;
       }
     } 
     if (!isDocSubmittedOrApproved("identification"))
-      navigate(getPathname.uploadSelfie);
+      navigate(PATHNAME_MAPPER.uploadSelfie);
     else {
       if (!isDocSubmittedOrApproved("equity_income"))
-        navigate(getPathname.uploadFnOIncomeProof);
-      else navigate(getPathname.kycEsign)
+        navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+      else navigate(PATHNAME_MAPPER.kycEsign)
     }
   }
 

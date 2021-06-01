@@ -1,7 +1,7 @@
 import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
 import { isEmpty, storageService } from '../../utils/validators'
-import { eqkycDocsGroupMapper, verificationDocOptions, addressProofOptions } from '../constants'
+import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS } from '../constants'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -234,7 +234,7 @@ export async function getPendingDocuments(kyc = {}) {
   const pendingDocsMapper = pendingDocs.filter((group) => eqkycDocsGroupMapper[group]).map((group) => {
     let docType = "";
     if (group === "bank") {
-      verificationDocOptions.forEach((option) => {
+      VERIFICATION_DOC_OPTIONS.forEach((option) => {
         if (option.value === kyc[group]?.meta_data?.doc_type) {
           docType = option.name;
         }
@@ -242,7 +242,7 @@ export async function getPendingDocuments(kyc = {}) {
     }
 
     if (group === "address" || group === "nri_address") {
-      addressProofOptions.forEach((option) => {
+      ADDRESS_PROOF_OPTIONS.forEach((option) => {
         if (option.value === kyc[group]?.meta_data?.doc_type) {
           docType = option.name;
         }

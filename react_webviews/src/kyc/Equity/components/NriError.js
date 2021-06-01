@@ -3,7 +3,7 @@ import { navigate as navigateFunc } from "../../common/functions";
 import Container from "../../common/Container";
 import { StatusInfo } from "../mini-components/StatusInfo";
 import "./commonStyles.scss";
-import { getPathname } from "../../constants";
+import { PATHNAME_MAPPER } from "../../constants";
 import { nativeCallback } from "../../../utils/native_callback";
 
 const NriError = (props) => {
@@ -17,7 +17,7 @@ const NriError = (props) => {
         type: "primary",
         order: "1",
         title: "COMPLETE MUTUAL FUND KYC",
-        onClick: () => navigate(getPathname.journey)
+        onClick: () => navigate(PATHNAME_MAPPER.journey)
       }}
       button2Props={{
         type: "secondary",
