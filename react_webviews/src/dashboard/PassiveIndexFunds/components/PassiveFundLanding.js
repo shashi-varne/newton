@@ -99,33 +99,33 @@ class Landing extends Component {
                     }
                   />
                 </div>
-                <div className="info-container">
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    padding: "30px 0px",
+                  }}
+                  className="info-container"
+                >
                   <div className="info-block">
                     <div>
-                      <img
-                        src={require("../../../assets/passive_info1.svg")}
-                        alt=""
-                      />
+                    <img src={require("../../../assets/passive_info1.svg")} alt="" />
                     </div>
                     <p>Lower cost</p>
                   </div>
                   <p>|</p>
                   <div className="info-block">
                     <div>
-                      <img
-                        src={require("../../../assets/passive_info2.svg")}
-                        alt=""
-                      />
+                    <img src={require("../../../assets/passive_info2.svg")} alt="" />
                     </div>
                     <p>Broad diversification</p>
                   </div>
                   <p>|</p>
                   <div className="info-block">
                     <div>
-                      <img
-                        src={require("../../../assets/passive_info3.svg")}
-                        alt=""
-                      />
+                    <img src={require("../../../assets/passive_info3.svg")} alt="" />
                     </div>
                     <p>Mirror the market</p>
                   </div>
