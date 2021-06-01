@@ -50,7 +50,10 @@ const Selfie = (props) => {
   }
 
   const handleSubmit = async () => {
-    try {      
+    if (bottomSheetType === "failed") {
+      setBottomSheetType("");
+    }     
+    try { 
       let params = {};
       if (TRADING_FLOW) {
         params = {
