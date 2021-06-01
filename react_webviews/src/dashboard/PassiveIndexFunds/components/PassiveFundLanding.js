@@ -12,6 +12,7 @@ import { initialize } from "../common/commonFunctions";
 import { nativeCallback } from "../../../utils/native_callback";
 import ActivePassiveCarousel from "../mini-components/ActivePassiveCarousel";
 import KeyInsightCarousel from "../mini-components/KeyInsightCarousel";
+import { Imgc } from "../../../common/ui/Imgc";
 
 class Landing extends Component {
     constructor(props) {
@@ -91,7 +92,7 @@ class Landing extends Component {
                     loop={true}
                     light={true}
                     playIcon={
-                      <img
+                      <Imgc
                         src={require(`assets/icon_play_btn.svg`)}
                         className="react-player play-icon"
                         alt=""
