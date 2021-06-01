@@ -21,6 +21,7 @@ import { SkeltonRect } from "../../../common/ui/Skelton";
 import PassiveStarRating from "../../../common/ui/PassiveStarRating";
 import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig } from "../../../utils/functions";
+import { Imgc } from "../../../common/ui/Imgc";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -77,7 +78,7 @@ function PassiveFundDetails({ history }) {
               <p className="pfd-title">
                 {fundDetails?.performance?.legal_name}
               </p>
-              <img
+              <Imgc
                 style={{ marginLeft: "40px", width: "50px", height: "50px" }}
                 src={fundDetails?.performance?.amc_logo_small}
                 alt=""
@@ -202,7 +203,7 @@ function PassiveFundDetails({ history }) {
             <p className="pfd-title">
               {fundDetails?.performance?.friendly_name}
             </p>
-            <img
+            <Imgc
               style={{ marginLeft: "40px", width: "50px", height: "50px" }}
               src={fundDetails?.performance?.amc_logo_small}
               alt=""
@@ -356,7 +357,7 @@ function PassiveFundDetails({ history }) {
           </section>
         ) : null}
         <section className="pfd-padding">
-          <img src={MorningStar} style={{ paddingBottom: "10px" }} alt="" />
+          <Imgc src={MorningStar} style={{ paddingBottom: "10px", width: "113px", height: "22px" }} alt="" />
           <div style={{paddingBottom: "10px"}}>
             <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
           </div>

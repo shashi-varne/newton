@@ -86,9 +86,10 @@
 //   z-index: 1;
 // }
 
-// .play-icon {
-//   margin-top: 50px;
-// }
+.play-icon {
+  min-width: 80px;
+  min-height: 80px;
+}
 
 .play-info {
   max-height: 150px !important;
