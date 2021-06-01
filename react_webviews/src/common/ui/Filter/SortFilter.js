@@ -25,7 +25,7 @@ const SortFilter = ({ localSortFilter, setLocalSortFilter, SortFilterData }) => 
         value={localSortFilter}
       >
         {!isEmpty(SortFilterData) &&
-          SortFilterData.map((item) => { console.log(item, ' ???????????????? ')
+          SortFilterData.map((item) => {
             return (
               <FormControlLabel
                 value={item.value}

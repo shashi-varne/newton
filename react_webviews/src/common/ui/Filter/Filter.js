@@ -21,8 +21,9 @@ const Filter = ({
 }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(filterOptions[0])[0]);
   const [activeData, setActiveData] = useState(Object.values(filterOptions[0])[0]);
+  const [localSortFilter, setLocalSortFilter] = useState(sortFilter); 
+  
   const [localFundHouse, setLocalFundHouse] = useState(fundHouse)
-  const [localSortFilter, setLocalSortFilter] = useState(sortFilter)
   const [localFundOption, setLocalFundOption] = useState(fundOption)
 
   const close = () => {
@@ -30,9 +31,9 @@ const Filter = ({
   }
 
   const apply = () => {
-    setFundHouse(localFundHouse)
+    // setFundHouse(localFundHouse)
     setSortFilter(localSortFilter)
-    setFundOption(localFundOption)
+    // setFundOption(localFundOption)
     close()
   }
 
@@ -79,25 +80,6 @@ const Filter = ({
               setLocalSortFilter={setLocalSortFilter}
               SortFilterData={activeData}
             />
-            {activeTab === 'index' && (
-              <indexFilter
-                localSortFilter={localSortFilter}
-                setLocalSortFilter={setLocalSortFilter}
-                SortFilterData={SortFilterData}
-              />
-            )}
-            {/* {activeTab === 'Fund Option' && (
-              <OptionFilter
-                localFundOption={localFundOption}
-                setLocalFundOption={setLocalFundOption}
-              />
-            )}
-            {activeTab === 'Fund House' && (
-              <FundHouse
-                localFundHouse={localFundHouse}
-                setLocalFundHouse={setLocalFundHouse}
-              />
-            )} */}
           </div>
         </main>
         <footer className="filter-buttons">
@@ -116,3 +98,26 @@ const Filter = ({
 }
 
 export default Filter
+
+
+
+
+           {/* {activeTab === 'index' && (
+              <indexFilter
+                localSortFilter={localSortFilter}
+                setLocalSortFilter={setLocalSortFilter}
+                SortFilterData={SortFilterData}
+              />
+            )} */}
+            {/* {activeTab === 'Fund Option' && (
+              <OptionFilter
+                localFundOption={localFundOption}
+                setLocalFundOption={setLocalFundOption}
+              />
+            )}
+            {activeTab === 'Fund House' && (
+              <FundHouse
+                localFundHouse={localFundHouse}
+                setLocalFundHouse={setLocalFundHouse}
+              />
+            )} */}

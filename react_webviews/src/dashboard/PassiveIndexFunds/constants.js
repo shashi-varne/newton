@@ -1,6 +1,7 @@
 import { productName } from "./common/commonFunctions";
 import Radio from '@material-ui/core/Radio'
 import Checkbox from '@material-ui/core/Checkbox';
+import CheckIcon from '@material-ui/icons/Done'
 
 export const product_name = 'finity' || productName()
 
@@ -108,71 +109,6 @@ export const sort_filter_data = [
     },
 ]
 
-export const sort_index_data = [
-    {
-        value: "Nifty 50",
-        control: Checkbox,
-        title: "Nifty 50",
-        labelPlacement: "end",
-        color: "primary",
-    },
-    {
-        value: "Nifty Next 50",
-        control: Checkbox,
-        title: "Nifty Next 50",
-        labelPlacement: "end",
-        color: "primary",
-    },
-    {
-        value: "Nifty 100",
-        control: Checkbox,
-        title: "Nifty 100",
-        labelPlacement: "end",
-        color: "primary",
-    },
-    {
-        value: "Nifty 500",
-        control: Checkbox,
-        title: "Nifty 500",
-        labelPlacement: "end",
-        color: "primary",
-    },
-    {
-        value: "Nifty Midcap 150",
-        control: Checkbox,
-        title: "Nifty Midcap 150",
-        labelPlacement: "end",
-        color: "primary",
-    },
-    {
-        value: "Nifty Smallcap 250",
-        control: Checkbox,
-        title: "Nifty Smallcap 250",
-        labelPlacement: "end",
-        color: "primary",
-    },
-    {
-        value: "Nifty 50 Value 20",
-        control: Checkbox,
-        title: "Nifty 50 Value 20",
-        labelPlacement: "end",
-        color: "primary",
-    },
-    {
-        value: "Nifty 100 Equal Weight",
-        control: Checkbox,
-        title: "Nifty 100 Equal Weight",
-        labelPlacement: "end",
-        color: "primary",
-    },
-    {
-        value: "Nifty Junior",
-        control: Checkbox,
-        title: "Nifty Junior",
-        labelPlacement: "end",
-        color: "primary",
-    },
-]
 
 export const fund_option_data = [
     {
@@ -200,7 +136,7 @@ export const filter_options = [
         "Sort by": sort_filter_data
     },
     {
-        "index": sort_index_data
+        "index": [] //   [ THIS DATA IS APPENED BY API ]
     },
     {
         "Fund Option": fund_option_data

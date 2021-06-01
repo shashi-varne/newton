@@ -1,8 +1,4 @@
 import React, { useState } from 'react'
-
-// import Filter from './Filter'
-// import Cart from './Cart'
-// import DiyCartButton from './CartButton'
 import FilterButton from "./FilterButton";
 import Filter from "./Filter";
 import "./commonStyles.scss"
@@ -12,10 +8,19 @@ const isMobileDevice = getConfig().isMobileDevice;
 const CartFooter = ({
     SortFilterData,
     filterOptions,
+    getSortedFilter,
     ...props
 }) => {
     const [filterActive, setFilterActive] = useState(false);
     const [cartActive, setCartActive] = useState(false)
+    const [sortFilter, setSortFilter] = useState(false);
+
+
+
+    getSortedFilter(sortFilter)
+
+
+
     return (
         <footer className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} >
             <FilterButton
@@ -26,6 +31,7 @@ const CartFooter = ({
                 isOpen={filterActive}
                 setFilterActive={setFilterActive}
                 SortFilterData={SortFilterData}
+                setSortFilter={setSortFilter}
                 filterOptions={filterOptions}
             />
         </footer>

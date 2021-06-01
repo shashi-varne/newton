@@ -1,4 +1,5 @@
 import { storageService } from "utils/validators";
+import Radio from '@material-ui/core/Radio'
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
@@ -124,14 +125,13 @@ export async function fetch_funddetails_list() {
 
     if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200 && !isEmpty(result)) {
 
-      const fund_house = getFundHouses(result); console.log(" fund_house ", fund_house)
-
-
+      getFilterNames(result, 'fund_house', 'Fund House');  // responce |  value |  Name
+      getFilterNames(result, 'tracking_index', 'index');
 
       this.setState({
         result: result,
         fundDescription: fundDescription,
-        getFundHouses: fund_house
+        filter_options: filter_options
       })
 
     }
@@ -143,10 +143,10 @@ export async function fetch_funddetails_list() {
 };
 
 
-export function getFundHouses(result) {
+export function getFilterNames(result, Value, name) {
 
   if (result.length > 0) {
-    const fundsHouseArr = result.map((item) => item.fund_house)
+    const fundsHouseArr = result.map((item) => item[Value])
     const uniqueSet = new Set(fundsHouseArr)
     var uniqueArr = Array.from(uniqueSet)
   }
@@ -154,8 +154,8 @@ export function getFundHouses(result) {
   if (!isEmpty(uniqueArr)) {
     const fund_house = uniqueArr.map((item, idx) => {
       return ({
-        value: 'item',
-        control: CheckIcon,
+        value: 'item' + idx,
+        control: Radio,
         title: item,
         labelPlacement: "end",
         color: "primary",
@@ -164,8 +164,8 @@ export function getFundHouses(result) {
 
     filter_options.forEach(element => {
 
-      if (!!element['Fund House']) {
-        element['Fund House'] = fund_house
+      if (!!element[name]) {
+        element[name] = fund_house
       }
 
     });
