@@ -49,7 +49,8 @@ class FundList extends Component {
 
     yearFilter = (time) => {
         this.setState({
-            selected: selected_year(time)
+            selected: selected_year(time),
+            checked: time,
         })
     }
 
@@ -99,7 +100,7 @@ class FundList extends Component {
 
                     <YearFilter
                         filterArray={year_filters}
-                        selected={this.state.selected}
+                        selected={this.state.checked}
                         onclick={this.yearFilter}
                     />
 

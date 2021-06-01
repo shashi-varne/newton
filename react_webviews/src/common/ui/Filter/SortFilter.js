@@ -56,11 +56,8 @@ const SortFilter = ({
                   />
                 }
                 label={
-                  <div className="fc-title">
-                    {item.title}
-                    {item.subtitle && (
-                      <p className="fc-subtitle">{item.subtitle}</p>
-                    )}
+                  <div className="fc-title">{item.title}
+                    {item.subtitle && <p className="fc-subtitle">{item.subtitle}</p>}
                   </div>
                 }
                 onChange={handleChange}

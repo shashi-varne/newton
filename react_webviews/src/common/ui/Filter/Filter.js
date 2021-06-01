@@ -3,13 +3,12 @@ import DiyDialog from './DiyDialog'
 import Button from 'common/ui/Button'
 import { isEmpty } from "utils/validators";
 import SortFilter from './SortFilter'
-import OptionFilter from './OptionFilter'
-import FundHouse from './FundHouse'
 import "./commonStyles.scss"
 
 const Filter = ({
   isOpen,
   setFilterActive,
+  sortFilter,
   setSortFilter,
   filterOptions,
 }) => {
@@ -27,8 +26,9 @@ const Filter = ({
   }
 
   const reset = () => {
-    setSortFilter('returns')
-    close()
+    setLocalSortFilter('returns')
+    setActiveTab(activeTab)
+    // close()
   }
   
   return (
@@ -81,4 +81,4 @@ const Filter = ({
   )
 }
 
-export default Filter
+export default Filter;
