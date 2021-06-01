@@ -12,6 +12,7 @@ import { initialize } from "../common/commonFunctions";
 import { nativeCallback } from "../../../utils/native_callback";
 import ActivePassiveCarousel from "../mini-components/ActivePassiveCarousel";
 import KeyInsightCarousel from "../mini-components/KeyInsightCarousel";
+import VideoBlock from "../mini-components/VideoBlock"
 
 class Landing extends Component {
     constructor(props) {
@@ -99,47 +100,9 @@ class Landing extends Component {
                     }
                   />
                 </div>
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    padding: "30px 0px",
-                  }}
-                  className="info-container"
-                >
-                  <div className="info-block">
-                    <div>
-                    <img src={require("../../../assets/passive_info1.svg")} alt="" />
-                    </div>
-                    <p>Lower cost</p>
-                  </div>
-                  <p>|</p>
-                  <div className="info-block">
-                    <div>
-                    <img src={require("../../../assets/passive_info2.svg")} alt="" />
-                    </div>
-                    <p>Broad diversification</p>
-                  </div>
-                  <p>|</p>
-                  <div className="info-block">
-                    <div>
-                    <img src={require("../../../assets/passive_info3.svg")} alt="" />
-                    </div>
-                    <p>Mirror the market</p>
-                  </div>
-                </div>
+                <VideoBlock/>
               </div>
-              <div
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "white",
-                  zIndex: "1",
-                  borderRadius: "7px",
-                  marginTop: "-25px",
-                }}
-              >
+              <div className="content-main">
                 <h1 className="category-title">Top index funds</h1>
                 <MenuListDropDown
                   menulistProducts={fund_category}
