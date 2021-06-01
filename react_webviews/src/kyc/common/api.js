@@ -167,6 +167,7 @@ export const upload = async (file, type, data = {}) => {
         formData.append('kyc_product_type', data.kyc_product_type);
         formData.append('location_coordinates', `${data.lat},${data.lng}`);
         formData.append('live_score', data.live_score);
+        formData.append('forced', data.forced);
         break;
       default:
         break

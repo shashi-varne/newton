@@ -61,6 +61,13 @@ const Selfie = (props) => {
         };
       }
 
+      if (TRADING_ENABLED && kyc.kyc_type === "manual") {
+        params = {
+          forced: true,
+          kyc_product_type: 'equity'
+        };
+      }
+
       setIsApiRunning("button");
       const result = await upload(file, 'identification', params);
       updateKyc(result.kyc);
