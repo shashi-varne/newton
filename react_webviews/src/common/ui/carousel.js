@@ -3,7 +3,6 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 import {getConfig} from 'utils/functions';
-
 import { Imgc} from './Imgc';
 
 class ReactResponsiveCarousel extends Component {
@@ -42,14 +41,19 @@ class ReactResponsiveCarousel extends Component {
         </div>
       )
     }
-
+  renderCustomCarousel = (Component, data, index) => {
+    return <Component data={data} key={index} />
+  }
   eventChangeFunction = (index) => {
     this.onChangeEvent();
     this.props.callbackFromParent(index);
   };
 
+  
+
   render() {
     let productName = getConfig().productName;
+    let arrowProps = {};
     const indicatorStyles = {
       background: productName !== 'fisdom' ?  "#9CC0FF" : "#DFD8EF",
       width: "20px",
@@ -59,7 +63,39 @@ class ReactResponsiveCarousel extends Component {
       borderRadius: "1.5px",
     };
 
-    if(this.props.CarouselImg.length === 1) {
+    const arrowStyles = {
+      position: "absolute",
+      zIndex: 2,
+      top: "40px",
+      width: 32,
+      height: 32,
+      cursor: "pointer",
+    };
+
+    if (this.props.customIndicatorButton) {
+      arrowProps["renderArrowPrev"] = (onClickHandler, hasPrev, label) =>
+        hasPrev && (
+          <div
+            onClick={onClickHandler}
+            title={label}
+            style={{ ...arrowStyles, left: 0 }}
+          >
+            <img src={require('assets/carousel-prev.svg')} alt="prev-btn" />
+          </div>
+        );
+      arrowProps["renderArrowNext"] = (onClickHandler, hasNext, label) =>
+        hasNext && (
+          <div
+            onClick={onClickHandler}
+            title={label}
+            style={{ ...arrowStyles, right: 0 }}
+          >
+            <img src={require('assets/carousel-next.svg')} alt="next-btn" />
+          </div>
+        );
+    }
+    
+    if(this.props?.CarouselImg?.length === 1 || this.props?.customData?.length === 1) {
       indicatorStyles.display = 'none';
     }
 
@@ -78,7 +114,7 @@ class ReactResponsiveCarousel extends Component {
               <li
                 style={{
                   ...indicatorStyles,
-                  background:  getConfig().styles.primaryColor,
+                  background: getConfig().styles.primaryColor,
                   width: "10px",
                 }}
               />
@@ -86,8 +122,9 @@ class ReactResponsiveCarousel extends Component {
           }
           return <li onClick={onClickHandler} style={indicatorStyles} />;
         }}
+        {...arrowProps}
       >
-        {this.props.CarouselImg.map(this.renderOfferImages)}
+        {this.props.customFormatCarousal ? this.props.customData.map((item, index)=>this.renderCustomCarousel(this.props.customComponent, item, index)) : this.props.CarouselImg.map(this.renderOfferImages)}
       </Carousel>
     );
   }
