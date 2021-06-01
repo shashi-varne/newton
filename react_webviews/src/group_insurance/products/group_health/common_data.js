@@ -1392,8 +1392,6 @@ export function setReportData(termData, group_insurance_policies, health_insuran
                 color: y.cssMapper.color,
                 topTextRightColor: bracketColor
             }
-            console.log(provider, frequency, y.product_key)
-            console.log(y)
             var bottomValues = [
              {
                 'title': 'COVER AMOUNT',

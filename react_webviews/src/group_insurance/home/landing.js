@@ -307,9 +307,6 @@ class Landing extends Component {
         errorData={this.state.errorData}
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
-           <div onClick={this.policymove}>
-           <Imgc style={{ margin: '-15px 5px 30px 0', width: '100%', minHeight: '140px', cursor: 'pointer'}} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
-           </div>
            {/* <div onClick={this.policymove}>
             <img style={{ margin: '-15px 5px 30px 0', width: '100%', cursor: 'pointer' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div> */}

@@ -8,6 +8,8 @@ import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import {Imgc} from '../../../../common/ui/Imgc'
 import Button from '../../../../common/ui/Button'
 import {formatAmount, isEmpty, compareObjects} from '../../../../utils/validators';
+import Button from '../../../../common/ui/Button'
+import { compareObjects } from 'utils/validators';
 
 class GroupHealthPlanList extends Component {
 

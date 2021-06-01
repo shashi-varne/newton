@@ -117,7 +117,6 @@ class Report extends Component {
 
   redirectCards = (policy) => {
     let policy_type = policy.policy_type ? policy.policy_type : ''
-    console.log(policy.id)
     this.sendEvents('next', policy.key, policy_type , policy, this.state.selectedTab);
     let path = '';
     let key = policy.key;
@@ -136,7 +135,7 @@ class Report extends Component {
     }
 
     storageService().setObject('reportSelectedTab', this.state.selectedTab )
-    // this.navigate(path);
+    this.navigate(path);
   }
 
   loadMore = async () => {
