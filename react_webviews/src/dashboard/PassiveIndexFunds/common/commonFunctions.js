@@ -1,9 +1,12 @@
 import { storageService } from "utils/validators";
+import Radio from '@material-ui/core/Radio'
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
+import CheckIcon from '@material-ui/icons/Done'
 import toast from "../../../common/ui/Toast";
+import { filter_options } from "../constants"
 
 export const genericErrMsg = "Something went wrong";
 
@@ -116,21 +119,59 @@ export async function fetch_funddetails_list() {
 
   try {
     const res = await Api.post(`https://subham-dot-plutus-staging.appspot.com/api/funds/passive/index/category/${this.state.title}`, body);
-    this.setState({skelton: false})
+    this.setState({ skelton: false })
     let result = res.pfwresponse?.result?.funds;
-    let fundDescription =  res.pfwresponse?.result?.category_explainer
-    
+    let fundDescription = res.pfwresponse?.result?.category_explainer
+
     if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200 && !isEmpty(result)) {
 
-        this.setState({
-          result: result,
-          fundDescription: fundDescription
-        })
+      getFilterNames(result, 'fund_house', 'Fund House');  // responce |  value |  Name
+      getFilterNames(result, 'tracking_index', 'index');
+
+      this.setState({
+        result: result,
+        fundDescription: fundDescription,
+        filter_options: filter_options
+      })
 
     }
 
   } catch (err) {
-    this.setState({skelton: false})
+    this.setState({ skelton: false })
     throw err;
   }
 };
+
+
+export function getFilterNames(result, Value, name) {
+
+  if (result.length > 0) {
+    const fundsHouseArr = result.map((item) => item[Value])
+    const uniqueSet = new Set(fundsHouseArr)
+    var uniqueArr = Array.from(uniqueSet)
+  }
+
+  if (!isEmpty(uniqueArr)) {
+    const fund_house = uniqueArr.map((item, idx) => {
+      return ({
+        value: 'item' + idx,
+        control: Radio,
+        title: item,
+        labelPlacement: "end",
+        color: "primary",
+      });
+    })
+
+    filter_options.forEach(element => {
+
+      if (!!element[name]) {
+        element[name] = fund_house
+      }
+
+    });
+    return filter_options;
+  }
+
+  return filter_options;
+
+}

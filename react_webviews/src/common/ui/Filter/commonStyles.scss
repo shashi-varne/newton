@@ -1,3 +1,27 @@
+.MuiFormControlLabel-root{
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+ .fc-title{
+    position: relative;
+    line-height: 21px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #161A2E;
+    width: 100vw;
+    margin-left: 5px;
+    margin-bottom: 10px;
+   }
+
+ .fc-subtitle{
+    position : absolute;
+    margin-top: 5px;
+    color: #767E86;
+    font-size: 13px;
+    line-height: 18px;
+  }
+}
+
 .filter-buttons {
 //   padding: 20px;
   .FlexButton {

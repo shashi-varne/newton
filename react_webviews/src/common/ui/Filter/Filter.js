@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import DiyDialog from './DiyDialog'
 import Button from 'common/ui/Button'
-
+import { isEmpty } from "utils/validators";
 import SortFilter from './SortFilter'
 import OptionFilter from './OptionFilter'
 import FundHouse from './FundHouse'
@@ -16,10 +16,14 @@ const Filter = ({
   setFundHouse,
   setSortFilter,
   setFundOption,
+  SortFilterData,
+  filterOptions,
 }) => {
-  const [activeTab, setActiveTab] = useState('sort')
+  const [activeTab, setActiveTab] = useState(Object.keys(filterOptions[0])[0]);
+  const [activeData, setActiveData] = useState(Object.values(filterOptions[0])[0]);
+  const [localSortFilter, setLocalSortFilter] = useState(sortFilter); 
+  
   const [localFundHouse, setLocalFundHouse] = useState(fundHouse)
-  const [localSortFilter, setLocalSortFilter] = useState(sortFilter)
   const [localFundOption, setLocalFundOption] = useState(fundOption)
 
   const close = () => {
@@ -27,9 +31,9 @@ const Filter = ({
   }
 
   const apply = () => {
-    setFundHouse(localFundHouse)
+    // setFundHouse(localFundHouse)
     setSortFilter(localSortFilter)
-    setFundOption(localFundOption)
+    // setFundOption(localFundOption)
     close()
   }
 
@@ -51,51 +55,31 @@ const Filter = ({
         <main className="filter">
           <div className="title">
             <ul>
-              <li
-                role="button"
-                tabIndex="0"
-                onClick={() => setActiveTab('sort')}
-                className={activeTab === 'sort' ? 'selected' : 'notselected'}
-              >
-                Sort
-              </li>
-              <li
-                role="button"
-                tabIndex="0"
-                onClick={() => setActiveTab('fundOption')}
-                className={activeTab === 'fundOption' ? 'selected' : 'notselected'}
-              >
-                Fund Option
-              </li>
-              <li
-                role="button"
-                tabIndex="0"
-                onClick={() => setActiveTab('fundHouse')}
-                className={activeTab === 'fundHouse' ? 'selected' : 'notselected'}
-              >
-                Fund House
-              </li>
+              {!isEmpty(filterOptions) &&
+                filterOptions.map((item) => {
+                  let filter_options = Object.keys(item)[0];
+                  return (
+                    <li
+                      role="button"
+                      tabIndex="0"
+                      onClick={() => {
+                        setActiveTab(filter_options);
+                        setActiveData(item[filter_options])
+                      }}
+                      className={activeTab === filter_options ? 'selected' : ''}
+                    >
+                      {filter_options}
+                    </li>
+                  );
+                })}
             </ul>
           </div>
           <div className="body">
-            {activeTab === 'sort' && (
-              <SortFilter
-                localSortFilter={localSortFilter}
-                setLocalSortFilter={setLocalSortFilter}
-              />
-            )}
-            {activeTab === 'fundOption' && (
-              <OptionFilter
-                localFundOption={localFundOption}
-                setLocalFundOption={setLocalFundOption}
-              />
-            )}
-            {activeTab === 'fundHouse' && (
-              <FundHouse
-                localFundHouse={localFundHouse}
-                setLocalFundHouse={setLocalFundHouse}
-              />
-            )}
+            <SortFilter
+              localSortFilter={localSortFilter}
+              setLocalSortFilter={setLocalSortFilter}
+              SortFilterData={activeData}
+            />
           </div>
         </main>
         <footer className="filter-buttons">
@@ -114,3 +98,26 @@ const Filter = ({
 }
 
 export default Filter
+
+
+
+
+           {/* {activeTab === 'index' && (
+              <indexFilter
+                localSortFilter={localSortFilter}
+                setLocalSortFilter={setLocalSortFilter}
+                SortFilterData={SortFilterData}
+              />
+            )} */}
+            {/* {activeTab === 'Fund Option' && (
+              <OptionFilter
+                localFundOption={localFundOption}
+                setLocalFundOption={setLocalFundOption}
+              />
+            )}
+            {activeTab === 'Fund House' && (
+              <FundHouse
+                localFundHouse={localFundHouse}
+                setLocalFundHouse={setLocalFundHouse}
+              />
+            )} */}

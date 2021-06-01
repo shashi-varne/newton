@@ -1,6 +1,9 @@
 import { productName } from "./common/commonFunctions";
+import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckIcon from '@material-ui/icons/Done'
 
-export const product_name = 'finity'  //productName()
+export const product_name = 'finity' || productName()
 
 
 export const keyInsightsCarousel = [
@@ -116,3 +119,84 @@ export const year_filters = [
         text: "5Y",
     },
 ]
+
+
+export const sort_filter_data = [
+    {
+        value: "expense_ratio",
+        control: Radio,
+        title: "Expense ratio",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Low to hight',
+    },
+    {
+        value: "tracking_error",
+        control: Radio,
+        title: "Tracking error",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Low to hight',
+    },
+    {
+        value: "returns",
+        control: Radio,
+        title: "Returns",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Hight to low',
+    },
+    {
+        value: "rating",
+        control: Radio,
+        title: "Ratings",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Hight to low',
+    },
+    {
+        value: "fundsize",
+        control: Radio,
+        title: "Fund size",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Hight to low',
+    },
+]
+
+
+export const fund_option_data = [
+    {
+        value: 'Growth',
+        control: Radio,
+        title: "Growth",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: 'truDividende',
+        control: Radio,
+        title: "Dividend",
+        labelPlacement: "end",
+        color: "primary",
+    },
+]
+
+
+
+
+
+export const filter_options = [
+    {
+        "Sort by": sort_filter_data
+    },
+    {
+        "index": [] //   [ THIS DATA IS APPENED BY API ]
+    },
+    {
+        "Fund Option": fund_option_data
+    },
+    {
+        "Fund House": []  //   [ THIS DATA IS APPENED BY API ]
+    }
+];
