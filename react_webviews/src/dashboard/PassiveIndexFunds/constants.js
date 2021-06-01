@@ -174,7 +174,7 @@ export const fund_option_data = [
         color: "primary",
     },
     {
-        value: 'truDividende',
+        value: 'Dividende',
         control: Radio,
         title: "Dividend",
         labelPlacement: "end",

@@ -181,7 +181,7 @@ export function getFilterNames(result, Value, name) {
   if (!isEmpty(uniqueArr)) {
     const fund_house = uniqueArr.map((item, idx) => {
       return ({
-        value: 'item' + idx,
+        value: item,
         control: Radio,
         title: item,
         labelPlacement: "end",

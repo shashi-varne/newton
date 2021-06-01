@@ -11,7 +11,6 @@ import "./commonStyles.scss"
 const SortFilter = ({ localSortFilter, setLocalSortFilter, SortFilterData }) => {
 
   const handleChange = (event) => {
-    console.log(event.target.value)
     setLocalSortFilter(event.target.value)
   }
 
@@ -31,9 +30,9 @@ const SortFilter = ({ localSortFilter, setLocalSortFilter, SortFilterData }) => 
                 value={item.value}
                 control={<item.control color={item.color} />}
                 label={
-                    <div className="fc-title">{item.title}
-                      {item.subtitle && <p className="fc-subtitle">{item.subtitle}</p>}
-                    </div>
+                  <div className="fc-title">{item.title}
+                    {item.subtitle && <p className="fc-subtitle">{item.subtitle}</p>}
+                  </div>
                 }
                 labelPlacement={item.labelPlacement}
               >

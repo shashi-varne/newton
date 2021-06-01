@@ -49,7 +49,8 @@ class FundList extends Component {
 
     yearFilter = (time) => {
         this.setState({
-            selected: selected_year(time)
+            selected: selected_year(time),
+            checked: time,
         })
     }
 
@@ -93,14 +94,13 @@ class FundList extends Component {
                 errorData={this.state.errorData}
             >
                 <div>
-                    {/* <h1 className="category-title">{this.state.title}</h1> */}
                     {this.state.fundDescription && (
                         <p className="category-description">{this.state.fundDescription.substring(0, 90)}<span style={this.state.expand ? {} : { display: "none" }}>{this.state.fundDescription.substring(91)}</span>...<span className="category-desc-button" onClick={this.handleExpand}>{this.state.expand ? " LESS" : " MORE"}</span></p>
                     )}
 
                     <YearFilter
                         filterArray={year_filters}
-                        selected={this.state.selected}
+                        selected={this.state.checked}
                         onclick={this.yearFilter}
                     />
 
@@ -127,14 +127,6 @@ class FundList extends Component {
                         fundsList={result}
                         filterOptions={filter_options}
                         getSortedFilter={this.setSortFilter}
-                    // sortFilter={sortFilter}
-                    // fundHouse={fundHouse}
-                    // fundOption={fundOption}
-                    // setSortFilter={setSortFilter}
-                    // setFundHouse={setFundHouse}
-                    // setFundsList={setFundOption}
-                    // setFundOption={setFundOption}
-                    // {...parentProps}
                     />
                 </div>
             </Container>

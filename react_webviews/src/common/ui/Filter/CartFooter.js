@@ -12,7 +12,6 @@ const CartFooter = ({
     ...props
 }) => {
     const [filterActive, setFilterActive] = useState(false);
-    const [cartActive, setCartActive] = useState(false)
     const [sortFilter, setSortFilter] = useState(false);
 
 

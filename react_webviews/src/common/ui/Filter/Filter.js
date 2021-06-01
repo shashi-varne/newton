@@ -3,48 +3,31 @@ import DiyDialog from './DiyDialog'
 import Button from 'common/ui/Button'
 import { isEmpty } from "utils/validators";
 import SortFilter from './SortFilter'
-import OptionFilter from './OptionFilter'
-import FundHouse from './FundHouse'
 import "./commonStyles.scss"
 
 const Filter = ({
   isOpen,
   setFilterActive,
-  fundHouse,
   sortFilter,
-  fundOption,
-  setFundHouse,
   setSortFilter,
-  setFundOption,
-  SortFilterData,
   filterOptions,
 }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(filterOptions[0])[0]);
   const [activeData, setActiveData] = useState(Object.values(filterOptions[0])[0]);
   const [localSortFilter, setLocalSortFilter] = useState(sortFilter); 
   
-  const [localFundHouse, setLocalFundHouse] = useState(fundHouse)
-  const [localFundOption, setLocalFundOption] = useState(fundOption)
-
   const close = () => {
     setFilterActive(false)
   }
 
   const apply = () => {
-    // setFundHouse(localFundHouse)
     setSortFilter(localSortFilter)
-    // setFundOption(localFundOption)
     close()
   }
 
   const reset = () => {
-    setFundOption('growth')
-    setSortFilter('returns')
-    setFundHouse('')
-    setLocalFundOption('growth')
     setLocalSortFilter('returns')
-    setLocalFundHouse('')
-    setActiveTab('sort')
+    setActiveTab(activeTab)
     // close()
   }
 
@@ -97,27 +80,4 @@ const Filter = ({
   )
 }
 
-export default Filter
-
-
-
-
-           {/* {activeTab === 'index' && (
-              <indexFilter
-                localSortFilter={localSortFilter}
-                setLocalSortFilter={setLocalSortFilter}
-                SortFilterData={SortFilterData}
-              />
-            )} */}
-            {/* {activeTab === 'Fund Option' && (
-              <OptionFilter
-                localFundOption={localFundOption}
-                setLocalFundOption={setLocalFundOption}
-              />
-            )}
-            {activeTab === 'Fund House' && (
-              <FundHouse
-                localFundHouse={localFundHouse}
-                setLocalFundHouse={setLocalFundHouse}
-              />
-            )} */}
+export default Filter;
