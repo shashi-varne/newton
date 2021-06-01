@@ -103,15 +103,32 @@ class Landing extends Component {
                   style={{
                     width: "100%",
                     display: "flex",
-                    justifyContent: "center",
+                    justifyContent: "space-around",
+                    alignItems: "center",
                     padding: "30px 0px",
                   }}
+                  className="info-container"
                 >
-                  <img
-                    src={require(`assets/passive_index_video_info.svg`)}
-                    className="react-player play-info"
-                    alt=""
-                  />
+                  <div className="info-block">
+                    <div>
+                    <img src={require("../../../assets/passive_info1.svg")} alt="" />
+                    </div>
+                    <p>Lower cost</p>
+                  </div>
+                  <p>|</p>
+                  <div className="info-block">
+                    <div>
+                    <img src={require("../../../assets/passive_info2.svg")} alt="" />
+                    </div>
+                    <p>Broad diversification</p>
+                  </div>
+                  <p>|</p>
+                  <div className="info-block">
+                    <div>
+                    <img src={require("../../../assets/passive_info3.svg")} alt="" />
+                    </div>
+                    <p>Mirror the market</p>
+                  </div>
                 </div>
               </div>
               <div
