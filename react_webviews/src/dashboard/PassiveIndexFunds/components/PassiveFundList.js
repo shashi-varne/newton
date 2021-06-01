@@ -122,9 +122,7 @@ class FundList extends Component {
                                 );
                             })}
                     </React.Fragment>
-
                     <CartFooter
-                        fundsList={result}
                         filterOptions={filter_options}
                         getSortedFilter={this.setSortFilter}
                     />

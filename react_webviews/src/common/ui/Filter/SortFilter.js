@@ -1,47 +1,73 @@
-import React from 'react';
-import Radio from '@material-ui/core/Radio';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import React from "react";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { isEmpty } from "utils/validators";
-import RadioGroup from '@material-ui/core/RadioGroup'
-import "./commonStyles.scss"
+// import RadioGroup from "@material-ui/core/RadioGroup";
+import "./commonStyles.scss";
 
-const SortFilter = ({ localSortFilter, setLocalSortFilter, SortFilterData }) => {
-
+const SortFilter = ({
+  selectedTab,
+  localSortFilter,
+  setLocalSortFilter,
+  SortFilterData,
+}) => {
   const handleChange = (event) => {
-    setLocalSortFilter(event.target.value)
-  }
-
+    if (event.target.type === "radio")
+      setLocalSortFilter({
+        ...localSortFilter,
+        [selectedTab]: event.target.value,
+      });
+    else {
+      let presentSelected = localSortFilter[selectedTab] || [];
+      if (presentSelected.includes(event.target.value)) {
+        let newArray = presentSelected.filter(
+          (item) => item !== event.target.value
+        );
+        setLocalSortFilter({ ...localSortFilter, [selectedTab]: newArray });
+      } else {
+        presentSelected.push(event.target.value);
+        setLocalSortFilter({
+          ...localSortFilter,
+          [selectedTab]: presentSelected,
+        });
+      }
+    }
+  };
   return (
     <FormControl component="fieldset" className="diy-sort-filter">
-      <RadioGroup
+      {/* <RadioGroup
         aria-label="Returns"
         name="sortFilter"
         className=""
-        onChange={handleChange}
-        value={localSortFilter}
-      >
+        // value={localSortFilter[selectedTab]}
+      > */}
         {!isEmpty(SortFilterData) &&
           SortFilterData.map((item) => {
             return (
               <FormControlLabel
                 value={item.value}
-                control={<item.control color={item.color} />}
+                name={item.isMulti}
+                control={
+                  <item.control
+                    checked={(localSortFilter[selectedTab] || []).includes(
+                      item.value
+                    )}
+                    color={item.color}
+                  />
+                }
                 label={
                   <div className="fc-title">{item.title}
                     {item.subtitle && <p className="fc-subtitle">{item.subtitle}</p>}
                   </div>
                 }
+                onChange={handleChange}
                 labelPlacement={item.labelPlacement}
-              >
-              </FormControlLabel>
+              ></FormControlLabel>
             );
           })}
-      </RadioGroup>
+      {/* </RadioGroup> */}
     </FormControl>
-  )
-}
+  );
+};
 
 export default SortFilter;

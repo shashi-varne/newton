@@ -7,6 +7,7 @@ import { isEmpty } from "utils/validators";
 import CheckIcon from '@material-ui/icons/Done'
 import toast from "../../../common/ui/Toast";
 import { filter_options } from "../constants"
+import Checkbox from '@material-ui/core/Checkbox';
 
 export const genericErrMsg = "Something went wrong";
 
@@ -153,7 +154,7 @@ export async function fetch_funddetails_list() {
     if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200 && !isEmpty(result)) {
 
       getFilterNames(result, 'fund_house', 'Fund House');  // responce |  value |  Name
-      getFilterNames(result, 'tracking_index', 'index');
+      getFilterNames(result, 'tracking_index', 'Index');
 
       this.setState({
         result: result,
@@ -182,7 +183,7 @@ export function getFilterNames(result, Value, name) {
     const fund_house = uniqueArr.map((item, idx) => {
       return ({
         value: item,
-        control: Radio,
+        control: Checkbox,
         title: item,
         labelPlacement: "end",
         color: "primary",

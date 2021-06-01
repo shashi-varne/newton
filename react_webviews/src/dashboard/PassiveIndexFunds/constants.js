@@ -191,7 +191,7 @@ export const filter_options = [
         "Sort by": sort_filter_data
     },
     {
-        "index": [] //   [ THIS DATA IS APPENED BY API ]
+        "Index": [] //   [ THIS DATA IS APPENED BY API ]
     },
     {
         "Fund Option": fund_option_data

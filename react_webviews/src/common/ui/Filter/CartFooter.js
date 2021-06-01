@@ -6,7 +6,6 @@ import { getConfig } from '../../../utils/functions';
 
 const isMobileDevice = getConfig().isMobileDevice;
 const CartFooter = ({
-    SortFilterData,
     filterOptions,
     getSortedFilter,
     ...props
@@ -22,6 +21,10 @@ const CartFooter = ({
 
     return (
         <footer className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} >
+            {/* <div
+                className="filter-toggle-button"
+                onClick={() => setFilterActive(true)}
+            ><img src={require('../../../assets/filter_icon.svg')} /><p><b>Filter</b></p></div> */}
             <FilterButton
                 className="button diy-filter-button"
                 onClick={() => setFilterActive(true)}
@@ -29,7 +32,6 @@ const CartFooter = ({
             <Filter
                 isOpen={filterActive}
                 setFilterActive={setFilterActive}
-                SortFilterData={SortFilterData}
                 setSortFilter={setSortFilter}
                 filterOptions={filterOptions}
             />

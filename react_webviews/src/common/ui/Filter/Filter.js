@@ -14,7 +14,7 @@ const Filter = ({
 }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(filterOptions[0])[0]);
   const [activeData, setActiveData] = useState(Object.values(filterOptions[0])[0]);
-  const [localSortFilter, setLocalSortFilter] = useState(sortFilter); 
+  const [localSortFilter, setLocalSortFilter] = useState({}); 
   
   const close = () => {
     setFilterActive(false)
@@ -30,7 +30,7 @@ const Filter = ({
     setActiveTab(activeTab)
     // close()
   }
-
+  
   return (
     <DiyDialog close={close} open={isOpen}>
       <section className="diy-bottom-sheet diy-filter-bottom-sheet filter-bottom-sheet">
@@ -49,7 +49,7 @@ const Filter = ({
                         setActiveTab(filter_options);
                         setActiveData(item[filter_options])
                       }}
-                      className={activeTab === filter_options ? 'selected' : ''}
+                      className={activeTab === filter_options ? 'selected' : 'notselected'}
                     >
                       {filter_options}
                     </li>
@@ -59,6 +59,7 @@ const Filter = ({
           </div>
           <div className="body">
             <SortFilter
+              selectedTab={activeTab}
               localSortFilter={localSortFilter}
               setLocalSortFilter={setLocalSortFilter}
               SortFilterData={activeData}
