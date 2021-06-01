@@ -489,6 +489,8 @@ export function navigate(pathname, data = {}) {
     toState
   }
 
+  console.log("inside navigate...", data);
+
   if (data.edit) {
     this.history.replace({
       pathname: pathname,

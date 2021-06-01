@@ -40,7 +40,6 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
     
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
-    console.log("inside landing redirect path...")
     navigate("/");
     return true;
   }
@@ -120,11 +119,14 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   if (npsDetailsCheckCasesArr.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     if (storageService().getObject("nps_additional_details_required")) {
       if (isNpsOutsideSdk(fromState, currentState)) {
+        console.log("in nps sdk, before clear history...")
         nativeCallback({ action: "clear_history" });
       }
+      console.log("in nps sdk, before navigating...")
       navigate("/nps/sdk");
       return true;
     } else {
+      console.log("outside nps sdk, before navigating...")
       navigate("/");
       return true;
     }

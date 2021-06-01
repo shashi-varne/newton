@@ -39,7 +39,7 @@ const PaymentCallback = (props) => {
         return;
       }
       if(config.isSdk) {
-        nativeCallback({ action: "clear_history" });
+        // nativeCallback({ action: "clear_history" });
         navigate("/");
         return;
       }
