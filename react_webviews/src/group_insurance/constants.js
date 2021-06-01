@@ -1,4 +1,4 @@
-import {isEmpty} from 'utils/validators';
+import {isEmpty, numDifferentiationInr, inrFormatDecimal} from 'utils/validators';
 
 export const maritalOptions = [
   {
@@ -541,7 +541,8 @@ export const back_button_mapper = {
   '/group-insurance/call-back-details' : '/group-insurance',
   '/group-insurance/advisory/recommendations' : '/group-insurance',
   '/group-insurance/advisory/landing': '/group-insurance',
-  '/group-insurance/advisory/basic-details': '/group-insurance/advisory/landing'
+  '/group-insurance/advisory/basic-details': '/group-insurance/advisory/landing',
+  '/group-insurance/life-insurance/resume-intermediate': '/group-insurance/life-insurance/savings-plan/landing'
 };
 
 export const insuranceMaritalStatus = [
@@ -786,9 +787,20 @@ export function getCssMapperReport(policy) {
     cssMapper.policy_issued.disc = 'Issued';
   }
 
-
   let obj = {};
   let policy_status = policy.status;
+
+  var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted'];
+  var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
+
+  var backgroundColor = "";
+  if(issued_statuses.indexOf(policy_status.toLowerCase()) > -1){
+    backgroundColor = "#F5FBED"
+  }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
+    backgroundColor = "#FFFDF2"
+  }else{
+    backgroundColor = "#FDF7F8"
+  }
 
   if (policy.key === 'TERM_INSURANCE') {
     if (policy_status === 'failed') {
@@ -803,7 +815,7 @@ export function getCssMapperReport(policy) {
   }
 
   obj.cssMapper = cssMapper[obj.status] || cssMapper['init'];
-
+  obj.cssMapper['backgroundColor'] = backgroundColor;
   if(policy_status === 'request_pending') {
     if(provider === 'STAR') {
       obj.cssMapper.disc += ` Star Health`;
@@ -814,7 +826,21 @@ export function getCssMapperReport(policy) {
 
   return obj;
 }
+export function productNameMapper(key){
+  let mapper = {
+    'religare': 'Health insurance',
+    'care_plus': 'Health insurance',
+    'HOSPICASH': 'Health insurance',
+    'CORONA': 'Health insurance',
+    'DENGUE': 'Health insurance',
+    'star': 'Health insurance',
+    'hdfc_ergo': 'Health insurance',
+    'PERSONAL_ACCIDENT': 'Other insurance'
+    //add sanchay plus and click to invest and smart wallet
+  }
 
+  return mapper[key];
+}
 export function childeNameMapper(name) {
   
   let mapper = {
@@ -869,4 +895,43 @@ export function ProviderName(name) {
 
   return ProviderName[NameData] ? ProviderName[NameData] : NameData
 
+}
+
+export function reportsfrequencyMapper(key, frequency, product_key){
+  var freqMapper = {
+    'monthly': '/mth', 
+    'yearly': '/yr', 
+    'annually':'/yr',
+    'quarterly': '/qr', 
+    'quaterly': '/qr',
+    'half yearly': '/HY',
+    'half-yearly': '/HY',
+    'at once': '', 
+    'single': ''
+  } 
+  if((['hdfc_ergo', 'star', 'religare' ].indexOf(key) > -1 || key === "BHARTIAXA") && product_key !== 'offline_insurance'){
+    return '/yr'
+  }else if(key === 'care_plus' && frequency){
+    return frequency.toLowerCase() === 'monthly' ? '/mth' : '/yr'
+  }else if((key === 'FYNTUNE' && frequency) || product_key === 'offline_insurance' || product_key === 'TERM_INSURANCE'){
+     return freqMapper[frequency.toLowerCase()]
+  }
+}
+
+export function reportCoverAmountValue(val){
+  if(val < 100000){
+    if(Number.isInteger(val)){
+      return inrFormatDecimal(val)
+    }else{
+      return inrFormatDecimal(val, 2)
+    }
+  }else{
+    return numDifferentiationInr(val)
+  }
+}
+
+export var reportTopTextMapper = {
+  'activeReports' : 'Issued policies for which claim can be made',
+  'pendingReports': 'Applications under process with insurance company', 
+  'inactiveReports': 'Expired, rejected and cancelled policies for which claim cannot be made'
 }

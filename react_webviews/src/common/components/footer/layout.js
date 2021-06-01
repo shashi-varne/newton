@@ -228,6 +228,28 @@ WithProviderLayoutGold = (props) => {
   )
 }
 
+  WithProviderLayoutLoan = (props) => {
+    return(
+      <div className="FooterDefaultLayout">
+        {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer loan-with-provider" 
+        onClick={props.handleClick2}
+        style={props.buttonData.leftStyle}>
+          <div className="text-block">
+          <div className="text-block-1">{props.buttonData.leftTitle}</div>
+            <div className="text-block-2">
+              {props.buttonData.leftSubtitle}
+              </div>
+          </div>
+        </div>}
+        <div className="FlexItem2 FlexItem2-withProvider-footer" onClick={props.handleClick}>
+          <Button
+            type={props.type}
+            {...props} />
+        </div>
+        {this.renderDialog()}
+      </div>
+    )
+  }
 
   render() {
     const props = this.props;
@@ -260,13 +282,20 @@ WithProviderLayoutGold = (props) => {
         type = 'withProviderGold';
       }
     }
+
+    if(project === 'lending') {
+      if(type === 'withProvider') {
+        type = 'withProviderLoan';
+      }
+    }
     let renderMapper = {
         'summary': this.renderInsuranceSummary,
         'twobutton': this.TwoButtonLayout,
         'withProviderInsurance': this.WithProviderLayoutInsurance,
         'insuranceDefault': this.insuranceDefault,
         'default': this.renderDefaultLayout,
-        'withProviderGold': this.WithProviderLayoutGold
+        'withProviderGold': this.WithProviderLayoutGold,
+        'withProviderLoan': this.WithProviderLayoutLoan
     }
 
     let renderFunction = renderMapper[type] || renderMapper['default'];

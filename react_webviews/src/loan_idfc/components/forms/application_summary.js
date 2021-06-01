@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import { timeStampToDate, capitalize, capitalizeFirstLetter, formatAmountInr } from "utils/validators"
+import { timeStampToDate, capitalize, capitalizeFirstLetter, formatAmountInr } from "utils/validators";
 
 class ApplicationSummary extends Component {
   constructor(props) {

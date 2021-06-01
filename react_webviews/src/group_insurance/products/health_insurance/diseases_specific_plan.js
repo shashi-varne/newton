@@ -40,15 +40,7 @@ class DiseasesSpecificPlan extends Component {
         icon: 'icn_dengue',
         Product_name : 'dengue insurance',
         resume_flag : this.props.parent.state.resumeFlagAll  ? this.props.parent.state.resumeFlagAll['DENGUE'] : false
-      },
-      {
-        key: 'CORONA',
-        title: 'Coronavirus insurance',
-        subtitle: 'Keep your savings immune to covid',
-        icon: 'icn_corona',
-        Product_name : 'coronovirus insurance',
-        resume_flag : this.props.parent.state.resumeFlagAll ? this.props.parent.state.resumeFlagAll['CORONA']  : false
-      },
+      }
     ];
 
     if (this.state.partner_code === 'hbl') {

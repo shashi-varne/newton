@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import toast from "../../../common/ui/Toast";
 import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropDownNew from "../../../common/ui/DropDownNew";
 import { getConfig } from "../../../utils/functions";
 import DotDotLoader from "common/ui/DotDotLoader";
 import { getBase64 } from "utils/functions";
@@ -628,7 +628,7 @@ class DocumentUpload extends Component {
         buttonTitle="CONTINUE"
         disable={disableButton}
         handleClick={this.handleClick}
-        // hidePageTitle={this.state.skelton}
+        force_hide_inpage_title={this.state.skelton}
         headerData={{
           goBack: this.goBack,
         }}
@@ -638,7 +638,7 @@ class DocumentUpload extends Component {
       >
         <div className="idfc-document-upload">
           <div className="InputField">
-            <DropdownWithoutIcon
+            <DropDownNew
               width="40"
               options={this.state.docs}
               id="doc_name"

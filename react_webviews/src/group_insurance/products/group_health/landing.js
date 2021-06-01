@@ -22,6 +22,8 @@ import MoreInfoAccordian from "../../../common/ui/MoreInfoAccordian";
 import GenericImageSlider from "../../../common/ui/GenericImageSlider";
 import {insuranceTypeMapper} from './constants';
 import {Imgc} from '../../../common/ui/Imgc'
+import { isEmpty } from "../../../utils/validators";
+
 const screen_name = "landing_screen";
 
 
@@ -74,7 +76,7 @@ class GroupHealthLanding extends Component {
         },
       ],
     };
-
+    var groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + this.state.providerConfig.key) || {}
     this.setState({
       stepsContentMapper: stepsContentMapper,
       offerImageData: screenData.offerImageData,
@@ -82,6 +84,7 @@ class GroupHealthLanding extends Component {
       whats_not_covered: screenData.whats_not_covered,
       screenData: screenData,
       openModuleData: openModuleData,
+      groupHealthPlanData
     });
   }
 
@@ -118,6 +121,8 @@ class GroupHealthLanding extends Component {
 
   async componentDidMount() {
    this.onload()
+   storageService().remove('reportSelectedTab');
+   storageService().remove('report_from_landing');
   }
 
   onload = async() =>{
@@ -197,21 +202,24 @@ class GroupHealthLanding extends Component {
     });
   };
   handleClick = () => {
+    let groupHealthPlanData = this.state.groupHealthPlanData;
     if(!this.state.tncChecked){
       toast('Please agree to the Terms and conditions');
       this.handleScroll();
-      return;
+      return
     }
 
-    let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + this.state.providerConfig.key) || {};
+    if(!isEmpty(groupHealthPlanData.application_data)){
+      groupHealthPlanData.application_data = {};
+      
+    }
     let post_body = groupHealthPlanData.post_body;
     if(post_body){
       delete post_body['quotation_id'];
       groupHealthPlanData.post_body  = post_body;
-      this.setLocalProviderData(groupHealthPlanData);
     }
     
-  
+    this.setLocalProviderData(groupHealthPlanData)
     this.sendEvents("next");
     storageService().setObject("resumeToPremiumHealthInsurance", false);
     this.navigate(this.state.providerConfig.get_next[screen_name]);
@@ -262,6 +270,11 @@ class GroupHealthLanding extends Component {
           storageService().set("health_insurance_application_id", this.state.applicationData.id);
           this.navigate("final-summary");
         } else {
+          var groupHealthPlanData = this.state.groupHealthPlanData;
+          if(!isEmpty(groupHealthPlanData.application_data)){
+            groupHealthPlanData.application_data = {};
+            this.setLocalProviderData(groupHealthPlanData)
+          }
           storageService().setObject("resumeToPremiumHealthInsurance", true);
           this.navigate(`plan-premium-summary`);
         }

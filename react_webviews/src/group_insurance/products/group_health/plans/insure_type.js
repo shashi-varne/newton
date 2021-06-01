@@ -6,6 +6,7 @@ import BottomInfo from '../../../../common/ui/BottomInfo';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { initialize } from '../common_data';
 import { storageService } from "utils/validators";
+import { isEmpty } from '../../../../utils/validators';
 
 class GroupHealthSelectInsureType extends Component {
 
@@ -49,6 +50,14 @@ class GroupHealthSelectInsureType extends Component {
 
     groupHealthPlanData.eldest_member = ''; //reset
     groupHealthPlanData.eldest_dob = ''; //reset
+    //reset
+    let keys_to_empty = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
+    for(var x of keys_to_empty){
+        groupHealthPlanData[x] = ""
+    }
+    if(!isEmpty(groupHealthPlanData.previous_add_ons_data)){
+      groupHealthPlanData.previous_add_ons_data = {}
+    }
 
     let post_body = groupHealthPlanData.post_body || {};
 

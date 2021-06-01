@@ -4,11 +4,12 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropDownNew from "../../../common/ui/DropDownNew";
 import {
   numDifferentiationInr,
   formatAmount,
 } from "utils/validators";
+import { employmentMapper } from "../../constants";
 
 class LoanRequirementDetails extends Component {
   constructor(props) {
@@ -33,8 +34,17 @@ class LoanRequirementDetails extends Component {
     let lead = this.state.lead || {};
     let application_info = lead.application_info || {};
 
+    let employment_type = application_info.employment_type || "";
+
+    let amount_required = application_info.amount_required || '';
+    if(employment_type){
+      if (amount_required > employmentMapper[employment_type.toLowerCase()][1])
+      amount_required = employmentMapper[employment_type.toLowerCase()][1];  
+    }
+    
+
     let form_data = {
-      amount_required: application_info.amount_required,
+      amount_required: amount_required,
       tenor: !application_info.tenor ? "" : String(application_info.tenor),
     };
 
@@ -160,7 +170,7 @@ class LoanRequirementDetails extends Component {
             </div>
 
             <div className="InputField">
-              <DropdownWithoutIcon
+              <DropDownNew
                 width="40"
                 options={this.state.screenData.tenorOptions}
                 id="tenor"

@@ -88,6 +88,7 @@
     "react-search-box": "^2.0.2",
     "react-select": "^3.2.0",
     "react-sortable-hoc": "^1.11.0",
+    "react-swipeable-views": "^0.13.9",
     "react-toastify": "^4.5.2",
     "react-tooltip": "^4.2.6",
     "react-tooltip-lite": "^1.12.0",
@@ -111,7 +112,7 @@
   },
   "scripts": {
     "start": "NODE_PATH=./src node scripts/start.js",
-    "build": "NODE_PATH=./src node scripts/build.js",
+    "build": "NODE_PATH=./src node --max_old_space_size=2000 scripts/build.js",
     "test": "NODE_PATH=./src node scripts/test.js --env=jsdom"
   },
   "jest": {

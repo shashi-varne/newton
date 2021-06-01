@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropDownNew from "../../../common/ui/DropDownNew";
 import { numDifferentiationInr, formatAmount } from "utils/validators";
 import Autosuggest from "../../../common/ui/SearchBar";
 import Api from "utils/api";
@@ -61,10 +61,6 @@ class ProfessionalDetails extends Component {
       form_data: form_data,
       employment_type: employment_type,
       company_name: professional_info.company_name,
-      companyOptions: [{
-        name: professional_info.company_name || "",
-        value: professional_info.company_name || ""
-      }]
     });
   };
 
@@ -165,14 +161,22 @@ class ProfessionalDetails extends Component {
       keys_to_check.push(...salaried);
     }
 
-    this.formCheckUpdate(keys_to_check, form_data, "internal", true);
+    !form_data.company_name_error && this.formCheckUpdate(keys_to_check, form_data, "internal", true);
   };
 
   handleSearch = async (value) => {
     let { form_data, companyOptions } = this.state;
+    var format = /[^a-zA-Z0-9 .&-,]/g;
+    let error = format.test(value);
 
-    form_data.company_name = value;
-    form_data.company_name_error = "";
+      form_data.company_name = value;
+      form_data.company_name_error = error
+        ? "special characters are not allowed except (&.-)."
+        : "";
+
+        this.setState({
+          form_data: form_data,
+        });
 
     if (value.length === 3) {
       this.setState({
@@ -294,7 +298,7 @@ class ProfessionalDetails extends Component {
 
             {employment_type === "salaried" && (
               <div className="InputField">
-                <DropdownWithoutIcon
+                <DropDownNew
                   width="40"
                   options={this.state.salaryRecieptOptions}
                   id="salary-receipt-mode"
@@ -309,7 +313,7 @@ class ProfessionalDetails extends Component {
             )}
 
             <div className="InputField">
-              <DropdownWithoutIcon
+              <DropDownNew
                 width="40"
                 options={this.state.organisationTypeOptions}
                 id="organisation"
@@ -324,7 +328,7 @@ class ProfessionalDetails extends Component {
 
             {employment_type === "salaried" && (
               <div className="InputField">
-                <DropdownWithoutIcon
+                <DropDownNew
                   options={industryOptions}
                   label="Industry"
                   id="industry"
