@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { storageService } from "../../../utils/validators";
+import { getUrlParams, storageService } from "../../../utils/validators";
 import "./PassiveFundDetails.scss";
 import Accordian from "../mini-components/Accordian";
 import { List, Slide } from "@material-ui/core";
 import Dialog, { DialogContent } from "material-ui/Dialog";
-import MorningStar from '../../../assets/logo_morningstar.svg'
+import MorningStar from "../../../assets/logo_morningstar.svg";
 import moment from "moment";
 import {
   fetch_fund_details,
@@ -19,17 +19,20 @@ import Container from "../../common/Container";
 import Toast from "../../../common/ui/Toast";
 import { SkeltonRect } from "../../../common/ui/Skelton";
 import PassiveStarRating from "../mini-components/PassiveStarRating";
+import { nativeCallback } from "../../../utils/native_callback";
+import { getConfig } from "../../../utils/functions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function PassiveFundDetails() {
+function PassiveFundDetails({ history }) {
   const [isLoading, setLoading] = useState(true);
   const [fundDetails, setFundDetails] = useState(null);
   const [graph, setGraph] = useState(null);
   const [openMoreInfoDialog, setOpenMoreInfoDialog] = useState(false);
-  const isins =  storageService().getObject("isins_number").isins_no;
+  const { isins } = getUrlParams();
+  const fund = storageService().getObject("diystore_fundInfo") || {};
 
   useEffect(() => {
     (async () => {
@@ -88,7 +91,12 @@ function PassiveFundDetails() {
                 fontWeight: "700",
               }}
             >
-              Tracking error: <span style={{ fontWeight: "400" }}>{fundDetails?.performance?.tracking_error !== "NA" ? `${fundDetails?.performance?.tracking_error}%` : "NA"}</span>
+              Tracking error:{" "}
+              <span style={{ fontWeight: "400" }}>
+                {fundDetails?.performance?.tracking_error !== "NA"
+                  ? `${fundDetails?.performance?.tracking_error}%`
+                  : "NA"}
+              </span>
             </p>
             <p className="pfd-values" style={{ color: "#767E86" }}>
               The difference between the fund’s returns & the index it tries to
@@ -136,26 +144,71 @@ function PassiveFundDetails() {
     setOpenMoreInfoDialog(true);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "passive_funds",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "fund_info",
+        fund_selected: fundDetails?.performance?.legal_name || "",
+        fund_info_clicked: storageService().get("fund_info_clicked")
+          ? "yes"
+          : "no",
+        portfolio_details_clicked: storageService().get(
+          "portfolio_details_clicked"
+        )
+          ? "yes"
+          : "no",
+        more_risks_clicked: storageService().get("more_risks_clicked")
+          ? "yes"
+          : "no",
+      },
+    };
+    storageService().remove("fund_info_clicked");
+    storageService().remove("portfolio_details_clicked");
+    storageService().remove("more_risks_clicked");
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
+  const navigate = (pathname) => {
+    history.push({
+      pathname: pathname,
+      search: getConfig().searchParams,
+    });
+  };
+
+  const handleClick = () => {
+    storageService().setObject("diystore_cart", [fund]);
+    navigate("/diy/invest");
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="INVEST NOW"
       title={fundDetails?.performance?.friendly_name}
       hidePageTitle
-      handleClick={() => console.log("next")}
+      handleClick={handleClick}
       noPadding
       skelton={isLoading}
     >
       <div className="passive-funds-details">
         <section className="pfd-padding">
           <div className="pf-flex">
-            <p className="pfd-title">{fundDetails?.performance?.friendly_name}</p>
+            <p className="pfd-title">
+              {fundDetails?.performance?.friendly_name}
+            </p>
             <img
               style={{ marginLeft: "40px", width: "50px", height: "50px" }}
               src={fundDetails?.performance?.amc_logo_small}
               alt=""
             />
           </div>
-          <div style={{ paddingBottom: "10px" }}>
+          <div style={{paddingTop: "8px", paddingBottom: "10px"}}>
             <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
           </div>
           <p className="pfd-info">{`${fundDetails?.performance.ms_risk} risk | ${fundDetails?.performance?.tracking_index}`}</p>
@@ -230,7 +283,11 @@ function PassiveFundDetails() {
           </div>
           <div>
             <p className="pfd-points">TRACKING ERROR</p>
-            <p className="pfd-values">{fundDetails?.performance?.tracking_error !== "NA" ? `${fundDetails?.performance?.tracking_error}% (1Y)` : "NA"}</p>
+            <p className="pfd-values">
+              {fundDetails?.performance?.tracking_error !== "NA"
+                ? `${fundDetails?.performance?.tracking_error}% (1Y)`
+                : "NA"}
+            </p>
           </div>
           <div>
             <p className="pfd-points">FUND SIZE</p>
@@ -254,7 +311,7 @@ function PassiveFundDetails() {
                 />
               </Accordian>
               <div className="pfd-line"></div>
-              <Accordian title="Fund's Info">
+              <Accordian title="Fund's Info" name="fund_info_clicked">
                 <FundInfo
                   title="Launch date"
                   content={fundDetails?.additional_info?.launch_date}
@@ -281,26 +338,37 @@ function PassiveFundDetails() {
                 />
               </Accordian>
               <div className="pfd-line"></div>
-              <Accordian title="Risk Details">
+              <Accordian title="Risk Details" name="more_risks_clicked">
                 <RiskDetails riskDetailsData={fundDetails?.risk} />
               </Accordian>
               <div className="pfd-line"></div>
-              <Accordian title="Portfolio Details">
+              <Accordian
+                title="Portfolio Details"
+                name="portfolio_details_clicked"
+              >
                 <FundPortfolio
                   portfolio={fundDetails?.portfolio}
                   navDate={fundDetails?.performance?.nav_update_date}
                 />
               </Accordian>
-              <div className="pfd-line" style={{marginBottom: "20px"}}></div>
+              <div className="pfd-line" style={{ marginBottom: "20px" }}></div>
             </List>
           </section>
         ) : null}
         <section className="pfd-padding">
-        <img src={MorningStar} style={{paddingBottom: "10px"}} alt="" />
-        <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
-        <p className="pfd-values" style={{color: "#767E86", paddingBottom:"20px"}}>
-        Funds are rated by Morningstar based on their past performance as compared to other funds in the same category. Ratings are from 1 – 5 stars with 5 being the highest for the best performing funds and 1 being the lowest for poor-performing funds.
-        </p>
+          <img src={MorningStar} style={{ paddingBottom: "10px" }} alt="" />
+          <div style={{paddingBottom: "10px"}}>
+            <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
+          </div>
+          <p
+            className="pfd-values"
+            style={{ color: "#767E86", paddingBottom: "20px" }}
+          >
+            Funds are rated by Morningstar based on their past performance as
+            compared to other funds in the same category. Ratings are from 1 – 5
+            stars with 5 being the highest for the best performing funds and 1
+            being the lowest for poor-performing funds.
+          </p>
         </section>
       </div>
       {moreInfoDialog()}

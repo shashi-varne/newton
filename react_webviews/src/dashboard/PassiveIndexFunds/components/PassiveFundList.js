@@ -8,6 +8,7 @@ import CartFooter from "../../../common/ui/Filter/CartFooter";
 import YearFilter from "../mini-components/YearFilter";
 import { year_filters, sort_filter_data, filter_options } from "../constants";
 import "./PassiveFundDetails.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 class FundList extends Component {
     constructor(props) {
@@ -16,6 +17,8 @@ class FundList extends Component {
             screen_name: 'fund_list',
             result: [],
             getFundHouses: [],
+            expand: false,
+            skelton: true
         };
 
         this.initialize = initialize.bind(this);
@@ -30,10 +33,18 @@ class FundList extends Component {
         this.fetch_funddetails_list()
     }
 
-    clickCard(isin) {
-        const isins_number = { "isins_no": isin }
+    clickCard(item) {
+        this.sendEvents("next", item.legal_name);
+        // TO BE CHECKED
+        const isins_number = { "isins_no": item.isin }
         storageService().setObject("isins_number", isins_number);
-        this.navigate(`fund-details`);
+        // --
+        let dataCopy = Object.assign({}, item)
+        dataCopy.diy_type = 'categories'
+        storageService().setObject('diystore_fundInfo', dataCopy)
+        this.navigate(`fund-details`,{
+            searchParams: `${this.props.location.search}&isins=${item.isin}`,
+          });
     }
 
     yearFilter = (time) => {
@@ -42,44 +53,69 @@ class FundList extends Component {
         })
     }
 
+    sendEvents = (userAction, fundSelected) => {
+        let fundCategory = (this.state.title || "").toLowerCase().split(" ").join("_");
+        let eventObj = {
+          event_name: "passive_funds",
+          properties: {
+            user_action: userAction || "",
+            screen_name: "explore_funds",
+            fund_selected: fundSelected || "",
+            fund_category: (fundCategory === "global_indices" ? "global_index_funds" : fundCategory) || ""
+          },
+        };
+        if (userAction === "just_set_events") {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+      };
+      handleExpand = () =>{
+          this.setState({
+              expand: !this.state.expand
+          })
+      }
 
     render() {
 
-        const { result, getFundHouses } = this.state; console.log(getFundHouses)
-        
+        const { result } = this.state
         return (
-            <Container
-                title={this.state.title}
-                noFooter={true}
-                skelton={this.state.skelton}
-                showError={this.state.showError}
-                errorData={this.state.errorData}
-                force_hide_inpage_title={true}
-            >
-                <div>
-                    <h1 className='category-title'>{this.state.title}</h1>
-                    <p>NIFTY is a benchmark index by the National Stock Exchange (NSE). It has a host of indices – NIFTY 50, Nifty Midcap 150, Nifty Smallcap 250 & more. Nifty50 comprises India's 50 largest companies traded on NSE such as Reliance Industries Ltd., HDFC Bank Ltd., Infosys Ltd., etc. Nifty50 has delivered a CAGR of 11.92% in the last 5 years as of 31 Dec 2020</p>
+          <Container
+            events={this.sendEvents("just_set_events")}
+            title={this.state.title}
+            noFooter={true}
+            skelton={this.state.skelton}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
+            // force_hide_inpage_title={true}
+          >
+            <div>
+              {/* <h1 className="category-title">{this.state.title}</h1> */}
+              {this.state.fundDescription && (
+                <p className="category-description">{this.state.fundDescription.substring(0, 90)}<span style={this.state.expand ? {} : {display: "none"}}>{this.state.fundDescription.substring(91)}</span>...<span className="category-desc-button" onClick={this.handleExpand}>{this.state.expand ? " LESS" : " MORE"}</span></p>
+              )}
 
+              <YearFilter
+                filterArray={year_filters}
+                selected={this.state.selected}
+                onclick={this.yearFilter}
+              />
 
-                    <YearFilter filterArray={year_filters} selected={this.state.selected} onclick={this.yearFilter} />
+              <React.Fragment>
+                {!isEmpty(result) &&
+                  result.map((item, index) => {
+                    return (
+                      <FundListCard
+                        data={item}
+                        key={index}
+                        handleClick={() => this.clickCard(item)}
+                        selected={this.state.selected}
+                      />
+                    );
+                  })}
+              </React.Fragment>
 
-
-                    <React.Fragment>
-                        {!isEmpty(result) &&
-                            result.map((item, index) => {
-                                return (
-                                    <FundListCard
-                                        data={item}
-                                        key={index}
-                                        handleClick={() =>
-                                            this.clickCard(item.isin)
-                                        }
-                                        selected={this.state.selected}
-                                    />
-                                );
-                            })}
-                    </React.Fragment>
-                    <CartFooter
+              <CartFooter
                         // cart={cart}
                         fundsList={result}
                         SortFilterData={sort_filter_data}
@@ -94,8 +130,8 @@ class FundList extends Component {
                     // setFundOption={setFundOption}
                     // {...parentProps}
                     />
-                </div>
-            </Container>
+            </div>
+          </Container>
         );
     }
 }

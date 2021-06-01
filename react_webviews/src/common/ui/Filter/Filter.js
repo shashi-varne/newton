@@ -49,11 +49,8 @@ const Filter = ({
 
   return (
     <DiyDialog close={close} open={isOpen}>
-      <section className="diy-bottom-sheet diy-filter-bottom-sheet">
-        <header className="header">
-          <b className="text">Filter</b>
-          <div onClick={reset} className="reset">Reset</div>
-        </header>
+      <section className="diy-bottom-sheet diy-filter-bottom-sheet filter-bottom-sheet">
+        <p className="heading">FILTERS</p>
         <main className="filter">
           <div className="title">
             <ul>
@@ -103,14 +100,14 @@ const Filter = ({
             )} */}
           </div>
         </main>
-        <footer>
+        <footer className="filter-buttons">
           <Button
-            fullWidth
-            onClick={apply}
-            buttonTitle="Apply"
-            classes={{
-              button: "filter-button"
-            }}
+            twoButton
+            dualbuttonwithouticon
+            handleClickOne={reset}
+            handleClickTwo={apply}
+            buttonOneTitle="CLEAR ALL"
+            buttonTwoTitle="APPLY"
           />
         </footer>
       </section>

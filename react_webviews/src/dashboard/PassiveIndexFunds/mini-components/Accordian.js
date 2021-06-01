@@ -3,9 +3,14 @@ import Collapse from "@material-ui/core/Collapse";
 import ExpandMoreIcon from "../../../assets/expand_more.svg";
 import ExpandLessIcon from "../../../assets/expand_less.svg";
 import "./commonStyles.scss";
+import { storageService } from "../../../utils/validators";
 
-const PassiveFundAccordian = ({ title, children }) => {
+const PassiveFundAccordian = ({ title, children, name }) => {
   const [open, setOpen] = useState(false);
+  const handleAccordian = () => {
+    if (name) storageService().set(name, true);
+    setOpen(!open);
+  };
   return (
     <>
       <div
@@ -16,7 +21,7 @@ const PassiveFundAccordian = ({ title, children }) => {
           cursor: "pointer",
           padding: "0 20px",
         }}
-        onClick={() => setOpen(!open)}
+        onClick={handleAccordian}
       >
         <p
           style={{

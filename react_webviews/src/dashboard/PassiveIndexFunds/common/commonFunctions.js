@@ -99,6 +99,8 @@ export function carouselSwipe_count(index) {
 };
 
 export function handleClick(data) {
+  let categoryName = data.key === "global_indices" ? "global_index_funds" : data.key;
+  this.sendEvents("next", categoryName)
   this.navigate(`${data.key}/fund-list`, data.title);
 }
 
@@ -116,22 +118,26 @@ export async function fetch_funddetails_list() {
 
   try {
     const res = await Api.post(`https://subham-dot-plutus-staging.appspot.com/api/funds/passive/index/category/${this.state.title}`, body);
-
+    this.setState({ skelton: false })
     let result = res.pfwresponse?.result?.funds;
+    let fundDescription = res.pfwresponse?.result?.category_explainer
 
     if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200 && !isEmpty(result)) {
 
-      const fund_house = getFundHouses(result);  console.log( " fund_house " , fund_house)
-      
+      const fund_house = getFundHouses(result); console.log(" fund_house ", fund_house)
+
+
+
       this.setState({
         result: result,
+        fundDescription: fundDescription,
         getFundHouses: fund_house
-      });
-
+      })
 
     }
 
   } catch (err) {
+    this.setState({ skelton: false })
     throw err;
   }
 };

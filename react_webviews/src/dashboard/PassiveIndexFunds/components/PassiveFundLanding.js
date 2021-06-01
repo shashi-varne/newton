@@ -9,6 +9,7 @@ import { storageService } from "utils/validators";
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
 import { carousel_img, fund_category } from "../constants";
 import { initialize } from "../common/commonFunctions";
+import { nativeCallback } from "../../../utils/native_callback";
 
 class Landing extends Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class Landing extends Component {
     }
 
     handleClickFullscreen = () => {
+        storageService().set("video_clicked", true);
         screenfull.request(findDOMNode(this.player));
         this.setState({ playing: !this.state.playing });
     }
@@ -32,12 +34,33 @@ class Landing extends Component {
         this.player = player
     }
 
+    sendEvents = (userAction, fundCategory) => {
+        // VIDEO PAUSED EVENT LEFT
+        let eventObj = {
+          event_name: "passive_funds",
+          properties: {
+            user_action: userAction || "",
+            screen_name: "learn_more_passive_funds",
+            video_clicked: storageService().get("video_clicked") ? "yes" : "no",
+            passive_index_funds_clicked: fundCategory || "",
+            // video_duration: 
+          },
+        };
+        storageService().remove("video_clicked");
+        if (userAction === "just_set_events") {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+      };
+
     render() {
 
         const { playing } = this.state;
 
         return (
             <Container
+                events={this.sendEvents("just_set_events")}
                 title="Passive index funds"
                 noFooter={true}
                 skelton={this.state.skelton}
@@ -45,10 +68,11 @@ class Landing extends Component {
                 errorData={this.state.errorData}
                 classHeader='header-color-blue'
                 customBackButtonColor='white'
+                noPadding
             >
                 <div>
                     <div className='educational-video-block'>
-                        <p>Get started with index funds</p>
+                        <p style={{padding: "5px 0 30px 20px"}}>Get started with index funds</p>
                         <div className='player-wrapper' onClick={this.handleClickFullscreen}>
                             <ReactPlayer
                                 className='react-player'
@@ -63,9 +87,12 @@ class Landing extends Component {
                                 playIcon={<img src={require(`assets/icon_play_btn.svg`)} className='react-player play-icon' alt="" />}
                             />
                         </div>
+                        <div style={{width: "100%",display: "flex", justifyContent: "center", padding: "30px 0px"}}>
                         <img src={require(`assets/passive_index_video_info.svg`)} className='react-player play-info' alt="" />
+                        </div>
                     </div>
-                    <h1 className='category-title' style={{ marginTop: '400px' }}>Top index funds</h1>
+                    <div style={{padding: "10px 20px",backgroundColor: "white",zIndex: "1", borderRadius: "7px", marginTop: "-25px"}}>
+                    <h1 className='category-title'>Top index funds</h1>
                     <MenuListDropDown menulistProducts={fund_category} value={this.state.value} handleClick={this.handleClick} />
                     <h1 className='category-title'>Key insights</h1>
                     <div className='react-responsive-carousel'>
@@ -76,6 +103,7 @@ class Landing extends Component {
                         />
                     </div>
                     <WVSecurityDisclaimer />
+                    </div>
                 </div>
             </Container>
         );
