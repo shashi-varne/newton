@@ -1,6 +1,8 @@
 import { productName } from "./common/commonFunctions";
+import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox';
 
-export const product_name = 'finity'  //productName()
+export const product_name = 'finity' || productName()
 
 export const carousel_img = [
     { src: 'passive_index_keyinsight_1.svg' },
@@ -61,3 +63,149 @@ export const year_filters = [
         text: "5Y",
     },
 ]
+
+
+export const sort_filter_data = [
+    {
+        value: "expense_ratio",
+        control: Radio,
+        title: "Expense ratio",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Low to hight',
+    },
+    {
+        value: "tracking_error",
+        control: Radio,
+        title: "Tracking error",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Low to hight',
+    },
+    {
+        value: "returns",
+        control: Radio,
+        title: "Returns",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Hight to low',
+    },
+    {
+        value: "rating",
+        control: Radio,
+        title: "Ratings",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Hight to low',
+    },
+    {
+        value: "fundsize",
+        control: Radio,
+        title: "Fund size",
+        labelPlacement: "end",
+        color: "primary",
+        subtitle: 'Hight to low',
+    },
+]
+
+export const sort_index_data = [
+    {
+        value: "Nifty 50",
+        control: Checkbox,
+        title: "Nifty 50",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: "Nifty Next 50",
+        control: Checkbox,
+        title: "Nifty Next 50",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: "Nifty 100",
+        control: Checkbox,
+        title: "Nifty 100",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: "Nifty 500",
+        control: Checkbox,
+        title: "Nifty 500",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: "Nifty Midcap 150",
+        control: Checkbox,
+        title: "Nifty Midcap 150",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: "Nifty Smallcap 250",
+        control: Checkbox,
+        title: "Nifty Smallcap 250",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: "Nifty 50 Value 20",
+        control: Checkbox,
+        title: "Nifty 50 Value 20",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: "Nifty 100 Equal Weight",
+        control: Checkbox,
+        title: "Nifty 100 Equal Weight",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: "Nifty Junior",
+        control: Checkbox,
+        title: "Nifty Junior",
+        labelPlacement: "end",
+        color: "primary",
+    },
+]
+
+export const fund_option_data = [
+    {
+        value: 'Growth',
+        control: Radio,
+        title: "Growth",
+        labelPlacement: "end",
+        color: "primary",
+    },
+    {
+        value: 'truDividende',
+        control: Radio,
+        title: "Dividend",
+        labelPlacement: "end",
+        color: "primary",
+    },
+]
+
+
+
+
+
+export const filter_options = [
+    {
+        "Sort by": sort_filter_data
+    },
+    {
+        "index": sort_index_data
+    },
+    {
+        "Fund Option": fund_option_data
+    },
+    {
+        "Fund House": []  //   [ THIS DATA IS APPENED BY API ]
+    }
+];

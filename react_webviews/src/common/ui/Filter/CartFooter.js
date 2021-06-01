@@ -10,9 +10,11 @@ import { getConfig } from '../../../utils/functions';
 
 const isMobileDevice = getConfig().isMobileDevice;
 const CartFooter = ({
+    SortFilterData,
+    filterOptions,
     ...props
 }) => {
-    const [filterActive, setFilterActive] = useState(false)
+    const [filterActive, setFilterActive] = useState(false);
     const [cartActive, setCartActive] = useState(false)
     return (
         <footer className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} >
@@ -23,6 +25,8 @@ const CartFooter = ({
             <Filter
                 isOpen={filterActive}
                 setFilterActive={setFilterActive}
+                SortFilterData={SortFilterData}
+                filterOptions={filterOptions}
             />
         </footer>
     )

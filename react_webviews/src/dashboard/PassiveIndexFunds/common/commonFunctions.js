@@ -3,7 +3,9 @@ import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
+import CheckIcon from '@material-ui/icons/Done'
 import toast from "../../../common/ui/Toast";
+import { filter_options } from "../constants"
 
 export const genericErrMsg = "Something went wrong";
 
@@ -119,9 +121,13 @@ export async function fetch_funddetails_list() {
 
     if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200 && !isEmpty(result)) {
 
-        this.setState({
-          result: result
-        })
+      const fund_house = getFundHouses(result);  console.log( " fund_house " , fund_house)
+      
+      this.setState({
+        result: result,
+        getFundHouses: fund_house
+      });
+
 
     }
 
@@ -129,3 +135,37 @@ export async function fetch_funddetails_list() {
     throw err;
   }
 };
+
+
+export function getFundHouses(result) {
+
+  if (result.length > 0) {
+    const fundsHouseArr = result.map((item) => item.fund_house)
+    const uniqueSet = new Set(fundsHouseArr)
+    var uniqueArr = Array.from(uniqueSet)
+  }
+
+  if (!isEmpty(uniqueArr)) {
+    const fund_house = uniqueArr.map((item, idx) => {
+      return ({
+        value: 'item',
+        control: CheckIcon,
+        title: item,
+        labelPlacement: "end",
+        color: "primary",
+      });
+    })
+
+    filter_options.forEach(element => {
+
+      if (!!element['Fund House']) {
+        element['Fund House'] = fund_house
+      }
+
+    });
+    return filter_options;
+  }
+
+  return filter_options;
+
+}

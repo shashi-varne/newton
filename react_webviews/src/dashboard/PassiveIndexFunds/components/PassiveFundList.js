@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { storageService, isEmpty } from "utils/validators";
 import { initialize, fetch_funddetails_list } from "../common/commonFunctions";
+import Radio from '@material-ui/core/Radio';
 import FundListCard from "../mini-components/FundListCard";
-import CartFooter from  "../../../common/ui/Filter/CartFooter";
+import CartFooter from "../../../common/ui/Filter/CartFooter";
 import YearFilter from "../mini-components/YearFilter";
-import { year_filters } from "../constants";
+import { year_filters, sort_filter_data, filter_options } from "../constants";
 import "./PassiveFundDetails.scss";
 
 class FundList extends Component {
@@ -14,6 +15,7 @@ class FundList extends Component {
         this.state = {
             screen_name: 'fund_list',
             result: [],
+            getFundHouses: [],
         };
 
         this.initialize = initialize.bind(this);
@@ -43,8 +45,8 @@ class FundList extends Component {
 
     render() {
 
-        const { result } = this.state
-
+        const { result, getFundHouses } = this.state; console.log(getFundHouses)
+        
         return (
             <Container
                 title={this.state.title}
@@ -77,10 +79,11 @@ class FundList extends Component {
                                 );
                             })}
                     </React.Fragment>
-
                     <CartFooter
                         // cart={cart}
                         fundsList={result}
+                        SortFilterData={sort_filter_data}
+                        filterOptions={filter_options}
                     // setCart={setCart}
                     // sortFilter={sortFilter}
                     // fundHouse={fundHouse}
