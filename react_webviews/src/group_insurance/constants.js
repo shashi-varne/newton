@@ -913,9 +913,9 @@ export function reportsfrequencyMapper(key, frequency, product_key){
     if((['hdfc_ergo', 'star', 'religare' ].indexOf(key) > -1 || key === "BHARTIAXA") && product_key !== 'offline_insurance'){
       return '/yr'
     }else if(key === 'care_plus' && frequency){
-      return frequency.toLowerCase() === 'monthly' ? '/mth' : '/yr'
+      return (frequency || '').toLowerCase() === 'monthly' ? '/mth' : '/yr'
     }else if((key === 'FYNTUNE' && frequency) || product_key === 'offline_insurance' || product_key === 'TERM_INSURANCE'){
-       return freqMapper[frequency.toLowerCase()]
+      return freqMapper[frequency.toLowerCase()] || ''
     }
   }catch(err){
     return ''
