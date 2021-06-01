@@ -20,8 +20,14 @@ export const checkBeforeRedirection = (fromState, toState) => {
 
 export const checkAfterRedirection = (props, fromState, toState) => {
   if (toState === "/" || isNpsOutsideSdk(fromState, toState)) {
-    nativeCallback({ action: "take_back_button_control" });
-    nativeCallback({ action: "clear_history" });
+    nativeCallback({ 
+      action: "take_control", message: {
+        back_url: "",
+        back_text: ''
+      }
+    });
+    console.log("props before clear history...", props);
+    // nativeCallback({ action: "clear_history" });
   } else {
     // Todo: Remove this code later
     nativeCallback({ action: "reset_back_button_control" });
@@ -40,6 +46,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     '/nps/sip', '/my-account', '/modal', '/page/callback', '/reports/sip/pause-request', '/kyc/journey'];
     
   if (landingRedirectPaths.indexOf(currentState) !== -1) {
+    console.log("inside landing redirect path...")
     navigate("/");
     return true;
   }
@@ -117,14 +124,18 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   
   const npsDetailsCheckCasesArr = ["/nps/payment/callback", "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"]
   if (npsDetailsCheckCasesArr.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
-    if (storageService().getObject("nps_additional_details_required")) {
+    console.log("nps additional required "+storageService().get("nps_additional_details_required"))
+    if (storageService().get("nps_additional_details_required")) {
       if (isNpsOutsideSdk(fromState, currentState)) {
+        console.log("isNpsOutsideSdk is true, before clear history")
         nativeCallback({ action: "clear_history" });
       }
+      console.log("isNpsOutsideSdk is false")
       navigate("/nps/sdk");
       return true;
     } else {
-      nativeCallback({ action: "clear_history" });
+      console.log("nps additional not required before clear history")
+      // nativeCallback({ action: "clear_history" });
       navigate("/");
       return true;
     }

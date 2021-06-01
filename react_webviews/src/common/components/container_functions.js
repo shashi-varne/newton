@@ -49,6 +49,7 @@ export function didMount() {
     const fromState = this.props?.location?.state?.fromState || "";
     const toState = this.props?.location?.state?.toState || "";
     this.checkAfterRedirection(this.props, fromState, toState);
+    console.log("props after redirection...", this.props)
 
     this.setState({
         productName: config.productName,

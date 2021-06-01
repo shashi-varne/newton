@@ -172,6 +172,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       window.location.href = redirectToLanding();
     } else {
       if (getConfig().app === 'android') {
+        console.log("inside native callback...", callbackData);
         window.Android.callbackNative(JSON.stringify(callbackData));
       }
 
