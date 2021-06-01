@@ -18,13 +18,14 @@ export async function initialize() {
   this.carouselSwipecount = carouselSwipe_count.bind(this);
   this.productName = productName.bind(this);
   this.handleClick = handleClick.bind(this);
+  this.fetch_funddetails_list = fetch_funddetails_list.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
   if (this.state.screen_name === "fund_list") {
     const state = this.props.location.state;
     this.setState({
-      title: state
+      title: storageService().get('category_index_name') || state,
     })
   }
 }
@@ -102,13 +103,14 @@ export function carouselSwipe_count(index) {
 
 export function handleClick(data) {
   let categoryName = data.key === "global_indices" ? "global_index_funds" : data.key;
-  this.sendEvents("next", categoryName)
+  this.sendEvents("next", categoryName);
+  storageService().set("category_index_name", data.title);
   this.navigate(`${data.key}/fund-list`, data.title);
 }
 
 
 export function selected_year(selected) {
-  let time 
+  let time
   switch (selected) {
     case "1M":
       time = 'one_month_return'
@@ -136,12 +138,14 @@ export function selected_year(selected) {
 
 
 
-export async function fetch_funddetails_list() {
+export async function fetch_funddetails_list(body) {
 
-  let body = {
-    "subcategory": "all",
-    "sort_by": "high_to_low",
-    "filter_by": "expense_ratio"
+  if (isEmpty(body)) {
+    var body = {
+      "subcategory": "all",
+      // "sort_by": "high_to_low",
+      // "filter_by": "returns"
+    }
   }
 
 

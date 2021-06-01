@@ -8,7 +8,7 @@ import "./commonStyles.scss"
 const Filter = ({
   isOpen,
   setFilterActive,
-  sortFilter,
+  setRenderApi,
   setSortFilter,
   filterOptions,
 }) => {
@@ -18,6 +18,7 @@ const Filter = ({
   
   const close = () => {
     setFilterActive(false)
+    setRenderApi(true)
   }
 
   const apply = () => {

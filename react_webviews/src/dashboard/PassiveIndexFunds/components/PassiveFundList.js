@@ -54,8 +54,26 @@ class FundList extends Component {
         })
     }
 
-    setSortFilter(item) {
-        console.log(item, ' item!~ ')
+    setSortFilter = (item) => {
+
+        let body = {
+            "filter_by": item["Sort by"] || "returns",
+            "fund_house": item["Fund House"] || [],
+            "tracking_index": item["Index"] || [],
+            "subcategory": item["Index"] || "all",
+        }
+
+        if (item["Sort by"] === "tracking_error" || item["Sort by"] === "expense_ratio") {
+            body["sort_by"] = "low_to_high"
+        } else body["sort_by"] = "high_to_low"
+
+        if (item["Fund Option"] === "Growth") {
+            body["growth"] = "true"
+        } else if (item["Fund Option"] === "Dividend") {
+            body["dividend"] = "true"
+        }
+
+        this.fetch_funddetails_list(body)
     }
 
     sendEvents = (userAction, fundSelected) => {
