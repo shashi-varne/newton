@@ -512,6 +512,7 @@ export const prepareInvestMaaper = [
     title: "Refer & Earn",
     subtitle: "Refer to your friends & earn rewards",
     img: "ic_db_refer.svg",
+    path:"/refer"
   },
   {
     key: "refer",

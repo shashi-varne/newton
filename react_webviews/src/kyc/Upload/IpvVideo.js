@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { getIpvCode, upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
@@ -18,7 +17,7 @@ const IpvVideo = (props) => {
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [ipvcode, setIpvCode] = useState('')
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [showKnowMoreDialog, setKnowMoreDialog] = useState(false)
 
   const open = () => {
@@ -119,7 +118,7 @@ const IpvVideo = (props) => {
       const response = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
       if(response.status_code === 200) {
         const result = response.result
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc);
         navigate('/kyc/upload/progress')
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")
