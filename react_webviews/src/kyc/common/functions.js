@@ -156,13 +156,15 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
   return compare;
 };
 
-export const getTotalPagesInPersonalDetails = (kyc = {}, user = {}, isEdit = false) => {
+export const getTotalPagesInPersonalDetails = (isEdit = false) => {
+  const kyc = storageService().getObject("kyc") || {};
+  const user = storageService().getObject("user") || {};
   if (isEmpty(kyc) || isEmpty(user)) {
     return "";
   }
   const isCompliant = kyc.kyc_status === "compliant";
   const isNri = kyc?.address?.meta_data?.is_nri || false;
-  const isEmailAndMobileVerified = getEmailOrMobileVerifiedStatus(kyc, user)
+  const isEmailAndMobileVerified = getEmailOrMobileVerifiedStatus()
   const dlCondition =
     !isCompliant &&
     !isNri &&
@@ -176,7 +178,9 @@ export const getTotalPagesInPersonalDetails = (kyc = {}, user = {}, isEdit = fal
   return totalPages;
 };
 
-export const getEmailOrMobileVerifiedStatus = (kyc = {}, user = {}) => {
+export const getEmailOrMobileVerifiedStatus = () => {
+  const kyc = storageService().getObject("kyc") || {};
+  const user = storageService().getObject("user") || {};
   if (isEmpty(kyc) || isEmpty(user)) {
     return false;
   }

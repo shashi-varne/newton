@@ -24,6 +24,7 @@ const PersonalDetails1 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const [totalPages, setTotalPages] = useState();
 
   const {kyc, user, isLoading} = useUserKycHook();
 
@@ -57,6 +58,7 @@ const PersonalDetails1 = (props) => {
     };
     setFormData({ ...formData });
     setOldState({...formData});
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
   const handleClick = () => {
@@ -149,7 +151,7 @@ const PersonalDetails1 = (props) => {
       title={title}
       count={1}
       current={1}
-      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
+      total={totalPages}
     >
       <div className="kyc-personal-details">
         <div className="kyc-main-subtitle">

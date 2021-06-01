@@ -61,6 +61,7 @@ const CommunicationDetails = (props) => {
   const isNri = kyc.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
   const [isReadyToInvestBase, setIsReadyToInvest] = useState();
+  const [totalPages, setTotalPages] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -74,6 +75,7 @@ const CommunicationDetails = (props) => {
       data.mobile = mobileNumber;
       setFormData({ ...data });
       setIsReadyToInvest(isReadyToInvest());
+      setTotalPages(getTotalPagesInPersonalDetails())
     }
   }, [kyc, user]);
 
@@ -103,7 +105,6 @@ const CommunicationDetails = (props) => {
     setShowDotLoader(true);
     try {
       const result = await resendOtp(otpId);
-      if (!result) return;
       setOtpId(result.otp_id);
       setOtpData({
         otp: "",
@@ -130,7 +131,6 @@ const CommunicationDetails = (props) => {
         }
         setShowLoader("button");
         const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
-        if (!otpResult) return;
         updateKyc(otpResult.kyc);
         handleNavigation();
       } else {
@@ -159,7 +159,6 @@ const CommunicationDetails = (props) => {
         }
         setShowLoader("button");
         const result = await sendOtp(body);
-        if (!result) return;
         setShowOtpContainer(true);
         setOtpId(result.otp_id);
         setOtpData({
@@ -213,7 +212,7 @@ const CommunicationDetails = (props) => {
       title="Communication details"
       count={!isReadyToInvestBase && pageNumber}
       current={pageNumber}
-      total={getTotalPagesInPersonalDetails(kyc, user)}
+      total={totalPages}
       handleClick={handleClick}
       showLoader={showLoader}
       skelton={isLoading}
@@ -243,11 +242,7 @@ const CommunicationDetails = (props) => {
                   >
                     {googleButtonTitle}
                   </WVButton>
-                  <div className="kcd-or-divider">
-                    <div className="kcd-divider-line"></div>
-                    <div className="kcd-divider-text">OR</div>
-                    <div className="kcd-divider-line"></div>
-                  </div>
+                  <img src={require("assets/ORDivider.svg")} alt="" className="kcd-or-divider" />
                 </>
               )}
               <TextField

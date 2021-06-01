@@ -28,11 +28,12 @@ const PersonalDetails4 = (props) => {
   if (isEdit) {
     title = "Edit nominee detail";
   }
+  const [totalPages, setTotalPages] = useState();
   const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) initialize();
-  }, [kyc]);
+    if (!isEmpty(kyc) && !isEmpty(user)) initialize();
+  }, [kyc, user]);
 
   const initialize = () => {
     let is_checked = false;
@@ -53,6 +54,7 @@ const PersonalDetails4 = (props) => {
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
   const handleClick = () => {
@@ -144,7 +146,6 @@ const PersonalDetails4 = (props) => {
     setFormData({ ...formData });
   };
 
-  const pageNumber = getTotalPagesInPersonalDetails(kyc, user, isEdit);
   return (
     <Container
       skelton={isLoading}
@@ -153,9 +154,9 @@ const PersonalDetails4 = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
-      current={pageNumber}
-      count={pageNumber}
-      total={pageNumber}
+      current={totalPages}
+      count={totalPages}
+      total={totalPages}
     >
       <div className="kyc-nominee">
         <main>

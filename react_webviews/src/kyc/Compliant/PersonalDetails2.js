@@ -20,6 +20,7 @@ const PersonalDetails2 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const [totalPages, setTotalPages] = useState();
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
@@ -28,12 +29,13 @@ const PersonalDetails2 = (props) => {
   const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
       initialize();
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const initialize = () => {
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
     let formData = {
       mother_name: kyc.pan?.meta_data?.mother_name || "",
       marital_status: kyc.identification.meta_data.marital_status || "",
@@ -118,7 +120,7 @@ const PersonalDetails2 = (props) => {
       title={title}
       count={2}
       current={2}
-      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
+      total={totalPages}
     >
       <div className="kyc-personal-details">
         {!isLoading && (
