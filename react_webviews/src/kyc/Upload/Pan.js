@@ -8,7 +8,7 @@ import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, navigate as navigateFunc } from '../common/functions'
+import { isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
@@ -46,10 +46,10 @@ const Pan = (props) => {
 
   const handleOtherPlatformNavigation = () => {
     if (kyc.kyc_status === 'compliant') {
-      if (kyc.equity_identification.doc_status !== "submitted" || kyc.equity_identification.doc_status !== "approved")
+      if (!isDocSubmittedOrApproved("identification"))
         navigate(getPathname.uploadSelfie);
       else {
-        if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
+        if (!isDocSubmittedOrApproved("equity_income"))
           navigate(getPathname.uploadFnOIncomeProof);
         else navigate(getPathname.kycEsign)
       }
@@ -95,17 +95,13 @@ const Pan = (props) => {
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
         (result.error && !result.ocr_pan_kyc_matches)
       ) {
-        if (TRADING_ENABLED && kyc.kyc_type !== "manual") {
-          setBottomSheetType('failed');
-          setIsOpen(true);
-        } else {
-          throw new Error(result.message || result.error);
-        }
+        setBottomSheetType('failed');
+        setIsOpen(true);
       } else {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        if (TRADING_ENABLED && result.kyc.kyc_type !== "manual") {
+        if (isNotManualAndNriUser(result.kyc)) {
           setBottomSheetType('success');
           setIsOpen(true);
         } else {
