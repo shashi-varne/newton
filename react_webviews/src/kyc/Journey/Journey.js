@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
-import { getPathname, storageConstants } from '../constants'
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
@@ -294,11 +294,11 @@ const Journey = (props) => {
       //   return
       // }
       stateMapper = {
-        personal: getPathname.compliantPersonalDetails1,
-        nominee: getPathname.compliantPersonalDetails4,
+        personal: PATHNAME_MAPPER.compliantPersonalDetails1,
+        nominee: PATHNAME_MAPPER.compliantPersonalDetails4,
         bank: '/kyc/compliant/bank-details',
-        sign: getPathname.uploadSign,
-        pan: getPathname.homeKyc,
+        sign: PATHNAME_MAPPER.uploadSign,
+        pan: PATHNAME_MAPPER.homeKyc,
       }
       navigate(stateMapper[key], {
         state: {
@@ -311,13 +311,13 @@ const Journey = (props) => {
     } else {
       if (show_aadhaar) {
         stateMapper = {
-          pan: getPathname.homeKyc,
-          personal: getPathname.digilockerPersonalDetails1,
+          pan: PATHNAME_MAPPER.homeKyc,
+          personal: PATHNAME_MAPPER.digilockerPersonalDetails1,
           bank_esign: '/kyc/non-compliant/bank-details',
-          trading_esign: getPathname.tradingExperience,
-          address: getPathname.addressDetails1,
-          docs: getPathname.uploadProgress,
-          esign: getPathname.kycEsign,
+          trading_esign: PATHNAME_MAPPER.tradingExperience,
+          address: PATHNAME_MAPPER.addressDetails1,
+          docs: PATHNAME_MAPPER.uploadProgress,
+          esign: PATHNAME_MAPPER.kycEsign,
         }
 
         navigate(stateMapper[key], {
@@ -330,12 +330,12 @@ const Journey = (props) => {
       } else {
         console.log('Non show aadhaar')
         stateMapper = {
-          pan: getPathname.homeKyc,
-          personal: getPathname.personalDetails1,
-          address: getPathname.addressDetails1,
-          docs: getPathname.uploadProgress,
-          esign: getPathname.kycEsign,
-          trading_esign: getPathname.tradingExperience,
+          pan: PATHNAME_MAPPER.homeKyc,
+          personal: PATHNAME_MAPPER.personalDetails1,
+          address: PATHNAME_MAPPER.addressDetails1,
+          docs: PATHNAME_MAPPER.uploadProgress,
+          esign: PATHNAME_MAPPER.kycEsign,
+          trading_esign: PATHNAME_MAPPER.tradingExperience,
         }
         console.log(stateMapper[key])
       }
@@ -395,7 +395,7 @@ const Journey = (props) => {
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
-    if (isMobile.any() && storageService().get(storageConstants.NATIVE)) {
+    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -447,7 +447,7 @@ const Journey = (props) => {
 
   const cancel = () => {
     setDlAadhaar(false)
-    navigate(`${getPathname.journey}`, {
+    navigate(`${PATHNAME_MAPPER.journey}`, {
       searchParams: `${config.searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Container from '../common/Container'
-import { storageService, isEmpty } from '../../utils/validators'
-import { getPathname, storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
 import { isDigilockerFlow, navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
@@ -12,7 +12,6 @@ import "./commonStyles.scss";
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 
 const isWeb = getConfig().Web
-
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -43,9 +42,9 @@ const Sign = (props) => {
         navigate(`/kyc/${type}/bank-details`);
       } else {
         if (props?.location?.state?.backToJourney) {
-          navigate(getPathname.journey);
+          navigate(PATHNAME_MAPPER.journey);
         } else {
-          navigate(getPathname.uploadProgress);
+          navigate(PATHNAME_MAPPER.uploadProgress);
         }
       }
     } catch (err) {

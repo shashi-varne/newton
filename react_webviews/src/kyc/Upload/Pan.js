@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
 import { isEmpty } from '../../utils/validators'
-import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -47,20 +47,20 @@ const Pan = (props) => {
   const handleOtherPlatformNavigation = () => {
     if (kyc.kyc_status === 'compliant') {
       if (!isDocSubmittedOrApproved("identification"))
-        navigate(getPathname.uploadSelfie);
+        navigate(PATHNAME_MAPPER.uploadSelfie);
       else {
         if (!isDocSubmittedOrApproved("equity_income"))
-          navigate(getPathname.uploadFnOIncomeProof);
-        else navigate(getPathname.kycEsign)
+          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+        else navigate(PATHNAME_MAPPER.kycEsign)
       }
     } else {
       if (dlFlow) {
         if (kyc.sign_status !== 'signed') {
-          navigate(getPathname.tradingExperience);
+          navigate(PATHNAME_MAPPER.tradingExperience);
         } else {
-          navigate(getPathname.journey);
+          navigate(PATHNAME_MAPPER.journey);
         }
-      } else navigate(getPathname.uploadProgress);
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
   };
 

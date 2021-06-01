@@ -5,7 +5,7 @@ import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   bankAccountTypeOptions,
-  getPathname,
+  PATHNAME_MAPPER,
   getIfscCodeError,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
@@ -124,7 +124,7 @@ const KycBankDetails = (props) => {
   };
 
   const redirect = () => {
-    navigate(getPathname.journey);
+    navigate(PATHNAME_MAPPER.journey);
   };
 
   const handleClick = () => {
@@ -167,28 +167,28 @@ const KycBankDetails = (props) => {
 
   const handleOtherPlatformNavigation = () => {
     if (userType === "compliant") {
-      if (isEdit) navigate(getPathname.journey);
-      else navigate(getPathname.tradingExperience)
+      if (isEdit) navigate(PATHNAME_MAPPER.journey);
+      else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
         const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(getPathname.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan);
         } else {
-          navigate(getPathname.tradingExperience);
+          navigate(PATHNAME_MAPPER.tradingExperience);
         }
       } else {
-        navigate(getPathname.uploadProgress);
+        navigate(PATHNAME_MAPPER.uploadProgress);
       }
     }
   };
 
   const handleSdkNavigation = () => {
     if (userType === "compliant") {
-      navigate(getPathname.journey);
-      // if (isEdit) navigate(getPathname.journey);
+      navigate(PATHNAME_MAPPER.journey);
+      // if (isEdit) navigate(PATHNAME_MAPPER.journey);
       // else
-      //   navigate(getPathname.uploadSign, {
+      //   navigate(PATHNAME_MAPPER.uploadSign, {
       //     state: {
       //       backToJourney: true,
       //     },
@@ -197,9 +197,9 @@ const KycBankDetails = (props) => {
       if (dl_flow) {
         const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
         if (isPanFailedAndNotApproved)
-          navigate(getPathname.uploadPan);
-        else navigate(getPathname.kycEsign);
-      } else navigate(getPathname.uploadProgress);
+          navigate(PATHNAME_MAPPER.uploadPan);
+        else navigate(PATHNAME_MAPPER.kycEsign);
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
   };
 

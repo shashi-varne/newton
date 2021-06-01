@@ -29,6 +29,8 @@ const isMobileDevice = getConfig().isMobileDevice;
 const partnerLogo = getConfig().logo;
 const isWeb = getConfig().Web;
 const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor : '';
+const backButtonColor = !isWeb ? getConfig().styles?.backButtonColor : '';
+const notificationsColor = !isWeb ? getConfig()?.styles.notificationsColor : '';
 
 const Header = ({
   classes, title, count, total, current, goBack, edit, type, resetpage,
@@ -56,21 +58,18 @@ const Header = ({
       style={style}
       >
         <Toolbar>
-          {
-            !logo &&
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
-              onClick={headerData.goBack ||
-              goBack}>
-              {!disableBack && !headerData.hide_icon &&
-              <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
-              src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
-              />
-              }
-              {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
-              <Close />}
-            </IconButton>
-          }
+          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
+            onClick={headerData.goBack ||
+            goBack}>
+            {!disableBack && !headerData.hide_icon &&
+            <SVG
+            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backButtonColor ?  backButtonColor : new_header && !logo ? getConfig().styles.primaryColor : 'white'))}
+            src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
+            />
+            }
+            {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
+            <Close />}
+          </IconButton>
           {
             logo && 
              <div className='sdk-header-partner-logo'>

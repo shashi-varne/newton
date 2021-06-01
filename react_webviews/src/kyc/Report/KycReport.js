@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import {
-  getPathname,
-  kycDocNameMapper,
-  reportCardDetails,
-  storageConstants,
+  PATHNAME_MAPPER,
+  DOCUMENTS_MAPPER,
+  REPORT_CARD_DETAILS,
+  STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
 import { navigate as navigateFunc } from "../common/functions";
@@ -28,7 +28,7 @@ const Report = (props) => {
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
-      navigate(getPathname.uploadProgress, {
+      navigate(PATHNAME_MAPPER.uploadProgress, {
         state: {
           disableNext: true,
           fromState: "kyc-report",
@@ -65,9 +65,9 @@ const Report = (props) => {
     const nri = kyc.address.meta_data.is_nri;
     if (nri) {
       address_proof = "Passport";
-      address_proof_nri = kycDocNameMapper[kyc.address_doc_type];
+      address_proof_nri = DOCUMENTS_MAPPER[kyc.address_doc_type];
     } else {
-      address_proof = kycDocNameMapper[kyc.address_doc_type];
+      address_proof = DOCUMENTS_MAPPER[kyc.address_doc_type];
     }
 
     setAddressProof({
@@ -79,7 +79,7 @@ const Report = (props) => {
       setButtonTitle("INVEST NOW");
     }
 
-    let reportCards = [...reportCardDetails];
+    let reportCards = [...REPORT_CARD_DETAILS];
     setIsNri(nri);
     if (compliant) {
       reportCards.splice(5, 1); //remove docs
@@ -107,12 +107,12 @@ const Report = (props) => {
 
   const proceed = () => {
     if (config.Web) {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     } else {
-      if (storageService().get(storageConstants.NATIVE)) {
+      if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
         nativeCallback({ action: "exit_web" });
       } else {
-        navigate(getPathname.landing);
+        navigate(PATHNAME_MAPPER.landing);
       }
     }
   };
@@ -120,16 +120,16 @@ const Report = (props) => {
   const checkNPSAndProceed = () => {
     if (user.nps_investment) {
       if (!config.isIframe) {
-        navigate(getPathname.reports);
+        navigate(PATHNAME_MAPPER.reports);
       }
     } else {
       if (config.Web) {
-        navigate(getPathname.invest);
+        navigate(PATHNAME_MAPPER.invest);
       } else {
-        if (storageService().get(storageConstants.NATIVE)) {
+        if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
           nativeCallback({ action: "exit_web" });
         } else {
-          navigate(getPathname.landing);
+          navigate(PATHNAME_MAPPER.landing);
         }
       }
     }

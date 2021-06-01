@@ -1,4 +1,4 @@
-export const apiConstants = {
+export const API_CONSTANTS = {
   accountSummary: '/api/user/account/summary',
   getPan: '/api/kyc/checkv2/mine',
   submit: '/api/kyc/v2/mine',
@@ -16,7 +16,7 @@ export const apiConstants = {
   socialAuth: '/api/communication'
 }
 
-export const getPathname = {
+export const PATHNAME_MAPPER = {
   invest: '/invest',
   landing: '/',
   accountMerge: '/account/merge/',
@@ -63,7 +63,7 @@ export const getPathname = {
   nriError: '/kyc/nri-error',
 }
 
-export const storageConstants = {
+export const STORAGE_CONSTANTS = {
   USER: 'user',
   KYC: 'kyc',
   BANK_MANDATES: 'bank_mandates',
@@ -72,7 +72,7 @@ export const storageConstants = {
   AUTH_IDS: 'auth_ids',
 }
 
-export const docMapper = {
+export const DOCUMENTS_MAPPER = {
   DL: "Driving license",
   PASSPORT: "Passport",
   AADHAAR: "Aadhaar card",
@@ -81,52 +81,13 @@ export const docMapper = {
   LAT_BANK_PB: "Passbook",
 };
 
-export const nriDocMapper = {
+export const NRI_DOCUMENTS_MAPPER = {
   DL: "Driving license",
   UTILITY_BILL: "Gas receipt",
   LAT_BANK_PB: "Passbook",
 }
 
-export const occupationOptions = [
-  {
-    name: "Private Sector",
-    value: "PRIVATE SECTOR",
-  },
-  {
-    name: "Professional",
-    value: "PROFESSIONAL",
-  },
-  {
-    name: "Business",
-    value: "BUSINESS",
-  },
-  {
-    name: "House Wife",
-    value: "HOUSE WIFE",
-  },
-  {
-    name: "Public Sector",
-    value: "PUBLIC SECTOR",
-  },
-  {
-    name: "Government",
-    value: "GOVERNMENT",
-  },
-  {
-    name: "Student",
-    value: "STUDENT",
-  },
-  {
-    name: "Retired",
-    value: "RETIRED",
-  },
-  {
-    name: "Others",
-    value: "OTHERS",
-  },
-];
-
-export const incomeOptions = [
+export const INCOME_OPTIONS = [
   {
     name: "Below 1L",
     value: "BELOW 1L",
@@ -153,7 +114,7 @@ export const incomeOptions = [
   },
 ];
 
-export const residentialOptions = [
+export const RESIDENTIAL_OPTIONS = [
   {
     name: 'Indian',
     value: 'INDIAN',
@@ -164,7 +125,7 @@ export const residentialOptions = [
   },
 ];
 
-export const relationshipOptions = [
+export const RELATIONSHIP_OPTIONS = [
   {
     name: "Wife",
     value: "WIFE",
@@ -187,7 +148,7 @@ export const relationshipOptions = [
   },
 ];
 
-export const reportCardDetails = [
+export const REPORT_CARD_DETAILS = [
   {
     key: "personal",
     title: "Personal details",
@@ -253,20 +214,20 @@ export const bankAccountTypeOptions = (isNri) => {
   return account_types;
 };
 
-export const genderOptions = [
+export const GENDER_OPTIONS = [
   { name: "Male", value: "MALE" },
   { name: "Female", value: "FEMALE" },
   { name: "Other", value: "OTHER" },
 ];
 
-export const maritalStatusOptions = [
+export const MARITAL_STATUS_OPTIONS = [
   { name: "Single", value: "SINGLE" },
   { name: "Married", value: "MARRIED" },
   { name: "Divorced", value: "DIVORCED" },
   { name: "Widow", value: "WIDOW" },
 ];
 
-export const occupationTypeOptions = [
+export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Salaried", value: "SALARIED" },
   { name: "Self employed", value: "SELF EMPLOYED" },
   { name: "Business", value: "BUSINESS" },
@@ -287,28 +248,13 @@ export const getIfscCodeError = (code) => {
   }
 }
 
-export const kycDocNameMapper = {
-  DL: 'Driving license',
-  PASSPORT: 'Passport',
-  AADHAAR: 'Aadhaar card',
-  VOTER_ID_CARD: 'Voter ID',
-  UTILITY_BILL: 'Gas receipt',
-  LAT_BANK_PB: 'Passbook',
-}
-
-export const kycNRIDocNameMapper = {
-  DL: "Driving license",
-  UTILITY_BILL: "Gas receipt",
-  LAT_BANK_PB: "Passbook"
-};
-
-export const verificationDocOptions = [
+export const VERIFICATION_DOC_OPTIONS = [
   { name: 'Bank statement', value: 'bankstatement' },
   { name: 'Cancelled cheque', value: 'cheque' },
   { name: 'First page of passbook', value: 'passbook' },
 ]
 
-export const addressProofOptions = [
+export const ADDRESS_PROOF_OPTIONS = [
   { name: "Driving license", value: "DL" },
   { name: "Passport", value: "PASSPORT" },
   { name: "Aadhaar card", value: "AADHAAR" },
@@ -317,13 +263,13 @@ export const addressProofOptions = [
   { name: "Passbook", value: "LAT_BANK_PB" }
 ];
 
-export const nriAddressProofOptions = [
+export const NRI_ADDRESS_PROOF_OPTIONS = [
   { name: "Driving license", value: "DL" },
   { name: "Passport", value: "PASSPORT" },
   { name: "Passport", value: "PASSPORT" } 
 ]
 
-export const dlDocs = [
+export const DL_DOCS = [
   {name: 'Aadhaar Card', icon: 'ic_aadhaar_card'},
   {name: 'Pan Card', icon: 'ic_pan_card'},
   {name: 'Address Details', icon: 'ic_address_details'}

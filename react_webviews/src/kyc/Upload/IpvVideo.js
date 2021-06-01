@@ -3,8 +3,7 @@ import VideoRecorder from 'react-video-recorder'
 import Container from '../common/Container'
 import Button from '../../common/ui/Button'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { getIpvCode, upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
@@ -16,7 +15,6 @@ import "./commonStyles.scss";
 const config = getConfig();
 const productName = config.productName
 const isWeb = config.Web
-
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)

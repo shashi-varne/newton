@@ -196,7 +196,11 @@ const InvestAmount = (props) => {
     >
       <section className='invest-amount-common'>
         <div className='invest-amount-input'>
-          <p className='invest-amount-input-head'>I want to invest</p>
+        <p className="invest-amount-input-head">
+            {funnelGoalData.itype === "saveforgoal"
+              ? " I can set aside"
+              : "I want to invest"}
+          </p>
           <div className='invest-amount-container'>
             <Input
               id='invest-amount'

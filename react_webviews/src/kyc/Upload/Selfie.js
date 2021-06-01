@@ -2,7 +2,7 @@ import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
-import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { isDocSubmittedOrApproved, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
 import { getConfig, isTradingEnabled } from 'utils/functions'
@@ -41,10 +41,10 @@ const Selfie = (props) => {
     } else {
       if (TRADING_FLOW) {
         if (!isDocSubmittedOrApproved("equity_income"))
-          navigate(getPathname.uploadFnOIncomeProof);
-        else navigate(getPathname.kycEsign)
+          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+        else navigate(PATHNAME_MAPPER.kycEsign)
       } else {
-        navigate(getPathname.uploadProgress);
+        navigate(PATHNAME_MAPPER.uploadProgress);
       }
     }
   }

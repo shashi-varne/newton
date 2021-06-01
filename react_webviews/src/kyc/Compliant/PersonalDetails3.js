@@ -3,9 +3,9 @@ import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
-  occupationTypeOptions,
-  incomeOptions,
-  getPathname,
+  OCCUPATION_TYPE_OPTIONS,
+  INCOME_OPTIONS,
+  PATHNAME_MAPPER,
 } from "../constants";
 import { isEmpty } from "utils/validators";
 import {
@@ -110,20 +110,20 @@ const PersonalDetails3 = (props) => {
     };
     if (getEmailOrMobileVerifiedStatus()) {
       if (isNri) {
-        navigate(getPathname.nriAddressDetails2, data);
+        navigate(PATHNAME_MAPPER.nriAddressDetails2, data);
       } else {
-        navigate(getPathname.compliantPersonalDetails4, data);
+        navigate(PATHNAME_MAPPER.compliantPersonalDetails4, data);
       }
       return;
     }
-    navigate(getPathname.communicationDetails, data);
+    navigate(PATHNAME_MAPPER.communicationDetails, data);
   };
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let formData = { ...form_data };
     if (name === "occupation")
-      formData[name] = occupationTypeOptions[value].value;
+      formData[name] = OCCUPATION_TYPE_OPTIONS[value].value;
     else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
@@ -151,7 +151,7 @@ const PersonalDetails3 = (props) => {
               width="40"
               label="Occupation detail:"
               class="occupation"
-              options={occupationTypeOptions}
+              options={OCCUPATION_TYPE_OPTIONS}
               id="account_type"
               value={form_data.occupation || ""}
               onChange={handleChange("occupation")}
@@ -162,7 +162,7 @@ const PersonalDetails3 = (props) => {
             <DropdownWithoutIcon
               error={form_data.income_error ? true : false}
               helperText={form_data.income_error}
-              options={incomeOptions}
+              options={INCOME_OPTIONS}
               id="relationship"
               label="Income range"
               isAOB={true}

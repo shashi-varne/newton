@@ -2,8 +2,7 @@ import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { storageService } from '../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig } from '../../utils/functions'
 import toast from 'common/ui/Toast'
@@ -13,7 +12,8 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import { isEmpty } from 'lodash';
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 
-const getTitleList = ({ kyc }) => {
+const isWeb = getConfig().Web;
+const getTitleList = () => {
   let titleList = [
     'Photo of address card should have your signature',
     'Photo of address should be clear and it should not have the exposure of flash light',
@@ -117,7 +117,7 @@ const NRIAddressUpload = (props) => {
     : kyc?.address_doc_type
   const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
-    : docMapper[kyc?.address_doc_type]
+    : DOCUMENTS_MAPPER[kyc?.address_doc_type]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -155,7 +155,6 @@ const NRIAddressUpload = (props) => {
       },
     });
   };
-
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"

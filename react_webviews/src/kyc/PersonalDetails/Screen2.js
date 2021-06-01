@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import { isEmpty, validateAlphabets } from "../../utils/validators";
 import {
   validateFields,
@@ -60,7 +60,7 @@ const PersonalDetails2 = (props) => {
         form_data.spouse_name;
 
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.personalDetails3, {
+      navigate(PATHNAME_MAPPER.personalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -81,7 +81,7 @@ const PersonalDetails2 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.personalDetails3, {
+      navigate(PATHNAME_MAPPER.personalDetails3, {
         state: {
           isEdit: isEdit,
         },
