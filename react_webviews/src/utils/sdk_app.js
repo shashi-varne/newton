@@ -23,6 +23,7 @@ export const checkAfterRedirection = (props, fromState, toState) => {
     nativeCallback({ action: "take_back_button_control" });
     nativeCallback({ action: "clear_history" });
   } else {
+    // Todo: Remove this code later
     nativeCallback({ action: "reset_back_button_control" });
   }
 }
@@ -48,7 +49,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     }
   }
 
-  if ("/diy/fundinfo/direct".indexOf(currentState)) {
+  if ("/diy/fundinfo/direct".indexOf(currentState) !== -1) {
     nativeCallback({ action: "clear_history" });
   }
 
