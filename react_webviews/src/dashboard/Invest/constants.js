@@ -24,6 +24,14 @@ export const investCardsBase = {
       icon: "icn_nps.svg",
     },
   },
+  indexFunds :{
+    passiveIndexFunds: {
+      button_text: "EXPLORE",
+      icon: "passive_index_funds.svg",
+      subtitle: "Earn 2% more than actively managed fund",
+      title: "Passive index funds",
+    },
+  },
   ourRecommendations: {
     buildwealth: {
       title: "High growth funds (Build Wealth)",
@@ -130,7 +138,7 @@ export const investCardsBase = {
 
 export const keyPathMapper = {
   nfo: "/advanced-investing/new-fund-offers/info",
-  passive_index_funds: "landing",
+  passiveIndexFunds: "landing",
   instaredeem: "invest/instaredeem",
   buildwealth: "invest/buildwealth",
   savetax: "invest/savetax",
@@ -425,10 +433,10 @@ export const riskProfiles = [{
 }];
 
 export const sdkInvestCardMapper = [
- {
+  {
     key: 'invest',
     title: 'Start investing',
-    titleImg:'ic_db_invest_solid.svg',
+    titleImg: 'ic_db_invest_solid.svg',
     subtitle: 'Mutual Funds',
     img: 'ic_db_invest.svg',
     height: '133px',

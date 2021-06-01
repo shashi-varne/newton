@@ -101,7 +101,7 @@ class Landing extends Component {
   };
 
   handleCampaign = () => {
-    this.setState({show_loader : 'page', openBottomSheet : false});
+    this.setState({ show_loader: 'page', openBottomSheet: false });
     let campLink = this.state.bottom_sheet_dialog_data.url;
     handleCampaignRedirection(campLink);
   }
@@ -120,6 +120,7 @@ class Landing extends Component {
       openKycPremiumLanding,
     } = this.state;
     const {
+      indexFunds,
       ourRecommendations,
       diy,
       bottomScrollCards,
@@ -138,7 +139,7 @@ class Landing extends Component {
           {
             !kycStatusLoader &&
             <div className="generic-page-subtitle">
-              {isReadyToInvestBase 
+              {isReadyToInvestBase
                 ? " Your KYC is verified, You’re ready to invest"
                 : "Invest in your future"}
             </div>
@@ -151,15 +152,6 @@ class Landing extends Component {
                 height: '270px',
                 marginBottom: "15px",
               }}
-            />
-          }
-          {
-            <InvestCard
-              data={data}
-              key={1}
-              handleClick={() =>
-                this.clickCard(data.key, data.title)
-              }
             />
           }
           {investSections &&
@@ -190,6 +182,23 @@ class Landing extends Component {
                           />
                         </div>
                       )}
+                    </React.Fragment>
+                  );
+                case "indexFunds":
+                  return (
+                    <React.Fragment key={index}>
+                      {!isEmpty(indexFunds) &&
+                        indexFunds.map((item, index) => {
+                          return (
+                            <InvestCard
+                              data={item}
+                              key={index}
+                              handleClick={() =>
+                                this.clickCard(item.key, item.title)
+                              }
+                            />
+                          );
+                        })}
                     </React.Fragment>
                   );
                 case "ourRecommendations":
@@ -420,11 +429,3 @@ class Landing extends Component {
 }
 
 export default Landing;
-
-const data = {
-  button_text: "EXPLORE",
-  icon: "ic_insta_fund_redemption.svg",
-  key: "passive_index_funds",
-  subtitle: "Earn 2% more than actively managed fund",
-  title: "Passive index funds",
-}
