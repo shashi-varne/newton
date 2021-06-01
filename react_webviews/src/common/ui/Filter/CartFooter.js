@@ -6,13 +6,11 @@ import { getConfig } from '../../../utils/functions';
 
 const isMobileDevice = getConfig().isMobileDevice;
 const CartFooter = ({
-    SortFilterData,
     filterOptions,
     getSortedFilter,
     ...props
 }) => {
     const [filterActive, setFilterActive] = useState(false);
-    const [cartActive, setCartActive] = useState(false)
     const [sortFilter, setSortFilter] = useState(false);
 
 
@@ -30,7 +28,6 @@ const CartFooter = ({
             <Filter
                 isOpen={filterActive}
                 setFilterActive={setFilterActive}
-                SortFilterData={SortFilterData}
                 setSortFilter={setSortFilter}
                 filterOptions={filterOptions}
             />

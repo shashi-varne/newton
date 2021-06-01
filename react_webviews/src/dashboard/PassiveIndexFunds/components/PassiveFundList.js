@@ -93,7 +93,6 @@ class FundList extends Component {
                 errorData={this.state.errorData}
             >
                 <div>
-                    {/* <h1 className="category-title">{this.state.title}</h1> */}
                     {this.state.fundDescription && (
                         <p className="category-description">{this.state.fundDescription.substring(0, 90)}<span style={this.state.expand ? {} : { display: "none" }}>{this.state.fundDescription.substring(91)}</span>...<span className="category-desc-button" onClick={this.handleExpand}>{this.state.expand ? " LESS" : " MORE"}</span></p>
                     )}
@@ -122,19 +121,9 @@ class FundList extends Component {
                                 );
                             })}
                     </React.Fragment>
-
                     <CartFooter
-                        fundsList={result}
                         filterOptions={filter_options}
                         getSortedFilter={this.setSortFilter}
-                    // sortFilter={sortFilter}
-                    // fundHouse={fundHouse}
-                    // fundOption={fundOption}
-                    // setSortFilter={setSortFilter}
-                    // setFundHouse={setFundHouse}
-                    // setFundsList={setFundOption}
-                    // setFundOption={setFundOption}
-                    // {...parentProps}
                     />
                 </div>
             </Container>
