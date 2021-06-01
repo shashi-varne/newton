@@ -18,7 +18,7 @@ import FundChart from "../mini-components/PassiveFundChart";
 import Container from "../../common/Container";
 import Toast from "../../../common/ui/Toast";
 import { SkeltonRect } from "../../../common/ui/Skelton";
-import PassiveStarRating from "../mini-components/PassiveStarRating";
+import PassiveStarRating from "../../../common/ui/PassiveStarRating";
 import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig } from "../../../utils/functions";
 

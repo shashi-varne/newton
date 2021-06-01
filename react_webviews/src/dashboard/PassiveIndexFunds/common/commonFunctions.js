@@ -106,6 +106,33 @@ export function handleClick(data) {
 }
 
 
+export function selected_year(selected) {
+  let time 
+  switch (selected) {
+    case "1M":
+      time = 'one_month_return'
+      break;
+    case "3M":
+      time = 'three_month_return'
+      break;
+    case "6M":
+      time = 'six_month_return'
+      break;
+    case "1Y":
+      time = 'one_year_return'
+      break;
+    case "3Y":
+      time = 'three_year_return'
+      break;
+    case "5Y":
+      time = 'five_year_return'
+      break;
+    default:
+      time = 'five_year_return'
+  }
+  return time;
+}
+
 
 
 export async function fetch_funddetails_list() {

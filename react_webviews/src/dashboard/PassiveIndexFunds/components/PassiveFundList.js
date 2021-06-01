@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import { storageService, isEmpty } from "utils/validators";
-import { initialize, fetch_funddetails_list } from "../common/commonFunctions";
-import FundListCard from "../mini-components/FundListCard";
+import { initialize, fetch_funddetails_list, selected_year } from "../common/commonFunctions";
 import CartFooter from "../../../common/ui/Filter/CartFooter";
-import YearFilter from "../mini-components/YearFilter";
+import YearFilter from "../../../common/ui/YearFilter";
+import GenericListCard from "../../../common/ui/GenericListCard"
 import { year_filters, filter_options } from "../constants";
 import "./PassiveFundDetails.scss";
 import { nativeCallback } from "../../../utils/native_callback";
@@ -49,7 +49,7 @@ class FundList extends Component {
 
     yearFilter = (time) => {
         this.setState({
-            selected: time
+            selected: selected_year(time)
         })
     }
 
@@ -91,7 +91,6 @@ class FundList extends Component {
                 skelton={this.state.skelton}
                 showError={this.state.showError}
                 errorData={this.state.errorData}
-            // force_hide_inpage_title={true}
             >
                 <div>
                     {/* <h1 className="category-title">{this.state.title}</h1> */}
@@ -109,11 +108,16 @@ class FundList extends Component {
                         {!isEmpty(result) &&
                             result.map((item, index) => {
                                 return (
-                                    <FundListCard
+                                    <GenericListCard
                                         data={item}
+                                        title1={'EXPENSE RATIO'}
+                                        title2={'Returns'}
+                                        title3={'TRACKING ERROR%'}
+                                        data1={'expense_ratio'}
+                                        data2={this.state.selected || "five_year_return"}
+                                        data3={'tracking_error'}
                                         key={index}
                                         handleClick={() => this.clickCard(item)}
-                                        selected={this.state.selected}
                                     />
                                 );
                             })}
