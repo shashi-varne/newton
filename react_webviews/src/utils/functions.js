@@ -141,7 +141,7 @@ export function getParamsMark(data) {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+  let { base_url="https://react-test-dot-plutus-staging.appspot.com" } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
@@ -488,6 +488,8 @@ export function navigate(pathname, data = {}) {
     fromState,
     toState
   }
+
+  console.log("inside navigate...", data)
 
   if (data.edit) {
     this.history.replace({
