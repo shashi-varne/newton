@@ -7,6 +7,7 @@ import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
+import WVSelect from "../../../common/ui/Select/WVSelect";
 
 const tradingExperienceValues = [
   {
@@ -22,7 +23,7 @@ const tradingExperienceValues = [
     value: "3-5",
   },
   {
-    name: "5 year +",
+    name: "5 years +",
     value: "5+",
   },
 ];
@@ -87,34 +88,33 @@ const TradingExperience = (props) => {
     }
   }
 
+  const handleChange = (selectedOption) => {
+    setExperience(selectedOption.value)
+  }
+
   return (
     <Container
       buttonTitle="CONTINUE"
       handleClick={handleClick}
       title="Select trading experience"
-      noPadding
       disable={isLoading}
       showLoader={isApiRunning}
+      data-aid="select-trading-experience-screen"
     >
-      <div className="trading-experience">
-        <div className="generic-page-subtitle te-subtitle">
+      <div className="trading-experience" data-aid="trading-experience">
+        <div
+          className="generic-page-subtitle te-subtitle"
+          data-aid="generic-page-subtitle"
+        >
           As per SEBI, it is mandatory to share your trading experience
         </div>
-        {tradingExperienceValues.map((data, index) => {
-          const selected = data.value === experience;
-          return (
-            <div
-              className={`te-tile ${selected && "te-selected-tile"}`}
-              key={index}
-              onClick={() => setExperience(data.value)}
-            >
-              <div>{data.name}</div>
-              {selected && (
-                <img alt="" src={require(`assets/completed_step.svg`)} />
-              )}
-            </div>
-          );
-        })}
+        <WVSelect
+          options={tradingExperienceValues}
+          titleProp="name"
+          indexBy="value"
+          value={experience}
+          onChange={handleChange}
+        />
       </div>
     </Container>
   );
