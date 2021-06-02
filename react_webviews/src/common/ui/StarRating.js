@@ -1,9 +1,9 @@
 import React from 'react'
 import StarIcon from "@material-ui/icons/Star";
 
-function PassiveStarRating({value}) {
+function StarRating({value}) {
     return (
-        <span style={{marginTop: '2px'}}>
+        <span>
            {[...Array(5)].map(
               (el, idx) => {
                 if (idx < value) {
@@ -36,4 +36,4 @@ function PassiveStarRating({value}) {
     )
 }
 
-export default PassiveStarRating
+export default StarRating;

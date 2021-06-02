@@ -18,7 +18,7 @@ import FundChart from "../mini-components/PassiveFundChart";
 import Container from "../../common/Container";
 import Toast from "../../../common/ui/Toast";
 import { SkeltonRect } from "../../../common/ui/Skelton";
-import PassiveStarRating from "../../../common/ui/PassiveStarRating";
+import StarRating from "../../../common/ui/StarRating";
 import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig } from "../../../utils/functions";
 import { Imgc } from "../../../common/ui/Imgc";
@@ -209,8 +209,8 @@ function PassiveFundDetails({ history }) {
               alt=""
             />
           </div>
-          <div style={{paddingTop: "8px", paddingBottom: "10px"}}>
-            <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
+          <div style={{paddingTop: "10px", paddingBottom: "10px"}}>
+            <StarRating value={fundDetails?.performance?.ms_rating} />
           </div>
           <p className="pfd-info">{`${fundDetails?.performance.ms_risk} risk | ${fundDetails?.performance?.tracking_index}`}</p>
           <div className="pf-flex">
@@ -359,7 +359,7 @@ function PassiveFundDetails({ history }) {
         <section className="pfd-padding">
           <Imgc src={MorningStar} style={{ paddingBottom: "10px", width: "113px", height: "22px" }} alt="" />
           <div style={{paddingBottom: "10px"}}>
-            <PassiveStarRating value={fundDetails?.performance?.ms_rating} />
+            <StarRating value={fundDetails?.performance?.ms_rating} />
           </div>
           <p
             className="pfd-values"
