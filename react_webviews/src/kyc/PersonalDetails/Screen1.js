@@ -6,7 +6,6 @@ import { GENDER_OPTIONS, MARITAL_STATUS_OPTIONS, PATHNAME_MAPPER } from "../cons
 import {
   formatDate,
   dobFormatTest,
-  validateNumber,
   validateAlphabets,
   isEmpty,
 } from "../../utils/validators";

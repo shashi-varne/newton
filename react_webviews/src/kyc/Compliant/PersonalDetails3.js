@@ -167,7 +167,7 @@ const PersonalDetails3 = (props) => {
       skelton={isLoading}
       events={sendEvents("just_set_events")}
       id="kyc-personal-details3"
-      buttonTitle="CONTINUE"
+      buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
@@ -183,7 +183,7 @@ const PersonalDetails3 = (props) => {
               error={form_data.occupation_error ? true : false}
               helperText={form_data.occupation_error}
               width="40"
-              label="Occupation detail:"
+              label="Occupation detail"
               class="occupation"
               options={OCCUPATION_TYPE_OPTIONS}
               id="account_type"

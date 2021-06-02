@@ -61,6 +61,8 @@ export const PATHNAME_MAPPER = {
   uploadFnOIncomeProof: '/kyc/upload/fno-income-proof',
   tradingExperience: '/kyc/trading-experience',
   nriError: '/kyc/nri-error',
+  communicationDetails: '/kyc/communication-details',
+  selfieSteps: '/kyc/upload/selfie-steps',
 }
 
 export const STORAGE_CONSTANTS = {
@@ -120,8 +122,8 @@ export const RESIDENTIAL_OPTIONS = [
     value: 'INDIAN',
   },
   {
-    name: 'Non indian',
-    value: 'NON INDIAN',
+    name: 'NRI',
+    value: 'NRI',
   },
 ];
 

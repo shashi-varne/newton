@@ -155,8 +155,7 @@ const PersonalDetails2 = (props) => {
                 error={form_data.marital_status_error ? true : false}
                 helperText={form_data.marital_status_error}
                 width="40"
-                label="Marital status:"
-                class="marital_status"
+                label="Marital status"
                 options={MARITAL_STATUS_OPTIONS}
                 id="account_type"
                 value={form_data.marital_status || ""}
@@ -176,7 +175,7 @@ const PersonalDetails2 = (props) => {
             />
             {form_data.marital_status === "MARRIED" && (
               <Input
-                label="Spouse"
+                label="Spouse's name"
                 class="input"
                 value={form_data.spouse_name || ""}
                 error={form_data.spouse_name_error ? true : false}
