@@ -2,7 +2,6 @@ import React from "react";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { isEmpty } from "utils/validators";
-// import RadioGroup from "@material-ui/core/RadioGroup";
 import "./commonStyles.scss";
 
 const SortFilter = ({
@@ -35,12 +34,6 @@ const SortFilter = ({
   };
   return (
     <FormControl component="fieldset" className="diy-sort-filter">
-      {/* <RadioGroup
-        aria-label="Returns"
-        name="sortFilter"
-        className=""
-        // value={localSortFilter[selectedTab]}
-      > */}
         {!isEmpty(SortFilterData) &&
           SortFilterData.map((item) => {
             return (
@@ -65,7 +58,6 @@ const SortFilter = ({
               ></FormControlLabel>
             );
           })}
-      {/* </RadioGroup> */}
     </FormControl>
   );
 };

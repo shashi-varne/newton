@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Imgc } from "./Imgc";
+import ReactHtmlParser from "react-html-parser";
 import { getConfig } from "utils/functions";
 
-class ActivePassiveCarousel extends Component {
+class GenericContentCarousel extends Component {
   onSwipeMoveEvent = () => {
     this.swipeMargin();
   };
@@ -28,25 +28,9 @@ class ActivePassiveCarousel extends Component {
 
   renderCarousel = (data, index) => {
     return (
-      <div className="active-passive-carousel" key={index}>
-        <div className="image">
-          <Imgc
-            style={{ width: "38px", height: "40px" }}
-            src={require(`assets/${data.src}`)}
-            alt=""
-          />
-        </div>
-        <p className="header">{data.header}</p>
-        <div className="body">
-          <div className="left">
-            <p className="left-title">{data.left.title.toUpperCase()}</p>
-            <p className="content">{data.left.content}</p>
-          </div>
-          <div className="right">
-            <p className="right-title">{data.right.title.toUpperCase()}</p>
-            <p className="content">{data.right.content}</p>
-          </div>
-        </div>
+      <div className="generic-content-carousel" key={index}>
+        <p className="title">{data.title}</p>
+        <p className="content">{ReactHtmlParser(data.content)}</p>
       </div>
     );
   };
@@ -67,36 +51,6 @@ class ActivePassiveCarousel extends Component {
       margin: "1px 3px",
       borderRadius: "1.5px",
     };
-
-    const arrowStyles = {
-      position: "absolute",
-      zIndex: 2,
-      top: "40px",
-      width: 32,
-      height: 32,
-      cursor: "pointer",
-    };
-    let arrowProps = {};
-    arrowProps["renderArrowPrev"] = (onClickHandler, hasPrev, label) =>
-      hasPrev && (
-        <div
-          onClick={onClickHandler}
-          title={label}
-          style={{ ...arrowStyles, left: 0 }}
-        >
-          <img src={require("assets/carousel-prev.svg")} alt="prev-btn" />
-        </div>
-      );
-    arrowProps["renderArrowNext"] = (onClickHandler, hasNext, label) =>
-      hasNext && (
-        <div
-          onClick={onClickHandler}
-          title={label}
-          style={{ ...arrowStyles, right: 0 }}
-        >
-          <img src={require("assets/carousel-next.svg")} alt="next-btn" />
-        </div>
-      );
 
     if (this.props?.customData?.length === 1) {
       indicatorStyles.display = "none";
@@ -125,7 +79,6 @@ class ActivePassiveCarousel extends Component {
           }
           return <li onClick={onClickHandler} style={indicatorStyles} />;
         }}
-        {...arrowProps}
       >
         {this.props.customData &&
           this.props.customData.map((item, index) =>
@@ -136,4 +89,4 @@ class ActivePassiveCarousel extends Component {
   }
 }
 
-export default ActivePassiveCarousel;
+export default GenericContentCarousel;

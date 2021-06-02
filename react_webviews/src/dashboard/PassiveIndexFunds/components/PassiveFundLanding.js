@@ -9,8 +9,8 @@ import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecuri
 import { fund_category, passiveActiveCarousal, keyInsightsCarousel } from "../constants";
 import { initialize } from "../common/commonFunctions";
 import { nativeCallback } from "../../../utils/native_callback";
-import ActivePassiveCarousel from "../../../common/ui/ActivePassiveCarousel";
-import KeyInsightCarousel from "../../../common/ui/KeyInsightCarousel";
+import GenericFactCarousel from "../../../common/ui/GenericFactCarousel";
+import GenericContentCarousel from "../../../common/ui/GenericContentCarousel";
 import VideoBlock from "../mini-components/VideoBlock"
 import { Imgc } from "../../../common/ui/Imgc";
 
@@ -111,7 +111,7 @@ class Landing extends Component {
                 />
                 <h1 className="category-title">Key insights</h1>
                 <div className="react-responsive-carousel">
-                  <KeyInsightCarousel
+                  <GenericContentCarousel
                     customData={keyInsightsCarousel}
                     callbackFromParent={this.carouselSwipecount}
                     selectedIndexvalue={this.state.selectedIndex}
@@ -119,7 +119,7 @@ class Landing extends Component {
                 </div>
                 <h1 className="category-title">Passive vs. Active investing</h1>
                 <div className="react-responsive-carousel">
-                  <ActivePassiveCarousel
+                  <GenericFactCarousel
                     customData={passiveActiveCarousal}
                     callbackFromParent={this.carouselSwipecount}
                   />

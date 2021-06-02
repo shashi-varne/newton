@@ -4,7 +4,7 @@ import ExpandMoreIcon from "../../assets/expand_more.svg";
 import ExpandLessIcon from "../../assets/expand_less.svg";
 import { storageService } from "utils/validators";
 
-const PassiveFundAccordian = ({ title, children, name }) => {
+const Accordian = ({ title, children, name }) => {
   const [open, setOpen] = useState(false);
   const handleAccordian = () => {
     if (name) storageService().set(name, true);
@@ -13,23 +13,10 @@ const PassiveFundAccordian = ({ title, children, name }) => {
   return (
     <>
       <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          cursor: "pointer",
-          padding: "0 20px",
-        }}
+        className="generic-accordian"
         onClick={handleAccordian}
       >
-        <p
-          style={{
-            fontSize: "15px",
-            fontWeight: "700",
-            lineHeight: "24px",
-            letterSpacing: "0px",
-          }}
-        >
+        <p>
           {title}
         </p>
         <img src={open ? ExpandLessIcon : ExpandMoreIcon} alt="" />
@@ -41,4 +28,4 @@ const PassiveFundAccordian = ({ title, children, name }) => {
   );
 };
 
-export default memo(PassiveFundAccordian);
+export default memo(Accordian);
