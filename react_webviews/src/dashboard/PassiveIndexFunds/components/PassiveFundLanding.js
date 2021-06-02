@@ -3,15 +3,14 @@ import { findDOMNode } from 'react-dom'
 import screenfull from 'screenfull'
 import ReactPlayer from 'react-player'
 import Container from "../../common/Container";
-import ReactResponsiveCarousel from "../../../common/ui/carousel";
 import MenuListDropDown from '../../../common/ui/MenuListDropDown'
 import { storageService } from "utils/validators";
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
 import { fund_category, passiveActiveCarousal, keyInsightsCarousel } from "../constants";
 import { initialize } from "../common/commonFunctions";
 import { nativeCallback } from "../../../utils/native_callback";
-import ActivePassiveCarousel from "../mini-components/ActivePassiveCarousel";
-import KeyInsightCarousel from "../mini-components/KeyInsightCarousel";
+import ActivePassiveCarousel from "../../../common/ui/ActivePassiveCarousel";
+import KeyInsightCarousel from "../../../common/ui/KeyInsightCarousel";
 import VideoBlock from "../mini-components/VideoBlock"
 import { Imgc } from "../../../common/ui/Imgc";
 
@@ -112,9 +111,7 @@ class Landing extends Component {
                 />
                 <h1 className="category-title">Key insights</h1>
                 <div className="react-responsive-carousel">
-                  <ReactResponsiveCarousel
-                    customFormatCarousal={true}
-                    customComponent={KeyInsightCarousel}
+                  <KeyInsightCarousel
                     customData={keyInsightsCarousel}
                     callbackFromParent={this.carouselSwipecount}
                     selectedIndexvalue={this.state.selectedIndex}
@@ -122,10 +119,7 @@ class Landing extends Component {
                 </div>
                 <h1 className="category-title">Passive vs. Active investing</h1>
                 <div className="react-responsive-carousel">
-                  <ReactResponsiveCarousel
-                    customFormatCarousal={true}
-                    customIndicatorButton={true}
-                    customComponent={ActivePassiveCarousel}
+                  <ActivePassiveCarousel
                     customData={passiveActiveCarousal}
                     callbackFromParent={this.carouselSwipecount}
                   />

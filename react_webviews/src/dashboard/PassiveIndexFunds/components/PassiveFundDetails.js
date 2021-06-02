@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUrlParams, storageService } from "../../../utils/validators";
 import "./PassiveFundDetails.scss";
-import Accordian from "../mini-components/Accordian";
+import Accordian from "../../../common/ui/Accordian";
 import { List, Slide } from "@material-ui/core";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import MorningStar from "../../../assets/logo_morningstar.svg";
@@ -96,7 +96,7 @@ function PassiveFundDetails({ history }) {
               <span style={{ fontWeight: "400" }}>
                 {fundDetails?.performance?.tracking_error !== "NA"
                   ? `${fundDetails?.performance?.tracking_error}%`
-                  : "NA"}
+                  : "Na"}
               </span>
             </p>
             <p className="pfd-values" style={{ color: "#767E86" }}>
@@ -287,7 +287,7 @@ function PassiveFundDetails({ history }) {
             <p className="pfd-values">
               {fundDetails?.performance?.tracking_error !== "NA"
                 ? `${fundDetails?.performance?.tracking_error}% (1Y)`
-                : "NA"}
+                : "Na"}
             </p>
           </div>
           <div>

@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import ReactHtmlParser from "react-html-parser";
+import { getConfig } from "utils/functions";
 
-import {getConfig} from 'utils/functions';
-import { Imgc} from './Imgc';
-
-class ReactResponsiveCarousel extends Component {
+class KeyInsightCarousel extends Component {
   onSwipeMoveEvent = () => {
     this.swipeMargin();
   };
@@ -27,41 +26,34 @@ class ReactResponsiveCarousel extends Component {
     }, 350);
   };
 
-  renderOfferImages = (props, index) => {
-      return (
-        <div key={index} className="generic-carousel" onClick={() => {
-          if(this.props.handleClick) {
-            this.props.handleClick(props, index);
-          }
-        }}>
-          <Imgc className="offer-slide-img"
-            src={this.props.directImgLink ? props :  require(`assets/${props.src}`)} alt="Gold Offer"
-            style={{minHeight:170}}
-            />
-        </div>
-      )
-    }
+  renderCarousel = (data, index) => {
+    return (
+      <div className="key-insight-carousel" key={index}>
+        <p className="title">{data.title}</p>
+        <p className="content">{ReactHtmlParser(data.content)}</p>
+      </div>
+    );
+  };
 
   eventChangeFunction = (index) => {
     this.onChangeEvent();
     this.props.callbackFromParent(index);
   };
 
-  
-
   render() {
     let productName = getConfig().productName;
+
     const indicatorStyles = {
-      background: productName !== 'fisdom' ?  "#9CC0FF" : "#DFD8EF",
+      background: productName !== "fisdom" ? "#9CC0FF" : "#DFD8EF",
       width: "20px",
       height: "3px",
       display: "inline-block",
       margin: "1px 3px",
       borderRadius: "1.5px",
     };
-    
-    if(this.props?.CarouselImg?.length === 1) {
-      indicatorStyles.display = 'none';
+
+    if (this.props?.customData?.length === 1) {
+      indicatorStyles.display = "none";
     }
 
     return (
@@ -88,10 +80,13 @@ class ReactResponsiveCarousel extends Component {
           return <li onClick={onClickHandler} style={indicatorStyles} />;
         }}
       >
-        {this.props.CarouselImg.map(this.renderOfferImages)}
+        {this.props.customData &&
+          this.props.customData.map((item, index) =>
+            this.renderCarousel(item, index)
+          )}
       </Carousel>
     );
   }
 }
 
-export default ReactResponsiveCarousel;
+export default KeyInsightCarousel;
