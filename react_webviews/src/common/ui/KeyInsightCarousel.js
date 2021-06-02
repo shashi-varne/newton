@@ -28,7 +28,7 @@ class KeyInsightCarousel extends Component {
 
   renderCarousel = (data, index) => {
     return (
-      <div className="key-insight-carousel">
+      <div className="key-insight-carousel" key={index}>
         <p className="title">{data.title}</p>
         <p className="content">{ReactHtmlParser(data.content)}</p>
       </div>

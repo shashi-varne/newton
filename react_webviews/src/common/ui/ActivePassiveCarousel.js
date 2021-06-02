@@ -28,7 +28,7 @@ class ActivePassiveCarousel extends Component {
 
   renderCarousel = (data, index) => {
     return (
-      <div className="active-passive-carousel">
+      <div className="active-passive-carousel" key={index}>
         <div className="image">
           <Imgc
             style={{ width: "38px", height: "40px" }}
