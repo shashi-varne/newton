@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUrlParams, storageService } from "../../../utils/validators";
 import "./PassiveFundDetails.scss";
-import Accordian from "../mini-components/Accordian";
+import Accordian from "../../../common/ui/Accordian";
 import { List, Slide } from "@material-ui/core";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import MorningStar from "../../../assets/logo_morningstar.svg";

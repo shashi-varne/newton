@@ -1531,3 +1531,103 @@ p {
 
 }
 // --------------------------------Passive Index Style-End----------------------------------- //
+
+// Active Passive Carousel 
+.active-passive-carousel {
+  background-image: url("../../assets/active_passive_background.svg");
+  width: 100%;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  padding: 20px 10px;
+  .image {
+    display: flex;
+    justify-content: center;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .header {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: 0px;
+    color: #0a1d32;
+  }
+  .body {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 25px;
+    .left {
+      width: 40%;
+      .left-title {
+        text-align: center;
+        font-size: calc(10px + 0.2vw);
+        font-weight: 600;
+        line-height: 16px;
+        letter-spacing: 1px;
+        color: #161a2e;
+      }
+      .content {
+        text-align: left;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 21px;
+        letter-spacing: 0px;
+        color: #767e86;
+      }
+    }
+    .right {
+      width: 40%;
+      .right-title {
+        text-align: center;
+        font-size: calc(10px + 0.2vw);
+        font-weight: 600;
+        line-height: 16px;
+        letter-spacing: 1px;
+        color: #4d890d;
+      }
+      .content {
+        text-align: left;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 21px;
+        letter-spacing: 0px;
+        color: #767e86;
+      }
+    }
+  }
+}
+
+// Key Insights Carousel
+.key-insight-carousel {
+  background-image: url("../../assets/passiveFundKeyInsights.svg");
+  width: 100%;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  padding: 20px 20px;
+  min-height: 116px;
+  .title {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0px;
+    color: #0a1d32;
+    margin-bottom: 10px;
+    margin-top: 0;
+    text-align: left;
+  }
+  .content {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0px;
+    color: #767e86;
+    text-align: left;
+  }
+}

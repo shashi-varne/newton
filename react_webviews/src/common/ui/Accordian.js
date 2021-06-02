@@ -1,9 +1,8 @@
 import React, { memo, useState } from "react";
 import Collapse from "@material-ui/core/Collapse";
-import ExpandMoreIcon from "../../../assets/expand_more.svg";
-import ExpandLessIcon from "../../../assets/expand_less.svg";
-import "./commonStyles.scss";
-import { storageService } from "../../../utils/validators";
+import ExpandMoreIcon from "../../assets/expand_more.svg";
+import ExpandLessIcon from "../../assets/expand_less.svg";
+import { storageService } from "utils/validators";
 
 const PassiveFundAccordian = ({ title, children, name }) => {
   const [open, setOpen] = useState(false);
