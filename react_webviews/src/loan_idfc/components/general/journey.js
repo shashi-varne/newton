@@ -447,6 +447,7 @@ class JourneyMap extends Component {
         loaderWithData={this.state.loaderWithData}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        title="Summary"
       >
         <div className="journey-track">
           {index < "3" && <img
