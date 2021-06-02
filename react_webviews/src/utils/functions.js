@@ -117,6 +117,8 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, "640px");
   html.style.setProperty(`--tooltip-width`, "540px");
   html.style.setProperty("--color-action-disable", "#E8ECF1");
+  html.style.setProperty('--dark', '#0A1D32');
+  html.style.setProperty('--steelgrey', '#767E86');
 
   return config_to_return;
 }
@@ -139,7 +141,7 @@ export function getParamsMark(data) {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+  let { base_url="https://react-test-dot-plutus-staging.appspot.com" } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
@@ -168,6 +170,7 @@ export const getConfig = () => {
   }
 
   let { is_secure = false } = main_query_params;
+  let { from_notification } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
@@ -234,6 +237,12 @@ export const getConfig = () => {
     returnConfig.generic_callback = generic_callback;
     searchParams += getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
+  }
+  
+  if (checkValidString(from_notification)) {
+    returnConfig.from_notification = from_notification;
+    searchParams += getParamsMark(searchParams) + `from_notification=${from_notification}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `from_notification=${from_notification}`;
   }
 
   if (sdk_capabilities) {
@@ -419,9 +428,16 @@ export function setHeights(data) {
       ? document.getElementsByClassName('Footer')[0].offsetHeight
       : 0;
 
+  const navbar =
+      document.getElementsByClassName('NavBar') && document.getElementsByClassName('NavBar')[0]
+        ? document.getElementsByClassName('NavBar')[0].offsetHeight
+        : 0;
+
   let HeaderHeight = bannerHeight + stepHeight + head + 'px';
+  const HeaderTop = head + navbar + 'px';
   if (data.header && document.getElementById('HeaderHeight')) {
     document.getElementById('HeaderHeight').style.height = HeaderHeight;
+    document.getElementById('HeaderHeight').style.top = HeaderTop;
   }
 
   // not using for now
@@ -503,7 +519,7 @@ export function isNpsOutsideSdk(fromState, toState) {
     return false;
   }
 
-  if (fromState === "/nps" ||
+  if (fromState === "/nps/sdk" ||
     ((fromState.indexOf("/nps/amount") !== -1) && toState === "/nps/info") ||
     ((fromState.indexOf("/nps/payment/callback") !== -1) &&
       ((toState.indexOf("/nps/amount") !== -1) || toState === "/nps/investments" ||

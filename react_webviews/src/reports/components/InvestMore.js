@@ -11,7 +11,7 @@ import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import PennyVerificationPending from "../../dashboard/Invest/mini-components/PennyVerificationPending";
 import InvestError from "../../dashboard/Invest/mini-components/InvestError";
 import InvestReferralDialog from "../../dashboard/Invest/mini-components/InvestReferralDialog";
-import { getConfig } from "../../utils/functions";
+import { getBasePath, getConfig } from "../../utils/functions";
 
 const InvestMore = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -101,7 +101,7 @@ const InvestMore = (props) => {
     };
 
     let paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/${sipOrOnetime}/${investmentObj.investment.amount}${getConfig().searchParams}`
+      `${getBasePath()}/page/callback/${sipOrOnetime}/${investmentObj.investment.amount}${getConfig().searchParams}`
     );
 
     let investmentEventData = {

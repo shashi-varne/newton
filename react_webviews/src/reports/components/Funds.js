@@ -137,7 +137,7 @@ const Funds = (props) => {
             button2Title: "SIP",
             button1Title: "ONE-TIME",
             handleClick1: handleInvestType("ONE-TIME", item),
-            handleClick2: handleInvestType("SIP", item),
+            handleClick2: handleInvestType("SIP", item, true),
           });
           setAskInvestType(true);
         } else if (result.sip_flag) {
@@ -207,8 +207,11 @@ const Funds = (props) => {
     }
   };
 
-  const handleInvestType = (invest_type, recommendation) => () => {
+  const handleInvestType = (invest_type, recommendation, addSipTag) => () => {
     if (invest_type === "SIP") {
+      if(addSipTag && recommendation.type !== "buildwealth") {
+        recommendation.type = dontAddSuffixInType(recommendation.type)
+      }
       navigate(`${getPathname.investMore}${invest_type}`, {
         state: {
           recommendation: JSON.stringify(recommendation),

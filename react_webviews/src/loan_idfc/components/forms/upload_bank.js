@@ -379,7 +379,7 @@ class UploadBank extends Component {
           () => this.handleScroll("upload")
         );
       } else {
-        throw result.error || result.message || "Something went wrong"
+        toast(result.error || result.message || "Something went wrong")
       }
     } catch (err) {
       console.log(err);
@@ -388,7 +388,7 @@ class UploadBank extends Component {
         show_loader: false,
         documents: documents
       });
-      toast(err || "Something went wrong");
+      toast("Something went wrong");
     }
   };
 

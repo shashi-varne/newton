@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, docMapper } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { DOCUMENTS_MAPPER } from '../constants'
 import { upload } from '../common/api'
 import { getBase64, getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -10,6 +10,7 @@ import { combinedDocBlob } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 
+const isWeb = getConfig().Web
 const getTitleList = ({ kyc, myAccountFlow }) => {
   let titleList = [
     'Photo of address card should have your signature',
@@ -63,7 +64,7 @@ const AddressUpload = (props) => {
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
-  const {kyc: kycData, isLoading} = useUserKycHook();
+  const {kyc: kycData, isLoading, updateKyc} = useUserKycHook();
   const [kyc, setKyc] = useState(
     kycData
   )
@@ -91,7 +92,7 @@ const AddressUpload = (props) => {
             doc_side: doc_side,
             show_loader: true,
           })
-          if (doc_side === 'back') {
+          if (doc_side === 'front') {
             setFrontDoc(file)
           } else {
             setBackDoc(file)
@@ -173,7 +174,7 @@ const AddressUpload = (props) => {
   }
 
   const handleUpload = (method_name, type) => () => {
-    if(getConfig().html_camera){
+    if(isWeb){
       if (type === 'front') {
         frontDocRef.current.click()
       } else {
@@ -212,8 +213,7 @@ const AddressUpload = (props) => {
       }
       if(response.status_code === 200) {
         result = response.result;
-        setKyc(result.kyc)
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc)
         if(isMyAccountFlow) {
           navigate('/my-account');
         } else {
@@ -246,8 +246,8 @@ const AddressUpload = (props) => {
   var addressProof = kyc?.address?.meta_data?.is_nri
     ? "Passport"
     : isMyAccountFlow
-    ? docMapper[stateParams.addressDocType]
-    : docMapper[kyc?.address_doc_type];
+    ? DOCUMENTS_MAPPER[stateParams.addressDocType]
+    : DOCUMENTS_MAPPER[kyc?.address_doc_type];
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -286,17 +286,17 @@ const AddressUpload = (props) => {
     });
   };
   
-  const isWeb = getConfig().Web
   const title =
     isMyAccountFlow && kyc?.address?.meta_data?.is_nri
       ? "Upload Indian Address Proof"
       : "Upload address proof";
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title={title}
     >

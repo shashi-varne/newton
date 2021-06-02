@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini-components/Alert'
-import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper, getPathname } from '../../constants'
+import { isEmpty } from '../../../utils/validators'
+import { NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER, PATHNAME_MAPPER } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig, navigate as navigateFunc } from '../../../utils/functions'
 import toast from '../../../common/ui/Toast'
@@ -10,6 +10,7 @@ import { combinedDocBlob } from '../../common/functions'
 import useUserKycHook from '../../common/hooks/userKycHook'
 import "../commonStyles.scss";
 
+const isWeb = getConfig().Web
 const getTitleList = () => {
   let titleList = [
     'Photo of address card should have your signature',
@@ -40,7 +41,7 @@ const ChangeAddressDetails2 = (props) => {
 
   const stateParams = props?.location?.state || {}
   if(!stateParams.address_doc_type) {
-    navigate(getPathname.changeAddressDetails1);
+    navigate(PATHNAME_MAPPER.changeAddressDetails1);
   }
   const { address_doc_type: addressDocType } = stateParams
 
@@ -48,7 +49,7 @@ const ChangeAddressDetails2 = (props) => {
 
   const [state, setState] = useState({})
 
-  const { kyc, isLoading } = useUserKycHook()
+  const { kyc, isLoading, updateKyc } = useUserKycHook()
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -146,7 +147,7 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleUpload = (method_name, type) => () => {
-    if(getConfig().html_camera){
+    if(isWeb){
       if (type === 'front') {
         frontDocRef.current.click()
       } else {
@@ -189,7 +190,7 @@ const ChangeAddressDetails2 = (props) => {
       }
       if(response.status_code === 200) {
         result = response.result;
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc)
         navigate('/my-account')
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
@@ -206,7 +207,7 @@ const ChangeAddressDetails2 = (props) => {
     : addressDocType
   const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
-    : docMapper[addressDocType]
+    : DOCUMENTS_MAPPER[addressDocType]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -215,15 +216,13 @@ const ChangeAddressDetails2 = (props) => {
     ? 'Upload Indian Address Proof'
     : 'Upload address proof'
 
-  const isWeb = getConfig().Web
-
   return (
     <Container
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title={title}
       count={2}

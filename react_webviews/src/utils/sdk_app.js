@@ -23,6 +23,7 @@ export const checkAfterRedirection = (props, fromState, toState) => {
     nativeCallback({ action: "take_back_button_control" });
     nativeCallback({ action: "clear_history" });
   } else {
+    // Todo: Remove this code later - https://fisdom.atlassian.net/browse/WVFIS-1073
     nativeCallback({ action: "reset_back_button_control" });
   }
 }
@@ -48,7 +49,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     }
   }
 
-  if ("/diy/fundinfo/direct".indexOf(currentState)) {
+  if ("/diy/fundinfo/direct".indexOf(currentState) !== -1) {
     nativeCallback({ action: "clear_history" });
   }
 
@@ -114,15 +115,14 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   }
   
   const npsDetailsCheckCasesArr = ["/nps/payment/callback", "/nps/mandate/callback", "/nps/success", "/page/invest/campaign/callback", "/invest", "/reports"]
-  if (npsDetailsCheckCasesArr.indexOf(currentState) !== -1) {
+  if (npsDetailsCheckCasesArr.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     if (storageService().getObject("nps_additional_details_required")) {
       if (isNpsOutsideSdk(fromState, currentState)) {
         nativeCallback({ action: "clear_history" });
       }
-      navigate("/nps");
+      navigate("/nps/sdk");
       return true;
     } else {
-      nativeCallback({ action: "clear_history" });
       navigate("/");
       return true;
     }

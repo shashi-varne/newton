@@ -200,7 +200,6 @@ export function commonRender(props_base) {
                         type={this.props.skelton}
                     />
                 }
-
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
@@ -240,6 +239,9 @@ export function commonRender(props_base) {
                         project={this.props.project || this.state.project}
                         dualbuttonwithouticon={this.props.dualbuttonwithouticon}
                         twoButton={this.props.twoButton}
+                        twoButtonVertical={this.props.twoButtonVertical}
+                        button1Props={this.props.button1Props}
+                        button2Props={this.props.button2Props}
                         buttonOneTitle={this.props.buttonOneTitle}
                         buttonTwoTitle={this.props.buttonTwoTitle}
                         handleClickOne={this.props.handleClickOne}
@@ -604,7 +606,7 @@ export function new_header_scroll() {
         <div id="header-title-page"
             style={this.props.styleHeader}
             className={`header-title-page  ${this.props.classHeader}`}>
-            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '' }}>
+            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }}>
                 {this.props.title}
             </div>
 

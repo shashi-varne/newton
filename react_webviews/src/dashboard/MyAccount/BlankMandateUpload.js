@@ -7,6 +7,7 @@ import "./MyAccount.scss";
 import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { upload } from "./MyAccountFunctions";
 
+const config = getConfig();
 const BlankMandateUpload = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -17,7 +18,6 @@ const BlankMandateUpload = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [fileToShow, setFileToShow] = useState(null);
   const inputEl = useRef(null);
-  const config = getConfig();
 
   const handleClose = () => {
     navigate("/my-account");
@@ -94,7 +94,7 @@ const BlankMandateUpload = (props) => {
   };
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(config.Web)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'blank_mandate', 'blank_mandate.jpg', 'front')

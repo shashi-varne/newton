@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { relationshipOptions, getPathname } from "../constants";
+import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
   compareObjects,
@@ -65,7 +65,7 @@ const Nominee = (props) => {
     let body = { ...finalSubmissionData };
     body.kyc.nomination = userkycDetails.nomination.meta_data;
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.kycReport);
+      navigate(PATHNAME_MAPPER.kycReport);
       return;
     }
     saveNomineeDetails(body);
@@ -76,7 +76,7 @@ const Nominee = (props) => {
       setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
-      navigate(getPathname.kycReport);
+      navigate(PATHNAME_MAPPER.kycReport);
     } catch (err) {
       console.log(err);
       toast(err.message || genericErrorMessage);
@@ -140,7 +140,7 @@ const Nominee = (props) => {
               <DropdownWithoutIcon
                 error={form_data.relationship_error ? true : false}
                 helperText={form_data.relationship_error}
-                options={relationshipOptions}
+                options={RELATIONSHIP_OPTIONS}
                 id="relationship"
                 label="Relationship"
                 isAOB={true}

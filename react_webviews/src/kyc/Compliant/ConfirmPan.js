@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
 import { panUiSet } from "../common/functions";
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import toast from "../../common/ui/Toast";
 import { kycSubmit } from "../common/api";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
@@ -18,7 +18,7 @@ const ConfirmPan = (props) => {
   const {kyc, isLoading} = useUserKycHook();
 
   const handleClick = () => {
-    navigate(getPathname.homeKyc, {
+    navigate(PATHNAME_MAPPER.homeKyc, {
       state: {
         isPremiumFlow: true,
         isEdit: true,
@@ -47,17 +47,17 @@ const ConfirmPan = (props) => {
         (isUserCompliant || result.kyc.kyc_status === "compliant") &&
         (kycConfirmPanScreen || isPremiumFlow)
       ) {
-        navigate(getPathname.compliantPersonalDetails1);
+        navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
       } else {
         if (isUserCompliant || result.kyc.kyc_status === "compliant") {
-          navigate(getPathname.journey);
+          navigate(PATHNAME_MAPPER.journey);
         } else {
           if (kyc.address.meta_data.is_nri) {
-            navigate(`${getPathname.journey}`, {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
             });
           } else {
-            navigate(`${getPathname.journey}`, {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
             });
           }
