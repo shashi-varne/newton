@@ -50,7 +50,7 @@ class FundList extends Component {
     yearFilter = (time) => {
         this.setState({
             selected: selected_year(time),
-            checked: time,
+            yearValue: time,
         })
     }
 
@@ -61,6 +61,7 @@ class FundList extends Component {
             "fund_house": item["Fund House"] || [],
             "tracking_index": item["Index"] || [],
             "subcategory": item["Index"] || "all",
+            "return_type": this.state.selected || "one_year_return"
         }
 
         if (item["Sort by"] === "tracking_error" || item["Sort by"] === "expense_ratio") {
@@ -118,7 +119,7 @@ class FundList extends Component {
 
                     <YearFilter
                         filterArray={year_filters}
-                        selected={this.state.checked}
+                        selected={this.state.yearValue || "1Y"}
                         onclick={this.yearFilter}
                     />
 
@@ -136,7 +137,7 @@ class FundList extends Component {
                                                 'title2': 'RETURNS',
                                                 'title3': 'TRACKING ERROR',
                                                 'data1': 'expense_ratio',
-                                                'data2': this.state.selected || "five_year_return",
+                                                'data2': this.state.selected || "one_year_return",
                                                 'data3': 'tracking_error',
                                             }
                                         }
