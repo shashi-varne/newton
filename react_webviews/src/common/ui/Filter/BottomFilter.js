@@ -6,7 +6,7 @@ import { getConfig } from '../../../utils/functions';
 
 const isMobileDevice = getConfig().isMobileDevice;
 
-const CartFooter = ({
+const BottomFilter = ({
     filterOptions,
     getSortedFilter,
     ...props
@@ -42,4 +42,4 @@ const CartFooter = ({
     )
 }
 
-export default CartFooter;
+export default BottomFilter;

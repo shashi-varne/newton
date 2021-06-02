@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { storageService, isEmpty } from "utils/validators";
 import { initialize, fetch_funddetails_list, selected_year } from "../common/commonFunctions";
-import CartFooter from "../../../common/ui/Filter/CartFooter";
+import BottomFilter from "../../../common/ui/Filter/BottomFilter";
 import YearFilter from "../../../common/ui/YearFilter";
 import GenericListCard from "../../../common/ui/GenericListCard"
 import { year_filters, filter_options } from "../constants";
@@ -128,19 +128,25 @@ class FundList extends Component {
                                 return (
                                     <GenericListCard
                                         data={item}
-                                        title1={'EXPENSE RATIO'}
-                                        title2={'RETURNS'}
-                                        title3={'TRACKING ERROR'}
-                                        data1={'expense_ratio'}
-                                        data2={this.state.selected || "five_year_return"}
-                                        data3={'tracking_error'}
+                                        title='legal_name'
+                                        subtitle='tracking_index'
+                                        value={
+                                            {
+                                                'title1': 'EXPENSE RATIO',
+                                                'title2': 'RETURNS',
+                                                'title3': 'TRACKING ERROR',
+                                                'data1': 'expense_ratio',
+                                                'data2': this.state.selected || "five_year_return",
+                                                'data3': 'tracking_error',
+                                            }
+                                        }
                                         key={index}
                                         handleClick={() => this.clickCard(item)}
                                     />
                                 );
                             })}
                     </React.Fragment>
-                    <CartFooter
+                    <BottomFilter
                         filterOptions={filter_options}
                         getSortedFilter={this.setSortFilter}
                     />

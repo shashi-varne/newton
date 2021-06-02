@@ -41,33 +41,33 @@ const SortFilter = ({
         className=""
         // value={localSortFilter[selectedTab]}
       > */}
-        {!isEmpty(SortFilterData) &&
-          SortFilterData.map((item) => {
-            return (
-              <FormControlLabel
-                value={item.value}
-                name={item.isMulti}
-                control={
-                  <item.control
-                    checked={(localSortFilter[selectedTab] || []).includes(
-                      item.value
-                    )}
-                    color={item.color}
-                  />
-                }
-                label={
-                  <div className="fc-title">{item.title}
-                    {item.subtitle && <p className="fc-subtitle">{item.subtitle}</p>}
-                  </div>
-                }
-                onChange={handleChange}
-                labelPlacement={item.labelPlacement}
-              ></FormControlLabel>
-            );
-          })}
+      {!isEmpty(SortFilterData) &&
+        SortFilterData.map((item) => {
+          return (
+            <FormControlLabel
+              value={item.value}
+              name={item.isMulti}
+              control={
+                <item.control
+                  checked={(localSortFilter[selectedTab] || []).includes(
+                    item.value
+                  )}
+                  color={item.color}
+                />
+              }
+              label={
+                <div className="fc-title">{item.title}
+                  {item.subtitle && <p className="fc-subtitle">{item.subtitle}</p>}
+                </div>
+              }
+              onChange={handleChange}
+              labelPlacement={item.labelPlacement}
+            ></FormControlLabel>
+          );
+        })}
       {/* </RadioGroup> */}
     </FormControl>
   );
 };
 
-export default SortFilter;
+export default SortFilter; 
