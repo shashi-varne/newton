@@ -62,6 +62,8 @@ export const PATHNAME_MAPPER = {
   tradingExperience: '/kyc/trading-experience',
   nriError: '/kyc/nri-error',
   selfieSteps: '/kyc/upload/selfie-steps',
+  stocksStatus: '/kyc/stocks-status',
+  accountInfo: '/kyc/account-info',
 }
 
 export const STORAGE_CONSTANTS = {

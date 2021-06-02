@@ -282,7 +282,15 @@ const Home = (props) => {
       navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       if (isUserCompliant || kyc_status === "compliant") {
-        navigate(PATHNAME_MAPPER.journey);
+        if (is_nri) {
+          if (!TRADING_ENABLED) {
+            navigate(PATHNAME_MAPPER.journey);
+          } else {
+            navigate(PATHNAME_MAPPER.nriError);
+          }
+        } else {
+          navigate(PATHNAME_MAPPER.journey);
+        }
       } else {
         if (is_nri) {
           if (!TRADING_ENABLED) {

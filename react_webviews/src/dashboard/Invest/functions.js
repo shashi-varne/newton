@@ -13,6 +13,7 @@ import {
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
+import { PATHNAME_MAPPER } from "../../kyc/constants";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -28,6 +29,7 @@ export async function initialize() {
   this.clickCard = clickCard.bind(this);
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
+  this.openStocks = openStocks.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
@@ -240,6 +242,9 @@ export function clickCard(state, title) {
       break;
     case "kyc":
       this.openKyc();
+      break;
+    case "stocks":
+      this.openStocks();
       break;
     case "insurance":
       let insurancePath = "/group-insurance";
@@ -507,20 +512,27 @@ export function openPremiumOnboardBottomSheet(
   }
 }
 
+export function handleKycSubmittedOrRejectedState () {
+  let { userKyc, kycJourneyStatusMapperData, } = this.state;
+
+  if (userKyc.bank.meta_data_status === "rejected") {
+    this.setState({ verificationFailed: true });
+  } else {
+    let modalData = kycJourneyStatusMapperData;
+    this.setState({ modalData, openKycStatusDialog: true });
+  }
+}
+
 export function openKyc() {
   let {
     userKyc,
     kycJourneyStatus,
     kycStatusData,
-    kycJourneyStatusMapperData,
   } = this.state;
+
+  storageService().set("kycProductType", "mf");
   if (kycJourneyStatus === "submitted" || kycJourneyStatus === "rejected") {
-    if (userKyc.bank.meta_data_status === "rejected") {
-      this.setState({ verificationFailed: true });
-    } else {
-      let modalData = kycJourneyStatusMapperData;
-      this.setState({ modalData, openKycStatusDialog: true });
-    }
+    handleKycSubmittedOrRejectedState();
   } else {
     if (kycJourneyStatus === "ground") {
       this.navigate("/kyc/home");
@@ -531,6 +543,32 @@ export function openKyc() {
           fromState: "invest",
         },
       });
+    } else {
+      this.navigate(kycStatusData.next_state, {
+        state: { fromState: "invest" },
+      });
+    }
+  }
+}
+
+export function openStocks() {
+  let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
+  
+  storageService().set("kycProductType", "equity");
+  if (kycJourneyStatus === "submitted" || kycJourneyStatus === "rejected") {
+    handleKycSubmittedOrRejectedState();
+  } else {
+    if (kycJourneyStatus === "ground") {
+      this.navigate(PATHNAME_MAPPER.stocksStatus);
+    } else if (kycJourneyStatus === "ground_pan") {
+      this.navigate(PATHNAME_MAPPER.journey, {
+        state: {
+          show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
+          fromState: "invest",
+        },
+      });
+    } else if (isReadyToInvest()) {
+      this.navigate(PATHNAME_MAPPER.accountInfo)
     } else {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },
