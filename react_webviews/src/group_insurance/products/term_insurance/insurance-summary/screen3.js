@@ -1037,7 +1037,7 @@ class Journey extends Component {
                     <img src={this.state.image} alt="" style={{ width: '100%' }} />
                   </Grid>
                   <Grid item xs={7}>
-                    <div className="Title" style={{ color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>
+                    <div className="Title" style={{ color: '#444', fontFamily: 'Rubik', fontWeight: 500, fontSize: 14 }}>
                       {this.state.providerName} {this.state.cover_plan}
                       <div>
                         Status: <span style={{ color: '#d26774' }}>Pending</span>

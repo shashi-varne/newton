@@ -1078,7 +1078,7 @@ class Summary extends Component {
                 <img src={this.state.image} alt="" style={{ width: '100%' }} />
               </Grid>
               <Grid item xs={7}>
-                <div className="Title" style={{ color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18 }}>
+                <div className="Title" style={{ color: '#444', fontFamily: 'Rubik', fontWeight: 500, fontSize: 18 }}>
                   {this.state.provider !== 'Maxlife' && <span>{this.state.providerName}</span>} {this.state.cover_plan}
                   <div style={{ marginTop: 7, marginBottom: 7 }}>{
                     this.state.application_id &&
@@ -1089,7 +1089,7 @@ class Summary extends Component {
             </Grid>
           </div>
           <div style={{ marginTop: 30 }}>
-            <div className="Title" style={{ color: '#444', fontFamily: 'Roboto', fontWeight: 500, fontSize: 18, marginBottom: 20 }}>
+            <div className="Title" style={{ color: '#444', fontFamily: 'Rubik', fontWeight: 500, fontSize: 18, marginBottom: 20 }}>
               Insurance details
           </div>
             <Grid container spacing={8} alignItems="center">
@@ -1099,7 +1099,7 @@ class Summary extends Component {
                     <img src={cover_period} alt="" width="40" />
                   </div>
                   <div className="Text">
-                    <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Cover period</div>
+                    <div style={{ color: '#4a4a4a', fontFamily: 'Rubik', fontWeight: 500, fontSize: 14 }}>Cover period</div>
                     <div style={{ color: '#4a4a4a' }}>{this.state.term} years</div>
                   </div>
                 </div>
@@ -1111,7 +1111,7 @@ class Summary extends Component {
                       <img src={life_cover} alt="" width="40" />
                     </div>
                     <div className="Text">
-                      <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Life cover</div>
+                      <div style={{ color: '#4a4a4a', fontFamily: 'Rubik', fontWeight: 500, fontSize: 14 }}>Life cover</div>
                       <div style={{ color: '#4a4a4a' }}>{this.state.cover_amount}</div>
                     </div>
                   </div>
@@ -1126,7 +1126,7 @@ class Summary extends Component {
                     <img src={income} alt="" width="40" />
                   </div>
                   <div className="Text">
-                    <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Annual income</div>
+                    <div style={{ color: '#4a4a4a', fontFamily: 'Rubik', fontWeight: 500, fontSize: 14 }}>Annual income</div>
                     <div style={{ color: '#4a4a4a' }}>
                       {this.state.annual_income}
                     </div>
@@ -1140,7 +1140,7 @@ class Summary extends Component {
                       <img src={smoking} alt="" width="40" />
                     </div>
                     <div className="Text">
-                      <div style={{ color: '#4a4a4a', fontFamily: 'Roboto', fontWeight: 500, fontSize: 14 }}>Use tobacco</div>
+                      <div style={{ color: '#4a4a4a', fontFamily: 'Rubik', fontWeight: 500, fontSize: 14 }}>Use tobacco</div>
                       <div style={{ color: '#4a4a4a' }}>{(this.state.tobacco_choice === 'N') ? 'No' : 'Yes'}</div>
                     </div>
                   </div>
