@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import { isEmpty, validateAlphabets } from "../../utils/validators";
 import {
   validateFields,
@@ -20,6 +20,7 @@ const PersonalDetails2 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const [totalPages, setTotalPages] = useState();
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
@@ -28,8 +29,8 @@ const PersonalDetails2 = (props) => {
   const {kyc, user, isLoading} = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) initialize();
-  }, [kyc]);
+    if (!isEmpty(kyc) && !isEmpty(user)) initialize();
+  }, [kyc, user]);
 
   const initialize = async () => {
     let formData = {
@@ -40,6 +41,7 @@ const PersonalDetails2 = (props) => {
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
   const handleClick = () => {
@@ -60,7 +62,7 @@ const PersonalDetails2 = (props) => {
         form_data.spouse_name;
 
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.personalDetails3, {
+      navigate(PATHNAME_MAPPER.personalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -81,7 +83,7 @@ const PersonalDetails2 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.personalDetails3, {
+      navigate(PATHNAME_MAPPER.personalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -134,10 +136,11 @@ const PersonalDetails2 = (props) => {
       title={title}
       count="2"
       current="2"
-      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
+      total={totalPages}
+      data-aid='kyc-personal-details-screen-2'
     >
       <div className="kyc-personal-details">
-        <main>
+        <main  data-aid='kyc-personal-details'>
           <Input
             label="Father's name"
             class="input"

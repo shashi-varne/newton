@@ -38,11 +38,11 @@ const UploadInstructions = (props) => {
     props.history.goBack();
   };
   return (
-    <Container buttonTitle="OKAY" title={data.title} handleClick={goBack}>
+    <Container buttonTitle="OKAY" title={data.title} handleClick={goBack} data-aid='kyc-upload-instructions-screen'>
       {data.instructions.map((data, index) => {
         return (
           <div key={index} className="stocks-pan-instructions">
-            <div className="spi-text">{data.text}</div>
+            <div className="spi-text" data-aid={`spi-text-${index}`}>{data.text}</div>
             <img
               alt=""
               className="left-img"

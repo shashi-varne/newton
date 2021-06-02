@@ -9,6 +9,7 @@ const CheckCompliant = ({ isOpen }) => {
       open={isOpen}
       className="kyc-check-compliant-loader"
       id="kyc-bottom-dialog"
+      data-aid='kyc-bottom-dialog'
     >
       <DialogContent className="kyc-check-compliant-loader-content">
         <Imgc
@@ -16,8 +17,8 @@ const CheckCompliant = ({ isOpen }) => {
           alt=""
           className="kcclc-img"
         />
-        <div className="kcclc-title">Checking for PAN compliance</div>
-        <div className="kcclc-subtitle">
+        <div className="kcclc-title" data-aid='kcclc-title'>Checking for PAN compliance</div>
+        <div className="kcclc-subtitle" data-aid='kcclc-subtitle'>
           Hang on while we check if you’re investment ready
         </div>
       </DialogContent>

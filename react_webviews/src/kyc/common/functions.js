@@ -1,7 +1,7 @@
 import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
-import { isEmpty } from '../../utils/validators'
-import { eqkycDocsGroupMapper } from '../constants'
+import { isEmpty, storageService } from '../../utils/validators'
+import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS } from '../constants'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -193,13 +193,15 @@ export const getDLFlow = (kycData) => {
   }
   return dlFlow;
 }
-export const getTotalPagesInPersonalDetails = (kyc = {}, user = {}, isEdit = false) => {
+export const getTotalPagesInPersonalDetails = (isEdit = false) => {
+  const kyc = storageService().getObject("kyc") || {};
+  const user = storageService().getObject("user") || {};
   if (isEmpty(kyc) || isEmpty(user)) {
     return "";
   }
   const isCompliant = kyc.kyc_status === "compliant";
   const isNri = kyc?.address?.meta_data?.is_nri || false;
-  const isEmailAndMobileVerified = getEmailOrMobileVerifiedStatus(kyc, user)
+  const isEmailAndMobileVerified = getEmailOrMobileVerifiedStatus()
   const dlCondition =
     !isCompliant &&
     !isNri &&
@@ -213,7 +215,9 @@ export const getTotalPagesInPersonalDetails = (kyc = {}, user = {}, isEdit = fal
   return totalPages;
 };
 
-export const getEmailOrMobileVerifiedStatus = (kyc = {}, user = {}) => {
+export const getEmailOrMobileVerifiedStatus = () => {
+  const kyc = storageService().getObject("kyc") || {};
+  const user = storageService().getObject("user") || {};
   if (isEmpty(kyc) || isEmpty(user)) {
     return false;
   }
@@ -252,7 +256,7 @@ export async function checkDocsPending(kyc = {}) {
 
 export async function pendingDocsList(kyc = {}) {
   if (isEmpty(kyc)) return false;
-  const docsToCheck = ["equity_pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
+  let docsToCheck = ["pan", "identification", "address", "bank", "ipvvideo", "sign"];
   
   if (kyc?.address?.meta_data.is_nri) {
     docsToCheck.push("nri_address");
@@ -265,10 +269,27 @@ export async function getPendingDocuments(kyc = {}) {
   if (isEmpty(kyc)) return false;
   const pendingDocs = await pendingDocsList(kyc)
   const pendingDocsMapper = pendingDocs.filter((group) => eqkycDocsGroupMapper[group]).map((group) => {
+    let docType = "";
+    if (group === "bank") {
+      VERIFICATION_DOC_OPTIONS.forEach((option) => {
+        if (option.value === kyc[group]?.meta_data?.doc_type) {
+          docType = option.name;
+        }
+      })
+    }
+
+    if (group === "address" || group === "nri_address") {
+      ADDRESS_PROOF_OPTIONS.forEach((option) => {
+        if (option.value === kyc[group]?.meta_data?.doc_type) {
+          docType = option.name;
+        }
+      })
+    }
+
     return {
       title: eqkycDocsGroupMapper[group]?.title,
-      doc: eqkycDocsGroupMapper[group]?.doc || kyc[group]?.meta_data?.doc_type
-    }
+      doc: eqkycDocsGroupMapper[group]?.doc || docType
+    };
   });
 
   return pendingDocsMapper;
@@ -286,5 +307,11 @@ export function checkPanFetchStatus(kyc = {}) {
 
 export function isNotManualAndNriUser(kyc = {}) {
   if (isEmpty(kyc)) return false;
-  return kyc.kyc_type !== "manual" && !kyc.address?.meta_data?.is_nri
+  return kyc.kyc_type !== "manual" && !kyc.address?.meta_data?.is_nri;
+}
+
+export function isDocSubmittedOrApproved(doc) {
+  const kyc = storageService().getObject("kyc") || {}; 
+  if (isEmpty(kyc)) return false;
+  return kyc[doc]?.doc_status === "submitted" || kyc[doc]?.doc_status === "approved";
 }

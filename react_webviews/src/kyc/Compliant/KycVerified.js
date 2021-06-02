@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import { navigate as navigateFunc } from "../common/functions";
 import { storageService } from "../../utils/validators";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
@@ -14,16 +14,16 @@ const KycVerified = (props) => {
   const { kyc, isLoading } = useUserKycHook();
   const handleClick = () => {
     sendEvents("next");
-    if (storageService().get(storageConstants.NATIVE)) {
+    if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     }
   };
 
   const applicationDetails = () => {
     sendEvents("application_details");
-    navigate(getPathname.kycReport);
+    navigate(PATHNAME_MAPPER.kycReport);
   };
   
   const sendEvents = (userAction) => {
@@ -50,15 +50,20 @@ const KycVerified = (props) => {
       buttonTitle="INVEST NOW"
       handleClick={handleClick}
       title="KYC verified"
+      data-aid='kyc-compliant-verify-screen'
     >
-      <div className="kyc-compliant-complete">
-        <header>
+      <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete'>
+        <header data-aid='kyc-compliant-verify-header'>
           <img
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""
           />
-          <div className="title">You're ready to invest!</div>
-          <div className="subtitle margin-top" onClick={applicationDetails}>
+          <div className="title" data-aid='kyc-title'>You're ready to invest!</div>
+          <div
+            className="subtitle margin-top"
+            onClick={() => navigate(PATHNAME_MAPPER.kycReport)}
+            data-aid='kyc-application-details-text'
+          >
             See KYC application details {" >"}
           </div>
         </header>

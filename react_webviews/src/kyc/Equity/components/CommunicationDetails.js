@@ -12,7 +12,7 @@ import {
 } from "../../../utils/validators";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
-import { apiConstants, getPathname } from "../../constants";
+import { API_CONSTANTS, PATHNAME_MAPPER } from "../../constants";
 import { getBasePath, getConfig } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
 import { nativeCallback } from "../../../utils/native_callback";
@@ -28,7 +28,7 @@ const googleButtonTitle = (
   <a
     className="kcd-google-text"
     href={`${config.base_url}${
-      apiConstants.socialAuth
+      API_CONSTANTS.socialAuth
     }/google?redirect_url=${encodeURIComponent(
       `${getBasePath()}/kyc/communication-details/callback${
         config.searchParams
@@ -62,6 +62,7 @@ const CommunicationDetails = (props) => {
   const isNri = kyc.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
   const [isReadyToInvestBase, setIsReadyToInvest] = useState();
+  const [totalPages, setTotalPages] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -75,6 +76,7 @@ const CommunicationDetails = (props) => {
       data.mobile = mobileNumber;
       setFormData({ ...data });
       setIsReadyToInvest(isReadyToInvest());
+      setTotalPages(getTotalPagesInPersonalDetails())
     }
   }, [kyc, user]);
 
@@ -105,7 +107,6 @@ const CommunicationDetails = (props) => {
     setShowDotLoader(true);
     try {
       const result = await resendOtp(otpId);
-      if (!result) return;
       setOtpId(result.otp_id);
       setOtpData({
         otp: "",
@@ -133,7 +134,6 @@ const CommunicationDetails = (props) => {
         }
         setShowLoader("button");
         const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
-        if (!otpResult) return;
         updateKyc(otpResult.kyc);
         handleNavigation();
       } else {
@@ -162,7 +162,6 @@ const CommunicationDetails = (props) => {
         }
         setShowLoader("button");
         const result = await sendOtp(body);
-        if (!result) return;
         setShowOtpContainer(true);
         setOtpId(result.otp_id);
         setOtpData({
@@ -218,7 +217,7 @@ const CommunicationDetails = (props) => {
 
   const handleNavigation = () => {
     if (isReadyToInvestBase) {
-      navigate(getPathname.tradingExperience);
+      navigate(PATHNAME_MAPPER.tradingExperience);
       return;
     }
     const data = {
@@ -229,14 +228,14 @@ const CommunicationDetails = (props) => {
     };
     if (userType === "compliant") {
       if (isNri) {
-        navigate(getPathname.nriAddressDetails2, data);
+        navigate(PATHNAME_MAPPER.nriAddressDetails2, data);
       } else {
-        navigate(getPathname.compliantPersonalDetails4, data);
+        navigate(PATHNAME_MAPPER.compliantPersonalDetails4, data);
       }
     } else if (flowType === "digilocker") {
-      navigate(getPathname.digilockerPersonalDetails3, data);
+      navigate(PATHNAME_MAPPER.digilockerPersonalDetails3, data);
     } else {
-      navigate(getPathname.personalDetails4, data);
+      navigate(PATHNAME_MAPPER.personalDetails4, data);
     }
   };
 
@@ -248,7 +247,7 @@ const CommunicationDetails = (props) => {
       title="Communication details"
       count={!isReadyToInvestBase && pageNumber}
       current={pageNumber}
-      total={getTotalPagesInPersonalDetails(kyc, user)}
+      total={totalPages}
       handleClick={handleClick}
       showLoader={showLoader}
       skelton={isLoading}
@@ -278,11 +277,7 @@ const CommunicationDetails = (props) => {
                   >
                     {googleButtonTitle}
                   </WVButton>
-                  <div className="kcd-or-divider">
-                    <div className="kcd-divider-line"></div>
-                    <div className="kcd-divider-text">OR</div>
-                    <div className="kcd-divider-line"></div>
-                  </div>
+                  <img src={require("assets/ORDivider.svg")} alt="" className="kcd-or-divider" />
                 </>
               )}
               <TextField

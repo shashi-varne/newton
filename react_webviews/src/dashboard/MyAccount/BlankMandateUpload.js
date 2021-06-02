@@ -7,6 +7,7 @@ import "./MyAccount.scss";
 import { getBase64, getConfig } from "../../utils/functions";
 import { upload } from "./MyAccountFunctions";
 
+const config = getConfig();
 const BlankMandateUpload = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -16,7 +17,6 @@ const BlankMandateUpload = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [fileToShow, setFileToShow] = useState(null);
   const inputEl = useRef(null);
-  const config = getConfig();
 
   const handleClose = () => {
     props.history.push({
@@ -96,7 +96,7 @@ const BlankMandateUpload = (props) => {
   };
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(config.Web)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'blank_mandate', 'blank_mandate.jpg', 'front')
@@ -153,7 +153,7 @@ const BlankMandateUpload = (props) => {
                     className="blank-mandate-upload-button"
                   >
                     <img alt="" src={require(`assets/take_pic_green.svg`)} />
-                    <div className="upload-action">open camera</div>
+                    <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
                   </button>
                 </div>
                 <div>- OR -</div>
@@ -172,7 +172,7 @@ const BlankMandateUpload = (props) => {
                       alt=""
                       src={require(`assets/go_to_gallery_green.svg`)}
                     />
-                    <div className="upload-action">Open Gallery</div>
+                    <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                   </button>
                 </div>
               </div>
@@ -193,7 +193,7 @@ const BlankMandateUpload = (props) => {
                 className="blank-mandate-upload-button"
               >
                 <img alt="" src={require(`assets/go_to_gallery_green.svg`)} />
-                <div className="upload-action">Open Gallery</div>
+                <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
               </button>
             </div>
           </div>

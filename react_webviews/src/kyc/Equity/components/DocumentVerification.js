@@ -48,6 +48,7 @@ const DocumentVerification = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
+      data-aid='doc-verification-screen'
       buttonTitle="HOME"
       handleClick={handleCTAClick}
       title="Document verification is under process"
@@ -55,15 +56,15 @@ const DocumentVerification = (props) => {
       type="outlined"
       skelton={isLoading}
     >
-      <div className="kyc-document-verification">
-        <header className="kyc-document-verification-header">
+      <div className="kyc-document-verification" data-aid='kyc-document-verification'>
+        <header className="kyc-document-verification-header" data-aid='kyc-document-verification-header'>
           <div className="kdv-text">Document verification is under process</div>
           <img
             src={require(`assets/${productName}/upload_documents_pending.svg`)}
             alt=""
           />
         </header>
-        <main className="kyc-document-verification-main">
+        <main className="kyc-document-verification-main" data-aid='kyc-document-verification-main'>
           <div className="kdvm-subtitle">
             Once the below documents are verified by us, you can complete eSign
             to start investing

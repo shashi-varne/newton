@@ -26,13 +26,13 @@ const ManualSignature = (props) => {
           onClick={handleDownloadFormsClick}
           showLoader={isApiRunning}
         >
-          <div className="download-text">DOWNLOAD FORMS</div>
+          <div className="download-text" data-aid='download-text'>DOWNLOAD FORMS</div>
           <img
             alt="Download button"
             src={require("assets/download.svg")}
           />
         </WVButton>
-        <div className="step-note">
+        <div className="step-note" data-aid='step-note-manual-sign'>
           Form with instructions is emailed at <b style={{color: "#161A2E"}}>{kyc?.identification?.meta_data.email || ""}</b>
         </div>
       </>
@@ -109,13 +109,14 @@ const ManualSignature = (props) => {
       title="Manual Signature"
       buttonTitle="HOME"
       handleClick={handleCTAClick}
+      data-aid='kyc-manual-signature-screen'
       skelton={isLoading}
     >
-      <section id="manual-signature">
-        <div className="generic-page-subtitle">
+      <section id="manual-signature" data-aid='manual-signature'>
+        <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
           Send us your signed documents through courier by following the steps below
         </div>
-        <div class="page-content">
+        <div class="page-content" data-aid='page-content'>
           {stepsToRender?.length && stepsToRender.map((step, index) => (
             <WVSteps
               stepNum={step.id}
@@ -123,12 +124,12 @@ const ManualSignature = (props) => {
               classes={{ stepContent: 'step' }}
               key={step.id}
             >
-              <div className="step-content">
+              <div className="step-content" data-aid={`step-content-${index+1}`}>
                 {step.render()}
               </div>
             </WVSteps>
           ))}
-          <div className="page-note">
+          <div className="page-note" data-aid='page-note'>
             We will verify the documents. You will receive an email from us once you are successfully onboarded
           </div>
           <ContactUs />

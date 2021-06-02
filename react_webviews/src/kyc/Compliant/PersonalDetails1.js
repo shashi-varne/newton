@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { genderOptions, residentialOptions, getPathname } from "../constants";
+import { GENDER_OPTIONS, RESIDENTIAL_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   formatDate,
   dobFormatTest,
   isEmpty,
-  validateNumber,
 } from "utils/validators";
 import {
   validateFields,
@@ -27,6 +26,7 @@ const PersonalDetails1 = (props) => {
   const [oldState, setOldState] = useState({});
   let title = "Personal details";
   const [isNri, setIsNri] = useState();
+  const [totalPages, setTotalPages] = useState();
   if (isEdit) {
     title = "Edit personal details";
   }
@@ -37,7 +37,7 @@ const PersonalDetails1 = (props) => {
     if (!isEmpty(kyc)) {
       initialize();
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const initialize = async () => {
     let nri = kyc.address.meta_data.is_nri;
@@ -49,13 +49,14 @@ const PersonalDetails1 = (props) => {
       pan: kyc.pan.meta_data.pan_number,
       dob: kyc.pan.meta_data.dob,
       residential_status:
-        residentialOptions[selectedIndexResidentialStatus].value,
+        RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value,
       tin_number: kyc.nri_address.tin_number,
       gender: kyc.identification.meta_data.gender || "",
     };
     setIsNri(nri);
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
   const handleClick = () => {
@@ -85,7 +86,7 @@ const PersonalDetails1 = (props) => {
       };
     }
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.compliantPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
       });
       return;
@@ -101,7 +102,7 @@ const PersonalDetails1 = (props) => {
         setIsApiRunning(false);
         return;
       }
-      navigate(getPathname.compliantPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
       });
     } catch (err) {
@@ -115,10 +116,10 @@ const PersonalDetails1 = (props) => {
     let value = event.target ? event.target.value : event;
     let formData = { ...form_data };
     if (name === "residential_status") {
-      formData[name] = residentialOptions[value].value;
+      formData[name] = RESIDENTIAL_OPTIONS[value].value;
       if (value === 1) setIsNri(true);
       else setIsNri(false);
-    } else if (name === "gender") formData[name] = genderOptions[value].value;
+    } else if (name === "gender") formData[name] = GENDER_OPTIONS[value].value;
     else if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
@@ -173,12 +174,12 @@ const PersonalDetails1 = (props) => {
       title={title}
       count={1}
       current={1}
-      total={getTotalPagesInPersonalDetails(kyc, user, isEdit)}
+      total={totalPages}
       headerData={{ goBack }}
     >
-      <div className="kyc-personal-details">
-        <div className="kyc-main-subtitle">
-          <div>
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
+        <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>
+          <div data-aid='kyc-share-pan-dob'>
             <div>Date of birth should be as per</div>
             <div>
               <b>PAN:</b> {form_data.pan}
@@ -186,7 +187,7 @@ const PersonalDetails1 = (props) => {
           </div>
         </div>
         {!isLoading && (
-          <main>
+          <main data-aid='kyc-personal-details'>
             <Input
               label="Date of birth(DD/MM/YYYY)"
               class="input"
@@ -206,7 +207,7 @@ const PersonalDetails1 = (props) => {
                 helperText={form_data.gender_error}
                 width="40"
                 label="Gender"
-                options={genderOptions}
+                options={GENDER_OPTIONS}
                 id="account_type"
                 value={form_data.gender || ""}
                 onChange={handleChange("gender")}
@@ -219,7 +220,7 @@ const PersonalDetails1 = (props) => {
                 helperText={form_data.resident_error}
                 width="40"
                 label="Residential status"
-                options={residentialOptions}
+                options={RESIDENTIAL_OPTIONS}
                 id="account_type"
                 value={form_data.residential_status || ""}
                 onChange={handleChange("residential_status")}

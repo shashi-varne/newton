@@ -198,6 +198,7 @@ class DigiStatus extends Component {
 
     return (
       <Container
+        data-aid='esign-nsdl-screen'
         showLoader={show_loader}
         events={this.sendEvents("just_set_events")}
         title={status === "success" ? "" : "Complete eSign"}

@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
-import { getPathname, storageConstants } from '../constants'
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
@@ -299,11 +299,11 @@ const Journey = (props) => {
       //   return
       // }
       stateMapper = {
-        personal: getPathname.compliantPersonalDetails1,
-        nominee: getPathname.compliantPersonalDetails4,
+        personal: PATHNAME_MAPPER.compliantPersonalDetails1,
+        nominee: PATHNAME_MAPPER.compliantPersonalDetails4,
         bank: '/kyc/compliant/bank-details',
-        sign: getPathname.uploadSign,
-        pan: getPathname.homeKyc,
+        sign: PATHNAME_MAPPER.uploadSign,
+        pan: PATHNAME_MAPPER.homeKyc,
       }
       navigate(stateMapper[key], {
         state: {
@@ -316,13 +316,13 @@ const Journey = (props) => {
     } else {
       if (show_aadhaar) {
         stateMapper = {
-          pan: getPathname.homeKyc,
-          personal: getPathname.digilockerPersonalDetails1,
+          pan: PATHNAME_MAPPER.homeKyc,
+          personal: PATHNAME_MAPPER.digilockerPersonalDetails1,
           bank_esign: '/kyc/non-compliant/bank-details',
-          trading_esign: getPathname.tradingExperience,
-          address: getPathname.addressDetails1,
-          docs: getPathname.uploadProgress,
-          esign: getPathname.kycEsign,
+          trading_esign: PATHNAME_MAPPER.tradingExperience,
+          address: PATHNAME_MAPPER.addressDetails1,
+          docs: PATHNAME_MAPPER.uploadProgress,
+          esign: PATHNAME_MAPPER.kycEsign,
         }
 
         navigate(stateMapper[key], {
@@ -335,12 +335,12 @@ const Journey = (props) => {
       } else {
         console.log('Non show aadhaar')
         stateMapper = {
-          pan: getPathname.homeKyc,
-          personal: getPathname.personalDetails1,
-          address: getPathname.addressDetails1,
-          docs: getPathname.uploadProgress,
-          esign: getPathname.kycEsign,
-          trading_esign: getPathname.tradingExperience,
+          pan: PATHNAME_MAPPER.homeKyc,
+          personal: PATHNAME_MAPPER.personalDetails1,
+          address: PATHNAME_MAPPER.addressDetails1,
+          docs: PATHNAME_MAPPER.uploadProgress,
+          esign: PATHNAME_MAPPER.kycEsign,
+          trading_esign: PATHNAME_MAPPER.tradingExperience,
         }
         console.log(stateMapper[key])
       }
@@ -400,7 +400,7 @@ const Journey = (props) => {
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
-    if (isMobile.any() && storageService().get(storageConstants.NATIVE)) {
+    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -452,7 +452,7 @@ const Journey = (props) => {
 
   const cancel = () => {
     setDlAadhaar(false)
-    navigate(`${getPathname.journey}`, {
+    navigate(`${PATHNAME_MAPPER.journey}`, {
       searchParams: `${config.searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })
@@ -609,22 +609,23 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
+      data-aid='kyc-journey-screen'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
-        <div className="kyc-journey">
+        <div className="kyc-journey" data-aid='kyc-journey-data'>
           {/* {journeyStatus === 'ground_premium' && (
             <div className="kyc-journey-caption">
               fast track your investment!
             </div>
           )} */}
-          <div className="kyc-pj-content">
+          <div className="kyc-pj-content" data-aid='kyc-pj-content'>
             <div className="left">
-              <div className="pj-header">{headerData.title}</div>
-              <div className="pj-sub-text">{headerData.subtitle}</div>
+              <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
+              <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
               {(show_aadhaar || isCompliant) && (
                 <>
-                  <div className="kyc-pj-bottom">
-                    <div className="pj-bottom-info-box">
+                  <div className="kyc-pj-bottom" data-aid='kyc-pj-bottom'>
+                    <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-one'>
                       <img
                         src={require(`assets/${productName}/ic_no_doc.svg`)}
                         alt=""
@@ -634,7 +635,7 @@ const Journey = (props) => {
                         100% paperless
                       </div>
                     </div>
-                    <div className="pj-bottom-info-box">
+                    <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-two'>
                       <img
                         src={require(`assets/${productName}/ic_instant.svg`)}
                         alt="No document asked"
@@ -654,9 +655,9 @@ const Journey = (props) => {
             />
           </div>
           
-          <div className="kyc-journey-title">{topTitle}</div>
+          <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
           {!show_aadhaar && !isCompliant && (
-            <div className="kyc-journey-subtitle">
+            <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle'>
               <WVInfoBubble isDismissable isOpen type="info">
                 Please keep your <b>PAN</b> {kyc?.pan?.meta_data?.pan_number}{" "}
                 and <b>address proof</b> handy to complete KYC
@@ -664,7 +665,7 @@ const Journey = (props) => {
             </div>
           )}
           {isCompliant && !investmentPending && (
-            <div className="kyc-compliant-subtitle">
+            <div className="kyc-compliant-subtitle" data-aid='kyc-compliant-subtitle'>
               Complete the remaining steps to start investing
             </div>
           )}
@@ -673,14 +674,16 @@ const Journey = (props) => {
             user.active_investment &&
             user.kyc_registration_v2 !== 'submitted' && (
               <Alert
+                dataAid='kyc-registration-v2-alertbox'
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."
                 title={`Hey ${user.name}`}
               />
             )}
-          <main className="steps-container">
+          <main  data-aid='kyc-journey' className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
+                data-aid={`kyc-${item.key}`}
                 className={
                   item.status === 'completed' ? 'step step__completed' : 'step'
                 }
@@ -705,7 +708,7 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  <div className="flex flex-between">
+                  <div className="flex flex-between" data-aid='kyc-field-value'>
                     <span className="field_key">
                       {item.title}
                       {item?.value ? ':' : ''}
@@ -717,6 +720,7 @@ const Journey = (props) => {
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
+                      data-aid='kyc-edit'
                       className="edit"
                       onClick={() =>
                         handleEdit(item.key, idx, item.isEditAllowed)
@@ -727,7 +731,7 @@ const Journey = (props) => {
                   )}
                 </div>
 
-                {item?.disc && <div className="disc">{item?.disc}</div>}
+                {item?.disc && <div className="disc" data-aid='kyc-disc'>{item?.disc}</div>}
               </div>
             ))}
           </main>

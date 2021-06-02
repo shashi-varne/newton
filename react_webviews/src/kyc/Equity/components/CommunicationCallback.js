@@ -7,7 +7,7 @@ import {
   navigate as navigateFunc,
 } from "../../common/functions";
 import { isReadyToInvest } from "../../services";
-import { getPathname } from "../../constants";
+import { PATHNAME_MAPPER } from "../../constants";
 import Container from "../../common/Container";
 
 const CommunicationCallback = (props) => {
@@ -19,7 +19,7 @@ const CommunicationCallback = (props) => {
   if (error) {
     checkUser = false;
     toast(error);
-    navigate(getPathname.communicationDetails);
+    navigate(PATHNAME_MAPPER.communicationDetails);
   }
 
   const [goNext] = useState(checkUser);
@@ -28,18 +28,18 @@ const CommunicationCallback = (props) => {
     if (!isEmpty(kyc) && goNext) {
       const isReadyToInvestBase = isReadyToInvest();
       if (isReadyToInvestBase) {
-        navigate(getPathname.tradingExperience);
+        navigate(PATHNAME_MAPPER.tradingExperience);
         return;
       }
       const isCompliant = kyc?.kyc_status === "compliant";
       const dlCondition = isDigilockerFlow(kyc);
       const isNri = kyc.address?.meta_data?.is_nri || false;
-      let nextState = getPathname.personalDetails4;
+      let nextState = PATHNAME_MAPPER.personalDetails4;
       if (isCompliant) {
-        if (isNri) nextState = getPathname.nriAddressDetails2;
-        else nextState = getPathname.compliantPersonalDetails4;
+        if (isNri) nextState = PATHNAME_MAPPER.nriAddressDetails2;
+        else nextState = PATHNAME_MAPPER.compliantPersonalDetails4;
       } else if (dlCondition) {
-        nextState = getPathname.digilockerPersonalDetails3;
+        nextState = PATHNAME_MAPPER.digilockerPersonalDetails3;
       }
       navigate(nextState);
     }

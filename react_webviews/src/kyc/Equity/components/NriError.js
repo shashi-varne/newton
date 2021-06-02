@@ -3,7 +3,7 @@ import { navigate as navigateFunc } from "../../common/functions";
 import Container from "../../common/Container";
 import { StatusInfo } from "../mini-components/StatusInfo";
 import "./commonStyles.scss";
-import { getPathname } from "../../constants";
+import { PATHNAME_MAPPER } from "../../constants";
 import { nativeCallback } from "../../../utils/native_callback";
 
 const NriError = (props) => {
@@ -27,6 +27,7 @@ const NriError = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
+      data-aid='nri-error-screen'
       hidePageTitle
       twoButtonVertical={true}
       button1Props={{
@@ -35,7 +36,7 @@ const NriError = (props) => {
         title: "COMPLETE MUTUAL FUND KYC",
         onClick: () => {
           sendEvents("complete_mf_kyc");
-          navigate(getPathname.journey);
+          navigate(PATHNAME_MAPPER.journey)
         },
       }}
       button2Props={{

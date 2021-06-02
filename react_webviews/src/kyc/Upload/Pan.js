@@ -4,11 +4,11 @@ import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
 import { isEmpty } from '../../utils/validators'
-import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
+import { isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
@@ -50,21 +50,21 @@ const Pan = (props) => {
 
   const handleOtherPlatformNavigation = () => {
     if (kyc.kyc_status === 'compliant') {
-      if (kyc.equity_identification.doc_status !== "submitted" || kyc.equity_identification.doc_status !== "approved")
-        navigate(getPathname.uploadSelfie);
+      if (!isDocSubmittedOrApproved("identification"))
+        navigate(PATHNAME_MAPPER.uploadSelfie);
       else {
-        if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
-          navigate(getPathname.uploadFnOIncomeProof);
-        else navigate(getPathname.kycEsign)
+        if (!isDocSubmittedOrApproved("equity_income"))
+          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+        else navigate(PATHNAME_MAPPER.kycEsign)
       }
     } else {
       if (dlFlow) {
         if (kyc.sign_status !== 'signed') {
-          navigate(getPathname.tradingExperience);
+          navigate(PATHNAME_MAPPER.tradingExperience);
         } else {
-          navigate(getPathname.journey);
+          navigate(PATHNAME_MAPPER.journey);
         }
-      } else navigate(getPathname.uploadProgress);
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
   };
 
@@ -154,13 +154,15 @@ const Pan = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload PAN"
+      data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
-          <div className="sub-title">
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             PAN Card: {kyc?.pan?.meta_data?.pan_number}
           </div>
           {/* {file && subTitle && <Alert
+            dataAid='kyc-upload-pan-alertbox'
             variant="attention"
             title={title}
             message={subTitle}
@@ -182,8 +184,8 @@ const Pan = (props) => {
               supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
-          <div className="doc-upload-note-row">
-            <div className="upload-note"> How to take picture of your PAN document? </div>
+          <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
+            <div className="upload-note" data-aid='upload-note-text'> How to take picture of your PAN document? </div>
             <WVClickableTextElement
               color="secondary"
               className="know-more-button"

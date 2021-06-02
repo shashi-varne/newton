@@ -42,16 +42,16 @@ const Experience = (props) => {
       nativeCallback({ events: eventObj });
     }
   };
-
   return (
     <Container
-      buttonTitle="CONTINUE"
       events={sendEvents("just_set_events")}
+      buttonTitle="CONTINUE"
       title="Select trading experience"
       noPadding
+      data-aid='select-trading-experience-screen'
     >
-      <div className="trading-experience">
-        <div className="generic-page-subtitle te-subtitle">
+      <div className="trading-experience" data-aid='trading-experience'>
+        <div className="generic-page-subtitle te-subtitle" data-aid='generic-page-subtitle'>
           As per SEBI, it is mandatory to share your trading experience
         </div>
         {tradingExperienceValues.map((data, index) => {
@@ -60,12 +60,18 @@ const Experience = (props) => {
             <div
               className={`te-tile ${selected && "te-selected-tile"}`}
               key={index}
+<<<<<<< HEAD
               onClick={() => {
                 setExperience(data.value);
                 setExperienceName(data.name);
               }}
             >
               <div>{data.name}</div>
+=======
+              onClick={() => setExperience(data.value)}
+            >
+              <div data-aid='sebi-name'>{data.name}</div>
+>>>>>>> a3780882b8ef100249f01607b916d9f45eca0714
               {selected && (
                 <img alt="" src={require(`assets/completed_step.svg`)} />
               )}

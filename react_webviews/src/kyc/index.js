@@ -190,7 +190,7 @@ const Kyc = (props) => {
           component={Nominee}
         />
         <Route 
-          exact 
+          exact
           path={`${url}/report`} 
           component={Report} 
         />

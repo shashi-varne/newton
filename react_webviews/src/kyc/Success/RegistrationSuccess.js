@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import { getConfig } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -36,16 +36,16 @@ const RegistrationSuccess = (props) => {
   };
 
   const proceed = () => {
-    navigate(getPathname.invest);
+    navigate(PATHNAME_MAPPER.invest);
   };
 
   const checkNPSAndProceed = () => {
     if (user.nps_investment) {
       if (!getConfig().isIframe) {
-        navigate(getPathname.reports);
+        navigate(PATHNAME_MAPPER.reports);
       }
     } else {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     }
   };
 
@@ -57,10 +57,11 @@ const RegistrationSuccess = (props) => {
       title="KYC Submitted"
       handleClick={handleClick}
       force_hide_inpage_title={true}
+      data-aid='kyc-registration-success-screen'
     >
       <div className="kyc-registration-success">
         <img src={require(`assets/thumpsup.png`)} alt="Success" />
-        <main>
+        <main data-aid='kyc-registration-success'>
           <p>Thanks for completing your registration.</p>
           <p>
             Thanks for completing your registration.

@@ -2,9 +2,9 @@ import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
-import { getPathname, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
+import { isDocSubmittedOrApproved, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
 import { getConfig, isTradingEnabled } from 'utils/functions'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
@@ -43,24 +43,34 @@ const Selfie = (props) => {
       setOpenBottomSheet(false)
     } else {
       if (TRADING_FLOW) {
-        if (kyc.equity_income.doc_status !== "submitted" || kyc.equity_income.doc_status !== "approved")
-          navigate(getPathname.uploadFnOIncomeProof);
-        else navigate(getPathname.kycEsign)
+        if (!isDocSubmittedOrApproved("equity_income"))
+          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+        else navigate(PATHNAME_MAPPER.kycEsign)
       } else {
-        navigate(getPathname.uploadProgress);
+        navigate(PATHNAME_MAPPER.uploadProgress);
       }
     }
   }
 
   const handleSubmit = async () => {
     sendEvents("next");
-    try {      
+    if (bottomSheetType === "failed") {
+      setBottomSheetType("");
+    }     
+    try { 
       let params = {};
       if (TRADING_FLOW) {
         params = {
           lat: locationData?.lat,
           lng: locationData?.lng,
           live_score: selfieLiveScore,
+          kyc_product_type: 'equity'
+        };
+      }
+
+      if (TRADING_ENABLED && kyc.kyc_type === "manual") {
+        params = {
+          forced: true,
           kyc_product_type: 'equity'
         };
       }

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import {
-  getPathname,
-  kycDocNameMapper,
-  reportCardDetails,
-  storageConstants,
+  PATHNAME_MAPPER,
+  DOCUMENTS_MAPPER,
+  REPORT_CARD_DETAILS,
+  STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
 import { navigate as navigateFunc, getFlow } from "../common/functions";
@@ -28,7 +28,7 @@ const Report = (props) => {
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
-      navigate(getPathname.uploadProgress, {
+      navigate(PATHNAME_MAPPER.uploadProgress, {
         state: {
           disableNext: true,
           fromState: "kyc-report",
@@ -65,9 +65,9 @@ const Report = (props) => {
     const nri = kyc.address.meta_data.is_nri;
     if (nri) {
       address_proof = "Passport";
-      address_proof_nri = kycDocNameMapper[kyc.address_doc_type];
+      address_proof_nri = DOCUMENTS_MAPPER[kyc.address_doc_type];
     } else {
-      address_proof = kycDocNameMapper[kyc.address_doc_type];
+      address_proof = DOCUMENTS_MAPPER[kyc.address_doc_type];
     }
 
     setAddressProof({
@@ -79,7 +79,7 @@ const Report = (props) => {
       setButtonTitle("INVEST NOW");
     }
 
-    let reportCards = [...reportCardDetails];
+    let reportCards = [...REPORT_CARD_DETAILS];
     setIsNri(nri);
     if (compliant) {
       reportCards.splice(5, 1); //remove docs
@@ -108,12 +108,12 @@ const Report = (props) => {
 
   const proceed = () => {
     if (config.Web) {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     } else {
-      if (storageService().get(storageConstants.NATIVE)) {
+      if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
         nativeCallback({ action: "exit_web" });
       } else {
-        navigate(getPathname.landing);
+        navigate(PATHNAME_MAPPER.landing);
       }
     }
   };
@@ -121,16 +121,16 @@ const Report = (props) => {
   const checkNPSAndProceed = () => {
     if (user.nps_investment) {
       if (!config.isIframe) {
-        navigate(getPathname.reports);
+        navigate(PATHNAME_MAPPER.reports);
       }
     } else {
       if (config.Web) {
-        navigate(getPathname.invest);
+        navigate(PATHNAME_MAPPER.invest);
       } else {
-        if (storageService().get(storageConstants.NATIVE)) {
+        if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
           nativeCallback({ action: "exit_web" });
         } else {
-          navigate(getPathname.landing);
+          navigate(PATHNAME_MAPPER.landing);
         }
       }
     }
@@ -139,47 +139,47 @@ const Report = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.pan.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
         {isCompliant && (
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-email'>
             <div className="title">Email</div>
             <div className="subtitle">{kyc.identification.meta_data.email}</div>
           </div>
         )}
         <div className="row-align">
           {!isCompliant && (
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-gender'>
               <div className="title">Gender</div>
               <div className="subtitle">
                 {kyc.identification.meta_data.gender}
               </div>
             </div>
           )}
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-dob'>
             <div className="title">Dob</div>
             <div className="subtitle">{kyc.pan.meta_data.dob}</div>
           </div>
         </div>
         {!isCompliant && (
           <>
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-marital-status'>
               <div className="title">Marital Status</div>
               <div className="subtitle">
                 {kyc.identification.meta_data.marital_status}
               </div>
             </div>
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-father-name'>
               <div className="title">Father’s name</div>
               <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
             </div>
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-mother-name'>
               <div className="title">Mother’s name</div>
               <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
             </div>
           </>
         )}
         {isCompliant && (
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-mobile'>
             <div className="title">Mobile</div>
             <div className="subtitle">
               {kyc.identification.meta_data.mobile_number}
@@ -195,7 +195,7 @@ const Report = (props) => {
       <>
         {!isCompliant && (
           <>
-            <div className="unzipped-box">
+            <div className="unzipped-box" data-aid='kyc-address-proof'>
               <div className="title">
                 {isNri && <span>Indian </span>} Address as per{" "}
                 {addressProof.address_proof}
@@ -207,7 +207,7 @@ const Report = (props) => {
               </div>
             </div>
             {isNri && (
-              <div className="unzipped-box">
+              <div className="unzipped-box" data-aid='kyc-address-proof-nri'>
                 <div className="title">
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
@@ -222,7 +222,7 @@ const Report = (props) => {
           </>
         )}
         {isCompliant && (
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-address-proof-nri'>
             <div className="title">Foreign Address</div>
             <div className="subtitle">
               {kyc.nri_address.meta_data.addressline},
@@ -239,16 +239,16 @@ const Report = (props) => {
   const nomineeDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.nomination.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-nominee-name'>{kyc.nomination.meta_data.name}</div>
         <div className="row-align">
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-relationship'>
             <div className="title">Relationship</div>
             <div className="subtitle">
               {kyc.nomination.meta_data.relationship}
             </div>
           </div>
 
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-dob'>
             <div className="title">Dob</div>
             <div className="subtitle">{kyc.nomination.meta_data.dob}</div>
           </div>
@@ -260,12 +260,12 @@ const Report = (props) => {
   const bankDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.bank.meta_data.bank_name}</div>
-        <div className="unzipped-box">
+        <div className="unzipped-title" data-aid='kyc-bank-name'>{kyc.bank.meta_data.bank_name}</div>
+        <div className="unzipped-box" data-aid='kyc-account-number'>
           <div className="title">A/C number</div>
           <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
         </div>
-        <div className="unzipped-box">
+        <div className="unzipped-box" data-aid='kyc-ifsc-code'>
           <div className="title">IFSC</div>
           <div className="subtitle">{kyc.bank.meta_data.ifsc_code}</div>
         </div>
@@ -338,6 +338,7 @@ const Report = (props) => {
     <Container
       id="kyc-home"
       events={sendEvents("just_set_events")}
+      data-aid='kyc-home-screen'
       buttonTitle={buttonTitle}
       handleClick={handleClick}
       title={topTitle}
@@ -345,7 +346,7 @@ const Report = (props) => {
       skelton={isLoading}
       noFooter={flowType === "compliant"}
     >
-      <div className="kyc-report">
+      <div className="kyc-report" data-aid='kyc-report-section'>
         {cardDetails &&
           cardDetails.map((item, index) => {
             return (
@@ -353,6 +354,7 @@ const Report = (props) => {
                 key={index}
                 className="tile-info"
                 onClick={() => handleTiles(index, item.key)}
+                data-aid={`title-info-${item.key}`}
               >
                 <div className="unzipped-title">
                   <div>{item.title}</div>
@@ -366,7 +368,7 @@ const Report = (props) => {
                   />
                 </div>
                 {openIndex === index && (
-                  <div className="unzipped">{renderCards(item.key)}</div>
+                  <div className="unzipped" data-aid={`items-${item.key}`}>{renderCards(item.key)}</div>
                 )}
               </div>
             );

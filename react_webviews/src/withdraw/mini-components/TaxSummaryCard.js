@@ -74,7 +74,7 @@ const TaxSummaryCard = ({
           </div>
         </div>
       )}
-      {know_how_msg && (
+      {know_how_msg && openCard && (
         <footer className="summary-bottom-info flex-between">
           <div className="flex-center">
             <img

@@ -61,15 +61,16 @@ const Allow = (props) => {
       handleClick={accessHandler}
       headerData={{ goBack }}
       disableBack
+      data-aid='allow-screen'
     >
-      <section id="allow-location">
+      <section id="allow-location" data-aid='allow-location'>
         <StatusInfo
           icon="location.svg"
           title="Allow location access"
           subtitle="As per SEBI, we need to capture your location while you take the selfie"
         />
         {showLocationError && 
-          <div className="location-error">
+          <div className="location-error" data-aid='location-error'>
             <WVInfoBubble
             type="error"
             isDismissable

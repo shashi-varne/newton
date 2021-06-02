@@ -53,12 +53,12 @@ const Header = ({
       setReferDialog(!referDialog);
     };
     return (
-      <AppBar position="fixed" color="primary" 
+      <AppBar position="fixed" color="primary" data-aid='app-bar'
       className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
       style={style}
       >
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
+          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" data-aid='tool-bar-icon-btn'
             onClick={headerData.goBack ||
             goBack}>
             {!disableBack && !headerData.hide_icon &&

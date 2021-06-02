@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
@@ -65,7 +65,7 @@ const Home = (props) => {
     };
     if (
       user.nps_investment &&
-      storageService().getObject("nps_additional_details_required")
+      storageService().get("nps_additional_details_required")
     ) {
       data.npsDetailsRequired = true;
     }
@@ -188,8 +188,8 @@ const Home = (props) => {
   const handleMerge = async (step) => {
     sendEvents("link_account", "pan_aleady_exists");
     if (step === "STEP1") {
-      storageService().setObject(storageConstants.AUTH_IDS, authIds);
-      navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
+      storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
+      navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {
         navigate("/logout");
@@ -282,24 +282,22 @@ const Home = (props) => {
       (isUserCompliant || kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
-      // sendEvents("next", "pan_entry");
-      navigate(getPathname.compliantPersonalDetails1);
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       if (isUserCompliant || kyc_status === "compliant") {
-        // sendEvents("next", "pan_entry");
-        navigate(getPathname.journey);
+        navigate(PATHNAME_MAPPER.journey);
       } else {
         // sendEvents(`${is_nri ? "no" : "yes"}`, "resident popup");
         if (is_nri) {
           if (!TRADING_ENABLED) {
-            navigate(`${getPathname.journey}`, {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${config.searchParams}&show_aadhaar=false`,
             });
           } else {
-            navigate(getPathname.nriError);
+            navigate(PATHNAME_MAPPER.nriError);
           }
         } else {
-          navigate(`${getPathname.journey}`, {
+          navigate(`${PATHNAME_MAPPER.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=true`,
           });
         }
@@ -356,11 +354,12 @@ const Home = (props) => {
       showLoader={showLoader}
       handleClick={handleClick}
       title={homeData.title}
+      data-aid='kyc-home-screen'
     >
       {!isEmpty(homeData) && (
-        <div className="kyc-home">
-          <div className="kyc-main-subtitle">{homeData.subtitle}</div>
-          <main>
+        <div className="kyc-home" data-aid='kyc-home-screen-page'>
+          <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
+          <main data-aid='kyc-home'>
             <Input
               label="Enter PAN"
               class="input"

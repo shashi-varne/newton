@@ -138,6 +138,7 @@ class ForgotPassword extends Component {
                 </div>
               )}
               <Button
+                dataAid='reset-password-btn'
                 buttonTitle="RESET PASSWORD"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}

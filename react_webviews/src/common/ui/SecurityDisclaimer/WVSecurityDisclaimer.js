@@ -8,8 +8,9 @@ const WVSecurityDisclaimer = ({
     <div
       style={{ margin: alignCenter ? 'auto' : '' }}
       className="wv-security-disclaimer"
+      data-aid='wv-security-disclaimer'
     >
-      <span>Investments with fisdom are 100% secure</span>
+      <span data-aid='wv-security-disclaimer-text'>Investments with fisdom are 100% secure</span>
       <div className="wv-sd-images">
         <img
           src={require('assets/sebi_registered_logo.svg')}

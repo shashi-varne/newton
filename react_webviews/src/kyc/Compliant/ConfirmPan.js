@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
 import { navigate as navigateFunc, panUiSet } from "../common/functions";
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import toast from "../../common/ui/Toast";
 import { kycSubmit } from "../common/api";
 import { getConfig } from "../../utils/functions";
@@ -20,7 +20,7 @@ const ConfirmPan = (props) => {
 
   const handleClick = () => {
     sendEvents('edit')
-    navigate(getPathname.homeKyc, {
+    navigate(PATHNAME_MAPPER.homeKyc, {
       state: {
         isPremiumFlow: true,
         isEdit: true,
@@ -50,17 +50,17 @@ const ConfirmPan = (props) => {
         (isUserCompliant || result.kyc.kyc_status === "compliant") &&
         (kycConfirmPanScreen || isPremiumFlow)
       ) {
-        navigate(getPathname.compliantPersonalDetails1);
+        navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
       } else {
         if (isUserCompliant || result.kyc.kyc_status === "compliant") {
-          navigate(getPathname.journey);
+          navigate(PATHNAME_MAPPER.journey);
         } else {
           if (kyc.address.meta_data.is_nri) {
-            navigate(`${getPathname.journey}`, {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
             });
           } else {
-            navigate(`${getPathname.journey}`, {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
             });
           }
@@ -106,15 +106,16 @@ const ConfirmPan = (props) => {
       buttonClassName="confirm-pan-button1"
       title='Confirm PAN'
       dualbuttonwithouticon={true}
+      data-aid='kyc-confirm-pan-screen'
     >
-      <div className="kyc-compliant-confirm-pan">
-        <div className="kyc-main-subtitle">
+      <div className="kyc-compliant-confirm-pan" data-aid='kyc-compliant-confirm-pan'>
+        <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>
           Confirm your PAN to unlock premium onboarding
         </div>
-        <main>
+        <main data='kyc-compliant-confirm-pan'>
           <img alt="" src={require(`assets/crd_pan.png`)} />
           {kyc && (
-            <div className="pan-block-on-img">
+            <div className="pan-block-on-img" data-aid='kyc-pan_number'>
               <div className="user-name">{kyc.pan?.meta_data?.name}</div>
               <div className="pan-number">
                 PAN: <span>{panUiSet(kyc.pan?.meta_data?.pan_number)}</span>

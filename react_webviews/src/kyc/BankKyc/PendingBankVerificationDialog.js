@@ -18,9 +18,10 @@ const PendingBankVerificationDialog = (props) => {
       aria-describedby="kyc-dialog"
       className="kyc-penny-failed-dialog"
       id="kyc-bottom-dialog"
+      data-aid='kyc-bottom-dialog'
     >
-      <DialogContent className="penny-failed-dialog-content">
-        <div className="title">
+      <DialogContent className="penny-failed-dialog-content" data-aid='penny-failed-dialog-content'>
+        <div className="title" data-aid='kyc-title'>
           <div className="text">{title}</div>
           <img
             src={require(`assets/${productName}/ic_bank_partial_added.svg`)}
@@ -28,8 +29,8 @@ const PendingBankVerificationDialog = (props) => {
             className="img"
           />
         </div>
-        <div className="subtitle">{description}</div>
-        <Button className="button bg-full" onClick={handleProceed}>
+        <div className="subtitle" data-aid='kyc-description'>{description}</div>
+        <Button className="button bg-full" onClick={handleProceed} data-aid='coninue-with-kyc-btn'>
           {label}
         </Button>
       </DialogContent>

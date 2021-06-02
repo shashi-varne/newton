@@ -1,7 +1,7 @@
 import React from 'react'
 import Container from '../common/Container'
 import { getConfig } from '../../utils/functions'
-import { dlDocs } from '../constants'
+import { DL_DOCS } from '../constants'
 import { navigate as navigateFunc } from '../common/functions'
 import "./Digilocker.scss";
 
@@ -17,24 +17,25 @@ const Success = (props) => {
       buttonTitle="PROCEED"
       handleClick={proceed}
       headerData={{goBack: proceed, icon: "close" }}
+      data-aid='kyc-success-page'
     >
-      <section id="digilocker-success">
-        <div className="page-desc">
+      <section id="digilocker-success" data-aid='kyc-digilocker-success'>
+        <div className="page-desc" data-aid='kyc-page-desc-text'>
           Tap on Proceed to allow fisdom to access your following documents
         </div>
-        <main className="esign-steps">
-          {dlDocs.map(({ name, icon }, idx) => (
+        <main className="esign-steps" data-aid='kyc-esign-steps'>
+          {DL_DOCS.map(({ name, icon }, idx) => (
             <div className="doc flex-center" key={icon}>
               <img
                 src={require(`assets/${productName}/${icon}.svg`)}
                 className="doc-icon"
                 alt=""
               />
-              <div className="doc-name">{idx + 1}{'. '}{name}</div>
+              <div className="doc-name" id={`name-${idx+1}`} data-aid={`name-${idx+1}`}>{idx + 1}{'. '}{name}</div>
             </div>
           ))}
         </main>
-        <footer className="footer">
+        <footer className="footer" data-aid='kyc-footer'>
           <div className="bottom-text flex-center-center center">Initiative by</div>
           <img
             src={require(`assets/ic_gov_meit.svg`)}

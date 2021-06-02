@@ -43,25 +43,27 @@ const StocksStatus = (props) => {
   };
 
   return (
-    <Container noFooter title="Stocks" skelton={isLoading}>
+    <Container noFooter title="Stocks" skelton={isLoading} data-aid='Stocks-screen'>
       <div
+        data-aid='stocks-status-card'
         className="stocks-status-card"
         style={{
           backgroundImage: `url(${require(`assets/${productName}/stocks_cip.svg`)})`,
         }}
       >
-        <div className="stocks-title">
+        <div className="stocks-title" data-aid='stocks-title'>
           <h3>{data.title}</h3>
           <img
             alt=""
             src={require(`assets/${productName}/kyc_status_icon.svg`)}
           />
         </div>
-        <p className="stocks-subtitle">{data.subtitle}</p>
+        <p className="stocks-subtitle" data-aid='stocks-subtitle'>{data.subtitle}</p>
         <Button
           buttonTitle={data.buttonTitle}
           classes={{ button: "stocks-button" }}
           onClick={handleClick}
+          dataAid={data.buttonTitle === "COMPLETE NOW" ? 'complete-now-btn' : 'open-acc-btn'}
         />
       </div>
     </Container>
