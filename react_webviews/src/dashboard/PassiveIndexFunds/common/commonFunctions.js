@@ -139,19 +139,19 @@ export function selected_year(selected) {
 
 
 export async function fetch_funddetails_list(body) {
-  
-  if (isEmpty(body)) { 
+
+  this.setState({ skelton: true })
+
+  if (isEmpty(body)) {
     var body = {
       "subcategory": "all",
       // "sort_by": "high_to_low",
       // "filter_by": "returns"
     }
   };
-
-
+  
   try {
     const res = await Api.post(`https://subham-dot-plutus-staging.appspot.com/api/funds/passive/index/category/${this.state.title}`, body);
-    this.setState({ skelton: false })
     let result = res.pfwresponse?.result?.funds;
     let fundDescription = res.pfwresponse?.result?.category_explainer
 
@@ -167,6 +167,7 @@ export async function fetch_funddetails_list(body) {
       })
 
     }
+    this.setState({ skelton: false })
 
   } catch (err) {
     this.setState({ skelton: false })

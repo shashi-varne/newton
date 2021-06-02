@@ -15,7 +15,7 @@ class MobileVerification extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      skelton: "g",
+      skelton: false,
       screen_name: "mobile_verification",
       mobile_no: "",
       terms_and_conditions_clicked: "no",

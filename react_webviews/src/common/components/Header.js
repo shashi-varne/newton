@@ -34,7 +34,7 @@ const notificationsColor = !isWeb ? getConfig()?.styles.notificationsColor : '';
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, customBackButtonColor,
+  inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, customBackButtonColor, 
   className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);

@@ -1,14 +1,16 @@
 import { storageService, inrFormatDecimal, getEditTitle, compareObjects } from 'utils/validators';
+import React from 'react'
 import { getConfig, 
     // isFeatureEnabled
  } from 'utils/functions';
-import { ghGetMember } from '../../constants';
+import { ghGetMember, getCssMapperReport } from '../../constants';
 import Api from 'utils/api';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
-import { isEmpty} from '../../../utils/validators';
+import {isEmpty, sortArrayOfObjectsByTime, getDateBreakup, capitalizeFirstLetter, capitalize} from '../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
+import {TitleMaper, reportsfrequencyMapper, reportTopTextMapper, reportCoverAmountValue} from '../../../group_insurance/constants'
 
 export async function initialize() {
     this.setErrorData =setErrorData.bind(this)
@@ -1205,3 +1207,359 @@ export function memberKeyMapper(member_key) {
     const final_dob_list = memberKeyMapperFunction(this.state.groupHealthPlanData);
     return final_dob_list.filter(data => data.key === member_key)[0];
 }
+
+export function filterReportData(reportData){
+    var activeReports = [], pendingReports = [], inactiveReports = [];
+    var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted'];
+    var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
+
+    reportData.forEach(report =>{
+      let policy_status = report.status;
+      if(issued_statuses.indexOf(policy_status.toLowerCase()) > -1){
+        report.main_status = 'active'
+        activeReports.push(report)
+      }else if(pending_statuses.indexOf(policy_status.toLowerCase()) > -1 ){
+        report.main_status = 'pending'
+        pendingReports.push(report)
+      }else{
+        report.main_status = 'inactive'
+        inactiveReports.push(report)
+      }
+    })
+    return {activeReports, pendingReports, inactiveReports};
+}
+
+export async function getReportCardsData(){
+    let error = '';
+    let errorType = '';
+    this.setErrorData('onload');
+    try {
+
+      let res = await Api.get('api/ins_service/api/insurance/get/report');
+      if (res.pfwresponse.status_code === 200) {
+
+        var policyData = res.pfwresponse.result.response;
+        var next_page = policyData.group_insurance.next_page;
+        var has_more = policyData.group_insurance.more;
+
+        this.setState({
+          nextPage: (has_more) ? next_page : ''
+        })
+
+        let o2o_applications = policyData.o2o_applications;          
+        // this.setReportData(policyData.term_insurance, ins_policies, o2o_applications);
+        let group_insurance_policies = policyData.group_insurance || {};
+        let health_insurance_policies = policyData.health_insurance || {};
+        let term_insurance_policies = policyData.term_insurance || {};
+        this.setState({
+          skelton: false
+        })
+        this.setReportData(term_insurance_policies, group_insurance_policies, health_insurance_policies , o2o_applications);
+      } else {
+        error=res.pfwresponse.result.error || res.pfwresponse.result.message
+          || true;
+        // this.setState({ nextPage: ''})
+      }
+
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        skelton: false
+      });
+      error=true;
+    }
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:'page'
+      })
+    }
+    window.addEventListener("scroll", this.onScroll, false);
+}
+
+export function setReportData(termData, group_insurance_policies, health_insurance_policies  , o2o_applications ) {
+    let canShowReport = false;
+    let application;
+    let pathname = ''
+
+    if (!termData.error) {
+      canShowReport = true;
+      let insurance_apps = termData.insurance_apps;
+      if (insurance_apps.complete.length > 0) {
+        canShowReport = true;
+        application = insurance_apps.complete[0];
+        pathname = 'report';
+      } else if (insurance_apps.failed.length > 0) {
+        canShowReport = true;
+        application = insurance_apps.failed[0];
+        pathname = 'report';
+      } else if (insurance_apps.init.length > 0) {
+        canShowReport = true;
+        application = insurance_apps.init[0];
+        pathname = 'journey';
+      } else if (insurance_apps.submitted.length > 0) {
+        canShowReport = true;
+        application = insurance_apps.submitted[0];
+        pathname = 'journey';
+      } else {
+        // intro
+        pathname = 'intro';
+      }
+
+    } 
+
+    let fullPath = '/group-insurance/term/' + pathname;
+
+    let reportData = [];
+
+    if (canShowReport && !isEmpty(application)) {
+      let termReport = {
+        status: application.status,
+        product_name: application.quote.insurance_title,
+        sum_assured: application.quote.cover_amount, //TODO
+        premium: application.quote.quote_json.premium,
+        key: 'TERM_INSURANCE',
+        product_key: 'TERM_INSURANCE',
+        product_category: application.quote.cover_plan + ' insurance',
+        id: application.id, 
+        logo: application.quote.quote_describer.image,
+        product_title: application.quote.insurance_title,
+        frequency: application.quote.quote_json.payment_frequency,
+        company_name: 'HDFC Life Insurance',
+        name: application.profile.name
+        //TODO
+        ///  , valid upto, date_cmp,
+      }
+
+      if (!termReport.product_name) {
+        termReport.product_name = application.quote.quote_provider + ' ' + application.quote.quote_json.cover_plan;
+      }
+
+      let data = getCssMapperReport(termReport);
+      termReport.status = data.status;
+      termReport.cssMapper = data.cssMapper;
+
+      reportData.push(termReport)
+    }
+
+    let hs_policies = health_insurance_policies.insurance_apps || [];
+    for (let i = 0; i < hs_policies.length; i++) {
+      let policy = this.getProviderObject(hs_policies[i]);
+      reportData.push(policy);
+    } 
+
+    let ins_policies = group_insurance_policies.ins_policies || [];
+    for (let i = 0; i < ins_policies.length; i++) {
+      let policy = this.getProviderObject(ins_policies[i]);
+      reportData.push(policy);
+    }
+
+    let o2o_details = o2o_applications || []; 
+    for(let i = 0; i< o2o_details.length; i++){
+      let policy = this.getProviderObject_offline(o2o_details[i]);
+      reportData.push(policy);
+    }
+    
+    var filteredReportData = filterReportData(reportData);
+    var activeReports = sortArrayOfObjectsByTime(filteredReportData.activeReports, 'dt_updated_cmp');
+    var pendingReports = sortArrayOfObjectsByTime(filteredReportData.pendingReports, 'dt_updated_cmp');
+    var inactiveReports = sortArrayOfObjectsByTime(filteredReportData.inactiveReports, 'dt_updated_cmp');
+    filteredReportData = {activeReports, pendingReports, inactiveReports}
+    var bracketColor = this.state.productName === 'fisdom' ? '#A998D2' : '#94C5FF'
+    for(var x in filteredReportData){
+        var tabData = filteredReportData[x];
+        var reports = [];
+        for(var y of tabData){
+            var temp = {}
+            var frequency = y.frequency || y.payment_frequency;
+            var provider = y.provider || y.vendor;
+            temp = {
+                //data
+                ...y,
+                topTextLeft: y.cssMapper.disc, 
+                topTextRight:  (y.product_category && y.product_category.toUpperCase()) || '',
+                headingTitle:  y.product_title,
+                headingSubtitle: y.company_name,
+                headingLogo: y.report_logo,
+                status: y.status,
+                key: provider,
+                //css
+                backgroundColor: y.cssMapper.backgroundColor,
+                color: y.cssMapper.color,
+                topTextRightColor: bracketColor
+            }
+
+            var bottomValues = [
+             {
+                'title': 'COVER AMOUNT',
+                'subtitle': reportCoverAmountValue(y.sum_assured),
+            },
+            {
+                'title': 'PREMIUM AMOUNT',
+                'subtitle': inrFormatDecimal(y.premium),
+                'postfix': <span className="details-card-postfix">{reportsfrequencyMapper(provider, frequency, y.product_key)}</span>
+            },
+            {
+                'title': 'Policy issued to',
+                'subtitle': y.name && capitalize(y.name),
+            },
+            {
+                'title': 'Valid upto',
+                'subtitle': !y.dt_policy_end ? 'Not available' : y.dt_policy_end.replace(/-/g, '/'),
+            },
+            ]
+            temp.bottomValues = bottomValues; 
+            reports.push(temp);
+        }
+        filteredReportData[x] = reports;
+    }
+
+    var reportTopText = reportTopTextMapper['activeReports'];
+    var selectedReports = filteredReportData.activeReports;
+
+    var prevSelectedTab = storageService().getObject('reportSelectedTab');
+    var tabIndex = 0;
+    var selectedTab = 'activeReports';
+    if(prevSelectedTab){
+        var tabMap = {
+            'activeReports': 0,
+            'pendingReports': 1,
+            'inactiveReports': 2
+          }
+          tabIndex = tabMap[prevSelectedTab];
+          selectedTab = prevSelectedTab;
+          console.log({prevSelectedTab, tabIndex, selectedTab})
+        storageService().remove('reportSelectedTab');
+    }
+    
+    this.setState({
+      reportData,
+      selectedTab,
+      reportCount: {
+        active: filteredReportData.activeReports.length,
+        pending: filteredReportData.pendingReports.length,
+        inactive: filteredReportData.inactiveReports.length
+      },
+      selectedReports,
+      filteredReportData,
+      termRedirectionPath: fullPath,
+      reportTopText,
+      bracketColor, 
+      tabIndex
+    })
+  }
+
+export function getProviderObject(policy) {
+    let provider = policy.vendor || policy.provider;
+    let obj = policy;
+    let formatted_valid_from = ''
+    obj.key = provider;
+
+    if(['hdfc_ergo','star','religare'].indexOf(provider) !== -1 ){
+      let valid_from = obj.valid_from ? getDateBreakup(obj.valid_from): '';
+      let formatted_day = valid_from && valid_from.plainDate.toString().length === 1 ? '0'+valid_from.plainDate : valid_from.plainDate ;
+      formatted_valid_from = formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+    }
+    
+    if (provider === 'hdfc_ergo') {
+      obj = {
+        ...obj,
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
+        product_title : 'my:health Suraksha',
+        top_title: 'Health insurance',
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
+      };
+    }else if( provider === 'FYNTUNE'){
+      obj = {
+        ...obj,
+        product_name: policy.base_plan_title,
+        product_title: policy.base_plan_title,
+        top_title: 'Life Insurance',
+        key: 'FYNTUNE',
+        id: policy.fyntune_ref_id, 
+        premium: policy.total_amount,
+        frequency: policy.frequency ? policy.frequency.toLowerCase() : 'annually'
+      };
+    } else if (provider === 'care_plus') {
+      obj = {
+        ...obj,
+        product_name: policy.product_title,
+        top_title: 'Health insurance',
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
+      };
+    } else if (provider === 'religare') {
+      obj = {
+        ...obj,
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
+        top_title: 'Health insurance',
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
+      };
+    }  else if (provider === 'star') {
+      obj = {
+        ...obj,
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
+        top_title: 'Health insurance',
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
+      };
+    }  else if (provider === 'BHARTIAXA') {
+      obj = {
+        ...obj,
+        // product_name: policy.product_title,
+        product_name: 'Bharti AXA General Insurances',
+        top_title: policy.product_title,
+        product_key: policy.product_name,
+        id: policy.policy_id
+      }
+    } else if (provider === 'EDELWEISS') {
+      obj = {
+        ...obj,
+        product_name: 'Term insurance (Edelweiss tokio life zindagi plus)',
+        top_title: 'Term insurance',
+        id: policy.policy_id
+      }
+    }
+
+    // var product_category_key = provider === 'BHARTIAXA' ? obj.product_key: obj.key;
+    // obj['product_category'] = productNameMapper(product_category_key)
+
+    let data = getCssMapperReport(obj);
+    obj.status = data.status;
+    obj.cssMapper = data.cssMapper;
+    return obj;
+  }
+
+  export function getProviderObject_offline(o2o_details){
+    let obj = o2o_details;
+    obj.key = 'insurance';
+    let top_title  = TitleMaper(o2o_details.policy_type)
+    obj.top_title = top_title
+    obj.sum_assured = o2o_details.cover_amount
+    obj.product_category = o2o_details.product_category + ' insurance'
+    obj.product_title = capitalizeFirstLetter(o2o_details.product_name)
+    let data = getCssMapperReport(obj);
+    obj.premium = o2o_details.total_amount;
+    obj.status = data.status;
+    obj.cssMapper = data.cssMapper;
+    obj.product_key = 'offline_insurance';
+    return obj;
+  }
