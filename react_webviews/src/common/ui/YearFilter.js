@@ -3,7 +3,7 @@ import { isEmpty } from "utils/validators";
 
 function YearFilter(props) {
 
-    const selected = props.selected || "5Y";
+    const selected = props.selected;
     const data = props.filterArray;
 
     return (

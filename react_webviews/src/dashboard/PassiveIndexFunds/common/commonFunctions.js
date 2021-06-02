@@ -145,8 +145,8 @@ export async function fetch_funddetails_list(body) {
   if (isEmpty(body)) {
     var body = {
       "subcategory": "all",
-      // "sort_by": "high_to_low",
-      // "filter_by": "returns"
+      "sort_by": "high_to_low",
+      "filter_by": "returns"
     }
   };
   

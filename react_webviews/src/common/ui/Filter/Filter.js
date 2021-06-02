@@ -14,16 +14,17 @@ const Filter = ({
 }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(filterOptions[0])[0]);
   const [activeData, setActiveData] = useState(Object.values(filterOptions[0])[0]);
-  const [localSortFilter, setLocalSortFilter] = useState({}); 
+  const [localSortFilter, setLocalSortFilter] = useState({"Sort by": "returns"}); 
   
-  const close = () => {
-    setFilterActive(false)
-    setRenderApi(true)
-  }
+  const close = (data) => {
+    setFilterActive(false);
+    if (data === "apply") setRenderApi(true);
+    else setRenderApi(false);
+  };
 
   const apply = () => {
     setSortFilter(localSortFilter)
-    close()
+    close('apply')
   }
 
   const reset = () => {
