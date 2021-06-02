@@ -23,12 +23,8 @@ const CartFooter = ({
 
     return (
         <footer className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} >
-            {/* <div
-                className="filter-toggle-button"
-                onClick={() => setFilterActive(true)}
-            ><img src={require('../../../assets/filter_icon.svg')} /><p><b>Filter</b></p></div> */}
             <FilterButton
-                className="button diy-filter-button"
+                className=""
                 onClick={() => setFilterActive(true)}
             />
             <Filter

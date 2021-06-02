@@ -11,9 +11,7 @@
   .filter {
     .body {
       height: 340px !important;
-      .diy-sort-filter div label:last-child {
-        margin-bottom: 70px;
-      }
+      padding-bottom: 70px;
       .MuiFormControlLabel-root {
         margin-top: 10px;
         margin-bottom: 10px;
@@ -57,7 +55,6 @@
     }
   }
   .filter-buttons {
-    //   padding: 20px;
     .FlexButton {
       display: flex;
       justify-content: space-around;
@@ -75,29 +72,29 @@
   }
 }
 
-// Filter Button
-.diy-cart-footer {
-  .filter-toggle-button {
-    background-color: white;
-    width: 140px;
-    padding: 13px 0;
-    border: none;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.43);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    img {
-      padding-right: 10px;
-    }
-    p {
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 14px;
-      letter-spacing: 1px;
-      text-align: center;
-      color: #35CB5D;
-      text-transform: uppercase;
-    }
-  }
-}
+// // Filter Button
+// .diy-cart-footer {
+//   .filter-toggle-button {
+//     background-color: white;
+//     width: 140px;
+//     padding: 13px 0;
+//     border: none;
+//     border-radius: 4px;
+//     border: 1px solid rgba(255, 255, 255, 0.43);
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     img {
+//       padding-right: 10px;
+//     }
+//     p {
+//       font-size: 12px;
+//       font-weight: 700;
+//       line-height: 14px;
+//       letter-spacing: 1px;
+//       text-align: center;
+//       color: #35CB5D;
+//       text-transform: uppercase;
+//     }
+//   }
+// }

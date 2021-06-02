@@ -128,7 +128,7 @@ export const sort_filter_data = [
     title: "Expense ratio",
     labelPlacement: "end",
     color: "primary",
-    subtitle: 'Low to hight',
+    subtitle: 'Low to high',
   },
   {
     value: "tracking_error",
@@ -136,7 +136,7 @@ export const sort_filter_data = [
     title: "Tracking error",
     labelPlacement: "end",
     color: "primary",
-    subtitle: 'Low to hight',
+    subtitle: 'Low to high',
   },
   {
     value: "returns",
@@ -144,7 +144,7 @@ export const sort_filter_data = [
     title: "Returns",
     labelPlacement: "end",
     color: "primary",
-    subtitle: 'Hight to low',
+    subtitle: 'High to low',
   },
   {
     value: "rating",
@@ -152,7 +152,7 @@ export const sort_filter_data = [
     title: "Ratings",
     labelPlacement: "end",
     color: "primary",
-    subtitle: 'Hight to low',
+    subtitle: 'High to low',
   },
   {
     value: "fund_size",
@@ -160,7 +160,7 @@ export const sort_filter_data = [
     title: "Fund size",
     labelPlacement: "end",
     color: "primary",
-    subtitle: 'Hight to low',
+    subtitle: 'High to low',
   },
 ]
 
