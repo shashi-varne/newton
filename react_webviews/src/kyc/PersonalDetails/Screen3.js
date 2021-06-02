@@ -117,7 +117,7 @@ const PersonalDetails3 = (props) => {
     <Container
       showSkelton={isLoading}
       hideInPageTitle
-      buttonTitle="CONTINUE"
+      buttonTitle="SAVE AND CONTINUE"
       handleClick={handleClick}
       skelton={isLoading}
       showLoader={isApiRunning}
@@ -134,7 +134,7 @@ const PersonalDetails3 = (props) => {
               error={form_data.occupation_error ? true : false}
               helperText={form_data.occupation_error}
               width="40"
-              label="Occupation detail:"
+              label="Occupation detail"
               class="occupation"
               options={OCCUPATION_TYPE_OPTIONS}
               id="account_type"
