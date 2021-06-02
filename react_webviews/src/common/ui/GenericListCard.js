@@ -15,7 +15,7 @@ function GenericListCard(props) {
                     <div className="title">{data[props?.title]}</div>
                     <div className='subtitle' >{data[props?.subtitle]}
                         <img src={require(`assets/split.svg`)} alt='' className='split-img' />
-                        <span><StarRating value={data.morning_star_rating} /> </span>
+                        <span className='star-icon'><StarRating value={data.morning_star_rating} /> </span>
                     </div>
                 </div>
                 <img src={data.amc_logo_big} className="amc-logo-small" alt='' />
