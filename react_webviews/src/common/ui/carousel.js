@@ -3,6 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 import {getConfig} from 'utils/functions';
+
 import { Imgc} from './Imgc';
 
 class ReactResponsiveCarousel extends Component {
@@ -47,8 +48,6 @@ class ReactResponsiveCarousel extends Component {
     this.props.callbackFromParent(index);
   };
 
-  
-
   render() {
     let productName = getConfig().productName;
     const indicatorStyles = {
@@ -59,8 +58,7 @@ class ReactResponsiveCarousel extends Component {
       margin: "1px 3px",
       borderRadius: "1.5px",
     };
-    
-    if(this.props?.CarouselImg?.length === 1) {
+    if(this.props.CarouselImg.length === 1) {
       indicatorStyles.display = 'none';
     }
 
@@ -79,7 +77,7 @@ class ReactResponsiveCarousel extends Component {
               <li
                 style={{
                   ...indicatorStyles,
-                  background: getConfig().styles.primaryColor,
+                  background:  getConfig().styles.primaryColor,
                   width: "10px",
                 }}
               />
