@@ -61,6 +61,7 @@ export const PATHNAME_MAPPER = {
   uploadFnOIncomeProof: '/kyc/upload/fno-income-proof',
   tradingExperience: '/kyc/trading-experience',
   nriError: '/kyc/nri-error',
+  selfieSteps: '/kyc/upload/selfie-steps',
 }
 
 export const STORAGE_CONSTANTS = {

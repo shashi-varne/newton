@@ -175,13 +175,7 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-<<<<<<< HEAD
-            <span>I do not wish to add a nominee</span>
-=======
-            <span data-aid='kyc-no-nominee-text'>
-              I do not wish to add a <b>nominee</b>
-            </span>
->>>>>>> e5f01f137e9e37998f7b21edeea1699a943a4cb9
+            <span data-aid='kyc-no-nominee-text'>I do not wish to add a nominee</span>
           </div>
           <Input
             label="Name"

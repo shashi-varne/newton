@@ -127,12 +127,12 @@ const Selfie = (props) => {
   }
 
   const showSelfieSteps = () => {
-    navigate('/kyc/upload/selfie-steps');
+    navigate(PATHNAME_MAPPER.selfieSteps);
   }
 
   const closeLocnPermDialog = (locationCloseType) => {
     if (locationCloseType === 'invalid-region') {
-      navigate('/kyc/journey');
+      navigate(PATHNAME_MAPPER.journey);
     }
     setIsLocnPermOpen(false);
   }
@@ -198,12 +198,14 @@ const Selfie = (props) => {
               </KycUploadContainer.Button>
             }
           </KycUploadContainer>
-          <div className="kyc-selfie-intructions">
-            <span id="kyc-si-text">How to take selfie?</span>
-            <WVClickableTextElement onClick={showSelfieSteps}>
-              Know More
-            </WVClickableTextElement>
-          </div>
+          {!TRADING_FLOW && 
+            <div className="kyc-selfie-intructions">
+              <span id="kyc-si-text">How to take selfie?</span>
+              <WVClickableTextElement onClick={showSelfieSteps}>
+                Know More
+              </WVClickableTextElement>
+            </div>
+          }
           {TRADING_FLOW &&
             <>
               <WVLiveCamera
