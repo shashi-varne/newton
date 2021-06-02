@@ -96,7 +96,7 @@ function PassiveFundDetails({ history }) {
               <span style={{ fontWeight: "400" }}>
                 {fundDetails?.performance?.tracking_error !== "NA"
                   ? `${fundDetails?.performance?.tracking_error}%`
-                  : "NA"}
+                  : "Na"}
               </span>
             </p>
             <p className="pfd-values" style={{ color: "#767E86" }}>
@@ -287,7 +287,7 @@ function PassiveFundDetails({ history }) {
             <p className="pfd-values">
               {fundDetails?.performance?.tracking_error !== "NA"
                 ? `${fundDetails?.performance?.tracking_error}% (1Y)`
-                : "NA"}
+                : "Na"}
             </p>
           </div>
           <div>
