@@ -84,17 +84,6 @@
   }
 }
 
-.stocks-selfie-instructions {
-  margin-bottom: 40px;
-
-  .ssi-text {
-    font-size: 13px;
-    line-height: 15px;
-    color: #000000;
-    padding-bottom: 10px;
-  }
-}
-
 .kyc-account-info {
   padding-bottom: 40px;
 
@@ -287,14 +276,6 @@
   }
 }
 
-#allow-location {
-  .location-error {
-    text-align: center;
-    margin-top: 30px;
-  }
-}
-
-
 #manual-signature {
   .manual-signature-subtile {
     margin-top: -10px;
@@ -328,5 +309,28 @@
     .page-note {
       color: var(--steelgrey);
     }
+  }
+}
+
+.status-info {
+  text-align: center;
+
+  .status-info-img {
+    width: 100%;
+    min-height: 90px;
+  }
+
+  .status-info-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    margin: 30px 0 10px 0;
+  }
+
+  .status-info-subtitle {
+    color: var(--steelgrey);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 21px;
   }
 }

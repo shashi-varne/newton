@@ -2,6 +2,7 @@ import React from "react";
 import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
+import { Imgc } from "../../../common/ui/Imgc";
 
 const productName = getConfig().productName;
 const NriError = (props) => {
