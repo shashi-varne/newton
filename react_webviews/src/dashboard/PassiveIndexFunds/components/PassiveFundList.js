@@ -129,8 +129,8 @@ class FundList extends Component {
                                     <GenericListCard
                                         data={item}
                                         title1={'EXPENSE RATIO'}
-                                        title2={'Returns'}
-                                        title3={'TRACKING ERROR%'}
+                                        title2={'RETURNS'}
+                                        title3={'TRACKING ERROR'}
                                         data1={'expense_ratio'}
                                         data2={this.state.selected || "five_year_return"}
                                         data3={'tracking_error'}
