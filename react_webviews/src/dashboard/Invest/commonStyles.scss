@@ -24,9 +24,12 @@
     }
 
     .insta-redeem-head-bar {
-      column-gap: 10px;
       padding-top: 10px;
       margin-right: 0;
+
+      img {
+        margin-left: 10px;
+      }
     }
 
     .subtitle {

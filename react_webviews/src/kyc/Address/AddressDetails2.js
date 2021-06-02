@@ -4,7 +4,7 @@ import Toast from "../../common/ui/Toast";
 import { isEmpty } from "utils/validators";
 import { getPinCodeData, submit } from "../common/api";
 import Container from "../common/Container";
-import { kycDocNameMapper } from "../constants";
+import { DOCUMENTS_MAPPER } from "../constants";
 import {
   compareObjects,
   navigate as navigateFunc,
@@ -62,6 +62,7 @@ const AddressDetails2 = (props) => {
     userKycDetails.address.meta_data.city = form_data.city;
     userKycDetails.address.meta_data.pincode = form_data.pincode;
     userKycDetails.address.meta_data.addressline = form_data.addressline;
+    userKycDetails.address.meta_data.country = form_data.country;
 
     try {
       let item = {
@@ -77,6 +78,7 @@ const AddressDetails2 = (props) => {
         form_data.pincode;
       userKycDetails.nomination.meta_data.nominee_address.addressline =
         form_data.addressline;
+      userKycDetails.nomination.meta_data.country = form_data.country;
       const nomination_address =
         userKycDetails.nomination.meta_data.nominee_address;
       item.kyc.nomination.address = nomination_address;
@@ -173,7 +175,7 @@ const AddressDetails2 = (props) => {
     if (isNri) {
       return "Passport";
     }
-    return kycDocNameMapper[kyc?.address_doc_type];
+    return DOCUMENTS_MAPPER[kyc?.address_doc_type];
   };
 
   return (

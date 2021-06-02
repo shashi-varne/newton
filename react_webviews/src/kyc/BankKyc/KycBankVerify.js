@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -141,7 +141,7 @@ const KycBankVerify = (props) => {
       if (isEdit) goToJourney();
       else {
         if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
-          navigate(getPathname.uploadSign, {
+          navigate(PATHNAME_MAPPER.uploadSign, {
             state: {
               backToJourney: true,
             },
@@ -156,13 +156,13 @@ const KycBankVerify = (props) => {
           kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
           kyc.pan.doc_status !== "approved"
         ) {
-          navigate(getPathname.uploadPan);
-        } else navigate(getPathname.kycEsign);
-      } else navigate(getPathname.uploadProgress);
+          navigate(PATHNAME_MAPPER.uploadPan);
+        } else navigate(PATHNAME_MAPPER.kycEsign);
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
   };
 
-  const goToJourney = () => navigate(getPathname.journey);
+  const goToJourney = () => navigate(PATHNAME_MAPPER.journey);
 
   const edit = () => () => {
     navigate(`/kyc/${userType}/bank-details`);

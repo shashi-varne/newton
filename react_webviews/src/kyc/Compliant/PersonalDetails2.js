@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
-import { getPathname, maritalStatusOptions } from "../constants";
+import { PATHNAME_MAPPER, MARITAL_STATUS_OPTIONS } from "../constants";
 import { isEmpty, validateAlphabets } from "utils/validators";
 import {
   validateFields,
@@ -65,7 +65,7 @@ const PersonalDetails2 = (props) => {
       },
     };
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.compliantPersonalDetails3, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -80,7 +80,7 @@ const PersonalDetails2 = (props) => {
       setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
-      navigate(getPathname.compliantPersonalDetails3, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -100,7 +100,7 @@ const PersonalDetails2 = (props) => {
     }
     let formData = { ...form_data };
     if (name === "marital_status")
-      formData[name] = maritalStatusOptions[value].value;
+      formData[name] = MARITAL_STATUS_OPTIONS[value].value;
     else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
@@ -130,7 +130,7 @@ const PersonalDetails2 = (props) => {
                 width="40"
                 label="Marital status:"
                 class="marital_status"
-                options={maritalStatusOptions}
+                options={MARITAL_STATUS_OPTIONS}
                 id="account_type"
                 value={form_data.marital_status || ""}
                 onChange={handleChange("marital_status")}

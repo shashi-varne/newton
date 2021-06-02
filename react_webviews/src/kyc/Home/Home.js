@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
@@ -62,7 +62,7 @@ const Home = (props) => {
     };
     if (
       user.nps_investment &&
-      storageService().getObject("nps_additional_details_required")
+      storageService().get("nps_additional_details_required")
     ) {
       data.npsDetailsRequired = true;
     }
@@ -115,14 +115,14 @@ const Home = (props) => {
         return;
       }
       setShowLoader("button");
-      await checkCompliant(true);
+      await checkPanValidity(true);
       // }
     } catch (err) {
       toast(err.message || genericErrorMessage);
     }
   };
 
-  const checkCompliant = async (showConfirmPan = false) => {
+  const checkPanValidity = async (showConfirmPan = false) => {
     // setOpenCheckCompliant(true);
     try {
       let result = await getPan(
@@ -136,11 +136,11 @@ const Home = (props) => {
       if (isEmpty(result)) return;
       setUserName(result.kyc.name);
       setIsStartKyc(true);
-      if (result?.kyc?.status) {
-        setIsUserCompliant(true);
-      } else {
-        setIsUserCompliant(false);
-      }
+      // if (result?.kyc?.status) {
+      //   setIsUserCompliant(true);
+      // } else {
+      //   setIsUserCompliant(false);
+      // }
       if (showConfirmPan) setOpenConfirmPan(true);
     } catch (err) {
       console.log(err);
@@ -179,8 +179,8 @@ const Home = (props) => {
 
   const handleMerge = async (step) => {
     if (step === "STEP1") {
-      storageService().setObject(storageConstants.AUTH_IDS, authIds);
-      navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
+      storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
+      navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {
         navigate("/logout");
@@ -245,9 +245,15 @@ const Home = (props) => {
           pan: newObject,
           address: kyc.address.meta_data,
         },
+        set_kyc_product_type: "equity" // later add a check only if its equity flow (for b2c this is hardcoded)
       };
       let result = await kycSubmit(body);
       if (!result) return;
+      if (result?.kyc?.kyc_status === "compliant") {
+        setIsUserCompliant(true);
+      } else {
+        setIsUserCompliant(false);
+      }
       handleNavigation(is_nri, result.kyc.kyc_status);
     } catch (err) {
       console.log(err);
@@ -263,17 +269,17 @@ const Home = (props) => {
       (isUserCompliant || kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
-      navigate(getPathname.compliantPersonalDetails1);
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       if (isUserCompliant || kyc_status === "compliant") {
-        navigate(getPathname.journey);
+        navigate(PATHNAME_MAPPER.journey);
       } else {
         if (is_nri) {
-          navigate(`${getPathname.journey}`, {
+          navigate(`${PATHNAME_MAPPER.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=false`,
           });
         } else {
-          navigate(`${getPathname.journey}`, {
+          navigate(`${PATHNAME_MAPPER.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=true`,
           });
         }
@@ -293,7 +299,6 @@ const Home = (props) => {
       );
     } else {
       setOpenCheckCompliant(true);
-      await checkCompliant();
       await savePan(!residentialStatus);
     }
   };

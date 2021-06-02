@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -23,7 +23,7 @@ const Pan = (props) => {
   const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
   const [showLoader, setShowLoader] = useState(false)
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (newFile, fileBase64) => {
     setFile(newFile);
@@ -54,7 +54,7 @@ const Pan = (props) => {
         )
         setTitle('PAN mismatch!')
       } else {
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc)
         if (
           result.kyc.kyc_status !== 'compliant' &&
           result.kyc.dl_docs_status !== '' &&
@@ -78,7 +78,7 @@ const Pan = (props) => {
     <Container
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
@@ -86,9 +86,9 @@ const Pan = (props) => {
       data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
-        <section data-aid='kyc-upload-pan'>
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
           <div className="sub-title" data-aid='kyc-sub-title'>
-            PAN Card {kyc?.pan?.meta_data?.pan_number}
+            PAN Card: {kyc?.pan?.meta_data?.pan_number}
           </div>
           {file && subTitle && <Alert
             dataAid='kyc-upload-pan-alertbox'

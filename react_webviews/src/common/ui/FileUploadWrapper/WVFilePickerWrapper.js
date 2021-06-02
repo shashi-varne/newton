@@ -133,7 +133,7 @@ const ClickWrappedChild = ({ childElem, onClickFunc }) => (
   React.cloneElement(childElem, {
     onClick: onClickFunc,
     style: {
-      ...childElem.style,
+      ...childElem?.props?.style,
       cursor: 'pointer'
     }
   })

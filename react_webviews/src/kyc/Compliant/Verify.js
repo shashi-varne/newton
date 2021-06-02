@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import { navigate as navigateFunc } from "../common/functions";
 import { storageService } from "../../utils/validators";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
 
@@ -12,10 +12,10 @@ const Verify = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
-    if (storageService().get(storageConstants.NATIVE)) {
+    if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     }
   };
 
@@ -36,7 +36,7 @@ const Verify = (props) => {
           <div className="title" data-aid='kyc-title'>You're ready to invest!</div>
           <div
             className="subtitle margin-top" data-aid='kyc-application-details-text'
-            onClick={() => navigate(getPathname.compliantReport)}
+            onClick={() => navigate(PATHNAME_MAPPER.compliantReport)}
           >
             See KYC application details {" >"}
           </div>

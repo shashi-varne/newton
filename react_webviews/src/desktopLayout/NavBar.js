@@ -16,7 +16,7 @@ const NavBar = (props) => {
   }
 
   return (
-    <AppBar position="sticky" className="navbar" data-aid='navbar'>
+    <AppBar position="sticky" className="navbar NavBar"  data-aid='navbar'>
       <Toolbar className='navbar-container'>
         <div className='header-partner-logo'>
           <img src={require(`assets/${logo}`)} alt={partner} />

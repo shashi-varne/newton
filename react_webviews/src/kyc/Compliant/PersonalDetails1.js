@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { genderOptions, residentialOptions, getPathname } from "../constants";
+import { GENDER_OPTIONS, RESIDENTIAL_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import CompliantHelpDialog from "../mini-components/CompliantHelpDialog";
 import {
   formatDate,
@@ -58,7 +58,7 @@ const PersonalDetails1 = (props) => {
       mobile: mobile_number,
       country_code: country_code,
       residential_status:
-        residentialOptions[selectedIndexResidentialStatus].value,
+        RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value,
       tin_number: kyc.nri_address.tin_number,
       gender: kyc.identification.meta_data.gender || "",
     };
@@ -105,7 +105,7 @@ const PersonalDetails1 = (props) => {
       };
     }
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.compliantPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
       });
       return;
@@ -121,7 +121,7 @@ const PersonalDetails1 = (props) => {
         setIsApiRunning(false);
         return;
       }
-      navigate(getPathname.compliantPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
       });
     } catch (err) {
@@ -136,10 +136,10 @@ const PersonalDetails1 = (props) => {
     if (name === "mobile" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "residential_status") {
-      formData[name] = residentialOptions[value].value;
+      formData[name] = RESIDENTIAL_OPTIONS[value].value;
       if (value === 1) setIsNri(true);
       else setIsNri(false);
-    } else if (name === "gender") formData[name] = genderOptions[value].value;
+    } else if (name === "gender") formData[name] = GENDER_OPTIONS[value].value;
     else if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
@@ -228,7 +228,7 @@ const PersonalDetails1 = (props) => {
                 helperText={form_data.gender_error}
                 width="40"
                 label="Gender:"
-                options={genderOptions}
+                options={GENDER_OPTIONS}
                 id="account_type"
                 value={form_data.gender || ""}
                 onChange={handleChange("gender")}
@@ -241,7 +241,7 @@ const PersonalDetails1 = (props) => {
                 helperText={form_data.resident_error}
                 width="40"
                 label="Residential status:"
-                options={residentialOptions}
+                options={RESIDENTIAL_OPTIONS}
                 id="account_type"
                 value={form_data.residential_status || ""}
                 onChange={handleChange("residential_status")}
