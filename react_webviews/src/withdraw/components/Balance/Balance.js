@@ -39,6 +39,8 @@ const Balance = (props) => {
       navigate(url)
     } else {
       setAmount('');
+      setError(false)
+      setHelperText('');
       setOpen(true)
     }
   }
@@ -47,43 +49,54 @@ const Balance = (props) => {
   }
 
   const handleSwitch = () => {
+    setType("/withdraw/switch")
     setAmount('');
     setError(false)
+    setHelperText('');
     setOpen(true)
   }
 
+  const validateAmount = (value) => {
+    let data = { error: false, helperText: "" };
+    if (!value) {
+      data.error = true;
+      data.helperText = `This is required`;
+    } else if (value > balance?.balance) {
+      data.error = true;
+      data.helperText = `Amount cannot be greater than withdrawable amount.`;
+    } else if (type === "/withdraw/systematic" && value < 500) {
+      data.error = true;
+      data.helperText = `Minimum amount is ${formatAmountInr(500)}`;
+    } else if (type === "/withdraw/switch" && value < 5000) {
+      data.error = true;
+      data.helperText = `Minimum amount is ${formatAmountInr(5000)}`;
+    } else if (value % 100 !== 0) {
+      data.error = true;
+      data.helperText = `Amount must be multiple of ${formatAmountInr(100)}`;
+    }
+    return data;
+  };
+
   const handleChange = (event) => {
     let value = event.target.value || "";
-    value = convertInrAmountToNumber(value);
-    // eslint-disable-next-line radix
-    if (!isNaN(parseInt(value))) {
-      // eslint-disable-next-line radix
-      setAmount(parseInt(value));
-      if (error) {
-        setError(false);
-        setHelperText('');
-      }
-    } else {
-      setAmount('');
-      setError(true);
-      setHelperText('')
-    }
+    value = convertInrAmountToNumber(value) || "";
+    setAmount(value);
+    const errorData = validateAmount(value);
+    setError(errorData.error);
+    setHelperText(errorData.helperText);
   }
+
   const handleProceed = () => {
-    if (amount) {
-      if (type === '/withdraw/systematic') {
-        navigate("/withdraw/systematic", {state: {amount} })
-      } else {
-        // eslint-disable-next-line radix
-        if( amount < 5000 ){
-          setError(true);
-          setHelperText(`minimum switch amount is ${formatAmountInr(5000)}`);
-        } else{
-          navigate('/withdraw/switch', {state: {amount} })
-        }
-      }
+    const errorData = validateAmount(amount);
+    if(errorData.error) {
+      setError(errorData.error);
+      setHelperText(errorData.helperText);
+      return;
+    }
+    if (type === '/withdraw/systematic') {
+      navigate(type, {state: {amount} })
     } else {
-      setError(true)
+      navigate('/withdraw/switch', {state: {amount} })
     }
     return
   }
