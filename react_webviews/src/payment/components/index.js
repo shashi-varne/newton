@@ -11,7 +11,7 @@ import icn_debit_card from 'assets/icn_debit_card.svg';
 import icn_more from 'assets/icn_more.svg';
 import icn_secure_payment from 'assets/icn_secure_payment.svg';
 import completed_step from 'assets/completed_step.svg';
-import ic_close from 'assets/fisdom/ic_close.svg';
+import ic_close from 'assets/close_icon.svg';
 import SVG from 'react-inlinesvg';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';

@@ -5,7 +5,6 @@ import { fetchFHCData } from '../common/ApiCalls';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../common/ui/Toast';
-
 class Landing extends Component {
     constructor(props) {
         super(props);

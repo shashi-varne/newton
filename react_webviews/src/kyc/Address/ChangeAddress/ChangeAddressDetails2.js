@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini-components/Alert'
-import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper, getPathname } from '../../constants'
+import { isEmpty } from '../../../utils/validators'
+import { NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER, PATHNAME_MAPPER } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
 import toast from '../../../common/ui/Toast'
@@ -11,7 +11,8 @@ import { navigate as navigateFunc } from '../../common/functions'
 import useUserKycHook from '../../common/hooks/userKycHook'
 import "../commonStyles.scss";
 
-const getTitleList = ({ kyc }) => {
+const isWeb = getConfig().Web
+const getTitleList = () => {
   let titleList = [
     'Photo of address card should have your signature',
     'Photo of address should be clear and it should not have the exposure of flash light',
@@ -41,7 +42,7 @@ const ChangeAddressDetails2 = (props) => {
 
   const stateParams = props?.location?.state || {}
   if(!stateParams.address_doc_type) {
-    navigate(getPathname.changeAddressDetails1);
+    navigate(PATHNAME_MAPPER.changeAddressDetails1);
   }
   const { address_doc_type: addressDocType } = stateParams
 
@@ -49,7 +50,7 @@ const ChangeAddressDetails2 = (props) => {
 
   const [state, setState] = useState({})
 
-  const { kyc, isLoading } = useUserKycHook()
+  const { kyc, isLoading, updateKyc } = useUserKycHook()
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -108,7 +109,6 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleChange = (type) => (event) => {
-    const isWeb = getConfig().isWebOrSdk
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -118,20 +118,11 @@ const ChangeAddressDetails2 = (props) => {
     }
 
     if (type === 'front') {
-      if (!isWeb) {
-        native_call_handler('open_camera', 'address', 'front.jpg', 'front')
-      } else {
-        setFrontDoc(uploadedFile)
-        mergeDocs(uploadedFile, 'front')
-      }
-    } else if (type === 'back') {
-      if (!isWeb) {
-        native_call_handler('open_camera', 'address', 'back.jpg', 'back')
-      } else {
-        setBackDoc(uploadedFile)
-        mergeDocs(uploadedFile, 'back')
-      }
+      setFrontDoc(uploadedFile)
+    } else {
+      setBackDoc(uploadedFile)
     }
+    mergeDocs(uploadedFile, type);
   }
 
   const mergeDocs = (file, type) => {
@@ -156,11 +147,16 @@ const ChangeAddressDetails2 = (props) => {
     })
   }
 
-  const handleUpload = (type) => () => {
-    if (type === 'front') {
-      frontDocRef.current.click()
-    } else {
-      backDocRef.current.click()
+  const handleUpload = (method_name, type) => () => {
+    if(isWeb){
+      if (type === 'front') {
+        frontDocRef.current.click()
+      } else {
+        backDocRef.current.click()
+      }
+    }   
+    else {
+      native_call_handler(method_name, `address_${type}`, `address_${type}.jpg`, type)
     }
   }
 
@@ -195,7 +191,7 @@ const ChangeAddressDetails2 = (props) => {
       }
       if(response.status_code === 200) {
         result = response.result;
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc)
         navigate('/my-account')
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
@@ -212,7 +208,7 @@ const ChangeAddressDetails2 = (props) => {
     : addressDocType
   const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
-    : docMapper[addressDocType]
+    : DOCUMENTS_MAPPER[addressDocType]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -221,15 +217,13 @@ const ChangeAddressDetails2 = (props) => {
     ? 'Upload Indian Address Proof'
     : 'Upload address proof'
 
-  const isWeb = getConfig().isWebOrSdk
-
   return (
     <Container
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title={title}
       count={2}
@@ -271,7 +265,7 @@ const ChangeAddressDetails2 = (props) => {
                     />
                     <button
                       data-click-type="camera-front"
-                      onClick={handleUpload('front')}
+                      onClick={handleUpload('open_camera','front')}
                       className="kyc-upload-button"
                     >
                       {!frontDoc && (
@@ -298,7 +292,7 @@ const ChangeAddressDetails2 = (props) => {
                       onChange={handleChange('front')}
                     />
                     <button
-                      onClick={handleUpload('front')}
+                      onClick={handleUpload('open_gallery','front')}
                       className="kyc-upload-button"
                     >
                       {!frontDoc && (
@@ -344,7 +338,7 @@ const ChangeAddressDetails2 = (props) => {
                   onChange={handleChange('front')}
                 />
                 <button
-                  onClick={handleUpload('front')}
+                  onClick={handleUpload('open_gallery','front')}
                   className="kyc-upload-button"
                 >
                   {!frontDoc && (
@@ -393,7 +387,7 @@ const ChangeAddressDetails2 = (props) => {
                     />
                     <button
                       data-click-type="camera-front"
-                      onClick={handleUpload('back')}
+                      onClick={handleUpload('open_camera','back')}
                       className="kyc-upload-button"
                     >
                       {!backDoc && (
@@ -420,7 +414,7 @@ const ChangeAddressDetails2 = (props) => {
                       onChange={handleChange('back')}
                     />
                     <button
-                      onClick={handleUpload('back')}
+                      onClick={handleUpload('open_gallery','back')}
                       className="kyc-upload-button"
                     >
                       {!backDoc && (
@@ -466,7 +460,7 @@ const ChangeAddressDetails2 = (props) => {
                   onChange={handleChange('back')}
                 />
                 <button
-                  onClick={handleUpload('back')}
+                  onClick={handleUpload('open_gallery','back')}
                   className="kyc-upload-button"
                 >
                   {!backDoc && (

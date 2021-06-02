@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, storageService, isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
-import { storageConstants } from "../constants";
+import { STORAGE_CONSTANTS } from "../constants";
 import { getConfig } from "utils/functions";
 import { getMyAccount } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -12,7 +12,7 @@ import "./BankDetails.scss";
 const BankDetails = (props) => {
   const [showLoader, setShowLoader] = useState(true);
   const [banks, setBanks] = useState(
-    storageService().getObject(storageConstants.BANK_MANDATES) || []
+    storageService().getObject(STORAGE_CONSTANTS.BANK_MANDATES) || []
   );
   const bank_id = props.match.params.bank_id;
   if (!bank_id) {
@@ -49,11 +49,11 @@ const BankDetails = (props) => {
         banksInfo = result.bank_mandates.banks || [];
         setBanks(banksInfo);
         storageService().setObject(
-          storageConstants.BANK_MANDATES,
+          STORAGE_CONSTANTS.BANK_MANDATES,
           result.bank_mandates.banks
         );
         storageService().setObject(
-          storageConstants.CHANGE_REQUEST,
+          STORAGE_CONSTANTS.CHANGE_REQUEST,
           result.change_requests
         );
       } catch (err) {

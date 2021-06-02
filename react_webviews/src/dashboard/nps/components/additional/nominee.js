@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import InputWithIcon from "common/ui/InputWithIcon";
+import Input from "common/ui/Input";
 import nominee from "assets/nominee.png";
 import calendar from "assets/calendar2.png";
-import relationship from "assets/relationship.png";
-import Select from "common/ui/Select";
+import SelectWithoutIcon from "common/ui/SelectWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
 import { storageService, capitalize } from "utils/validators";
 import { formatDate } from "utils/validators";
@@ -19,7 +18,7 @@ class NpsNominee extends Component {
       form_data: {},
       nps_details: {},
       screen_name: "nps_nominee",
-      skelton: 'g'
+      skelton: "g",
     };
     this.initialize = initialize.bind(this);
   }
@@ -28,10 +27,18 @@ class NpsNominee extends Component {
     this.initialize();
   }
 
-  onload = () => {
+  onload = async () => {
     let nps_additional_details = storageService().getObject(
       "nps_additional_details"
     );
+    if (!nps_additional_details) {
+      await this.getNPSInvestmentStatus();
+      storageService().set("nps_additional_details_required", true);
+    }
+    nps_additional_details = storageService().getObject(
+      "nps_additional_details"
+    );
+
     let { nps_details } = nps_additional_details;
 
     let { form_data } = this.state;
@@ -46,7 +53,7 @@ class NpsNominee extends Component {
     this.setState({
       nps_details: nps_details,
       form_data: form_data,
-      skelton: false
+      skelton: false,
     });
   };
 
@@ -83,17 +90,17 @@ class NpsNominee extends Component {
         },
       };
 
-      this.updateMeta(data, "delivery");
+      await this.updateMeta(data, "delivery");
     }
   };
 
   bannerText = () => {
     return (
       <span>
-        Please <span className="bold">confirm</span> the nominee details.
+        Please <b>confirm</b> the nominee details.
       </span>
     );
-  }
+  };
 
   render() {
     let { form_data } = this.state;
@@ -108,10 +115,10 @@ class NpsNominee extends Component {
         errorData={this.state.errorData}
         banner={true}
         bannerText={this.bannerText()}
-      >       
+      >
         <div className="nps-nominee">
           <div className="InputField">
-            <InputWithIcon
+            <Input
               icon={nominee}
               width="30"
               id="nominee_name"
@@ -125,7 +132,7 @@ class NpsNominee extends Component {
           </div>
 
           <div className="InputField">
-            <InputWithIcon
+            <Input
               icon={calendar}
               width="30"
               id="nominee_dob"
@@ -139,8 +146,7 @@ class NpsNominee extends Component {
           </div>
 
           <div className="InputField">
-            <Select
-              icon={relationship}
+            <SelectWithoutIcon
               width="30"
               id="relationship"
               label="Relationship"

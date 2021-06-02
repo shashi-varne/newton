@@ -45,12 +45,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    column-gap: 10px;
     text-align: center;
     margin-top: 50px;
 
     .left {
       width: 90px;
+      margin-right: 10px;
     }
 
     .right {
