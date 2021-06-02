@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig, getBase64 } from 'utils/functions'
@@ -10,6 +9,9 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
+const config = getConfig();
+const productName = config.productName;
+const isWeb = config.Web;
 const Sign = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
@@ -61,10 +63,10 @@ const Sign = (props) => {
     })
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'selfie', 'selfie.jpg', 'front')
@@ -95,7 +97,7 @@ const Sign = (props) => {
       const response = await upload(file, 'identification')
       if(response.status_code === 200) {
         const result = response.result
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc);
         navigate('/kyc/upload/progress')
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")
@@ -107,9 +109,6 @@ const Sign = (props) => {
       setIsApiRunning(false)
     }
   }
-
-  const productName = getConfig().productName
-  const isWeb = getConfig().isWebOrSdk
 
   const sendEvents = (userAction, type) => {
     let eventObj = {

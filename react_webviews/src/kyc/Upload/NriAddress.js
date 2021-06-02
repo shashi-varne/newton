@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER } from '../constants'
 import { upload } from '../common/api'
 import { getBase64, getConfig } from '../../utils/functions'
 import toast from 'common/ui/Toast'
@@ -12,7 +12,8 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
-const getTitleList = ({ kyc }) => {
+const isWeb = getConfig().Web;
+const getTitleList = () => {
   let titleList = [
     'Photo of address card should have your signature',
     'Photo of address should be clear and it should not have the exposure of flash light',
@@ -43,7 +44,7 @@ const NRIAddressUpload = (props) => {
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
   const [showLoader, setShowLoader] = useState(false)
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -64,7 +65,7 @@ const NRIAddressUpload = (props) => {
             doc_side: doc_side,
             show_loader: true,
           })
-          if (doc_side === 'back') {
+          if (doc_side === 'front') {
             setFrontDoc(file)
           } else {
             setBackDoc(file)
@@ -147,7 +148,7 @@ const NRIAddressUpload = (props) => {
   }
 
   const handleUpload = (method_name, type) => () => {
-    if(getConfig().html_camera){
+    if(isWeb) {
       if (type === 'front') {
         frontDocRef.current.click()
       } else {
@@ -187,7 +188,7 @@ const NRIAddressUpload = (props) => {
       }
       if(response.status_code === 200) {
         result = response.result;
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc);
         navigate('/kyc/upload/progress')
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
@@ -213,7 +214,7 @@ const NRIAddressUpload = (props) => {
     : kyc?.address_doc_type
   const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
-    : docMapper[kyc?.address_doc_type]
+    : DOCUMENTS_MAPPER[kyc?.address_doc_type]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -253,8 +254,6 @@ const NRIAddressUpload = (props) => {
     });
   };
 
-  const isWeb = getConfig().isWebOrSdk
-
   const sendEvents = (userAction, type, docSide) => {
     let eventObj = {
       "event_name": 'KYC_registration',
@@ -279,7 +278,7 @@ const NRIAddressUpload = (props) => {
       skelton={isLoading || showLoader}
       events={sendEvents("just_set_events")}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
     >

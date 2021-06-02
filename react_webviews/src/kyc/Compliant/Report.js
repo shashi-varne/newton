@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { reportCardDetails } from "../constants";
+import { REPORT_CARD_DETAILS } from "../constants";
 import ContactUs from "../../common/components/contact_us";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -33,7 +33,7 @@ const CompliantReport = (props) => {
   const initialize = async () => {
     let isNri = kyc.address.meta_data.is_nri;
     setIsNri(isNri);
-    let reportCards = [...reportCardDetails];
+    let reportCards = [...REPORT_CARD_DETAILS];
     if (isCompliant) {
       if (isNri) {
         reportCards.splice(4, 1); //remove docs

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { getPathname } from "../../constants";
+import { PATHNAME_MAPPER } from "../../constants";
 import { isEmpty, validateNumber } from "utils/validators";
 import {
   validateFields,
@@ -29,7 +29,7 @@ const NriAddressDetails1 = (props) => {
 
   const {kyc, isLoading} = useUserKycHook();
 
-  const addressProofOptions = [
+  const ADDRESS_PROOF_OPTIONS = [
     { name: "Driving license", value: "DL" },
     { name: "Gas receipt", value: "UTILITY_BILL" },
     { name: "Passbook", value: "LAT_BANK_PB" },
@@ -65,7 +65,7 @@ const NriAddressDetails1 = (props) => {
       return;
     }
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.nriAddressDetails2, {
+      navigate(PATHNAME_MAPPER.nriAddressDetails2, {
         state: {
           isEdit: isEdit,
           backToJourney: state.backToJourney,
@@ -94,7 +94,7 @@ const NriAddressDetails1 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.nriAddressDetails2, {
+      navigate(PATHNAME_MAPPER.nriAddressDetails2, {
         state: {
           isEdit: isEdit,
           backToJourney: state.backToJourney,
@@ -113,7 +113,7 @@ const NriAddressDetails1 = (props) => {
     if (name === "mobile_number" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "address_doc_type")
-      formData[name] = addressProofOptions[value].value;
+      formData[name] = ADDRESS_PROOF_OPTIONS[value].value;
     else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
@@ -169,7 +169,7 @@ const NriAddressDetails1 = (props) => {
               width="40"
               label="Foreign Address proof:"
               class="address_doc_type"
-              options={addressProofOptions}
+              options={ADDRESS_PROOF_OPTIONS}
               id="account_type"
               value={form_data.address_doc_type || ""}
               onChange={handleChange("address_doc_type")}

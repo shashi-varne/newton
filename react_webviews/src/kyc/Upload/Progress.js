@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import UploadCard from "./UploadCard";
 import { getDocuments } from "../services";
 import { isEmpty } from "utils/validators";
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
@@ -36,20 +36,25 @@ const Progress = (props) => {
     if (disableNext) return;
     if (documents[index].doc_status === "approved") return;
     const stateMapper = {
-      pan: getPathname.uploadPan,
-      address: getPathname.uploadAddress,
-      nriaddress: getPathname.uploadNriAddress,
-      selfie: getPathname.uploadSelfie,
-      selfie_video: getPathname.uploadSelfieVideo,
+      pan: PATHNAME_MAPPER.uploadPan,
+      address: PATHNAME_MAPPER.uploadAddress,
+      nriaddress: PATHNAME_MAPPER.uploadNriAddress,
+      selfie: PATHNAME_MAPPER.uploadSelfie,
+      selfie_video: PATHNAME_MAPPER.uploadSelfieVideo,
       bank: `/kyc/${
         kyc.kyc_status === "compliant" ? "compliant" : "non-compliant"
       }/bank-details`,
-      sign: getPathname.uploadSign,
+      sign: PATHNAME_MAPPER.uploadSign,
     };
     navigate(stateMapper[key]);
   };
 
   const goBack = () => {
+    sendEvents("back");
+    if(disableNext) {
+      props.history.goBack();
+      return;
+    }
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
   }
@@ -80,8 +85,8 @@ const Progress = (props) => {
       skelton={isLoading}
       skeltonType="p"
       handleClick={() => {
-        sendEvents('next')
-        navigate(getPathname.journey);
+        sendEvents('next');
+        navigate(PATHNAME_MAPPER.journey);
       }}
       title="Upload documents"
       headerData={{goBack}}

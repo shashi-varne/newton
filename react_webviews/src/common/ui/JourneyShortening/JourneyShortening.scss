@@ -1,0 +1,33 @@
+.wv-journey-shortening {
+  padding: 16px;
+  background: var(--highlight);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .wv-js-step-info {
+    max-width: 75%;
+    word-break: break-word;
+
+    .wv-jssi-title {
+      font-size: 10px;
+      line-height: 16px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+
+    .wv-jssi-step-name {
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 21px;
+      color: var(--dark);
+    }
+  }
+
+  .wv-js-step-action {
+    padding: 12px;
+  }
+}

@@ -3,9 +3,9 @@ import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
-  occupationTypeOptions,
-  incomeOptions,
-  getPathname,
+  OCCUPATION_TYPE_OPTIONS,
+  INCOME_OPTIONS,
+  PATHNAME_MAPPER,
 } from "../constants";
 import {
   validateFields,
@@ -89,13 +89,13 @@ const PersonalDetails3 = (props) => {
 
   const handleNavigation = () => {
     if (type === "digilocker") {
-      if (isEdit) {
-        navigate(getPathname.journey);
-      } else {
-        navigate(getPathname.digilockerPersonalDetails3);
-      }
+      navigate(PATHNAME_MAPPER.digilockerPersonalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
     } else {
-      navigate(getPathname.personalDetails4, {
+      navigate(PATHNAME_MAPPER.personalDetails4, {
         state: {
           isEdit: isEdit,
         },
@@ -107,7 +107,7 @@ const PersonalDetails3 = (props) => {
     let value = event.target ? event.target.value : event;
     let formData = { ...form_data };
     if (name === "occupation")
-      formData[name] = occupationTypeOptions[value].value;
+      formData[name] = OCCUPATION_TYPE_OPTIONS[value].value;
     else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
@@ -153,7 +153,7 @@ const PersonalDetails3 = (props) => {
               width="40"
               label="Occupation detail:"
               class="occupation"
-              options={occupationTypeOptions}
+              options={OCCUPATION_TYPE_OPTIONS}
               id="account_type"
               value={form_data.occupation || ""}
               onChange={handleChange("occupation")}
@@ -164,7 +164,7 @@ const PersonalDetails3 = (props) => {
             <DropdownWithoutIcon
               error={form_data.income_error ? true : false}
               helperText={form_data.income_error}
-              options={incomeOptions}
+              options={INCOME_OPTIONS}
               id="relationship"
               label="Income range"
               isAOB={true}

@@ -4,7 +4,7 @@ import { getConfig } from "../../utils/functions";
 import { getMyAccount } from "../common/api";
 import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import { initData } from "../services";
 import "./BanksList.scss";
@@ -30,11 +30,11 @@ const BanksList = (props) => {
       setShowLoader(false);
       await initData();
       storageService().setObject(
-        storageConstants.BANK_MANDATES,
+        STORAGE_CONSTANTS.BANK_MANDATES,
         result.bank_mandates.banks
       );
       storageService().setObject(
-        storageConstants.CHANGE_REQUEST,
+        STORAGE_CONSTANTS.CHANGE_REQUEST,
         result.change_requests
       );
     } catch (err) {
@@ -44,13 +44,13 @@ const BanksList = (props) => {
   };
 
   const handleClick = () => {
-    sendEvents("next")
-    navigate(getPathname.addBank);
+    sendEvents("next");
+    navigate(PATHNAME_MAPPER.addBank);
   };
 
   const bank_details = (bank_id) => () => {
     sendEvents('next')
-    navigate(`${getPathname.bankDetails}${bank_id}`);
+    navigate(`${PATHNAME_MAPPER.bankDetails}${bank_id}`);
   };
 
   const config = getConfig();

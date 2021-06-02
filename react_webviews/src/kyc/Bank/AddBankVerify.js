@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { storageService } from "utils/validators";
-import { storageConstants, getPathname } from "../constants";
+import { STORAGE_CONSTANTS, PATHNAME_MAPPER } from "../constants";
 import { navigate as navigateFunc, getFlow } from "../common/functions";
 import {
   saveBankData,
@@ -41,7 +41,7 @@ const AddBankVerify = (props) => {
 
   const initialize = async () => {
     await getUserKycFromSummary();
-    let kyc = storageService().getObject(storageConstants.KYC) || {};
+    let kyc = storageService().getObject(STORAGE_CONSTANTS.KYC) || {};
     let data = kyc.additional_approved_banks.find(
       (obj) => obj.bank_id?.toString() === bank_id
     );
@@ -132,7 +132,7 @@ const AddBankVerify = (props) => {
   };
 
   const checkBankDetails = () => {
-    navigate(getPathname.addBank, {
+    navigate(PATHNAME_MAPPER.addBank, {
       state: {
         bank_id: bankData.bank_id,
       },
@@ -153,11 +153,11 @@ const AddBankVerify = (props) => {
   };
 
   const goTobankLists = () => {
-    navigate(getPathname.bankList);
+    navigate(PATHNAME_MAPPER.bankList);
   };
 
   const edit = () => () => {
-    navigate(getPathname.addBank, {
+    navigate(PATHNAME_MAPPER.addBank, {
       state: {
         bank_id: bankData.bank_id,
       },

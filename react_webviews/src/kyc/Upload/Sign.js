@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
 import { getFlow, navigate as navigateFunc } from '../common/functions'
 import { getConfig, getBase64 } from 'utils/functions'
@@ -10,6 +9,7 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
+const isWeb = getConfig().Web
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -61,7 +61,7 @@ const Sign = (props) => {
     })
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   
   const handleChange = (type) => (event) => {
     event.preventDefault();
@@ -81,7 +81,7 @@ const Sign = (props) => {
   }
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else 
       native_call_handler(method_name, 'sign', 'sign.jpg', 'front')
@@ -94,7 +94,7 @@ const Sign = (props) => {
       const response = await upload(file, 'sign')
       if (response.status_code === 200) {
         const result = response.result;
-        storageService().setObject(storageConstants.KYC, result.kyc);
+        updateKyc(result.kyc);
         const dlFlow =
           result.kyc.kyc_status !== "compliant" &&
           !result.kyc.address.meta_data.is_nri &&
@@ -131,8 +131,6 @@ const Sign = (props) => {
       setIsApiRunning(false)
     }
   }
-
-  const isWeb = getConfig().isWebOrSdk
 
   const sendEvents = (userAction, type) => {
     let eventObj = {

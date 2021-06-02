@@ -5,7 +5,7 @@ import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   bankAccountTypeOptions,
-  getPathname,
+  PATHNAME_MAPPER,
   getIfscCodeError,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
@@ -90,7 +90,7 @@ const AddBank = (props) => {
   };
 
   const redirect = () => {
-    navigate(getPathname.journey);
+    navigate(PATHNAME_MAPPER.journey);
   };
 
   const handleClick = () => {
@@ -134,9 +134,9 @@ const AddBank = (props) => {
       if (!result) return;
       if (result.bank.bank_status === "approved") {
         toast("Congratulations!, new account added succesfully");
-        navigate(getPathname.bankList);
+        navigate(PATHNAME_MAPPER.bankList);
       } else {
-        navigate(`${getPathname.addBankVerify}${result.bank.bank_id}`);
+        navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`);
       }
     } catch (err) {
       toast(err.message || genericErrorMessage);
