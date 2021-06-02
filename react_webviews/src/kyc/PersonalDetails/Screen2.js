@@ -112,9 +112,10 @@ const PersonalDetails2 = (props) => {
       count="2"
       current="2"
       total="4"
+      data-aid='kyc-personal-details-screen-2'
     >
       <div className="kyc-personal-details">
-        <main>
+        <main  data-aid='kyc-personal-details'>
           <Input
             label="Father's name"
             class="input"

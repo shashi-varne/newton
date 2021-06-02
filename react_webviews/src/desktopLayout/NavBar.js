@@ -16,19 +16,19 @@ const NavBar = (props) => {
   }
 
   return (
-    <AppBar position="sticky" className="navbar NavBar">
+    <AppBar position="sticky" className="navbar NavBar"  data-aid='navbar'>
       <Toolbar className='navbar-container'>
         <div className='header-partner-logo'>
           <img src={require(`assets/${logo}`)} alt={partner} />
         </div>
         <div className='navbar-right-container'>
-            <div className='user-profile-data'>
-              <div className='user-name'>{user?.name}</div>
-              <div className='user-contact'>{user?.email || user?.mobile}</div>
+            <div className='user-profile-data' data-aid='user-profile-data'>
+              <div className='user-name' data-aid='user-name'>{user?.name}</div>
+              <div className='user-contact' data-aid='user-contact'>{user?.email || user?.mobile}</div>
             </div>
             <div className='navbar-logout-section' onClick={handleLogout}>
                 <img src={require('assets/logout.png')} alt="logout" />
-                <div className='navbar-logout'>Logout</div>
+                <div className='navbar-logout' data-aid='navbar-logout'>Logout</div>
             </div>
         </div>
       </Toolbar>

@@ -24,7 +24,7 @@ export const ConfirmPan = ({ isOpen, name, pan, handleClick, close }) => {
       }}
       image={require(`assets/${productName}/kyc_status_icon.svg`)}
     >
-      <div className="kyc-confirm-pan-text">{panUiSet(pan)}</div>
+      <div className="kyc-confirm-pan-text" data-aid='kyc-confirm-pan-text'>{panUiSet(pan)}</div>
     </WVBottomSheet>
   );
 };

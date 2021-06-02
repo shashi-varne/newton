@@ -18,6 +18,7 @@ const WVClickableTextElement = ({ className, children, onClick, color }) => {
 
   return (
     <span
+      data-aid='clickable-text-btn'
       className={`wv-clickable-text-elem ${className}`}
       style={textColor ? { color: textColor } : {}}
       onClick={onClick}

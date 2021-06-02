@@ -175,12 +175,14 @@ const KycBankVerify = (props) => {
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
       title="Verify your bank account"
+      data-aid='kyc-verify-bank-accont-screen'
     >
-      <div className="kyc-approved-bank-verify">
+      <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
         <Alert
           variant="info"
           title="Important"
           message="We will credit ₹1 to verify your bank account."
+          dataAid='kyc-bankverify-alertbox'
         />
         {isEmpty(bankData) && (
           <>
@@ -192,7 +194,7 @@ const KycBankVerify = (props) => {
         )}
         {!isEmpty(bankData) && (
           <>
-            <div className="item">
+            <div className="item" data-aid='kyc-bank-data'>
               <div className="flex">
                 <div className="left">
                   <img
@@ -201,24 +203,24 @@ const KycBankVerify = (props) => {
                     alt="bank-logo"
                   />
                 </div>
-                <div className="right">
+                <div className="right" data-aid='kyc-bank-name'>
                   <div>{bankData.bank_name}</div>
                   <div className="text">{bankData.branch_name} </div>
                 </div>
               </div>
-              <div className="edit" onClick={edit()}>
+              <div className="edit" data-aid='kyc-edit' onClick={edit()}>
                 EDIT
               </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-account-number'>
               <div className="left">Account number</div>
               <div className="right"> {bankData.account_number} </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-ifsc-code'>
               <div className="left">IFSC code</div>
               <div className="right">{bankData.ifsc_code} </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
               <div className="right"> {bankData.account_type} </div>
             </div>
@@ -232,7 +234,7 @@ const KycBankVerify = (props) => {
         />
         <PennySuccessDialog isOpen={isPennySuccess} redirect={handleSuccess} />
         <PennyExhaustedDialog
-          isOpen={isPennyExhausted}
+          isOpen= {isPennyExhausted}
           redirect={goToJourney}
           uploadDocuments={uploadDocuments}
         />

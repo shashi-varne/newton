@@ -14,9 +14,10 @@ const PennySuccessDialog = ({ isOpen, redirect }) => {
       aria-describedby="kyc-dialog"
       className="kyc-penny-failed-dialog"
       id="kyc-bottom-dialog"
+      data-aid='kyc-bottom-dialog'
     >
-      <DialogContent className="penny-failed-dialog-content">
-        <div className="title">
+      <DialogContent className="penny-failed-dialog-content" data-aid='kyc-penny-failed-dialog-content'>
+        <div className="title" data-aid='kyc-title'>
           <div className="text">Bank added successfully</div>
           <img
             src={require(`assets/${productName}/ic_bank_added.svg`)}
@@ -24,10 +25,10 @@ const PennySuccessDialog = ({ isOpen, redirect }) => {
             className="img"
           />
         </div>
-        <div className="subtitle">
+        <div className="subtitle" data-aid='kyc-subtitle'>
           Now, tell us your trading experience in the next step
         </div>
-        <Button className="button bg-full" onClick={() => redirect()}>
+        <Button className="button bg-full" onClick={() => redirect()} data-aid='continue-btn'>
           CONTINUE
         </Button>
       </DialogContent>

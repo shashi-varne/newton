@@ -57,10 +57,11 @@ const RegistrationSuccess = (props) => {
       title="KYC Submitted"
       handleClick={handleClick}
       force_hide_inpage_title={true}
+      data-aid='kyc-registration-success-screen'
     >
       <div className="kyc-registration-success">
         <img src={require(`assets/thumpsup.png`)} alt="Success" />
-        <main>
+        <main data-aid='kyc-registration-success'>
           <p>Thanks for completing your registration.</p>
           <p>
             Thanks for completing your registration.

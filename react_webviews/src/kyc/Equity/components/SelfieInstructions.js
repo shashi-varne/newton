@@ -18,11 +18,11 @@ const instructions = [
 ];
 const SelfieInstructions = (props) => {
   return (
-    <Container buttonTitle="OKAY" title="How to take selfie?">
+    <Container buttonTitle="OKAY" title="How to take selfie?" data-aid='kyc-how-to-take-selfie-screen'>
       {instructions.map((data, index) => {
         return (
-          <div key={index} className="stocks-selfie-instructions">
-            <div className="ssi-text">{data.text}</div>
+          <div key={index} className="stocks-selfie-instructions" data-aid='stocks-selfie-instructions'>
+            <div className="ssi-text" data-aid='ssi-text'>{data.text}</div>
             <div className="flex-between-center">
               <img
                 alt=""

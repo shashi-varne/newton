@@ -39,6 +39,7 @@ const Failed = (props) => {
   return (
     <Container
       title="Aadhaar KYC Failed!"
+      data-aid='kyc-aadhaar-kyc-failed-screen'
       twoButtonVertical={true}
       button1Props={{
         type: 'primary',
@@ -57,13 +58,13 @@ const Failed = (props) => {
       // disableBack
       headerData={{ icon: "close" }}
     >
-      <section id="digilocker-failed">
+      <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         <img
           className="digi-image"
           alt=""
           src={require(`assets/${productName}/ils_digilocker_failed.svg`)}
         />
-        <div className="body-text1">
+        <div className="body-text1" data-aid='kyc-body-text1'>
           Aadhaar KYC has been failed because we were not able to connect to
           your Digilocker.
         </div>
