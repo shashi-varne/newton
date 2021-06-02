@@ -198,16 +198,14 @@ const Selfie = (props) => {
               </KycUploadContainer.Button>
             }
           </KycUploadContainer>
-          {!TRADING_FLOW && 
-            <div className="kyc-selfie-intructions">
-              <span id="kyc-si-text">How to take selfie?</span>
-              <WVClickableTextElement onClick={showSelfieSteps}>
-                Know More
-              </WVClickableTextElement>
-            </div>
-          }
           {TRADING_FLOW &&
             <>
+              <div className="kyc-selfie-intructions">
+                <span id="kyc-si-text">How to take selfie?</span>
+                <WVClickableTextElement onClick={showSelfieSteps}>
+                  Know More
+                </WVClickableTextElement>
+              </div>
               <WVLiveCamera
                 open={isLiveCamOpen}
                 onCameraInit={onCameraInit}
