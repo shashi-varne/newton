@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Container from "../common/Container";
-import { verificationDocOptions } from "../constants";
+import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
@@ -9,7 +9,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getBase64, getConfig } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";
 
 const config = getConfig();
@@ -21,7 +21,7 @@ const KycUploadDocuments = (props) => {
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
-  const {kyc, isLoading, setKycToSession} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
 
@@ -136,11 +136,11 @@ const KycUploadDocuments = (props) => {
       setIsApiRunning("button");
       const result = await uploadBankDocuments(
         file,
-        verificationDocOptions[selected].value,
+        VERIFICATION_DOC_OPTIONS[selected].value,
         bank_id
       );
       if(!isEmpty(result))
-        setKycToSession(result.kyc)
+        updateKyc(result.kyc)
       setShowPendingModal(true);
     } catch (err) {
       toast("Image upload failed, please retry")
@@ -169,7 +169,7 @@ const KycUploadDocuments = (props) => {
           navigate("/kyc/journey");
         } else {
           if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
-            navigate(getPathname.uploadSign, {
+            navigate(PATHNAME_MAPPER.uploadSign, {
               state: {
                 backToJourney: true,
               },
@@ -200,7 +200,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const selectedDocValue =
-    selected !== null ? verificationDocOptions[selected].value : "";
+    selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
   return (
     <Container
@@ -231,7 +231,7 @@ const KycUploadDocuments = (props) => {
             Ensure your name is clearly visible in the document
           </div>
           <div className="kyc-upload-doc-options">
-            {verificationDocOptions.map((data, index) => {
+            {VERIFICATION_DOC_OPTIONS.map((data, index) => {
               const selectedType = data.value === selectedDocValue;
               const disableField =
                 kyc.address?.meta_data?.is_nri && data.value !== "cheque";
