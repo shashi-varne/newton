@@ -41,9 +41,7 @@ class ReactResponsiveCarousel extends Component {
         </div>
       )
     }
-  renderCustomCarousel = (Component, data, index) => {
-    return <Component data={data} key={index} />
-  }
+
   eventChangeFunction = (index) => {
     this.onChangeEvent();
     this.props.callbackFromParent(index);
@@ -53,7 +51,6 @@ class ReactResponsiveCarousel extends Component {
 
   render() {
     let productName = getConfig().productName;
-    let arrowProps = {};
     const indicatorStyles = {
       background: productName !== 'fisdom' ?  "#9CC0FF" : "#DFD8EF",
       width: "20px",
@@ -62,40 +59,8 @@ class ReactResponsiveCarousel extends Component {
       margin: "1px 3px",
       borderRadius: "1.5px",
     };
-
-    const arrowStyles = {
-      position: "absolute",
-      zIndex: 2,
-      top: "40px",
-      width: 32,
-      height: 32,
-      cursor: "pointer",
-    };
-
-    if (this.props.customIndicatorButton) {
-      arrowProps["renderArrowPrev"] = (onClickHandler, hasPrev, label) =>
-        hasPrev && (
-          <div
-            onClick={onClickHandler}
-            title={label}
-            style={{ ...arrowStyles, left: 0 }}
-          >
-            <img src={require('assets/carousel-prev.svg')} alt="prev-btn" />
-          </div>
-        );
-      arrowProps["renderArrowNext"] = (onClickHandler, hasNext, label) =>
-        hasNext && (
-          <div
-            onClick={onClickHandler}
-            title={label}
-            style={{ ...arrowStyles, right: 0 }}
-          >
-            <img src={require('assets/carousel-next.svg')} alt="next-btn" />
-          </div>
-        );
-    }
     
-    if(this.props?.CarouselImg?.length === 1 || this.props?.customData?.length === 1) {
+    if(this.props?.CarouselImg?.length === 1) {
       indicatorStyles.display = 'none';
     }
 
@@ -122,9 +87,8 @@ class ReactResponsiveCarousel extends Component {
           }
           return <li onClick={onClickHandler} style={indicatorStyles} />;
         }}
-        {...arrowProps}
       >
-        {this.props.customFormatCarousal ? this.props.customData.map((item, index)=>this.renderCustomCarousel(this.props.customComponent, item, index)) : this.props.CarouselImg.map(this.renderOfferImages)}
+        {this.props.CarouselImg.map(this.renderOfferImages)}
       </Carousel>
     );
   }
