@@ -35,11 +35,12 @@ const SortFilter = ({
   return (
     <FormControl component="fieldset" className="diy-sort-filter">
         {!isEmpty(SortFilterData) &&
-          SortFilterData.map((item) => {
+          SortFilterData.map((item, idx) => {
             return (
               <FormControlLabel
                 value={item.value}
                 name={item.isMulti}
+                key={idx}
                 control={
                   <item.control
                     checked={(localSortFilter[selectedTab] || []).includes(

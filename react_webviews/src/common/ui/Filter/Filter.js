@@ -41,10 +41,11 @@ const Filter = ({
           <div className="title">
             <ul>
               {!isEmpty(filterOptions) &&
-                filterOptions.map((item) => {
+                filterOptions.map((item , idx) => {
                   let filter_options = Object.keys(item)[0];
                   return (
                     <li
+                      key={idx}
                       role="button"
                       tabIndex="0"
                       onClick={() => {
