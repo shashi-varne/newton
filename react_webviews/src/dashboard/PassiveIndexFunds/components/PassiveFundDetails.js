@@ -51,7 +51,7 @@ function PassiveFundDetails({ history }) {
       }
     })();
   }, []);
-  console.log(fundDetails);
+
   const fetch_graph_data = async (isin) => {
     setGraph(null);
     const graph_data = await fetch_fund_graph(isin);

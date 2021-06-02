@@ -4,7 +4,6 @@ import screenfull from 'screenfull'
 import ReactPlayer from 'react-player'
 import Container from "../../common/Container";
 import MenuListDropDown from '../../../common/ui/MenuListDropDown'
-import { storageService } from "utils/validators";
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
 import { fund_category, passiveActiveCarousal, keyInsightsCarousel } from "../constants";
 import { initialize } from "../common/commonFunctions";
@@ -28,7 +27,7 @@ class Landing extends Component {
     }
 
     handleClickFullscreen = () => {
-        storageService().set("video_clicked", true);
+        this.setState({video_clicked : 'yes'})
         screenfull.request(findDOMNode(this.player));
         this.setState({ playing: !this.state.playing });
     }
@@ -38,18 +37,20 @@ class Landing extends Component {
     }
 
     sendEvents = (userAction, fundCategory) => {
-        // VIDEO PAUSED EVENT LEFT
         let eventObj = {
           event_name: "passive_funds",
           properties: {
-            user_action: userAction || "",
+            user_action: this.state.video_paused || userAction || "",
             screen_name: "learn_more_passive_funds",
-            video_clicked: storageService().get("video_clicked") ? "yes" : "no",
-            passive_index_funds_clicked: fundCategory || "",
-            // video_duration: 
+            video_clicked:  this.state.video_clicked || "no",
+            video_duration : this.state.video_duration || "",
           },
         };
-        storageService().remove("video_clicked");
+
+        if(fundCategory){
+          eventObj.properties.passive_index_funds_clicked = fundCategory || ''
+        }
+        
         if (userAction === "just_set_events") {
           return eventObj;
         } else {
@@ -84,12 +85,14 @@ class Landing extends Component {
                   <ReactPlayer
                     className="react-player"
                     ref={this.ref}
-                    url="https://www.youtube.com/watch?v=FydbL8Oq4G8"
+                    url="https://www.youtube.com/watch?v=FydbL8Oq4G8&ab_channel=fisdom"
                     width="100%"
                     height="180px"
                     playing={playing}
-                    controls={false}
+                    controls={true}
                     loop={true}
+                    onProgress={(callback) => this.setState({video_duration: callback?.playedSeconds})}
+                    onPause={() =>  this.sendEvents("video_paused")}
                     light={true}
                     playIcon={
                       <Imgc
