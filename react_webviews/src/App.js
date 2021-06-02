@@ -25,7 +25,6 @@ import DesktopLayout from './desktopLayout';
 
 
 import Feature from './Feature';
-
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
 import 'common/theme/Style.scss';

@@ -117,7 +117,7 @@ const OtpSwitch = (props) => {
       events={sendEvents("just_set_events")}
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      hideInPageTitle
+      title="OTP"
       type="withProvider"
       noFooter
     >

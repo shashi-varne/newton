@@ -5,7 +5,7 @@ import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   bankAccountTypeOptions,
-  getPathname,
+  PATHNAME_MAPPER,
   getIfscCodeError,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
@@ -125,7 +125,7 @@ const KycBankDetails = (props) => {
   };
 
   const redirect = () => {
-    navigate(getPathname.journey);
+    navigate(PATHNAME_MAPPER.journey);
   };
 
   const handleClick = () => {
@@ -168,9 +168,9 @@ const KycBankDetails = (props) => {
 
   const handleNavigation = () => {
     if (userType === "compliant") {
-      if (isEdit) navigate(getPathname.journey);
+      if (isEdit) navigate(PATHNAME_MAPPER.journey);
       else
-        navigate(getPathname.uploadSign, {
+        navigate(PATHNAME_MAPPER.uploadSign, {
           state: {
             backToJourney: true,
           },
@@ -183,9 +183,9 @@ const KycBankDetails = (props) => {
             kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
           kyc.pan.doc_status !== "approved"
         )
-          navigate(getPathname.uploadPan);
-        else navigate(getPathname.kycEsign);
-      } else navigate(getPathname.uploadProgress);
+          navigate(PATHNAME_MAPPER.uploadPan);
+        else navigate(PATHNAME_MAPPER.kycEsign);
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
   };
 

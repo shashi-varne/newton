@@ -120,6 +120,8 @@ class GroupHealthLanding extends Component {
 
   async componentDidMount() {
    this.onload()
+   storageService().remove('reportSelectedTab');
+   storageService().remove('report_from_landing');
   }
 
   onload = async() =>{
