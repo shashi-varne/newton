@@ -18,12 +18,13 @@ class AdvisoryLanding extends Component {
         }
     }
 
-    sendEvents(user_action, insurance_type, banner_clicked) {
+    sendEvents(user_action) {
         let eventObj = {
           "event_name": 'insurance_advisory',
           "properties": {
             "user_action": user_action,
             "screen_name": 'introduction',
+            "flow": storageService().getObject('advisory_from_landing') ? 'insurance_home_screen' : 'insurance_report'
           }
         };
     

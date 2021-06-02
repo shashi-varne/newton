@@ -251,6 +251,7 @@ class LoanKnowMore extends Component {
         headerData={{
           goBack: this.goBack,
         }}
+        title="IDFC FIRST Bank"
       >
         <div className="loan-know-more">
           <div className="block1-info">
