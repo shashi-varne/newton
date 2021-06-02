@@ -555,7 +555,7 @@ export function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
   
   storageService().set("kycStartPoint", "stocks");
-  if (kycJourneyStatus === "submitted" || kycJourneyStatus === "rejected") {
+  if (kycJourneyStatus === "rejected") {
     handleKycSubmittedOrRejectedState();
   } else {
     if (kycJourneyStatus === "ground") {
@@ -567,7 +567,7 @@ export function openStocks() {
           fromState: "invest",
         },
       });
-    } else if (isReadyToInvest()) {
+    } else if (kycJourneyStatus === "submitted" || kycJourneyStatus === "complete") {
       this.navigate(PATHNAME_MAPPER.accountInfo)
     } else {
       this.navigate(kycStatusData.next_state, {
