@@ -123,7 +123,7 @@ class EligibleLoan extends Component {
       form_data.amount_required = vendor_info.display_loan_amount;
       form_data.amount_required_error = "";
     } else {
-      form_data.maxAmount = vendor_info.displayOffer;
+      form_data.maxAmount = vendor_info.idfc_display_offer;
     }
 
     let keys_to_check = ["amount_required"];
@@ -198,14 +198,12 @@ class EligibleLoan extends Component {
         hidePageTitle={true}
         buttonTitle="VIEW FINAL OFFER"
         handleClick={this.handleClick}
-        // headerData={{
-        //   progressHeaderData: this.state.progressHeaderData,
-        // }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        title="Congrats!"
       >
         <div className="eligible-loan" id="max-amount">
           <img
@@ -220,7 +218,7 @@ class EligibleLoan extends Component {
               <b>Congrats!</b> You’re eligible for a loan up to
             </div>
             <div className="max-loan-amt">
-              {formatAmountInr(vendor_info.displayOffer || "0")}
+              {formatAmountInr(vendor_info.idfc_display_offer || "0")}
             </div>
           </div>
 
@@ -247,7 +245,11 @@ class EligibleLoan extends Component {
               </Grid>
 
               <Grid item xs={11}>
-                <div className="title">I want to proceed with this offer</div>
+                <div className="title">
+                  I want to proceed with{" "}
+                  {`${formatAmountInr(vendor_info.display_loan_amount || "0")}`} as final loan
+                  amount
+                </div>
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
@@ -293,7 +295,7 @@ class EligibleLoan extends Component {
                 />
               </Grid>
               <Grid item xs={11}>
-                <div className="title">I want to customise my loan offer</div>
+                <div className="title">I want to change my loan offer</div>
                 {this.state.checked === "custom_tenor" && (
                   <>
                     <FormControl fullWidth>
@@ -304,7 +306,7 @@ class EligibleLoan extends Component {
                             this.state.form_data.amount_required_error ||
                             (this.state.form_data.amount_required &&
                               numDifferentiationInr(this.state.form_data.amount_required  || 0)) ||
-                            `Min ₹1 lakh to max ₹${changeNumberFormat(vendor_info.displayOffer || "0")}`
+                            `Min ₹1 lakh to max ₹${changeNumberFormat(vendor_info.idfc_display_offer || "0")}`
                           }
                           // type="number"
                           inputMode="numeric"

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { isEmpty, isFunction } from 'lodash';
 import useScript from '../../customHooks/useScript';
 import Api from '../../../utils/api';
+import { storageService } from '../../../utils/validators';
 
 const SCRIPT_SRC = "https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@latest/src/sdk.min.js";
 
@@ -17,23 +18,42 @@ const WVLiveCamera = ({
 }) => {
   const { scriptLoaded } = useScript(SCRIPT_SRC);
 
+  const isHVTokenValid = (HVToken) => {
+    if (isEmpty(HVToken)) return false;
+
+    const timeElapsed = Date.now() - HVToken.timestamp;
+    // If token is more than 10 mins old, invalidate token
+    if (timeElapsed > 10*60*1000) {
+      return false;
+    }
+
+    return true;
+  }
+
   const initHVCamera = async () => {
     try {
-      const res = await Api.get('api/kyc/hyperverge/token/fetch');
-      if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
-        // eslint-disable-next-line no-throw-literal
-        throw 'Something went wrong!';
+      let HVToken = storageService().getObject('HVToken');
+      if (!isHVTokenValid(HVToken)) {
+        const res = await Api.get('api/kyc/hyperverge/token/fetch');
+        if (res.pfwstatus_code !== 200 || isEmpty(res.pfwresponse)) {
+          // eslint-disable-next-line no-throw-literal
+          throw 'Something went wrong!';
+        }
+  
+        const { result, status_code: status } = res.pfwresponse;
+        if (status === 200) {
+          HVToken = {
+            token: result.hyperverge_token,
+            timestamp: Date.now()
+          };
+          storageService().setObject('HVToken', HVToken);
+        } else {
+          throw (result.error || result.message || 'Something went wrong!');
+        }
       }
-
-      const { result, status_code: status } = res.pfwresponse;
-
-      if (status === 200) {
-        window.HyperSnapSDK.init(result.hyperverge_token, window.HyperSnapParams.Region.India);
-        window.HyperSnapSDK.startUserSession();
-        onCameraInit(true);
-      } else {
-        throw (result.error || result.message || 'Something went wrong!');
-      }
+      window.HyperSnapSDK.init(HVToken.token, window.HyperSnapParams.Region.India, false, true);
+      window.HyperSnapSDK.startUserSession();
+      onCameraInit(true);
     } catch (err) {
       onCameraInit(false);
       console.log('Error fetching HV token: ', err);
@@ -53,7 +73,6 @@ const WVLiveCamera = ({
   }
 
   const callback = (HVError, HVResponse) => {
-    console.log(HVError, HVResponse);
     if (HVError) {
       if (HVError.errorCode === "013") {
         onClose();
