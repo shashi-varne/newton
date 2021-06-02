@@ -147,9 +147,9 @@ const PersonalDetails1 = (props) => {
       total={totalPages}
       headerData={{ goBack }}
     >
-      <div className="kyc-personal-details">
-        <div className="kyc-main-subtitle">
-          <div>
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
+        <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>
+          <div data-aid='kyc-share-pan-dob'>
             <div>Date of birth should be as per</div>
             <div>
               <b>PAN:</b> {form_data.pan}
@@ -157,7 +157,7 @@ const PersonalDetails1 = (props) => {
           </div>
         </div>
         {!isLoading && (
-          <main>
+          <main data-aid='kyc-personal-details'>
             <Input
               label="Date of birth(DD/MM/YYYY)"
               class="input"

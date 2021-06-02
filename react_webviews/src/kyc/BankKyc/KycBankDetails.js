@@ -310,8 +310,9 @@ const KycBankDetails = (props) => {
       skelton={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      data-aid='kyc-enter-bank-account-details-screen'
     >
-      <div className="kyc-approved-bank">
+      <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
             {/* <Alert
@@ -326,7 +327,7 @@ const KycBankDetails = (props) => {
             >
               {note.info_text}
             </WVInfoBubble>
-            <main>
+            <main data-aid='kyc-enter-bank-account-details'>
               <Input
                 label="Account holder name"
                 class="input"
@@ -390,7 +391,7 @@ const KycBankDetails = (props) => {
                   isApiRunning || disableFields.c_account_number_disabled
                 }
               />
-              <div className="input">
+              <div className="input" data-aid='kyc-dropdown-withouticon'>
                 <DropdownWithoutIcon
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}
@@ -409,7 +410,7 @@ const KycBankDetails = (props) => {
         )}
         {isPennyExhausted && (
           <PennyExhaustedDialog
-            isOpen={isPennyExhausted}
+            isOpen= {isPennyExhausted}
             redirect={redirect}
             uploadDocuments={uploadDocuments}
           />

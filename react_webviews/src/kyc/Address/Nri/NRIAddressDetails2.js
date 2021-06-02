@@ -154,10 +154,11 @@ const NRIAddressDetails2 = (props) => {
       current={pageDetails.current}
       count={pageDetails.current}
       total={pageDetails.total}
+      data-aid='kyc-nri-address-details-screen-2'
     >
-      <section id="kyc-address-details-2">
-        <div className="sub-title">Address as per {address_proof}</div>
-        <form className="form-container">
+      <section data-aid='kyc-address-details-2'>
+        <div className="sub-title" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
+        <form className="form-container" data-aid='kyc-form-container'>
           <TextField
             label="Pincode"
             name="nri_pincode"

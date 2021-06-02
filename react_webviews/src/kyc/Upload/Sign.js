@@ -63,9 +63,10 @@ const Sign = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Share Signature"
+      data-aid='kyc-signature-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-sign">
+        <section id="kyc-upload-sign" data-aid='kyc-upload-sign'>
           <WVInfoBubble
             isDismissable
             isOpen={true}

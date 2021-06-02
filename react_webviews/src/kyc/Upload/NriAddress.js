@@ -25,11 +25,11 @@ const getTitleList = () => {
 const MessageComponent = (kyc) => {
   const [titleList, ] = useState(getTitleList(kyc))
   return (
-    <section className="pan-alert">
+    <section className="pan-alert" data-aid='kyc-pan-alert'>
       {titleList.map((title, idx) => (
-        <div className="row" key={idx}>
-          <div className="order">{idx + 1}.</div>
-          <div className="value">{title}</div>
+        <div className="row" key={idx} data-aid={`row-${idx + 1}`}>
+          <div className="order" data-aid={`order-${idx + 1}`}>{idx + 1}.</div>
+          <div className="value" data-aid={`value-${idx + 1}`}>{title}</div>
         </div>
       ))}
     </section>
@@ -163,25 +163,26 @@ const NRIAddressUpload = (props) => {
       disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
+      data-aid='kyc-upload-foreign-address-proof-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-address">
-          <div className="sub-title">
-            <span>{addressProof}</span>
+        <section id="kyc-upload-address" data-aid='kyc-upload-foreign-address-proof-page'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
+            <span data-aid='kyc-address-proof'>{addressProof}</span>
             {addressProof && (
-              <div className="edit" onClick={editAddress}>
+              <div className="edit" data-aid='kyc-edit' onClick={editAddress}>
                 EDIT
               </div>
             )}
           </div>
-          <div className="address-detail">{getFullAddress()}</div>
+          <div className="address-detail" data-aid='kyc-address-detail'>{getFullAddress()}</div>
           {/* <Alert
             variant="attention"
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
           /> */}
           <KycUploadContainer.TitleText alignLeft>
-            <span><b>Front side</b></span> of your {addressProof}
+            <span data-aid='kyc-address-proof-front-side'><b>Front side</b></span> of your {addressProof}
           </KycUploadContainer.TitleText>
           <KycUploadContainer>
             <KycUploadContainer.Image
@@ -204,7 +205,7 @@ const NRIAddressUpload = (props) => {
           {!onlyFrontDocRequired &&
             <>
               <KycUploadContainer.TitleText alignLeft>
-                <span><b>Back side</b></span> of your {addressProof}
+                <span data-aid='kyc-address-proof-back-side'><b>Back side</b></span> of your {addressProof}
               </KycUploadContainer.TitleText>
               <KycUploadContainer>
                 <KycUploadContainer.Image
@@ -226,8 +227,8 @@ const NRIAddressUpload = (props) => {
               </KycUploadContainer>
             </>
           }
-          <div className="doc-upload-note-row">
-            <div className="upload-note"> How to take picture of your address proof? </div>
+          <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
+            <div className="upload-note" data-aid='upload-note-text'> How to take picture of your address proof? </div>
             <WVClickableTextElement
               color="secondary"
               className="know-more-button"

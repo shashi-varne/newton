@@ -135,14 +135,15 @@ const IpvVideo = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload selfie video (IPV)"
+      data-aid='kyc-selfie-video-ipv-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-ipv-video">
-          <div className="sub-title">
+        <section id="kyc-upload-ipv-video" data-aid='kyc-upload-ipv-video'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             As per SEBI, it's compulsory for all investors to go through IPV (In
             Person Verification Process).
           </div>
-          <div className="kyc-doc-upload-container noBorder">
+          <div className="kyc-doc-upload-container noBorder" data-aid='kyc-doc-upload-container'>
             {!isWeb && file && (
               <img
                 src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
@@ -151,13 +152,13 @@ const IpvVideo = (props) => {
               />
             )}
             {!file && (
-              <div className="instructions-container">
-                <div className="ipv_footer_instructions">
+              <div className="instructions-container" data-aid='instructions-container'>
+                <div className="ipv_footer_instructions" data-aid='ipv-footer-instructions'>
                   Start recording,{' '}
                   <strong>by reading the following verification numbers loud</strong>{' '}
                   while looking at the camera
                 </div>
-                <div className="ipv_code">{ipvcode}</div>
+                <div className="ipv_code" data-aid='ipv-code'>{ipvcode}</div>
                 <img
                   src={require(`assets/${productName}/state_ipv_number.svg`)}
                   alt="Upload Selfie"
@@ -172,10 +173,11 @@ const IpvVideo = (props) => {
                 onRecordingComplete={onRecordingComplete}
               />
             }
-            <div className="kyc-upload-doc-actions">
+            <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
               {isWeb && !isRecordingComplete && 
                 <div className="button-container">
                   <Button
+                    dataAid='open-camera-btn'
                     type="outlined"
                     buttonTitle="OPEN CAMERA"
                     onClick={handleClick}
@@ -185,6 +187,7 @@ const IpvVideo = (props) => {
               {!isWeb &&
               <div className="button-container">
                 <Button
+                  dataAid='take-video-btn'
                   type="outlined"
                   buttonTitle={uploadCTAText}
                   onClick={handleClick}
@@ -192,8 +195,8 @@ const IpvVideo = (props) => {
               </div>}
             </div>
           </div>
-          <div className="doc-upload-note-row">
-            <div className="upload-note">How to make a selfie video ?</div>
+          <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
+            <div className="upload-note" data-aid='upload-note-text'>How to make a selfie video ?</div>
             <WVClickableTextElement
               color="secondary"
               className="know-more-button"

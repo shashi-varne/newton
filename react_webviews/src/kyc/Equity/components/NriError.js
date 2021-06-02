@@ -11,6 +11,7 @@ const NriError = (props) => {
   
   return (
     <Container
+      data-aid='nri-error-screen'
       hidePageTitle
       twoButtonVertical={true}
       button1Props={{

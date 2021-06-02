@@ -13,7 +13,7 @@ const KycUploadContainer = ({
   children,
 }) => {
   return (
-    <div className={`kyc-upload-container ${classes.container}`}>
+    <div className={`kyc-upload-container ${classes.container}`} data-aid='kyc-upload-container'>
       {titleText &&
         <TitleText>{titleText}</TitleText>
       }
@@ -37,7 +37,7 @@ const KycUploadContainer = ({
 
 const TitleText = ({ children, className, alignLeft }) => {
   return (
-    <div className={`kuc-caption ${className}`} style={{ textAlign: alignLeft ? 'left' : 'center' }}>{children}</div>
+    <div className={`kuc-caption ${className}`} style={{ textAlign: alignLeft ? 'left' : 'center' }} data-aid='title-text-caption'>{children}</div>
   );
 }
 
@@ -80,6 +80,7 @@ const Button = ({
         customPickerId={customPickerId}
       >
         <WVButton
+          dataAid='attach-doc-btn'
           variant="outlined"
           color="secondary"
           classes={{
@@ -94,6 +95,7 @@ const Button = ({
   }
   return (
     <WVButton
+      dataAid='attach-doc-btn'
       variant="outlined"
       color="secondary"
       classes={{

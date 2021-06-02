@@ -228,16 +228,18 @@ const AddBank = (props) => {
       disable={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      data-aid='kyc-add-bank-screen'
     >
-      <div className="kyc-approved-bank">
+      <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
             <Alert
               variant={note.variant}
               title="Note"
               message={note.info_text}
+              dataAid='kyc-addbank-alertbox'
             />
-            <main>
+            <main data-aid='kyc-approved-bank'>
               <Input
                 label="Account Holder name"
                 class="input"
@@ -299,7 +301,7 @@ const AddBank = (props) => {
                 id="c_account_number"
                 disabled={isApiRunning}
               />
-              <div className="input">
+              <div className="input" data-aid='kyc-dropdown-withouticon'>
                 <DropdownWithoutIcon
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}

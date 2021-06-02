@@ -125,13 +125,15 @@ const Pan = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload PAN"
+      data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
-          <div className="sub-title">
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             PAN Card: {kyc?.pan?.meta_data?.pan_number}
           </div>
           {/* {file && subTitle && <Alert
+            dataAid='kyc-upload-pan-alertbox'
             variant="attention"
             title={title}
             message={subTitle}
@@ -153,8 +155,8 @@ const Pan = (props) => {
               supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
-          <div className="doc-upload-note-row">
-            <div className="upload-note"> How to take picture of your PAN document? </div>
+          <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
+            <div className="upload-note" data-aid='upload-note-text'> How to take picture of your PAN document? </div>
             <WVClickableTextElement
               color="secondary"
               className="know-more-button"

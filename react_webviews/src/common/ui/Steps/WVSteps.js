@@ -25,9 +25,10 @@ const WVSteps = ({
 }) => {
   return (
     <div className={`wv-step ${classes.stepContainer}`}>
-      <div className="wv-step-header">
+      <div className="wv-step-header" data-aid='wv-step-header'>
         <div
           id="wv-sh-number"
+          data-aid='wv-sh-number'
           className={`wv-sh-number-${stepType} ${classes.stepNumber}`}
         >
           {/* If type is 'completed, default content is a success badge */}
@@ -36,9 +37,9 @@ const WVSteps = ({
             stepNum
           }
         </div>
-        <div id="wv-sh-title">{title}</div>
+        <div id="wv-sh-title" data-aid='wv-sh-title'>{title}</div>
       </div>
-      <div className={`wv-step-content ${classes.stepContent}`}>
+      <div className={`wv-step-content ${classes.stepContent}`} data-aid='wv-step-content'>
         {children}
       </div>
     </div>
