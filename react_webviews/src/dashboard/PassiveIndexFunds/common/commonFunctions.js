@@ -1,11 +1,11 @@
 import { storageService } from "utils/validators";
-import Radio from '@material-ui/core/Radio'
+// import Radio from '@material-ui/core/Radio'
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
-import CheckIcon from '@material-ui/icons/Done'
-import toast from "../../../common/ui/Toast";
+// import CheckIcon from '@material-ui/icons/Done'
+// import toast from "../../../common/ui/Toast";
 import { filter_options } from "../constants"
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -139,14 +139,14 @@ export function selected_year(selected) {
 
 
 export async function fetch_funddetails_list(body) {
-
-  if (isEmpty(body)) {
+  
+  if (isEmpty(body)) { 
     var body = {
       "subcategory": "all",
       // "sort_by": "high_to_low",
       // "filter_by": "returns"
     }
-  }
+  };
 
 
   try {
@@ -178,13 +178,13 @@ export async function fetch_funddetails_list(body) {
 export function getFilterNames(result, Value, name) {
 
   if (result.length > 0) {
-    const fundsHouseArr = result.map((item) => item[Value])
-    const uniqueSet = new Set(fundsHouseArr)
+    const dataArr = result.map((item) => item[Value])
+    const uniqueSet = new Set(dataArr)
     var uniqueArr = Array.from(uniqueSet)
   }
 
   if (!isEmpty(uniqueArr)) {
-    const fund_house = uniqueArr.map((item, idx) => {
+    const option = uniqueArr.map((item, idx) => {
       return ({
         value: item,
         control: Checkbox,
@@ -197,7 +197,7 @@ export function getFilterNames(result, Value, name) {
     filter_options.forEach(element => {
 
       if (!!element[name]) {
-        element[name] = fund_house
+        element[name] = option
       }
 
     });

@@ -1,7 +1,7 @@
 import { productName } from "./common/commonFunctions";
 import Radio from '@material-ui/core/Radio'
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckIcon from '@material-ui/icons/Done'
+// import Checkbox from '@material-ui/core/Checkbox';
+// import CheckIcon from '@material-ui/icons/Done'
 
 export const product_name = 'finity' || productName()
 
