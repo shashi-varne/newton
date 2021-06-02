@@ -530,7 +530,7 @@ export function openKyc() {
     kycStatusData,
   } = this.state;
 
-  storageService().set("kycProductType", "mf");
+  storageService().set("kycStartPoint", "mf");
   if (kycJourneyStatus === "submitted" || kycJourneyStatus === "rejected") {
     handleKycSubmittedOrRejectedState();
   } else {
@@ -554,7 +554,7 @@ export function openKyc() {
 export function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
   
-  storageService().set("kycProductType", "equity");
+  storageService().set("kycStartPoint", "stocks");
   if (kycJourneyStatus === "submitted" || kycJourneyStatus === "rejected") {
     handleKycSubmittedOrRejectedState();
   } else {

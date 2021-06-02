@@ -281,24 +281,25 @@ const Home = (props) => {
     ) {
       navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
+      const kycProductType = storageService().get("kycStartPoint");
       if (isUserCompliant || kyc_status === "compliant") {
         if (is_nri) {
-          if (!TRADING_ENABLED) {
-            navigate(PATHNAME_MAPPER.journey);
-          } else {
+          if (!TRADING_ENABLED && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
+          } else {
+            navigate(PATHNAME_MAPPER.journey);
           }
         } else {
           navigate(PATHNAME_MAPPER.journey);
         }
       } else {
         if (is_nri) {
-          if (!TRADING_ENABLED) {
+          if (!TRADING_ENABLED && kycProductType === "stocks") {
+            navigate(PATHNAME_MAPPER.nriError);
+          } else {
             navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${config.searchParams}&show_aadhaar=false`,
             });
-          } else {
-            navigate(PATHNAME_MAPPER.nriError);
           }
         } else {
           navigate(`${PATHNAME_MAPPER.journey}`, {
