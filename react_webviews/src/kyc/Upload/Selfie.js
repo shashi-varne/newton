@@ -1,5 +1,5 @@
 import "./commonStyles.scss";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
@@ -26,6 +26,7 @@ const Selfie = (props) => {
   const [isCamInitialised, setIsCamInitialised] = useState(false);
   const [isCamLoading, setIsCamLoading] = useState(true);
   const [isLocnPermOpen, setIsLocnPermOpen] = useState(false);
+  const [isLocInitialised, setIsLocInitialised] = useState(true);
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
   // const [showLoader, setShowLoader] = useState(false);
@@ -129,8 +130,15 @@ const Selfie = (props) => {
     navigate('/kyc/upload/selfie-steps');
   }
 
-  const closeLocnPermDialog = () => {
+  const closeLocnPermDialog = (locationCloseType) => {
+    if (locationCloseType === 'invalid-region') {
+      navigate('/kyc/journey');
+    }
     setIsLocnPermOpen(false);
+  }
+
+  const onLocationInit = () => {
+    setIsLocInitialised(true);
   }
 
   const onCameraInit = (init) => {
@@ -141,6 +149,12 @@ const Selfie = (props) => {
       Toast('Something went wrong! Please try again in some time');
     }
   }
+
+  useEffect(() => {
+    if (isCamInitialised && isLocInitialised) {
+      setIsCamLoading(false);
+    }
+  }, [isCamInitialised, isLocInitialised])
 
   return (
     <Container
@@ -201,6 +215,7 @@ const Selfie = (props) => {
               />
               <LocationPermission
                 isOpen={isLocnPermOpen}
+                onInit={onLocationInit}
                 onClose={closeLocnPermDialog}
                 onLocationFetchSuccess={onLocationFetchSuccess}
                 parentProps={props}
