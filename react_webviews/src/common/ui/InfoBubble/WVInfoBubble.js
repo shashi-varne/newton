@@ -89,9 +89,11 @@ const WVInfoBubble = ({
               }
             </div>
           }
-          <div className='wv-ib-content-desc'>
-            {children}
-          </div>
+          {children &&
+            <div className='wv-ib-content-desc'>
+              {children}
+            </div>
+          }
         </div>
       </div>
     </Fade>
