@@ -63,7 +63,7 @@ const StocksStatus = (props) => {
           buttonTitle={data.buttonTitle}
           classes={{ button: "stocks-button" }}
           onClick={handleClick}
-          dataAid={data.buttonTitle === "COMPLETE NOW" ? 'complete-now-btn' : 'open-acc-btn'}
+          dataAid={'stocks-action-btn'}
         />
       </div>
     </Container>
