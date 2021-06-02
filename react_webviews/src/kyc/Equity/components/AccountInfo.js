@@ -6,7 +6,7 @@ import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
 
 const productName = getConfig().productName;
-const benefits = [
+const BENEFITS = [
   {
     icon: "one_account.svg",
     text: "One account for stocks, IPO, F&O",
@@ -24,12 +24,12 @@ const AccountInfo = (props) => {
   return (
     <Container
       buttonTitle="CONTINUE"
-      title={"Trading & demat account"}
+      title="Trading & demat account"
       hidePageTitle
     >
       <div className="kyc-account-info">
         <header className="kyc-account-info-header">
-          <div className="kaih-text">{"Trading & demat account"}</div>
+          <div className="kaih-text">Trading & demat account</div>
           <img src={require(`assets/${productName}/ic_upgrade.svg`)} alt="" />
         </header>
         <main className="kyc-account-info-main">
@@ -39,7 +39,7 @@ const AccountInfo = (props) => {
           <div className="kaim-key-benefits">
             <div className="generic-page-title">Key benefits</div>
             <div className="kaim-benefits">
-              {benefits.map((data, index) => {
+              {BENEFITS.map((data, index) => {
                 return (
                   <div key={index} className="kaim-benefits-info">
                     <img
@@ -78,7 +78,7 @@ const AccountInfo = (props) => {
             <Checkbox checked={true} />
             <div>
               I agree to have read and understood the{" "}
-              <span>{"Terms & conditions"}</span> and{" "}
+              <span>Terms & conditions</span> and{" "}
               <span>Equity Annexure</span>{" "}
             </div>
           </div>

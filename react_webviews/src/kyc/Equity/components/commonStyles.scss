@@ -68,7 +68,7 @@ $generic-subtitle-margin-top: -10px;
   .te-tile {
     font-size: 15px;
     line-height: 24px;
-    color: #767e86;
+    color: var(--steelgrey);
     padding: 20px;
     margin-bottom: 10px;
     font-weight: 600;
@@ -122,7 +122,7 @@ $generic-subtitle-margin-top: -10px;
 
   .kyc-account-info-main {
     .kaim-subtitle {
-      color: #767e86;
+      color: var(--steelgrey);
       font-size: 15px;
       font-weight: 400;
       padding: 0 0 30px 0;
@@ -144,7 +144,7 @@ $generic-subtitle-margin-top: -10px;
         padding: 20px 0 10px 0;
         font-size: 13px;
         line-height: 21px;
-        color: #767e86;
+        color: var(--steelgrey);
 
         img {
           border-radius: 8px;
@@ -176,7 +176,7 @@ $generic-subtitle-margin-top: -10px;
         .kaim-fees-info-subtext {
           font-size: 11px;
           line-height: 18px;
-          color: #767e86;
+          color: var(--steelgrey);
         }
       }
 
@@ -184,7 +184,7 @@ $generic-subtitle-margin-top: -10px;
         font-size: 13px;
         line-height: 21px;
         text-decoration-line: line-through;
-        color: #767e86;
+        color: var(--steelgrey);
       }
 
       .kaim-no-fees-text2 {
@@ -203,7 +203,7 @@ $generic-subtitle-margin-top: -10px;
       column-gap: 10px;
       font-size: 13px;
       line-height: 21px;
-      color: #767e86;
+      color: var(--steelgrey);
 
       span {
         color: var(--primary);
@@ -246,7 +246,7 @@ $generic-subtitle-margin-top: -10px;
     .kdvm-subtitle {
       font-size: 13px;
       line-height: 21px;
-      color: #767e86;
+      color: var(--steelgrey);
       padding-bottom: 20px;
     }
 
@@ -319,7 +319,7 @@ $generic-subtitle-margin-top: -10px;
 
       .step-content {
         margin: 10px 0 30px 40px;
-        color: #767E86;
+        color: var(--steelgrey);
 
         .step-note {
           line-height: 21px;
@@ -328,7 +328,7 @@ $generic-subtitle-margin-top: -10px;
     }
 
     .page-note {
-      color: #767E86;
+      color: var(--steelgrey);
     }
   }
 }
