@@ -166,7 +166,7 @@ const PaymentOptions = (props) => {
   return (
     <Container
       noFooter={true}
-      showLoader={show_skelton}
+      skelton={show_skelton}
       title="Select Payment Option"
     >
       <section className="invest-payment-options">
