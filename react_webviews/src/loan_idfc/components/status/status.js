@@ -331,19 +331,27 @@ class LoanStatus extends Component {
   handleClick = () => {
     this.sendEvents("next");
     let { commonMapper, vendor_application_status, is_dedupe } = this.state;
+    let employment_type = this.state.employment_type;
+
     if (!is_dedupe && vendor_application_status === "idfc_0.5_accepted") {
       this.setState({
         show_loader: "button",
       });
-      toast(
-        "An email has been sent to your official email ID. Verify the same for faster loan sanction."
-      );
+
       let body = {
         perfios_state: "init",
         idfc_loan_status: "perfios",
       };
 
-      setTimeout(updateFunc, 3000);
+      if (employment_type === 'salaried') {
+        toast(
+          "An email has been sent to your official email ID. Verify the same for faster loan sanction."
+        );
+        
+        setTimeout(updateFunc, 3000);
+      } else {
+        this.updateApplication(body, "income-details");
+      }
 
       let that = this;
       function updateFunc() {

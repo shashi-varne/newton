@@ -9,7 +9,7 @@ import icn_call_myway from 'assets/icn_call_myway.svg';
 
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
-import { numDifferentiation, inrFormatDecimal, getUrlParams, capitalizeFirstLetter } from '../../../utils/validators';
+import { numDifferentiation, inrFormatDecimal, getUrlParams, capitalizeFirstLetter, storageService } from '../../../utils/validators';
 import { insuranceStateMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -103,20 +103,25 @@ class ReportDetails extends Component {
         var policyData = res.pfwresponse.result.policy;
         policyData.provider = this.state.provider;
         let buttonTitle = 'Resume';
+        var reportSelectedTab = 'activeReports';
 
         let path = '';
         let noFooter = false;
         if (policyData.status === 'expired') {
           buttonTitle = 'Buy Again';
           path = '';
+          reportSelectedTab = 'inactiveReports'
         } else if (policyData.status === 'init' && policyData.lead_payment_status === 'payment_done') {
           path = 'payment-success';
+          reportSelectedTab = 'pendingReports'
         } else if (policyData.status === 'init') {
           path = 'plan';
+          reportSelectedTab = 'pendingReports'
         } else {
           noFooter = true;
         }
 
+        storageService().setObject('reportSelectedTab', reportSelectedTab)
         let redirectPath = '/group-insurance';
 
         if (path) {

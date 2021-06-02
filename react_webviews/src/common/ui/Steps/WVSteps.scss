@@ -1,0 +1,56 @@
+.wv-step {
+  word-break: break-word;
+
+  .wv-step-header {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    margin-bottom: 10px;
+    
+    #wv-sh-number {
+      margin-right: 20px;
+      background-color: var(--primary);
+      height: 20px;
+      width: 20px;
+      flex: 0 0 20px;
+      border-radius: 50%;
+      // to center align number(horizontally and vertically)
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      // --------------------------
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: 1px;
+      color: white;
+    }
+
+    .wv-sh-number-completed {
+      background-color: var(--secondary) !important;
+    }
+    
+    .wv-sh-number-pending {
+      background-color: #FFDA2C !important;
+    }
+
+    #wv-sh-title {
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 21px;
+      color: var(--dark);
+      text-align: left;
+      text-transform: capitalize;
+    }
+  }
+  
+  .wv-step-content {
+    text-align: left;
+    margin-left: 40px;
+    text-transform: capitalize;
+  }
+}
+
+.wv-step + .wv-step {
+  margin-top: 30px;
+}

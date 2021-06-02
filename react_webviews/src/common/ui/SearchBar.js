@@ -12,11 +12,7 @@ const getSuggestions = (value, inputs) => {
     (item) => item.name.toLowerCase().slice(0, inputLength) === inputValue
   );
 
-  return inputLength === 0
-    ? []
-    : list.length === 0
-    ? [{ name: "OTHERS", value: "OTHERS" }]
-    : list;
+  return inputLength === 0 ? [] : list;
 };
 
 const getSuggestionValue = (suggestion) => suggestion.name;

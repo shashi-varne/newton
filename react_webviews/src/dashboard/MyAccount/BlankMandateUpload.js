@@ -8,6 +8,7 @@ import { getBase64, getConfig } from "../../utils/functions";
 import { upload } from "./MyAccountFunctions";
 import { nativeCallback } from "../../utils/native_callback";
 
+const config = getConfig();
 const BlankMandateUpload = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -17,7 +18,6 @@ const BlankMandateUpload = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [fileToShow, setFileToShow] = useState(null);
   const inputEl = useRef(null);
-  const config = getConfig();
 
   const handleClose = () => {
     props.history.push({
@@ -98,7 +98,7 @@ const BlankMandateUpload = (props) => {
   };
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(config.Web)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'blank_mandate', 'blank_mandate.jpg', 'front')

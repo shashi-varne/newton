@@ -86,7 +86,7 @@ class NpsInvestments extends Component {
           nps_data: nps_data
         })
       } else {
-        let title1 = result.error || result.message || "Something went wrong!";
+        let title1 = result.message || result.error || "Something went wrong!";
         this.setState({
           title1: title1,
         });
