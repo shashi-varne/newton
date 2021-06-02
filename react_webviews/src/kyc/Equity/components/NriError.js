@@ -1,8 +1,9 @@
 import React from "react";
+import { getConfig } from "../../../utils/functions";
 import Container from "../../common/Container";
-import { StatusInfo } from "../mini-components/StatusInfo";
 import "./commonStyles.scss";
 
+const productName = getConfig().productName;
 const NriError = (props) => {
   return (
     <Container
@@ -10,20 +11,25 @@ const NriError = (props) => {
       twoButtonVertical={true}
       button1Props={{
         type: "primary",
-        order: "1",
         title: "COMPLETE MUTUAL FUND KYC",
       }}
       button2Props={{
         type: "secondary",
-        order: "2",
         title: "DONE",
       }}
     >
-      <StatusInfo
-        icon="no_stocks_nri.svg"
-        title="Currently, we don't offer trading and demat services to NRI users"
-        subtitle="Please check back later or continue with your mutual fund KYC"
-      />
+      <div className="status-info">
+        <Imgc
+          className="status-info-img"
+          src={require(`assets/${productName}/no_stocks_nri.svg`)}
+        />
+        <div className="status-info-title">
+          Currently, we don't offer trading and demat services to NRI users
+        </div>
+        <div className="status-info-subtitle">
+          Please check back later or continue with your mutual fund KYC
+        </div>
+      </div>
     </Container>
   );
 };

@@ -35,7 +35,7 @@ const ManualSignature = (props) => {
       headerData={{ goBack }}
     >
       <section id="manual-signature">
-        <div className="generic-page-subtitle">
+        <div className="generic-page-subtitle manual-signature-subtile">
           Send us your signed documents through courier by following the steps below
         </div>
         <div class="page-content">

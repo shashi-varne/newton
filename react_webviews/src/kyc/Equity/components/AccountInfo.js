@@ -53,7 +53,7 @@ const AccountInfo = (props) => {
             </div>
           </div>
           <div>
-            <div className="generic-page-title">{"Fees & charges"}</div>
+            <div className="generic-page-title">Fees & charges</div>
             <div className="kaim-fees-info">
               <div className="kaim-fees-info-text">
                 <div>Account opening charges</div>
