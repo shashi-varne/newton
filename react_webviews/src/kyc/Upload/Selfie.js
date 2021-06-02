@@ -1,5 +1,5 @@
 import "./commonStyles.scss";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
@@ -26,6 +26,7 @@ const Selfie = (props) => {
   const [isCamInitialised, setIsCamInitialised] = useState(false);
   const [isCamLoading, setIsCamLoading] = useState(true);
   const [isLocnPermOpen, setIsLocnPermOpen] = useState(false);
+  const [isLocInitialised, setIsLocInitialised] = useState(true);
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
   // const [showLoader, setShowLoader] = useState(false);
@@ -126,11 +127,18 @@ const Selfie = (props) => {
   }
 
   const showSelfieSteps = () => {
-    navigate('/kyc/upload/selfie-steps');
+    navigate(PATHNAME_MAPPER.selfieSteps);
   }
 
-  const closeLocnPermDialog = () => {
+  const closeLocnPermDialog = (locationCloseType) => {
+    if (locationCloseType === 'invalid-region') {
+      navigate(PATHNAME_MAPPER.journey);
+    }
     setIsLocnPermOpen(false);
+  }
+
+  const onLocationInit = () => {
+    setIsLocInitialised(true);
   }
 
   const onCameraInit = (init) => {
@@ -141,6 +149,12 @@ const Selfie = (props) => {
       Toast('Something went wrong! Please try again in some time');
     }
   }
+
+  useEffect(() => {
+    if (isCamInitialised && isLocInitialised) {
+      setIsCamLoading(false);
+    }
+  }, [isCamInitialised, isLocInitialised])
 
   return (
     <Container
@@ -184,14 +198,14 @@ const Selfie = (props) => {
               </KycUploadContainer.Button>
             }
           </KycUploadContainer>
-          <div className="kyc-selfie-intructions">
-            <span id="kyc-si-text">How to take selfie?</span>
-            <WVClickableTextElement onClick={showSelfieSteps}>
-              Know More
-            </WVClickableTextElement>
-          </div>
           {TRADING_FLOW &&
             <>
+              <div className="kyc-selfie-intructions">
+                <span id="kyc-si-text">How to take selfie?</span>
+                <WVClickableTextElement onClick={showSelfieSteps}>
+                  Know More
+                </WVClickableTextElement>
+              </div>
               <WVLiveCamera
                 open={isLiveCamOpen}
                 onCameraInit={onCameraInit}
@@ -201,6 +215,7 @@ const Selfie = (props) => {
               />
               <LocationPermission
                 isOpen={isLocnPermOpen}
+                onInit={onLocationInit}
                 onClose={closeLocnPermDialog}
                 onLocationFetchSuccess={onLocationFetchSuccess}
                 parentProps={props}
