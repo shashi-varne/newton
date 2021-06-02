@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
-import { getPathname } from '../constants'
+import { PATHNAME_MAPPER } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
@@ -398,6 +398,10 @@ const Journey = (props) => {
         },
       ]
 
+      if(!isCompliant && !dlCondition && kyc?.address?.meta_data?.is_nri) {
+        journeyData[3].inputsForStatus.push('nri_address')
+      }
+
       if (
         isCompliant &&
         kyc?.identification?.meta_data?.marital_status &&
@@ -459,9 +463,11 @@ const Journey = (props) => {
         pan: '/kyc/home',
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        backToJourney: key === 'sign' ? true : null,
-        userType: 'compliant',
+        state: {
+          isEdit: isEdit,
+          backToJourney: key === 'sign' ? true : null,
+          userType: 'compliant',
+        }
       })
       return
     } else {
@@ -477,8 +483,10 @@ const Journey = (props) => {
         }
 
         navigate(stateMapper[key], {
-          isEdit: isEdit,
-          userType: 'non-compliant',
+          state: {
+            isEdit: isEdit,
+            userType: 'non-compliant',
+          }
         })
         return
       } else {
@@ -493,8 +501,10 @@ const Journey = (props) => {
         console.log(stateMapper[key])
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        userType: 'non-compliant',
+        state: {
+          isEdit: isEdit,
+          userType: 'non-compliant',
+        }
       })
       return
     }
@@ -533,7 +543,7 @@ const Journey = (props) => {
 
   const cancel = () => {
     setDlAadhaar(false)
-    navigate(`${getPathname.journey}`, {
+    navigate(`${PATHNAME_MAPPER.journey}`, {
       searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })

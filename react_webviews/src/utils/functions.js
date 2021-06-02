@@ -117,6 +117,8 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, "640px");
   html.style.setProperty(`--tooltip-width`, "540px");
   html.style.setProperty("--color-action-disable", "#E8ECF1");
+  html.style.setProperty('--dark', '#0A1D32');
+  html.style.setProperty('--steelgrey', '#767E86');
 
   return config_to_return;
 }
@@ -423,9 +425,16 @@ export function setHeights(data) {
       ? document.getElementsByClassName('Footer')[0].offsetHeight
       : 0;
 
+  const navbar =
+      document.getElementsByClassName('NavBar') && document.getElementsByClassName('NavBar')[0]
+        ? document.getElementsByClassName('NavBar')[0].offsetHeight
+        : 0;
+
   let HeaderHeight = bannerHeight + stepHeight + head + 'px';
+  const HeaderTop = head + navbar + 'px';
   if (data.header && document.getElementById('HeaderHeight')) {
     document.getElementById('HeaderHeight').style.height = HeaderHeight;
+    document.getElementById('HeaderHeight').style.top = HeaderTop;
   }
 
   // not using for now

@@ -101,6 +101,11 @@ const App = () => {
                   <Feature />
                 </DesktopLayout>
               }
+<<<<<<< HEAD
+=======
+              <Route path='/partner' component={Partner} />
+              <Route component={NotFound} />
+>>>>>>> 11ed809309677a9a807b6c6d357aca6fcc9c552f
             </Switch>
           </MuiThemeProvider>
         </JssProvider>
