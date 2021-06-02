@@ -23,14 +23,13 @@ export const checkAfterRedirection = (props, fromState, toState) => {
     nativeCallback({ action: "take_back_button_control" });
     nativeCallback({ action: "clear_history" });
   } else {
-    // Todo: Remove this code later
+    // Todo: Remove this code later - https://fisdom.atlassian.net/browse/WVFIS-1073
     nativeCallback({ action: "reset_back_button_control" });
   }
 }
 
 export const backButtonHandler = (props, fromState, currentState, params) => {
   const navigate = navigateFunc.bind(props);
-  console.log("Inside sdk back handler...", currentState);
   
   const landingRedirectPaths = ["/sip/payment/callback", "/kyc/report", "/notification", "/diy/fundlist/direct",
     "/diy/fundinfo/direct", "/diy/invest", "/invest/doityourself/direct", "/risk/recommendations/error"];
@@ -119,14 +118,11 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
   if (npsDetailsCheckCasesArr.indexOf(currentState) !== -1 || currentState.indexOf("/nps/payment/callback") !== -1) {
     if (storageService().getObject("nps_additional_details_required")) {
       if (isNpsOutsideSdk(fromState, currentState)) {
-        console.log("in nps sdk, before clear history...")
         nativeCallback({ action: "clear_history" });
       }
-      console.log("in nps sdk, before navigating...")
       navigate("/nps/sdk");
       return true;
     } else {
-      console.log("outside nps sdk, before navigating...")
       navigate("/");
       return true;
     }
