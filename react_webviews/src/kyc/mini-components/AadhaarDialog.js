@@ -5,7 +5,7 @@ import { getConfig, isMobile } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { storageService } from "utils/validators";
 import { updateQueryStringParameter } from "../common/functions";
-import { storageConstants } from "../constants";
+import { STORAGE_CONSTANTS } from "../constants";
 import { getBasePath } from "../../utils/functions";
 import "./mini-components.scss";
 
@@ -25,7 +25,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
-    if (isMobile.any() && storageService().get(storageConstants.NATIVE)) {
+    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -78,8 +78,8 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
   };
   return (
     <SlidingDialog id={id} open={open} close={close} {...props} onClick={close}>
-      <section className="kyc-dl-aadhaar-dialog">
-        <div className="flex-between">
+      <section className="kyc-dl-aadhaar-dialog" data-aid='kyc-dl-aadhaar-dialog'>
+        <div className="flex-between" data-aid='aadhaar-heading'>
           <div className="heading">
             Please ensure your mobile no. is linked with Aadhaar
           </div>
@@ -96,6 +96,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
             variant="raised"
             onClick={handleProceed}
             fullWidth
+            data-aid='proceed-btn'
           >
             PROCEED
           </Button>

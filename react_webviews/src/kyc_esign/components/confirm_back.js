@@ -11,18 +11,19 @@ const ConfirmBackModal = ({ id, open, confirm, cancel, ...props }) => {
       aria-labelledby="kyc-esign-back"
       aria-describedby="kyc-esign-back-confirmation"
       id="kyc-esign-back-dialog"
+      data-aid='kyc-esign-back-dialog'
       {...props}
     >
       <DialogContent>
-        <section className="kyc-esign-gb-dailog">
+        <section className="kyc-esign-gb-dailog" data-aid='kyc-esign-gb-dailog'>
           <article
-            className="text"
+            className="text" data-aid='text'
           >
             You are almost there, do you really want to go back?
           </article>
           <footer className="actions">
-            <Button onClick={confirm}>Yes</Button>
-            <Button onClick={cancel} variant="flat">No</Button>
+            <Button data-aid='yes-btn' onClick={confirm}>Yes</Button>
+            <Button data-aid='no-btn' onClick={cancel} variant="flat">No</Button>
           </footer>
         </section>
       </DialogContent>

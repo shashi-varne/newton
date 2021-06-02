@@ -3,8 +3,7 @@ import VideoRecorder from 'react-video-recorder'
 import Container from '../common/Container'
 import Button from '../../common/ui/Button'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { getIpvCode, upload } from '../common/api'
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
@@ -16,13 +15,12 @@ import "./commonStyles.scss";
 const config = getConfig();
 const productName = config.productName
 const isWeb = config.Web
-
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [ipvcode, setIpvCode] = useState('')
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [showKnowMoreDialog, setKnowMoreDialog] = useState(false)
   const [showVideoRecoreder, setShowVideoRecorder] = useState(false)
   const [uploadCTAText, setUploadCTAText] = useState("OPEN CAMERA")
@@ -101,14 +99,9 @@ const IpvVideo = (props) => {
     const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
-      const response = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
-      if(response.status_code === 200) {
-        const result = response.result
-        storageService().setObject(storageConstants.KYC, result.kyc)
-        navigate('/kyc/upload/progress')
-      } else {
-        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")
-      }
+      const result = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
+      updateKyc(result.kyc)
+      navigate('/kyc/upload/progress')
     } catch (err) {
       toast(err?.message)
       console.error(err)
@@ -142,14 +135,15 @@ const IpvVideo = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload selfie video (IPV)"
+      data-aid='kyc-selfie-video-ipv-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-ipv-video">
-          <div className="sub-title">
+        <section id="kyc-upload-ipv-video" data-aid='kyc-upload-ipv-video'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             As per SEBI, it's compulsory for all investors to go through IPV (In
             Person Verification Process).
           </div>
-          <div className="kyc-doc-upload-container noBorder">
+          <div className="kyc-doc-upload-container noBorder" data-aid='kyc-doc-upload-container'>
             {!isWeb && file && (
               <img
                 src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
@@ -158,13 +152,13 @@ const IpvVideo = (props) => {
               />
             )}
             {!file && (
-              <div className="instructions-container">
-                <div className="ipv_footer_instructions">
+              <div className="instructions-container" data-aid='instructions-container'>
+                <div className="ipv_footer_instructions" data-aid='ipv-footer-instructions'>
                   Start recording,{' '}
                   <strong>by reading the following verification numbers loud</strong>{' '}
                   while looking at the camera
                 </div>
-                <div className="ipv_code">{ipvcode}</div>
+                <div className="ipv_code" data-aid='ipv-code'>{ipvcode}</div>
                 <img
                   src={require(`assets/${productName}/state_ipv_number.svg`)}
                   alt="Upload Selfie"
@@ -179,10 +173,11 @@ const IpvVideo = (props) => {
                 onRecordingComplete={onRecordingComplete}
               />
             }
-            <div className="kyc-upload-doc-actions">
+            <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
               {isWeb && !isRecordingComplete && 
                 <div className="button-container">
                   <Button
+                    dataAid='open-camera-btn'
                     type="outlined"
                     buttonTitle="OPEN CAMERA"
                     onClick={handleClick}
@@ -192,6 +187,7 @@ const IpvVideo = (props) => {
               {!isWeb &&
               <div className="button-container">
                 <Button
+                  dataAid='take-video-btn'
                   type="outlined"
                   buttonTitle={uploadCTAText}
                   onClick={handleClick}
@@ -199,8 +195,8 @@ const IpvVideo = (props) => {
               </div>}
             </div>
           </div>
-          <div className="doc-upload-note-row">
-            <div className="upload-note">How to make a selfie video ?</div>
+          <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
+            <div className="upload-note" data-aid='upload-note-text'>How to make a selfie video ?</div>
             <WVClickableTextElement
               color="secondary"
               className="know-more-button"

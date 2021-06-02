@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
-import { getPathname, storageConstants } from '../constants'
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
@@ -18,6 +18,7 @@ import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
+import { getJourneyData } from './JourneyFunction';
 
 const headerDataMapper = {
   compliant: {
@@ -42,6 +43,9 @@ const headerDataMapper = {
       "As per Govt norm. you need to do a one-time registration process to complete KYC.",
   },
 };
+
+const config = getConfig();
+
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -103,7 +107,7 @@ const Journey = (props) => {
   const initJourneyData = () => {
     let i, j, k, data
     if (!isEmpty(kyc) && !isEmpty(user)) {
-      let journeyData = getJourneyData()
+      let journeyData = getJourneyData(kyc, isCompliant, show_aadhaar)
       for (i = 0; i < journeyData.length; i++) {
         let status = 'completed'
         if (journeyData[i].key === 'digilocker') {
@@ -115,10 +119,7 @@ const Journey = (props) => {
             status = 'init'
             break
           }
-        } else if (
-          journeyData[i].key === 'esign' ||
-          journeyData[i].key === 'bank_esign'
-        ) {
+        } else if (['esign', 'bank_esign', 'trading_esign'].includes(journeyData[i].key)) {
           if (kyc.sign_status !== 'signed') {
             status = 'init'
             break
@@ -140,8 +141,7 @@ const Journey = (props) => {
             }
           }
         } else if (
-          !isCompliant &&
-          show_aadhaar &&
+          ((!isCompliant && show_aadhaar) || isCompliant) &&
           journeyData[i].key === 'personal' &&
           (kyc.sign.doc_status === 'init' || kyc.sign.doc_status === 'rejected')
         ) {
@@ -253,191 +253,6 @@ const Journey = (props) => {
     return false
   }
 
-  const getJourneyData = () => {
-    let journeyData = []
-    if (isCompliant) {
-      journeyData = [
-        {
-          key: 'pan',
-          title: 'PAN',
-          value: kyc?.pan?.meta_data?.pan_number,
-          status: 'completed',
-          isEditAllowed: false,
-          inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
-        },
-        {
-          key: 'personal',
-          title: 'Basic details',
-          status: 'init',
-          isEditAllowed: true,
-          inputsForStatus: [
-            { name: 'pan', keys: ['dob'] },
-            {
-              name: 'identification',
-              keys: [
-                'mobile_number',
-                'email',
-                'occupation',
-                'gross_annual_income',
-              ],
-            },
-            {
-              name: 'nomination',
-              keys: ['name', 'dob', 'relationship'],
-            },
-          ],
-        },
-        // {
-        //   key: "nominee",
-        //   title: "Assign nominee",
-        //   status: "pending",
-        //   isEditAllowed: true,
-        //   inputsForStatus: [
-        //     {
-        //       name: "nomination",
-        //       keys: ["name", "dob", "relationship", "address"]
-        //     }
-        //   ]
-        // },
-        {
-          key: 'bank',
-          title: 'Bank details',
-          status: 'pending',
-          isEditAllowed: false,
-          inputsForStatus: [
-            {
-              name: 'bank',
-              keys: ['account_number', 'account_type', 'ifsc_code'],
-            },
-          ],
-        },
-        {
-          key: 'sign',
-          title: 'Signature',
-          status: 'pending',
-          isEditAllowed: true,
-          inputsForStatus: ['sign'],
-        },
-      ]
-    } else if (!isCompliant && show_aadhaar) {
-      journeyData = [
-        {
-          key: 'pan',
-          title: 'PAN',
-          value: kyc?.pan?.meta_data?.pan_number,
-          status: 'completed',
-          isEditAllowed: true,
-          inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
-        },
-        {
-          key: 'digilocker',
-          title: 'Connect to digilocker',
-          status: 'init',
-          isEditAllowed: false,
-          inputsForStatus: ['dl_docs_status'],
-        },
-        {
-          key: 'personal',
-          title: 'Personal details',
-          status: 'pending',
-          isEditAllowed: true,
-          inputsForStatus: [
-            { name: 'pan', keys: ['name', 'father_name', 'mother_name'] },
-            {
-              name: 'identification',
-              keys: ['email', 'mobile_number', 'gender', 'marital_status'],
-            },
-            {
-              name: 'nomination',
-              keys: ['name', 'dob', 'relationship'],
-            },
-          ],
-        },
-        {
-          key: 'bank_esign',
-          title: 'Bank details & eSign',
-          status: 'pending',
-          isEditAllowed: false,
-          inputsForStatus: ['esign'],
-        },
-      ]
-    } else {
-      journeyData = [
-        {
-          key: 'pan',
-          title: 'PAN details',
-          status: 'completed',
-          isEditAllowed: true,
-          inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
-        },
-        {
-          key: 'personal',
-          title: 'Personal details',
-          status: 'init',
-          isEditAllowed: true,
-          inputsForStatus: [
-            {
-              name: 'pan',
-              keys: ['name', 'dob', 'father_name', 'mother_name'],
-            },
-            {
-              name: 'identification',
-              keys: ['email', 'mobile_number', 'gender', 'marital_status'],
-            },
-            {
-              name: 'nomination',
-              keys: ['name', 'dob', 'relationship'],
-            },
-            // { name: "nomination", keys: ["name", "dob", "relationship"] }
-          ],
-        },
-        {
-          key: 'address',
-          title: 'Address details',
-          status: 'pending',
-          isEditAllowed: true,
-          inputsForStatus: [
-            { name: 'address', keys: ['pincode'] },
-            { name: 'nomination', keys: ['address'] },
-          ],
-        },
-        {
-          key: 'docs',
-          title: 'Upload documents',
-          disc: 'PAN & proof of address',
-          status: 'pending',
-          isEditAllowed: true,
-          inputsForStatus: [
-            'pan',
-            'identification',
-            'address',
-            'bank',
-            'ipvvideo',
-            'sign',
-          ],
-        },
-        {
-          key: 'esign',
-          title: 'eSign',
-          status: 'init',
-          isEditAllowed: false,
-          inputsForStatus: ['esign'],
-        },
-      ]
-
-      if (
-        isCompliant &&
-        kyc?.identification?.meta_data?.marital_status &&
-        kyc?.identification?.meta_data?.marital_status?.toLowerCase() ===
-          'married'
-      ) {
-        journeyData[1].inputsForStatus[1].keys.push('spouse_name')
-      }
-    }
-
-    return journeyData
-  }
-
   const goNext = async () => {
     try {
       if (!canSubmit()) {
@@ -479,49 +294,56 @@ const Journey = (props) => {
       //   return
       // }
       stateMapper = {
-        personal: '/kyc/compliant-personal-details',
-        nominee: '/kyc/compliant-nominee-details',
+        personal: PATHNAME_MAPPER.compliantPersonalDetails1,
+        nominee: PATHNAME_MAPPER.compliantPersonalDetails4,
         bank: '/kyc/compliant/bank-details',
-        sign: '/kyc/upload/sign',
-        pan: '/kyc/home',
+        sign: PATHNAME_MAPPER.uploadSign,
+        pan: PATHNAME_MAPPER.homeKyc,
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        backToJourney: key === 'sign' ? true : null,
-        userType: 'compliant',
+        state: {
+          isEdit: isEdit,
+          backToJourney: key === 'sign' ? true : null,
+          userType: 'compliant',
+        }
       })
       return
     } else {
       if (show_aadhaar) {
-        console.log(key)
         stateMapper = {
-          pan: '/kyc/home',
-          personal: '/kyc/dl/personal-details1',
+          pan: PATHNAME_MAPPER.homeKyc,
+          personal: PATHNAME_MAPPER.digilockerPersonalDetails1,
           bank_esign: '/kyc/non-compliant/bank-details',
-          address: '/kyc/address-details1',
-          docs: '/kyc/upload/intro',
-          esign: '/kyc-esign/info',
+          trading_esign: PATHNAME_MAPPER.tradingExperience,
+          address: PATHNAME_MAPPER.addressDetails1,
+          docs: PATHNAME_MAPPER.uploadProgress,
+          esign: PATHNAME_MAPPER.kycEsign,
         }
 
         navigate(stateMapper[key], {
-          isEdit: isEdit,
-          userType: 'non-compliant',
+          state: {
+            isEdit: isEdit,
+            userType: 'non-compliant',
+          }
         })
         return
       } else {
         console.log('Non show aadhaar')
         stateMapper = {
-          pan: '/kyc/home',
-          personal: '/kyc/personal-details1',
-          address: '/kyc/address-details1',
-          docs: '/kyc/upload/intro',
-          esign: '/kyc-esign/info',
+          pan: PATHNAME_MAPPER.homeKyc,
+          personal: PATHNAME_MAPPER.personalDetails1,
+          address: PATHNAME_MAPPER.addressDetails1,
+          docs: PATHNAME_MAPPER.uploadProgress,
+          esign: PATHNAME_MAPPER.kycEsign,
+          trading_esign: PATHNAME_MAPPER.tradingExperience,
         }
         console.log(stateMapper[key])
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        userType: 'non-compliant',
+        state: {
+          isEdit: isEdit,
+          userType: 'non-compliant',
+        }
       })
       return
     }
@@ -544,7 +366,9 @@ const Journey = (props) => {
         if (kyc?.bank?.meta_data_status === 'approved') {
           navigate('/kyc/compliant-report-verified')
         } else {
-          navigate('/kyc/compliant-report-complete')
+          navigate('/kyc-esign/nsdl', {
+            searchParams: `${config.searchParams}&status=success`,
+          })
         }
       } else {
         navigate('/kyc/report')
@@ -556,22 +380,22 @@ const Journey = (props) => {
     }
   }
 
-  const productName = getConfig().productName
+  const productName = config.productName
   const basePath = getBasePath();
   const handleProceed = () => {
     const redirect_url = encodeURIComponent(
       `${basePath}/digilocker/callback${
-        getConfig().searchParams
+        config.searchParams
       }&is_secure=${storageService().get("is_secure")}`
     );
     const data = {
       url: `${basePath}/kyc/journey${
-        getConfig().searchParams
+        config.searchParams
       }&show_aadhaar=true&is_secure=
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
-    if (isMobile.any() && storageService().get(storageConstants.NATIVE)) {
+    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -592,7 +416,7 @@ const Journey = (props) => {
               action_type: "redirect",
               redirect_url: encodeURIComponent(
                 `${basePath}/kyc/journey${
-                  getConfig().searchParams
+                  config.searchParams
                 }&show_aadhaar=true&is_secure=
                   ${storageService().get("is_secure")}`
               ),
@@ -623,8 +447,8 @@ const Journey = (props) => {
 
   const cancel = () => {
     setDlAadhaar(false)
-    navigate(`${getPathname.journey}`, {
-      searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+    navigate(`${PATHNAME_MAPPER.journey}`, {
+      searchParams: `${config.searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })
   }
@@ -730,22 +554,23 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
+      data-aid='kyc-journey-screen'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
-        <div className="kyc-journey">
+        <div className="kyc-journey" data-aid='kyc-journey-data'>
           {/* {journeyStatus === 'ground_premium' && (
             <div className="kyc-journey-caption">
               fast track your investment!
             </div>
           )} */}
-          <div className="kyc-pj-content">
+          <div className="kyc-pj-content" data-aid='kyc-pj-content'>
             <div className="left">
-              <div className="pj-header">{headerData.title}</div>
-              <div className="pj-sub-text">{headerData.subtitle}</div>
+              <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
+              <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
               {(show_aadhaar || isCompliant) && (
                 <>
-                  <div className="kyc-pj-bottom">
-                    <div className="pj-bottom-info-box">
+                  <div className="kyc-pj-bottom" data-aid='kyc-pj-bottom'>
+                    <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-one'>
                       <img
                         src={require(`assets/${productName}/ic_no_doc.svg`)}
                         alt=""
@@ -755,7 +580,7 @@ const Journey = (props) => {
                         100% paperless
                       </div>
                     </div>
-                    <div className="pj-bottom-info-box">
+                    <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-two'>
                       <img
                         src={require(`assets/${productName}/ic_instant.svg`)}
                         alt="No document asked"
@@ -775,9 +600,9 @@ const Journey = (props) => {
             />
           </div>
           
-          <div className="kyc-journey-title">{topTitle}</div>
+          <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
           {!show_aadhaar && !isCompliant && (
-            <div className="kyc-journey-subtitle">
+            <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle'>
               <WVInfoBubble isDismissable isOpen type="info">
                 Please keep your <b>PAN</b> {kyc?.pan?.meta_data?.pan_number}{" "}
                 and <b>address proof</b> handy to complete KYC
@@ -785,7 +610,7 @@ const Journey = (props) => {
             </div>
           )}
           {isCompliant && !investmentPending && (
-            <div className="kyc-compliant-subtitle">
+            <div className="kyc-compliant-subtitle" data-aid='kyc-compliant-subtitle'>
               Complete the remaining steps to start investing
             </div>
           )}
@@ -794,14 +619,16 @@ const Journey = (props) => {
             user.active_investment &&
             user.kyc_registration_v2 !== 'submitted' && (
               <Alert
+                dataAid='kyc-registration-v2-alertbox'
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."
                 title={`Hey ${user.name}`}
               />
             )}
-          <main className="steps-container">
+          <main  data-aid='kyc-journey' className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
+                data-aid={`kyc-${item.key}`}
                 className={
                   item.status === 'completed' ? 'step step__completed' : 'step'
                 }
@@ -826,7 +653,7 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  <div className="flex flex-between">
+                  <div className="flex flex-between" data-aid='kyc-field-value'>
                     <span className="field_key">
                       {item.title}
                       {item?.value ? ':' : ''}
@@ -838,6 +665,7 @@ const Journey = (props) => {
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
+                      data-aid='kyc-edit'
                       className="edit"
                       onClick={() =>
                         handleEdit(item.key, idx, item.isEditAllowed)
@@ -848,7 +676,7 @@ const Journey = (props) => {
                   )}
                 </div>
 
-                {item?.disc && <div className="disc">{item?.disc}</div>}
+                {item?.disc && <div className="disc" data-aid='kyc-disc'>{item?.disc}</div>}
               </div>
             ))}
           </main>

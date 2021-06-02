@@ -33,20 +33,21 @@ class DigiStatus extends Component {
         handleClick={this.handleClick}
         buttonTitle='OKAY'
         headerData={headerData}
+        data-aid='digilocker-screen'
       >
-        <div className="digi-status">
+        <div className="digi-status" data-aid='digi-status'>
           <img
             src={ require(`assets/${productName}/ils_digilocker_${status}.svg`)}
             style={{width:"100%"}}
             alt="Digilocker Status" 
           />
           {status === "success" ? 
-            <div className="digi-status-text">
+            <div className="digi-status-text" data-aid='digi-status-text'>
                 <strong>Digilocker is now linked!</strong> Complete remaining steps to start investing
             </div>
             :
             <Fragment>
-                <div className="digi-status-text">
+                <div className="digi-status-text" data-aid='digi-status-text'>
                     Aadhaar KYC has been failed because we were not able to connect to your Digilocker.
                 </div>
                 <div className="digi-desc">

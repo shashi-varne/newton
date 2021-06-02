@@ -37,6 +37,7 @@ class CustomButton extends Component {
         return(
           <div>
           <Button
+            data-aid={props.dataAid}
             fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"
             size="large"
@@ -60,6 +61,7 @@ class CustomButton extends Component {
       return (
         <div className="FlexButton">
           <Button
+            data-aid={props.dataAid}
             onClick={props.handleClickOne}
             fullWidth={false}
             variant="raised"
@@ -72,6 +74,7 @@ class CustomButton extends Component {
             {props.buttonOneTitle}
           </Button>
           <Button
+            data-aid={props.dataAid}
             onClick={props.handleClickTwo}
             fullWidth={false}
             variant="raised"
@@ -94,6 +97,7 @@ class CustomButton extends Component {
       return (
         <div className="FlexButton">
           <Button
+            data-aid={props.dataAid}
             onClick={props.handleClickOne}
             fullWidth={false}
             variant="raised"
@@ -110,6 +114,7 @@ class CustomButton extends Component {
             {props.buttonOneTitle}
           </Button>
           <Button
+            data-aid={props.dataAid}
             onClick={props.handleClickTwo}
             fullWidth={false}
             variant="raised"
@@ -126,6 +131,7 @@ class CustomButton extends Component {
       return (
         // <div>
           <Button
+            data-aid={props.dataAid}
             fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"
             size="large"

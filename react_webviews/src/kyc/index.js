@@ -24,7 +24,7 @@ import CompliantPersonalDetails4 from "./Compliant/PersonalDetails4";
 import ConfirmPan from "./Compliant/ConfirmPan";
 import KycComplete from "./Compliant/Complete";
 import CompliantReport from "./Compliant/Report";
-import Verify from "./Compliant/Verify";
+import KycVerified from "./Compliant/KycVerified";
 import RtaCompliantPersonalDetails from "./RtaCompliant";
 
 import RegistrationSuccess from "./Success/RegistrationSuccess";
@@ -67,6 +67,8 @@ import AccountInfo from "./Equity/components/AccountInfo";
 import UploadInstructions from "./Equity/components/UploadInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
+import CommunicationDetails from "./Equity/components/CommunicationDetails";
+import CommunicationCallback from "./Equity/components/CommunicationCallback";
 import FnOSampleDocuments from "./Upload/F&OSampleDocuments";
 
 const Kyc = (props) => {
@@ -187,7 +189,7 @@ const Kyc = (props) => {
           component={Nominee}
         />
         <Route 
-          exact 
+          exact
           path={`${url}/report`} 
           component={Report} 
         />
@@ -229,7 +231,7 @@ const Kyc = (props) => {
         <Route
           exact
           path={`${url}/compliant-report-verified`}
-          component={Verify}
+          component={KycVerified}
         />
         <Route
           exact
@@ -370,6 +372,16 @@ const Kyc = (props) => {
           exact 
           path={`${url}/manual-signature`} 
           component={ManualSignature} 
+        />
+        <Route 
+          exact 
+          path={`${url}/communication-details`} 
+          component={CommunicationDetails} 
+        />
+        <Route
+          exact
+          path={`${url}/communication-details/callback`}
+          component={CommunicationCallback}
         />
         <Route component={NotFound} />
       </Switch>

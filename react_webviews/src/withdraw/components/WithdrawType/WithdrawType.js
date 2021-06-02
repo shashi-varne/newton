@@ -14,7 +14,7 @@ import './WithdrawType.scss';
 const Landing = (props) => {
   const { type } = props.match?.params
   const amount = props.location?.state?.amount
-  const [error, setError] = useState(false)
+  const [error, setError] = useState({})
   const [totalAmount, setTotalAmount] = useState('')
   const [value, setValue] = useState({})
   const [recommendedFunds, setRecommendedFunds] = useState(null)
@@ -117,8 +117,14 @@ const Landing = (props) => {
       }
     }
   }
-  const checkError = (err) => {
-    setError(err)
+  const checkError = (isin, err) => {
+    if(err) {
+      setError({ ...error, [isin]: err })
+    } else {
+      const newError = error;
+      delete newError[isin];
+      setError({...newError})
+    }
   }
 
   const getTitle = () => {
@@ -128,6 +134,7 @@ const Landing = (props) => {
       case "insta-redeem": 
         return "Instant withdraw";
       case "self":
+      case "manual":
         return "Manual withdraw";
       default:
         return "Withdraw";
@@ -171,14 +178,9 @@ const Landing = (props) => {
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
       goBack={goBack}
-      // hideInPageTitle
-      disable={type === 'insta-redeem' ? (limitCrossed || error) : error}
-      // handleClick2={handleClick}
+      disable={type === 'insta-redeem' ? (limitCrossed || !isEmpty(error)) : !isEmpty(error)}
       handleClick={handleClick}
       skelton={isEmpty(recommendedFunds) && showSkeltonLoader}
-      // twoButton={type !== 'insta-redeem'}
-      // footerText1={totalAmount}
-      // disable2={error}
       buttonData={{
         leftTitle: "Withdraw amount",
         leftSubtitle: formatAmountInr(totalAmount),

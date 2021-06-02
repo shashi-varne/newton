@@ -4,11 +4,12 @@ import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { relationshipOptions, getPathname } from "../constants";
+import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
+  getTotalPagesInPersonalDetails,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
@@ -27,11 +28,12 @@ const PersonalDetails4 = (props) => {
   if (isEdit) {
     title = "Edit nominee detail";
   }
-  const { kyc, isLoading } = useUserKycHook();
+  const [totalPages, setTotalPages] = useState();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) initialize();
-  }, [kyc]);
+    if (!isEmpty(kyc) && !isEmpty(user)) initialize();
+  }, [kyc, user]);
 
   const initialize = () => {
     let is_checked = false;
@@ -52,6 +54,7 @@ const PersonalDetails4 = (props) => {
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
   const handleClick = () => {
@@ -108,11 +111,16 @@ const PersonalDetails4 = (props) => {
   };
 
   const handleNavigation = () => {
-    if (isChecked) {
-      if (isEdit) navigate(getPathname.journey);
-      else navigate("/kyc/compliant/bank-details");
+    // if (isChecked) {
+    //   if (isEdit) navigate(PATHNAME_MAPPER.journey);
+    //   else navigate("/kyc/compliant/bank-details");
+    // } else {
+    //   navigate(PATHNAME_MAPPER.journey);
+    // }
+    if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+      navigate(PATHNAME_MAPPER.uploadSign);
     } else {
-      navigate(getPathname.journey);
+      navigate(PATHNAME_MAPPER.journey)
     }
   };
 
@@ -146,15 +154,19 @@ const PersonalDetails4 = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      current={totalPages}
+      count={totalPages}
+      total={totalPages}
+      data-aid='kyc-personal-details-screen-4'
     >
       <div className="kyc-nominee">
-        <main>
+        <main data-aid='kyc-nominee-page'>
           <WVInfoBubble
             type="info"
             customTitle="Nominee details will be applicable for mutual fund investments only"
             hasTitle
           />
-          <div className="nominee-checkbox">
+          <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
               checked={isChecked}
@@ -163,9 +175,13 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-            <span>
+<<<<<<< HEAD
+            <span>I do not wish to add a nominee</span>
+=======
+            <span data-aid='kyc-no-nominee-text'>
               I do not wish to add a <b>nominee</b>
             </span>
+>>>>>>> e5f01f137e9e37998f7b21edeea1699a943a4cb9
           </div>
           <Input
             label="Name"
@@ -191,11 +207,11 @@ const PersonalDetails4 = (props) => {
             id="dob"
             disabled={isChecked || isApiRunning}
           />
-          <div className="input">
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
-              options={relationshipOptions}
+              options={RELATIONSHIP_OPTIONS}
               id="relationship"
               label="Relationship"
               isAOB={true}

@@ -5,13 +5,15 @@ import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   bankAccountTypeOptions,
-  getPathname,
+  PATHNAME_MAPPER,
   getIfscCodeError,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini-components/Alert";
 import {
+  checkPanFetchStatus,
+  isDigilockerFlow,
   // compareObjects,
   navigate as navigateFunc,
   validateFields,
@@ -19,13 +21,15 @@ import {
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, isTradingEnabled } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
+const config = getConfig();
+
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
-  const code = getConfig().code;
+  const code = config.code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
   const params = props.match.params || {};
@@ -79,13 +83,7 @@ const KycBankDetails = (props) => {
       disableData.ifsc_code_disabled = true;
     }
     setDisableFields({ ...disableData });
-    if (
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
+    if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
     setName(kyc.pan.meta_data.name || "");
@@ -126,7 +124,7 @@ const KycBankDetails = (props) => {
   };
 
   const redirect = () => {
-    navigate(getPathname.journey);
+    navigate(PATHNAME_MAPPER.journey);
   };
 
   const handleClick = () => {
@@ -167,26 +165,49 @@ const KycBankDetails = (props) => {
     }
   };
 
-  const handleNavigation = () => {
+  const handleOtherPlatformNavigation = () => {
     if (userType === "compliant") {
-      if (isEdit) navigate(getPathname.journey);
-      else
-        navigate(getPathname.uploadSign, {
-          state: {
-            backToJourney: true,
-          },
-        });
+      if (isEdit) navigate(PATHNAME_MAPPER.journey);
+      else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-          kyc.pan.doc_status !== "approved"
-        )
-          navigate(getPathname.uploadPan);
-        else navigate(getPathname.kycEsign);
-      } else navigate(getPathname.uploadProgress);
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
+          navigate(PATHNAME_MAPPER.uploadPan);
+        } else {
+          navigate(PATHNAME_MAPPER.tradingExperience);
+        }
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress);
+      }
+    }
+  };
+
+  const handleSdkNavigation = () => {
+    if (userType === "compliant") {
+      navigate(PATHNAME_MAPPER.journey);
+      // if (isEdit) navigate(PATHNAME_MAPPER.journey);
+      // else
+      //   navigate(PATHNAME_MAPPER.uploadSign, {
+      //     state: {
+      //       backToJourney: true,
+      //     },
+      //   });handleSdkNavigation
+    } else {
+      if (dl_flow) {
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved)
+          navigate(PATHNAME_MAPPER.uploadPan);
+        else navigate(PATHNAME_MAPPER.kycEsign);
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
+    }
+  };
+
+  const handleNavigation = () => {
+    if (isTradingEnabled()) {
+      handleOtherPlatformNavigation();
+    } else {
+      handleSdkNavigation();
     }
   };
 
@@ -289,8 +310,9 @@ const KycBankDetails = (props) => {
       skelton={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      data-aid='kyc-enter-bank-account-details-screen'
     >
-      <div className="kyc-approved-bank">
+      <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
             {/* <Alert
@@ -305,7 +327,7 @@ const KycBankDetails = (props) => {
             >
               {note.info_text}
             </WVInfoBubble>
-            <main>
+            <main data-aid='kyc-enter-bank-account-details'>
               <Input
                 label="Account holder name"
                 class="input"
@@ -369,7 +391,7 @@ const KycBankDetails = (props) => {
                   isApiRunning || disableFields.c_account_number_disabled
                 }
               />
-              <div className="input">
+              <div className="input" data-aid='kyc-dropdown-withouticon'>
                 <DropdownWithoutIcon
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}
@@ -388,7 +410,7 @@ const KycBankDetails = (props) => {
         )}
         {isPennyExhausted && (
           <PennyExhaustedDialog
-            isOpen={isPennyExhausted}
+            isOpen= {isPennyExhausted}
             redirect={redirect}
             uploadDocuments={uploadDocuments}
           />

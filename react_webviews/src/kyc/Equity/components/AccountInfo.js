@@ -4,6 +4,8 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
+import { navigate as navigateFunc } from "../../common/functions";
+import { PATHNAME_MAPPER } from "../../constants";
 
 const productName = getConfig().productName;
 const benefits = [
@@ -21,32 +23,40 @@ const benefits = [
   },
 ];
 const AccountInfo = (props) => {
+  const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
   const handleCheckBox = () => {
     setCheckTermsAndConditions(!checkTermsAndConditions);
   };
+
+  const handleClick = () => {
+    navigate(PATHNAME_MAPPER.homeKyc);
+  };
+
   return (
     <Container
       buttonTitle="CONTINUE"
       title={"Trading & demat account"}
       hidePageTitle
+      data-aid='kyc-demate-account-screen'
       disable={!checkTermsAndConditions}
+      handleClick={handleClick}
     >
-      <div className="kyc-account-info">
-        <header className="kyc-account-info-header">
+      <div className="kyc-account-info" data-aid='kyc-account-info'>
+        <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
           <div className="kaih-text">{"Trading & demat account"}</div>
           <img src={require(`assets/${productName}/ic_upgrade.svg`)} alt="" />
         </header>
-        <main className="kyc-account-info-main">
-          <div className="kaim-subtitle">
+        <main className="kyc-account-info-main" data-aid='kyc-account-info-main'>
+          <div className="kaim-subtitle" data-aid='kyc-subtitle'>
             Invest in India's best performing stocks in just a few clicks!
           </div>
-          <div className="kaim-key-benefits">
+          <div className="kaim-key-benefits" data-aid='key-benefits'>
             <div className="generic-page-title">Key benefits</div>
             <div className="kaim-benefits">
               {benefits.map((data, index) => {
                 return (
-                  <div key={index} className="kaim-benefits-info">
+                  <div key={index} className="kaim-benefits-info" data-aid='kaim-benefits-info'>
                     <img
                       src={require(`assets/${productName}/${data.icon}`)}
                       alt=""
@@ -58,8 +68,8 @@ const AccountInfo = (props) => {
             </div>
           </div>
           <div>
-            <div className="generic-page-title">{"Fees & charges"}</div>
-            <div className="kaim-fees-info">
+            <div className="generic-page-title" data-aid='kyc-free-charges'>{"Fees & charges"}</div>
+            <div className="kaim-fees-info" data-aid='kyc-opening-charges'>
               <div className="kaim-fees-info-text">
                 <div>Account opening charges</div>
                 <div className="kaim-fees-info-subtext">(one-time fee)</div>
@@ -69,7 +79,7 @@ const AccountInfo = (props) => {
                 <div className="kaim-no-fees-text2">FREE</div>
               </div>
             </div>
-            <div className="kaim-fees-info">
+            <div className="kaim-fees-info" data-aid='kyc-platform-charges'>
               <div className="kaim-fees-info-text">
                 <div>Platform charges</div>
               </div>
@@ -79,7 +89,7 @@ const AccountInfo = (props) => {
               </div>
             </div>
           </div>
-          <div className="kaim-terms">
+          <div className="kaim-terms" data-aid='kaim-terms'>
             <Checkbox
               checked={checkTermsAndConditions}
               handleChange={handleCheckBox}

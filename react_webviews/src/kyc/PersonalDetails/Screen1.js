@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { genderOptions, maritalStatusOptions, getPathname } from "../constants";
+import { GENDER_OPTIONS, MARITAL_STATUS_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   formatDate,
   dobFormatTest,
@@ -14,6 +14,7 @@ import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
+  getTotalPagesInPersonalDetails,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -25,6 +26,7 @@ const PersonalDetails1 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const [totalPages, setTotalPages] = useState();
 
   let title = "Personal details";
   if (isEdit) {
@@ -34,10 +36,10 @@ const PersonalDetails1 = (props) => {
   const {kyc, user, isLoading} = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
       initialize();
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const initialize = async () => {
     let mobile_number = kyc.identification?.meta_data?.mobile_number || "";
@@ -57,12 +59,11 @@ const PersonalDetails1 = (props) => {
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
   const handleClick = () => {
     let keysToCheck = ["name", "dob", "gender", "marital_status"];
-    if (user.email === null) keysToCheck.push("email");
-    if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
@@ -82,7 +83,7 @@ const PersonalDetails1 = (props) => {
     userkycDetails.identification.meta_data.marital_status =
       form_data.marital_status;
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.personalDetails2, {
+      navigate(PATHNAME_MAPPER.personalDetails2, {
         state: {
           isEdit: isEdit,
         },
@@ -104,7 +105,7 @@ const PersonalDetails1 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.personalDetails2, {
+      navigate(PATHNAME_MAPPER.personalDetails2, {
         state: {
           isEdit: isEdit,
         },
@@ -120,11 +121,10 @@ const PersonalDetails1 = (props) => {
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     if (value && name === "name" && !validateAlphabets(value)) return;
-    if (name === "mobile" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "marital_status")
-      formData[name] = maritalStatusOptions[value].value;
-    else if (name === "gender") formData[name] = genderOptions[value].value;
+      formData[name] = MARITAL_STATUS_OPTIONS[value].value;
+    else if (name === "gender") formData[name] = GENDER_OPTIONS[value].value;
     else if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
@@ -147,13 +147,14 @@ const PersonalDetails1 = (props) => {
       title={title}
       count="1"
       current="1"
-      total="4"
+      total={totalPages}
+      data-aid='kyc-personal-details-screen-1'
     >
       <div className="kyc-personal-details">
-        <div className="kyc-main-subtitle">
+        <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>
           We need basic details to verify identity
         </div>
-        <main>
+        <main data-aid='kyc-personal-details'>
           <Input
             label="Name"
             class="input"
@@ -178,39 +179,13 @@ const PersonalDetails1 = (props) => {
             id="dob"
             disabled={isApiRunning}
           />
-          {user.email === null && (
-            <Input
-              label="Email"
-              class="input"
-              value={form_data.email || ""}
-              error={form_data.email_error ? true : false}
-              helperText={form_data.email_error || ""}
-              onChange={handleChange("email")}
-              type="text"
-              disabled={isApiRunning}
-            />
-          )}
-          {user.mobile === null && (
-            <Input
-              label="Mobile number"
-              class="input"
-              value={form_data.mobile || ""}
-              error={form_data.mobile_error ? true : false}
-              helperText={form_data.mobile_error || ""}
-              onChange={handleChange("mobile")}
-              maxLength={10}
-              type="text"
-              inputMode="numeric"
-              disabled={isApiRunning}
-            />
-          )}
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.gender_error ? true : false}
               helperText={form_data.gender_error}
               width="40"
-              label="Gender:"
-              options={genderOptions}
+              label="Gender"
+              options={GENDER_OPTIONS}
               id="account_type"
               value={form_data.gender || ""}
               onChange={handleChange("gender")}
@@ -222,8 +197,8 @@ const PersonalDetails1 = (props) => {
               error={form_data.marital_status_error ? true : false}
               helperText={form_data.marital_status_error}
               width="40"
-              label="Marital status:"
-              options={maritalStatusOptions}
+              label="Marital status"
+              options={MARITAL_STATUS_OPTIONS}
               id="account_type"
               value={form_data.marital_status || ""}
               onChange={handleChange("marital_status")}

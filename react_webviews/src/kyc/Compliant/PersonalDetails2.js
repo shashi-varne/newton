@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
-import { getPathname, maritalStatusOptions } from "../constants";
+import { PATHNAME_MAPPER, MARITAL_STATUS_OPTIONS } from "../constants";
 import { isEmpty, validateAlphabets } from "utils/validators";
 import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
+  getTotalPagesInPersonalDetails,
 } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -19,20 +20,22 @@ const PersonalDetails2 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const [totalPages, setTotalPages] = useState();
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
       initialize();
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const initialize = () => {
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
     let formData = {
       mother_name: kyc.pan?.meta_data?.mother_name || "",
       marital_status: kyc.identification.meta_data.marital_status || "",
@@ -65,7 +68,7 @@ const PersonalDetails2 = (props) => {
       },
     };
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.compliantPersonalDetails3, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -80,7 +83,7 @@ const PersonalDetails2 = (props) => {
       setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
-      navigate(getPathname.compliantPersonalDetails3, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -100,7 +103,7 @@ const PersonalDetails2 = (props) => {
     }
     let formData = { ...form_data };
     if (name === "marital_status")
-      formData[name] = maritalStatusOptions[value].value;
+      formData[name] = MARITAL_STATUS_OPTIONS[value].value;
     else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
@@ -117,11 +120,12 @@ const PersonalDetails2 = (props) => {
       title={title}
       count={2}
       current={2}
-      total={3}
+      total={totalPages}
+      data-aid='kyc-personal-details-screen-2'
     >
-      <div className="kyc-personal-details">
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         {!isLoading && (
-          <main>
+          <main  data-aid='kyc-personal-details'>
             <div className={`input ${isApiRunning && `disabled`}`}>
               <RadioWithoutIcon
                 error={form_data.marital_status_error ? true : false}
@@ -129,7 +133,7 @@ const PersonalDetails2 = (props) => {
                 width="40"
                 label="Marital status:"
                 class="marital_status"
-                options={maritalStatusOptions}
+                options={MARITAL_STATUS_OPTIONS}
                 id="account_type"
                 value={form_data.marital_status || ""}
                 onChange={handleChange("marital_status")}

@@ -15,9 +15,10 @@ const AccountMerge = ({ isOpen, close, data, handleClick }) => {
       aria-describedby="kyc-dialog"
       className="account-merge-dialog"
       id="kyc-bottom-dialog"
+      data-aid='kyc-bottom-dialog'
     >
-      <DialogContent className="account-merge-dialog-content">
-        <div className="title">
+      <DialogContent className="account-merge-dialog-content" data-aid='kyc-account-merge-dialog-content'>
+        <div className="title" data-aid='account-merger-title'>
           <div className="text">{data.title}</div>
           <img
             src={require(`assets/${productName}/popup_kyc_pending.svg`)}
@@ -25,14 +26,15 @@ const AccountMerge = ({ isOpen, close, data, handleClick }) => {
             className="img"
           />
         </div>
-        <div className="subtitle">{data.subtitle}</div>
+        <div className="subtitle" data-aid='account-merger-subtitle'>{data.subtitle}</div>
         <div className="action">
-          <Button className="button no-bg" onClick={() => close()}>
+          <Button className="button no-bg" onClick={() => close()} data-aid='re-enter-pin-btn'>
             RE-ENTER PAN
           </Button>
           <Button
             className="button bg-full"
             onClick={() => handleClick(data.step)}
+            data-aid='account-merge-btn'
           >
             {data.buttonTitle || ""}
           </Button>

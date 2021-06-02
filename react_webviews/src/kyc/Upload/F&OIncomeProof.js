@@ -11,7 +11,7 @@ import { upload } from '../common/api';
 import { navigate as navigateFunc } from '../common/functions';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
-import { checkDocsPending } from '../services';
+import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import { getConfig } from '../../utils/functions';
 
@@ -55,7 +55,7 @@ const FnOIncomeProof = (props) => {
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
-  const { kyc, isLoading, setKycToSession } = useUserKycHook();
+  const { kyc, isLoading, updateKyc } = useUserKycHook();
 
   useEffect(() => {
     setFilePassword('');
@@ -78,7 +78,7 @@ const FnOIncomeProof = (props) => {
       };
       setIsApiRunning("button")
       const result = await upload(selectedFile, 'income', data);
-      setKycToSession(result.kyc);
+      updateKyc(result.kyc);
     } catch (err) {
       console.error(err);
       Toast('Something went wrong! Please try again')

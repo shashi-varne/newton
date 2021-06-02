@@ -93,7 +93,7 @@ class Recommendations extends Component {
     if (data && !pran) {
       const [recommendations] = data.recommended;
       const altRiskOptsMap = keyBy([...data.alternatives, ...data.recommended], 'risk');
-      const assetAlloc = altRiskOptsMap[recommendations.risk || this.state.risk]
+      const assetAlloc = altRiskOptsMap[recommendations?.risk || this.state.risk]
 
       this.setState(
         {
@@ -104,7 +104,7 @@ class Recommendations extends Component {
           assetAllocation: assetAlloc,
           pieChartData: createPieChartData(assetAlloc),
           skelton: this.state.display_summary_only,
-          risk: recommendations.risk || this.state.risk,
+          risk: recommendations?.risk || this.state.risk,
         },
         () => {
           this.state.display_summary_only && this.handleClick();
@@ -304,10 +304,6 @@ class Recommendations extends Component {
     }
   };
 
-  goBack = () => {
-    this.navigate("amount/one-time");
-  };
-
   handleReplace = () => {
     const { recommendations, pension_house } = this.state;
     const replaceObject = pension_house || recommendations?.pension_house;
@@ -335,9 +331,6 @@ class Recommendations extends Component {
         noFooter={display_summary_only}
         showLoader={show_loader}
         handleClick={this.handleClick}
-        headerData={{
-          goBack: this.goBack
-        }}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
@@ -496,7 +489,7 @@ class Recommendations extends Component {
                 <img src={require("assets/terms_agree.png")} alt="" width="25" />
                 <div>
                   By tapping on proceed, I agree that I have read the {" "}
-                  <span onClick={() => this.openInBrowser("https://www.fisdom.com")} style={{textDecoration:'underline', cursor:'pointer'}}>
+                  <span onClick={() => this.openInBrowser("https://www.fisdom.com/terms/")} style={{textDecoration:'underline', cursor:'pointer'}}>
                     terms & conditions
                   </span>
                 </div>

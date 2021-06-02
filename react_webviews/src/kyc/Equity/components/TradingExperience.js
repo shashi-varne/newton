@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { navigate as navigateFunc } from "../../common/functions"
+import { isDocSubmittedOrApproved, navigate as navigateFunc } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
+import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
 
 const tradingExperienceValues = [
@@ -25,6 +26,7 @@ const tradingExperienceValues = [
     value: "5+",
   },
 ];
+
 const TradingExperience = (props) => {
   const [experience, setExperience] = useState("");
   const [oldState, setOldState] = useState("");
@@ -70,7 +72,19 @@ const TradingExperience = (props) => {
   };
 
   const handleNavigation = () => {
-    // navigate("path"); Todo: Add path
+    if (kyc.initial_kyc_status === "compliant") {
+      if (!isDocSubmittedOrApproved("pan")) {
+        navigate(PATHNAME_MAPPER.uploadPan);
+        return;
+      }
+    } 
+    if (!isDocSubmittedOrApproved("identification"))
+      navigate(PATHNAME_MAPPER.uploadSelfie);
+    else {
+      if (!isDocSubmittedOrApproved("equity_income"))
+        navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+      else navigate(PATHNAME_MAPPER.kycEsign)
+    }
   }
 
   return (

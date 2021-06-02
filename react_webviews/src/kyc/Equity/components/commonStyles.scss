@@ -318,3 +318,87 @@ $generic-subtitle-margin-top: -10px;
     }
   }
 }
+
+.kyc-communication-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .kyc-main-subtitle {
+    padding-bottom: 30px;
+  }
+
+  .kcd-google-button {
+    width: 100%;
+    padding: 15px !important;
+
+    .kcd-google-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--default);
+      font-weight: normal;
+      font-size: 13px;
+      text-transform: initial;
+      text-decoration: none;
+      width: 100%;
+
+      img {
+        width: 18px;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .kcd-or-divider {
+    margin: 40px 0;
+    width: 100%;
+  }
+
+  .kcd-input-field {
+    .kcd-input-edit {
+      color: var(--secondary);
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+  }
+
+  .kcd-email-subtext {
+    font-size: 11px;
+    line-height: 18px;
+    color: #878787;
+    padding-top: 5px;
+  }
+
+  .kcd-otp-container {
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0;
+
+    .kcd-otp-content {
+      display: flex;
+    }
+  }
+
+  .kcd-whatsapp-consent {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    line-height: 21px;
+    color: var(--steelgrey);
+    margin-top: 40px;
+
+    .kcd-whatsapp-consent-checkbox {
+      margin-left: -12px;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .kyc-communication-details-mobile{
+    height: calc(100vh - 220px);
+  }
+}

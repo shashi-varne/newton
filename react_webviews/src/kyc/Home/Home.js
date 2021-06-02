@@ -3,11 +3,11 @@ import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig } from "../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -24,6 +24,9 @@ const residentialStatusOptions = [
     name: "No",
   },
 ];
+
+const TRADING_ENABLED = isTradingEnabled();
+
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -62,7 +65,7 @@ const Home = (props) => {
     };
     if (
       user.nps_investment &&
-      storageService().getObject("nps_additional_details_required")
+      storageService().get("nps_additional_details_required")
     ) {
       data.npsDetailsRequired = true;
     }
@@ -124,15 +127,18 @@ const Home = (props) => {
 
   const checkPanValidity = async (showConfirmPan = false) => {
     // setOpenCheckCompliant(true);
+    let body = {
+      kyc: {
+        pan_number: pan.toUpperCase(),
+      }
+    };
+
+    if(TRADING_ENABLED) {
+      body.kyc_product_type = "equity"
+    };
+
     try {
-      let result = await getPan(
-        {
-          kyc: {
-            pan_number: pan.toUpperCase(),
-          },
-        },
-        accountMerge
-      );
+      let result = await getPan(body, accountMerge);
       if (isEmpty(result)) return;
       setUserName(result.kyc.name);
       setIsStartKyc(true);
@@ -179,8 +185,8 @@ const Home = (props) => {
 
   const handleMerge = async (step) => {
     if (step === "STEP1") {
-      storageService().setObject(storageConstants.AUTH_IDS, authIds);
-      navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
+      storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
+      navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {
         navigate("/logout");
@@ -245,8 +251,12 @@ const Home = (props) => {
           pan: newObject,
           address: kyc.address.meta_data,
         },
-        set_kyc_product_type: "equity" // later add a check only if its equity flow (for b2c this is hardcoded)
       };
+
+      if(TRADING_ENABLED) {
+        body.set_kyc_product_type = "equity";
+      }
+
       let result = await kycSubmit(body);
       if (!result) return;
       if (result?.kyc?.kyc_status === "compliant") {
@@ -269,17 +279,21 @@ const Home = (props) => {
       (isUserCompliant || kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
-      navigate(getPathname.compliantPersonalDetails1);
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       if (isUserCompliant || kyc_status === "compliant") {
-        navigate(getPathname.journey);
+        navigate(PATHNAME_MAPPER.journey);
       } else {
         if (is_nri) {
-          navigate(`${getPathname.journey}`, {
-            searchParams: `${config.searchParams}&show_aadhaar=false`,
-          });
+          if (!TRADING_ENABLED) {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=false`,
+            });
+          } else {
+            navigate(PATHNAME_MAPPER.nriError);
+          }
         } else {
-          navigate(`${getPathname.journey}`, {
+          navigate(`${PATHNAME_MAPPER.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=true`,
           });
         }
@@ -311,11 +325,12 @@ const Home = (props) => {
       showLoader={showLoader}
       handleClick={handleClick}
       title={homeData.title}
+      data-aid='kyc-home-screen'
     >
       {!isEmpty(homeData) && (
-        <div className="kyc-home">
-          <div className="kyc-main-subtitle">{homeData.subtitle}</div>
-          <main>
+        <div className="kyc-home" data-aid='kyc-home-screen-page'>
+          <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
+          <main data-aid='kyc-home'>
             <Input
               label="Enter PAN"
               class="input"

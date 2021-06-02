@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
-import { getPathname } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { PATHNAME_MAPPER } from "../constants";
+import { checkPanFetchStatus, isDigilockerFlow, navigate as navigateFunc } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -12,6 +12,7 @@ import PennySuccessDialog from "../mini-components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { getConfig, isTradingEnabled } from "../../utils/functions";
 
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -36,13 +37,7 @@ const KycBankVerify = (props) => {
   }, [kyc]);
 
   const initialize = async () => {
-    if (
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
+    if (isDigilockerFlow(kyc)) {
       setDlFlow(true);
     }
     setBankData({ ...kyc.bank.meta_data });
@@ -136,33 +131,56 @@ const KycBankVerify = (props) => {
     navigate(`/kyc/${userType}/upload-documents`);
   };
 
-  const handleSuccess = () => {
+  const handleOtherPlatformNavigation = () => {
     if (userType === "compliant") {
       if (isEdit) goToJourney();
-      else {
-        if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
-          navigate(getPathname.uploadSign, {
-            state: {
-              backToJourney: true,
-            },
-          });
-        } else goToJourney();
-      }
+      else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-          kyc.pan.doc_status !== "approved"
-        ) {
-          navigate(getPathname.uploadPan);
-        } else navigate(getPathname.kycEsign);
-      } else navigate(getPathname.uploadProgress);
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
+          navigate(PATHNAME_MAPPER.uploadPan);
+        } else {
+          navigate(PATHNAME_MAPPER.tradingExperience);
+        }
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress);
+      }
     }
   };
 
-  const goToJourney = () => navigate(getPathname.journey);
+  const handleSdkNavigation = () => {
+    if (userType === "compliant") {
+      goToJourney();
+      // if (isEdit) goToJourney();
+      // else {
+      //   if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+      //     navigate(PATHNAME_MAPPER.uploadSign, {
+      //       state: {
+      //         backToJourney: true,
+      //       },
+      //     });
+      //   } else goToJourney();
+      // }
+    } else {
+      if (dl_flow) {
+        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        if (isPanFailedAndNotApproved) {
+          navigate(PATHNAME_MAPPER.uploadPan);
+        } else navigate(PATHNAME_MAPPER.kycEsign);
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
+    }
+  };
+
+  const handleSuccess = () => {
+    if (isTradingEnabled()) {
+      handleOtherPlatformNavigation();
+    } else {
+      handleSdkNavigation();
+    }
+  };
+
+  const goToJourney = () => navigate(PATHNAME_MAPPER.journey);
 
   const edit = () => () => {
     navigate(`/kyc/${userType}/bank-details`);
@@ -175,12 +193,14 @@ const KycBankVerify = (props) => {
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
       title="Verify your bank account"
+      data-aid='kyc-verify-bank-accont-screen'
     >
-      <div className="kyc-approved-bank-verify">
+      <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
         <Alert
           variant="info"
           title="Important"
           message="We will credit ₹1 to verify your bank account."
+          dataAid='kyc-bankverify-alertbox'
         />
         {isEmpty(bankData) && (
           <>
@@ -192,7 +212,7 @@ const KycBankVerify = (props) => {
         )}
         {!isEmpty(bankData) && (
           <>
-            <div className="item">
+            <div className="item" data-aid='kyc-bank-data'>
               <div className="flex">
                 <div className="left">
                   <img
@@ -201,24 +221,24 @@ const KycBankVerify = (props) => {
                     alt="bank-logo"
                   />
                 </div>
-                <div className="right">
+                <div className="right" data-aid='kyc-bank-name'>
                   <div>{bankData.bank_name}</div>
                   <div className="text">{bankData.branch_name} </div>
                 </div>
               </div>
-              <div className="edit" onClick={edit()}>
+              <div className="edit" data-aid='kyc-edit' onClick={edit()}>
                 EDIT
               </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-account-number'>
               <div className="left">Account number</div>
               <div className="right"> {bankData.account_number} </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-ifsc-code'>
               <div className="left">IFSC code</div>
               <div className="right">{bankData.ifsc_code} </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
               <div className="right"> {bankData.account_type} </div>
             </div>
@@ -232,7 +252,7 @@ const KycBankVerify = (props) => {
         />
         <PennySuccessDialog isOpen={isPennySuccess} redirect={handleSuccess} />
         <PennyExhaustedDialog
-          isOpen={isPennyExhausted}
+          isOpen= {isPennyExhausted}
           redirect={goToJourney}
           uploadDocuments={uploadDocuments}
         />
