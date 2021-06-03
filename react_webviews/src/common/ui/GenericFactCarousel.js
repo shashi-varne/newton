@@ -39,11 +39,11 @@ class GenericFactCarousel extends Component {
         <p className="header">{data.header}</p>
         <div className="body">
           <div className="left">
-            <p className="left-title">{data.left.title.toUpperCase()}</p>
+            <p className="left-title">{(data.left.title || "").toUpperCase()}</p>
             <p className="content">{data.left.content}</p>
           </div>
           <div className="right">
-            <p className="right-title">{data.right.title.toUpperCase()}</p>
+            <p className="right-title">{(data.right.title || "").toUpperCase()}</p>
             <p className="content">{data.right.content}</p>
           </div>
         </div>
