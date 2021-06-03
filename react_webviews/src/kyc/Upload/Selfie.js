@@ -131,12 +131,12 @@ const Selfie = (props) => {
   }
 
   const showSelfieSteps = () => {
-    navigate('/kyc/upload/selfie-steps');
+    navigate(PATHNAME_MAPPER.selfieSteps);
   }
 
   const closeLocnPermDialog = (locationCloseType) => {
     if (locationCloseType === 'invalid-region') {
-      navigate('/kyc/journey');
+      navigate(PATHNAME_MAPPER.journey);
     }
     setIsLocnPermOpen(false);
   }

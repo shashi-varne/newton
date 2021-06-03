@@ -4,11 +4,12 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
-import { navigate as navigateFunc } from "../../common/functions";
+import { getEmailOrMobileVerifiedStatus, navigate as navigateFunc } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
+import useUserKycHook from "../../common/hooks/userKycHook";
 
 const productName = getConfig().productName;
-const benefits = [
+const BENEFITS = [
   {
     icon: "one_account.svg",
     text: "One account for stocks, IPO, F&O",
@@ -25,26 +26,36 @@ const benefits = [
 const AccountInfo = (props) => {
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
+  const { kyc, isLoading } = useUserKycHook();
   const handleCheckBox = () => {
     setCheckTermsAndConditions(!checkTermsAndConditions);
   };
 
   const handleClick = () => {
-    navigate(PATHNAME_MAPPER.homeKyc);
+    if (kyc?.application_status_v2 === "submitted" || kyc?.application_status_v2 === "complete") {
+      if (!getEmailOrMobileVerifiedStatus()) {
+        navigate(PATHNAME_MAPPER.communicationDetails);
+      } else {
+        navigate(PATHNAME_MAPPER.tradingExperience);
+      }
+    } else {
+      navigate(PATHNAME_MAPPER.homeKyc);
+    }
   };
 
   return (
     <Container
       buttonTitle="CONTINUE"
-      title={"Trading & demat account"}
+      title="Trading & demat account"
       hidePageTitle
       data-aid='kyc-demate-account-screen'
       disable={!checkTermsAndConditions}
       handleClick={handleClick}
+      skelton={isLoading}
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
-          <div className="kaih-text">{"Trading & demat account"}</div>
+          <div className="kaih-text">Trading & demat account"</div>
           <img src={require(`assets/${productName}/ic_upgrade.svg`)} alt="" />
         </header>
         <main className="kyc-account-info-main" data-aid='kyc-account-info-main'>
@@ -54,7 +65,7 @@ const AccountInfo = (props) => {
           <div className="kaim-key-benefits" data-aid='key-benefits'>
             <div className="generic-page-title">Key benefits</div>
             <div className="kaim-benefits">
-              {benefits.map((data, index) => {
+              {BENEFITS.map((data, index) => {
                 return (
                   <div key={index} className="kaim-benefits-info" data-aid='kaim-benefits-info'>
                     <img
@@ -68,7 +79,7 @@ const AccountInfo = (props) => {
             </div>
           </div>
           <div>
-            <div className="generic-page-title" data-aid='kyc-free-charges'>{"Fees & charges"}</div>
+            <div className="generic-page-title" data-aid='kyc-free-charges'>Fees & charges</div>
             <div className="kaim-fees-info" data-aid='kyc-opening-charges'>
               <div className="kaim-fees-info-text">
                 <div>Account opening charges</div>
@@ -96,7 +107,7 @@ const AccountInfo = (props) => {
             />
             <div className="kaim-terms-info">
               I agree to have read and understood the{" "}
-              <span>{"Terms & conditions"}</span> and{" "}
+              <span>Terms & conditions</span> and{" "}
               <span>Equity Annexure</span>{" "}
             </div>
           </div>

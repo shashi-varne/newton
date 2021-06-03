@@ -19,21 +19,12 @@ import {
   getTotalPagesInPersonalDetails,
   navigate as navigateFunc,
 } from "../../common/functions";
-import { isReadyToInvest } from "../../services";
 import WVButton from "../../../common/ui/Button/WVButton";
 
 const config = getConfig();
+const googleRedirectUrl = `${config.base_url}${API_CONSTANTS.socialAuth}/google?redirect_url=${encodeURIComponent(`${getBasePath()}/kyc/communication-details/callback${config.searchParams}`)}`;
 const googleButtonTitle = (
-  <a
-    className="kcd-google-text"
-    href={`${config.base_url}${
-      API_CONSTANTS.socialAuth
-    }/google?redirect_url=${encodeURIComponent(
-      `${getBasePath()}/kyc/communication-details/callback${
-        config.searchParams
-      }`
-    )}`}
-  >
+  <a className="kcd-google-text" href={googleRedirectUrl}>
     <img src={require(`assets/google.svg`)} alt="google" />
     <div>Continue with Google</div>
   </a>
@@ -60,7 +51,7 @@ const CommunicationDetails = (props) => {
   const { user, kyc, isLoading, updateKyc } = useUserKycHook();
   const isNri = kyc.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
-  const [isReadyToInvestBase, setIsReadyToInvest] = useState();
+  const [isKycDone, setIsKycDone] = useState();
   const [totalPages, setTotalPages] = useState();
 
   useEffect(() => {
@@ -74,8 +65,11 @@ const CommunicationDetails = (props) => {
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
       setFormData({ ...data });
-      setIsReadyToInvest(isReadyToInvest());
-      setTotalPages(getTotalPagesInPersonalDetails())
+      setIsKycDone(
+        kyc?.application_status_v2 === "submitted" ||
+          kyc?.application_status_v2 === "complete"
+      );
+      setTotalPages(getTotalPagesInPersonalDetails());
     }
   }, [kyc, user]);
 
@@ -182,7 +176,7 @@ const CommunicationDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if (isReadyToInvestBase) {
+    if (isKycDone) {
       navigate(PATHNAME_MAPPER.tradingExperience);
       return;
     }
@@ -210,7 +204,7 @@ const CommunicationDetails = (props) => {
     <Container
       buttonTitle={buttonTitle}
       title="Communication details"
-      count={!isReadyToInvestBase && pageNumber}
+      count={!isKycDone && pageNumber}
       current={pageNumber}
       total={totalPages}
       handleClick={handleClick}
@@ -242,7 +236,11 @@ const CommunicationDetails = (props) => {
                   >
                     {googleButtonTitle}
                   </WVButton>
-                  <img src={require("assets/ORDivider.svg")} alt="" className="kcd-or-divider" />
+                  <img
+                    src={require("assets/ORDivider.svg")}
+                    alt=""
+                    className="kcd-or-divider"
+                  />
                 </>
               )}
               <TextField
