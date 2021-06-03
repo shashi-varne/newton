@@ -164,7 +164,7 @@ export const getTotalPagesInPersonalDetails = (isEdit = false) => {
   }
   const isCompliant = kyc.kyc_status === "compliant";
   const isNri = kyc?.address?.meta_data?.is_nri || false;
-  const isEmailAndMobileVerified = getEmailOrMobileVerifiedStatus()
+  const isEmailAndMobileVerified = isEmailOrMobileVerified()
   const dlCondition =
     !isCompliant &&
     !isNri &&
@@ -178,7 +178,7 @@ export const getTotalPagesInPersonalDetails = (isEdit = false) => {
   return totalPages;
 };
 
-export const getEmailOrMobileVerifiedStatus = () => {
+export const isEmailOrMobileVerified = () => {
   const kyc = storageService().getObject("kyc") || {};
   const user = storageService().getObject("user") || {};
   if (isEmpty(kyc) || isEmpty(user)) {

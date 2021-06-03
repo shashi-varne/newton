@@ -13,7 +13,7 @@ import {
   navigate as navigateFunc,
   compareObjects,
   getTotalPagesInPersonalDetails,
-  getEmailOrMobileVerifiedStatus,
+  isEmailOrMobileVerified,
 } from "../common/functions";
 import { kycSubmit, getCVL } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -108,7 +108,7 @@ const PersonalDetails3 = (props) => {
         userType: "compliant",
       },
     };
-    if (getEmailOrMobileVerifiedStatus()) {
+    if (isEmailOrMobileVerified()) {
       if (isNri) {
         navigate(PATHNAME_MAPPER.nriAddressDetails2, data);
       } else {
