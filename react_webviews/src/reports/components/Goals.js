@@ -7,6 +7,7 @@ import { getPathname } from "../constants";
 import { getReportGoals } from "../common/api";
 import { getAmountInInr } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
+import { getConfig } from "../../utils/functions";
 
 const sliderConstants = {
   min: 0,
@@ -32,6 +33,25 @@ const Goals = (props) => {
   };
 
   const redirectToInvestType = (goal) => {
+    const config = getConfig();
+    var _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "reports",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+
     let pathname = getPathname[goal?.itag?.itype] || "";
     if (!pathname) return;
     if (goal.itag.itype === "saveforgoal")

@@ -18,7 +18,29 @@ const InvestMore = (props) => {
   const params = props?.match?.params || {};
   if (isEmpty(params) || !params.mode) props.history.goBack();
   const state = props.location.state || {};
-  if (isEmpty(state) || !state.recommendation) navigate(getPathname.reports);
+  if (isEmpty(state) || !state.recommendation) {
+    const config = getConfig();
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "mf",
+          trigger: "cta",
+          journey_status: "incomplete",
+          next_journey: "reports",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+      navigate(getPathname.reports);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    } else {
+      navigate(getPathname.reports);
+    }
+  }
   const investBody = JSON.parse(state.recommendation) || {};
   const sipOrOnetime = (params.mode || "").toLowerCase();
   let title = "INVEST";
