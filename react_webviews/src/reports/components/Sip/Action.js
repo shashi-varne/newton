@@ -2,8 +2,7 @@ import React from "react";
 import Container from "../../common/Container";
 import { isEmpty } from "utils/validators";
 import { getPathname } from "../../constants";
-import { navigate as navigateFunc } from "../../common/functions";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { Imgc } from "common/ui/Imgc";
 import "./commonStyles.scss";
 

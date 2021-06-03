@@ -3,7 +3,7 @@ import Container from '../../common/Container'
 import FundCard from '../../mini-components/FundCard'
 import isEmpty from 'lodash/isEmpty'
 import { getRecommendedFund } from '../../common/Api'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import toast from 'common/ui/Toast'
 import Typography from '@material-ui/core/Typography'
 import { getConfig } from 'utils/functions'
@@ -94,7 +94,7 @@ const Landing = (props) => {
   const handleClick = () => {
     sendEvents('next')
     if (zeroInvested) {
-      navigate('/invest/instaredeem', null, true)
+      navigate('/invest/instaredeem')
     } else if (fetchFailed) {
       fetchRecommendedFunds()
     } else {
@@ -103,14 +103,14 @@ const Landing = (props) => {
         return
       }
       if (type === 'manual') {
-        navigate(`self/summary`, {
+        navigate(`/withdraw/self/summary`, {
           state:{
             amounts: value,
             ...recommendedFunds[0],
           }
         })
       } else {
-        navigate(`${type}/summary`, {
+        navigate(`/withdraw/${type}/summary`, {
           state:{
             amounts: value,
             ...recommendedFunds[0],
@@ -170,11 +170,6 @@ const Landing = (props) => {
     }
   }
 
-  const goBack = () => {
-    sendEvents("back")
-    navigate('');
-  }
-  
   const sendEvents = (userAction) => {
 
     let redemptionType = "";
@@ -221,7 +216,6 @@ const Landing = (props) => {
       fullWidthButton
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      goBack={goBack}
       disable={type === 'insta-redeem' ? (limitCrossed || !isEmpty(error)) : !isEmpty(error)}
       handleClick={handleClick}
       skelton={isEmpty(recommendedFunds) && showSkeltonLoader}

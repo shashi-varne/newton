@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Container from '../../common/Container';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import isEmpty from 'lodash/isEmpty';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import { navigate as navigateFunc } from 'utils/functions';
 import Dialog from '../../mini-components/Dialog';
 import toast from 'common/ui/Toast';
 
@@ -36,7 +36,7 @@ const Landing = (props) => {
     try {
       const result = await getWithdrawReasons();
       if (result?.dnd_flag) {
-        navigate("");
+        navigate("/withdraw");
       } else {
         storageService().setObject("withdrawReasons", result?.survey?.question);
         setReasons(result?.survey?.question);
@@ -51,7 +51,7 @@ const Landing = (props) => {
     try {
       setIsLoading(true);
       await postWithdrawReasons(param);
-      navigate('');
+      navigate('/withdraw');
     } catch (err) {
       toast(err);
     } finally {
@@ -79,7 +79,7 @@ const Landing = (props) => {
       }
     }
 
-    navigate('remark', {state:qstn});
+    navigate('/withdraw/remark', {state:qstn});
   };
 
   const handleClose = () => {
@@ -129,7 +129,7 @@ const Landing = (props) => {
   return (
     <Container 
       events={sendEvents("just_set_events")}
-      buttonTitle='Continue' 
+      buttonTitle='CONTINUE' 
       fullWidthButton       
       title="Withdraw"
       noPadding 

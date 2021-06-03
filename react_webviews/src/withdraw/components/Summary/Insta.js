@@ -7,8 +7,7 @@ import Disclaimer from './Disclaimer'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { formatAmountInr, isEmpty } from '../../../utils/validators'
-import { getConfig } from '../../../utils/functions'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions'
 
 import './Insta.scss';
 import '../commonStyles.scss';
@@ -44,7 +43,7 @@ const Insta = (props) => {
         investments: [{ itype, name, subtype, allocations }],
       })
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('verify', { state:{...result, type: 'instaredeem'} })
+        navigate('/withdraw/verify', { state:{...result} })
         return
       }
     } catch (err) {
@@ -110,8 +109,6 @@ const Insta = (props) => {
       hidePageTitle
       handleClick={handleClick}
       skelton={isEmpty(taxes)}
-      // twoButton={true}
-      // footerText1={getTotalAmount()}
       showLoader={isApiRunning}
       buttonData={{
         leftTitle: "Withdraw amount",

@@ -1,6 +1,6 @@
 import React from 'react'
 import Container from '../../common/Container'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 
 import './Success.scss';
 import { nativeCallback } from '../../../utils/native_callback';
@@ -9,16 +9,16 @@ const Success = (props) => {
   const successMessage = props?.location?.state?.message;
   const navigate = navigateFunc.bind(props);
   if(!successMessage){
-    navigate('');
+    navigate('/withdraw');
   }
   const type = props?.location?.state?.type
   const pageHead = type === 'switch' ? 'Switch' : 'Withdraw'
   const goTo = () => {
     sendEvents('next')
     if (type === 'switch') {
-      navigate('/reports/switched-transaction', null, true)
+      navigate('/reports/switched-transaction')
     } else {
-      navigate('/reports/redeemed-transaction', null, true)
+      navigate('/reports/redeemed-transaction')
     }
   }
 
@@ -38,7 +38,7 @@ const Success = (props) => {
   };
 
   return (
-    <Container hidepageTitle buttonTitle="Okay" handleClick={goTo} events={sendEvents("just_set_events")}>
+    <Container hidepageTitle buttonTitle="Okay" handleClick={goTo} headerData={{icon: "close"}} events={sendEvents("just_set_events")}>
       <section id="withdraw-otp-success">
         <img
           className="thumb-img"

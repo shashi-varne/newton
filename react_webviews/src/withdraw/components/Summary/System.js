@@ -9,7 +9,7 @@ import TaxLiability from './TaxLiability'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { isEmpty } from 'utils/validators'
 import { getConfig } from 'utils/functions'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import { formatAmountInr } from '../../../utils/validators'
 
 import '../commonStyles.scss';
@@ -42,7 +42,7 @@ const SystemSummary = (props) => {
       })
 
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('verify', {state:{...result, type: "system"} })
+        navigate('/withdraw/verify', {state:{...result} })
         return
       }
     } catch (err) {

@@ -34,7 +34,7 @@ const CampaignDialog = ({ isOpen, close, handleClick, cancel, data }) => {
           </Button>
         )}
         <Button className='button bg-full' onClick={handleClick}>
-          {data?.action_buttons?.buttons[0]?.title}
+          {data?.action_buttons?.buttons[0]?.title || ""}
         </Button>
       </DialogActions>
     </Dialog>

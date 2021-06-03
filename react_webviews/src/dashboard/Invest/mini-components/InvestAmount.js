@@ -4,7 +4,6 @@ import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 import { numDifferentiationInr } from 'utils/validators';
 import {
-  navigate as navigateFunc,
   getCorpusValue,
   validateOtAmount,
   validateSipAmount,
@@ -14,7 +13,7 @@ import {
 import { get_recommended_funds } from '../common/api';
 import { isArray } from 'lodash';
 
-import { getConfig } from '../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import { 
   formatAmountInr, 
   convertInrAmountToNumber 
@@ -133,9 +132,9 @@ const InvestAmount = (props) => {
         setUserRiskProfile(''); // clearing risk profile stored in session
         updateFunnelData({ corpus, userEnteredAmt });
         if (data.msg_code === 0) {
-          navigate(`${funnelGoalData.id}/risk-select`);
+          navigate(`/invest/${funnelGoalData.id}/risk-select`);
         } else if (data.msg_code === 1) {
-          navigate(`${funnelGoalData.id}/risk-select-skippable`);
+          navigate(`/invest/${funnelGoalData.id}/risk-select-skippable`);
         }
         return;
       }
@@ -145,10 +144,10 @@ const InvestAmount = (props) => {
       if (isArray(data.recommendation)) {
         // RP enabled flow, when user has risk profile and recommendations fetched successfully
         setUserRiskProfile(data.rp_indicator || '');
-        navigate('recommendations');
+        navigate('/invest/recommendations');
       } else {
         // RP disabled flow
-        navigate(`${funnelGoalData.id}/funds`);
+        navigate(`/invest/${funnelGoalData.id}/funds`);
       }
     } catch (err) {
       console.log(err);
