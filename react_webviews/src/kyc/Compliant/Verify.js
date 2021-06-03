@@ -5,12 +5,30 @@ import { storageService } from "../../utils/validators";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
-
-const productName = getConfig().productName;
+const config = getConfig();
+const productName = config.productName;
 const Verify = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "kyc",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+    
     if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {
