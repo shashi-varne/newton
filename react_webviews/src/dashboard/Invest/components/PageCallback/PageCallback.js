@@ -92,11 +92,13 @@ const PageCallback = (props) => {
       default:
         setSkelton(false);
         if (!status) {
-          sendEvents("payment failed", message);
           navigate("/landing", null, true);
         } else {
           if (!message) message = "";
-          sendEvents("payment completed", investment_type);
+          if(status === "success")
+            sendEvents("payment completed", investment_type);
+          else
+            sendEvents("payment failed", message);
           if (investment_type === "sip") {
             navigate(`/sip/payment/callback/${status}/${message}`, null, true);
           } else if (investment_type === "onetime") {
