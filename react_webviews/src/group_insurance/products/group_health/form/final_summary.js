@@ -854,7 +854,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         {props.title}
                     </div>
                     <div className="bct-icon">
-                        <Imgc src={require(`assets/${props.open ? 'minus_icon' : 'plus_icon'}.svg`)} alt="" />
+                        <Imgc style={{width: '14px', height: '14px'}} src={require(`assets/${props.open ? 'minus_icon' : 'plus_icon'}.svg`)} alt="" />
                     </div>
                 </div>
 
@@ -993,7 +993,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
 
                     <div className="tc-right">
-                        <Imgc src={require(`assets/${this.state.providerData.logo_card}`)} alt="" style={{width:'30px', height: '30px' }} />
+                        <Imgc src={require(`assets/${this.state.providerData.logo_card}`)} alt="" style={{width:'50px', height: '50px' }} />
                     </div>
                 </div>
 
@@ -1115,7 +1115,7 @@ class GroupHealthPlanFinalSummary extends Component {
                   <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future' }} />
             </div>
             {this.state.medical_dialog_data &&
-                <BottomSheet parent={this} data={this.state.medical_dialog_data} />}
+                <BottomSheet iconClassName="final-summary-medical-review-img" parent={this} data={this.state.medical_dialog_data} />}
             {this.renderDialog()}
         </Container>
     );

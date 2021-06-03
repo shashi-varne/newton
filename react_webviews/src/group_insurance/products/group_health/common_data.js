@@ -1210,7 +1210,7 @@ export function memberKeyMapper(member_key) {
 
 export function filterReportData(reportData){
     var activeReports = [], pendingReports = [], inactiveReports = [];
-    var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted'];
+    var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted', 'payment_done'];
     var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
     
     reportData.forEach(report =>{

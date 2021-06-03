@@ -241,7 +241,7 @@ class GroupHealthPlanDetails extends Component {
         return (
             <div key={index} className="tile">
                 <Imgc className="icon"
-                style={{width: '80px' , height: '50px' }}
+                style={{width: '80px' , height: '60px' }}
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">

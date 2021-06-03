@@ -11,6 +11,7 @@ import { initialize } from '../common_data';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 import ConfirmDialog from './../plans/confirm_dialog';
+import {Imgc} from 'common/ui/Imgc';
 
 const commonMapper = {
   'success': {
@@ -289,7 +290,7 @@ class GroupHealthPayment extends Component {
       >
         <div className="gold-payment-container" id="goldSection">
           <div>
-            <img style={{ width: '100%' }}
+            <Imgc style={{ width: '100%', minHeight: '160px' }}
               src={require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)}
               alt="" />
           </div>
@@ -368,7 +369,8 @@ class GroupHealthPayment extends Component {
             {this.state.paymentSuccess &&
               <div style={{ margin: '30px 0 30px 0', display: 'flex', position: 'relative' }} className="highlight-text highlight-color-info">
                 <div>
-                 {this.state.providerData.logo && <img className="highlight-text11"
+                 {this.state.providerData.logo && <Imgc className="highlight-text11"
+                    style={{width: '30px', height: '30px', margin: 0}}
                     src={require(`assets/${this.state.providerData.logo}`)}
                     style={{ width: 30 }}
                     alt="info" />}

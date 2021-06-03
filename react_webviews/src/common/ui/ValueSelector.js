@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {Imgc} from 'common/ui/Imgc';
 
 class ValueSelector extends Component {
 
@@ -10,7 +11,7 @@ class ValueSelector extends Component {
                     <div className="name">
                         {props.value}
                     </div>
-                    {index === this.props.selectedIndex && <img className="completed-icon" src={require(`assets/completed_step.svg`)} alt="" />}
+                    {index === this.props.selectedIndex && <Imgc style={{ width: '14px', height: '14px', margin: 0 }} className="completed-icon" src={require(`assets/completed_step.svg`)} alt="" />}
                 </div>
             </div >
         )

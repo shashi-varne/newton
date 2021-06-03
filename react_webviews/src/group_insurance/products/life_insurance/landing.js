@@ -16,6 +16,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import {open_browser_web} from  'utils/validators';
+import {Imgc} from 'common/ui/Imgc';
 
 class FyntuneLanding extends Component {
   constructor(props) {
@@ -415,8 +416,8 @@ class FyntuneLanding extends Component {
       >
       <div className="fyntune-landing">
         <div className="landing-hero-container">
-            <img
-                className="landing-hero-img"
+            <Imgc
+                className="fyntune-landing-hero-img"
                 src={require(`assets/${this.state.productName}/fyntune_landing_page_hero.svg`)}
                 alt=""
               />
@@ -430,7 +431,8 @@ class FyntuneLanding extends Component {
               <div className="rc-tile" style={{ marginBottom: 0 }}>
                 <div className="rc-tile-left">
                   <div className="">
-                    <img
+                    <Imgc
+                      style={{width: 70, height: 50}}
                       src={this.state.resume_data.lead.logo}
                       alt=""
                     />
@@ -469,17 +471,20 @@ class FyntuneLanding extends Component {
         <p className="fyntune-heading">Major benefits</p>
         <div className="his" >
           <div className="horizontal-images-scroll">
-            <img
+            <Imgc
+              style={{width : '170px' , height: '115px' }}
               className="image"
               src={require(`assets/${this.state.productName}/ic_why_fyn1.png`)}
               alt=""
             />
-            <img
+            <Imgc
+              style={{width : '170px' , height: '115px' }}
               className="image"
               src={require(`assets/${this.state.productName}/ic_why_fyn2.png`)}
               alt=""
             />
-            <img
+            <Imgc
+              style={{width : '170px' , height: '115px' }}
               className="image"
               src={require(`assets/${this.state.productName}/ic_why_fyn3.png`)}
               alt=""
@@ -500,6 +505,8 @@ class FyntuneLanding extends Component {
             We make this process easy with
           </p>
           <HowToSteps
+            showSkelton={true}
+            classNameIcon="fyntune-how-to-step"
             style={{ marginTop: 20, marginBottom: 0 }}
             baseData={this.state.stepsContentMapper}
           />
@@ -509,8 +516,9 @@ class FyntuneLanding extends Component {
           <div className="generic-hr" style={{marginBottom: "12px" }}></div>
           <div className="flex-center fyntune-faq" onClick={() => this.openFaqs()}>
             <div>
-              <img
+              <Imgc
                 className="accident-plan-read-icon"
+                style={{width: '30px', height: '30px'}}
                 src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
                 alt=""
               />

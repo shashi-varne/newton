@@ -788,7 +788,7 @@ class PlanDetailsClass extends Component {
         }
         {this.props.parent.state.product_key !== 'CORONA' &&
           <div className="accident-plan-claim">
-            <Imgc style={{width: '20px', height:'20px' }} className=" accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
+            <Imgc style={{width: '20px', height:'20px', margin: 0 }} className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
             <div>
               <div className="accident-plan-claim-title">Claim assistance</div>
               <div className="accident-plan-claim-subtitle">{this.state.quoteData.claim_assistance_line ||

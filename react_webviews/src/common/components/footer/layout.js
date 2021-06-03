@@ -126,7 +126,7 @@ export class FooterLayoutBase extends Component {
 
           {props.buttonData.logo && <div className='image-block'>
             <Imgc
-              style={{width:'40px', height:'54px'}}
+              style={{width:'40px', height:'40px'}}
               alt=""
               src={require(`assets/${props.buttonData.logo}`)}
               className="FooterImage" />

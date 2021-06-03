@@ -10,6 +10,7 @@ import {
 import Api from 'utils/api';
 import {fyntuneConstants} from './constants';
 import { storageService } from '../../../utils/validators';
+import {Imgc} from 'common/ui/Imgc';
 
 class FyntuneReportDetails extends Component {
 
@@ -76,7 +77,6 @@ class FyntuneReportDetails extends Component {
                 policy_data.dt_policy_start = policy_data.dt_policy_start &&  policy_data.dt_policy_start.substring(0,11);
                 
                 let final_status = fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status]
-
                 storageService().setObject('reportSelectedTab', fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status].reportTab)
                 policy_data.final_status = final_status; 
                 
@@ -170,7 +170,7 @@ class FyntuneReportDetails extends Component {
 
                     <div className={`report-color-state`}>
                         <div className="circle" style={{background:this.state.policy_data.final_status && this.state.policy_data.final_status.color }} ></div>
-        <div className="report-color-state-title" style={{color: this.state.policy_data.final_status && this.state.policy_data.final_status.color}}>{this.state.policy_data.final_status && this.state.policy_data.final_status.text }</div>
+                        <div className="report-color-state-title" style={{color: this.state.policy_data.final_status && this.state.policy_data.final_status.color}}>{this.state.policy_data.final_status && this.state.policy_data.final_status.text }</div>
                     </div> 
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
@@ -182,7 +182,7 @@ class FyntuneReportDetails extends Component {
                         </div>
 
                         <div className="tc-right">
-                            <img src={this.state.policy_data.logo} alt="" />
+                            <Imgc style={{width: '50px', height: '50px'}} src={this.state.policy_data.logo} alt="" />
                         </div>
                     </div>
 
@@ -190,7 +190,7 @@ class FyntuneReportDetails extends Component {
 
                     <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/icn_identity.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/icn_identity.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">
@@ -203,7 +203,7 @@ class FyntuneReportDetails extends Component {
                         </div>
                         <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">
@@ -218,7 +218,7 @@ class FyntuneReportDetails extends Component {
 
                         <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">
@@ -233,7 +233,7 @@ class FyntuneReportDetails extends Component {
                         {this.state.policy_data.add_ons && (
                             <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">
@@ -248,7 +248,7 @@ class FyntuneReportDetails extends Component {
                         {/* { this.state.policy_data.insurance_type === 'Ulip' && (
                             <div className="member-tile-fyntune">
                                 <div className="mt-left-fyntune">
-                                    <img src={require(`assets/${this.state.productName}/certificate-rs.svg`)} alt="" />
+                                    <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/certificate-rs.svg`)} alt="" />
                                 </div>
                                 <div className="mt-right-fyntune">
                                     <div className="mtr-top-fyntune">
@@ -263,7 +263,7 @@ class FyntuneReportDetails extends Component {
                     
                         <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/calender-rs.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/calender-rs.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">
@@ -277,7 +277,7 @@ class FyntuneReportDetails extends Component {
 
                         <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">
@@ -291,7 +291,7 @@ class FyntuneReportDetails extends Component {
 
                         <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">
@@ -304,7 +304,7 @@ class FyntuneReportDetails extends Component {
                         </div>
                         <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/hourglass.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/hourglass.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">
@@ -317,7 +317,7 @@ class FyntuneReportDetails extends Component {
                         </div>
                         <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/cash-payment.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/cash-payment.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">
@@ -330,7 +330,7 @@ class FyntuneReportDetails extends Component {
                         </div>
                         <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
-                                <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
+                                <Imgc className="imgc-tile" src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
                             </div>
                             <div className="mt-right-fyntune">
                                 <div className="mtr-top-fyntune">

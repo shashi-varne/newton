@@ -12,6 +12,7 @@ import { getConfig } from 'utils/functions';
 import { numDifferentiation, inrFormatDecimal, getUrlParams, capitalizeFirstLetter, storageService } from '../../../utils/validators';
 import { insuranceStateMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
+import {Imgc} from 'common/ui/Imgc';
 
 class ReportDetails extends Component {
 
@@ -243,7 +244,7 @@ class ReportDetails extends Component {
         <div className="card">
           <div className="report-detail-header">
             <div className="report-detail-icon">
-              <img src={this.state.policyData.logo} alt="" />
+              <Imgc src={this.state.policyData.logo} alt="" />
             </div>
             <div>
               <div className="report-detail-ins-name">{this.state.policyData.product_title}</div>
@@ -280,7 +281,7 @@ class ReportDetails extends Component {
           }
           {this.state.policyData.provider === 'EDELWEISS' && 
             <div style={{display: 'flex', alignItems: 'end', margin: '30px 0 0 0'}}>
-              <img src={this.state.icn_call} alt="" />
+              <Imgc src={this.state.icn_call} alt="" />
               <div style={{color: '#4A4A4A', fontSize:13, fontWeight: 400, margin: '0 0 0 10px'}}>
                 Edelweiss team will call you to assist in policy issuance.
               </div>
@@ -289,16 +290,16 @@ class ReportDetails extends Component {
         </div>
         {this.state.policyData.status === 'policy_issued' &&
           <div onClick={() => this.openInBrowser(this.state.policyData.coi_blob_key)} className="report-detail-download">
-            <img src={download} alt="" />
+            <Imgc style={{width: '14px', height: '14px', margin: 0}} src={download} alt="" />
             <div className="report-detail-download-text">Download Policy</div>
           </div>}
         {this.state.policyData.status === 'policy_issued' && <div className="Accordion">
           <div className="AccordionTitle" onClick={() => this.toggleAccordion()}>
             <div className="AccordionList">
               <span className="AccordionList1">
-                <img className="AccordionListIcon" src={(this.state.accordionTab) ? shrink : expand} alt="" width="20" />
+                <Imgc style={{width: '20px', height: '20px', margin: 0}} className="AccordionListIcon" src={(this.state.accordionTab) ? shrink : expand} alt="" width="20" />
               </span>
-              <span>How to claim the policy?</span>
+              <span style={{marginLeft: '10px'}}>How to claim the policy?</span>
             </div>
           </div>
           {this.state.accordionTab && <div className="AccordionDescription">

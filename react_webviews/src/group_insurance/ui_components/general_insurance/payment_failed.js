@@ -5,7 +5,7 @@ import failed_fisdom from 'assets/ils_covid_failed_fisdom.svg';
 import failed_myway from 'assets/ils_covid_failed_myway.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-
+import {Imgc} from 'common/ui/Imgc';
 class PaymentFailedClass extends Component {
 
   constructor(props) {
@@ -72,7 +72,7 @@ class PaymentFailedClass extends Component {
         classOverRideContainer="payment-failed"
       >
         <div>
-          <div className="payment-failed-icon"><img src={this.state.failed_icon} alt="" /></div>
+          <div className="payment-failed-icon"><Imgc style={{width: '320px', height: '160px'}} src={this.state.failed_icon} alt="" /></div>
           <div className="payment-failed-title">Payment Failed!</div>
           <div className="payment-failed-subtitle">Seems like an internal issue. Don’t worry we are on to it, please retry after sometime.</div>
         </div>

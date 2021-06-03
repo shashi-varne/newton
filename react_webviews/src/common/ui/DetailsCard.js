@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {Imgc} from 'common/ui/Imgc';
 
 class DetailsCard extends Component {
     render() {
@@ -28,7 +29,7 @@ class DetailsCard extends Component {
                         
                     </div>
                     {
-                        item.headingLogo && <img alt="product-icon" src={`${item.headingLogo}`}/>
+                        item.headingLogo && <Imgc style={{width: '36px', height: '36px'}} alt="product-icon" src={`${item.headingLogo}`}/>
                     }
                 </div>
 

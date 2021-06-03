@@ -7,6 +7,7 @@ import { initialize, updateBottomPremium, getAddOnsData, getCoverPeriodData } fr
 import { childeNameMapper } from '../../../constants';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import { compareObjects, isEmpty } from '../../../../utils/validators';
+import {Imgc} from 'common/ui/Imgc';
 class GroupHealthPlanSelectFloater extends Component {
     constructor(props) {
         super(props);
@@ -189,7 +190,7 @@ class GroupHealthPlanSelectFloater extends Component {
                                {props.subtitle}
                            </div>
                            {props.discount > 0 && <div className="flex" style={{ margin: '4px 0 0 0' }}>
-                               <img style={{ width: 10 }} src={require(`assets/completed_step.svg`)} alt="" />
+                               <Imgc style={{ width: '14px', height: '14px', margin: 0 }} src={require(`assets/completed_step.svg`)} alt="" />
                                <span style={{
                                    color: '#4D890D', fontSize: 10,
                                    fontWeight: 400, margin: '0 0 0 4px'
@@ -198,7 +199,7 @@ class GroupHealthPlanSelectFloater extends Component {
                        </div>
                        <div className="completed-icon">
                            {index === this.state.selectedIndex &&
-                               <img src={require(`assets/completed_step.svg`)} alt="" />}
+                               <Imgc style={{ width: '14px', height: '14px', margin: 0 }} src={require(`assets/completed_step.svg`)} alt="" />}
                        </div>
                    </div>
                    {props.key === 'non_floater' && index === this.state.selectedIndex && this.state.show_ind_mem_premium &&

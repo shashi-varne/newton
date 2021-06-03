@@ -453,6 +453,13 @@ button {
   margin-right: 10px;
 }
 
+.resume-hero-container{
+  text-align: center;
+  .resume-hero-img{ 
+    width: 320px !important;
+    height: 160px !important;
+  }
+}
 .resume-page-content{
   font-size: 14px;
   color: grey;
@@ -461,6 +468,10 @@ button {
 }
 .fyntune-landing{
   font-family: "Roboto", sans-serif;
+}
+.fyntune-how-to-step{
+  width: 70px !important;
+  height: 60px !important;
 }
 .fyntune-heading {
   font-size: 17px;
@@ -524,8 +535,9 @@ button {
 .landing-hero-container{
   width: 100%;
 }
-.landing-hero-img{
+.fyntune-landing-hero-img{
   width: 100%;
+  min-height: 160px;
   object-fit: cover;
 }
 

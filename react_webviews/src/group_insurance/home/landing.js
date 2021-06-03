@@ -314,7 +314,7 @@ class Landing extends Component {
               <p className="hi-landing-banner-header">{getConfig().productName} HealthProtect</p>
               <p className="hi-landing-banner-text">₹10 Lakh health cover @ just ₹728/m</p>
               <p className="hi-landing-banner-text">100% additional personal accident cover</p>
-              <img className="hi-landing-banner-img" src={require(`../../assets/hi-banner-image.svg`)} alt="" />
+              <Imgc className="hi-landing-banner-img" src={require(`../../assets/hi-banner-image.svg`)} alt="" />
               <Button variant="raised"
                 size="large" color="secondary" autoFocus className="button" onClick={() => this.navigate('/group-insurance/group-health/GMC/landing')}>
                 GET INSURED
@@ -323,7 +323,7 @@ class Landing extends Component {
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
             <div className="inactive-entry-card" onClick={this.toToReports}>
-              <img alt="inactive-policy-card" src={require(`assets/${this.state.type}/policy_icon.svg`)} />
+              <Imgc style={{width: '40px', height: '40px'}} alt="inactive-policy-card" src={require(`assets/${this.state.type}/policy_icon.svg`)} />
               <div className="inactive-right">
                 <p className="inactive-title">Your policies</p>
                 <p className="inactive-subtitle">{this.state.showCustomReportCardText ? `${this.state.customReportCardText} ${this.state.noOfReports > 1   ? '+' + (this.state.noOfReports - 1) + ' more': '' }` :'Looks like you have zero coverage'}</p>
@@ -346,7 +346,7 @@ class Landing extends Component {
           </div>
 
           <div className="callback-button-container">
-          <span onClick={() => this.callBackScreen()}><Imgc className="image" style={{cursor: 'pointer' , minHeight: '100px'}} src={require(`assets/${this.state.type}/landing_call_back_button.svg`)} alt=""/></span>
+          <span onClick={() => this.callBackScreen()}><Imgc className="image" style={{cursor: 'pointer' , minHeight: '120px'}} src={require(`assets/${this.state.type}/landing_call_back_button.svg`)} alt=""/></span>
           </div>
 
           <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}> What our customers say </div>
