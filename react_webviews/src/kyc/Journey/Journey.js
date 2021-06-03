@@ -225,7 +225,7 @@ const Journey = (props) => {
         topTitle = 'Investment pending'
         investmentPending = true
       } else if (isCompliant) {
-        topTitle = 'What next?'
+        topTitle = `What's next?`
       } else if (show_aadhaar) {
         topTitle = 'Steps to follow:'
       }

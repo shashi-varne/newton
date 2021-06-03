@@ -19,21 +19,12 @@ import {
   getTotalPagesInPersonalDetails,
   navigate as navigateFunc,
 } from "../../common/functions";
-import { isReadyToInvest } from "../../services";
 import WVButton from "../../../common/ui/Button/WVButton";
 
 const config = getConfig();
+const googleRedirectUrl = `${config.base_url}${API_CONSTANTS.socialAuth}/google?redirect_url=${encodeURIComponent(`${getBasePath()}/kyc/communication-details/callback${config.searchParams}`)}`;
 const googleButtonTitle = (
-  <a
-    className="kcd-google-text"
-    href={`${config.base_url}${
-      API_CONSTANTS.socialAuth
-    }/google?redirect_url=${encodeURIComponent(
-      `${getBasePath()}/kyc/communication-details/callback${
-        config.searchParams
-      }`
-    )}`}
-  >
+  <a className="kcd-google-text" href={googleRedirectUrl}>
     <img src={require(`assets/google.svg`)} alt="google" />
     <div>Continue with Google</div>
   </a>
@@ -74,8 +65,11 @@ const CommunicationDetails = (props) => {
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
       setFormData({ ...data });
-      setIsKycDone(kyc?.application_status_v2 === "submitted" || kyc?.application_status_v2 === "complete");
-      setTotalPages(getTotalPagesInPersonalDetails())
+      setIsKycDone(
+        kyc?.application_status_v2 === "submitted" ||
+          kyc?.application_status_v2 === "complete"
+      );
+      setTotalPages(getTotalPagesInPersonalDetails());
     }
   }, [kyc, user]);
 
@@ -242,7 +236,11 @@ const CommunicationDetails = (props) => {
                   >
                     {googleButtonTitle}
                   </WVButton>
-                  <img src={require("assets/ORDivider.svg")} alt="" className="kcd-or-divider" />
+                  <img
+                    src={require("assets/ORDivider.svg")}
+                    alt=""
+                    className="kcd-or-divider"
+                  />
                 </>
               )}
               <TextField
