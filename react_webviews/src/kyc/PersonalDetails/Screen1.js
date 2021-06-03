@@ -146,7 +146,7 @@ const PersonalDetails1 = (props) => {
         user_action: userAction || "",
         screen_name: "personal_details_1",
         gender: form_data.gender
-          ? form_data.gender === "TRANSGENDER"
+          ? form_data.gender === "OTHER"
             ? "others"
             : form_data?.gender?.toLowerCase()
           : "",
