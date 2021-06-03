@@ -26,9 +26,9 @@ class GenericContentCarousel extends Component {
     }, 350);
   };
 
-  renderCarousel = (data, index) => {
+  renderCarousel = (data, index, style) => {
     return (
-      <div className="generic-content-carousel" key={index}>
+      <div className="generic-content-carousel" key={index} style={{...style}}>
         <p className="title">{data.title}</p>
         <p className="content">{ReactHtmlParser(data.content)}</p>
       </div>
@@ -82,7 +82,7 @@ class GenericContentCarousel extends Component {
       >
         {this.props.customData &&
           this.props.customData.map((item, index) =>
-            this.renderCarousel(item, index)
+            this.renderCarousel(item, index, this.props.style)
           )}
       </Carousel>
     );

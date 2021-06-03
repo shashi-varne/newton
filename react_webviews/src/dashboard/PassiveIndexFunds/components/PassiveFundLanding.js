@@ -12,7 +12,8 @@ import GenericFactCarousel from "../../../common/ui/GenericFactCarousel";
 import GenericContentCarousel from "../../../common/ui/GenericContentCarousel";
 import VideoBlock from "../mini-components/VideoBlock"
 import { Imgc } from "../../../common/ui/Imgc";
-
+import KeyInsightBackground from "../../../assets/passiveFundKeyInsights.svg"
+import ActivePassiveBackground from "../../../assets/active_passive_background.svg"
 class Landing extends Component {
     constructor(props) {
         super(props);
@@ -118,6 +119,10 @@ class Landing extends Component {
                     customData={keyInsightsCarousel}
                     callbackFromParent={this.carouselSwipecount}
                     selectedIndexvalue={this.state.selectedIndex}
+                    style={{
+                      backgroundImage: `url(${KeyInsightBackground})`,
+                      backgroundColor: "#FBFDFF"
+                    }}
                   />
                 </div>
                 <h1 className="category-title">Passive vs. Active investing</h1>
@@ -125,6 +130,10 @@ class Landing extends Component {
                   <GenericFactCarousel
                     customData={passiveActiveCarousal}
                     callbackFromParent={this.carouselSwipecount}
+                    style={{
+                      backgroundImage: `url(${ActivePassiveBackground})`,
+                      backgroundColor: "#FAFCFF"
+                    }}
                   />
                 </div>
                 <WVSecurityDisclaimer />
