@@ -407,6 +407,7 @@ export async function getInvestmentData(params, pageError = false) {
 }
 
 export async function submitPran(params) {
+  const config = getConfig();
   let error = "";
   let errorType = "";
   
@@ -430,18 +431,36 @@ export async function submitPran(params) {
       return result;
     } else {
       switch(status) {
-        case 301: 
+        case 301:
           this.navigate('/nps/pan');
           break;
         case 303:
-          this.navigate('/kyc/journey')
+          let _event = {
+            event_name: "journey_details",
+            properties: {
+              journey: {
+                name: "nps",
+                trigger: "cta",
+                journey_status: "incomplete",
+                next_journey: "kyc",
+              },
+            },
+          };
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+
+          this.navigate("/kyc/journey");
           break;
-        default: 
+        default:
           let title1 = result.error || result.message || "Something went wrong!";
           this.setState({
             title1: title1,
           });
-        
+
           this.setErrorData("submit");
           throw title1;
       }
