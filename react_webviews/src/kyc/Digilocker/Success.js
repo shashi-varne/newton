@@ -3,11 +3,11 @@ import Container from '../common/Container'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { DL_DOCS } from '../constants'
 import "./Digilocker.scss";
-import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
+// import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
 
 const Success = (props) => {
   const productName = getConfig().productName;
-  const [isBackDialogOpen, setBackDialogOpen] = useState(false);
+  // const [isBackDialogOpen, setBackDialogOpen] = useState(false);
   const proceed = () => {
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
@@ -45,11 +45,11 @@ const Success = (props) => {
           />
         </footer>
       </section>
-      <ConfirmBackDialog
+      {/* <ConfirmBackDialog
         isOpen={isBackDialogOpen}
         close={() => setBackDialogOpen(false)}
         goBack={proceed}
-      />
+      /> */}
     </Container>
   )
 }

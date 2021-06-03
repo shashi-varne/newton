@@ -1,7 +1,6 @@
 import React from "react";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import "./mini-components.scss";
-import Button from "../../common/ui/Button";
 
 const ConfirmBackDialog = ({ isOpen, close, goBack }) => {
   return (
@@ -16,16 +15,15 @@ const ConfirmBackDialog = ({ isOpen, close, goBack }) => {
           You are almost there, do you really want to go back?
         </div>
         <div className="confirm-back-dialog-actions">
-          <Button
-            classes={{ button: "confirm-back-button confirm-back-yes" }}
+          <div
+            className="confirm-back-button confirm-back-yes"
             onClick={goBack}
-            buttonTitle="YES"
-          />
-          <Button
-            classes={{ button: "confirm-back-button" }}
-            onClick={close}
-            buttonTitle="NO"
-          />
+          >
+            YES
+          </div>
+          <div className="confirm-back-button" onClick={close}>
+            NO
+          </div>
         </div>
       </DialogContent>
     </Dialog>

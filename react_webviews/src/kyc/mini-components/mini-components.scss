@@ -454,35 +454,29 @@
 .kyc-back-confirm-dialog {
   .kyc-back-confirm-dialog-content {
     line-height: 1.5;
+    color: #160d2e;
 
     .title {
-      margin: 10px 0;
-      color: #160d2e;
-      font-size: 16px;
+      margin: 10px 0 20px;
+      font-size: 15px;
     }
 
     .confirm-back-dialog-actions {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      column-gap: 20px;
-      padding: 10px;
 
       .confirm-back-button  {
-        background-color: rgba(158,158,158,0.2);
-        min-width: 90px;
-        width: 90px;
-        border-radius: 3px;
-        color: #160d2e;
-        padding: 8px 15px !important;
+        background-color: transparent;
+        width: fit-content;
+        padding: 15px 0 0 !important;
+        font-weight: bold;
+        font-size: 12px;
+        cursor: pointer;
       }
 
       .confirm-back-yes {
-        background-color: transparent;
-      }
-
-      .confirm-back-yes:hover {
-        background-color: rgba(158,158,158,0.2);
+        margin-right: 70px;
       }
     }
   }
