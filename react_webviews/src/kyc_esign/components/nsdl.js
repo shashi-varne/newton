@@ -29,19 +29,6 @@ class DigiStatus extends Component {
     this.initialize();
   };
   
-  checkDlFlow = (kyc) => {
-    if (
-      kyc.kyc_status !== "compliant" &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== "" &&
-      kyc.dl_docs_status !== "init" &&
-      kyc.dl_docs_status !== null
-    ) {
-      return true;
-    }
-    return false;
-  };
-  
   initialize = async () => {
     await getUserKycFromSummary();
     const kyc = storageService().getObject("kyc");
@@ -164,11 +151,7 @@ class DigiStatus extends Component {
   };
 
   sendEvents = (userAction, screenName) => {
-    const kyc = storageService().getObject("kyc");
-    const user = storageService().getObject("user");
-    let dl_flow = false;
-    if (!isEmpty(kyc) && !isEmpty(user)) {
-      dl_flow = this.checkDlFlow(kyc);
+    let kyc = this.state.kyc;
       let eventObj = {
         // "event_name": 'KYC_registration',
         event_name: "trading_onboarding",
@@ -177,7 +160,7 @@ class DigiStatus extends Component {
           screen_name: screenName || "kyc_verified",
           rti: "",
           initial_kyc_status: kyc.initial_kyc_status || "",
-          flow: dl_flow ? "digi kyc" : "general",
+          flow: this.state.dl_flow ? "digi kyc" : "general",
         },
       };
       if (userAction === "just_set_events") {
@@ -186,7 +169,6 @@ class DigiStatus extends Component {
         nativeCallback({ events: eventObj });
       }
     }
-  };
 
   render() {
     let { show_loader, skelton, dl_flow, show_note, kyc } = this.state;
