@@ -1,7 +1,8 @@
 import React from "react";
 import WVLoadingBottomSheet from "../../../common/ui/LoadingBottomSheet/WVLoadingBottomSheet";
+import { getConfig } from "../../../utils/functions";
 
-const productName = getConfig().productName;
+const { productName } = getConfig();
 const CheckCompliant = ({ isOpen }) => {
   return (
     <WVLoadingBottomSheet
