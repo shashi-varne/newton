@@ -5,13 +5,15 @@ import Container from "../common/Container";
 import Api from "../../utils/api";
 import toast from "../../common/ui/Toast";
 import { storageService } from "../../utils/validators";
+import { getBasePath } from "../../utils/functions";
 
 const genericErrorMessage = "Something went wrong!";
+const config = getConfig();
 class Notification extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productName: getConfig().productName,
+      productName: config.productName,
       showLoader: false,
       notifications: [],
     };
@@ -77,22 +79,22 @@ class Notification extends Component {
     return notificationsData;
   }
 
-  getRedirectionUrlWebview = (url, type) => {
+  getRedirectionUrlWebview = (url, showRedirectUrl) => {
     let webRedirectionUrl = url;
-    webRedirectionUrl +=
-      // eslint-disable-next-line
-      (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
-      "generic_callback=true";
-
+    let plutusRedirectUrl = `${getBasePath()}/notifications/${config.searchParams}&is_secure=${storageService().get("is_secure")}`;
+    // Adding redirect url for testing
+    // eslint-disable-next-line
+    webRedirectionUrl = `${webRedirectionUrl}${webRedirectionUrl.match(/[\?]/g) ? "&" : "?"}generic_callback=true&${showRedirectUrl ?"redirect_url":"plutus_redirect_url"}=${encodeURIComponent(plutusRedirectUrl)}&campaign_version=1`
     return webRedirectionUrl;
   };
 
   handleClick = (target) => {
     this.setState({ showLoader: true });
     let campLink = "";
+    const showRedirectUrl = target.campaign_name === "whatsapp_consent"
     campLink = this.getRedirectionUrlWebview(
       target.url,
-      "campaigns"
+      showRedirectUrl
     );
     window.location.href = campLink;
   };
