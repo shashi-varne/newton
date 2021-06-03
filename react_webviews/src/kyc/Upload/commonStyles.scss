@@ -474,3 +474,20 @@
   margin: 40px auto 0;
 }
 // F&OIncomeProof END ------------
+
+.webcam-selfie {
+  text-align: center;
+
+  video {
+    height: 300px;
+    object-fit: cover;
+    margin-top: 60px;
+    border-radius: 50%;
+    width: 300px;
+    // transform: scaleX(-1);
+  }
+}
+
+.webcam-selfie-btn {
+  margin: auto !important;
+}
