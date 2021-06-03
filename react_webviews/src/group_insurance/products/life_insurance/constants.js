@@ -23,19 +23,23 @@ export var fyntuneConstants = {
     fyntune_policy_report_status_mapper: {
       issued: {
         text: 'ISSUED',
-        color: '#78CE5D'
+        color: '#78CE5D',
+        reportTab: 'activeReports'
       },
       pending: {
         text: 'PENDING',
-        color: '#d3bd13'
+        color: '#d3bd13',
+        reportTab: 'pendingReports'
       },
       expired: {
         text: 'EXPIRED',
-        color: 'orange'
+        color: 'orange',
+        reportTab: 'inactiveReports'
       },
       rejected: {
         text: 'EXPIRED',
-        color: 'red'
+        color: 'red',
+        reportTab: 'inactiveReports'
       }
     },
     stepsToFollow : [
@@ -66,7 +70,7 @@ export var fyntuneConstants = {
           'options': [
               {
                   'title': 'What are the products available?',
-                  'subtitle': 'We are currently offering HDFC Life Sanchay Plus and HDFC Life Click-2-Invest products.'
+                  'subtitle': 'We are currently offering HDFC Life Sanchay Plus and HDFC Life Click 2 Invest products, and Edelweiss Active Income Plan.'
               },
               {
                   'title': 'What are bonuses and how do the Cash Bonus work?',

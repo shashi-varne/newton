@@ -6,13 +6,14 @@ import { PATHNAME_MAPPER } from "../../constants";
 import { isEmpty, validateNumber } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import "../commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const NriAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -55,6 +56,7 @@ const NriAddressDetails1 = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next")
     let keysToCheck = ["mobile_number", "address_doc_type"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
@@ -118,8 +120,26 @@ const NriAddressDetails1 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nri_address_details_1",
+        "address_proof": form_data.address_doc_type,
+        "mobile_number": kyc.nri_address.meta_data.mobile_number ? "Indian" : "NRI"
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-personal-details1"
       buttonTitle="SAVE AND CONTINUE"

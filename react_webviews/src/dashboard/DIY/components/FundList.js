@@ -6,9 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import RatingStar from '../../../fund_details/common/RatingStar'
 import Button from 'common/ui/Button'
 import { storageService } from '../../../utils/validators'
-import { getConfig } from 'utils/functions'
-
-import { navigate as navigateFunc } from '../../Invest/common/commonFunctions'
+import { getConfig, navigate as navigateFunc } from 'utils/functions'
 
 import CartFooter from '../mini-components/CartFooter'
 import { getFundList } from '../functions'
@@ -251,14 +249,13 @@ const DiyFundCard = ({
       `/fund-details`,
       {
         searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy`,
-      },
-      true
+      }
     )
   }
   const handleInvest = () => {
     storageService().setObject('diystore_cart', [props])
     const navigate = navigateFunc.bind(parentProps)
-    navigate('/diy/invest', null, true, parentProps.location.search)
+    navigate('/diy/invest')
   }
   return (
     <div className="diy-fund-card">

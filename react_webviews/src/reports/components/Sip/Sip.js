@@ -4,10 +4,9 @@ import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { getSummaryV2 } from "../../common/api";
 import {
-  navigate as navigateFunc,
   dateOrdinalSuffix,
 } from "../../common/functions";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import "./commonStyles.scss";
 
 const Sip = (props) => {

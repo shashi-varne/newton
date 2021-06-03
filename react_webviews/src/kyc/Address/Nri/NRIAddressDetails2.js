@@ -6,12 +6,13 @@ import Container from "../../common/Container";
 import { NRI_DOCUMENTS_MAPPER } from "../../constants";
 import {
   compareObjects,
-  navigate as navigateFunc,
   validateFields,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
 import "../commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -40,6 +41,7 @@ const NRIAddressDetails2 = (props) => {
   const stateParams = props?.location?.state;
 
   const handleSubmit = async () => {
+    sendEvents("next")
     let keysToCheck = [
       "nri_pincode",
       "addressline",
@@ -144,8 +146,26 @@ const NRIAddressDetails2 = (props) => {
 
   const pageDetails = getPageDetails(kyc);
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nri_address_details_2",
+        "pincode_entered": form_data.nri_pincode ? "yes" : "no",
+        "address_entered": form_data.addressline ? "yes" : "no"
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}

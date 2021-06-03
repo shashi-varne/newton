@@ -5,6 +5,7 @@ import ContactUs from "../../common/components/contact_us";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isEmpty } from "../../utils/validators";
+import { nativeCallback } from "../../utils/native_callback";
 
 const CompliantReport = (props) => {
   const [openIndex, setOpenIndex] = useState(-1);
@@ -150,8 +151,30 @@ const CompliantReport = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "kyc_status",
+        "flow": 'premium onboarding'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
-    <Container id="kyc-home" noFooter={true} title={topTitle} data-aid='kyc-reports-screen'>
+    <Container 
+      id="kyc-home" 
+      noFooter={true} 
+      title={topTitle} 
+      data-aid='kyc-reports-screen'
+      events={sendEvents("just_set_events")}
+    >
       <div className="kyc-report">
         <main data-aid='kyc-report'>
           <section data-aid='kyc-reports-screen-page'>
