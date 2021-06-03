@@ -10,16 +10,18 @@ import "./commonStyles.scss";
 const productName = getConfig().productName;
 const STATUS_MAPPER = {
   init: {
+    status: "init",
     title: "Open free trading & demat account ",
     subtitle: "Trade & invest like a pro anytime, anywhere",
     buttonTitle: "OPEN ACCOUNT",
     path: "/kyc/account-info",
   },
   incomplete: {
+    status: "incomplete",
     title: "Complete your KYC application",
     subtitle: "Don't miss out on good returns by delaying",
     buttonTitle: "COMPLETE NOW",
-    path: "/kyc/journey", // Todo check for show aadhaar condition
+    path: "/kyc/journey",
   },
 };
 
@@ -39,7 +41,19 @@ const StocksStatus = (props) => {
   }, [kyc]);
 
   const handleClick = () => {
-    navigate(data.path);
+    if (data.status === "incomplete") {
+      if (kyc?.kyc_status === "compliant") {
+        navigate(data.path)
+      } else {
+        navigate(data.path, {
+          state: {
+            show_aadhaar: !kyc.address.meta_data.is_nri ? true : false,
+          }
+        });
+      }
+    } else {
+      navigate(data.path);
+    }
   };
 
   return (

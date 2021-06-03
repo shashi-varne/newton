@@ -11,6 +11,7 @@ import KycPremiumLandingDialog from "../../mini-components/KycPremiumLandingDial
 import CampaignDialog from '../../mini-components/CampaignDialog';
 import { storageService } from 'utils/validators';
 import { SkeltonRect } from 'common/ui/Skelton';
+import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 
@@ -184,6 +185,24 @@ class Landing extends Component {
                           />
                         </div>
                       )}
+                    </React.Fragment>
+                  );
+                case "stocks":
+                  return (
+                    <React.Fragment key={index}>
+                      <div className="invest-main-top-title" 
+                        onClick={() => this.clickCard("stocks") } 
+                        data-aid='stocks-title'
+                      >
+                        <WVButton
+                          variant='contained'
+                          size='large'
+                          color="secondary"
+                          // fullWidth
+                        >
+                          Stocks
+                        </WVButton>
+                      </div>
                     </React.Fragment>
                   );
                 case "ourRecommendations":
