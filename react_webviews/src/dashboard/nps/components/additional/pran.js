@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import InputWithIcon from "common/ui/InputWithIcon";
+import Input from "common/ui/Input";
 import { initialize } from "../../common/commonFunctions";
-import card from "assets/card.png";
 
 class NpsPran extends Component {
   constructor(props) {
@@ -56,8 +55,7 @@ class NpsPran extends Component {
       >
         <div className="pran-details" data-aid='nps-pran-details'>
           <div className="InputField">
-            <InputWithIcon
-              icon={card}
+            <Input
               width="30"
               type="number"
               id="pran"

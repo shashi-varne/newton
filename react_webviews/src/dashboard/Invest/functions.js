@@ -1,7 +1,7 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import {
   apiConstants,
   investCardsBase,
@@ -24,7 +24,7 @@ export async function initialize() {
   this.getRecommendations = getRecommendations.bind(this);
   this.getRateOfInterest = getRateOfInterest.bind(this);
   this.corpusValue = corpusValue.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.clickCard = clickCard.bind(this);
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
@@ -163,6 +163,7 @@ export async function setNpsData(response) {
       const res = await Api.get(apiConstants.npsInvestStatus);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
+        storageService().setObject("nps_additional_details", result.registration_details);
         if (!result.registration_details.additional_details_status) {
           storageService().set("nps_additional_details_required", true);
         } else {
@@ -564,7 +565,7 @@ function handleInvestSubtitle (partner = '')  {
 
 export function handleRenderCard() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-  let partner = this.state.partner || storageService().getObject("partner") || {};
+  let partner = this.state.partner || storageService().get("partner") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
   const isWeb =getConfig().Web;

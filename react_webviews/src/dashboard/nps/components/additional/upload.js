@@ -1,20 +1,21 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import { initialize } from "../../common/commonFunctions";
+import { initialize, combinedDocBlob } from "../../common/commonFunctions";
 import SelectWithoutIcon from "common/ui/SelectWithoutIcon";
 import { storageService } from "utils/validators";
 import { getConfig, getBase64 } from "utils/functions";
 import toast from "common/ui/Toast";
 import $ from "jquery";
+import { isEmpty } from "../../../../utils/validators";
 
-let options = [
-  'Passport',
-  'Driving License',
-  'Utility Bill',
-  'Bank Statement',
-  'Aadhar Card',
-  'Voter ID',
-]
+const options = [
+  { name: "Passport", value: "passport" },
+  { name: "Driving license", value: "dl" },
+  { name: "Utility Bill", value: "utilitybill" },
+  { name: "Bank Statement", value: "bankstatement" },
+  { name: "Aadhaar card", value: "aadhar" },
+  { name: "Voter ID", value: "voterid" }
+];
 
 class uploadAddressProof extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class uploadAddressProof extends Component {
       isSelected: false,
       sides: 1,
       doc_side: '',
+      screen_name: "nps_upload"
     };
     this.initialize = initialize.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -37,14 +39,14 @@ class uploadAddressProof extends Component {
   }
 
   onload = () => {
-    let kyc_app = storageService().getObject(
-      "kyc_app"
-    );
-    let { address } = kyc_app;
+    let npsAdditionalDetails = storageService().getObject(
+      "nps_additional_details"
+    ) || {};
+    let npsDetails = npsAdditionalDetails.nps_details || {};
 
-    if (address) {
+    if (!isEmpty(npsDetails)) {
       this.setState({
-        address: address.meta_data || '',
+        address: npsDetails?.address || '',
         skelton: false
       });
     }
@@ -97,51 +99,49 @@ class uploadAddressProof extends Component {
 
   native_call_handler(method_name, doc_type, doc_name, doc_side) {
     let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb[method_name]({
-        type: 'doc',
-        doc_type: doc_type,
-        doc_name: doc_name,
-        doc_side: doc_side,
-        // callbacks from native
-        upload: function upload(file) {
-          try {
-            that.setState({
-              doc_type: this.doc_type,
-              docName: this.docName,
-              doc_side: this.doc_side,
-              show_loader: true
-            })
-            switch (file.type) {
-              case 'image/jpeg':
-              case 'image/jpg':
-              case 'image/png':
-              case 'image/bmp':
-                that.mergeDocs(file);
-                break;
-              default:
-                alert('Please select image file');
-                that.setState({
-                  docType: this.doc_type,
-                  show_loader: false
-                })
-            }
-          } catch (e) {
-            // 
-          }
-        }
-      });
-
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
+    window.callbackWeb[method_name]({
+      type: "doc",
+      doc_type: doc_type,
+      doc_name: doc_name,
+      doc_side: doc_side,
+      // callbacks from native
+      upload: function upload(file) {
+        try {
           that.setState({
-            show_loader: true
-          })
-          that.showLoaderNative();
+            doc_type: this.doc_type,
+            docName: this.docName,
+            doc_side: this.doc_side,
+            show_loader: true,
+          });
+          switch (file.type) {
+            case "image/jpeg":
+            case "image/jpg":
+            case "image/png":
+            case "image/bmp":
+              that.mergeDocs(file);
+              break;
+            default:
+              alert("Please select image file");
+              that.setState({
+                docType: this.doc_type,
+                show_loader: false,
+              });
+          }
+        } catch (e) {
+          //
         }
-      });
-    }
+      },
+    });
+
+    window.callbackWeb.add_listener({
+      type: "native_receiver_image",
+      show_loader: function (show_loader) {
+        that.setState({
+          show_loader: true,
+        });
+        that.showLoaderNative();
+      },
+    });
   }
 
   openFileExplorer(side) {
@@ -194,7 +194,7 @@ class uploadAddressProof extends Component {
   handleChange = (event) => {
     let value = event || "";
     let sides = 1;
-    if (value === 'Utility Bill' || value === 'Bank Statement') {
+    if (value === 'utilitybill' || value === 'bankstatement') {
       sides = 2
     }
 
@@ -216,6 +216,7 @@ class uploadAddressProof extends Component {
               this.state[side] || require("assets/pickup.png")
             }
             alt="Document"
+            onLoad={this.handleImageLoad}
           />
           <div className="display-flex">
             {!getConfig().Web && (
@@ -272,20 +273,37 @@ class uploadAddressProof extends Component {
     );
   }
 
-  handleClick = async () => {
-
-    if (this.state.sides === 2) {
-      await this.uploadDocs(this.state.Front_file);
-      await this.uploadDocs(this.state.Back_file);
-    } else {
-      await this.uploadDocs(this.state.Front_file);
+  handleImageLoad = () => {
+    const fr = new Image()
+    const bc = new Image()
+    if (this.state.Front && this.state.Back) {
+      fr.src = this.state.Front
+      bc.src = this.state.Back
+      const blob = combinedDocBlob(fr, bc, 'address')
+      this.setState({file: blob})
     }
   }
+
+  handleClick = async () => {
+    if (this.state.sides === 2) {
+      if (this.state.Front_file && this.state.Back_file) {
+        await this.uploadDocs(this.state.file);
+      } else {
+        toast("Please upload both the files");
+      }
+    } else {
+      if (!this.state.Front_file) {
+        toast("Please upload the file");
+        return;
+      }
+      await this.uploadDocs(this.state.Front_file);
+    }
+  };
 
   bannerText = () => {
     return (
       <span data-aid='nps-banner-text'>
-        Please upload the <span className="bold">proof</span> for updated
+        Please upload the <b>proof</b> for updated
             address: <br />
             <span>
               <b>Address:</b> {this.state.address.addressline}
@@ -316,6 +334,7 @@ class uploadAddressProof extends Component {
               id="name"
               label="Address Proof Type"
               value={this.state.proof_type}
+              isAOB={true}
               options={options}
               onChange={this.handleChange}
             />
@@ -323,8 +342,7 @@ class uploadAddressProof extends Component {
         </div>
 
         {this.state.isSelected && this.renderCamera('Front')}
-        {this.state.isSelected && (this.state.proof_type === 'Utility Bill' ||
-          this.state.proof_type === 'Bank Statement') && this.renderCamera('Back')}
+        {this.state.isSelected && (this.state.sides === 2) && this.renderCamera('Back')}
       </Container>
     );
   }

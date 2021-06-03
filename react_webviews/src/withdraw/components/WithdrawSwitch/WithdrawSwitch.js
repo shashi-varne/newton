@@ -7,7 +7,7 @@ import bond_icon from 'assets/bond_icon.png';
 import info_icon from 'assets/info_icon_fisdom.svg';
 import { inrFormatDecimal } from 'utils/validators';
 import { getRecommendedSwitch, postSwitchOrders } from '../../common/Api';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import { navigate as navigateFunc } from 'utils/functions';
 import toast from 'common/ui/Toast';
 import './WithdrawSwitch.scss';
 
@@ -32,7 +32,7 @@ const WithdrawSwitch = (props) => {
     try {
       setIsLoading(true);
       const response = await postSwitchOrders({switch_orders});
-      navigate('verify', { state:{...response} });
+      navigate('/withdraw/verify', { state:{...response} });
     } catch (err) {
       toast(err);
     } finally {
@@ -43,15 +43,14 @@ const WithdrawSwitch = (props) => {
     if (amount || true) {
       fetchRecommendedSwitch();
     } else {
-      navigate('');
+      navigate('/withdraw');
     }
   }, []);
 
   const showFundGraph = (isins) => () => {
     navigate(
       '/fund-details',
-      { searchParams: `${props.location.search}&isins=${isins}` },
-      true
+      { searchParams: `${props.location.search}&isins=${isins}` }
     );
   };
 
@@ -80,7 +79,6 @@ const WithdrawSwitch = (props) => {
       buttonTitle={`SWITCH: ${inrFormatDecimal(switchFunds?.total_switched_amount)}`}
       skelton={isLoading}
       fullWidthButton
-      // hideInPageTitle
       handleClick={handleClick}
       title="Switch Recommendations"
     >

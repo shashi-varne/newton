@@ -35,7 +35,7 @@ class NpsInvestments extends Component {
     };
 
     campaigns.forEach(item => {
-      if (item.campaign === 'nps_esign') {
+      if (item.campaign.name === 'nps_esign') {
         npscampaign = true;
         npsCampaignData = item;
       }
@@ -85,7 +85,7 @@ class NpsInvestments extends Component {
           nps_data: nps_data
         })
       } else {
-        let title1 = result.error || result.message || "Something went wrong!";
+        let title1 = result.message || result.error || "Something went wrong!";
         this.setState({
           title1: title1,
         });
@@ -104,15 +104,14 @@ class NpsInvestments extends Component {
     }
   }
 
-  redirection = (url) => {
+  redirection = (url, name='') => {
     let paymentRedirectUrl = encodeURIComponent(
       window.location.origin + `/nps/investments` + getConfig().searchParams
     );
 
     let back_url = paymentRedirectUrl;
 
-    // for web no issue
-    if(getConfig().Web) {
+    if(getConfig().Web && name !== 'e-sign') {
       this.openInBrowser(url)
     } else {
       var payment_link = url;
@@ -140,15 +139,15 @@ class NpsInvestments extends Component {
       cardClicked: cardClicked
     })
 
-    this.navigate(route, '', true);
+    this.navigate(route);
   }
 
   investMore = () => {
-    this.navigate('amount/one-time')
+    this.navigate('/nps/amount/one-time')
   }
 
   goBack = () => {
-    this.navigate('/invest', '', true);
+    this.navigate('/invest');
   };
 
   render() {
@@ -172,7 +171,7 @@ class NpsInvestments extends Component {
             {this.state.npscampaign && <div
               data-aid='nps-npscampaign-list'
               className="list"
-              onClick={() => this.redirection(this.state.npsCampActionUrl)}
+              onClick={() => this.redirection(this.state.npsCampActionUrl, 'e-sign')}
             >
               <div className="icon">
                 <img

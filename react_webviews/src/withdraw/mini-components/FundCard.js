@@ -20,13 +20,13 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
   } = data;
   const handleChange = (event) => {
     let value = event.target.value || "";
-    value = convertInrAmountToNumber(value);
+    value = convertInrAmountToNumber(value) || "";
     if (validateNumber(value)) {
-      checkLimit(Math.ceil(value), Math.ceil(amount),data?.mf?.isin);
       setFundValue(value);
     } else {
       setFundValue('');
     }
+    checkLimit(Math.ceil(value), Math.ceil(amount),data?.mf?.isin)
   }
   const handleToggle = () => {
     setOpen(!open);
@@ -35,7 +35,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
     if(num === 0) {
       calcTotalAmount(isin,num);
       setError(false);
-      checkError(false);
+      checkError(isin, false);
       return;
     }
     if (type !== 'insta-redeem') {
@@ -43,27 +43,27 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
         if (num < 1000) {
           setError(true);
           setHelperText(`Minimum withdrawal amount for each fund is ${formatAmountInr(1000)}`);
-          checkError(true);
+          checkError(isin, true);
         } else if (num > compNum) {
           setError(true);
           setHelperText('Amount cannot be more than withdrawable amount');
-          checkError(true);
+          checkError(isin, true);
           return;
         } else {
           if (error) {
             setError(false);
           }
-          checkError(false);
+          checkError(isin, false);
           calcTotalAmount(isin,num);
         }
       } else {
         if (num < compNum) {
           setError(true);
-          checkError(true);
+          checkError(isin, true);
           setHelperText('Withdrawal amount cannot be less than balance amount');
         } else if (num > compNum) {
           setError(true);
-          checkError(true);
+          checkError(isin, true);
           setHelperText(
             'Withdrawal amount cannot be greater than balance amount'
           );
@@ -71,7 +71,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
           if (error) {
             setError(false);
           }
-          checkError(false);
+          checkError(isin, false);
           calcTotalAmount(isin,num);
         }
       }
@@ -79,17 +79,17 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
       if (num > Math.ceil(compNum)) {
         setError(true);
         setHelperText('Amount cannot be more than withdrawable amount');
-        checkError(true);
+        checkError(isin, true);
       } else if (num <= 0) {
         setError(true);
-        setHelperText(`Minimum withdrawal amount for fund is ${formatAmountInr(1000)}`);
-        checkError(true);
+        setHelperText(`Minimum withdrawal amount for fund is ${formatAmountInr(1)}`);
+        checkError(isin, true);
         return;
       } else {
         if (error) {
           setError(false);
         }
-        checkError(false);
+        checkError(isin, false);
       }
       calcTotalAmount(isin,num);
     }

@@ -8,7 +8,7 @@ import { Redirect } from 'react-router-dom'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { getConfig } from 'utils/functions'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import { formatAmountInr, isEmpty } from '../../../utils/validators'
 
 import '../commonStyles.scss';
@@ -50,7 +50,7 @@ const SelfSummary = (props) => {
         investments: [{ itype, subtype, allocations }],
       })
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('verify', { state:{...result} })
+        navigate('/withdraw/verify', { state:{...result} })
         return
       }
     } catch (err) {

@@ -2,18 +2,17 @@ import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { storageService } from '../../utils/validators'
-import { storageConstants, nriDocMapper as docMapper, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { SUPPORTED_IMAGE_TYPES , NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER  } from '../constants'
 import { upload } from '../common/api'
-import { getConfig } from '../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from 'common/ui/Toast'
 import { combinedDocBlob } from '../common/functions'
-import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import { isEmpty } from 'lodash';
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 
-const getTitleList = ({ kyc }) => {
+const isWeb = getConfig().Web;
+const getTitleList = () => {
   let titleList = [
     'Photo of address card should have your signature',
     'Photo of address should be clear and it should not have the exposure of flash light',
@@ -47,7 +46,7 @@ const NRIAddressUpload = (props) => {
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
   const [showLoader, setShowLoader] = useState(false)
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
     if (type === 'front') {
@@ -96,7 +95,7 @@ const NRIAddressUpload = (props) => {
       }
       if(response.status_code === 200) {
         result = response.result;
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc);
         navigate('/kyc/upload/progress')
       } else {
         throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
@@ -122,7 +121,7 @@ const NRIAddressUpload = (props) => {
     : kyc?.address_doc_type
   const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
-    : docMapper[kyc?.address_doc_type]
+    : DOCUMENTS_MAPPER[kyc?.address_doc_type]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -161,12 +160,13 @@ const NRIAddressUpload = (props) => {
     });
   };
 
+  
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
       data-aid='kyc-upload-foreign-address-proof-screen'

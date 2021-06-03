@@ -2,8 +2,7 @@ import React from "react";
 import Container from "../../common/Container";
 import { isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { navigate as navigateFunc } from "../../common/functions";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { Imgc } from "common/ui/Imgc";
 import "./commonStyles.scss";
 
@@ -26,7 +25,6 @@ const Request = (props) => {
       hidePageTitle={true}
       buttonTitle="OK"
       handleClick={() => handleClick()}
-      headerData={{goBack: handleClick}}
     >
       {!isEmpty(requestData) && (
         <div className="reports-sip-request" data-aid='reports-sip-request'>

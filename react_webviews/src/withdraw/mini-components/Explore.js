@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
-import { navigate as navigateFunc } from '../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import './mini-components.scss';
 
 // Current Version of material ui does not have right alt icons
@@ -29,7 +29,7 @@ const tiles = [
 const Explore = (props) => {
   const navigate = navigateFunc.bind(props)
   const handleClick = () => {
-    navigate('/invest', null, true)
+    navigate('/invest')
   }
   return (
     <section className="withdraw-explore-investment-options" data-aid='withdraw-explore-investment-options'>

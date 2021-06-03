@@ -15,7 +15,7 @@ class NfoScheme extends Component {
 
   handleClick = (value) => {
     this.props.history.push({
-      pathname: `${value}/funds`,
+      pathname: `/advanced-investing/new-fund-offers/${value}/funds`,
       search: getConfig().searchParams,
     });
   };

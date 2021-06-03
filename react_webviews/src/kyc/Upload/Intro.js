@@ -1,8 +1,7 @@
 import React from 'react'
-import { getConfig } from 'utils/functions'
+import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import Container from '../common/Container'
 
-import { navigate as navigateFunc } from '../common/functions'
 import "./commonStyles.scss";
 
 const Intro = (props) => {

@@ -3,12 +3,11 @@ import React, { useState } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { getConfig } from '../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 
@@ -23,7 +22,7 @@ const Pan = (props) => {
   const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
   const [showLoader, setShowLoader] = useState(false)
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (newFile, fileBase64) => {
     setFile(newFile);
@@ -31,7 +30,7 @@ const Pan = (props) => {
   }
 
   const onFileSelectError = (error) => {
-    toast('Please select image file only');
+    return toast('Please select image file only');
   }
 
   const handleSubmit = async () => {
@@ -54,7 +53,7 @@ const Pan = (props) => {
         )
         setTitle('PAN mismatch!')
       } else {
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc)
         if (
           result.kyc.kyc_status !== 'compliant' &&
           result.kyc.dl_docs_status !== '' &&
@@ -74,6 +73,7 @@ const Pan = (props) => {
     }
   }
   
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"

@@ -3,7 +3,8 @@ import Container from '../../../common/Container';
 import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast'
 
-import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
+import { isRecurring } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import "../../commonStyles.scss"
@@ -60,7 +61,7 @@ const Landing = (props) => {
   };
 
   const goNext = () => {
-    navigate('investsurplus/amount');
+    navigate('/invest/investsurplus/amount');
   };
 
   const handleChange = (type) => {

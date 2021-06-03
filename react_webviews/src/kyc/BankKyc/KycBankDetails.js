@@ -5,21 +5,19 @@ import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   bankAccountTypeOptions,
-  getPathname,
+  PATHNAME_MAPPER,
   getIfscCodeError,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Alert from "../mini-components/Alert";
 import {
   // compareObjects,
-  navigate as navigateFunc,
   validateFields,
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
@@ -126,7 +124,7 @@ const KycBankDetails = (props) => {
   };
 
   const redirect = () => {
-    navigate(getPathname.journey);
+    navigate(PATHNAME_MAPPER.journey);
   };
 
   const handleClick = () => {
@@ -169,9 +167,9 @@ const KycBankDetails = (props) => {
 
   const handleNavigation = () => {
     if (userType === "compliant") {
-      if (isEdit) navigate(getPathname.journey);
+      if (isEdit) navigate(PATHNAME_MAPPER.journey);
       else
-        navigate(getPathname.uploadSign, {
+        navigate(PATHNAME_MAPPER.uploadSign, {
           state: {
             backToJourney: true,
           },
@@ -184,9 +182,9 @@ const KycBankDetails = (props) => {
             kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
           kyc.pan.doc_status !== "approved"
         )
-          navigate(getPathname.uploadPan);
-        else navigate(getPathname.kycEsign);
-      } else navigate(getPathname.uploadProgress);
+          navigate(PATHNAME_MAPPER.uploadPan);
+        else navigate(PATHNAME_MAPPER.kycEsign);
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
   };
 

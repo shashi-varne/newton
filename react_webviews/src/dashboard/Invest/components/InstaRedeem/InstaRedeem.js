@@ -2,8 +2,7 @@ import "./InstaRedeem.scss";
 import "../../commonStyles.scss";
 import React, { useEffect, useState } from "react";
 import Container from "../../../common/Container";
-import { getConfig } from "utils/functions";
-import { navigate as navigateFunc } from "../../common/commonFunctions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Faqs from "common/ui/Faqs";
 import SecureInvest from "../../mini-components/SecureInvest";
 import { investRedeemData } from "../../constants";
@@ -46,7 +45,7 @@ const InstaRedeem = (props) => {
   }, [funnelData])
 
   const handleClick = () => {
-    navigate("instaredeem/type");
+    navigate("/invest/instaredeem/type");
   };
 
   const showFundInfo = (data) => {
@@ -59,8 +58,7 @@ const InstaRedeem = (props) => {
       "/fund-details",
       {
         searchParams: `${getConfig().searchParams}&isins=${data.isin}`,
-      },
-      true
+      }
     );
   }
 

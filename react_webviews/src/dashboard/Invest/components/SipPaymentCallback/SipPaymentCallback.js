@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { getCampaignBySection, resetRiskProfileJourney } from "../../functions";
@@ -10,6 +10,7 @@ import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 
 const SipPaymentCallback = (props) => {
+  const navigate = navigateFunc.bind(props);
   const params = props.match.params || {};
   const status = params.status || "";
   let message = params.message || "";
@@ -69,13 +70,6 @@ const SipPaymentCallback = (props) => {
     } finally {
       setSkelton(false);
     }
-  };
-
-  const navigate = (path) => {
-    props.history.push({
-      pathname: path,
-      search: config.searchParams,
-    });
   };
 
   const handleClick = () => {

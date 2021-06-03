@@ -246,6 +246,7 @@ export class FooterLayoutBase extends Component {
     );
   };
 
+
   WithProviderLayoutGold = (props) => {
     const leftArrowMapper = {
       'up': up_arrow,

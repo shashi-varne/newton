@@ -6,7 +6,6 @@ import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
 import { getSummaryV2 } from "../common/api";
-import { getConfig } from "../../utils/functions";
 
 const SwitchedTransaction = (props) => {
   const stateParams = props.location?.state || {};
@@ -46,20 +45,12 @@ const SwitchedTransaction = (props) => {
     setOpenProcess(true);
   };
 
-  const goBack = () => {
-    props.history.push({
-      pathname: "/reports",
-      search: getConfig().searchParams,
-    });
-  };
-
   return (
     <Container
       data-aid='reports-pending-switch-screen'
       noFooter={true}
       title="Pending Switch"
       skelton={showSkelton}
-      headerData={{ goBack }}
     >
       <div className="report-purchase" data-aid='report-purchase'>
         {!isEmpty(transactions) &&

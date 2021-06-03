@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Container from '../../common/Container';
 import isEmpty from 'lodash/isEmpty';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import { navigate as navigateFunc } from 'utils/functions';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -23,7 +23,7 @@ const WithdrawRemark = ({ location, ...props }) => {
   const navigate = navigateFunc.bind(props);
   useEffect(() => {
     if (isEmpty(subQstn)) {
-      navigate('reason');
+      navigate('/withdraw/reason');
     }
   }, []);
 
@@ -31,7 +31,7 @@ const WithdrawRemark = ({ location, ...props }) => {
     try {
       setIsLoading("button");
       await postWithdrawReasons(param);
-      navigate('');
+      navigate('/withdraw');
     } catch (err) {
       toast(err);
     } finally{

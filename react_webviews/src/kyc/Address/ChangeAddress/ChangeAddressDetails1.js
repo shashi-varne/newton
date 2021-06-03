@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { getPathname, addressProofOptions } from "../../constants";
+import { PATHNAME_MAPPER, ADDRESS_PROOF_OPTIONS } from "../../constants";
 import { isEmpty } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import "../commonStyles.scss";
 
@@ -49,7 +49,7 @@ const ChangeAddressDetails1 = (props) => {
       setFormData(data);
       return;
     }
-    navigate(getPathname.uploadAddress, {
+    navigate(PATHNAME_MAPPER.uploadAddress, {
       state: {
         addressDocType: form_data.address_doc_type,
         flow: "myAccount",
@@ -60,7 +60,7 @@ const ChangeAddressDetails1 = (props) => {
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let formData = { ...form_data };
-    formData[name] = addressProofOptions[value].value;
+    formData[name] = ADDRESS_PROOF_OPTIONS[value].value;
     formData[`${name}_error`] = "";
     setFormData({ ...formData });
   };
@@ -86,7 +86,7 @@ const ChangeAddressDetails1 = (props) => {
               helperText={form_data.address_doc_type_error}
               label="Address proof:"
               class="address_doc_type"
-              options={addressProofOptions}
+              options={ADDRESS_PROOF_OPTIONS}
               id="account_type"
               value={form_data.address_doc_type || ""}
               onChange={handleChange("address_doc_type")}

@@ -3,7 +3,8 @@ import Container from "../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
 import { getFunds, getFundMf } from "../common/api";
-import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
+import { getAmountInInr } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import FundNotAvailable from "./mini-components/FundNotAvailable";
 import AskInvestType from "./mini-components/AskInvestType";
 import Button from "../../common/ui/Button";
@@ -107,16 +108,12 @@ const Funds = (props) => {
       if (!result.purchase_flag) setFundNotAvailable(true);
       if (canShowBothOptions(itype)) {
         if (result.sip_flag && result.ot_flag) {
-          item.type =
-            itype === "buildwealth"
-              ? "buildwealth"
-              : dontAddSuffixInType(itype);
           setInvestTypeData({
             message: "How would you like to invest in this fund?",
             button2Title: "SIP",
             button1Title: "ONE-TIME",
             handleClick1: handleInvestType("ONE-TIME", item),
-            handleClick2: handleInvestType("SIP", item),
+            handleClick2: handleInvestType("SIP", item, true),
           });
           setAskInvestType(true);
         } else if (result.sip_flag) {
@@ -158,8 +155,11 @@ const Funds = (props) => {
     }
   };
 
-  const handleInvestType = (invest_type, recommendation) => () => {
+  const handleInvestType = (invest_type, recommendation, addSipTag) => () => {
     if (invest_type === "SIP") {
+      if(addSipTag && recommendation.type !== "buildwealth") {
+        recommendation.type = dontAddSuffixInType(recommendation.type)
+      }
       navigate(`${getPathname.investMore}${invest_type}`, {
         state: {
           recommendation: JSON.stringify(recommendation),

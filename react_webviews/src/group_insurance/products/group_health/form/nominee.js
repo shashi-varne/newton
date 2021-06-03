@@ -72,7 +72,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         this.setState({
             form_data: form_data,
             lead: lead,
-            renderAppointee: !!(age && age < 18),
+            renderAppointee: !!(age && age < 18) && this.state.providerConfig.nominee_screen.showAppointee ? true :false,
         });
 
         this.setState({

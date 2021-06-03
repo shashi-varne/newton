@@ -4,17 +4,15 @@ import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
-import { getPathname, storageConstants } from '../constants'
+import { storageConstants , PATHNAME_MAPPER } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import {
-  navigate as navigateFunc,
-} from '../common/functions'
 import { updateQueryStringParameter } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
+import { navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
@@ -51,6 +49,7 @@ const Journey = (props) => {
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
+  const config = getConfig()
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -65,17 +64,36 @@ const Journey = (props) => {
     setGoBackModal(false)
   }
 
+  const backHandlingCondition = () => {
+    if (config.isIframe) {
+      if (config.code === 'moneycontrol') {
+        navigate("/invest/money-control");
+      } else {
+        navigate("/landing");
+      }
+      return;
+    } else if (!config.Web) {
+      if (storageService().get('native')) {
+        nativeCallback({ action: "exit_web" });
+      } else {
+        navigate("/");
+      }
+      return;
+    }
+    navigate("/landing");
+  }
+
   const openGoBackModal = () => {
     if (user?.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete") {
       setGoBackModal(true)
     } else {
-      nativeCallback({ action: "exit" })
+      backHandlingCondition();
     }
   }
 
   const confirmGoBack = () => {
       closeGoBackModal()
-      navigate('/')
+      backHandlingCondition();
   }
 
   useEffect(() => {
@@ -425,6 +443,10 @@ const Journey = (props) => {
         },
       ]
 
+      if(!isCompliant && !dlCondition && kyc?.address?.meta_data?.is_nri) {
+        journeyData[3].inputsForStatus.push('nri_address')
+      }
+
       if (
         isCompliant &&
         kyc?.identification?.meta_data?.marital_status &&
@@ -486,9 +508,11 @@ const Journey = (props) => {
         pan: '/kyc/home',
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        backToJourney: key === 'sign' ? true : null,
-        userType: 'compliant',
+        state: {
+          isEdit: isEdit,
+          backToJourney: key === 'sign' ? true : null,
+          userType: 'compliant',
+        }
       })
       return
     } else {
@@ -504,8 +528,10 @@ const Journey = (props) => {
         }
 
         navigate(stateMapper[key], {
-          isEdit: isEdit,
-          userType: 'non-compliant',
+          state: {
+            isEdit: isEdit,
+            userType: 'non-compliant',
+          }
         })
         return
       } else {
@@ -520,8 +546,10 @@ const Journey = (props) => {
         console.log(stateMapper[key])
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        userType: 'non-compliant',
+        state: {
+          isEdit: isEdit,
+          userType: 'non-compliant',
+        }
       })
       return
     }
@@ -572,6 +600,7 @@ const Journey = (props) => {
       message: "You are almost there, do you really want to go back?",
     };
     if (isMobile.any() && storageService().get(storageConstants.NATIVE)) {
+      
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -623,7 +652,7 @@ const Journey = (props) => {
 
   const cancel = () => {
     setDlAadhaar(false)
-    navigate(`${getPathname.journey}`, {
+    navigate(`${PATHNAME_MAPPER.journey}`, {
       searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })

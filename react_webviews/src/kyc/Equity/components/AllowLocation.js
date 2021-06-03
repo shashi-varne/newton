@@ -7,8 +7,8 @@ import "./commonStyles.scss";
 
 const Allow = (props) => {
   const [showLocationError, setShowLocationError] = useState(false);
-  const [locationData, setLocationData] = useState(null);
-  const navigate = navigateFunc.bind(props);
+  // const [locationData, setLocationData] = useState(null);
+  // const navigate = navigateFunc.bind(props);
 
   const accessHandler = () => {
     if (navigator.onLine) {
@@ -23,7 +23,7 @@ const Allow = (props) => {
       longitude: position.coords.longitude
     }
     console.log(data);
-    setLocationData(data);
+    // setLocationData(data);
     // navigate("path")
   }
 

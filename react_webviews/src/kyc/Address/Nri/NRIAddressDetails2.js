@@ -3,12 +3,12 @@ import React, { useState, useEffect } from "react";
 import Toast from "../../../common/ui/Toast";
 import { submit } from "../../common/api";
 import Container from "../../common/Container";
-import { kycNRIDocNameMapper } from "../../constants";
+import { NRI_DOCUMENTS_MAPPER } from "../../constants";
 import {
   compareObjects,
-  navigate as navigateFunc,
   validateFields,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
 import "../commonStyles.scss";
@@ -130,7 +130,7 @@ const NRIAddressDetails2 = (props) => {
   if (kyc?.address?.meta_data?.is_nri) {
     address_proof = "Passport";
   } else {
-    address_proof = kycNRIDocNameMapper[kyc?.address_doc_type];
+    address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
   }
 
   return (

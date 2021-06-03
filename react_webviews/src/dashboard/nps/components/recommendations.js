@@ -150,7 +150,7 @@ class Recommendations extends Component {
     this.setState({
       openInvestmentSummary: false,
     });
-    this.navigate("amount/one-time");
+    this.navigate("/nps/amount/one-time");
   };
 
   renderInvestmentSummary = () => {
@@ -305,17 +305,17 @@ class Recommendations extends Component {
     }
   };
 
-  goBack = () => {
-    this.navigate("amount/one-time");
-  };
-
   handleReplace = () => {
     const { recommendations, pension_house } = this.state;
     const replaceObject = pension_house || recommendations?.pension_house;
     storageService().setObject("nps-current", replaceObject);
-    this.navigate("fundreplace");
+    this.navigate("/nps/fundreplace");
   }
 
+  goBack = () => {
+    this.navigate('/nps/amount/one-time')
+  }
+ 
   render() {
     const {
       assetAllocation,
@@ -337,12 +337,12 @@ class Recommendations extends Component {
         noFooter={display_summary_only}
         showLoader={show_loader}
         handleClick={this.handleClick}
-        headerData={{
-          goBack: this.goBack
-        }}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         {!display_summary_only && (
           <div data-aid='nps-display-summary-only'>
@@ -498,7 +498,7 @@ class Recommendations extends Component {
                 <img src={require("assets/terms_agree.png")} alt="" width="25" />
                 <div>
                   By tapping on proceed, I agree that I have read the {" "}
-                  <span onClick={() => this.openInBrowser("https://www.fisdom.com")} style={{textDecoration:'underline', cursor:'pointer'}}>
+                  <span onClick={() => this.openInBrowser("https://www.fisdom.com/terms/")} style={{textDecoration:'underline', cursor:'pointer'}}>
                     terms & conditions
                   </span>
                 </div>
@@ -514,7 +514,7 @@ class Recommendations extends Component {
   }
 }
 
-const createPieChartData = (allocData) => {
+const createPieChartData = (allocData = {}) => {
   return [
     {
       id: "E",

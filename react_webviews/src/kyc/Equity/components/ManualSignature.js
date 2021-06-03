@@ -12,8 +12,6 @@ import { companyDetails } from "../../constants";
 import "./commonStyles.scss";
 
 const ManualSignature = (props) => {
-  const navigate = navigateFunc.bind(props);
-  const config = getConfig();
   const {kyc} = useUserKycHook();
 
   const renderStep1Content = useCallback(() => {
@@ -60,9 +58,6 @@ const ManualSignature = (props) => {
     )
   }, []);
 
-  const handleDownloadFormsClick = () => {
-
-  }
 
   const handleCTAClick = () => {
     nativeCallback({ action: "exit" })

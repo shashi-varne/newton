@@ -2,7 +2,7 @@ import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import {getConfig} from 'utils/functions';
-import {navigate as navigateFunc} from './commonFunctions'
+import {navigate as navigateFunc} from 'utils/functions'
 import {withRouter} from 'react-router-dom';
 import './NavBar.scss';
 import { storageService } from "../utils/validators";
@@ -16,7 +16,7 @@ const NavBar = (props) => {
   }
 
   return (
-    <AppBar position="sticky" className="navbar" data-aid='navbar'>
+    <AppBar position="sticky" className="navbar NavBar" data-aid='navbar'>
       <Toolbar className='navbar-container'>
         <div className='header-partner-logo'>
           <img src={require(`assets/${logo}`)} alt={partner} />

@@ -1,11 +1,12 @@
 import React from "react";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
 import "./PaymentCallback.scss";
-import { navigate as navigateFunc } from "../../common/commonFunctions";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
+import { isIframe } from "../../../../utils/functions";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const PaymentCallback = (props) => {
   const params = props.match.params || {};
@@ -23,7 +24,7 @@ const PaymentCallback = (props) => {
   }
 
   const handleClick = () => {
-    navigate("/reports", null, true);
+    navigate("/reports");
   };
 
   const goBack = () => {
@@ -31,9 +32,17 @@ const PaymentCallback = (props) => {
       user.kyc_registration_v2 === "init" ||
       user.kyc_registration_v2 === "incomplete"
     ) {
-      navigate("/kyc/journey", null, true);
+      navigate("/kyc/journey");
     } else {
-      navigate("/landing", null, true);
+      if(isIframe() && config?.code === 'moneycontrol') {
+        navigate("/invest/money-control");
+        return;
+      }
+      if(config.isSdk) {
+        navigate("/");
+        return;
+      }
+      navigate("/landing");
     }
   }
 

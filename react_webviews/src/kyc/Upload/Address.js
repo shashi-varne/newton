@@ -2,13 +2,12 @@ import "./commonStyles.scss";
 import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { storageService, } from '../../utils/validators'
-import { storageConstants, docMapper, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { getConfig } from '../../utils/functions'
+import { DOCUMENTS_MAPPER } from '../constants'
+import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
 import { combinedDocBlob } from '../common/functions'
-import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { isEmpty } from 'lodash';
@@ -67,7 +66,7 @@ const AddressUpload = (props) => {
   const [backDoc, setBackDoc] = useState(null)
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
-  const {kyc: kycData, isLoading} = useUserKycHook();
+  const {kyc: kycData, isLoading , updateKyc} = useUserKycHook();
   const [kyc, setKyc] = useState(kycData);
 
   useEffect(() => {
@@ -121,8 +120,7 @@ const AddressUpload = (props) => {
       }
       if(response.status_code === 200) {
         result = response.result;
-        setKyc(result.kyc)
-        storageService().setObject(storageConstants.KYC, result.kyc)
+        updateKyc(result.kyc)
         if(isMyAccountFlow) {
           navigate('/my-account');
         } else {
@@ -155,8 +153,8 @@ const AddressUpload = (props) => {
   var addressProof = kyc?.address?.meta_data?.is_nri
     ? "Passport"
     : isMyAccountFlow
-    ? docMapper[stateParams.addressDocType]
-    : docMapper[kyc?.address_doc_type];
+    ? DOCUMENTS_MAPPER[stateParams.addressDocType]
+    : DOCUMENTS_MAPPER[kyc?.address_doc_type];
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -199,7 +197,7 @@ const AddressUpload = (props) => {
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload address proof"
       data-aid='kyc-upload-adress-proof-screen'

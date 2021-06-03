@@ -38,14 +38,14 @@ class NpsSuccess extends Component {
   }
 
   handleClick = () => {
-    this.navigate("investments")
+    this.navigate("/nps/investments")
   }
 
   render() {
     return (
       <Container
         data-aid='nps-success-screen'
-        buttonTitle="CONTINUE"
+        buttonTitle="PROCEED"
         hideInPageTitle
         hidePageTitle
         showLoader={this.state.show_loader}

@@ -167,7 +167,7 @@ const PaymentOptions = (props) => {
     <Container
       data-aid='select-payment-option-screen'
       noFooter={true}
-      showLoader={show_skelton}
+      skelton={show_skelton}
       title="Select Payment Option"
     >
       <section className="invest-payment-options" data-aid='invest-payment-options'>

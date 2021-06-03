@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import InputWithIcon from "common/ui/InputWithIcon";
-import calendar from "assets/calendar2.png";
-import phone from "assets/phone_black.png";
-import card from "assets/card.png";
-import email from "assets/email2.svg";
+import Input from "common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
@@ -16,12 +12,11 @@ import {
   validateEmail,
   validatePan,
 } from "utils/validators";
-import Grid from "material-ui/Grid";
 import { storageService } from "utils/validators";
 import Dialog, { DialogContent } from "material-ui/Dialog";
-import { getConfig } from "../../../../utils/functions";
-import { nativeCallback } from "../../../../utils/native_callback";
-import { isEmpty } from "../../../../utils/validators";
+import { getConfig } from "utils/functions";
+import { nativeCallback } from "utils/native_callback";
+import { isEmpty } from "utils/validators";
 
 const yesOrNo_options = [
   {
@@ -69,7 +64,14 @@ class PanDetails extends Component {
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 
     form_data.email = userKyc.address.meta_data.email || "";
-    form_data.mobile_number = userKyc.address.meta_data.mobile_number || "";
+    let mobile_number = userKyc.identification?.meta_data?.mobile_number || "";
+    let country_code = "";
+    if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
+      country_code = mobile_number.split("|")[0];
+      mobile_number = mobile_number.split("|")[1];
+    }
+    form_data.mobile_number = mobile_number || "";
+    form_data.country_code = country_code;
 
     form_data.pran = storageService().get("nps_pran_number") || ""
     if(!isEmpty(form_data.pran)) {
@@ -89,8 +91,14 @@ class PanDetails extends Component {
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
+    const phoneRegEx = /[0-9]+$/
+    if (name === "mobile_number" && value) {
+      if (!phoneRegEx.test(value)) {
+        return;
+      }
+    }
 
-    if (name === "mobile_number" || name === "pran") {
+    if (name === "pran") {
       value = !isNaN(parseInt(value, 10)) && parseInt(value, 10);
     }
 
@@ -124,19 +132,26 @@ class PanDetails extends Component {
     let { form_data, userKyc, is_nps_contributed, currentUser } = this.state;
     let canSubmit = true;
 
-    if (!validatePan(form_data.pan)) {
+    if (!form_data.pan) {
+      form_data.pan_error = "This is required."
+      canSubmit = false
+    } else
+    if (form_data.pan && !validatePan(form_data.pan)) {
       form_data.pan_error = "invalid pan";
       canSubmit = false;
     }
-
-    if (
-      is_nps_contributed &&
-      (!form_data.pran || form_data.pran.toString().length !== 12)
-    ) {
+    if (is_nps_contributed && !form_data.pran) {
+      form_data.pran_error = "This is required."
+      canSubmit = false;
+    } else
+    if (is_nps_contributed && form_data.pran.toString().length !== 12) {
       form_data.pran_error = "invalid pran";
       canSubmit = false;
     }
-
+    if (!currentUser.mobile && !form_data.mobile_number) {
+      form_data.mobile_number_error = "This is required."
+      canSubmit = false;
+    } else
     if (!currentUser.mobile && form_data.mobile_number.toString().length !== 10) {
       form_data.mobile_number_error = "invalid mobile number";
       canSubmit = false;
@@ -151,7 +166,11 @@ class PanDetails extends Component {
       form_data.dob_error = "future date not allowed";
       canSubmit = false;
     }
-    if (!isValidDate(form_data.dob) || !form_data.dob) {
+    if (!form_data.dob) {
+      form_data.dob_error = "This is required."
+      canSubmit = false
+    } else
+    if (form_data.dob && !isValidDate(form_data.dob)) {
       form_data.dob_error = "invalid date";
       canSubmit = false;
     }
@@ -161,7 +180,7 @@ class PanDetails extends Component {
     });
 
     if (canSubmit) {
-      let { pan, address } = userKyc;
+      let { pan, address, identification } = userKyc;
 
       if (is_nps_contributed) {
         storageService().set("nps_pran_number", form_data.pran);
@@ -172,14 +191,18 @@ class PanDetails extends Component {
       pan.meta_data.pan_number = form_data.pan;
 
       address.meta_data.email = form_data.email;
-      address.meta_data.mobile_number = form_data.mobile_number;
 
-      storageService().setObject("kyc", userKyc);
+      let mobile_number = form_data.mobile_number?.toString();
+      if (form_data.country_code) {
+        mobile_number = form_data.country_code + "|" + mobile_number;
+      }
+      identification.meta_data.mobile_number = mobile_number;
 
       let data = {
         kyc: {
-          address: address.meta_data,
           pan: pan.meta_data,
+          address: address.meta_data,
+          identification: identification.meta_data,
         },
       };
 
@@ -243,18 +266,18 @@ class PanDetails extends Component {
     let { btn_text, form_data, auth_ids } = this.state;
     if (btn_text === "SIGN OUT") {
       if (getConfig().Web) {
-        this.navigate("/logout", '', true);
+        this.navigate("/logout");
       } else {
         nativeCallback({ action: "session_expired" });
       }
     } else if(btn_text === "LINK ACCOUNT") {
       storageService().setObject("auth_ids", auth_ids)
-      this.navigate(`/account/merge/${form_data.pan.toUpperCase()}`, '', true)
+      this.navigate(`/account/merge/${form_data.pan.toUpperCase()}`)
     }
   }
 
   goBack = () => {
-    this.navigate('/invest', '', true)
+    this.navigate('/nps/info')
   }
 
   render() {
@@ -267,14 +290,19 @@ class PanDetails extends Component {
         hideInPageTitle
         title="PAN Details"
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={this.handleClick}
         goBack={this.goBack}
+        handleClick1={this.handleClick}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div className="pan-details" data-aid='pan-details-page'>
           <FormControl fullWidth>
             <div className="InputField">
-              <InputWithIcon
-                icon={card}
+              <Input
                 width="30"
                 id="pan"
                 label="PAN number"
@@ -289,35 +317,27 @@ class PanDetails extends Component {
             </div>
 
             <div className="InputField">
-              <Grid container spacing={16} className="marital_status">
-                <Grid item xs={2}>
-                  {""}
-                </Grid>
-                <Grid item xs={10}>
-                  <RadioWithoutIcon
-                    width="40"
-                    label="Have you ever contributed in NPS before?"
-                    options={yesOrNo_options}
-                    id="is_nps_contributed"
-                    name="is_nps_contributed"
-                    error={this.state.is_nps_contributed_error ? true : false}
-                    helperText={this.state.is_nps_contributed_error}
-                    value={this.state.is_nps_contributed}
-                    onChange={this.handleChangeRadio}
-                  />
-                </Grid>
-              </Grid>
+              <RadioWithoutIcon
+                width="40"
+                label="Have you ever contributed in NPS before?"
+                options={yesOrNo_options}
+                id="is_nps_contributed"
+                name="is_nps_contributed"
+                error={this.state.is_nps_contributed_error ? true : false}
+                helperText={this.state.is_nps_contributed_error}
+                value={this.state.is_nps_contributed}
+                onChange={this.handleChangeRadio}
+              />
             </div>
 
             {is_nps_contributed && (
               <div className="InputField">
-                <InputWithIcon
-                  icon={card}
+                <Input
                   width="30"
                   id="pran"
-                  label="Pran number"
+                  label="PRAN number"
                   inputMode="numeric"
-                  pattern="[0-9]*"
+                  pattern="[0-9]{12}"
                   name="pran"
                   maxLength={12}
                   error={!!form_data.pran_error}
@@ -329,12 +349,11 @@ class PanDetails extends Component {
             )}
 
             <div className="InputField">
-              <InputWithIcon
-                icon={calendar}
+              <Input
                 width="30"
                 id="dob"
                 name="dob"
-                label="your date of birth"
+                label="Your date of birth"
                 error={!!form_data.dob_error}
                 helperText={form_data.dob_error}
                 value={form_data.dob || ""}
@@ -346,15 +365,14 @@ class PanDetails extends Component {
 
             {currentUser.mobile === null && (
               <div className="InputField">
-                <InputWithIcon
-                  icon={phone}
+                <Input
                   width="30"
                   id="number"
                   name="mobile_number"
                   inputMode="numeric"
                   maxLength={10}
                   label="Enter Mobile Number"
-                  pattern="[0-9]*"
+                  pattern="[0-9]{10}"
                   class="Mobile"
                   error={!!form_data.mobile_number_error}
                   helperText={form_data.mobile_number_error}
@@ -367,8 +385,7 @@ class PanDetails extends Component {
 
             {currentUser.email === null && (
               <div className="InputField">
-                <InputWithIcon
-                  icon={email}
+                <Input
                   width="30"
                   type="email"
                   id="email"

@@ -1,10 +1,9 @@
 import './commonStyles.scss';
 import React, { useState } from 'react';
-import { getConfig } from '../../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { riskProfiles } from '../../constants';
 import FSelect from './FSelect';
 import toast from 'common/ui/Toast'
@@ -79,9 +78,9 @@ const RiskSelect = ({
   const goNext = async (skipRiskUpdate) => {
     await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
-    let state = 'recommendations';
+    let state = '/invest/recommendations';
     if (funnelData.investType === 'saveforgoal') {
-      state = `savegoal/${funnelData.subtype}/amount`;
+      state = `/invest/savegoal/${funnelData.subtype}/amount`;
     }
     navigate(state);
   };
@@ -100,11 +99,11 @@ const RiskSelect = ({
         year: funnelData.year, // only applicable for 'saveforgoal'
         term: funnelData.term
       }
-    }, true);
+    });
   };
 
   const showInfo = () => {
-    navigate('risk-info');
+    navigate('/invest/risk-info');
   }
 
   return (

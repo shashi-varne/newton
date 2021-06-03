@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Button from "common/ui/Button";
 import {
-  navigate as navigateFunc,
   getProjectedValue,
   getAmountInInr,
 } from "../../common/functions";
