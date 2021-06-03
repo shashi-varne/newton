@@ -27,6 +27,7 @@ const styles = {
     boxShadow: 'none',
     fontWeight: 'bold',
     letterSpacing: '1px',
+    display: !getConfig().isMobileDevice ? 'flex' : 'inline-flex', 
     width: !getConfig().isMobileDevice ? 'auto' : '100%'
   },
   label: {},
