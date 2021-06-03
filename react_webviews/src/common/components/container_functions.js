@@ -181,7 +181,6 @@ export function commonRender(props_base) {
                         type={this.props.skelton}
                     />
                 }
-
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
