@@ -56,19 +56,18 @@ const FundChart = (props) => {
     let d2 = moment(maximum).utc();
 
     let days = d2.diff(d1, "days");
-
-    if (days > 3 * 365) {
+    if (days >= 5 * 365) {
       duration = 5;
-    } else if (days > 365 && days <= 3 * 365) {
+    } else if (days >= 3 * 365) {
+      duration = 4;
+    } else if (days >= 365) {
       duration = 3;
-    } else if (days > 30 * 6 && days <= 365) {
+    } else if (days >= 30 * 6) {
+      duration = 2;
+    } else if (days >= 30 * 3) {
       duration = 1;
-    } else if (days > 30 * 6 && days <= 365) {
-      duration = 6;
-    } else if (days > 30 * 3 && days <= 30 * 6) {
-      duration = 3;
-    } else if (days > 30 && days <= 30 * 3) {
-      duration = 1;
+    } else if (days >= 30) {
+      duration = 0;
     }
 
     for (let i = 0; i < dates1.length; i++) {
@@ -79,7 +78,6 @@ const FundChart = (props) => {
   };
 
   chopDates(fundGraph);
-
   const configPrice = {
     title: {
       text: undefined,

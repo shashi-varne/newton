@@ -1640,6 +1640,8 @@ p {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  background-color: #FAFCFF;
+  border-radius: 6px;
   padding: 20px 10px;
   .image {
     display: flex;
@@ -1710,8 +1712,10 @@ p {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  background-color: #FBFDFF;
   padding: 20px 20px;
   min-height: 116px;
+  border-radius: 6px;
   .title {
     font-size: 15px;
     font-weight: 600;
