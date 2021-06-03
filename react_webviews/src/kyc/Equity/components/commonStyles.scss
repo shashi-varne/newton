@@ -1,9 +1,3 @@
-$generic-subtitle-margin-top: -10px;
-
-.generic-page-subtitle {
-  margin-top: $generic-subtitle-margin-top;
-}
-
 @mixin d-flex {
   display: flex;
 }
@@ -76,7 +70,7 @@ $generic-subtitle-margin-top: -10px;
   .te-tile {
     font-size: 15px;
     line-height: 24px;
-    color: #767e86;
+    color: var(--steelgrey);
     padding: 20px;
     margin-bottom: 10px;
     font-weight: 600;
@@ -84,7 +78,7 @@ $generic-subtitle-margin-top: -10px;
   }
 
   .te-selected-tile {
-    color: #161a2e;
+    color: var(--dark);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -95,17 +89,6 @@ $generic-subtitle-margin-top: -10px;
       width: 14px;
       height: 14px;
     }
-  }
-}
-
-.stocks-selfie-instructions {
-  margin-bottom: 40px;
-
-  .ssi-text {
-    font-size: 13px;
-    line-height: 15px;
-    color: #000000;
-    padding-bottom: 10px;
   }
 }
 
@@ -120,7 +103,7 @@ $generic-subtitle-margin-top: -10px;
     font-weight: bold;
     font-size: 20px;
     line-height: 32px;
-    color: #161a2e;
+    color: var(--dark);
     padding-bottom: 20px;
 
     .kaih-text {
@@ -130,7 +113,7 @@ $generic-subtitle-margin-top: -10px;
 
   .kyc-account-info-main {
     .kaim-subtitle {
-      color: #767e86;
+      color: var(--steelgrey);
       font-size: 15px;
       font-weight: 400;
       padding: 0 0 30px 0;
@@ -151,8 +134,8 @@ $generic-subtitle-margin-top: -10px;
         padding: 20px 0 10px 0;
         font-size: 13px;
         line-height: 21px;
-        color: #767e86;
         margin-right: 20px;
+        color: var(--steelgrey);
 
         img {
           border-radius: 8px;
@@ -178,12 +161,12 @@ $generic-subtitle-margin-top: -10px;
       .kaim-fees-info-text {
         font-size: 13px;
         line-height: 21px;
-        color: #161a2e;
+        color: var(--dark);
 
         .kaim-fees-info-subtext {
           font-size: 11px;
           line-height: 18px;
-          color: #767e86;
+          color: var(--steelgrey);
         }
       }
 
@@ -191,7 +174,7 @@ $generic-subtitle-margin-top: -10px;
         font-size: 13px;
         line-height: 21px;
         text-decoration-line: line-through;
-        color: #767e86;
+        color: var(--steelgrey);
       }
 
       .kaim-no-fees-text2 {
@@ -209,7 +192,7 @@ $generic-subtitle-margin-top: -10px;
       align-items: center;
       font-size: 13px;
       line-height: 21px;
-      color: #767e86;
+      color: var(--steelgrey);
 
       .kaim-terms-info {
         margin-left: 10px;
@@ -229,7 +212,7 @@ $generic-subtitle-margin-top: -10px;
   .spi-text {
     font-size: 13px;
     line-height: 21px;
-    color: #000000;
+    color: var(--dark);
     padding-bottom: 10px;
   }
 
@@ -250,7 +233,7 @@ $generic-subtitle-margin-top: -10px;
     font-weight: bold;
     font-size: 20px;
     line-height: 32px;
-    color: #161a2e;
+    color: var(--dark);
     padding-bottom: 20px;
   }
 
@@ -258,7 +241,7 @@ $generic-subtitle-margin-top: -10px;
     .kdvm-subtitle {
       font-size: 13px;
       line-height: 21px;
-      color: #767e86;
+      color: var(--steelgrey);
       padding-bottom: 20px;
     }
 
@@ -271,15 +254,11 @@ $generic-subtitle-margin-top: -10px;
   }
 }
 
-#allow-location {
-  .location-error {
-    text-align: center;
-    margin-top: 30px;
-  }
-}
-
-
 #manual-signature {
+  .manual-signature-subtile {
+    margin-top: -10px;
+  }
+
   .page-content {
     margin-top: 25px;
     margin-bottom: 30px;
@@ -287,21 +266,9 @@ $generic-subtitle-margin-top: -10px;
 
     .step {
       .step-content {
-        .form-download-btn {
-          @include d-flex-space-between();
-          width: 100%;
-          padding-left: 16px;
-          padding-right: 16px;
-    
-          .download-text {
-            font-size: 12px;
-            line-height: 14px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-right: 10px;
-          }
-        }
-        
+        margin: 10px 0 30px 40px;
+        color: var(--steelgrey);
+
         .step-note {
           color: var(--steelgrey);
           margin-top: 16px;
@@ -400,5 +367,27 @@ $generic-subtitle-margin-top: -10px;
 @media only screen and (max-width: 767px) {
   .kyc-communication-details-mobile{
     height: calc(100vh - 220px);
+  }
+}
+.status-info {
+  text-align: center;
+
+  .status-info-img {
+    width: 100%;
+    min-height: 90px;
+  }
+
+  .status-info-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 32px;
+    margin: 30px 0 10px 0;
+  }
+
+  .status-info-subtitle {
+    color: var(--steelgrey);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 21px;
   }
 }

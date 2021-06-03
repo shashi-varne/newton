@@ -1489,3 +1489,15 @@
   background: var(--highlight) !important;
   height: 100% !important;
 }
+
+.email-verification-dialog {
+  .top-content {
+    margin: -10px -20px 30px;
+    padding-left: 10px;
+    align-items: flex-end;
+  }
+
+  .content-mid {
+    margin-bottom: 30px;
+  }
+}
