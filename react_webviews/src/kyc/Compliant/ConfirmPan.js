@@ -7,6 +7,7 @@ import { kycSubmit } from "../common/api";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const ConfirmPan = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -18,6 +19,7 @@ const ConfirmPan = (props) => {
   const {kyc, isLoading} = useUserKycHook();
 
   const handleClick = () => {
+    sendEvents('edit')
     navigate(PATHNAME_MAPPER.homeKyc, {
       state: {
         isPremiumFlow: true,
@@ -27,6 +29,7 @@ const ConfirmPan = (props) => {
   };
 
   const handleClick2 = async () => {
+    sendEvents('next')
     try {
       let dob = kyc.pan.meta_data.dob;
       let pan = kyc.pan?.meta_data?.pan_number;
@@ -71,9 +74,27 @@ const ConfirmPan = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'premium_onboard',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "confirm_pan",
+        "initial_kyc_status":  "compliant",
+        "channel": getConfig().code    
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       id="confirm-pan"
+      events={sendEvents("just_set_events")}
       buttonOneTitle="EDIT PAN"
       buttonTwoTitle="CONFIRM PAN"
       skelton={isLoading}

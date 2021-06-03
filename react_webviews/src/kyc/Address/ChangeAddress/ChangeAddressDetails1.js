@@ -9,6 +9,7 @@ import {
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import "../commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const ChangeAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -42,6 +43,7 @@ const ChangeAddressDetails1 = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next")
     let keysToCheck = ["address_doc_type"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
@@ -66,8 +68,26 @@ const ChangeAddressDetails1 = (props) => {
   };
 
   const disabled = kyc?.address?.meta_data?.is_nri || false;
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "change address",
+        "address_proof": form_data.address_doc_type 
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-change-address-details1"
       buttonTitle="SAVE AND CONTINUE"
