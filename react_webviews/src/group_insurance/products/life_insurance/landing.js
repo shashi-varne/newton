@@ -99,7 +99,7 @@ class FyntuneLanding extends Component {
           let fyntuneRefId = resultData.lead.fyntune_ref_id;
           storageService().setObject('fyntune_ref_id', fyntuneRefId); 
           var frequency = resultData.lead.premium_payment_freq || resultData.lead.payout_type || '';
-          var resume_frequency = reportsfrequencyMapper('FYNTUNE', frequency)
+          resume_frequency = reportsfrequencyMapper('FYNTUNE', frequency)
           if(resume_frequency){
             resume_frequency = resume_frequency.substring(1) || ''
           }
