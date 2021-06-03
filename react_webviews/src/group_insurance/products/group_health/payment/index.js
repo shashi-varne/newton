@@ -372,7 +372,6 @@ class GroupHealthPayment extends Component {
                  {this.state.providerData.logo && <Imgc className="highlight-text11"
                     style={{width: '30px', height: '30px', margin: 0}}
                     src={require(`assets/${this.state.providerData.logo}`)}
-                    style={{ width: 30 }}
                     alt="info" />}
                 </div>
 

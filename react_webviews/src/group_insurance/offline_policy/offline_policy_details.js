@@ -9,7 +9,6 @@ import {
 import Api from 'utils/api';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-import ReactHtmlParser from 'react-html-parser';
 import { getCssMapperReport ,  TitleMaper , ProviderName } from '../constants'
 import {Imgc} from 'common/ui/Imgc';
 

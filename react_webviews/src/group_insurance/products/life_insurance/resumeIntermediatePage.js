@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Container from "../../common/Container";
 import { getConfig } from "utils/functions";
-import toast from "../../../common/ui/Toast";
 import { storageService} from '../../../utils/validators';
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";

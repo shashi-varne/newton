@@ -686,7 +686,7 @@ class GroupHealthReportDetails extends Component {
 
                                 <div className="special-benefit"
                                     style={{ backgroundImage: `url(${this.state.ic_hs_special_benefits})` }}>
-                                    <Imgc className="imgc-tile1" className="special-benefit-img" src={require(`assets/ic_hs_special.svg`)}
+                                    <Imgc className="imgc-tile1 special-benefit-img" src={require(`assets/ic_hs_special.svg`)}
                                         alt="" />
                                     <span className="special-benefit-text">Special features</span>
                                 </div>
@@ -696,7 +696,7 @@ class GroupHealthReportDetails extends Component {
 
                                 <div className="special-benefit"
                                     style={{ backgroundImage: `url(${this.state.ic_hs_main_benefits})` }}>
-                                    <Imgc className="imgc-tile1" className="special-benefit-img" src={require(`assets/ic_hs_main.svg`)}
+                                    <Imgc className="imgc-tile1 special-benefit-img" src={require(`assets/ic_hs_main.svg`)}
                                         alt="" />
                                     <span className="special-benefit-text">Key benefits</span>
                                 </div>
