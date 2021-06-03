@@ -120,7 +120,7 @@ class FundList extends Component {
                     <YearFilter
                         filterArray={year_filters}
                         selected={this.state.yearValue || "1Y"}
-                        onclick={this.yearFilter}
+                        onClick={this.yearFilter}
                     />
 
                     <React.Fragment>
