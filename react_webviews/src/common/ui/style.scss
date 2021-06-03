@@ -1560,8 +1560,11 @@ padding-right: 12px !important;
     }
 
     .split-img{
-      margin-left: 5px;
-      margin-right: 5px;
+      margin: 0 10px 0 10px;
+    }
+    .star-icon{
+      position: absolute;
+      margin-top: 2px;
     }
     .tc-title {
       color: #767E86;
