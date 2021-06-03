@@ -6,8 +6,6 @@ import bse_icon from "assets/bse_icon.png";
 import fund_house_icon from "assets/fund_house_icon.png";
 import safe_secure_journey from "assets/safe_secure_journey.png";
 
-import { navigate as navigateFunc } from "../Invest/common/commonFunctions";
-
 import "./InvestJourney.scss";
 import {
   canDoInvestment,
@@ -16,7 +14,7 @@ import {
 } from "../proceedInvestmentFunctions";
 import PennyVerificationPending from "../Invest/mini-components/PennyVerificationPending";
 import InvestError from "../Invest/mini-components/InvestError";
-import { getBasePath, getConfig } from "../../utils/functions";
+import { getBasePath, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import InvestReferralDialog from "../Invest/mini-components/InvestReferralDialog";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { formatAmountInr } from "../../utils/validators";
@@ -158,12 +156,12 @@ const InvestJourney = (props) => {
         </div>
         <PennyVerificationPending
           isOpen={dialogStates.openPennyVerificationPending}
-          handleClick={() => navigate("/kyc/add-bank", null, true)}
+          handleClick={() => navigate("/kyc/add-bank")}
         />
         <InvestError
           isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
-          handleClick={() => navigate("/invest", null, true)}
+          handleClick={() => navigate("/invest")}
           close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog

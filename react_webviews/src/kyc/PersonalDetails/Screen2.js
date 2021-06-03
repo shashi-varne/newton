@@ -5,9 +5,9 @@ import { PATHNAME_MAPPER } from "../constants";
 import { isEmpty, validateAlphabets } from "../../utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { storageService } from "utils/validators";
+import { navigate as navigateFunc } from "utils/functions";
 import { STORAGE_CONSTANTS, PATHNAME_MAPPER } from "../constants";
-import { navigate as navigateFunc, getFlow } from "../common/functions";
+import { getFlow } from "../common/functions";
 import {
   saveBankData,
   getBankStatus,

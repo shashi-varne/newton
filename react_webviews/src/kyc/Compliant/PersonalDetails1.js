@@ -12,9 +12,9 @@ import {
 } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { kycSubmit } from "../common/api";
 import { nativeCallback } from "../../utils/native_callback";

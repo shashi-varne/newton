@@ -11,7 +11,7 @@ import Api from "../../utils/api";
 import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
-import { getBasePath } from "../../utils/functions";
+import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -22,6 +22,8 @@ class DigiStatus extends Component {
       params: getUrlParams(),
       skelton: true,
     };
+
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentDidMount = () => {
@@ -66,11 +68,11 @@ class DigiStatus extends Component {
 
   handleClick = () => {
     this.sendEvents('next')
-    /**
-     * Need to handle this
-     */
-    // nativeCallback({ action: 'exit_web' });
-    this.navigate("/invest");
+    if (getConfig().isNative) {
+      nativeCallback({ action: 'exit_web' });
+    } else {
+      this.navigate("/invest");
+    }
   };
 
   navigateToReports = () => {

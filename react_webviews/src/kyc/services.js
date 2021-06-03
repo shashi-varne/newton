@@ -175,6 +175,7 @@ async function setNpsData(result) {
     const data = await getNPSInvestmentStatus()
     if(!data) return;
     storageService().setObject("nps_additional_details", data.registration_details);
+    storageService().setObject("nps_data", data);
     if (!data.registration_details.additional_details_status) {
       storageService().set('nps_additional_details_required', true)
     } else {

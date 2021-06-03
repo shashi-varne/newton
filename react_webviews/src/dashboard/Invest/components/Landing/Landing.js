@@ -14,6 +14,8 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 
+const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
+const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +32,8 @@ class Landing extends Component {
       openKycPremiumLanding: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      isWeb: getConfig().Web
+      isWeb: getConfig().Web,
+      stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -90,7 +93,7 @@ class Landing extends Component {
     } else if (kycJourneyStatus === "rejected") {
       this.navigate("/kyc/upload/progress", {
         state: {
-          toState: "/invest",
+          goBack: "/invest",
         },
       });
     }
@@ -118,6 +121,7 @@ class Landing extends Component {
       openKycStatusDialog,
       modalData,
       openKycPremiumLanding,
+      stateParams,
     } = this.state;
     const {
       ourRecommendations,
@@ -133,6 +137,19 @@ class Landing extends Component {
         noFooter={true}
         title="Start Investing"
         showLoader={this.state.show_loader}
+        noBackIcon={fromLoginStates.includes(stateParams.fromState)}
+        background={
+          isMobileDevice &&
+          fromLoginStates.includes(stateParams.fromState) &&
+          "invest-landing-background"
+        }
+        classHeader={
+          isMobileDevice &&
+          fromLoginStates.includes(stateParams.fromState) &&
+          (this.state.headerStyle
+            ? "invest-landing-partner-header"
+            : "invest-landing-header")
+        }
       >
         <div className="invest-landing">
           {

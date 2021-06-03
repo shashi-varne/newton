@@ -5,9 +5,9 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import {
   validateAlphabets,

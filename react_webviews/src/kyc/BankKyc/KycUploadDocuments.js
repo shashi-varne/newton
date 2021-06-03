@@ -4,10 +4,10 @@ import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { getFlow, navigate as navigateFunc } from "../common/functions";
+import { getFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getBase64, getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc, getBase64 } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";

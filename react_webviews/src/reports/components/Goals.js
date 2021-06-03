@@ -5,7 +5,8 @@ import Button from "@material-ui/core/Button";
 import Slider from "common/ui/Slider";
 import { getPathname } from "../constants";
 import { getReportGoals } from "../common/api";
-import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
+import { getAmountInInr } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 
 const sliderConstants = {
   min: 0,

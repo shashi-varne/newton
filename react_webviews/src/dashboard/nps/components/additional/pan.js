@@ -263,18 +263,18 @@ class PanDetails extends Component {
     let { btn_text, form_data, auth_ids } = this.state;
     if (btn_text === "SIGN OUT") {
       if (getConfig().Web) {
-        this.navigate("/logout", '', true);
+        this.navigate("/logout");
       } else {
         nativeCallback({ action: "session_expired" });
       }
     } else if(btn_text === "LINK ACCOUNT") {
       storageService().setObject("auth_ids", auth_ids)
-      this.navigate(`/account/merge/${form_data.pan.toUpperCase()}`, '', true)
+      this.navigate(`/account/merge/${form_data.pan.toUpperCase()}`)
     }
   }
 
   goBack = () => {
-    this.navigate('/invest', '', true)
+    this.navigate('/nps/info')
   }
 
   render() {
@@ -291,6 +291,9 @@ class PanDetails extends Component {
         handleClick={this.handleClick}
         goBack={this.goBack}
         handleClick1={this.handleClick}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div className="pan-details">
           <FormControl fullWidth>

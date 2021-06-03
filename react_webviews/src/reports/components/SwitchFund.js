@@ -7,7 +7,7 @@ import {
   getAvailableFundsForSwitch,
   getFundDetailsForSwitch,
 } from "../common/api";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import toast from "common/ui/Toast";
 import { getConfig } from "../../utils/functions";
