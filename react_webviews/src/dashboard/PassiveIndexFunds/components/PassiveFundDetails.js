@@ -183,8 +183,13 @@ function PassiveFundDetails({ history }) {
   };
 
   const handleClick = () => {
+    sendEvents("next");
     storageService().setObject("diystore_cart", [fund]);
     navigate("/diy/invest");
+  };
+
+  const storeEventsData = (name) => {
+    storageService().set(name, true);
   };
 
   return (
@@ -209,7 +214,7 @@ function PassiveFundDetails({ history }) {
               alt=""
             />
           </div>
-          <div style={{paddingTop: "10px", paddingBottom: "10px"}}>
+          <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
             <StarRating value={fundDetails?.performance?.ms_rating} />
           </div>
           <p className="pfd-info">{`${fundDetails?.performance.ms_risk} risk | ${fundDetails?.performance?.tracking_index}`}</p>
@@ -312,7 +317,11 @@ function PassiveFundDetails({ history }) {
                 />
               </Accordian>
               <div className="pfd-line"></div>
-              <Accordian title="Fund's Info" name="fund_info_clicked">
+              <Accordian
+                title="Fund's Info"
+                name="fund_info_clicked"
+                handleClick={() => storeEventsData("fund_info_clicked")}
+              >
                 <FundInfo
                   title="Launch date"
                   content={fundDetails?.additional_info?.launch_date}
@@ -339,13 +348,18 @@ function PassiveFundDetails({ history }) {
                 />
               </Accordian>
               <div className="pfd-line"></div>
-              <Accordian title="Risk Details" name="more_risks_clicked">
+              <Accordian
+                title="Risk Details"
+                name="more_risks_clicked"
+                handleClick={() => storeEventsData("more_risks_clicked")}
+              >
                 <RiskDetails riskDetailsData={fundDetails?.risk} />
               </Accordian>
               <div className="pfd-line"></div>
               <Accordian
                 title="Portfolio Details"
                 name="portfolio_details_clicked"
+                handleClick={() => storeEventsData("portfolio_details_clicked")}
               >
                 <FundPortfolio
                   portfolio={fundDetails?.portfolio}
@@ -357,8 +371,12 @@ function PassiveFundDetails({ history }) {
           </section>
         ) : null}
         <section className="pfd-padding">
-          <Imgc src={MorningStar} style={{ paddingBottom: "10px", width: "113px", height: "22px" }} alt="" />
-          <div style={{paddingBottom: "10px"}}>
+          <Imgc
+            src={MorningStar}
+            style={{ paddingBottom: "10px", width: "113px", height: "22px" }}
+            alt=""
+          />
+          <div style={{ paddingBottom: "10px" }}>
             <StarRating value={fundDetails?.performance?.ms_rating} />
           </div>
           <p
