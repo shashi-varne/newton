@@ -12,7 +12,7 @@ function Transition(props) {
 const DiyDialog = ({ close, open, children, ...props }) => {
   return (
     <Dialog
-      onClose={() => close()}
+      onClose= {close}
       open={open}
       aria-labelledby="diy-dialog"
       TransitionComponent={Transition}

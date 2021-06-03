@@ -11,7 +11,7 @@ function YearFilter(props) {
             {!isEmpty(data) &&
                 data.map((item, index) => {
                     return (
-                        <p className={`text-block ${selected === item.text ? 'selected' : ''}`} onClick={() => props.onclick(item.text)} key={index}>
+                        <p className={`text-block ${selected === item.text ? 'selected' : ''}`} onClick={() => props.onClick(item.text)} key={index}>
                             {item.text}
                         </p>
                     );

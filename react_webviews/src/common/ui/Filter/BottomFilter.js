@@ -9,7 +9,6 @@ const isMobileDevice = getConfig().isMobileDevice;
 const BottomFilter = ({
     filterOptions,
     getSortedFilter,
-    ...props
 }) => {
 
     const [sortFilter, setSortFilter] = useState(false);
@@ -24,7 +23,6 @@ const BottomFilter = ({
     return (
         <footer className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} >
             <FilterButton
-                className=""
                 onClick={() => setFilterActive(true)}
             />
             <Filter
