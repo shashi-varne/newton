@@ -16,6 +16,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import {open_browser_web} from  'utils/validators';
+import {reportsfrequencyMapper} from 'group_insurance/constants';
 
 class FyntuneLanding extends Component {
   constructor(props) {
@@ -91,17 +92,24 @@ class FyntuneLanding extends Component {
     try{
       var res = await Api.get(`api/ins_service/api/insurance/fyntune/get/resumelist`);
       var resultData = res.pfwresponse.result;
-
+      var resume_frequency = '';
       if (res.pfwresponse.status_code === 200) {
-      
-      if(resultData.resume_present){
-        let fyntuneRefId = resultData.lead.fyntune_ref_id;
-        storageService().setObject('fyntune_ref_id', fyntuneRefId);
-      }
-      this.setState({
-        skelton: false
-      })
-      this.setState({ resume_data : resultData});
+        
+        if(resultData.resume_present){
+          let fyntuneRefId = resultData.lead.fyntune_ref_id;
+          storageService().setObject('fyntune_ref_id', fyntuneRefId); 
+          var frequency = resultData.lead.premium_payment_freq || resultData.lead.payout_type || '';
+          resume_frequency = reportsfrequencyMapper('FYNTUNE', frequency)
+          if(resume_frequency){
+            resume_frequency = resume_frequency.substring(1) || ''
+          }
+        }
+        
+        this.setState({ 
+          skelton: false,
+          resume_data : resultData,
+          resume_frequency: resume_frequency || ''
+        });
         
       } else {
         this.setState({
@@ -440,7 +448,13 @@ class FyntuneLanding extends Component {
                       {this.state.resume_data.lead.base_plan_title}
                     </div>
                     <div className="rct-subtitle" style={{fontSize: '20px'}}>
-                      {inrFormatDecimal(this.state.resume_data.lead.base_premium)}/<span style={{fontSize: '16px', fontWeight: '300'}}>year</span>
+                      {inrFormatDecimal(this.state.resume_data.lead.base_premium)}
+                      {this.state.resume_frequency ? 
+                        <span>
+                          <span className="rct-subtitle-frequency">/</span><span className="rct-subtitle-frequency-value">{this.state.resume_frequency}</span>
+                        </span>:
+                      null
+                      }
                     </div>
                   </div>
                 </div>
