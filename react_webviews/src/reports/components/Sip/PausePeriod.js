@@ -3,10 +3,9 @@ import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import {
-  navigate as navigateFunc,
   dateOrdinalSuffix,
 } from "../../common/functions";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Slider from "common/ui/Slider";
 import "./commonStyles.scss";
 

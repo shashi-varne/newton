@@ -11,7 +11,7 @@ import FundCard from '../Invest/mini-components/FundCard';
 import TermsAndCond from "../mini-components/TermsAndCond"
 import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
-import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import { isInvestRefferalRequired, proceedInvestment } from '../proceedInvestmentFunctions';
 import PennyVerificationPending from '../Invest/mini-components/PennyVerificationPending';
 import InvestError from '../Invest/mini-components/InvestError';
@@ -183,7 +183,6 @@ const Recommendations = (props) => {
       navigate(
         "/invest-journey",
         { state: { investment: JSON.stringify(investmentObject) } },
-        true
       );
       return;
     } else if (sipOrOneTime === "onetime") {
@@ -250,11 +249,11 @@ const Recommendations = (props) => {
   }, [recommendations]);
 
   const editFund = () => {
-    navigate("recommendations/edit-funds");
+    navigate("/invest/recommendations/edit-funds");
   };
 
   const checkHow = () => {
-    navigate("recommendations/how-we-recommend");
+    navigate("/invest/recommendations/how-we-recommend");
   }
 
   return (

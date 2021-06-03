@@ -150,7 +150,7 @@ class Recommendations extends Component {
     this.setState({
       openInvestmentSummary: false,
     });
-    this.navigate("amount/one-time");
+    this.navigate("/nps/amount/one-time");
   };
 
   renderInvestmentSummary = () => {
@@ -308,9 +308,13 @@ class Recommendations extends Component {
     const { recommendations, pension_house } = this.state;
     const replaceObject = pension_house || recommendations?.pension_house;
     storageService().setObject("nps-current", replaceObject);
-    this.navigate("fundreplace");
+    this.navigate("/nps/fundreplace");
   }
 
+  goBack = () => {
+    this.navigate('/nps/amount/one-time')
+  }
+ 
   render() {
     const {
       assetAllocation,
@@ -334,6 +338,9 @@ class Recommendations extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         {!display_summary_only && (
           <div>
@@ -505,7 +512,7 @@ class Recommendations extends Component {
   }
 }
 
-const createPieChartData = (allocData) => {
+const createPieChartData = (allocData = {}) => {
   return [
     {
       id: "E",
