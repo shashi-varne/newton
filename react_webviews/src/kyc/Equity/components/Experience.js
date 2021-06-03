@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
 
-const tradingExperienceValues = [
+const TRADING_EXPERIENCE_VALUES = [
   {
     name: "0 to 1 year",
     value: "0-1",
@@ -33,7 +33,7 @@ const Experience = (props) => {
         <div className="generic-page-subtitle te-subtitle" data-aid='generic-page-subtitle'>
           As per SEBI, it is mandatory to share your trading experience
         </div>
-        {tradingExperienceValues.map((data, index) => {
+        {TRADING_EXPERIENCE_VALUES.map((data, index) => {
           const selected = data.value === experience;
           return (
             <div

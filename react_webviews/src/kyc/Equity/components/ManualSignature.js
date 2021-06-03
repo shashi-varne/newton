@@ -96,7 +96,7 @@ const ManualSignature = (props) => {
       skelton={isLoading}
     >
       <section id="manual-signature" data-aid='manual-signature'>
-        <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
+        <div className="generic-page-subtitle manual-signature-subtile" data-aid='generic-page-subtitle'>
           Send us your signed documents through courier by following the steps below
         </div>
         <div class="page-content" data-aid='page-content'>
