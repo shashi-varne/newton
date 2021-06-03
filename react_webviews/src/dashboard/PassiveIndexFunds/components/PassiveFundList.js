@@ -17,8 +17,9 @@ class FundList extends Component {
             result: [],
             expand: false,
             skelton: true,
-            selected: "one_year_return",
-            yearValue: "1Y"
+            selected: "five_year_return",
+            yearValue: "5Y",
+            mount: true,
         };
 
         this.initialize = initialize.bind(this);
@@ -48,10 +49,14 @@ class FundList extends Component {
     }
 
     yearFilter = (time) => {
+        let body = this.state.body || {};
+        const SelectedYear = selected_year(time)
         this.setState({
-            selected: selected_year(time),
+            selected: SelectedYear,
             yearValue: time,
         })
+        body["return_type"] = SelectedYear;
+        this.fetch_funddetails_list(body);
     }
 
     setSortFilter = (item) => {
@@ -59,9 +64,9 @@ class FundList extends Component {
         let body = {
             "filter_by": item["Sort by"] || "returns",
             "fund_house": item["Fund House"] || [],
-            "tracking_index": item["Index"] || [],
-            "subcategory": item["Index"] || "all",
-            "return_type": this.state.selected || "one_year_return"
+            // "tracking_index": item["Index"] || [],
+            "return_type": this.state.selected || "five_year_return",
+             "subcategory": item["Index"] ? item['Index'].length === 0 ?  "all" :  item["Index"] : "all"
         }
 
         if (item["Sort by"] === "tracking_error" || item["Sort by"] === "expense_ratio") {
@@ -73,6 +78,10 @@ class FundList extends Component {
         } else if (item["Fund Option"] === "Dividend") {
             body["dividend"] = "true"
         }
+
+        this.setState({
+            body: body
+        });
 
         this.fetch_funddetails_list(body)
     }
@@ -116,7 +125,7 @@ class FundList extends Component {
                     {this.state.fundDescription && (
                         <p className="category-description">{this.state.fundDescription.substring(0, 90)}<span style={this.state.expand ? {} : { display: "none" }}>{this.state.fundDescription.substring(91)}</span>...<span className="category-desc-button" onClick={this.handleExpand}>{this.state.expand ? " LESS" : " MORE"}</span></p>
                     )}
-
+                    <p className="fund-number">{result.length} FUNDS</p>
                     <YearFilter
                         filterArray={year_filters}
                         selected={this.state.yearValue || "1Y"}
@@ -137,11 +146,11 @@ class FundList extends Component {
                                         value={
                                             [{ 'title1': 'EXPENSE RATIO', 'title2': 'RETURNS' },
                                             {
-                                                'title1': item["expense_ratio"], 'className': 'return', "tag1": "%",
-                                                'title2': item[this.state.selected], 'className': 'return color', "tag2": item[this.state.selected] ? `%` : 'Na',
+                                                'title1': item["expense_ratio"], 'className1': 'return', "tag1": "%",
+                                                'title2': item[this.state.selected], 'className2': 'return color', "tag2": item[this.state.selected] ? `%` : 'Na',
                                             },
                                             { 'title1': 'TRACKING ERROR' },
-                                            { 'title1': item["tracking_error"] || "Na", 'className': 'return', "tag1": item["tracking_error"] ? `% [${this.state.yearValue}]` : '' }]
+                                            { 'title1': item["tracking_error"] || "Na", 'className1': 'return', "tag1": item["tracking_error"] ? `% [${this.state.yearValue}]` : '' }]
                                         }
                                         key={index}
                                         handleClick={() => this.clickCard(item)}
@@ -152,6 +161,7 @@ class FundList extends Component {
                     <BottomFilter
                         filterOptions={filter_options}
                         getSortedFilter={this.setSortFilter}
+                        defaultFilter={{ "Sort by": "tracking_error" }}
                     />
                 </div>
             </Container>

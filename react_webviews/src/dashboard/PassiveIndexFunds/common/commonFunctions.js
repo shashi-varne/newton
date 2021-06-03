@@ -5,6 +5,7 @@ import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
 import { filter_options } from "../constants"
 import Checkbox from '@material-ui/core/Checkbox';
+import toast from "../../../common/ui/Toast";
 
 export const genericErrMsg = "Something went wrong";
 
@@ -137,36 +138,60 @@ export function selected_year(selected) {
 
 export async function fetch_funddetails_list(body) {
 
-  this.setState({ skelton: true })
-
   if (isEmpty(body)) {
-    var body = {
+    body = {
       "subcategory": "all",
-      "sort_by": "high_to_low",
-      "filter_by": "returns"
+      "sort_by": "low_to_high",
+      "filter_by": "tracking_error",
+      "return_type": "five_year_return"
     }
+    this.setState({ body: body })
   };
 
+  this.setState({ skelton: true })
+  let error = ""
   try {
     const res = await Api.post(`/api/funds/passive/index/category/${this.state.title}`, body);
     let result = res.pfwresponse?.result?.funds;
+    var resultData = res.pfwresponse.result;
     let fundDescription = res.pfwresponse?.result?.category_explainer
 
     if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200 && !isEmpty(result)) {
 
-      getFilterNames(result, 'fund_house', 'Fund House');  // responce |  value |  Name
-      getFilterNames(result, 'tracking_index', 'Index');
-
-      this.setState({
-        result: result,
-        fundDescription: fundDescription,
-        filter_options: filter_options
-      })
+      if (this.state.mount) {
+        getFilterNames(result, 'fund_house', 'Fund House');  // responce |  value |  Name
+        getFilterNames(result, 'tracking_index', 'Index');
+        this.setState({
+          result: result,
+          fundDescription: fundDescription,
+          filter_options: filter_options,
+          body: body,
+          mount: false,
+        })
+      }
+      else {
+        this.setState({
+          result: result,
+          body: body
+        })
+      }
 
     }
-    this.setState({ skelton: false })
+    else if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200 && isEmpty(result)) {
+      this.setState({
+        fundDescription: fundDescription,
+      })
+      toast("We are sorry! There are no funds that match your requirements.")
+    }
+    else {
+      error = resultData?.error || resultData?.message || "Something went wrong."
+      throw error;
+    }
 
+    this.setState({ skelton: false })
   } catch (err) {
+    console.log(err)
+    toast(err, `error`)
     this.setState({ skelton: false })
     throw err;
   }

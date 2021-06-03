@@ -3,7 +3,7 @@ import StarIcon from "@material-ui/icons/Star";
 
 function StarRating({value}) {
     return (
-        <span>
+        <>
            {[...Array(5)].map(
               (el, idx) => {
                 if (idx < value) {
@@ -32,7 +32,7 @@ function StarRating({value}) {
                 }
               }
             )} 
-        </span>
+        </>
     )
 }
 

@@ -9,6 +9,7 @@ const isMobileDevice = getConfig().isMobileDevice;
 const BottomFilter = ({
     filterOptions,
     getSortedFilter,
+    defaultFilter
 }) => {
 
     const [sortFilter, setSortFilter] = useState(false);
@@ -30,6 +31,7 @@ const BottomFilter = ({
                 setFilterActive={setFilterActive}
                 setSortFilter={setSortFilter}
                 setRenderApi={setRenderApi}
+                defaultFilter={defaultFilter}
                 filterOptions={filterOptions}
             />
         </footer>

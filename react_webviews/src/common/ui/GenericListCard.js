@@ -23,8 +23,8 @@ function GenericListCard(props) {
                 value.map((item, index) => {
                     return (
                         <div className="generic-card-details" key={index}>
-                            <p className={`tc-title  ${item.className}`}>{item.title1}{item.tag1}</p>
-                            <p className={`tc-title  ${item.className}`}>{item.title2}{item.tag2}</p>
+                            <p className={`tc-title  ${item.className1}`}>{item.title1}{item.tag1}</p>
+                            <p className={`tc-title  ${item.className2}`}>{item.title2}{item.tag2}</p>
                         </div>
                     )
                 })}

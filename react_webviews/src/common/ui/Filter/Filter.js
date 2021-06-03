@@ -11,10 +11,11 @@ const Filter = ({
   setRenderApi,
   setSortFilter,
   filterOptions,
+  defaultFilter
 }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(filterOptions[0])[0]);
   const [activeData, setActiveData] = useState(Object.values(filterOptions[0])[0]);
-  const [localSortFilter, setLocalSortFilter] = useState({"Sort by": "returns"}); 
+  const [localSortFilter, setLocalSortFilter] = useState(defaultFilter);
   
   const close = (data) => {
     setFilterActive(false);
@@ -28,7 +29,7 @@ const Filter = ({
   }
 
   const reset = () => {
-    setLocalSortFilter('returns')
+    setLocalSortFilter(defaultFilter)
     setActiveTab(activeTab)
     // close()
   }
