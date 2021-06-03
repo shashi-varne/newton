@@ -173,3 +173,19 @@ export function bankAccountTypeOptions(isNri) {
       'SB-NRE': 'Non Resident External Account (NRE)',
       'SB-NRO': 'Non Resident Ordinary Account (NRO)'
   }
+
+export const commonBackMapper = {
+    '/withdraw/insta': '/withdraw',
+    '/withdraw': '/',
+    '/my-account': '/',
+    '/withdraw/otp/success': '/',
+    '/withdraw/otp/failed': '/withdraw',
+    '/kyc/compliant-report-verified': '/',
+    '/kyc/compliant-report-complete': '/',
+    '/kyc/compliant-personal-details': '/kyc/journey',
+    '/reports/redeemed-transaction': '/reports',
+    '/reports/switched-transaction': '/reports',
+    '/reports/sip/pause-request': '/reports/sip',
+    '/reports/sip/details': '/reports/sip',
+    '/reports/sip': '/reports',
+}

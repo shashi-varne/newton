@@ -6,7 +6,6 @@ import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
 import { getSummaryV2 } from "../common/api";
-import { getConfig } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
 const Redeemed = (props) => {
@@ -47,14 +46,6 @@ const Redeemed = (props) => {
     setOpenProcess(true);
   };
 
-  const goBack = () => {
-    sendEvents("back");
-    props.history.push({
-      pathname: "/reports",
-      search: getConfig().searchParams,
-    });
-  };
-
   const sendEvents = (userAction) => {
     let eventObj = {
       event_name: "my_portfolio",
@@ -72,10 +63,10 @@ const Redeemed = (props) => {
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       noFooter={true}
       title="Pending withdrawals"
       skelton={showSkelton}
-      headerData={{ goBack }}
     >
       <div className="report-purchase">
         {!isEmpty(transactions) &&

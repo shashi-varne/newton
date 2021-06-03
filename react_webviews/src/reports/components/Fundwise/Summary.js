@@ -4,9 +4,9 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { getFunds, getFundDetailsForSwitch } from "../../common/api";
 import {
-  navigate as navigateFunc,
   getAmountInInr,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FundSummaryMenu from "../mini-components/FundSummaryMenu";
 import toast from "common/ui/Toast";
@@ -126,7 +126,6 @@ const FundswiseSummary = (props) => {
                     <div className="content">
                       <h5>
                         {formatAmountInr(fund.current)}
-                        {fund.current === 0 && 0}
                       </h5>
                       <div>Current Value</div>
                     </div>
@@ -145,7 +144,6 @@ const FundswiseSummary = (props) => {
                     <div className="content">
                       <h5>
                         {formatAmountInr(fund.current_invested)}
-                        {fund.current_invested === 0 && 0}
                       </h5>
                       <div>Invested Cost</div>
                     </div>

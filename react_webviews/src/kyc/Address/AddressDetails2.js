@@ -7,9 +7,9 @@ import Container from "../common/Container";
 import { DOCUMENTS_MAPPER } from "../constants";
 import {
   compareObjects,
-  navigate as navigateFunc,
   validateFields,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { validateNumber } from "utils/validators";
 import "./commonStyles.scss";

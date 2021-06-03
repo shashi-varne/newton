@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import OtpDefault from "common/ui/otp";
 import toast from "common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { navigate as navigateFunc} from "utils/functions";
 import { storageService, isEmpty } from "../../../utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { initData } from "../../../kyc/services";
@@ -19,6 +19,7 @@ class Otp extends Component {
       totalTime: 30,
       showSkelton: true,
     };
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   goBack = () => {
@@ -64,10 +65,7 @@ class Otp extends Component {
           return;
         }
         if (result.navigateTo) {
-          this.props.history.push({
-            pathname: result.navigateTo,
-            search: getConfig().searchParams,
-          });
+          this.navigate(result.navigateTo)
           return;
         }
         const requestdata = {
@@ -79,10 +77,7 @@ class Otp extends Component {
           storageConstants.PAUSE_REQUEST_DATA,
           requestdata
         );
-        this.props.history.push({
-          pathname: getPathname.pauseRequest,
-          search: getConfig().searchParams,
-        });
+        this.navigate(getPathname.pauseRequest);
       } catch (err) {
         toast(err);
         this.setState({ isApiRunning: false });
