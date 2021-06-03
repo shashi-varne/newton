@@ -72,7 +72,7 @@ const InvestmentProof = (props) => {
       "event_name": 'my_account',
       "properties": {
         "user_action": userAction,
-        "screen_name": 'elss statement',
+        "screen_name": type === 'capital-gain' ? 'capital gain' : 'elss statement',
         "year": year || "",
         }
     };
