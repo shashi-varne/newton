@@ -1,5 +1,5 @@
 import React from 'react'
-import { isEmpty } from "utils/validators";
+import { isEmpty } from 'lodash';
 
 function YearFilter(props) {
 
