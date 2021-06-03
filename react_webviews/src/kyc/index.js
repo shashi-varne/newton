@@ -57,12 +57,9 @@ import SelfieSteps from "./Upload/SelfieSteps";
 import FnOIncomeProof from "./Upload/F&OIncomeProof";
 
 // Equity Components
-import AllowLocation from  "./Equity/components/AllowLocation";
 import TradingExperience from "./Equity/components/TradingExperience";
-import SelfieInstructions from "./Equity/components/SelfieInstructions";
 import StocksStatus from "./Equity/components/StocksStatus";
 import NriError from "./Equity/components/NriError";
-import LocationError from "./Equity/components/LocationError";
 import AccountInfo from "./Equity/components/AccountInfo";
 import UploadInstructions from "./Equity/components/UploadInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
@@ -323,18 +320,8 @@ const Kyc = (props) => {
         />
         <Route 
           exact 
-          path={`${url}/location/allow`} 
-          component={AllowLocation} 
-        />
-        <Route 
-          exact 
           path={`${url}/trading-experience`} 
           component={TradingExperience} 
-        />
-        <Route 
-          exact 
-          path={`${url}/selfie-instructions`} 
-          component={SelfieInstructions} 
         />
         <Route 
           exact 
@@ -345,11 +332,6 @@ const Kyc = (props) => {
           exact 
           path={`${url}/nri-error`} 
           component={NriError} 
-        />
-        <Route 
-          exact 
-          path={`${url}/location-error`} 
-          component={LocationError} 
         />
         <Route 
           exact 
