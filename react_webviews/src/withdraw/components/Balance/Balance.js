@@ -2,7 +2,7 @@ import Button from 'common/ui/Button'
 import React, { useEffect, useState } from 'react'
 import Container from '../../common/Container'
 import { withdrawOptions } from '../../constants'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import Dialog from '../../mini-components/Dialog'
 import { getBalance } from '../../common/Api'
 import toast from 'common/ui/Toast'
@@ -36,7 +36,7 @@ const Balance = (props) => {
   const redirect = (url, openModal) => {
     setType(url)
     if (!openModal) {
-      navigate(url, null, false)
+      navigate(url)
     } else {
       setAmount('');
       setError(false)
@@ -49,7 +49,7 @@ const Balance = (props) => {
   }
 
   const handleSwitch = () => {
-    setType("switch")
+    setType("/withdraw/switch")
     setAmount('');
     setError(false)
     setHelperText('');
@@ -64,10 +64,10 @@ const Balance = (props) => {
     } else if (value > balance?.balance) {
       data.error = true;
       data.helperText = `Amount cannot be greater than withdrawable amount.`;
-    } else if (type === "systematic" && value < 500) {
+    } else if (type === "/withdraw/systematic" && value < 500) {
       data.error = true;
       data.helperText = `Minimum amount is ${formatAmountInr(500)}`;
-    } else if (type === "switch" && value < 5000) {
+    } else if (type === "/withdraw/switch" && value < 5000) {
       data.error = true;
       data.helperText = `Minimum amount is ${formatAmountInr(5000)}`;
     } else if (value % 100 !== 0) {
@@ -93,10 +93,10 @@ const Balance = (props) => {
       setHelperText(errorData.helperText);
       return;
     }
-    if (type === 'systematic') {
+    if (type === '/withdraw/systematic') {
       navigate(type, {state: {amount} })
     } else {
-      navigate('switch', {state: {amount} })
+      navigate('/withdraw/switch', {state: {amount} })
     }
     return
   }

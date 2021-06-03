@@ -36,7 +36,7 @@ class NpsInvestments extends Component {
     };
 
     campaigns.forEach(item => {
-      if (item.campaign === 'nps_esign') {
+      if (item.campaign.name === 'nps_esign') {
         npscampaign = true;
         npsCampaignData = item;
       }
@@ -105,7 +105,7 @@ class NpsInvestments extends Component {
     }
   }
 
-  redirection = (url, item) => {
+  redirection = (url, name='',item) => {
     this.sendEvents('next', 'NPS investments', item)
     let paymentRedirectUrl = encodeURIComponent(
       window.location.origin + `/nps/investments` + getConfig().searchParams
@@ -113,8 +113,7 @@ class NpsInvestments extends Component {
 
     let back_url = paymentRedirectUrl;
 
-    // for web no issue
-    if(getConfig().Web) {
+    if(getConfig().Web && name !== 'e-sign') {
       this.openInBrowser(url)
     } else {
       var payment_link = url;
@@ -142,17 +141,17 @@ class NpsInvestments extends Component {
       cardClicked: cardClicked
     })
 
-    this.navigate(route, '', true);
+    this.navigate(route);
   }
 
   investMore = () => {
     this.sendEvents('next')
-    this.navigate('amount/one-time')
+    this.navigate('/nps/amount/one-time')
   }
 
   goBack = () => {
     this.sendEvents('back')
-    this.navigate('/invest', '', true);
+    this.navigate('/invest');
   };
 
   sendEvents = (userAction, screenName, cardClicked) => {
@@ -191,7 +190,7 @@ class NpsInvestments extends Component {
           <div className="nps-investments">
             {this.state.npscampaign && <div
               className="list"
-              onClick={() => this.redirection(this.state.npsCampActionUrl, 'nps activation pending')}
+              onClick={() => this.redirection(this.state.npsCampActionUrl, 'e-sign', 'nps activation pending')}
             >
               <div className="icon">
                 <img
@@ -203,7 +202,7 @@ class NpsInvestments extends Component {
               </div>
             </div>}
 
-            <div className="list" onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url, 'tax statement')}>
+            <div className="list" onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url, '', 'tax statement')}>
               <div className="icon">
                 <img
                   alt=''

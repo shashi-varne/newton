@@ -54,10 +54,18 @@ class EnterAmount extends Component {
       let res = await this.get_recommended_funds(amount);
 
       if (res) {
-        this.navigate('recommendation/one-time', {amount: this.state.amount})
+        this.navigate('/nps/recommendation/one-time', {amount: this.state.amount})
       }
     }
   };
+
+  goBack = () => {
+    let currentUser = storageService().getObject("user");
+
+    let backState = currentUser.nps_investment ? '/nps/info' : '/nps/pan';
+
+    this.navigate(backState);
+  }
 
   render() {
     return (
@@ -69,6 +77,9 @@ class EnterAmount extends Component {
         disable={this.state.amount < 500 || this.state.amount > 500000}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div className="enter-amount">
           <section className="page nps">

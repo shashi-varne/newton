@@ -6,7 +6,6 @@ import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
 import { getSummaryV2 } from "../common/api";
-import { getConfig } from "../../utils/functions";
 
 const Redeemed = (props) => {
   const stateParams = props.location?.state || {};
@@ -46,19 +45,11 @@ const Redeemed = (props) => {
     setOpenProcess(true);
   };
 
-  const goBack = () => {
-    props.history.push({
-      pathname: "/reports",
-      search: getConfig().searchParams,
-    });
-  };
-
   return (
     <Container
       noFooter={true}
       title="Pending withdrawals"
       skelton={showSkelton}
-      headerData={{ goBack }}
     >
       <div className="report-purchase">
         {!isEmpty(transactions) &&
