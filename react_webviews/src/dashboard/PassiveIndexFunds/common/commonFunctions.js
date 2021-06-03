@@ -1,11 +1,8 @@
 import { storageService } from "utils/validators";
-// import Radio from '@material-ui/core/Radio'
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
-// import CheckIcon from '@material-ui/icons/Done'
-// import toast from "../../../common/ui/Toast";
 import { filter_options } from "../constants"
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -149,7 +146,7 @@ export async function fetch_funddetails_list(body) {
       "filter_by": "returns"
     }
   };
-  
+
   try {
     const res = await Api.post(`/api/funds/passive/index/category/${this.state.title}`, body);
     let result = res.pfwresponse?.result?.funds;

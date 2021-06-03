@@ -120,7 +120,6 @@ export const year_filters = [
   },
 ]
 
-
 export const sort_filter_data = [
   {
     value: "expense_ratio",

@@ -1,40 +1,34 @@
 import React from 'react'
 import StarRating from "./StarRating"
+import { isEmpty } from "utils/validators";
 
 function GenericListCard(props) {
     const data = props.data;
     const value = props.value;
-    const data1 = value.data1
-    const data2 = value.data2
-    const data3 = value.data3
 
     return (
         <div className="card generic-card" onClick={() => props.handleClick()}>
             <div className="generic-card-details">
                 <div className="content">
-                    <div className="title">{data[props?.title]}</div>
-                    <div className='subtitle' >{data[props?.subtitle]}
-                        <img src={require(`assets/split.svg`)} alt='' className='split-img' />
-                        <span className='star-icon'><StarRating value={data.morning_star_rating} /> </span>
+                    <div className="title">{props?.title}</div>
+                    <div className='subtitle' >{props?.subtitle}
+                        <img src={props.img_src} alt='' className='split-img' />
+                        <span className='star-icon'><StarRating value={props.morning_star_rating} /> </span>
                     </div>
                 </div>
                 <img src={data.amc_logo_big} className="amc-logo-small" alt='' />
             </div>
 
-            <div className="generic-card-details">
-                <p className="tc-title">{value.title1}</p>
-                <p className="tc-title">{value.title2}</p>
-            </div>
-            <div className="generic-card-details">
-                <p className="tc-title return">{data[data1] ? data[data1] + "%" : "Na"}</p>
-                <p className="tc-title return color">{data[data2] ? data[data2] + "%" : "Na"}</p>
-            </div>
-            <div className="generic-card-details">
-                <p className="tc-title">{value.title3}</p>
-            </div>
-            <div className="generic-card-details">
-                <p className="tc-title return">{data[data3] ? data[data3] + "% (1Y)" : "Na"}</p>
-            </div>
+
+            {!isEmpty(value) &&
+                value.map((item, index) => {
+                    return (
+                        <div className="generic-card-details" key={index}>
+                            <p className={`tc-title  ${item.className}`}>{item.title1}{item.tag1}</p>
+                            <p className={`tc-title  ${item.className}`}>{item.title2}{item.tag2}</p>
+                        </div>
+                    )
+                })}
         </div>
     )
 };
