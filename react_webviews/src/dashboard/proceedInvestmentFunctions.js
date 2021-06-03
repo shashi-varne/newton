@@ -126,6 +126,25 @@ export function canDoInvestment(kyc) {
 }
 
 export function redirectToKyc(kycJourneyStatus, history) {
+  const config = getConfig();
+  let _event = {
+    event_name: "journey_details",
+    properties: {
+      journey: {
+        name: "mf",
+        trigger: "cta",
+        journey_status: "incomplete",
+        next_journey: "kyc",
+      },
+    },
+  };
+  // send event
+  if (!config.Web) {
+    window.callbackWeb.eventCallback(_event);
+  } else if (config.isIframe) {
+    var message = JSON.stringify(_event);
+    window.callbackWeb.sendEvent(_event);
+  }
   if (kycJourneyStatus === "ground") {
     navigation(history, "/kyc/home");
   } else {

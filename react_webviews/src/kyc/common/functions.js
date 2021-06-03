@@ -278,3 +278,27 @@ export function isDocSubmittedOrApproved(doc) {
   if (isEmpty(kyc)) return false;
   return kyc[doc]?.doc_status === "submitted" || kyc[doc]?.doc_status === "approved";
 }
+
+export const getFlow = (kycData) => {
+  let flow = "";
+  let dlFlow = false;
+  if (
+    kycData.kyc_status !== 'compliant' &&
+    !kycData.address?.meta_data?.is_nri &&
+    kycData.dl_docs_status !== '' &&
+    kycData.dl_docs_status !== 'init' &&
+    kycData.dl_docs_status !== null
+  ) {
+    dlFlow = true;
+  }
+  if (kycData.kyc_status === 'compliant') {
+    flow = 'premium onboarding'
+  } else {
+    if (dlFlow) {
+      flow = 'digi kyc'
+    } else {
+      flow = 'general'
+    }
+  }
+  return flow;
+}

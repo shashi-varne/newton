@@ -5,13 +5,14 @@ import { PATHNAME_MAPPER } from "../constants";
 import { isEmpty, validateAlphabets } from "../../utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
   getTotalPagesInPersonalDetails,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails2 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -44,6 +45,7 @@ const PersonalDetails2 = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next")
     let keysToCheck = ["mother_name", "father_name"];
     if (form_data.marital_status === "MARRIED") keysToCheck.push("spouse_name");
     let result = validateFields(form_data, keysToCheck);
@@ -104,8 +106,28 @@ const PersonalDetails2 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "personal_details_2",
+        "mother_name": form_data.mother_name ? "yes" : "no",
+        "father_name": form_data.father_name ? "yes" : "no",
+        "spouse_name": form_data.spouse_name ? "yes" : "no",
+        "flow": 'general'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       showSkelton={isLoading}
       buttonTitle="SAVE AND CONTINUE"
       handleClick={handleClick}

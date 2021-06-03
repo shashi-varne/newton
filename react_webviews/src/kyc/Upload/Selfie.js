@@ -4,8 +4,8 @@ import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { isDocSubmittedOrApproved, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
-import { getConfig, isTradingEnabled } from 'utils/functions'
+import { isDocSubmittedOrApproved, isNotManualAndNriUser } from '../common/functions'
+import { getConfig, isTradingEnabled, navigate as navigateFunc } from 'utils/functions'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
@@ -13,6 +13,8 @@ import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClick
 import LocationPermission from "./LocationPermission";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
+import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
 const { productName } = config;
@@ -51,6 +53,7 @@ const Selfie = (props) => {
   }
 
   const handleSubmit = async () => {
+    sendEvents('next');
     if (bottomSheetType === "failed") {
       setBottomSheetType("");
     }     
@@ -156,6 +159,22 @@ const Selfie = (props) => {
     }
   }, [isCamInitialised, isLocInitialised])
 
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "selfie_doc",
+        "type": type || "",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="Upload"
@@ -164,6 +183,8 @@ const Selfie = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Take a selfie"
+      data-aid='kyc-upload-selfie-screen'
+      events={sendEvents("just_set_events")}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan">

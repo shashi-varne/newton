@@ -4,7 +4,7 @@ import FundCard from '../Invest/mini-components/FundCard';
 import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
 import replaceFund from 'assets/replace_bfdl.png';
 
-import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import isEmpty from 'lodash/isEmpty';
 import './EditFunds.scss';
@@ -35,7 +35,7 @@ const EditFunds = (props) => {
     if (isEmpty(alternateFunds)) {
       setOpen(true);
     } else {
-      navigate('recommendations/alternate-funds', { mftype, mfid, amount, alternateFunds });
+      navigate('/invest/recommendations/alternate-funds', { state: {mftype, mfid, amount, alternateFunds} });
     }
   };
 

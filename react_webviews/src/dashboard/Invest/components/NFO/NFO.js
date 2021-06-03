@@ -15,7 +15,7 @@ class NfoInfo extends Component {
 
   handleClick = () => {
     this.props.history.push({
-      pathname: "scheme",
+      pathname: "/advanced-investing/new-fund-offers/scheme",
       search: getConfig().searchParams,
     });
   };
