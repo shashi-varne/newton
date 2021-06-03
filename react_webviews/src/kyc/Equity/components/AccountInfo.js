@@ -4,9 +4,10 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
+import { getEmailOrMobileVerifiedStatus, navigate as navigateFunc } from "../../common/functions";
 import { nativeCallback } from "../../../utils/native_callback";
-import { navigate as navigateFunc } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
+import useUserKycHook from "../../common/hooks/userKycHook";
 
 const productName = getConfig().productName;
 const benefits = [
@@ -26,6 +27,7 @@ const benefits = [
 const AccountInfo = (props) => {
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
+  const { kyc, isLoading } = useUserKycHook();
   const handleCheckBox = () => {
     setCheckTermsAndConditions(!checkTermsAndConditions);
   };
@@ -48,7 +50,15 @@ const AccountInfo = (props) => {
   
   const handleClick = () => {
     sendEvents("next");
-    navigate(PATHNAME_MAPPER.homeKyc);
+    if (kyc?.application_status_v2 === "submitted" || kyc?.application_status_v2 === "complete") {
+      if (!getEmailOrMobileVerifiedStatus()) {
+        navigate(PATHNAME_MAPPER.communicationDetails);
+      } else {
+        navigate(PATHNAME_MAPPER.tradingExperience);
+      }
+    } else {
+      navigate(PATHNAME_MAPPER.homeKyc);
+    }
   };
 
   return (
@@ -60,6 +70,7 @@ const AccountInfo = (props) => {
       data-aid='kyc-demate-account-screen'
       disable={!checkTermsAndConditions}
       handleClick={handleClick}
+      skelton={isLoading}
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>

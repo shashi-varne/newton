@@ -2,6 +2,7 @@
 Exhaustive list of property values:
 - investSections: [
     'kyc',
+    'stocks',
     'ourRecommendations',
     'diy',
     'bottomScrollCards',
@@ -29,6 +30,7 @@ export const commonCardsConfig = {
   logo: "logo_white.png",
   investSections: [
     "kyc",
+    "stocks",
     "ourRecommendations",
     "diy",
     "bottomScrollCards",

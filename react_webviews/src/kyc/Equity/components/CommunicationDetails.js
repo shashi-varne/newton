@@ -61,7 +61,7 @@ const CommunicationDetails = (props) => {
   const { user, kyc, isLoading, updateKyc } = useUserKycHook();
   const isNri = kyc.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
-  const [isReadyToInvestBase, setIsReadyToInvest] = useState();
+  const [isKycDone, setIsKycDone] = useState();
   const [totalPages, setTotalPages] = useState();
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const CommunicationDetails = (props) => {
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
       setFormData({ ...data });
-      setIsReadyToInvest(isReadyToInvest());
+      setIsKycDone(kyc?.application_status_v2 === "submitted" || kyc?.application_status_v2 === "complete");
       setTotalPages(getTotalPagesInPersonalDetails())
     }
   }, [kyc, user]);
@@ -216,7 +216,7 @@ const CommunicationDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if (isReadyToInvestBase) {
+    if (isKycDone) {
       navigate(PATHNAME_MAPPER.tradingExperience);
       return;
     }
@@ -245,7 +245,7 @@ const CommunicationDetails = (props) => {
       events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       title="Communication details"
-      count={!isReadyToInvestBase && pageNumber}
+      count={!isKycDone && pageNumber}
       current={pageNumber}
       total={totalPages}
       handleClick={handleClick}
