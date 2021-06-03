@@ -15,8 +15,6 @@ class FundList extends Component {
         this.state = {
             screen_name: 'fund_list',
             result: [],
-            getFundHouses: [],
-            getIndexName: [],
             expand: false,
             skelton: true,
             selected: "one_year_return",
@@ -135,7 +133,7 @@ class FundList extends Component {
                                         morning_star_rating={item?.morning_star_rating}
                                         title={item["legal_name"]}
                                         subtitle={item["tracking_index"]}
-                                        img_src={require(`assets/split.svg`)}
+                                        img_src={item.amc_logo_big}
                                         value={
                                             [{ 'title1': 'EXPENSE RATIO', 'title2': 'RETURNS' },
                                             {

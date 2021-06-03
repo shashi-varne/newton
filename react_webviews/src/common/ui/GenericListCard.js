@@ -3,7 +3,6 @@ import StarRating from "./StarRating"
 import { isEmpty } from "utils/validators";
 
 function GenericListCard(props) {
-    const data = props.data;
     const value = props.value;
 
     return (
@@ -12,11 +11,11 @@ function GenericListCard(props) {
                 <div className="content">
                     <div className="title">{props?.title}</div>
                     <div className='subtitle' >{props?.subtitle}
-                        <img src={props.img_src} alt='' className='split-img' />
+                        <img src={require(`assets/split.svg`)} alt='' className='split-img' />
                         <span className='star-icon'><StarRating value={props.morning_star_rating} /> </span>
                     </div>
                 </div>
-                <img src={data.amc_logo_big} className="amc-logo-small" alt='' />
+                <img src={props.img_src} className="amc-logo-small" alt='' />
             </div>
 
 
