@@ -6,7 +6,6 @@ import { resetRiskProfileJourney } from "../../functions";
 import "./PaymentCallback.scss";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { isIframe } from "../../../../utils/functions";
-import { nativeCallback } from "../../../../utils/native_callback";
 import { storageService } from "../../../../utils/validators";
 
 const PaymentCallback = (props) => {

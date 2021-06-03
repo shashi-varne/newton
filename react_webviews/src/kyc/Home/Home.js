@@ -83,6 +83,7 @@ const Home = (props) => {
   };
 
   const handleClick = async () => {
+    
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
@@ -101,6 +102,7 @@ const Home = (props) => {
 
       const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
       if (!isStartKyc) {
+        sendEvents("next")
         if (skipApiCall) {
           setIsStartKyc(true);
           setUserName(kyc?.pan?.meta_data?.name)
@@ -246,6 +248,7 @@ const Home = (props) => {
   };
 
   const savePan = async (is_nri) => {
+    // sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
     try {
       setShowLoader("button");
       if (is_nri) {
@@ -280,11 +283,14 @@ const Home = (props) => {
       (isUserCompliant || kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
+      sendEvents("next", "pan_entry")
       navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       if (isUserCompliant || kyc_status === "compliant") {
+        sendEvents("next", "pan_entry")
         navigate(PATHNAME_MAPPER.journey);
       } else {
+        sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
         if (is_nri) {
           navigate(`${PATHNAME_MAPPER.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=false`,
@@ -298,8 +304,25 @@ const Home = (props) => {
     }
   };
 
+  const sendEvents = (userAction, screenName) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction,
+        "screen_name": screenName || "pan_check",
+        "pan": pan ? "yes" : "no",
+        "initial_kyc_status": kyc?.initial_kyc_status || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
   return (
     <Container
+      events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-home"
       buttonTitle={buttonTitle}
