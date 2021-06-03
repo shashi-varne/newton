@@ -898,23 +898,29 @@ export function ProviderName(name) {
 }
 
 export function reportsfrequencyMapper(key, frequency, product_key){
-  var freqMapper = {
-    'monthly': '/mth', 
-    'yearly': '/yr', 
-    'annually':'/yr',
-    'quarterly': '/qr', 
-    'quaterly': '/qr',
-    'half yearly': '/HY',
-    'half-yearly': '/HY',
-    'at once': '', 
-    'single': ''
-  } 
-  if((['hdfc_ergo', 'star', 'religare' ].indexOf(key) > -1 || key === "BHARTIAXA") && product_key !== 'offline_insurance'){
-    return '/yr'
-  }else if(key === 'care_plus' && frequency){
-    return frequency.toLowerCase() === 'monthly' ? '/mth' : '/yr'
-  }else if((key === 'FYNTUNE' && frequency) || product_key === 'offline_insurance' || product_key === 'TERM_INSURANCE'){
-     return freqMapper[frequency.toLowerCase()]
+  try{
+    var freqMapper = {
+      'monthly': '/mth', 
+      'yearly': '/yr', 
+      'annually':'/yr',
+      'quarterly': '/qr', 
+      'quaterly': '/qr',
+      'half yearly': '/HY',
+      'half-yearly': '/HY',
+      'at once': '', 
+      'single': ''
+    } 
+    if((['hdfc_ergo', 'star', 'religare' ].indexOf(key) > -1 || key === "BHARTIAXA") && product_key !== 'offline_insurance'){
+      return '/yr'
+    }else if(key === 'care_plus' && frequency){
+      return frequency.toLowerCase() === 'monthly' ? '/mth' : '/yr'
+    }else if(frequency && (key === 'FYNTUNE' || product_key === 'offline_insurance' || product_key === 'TERM_INSURANCE')){
+      return freqMapper[frequency.toLowerCase()] || ''
+    }else{
+      return ''
+    }
+  }catch(err){
+    return ''
   }
 }
 
