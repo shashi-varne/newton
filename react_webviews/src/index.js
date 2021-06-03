@@ -71,7 +71,7 @@ $(document).ready(function () {
     gtag('config', 'AW-930930371');
   }
 
-  if (getConfig().isWeb && getConfig().productName === "finity") {
+  if (getConfig().Web && getConfig().productName === "finity") {
     runHotjar();
     runGoogleAds();
   }
