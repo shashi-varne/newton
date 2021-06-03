@@ -26,9 +26,9 @@ class GenericFactCarousel extends Component {
     }, 350);
   };
 
-  renderCarousel = (data, index) => {
+  renderCarousel = (data, index, style) => {
     return (
-      <div className="generic-fact-carousel" key={index}>
+      <div className="generic-fact-carousel" key={index} style={{ ...style }}>
         <div className="image">
           <Imgc
             style={{ width: "38px", height: "40px" }}
@@ -39,11 +39,15 @@ class GenericFactCarousel extends Component {
         <p className="header">{data.header}</p>
         <div className="body">
           <div className="left">
-            <p className="left-title">{(data.left.title || "").toUpperCase()}</p>
+            <p className="left-title">
+              {(data.left.title || "").toUpperCase()}
+            </p>
             <p className="content">{data.left.content}</p>
           </div>
           <div className="right">
-            <p className="right-title">{(data.right.title || "").toUpperCase()}</p>
+            <p className="right-title">
+              {(data.right.title || "").toUpperCase()}
+            </p>
             <p className="content">{data.right.content}</p>
           </div>
         </div>
@@ -129,7 +133,7 @@ class GenericFactCarousel extends Component {
       >
         {this.props.customData &&
           this.props.customData.map((item, index) =>
-            this.renderCarousel(item, index)
+            this.renderCarousel(item, index, this.props.style)
           )}
       </Carousel>
     );
