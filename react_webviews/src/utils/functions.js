@@ -141,7 +141,7 @@ export function getParamsMark(data) {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+  let { base_url="https://react-test-dot-plutus-staging.appspot.com" } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
@@ -329,6 +329,9 @@ export const getConfig = () => {
   returnConfig.isSdk = storageService().get("is_secure"); 
   returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
   returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
+  returnConfig.isIframe = isIframe();
+  returnConfig.platform = !returnConfig.isIframe ? (!returnConfig.Web ? "sdk" : "web" ): "iframe";
+  returnConfig.isLoggedIn = storageService().get("currentUser");
   
   return returnConfig;
 };
@@ -475,4 +478,80 @@ export function getBasePath() {
     basename = basename ? basename + 'view' : '';
   }
   return window.location.origin + basename;
+}
+
+const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
+
+export function navigate(pathname, data = {}) {
+  let fromState = this?.location?.pathname || ""
+  let toState = pathname
+  
+  const redirectPath = checkBeforeRedirection(fromState, toState)
+  if (redirectPath) {
+    toState = redirectPath
+  }
+
+  data.state = {
+    ...data?.state,
+    fromState,
+    toState
+  }
+
+  if (data.edit) {
+    this.history.replace({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  } else {
+    this.history.push({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  }
+}
+
+export function isNpsOutsideSdk(fromState, toState) {
+  let config = getConfig();
+  if (config?.landingconfig?.nps === 'inside_sdk') {
+    return false;
+  }
+
+  if (fromState === "/nps/sdk" ||
+    ((fromState.indexOf("/nps/amount") !== -1) && toState === "/nps/info") ||
+    ((fromState.indexOf("/nps/payment/callback") !== -1) &&
+      ((toState.indexOf("/nps/amount") !== -1) || toState === "/nps/investments" ||
+        toState === "/nps/performance"))) {
+    return true;
+  }
+}
+
+export function listenPartnerEvents(cb) {
+  window.addEventListener("message", function (e) {
+    if (e.data !== "" && typeof e.data === "string") {
+      /* Parse events */
+      var data = JSON.parse(e.data);
+      /* Match whitelisted domains */
+      if (e.origin !== data.targetOrigin) {
+        return;
+      }
+
+      /* Store event */
+      // setEvent(data);
+      /* return events to callback */
+      cb(data);
+    } else {
+      // setEvent(e.data);
+      cb(e.data);
+    }
+  });
+}
+
+export {
+  checkBeforeRedirection, 
+  checkAfterRedirection, 
+  backButtonHandler
 }

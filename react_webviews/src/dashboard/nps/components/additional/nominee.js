@@ -90,7 +90,7 @@ class NpsNominee extends Component {
         },
       };
 
-      await this.updateMeta(data, "delivery");
+      await this.updateMeta(data, "/nps/delivery");
     }
   };
 

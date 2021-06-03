@@ -4,11 +4,12 @@ import { Button } from "@material-ui/core";
 import toast from "../../common/ui/Toast";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import "./MyAccount.scss";
-import { getBase64, getConfig } from "../../utils/functions";
+import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { upload } from "./MyAccountFunctions";
 
 const config = getConfig();
 const BlankMandateUpload = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -19,10 +20,7 @@ const BlankMandateUpload = (props) => {
   const inputEl = useRef(null);
 
   const handleClose = () => {
-    props.history.push({
-      pathname: "/my-account",
-      search: config.searchParams,
-    });
+    navigate("/my-account");
     setOpenDialog(false);
   };
 

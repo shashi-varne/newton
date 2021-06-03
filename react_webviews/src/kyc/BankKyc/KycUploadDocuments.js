@@ -4,13 +4,14 @@ import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { navigate as navigateFunc } from "../common/functions";
+import { getFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getBase64, getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc, getBase64 } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const config = getConfig();
 const isWeb = config.Web;
@@ -99,7 +100,8 @@ const KycUploadDocuments = (props) => {
     });
   }
 
-  const handleChange = (event) => {
+  const handleChange = (type) => (event) => {
+    sendEvents('get_image', type)
     event.preventDefault();
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
@@ -131,6 +133,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleSubmit = async () => {
+    sendEvents('next')
     if (selected === null || !file) return;
     try {
       setIsApiRunning("button");
@@ -150,6 +153,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleEdit = () => {
+    sendEvents('edit')
     const navigate = navigateFunc.bind(props);
     navigate(`/kyc/${userType}/bank-details`);
   };
@@ -160,6 +164,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const proceed = () => {
+    sendEvents('next', "", 'bottom_sheet')
     const navigate = navigateFunc.bind(props);
     if (additional) {
       navigate("/kyc/add-bank");
@@ -202,10 +207,31 @@ const KycUploadDocuments = (props) => {
   const selectedDocValue =
     selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
-  return (
+    const sendEvents = (userAction, type, screen_name) => {
+      let eventObj = {
+        "event_name": 'KYC_registration',
+        "properties": {
+          "user_action": userAction || "",
+          "screen_name": screen_name || 'bank_docs',
+          "initial_kyc_status": kyc.initial_kyc_status,
+          "flow": getFlow(kyc) || "",
+          "document":VERIFICATION_DOC_OPTIONS[selected]?.name || "",
+          "type": type || '',
+          "status" : screen_name ? "verification pending":""
+        }
+      };
+      if (userAction === 'just_set_events') {
+        return eventObj;
+      } else {
+        nativeCallback({ events: eventObj });
+      }
+    }
+
+    return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
+      events={sendEvents("just_set_events")}
       hideInPageTitle
       handleClick={handleSubmit}
       showLoader={isApiRunning}
@@ -291,7 +317,7 @@ const KycUploadDocuments = (props) => {
                       ref={inputEl}
                       capture
                       style={{ display: "none" }}
-                      onChange={handleChange}
+                      onChange={handleChange('gallery')}
                     />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -320,7 +346,7 @@ const KycUploadDocuments = (props) => {
                       ref={inputEl}
                       capture
                       style={{ display: "none" }}
-                      onChange={handleChange}
+                      onChange={handleChange('open-camera')}
                     />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -346,7 +372,7 @@ const KycUploadDocuments = (props) => {
                       ref={inputEl}
                       capture
                       style={{ display: "none" }}
-                      onChange={handleChange}
+                      onChange={handleChange('gallery')}
                     />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

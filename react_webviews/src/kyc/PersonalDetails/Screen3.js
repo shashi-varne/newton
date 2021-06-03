@@ -9,13 +9,14 @@ import {
 } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isEmpty } from "../../utils/validators";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails3 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -45,6 +46,7 @@ const PersonalDetails3 = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next")
     let keysToCheck = ["income", "occupation"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
@@ -112,8 +114,25 @@ const PersonalDetails3 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "professional_details",
+        "flow": 'general'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       showSkelton={isLoading}
       hideInPageTitle
       buttonTitle="CONTINUE"

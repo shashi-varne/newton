@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Container from '../../common/Container'
 import OtpDefault from 'common/ui/otp'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import toast from 'common/ui/Toast'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
@@ -66,12 +66,12 @@ const Otp = (props) => {
       if (!isEmpty(stateParams?.verification_link) && !isEmpty(state?.otp)) {
         result = await verify(stateParams?.verification_link, state?.otp)
       }
-      navigate('/withdraw/otp/success',
-              { state : {
-                  type: stateParams?.type,
-                  message: result?.message,
-                } 
-              }, true)
+      navigate("/withdraw/otp/success", {
+        state: {
+          type: stateParams?.type,
+          message: result?.message,
+        },
+      });
       } catch (err) {
         if(err.message.includes('wrong')){
         toast(err.message, 'error')
@@ -82,7 +82,7 @@ const Otp = (props) => {
             type: stateParams?.type,
             message: err.message,
           }
-        }, true)
+        })
       }
     } finally {
       setIsApiRunning(false)

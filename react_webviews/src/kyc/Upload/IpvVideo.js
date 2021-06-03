@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
 import { getIpvCode, upload } from '../common/api'
-import { navigate as navigateFunc } from '../common/functions'
-import { getConfig } from 'utils/functions'
+import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import KnowMore from '../mini-components/IpvVideoKnowMore'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
 const productName = config.productName
@@ -87,7 +87,8 @@ const IpvVideo = (props) => {
     })
   }
   
-  const handleChange = (event) => {
+  const handleChange = (type) => (event) => {
+    sendEvents('get_image', type)
     event.preventDefault();
     const uploadedFile = event.target.files[0]
     let acceptedTypes = [
@@ -112,6 +113,7 @@ const IpvVideo = (props) => {
   }
 
   const handleSubmit = async () => {
+    sendEvents('next')
     const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
@@ -131,9 +133,26 @@ const IpvVideo = (props) => {
     }
   }
 
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "selfie_video_doc",
+        "type": type || "",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       skelton={loading || isLoading}
       handleClick={handleSubmit}
       disable={!file}
@@ -170,7 +189,7 @@ const IpvVideo = (props) => {
                     ref={inputEl}
                     type="file"
                     className="kyc-upload"
-                    onChange={handleChange}
+                    onChange={handleChange('open-camera')}
                     accept="video/*"
                     capture
                   />
@@ -221,7 +240,7 @@ const IpvVideo = (props) => {
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange}
+                  onChange={handleChange('gallery')}
                 />
                 <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
                   {!file && (

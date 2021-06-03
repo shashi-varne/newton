@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig, getBasePath } from 'utils/functions';
+import { getConfig, getBasePath, navigate as navigateFunc } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
-import { navigate as navigateFunc } from '../common/functions'
 import ConfirmBackModal from './confirm_back'
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
@@ -19,7 +18,7 @@ class ESignInfo extends Component {
       dl_flow: false
     }
 
-    this.navigate = navigateFunc.bind(this.props);
+    this.navigate = navigateFunc.bind(props);
   }
 
   componentDidMount = () => {
@@ -55,6 +54,7 @@ class ESignInfo extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next','e sign kyc')
     let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
       basepath + '/kyc-esign/nsdl' + getConfig().searchParams
@@ -108,6 +108,25 @@ class ESignInfo extends Component {
     }
   }
 
+  sendEvents = (userAction, screenName) => {
+    const kyc = storageService().getObject("kyc");
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "" ,
+        "screen_name": screenName || "",
+        "rti": "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": 'digi kyc'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  
   render() {
     const { show_loader, productName } = this.state;
     const headerData = {
@@ -117,6 +136,7 @@ class ESignInfo extends Component {
 
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         showLoader={show_loader}
         title='eSign KYC'
         handleClick={this.handleClick}
