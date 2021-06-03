@@ -63,6 +63,8 @@ export const PATHNAME_MAPPER = {
   nriError: '/kyc/nri-error',
   communicationDetails: '/kyc/communication-details',
   selfieSteps: '/kyc/upload/selfie-steps',
+  stocksStatus: '/kyc/stocks-status',
+  accountInfo: '/kyc/account-info',
 }
 
 export const STORAGE_CONSTANTS = {
