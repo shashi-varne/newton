@@ -18,7 +18,9 @@ class FundList extends Component {
             getFundHouses: [],
             getIndexName: [],
             expand: false,
-            skelton: true
+            skelton: true,
+            selected: "one_year_return",
+            yearValue: "1Y"
         };
 
         this.initialize = initialize.bind(this);
@@ -129,17 +131,19 @@ class FundList extends Component {
                                 return (
                                     <GenericListCard
                                         data={item}
-                                        title='legal_name'
-                                        subtitle='tracking_index'
+                                        image={`assets/split.svg`}
+                                        morning_star_rating={item?.morning_star_rating}
+                                        title={item["legal_name"]}
+                                        subtitle={item["tracking_index"]}
+                                        img_src={require(`assets/split.svg`)}
                                         value={
+                                            [{ 'title1': 'EXPENSE RATIO', 'title2': 'RETURNS' },
                                             {
-                                                'title1': 'EXPENSE RATIO',
-                                                'title2': 'RETURNS',
-                                                'title3': 'TRACKING ERROR',
-                                                'data1': 'expense_ratio',
-                                                'data2': this.state.selected || "one_year_return",
-                                                'data3': 'tracking_error',
-                                            }
+                                                'title1': item["expense_ratio"], 'className': 'return', "tag1": "%",
+                                                'title2': item[this.state.selected], 'className': 'return color', "tag2": item[this.state.selected] ? `%` : 'Na',
+                                            },
+                                            { 'title1': 'TRACKING ERROR' },
+                                            { 'title1': item["tracking_error"] || "Na", 'className': 'return', "tag1": item["tracking_error"] ? `% [${this.state.yearValue}]` : '' }]
                                         }
                                         key={index}
                                         handleClick={() => this.clickCard(item)}
