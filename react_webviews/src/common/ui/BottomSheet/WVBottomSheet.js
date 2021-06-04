@@ -17,6 +17,7 @@ Example syntax:
     title="Bottomsheet title",
     subtitle="Bottomsheet subtitle"
     image={require('assets/path/to/asset')}
+    classes={}
   >
     Place anything here that needs to be added within
     the content box of bottomsheet but not as subtitle
@@ -45,27 +46,28 @@ const WVBottomSheet = ({
   title, // Title for bottomsheet
   subtitle, // Subtitle for bottomsheet (shows below title)
   children, // Allows for addition of any kind of content within the BottomSheet DialogContent box
-  image // Image to show on top right corner (Use require('path'))
+  image, // Image to show on top right corner (Use require('path'))
+  classes
 }) => {
   return (
     <Dialog
       id="wv-bottomsheet"
       open={isOpen}
       onClose={onClose}
-      className="wv-bottomsheet"
+      className={`wv-bottomsheet ${classes.container}`}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>
-        <div className="wv-bottomsheet-content">
+        <div className={`wv-bottomsheet-content ${classes.content}`}>
           <div className="wv-bc-left">
             {title &&
-              <div className="wv-bcl-title">
+              <div className={`wv-bcl-title ${classes.title}`}>
                 {title}
               </div>
             }
             {subtitle &&
-              <Subtitle>
+              <Subtitle className={classes.subtitle}>
                 {subtitle}
               </Subtitle>
             }
@@ -73,7 +75,7 @@ const WVBottomSheet = ({
           <div className="wv-bc-right">
             {image &&
               <Imgc
-                className="wv-bcr-image"
+                className={`wv-bcr-image ${classes.image}`}
                 alt=""
                 src={image}
               />
@@ -114,9 +116,9 @@ const WVBottomSheet = ({
   );
 };
 
-const Subtitle = ({ children }) => {
+const Subtitle = ({ children, className }) => {
   return (
-    <div className="wv-bcl-subtitle">
+    <div className={`wv-bcl-subtitle ${className}`}>
       {children}
     </div>
   );
@@ -137,6 +139,7 @@ WVBottomSheet.defaultProps = {
   button1Props: {
     type: 'primary',
   },
+  classes: {},
 };
 
 WVBottomSheet.Subtitle = Subtitle;
