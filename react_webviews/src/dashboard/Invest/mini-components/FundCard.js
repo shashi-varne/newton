@@ -4,7 +4,7 @@ import RatingStar from '../../../fund_details/common/RatingStar';
 import { navigate as navigateFunc } from 'utils/functions';
 import './mini-components.scss';
 
-const stocksFundList = [
+const STOCKS_FUND_LIST = [
   "equity",
   "arbitrage",
   "index",
@@ -13,12 +13,12 @@ const stocksFundList = [
   "sectoral",
   "elss",
 ];
-const bondFundList = [
+const BOND_FUND_LIST = [
   "reliance_simply_save",
   "fixed_income_lt",
   "fixed_income_st",
 ];
-const hybridFundList = ["balanced", "equity_saver", "monthlyincomeplan"];
+const HYBRID_FUND_LIST = ["balanced", "equity_saver", "monthlyincomeplan"];
 const FundCard = ({ 
   classOverRide, 
   fund,
@@ -56,11 +56,11 @@ const FundCard = ({
         <div className='recommendations-funds-item-status'>
         <span
             className={
-              stocksFundList.includes(mftype)
+              STOCKS_FUND_LIST.includes(mftype)
                 ? "recommendations-funds-stock"
-                : bondFundList.includes(mftype)
+                : BOND_FUND_LIST.includes(mftype)
                 ? "recommendations-funds-bond"
-                : hybridFundList.includes(mftype)
+                : HYBRID_FUND_LIST.includes(mftype)
                 ? "recommendations-funds-hybrid"
                 : ""
             }
