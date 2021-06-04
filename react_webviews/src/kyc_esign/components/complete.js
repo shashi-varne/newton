@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getConfig, isTradingEnabled } from "utils/functions";
 import WVSteps from "../../common/ui/Steps/WVSteps"
+import { isReadyToInvest } from "../../kyc/services";
 
 const stepsData = [
   { title: "Mutual fund", status: "Ready to invest" },
@@ -11,13 +12,19 @@ const stepsData = [
 const config = getConfig();
 const productName = config.productName;
 const TRADING_ENABLED = isTradingEnabled();
+const isReadyToInvestUser = isReadyToInvest();
 
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
+  const showAccountStatus = (dl_flow || kyc?.kyc_status === "compliant") && TRADING_ENABLED && !show_note;
 
   useEffect(() => {
-    if (dl_flow && kyc?.sign_status === "signed" && !kyc?.equity_data?.meta_data?.fno) {
+    if (showAccountStatus && kyc?.sign_status === "signed" && !kyc?.equity_data?.meta_data?.fno) {
       setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
+    }
+
+    if (isReadyToInvestUser) {
+      setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Mutual fund"))
     }
   }, [kyc]);
 
@@ -43,7 +50,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
             Approves in one working day
           </div>
         )}
-        {(dl_flow || kyc?.kyc_status === "compliant") && TRADING_ENABLED && !show_note && (
+        {showAccountStatus && (
           <div className="sub-title" data-aid='kyc-header-sub-title'>
             Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds
           </div>
@@ -64,7 +71,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
           </div>
         </div>
       )}
-      {(dl_flow || kyc?.kyc_status === "compliant") && TRADING_ENABLED && !show_note && 
+      {showAccountStatus && 
         <div className="account-status-container" data-aid='account-status-container'>
           <div className="account-status" data-aid='account-status'>Account status</div>
           {steps.map((step, index) => (
