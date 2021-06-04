@@ -15,12 +15,12 @@ export async function initialize() {
   if (this.state.screen_name === "fund_list") {
     const state = this.props.location.state;
     this.setState({
-      title: storageService().get('category_index_name') || state,
-    })
+      title: storageService().get("category_index_name") || state,
+    });
   }
 }
 
-export const productName = () => getConfig().productName
+export const productName = () => getConfig().productName;
 
 
 export function navigate(pathname, data = {}, redirect) {
@@ -37,10 +37,11 @@ export function countCarouselSwipe(index) {
     card_swipe: "yes",
     card_swipe_count: this.state.card_swipe_count + 1,
   });
-};
+}
 
 export function handleClick(data) {
-  const categoryName = data.key === "global_indices" ? "global_index_funds" : data.key;
+  const categoryName =
+    data.key === "global_indices" ? "global_index_funds" : data.key;
   this.sendEvents("next", categoryName);
   storageService().set("category_index_name", data.title);
   this.navigate(`${data.key}/fund-list`, data.title);

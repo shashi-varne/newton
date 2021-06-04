@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getUrlParams, storageService } from "../../../utils/validators";
 import "./PassiveFundDetails.scss";
 import Accordian from "../../../common/ui/Accordian";
-import { List, Slide } from "@material-ui/core";
-import Dialog, { DialogContent } from "material-ui/Dialog";
+import { List } from "@material-ui/core";
 import MorningStar from "../../../assets/logo_morningstar.svg";
 import moment from "moment";
 import {
@@ -22,16 +21,16 @@ import StarRating from "../../../common/ui/StarRating";
 import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig } from "../../../utils/functions";
 import { Imgc } from "../../../common/ui/Imgc";
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 
 function PassiveFundDetails({ history }) {
   const [isLoading, setLoading] = useState(true);
   const [fundDetails, setFundDetails] = useState(null);
   const [graph, setGraph] = useState(null);
   const [openMoreInfoDialog, setOpenMoreInfoDialog] = useState(false);
+  const [fundInfoClicked, setFundInfoClicked] = useState(false);
+  const [portfolioDetailsClicked, setPortfolioDetailsClicked] = useState(false);
+  const [moreRisksClicked, setMoreRisksClicked] = useState(false);
   const { isins } = getUrlParams();
   const fund = storageService().getObject("diystore_fundInfo") || {};
 
@@ -58,86 +57,6 @@ function PassiveFundDetails({ history }) {
     setGraph(graph_data);
   };
 
-  const moreInfoDialog = () => {
-    return (
-      <Dialog
-        id="bottom-popup"
-        open={openMoreInfoDialog || false}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        TransitionComponent={Transition}
-        keepMounted
-      >
-        <DialogContent>
-          <div
-            className="passive-funds-details"
-            style={{ marginTop: "20px", width: "100%" }}
-          >
-            <div className="pf-flex">
-              <p className="pfd-title">
-                {fundDetails?.performance?.legal_name}
-              </p>
-              <Imgc
-                style={{ marginLeft: "40px", width: "50px", height: "50px" }}
-                src={fundDetails?.performance?.amc_logo_small}
-                alt=""
-              />
-            </div>
-            <p
-              className="pfd-nav-returns"
-              style={{
-                paddingTop: "20px",
-                paddingBottom: "10px",
-                fontWeight: "700",
-              }}
-            >
-              Tracking error:{" "}
-              <span style={{ fontWeight: "400" }}>
-                {fundDetails?.performance?.tracking_error !== "NA"
-                  ? `${fundDetails?.performance?.tracking_error}%`
-                  : "Na"}
-              </span>
-            </p>
-            <p className="pfd-values" style={{ color: "#767E86" }}>
-              The difference between the fund’s returns & the index it tries to
-              mimic. The lower the tracking error the better it is.
-            </p>
-            <p
-              className="pfd-nav-returns"
-              style={{
-                paddingTop: "30px",
-                paddingBottom: "10px",
-                fontWeight: "700",
-              }}
-            >
-              Expense ratio:{" "}
-              <span style={{ fontWeight: "400" }}>
-                {fundDetails?.portfolio?.expense_ratio}%
-              </span>
-            </p>
-            <p
-              className="pfd-values"
-              style={{ color: "#767E86", paddingBottom: "40px" }}
-            >
-              The annual maintenance charge that includes operating costs,
-              management fees, allocation charges, advertising costs, etc. A
-              lower expense ratio leads to more gains.
-            </p>
-
-            <button
-              className="call-back-popup-button"
-              style={{ cursor: "pointer", fontSize: "12px" }}
-              onClick={handleClose}
-            >
-              OKAY
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  };
-
   const handleClose = () => {
     setOpenMoreInfoDialog(false);
   };
@@ -152,22 +71,11 @@ function PassiveFundDetails({ history }) {
         user_action: userAction || "",
         screen_name: "fund_info",
         fund_selected: fundDetails?.performance?.legal_name || "",
-        fund_info_clicked: storageService().get("fund_info_clicked")
-          ? "yes"
-          : "no",
-        portfolio_details_clicked: storageService().get(
-          "portfolio_details_clicked"
-        )
-          ? "yes"
-          : "no",
-        more_risks_clicked: storageService().get("more_risks_clicked")
-          ? "yes"
-          : "no",
+        fund_info_clicked: fundInfoClicked ? "yes" : "no",
+        portfolio_details_clicked: portfolioDetailsClicked ? "yes" : "no",
+        more_risks_clicked: moreRisksClicked ? "yes" : "no",
       },
     };
-    storageService().remove("fund_info_clicked");
-    storageService().remove("portfolio_details_clicked");
-    storageService().remove("more_risks_clicked");
     if (userAction === "just_set_events") {
       return eventObj;
     } else {
@@ -189,7 +97,13 @@ function PassiveFundDetails({ history }) {
   };
 
   const storeEventsData = (name) => {
-    storageService().set(name, true);
+    if (name === "fund_info_clicked") {
+      setFundInfoClicked(true);
+    } else if (name === "portfolio_details_clicked") {
+      setPortfolioDetailsClicked(true);
+    } else if (name === "more_risks_clicked") {
+      setMoreRisksClicked(true);
+    }
   };
 
   return (
@@ -290,7 +204,7 @@ function PassiveFundDetails({ history }) {
           <div>
             <p className="pfd-points">TRACKING ERROR</p>
             <p className="pfd-values">
-              {fundDetails?.performance?.tracking_error !== "NA"
+              {fundDetails?.performance?.tracking_error !== null
                 ? `${fundDetails?.performance?.tracking_error}% (1Y)`
                 : "Na"}
             </p>
@@ -390,7 +304,59 @@ function PassiveFundDetails({ history }) {
           </p>
         </section>
       </div>
-      {moreInfoDialog()}
+      <WVBottomSheet
+        isOpen={openMoreInfoDialog || false}
+        button1Props={{
+          type: "primary",
+          title: "OKAY",
+          onClick: handleClose,
+        }}
+        image={fundDetails?.performance?.amc_logo_small}
+        title={fundDetails?.performance?.friendly_name}
+        classes={{
+          image: "pfd-image",
+        }}
+      >
+        <div className="passive-funds-details">
+          <p
+            className="pfd-nav-returns"
+            style={{
+              paddingTop: "20px",
+              paddingBottom: "10px",
+              fontWeight: "700",
+            }}
+          >
+            Tracking error:{" "}
+            <span style={{ fontWeight: "400" }}>
+              {fundDetails?.performance?.tracking_error !== null
+                ? `${fundDetails?.performance?.tracking_error}%`
+                : "Na"}
+            </span>
+          </p>
+          <p className="pfd-values" style={{ color: "#767E86" }}>
+            The difference between the fund’s returns & the index it tries to
+            mimic. The lower the tracking error the better it is.
+          </p>
+          <p
+            className="pfd-nav-returns"
+            style={{
+              paddingTop: "30px",
+              paddingBottom: "10px",
+              fontWeight: "700",
+            }}
+          >
+            Expense ratio:{" "}
+            <span style={{ fontWeight: "400" }}>
+              {fundDetails?.portfolio?.expense_ratio}%
+            </span>
+          </p>
+          <p className="pfd-values" style={{ color: "#767E86" }}>
+            The annual maintenance charge that includes operating costs,
+            management fees, allocation charges, advertising costs, etc. A lower
+            expense ratio leads to more gains.
+          </p>
+        </div>
+      </WVBottomSheet>
     </Container>
   );
 }
