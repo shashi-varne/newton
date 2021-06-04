@@ -10,11 +10,9 @@ import {
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Alert from "../mini-components/Alert";
 import {
   checkPanFetchStatus,
   isDigilockerFlow,
-  // compareObjects,
   validateFields,
   getFlow
 } from "../common/functions";
@@ -44,7 +42,6 @@ const KycBankDetails = (props) => {
     account_type: "",
     ifsc_code: "",
   });
-  // const [oldState, setOldState] = useState({});
   const [bankIcon, setBankIcon] = useState("");
   const [accountTypes, setAccountTypes] = useState([]);
   const [name, setName] = useState("");
@@ -113,7 +110,6 @@ const KycBankDetails = (props) => {
       });
     }
     setBankData({ ...data });
-    // setOldState({...data})
     setBankIcon(data.ifsc_image || "");
     setAccountTypes([
       ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
@@ -160,10 +156,6 @@ const KycBankDetails = (props) => {
       if (!["incomplete", "submitted"].includes(bankData.bank_status)) {
         data.bank_id = "";
       }
-      // if(compareObjects(keysToCheck, oldState ,bankData)) {
-      //   navigate(`/kyc/${userType}/bank-verify`)
-      //   return
-      // }
       saveBankData(data);
     }
   };
@@ -340,11 +332,6 @@ const KycBankDetails = (props) => {
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
-            {/* <Alert
-              variant={note.variant}
-              title="Note"
-              message={note.info_text}
-            /> */}
             <WVInfoBubble
               type={note.variant}
               hasTitle

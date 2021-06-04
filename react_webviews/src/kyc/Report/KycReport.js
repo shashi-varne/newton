@@ -14,7 +14,6 @@ import { storageService, isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
-const config = getConfig();
 const Report = (props) => {
   const flowType = props?.type || "";
   const config = getConfig();
