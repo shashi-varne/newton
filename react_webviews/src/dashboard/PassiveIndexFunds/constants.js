@@ -201,3 +201,30 @@ export const BOTTOM_FILTER_NAME = [
     "Fund House": []  //   [ THIS DATA IS APPENED BY API ]
   }
 ];
+
+export const BUTTON_MAPPER = [
+  {
+    count: 1,
+    type: "month",
+  },
+  {
+    count: 3,
+    type: "month",
+  },
+  {
+    count: 6,
+    type: "month",
+  },
+  {
+    count: 1,
+    type: "year",
+  },
+  {
+    count: 3,
+    type: "year",
+  },
+  {
+    count: 5,
+    type: "year",
+  },
+];

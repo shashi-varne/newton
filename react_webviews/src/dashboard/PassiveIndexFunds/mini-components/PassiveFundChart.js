@@ -5,7 +5,7 @@ import $ from "jquery";
 import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig } from "../../../utils/functions";
 import "./commonStyles.scss";
-
+import { BUTTON_MAPPER } from "../constants";
 ReactHighcharts.Highcharts.setOptions({
   lang: {
     rangeSelectorZoom: "",
@@ -24,12 +24,14 @@ ReactHighcharts.Highcharts.addEvent(
     }
   }
 );
+
 const FundChart = (props) => {
   const fundGraph = props?.graphData.graph_report[0].graph_data_for_amfi;
   const productName = getConfig().productName;
   let format = "yyyy";
   let d1Series = [];
   let duration = 0;
+  let buttonConfig = [];
 
   const prevSelectedMonth = useRef();
   const sendEvents = (monthValue) => {
@@ -46,6 +48,23 @@ const FundChart = (props) => {
     }
     prevSelectedMonth.current = monthValue;
   };
+
+  const buttonConfigMapper = () => {
+    BUTTON_MAPPER.map((item) => {
+      let obj = {};
+      obj.count = item.count;
+      obj.type = item.type;
+      obj.text = item.type === "year" ? `${item.count}Y` : `${item.count}M`;
+      obj.events = {
+        click: function () {
+          format = item.type === "year" && item.count !== 1 ? "yyyy" : "ddmm";
+          sendEvents(obj.text.toUpperCase());
+        },
+      };
+      buttonConfig.push(obj);
+    });
+  };
+  buttonConfigMapper();
 
   const chopDates = (dates1) => {
     let seriesAMin = dates1[0][0];
@@ -254,74 +273,7 @@ const FundChart = (props) => {
           },
         },
       },
-      buttons: [
-        {
-          type: "month",
-          count: 1,
-          text: "1M",
-          events: {
-            click: function () {
-              format = "ddmm";
-              sendEvents("1m");
-            },
-          },
-        },
-        {
-          type: "month",
-          count: 3,
-          text: "3M",
-          events: {
-            click: function () {
-              format = "ddmm";
-              sendEvents("3m");
-            },
-          },
-        },
-        {
-          type: "month",
-          count: 6,
-          text: "6M",
-          events: {
-            click: function () {
-              format = "ddmm";
-              sendEvents("6m");
-            },
-          },
-        },
-        {
-          type: "year",
-          count: 1,
-          text: "1Y",
-          events: {
-            click: function () {
-              format = "ddmm";
-              sendEvents("1y");
-            },
-          },
-        },
-        {
-          type: "year",
-          count: 3,
-          text: "3Y",
-          events: {
-            click: function () {
-              format = "yyyy";
-              sendEvents("3y");
-            },
-          },
-        },
-        {
-          type: "year",
-          count: 5,
-          text: "5Y",
-          events: {
-            click: function () {
-              format = "yyyy";
-              sendEvents("5y");
-            },
-          },
-        },
-      ],
+      buttons: [...buttonConfig],
     },
     series: [
       {
