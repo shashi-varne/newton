@@ -11567,6 +11567,7 @@ react-svg-inline@^2.1.0:
   dependencies:
     classnames "^2.2.1"
     prop-types "^15.5.8"
+    
 react-swipeable-views-core@^0.13.7:
   version "0.13.7"
   resolved "https://registry.yarnpkg.com/react-swipeable-views-core/-/react-swipeable-views-core-0.13.7.tgz#c082b553f26e83fd20fc17f934200eb717023c8a"
@@ -11668,6 +11669,11 @@ react-virtualized@^9.21.0:
     loose-envify "^1.4.0"
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
+
+react-webcam@^5.2.4:
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/react-webcam/-/react-webcam-5.2.4.tgz#714b4460ea43ac7ed081824299cd2a580f764478"
+  integrity sha512-Qqj14t68Ke1eoEYjFde+N48HtuIJg0ePIQRpFww9eZt5oBcDpe/l60h+m3VRFJAR5/E3dOhSU5R8EJEcdCq/Eg==
 
 react@^16.13.1:
   version "16.13.1"
