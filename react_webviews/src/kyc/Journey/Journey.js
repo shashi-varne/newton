@@ -549,9 +549,7 @@ const Journey = (props) => {
     if (canSubmit()) {
       ctaText = 'SUBMIT APPLICATION'
     } else {
-      if (!customerVerified) {
-        ctaText = 'UNLOCK NOW'
-      } else ctaText = 'CONTINUE'
+      ctaText = 'CONTINUE'
     }
     if (
       !isCompliant &&
