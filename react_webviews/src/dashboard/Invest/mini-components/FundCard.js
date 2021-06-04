@@ -3,6 +3,22 @@ import { formatAmountInr } from 'utils/validators';
 import RatingStar from '../../../fund_details/common/RatingStar';
 import { navigate as navigateFunc } from 'utils/functions';
 import './mini-components.scss';
+
+const stocksFundList = [
+  "equity",
+  "arbitrage",
+  "index",
+  "midcap",
+  "shariah",
+  "sectoral",
+  "elss",
+];
+const bondFundList = [
+  "reliance_simply_save",
+  "fixed_income_lt",
+  "fixed_income_st",
+];
+const hybridFundList = ["balanced", "equity_saver", "monthlyincomeplan"];
 const FundCard = ({ 
   classOverRide, 
   fund,
@@ -13,7 +29,7 @@ const FundCard = ({
 }) => {
   const {
     amount,
-    mf: { mfname, rating, isin, amc_logo_small,mftype_name },
+    mf: { mfname, rating, isin, amc_logo_small,mftype_name, mftype },
   } = fund;
   const navigate = navigateFunc.bind(parentProps);
   const handleGraph = () => {
@@ -38,7 +54,19 @@ const FundCard = ({
       <div className='recommendations-funds-item-info'>
         <div className='recommendations-funds-item-name'>{mfname}</div>
         <div className='recommendations-funds-item-status'>
-          <span>{mftype_name}</span>
+        <span
+            className={
+              stocksFundList.includes(mftype)
+                ? "recommendations-funds-stock"
+                : bondFundList.includes(mftype)
+                ? "recommendations-funds-bond"
+                : hybridFundList.includes(mftype)
+                ? "recommendations-funds-hybrid"
+                : ""
+            }
+          >
+            {mftype_name}
+          </span>
           <span>{amount && formatAmountInr(amount)}</span>
         </div>
         <div className='recommendations-funds-item-rating'>
