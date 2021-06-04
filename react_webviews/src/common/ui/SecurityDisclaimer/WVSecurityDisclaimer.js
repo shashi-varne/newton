@@ -1,16 +1,19 @@
 import './WVSecurityDisclaimer.scss';
 import React from 'react';
+import { getConfig } from '../../../utils/functions';
+
+const { productName } = getConfig();
 
 const WVSecurityDisclaimer = ({
-  alignCenter = true // Center aligns component [default=true]
+  alignCenter = true, // Center aligns component [default=true]
+  className = ''
 }) => {
   return (
     <div
       style={{ margin: alignCenter ? 'auto' : '' }}
-      className="wv-security-disclaimer"
-      data-aid='wv-security-disclaimer'
+      className={`wv-security-disclaimer ${className}`}
     >
-      <span data-aid='wv-security-disclaimer-text'>Investments with fisdom are 100% secure</span>
+      <span>Investments with {productName} are 100% secure</span>
       <div className="wv-sd-images">
         <img
           src={require('assets/sebi_registered_logo.svg')}
