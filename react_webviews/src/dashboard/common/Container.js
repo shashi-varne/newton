@@ -57,7 +57,6 @@ class Container extends Component {
       }
     }
 
-    console.log("Container props...", this.props);
     
     if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
@@ -65,14 +64,12 @@ class Container extends Component {
     }
 
     const goBackPath = this.props.location?.state?.goBack || "";
-    console.log("goBackPath...", goBackPath)
 
     if(goBackPath) {
       this.navigate(goBackPath);
       return;
     }
     
-    console.log("Props history goBack...");
     this.props.history.goBack();
   };
 
