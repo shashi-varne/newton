@@ -42,7 +42,7 @@ const WVFileUploadCard = ({
   return (
     <>
       <WVFilePickerWrapper
-       dataAidSuffix={dataAidSuffix}
+        dataAidSuffix={dataAidSuffix}
         {...wrapperProps}
         onFileSelectComplete={onFileSelected}
       >
