@@ -47,7 +47,8 @@ const WVBottomSheet = ({
   subtitle, // Subtitle for bottomsheet (shows below title)
   children, // Allows for addition of any kind of content within the BottomSheet DialogContent box
   image, // Image to show on top right corner (Use require('path'))
-  classes
+  classes,
+  ...props // Any other props to be sent to Dialog
 }) => {
   return (
     <Dialog
@@ -57,6 +58,7 @@ const WVBottomSheet = ({
       className={`wv-bottomsheet ${classes.container}`}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      {...props}
     >
       <DialogContent>
         <div className={`wv-bottomsheet-content ${classes.content}`}>
