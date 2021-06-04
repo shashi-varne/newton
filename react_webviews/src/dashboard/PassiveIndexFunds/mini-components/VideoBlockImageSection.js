@@ -1,6 +1,6 @@
 import React from 'react'
 
-function VideoBlock() {
+function VideoBlockImageSection() {
     return (
         <div className="info-container">
             <div className="info-block">
@@ -27,4 +27,4 @@ function VideoBlock() {
     )
 }
 
-export default VideoBlock;
+export default VideoBlockImageSection;

@@ -2,7 +2,7 @@ import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
-import { isEmpty } from "utils/validators";
+import { isEmpty } from 'lodash';
 import { filter_options } from "../constants"
 import Checkbox from '@material-ui/core/Checkbox';
 import toast from "../../../common/ui/Toast";
@@ -13,7 +13,7 @@ export async function initialize() {
   this.navigate = navigate.bind(this);
   this.setErrorData = setErrorData.bind(this);
   this.handleError = handleError.bind(this);
-  this.carouselSwipecount = carouselSwipe_count.bind(this);
+  this.countCarouselSwipe = countCarouselSwipe.bind(this);
   this.productName = productName.bind(this);
   this.handleClick = handleClick.bind(this);
   this.fetch_funddetails_list = fetch_funddetails_list.bind(this);
@@ -91,7 +91,7 @@ export function navigate(pathname, data = {}, redirect) {
   });
 }
 
-export function carouselSwipe_count(index) {
+export function countCarouselSwipe(index) {
   this.setState({
     selectedIndex: index,
     card_swipe: "yes",
@@ -100,40 +100,11 @@ export function carouselSwipe_count(index) {
 };
 
 export function handleClick(data) {
-  let categoryName = data.key === "global_indices" ? "global_index_funds" : data.key;
+  const categoryName = data.key === "global_indices" ? "global_index_funds" : data.key;
   this.sendEvents("next", categoryName);
   storageService().set("category_index_name", data.title);
   this.navigate(`${data.key}/fund-list`, data.title);
 }
-
-
-export function selected_year(selected) {
-  let time
-  switch (selected) {
-    case "1M":
-      time = 'one_month_return'
-      break;
-    case "3M":
-      time = 'three_month_return'
-      break;
-    case "6M":
-      time = 'six_month_return'
-      break;
-    case "1Y":
-      time = 'one_year_return'
-      break;
-    case "3Y":
-      time = 'three_year_return'
-      break;
-    case "5Y":
-      time = 'five_year_return'
-      break;
-    default:
-      time = 'five_year_return'
-  }
-  return time;
-}
-
 
 
 export async function fetch_funddetails_list(body) {

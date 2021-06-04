@@ -120,6 +120,15 @@ export const year_filters = [
   },
 ]
 
+export const selected_year = {
+  "1M": 'one_month_return',
+  "3M": 'three_month_return',
+  "6M": 'six_month_return',
+  "1Y": 'one_year_return',
+  "3Y": 'three_year_return',
+  "5Y": 'five_year_return',
+}
+
 export const sort_filter_data = [
   {
     value: "expense_ratio",

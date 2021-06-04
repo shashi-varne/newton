@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import { storageService, isEmpty } from "utils/validators";
-import { initialize, fetch_funddetails_list, selected_year } from "../common/commonFunctions";
+import { initialize, fetch_funddetails_list } from "../common/commonFunctions";
 import BottomFilter from "../../../common/ui/Filter/BottomFilter";
 import YearFilter from "../../../common/ui/YearFilter";
 import GenericListCard from "../../../common/ui/GenericListCard"
-import { year_filters, filter_options } from "../constants";
+import { year_filters, filter_options, selected_year } from "../constants";
 import "./PassiveFundDetails.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 
@@ -50,7 +50,7 @@ class FundList extends Component {
 
     yearFilter = (time) => {
         let body = this.state.body || {};
-        const SelectedYear = selected_year(time)
+        const SelectedYear = selected_year[time] || "five_year_return";
         this.setState({
             selected: SelectedYear,
             yearValue: time,
@@ -66,7 +66,7 @@ class FundList extends Component {
             "fund_house": item["Fund House"] || [],
             // "tracking_index": item["Index"] || [],
             "return_type": this.state.selected || "five_year_return",
-             "subcategory": item["Index"] ? item['Index'].length === 0 ?  "all" :  item["Index"] : "all"
+            "subcategory": item["Index"] ? item['Index'].length === 0 ? "all" : item["Index"] : "all"
         }
 
         if (item["Sort by"] === "tracking_error" || item["Sort by"] === "expense_ratio") {
@@ -123,7 +123,15 @@ class FundList extends Component {
             >
                 <div>
                     {this.state.fundDescription && (
-                        <p className="category-description">{this.state.fundDescription.substring(0, 90)}<span style={this.state.expand ? {} : { display: "none" }}>{this.state.fundDescription.substring(91)}</span>...<span className="category-desc-button" onClick={this.handleExpand}>{this.state.expand ? " LESS" : " MORE"}</span></p>
+                        <p className="category-description">
+                            {this.state.fundDescription.substring(0, 90)}
+                            <span style={this.state.expand ? {} : { display: "none" }}>
+                                {this.state.fundDescription.substring(91)}
+                            </span>...
+                            <span className="category-desc-button" onClick={this.handleExpand}>
+                                {this.state.expand ? " LESS" : " MORE"}
+                            </span>
+                        </p>
                     )}
                     <p className="fund-number">{result.length} FUNDS</p>
                     <YearFilter
