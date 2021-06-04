@@ -30,6 +30,8 @@ const IpvVideo = (props) => {
   const [noCameraPermission, setNoCameraPermission] = useState(false);
   const [errorContent, setErrorContent] = useState("");
 
+  const SUPPORTED_VIDEO_TYPES = ["mp4", "webm", "ogg", "x-flv", "x-ms-wmv"];
+
   useEffect(() => {
     fetchIpvCode()
     navigator.mediaDevices.enumerateDevices()
@@ -66,50 +68,12 @@ const IpvVideo = (props) => {
     }
   }
 
-  const native_call_handler = (method_name, doc_type, doc_name, doc_side, msg, ipv_code) => {
-    window.callbackWeb[method_name]({
-      type: 'doc',
-      doc_type: doc_type,
-      doc_name: doc_name,
-      doc_side: doc_side,
-      message: msg,
-      ipv_code: ipv_code,
-      // callbacks from native
-      upload: function upload(file) {
-        try {
-          switch (file.type) {
-            case "video/mp4":
-            case "video/webm":
-            case "video/ogg":
-            case "video/x-flv":
-            case "video/x-ms-wmv":
-            setFile(file)
-            setTimeout(
-              function () {
-                setLoading(false);
-              },
-              1000
-            );
-            break;
-            default:
-              toast('Please select a valid video file')
-          }
-        } catch (e) {
-          //
-        }
-      },
-    })
-
-    window.callbackWeb.add_listener({
-      type: 'native_receiver_image',
-      show_loader: function (show_loader) {
-        setLoading(true)
-      },
-    })
+  const onFileSelectComplete = (file) => {
+    setFile(file);
   }
-  
-  const handleUpload = (method_name) => {
-      native_call_handler(method_name, 'ipvvideo', '', '', 'Look at the screen and read the verification number loud', ipvcode)
+
+  const onFileSelectError = () => {
+    return toast('Please select video file only');
   }
 
   const handleSubmit = async () => {
@@ -129,16 +93,8 @@ const IpvVideo = (props) => {
   }
 
   const handleClick = (e) => {
-    if (!isWeb) {
-      if (!file) {
-        handleUpload("open_video_camera");
-      } else {
-        setFile(null);
-      }
-    } else {
-      if (!showVideoRecoreder) {
-        setShowVideoRecorder(!showVideoRecoreder);
-      }
+    if (!showVideoRecoreder) {
+      setShowVideoRecorder(!showVideoRecoreder);
     }
   }
 
@@ -216,7 +172,7 @@ const IpvVideo = (props) => {
                 {errorContent}
               </WVInfoBubble>
             }
-            {!isWeb && file && !errorContent && (
+            {!isWeb && file && (
               <img
                 src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
                 className="preview"
@@ -252,7 +208,17 @@ const IpvVideo = (props) => {
                 dataAid='take-video-btn'
                 type="outlined"
                 buttonTitle={uploadCTAText}
-                onClick={handleClick}
+                fileName="ipv_video"
+                withPicker
+                nativePickerMethodName="open_video_camera"
+                onFileSelectComplete={onFileSelectComplete}
+                onFileSelectError={onFileSelectError}
+                supportedFormats={SUPPORTED_VIDEO_TYPES}
+                fileHandlerParams={{
+                  doc_type: "ipvvideo",
+                  message: "Look at the screen and read the verification number loud",
+                  ipv_code: ipvcode
+                }}
               />
             }
           </KycUploadContainer>
