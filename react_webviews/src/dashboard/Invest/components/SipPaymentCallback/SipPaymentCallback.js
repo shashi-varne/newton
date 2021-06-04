@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { getCampaignBySection, resetRiskProfileJourney } from "../../functions";
@@ -10,6 +10,7 @@ import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 
 const SipPaymentCallback = (props) => {
+  const navigate = navigateFunc.bind(props);
   const params = props.match.params || {};
   const status = params.status || "";
   let message = params.message || "";
@@ -23,6 +24,27 @@ const SipPaymentCallback = (props) => {
 
   resetRiskProfileJourney();
   const config = getConfig();
+  const eventData = storageService().getObject('mf_invest_data')
+  let _event = {
+    'event_name': 'payment_status',
+    'properties': {
+      'status': status,
+      'amount': eventData.amount,
+      'payment_id': eventData.payment_id,
+      'journey': {
+        'name': eventData.journey_name,
+        'investment_type': eventData.investment_type,
+        'investment_subtype': eventData.investment_subtype || "",
+        'risk_type': ''
+      }
+    }
+  };
+  // send event
+  if (!config.Web) {
+    window.callbackWeb.eventCallback(_event);
+  } else if (config.isIframe) {
+    window.callbackWeb.sendEvent(_event);
+  }
   let paymentError = false;
   if (status === "error" || status === "failed") {
     paymentError = true;
@@ -69,13 +91,6 @@ const SipPaymentCallback = (props) => {
     } finally {
       setSkelton(false);
     }
-  };
-
-  const navigate = (path) => {
-    props.history.push({
-      pathname: path,
-      search: config.searchParams,
-    });
   };
 
   const handleClick = () => {

@@ -3,10 +3,12 @@ import Container from "../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
 import { getFunds, getFundMf } from "../common/api";
-import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
+import { getAmountInInr } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import FundNotAvailable from "./mini-components/FundNotAvailable";
 import AskInvestType from "./mini-components/AskInvestType";
 import Button from "../../common/ui/Button";
+import { getConfig } from "../../utils/functions";
 
 const Funds = (props) => {
   const params = props?.match?.params || {};
@@ -83,6 +85,18 @@ const Funds = (props) => {
   };
 
   const getMfDetails = async (fund) => {
+    const config = getConfig();
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "reports",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
     setIsApiRunning("button");
     try {
       const result = await getFundMf({
@@ -107,6 +121,17 @@ const Funds = (props) => {
       if (!result.purchase_flag) setFundNotAvailable(true);
       if (canShowBothOptions(itype)) {
         if (result.sip_flag && result.ot_flag) {
+          item.type =
+            itype === "buildwealth"
+              ? "buildwealth"
+              : dontAddSuffixInType(itype);
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+
           setInvestTypeData({
             message: "How would you like to invest in this fund?",
             button2Title: "SIP",
@@ -116,6 +141,13 @@ const Funds = (props) => {
           });
           setAskInvestType(true);
         } else if (result.sip_flag) {
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+
           setInvestTypeData({
             message: result.mfname + " is only enabled for SIP",
             button2Title: "CONTINUE",
@@ -125,6 +157,13 @@ const Funds = (props) => {
           });
           setAskInvestType(true);
         } else if (result.ot_flag) {
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+
           setInvestTypeData({
             message: result.mfname + " is only enabled for ONE-TIME",
             button2Title: "CONTINUE",
@@ -135,12 +174,26 @@ const Funds = (props) => {
           setAskInvestType(true);
         }
       } else if (canShowOnlyOt(itype) && result.ot_flag) {
+        // send event
+        if (!config.Web) {
+          window.callbackWeb.eventCallback(_event);
+        } else if (config.isIframe) {
+          window.callbackWeb.sendEvent(_event);
+        }
+
         navigate(`${getPathname.investMore}ONE-TIME`, {
           state: {
             recommendation: JSON.stringify(item),
           },
         });
       } else if (canShowOnlySip(itype) && result.sip_flag) {
+        // send event
+        if (!config.Web) {
+          window.callbackWeb.eventCallback(_event);
+        } else if (config.isIframe) {
+          window.callbackWeb.sendEvent(_event);
+        }
+
         navigate(`${getPathname.investMore}SIP`, {
           state: {
             recommendation: JSON.stringify(item),
@@ -165,8 +218,8 @@ const Funds = (props) => {
         },
       });
     } else if (invest_type === "ONE-TIME") {
-      if(recommendation.type === "buildwealth") {
-        recommendation.type = "buildwealthot"
+      if (recommendation.type === "buildwealth") {
+        recommendation.type = "buildwealthot";
       }
       navigate(`${getPathname.investMore}${invest_type}`, {
         state: {
@@ -196,7 +249,9 @@ const Funds = (props) => {
                       fund.current_earnings.percent !== 0 && (
                         <div
                           className={`earning-percent ${
-                            fund.current_earnings.percent >= 0 ? "funds-green-text" : "funds-red-text"
+                            fund.current_earnings.percent >= 0
+                              ? "funds-green-text"
+                              : "funds-red-text"
                           }`}
                         >
                           {fund.current_earnings.percent > 0 && "+"}
@@ -238,7 +293,9 @@ const Funds = (props) => {
                         <div className="content">
                           <div
                             className={`amount ${
-                              fund.current_earnings.amount < 0 ? "funds-red-text" : "funds-green-text"
+                              fund.current_earnings.amount < 0
+                                ? "funds-red-text"
+                                : "funds-green-text"
                             }`}
                           >
                             {getAmountInInr(fund.current_earnings.amount)}

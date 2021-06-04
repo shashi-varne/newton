@@ -574,6 +574,31 @@ export function checkValidString(value) {
   }
 }
 
+export function checkValidStringV2(value) {
+  try {
+    return (typeof value === "string" && value !== 'undefined' && 
+      value !== '' && value !== 'false');
+  } catch (ex) {
+    console.log(ex.toString());
+    return false;
+  }
+}
+
+export function checkObjectWithinString(value) {
+  try {
+    if (checkValidStringV2(value)) {
+      let o = JSON.parse(value);
+      if (o && typeof o === "object") {
+          return true;
+      }
+    }
+    return false;
+  } catch (ex) {
+    console.log(ex.toString());
+    return false;
+   }
+}
+
 export function split2(str, delim) {
   var parts = str.split(delim);
   return [parts[0], parts.splice(1, parts.length).join(delim)];
@@ -645,7 +670,7 @@ export function storageService() {
   }
 
   function getObject(key) {
-    if (sessionStorageValid && checkValidString(window.sessionStorage.getItem(key))) {
+    if (sessionStorageValid && checkObjectWithinString(window.sessionStorage.getItem(key))) {
       return JSON.parse(window.sessionStorage.getItem(key)) || {};
     }
 

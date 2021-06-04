@@ -6,6 +6,7 @@ import Api from "../../utils/api";
 import toast from "../../common/ui/Toast";
 import { storageService } from "../../utils/validators";
 import { getBasePath } from "../../utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
 
 const genericErrorMessage = "Something went wrong!";
 const config = getConfig();
@@ -89,6 +90,7 @@ class Notification extends Component {
   };
 
   handleClick = (target) => {
+    this.sendEvents('next', target.campaign_name)
     this.setState({ showLoader: true });
     let campLink = "";
     const showRedirectUrl = target.campaign_name === "whatsapp_consent"
@@ -99,10 +101,27 @@ class Notification extends Component {
     window.location.href = campLink;
   };
 
+  sendEvents = (userAction, data) => {
+    let eventObj = {
+      "event_name": 'notification',
+      "properties": {
+        "user_action": userAction,
+        "screen_name": 'notification',
+        "notification_click": data || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     let { notifications } = this.state;
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         noFooter={true}
         skelton={this.state.showLoader}
         title="Notification"

@@ -2,8 +2,9 @@ import { validateEmail } from "utils/validators";
 import toast from "common/ui/Toast";
 import Api from "utils/api";
 import { storageService, getUrlParams } from "utils/validators";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
+import { nativeCallback } from "../utils/native_callback";
 
 const isMobileView = getConfig().isMobileDevice;
 const errorMessage = "Something went wrong!";
@@ -18,7 +19,7 @@ export function initialize() {
   this.resendOtp = resendOtp.bind(this);
   this.forgotPassword = forgotPassword.bind(this);
   this.verifyForgotOtp = verifyForgotOtp.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
   let main_query_params = getUrlParams();
@@ -369,6 +370,10 @@ export async function otpVerification(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      let eventObj = {
+        event_name: "user loggedin",
+      };
+      nativeCallback({ events: eventObj });
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);
@@ -505,24 +510,6 @@ export async function verifyForgotOtp(body) {
     toast(errorMessage);
   } finally {
     this.setState({ isApiRunning: false });
-  }
-}
-
-export function navigate(pathname, data = {}) {
-  if (data.edit) {
-    this.props.history.replace({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
-  } else {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
   }
 }
 

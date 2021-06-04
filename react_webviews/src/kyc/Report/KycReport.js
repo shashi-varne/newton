@@ -9,14 +9,16 @@ import {
   STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
-import { navigate as navigateFunc } from "../common/functions";
+import { getFlow } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Report = (props) => {
-  const productName = getConfig().productName;
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -33,8 +35,8 @@ const Report = (props) => {
       navigate(PATHNAME_MAPPER.uploadProgress, {
         state: {
           disableNext: true,
-          fromState: "kyc-report",
-          toState: "landing",
+          fromState: "/kyc/report",
+          toState: "/landing",
         },
       });
       return;
@@ -109,6 +111,7 @@ const Report = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents('next')
     if (isCompliant) {
       proceed();
     } else {
@@ -117,6 +120,23 @@ const Report = (props) => {
   };
 
   const proceed = () => {
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "kyc",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf"
+        }
+      }
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
     if (getConfig().Web) {
       navigate(PATHNAME_MAPPER.invest);
     } else {
@@ -129,11 +149,48 @@ const Report = (props) => {
   };
 
   const checkNPSAndProceed = () => {
+    let _event = {};
     if (user.nps_investment) {
+      _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "kyc",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "reports",
+          },
+        },
+      };
+      // send event
+      if (!config.Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (config.isIframe) {
+        window.callbackWeb.sendEvent(_event);
+      }
+
       if (!getConfig().isIframe) {
         navigate(PATHNAME_MAPPER.reports);
       }
     } else {
+      _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "kyc",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "mf",
+          },
+        },
+      };
+      // send event
+      if (!config.Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (config.isIframe) {
+        window.callbackWeb.sendEvent(_event);
+      }
+
       if (getConfig().Web) {
         navigate(PATHNAME_MAPPER.invest);
       } else {
@@ -306,9 +363,26 @@ const Report = (props) => {
     }
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "kyc_done",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       id="kyc-home"
+      events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       handleClick={handleClick}
       title={topTitle}
