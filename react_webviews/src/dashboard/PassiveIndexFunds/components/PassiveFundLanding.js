@@ -5,7 +5,7 @@ import ReactPlayer from 'react-player'
 import Container from "../../common/Container";
 import MenuListDropDown from '../../../common/ui/MenuListDropDown'
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
-import { fund_category, passiveActiveCarousal, keyInsightsCarousel } from "../constants";
+import { FUND_CATEGORY, ACTIVE_PASSIVE_FACTS_CAROUSEL, KEY_INSIGHTS_CAROUSEL } from "../constants";
 import { initialize } from "../common/commonFunctions";
 import { nativeCallback } from "../../../utils/native_callback";
 import GenericFactCarousel from "../../../common/ui/GenericFactCarousel";
@@ -105,14 +105,14 @@ class Landing extends Component {
           <div className="content-main">
             <h1 className="category-title">Top index funds</h1>
             <MenuListDropDown
-              menulistProducts={fund_category}
+              menulistProducts={FUND_CATEGORY}
               value={this.state.value}
               handleClick={this.handleClick}
             />
             <h1 className="category-title">Key insights</h1>
             <div className="react-responsive-carousel">
               <GenericContentCarousel
-                customData={keyInsightsCarousel}
+                customData={KEY_INSIGHTS_CAROUSEL}
                 callbackFromParent={this.countCarouselSwipe}
                 selectedIndexvalue={this.state.selectedIndex}
                 style={{
@@ -124,7 +124,7 @@ class Landing extends Component {
             <h1 className="category-title">Passive vs. Active investing</h1>
             <div className="react-responsive-carousel">
               <GenericFactCarousel
-                customData={passiveActiveCarousal}
+                customData={ACTIVE_PASSIVE_FACTS_CAROUSEL}
                 callbackFromParent={this.countCarouselSwipe}
                 style={{
                   backgroundImage: `url(${ActivePassiveBackground})`,
