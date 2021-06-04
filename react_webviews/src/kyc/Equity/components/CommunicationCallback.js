@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import toast from "../../../common/ui/Toast";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { getUrlParams, isEmpty } from "../../../utils/validators";
-import {
-  isDigilockerFlow,
-  navigate as navigateFunc,
-} from "../../common/functions";
+import { isDigilockerFlow } from "../../common/functions";
 import { isReadyToInvest } from "../../services";
 import { PATHNAME_MAPPER } from "../../constants";
 import Container from "../../common/Container";
+import { navigate as navigateFunc } from "../../../utils/functions";
 
 const CommunicationCallback = (props) => {
   const navigate = navigateFunc.bind(props);

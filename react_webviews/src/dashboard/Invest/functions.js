@@ -14,6 +14,7 @@ import {
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
+import { isKycCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -567,7 +568,7 @@ export function openStocks() {
           fromState: "invest",
         },
       });
-    } else if (kycJourneyStatus === "submitted" || kycJourneyStatus === "complete") {
+    } else if (isKycCompleted(userKyc)) {
       this.navigate(PATHNAME_MAPPER.accountInfo)
     } else {
       this.navigate(kycStatusData.next_state, {

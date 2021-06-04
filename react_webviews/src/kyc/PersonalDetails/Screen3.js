@@ -11,7 +11,7 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
-  getEmailOrMobileVerifiedStatus,
+  isEmailOrMobileVerified,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -93,7 +93,7 @@ const PersonalDetails3 = (props) => {
 
   const handleNavigation = () => {
     const data = { state: { isEdit } };
-    if (!getEmailOrMobileVerifiedStatus()) {
+    if (!isEmailOrMobileVerified()) {
       navigate(PATHNAME_MAPPER.communicationDetails, data);
       return;
     }

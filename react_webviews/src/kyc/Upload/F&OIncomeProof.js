@@ -8,12 +8,11 @@ import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClick
 import Toast from '../../common/ui/Toast';
 import useUserKycHook from '../common/hooks/userKycHook';
 import { upload } from '../common/api';
-import { navigate as navigateFunc } from '../common/functions';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
-import { getConfig } from '../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../utils/functions';
 
 const { productName } = getConfig();
 const UPLOAD_OPTIONS_MAP = {

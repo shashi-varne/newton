@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Toast from "../../../common/ui/Toast";
 import { submit } from "../../common/api";
 import Container from "../../common/Container";
-import { NRI_DOCUMENTS_MAPPER } from "../../constants";
+import { NRI_DOCUMENTS_MAPPER, PATHNAME_MAPPER } from "../../constants";
 import {
   compareObjects,
   validateFields,
@@ -13,6 +13,7 @@ import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
 import "../commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
+import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -21,7 +22,14 @@ const NRIAddressDetails2 = (props) => {
     nri_pincode: "",
   });
   const [oldState, setOldState] = useState({});
+  const [openConfirmBack, setOpenConfirmBack] = useState(false);
   const navigate = navigateFunc.bind(props);
+
+  const closeConfirmBack = () => {
+    setOpenConfirmBack(false);
+  }
+
+  const goToJourney = () => navigate(PATHNAME_MAPPER.journey);
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -163,6 +171,14 @@ const NRIAddressDetails2 = (props) => {
     }
   }
 
+  const goBack = () => {
+    if(stateParams?.userType === "compliant") {
+      setOpenConfirmBack(true)
+    } else {
+      props.history.goBack();
+    }
+  }
+
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -175,6 +191,7 @@ const NRIAddressDetails2 = (props) => {
       count={pageDetails.current}
       total={pageDetails.total}
       data-aid='kyc-nri-address-details-screen-2'
+      headerData={{ goBack }}
     >
       <section data-aid='kyc-address-details-2'>
         <div className="sub-title" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
@@ -230,6 +247,11 @@ const NRIAddressDetails2 = (props) => {
           />
         </form>
       </section>
+      <ConfirmBackDialog
+        isOpen={openConfirmBack}
+        goBack={goToJourney}
+        close={closeConfirmBack}
+      />
     </Container>
   );
 };

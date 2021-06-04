@@ -8,6 +8,7 @@ import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
 import { navigate as navigateFunc } from "../../utils/functions";
 import { storageService } from "../../utils/validators";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 class Container extends Component {
   constructor(props) {
@@ -41,12 +42,38 @@ class Container extends Component {
     const fromState = this.props.location?.state?.fromState || "";
     const toState = this.props.location?.state?.toState || "";
     const params = this.props.location?.params || {};
-    const pathname = this.props.location?.pathname || "";
+    let pathname = this.props.location?.pathname || "";
+    if(pathname.indexOf('appl/webview') !== -1) {
+      pathname = pathname.split("/")[5] || "/";
+    }
 
+    let openDialog = false;
+    switch (pathname) {
+      case "/kyc/personal-details4":
+      case "/kyc/dl/personal-details3":
+      case "/kyc/compliant-personal-details4":
+      case "/kyc/compliant/bank-details":
+      case "/kyc/non-compliant/bank-details":
+      case "/kyc/compliant/upload-documents":
+      case "/kyc/non-compliant/upload-documents":
+      case "/kyc//upload/fno-sample-documents":
+      case "/kyc/digilocker/success":
+      case "/kyc/digilocker/failed":
+        this.setState({ openConfirmBack: true });
+        openDialog=true;
+        break;
+      default:
+        break;
+    }
+
+    if(openDialog) {
+      return;
+    }
+    
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-    
+
     if (toState) {
       let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
       if (isRedirected) {
@@ -91,8 +118,28 @@ class Container extends Component {
     this.didupdate();
   }
 
+  closeConfirmBackDialog = () => {
+    this.setState({ openConfirmBack: false });
+  };
+
+  redirectToJourney = () => {
+    if (this.getEvents("back")) {
+      nativeCallback({ events: this.getEvents("back") });
+    }
+    this.navigate("/kyc/journey");
+  };
+
   render() {
-    return <Fragment>{this.commonRender()}</Fragment>;
+    return (
+      <Fragment>
+        <ConfirmBackDialog
+          isOpen={this.state.openConfirmBack}
+          close={this.closeConfirmBackDialog}
+          goBack={this.redirectToJourney}
+        />
+        {this.commonRender()}
+      </Fragment>
+    );
   }
 }
 
