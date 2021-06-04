@@ -69,7 +69,7 @@ const WVBottomSheet = ({
               </div>
             }
             {subtitle &&
-              <Subtitle className={classes.subtitle}  dataAidSuffix={dataAidSuffix}>
+              <Subtitle className={classes.subtitle} dataAidSuffix={dataAidSuffix}>
                 {subtitle}
               </Subtitle>
             }

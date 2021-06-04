@@ -2,7 +2,7 @@ import './WVClickableTextElement.scss';
 import React, { useEffect, useState } from 'react';
 import { getConfig } from '../../../utils/functions';
 
-const WVClickableTextElement = ({ className, children, onClick, color, dataAidSuffix  }) => {
+const WVClickableTextElement = ({ className, children, onClick, color, dataAidSuffix }) => {
   const [textColor, setTextColor] = useState('');
 
   useEffect(() => {

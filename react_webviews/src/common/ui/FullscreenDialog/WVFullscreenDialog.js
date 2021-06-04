@@ -11,7 +11,7 @@ const WVFullscreenDialog = ({
 }) => {
   return (
     <Dialog
-      dataAidSuffix={dataAidSuffix}
+      data-aid={`wv-fullscreen-dialog-${dataAidSuffix}`}
       fullScreen
       open={open}
       onClose={onClose}

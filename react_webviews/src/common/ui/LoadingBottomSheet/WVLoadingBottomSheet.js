@@ -27,7 +27,6 @@ import PropTypes from 'prop-types';
 import { isFunction, noop } from 'lodash';
 
 const WVLoadingBottomSheet = ({
-
   dataAidSuffix,
   isOpen,
   gifSrc,

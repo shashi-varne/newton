@@ -2,7 +2,7 @@ import React from "react";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import "./FileAccessDialog.scss";
 
-const FileAccessDialog = ({ isOpen, onClose, handleUpload, docSidem, dataAidSuffix }) => {
+const FileAccessDialog = ({ isOpen, onClose, handleUpload, docSide, dataAidSuffix }) => {
   return (
     <Dialog
       open={isOpen}
