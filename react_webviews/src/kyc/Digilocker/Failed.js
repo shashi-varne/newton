@@ -1,16 +1,17 @@
 import "./Digilocker.scss";
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
-import { navigate as navigateFunc } from "../common/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
+import "./Digilocker.scss";
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const navigate = navigateFunc.bind(props);
 
   const close = () => {
     setOpen(false);
@@ -21,7 +22,6 @@ const Failed = (props) => {
   };
 
   const manual = async () => {
-    const navigate = navigateFunc.bind(props);
     try {
       setIsApiRunning(true);
       await setKycType("manual");
@@ -43,19 +43,16 @@ const Failed = (props) => {
       twoButtonVertical={true}
       button1Props={{
         type: 'primary',
-        order: "1",
         title: "RETRY",
         onClick: retry,
       }}
       button2Props={{
         type: 'secondary',
-        order: "2",
         title: "UPLOAD DOCUMENTS MANUALLY",
         onClick: manual,
         showLoader: isApiRunning
       }}
       skelton={isLoading}
-      // disableBack
       headerData={{ icon: "close" }}
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>

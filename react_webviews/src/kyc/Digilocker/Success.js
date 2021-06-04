@@ -1,12 +1,11 @@
 import React from 'react'
 import Container from '../common/Container'
-import { getConfig } from '../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { DL_DOCS } from '../constants'
-import { navigate as navigateFunc } from '../common/functions'
 import "./Digilocker.scss";
 
 const Success = (props) => {
-  const productName = getConfig().productName
+  const productName = getConfig().productName;
   const proceed = () => {
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
@@ -16,7 +15,7 @@ const Success = (props) => {
       title="Share Details"
       buttonTitle="PROCEED"
       handleClick={proceed}
-      headerData={{goBack: proceed, icon: "close" }}
+      headerData={{ icon: "close" }}
       data-aid='kyc-success-page'
     >
       <section id="digilocker-success" data-aid='kyc-digilocker-success'>

@@ -5,9 +5,8 @@ import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
-import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isTradingEnabled } from "../../utils/functions";
+import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -89,6 +88,7 @@ const Home = (props) => {
   };
 
   const handleClick = async () => {
+    
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
@@ -234,6 +234,7 @@ const Home = (props) => {
   };
 
   const savePan = async (is_nri) => {
+    // sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
     try {
       // setShowLoader("button");
       if (is_nri) {
@@ -279,6 +280,7 @@ const Home = (props) => {
       (isUserCompliant || kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
+      sendEvents("next", "pan_entry")
       navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       const kycProductType = storageService().get("kycStartPoint");
@@ -292,7 +294,9 @@ const Home = (props) => {
         } else {
           navigate(PATHNAME_MAPPER.journey);
         }
+        sendEvents("next", "pan_entry")
       } else {
+        sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
         if (is_nri) {
           if (!TRADING_ENABLED && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
@@ -326,8 +330,25 @@ const Home = (props) => {
     }
   };
 
+  const sendEvents = (userAction, screenName) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction,
+        "screen_name": screenName || "pan_check",
+        "pan": pan ? "yes" : "no",
+        "initial_kyc_status": kyc?.initial_kyc_status || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
   return (
     <Container
+      events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-home"
       buttonTitle="CONTINUE"

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
-import { getConfig } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const RegistrationSuccess = (props) => {

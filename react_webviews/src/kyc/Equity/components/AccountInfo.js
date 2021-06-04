@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { getConfig } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
-import { getEmailOrMobileVerifiedStatus, navigate as navigateFunc } from "../../common/functions";
+import { isEmailOrMobileVerified, isKycCompleted } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 
@@ -32,8 +32,8 @@ const AccountInfo = (props) => {
   };
 
   const handleClick = () => {
-    if (kyc?.application_status_v2 === "submitted" || kyc?.application_status_v2 === "complete") {
-      if (!getEmailOrMobileVerifiedStatus()) {
+    if (isKycCompleted(kyc)) {
+      if (!isEmailOrMobileVerified()) {
         navigate(PATHNAME_MAPPER.communicationDetails);
       } else {
         navigate(PATHNAME_MAPPER.tradingExperience);

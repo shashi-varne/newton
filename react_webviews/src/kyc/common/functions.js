@@ -1,25 +1,7 @@
-import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { isTradingEnabled } from '../../utils/functions'
 import { isEmpty, storageService } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS } from '../constants'
-
-export function navigate(pathname, data = {}) {
-  if (data?.edit) {
-    this.history.replace({
-      pathname: pathname,
-      search: data?.searchParams || getConfig().searchParams,
-      state: data?.state || null,
-      params: data?.params || null,
-    })
-  } else {
-    this.history.push({
-      pathname: pathname,
-      search: data?.searchParams || getConfig().searchParams,
-      state: data?.state,
-      params: data?.params,
-    })
-  }
-}
 
 export const validateFields = (formData, keyToCheck) => {
   let canSubmit = true
@@ -164,7 +146,7 @@ export const getTotalPagesInPersonalDetails = (isEdit = false) => {
   }
   const isCompliant = kyc.kyc_status === "compliant";
   const isNri = kyc?.address?.meta_data?.is_nri || false;
-  const isEmailAndMobileVerified = getEmailOrMobileVerifiedStatus()
+  const isEmailAndMobileVerified = isEmailOrMobileVerified()
   const dlCondition =
     !isCompliant &&
     !isNri &&
@@ -178,7 +160,7 @@ export const getTotalPagesInPersonalDetails = (isEdit = false) => {
   return totalPages;
 };
 
-export const getEmailOrMobileVerifiedStatus = () => {
+export const isEmailOrMobileVerified = () => {
   const kyc = storageService().getObject("kyc") || {};
   const user = storageService().getObject("user") || {};
   if (isEmpty(kyc) || isEmpty(user)) {
@@ -278,3 +260,36 @@ export function isDocSubmittedOrApproved(doc) {
   if (isEmpty(kyc)) return false;
   return kyc[doc]?.doc_status === "submitted" || kyc[doc]?.doc_status === "approved";
 }
+
+export const getFlow = (kycData) => {
+  let flow = "";
+  let dlFlow = false;
+  if (
+    kycData.kyc_status !== 'compliant' &&
+    !kycData.address?.meta_data?.is_nri &&
+    kycData.dl_docs_status !== '' &&
+    kycData.dl_docs_status !== 'init' &&
+    kycData.dl_docs_status !== null
+  ) {
+    dlFlow = true;
+  }
+  if (kycData.kyc_status === 'compliant') {
+    flow = 'premium onboarding'
+  } else {
+    if (dlFlow) {
+      flow = 'digi kyc'
+    } else {
+      flow = 'general'
+    }
+  }
+  return flow;
+}
+
+export const isKycCompleted = (kyc) => {
+  return (
+    isTradingEnabled() &&
+    (kyc?.application_status_v2 === "submitted" ||
+      kyc?.application_status_v2 === "complete") &&
+    kyc.sign_status === "signed"
+  );
+};

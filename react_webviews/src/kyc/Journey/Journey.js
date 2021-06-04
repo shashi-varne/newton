@@ -7,20 +7,24 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import {
-  navigate as navigateFunc,
-} from '../common/functions'
-import { updateQueryStringParameter } from "../common/functions";
+import { isKycCompleted, updateQueryStringParameter } from "../common/functions";
+import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
+import { navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import { getJourneyData } from './JourneyFunction';
 
 const headerDataMapper = {
+  kycDone: {
+    icon: "ic_premium_onboarding_mid",
+    title: "Finish account upgrade",
+    subtitle: "",
+  },
   compliant: {
     icon: "ic_premium_onboarding_mid",
     title: "Premium onboarding",
@@ -45,7 +49,6 @@ const headerDataMapper = {
 };
 
 const config = getConfig();
-
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -69,17 +72,36 @@ const Journey = (props) => {
     setGoBackModal(false)
   }
 
+  const backHandlingCondition = () => {
+    if (config.isIframe) {
+      if (config.code === 'moneycontrol') {
+        navigate("/invest/money-control");
+      } else {
+        navigate("/landing");
+      }
+      return;
+    } else if (!config.Web) {
+      if (storageService().get('native')) {
+        nativeCallback({ action: "exit_web" });
+      } else {
+        navigate("/");
+      }
+      return;
+    }
+    navigate("/landing");
+  }
+
   const openGoBackModal = () => {
     if (user?.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete") {
       setGoBackModal(true)
     } else {
-      nativeCallback({ action: "exit" })
+      backHandlingCondition();
     }
   }
 
   const confirmGoBack = () => {
       closeGoBackModal()
-      navigate('/')
+      backHandlingCondition();
   }
 
   useEffect(() => {
@@ -224,7 +246,7 @@ const Journey = (props) => {
       ) {
         topTitle = 'Investment pending'
         investmentPending = true
-      } else if (isCompliant) {
+      } else if (isCompliant || isKycDone) {
         topTitle = `What's next?`
       } else if (show_aadhaar) {
         topTitle = 'Steps to follow:'
@@ -254,6 +276,7 @@ const Journey = (props) => {
   }
 
   const goNext = async () => {
+    sendEvents('next')
     try {
       if (!canSubmit()) {
         for (var i = 0; i < kycJourneyData.length; i++) {
@@ -286,6 +309,8 @@ const Journey = (props) => {
   }
 
   const handleEdit = (key, index, isEdit) => {
+    if(isEdit)
+      sendEvents('edit')
     console.log('Inside handleEdit')
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {
@@ -477,8 +502,15 @@ const Journey = (props) => {
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
+    var isKycDone = isKycCompleted(kyc);
     var kycJourneyData = initJourneyData() || []
-    var headerKey = isCompliant ? "compliant" : dlCondition ? "dlFlow" : "default";
+    var headerKey = isKycDone
+      ? "kycDone"
+      : isCompliant
+      ? "compliant"
+      : dlCondition
+      ? "dlFlow"
+      : "default";
     var headerData = headerDataMapper[headerKey];
     if(isCompliant) {
       if (journeyStatus === "ground_premium") {
@@ -526,7 +558,6 @@ const Journey = (props) => {
       }
     }
   }
-
   if (!isEmpty(kyc) && !isEmpty(user)) {
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
       navigate('/nps/identity')
@@ -545,9 +576,42 @@ const Journey = (props) => {
     }
   }
 
+  const sendEvents = (userAction, screen_name) => {
+    let stageData=0;
+    let stageDetailData='';
+    for (var i = 0; i < kycJourneyData?.length; i++) {
+      if (
+        kycJourneyData[i].status === 'init' ||
+        kycJourneyData[i].status === 'pending'
+      ) {
+        stageData = i + 1
+        stageDetailData = kycJourneyData[i].key
+        break
+      }
+    }
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "" ,
+        "screen_name": screen_name || "kyc_journey",
+        stage: stageData,
+        details: stageDetailData,
+        "rti": "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       force_hide_inpage_title
+      events={sendEvents("just_set_events")}
       buttonTitle={ctaText}
       classOverRideContainer="pr-container"
       skelton={isLoading || isEmpty(kyc) || isEmpty(user)}
@@ -567,7 +631,7 @@ const Journey = (props) => {
             <div className="left">
               <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
               <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
-              {(show_aadhaar || isCompliant) && (
+              {(show_aadhaar || isCompliant || isKycDone) && (
                 <>
                   <div className="kyc-pj-bottom" data-aid='kyc-pj-bottom'>
                     <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-one'>

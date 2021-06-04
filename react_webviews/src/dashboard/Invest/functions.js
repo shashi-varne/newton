@@ -1,7 +1,7 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import {
   apiConstants,
   investCardsBase,
@@ -14,6 +14,7 @@ import {
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
+import { isKycCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -25,7 +26,7 @@ export async function initialize() {
   this.getRecommendations = getRecommendations.bind(this);
   this.getRateOfInterest = getRateOfInterest.bind(this);
   this.corpusValue = corpusValue.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.clickCard = clickCard.bind(this);
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
@@ -567,7 +568,7 @@ export function openStocks() {
           fromState: "invest",
         },
       });
-    } else if (kycJourneyStatus === "submitted" || kycJourneyStatus === "complete") {
+    } else if (isKycCompleted(userKyc)) {
       this.navigate(PATHNAME_MAPPER.accountInfo)
     } else {
       this.navigate(kycStatusData.next_state, {
@@ -603,7 +604,7 @@ function handleInvestSubtitle (partner = '')  {
 
 export function handleRenderCard() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-  let partner = this.state.partner || storageService().getObject("partner") || {};
+  let partner = this.state.partner || storageService().get("partner") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
   const isWeb =getConfig().Web;

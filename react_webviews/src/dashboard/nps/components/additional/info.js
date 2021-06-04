@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
 import { initialize } from "../../common/commonFunctions";
-import { getConfig } from "utils/functions";
 
 class NpsInfo extends Component {
   constructor(props) {
@@ -39,19 +38,20 @@ class NpsInfo extends Component {
         });
     } else {
       if (this.state.currentUser.nps_investment) {
-        this.props.history.push(
-          { pathname: `amount/one-time`, search: getConfig().searchParams },
-          {
-            state: {
-              pran_number: this.state.npsUser.pran,
-            },
+        this.navigate("/nps/amount/one-time", {
+          state: {
+            pran_number: this.state.npsUser.pran,
           }
-        );
+        })
       } else {
-        this.navigate("pan");
+        this.navigate("/nps/pan");
       }
     }
   };
+
+  goBack = () => {
+    this.navigate('/invest')
+  }
 
   render() {
     let { benefits, withdraw } = this.state;
@@ -60,6 +60,9 @@ class NpsInfo extends Component {
         buttonTitle="CONTINUE"
         title="Why NPS?"
         handleClick={this.handleClick}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div className="nps-info">
           <ul>

@@ -11,13 +11,14 @@ import {
 } from "../../utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
   getTotalPagesInPersonalDetails,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import useUserKycHook from "../common/hooks/userKycHook";
 import toast from "../../common/ui/Toast";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -64,6 +65,7 @@ const PersonalDetails1 = (props) => {
   const handleClick = () => {
     let keysToCheck = ["name", "dob", "gender", "marital_status"];
     let result = validateFields(form_data, keysToCheck);
+    sendEvents("next")
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -137,8 +139,31 @@ const PersonalDetails1 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "" ,
+        "screen_name": "personal_details_1",
+        "name": form_data.name ? "yes" : "no",
+        "mobile": form_data.mobile_number ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "gender": form_data.gender,
+        "marital_status": form_data.marital_status,
+        "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
+        "flow": 'general'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       handleClick={handleClick}
       skelton={isLoading}

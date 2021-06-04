@@ -13,12 +13,13 @@ import {
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
 import { API_CONSTANTS, PATHNAME_MAPPER } from "../../constants";
-import { getBasePath, getConfig } from "../../../utils/functions";
-import Otp from "../mini-components/Otp";
 import {
-  getTotalPagesInPersonalDetails,
+  getBasePath,
+  getConfig,
   navigate as navigateFunc,
-} from "../../common/functions";
+} from "../../../utils/functions";
+import Otp from "../mini-components/Otp";
+import { getTotalPagesInPersonalDetails, isKycCompleted } from "../../common/functions";
 import WVButton from "../../../common/ui/Button/WVButton";
 
 const config = getConfig();
@@ -65,10 +66,7 @@ const CommunicationDetails = (props) => {
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
       setFormData({ ...data });
-      setIsKycDone(
-        kyc?.application_status_v2 === "submitted" ||
-          kyc?.application_status_v2 === "complete"
-      );
+      setIsKycDone(isKycCompleted(kyc));
       setTotalPages(getTotalPagesInPersonalDetails());
     }
   }, [kyc, user]);

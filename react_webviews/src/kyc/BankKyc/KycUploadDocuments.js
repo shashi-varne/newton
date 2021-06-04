@@ -4,14 +4,16 @@ import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkPanFetchStatus, isDigilockerFlow, navigate as navigateFunc } from "../common/functions";
+import { checkPanFetchStatus, isDigilockerFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig, isTradingEnabled } from "../../utils/functions";
+import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
+import { getFlow } from "../common/functions";
+import { nativeCallback } from "../../utils/native_callback";
 
 const config = getConfig();
 const isWeb = config.Web;
@@ -71,6 +73,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleSubmit = async () => {
+    sendEvents('next')
     if (selected === null || !file) return;
     try {
       setIsApiRunning("button");
@@ -90,6 +93,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleEdit = () => {
+    sendEvents('edit')
     navigate(`/kyc/${userType}/bank-details`);
   };
 
@@ -98,6 +102,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
+    sendEvents('next', "", 'bottom_sheet')
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
@@ -168,7 +173,27 @@ const KycUploadDocuments = (props) => {
   const selectedDocValue =
     selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
-  return (
+    const sendEvents = (userAction, type, screen_name) => {
+      let eventObj = {
+        "event_name": 'KYC_registration',
+        "properties": {
+          "user_action": userAction || "",
+          "screen_name": screen_name || 'bank_docs',
+          "initial_kyc_status": kyc.initial_kyc_status,
+          "flow": getFlow(kyc) || "",
+          "document":VERIFICATION_DOC_OPTIONS[selected]?.name || "",
+          "type": type || '',
+          "status" : screen_name ? "verification pending":""
+        }
+      };
+      if (userAction === 'just_set_events') {
+        return eventObj;
+      } else {
+        nativeCallback({ events: eventObj });
+      }
+    }
+
+    return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
@@ -177,6 +202,7 @@ const KycUploadDocuments = (props) => {
       showLoader={isApiRunning}
       title="Upload documents"
       data-aid='kyc-upload-documents-page'
+      events={sendEvents("just_set_events")}
     >
       <section id="kyc-bank-kyc-upload-docs" data-aid='kyc-bank-kyc-upload-docs'>
         <div className="banner" data-aid='kyc-banner'>

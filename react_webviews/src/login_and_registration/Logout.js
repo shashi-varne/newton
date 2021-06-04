@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { getConfig } from "../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../utils/functions";
 import { nativeCallback } from "../utils/native_callback";
 import { storageService } from "../utils/validators";
 import { logout } from "./function";
 
 const Logout = (props) => {
   const config = getConfig();
+  const navigate = navigateFunc.bind(props); 
 
   useEffect(() => {
     initialize();
@@ -20,10 +21,7 @@ const Logout = (props) => {
       } catch (err) {
         console.log(err);
       } finally {
-        props.history.push({
-          pathname: "/login",
-          search: config.searchParams,
-        });
+        navigate("/login")
       }
     } else {
       nativeCallback({ action: "session_expired" });

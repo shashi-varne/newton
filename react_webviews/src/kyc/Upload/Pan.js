@@ -6,12 +6,14 @@ import Alert from '../mini-components/Alert'
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { getConfig, isTradingEnabled } from '../../utils/functions'
+import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
+import { isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
+import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
 const productName = config.productName;
@@ -82,6 +84,7 @@ const Pan = (props) => {
 
   const handleSubmit = async () => {
     if (isOpen) setIsOpen(false)
+    sendEvents('next')
     try {
       const data = {};
       if (dlFlow) {
@@ -116,9 +119,26 @@ const Pan = (props) => {
     }
   }
 
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "pan_doc",
+        "type": type || "",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       classOverRideContainer="pr-container"
       skelton={isLoading}
       handleClick={handleSubmit}

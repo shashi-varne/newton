@@ -1,6 +1,5 @@
 import React from "react";
-import { navigate as navigateFunc } from "../../common/functions";
-import { getConfig } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc, } from "../../../utils/functions";
 import Container from "../../common/Container";
 import "./commonStyles.scss";
 import { PATHNAME_MAPPER } from "../../constants";

@@ -3,13 +3,14 @@ import Container from '../common/Container'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
-import { isDigilockerFlow, navigate as navigateFunc } from '../common/functions'
-import { getConfig } from 'utils/functions'
+import { isDigilockerFlow, getFlow } from '../common/functions'
+import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import "./commonStyles.scss";
 import KycUploadContainer from '../mini-components/KycUploadContainer'
+import { nativeCallback } from '../../utils/native_callback'
 
 const isWeb = getConfig().Web
 const Sign = (props) => {
@@ -31,6 +32,7 @@ const Sign = (props) => {
   }
 
   const handleSubmit = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
       const result = await upload(file, 'sign')
@@ -55,10 +57,30 @@ const Sign = (props) => {
     }
   }
 
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "sign_doc",
+        "type": type || "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
