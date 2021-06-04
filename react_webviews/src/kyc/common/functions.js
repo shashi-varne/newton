@@ -207,7 +207,12 @@ export async function pendingDocsList(kyc = {}) {
     docsToCheck.push("nri_address");
   }
 
-  return docsToCheck.filter((doc) => kyc[doc]?.doc_status !== "approved");
+  return docsToCheck.filter((doc) => {
+    return (
+      (doc !== "bank" && kyc[doc]?.doc_status !== "approved") ||
+      (doc === "bank" && kyc[doc]?.meta_data?.bank_status !== "verified") 
+    );
+  });
 }
 
 export async function getPendingDocuments(kyc = {}) {
