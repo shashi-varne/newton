@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { reportCardDetails } from "../constants";
+import { REPORT_CARD_DETAILS } from "../constants";
 import ContactUs from "../../common/components/contact_us";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isEmpty } from "../../utils/validators";
+import { nativeCallback } from "../../utils/native_callback";
 
 const CompliantReport = (props) => {
   const [openIndex, setOpenIndex] = useState(-1);
@@ -32,7 +33,7 @@ const CompliantReport = (props) => {
   const initialize = async () => {
     let isNri = kyc.address.meta_data.is_nri;
     setIsNri(isNri);
-    let reportCards = [...reportCardDetails];
+    let reportCards = [...REPORT_CARD_DETAILS];
     if (isCompliant) {
       if (isNri) {
         reportCards.splice(4, 1); //remove docs
@@ -61,16 +62,16 @@ const CompliantReport = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.pan.meta_data.name}</div>
-        <div className="unzipped-box">
+        <div className="unzipped-title" data-aid='kyc-personal-details-title'>{kyc.pan.meta_data.name}</div>
+        <div className="unzipped-box" data-aid='kyc-email'>
           <div className="title">Email</div>
           <div className="subtitle">{kyc.identification.meta_data.email}</div>
         </div>
-        <div className="unzipped-box">
+        <div className="unzipped-box" data-aid='kyc-eob'>
           <div className="title">Dob</div>
           <div className="subtitle">{kyc.pan.meta_data.dob}</div>
         </div>
-        <div className="unzipped-box">
+        <div className="unzipped-box" data-aid='kyc-mobile-number'>
           <div className="title">Mobile</div>
           <div className="subtitle">
             {kyc.identification.meta_data.mobile_number}
@@ -84,7 +85,7 @@ const CompliantReport = (props) => {
     return (
       <>
         {is_nri && (
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-address-proof-nri'>
             <div className="title">Foreign Address</div>
             <div className="subtitle">
               {kyc.nri_address.meta_data.addressline},
@@ -101,16 +102,16 @@ const CompliantReport = (props) => {
   const nomineeDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.nomination.meta_data.name}</div>
+        <div className="unzipped-title" data-aid='kyc-nomination-data'>{kyc.nomination.meta_data.name}</div>
         <div className="row-align">
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-relationship'>
             <div className="title">Relationship</div>
             <div className="subtitle">
               {kyc.nomination.meta_data.relationship}
             </div>
           </div>
 
-          <div className="unzipped-box">
+          <div className="unzipped-box" data-aid='kyc-dob'>
             <div className="title">Dob</div>
             <div className="subtitle">{kyc.nomination.meta_data.dob}</div>
           </div>
@@ -122,12 +123,12 @@ const CompliantReport = (props) => {
   const bankDetails = () => {
     return (
       <>
-        <div className="unzipped-title">{kyc.bank.meta_data.bank_name}</div>
-        <div className="unzipped-box">
+        <div className="unzipped-title" data-aid='kyc-bank-name'>{kyc.bank.meta_data.bank_name}</div>
+        <div className="unzipped-box" data-aid='kyc-account-number'>
           <div className="title">A/C number</div>
           <div className="subtitle">{kyc.bank.meta_data.account_number}</div>
         </div>
-        <div className="unzipped-box">
+        <div className="unzipped-box" data-aid='kyc-ifsc-code'>
           <div className="title">IFSC</div>
           <div className="subtitle">{kyc.bank.meta_data.ifsc_code}</div>
         </div>
@@ -150,11 +151,33 @@ const CompliantReport = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "kyc_status",
+        "flow": 'premium onboarding'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
-    <Container id="kyc-home" noFooter={true} title={topTitle}>
+    <Container 
+      id="kyc-home" 
+      noFooter={true} 
+      title={topTitle} 
+      data-aid='kyc-reports-screen'
+      events={sendEvents("just_set_events")}
+    >
       <div className="kyc-report">
-        <main>
-          <section>
+        <main data-aid='kyc-report'>
+          <section data-aid='kyc-reports-screen-page'>
             {cardDetails &&
               cardDetails.map((item, index) => {
                 return (
@@ -162,9 +185,10 @@ const CompliantReport = (props) => {
                     key={index}
                     className="tile-info"
                     onClick={() => handleTiles(index, item.key)}
+                    data-aid={`kyc-title-info-${index+1}`}
                   >
                     <div className="unzipped-title">
-                      <div>{item.title}</div>
+                      <div data-aid={`kyc-item-title-${index+1}`}>{item.title}</div>
                       <img
                         src={require(`assets/${
                           openIndex === index && item.key !== "docs"
@@ -175,7 +199,7 @@ const CompliantReport = (props) => {
                       />
                     </div>
                     {openIndex === index && (
-                      <div className="unzipped">{renderCards(item.key)}</div>
+                      <div className="unzipped" data-aid='kyc-unzipped'>{renderCards(item.key)}</div>
                     )}
                   </div>
                 );

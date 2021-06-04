@@ -141,7 +141,7 @@ export function getParamsMark(data) {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+  let { base_url="https://react-test-dot-plutus-staging.appspot.com" } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
@@ -170,6 +170,7 @@ export const getConfig = () => {
   }
 
   let { is_secure = false } = main_query_params;
+  let { from_notification } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
@@ -236,6 +237,12 @@ export const getConfig = () => {
     returnConfig.generic_callback = generic_callback;
     searchParams += getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
+  }
+  
+  if (checkValidString(from_notification)) {
+    returnConfig.from_notification = from_notification;
+    searchParams += getParamsMark(searchParams) + `from_notification=${from_notification}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `from_notification=${from_notification}`;
   }
 
   if (sdk_capabilities) {
@@ -322,6 +329,9 @@ export const getConfig = () => {
   returnConfig.isSdk = storageService().get("is_secure"); 
   returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
   returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
+  returnConfig.isIframe = isIframe();
+  returnConfig.platform = !returnConfig.isIframe ? (!returnConfig.Web ? "sdk" : "web" ): "iframe";
+  returnConfig.isLoggedIn = storageService().get("currentUser");
   
   return returnConfig;
 };
@@ -418,9 +428,16 @@ export function setHeights(data) {
       ? document.getElementsByClassName('Footer')[0].offsetHeight
       : 0;
 
+  const navbar =
+      document.getElementsByClassName('NavBar') && document.getElementsByClassName('NavBar')[0]
+        ? document.getElementsByClassName('NavBar')[0].offsetHeight
+        : 0;
+
   let HeaderHeight = bannerHeight + stepHeight + head + 'px';
+  const HeaderTop = head + navbar + 'px';
   if (data.header && document.getElementById('HeaderHeight')) {
     document.getElementById('HeaderHeight').style.height = HeaderHeight;
+    document.getElementById('HeaderHeight').style.top = HeaderTop;
   }
 
   // not using for now
@@ -460,4 +477,104 @@ export function getBasePath() {
     basename = basename ? basename + 'view' : '';
   }
   return window.location.origin + basename;
+}
+
+export function isTradingEnabled() {
+  const kyc = storageService().getObject("kyc");
+  return !getConfig().isSdk && !kyc?.address?.meta_data.is_nri
+}
+const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
+
+export function navigate(pathname, data = {}) {
+  let fromState = this?.location?.pathname || ""
+  let toState = pathname
+  
+  const redirectPath = checkBeforeRedirection(fromState, toState)
+  if (redirectPath) {
+    toState = redirectPath
+  }
+
+  data.state = {
+    ...data?.state,
+    fromState,
+    toState
+  }
+
+  if (data.edit) {
+    this.history.replace({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  } else {
+    this.history.push({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  }
+}
+
+export function isNpsOutsideSdk(fromState, toState) {
+  let config = getConfig();
+  if (config?.landingconfig?.nps === 'inside_sdk') {
+    return false;
+  }
+
+  if (fromState === "/nps/sdk" ||
+    ((fromState.indexOf("/nps/amount") !== -1) && toState === "/nps/info") ||
+    ((fromState.indexOf("/nps/payment/callback") !== -1) &&
+      ((toState.indexOf("/nps/amount") !== -1) || toState === "/nps/investments" ||
+        toState === "/nps/performance"))) {
+    return true;
+  }
+}
+
+export function listenPartnerEvents(cb) {
+  window.addEventListener("message", function (e) {
+    if (e.data !== "" && typeof e.data === "string") {
+      /* Parse events */
+      var data = JSON.parse(e.data);
+      /* Match whitelisted domains */
+      if (e.origin !== data.targetOrigin) {
+        return;
+      }
+
+      /* Store event */
+      // setEvent(data);
+      /* return events to callback */
+      cb(data);
+    } else {
+      // setEvent(e.data);
+      cb(e.data);
+    }
+  });
+}
+
+export const base64ToBlob = (b64Data, contentType = '', sliceSize = 512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+}
+
+export {
+  checkBeforeRedirection, 
+  checkAfterRedirection, 
+  backButtonHandler
 }

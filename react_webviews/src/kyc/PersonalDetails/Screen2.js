@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import { isEmpty, validateAlphabets } from "../../utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
+  getTotalPagesInPersonalDetails,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails2 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -18,16 +20,17 @@ const PersonalDetails2 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const [totalPages, setTotalPages] = useState();
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, user, isLoading} = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) initialize();
-  }, [kyc]);
+    if (!isEmpty(kyc) && !isEmpty(user)) initialize();
+  }, [kyc, user]);
 
   const initialize = async () => {
     let formData = {
@@ -38,9 +41,11 @@ const PersonalDetails2 = (props) => {
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
+    setTotalPages(getTotalPagesInPersonalDetails(isEdit))
   };
 
   const handleClick = () => {
+    sendEvents("next")
     let keysToCheck = ["mother_name", "father_name"];
     if (form_data.marital_status === "MARRIED") keysToCheck.push("spouse_name");
     let result = validateFields(form_data, keysToCheck);
@@ -57,7 +62,7 @@ const PersonalDetails2 = (props) => {
         form_data.spouse_name;
 
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.personalDetails3, {
+      navigate(PATHNAME_MAPPER.personalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -78,7 +83,7 @@ const PersonalDetails2 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.personalDetails3, {
+      navigate(PATHNAME_MAPPER.personalDetails3, {
         state: {
           isEdit: isEdit,
         },
@@ -101,8 +106,28 @@ const PersonalDetails2 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "personal_details_2",
+        "mother_name": form_data.mother_name ? "yes" : "no",
+        "father_name": form_data.father_name ? "yes" : "no",
+        "spouse_name": form_data.spouse_name ? "yes" : "no",
+        "flow": 'general'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       showSkelton={isLoading}
       buttonTitle="SAVE AND CONTINUE"
       handleClick={handleClick}
@@ -111,10 +136,11 @@ const PersonalDetails2 = (props) => {
       title={title}
       count="2"
       current="2"
-      total="4"
+      total={totalPages}
+      data-aid='kyc-personal-details-screen-2'
     >
       <div className="kyc-personal-details">
-        <main>
+        <main  data-aid='kyc-personal-details'>
           <Input
             label="Father's name"
             class="input"
@@ -138,7 +164,7 @@ const PersonalDetails2 = (props) => {
           />
           {form_data.marital_status === "MARRIED" && (
             <Input
-              label="Spouse"
+              label="Spouse's name"
               class="input"
               value={form_data.spouse_name || ""}
               error={form_data.spouse_name_error ? true : false}

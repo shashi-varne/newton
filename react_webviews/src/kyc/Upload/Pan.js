@@ -1,29 +1,40 @@
 import "./commonStyles.scss";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { getConfig } from '../../utils/functions'
+import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { navigate as navigateFunc } from '../common/functions'
+import { isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
+import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
+import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
 const productName = config.productName;
+const TRADING_ENABLED = isTradingEnabled();
 
 const Pan = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const [title, setTitle] = useState("Note")
-  const [subTitle, setSubTitle] = useState('')
-  const [showLoader, setShowLoader] = useState(false)
-  const {kyc, isLoading} = useUserKycHook();
+  const [isOpen, setIsOpen] = useState(false)
+  const [dlFlow, setDlFlow] = useState(false);
+  const [bottomSheetType, setBottomSheetType] = useState('');
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
+
+  useEffect(() => {
+    if (!isEmpty(kyc)) {
+      if (isDigilockerFlow(kyc)) {
+        setDlFlow(true);
+      }
+    }
+  }, [kyc]);
 
   const onFileSelectComplete = (newFile, fileBase64) => {
     setFile(newFile);
@@ -34,36 +45,69 @@ const Pan = (props) => {
     toast('Please select image file only');
   }
 
+  const handleOtherPlatformNavigation = () => {
+    if (kyc.kyc_status === 'compliant') {
+      if (!isDocSubmittedOrApproved("identification"))
+        navigate(PATHNAME_MAPPER.uploadSelfie);
+      else {
+        if (!isDocSubmittedOrApproved("equity_income"))
+          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+        else navigate(PATHNAME_MAPPER.kycEsign)
+      }
+    } else {
+      if (dlFlow) {
+        if (kyc.sign_status !== 'signed') {
+          navigate(PATHNAME_MAPPER.tradingExperience);
+        } else {
+          navigate(PATHNAME_MAPPER.journey);
+        }
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
+    }
+  };
+
+  const handleSdkNavigation = () => {
+    if (dlFlow) {
+      navigate('/kyc-esign/info')
+    } else {
+      navigate('/kyc/upload/progress')
+    }
+  };
+
+  const handleNavigation = () => {
+    if (TRADING_ENABLED) {
+      handleOtherPlatformNavigation();
+    } else {
+      handleSdkNavigation();
+    }
+  }
+
   const handleSubmit = async () => {
+    if (isOpen) setIsOpen(false)
+    sendEvents('next')
     try {
       const data = {};
-      if (kyc.kyc_status !== 'compliant' && kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null) {
-        if (kyc.all_dl_doc_statuses.pan_fetch_status === null || kyc.all_dl_doc_statuses.pan_fetch_status === '' || kyc.all_dl_doc_statuses.pan_fetch_status === 'failed') {
+      if (dlFlow) {
+        if ([null, "", "failed"].includes(kyc.all_dl_doc_statuses.pan_fetch_status)) {
           data.kyc_flow =  'dl';
         }
       }
       setIsApiRunning("button")
-      const response = await upload(file, 'pan', data);
-      const result = response.result;
+      const result = await upload(file, 'pan', data);
       if (
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
         (result.error && !result.ocr_pan_kyc_matches)
       ) {
-        setSubTitle(
-          'Photo of PAN should be clear and it should not have the exposure of flash light'
-        )
-        setTitle('PAN mismatch!')
+        setBottomSheetType('failed');
+        setIsOpen(true);
       } else {
-        storageService().setObject(storageConstants.KYC, result.kyc)
-        if (
-          result.kyc.kyc_status !== 'compliant' &&
-          result.kyc.dl_docs_status !== '' &&
-          result.kyc.dl_docs_status !== 'init' &&
-          result.kyc.dl_docs_status !== null
-        ) {
-          navigate('/kyc-esign/info')
+        if(!isEmpty(result)) {
+          updateKyc(result.kyc)
+        }
+        if (isNotManualAndNriUser(result.kyc)) {
+          setBottomSheetType('success');
+          setIsOpen(true);
         } else {
-          navigate('/kyc/upload/progress')
+          handleNavigation();
         }
       }
     } catch (err) {
@@ -73,27 +117,46 @@ const Pan = (props) => {
       setIsApiRunning(false)
     }
   }
-  
+
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "pan_doc",
+        "type": type || "",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       classOverRideContainer="pr-container"
-      skelton={isLoading || showLoader}
+      skelton={isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
       title="Upload PAN"
+      data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
-          <div className="sub-title">
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             PAN Card: {kyc?.pan?.meta_data?.pan_number}
           </div>
-          {file && subTitle && <Alert
+          {/* {file && subTitle && <Alert
+            dataAid='kyc-upload-pan-alertbox'
             variant="attention"
             title={title}
             message={subTitle}
-          />}
+          />} */}
           <KycUploadContainer
             titleText="Your PAN card should be clearly visible in your pic"
           >
@@ -111,8 +174,8 @@ const Pan = (props) => {
               supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
-          <div className="doc-upload-note-row">
-            <div className="upload-note"> How to take picture of your PAN document? </div>
+          <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
+            <div className="upload-note" data-aid='upload-note-text'> How to take picture of your PAN document? </div>
             <WVClickableTextElement
               color="secondary"
               className="know-more-button"
@@ -123,6 +186,15 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
+          {TRADING_ENABLED && kyc.kyc_type !== "manual" && bottomSheetType &&
+            <PanUploadStatus
+              status={bottomSheetType}
+              isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
+              disableBackdropClick
+              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
+            />
+          }
         </section>
       )}
     </Container>

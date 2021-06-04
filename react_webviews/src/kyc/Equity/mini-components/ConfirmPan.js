@@ -8,7 +8,7 @@ const productName = getConfig().productName;
 export const ConfirmPan = ({ isOpen, name, pan, handleClick, close }) => {
   const subtitle = (
     <>
-      Hi, <b>{name}</b> please confirm that this PAN belongs to you
+      Hi<b>{name  && ` ${name}`}</b>, please confirm that this PAN belongs to you
     </>
   );
   return (
@@ -24,7 +24,7 @@ export const ConfirmPan = ({ isOpen, name, pan, handleClick, close }) => {
       }}
       image={require(`assets/${productName}/kyc_status_icon.svg`)}
     >
-      <div className="kyc-confirm-pan-text">{panUiSet(pan)}</div>
+      <div className="kyc-confirm-pan-text" data-aid='kyc-confirm-pan-text'>{panUiSet(pan)}</div>
     </WVBottomSheet>
   );
 };

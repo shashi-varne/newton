@@ -4,10 +4,9 @@ import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { getSipAction } from "../../common/api";
 import {
-  navigate as navigateFunc,
   dateOrdinalSuffix,
 } from "../../common/functions";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import toast from "common/ui/Toast";
 import "./commonStyles.scss";
 
@@ -58,7 +57,7 @@ const SipDetails = (props) => {
         return;
       }
       if (requested_cancel.includes(report.friendly_status)) {
-        nextStep("cancel");
+        nextStep("restart");
         return;
       }
     } else {

@@ -1,5 +1,5 @@
 import Api from 'utils/api'
-import { apiConstants, storageConstants } from '../constants'
+import { API_CONSTANTS, STORAGE_CONSTANTS } from '../constants'
 import { isEmpty } from 'utils/validators'
 import { storageService } from 'utils/validators'
 import toast from '../../common/ui/Toast'
@@ -25,7 +25,7 @@ export const handleApi = (res) => {
 
 export const getUserKycFromSummary = async () => {
   try {
-    const res = await Api.post(apiConstants.accountSummary, {
+    const res = await Api.post(API_CONSTANTS.accountSummary, {
       kyc: ['kyc'],
       user: ['user'],
     })
@@ -33,8 +33,8 @@ export const getUserKycFromSummary = async () => {
     if(result) {
       let user = result.data.user.user.data
       let kyc = result.data.kyc.kyc.data
-      storageService().setObject(storageConstants.KYC, kyc)
-      storageService().setObject(storageConstants.USER, user)
+      storageService().setObject(STORAGE_CONSTANTS.KYC, kyc)
+      storageService().setObject(STORAGE_CONSTANTS.USER, user)
     }
     return result;
   } catch (err) {
@@ -43,7 +43,7 @@ export const getUserKycFromSummary = async () => {
 }
 
 export const getPan = async (data, accountMerge) => {
-  const res = await Api.post(apiConstants.getPan, data)
+  const res = await Api.post(API_CONSTANTS.getPan, data)
   if (
     res.pfwstatus_code !== 200 ||
     !res.pfwresponse ||
@@ -81,7 +81,7 @@ export const checkMerge = async (pan) => {
 }
 
 export const kycSubmit = async (body) => {
-  const res = await Api.post(apiConstants.submit, {
+  const res = await Api.post(API_CONSTANTS.submit, {
     ...body,
   })
   if (
@@ -96,8 +96,8 @@ export const kycSubmit = async (body) => {
     case 200:
       if (result.kyc.identification.meta_data.nationality)
         result.kyc.identification.meta_data.nationality = result.kyc.identification.meta_data.nationality.toUpperCase()
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      storageService().setObject(storageConstants.USER, result.user)
+      storageService().setObject(STORAGE_CONSTANTS.KYC, result.kyc)
+      storageService().setObject(STORAGE_CONSTANTS.USER, result.user)
       return result
     case 402:
       const email = getConfig().email
@@ -114,17 +114,17 @@ export const kycSubmit = async (body) => {
 }
 
 export const getMyAccount = async () => {
-  const res = await Api.get(apiConstants.getMyaccount)
+  const res = await Api.get(API_CONSTANTS.getMyaccount)
   return handleApi(res);
 }
 
 export const getIFSC = async (data) => {
-  const res = await Api.get(`${apiConstants.getIFSC}${data}`)
+  const res = await Api.get(`${API_CONSTANTS.getIFSC}${data}`)
   return handleApi(res);
 }
 
 export const addAdditionalBank = async (data) => {
-  const res = await Api.post(apiConstants.addAdditionalBank, data)
+  const res = await Api.post(API_CONSTANTS.addAdditionalBank, data)
   if (
     res.pfwstatus_code !== 200 ||
     !res.pfwresponse ||
@@ -167,6 +167,7 @@ export const upload = async (file, type, data = {}) => {
         formData.append('kyc_product_type', data.kyc_product_type);
         formData.append('location_coordinates', `${data.lat},${data.lng}`);
         formData.append('live_score', data.live_score);
+        formData.append('forced', data.forced);
         break;
       default:
         break
@@ -175,10 +176,12 @@ export const upload = async (file, type, data = {}) => {
   const url = isEmpty(doc_type) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${doc_type}`
   const res = await Api.post(url, formData)
   if (
-    res?.pfwresponse?.status_code
+    res?.pfwresponse?.status_code === 200 || 
+    (res?.pfwresponse?.status_code === 400 && res?.pfwresponse?.result?.pan_ocr)
   ) {
-    return res?.pfwresponse
+    return res?.pfwresponse?.result
   }
+
   throw new Error(
     res?.pfwresponse?.result?.message ||
       res?.pfwresponse?.result?.error ||
@@ -187,17 +190,17 @@ export const upload = async (file, type, data = {}) => {
 }
 
 export const saveBankData = async (data) => {
-  const res = await Api.post(apiConstants.pennyVerification, data)
+  const res = await Api.post(API_CONSTANTS.pennyVerification, data)
   return handleApi(res);
 }
 
 export const getBankStatus = async (data) => {
-  const res = await Api.post(apiConstants.getBankStatus, data)
+  const res = await Api.post(API_CONSTANTS.getBankStatus, data)
   return handleApi(res);
 }
 
 export const getCVL = async (data) => {
-  const res = await Api.post(apiConstants.getCVL, data)
+  const res = await Api.post(API_CONSTANTS.getCVL, data)
   return handleApi(res);
 }
 
@@ -274,11 +277,30 @@ export const setKycType = async (type) => {
 }
 
 export const getMerge = async (pan_number) => {
-  const res = await Api.post(`${apiConstants.getMerge}${pan_number}`)
+  const res = await Api.post(`${API_CONSTANTS.getMerge}${pan_number}`)
   return handleApi(res);
 }
 
 export const getKRAForm = async (params) => {
-  const res = await Api.get(`${apiConstants.getKRAForm}`, params)
+  const res = await Api.get(`${API_CONSTANTS.getKRAForm}`, params)
+  return handleApi(res);
+}
+export const sendOtp = async (body) => {
+  const res = await Api.post(API_CONSTANTS.sendOtp, body)
+  return handleApi(res);
+}
+
+export const resendOtp = async (otpId) => {
+  const res = await Api.post(`${API_CONSTANTS.resendOtp}/${otpId}`)
+  return handleApi(res);
+}
+
+export const verifyOtp = async (body) => {
+  const res = await Api.post(`${API_CONSTANTS.verifyOtp}/${body.otpId}?otp=${body.otp}`)
+  return handleApi(res);
+}
+
+export const socialAuth = async (body) => {
+  const res = await Api.post(`${API_CONSTANTS.socialAuth}/${body.provider}?redirect_url=${body.redirectUrl}`)
   return handleApi(res);
 }

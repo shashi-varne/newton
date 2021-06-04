@@ -79,7 +79,6 @@
 
 .alert-status-info {
   display: flex;
-  column-gap: 10px;
   align-items: flex-start;
   padding: 15px 15px 20px 15px;
   border: 1px solid #fff5f6;
@@ -88,6 +87,7 @@
 
   img {
     width: 14px;
+    margin-right: 10px;
   }
 
   .text {
@@ -254,7 +254,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      column-gap: 10px;
       margin: 20px 0;
       color: #160d2e;
       font-size: 20px;
@@ -264,6 +263,7 @@
       span {
         font-size: 13px;
         color: var(--primary);
+        margin-left: 10px;
       }
     }
 
@@ -403,7 +403,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      column-gap: 10px;
       color: #160d2e;
       font-size: 20px;
       font-weight: 600;
@@ -413,7 +412,7 @@
       }
 
       img {
-        margin-bottom: 10px;
+        margin: 0 0 10px 10px;
       }
     }
 
@@ -426,7 +425,6 @@
     .action {
       display: flex;
       width: 100%;
-      column-gap: 30px;
       align-items: center;
 
       .button {
@@ -447,6 +445,38 @@
       .no-bg {
         background-color: white;
         color: #878787;
+        margin-right: 30px;
+      }
+    }
+  }
+}
+
+.kyc-back-confirm-dialog {
+  .kyc-back-confirm-dialog-content {
+    line-height: 1.5;
+    color: #160d2e;
+
+    .title {
+      margin: 10px 0 20px;
+      font-size: 15px;
+    }
+
+    .confirm-back-dialog-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      .confirm-back-button  {
+        background-color: transparent;
+        width: fit-content;
+        padding: 15px 0 0 !important;
+        font-weight: bold;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .confirm-back-yes {
+        margin-right: 70px;
       }
     }
   }

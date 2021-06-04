@@ -6,7 +6,8 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
-import { getConfig } from "../../utils/functions";
+import { navigate as navigateFunc } from "../../utils/functions";
+import { storageService } from "../../utils/validators";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 class Container extends Component {
@@ -29,6 +30,7 @@ class Container extends Component {
 
   componentDidMount() {
     this.didMount();
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentWillUnmount() {
@@ -36,9 +38,49 @@ class Container extends Component {
   }
 
   historyGoBack = (backData) => {
+    const fromState = this.props.location?.state?.fromState || "";
+    const toState = this.props.location?.state?.toState || "";
+    const params = this.props.location?.params || {};
+    let pathname = this.props.location?.pathname || "";
+    if(pathname.indexOf('appl/webview') !== -1) {
+      pathname = pathname.split("/")[5] || "/";
+    }
+
+    let openDialog = false;
+    switch (pathname) {
+      case "/kyc/personal-details4":
+      case "/kyc/dl/personal-details3":
+      case "/kyc/compliant-personal-details4":
+      case "/kyc/compliant/bank-details":
+      case "/kyc/non-compliant/bank-details":
+      case "/kyc/compliant/upload-documents":
+      case "/kyc/non-compliant/upload-documents":
+      case "/kyc//upload/fno-sample-documents":
+      case "/kyc/digilocker/success":
+      case "/kyc/digilocker/failed":
+        this.setState({ openConfirmBack: true });
+        openDialog=true;
+        break;
+      default:
+        break;
+    }
+
+    if(openDialog) {
+      return;
+    }
+    
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
+
+    if (toState) {
+      let isRedirected = this.backButtonHandler(this.props, fromState, toState, params);
+      if (isRedirected) {
+        return;
+      }
+    }
+
+    console.log("Container props...", this.props);
 
     if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
@@ -46,21 +88,45 @@ class Container extends Component {
     }
 
     const goBackPath = this.props.location?.state?.goBack || "";
+    console.log("goBackPath...", goBackPath)
 
-    if(goBackPath) {
-      this.props.history.push({
-        pathname: goBackPath,
-        search: getConfig().searchParams,
-      });
+    if (goBackPath) {
+      if (goBackPath === "exit" && storageService().get("native")) {
+        switch (pathname) {
+          case "/kyc/home":
+          case "/kyc/add-bank":
+          case "/kyc/approved/banks/doc":
+          case "/kyc/journey":
+            nativeCallback({ action: "exit_web" });
+            break;
+          default:
+            console.log("Props history goBack...")
+            this.props.history.goBack();
+        }
+        return;
+      }
+      this.navigate(goBackPath);
       return;
     }
 
+    console.log("Props history goBack...");
     this.props.history.goBack();
   };
 
   componentDidUpdate(prevProps) {
     this.didupdate();
   }
+
+  closeConfirmBackDialog = () => {
+    this.setState({ openConfirmBack: false });
+  };
+
+  redirectToJourney = () => {
+    if (this.getEvents("back")) {
+      nativeCallback({ events: this.getEvents("back") });
+    }
+    this.navigate("/kyc/journey");
+  };
 
   render() {
     return (

@@ -23,8 +23,7 @@ import CompliantPersonalDetails3 from "./Compliant/PersonalDetails3";
 import CompliantPersonalDetails4 from "./Compliant/PersonalDetails4";
 import ConfirmPan from "./Compliant/ConfirmPan";
 import KycComplete from "./Compliant/Complete";
-import CompliantReport from "./Compliant/Report";
-import Verify from "./Compliant/Verify";
+import KycVerified from "./Compliant/KycVerified";
 import RtaCompliantPersonalDetails from "./RtaCompliant";
 
 import RegistrationSuccess from "./Success/RegistrationSuccess";
@@ -57,16 +56,15 @@ import SelfieSteps from "./Upload/SelfieSteps";
 import FnOIncomeProof from "./Upload/F&OIncomeProof";
 
 // Equity Components
-import AllowLocation from  "./Equity/components/AllowLocation";
 import TradingExperience from "./Equity/components/TradingExperience";
-import SelfieInstructions from "./Equity/components/SelfieInstructions";
 import StocksStatus from "./Equity/components/StocksStatus";
 import NriError from "./Equity/components/NriError";
-import LocationError from "./Equity/components/LocationError";
 import AccountInfo from "./Equity/components/AccountInfo";
 import UploadInstructions from "./Equity/components/UploadInstructions";
 import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
+import CommunicationDetails from "./Equity/components/CommunicationDetails";
+import CommunicationCallback from "./Equity/components/CommunicationCallback";
 import FnOSampleDocuments from "./Upload/F&OSampleDocuments";
 
 const Kyc = (props) => {
@@ -187,7 +185,7 @@ const Kyc = (props) => {
           component={Nominee}
         />
         <Route 
-          exact 
+          exact
           path={`${url}/report`} 
           component={Report} 
         />
@@ -229,7 +227,7 @@ const Kyc = (props) => {
         <Route
           exact
           path={`${url}/compliant-report-verified`}
-          component={Verify}
+          component={KycVerified}
         />
         <Route
           exact
@@ -323,18 +321,8 @@ const Kyc = (props) => {
         />
         <Route 
           exact 
-          path={`${url}/location/allow`} 
-          component={AllowLocation} 
-        />
-        <Route 
-          exact 
           path={`${url}/trading-experience`} 
           component={TradingExperience} 
-        />
-        <Route 
-          exact 
-          path={`${url}/selfie-instructions`} 
-          component={SelfieInstructions} 
         />
         <Route 
           exact 
@@ -345,11 +333,6 @@ const Kyc = (props) => {
           exact 
           path={`${url}/nri-error`} 
           component={NriError} 
-        />
-        <Route 
-          exact 
-          path={`${url}/location-error`} 
-          component={LocationError} 
         />
         <Route 
           exact 
@@ -370,6 +353,16 @@ const Kyc = (props) => {
           exact 
           path={`${url}/manual-signature`} 
           component={ManualSignature} 
+        />
+        <Route 
+          exact 
+          path={`${url}/communication-details`} 
+          component={CommunicationDetails} 
+        />
+        <Route
+          exact
+          path={`${url}/communication-details/callback`}
+          component={CommunicationCallback}
         />
         <Route component={NotFound} />
       </Switch>

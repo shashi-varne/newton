@@ -2,6 +2,7 @@
 Exhaustive list of property values:
 - investSections: [
     'kyc',
+    'stocks',
     'ourRecommendations',
     'diy',
     'bottomScrollCards',
@@ -29,6 +30,7 @@ export const commonCardsConfig = {
   logo: "logo_white.png",
   investSections: [
     "kyc",
+    "stocks",
     "ourRecommendations",
     "diy",
     "bottomScrollCards",
@@ -425,7 +427,7 @@ export const partnerConfigs = {
     },
   },
   moneycontrol: {
-    logo: "moneycontrol.svg",
+    logo: "moneycontrol_logo.svg",
     code: "moneycontrol",
     email: "moneycontrol@finity.in",
     mobile: "+91-7829228886", // check with satendra -> mobile is of fisdom

@@ -109,7 +109,7 @@
   }
 
   .instructions-container {
-    margin: 10px;
+    margin: 10px 10px 0 10px;
   }
 
   .ipv_footer_instructions {
@@ -167,6 +167,7 @@
       color: var(--secondary);
       font-size: 12px;
       font-weight: 800;
+      cursor: pointer;
     }
   }
 
@@ -473,3 +474,25 @@
   margin: 40px auto 0;
 }
 // F&OIncomeProof END ------------
+
+// ------ WebcamSelfie -----------
+.webcam-selfie {
+  text-align: center;
+  
+  .wv-ip-title {
+    margin-bottom: 60px;
+  }
+
+  video {
+    height: 300px;
+    object-fit: cover;
+    border-radius: 50%;
+    width: 300px;
+    // transform: scaleX(-1);
+  }
+}
+
+.webcam-selfie-btn {
+  margin: auto !important;
+}
+// ------------------------------

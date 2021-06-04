@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Alert from "../mini-components/Alert";
 import { storageService } from "utils/validators";
-import { storageConstants, getPathname } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
+import { STORAGE_CONSTANTS, PATHNAME_MAPPER } from "../constants";
+import { getFlow } from "../common/functions";
 import {
   saveBankData,
   getBankStatus,
@@ -16,6 +17,7 @@ import PennySuccessDialog from "../mini-components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import { getConfig } from "utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
 
 const AddBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -40,7 +42,7 @@ const AddBankVerify = (props) => {
 
   const initialize = async () => {
     await getUserKycFromSummary();
-    let kyc = storageService().getObject(storageConstants.KYC) || {};
+    let kyc = storageService().getObject(STORAGE_CONSTANTS.KYC) || {};
     let data = kyc.additional_approved_banks.find(
       (obj) => obj.bank_id?.toString() === bank_id
     );
@@ -50,6 +52,7 @@ const AddBankVerify = (props) => {
   };
 
   const handleClick = async () => {
+    sendEvents("next")
     try {
       setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bank_id });
@@ -130,7 +133,7 @@ const AddBankVerify = (props) => {
   };
 
   const checkBankDetails = () => {
-    navigate(getPathname.addBank, {
+    navigate(PATHNAME_MAPPER.addBank, {
       state: {
         bank_id: bankData.bank_id,
       },
@@ -151,27 +154,50 @@ const AddBankVerify = (props) => {
   };
 
   const goTobankLists = () => {
-    navigate(getPathname.bankList);
+    navigate(PATHNAME_MAPPER.bankList);
   };
 
   const edit = () => () => {
-    navigate(getPathname.addBank, {
+    navigate(PATHNAME_MAPPER.addBank, {
       state: {
         bank_id: bankData.bank_id,
       },
     });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "bank_details",
+        "account_number": bankData.account_number ? "yes" : "no",
+        "ifsc_code": bankData.ifsc_code ? "yes" : "no",
+        "account_type": bankData.account_type ? "yes" : "no",
+        "c_account_number": userKyc.bank?.meta_data?.account_number ? "yes" : "no",
+        "flow": getFlow(userKyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="VERIFY BANK ACCOUNT"
+      events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       noFooter={showLoader}
       handleClick={handleClick}
       title="Verify your bank account"
+      data-aid='kyc-approved-bank-verify-screen'
     >
-      <div className="kyc-approved-bank-verify">
+      <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
         <Alert
+          dataAid='kyc-verification-alertbox'
           variant="info"
           title="Important"
           message="We will credit ₹1 to your bank account for verification."
@@ -186,7 +212,7 @@ const AddBankVerify = (props) => {
         )}
         {!showLoader && (
           <>
-            <div className="item">
+            <div className="item" data-aid='kyc-bank-name'>
               <div className="flex">
                 <div className="left">
                   <img
@@ -195,24 +221,24 @@ const AddBankVerify = (props) => {
                     alt="bank-logo"
                   />
                 </div>
-                <div className="right">
+                <div className="right" data-aid='bank-name'>
                   <div>{bankData.bank_name}</div>
                   <div className="text">{bankData.branch_name} </div>
                 </div>
               </div>
-              <div className="edit" onClick={edit()}>
+              <div className="edit" data-aid='kyc-edit' onClick={edit()}>
                 EDIT
               </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-account-number'>
               <div className="left">Account number</div>
               <div className="right"> {bankData.account_number} </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-ifsc-code'>
               <div className="left">IFSC code</div>
               <div className="right">{bankData.ifsc_code} </div>
             </div>
-            <div className="item">
+            <div className="item" data-aid='kyc-account-type'>
               <div className="left">Account type</div>
               <div className="right"> {bankData.account_type} </div>
             </div>

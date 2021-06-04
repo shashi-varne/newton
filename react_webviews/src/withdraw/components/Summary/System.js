@@ -9,7 +9,7 @@ import TaxLiability from './TaxLiability'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { isEmpty } from 'utils/validators'
 import { getConfig } from 'utils/functions'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import { formatAmountInr } from '../../../utils/validators'
 
 import '../commonStyles.scss';
@@ -40,7 +40,7 @@ const SystemSummary = (props) => {
       })
 
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('verify', {state:{...result} })
+        navigate('/withdraw/verify', {state:{...result} })
         return
       }
     } catch (err) {
@@ -54,12 +54,17 @@ const SystemSummary = (props) => {
     try {
       const taxes = await getTaxes(props?.location?.state?.amounts);
       setTaxes(taxes)
+      const firstIsin = taxes?.liabilities[0]?.isin || "";
+      setOpen((open) => {
+        return { ...open, [firstIsin]: true }
+      })
     } catch (err) {
       toast(err.message, 'error')
     }
   }
 
   const showOpenCard = (isin) => {
+    if(taxes?.liabilities?.length === 1) return;
     setOpen((open) => {
       return { ...open, [isin]: !!!open[isin] }
     })
@@ -96,20 +101,17 @@ const SystemSummary = (props) => {
           <ExitLoad exit_load={taxes.exit_load} />
           <div className="tax-summary">Tax Summary</div>
           <main className="fund-list">
-            {taxes?.liabilities?.map((item, idx) => (
+            {taxes?.liabilities?.map((item) => (
               <TaxSummaryCard
                 key={item.isin}
                 {...item}
                 openCard={
-                  idx === 0
-                    ? isEmpty(open[item.isin])
-                      ? true
-                      : open[item.isin]
-                    : open[item.isin]
+                  open[item.isin]
                 }
                 onClick={() => {
                   showOpenCard(item.isin)
                 }}
+                hideIcon={taxes?.liabilities?.length === 1}
               />
             ))}
           </main>

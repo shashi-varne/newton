@@ -4,8 +4,8 @@ import Container from '../../common/Container'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import toast from 'common/ui/Toast'
-import { navigate as navigateFunc } from '../../common/commonFunction'
 import Button from 'common/ui/Button'
+import { navigate as navigateFunc } from 'utils/functions'
 
 import './OtpSwitch.scss';
 import '../commonStyles.scss';
@@ -70,8 +70,7 @@ const OtpSwitch = (props) => {
             type: stateParams?.type,
             message: result?.message,
           }
-        },
-        true
+        }
       )
     } catch (err) {
       toast(err.message)
@@ -82,8 +81,7 @@ const OtpSwitch = (props) => {
             type: stateParams?.type,
             message: err.message,
           }
-        },
-        true
+        }
       )
     } finally {
       setIsApiRunning(false)
@@ -94,7 +92,7 @@ const OtpSwitch = (props) => {
     <Container
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      hideInPageTitle
+      title="OTP"
       type="withProvider"
       noFooter
     >

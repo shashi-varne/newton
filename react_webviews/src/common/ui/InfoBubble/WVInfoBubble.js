@@ -66,7 +66,7 @@ const WVInfoBubble = ({
 
   return (
     <Fade in={isOpen} timeout={350}>
-      <div className='wv-info-bubble' style={{ backgroundColor: typeConfig.bgColor }}>
+      <div className='wv-info-bubble' data-aid='wv-info-bubble' style={{ backgroundColor: typeConfig.bgColor }}>
         {typeConfig.icon &&
           <SVG
             className='wv-ib-icon'
@@ -74,9 +74,9 @@ const WVInfoBubble = ({
             src={require(`assets/${typeConfig.icon}.svg`)}
           />
         }
-        <div className='wv-ib-content'>
+        <div className='wv-ib-content' data-aid='wv-ib-content'>
           {hasTitle &&
-            <div className='wv-ib-content-title'>
+            <div className='wv-ib-content-title' data-aid='wv-ib-content-title'>
               <span style={{ color: typeConfig.titleColor }}>
                 {customTitle || typeConfig.title}
               </span>
@@ -89,9 +89,11 @@ const WVInfoBubble = ({
               }
             </div>
           }
-          <div className='wv-ib-content-desc'>
-            {children}
-          </div>
+          {children &&
+            <div className='wv-ib-content-desc' data-aid='wv-ib-content-desc'>
+              {children}
+            </div>
+          }
         </div>
       </div>
     </Fade>

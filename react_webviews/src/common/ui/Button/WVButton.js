@@ -2,8 +2,15 @@ import React from 'react';
 import { Button, withStyles } from '@material-ui/core';
 import { getConfig } from '../../../utils/functions';
 import DotDotLoaderNew from '../DotDotLoaderNew';
+import { disableBodyTouch } from '../../../utils/validators';
 
 const WVButton = ({ showLoader, children, ...props }) => {
+  if (showLoader) {
+    disableBodyTouch(); //disable touch
+  } else {
+    disableBodyTouch(true); //touch enabled
+  }
+
   return (
     <Button {...props}>
       {showLoader ?
@@ -27,6 +34,7 @@ const styles = {
     boxShadow: 'none',
     fontWeight: 'bold',
     letterSpacing: '1px',
+    display: !getConfig().isMobileDevice ? 'flex' : 'inline-flex', 
     width: !getConfig().isMobileDevice ? 'auto' : '100%'
   },
   label: {},

@@ -1,32 +1,53 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import VideoRecorder from 'react-video-recorder'
 import Container from '../common/Container'
-import Button from '../../common/ui/Button'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { getIpvCode, upload } from '../common/api'
-import { navigate as navigateFunc } from '../common/functions'
-import { getConfig } from 'utils/functions'
+import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import KnowMore from '../mini-components/IpvVideoKnowMore'
 import useUserKycHook from '../common/hooks/userKycHook'
+import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
+import KycUploadContainer from '../mini-components/KycUploadContainer'
 
 const config = getConfig();
 const productName = config.productName
 const isWeb = config.Web
-
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [ipvcode, setIpvCode] = useState('')
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [showKnowMoreDialog, setKnowMoreDialog] = useState(false)
   const [showVideoRecoreder, setShowVideoRecorder] = useState(false)
   const [uploadCTAText, setUploadCTAText] = useState("OPEN CAMERA")
   const [isRecordingComplete, steIsRecordingComplete] = useState(false);
+  const [noCameraFound, setNoCameraFound] = useState(false);
+  const [noCameraPermission, setNoCameraPermission] = useState(false);
+  const [errorContent, setErrorContent] = useState("");
+
+  const SUPPORTED_VIDEO_TYPES = ["mp4", "webm", "ogg", "x-flv", "x-ms-wmv"];
+
+  useEffect(() => {
+    fetchIpvCode()
+    navigator.mediaDevices.enumerateDevices()
+      .then(function (devices) {
+        const videoDevices = devices.filter(device => device.kind === 'videoinput')
+        setNoCameraFound(videoDevices.length === 0);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (noCameraPermission) {
+      setErrorContent("Webcam permission is necessary to complete KYC. You can continue on mobile app if you are facing an issue.")
+    } else if (noCameraFound) {
+      setErrorContent("You do not have a webcam, use mobile app to complete KYC");
+    }
+  }, [noCameraFound, noCameraPermission])
 
   const open = () => {
     setKnowMoreDialog(true)
@@ -35,10 +56,6 @@ const IpvVideo = (props) => {
   const close = () => {
     setKnowMoreDialog(false)
   }
-
-  useEffect(() => {
-    fetchIpvCode()
-  }, [])
 
   const fetchIpvCode = async () => {
     try {
@@ -51,64 +68,22 @@ const IpvVideo = (props) => {
     }
   }
 
-  const native_call_handler = (method_name, doc_type, doc_name, doc_side, msg, ipv_code) => {
-    window.callbackWeb[method_name]({
-      type: 'doc',
-      doc_type: doc_type,
-      doc_name: doc_name,
-      doc_side: doc_side,
-      message: msg,
-      ipv_code: ipv_code,
-      // callbacks from native
-      upload: function upload(file) {
-        try {
-          switch (file.type) {
-            case "video/mp4":
-            case "video/webm":
-            case "video/ogg":
-            case "video/x-flv":
-            case "video/x-ms-wmv":
-            setFile(file)
-            setTimeout(
-              function () {
-                setLoading(false);
-              },
-              1000
-            );
-            break;
-            default:
-              toast('Please select a valid video file')
-          }
-        } catch (e) {
-          //
-        }
-      },
-    })
-
-    window.callbackWeb.add_listener({
-      type: 'native_receiver_image',
-      show_loader: function (show_loader) {
-        setLoading(true)
-      },
-    })
+  const onFileSelectComplete = (file) => {
+    setFile(file);
   }
-  
-  const handleUpload = (method_name) => {
-      native_call_handler(method_name, 'ipvvideo', '', '', 'Look at the screen and read the verification number loud', ipvcode)
+
+  const onFileSelectError = () => {
+    return toast('Please select video file only');
   }
 
   const handleSubmit = async () => {
+    sendEvents('next')
     const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
-      const response = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
-      if(response.status_code === 200) {
-        const result = response.result
-        storageService().setObject(storageConstants.KYC, result.kyc)
-        navigate('/kyc/upload/progress')
-      } else {
-        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")
-      }
+      const result = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
+      updateKyc(result.kyc)
+      navigate('/kyc/upload/progress')
     } catch (err) {
       toast(err?.message)
       console.error(err)
@@ -118,12 +93,8 @@ const IpvVideo = (props) => {
   }
 
   const handleClick = (e) => {
-    if (!isWeb) {
-      handleUpload("open_video_camera");
-    } else {
-      if (!showVideoRecoreder) {
-        setShowVideoRecorder(true);
-      }
+    if (!showVideoRecoreder) {
+      setShowVideoRecorder(!showVideoRecoreder);
     }
   }
 
@@ -134,22 +105,73 @@ const IpvVideo = (props) => {
     steIsRecordingComplete(true);
   }
 
+  const onVideoRecorderError = (error) => {
+    setShowVideoRecorder(!showVideoRecoreder);
+    setNoCameraPermission(!noCameraPermission);
+  }
+
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "selfie_video_doc",
+        "type": type || "",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+  const renderInitialIllustration = useCallback(() => {
+    return (
+      <div className="instructions-container" data-aid='instructions-container'>
+        <div className="ipv_footer_instructions" data-aid='ipv-footer-instructions'>
+          Start recording,{' '}
+          <strong>by reading the following verification numbers loud</strong>{' '}
+          while looking at the camera
+        </div>
+        <div className="ipv_code" data-aid='ipv-code'>{ipvcode}</div>
+        <div style={{display: "flex", justifyContent: "center"}}>
+          <img
+            src={require(`assets/${productName}/state_ipv_number.svg`)}
+            alt="Upload Selfie"
+            className="default"
+          />
+        </div>
+      </div>
+    )
+  },[ipvcode, productName])
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       skelton={loading || isLoading}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
       title="Upload selfie video (IPV)"
+      data-aid='kyc-selfie-video-ipv-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-ipv-video">
-          <div className="sub-title">
+        <section id="kyc-upload-ipv-video" data-aid='kyc-upload-ipv-video'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             As per SEBI, it's compulsory for all investors to go through IPV (In
             Person Verification Process).
           </div>
-          <div className="kyc-doc-upload-container noBorder">
+          <KycUploadContainer dataAidSuffix="ipv">
+            {errorContent &&
+              <WVInfoBubble
+                hasTitle
+                type="error"
+              >
+                {errorContent}
+              </WVInfoBubble>
+            }
             {!isWeb && file && (
               <img
                 src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
@@ -157,58 +179,61 @@ const IpvVideo = (props) => {
                 alt="Uploaded IPV Video"
               />
             )}
-            {!file && (
-              <div className="instructions-container">
-                <div className="ipv_footer_instructions">
-                  Start recording,{' '}
-                  <strong>by reading the following verification numbers loud</strong>{' '}
-                  while looking at the camera
-                </div>
-                <div className="ipv_code">{ipvcode}</div>
-                <img
-                  src={require(`assets/${productName}/state_ipv_number.svg`)}
-                  alt="Upload Selfie"
-                  className="default"
-                />
-              </div>
+            {isWeb && !errorContent && (
+              renderInitialIllustration()
             )}
-            {isWeb && showVideoRecoreder && 
+            {!isWeb && !file && !errorContent && (
+              renderInitialIllustration()
+            )}
+            {isWeb && showVideoRecoreder && !errorContent &&
               <VideoRecorder
+                isOnInitially
                 showReplayControls
                 replayVideoAutoplayAndLoopOff
                 onRecordingComplete={onRecordingComplete}
+                countdownTime={15}
+                onError={onVideoRecorderError}
               />
             }
-            <div className="kyc-upload-doc-actions">
-              {isWeb && !isRecordingComplete && 
-                <div className="button-container">
-                  <Button
-                    type="outlined"
-                    buttonTitle="OPEN CAMERA"
-                    onClick={handleClick}
-                  />
-                </div>
-              }
-              {!isWeb &&
-              <div className="button-container">
-                <Button
-                  type="outlined"
-                  buttonTitle={uploadCTAText}
-                  onClick={handleClick}
-                />
-              </div>}
+            {isWeb && !showVideoRecoreder && !isRecordingComplete && !errorContent &&
+              <KycUploadContainer.Button
+                dataAid='open-camera-btn'
+                type="outlined"
+                buttonTitle="OPEN CAMERA"
+                onClick={handleClick}
+              />
+            }
+            {!isWeb && !errorContent &&
+              <KycUploadContainer.Button
+                dataAid='take-video-btn'
+                type="outlined"
+                buttonTitle={uploadCTAText}
+                fileName="ipv_video"
+                withPicker
+                nativePickerMethodName="open_video_camera"
+                onFileSelectComplete={onFileSelectComplete}
+                onFileSelectError={onFileSelectError}
+                supportedFormats={SUPPORTED_VIDEO_TYPES}
+                fileHandlerParams={{
+                  doc_type: "ipvvideo",
+                  message: "Look at the screen and read the verification number loud",
+                  ipv_code: ipvcode
+                }}
+              />
+            }
+          </KycUploadContainer>
+          {!errorContent &&
+            <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
+              <div className="upload-note" data-aid='upload-note-text'>How to make a selfie video ?</div>
+              <WVClickableTextElement
+                color="secondary"
+                className="know-more-button"
+                onClick={() => open()}
+              >
+                KNOW MORE
+              </WVClickableTextElement>
             </div>
-          </div>
-          <div className="doc-upload-note-row">
-            <div className="upload-note">How to make a selfie video ?</div>
-            <WVClickableTextElement
-              color="secondary"
-              className="know-more-button"
-              onClick={() => open()}
-            >
-              KNOW MORE
-            </WVClickableTextElement>
-          </div>
+          }
         </section>
       )}
       <KnowMore isOpen={showKnowMoreDialog} close={close} />

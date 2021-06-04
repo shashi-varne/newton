@@ -13,6 +13,7 @@ import { initialize } from "./function";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
+import { nativeCallback } from "../utils/native_callback";
 
 const config = getConfig();
 class Register extends Component {
@@ -54,6 +55,8 @@ class Register extends Component {
   handleClick = () => {
     let { form_data, registerType } = this.state;
     let keys_to_check = ["mobile", "code"];
+    if(registerType !== "email")
+      this.sendEvents()
     if (registerType === "email")
       keys_to_check = ["email", "password", "confirm_password"];
     this.formCheckFields(keys_to_check, form_data, "REGISTER", registerType);
@@ -64,6 +67,17 @@ class Register extends Component {
       referralCheck: !this.state.referralCheck,
     });
   };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'otp sent to user',
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let {
@@ -76,18 +90,18 @@ class Register extends Component {
       googleUrl,
     } = this.state;
     return (
-      <div className="login">
+      <div className="login" data-aid='login-register'>
         <div className="header">
           <img src={require(`assets/${config.logo}`)} alt="logo" />
         </div>
-        <div className="login-details">
+        <div className="login-details" data-aid='login-details'>
           <div className="left-image">
             <img
               src={require(`assets/${this.state.productName}/ils_register.svg`)}
               alt="register"
             />
           </div>
-          <div className="login-form">
+          <div className="login-form" data-aid='login-form'>
             <div className="header-text">REGISTER</div>
             <div className="login-type">
               <div
@@ -111,10 +125,10 @@ class Register extends Component {
                 {registerType === "email" && <div className="underline"></div>}
               </div>
             </div>
-            <div className="form">
+            <div className="form" data-aid='form'>
               {registerType === "mobile" && (
                 <div className="form-field">
-                  <div className="country-code">
+                  <div className="country-code" data-aid='country-code'>
                     <DropdownWithoutIcon
                       onChange={this.handleChange("code")}
                       error={form_data.code_error ? true : false}
@@ -188,7 +202,7 @@ class Register extends Component {
               )}
               {referralCheck && (
                 <div className="form-field referral-code-input">
-                  <FormControl className="referral-form">
+                  <FormControl className="referral-form" id="referral-form">
                     <InputLabel>Enter referral/partner code</InputLabel>
                     <InputUI
                       className="input"
@@ -221,7 +235,7 @@ class Register extends Component {
                   )}
                 </div>
               )}
-              <div className="referral-code">
+              <div className="referral-code" data-aid='referral-code-checkbox'>
                 <Checkbox
                   checked={referralCheck}
                   color="default"
@@ -230,9 +244,10 @@ class Register extends Component {
                   handleChange={this.handleCheckbox}
                   class="checkbox"
                 />
-                <div>I have a referral/promo/partner code</div>
+                <div data-aid='referral-code-checkbox-text'>I have a referral/promo/partner code</div>
               </div>
               <Button
+                dataAid='register-btn'
                 buttonTitle="REGISTER"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
@@ -258,19 +273,19 @@ class Register extends Component {
                   </span>
                 </div>
               )}
-              <div className="social-block">
-                <a className="socialSignupBtns facebookBtn" href={facebookUrl}>
+              <div className="social-block" data-aid='social-block'>
+                <a className="socialSignupBtns facebookBtn" data-aid='social-signupbtns-facebookbtn' href={facebookUrl}>
                   FACEBOOK
                 </a>
-                <a className="socialSignupBtns googleBtn" href={googleUrl}>
+                <a className="socialSignupBtns googleBtn" data-aid='social-signupbtns-googlebtn' href={googleUrl}>
                   GOOGLE
                 </a>
               </div>
             </div>
-            <div className="footer" onClick={() => this.navigate("login")}>
-              EXISTING USER? <span>LOGIN</span>
+            <div className="footer"  data-aid='footer' onClick={() => this.navigate("login")}>
+              EXISTING USER? <span data-aid='login-btn'>LOGIN</span>
             </div>
-            <div className="agree-terms">
+            <div className="agree-terms" data-aid='agree-terms'>
               By signing in, you agree to fisdom's{" "}
               <a
                 href="https://www.fisdom.com/terms/"

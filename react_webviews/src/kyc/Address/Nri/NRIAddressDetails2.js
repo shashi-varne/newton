@@ -3,15 +3,17 @@ import React, { useState, useEffect } from "react";
 import Toast from "../../../common/ui/Toast";
 import { submit } from "../../common/api";
 import Container from "../../common/Container";
-import { kycNRIDocNameMapper } from "../../constants";
+import { NRI_DOCUMENTS_MAPPER, PATHNAME_MAPPER } from "../../constants";
 import {
   compareObjects,
-  navigate as navigateFunc,
   validateFields,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
 import "../commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
+import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -20,7 +22,14 @@ const NRIAddressDetails2 = (props) => {
     nri_pincode: "",
   });
   const [oldState, setOldState] = useState({});
+  const [openConfirmBack, setOpenConfirmBack] = useState(false);
   const navigate = navigateFunc.bind(props);
+
+  const closeConfirmBack = () => {
+    setOpenConfirmBack(false);
+  }
+
+  const goToJourney = () => navigate(PATHNAME_MAPPER.journey);
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -40,6 +49,7 @@ const NRIAddressDetails2 = (props) => {
   const stateParams = props?.location?.state;
 
   const handleSubmit = async () => {
+    sendEvents("next")
     let keysToCheck = [
       "nri_pincode",
       "addressline",
@@ -87,10 +97,11 @@ const NRIAddressDetails2 = (props) => {
   };
 
   const handleNavigation = () => {
+    const data = { state: { isEdit } };
     if (stateParams?.backToJourney) {
-      navigate("/kyc/upload/address");
+      navigate("/kyc/upload/address", data);
     } else if (stateParams?.userType === "compliant") {
-      navigate("/kyc/compliant-personal-details4");
+      navigate("/kyc/compliant-personal-details4", data);
     } else {
       navigate("/kyc/journey");
     }
@@ -130,23 +141,61 @@ const NRIAddressDetails2 = (props) => {
   if (kyc?.address?.meta_data?.is_nri) {
     address_proof = "Passport";
   } else {
-    address_proof = kycNRIDocNameMapper[kyc?.address_doc_type];
+    address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
+  }
+
+  const getPageDetails = (userKyc) => {
+    let pageDetails = {}
+    const isCompliant = userKyc.kyc_status === "compliant";
+    pageDetails.total = isCompliant ? (isEdit ? 5 : 6) : 4 ;
+    pageDetails.current = isCompliant && !isEdit ? 5 : 4;
+    return pageDetails;
+  }
+
+  const pageDetails = getPageDetails(kyc);
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nri_address_details_2",
+        "pincode_entered": form_data.nri_pincode ? "yes" : "no",
+        "address_entered": form_data.addressline ? "yes" : "no"
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+  const goBack = () => {
+    if(stateParams?.userType === "compliant") {
+      setOpenConfirmBack(true)
+    } else {
+      props.history.goBack();
+    }
   }
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title={title}
-      current={4}
-      count={4}
-      total={4}
+      current={pageDetails.current}
+      count={pageDetails.current}
+      total={pageDetails.total}
+      data-aid='kyc-nri-address-details-screen-2'
+      headerData={{ goBack }}
     >
-      <section id="kyc-address-details-2">
-        <div className="sub-title">Address as per {address_proof}</div>
-        <form className="form-container">
+      <section data-aid='kyc-address-details-2'>
+        <div className="sub-title" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
+        <form className="form-container" data-aid='kyc-form-container'>
           <TextField
             label="Pincode"
             name="nri_pincode"
@@ -198,6 +247,11 @@ const NRIAddressDetails2 = (props) => {
           />
         </form>
       </section>
+      <ConfirmBackDialog
+        isOpen={openConfirmBack}
+        goBack={goToJourney}
+        close={closeConfirmBack}
+      />
     </Container>
   );
 };

@@ -1,27 +1,30 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig, getBasePath } from 'utils/functions';
+import { getConfig, getBasePath, isTradingEnabled, navigate as navigateFunc } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
-import { navigate as navigateFunc } from '../common/functions'
 import ConfirmBackModal from './confirm_back'
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
+import { isDigilockerFlow } from '../../kyc/common/functions';
+
+const config = getConfig();
+const TRADING_ENABLED = isTradingEnabled();
 
 class ESignInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      productName: getConfig().productName,
+      productName: config.productName,
       backModal: false,
       dl_flow: false,
       showAadharDialog: false,
     }
 
-    this.navigate = navigateFunc.bind(this.props);
+    this.navigate = navigateFunc.bind(props);
   }
 
   componentDidMount = () => {
@@ -31,15 +34,11 @@ class ESignInfo extends Component {
   initialize = async () => {
     const kyc = storageService().getObject("kyc");
     if (!isEmpty(kyc)) {
-      if (
-        kyc.kyc_status !== "compliant" &&
-        !kyc.address.meta_data.is_nri &&
-        kyc.dl_docs_status !== "" &&
-        kyc.dl_docs_status !== "init" &&
-        kyc.dl_docs_status !== null
-      ) {
-        this.setState({ dl_flow: true });
+      let dl_flow = false;
+      if (isDigilockerFlow(kyc)) {
+        dl_flow = true;
       }
+      this.setState({ dl_flow, kyc });
     }
   };
 
@@ -64,18 +63,24 @@ class ESignInfo extends Component {
     if(this.state.showAadharDialog) {
       this.closeAadharDialog();
     }
+    this.sendEvents('next','e sign kyc')
     let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
-      basepath + '/kyc-esign/nsdl' + getConfig().searchParams
+      basepath + '/kyc-esign/nsdl' + config.searchParams
     );
 
     this.setState({ show_loader: "button" });
 
     try {
-      let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);
+      const params = {};
+      if (TRADING_ENABLED) {
+        params.kyc_product_type = "equity";
+      }
+      const url = `/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`;
+      let res = await Api.get(url, params);
       let resultData = res.pfwresponse.result;
       if (resultData && !resultData.error) {
-        if (getConfig().app === 'ios') {
+        if (config.app === 'ios') {
           nativeCallback({
             action: 'show_top_bar', message: {
               title: 'eSign KYC'
@@ -118,13 +123,32 @@ class ESignInfo extends Component {
   }
 
   goNext = () => {
-    if(this.state.kyc?.address?.meta_data?.is_nri) {
+    if(!TRADING_ENABLED) {
       this.handleClick()
     } else {
       this.setState({ showAadharDialog: true })
     }
   }
 
+  sendEvents = (userAction, screenName) => {
+    const kyc = storageService().getObject("kyc");
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "" ,
+        "screen_name": screenName || "",
+        "rti": "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": 'digi kyc'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  
   render() {
     const { show_loader, productName } = this.state;
     const headerData = {
@@ -134,11 +158,13 @@ class ESignInfo extends Component {
 
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         showLoader={show_loader}
         title='eSign KYC'
         handleClick={this.goNext}
         buttonTitle='PROCEED'
         headerData={headerData}
+        data-aid='kyc-esign-screen'
       >
         <div className="esign-image">
           <img
@@ -147,16 +173,16 @@ class ESignInfo extends Component {
             alt="eSign KYC icon"
           />
         </div>
-        <div className="esign-desc">
+        <div className="esign-desc" data-aid='esign-desc'>
           eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
         </div>
-        <div className="esign-subtitle">How to eSign documents</div>
-        <div className="esign-steps">
+        <div className="esign-subtitle" data-aid='esign-subtitle'>How to eSign documents</div>
+        <div className="esign-steps" data-aid='esign-steps'>
           <div className="step">
             <div className="icon-container">
               <img src={require(`assets/ic_verify_otp_${productName}.svg`)} alt="Verify OTP" />
             </div>
-            <div className="step-text">
+            <div className="step-text" data-aid='step-text-1'>
               1. Verify mobile and enter Aadhaar number
                 </div>
           </div>
@@ -164,7 +190,7 @@ class ESignInfo extends Component {
             <div className="icon-container">
               <img src={require(`assets/ic_esign_otp_${productName}.svg`)} alt="Esign OTP icon" />
             </div>
-            <div className="step-text">
+            <div className="step-text" data-aid='step-text-2'>
               2. Enter OTP recieved on your Aadhaar linked mobile number
                 </div>
           </div>
@@ -172,11 +198,11 @@ class ESignInfo extends Component {
             <div className="icon-container">
               <img src={require(`assets/ic_esign_done_${productName}.svg`)} alt="Esign Done icon" />
             </div>
-            <div className="step-text">
+            <div className="step-text" data-aid='step-text-3'>
               3. e-Sign is successfully done
                 </div>
           </div>
-          <div className="esign-bottom">
+          <div className="esign-bottom" data-aid='esign-bottom'>
             <div className="bottom-text">
               Initiative by
                 </div>

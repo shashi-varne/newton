@@ -185,3 +185,38 @@
 }
 
 // PeriodWiseReturns styling END -------
+
+// Account merge confirm  back styling START -----
+.account-merge-back-confirm-dialog {
+  .account-merge-back-confirm-dialog-content {
+    line-height: 1.5;
+
+    .title {
+      margin: 10px 0;
+      color: #160d2e;
+      font-size: 16px;
+    }
+
+    .confirm-back-dialog-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      column-gap: 10px;
+      padding: 10px;
+
+      .confirm-back-button  {
+        min-width: 100px;
+        width: 100px;
+        border-radius: 3px;
+        padding: 8px 10px !important;
+      }
+
+      .confirm-back-yes {
+        background-color: transparent;
+        color: var(--primary);
+      }
+    }
+  }
+}
+
+// Account merge confirm  back styling END -----

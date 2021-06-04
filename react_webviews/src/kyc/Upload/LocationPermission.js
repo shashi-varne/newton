@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getConfig } from '../../utils/functions';
-import { getGeoLocation } from '../services';
-import { navigate as navigateFunc } from '../common/functions';
 import { isFunction } from 'lodash';
+import useScript from '../../common/customHooks/useScript';
 import WVButton from '../../common/ui/Button/WVButton';
 import WVFullscreenDialog from '../../common/ui/FullscreenDialog/WVFullscreenDialog';
 
@@ -37,19 +36,20 @@ const PAGE_TYPE_CONTENT_MAP = {
     subtitle: 'As per SEBI, we need to capture your location while you take the selfie'
   }
 };
+const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCe5PrvBwabfWYOSftl0DlpGKan4o7se2A&libraries=&v=weekly"
 
 const LocationPermission = ({
   isOpen,
   onClose,
-  type,
+  onInit, // callback to trigger (if any) for when google geocoder module is initialised
   onLocationFetchSuccess,
   onLocationFetchFailure,
-  parentProps
 }) => {
-  const [pageType, setPageType] = useState(type || 'permission-denied');
+  const [pageType, setPageType] = useState('permission-denied');
   const [pageContent, setPageContent] = useState({});
   const [permissionWarning, setPermissionWarning] = useState(false);
-  const navigate = navigateFunc.bind(parentProps);
+  const [isApiRunning, setIsApiRunning] = useState(true);
+  const { isLoaded } = useScript(GEOCODER);
 
   useEffect(() => {
     if (isOpen) {
@@ -58,24 +58,41 @@ const LocationPermission = ({
   }, [isOpen]);
 
   useEffect(() => {
+    if (isLoaded) {
+      onInit();
+    }
+  }, [isLoaded]);
+  
+  useEffect(() => {
     setPageContent(PAGE_TYPE_CONTENT_MAP[pageType]);
   }, [pageType]);
-
+  
   const locationCallbackSuccess = async (data) => {
     if (data.location_permission_denied) {
       setPermissionWarning(true);
     } else {
       try {
-        const results = await getGeoLocation(data.location);
-        const country = results[0]?.address_components?.[0]?.long_name;
-
-        if (country !== 'India') {
-          setPageType("invalid-region");
-        } else {
-          onLocationFetchSuccess(data.location);
-        }
+        setIsApiRunning(true);        
+        const geocoderService = new window.google.maps.Geocoder();
+        geocoderService.geocode({ location: {
+          lat: data.location.lat,
+          lng: data.location.lng,
+        }}, (results, status) => {
+          if (status === 'OK') {
+            const country = results[0]?.address_components?.[0]?.long_name;
+            setIsApiRunning(false);
+            if (country !== 'India') {
+              setPageType("invalid-region");
+            } else {
+              onLocationFetchSuccess(data.location);
+            }
+          } else {
+            throw(status);
+          }
+        });
       } catch (err) {
         console.log(err);
+        setIsApiRunning(false);
         toast('Something went wrong! Please try again');
         if (isFunction(onLocationFetchFailure)) {
           onLocationFetchFailure();
@@ -85,6 +102,7 @@ const LocationPermission = ({
   }
 
   const requestLocnPermission = () => {
+    setIsApiRunning(true);
     window.callbackWeb.get_device_data({
       type: 'location_nsp_received',
       location_nsp_received: locationCallbackSuccess
@@ -93,7 +111,7 @@ const LocationPermission = ({
 
   const onCTAClick = () => {
     if (pageType === 'invalid-region') {
-      navigate('/kyc/journey');
+      onClose(pageType);
     } else {
       requestLocnPermission();
     }
@@ -106,9 +124,9 @@ const LocationPermission = ({
   return (
     <WVFullscreenDialog
       open={isOpen}
-      onClose={onClose}
+      onClose={() => onClose(pageType)}
     >
-      <WVFullscreenDialog.Content onCloseClick={onClose}>
+      <WVFullscreenDialog.Content onCloseClick={() => onClose(pageType)}>
         <div className="kyc-loc-permission">
           <div className="kyc-loc-perm-illustration">
             {pageContent?.imgElem}
@@ -132,6 +150,7 @@ const LocationPermission = ({
           onClick={onCTAClick}
           variant="outlined"
           color="secondary"
+          showLoader={isApiRunning}
         >
           {pageType === 'invalid-region' ? "Okay" : "Allow"}
         </WVButton>

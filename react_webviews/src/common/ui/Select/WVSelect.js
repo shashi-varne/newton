@@ -40,6 +40,7 @@ const WVSelect = ({
   subtitleProp, // Name of prop to render subtitle for select option
   onChange, // Callback for when any select option is selected/changed
   renderItem, // Use this prop to pass a custom render function/component for select option
+  classes,
 }) => {
   const [selectedOpt, setSelectedOpt] = useState(value || {});
 
@@ -69,11 +70,12 @@ const WVSelect = ({
     titleProp,
     subtitleProp,
     renderItem,
-    onClick: selectOpt
+    onClick: selectOpt,
+    classes
   };
 
   return (
-    <div className="wv-select-container">
+    <div className={`wv-select-container ${classes.container}`}>
       {options?.map((option, idx) =>
         <RenderOption
           key={option[indexBy]}
@@ -95,27 +97,29 @@ const RenderOption = (props) => {
     onClick,
     renderItem,
     titleProp,
-    subtitleProp
+    subtitleProp,
+    classes = {},
   } = props;
 
   return (
     <div
-      className={`wv-select-item ${selected ? 'selected' : ''}`}
+      className={`wv-select-item ${classes.item} ${selected ? 'selected' : ''}`}
+      style={{ padding: subtitleProp ? '10px 22px' : '20px 22px'}}
       key={optionIndex}
       onClick={() => onClick?.(optionIndex)}
     >
-      <div className="wv-select-item-content">
+      <div className={`wv-select-item-content ${classes.itemContent}`}>
         {isFunction(renderItem) ?
           renderItem(option) :
           <>
-            <Title>{option[titleProp]}</Title>
-            <Subtitle>{option[subtitleProp]}</Subtitle>
+            {titleProp && <Title className={classes.title}>{option[titleProp]}</Title>}
+            {subtitleProp && <Subtitle className={classes.subtitle}>{option[subtitleProp]}</Subtitle>}
           </>
         }
       </div>
       {selected &&
         <img
-          className="wv-select-selected-icon"
+          className={`wv-select-selected-icon ${classes.selectedIcon}`}
           src={completed_step}
           alt="Check"
         />
@@ -125,7 +129,7 @@ const RenderOption = (props) => {
 }
 
 const Title = (props) => {
-  return (<div className="wv-select-item-title">
+  return (<div className={`wv-select-item-title ${props.className}`}>
     {props.children}
   </div>)
 };
@@ -133,7 +137,7 @@ const Title = (props) => {
 WVSelect.ItemTitle = Title;
 
 const Subtitle = (props) => {
-  return (<div className="wv-select-item-subtitle">
+  return (<div className={`wv-select-item-subtitle ${props.className}`}>
     {props.children}
   </div>)
 };
@@ -153,6 +157,7 @@ WVSelect.propTypes = {
 
 WVSelect.defaultProps = {
   preselectFirst: false,
+  classes: {},
 }
 
 export default WVSelect;
