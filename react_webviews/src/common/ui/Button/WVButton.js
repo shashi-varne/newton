@@ -2,8 +2,15 @@ import React from 'react';
 import { Button, withStyles } from '@material-ui/core';
 import { getConfig } from '../../../utils/functions';
 import DotDotLoaderNew from '../DotDotLoaderNew';
+import { disableBodyTouch } from '../../../utils/validators';
 
 const WVButton = ({ showLoader, children,  dataAid, ...props  }) => {
+  if (showLoader) {
+    disableBodyTouch(); //disable touch
+  } else {
+    disableBodyTouch(true); //touch enabled
+  }
+
   return (
     <Button {...props} data-aid={dataAid}>
       {showLoader ?
