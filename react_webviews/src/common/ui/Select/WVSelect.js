@@ -32,6 +32,7 @@ import { isFunction, findIndex } from 'lodash';
 import PropTypes from 'prop-types';
 
 const WVSelect = ({
+  dataAidSuffix,
   preselectFirst, // Set this to preselect the first option from 'options' list
   options, // Array of objects to be displayed as select options
   indexBy, // Prop name to track select option by (used for equality comparison) 
@@ -67,6 +68,7 @@ const WVSelect = ({
   }, []);
 
   const renderOptionProps = {
+    dataAidSuffix,
     titleProp,
     subtitleProp,
     renderItem,
@@ -75,7 +77,7 @@ const WVSelect = ({
   };
 
   return (
-    <div className={`wv-select-container ${classes.container}`}>
+    <div className={`wv-select-container ${classes.container}`} data-aid={`wv-select-container-${dataAidSuffix}`}>
       {options?.map((option, idx) =>
         <RenderOption
           key={option[indexBy]}
@@ -91,6 +93,7 @@ const WVSelect = ({
 
 const RenderOption = (props) => {
   const {
+    dataAidSuffix,
     option,
     optionIndex,
     selected,
@@ -107,13 +110,14 @@ const RenderOption = (props) => {
       style={{ padding: subtitleProp ? '10px 22px' : '20px 22px'}}
       key={optionIndex}
       onClick={() => onClick?.(optionIndex)}
+      data-aid={`wv-select-item-${dataAidSuffix}`}
     >
-      <div className={`wv-select-item-content ${classes.itemContent}`}>
+      <div className={`wv-select-item-content ${classes.itemContent}`} data-aid={`wv-select-item-content-${dataAidSuffix}`}>
         {isFunction(renderItem) ?
           renderItem(option) :
           <>
-            {titleProp && <Title className={classes.title}>{option[titleProp]}</Title>}
-            {subtitleProp && <Subtitle className={classes.subtitle}>{option[subtitleProp]}</Subtitle>}
+            {titleProp && <Title dataAidSuffix={dataAidSuffix} className={classes.title}>{option[titleProp]}</Title>}
+            {subtitleProp && <Subtitle dataAidSuffix={dataAidSuffix} className={classes.subtitle}>{option[subtitleProp]}</Subtitle>}
           </>
         }
       </div>
@@ -129,7 +133,7 @@ const RenderOption = (props) => {
 }
 
 const Title = (props) => {
-  return (<div className={`wv-select-item-title ${props.className}`}>
+  return (<div className={`wv-select-item-title ${props.className}`} data-aid={`wv-title-${props.dataAidSuffix}`}>
     {props.children}
   </div>)
 };
@@ -137,7 +141,7 @@ const Title = (props) => {
 WVSelect.ItemTitle = Title;
 
 const Subtitle = (props) => {
-  return (<div className={`wv-select-item-subtitle ${props.className}`}>
+  return (<div className={`wv-select-item-subtitle ${props.className}`} data-aid={`wv-subtitle-${props.dataAidSuffix}`}>
     {props.children}
   </div>)
 };
