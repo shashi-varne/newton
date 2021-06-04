@@ -138,11 +138,10 @@ class FundList extends Component {
                                 return (
                                     <GenericListCard
                                         data={item}
-                                        image={`assets/split.svg`}
                                         morning_star_rating={item?.morning_star_rating}
                                         title={item["legal_name"]}
                                         subtitle={item["tracking_index"]}
-                                        img_src={item.amc_logo_big}
+                                        image={item.amc_logo_big}
                                         value={
                                             [{ 'title1': 'EXPENSE RATIO', 'title2': 'RETURNS' },
                                             {

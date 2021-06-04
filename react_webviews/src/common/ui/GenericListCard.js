@@ -15,7 +15,7 @@ function GenericListCard(props) {
                         <span className='star-icon'><StarRating value={props.morning_star_rating} /> </span>
                     </div>
                 </div>
-                <img src={props.img_src} className="amc-logo-small" alt='' />
+                <img src={props.image} className="amc-logo-small" alt='' />
             </div>
 
 
