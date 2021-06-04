@@ -32,7 +32,10 @@
       line-height: 21px;
       color: var(--steelgrey);
       word-break: break-word;
-      margin-top: 10px;
+    }
+
+    .wv-ib-content-title + .wv-ib-content-desc {
+      margin-top: 6px;
     }
   }
 }
