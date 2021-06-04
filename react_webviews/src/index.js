@@ -1,19 +1,26 @@
-// import 'babel-polyfill';
+import './index.css';
+import './common/theme/Style.scss';
+import "./common/ui/style.scss";
 import 'idempotent-babel-polyfill';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import "typeface-roboto";
 import "typeface-source-sans-pro";
 import "typeface-poppins";
-import "@fontsource/rubik/latin.css";
-import './index.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import App from './App';
 import $ from 'jquery';
 import { isMobile } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import './common/theme/Style.scss';
-import "./common/ui/style.scss";
 import { getConfig } from './utils/functions';
+// ----- Rubik font imports -----
+import "@fontsource/rubik/latin.css"; // all weights from 300 to 900, (does not include italics)
+import "@fontsource/rubik/latin-400-italic.css";
+// -----------------------------
+// ----- Roboto font imports ----
+import "@fontsource/roboto/latin-400.css";
+import "@fontsource/roboto/latin-500.css";
+import "@fontsource/roboto/latin-700.css";
+// ------------------------------
+
 $(document).ready(function () {
   if (isMobile.Android()) {
     window.addEventListener('resize', function () {
