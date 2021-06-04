@@ -28,6 +28,9 @@ function PassiveFundDetails({ history }) {
   const [fundDetails, setFundDetails] = useState(null);
   const [graph, setGraph] = useState(null);
   const [openMoreInfoDialog, setOpenMoreInfoDialog] = useState(false);
+  const [fundInfoClicked, setFundInfoClicked] = useState(false);
+  const [portfolioDetailsClicked, setPortfolioDetailsClicked] = useState(false);
+  const [moreRisksClicked, setMoreRisksClicked] = useState(false);
   const { isins } = getUrlParams();
   const fund = storageService().getObject("diystore_fundInfo") || {};
 
@@ -68,22 +71,11 @@ function PassiveFundDetails({ history }) {
         user_action: userAction || "",
         screen_name: "fund_info",
         fund_selected: fundDetails?.performance?.legal_name || "",
-        fund_info_clicked: storageService().get("fund_info_clicked")
-          ? "yes"
-          : "no",
-        portfolio_details_clicked: storageService().get(
-          "portfolio_details_clicked"
-        )
-          ? "yes"
-          : "no",
-        more_risks_clicked: storageService().get("more_risks_clicked")
-          ? "yes"
-          : "no",
+        fund_info_clicked: fundInfoClicked ? "yes" : "no",
+        portfolio_details_clicked: portfolioDetailsClicked ? "yes" : "no",
+        more_risks_clicked: moreRisksClicked ? "yes" : "no",
       },
     };
-    storageService().remove("fund_info_clicked");
-    storageService().remove("portfolio_details_clicked");
-    storageService().remove("more_risks_clicked");
     if (userAction === "just_set_events") {
       return eventObj;
     } else {
@@ -105,7 +97,13 @@ function PassiveFundDetails({ history }) {
   };
 
   const storeEventsData = (name) => {
-    storageService().set(name, true);
+    if (name === "fund_info_clicked") {
+      setFundInfoClicked(true);
+    } else if (name === "portfolio_details_clicked") {
+      setPortfolioDetailsClicked(true);
+    } else if (name === "more_risks_clicked") {
+      setMoreRisksClicked(true);
+    }
   };
 
   return (
