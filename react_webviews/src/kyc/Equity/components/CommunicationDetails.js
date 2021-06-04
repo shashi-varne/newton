@@ -19,7 +19,7 @@ import {
   navigate as navigateFunc,
 } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
-import { getTotalPagesInPersonalDetails } from "../../common/functions";
+import { getTotalPagesInPersonalDetails, isKycCompleted } from "../../common/functions";
 import WVButton from "../../../common/ui/Button/WVButton";
 
 const config = getConfig();
@@ -66,10 +66,7 @@ const CommunicationDetails = (props) => {
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
       setFormData({ ...data });
-      setIsKycDone(
-        kyc?.application_status_v2 === "submitted" ||
-          kyc?.application_status_v2 === "complete"
-      );
+      setIsKycDone(isKycCompleted(kyc));
       setTotalPages(getTotalPagesInPersonalDetails());
     }
   }, [kyc, user]);

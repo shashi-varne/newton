@@ -1,4 +1,5 @@
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { isTradingEnabled } from '../../utils/functions'
 import { isEmpty, storageService } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS } from '../constants'
 
@@ -283,3 +284,12 @@ export const getFlow = (kycData) => {
   }
   return flow;
 }
+
+export const isKycCompleted = (kyc) => {
+  return (
+    isTradingEnabled() &&
+    (kyc?.application_status_v2 === "submitted" ||
+      kyc?.application_status_v2 === "complete") &&
+    kyc.sign_status === "signed"
+  );
+};

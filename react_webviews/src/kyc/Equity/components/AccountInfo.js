@@ -4,7 +4,7 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
-import { isEmailOrMobileVerified } from "../../common/functions";
+import { isEmailOrMobileVerified, isKycCompleted } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 
@@ -32,7 +32,7 @@ const AccountInfo = (props) => {
   };
 
   const handleClick = () => {
-    if (kyc?.application_status_v2 === "submitted" || kyc?.application_status_v2 === "complete") {
+    if (isKycCompleted(kyc)) {
       if (!isEmailOrMobileVerified()) {
         navigate(PATHNAME_MAPPER.communicationDetails);
       } else {

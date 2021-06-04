@@ -7,7 +7,7 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { updateQueryStringParameter } from "../common/functions";
+import { isKycCompleted, updateQueryStringParameter } from "../common/functions";
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -20,6 +20,11 @@ import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import { getJourneyData } from './JourneyFunction';
 
 const headerDataMapper = {
+  kycDone: {
+    icon: "ic_premium_onboarding_mid",
+    title: "Finish account upgrade",
+    subtitle: "",
+  },
   compliant: {
     icon: "ic_premium_onboarding_mid",
     title: "Premium onboarding",
@@ -44,7 +49,6 @@ const headerDataMapper = {
 };
 
 const config = getConfig();
-
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -54,7 +58,6 @@ const Journey = (props) => {
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
-  const config = getConfig()
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -243,7 +246,7 @@ const Journey = (props) => {
       ) {
         topTitle = 'Investment pending'
         investmentPending = true
-      } else if (isCompliant) {
+      } else if (isCompliant || isKycDone) {
         topTitle = `What's next?`
       } else if (show_aadhaar) {
         topTitle = 'Steps to follow:'
@@ -499,8 +502,15 @@ const Journey = (props) => {
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
+    var isKycDone = isKycCompleted(kyc);
     var kycJourneyData = initJourneyData() || []
-    var headerKey = isCompliant ? "compliant" : dlCondition ? "dlFlow" : "default";
+    var headerKey = isKycDone
+      ? "kycDone"
+      : isCompliant
+      ? "compliant"
+      : dlCondition
+      ? "dlFlow"
+      : "default";
     var headerData = headerDataMapper[headerKey];
     if(isCompliant) {
       if (journeyStatus === "ground_premium") {
@@ -621,7 +631,7 @@ const Journey = (props) => {
             <div className="left">
               <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
               <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
-              {(show_aadhaar || isCompliant) && (
+              {(show_aadhaar || isCompliant || isKycDone) && (
                 <>
                   <div className="kyc-pj-bottom" data-aid='kyc-pj-bottom'>
                     <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-one'>
