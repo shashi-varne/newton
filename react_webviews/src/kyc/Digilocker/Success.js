@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Container from '../common/Container'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { DL_DOCS } from '../constants'
 import "./Digilocker.scss";
-// import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
 
 const Success = (props) => {
   const productName = getConfig().productName;
-  // const [isBackDialogOpen, setBackDialogOpen] = useState(false);
   const proceed = () => {
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
@@ -17,7 +15,7 @@ const Success = (props) => {
       title="Share Details"
       buttonTitle="PROCEED"
       handleClick={proceed}
-      headerData={{goBack: proceed, icon: "close" }}
+      headerData={{ icon: "close" }}
       data-aid='kyc-success-page'
     >
       <section id="digilocker-success" data-aid='kyc-digilocker-success'>
@@ -45,11 +43,6 @@ const Success = (props) => {
           />
         </footer>
       </section>
-      {/* <ConfirmBackDialog
-        isOpen={isBackDialogOpen}
-        close={() => setBackDialogOpen(false)}
-        goBack={proceed}
-      /> */}
     </Container>
   )
 }
