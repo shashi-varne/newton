@@ -291,10 +291,14 @@ export const getFlow = (kycData) => {
 }
 
 export const isKycCompleted = (kyc) => {
-  return (
-    isTradingEnabled() &&
-    (kyc?.application_status_v2 === "submitted" ||
-      kyc?.application_status_v2 === "complete") &&
-    kyc.sign_status === "signed"
-  );
+  if (kyc?.kyc_status === "compliant") {
+    return (kyc?.application_status_v2 === "submitted" ||
+    kyc?.application_status_v2 === "complete");
+  } else {
+    return (
+      (kyc?.application_status_v2 === "submitted" ||
+        kyc?.application_status_v2 === "complete") &&
+      kyc.sign_status === "signed"
+    );
+  }
 };

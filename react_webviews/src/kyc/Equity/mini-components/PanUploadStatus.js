@@ -10,7 +10,7 @@ const uploadStatus = {
   success: {
     icon: "ic_indian_resident.svg",
     title: "PAN uploaded",
-    subtitle: !TRADING_ENABLED || kyc?.all_dl_doc_statuses.pan_fetch_status === "failed" ? 
+    subtitle: !TRADING_ENABLED || kyc?.all_dl_doc_statuses?.pan_fetch_status === "failed" ? 
       "You're almost there, eSign your KYC form" : "You're almost there, now take a selfie",
     ctaText: "CONTINUE",
   },

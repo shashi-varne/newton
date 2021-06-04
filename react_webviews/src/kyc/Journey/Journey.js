@@ -13,7 +13,7 @@ import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
-import { navigate as navigateFunc } from '../../utils/functions'
+import { isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
@@ -49,6 +49,8 @@ const headerDataMapper = {
 };
 
 const config = getConfig();
+const TRADING_ENABLED = isTradingEnabled();
+
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -512,7 +514,7 @@ const Journey = (props) => {
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
-    var isKycDone = isKycCompleted(kyc);
+    var isKycDone = TRADING_ENABLED && isKycCompleted(kyc);
     var kycJourneyData = initJourneyData() || []
     var headerKey = isKycDone
       ? "kycDone"

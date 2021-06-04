@@ -186,7 +186,7 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          {TRADING_ENABLED && kyc.kyc_type !== "manual" &&
+          {TRADING_ENABLED && kyc.kyc_type !== "manual" && bottomSheetType &&
             <PanUploadStatus
               status={bottomSheetType}
               isOpen={isOpen}
