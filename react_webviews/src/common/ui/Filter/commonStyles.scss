@@ -17,7 +17,7 @@
         margin-bottom: 10px;
         margin-left: 0px;
         .MuiSvgIcon-root {
-          fill: #3792fc;
+          fill: var(--primary);
         }
         .MuiCheckbox-root {
           left: 0;
@@ -27,7 +27,7 @@
           line-height: 21px;
           font-weight: normal;
           font-size: 16px;
-          color: #161a2e;
+          color: var(--dark);
           width: 100%;
           margin-left: 5px;
         }
@@ -35,7 +35,7 @@
         .fc-subtitle {
           position: absolute;
           margin-top: 5px;
-          color: #767e86;
+          color: var(--steelgrey);
           font-size: 13px;
           line-height: 18px;
           min-width: 100px;
@@ -45,7 +45,7 @@
     .title {
       .notselected {
         background-color: transparent !important;
-        color: #767e86;
+        color: var(--steelgrey);
       }
       background-color: transparent !important;
       background-image: linear-gradient(

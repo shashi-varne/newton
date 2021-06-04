@@ -133,8 +133,8 @@ function PassiveFundDetails({ history }) {
           </div>
           <p className="pfd-info">{`${fundDetails?.performance.ms_risk} risk | ${fundDetails?.performance?.tracking_index}`}</p>
           <div className="pf-flex">
-            <div style={{ color: "#161A2E" }}>
-              <p className="pfd-points" style={{ color: "#161A2E" }}>
+            <div>
+              <p className="pfd-points" style={{ color: "var(--dark)" }}>
                 NAV
                 <span style={{ fontSize: "8px", fontWeight: "400" }}>
                   (AS ON{" "}
@@ -145,12 +145,12 @@ function PassiveFundDetails({ history }) {
                   )
                 </span>
               </p>
-              <p className="pfd-nav-returns" style={{ color: "#161A2E" }}>
+              <p className="pfd-nav-returns" style={{ color: "var(--dark)" }}>
                 ₹{fundDetails?.performance?.current_nav}
               </p>
             </div>
             <div>
-              <p className="pfd-points" style={{ color: "#161A2E" }}>
+              <p className="pfd-points" style={{ color: "var(--dark)" }}>
                 Returns
               </p>
               <p
@@ -295,7 +295,7 @@ function PassiveFundDetails({ history }) {
           </div>
           <p
             className="pfd-values"
-            style={{ color: "#767E86", paddingBottom: "20px" }}
+            style={{ color: "var(--steelgrey)", paddingBottom: "20px" }}
           >
             Funds are rated by Morningstar based on their past performance as
             compared to other funds in the same category. Ratings are from 1 – 5
@@ -333,7 +333,7 @@ function PassiveFundDetails({ history }) {
                 : "Na"}
             </span>
           </p>
-          <p className="pfd-values" style={{ color: "#767E86" }}>
+          <p className="pfd-values" style={{ color: "var(--steelgrey)" }}>
             The difference between the fund’s returns & the index it tries to
             mimic. The lower the tracking error the better it is.
           </p>
@@ -350,7 +350,7 @@ function PassiveFundDetails({ history }) {
               {fundDetails?.portfolio?.expense_ratio}%
             </span>
           </p>
-          <p className="pfd-values" style={{ color: "#767E86" }}>
+          <p className="pfd-values" style={{ color: "var(--steelgrey)" }}>
             The annual maintenance charge that includes operating costs,
             management fees, allocation charges, advertising costs, etc. A lower
             expense ratio leads to more gains.

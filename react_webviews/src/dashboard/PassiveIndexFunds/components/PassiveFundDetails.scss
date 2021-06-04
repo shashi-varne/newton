@@ -13,7 +13,7 @@
     font-weight: 700;
     line-height: 32px;
     letter-spacing: 0px;
-    color: #160d2e;
+    color: var(--dark);
     // padding-bottom: 10px;
   }
   .pfd-info {
@@ -21,14 +21,14 @@
     font-weight: 400;
     line-height: 18px;
     letter-spacing: 0px;
-    color: #8d879b;
+    color: var(--steelgrey);
     padding-bottom: 18px;
     .pfd-check-btn {
       font-size: 12px;
       font-weight: 700;
       line-height: 14px;
       letter-spacing: 1px;
-      color: #35cb5d;
+      color: var(--secondary);
       cursor: pointer;
     }
   }
@@ -37,14 +37,14 @@
     font-weight: 600;
     line-height: 16px;
     letter-spacing: 1px;
-    color: #767e86;
+    color: var(--steelgrey);
   }
   .pfd-values {
     font-size: 13px;
     font-weight: 400;
     line-height: 21px;
     letter-spacing: 0px;
-    color: #8d879b;
+    color: var(--steelgrey);
   }
   .pfd-nav-returns{
     font-size: 15px;

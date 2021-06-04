@@ -1,31 +1,20 @@
-.category-title {
-  font-size: 20px;
-  margin-bottom: 24px;
-  font-weight: 700;
-}
-
-.category-subtitle {
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 21px;
-}
 .category-description {
   font-size: 13px;
   font-weight: 400;
   line-height: 21px;
   letter-spacing: 0px;
-  color: #767e86;
+  color: var(--steelgrey);
   .category-desc-button {
     font-size: 12px;
     font-weight: 700;
     line-height: 14px;
     letter-spacing: 1px;
-    color: #3792fc;
+    color: var(--primary);
     cursor: pointer;
   }
 }
 .fund-number{
-  color: #767E86;
+  color: var(--steelgrey);
   line-height: 16px;
   font-size: 10px;
   font-weight: 400;
@@ -57,7 +46,7 @@
      align-items: center;
      padding: 30px 0px;
     p{
-      color: #94C5FF;
+      color: var(--highlight);
       font-size: 13px;
       font-weight: 400;
       line-height: 21px;
@@ -87,15 +76,6 @@
   padding: 0px 20px;
 
 }
-
-// .react-player {
-//   top: 0;
-//   margin: 0 auto;
-//   left: 50%;
-//   transform: translate(-50%, 0);
-//   position: absolute;
-//   z-index: 1;
-// }
 
 .play-icon {
   min-width: 80px;
