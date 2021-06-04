@@ -86,7 +86,7 @@ class Landing extends Component {
                   <ReactPlayer
                     className="react-player"
                     ref={this.ref}
-                    url="https://www.youtube.com/watch?v=FydbL8Oq4G8&ab_channel=fisdom"
+                    url="https://youtu.be/_jG3A96fu8o&ab_channel=fisdom"
                     width="100%"
                     height="180px"
                     playing={playing}
