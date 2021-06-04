@@ -11,9 +11,13 @@ const KycUploadContainer = ({
   buttonText,
   onButtonClick,
   children,
+  dataAidSuffix
 }) => {
   return (
-    <div className={`kyc-upload-container ${classes.container}`} data-aid='kyc-upload-container'>
+    <div
+      className={`kyc-upload-container ${classes.container}`}
+      data-aid={`kyc-upload-container-${dataAidSuffix}`}
+    >
       {titleText &&
         <TitleText>{titleText}</TitleText>
       }
@@ -35,19 +39,26 @@ const KycUploadContainer = ({
   )
 }
 
-const TitleText = ({ children, className, alignLeft }) => {
+const TitleText = ({ children, className, alignLeft, dataAidSuffix }) => {
   return (
-    <div className={`kuc-caption ${className}`} style={{ textAlign: alignLeft ? 'left' : 'center' }} data-aid='title-text-caption'>{children}</div>
+    <div
+      className={`kuc-caption ${className}`}
+      dataAidSuffix={`kuc-caption-${dataAidSuffix}`}
+      style={{ textAlign: alignLeft ? 'left' : 'center' }}
+    >
+      {children}
+    </div>
   );
 }
 
 KycUploadContainer.TitleText = TitleText;
 
-const Image = ({ fileToShow, illustration, alt, className, ...props }) => {
+const Image = ({ fileToShow, illustration, alt, className, dataAidSuffix, ...props }) => {
   return (
     <img
       src={fileToShow || illustration}
       className={`kuc-image ${className}`}
+      data-aid={`kuc-image-${dataAidSuffix}`}
       alt={alt || "upload"}
       {...props}
     />
@@ -58,6 +69,7 @@ KycUploadContainer.Image = Image;
 
 const Button = ({
   fileName,
+  dataAidSuffix,
   nativePickerMethodName,
   onFileSelectComplete,
   showOptionsDialog,
@@ -72,6 +84,7 @@ const Button = ({
     return (
       <WVFilePickerWrapper
         fileName={fileName}
+        dataAidSuffix={dataAidSuffix}
         nativePickerMethodName={nativePickerMethodName}
         showOptionsDialog={showOptionsDialog}
         onFileSelectComplete={onFileSelectComplete}
@@ -80,7 +93,7 @@ const Button = ({
         customPickerId={customPickerId}
       >
         <WVButton
-          dataAid='attach-doc-btn'
+          dataAidSuffix={dataAidSuffix}
           variant="outlined"
           color="secondary"
           classes={{
@@ -95,7 +108,7 @@ const Button = ({
   }
   return (
     <WVButton
-      dataAid='attach-doc-btn'
+      dataAid={dataAidSuffix}
       variant="outlined"
       color="secondary"
       classes={{
