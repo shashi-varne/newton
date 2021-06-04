@@ -82,7 +82,7 @@ class Notification extends Component {
 
   getRedirectionUrlWebview = (url, showRedirectUrl) => {
     let webRedirectionUrl = url;
-    let plutusRedirectUrl = `${getBasePath()}/notifications/${config.searchParams}&is_secure=${storageService().get("is_secure")}`;
+    let plutusRedirectUrl = `${getBasePath()}/notification${config.searchParams}&is_secure=${storageService().get("is_secure")}`;
     // Adding redirect url for testing
     // eslint-disable-next-line
     webRedirectionUrl = `${webRedirectionUrl}${webRedirectionUrl.match(/[\?]/g) ? "&" : "?"}generic_callback=true&${showRedirectUrl ?"redirect_url":"plutus_redirect_url"}=${encodeURIComponent(plutusRedirectUrl)}&campaign_version=1`
