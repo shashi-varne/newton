@@ -1,12 +1,9 @@
 import { productName } from "./common/commonFunctions";
 import Radio from '@material-ui/core/Radio'
-// import Checkbox from '@material-ui/core/Checkbox';
-// import CheckIcon from '@material-ui/icons/Done'
-
 export const product_name = 'finity' || productName()
 
 
-export const keyInsightsCarousel = [
+export const KEY_INSIGHTS_CAROUSEL = [
   {
     title: "AUM growth",
     content:
@@ -28,7 +25,7 @@ export const keyInsightsCarousel = [
       "<b>Long-term investors</b> looking for low-cost funds & portfolio diversification",
   },
 ];
-export const passiveActiveCarousal = [
+export const ACTIVE_PASSIVE_FACTS_CAROUSEL = [
   {
     src: "cost.svg",
     header: "Cost",
@@ -66,7 +63,7 @@ export const passiveActiveCarousal = [
     },
   },
 ];
-export const fund_category = [
+export const FUND_CATEGORY = [
   {
     key: 'nifty_backers',
     title: 'Nifty backers',
@@ -93,7 +90,7 @@ export const fund_category = [
   }
 ];
 
-export const year_filters = [
+export const YEARS_FILTERS = [
   {
     type: "month",
     text: "1M",
@@ -120,7 +117,7 @@ export const year_filters = [
   },
 ]
 
-export const sort_filter_data = [
+export const SORT_FILTER_DATA = [
   {
     value: "expense_ratio",
     control: Radio,
@@ -164,7 +161,7 @@ export const sort_filter_data = [
 ]
 
 
-export const fund_option_data = [
+export const FUND_OPTION_DATA = [
   {
     value: 'Growth',
     control: Radio,
@@ -181,15 +178,15 @@ export const fund_option_data = [
   },
 ]
 
-export const filter_options = [
+export const FILTER_OPTIONS = [
   {
-    "Sort by": sort_filter_data
+    "Sort by": SORT_FILTER_DATA
   },
   {
     "Index": [] //   [ THIS DATA IS APPENED BY API ]
   },
   {
-    "Fund Option": fund_option_data
+    "Fund Option": FUND_OPTION_DATA
   },
   {
     "Fund House": []  //   [ THIS DATA IS APPENED BY API ]

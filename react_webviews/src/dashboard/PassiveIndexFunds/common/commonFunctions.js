@@ -3,7 +3,7 @@ import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
-import { filter_options } from "../constants"
+import { FILTER_OPTIONS } from "../constants"
 import Checkbox from '@material-ui/core/Checkbox';
 import toast from "../../../common/ui/Toast";
 
@@ -164,7 +164,7 @@ export async function fetch_funddetails_list(body) {
         this.setState({
           result: result,
           fundDescription: fundDescription,
-          filter_options: filter_options,
+          filter_options: FILTER_OPTIONS,
           body: body,
           mount: false,
         })
@@ -217,16 +217,16 @@ export function getFilterNames(result, Value, name) {
       });
     })
 
-    filter_options.forEach(element => {
+    FILTER_OPTIONS.forEach(element => {
 
       if (!!element[name]) {
         element[name] = option
       }
 
     });
-    return filter_options;
+    return FILTER_OPTIONS;
   }
 
-  return filter_options;
+  return FILTER_OPTIONS;
 
 }

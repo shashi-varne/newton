@@ -5,7 +5,7 @@ import { initialize, fetch_funddetails_list, selected_year } from "../common/com
 import BottomFilter from "../../../common/ui/Filter/BottomFilter";
 import YearFilter from "../../../common/ui/YearFilter";
 import GenericListCard from "../../../common/ui/GenericListCard"
-import { year_filters, filter_options } from "../constants";
+import { YEARS_FILTERS, FILTER_OPTIONS } from "../constants";
 import "./PassiveFundDetails.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 
@@ -127,7 +127,7 @@ class FundList extends Component {
                     )}
                     <p className="fund-number">{result.length} FUNDS</p>
                     <YearFilter
-                        filterArray={year_filters}
+                        filterArray={YEARS_FILTERS}
                         selected={this.state.yearValue || "1Y"}
                         onClick={this.yearFilter}
                     />
@@ -159,7 +159,7 @@ class FundList extends Component {
                             })}
                     </React.Fragment>
                     <BottomFilter
-                        filterOptions={filter_options}
+                        filterOptions={FILTER_OPTIONS}
                         getSortedFilter={this.setSortFilter}
                         defaultFilter={{ "Sort by": "tracking_error" }}
                     />
