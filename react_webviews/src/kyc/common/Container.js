@@ -7,10 +7,7 @@ import {
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
 import { getConfig } from "../../utils/functions";
-
-const KYC_PROPS_BASE = {
-  classOverRide: 'rubik'
-};
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 class Container extends Component {
   constructor(props) {
@@ -66,7 +63,16 @@ class Container extends Component {
   }
 
   render() {
-    return <Fragment>{this.commonRender(KYC_PROPS_BASE)}</Fragment>;
+    return (
+      <Fragment>
+        <ConfirmBackDialog
+          isOpen={this.state.openConfirmBack}
+          close={this.closeConfirmBackDialog}
+          goBack={this.redirectToJourney}
+        />
+        {this.commonRender()}
+      </Fragment>
+    );
   }
 }
 
