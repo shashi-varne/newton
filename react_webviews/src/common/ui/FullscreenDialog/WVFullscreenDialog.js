@@ -4,12 +4,14 @@ import React from 'react';
 import Close from '@material-ui/icons/Close';
 
 const WVFullscreenDialog = ({
+  dataAidSuffix,
   open,
   onClose,
   children
 }) => {
   return (
     <Dialog
+      dataAidSuffix={dataAidSuffix}
       fullScreen
       open={open}
       onClose={onClose}
@@ -22,12 +24,14 @@ const WVFullscreenDialog = ({
 }
 
 const Content = ({
+  dataAidSuffix,
   onCloseClick,
   children
 }) => {
   return (
     <DialogContent>
       <Close
+        data-aid={`wv-close-dialog-${dataAidSuffix}`}
         color="primary"
         onClick={onCloseClick}
         classes={{ root: 'wv-fullscreen-dialog-close' }}

@@ -5,6 +5,7 @@ import { getConfig } from '../../../utils/functions';
 const { productName } = getConfig();
 
 const WVSecurityDisclaimer = ({
+  dataAidSuffix,
   alignCenter = true, // Center aligns component [default=true]
   className = ''
 }) => {
@@ -12,8 +13,9 @@ const WVSecurityDisclaimer = ({
     <div
       style={{ margin: alignCenter ? 'auto' : '' }}
       className={`wv-security-disclaimer ${className}`}
+      data-aid={`wv-security-disclaimer-${dataAidSuffix}`}
     >
-      <span>Investments with {productName} are 100% secure</span>
+      <span data-aid={`wv-disclaimer-text-${dataAidSuffix}`}>Investments with {productName} are 100% secure</span>
       <div className="wv-sd-images">
         <img
           src={require('assets/sebi_registered_logo.svg')}

@@ -6,6 +6,7 @@ import { isFunction } from 'lodash';
 import PropTypes from 'prop-types';
 
 const WVFileUploadCard = ({
+  dataAidSuffix,
   title,
   subtitle,
   file,
@@ -41,10 +42,12 @@ const WVFileUploadCard = ({
   return (
     <>
       <WVFilePickerWrapper
+       dataAidSuffix={dataAidSuffix}
         {...wrapperProps}
         onFileSelectComplete={onFileSelected}
       >
         <div
+          data-aid={`wv-file-upload-card-${dataAidSuffix}`}
           className={`
           wv-file-upload-card
           ${classes.container}
@@ -52,7 +55,7 @@ const WVFileUploadCard = ({
         `}
           style={{ border: selectedFile ? '1px solid var(--primary)' : '' }}
         >
-          <div className="wv-fuc-left">
+          <div className="wv-fuc-left" data-aid={`wv-fuc-left-${dataAidSuffix}`}>
             <div className="wv-fuc-left-title">
               {title}
             </div>
@@ -60,7 +63,7 @@ const WVFileUploadCard = ({
               {subtitle}
             </div>
           </div>
-          <div className="wv-fuc-right">
+          <div className="wv-fuc-right" data-aid={`wv-fuc-right-${dataAidSuffix}`}>
             <SVG
               preProcessor={code => code.replace(
                 /fill=".*?"/g, `fill=${selectedFile ? '#24154C' : '#767E86'}`

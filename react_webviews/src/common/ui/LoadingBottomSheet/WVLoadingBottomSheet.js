@@ -27,6 +27,8 @@ import PropTypes from 'prop-types';
 import { isFunction, noop } from 'lodash';
 
 const WVLoadingBottomSheet = ({
+
+  dataAidSuffix,
   isOpen,
   gifSrc,
   title,
@@ -84,8 +86,9 @@ const WVLoadingBottomSheet = ({
       aria-describedby="wv-loading-bs"
       className="wv-loading-bs"
       id="wv-loading-bottom-sheet"
+      data-aid={`wv-loading-bottom-sheet-${dataAidSuffix}`}
     >
-      <DialogContent className="wv-lb-content">
+      <DialogContent className="wv-lb-content" data-aid={`wv-lb-content-${dataAidSuffix}`}>
         {gifSrc &&
           <Imgc
             src={gifSrc}
@@ -94,7 +97,7 @@ const WVLoadingBottomSheet = ({
           />
         }
         {title &&
-          <div className="wv-lbc-title">
+          <div className="wv-lbc-title" data-aid={`wv-lbc-title-${dataAidSuffix}`}>
             {title}&nbsp;
             {timerDuration &&
               <span>00:{timer}</span>
@@ -102,7 +105,7 @@ const WVLoadingBottomSheet = ({
           </div>
         }
         {subtitle &&
-          <div className="wv-lbc-subtitle">
+          <div className="wv-lbc-subtitle" data-aid={`wv-lbc-subtitle-${dataAidSuffix}`}>
            {subtitle}
           </div>
         }

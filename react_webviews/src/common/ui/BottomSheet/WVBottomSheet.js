@@ -38,6 +38,7 @@ import PropTypes from 'prop-types';
 import WVButtonLayout from '../ButtonLayout/WVButtonLayout';
 
 const WVBottomSheet = ({
+  dataAidSuffix,
   isOpen,
   onClose, // Callback for when bottomsheet is being closed
   buttonLayout, // Sets button layout - stacked/stackedOR/horizontal [default=horizontal]
@@ -51,6 +52,7 @@ const WVBottomSheet = ({
 }) => {
   return (
     <Dialog
+      data-aid={`wv-bottomsheet-${dataAidSuffix}`}
       id="wv-bottomsheet"
       open={isOpen}
       onClose={onClose}
@@ -59,15 +61,15 @@ const WVBottomSheet = ({
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>
-        <div className={`wv-bottomsheet-content ${classes.content}`}>
+        <div className={`wv-bottomsheet-content ${classes.content}`} data-aid={`wv-bottomsheet-content-${dataAidSuffix}`}>
           <div className="wv-bc-left">
             {title &&
-              <div className={`wv-bcl-title ${classes.title}`}>
+              <div className={`wv-bcl-title ${classes.title}`} data-aid={`wv-bcl-title-${dataAidSuffix}`}>
                 {title}
               </div>
             }
             {subtitle &&
-              <Subtitle className={classes.subtitle}>
+              <Subtitle className={classes.subtitle}  dataAidSuffix={dataAidSuffix}>
                 {subtitle}
               </Subtitle>
             }
@@ -86,6 +88,7 @@ const WVBottomSheet = ({
       </DialogContent>
       <DialogActions>
         <WVButtonLayout
+          dataAidSuffix={dataAidSuffix}
           layout={buttonLayout === 'stackedOR' ? 'stacked' : buttonLayout}
           className="wv-bottomsheet-actions"
         >
@@ -105,6 +108,7 @@ const WVBottomSheet = ({
           */}
           {!isEmpty(button2Props) &&
             <WVButtonLayout.Button
+              dataAidSuffix={dataAidSuffix}
               title={button2Props.title}
               type={button2Props.type}
               {...button2Props}
@@ -116,9 +120,9 @@ const WVBottomSheet = ({
   );
 };
 
-const Subtitle = ({ children, className }) => {
+const Subtitle = ({ children, className, dataAidSuffix }) => {
   return (
-    <div className={`wv-bcl-subtitle ${className}`}>
+    <div className={`wv-bcl-subtitle ${className}`} data-aid={`wv-bcl-subtitle-${dataAidSuffix}`}>
       {children}
     </div>
   );

@@ -25,6 +25,7 @@ const STEP_ACTION_COLOR_MAP = {
 }
 
 const WVJourneyShortening = ({
+  dataAidSuffix,
   title, // Title text for the step
   stepName, // Name of the step
   stepActionText, // Text for clickable element in the step-action section
@@ -32,16 +33,16 @@ const WVJourneyShortening = ({
   onStepActionClick // Function to call when step-action is clicked
 }) => {
   return (
-    <div className="wv-journey-shortening">
+    <div className="wv-journey-shortening" data-aid={`wv-journey-shortening-${dataAidSuffix}`}>
       <div className="wv-js-step-info">
-        <div className="wv-jssi-title">
+        <div className="wv-jssi-title" data-aid={`wv-jssi-title-${dataAidSuffix}`}>
           {title}
         </div>
-        <div className="wv-jssi-step-name">
+        <div className="wv-jssi-step-name" data-aid={`wv-jssi-step-name-${dataAidSuffix}`}>
           {stepName}
         </div>
       </div>
-      <div className="wv-js-step-action">
+      <div className="wv-js-step-action" data-aid={`wv-js-step-action-${dataAidSuffix}`}>
         <WVClickableTextElement
           onClick={onStepActionClick}
           color={STEP_ACTION_COLOR_MAP[stepActionType]}

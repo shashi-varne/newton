@@ -48,6 +48,7 @@ const validateFileTypeAndSize = (file, supportedTypes, sizeLimit) => {
 }
 
 export const WVFilePickerWrapper = ({
+  dataAidSuffix,
   nativePickerMethodName = '',
   customPickerId = 'wv-file-input',
   showOptionsDialog,
@@ -121,6 +122,7 @@ export const WVFilePickerWrapper = ({
         onClickFunc={onElementClick}
       />
       <FileAccessDialog
+        dataAidSuffix={dataAidSuffix}
         isOpen={openOptionsDialog}
         handleUpload={handleUploadFromDialog}
         onClose={() => setOpenOptionsDialog(false)}

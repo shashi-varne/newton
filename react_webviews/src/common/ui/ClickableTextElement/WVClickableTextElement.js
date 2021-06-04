@@ -2,7 +2,7 @@ import './WVClickableTextElement.scss';
 import React, { useEffect, useState } from 'react';
 import { getConfig } from '../../../utils/functions';
 
-const WVClickableTextElement = ({ className, children, onClick, color }) => {
+const WVClickableTextElement = ({ className, children, onClick, color, dataAidSuffix  }) => {
   const [textColor, setTextColor] = useState('');
 
   useEffect(() => {
@@ -18,6 +18,7 @@ const WVClickableTextElement = ({ className, children, onClick, color }) => {
 
   return (
     <span
+      data-aid={`wv-clickable-text-elem-${dataAidSuffix}`}
       className={`wv-clickable-text-elem ${className}`}
       style={textColor ? { color: textColor } : {}}
       onClick={onClick}
