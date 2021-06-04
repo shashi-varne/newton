@@ -13,12 +13,13 @@ import {
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
 import { API_CONSTANTS, PATHNAME_MAPPER } from "../../constants";
-import { getBasePath, getConfig } from "../../../utils/functions";
-import Otp from "../mini-components/Otp";
 import {
-  getTotalPagesInPersonalDetails,
+  getBasePath,
+  getConfig,
   navigate as navigateFunc,
-} from "../../common/functions";
+} from "../../../utils/functions";
+import Otp from "../mini-components/Otp";
+import { getTotalPagesInPersonalDetails } from "../../common/functions";
 import WVButton from "../../../common/ui/Button/WVButton";
 
 const config = getConfig();

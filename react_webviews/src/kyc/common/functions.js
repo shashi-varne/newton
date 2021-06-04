@@ -1,25 +1,6 @@
-import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
 import { isEmpty, storageService } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS } from '../constants'
-
-export function navigate(pathname, data = {}) {
-  if (data?.edit) {
-    this.history.replace({
-      pathname: pathname,
-      search: data?.searchParams || getConfig().searchParams,
-      state: data?.state || null,
-      params: data?.params || null,
-    })
-  } else {
-    this.history.push({
-      pathname: pathname,
-      search: data?.searchParams || getConfig().searchParams,
-      state: data?.state,
-      params: data?.params,
-    })
-  }
-}
 
 export const validateFields = (formData, keyToCheck) => {
   let canSubmit = true

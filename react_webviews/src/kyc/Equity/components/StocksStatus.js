@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../common/ui/Button";
-import { getConfig } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
-import { navigate as navigateFunc } from "../../common/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { getKycAppStatus } from "../../services";
 import "./commonStyles.scss";

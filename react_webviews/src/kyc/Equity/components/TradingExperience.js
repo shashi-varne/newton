@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { isDocSubmittedOrApproved, navigate as navigateFunc } from "../../common/functions"
+import { isDocSubmittedOrApproved } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
 import WVSelect from "../../../common/ui/Select/WVSelect";
+import { navigate as navigateFunc, } from "../../../utils/functions";
 
 const tradingExperienceValues = [
   {

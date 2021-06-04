@@ -5,8 +5,6 @@ import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
-import ResidentDialog from "../mini-components/residentDialog";
-import Alert from "../mini-components/Alert";
 import AccountMerge from "../mini-components/AccountMerge";
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
