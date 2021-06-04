@@ -22,7 +22,6 @@ class FundList extends Component {
             skelton: true,
             selected: "five_year_return",
             yearValue: "5Y",
-            mount: true,
             bottomFilterOptions: BOTTOM_FILTER_NAME,
         };
 
@@ -82,14 +81,9 @@ class FundList extends Component {
             this.setState({
                 bottomFilterOptions
             })
-
-            return;
         }
-        this.setState({
-            bottomFilterOptions
-        })
         return;
-    }
+    };
 
     clickCard(item) {
         this.sendEvents("next", item.legal_name);
@@ -118,7 +112,6 @@ class FundList extends Component {
         let body = {
             "filter_by": item["Sort by"] || "returns",
             "fund_house": item["Fund House"] || [],
-            // "tracking_index": item["Index"] || [],
             "return_type": this.state.selected || "five_year_return",
             "subcategory": item["Index"] ? item['Index'].length === 0 ? "all" : item["Index"] : "all"
         }
@@ -133,9 +126,7 @@ class FundList extends Component {
             body["dividend"] = "true"
         }
 
-        this.setState({
-            body: body
-        });
+        this.setState({ body });
 
         this.getFundDetailsList(body)
     }

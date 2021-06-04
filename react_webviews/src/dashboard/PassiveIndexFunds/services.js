@@ -5,17 +5,7 @@ import toast from '../../common/ui/Toast';
 
 export async function getFundDetailsList(body) {
 
-  if (isEmpty(body)) {
-    body = {
-      "subcategory": "all",
-      "sort_by": "low_to_high",
-      "filter_by": "tracking_error",
-      "return_type": "five_year_return"
-    }
-    this.setState({ body: body })
-  };
-
-  this.setState({ skelton: true })
+  this.setState({ skelton: true });
   let error = ""
   try {
     const res = await Api.post(`/api/funds/passive/index/category/${this.state.title}`, body);
