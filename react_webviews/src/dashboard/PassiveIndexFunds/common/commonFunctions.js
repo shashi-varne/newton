@@ -2,7 +2,7 @@ import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
-import { isEmpty } from "utils/validators";
+import { isEmpty } from "lodash";
 import { FILTER_OPTIONS } from "../constants"
 import Checkbox from '@material-ui/core/Checkbox';
 import toast from "../../../common/ui/Toast";
@@ -100,7 +100,7 @@ export function carouselSwipe_count(index) {
 };
 
 export function handleClick(data) {
-  let categoryName = data.key === "global_indices" ? "global_index_funds" : data.key;
+  const categoryName = data.key === "global_indices" ? "global_index_funds" : data.key;
   this.sendEvents("next", categoryName);
   storageService().set("category_index_name", data.title);
   this.navigate(`${data.key}/fund-list`, data.title);
