@@ -74,7 +74,7 @@ const KycBankDetails = (props) => {
     let disableData = { ...disableFields };
     if (
       user.active_investment ||
-      kyc.bank.meta_data_status === "approved" ||
+      (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
       kyc.bank.meta_data.bank_status === "doc_submitted"
     ) {
       disableData.skip_api_call = true;
