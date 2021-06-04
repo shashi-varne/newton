@@ -126,7 +126,7 @@ export const SELECTED_YEAR = {
   "5Y": 'five_year_return',
 }
 
-export const SORT_FILTER_DATA = [
+export const SORT_OPTIONS = [
   {
     value: "expense_ratio",
     control: Radio,
@@ -170,7 +170,7 @@ export const SORT_FILTER_DATA = [
 ]
 
 
-export const FUND_OPTION_DATA = [
+export const FUND_OPTIONS = [
   {
     value: 'Growth',
     control: Radio,
@@ -187,15 +187,15 @@ export const FUND_OPTION_DATA = [
   },
 ]
 
-export const FILTER_OPTIONS = [
+export const BOTTOM_FILTER_NAME = [
   {
-    "Sort by": SORT_FILTER_DATA
+    "Sort by": SORT_OPTIONS
   },
   {
     "Index": [] //   [ THIS DATA IS APPENED BY API ]
   },
   {
-    "Fund Option": FUND_OPTION_DATA
+    "Fund Option": FUND_OPTIONS
   },
   {
     "Fund House": []  //   [ THIS DATA IS APPENED BY API ]

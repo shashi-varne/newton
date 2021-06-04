@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { storageService, isEmpty } from "utils/validators";
-import { initialize, fetch_funddetails_list } from "../common/commonFunctions";
+import { storageService } from "utils/validators";
+import { initialize } from "../common/commonFunctions";
+import { getFundDetailsList } from "../services"
 import BottomFilter from "../../../common/ui/Filter/BottomFilter";
 import YearFilter from "../../../common/ui/YearFilter";
 import GenericListCard from "../../../common/ui/GenericListCard"
-import { YEARS_FILTERS, FILTER_OPTIONS , SELECTED_YEAR } from "../constants";
+import { YEARS_FILTERS, BOTTOM_FILTER_NAME, SELECTED_YEAR } from "../constants";
 import "./PassiveFundDetails.scss";
 import { nativeCallback } from "../../../utils/native_callback";
+import { isEmpty } from 'lodash';
+import Checkbox from '@material-ui/core/Checkbox';
 
 class FundList extends Component {
     constructor(props) {
@@ -20,26 +23,76 @@ class FundList extends Component {
             selected: "five_year_return",
             yearValue: "5Y",
             mount: true,
+            bottomFilterOptions: BOTTOM_FILTER_NAME,
         };
 
         this.initialize = initialize.bind(this);
-        this.fetch_funddetails_list = fetch_funddetails_list.bind(this);
+        this.getFundDetailsList = getFundDetailsList.bind(this)
     }
 
     componentWillMount() {
         this.initialize();
     }
 
-    componentDidMount() {
-        this.fetch_funddetails_list()
+    async componentDidMount() {
+        const body = {
+            "subcategory": "all",
+            "sort_by": "low_to_high",
+            "filter_by": "tracking_error",
+            "return_type": "five_year_return"
+        }
+        const { result, fundDescription } = await this.getFundDetailsList(body)
+
+        if (!isEmpty(result)) {
+            this.getFilterNames(result, 'fund_house', 'Fund House');
+            this.getFilterNames(result, 'tracking_index', 'Index');
+        }
+
+        this.setState({ body, result: result ? result : [], fundDescription })
+    }
+
+
+    getFilterNames(result, value, name) {
+
+        const { bottomFilterOptions } = this.state
+
+        if (result?.length > 0) {
+            const dataArr = result.map((item) => item[value])
+            const uniqueSet = new Set(dataArr)
+            var uniqueArr = Array.from(uniqueSet)
+        }
+        if (!isEmpty(uniqueArr)) {
+            const option = uniqueArr.map((item, idx) => {
+                return ({
+                    value: item,
+                    control: Checkbox,
+                    title: item,
+                    labelPlacement: "end",
+                    color: "primary",
+                });
+            })
+            bottomFilterOptions.forEach(element => {
+
+                if (!!element[name]) {
+                    element[name] = option
+                }
+
+            });
+
+            this.setState({
+                bottomFilterOptions
+            })
+
+            return;
+        }
+        this.setState({
+            bottomFilterOptions
+        })
+        return;
     }
 
     clickCard(item) {
         this.sendEvents("next", item.legal_name);
-        // TO BE CHECKED
-        const isins_number = { "isins_no": item.isin }
-        storageService().setObject("isins_number", isins_number);
-        // --
         let dataCopy = Object.assign({}, item)
         dataCopy.diy_type = 'categories'
         storageService().setObject('diystore_fundInfo', dataCopy)
@@ -54,9 +107,10 @@ class FundList extends Component {
         this.setState({
             selected: SelectedYear,
             yearValue: time,
-        })
+        });
         body["return_type"] = SelectedYear;
-        this.fetch_funddetails_list(body);
+
+        this.getFundDetailsList(body);
     }
 
     setSortFilter = (item) => {
@@ -83,7 +137,7 @@ class FundList extends Component {
             body: body
         });
 
-        this.fetch_funddetails_list(body)
+        this.getFundDetailsList(body)
     }
 
     sendEvents = (userAction, fundSelected) => {
@@ -133,7 +187,7 @@ class FundList extends Component {
                             </span>
                         </p>
                     )}
-                    <p className="fund-number">{result.length} FUNDS</p>
+                    <p className="fund-number">{result?.length} FUNDS</p>
                     <YearFilter
                         filterArray={YEARS_FILTERS}
                         selected={this.state.yearValue || "1Y"}
@@ -166,7 +220,7 @@ class FundList extends Component {
                             })}
                     </React.Fragment>
                     <BottomFilter
-                        filterOptions={FILTER_OPTIONS}
+                        filterOptions={this.state.bottomFilterOptions}
                         getSortedFilter={this.setSortFilter}
                         defaultFilter={{ "Sort by": "tracking_error" }}
                     />
