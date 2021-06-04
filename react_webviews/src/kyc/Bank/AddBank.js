@@ -11,12 +11,13 @@ import {
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini-components/Alert";
-import { navigate as navigateFunc, validateFields } from "../common/functions";
+import { validateFields } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, addAdditionalBank } from "../common/api";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const AddBank = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -93,6 +94,7 @@ const AddBank = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next")
     const keysToCheck = [
       "ifsc_code",
       "account_number",
@@ -220,9 +222,25 @@ const AddBank = (props) => {
     return { bankData: bank, formData: formData, bankIcon: bankIcon };
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "new bank details",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       disable={isLoading}

@@ -7,13 +7,15 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
+  getFlow
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -62,10 +64,11 @@ const PersonalDetails4 = (props) => {
       if (!result.canSubmit) {
         let data = { ...result.formData };
         setFormData(data);
+        sendEvents("next")
         return;
       }
     }
-
+    sendEvents("next")
     if (isChecked) {
       if (kyc.nomination.nominee_optional) {
         handleNavigation();
@@ -145,8 +148,29 @@ const PersonalDetails4 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nominee details",
+        "name": form_data.name ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "relationship": form_data.relationship ? "yes" : "no",
+        "flow": getFlow(kyc) || "",
+        "add_nominee":isChecked ? "no":"yes",
+        "initial_kyc_status" : kyc.kyc_status || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
   return (
     <Container
+      events={sendEvents("just_set_events")}
       showSkelton={isLoading}
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"

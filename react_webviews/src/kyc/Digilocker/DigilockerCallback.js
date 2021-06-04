@@ -1,5 +1,5 @@
 import React from "react";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { getUrlParams } from "../../utils/validators";
 
 const DigilockerCallback = (props) => {
