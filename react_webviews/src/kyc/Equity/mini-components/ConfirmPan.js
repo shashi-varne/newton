@@ -8,7 +8,7 @@ const productName = getConfig().productName;
 export const ConfirmPan = ({ isOpen, name, pan, handleClick, close }) => {
   const subtitle = (
     <>
-      Hi, <b>{name}</b> please confirm that this PAN belongs to you
+      Hi<b>{name  && ` ${name}`}</b>, please confirm that this PAN belongs to you
     </>
   );
   return (

@@ -146,6 +146,12 @@ const Journey = (props) => {
             status = 'init'
             break
           }
+        } else if (journeyData[i].key === 'bank') {
+          // this condition covers users who are not penny verified
+          if (kyc[journeyData[i].key].meta_data_status === 'approved' && kyc[journeyData[i].key].meta_data.bank_status !== 'verified') {
+            status = 'init';
+            break;
+          }
         } else if (
           journeyData[i].key === 'docs' ||
           journeyData[i].key === 'sign'
@@ -154,10 +160,11 @@ const Journey = (props) => {
             let data = journeyData[i].inputsForStatus[j]
             if (data !== 'bank' && (kyc[data].doc_status === 'init' || kyc[data].doc_status === 'rejected')) {
               status = 'init'
-              break
+              break// this condition covers users who are not penny verified
             }
 
-            if (data === 'bank' && (kyc[data].meta_data_status === 'init' || kyc[data].meta_data_status === 'rejected')) {
+            if (data === 'bank' && ((kyc[data].meta_data_status === 'init' || kyc[data].meta_data_status === 'rejected') ||
+              (kyc[data].meta_data_status === 'approved' && kyc[data].meta_data.bank_status !== 'verified'))) { // this condition covers users who are not penny verified
               status = 'init'
               break
             }
@@ -679,16 +686,6 @@ const Journey = (props) => {
             </div>
           )}
 
-          {isCompliant &&
-            user.active_investment &&
-            user.kyc_registration_v2 !== 'submitted' && (
-              <Alert
-                dataAid='kyc-registration-v2-alertbox'
-                variant="attention"
-                message="Please share following mandatory details within 24 hrs to execute the investment."
-                title={`Hey ${user.name}`}
-              />
-            )}
           <main  data-aid='kyc-journey' className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
