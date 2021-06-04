@@ -23,7 +23,6 @@ import CompliantPersonalDetails3 from "./Compliant/PersonalDetails3";
 import CompliantPersonalDetails4 from "./Compliant/PersonalDetails4";
 import ConfirmPan from "./Compliant/ConfirmPan";
 import KycComplete from "./Compliant/Complete";
-import CompliantReport from "./Compliant/Report";
 import KycVerified from "./Compliant/KycVerified";
 import RtaCompliantPersonalDetails from "./RtaCompliant";
 

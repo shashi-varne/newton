@@ -16,7 +16,6 @@ import { getFlow } from "../common/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
 const config = getConfig();
-const isWeb = config.Web;
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -25,7 +24,6 @@ const KycUploadDocuments = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
-  // const [showLoader, setShowLoader] = useState(false)
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {

@@ -686,16 +686,6 @@ const Journey = (props) => {
             </div>
           )}
 
-          {isCompliant &&
-            user.active_investment &&
-            user.kyc_registration_v2 !== 'submitted' && (
-              <Alert
-                dataAid='kyc-registration-v2-alertbox'
-                variant="attention"
-                message="Please share following mandatory details within 24 hrs to execute the investment."
-                title={`Hey ${user.name}`}
-              />
-            )}
           <main  data-aid='kyc-journey' className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
