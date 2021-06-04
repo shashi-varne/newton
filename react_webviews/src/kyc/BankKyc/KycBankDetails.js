@@ -93,13 +93,13 @@ const KycBankDetails = (props) => {
       setNote({
         info_text:
           "2 more attempts remaining! Please enter your correct account details to proceed",
-        variant: "attention",
+        variant: "warning",
       });
     } else if (data.user_rejection_attempts === 1) {
       setNote({
         info_text:
           "Just 1 attempt is remaining! Please enter your correct account details to proceed",
-        variant: "attention",
+        variant: "warning",
       });
     }
     if (disableData.skip_api_call) {
