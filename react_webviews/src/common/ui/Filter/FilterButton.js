@@ -5,14 +5,14 @@ const FilterButton = (props) => {
   return (
     <Button
       {...props}
-      style={{ width: "138px", border: "1px solid rgba(255,255,255,0.5)", backgroundColor: "white" }}
+      style={{ width: "138px", minHeight: '40px',  border: "1px solid rgba(255,255,255,0.5)", backgroundColor: "white" }}
     >
       <div className="icon">
         <img src={require("../../../assets/filter_icon.svg")} alt="" />
       </div>
       <div
         className="title"
-        style={{ color: "#35CB5D", paddingLeft: "10px", fontSize: "12px" }}
+        style={{ color: "#35CB5D", paddingLeft: "10px", fontSize: "12px" , fontWeight: '700' }}
       >
         Filter
       </div>
