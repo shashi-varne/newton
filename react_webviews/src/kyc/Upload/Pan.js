@@ -190,6 +190,8 @@ const Pan = (props) => {
             <PanUploadStatus
               status={bottomSheetType}
               isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
+              disableBackdropClick
               onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
             />
           }

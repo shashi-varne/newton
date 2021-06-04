@@ -240,6 +240,7 @@ const Selfie = (props) => {
           <SelfieUploadStatus
             status={bottomSheetType}
             isOpen={openBottomSheet}
+            disableBackdropClick
             onClose={() => setOpenBottomSheet(false)}
             onCtaClick={handleNavigation}
           />
