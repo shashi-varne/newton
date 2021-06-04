@@ -146,12 +146,6 @@ const Journey = (props) => {
             status = 'init'
             break
           }
-        } else if (journeyData[i].key === 'bank') {
-          // this condition covers users who are not penny verified
-          if (kyc[journeyData[i].key].meta_data_status === 'approved' && kyc[journeyData[i].key].meta_data.bank_status !== 'verified') {
-            status = 'init';
-            break;
-          }
         } else if (
           journeyData[i].key === 'docs' ||
           journeyData[i].key === 'sign'
@@ -160,7 +154,7 @@ const Journey = (props) => {
             let data = journeyData[i].inputsForStatus[j]
             if (data !== 'bank' && (kyc[data].doc_status === 'init' || kyc[data].doc_status === 'rejected')) {
               status = 'init'
-              break// this condition covers users who are not penny verified
+              break
             }
 
             if (data === 'bank' && ((kyc[data].meta_data_status === 'init' || kyc[data].meta_data_status === 'rejected') ||
@@ -209,6 +203,14 @@ const Journey = (props) => {
                 } else {
                   status = 'init'
                   break
+                }
+              } else {
+                if (journeyData[i].key === 'bank') {
+                  // this condition covers users who are not penny verified
+                  if (kyc[data.name].meta_data_status === 'approved' && kyc[data.name].meta_data.bank_status !== 'verified') {
+                    status = 'init';
+                    break;
+                  }
                 }
               }
             }
@@ -345,6 +347,7 @@ const Journey = (props) => {
         stateMapper = {
           pan: PATHNAME_MAPPER.homeKyc,
           personal: PATHNAME_MAPPER.digilockerPersonalDetails1,
+          bank: '/kyc/non-compliant/bank-details',
           bank_esign: '/kyc/non-compliant/bank-details',
           trading_esign: PATHNAME_MAPPER.tradingExperience,
           address: PATHNAME_MAPPER.addressDetails1,

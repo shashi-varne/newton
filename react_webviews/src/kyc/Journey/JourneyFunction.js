@@ -63,7 +63,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: [
           {
             name: 'bank',
-            keys: ['account_number', 'account_type', 'ifsc_code'],
+            keys: ['account_number', 'account_type', 'ifsc_code', 'bank_status'],
           },
         ],
       },
@@ -133,7 +133,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: [
           {
             name: 'bank',
-            keys: ['account_number', 'account_type', 'ifsc_code'],
+            keys: ['account_number', 'account_type', 'ifsc_code', 'bank_status'],
           },
         ],
       },
