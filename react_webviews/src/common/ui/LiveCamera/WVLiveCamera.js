@@ -4,6 +4,7 @@ import { isEmpty, isFunction } from 'lodash';
 import useScript from '../../customHooks/useScript';
 import Api from '../../../utils/api';
 import { storageService } from '../../../utils/validators';
+import { base64ToBlob } from '../../../utils/functions';
 
 const SCRIPT_SRC = "https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@latest/src/sdk.min.js";
 
@@ -80,8 +81,11 @@ const WVLiveCamera = ({
         onCaptureFailure(HVError);
       }
     } else if (isFunction(onCaptureSuccess)) {
+      const fileBlob = base64ToBlob(HVResponse.imgBase64.split(",")[1], 'image/jpeg');
+
       onCaptureSuccess({
         ...HVResponse.response.result,
+        fileBlob,
         imgBase64: HVResponse.imgBase64
       });
     }
