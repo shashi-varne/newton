@@ -116,14 +116,14 @@ const Selfie = (props) => {
     if (TRADING_FLOW) {
       setIsLiveCamOpen(false);
       if (result.imgBase64 && result['liveness-score']) {
-        setFile(result.imgBase64);
+        setFile(result.fileBlob);
         setFileToShow(result.imgBase64);
         setSelfieLiveScore(result['liveness-score']);
       }
     } else {
       setIsWebcamOpen(false);
-      setFile(result);
-      setFileToShow(result);
+      setFile(result.fileBlob);
+      setFileToShow(result.imgBase64);
     }
   }
 
