@@ -105,8 +105,7 @@ const Home = (props) => {
         return;
       }
       const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
-      // if (!isStartKyc) {
-      if (skipApiCall) {
+      if (skipApiCall || isStartKyc) {
         setIsStartKyc(true);
         setUserName(kyc?.pan?.meta_data?.name);
         if (kyc?.kyc_status === "compliant") {
@@ -119,14 +118,12 @@ const Home = (props) => {
       }
       setShowLoader("button");
       await checkPanValidity(true);
-      // }
     } catch (err) {
       toast(err.message || genericErrorMessage);
     }
   };
 
   const checkPanValidity = async (showConfirmPan = false) => {
-    // setOpenCheckCompliant(true);
     let body = {
       kyc: {
         pan_number: pan.toUpperCase(),
@@ -142,17 +139,11 @@ const Home = (props) => {
       if (isEmpty(result)) return;
       setUserName(result.kyc.name);
       setIsStartKyc(true);
-      // if (result?.kyc?.status) {
-      //   setIsUserCompliant(true);
-      // } else {
-      //   setIsUserCompliant(false);
-      // }
       if (showConfirmPan) setOpenConfirmPan(true);
     } catch (err) {
       console.log(err);
       toast(err.message);
     } finally {
-      // setOpenCheckCompliant(false);
       setShowLoader(false);
     }
   };
@@ -236,7 +227,6 @@ const Home = (props) => {
   const savePan = async (is_nri) => {
     // sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
     try {
-      // setShowLoader("button");
       if (is_nri) {
         kyc.address.meta_data.is_nri = true;
       } else {
@@ -271,7 +261,6 @@ const Home = (props) => {
       toast(err.message || genericErrorMessage);
     } finally {
       setOpenCheckCompliant(false);
-      // setShowLoader(false);
     }
   };
 
@@ -379,7 +368,6 @@ const Home = (props) => {
                 width="40"
                 label="Are you an Indian resident?"
                 options={residentialStatusOptions}
-                // id="account_type"
                 value={residentialStatus}
                 onChange={handleResidentialStatus}
                 disabled={showLoader}

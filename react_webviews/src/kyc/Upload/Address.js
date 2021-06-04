@@ -1,9 +1,8 @@
 import "./commonStyles.scss";
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { storageService, } from '../../utils/validators'
-import { storageConstants, DOCUMENTS_MAPPER, SUPPORTED_IMAGE_TYPES, PATHNAME_MAPPER } from '../constants'
+import { DOCUMENTS_MAPPER, SUPPORTED_IMAGE_TYPES, PATHNAME_MAPPER } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
@@ -13,45 +12,6 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { isEmpty } from 'lodash';
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
-
-const isWeb = getConfig().Web
-const getTitleList = ({ kyc, myAccountFlow }) => {
-  let titleList = [
-    'Photo of address card should have your signature',
-    'Photo of address should be clear and it should not have the exposure of flash light',
-  ]
-  if (
-    kyc?.kyc_status !== 'compliant' &&
-    kyc?.dl_docs_status !== '' &&
-    kyc?.dl_docs_status !== 'init' &&
-    kyc?.dl_docs_status !== null && 
-    !myAccountFlow
-  ) {
-    if (
-      kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-      kyc.all_dl_doc_statuses.pan_fetch_status === '' ||
-      kyc.all_dl_doc_statuses.pan_fetch_status === 'failed'
-    ) {
-      titleList[0] =
-        'Oops! seems like Digilocker is down, please upload your address to proceed further'
-    }
-  }
-  return titleList
-}
-
-const MessageComponent = (kyc, myAccountFlow) => {
-  const [titleList] = useState(getTitleList(kyc, myAccountFlow))
-  return (
-    <section className="pan-alert" data-aid='kyc-pan-alert'>
-      {titleList.map((title, idx) => (
-        <div className="row" key={idx} data-aid={`row-${idx + 1}`}>
-          <div className="order" data-aid={`order-${idx + 1}`}>{idx + 1}.</div>
-          <div className="value" data-aid={`value-${idx + 1}`}>{title}</div>
-        </div>
-      ))}
-    </section>
-  )
-}
 
 const config = getConfig();
 const productName = config.productName
@@ -65,7 +25,6 @@ const AddressUpload = (props) => {
   }
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
-  // const [showLoader, setShowLoader] = useState(false)
   const [backDoc, setBackDoc] = useState(null)
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
@@ -118,7 +77,11 @@ const AddressUpload = (props) => {
         })
       }
       updateKyc(result.kyc)
-      navigate(PATHNAME_MAPPER.uploadProgress)
+      if(isMyAccountFlow) {
+        navigate("/my-account");
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      }
     } catch (err) {
       console.error(err)
       toast(err?.message)
@@ -215,7 +178,7 @@ const AddressUpload = (props) => {
       handleClick={handleSubmit}
       disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
-      title="Upload address proof"
+      title={title}
       data-aid='kyc-upload-adress-proof-screen'
     >
       {!isEmpty(kyc) && (
@@ -229,11 +192,6 @@ const AddressUpload = (props) => {
             )}
           </div>
           <div className="address-detail" data-aid='kyc-address-detail'>{getFullAddress()}</div>
-          {/* <Alert
-            variant="attention"
-            title="Note"
-            renderMessage={() => <MessageComponent kyc={kyc} />}
-          /> */}
           <KycUploadContainer.TitleText alignLeft>
             <span data-aid='kyc-address-proof-front-side'><b>Front side</b></span> of your {addressProof}
           </KycUploadContainer.TitleText>

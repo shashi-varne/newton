@@ -93,6 +93,10 @@ const TradingExperience = (props) => {
     setExperience(selectedOption.value)
   }
 
+  const goBack = () => {
+    navigate(PATHNAME_MAPPER.journey);
+  }
+
   return (
     <Container
       buttonTitle="CONTINUE"
@@ -100,6 +104,7 @@ const TradingExperience = (props) => {
       title="Select trading experience"
       disable={isLoading}
       showLoader={isApiRunning}
+      headerData={{goBack}}
       data-aid="select-trading-experience-screen"
     >
       <div className="trading-experience" data-aid="trading-experience">

@@ -27,6 +27,8 @@ const AccountInfo = (props) => {
   const navigate = navigateFunc.bind(props);
   const [checkTermsAndConditions, setCheckTermsAndConditions] = useState(true);
   const { kyc, isLoading } = useUserKycHook();
+  const userType = kyc?.kyc_status;
+  
   const handleCheckBox = () => {
     setCheckTermsAndConditions(!checkTermsAndConditions);
   };
@@ -36,7 +38,11 @@ const AccountInfo = (props) => {
       if (!isEmailOrMobileVerified()) {
         navigate(PATHNAME_MAPPER.communicationDetails);
       } else {
-        navigate(PATHNAME_MAPPER.tradingExperience);
+        if (kyc?.bank?.meta_data_status === "approved" && kyc?.bank?.meta_data?.bank_status !== "verified") {
+          navigate(`/kyc/${userType}/bank-details`);
+        } else {
+          navigate(PATHNAME_MAPPER.tradingExperience);
+        }
       }
     } else {
       navigate(PATHNAME_MAPPER.homeKyc);

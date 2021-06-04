@@ -207,7 +207,12 @@ export async function pendingDocsList(kyc = {}) {
     docsToCheck.push("nri_address");
   }
 
-  return docsToCheck.filter((doc) => kyc[doc]?.doc_status !== "approved");
+  return docsToCheck.filter((doc) => {
+    return (
+      (doc !== "bank" && kyc[doc]?.doc_status !== "approved") ||
+      (doc === "bank" && kyc[doc]?.meta_data?.bank_status !== "verified") 
+    );
+  });
 }
 
 export async function getPendingDocuments(kyc = {}) {
@@ -286,10 +291,14 @@ export const getFlow = (kycData) => {
 }
 
 export const isKycCompleted = (kyc) => {
-  return (
-    isTradingEnabled() &&
-    (kyc?.application_status_v2 === "submitted" ||
-      kyc?.application_status_v2 === "complete") &&
-    kyc.sign_status === "signed"
-  );
+  if (kyc?.kyc_status === "compliant") {
+    return (kyc?.application_status_v2 === "submitted" ||
+    kyc?.application_status_v2 === "complete");
+  } else {
+    return (
+      (kyc?.application_status_v2 === "submitted" ||
+        kyc?.application_status_v2 === "complete") &&
+      kyc.sign_status === "signed"
+    );
+  }
 };

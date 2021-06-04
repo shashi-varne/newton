@@ -2,7 +2,6 @@ import "./commonStyles.scss";
 import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import Alert from '../mini-components/Alert'
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
@@ -187,7 +186,7 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          {TRADING_ENABLED && kyc.kyc_type !== "manual" &&
+          {TRADING_ENABLED && kyc.kyc_type !== "manual" && bottomSheetType &&
             <PanUploadStatus
               status={bottomSheetType}
               isOpen={isOpen}
