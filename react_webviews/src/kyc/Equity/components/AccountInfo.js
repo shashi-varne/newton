@@ -7,6 +7,7 @@ import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurity
 import { isEmailOrMobileVerified, isKycCompleted } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
+import Toast from "../../../common/ui/Toast";
 
 const productName = getConfig().productName;
 const BENEFITS = [
@@ -34,6 +35,10 @@ const AccountInfo = (props) => {
   };
 
   const handleClick = () => {
+    if(!checkTermsAndConditions) {
+      Toast("Accept T&C to proceed");
+      return;
+    }
     if (isKycCompleted(kyc)) {
       if (!isEmailOrMobileVerified()) {
         navigate(PATHNAME_MAPPER.communicationDetails);
@@ -55,13 +60,12 @@ const AccountInfo = (props) => {
       title="Trading & demat account"
       hidePageTitle
       data-aid='kyc-demate-account-screen'
-      disable={!checkTermsAndConditions}
       handleClick={handleClick}
       skelton={isLoading}
     >
       <div className="kyc-account-info" data-aid='kyc-account-info'>
         <header className="kyc-account-info-header" data-aid='kyc-account-info-header'>
-          <div className="kaih-text">Trading & demat account"</div>
+          <div className="kaih-text">Trading & demat account</div>
           <img src={require(`assets/${productName}/ic_upgrade.svg`)} alt="" />
         </header>
         <main className="kyc-account-info-main" data-aid='kyc-account-info-main'>
