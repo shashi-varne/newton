@@ -244,7 +244,7 @@ const PersonalDetails1 = (props) => {
           </div>
           {form_data.marital_status === "MARRIED" && (
             <Input
-              label="Spouse"
+              label="Spouse's name"
               class="input"
               value={form_data.spouse_name || ""}
               error={form_data.spouse_name_error ? true : false}
