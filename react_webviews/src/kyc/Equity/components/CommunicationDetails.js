@@ -19,7 +19,10 @@ import {
   navigate as navigateFunc,
 } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
-import { getTotalPagesInPersonalDetails, isKycCompleted } from "../../common/functions";
+import {
+  getTotalPagesInPersonalDetails,
+  isKycCompleted,
+} from "../../common/functions";
 import WVButton from "../../../common/ui/Button/WVButton";
 
 const config = getConfig();
@@ -204,7 +207,7 @@ const CommunicationDetails = (props) => {
       title="Communication details"
       count={!isKycDone && pageNumber}
       current={pageNumber}
-      total={totalPages}
+      total={!isKycDone && totalPages}
       handleClick={handleClick}
       showLoader={showLoader}
       skelton={isLoading}
@@ -285,9 +288,11 @@ const CommunicationDetails = (props) => {
               }}
             />
           )}
-          <div className="kcd-email-subtext">
-            We'll keep you updated on your investments
-          </div>
+          {!showOtpContainer && (
+            <div className="kcd-email-subtext">
+              We'll keep you updated on your investments
+            </div>
+          )}
           {showOtpContainer && (
             <div className="kcd-otp-container">
               <div className="kcd-email-subtext">
