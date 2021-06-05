@@ -30,12 +30,13 @@ import WVButton from '../Button/WVButton';
 /* ButtonLayout Component */
 
 const WVButtonLayout = ({
+  dataAidSuffix,
   layout, // "stacked" or "horizontal"
   className, // classes for layout container
   children // any combination of button, text, elements, components
 }) => {
   return (
-    <div className={`wv-button-layout-${layout} ${className}`}>
+    <div className={`wv-button-layout-${layout} ${className}`} data-aid={`wv-button-layout-${dataAidSuffix}`}>
       {children}
     </div>
   );
