@@ -209,7 +209,13 @@ const Journey = (props) => {
               } else {
                 if (journeyData[i].key === 'bank') {
                   // this condition covers users who are not penny verified
-                  if (kyc[data.name].meta_data_status === 'approved' && kyc[data.name].meta_data.bank_status !== 'verified') {
+                  const isBankNotPennyVerified = (kyc[data.name].meta_data_status === 'approved' && 
+                    kyc[data.name].meta_data.bank_status !== 'verified') || (kyc[data.name].meta_data_status === 'submitted' && 
+                    kyc[data.name].meta_data.bank_status === 'submitted') || (kyc[data.name].meta_data_status === 'rejected' && 
+                    kyc[data.name].meta_data.bank_status === 'rejected') || (kyc[data.name].meta_data_status === 'submitted' && 
+                    kyc[data.name].meta_data.bank_status === 'pd_triggered')
+
+                  if (isBankNotPennyVerified) {
                     status = 'init';
                     break;
                   }
