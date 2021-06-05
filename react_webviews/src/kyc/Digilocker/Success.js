@@ -35,7 +35,7 @@ const Success = (props) => {
           ))}
         </main>
         <footer className="footer" data-aid='kyc-footer'>
-          <div className="bottom-text flex-center-center center">Initiative by</div>
+          <div className="bottom-text flex-center-center center">INITIATIVE BY</div>
           <img
             src={require(`assets/ic_gov_meit.svg`)}
             alt="Initiative by Ministry of Electronics and Information Technology"

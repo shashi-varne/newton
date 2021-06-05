@@ -15,12 +15,14 @@
 
 .kyc-journey .kyc-pj-bottom {
   margin-bottom: 40px;
+  width: 100%;
 }
 
 .kyc-journey .kyc-pj-bottom .pj-bottom-info-box {
   display: flex;
   align-items: center;
   margin-top: 20px;
+  margin-right: 30px;
 
   .icon {
     margin: 0 10px 0 0;
@@ -159,4 +161,10 @@
 .kyc-journey .steps-container .step .title__selected {
   color: #333333;
   font-weight: 600;
+}
+
+.kyc-journey .footer {
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 1px;
 }
