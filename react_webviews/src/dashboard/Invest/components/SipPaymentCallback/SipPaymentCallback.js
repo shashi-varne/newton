@@ -119,7 +119,7 @@ const SipPaymentCallback = (props) => {
           ) {
             let auto_debit_campaign_url = target.url;
             // eslint-disable-next-line
-            auto_debit_campaign_url = `${auto_debit_campaign_url}${auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/${config.searchParams}&is_secure=${storageService().get("is_secure")}`)}`
+            auto_debit_campaign_url = `${auto_debit_campaign_url}${auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}`)}`
             window.location.href = auto_debit_campaign_url;
           } else if (
             campaign.campaign.name !== "auto_debit_campaign" ||
@@ -128,7 +128,7 @@ const SipPaymentCallback = (props) => {
           ) {
             let url = campaign.notification_visual_data.target[0].url;
             // eslint-disable-next-line
-            url = `${url}${url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/${config.searchParams}&is_secure=${storageService().get("is_secure")}`)}`
+            url = `${url}${url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}`)}`
             window.location.href = url;
           }
         });
