@@ -8,7 +8,9 @@ import { PATHNAME_MAPPER } from "../constants";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
+const productName = getConfig().productName;
 const Progress = (props) => {
   const {kyc, isLoading} = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
@@ -91,8 +93,16 @@ const Progress = (props) => {
       title="Upload documents"
       headerData={{goBack}}
       data-aid='kyc-progress-screen'
+      hidePageTitle
     >
       <section id="kyc-upload-progress" data-aid='kyc-upload-progress'>
+        <header className="flex-between kup-header">
+          <div>
+            <div className="generic-page-title">Upload documents</div>
+            <div className="generic-page-subtitle">Attach required documents to verify your personal and address details</div>
+          </div>
+          <img alt="" src={require(`assets/${productName}/upload_documents.svg`)} />
+        </header>
         <main className="documents" data-aid='kyc-progress-screen-documents'>
           {documents.map((document, index) => (
             <div key={index} className="document" data-aid={`kyc-document-${index+1}`}>
@@ -108,6 +118,12 @@ const Progress = (props) => {
             </div>
           ))}
         </main>
+        <footer className="kup-footer">
+          <img
+            alt=""
+            src={require(`assets/${productName}/trust_icons.svg`)}
+          />
+        </footer>
       </section>
     </Container>
   );
