@@ -15,6 +15,7 @@ import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -235,12 +236,13 @@ const KycBankVerify = (props) => {
       data-aid='kyc-verify-bank-accont-screen'
     >
       <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
-        <Alert
-          variant="info"
-          title="Important"
-          message="We will credit ₹1 to verify your bank account."
-          dataAid='kyc-bankverify-alertbox'
-        />
+        <WVInfoBubble
+          type="info"
+          hasTitle
+          customTitle="Important"
+        >
+          We will credit ₹1 to your bank account for verification.
+        </WVInfoBubble>
         {isEmpty(bankData) && (
           <>
             <SkeltonRect className="verify-skelton" />
