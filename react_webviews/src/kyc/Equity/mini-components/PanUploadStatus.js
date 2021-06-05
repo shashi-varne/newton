@@ -10,8 +10,10 @@ const uploadStatus = {
   success: {
     icon: "ic_indian_resident.svg",
     title: "PAN uploaded",
-    subtitle: !TRADING_ENABLED || kyc?.all_dl_doc_statuses?.pan_fetch_status === "failed" ? 
-      "Great, just one more step to go! Now complete eSign to get investment ready" : "You're almost there, now take a selfie",
+    subtitle: !TRADING_ENABLED ? 
+      "Great, just one more step to go! Now complete eSign to get investment ready" : 
+      (kyc?.all_dl_doc_statuses?.pan_fetch_status === "failed" ? 
+      "You’re almost there, now give details for your trading account" : "You're almost there, now take a selfie"),
     ctaText: "CONTINUE",
   },
   failed: {
@@ -23,9 +25,10 @@ const uploadStatus = {
 };
 
 const PanUploadStatus = ({ status, isOpen, onClose, disableBackdropClick, onCtaClick }) => {
+  if (!status) return '';
+
   const data = uploadStatus[status] || {};
   
-  if (!status) return '';
 
   return (
     <WVBottomSheet
