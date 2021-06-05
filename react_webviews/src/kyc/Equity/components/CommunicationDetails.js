@@ -21,6 +21,7 @@ import {
 import Otp from "../mini-components/Otp";
 import {
   getTotalPagesInPersonalDetails,
+  isDigilockerFlow,
   isKycCompleted,
 } from "../../common/functions";
 import WVButton from "../../../common/ui/Button/WVButton";
@@ -38,7 +39,6 @@ const CommunicationDetails = (props) => {
   const stateParams = props.location?.state || {};
   const isEdit = stateParams.isEdit || false;
   const userType = stateParams.userType || "";
-  const flowType = stateParams.flowType || "";
   const [formData, setFormData] = useState({
     whatsappConsent: true,
   });
@@ -57,6 +57,7 @@ const CommunicationDetails = (props) => {
   const [communicationType, setCommunicationType] = useState("");
   const [isKycDone, setIsKycDone] = useState();
   const [totalPages, setTotalPages] = useState();
+  const [isDlFlow, setIsDlFlow] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -70,6 +71,7 @@ const CommunicationDetails = (props) => {
       data.mobile = mobileNumber;
       setFormData({ ...data });
       setIsKycDone(isKycCompleted(kyc));
+      setIsDlFlow(isDigilockerFlow(kyc));
       setTotalPages(getTotalPagesInPersonalDetails());
     }
   }, [kyc, user]);
@@ -193,14 +195,14 @@ const CommunicationDetails = (props) => {
       } else {
         navigate(PATHNAME_MAPPER.compliantPersonalDetails4, data);
       }
-    } else if (flowType === "digilocker") {
+    } else if (isDlFlow) {
       navigate(PATHNAME_MAPPER.digilockerPersonalDetails3, data);
     } else {
       navigate(PATHNAME_MAPPER.personalDetails4, data);
     }
   };
 
-  const pageNumber = flowType === "digilocker" ? 3 : 4;
+  const pageNumber = isDlFlow ? 3 : 4;
   return (
     <Container
       buttonTitle={buttonTitle}
