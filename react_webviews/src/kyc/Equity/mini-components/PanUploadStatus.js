@@ -22,7 +22,7 @@ const uploadStatus = {
   },
 };
 
-const PanUploadStatus = ({ status, isOpen, onCtaClick }) => {
+const PanUploadStatus = ({ status, isOpen, onClose, disableBackdropClick, onCtaClick }) => {
   const data = uploadStatus[status] || {};
   
   if (!status) return '';
@@ -38,6 +38,7 @@ const PanUploadStatus = ({ status, isOpen, onCtaClick }) => {
         type: 'primary',
         onClick: onCtaClick,
       }}
+      disableBackdropClick
     />
   );
 };

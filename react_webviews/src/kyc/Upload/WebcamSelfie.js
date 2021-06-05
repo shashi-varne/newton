@@ -21,7 +21,7 @@ const WebcamSelfie = ({
   const webcamRef = React.useRef(null);
   const [noCameraFound, setNoCameraFound] = useState(false);
   const [noCameraPermission, setNoCameraPermission] = useState(false);
-  const [errorContent, setErrorContent] = useState(true);
+  const [errorContent, setErrorContent] = useState("");
 
   useEffect(() => {
     navigator.mediaDevices.enumerateDevices()
