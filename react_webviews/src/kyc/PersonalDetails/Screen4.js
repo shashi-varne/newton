@@ -189,11 +189,9 @@ const PersonalDetails4 = (props) => {
     >
       <div className="kyc-nominee">
         <main data-aid='kyc-nominee-details'>
-          <WVInfoBubble
-            type="info"
-            customTitle="Nominee details will be applicable for mutual fund investments only"
-            hasTitle
-          />
+          <WVInfoBubble type="info">
+            Nominee details will be applicable for mutual fund investments only
+          </WVInfoBubble>
           <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
@@ -204,7 +202,7 @@ const PersonalDetails4 = (props) => {
               class="checkbox"
             />
             <span>
-              I do not wish to add a <b>nominee</b>
+              I do not wish to add a nominee
             </span>
           </div>
           <Input
