@@ -751,13 +751,13 @@ const Journey = (props) => {
         onClose={() => setDlAadhaar(false)}
         redirect={cancel}
       />
-      <AadhaarDialog
+      {/* <AadhaarDialog
         open={aadhaarLinkDialog}
         onClose={() => {
           setAadhaarLinkDialog(false)
         }}
         kyc={kyc}
-      />
+      /> */}
       <KycBackModal
         id="kyc-back-modal"
         open={goBackModal}
