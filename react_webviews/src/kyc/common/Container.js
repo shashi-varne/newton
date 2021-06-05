@@ -24,7 +24,6 @@ class Container extends Component {
       project: "kyc", //to use in common functions
     };
     this.historyGoBack = this.historyGoBack.bind(this);
-
     this.didMount = didMount.bind(this);
     this.commonRender = commonRender.bind(this);
   }
