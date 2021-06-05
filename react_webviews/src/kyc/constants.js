@@ -274,9 +274,9 @@ export const NRI_ADDRESS_PROOF_OPTIONS = [
 ]
 
 export const DL_DOCS = [
-  {name: 'Aadhaar Card', icon: 'ic_aadhaar_card'},
-  {name: 'Pan Card', icon: 'ic_pan_card'},
-  {name: 'Address Details', icon: 'ic_address_details'}
+  {name: 'Aadhaar card', icon: 'ic_aadhaar_card'},
+  {name: 'PAN card', icon: 'ic_pan_card'},
+  {name: 'Address details', icon: 'ic_address_details'}
 ]
 
 export const companyDetails = {

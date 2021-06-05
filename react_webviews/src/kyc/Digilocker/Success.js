@@ -12,14 +12,14 @@ const Success = (props) => {
   }
   return (
     <Container
-      title="Share Details"
+      title="Share details"
       buttonTitle="PROCEED"
       handleClick={proceed}
       headerData={{ icon: "close" }}
       data-aid='kyc-success-page'
     >
       <section id="digilocker-success" data-aid='kyc-digilocker-success'>
-        <div className="page-desc" data-aid='kyc-page-desc-text'>
+        <div className="kyc-main-subtitle" data-aid='kyc-page-desc-text'>
           Tap on Proceed to allow fisdom to access your following documents
         </div>
         <main className="esign-steps" data-aid='kyc-esign-steps'>
@@ -30,7 +30,7 @@ const Success = (props) => {
                 className="doc-icon"
                 alt=""
               />
-              <div className="doc-name" id={`name-${idx+1}`} data-aid={`name-${idx+1}`}>{idx + 1}{'. '}{name}</div>
+              <div className="doc-name" id={`name-${idx+1}`} data-aid={`name-${idx+1}`}>{name}</div>
             </div>
           ))}
         </main>

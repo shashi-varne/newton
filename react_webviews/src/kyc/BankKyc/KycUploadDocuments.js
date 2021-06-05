@@ -295,7 +295,7 @@ const KycUploadDocuments = (props) => {
         close={setShowPendingModal}
         title="Bank Verification Pending!"
         description="We’ve added your bank account details. The verification is in progress, meanwhile you can continue with KYC"
-        label="CONTINUE WITH KYC"
+        label="CONTINUE"
         proceed={proceed}
         cancel={setShowPendingModal}
       />

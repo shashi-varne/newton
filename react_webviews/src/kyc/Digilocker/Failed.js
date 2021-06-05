@@ -63,7 +63,7 @@ const Failed = (props) => {
         />
         <div className="body-text1" data-aid='kyc-body-text1'>
           Aadhaar KYC has been failed because we were not able to connect to
-          your Digilocker.
+          your DigiLocker.
         </div>
       </section>
       <AadhaarDialog

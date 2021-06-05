@@ -3,7 +3,7 @@ import React from 'react'
 function SampleDocument({ description, documents }) {
   return (
     <section id="sample-docs" data-aid='sample-docs'>
-      <div className="description" data-aid='description'>
+      <div className="kyc-main-subtitle" data-aid='description'>
         {description}
       </div>
       <main data-aid='sample-documents'>

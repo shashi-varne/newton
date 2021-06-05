@@ -10,7 +10,7 @@ import "./commonStyles.scss";
 import WVSelect from "../../../common/ui/Select/WVSelect";
 import { navigate as navigateFunc, } from "../../../utils/functions";
 
-const tradingExperienceValues = [
+const TRADING_EXPERIENCE_VALUES = [
   {
     name: "0 to 1 year",
     value: "0-1",
@@ -115,7 +115,7 @@ const TradingExperience = (props) => {
           As per SEBI, it is mandatory to share your trading experience
         </div>
         <WVSelect
-          options={tradingExperienceValues}
+          options={TRADING_EXPERIENCE_VALUES}
           titleProp="name"
           indexBy="value"
           value={experience}
