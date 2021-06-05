@@ -10,7 +10,7 @@ import "./commonStyles.scss";
 import WVSelect from "../../../common/ui/Select/WVSelect";
 import { navigate as navigateFunc, } from "../../../utils/functions";
 
-const tradingExperienceValues = [
+const TRADING_EXPERIENCE_VALUES = [
   {
     name: "0 to 1 year",
     value: "0-1",
@@ -38,8 +38,10 @@ const TradingExperience = (props) => {
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      setExperience(kyc?.equity_data?.meta_data?.trading_experience || "0-1");
-      setOldState(kyc?.equity_data?.meta_data?.trading_experience || "")
+      // TO DO change 
+      const selectedOption = TRADING_EXPERIENCE_VALUES.find(element => element.name === kyc?.equity_data?.meta_data?.trading_experience) || {}
+      setExperience(selectedOption.value || "0-1");
+      setOldState(selectedOption.value || "")
     }
   }, [kyc]);
 
@@ -115,7 +117,7 @@ const TradingExperience = (props) => {
           As per SEBI, it is mandatory to share your trading experience
         </div>
         <WVSelect
-          options={tradingExperienceValues}
+          options={TRADING_EXPERIENCE_VALUES}
           titleProp="name"
           indexBy="value"
           value={experience}
