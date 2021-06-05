@@ -3,6 +3,11 @@
   justify-content: space-between;
 }
 
+@mixin d-flex-center {
+  display: flex;
+  justify-content: center;
+}
+
 @mixin block-fit {
   display: block;
   width: 100%;
@@ -110,15 +115,19 @@
 
   .instructions-container {
     margin: 10px 10px 0 10px;
+
+    .ipv-initial-asset {
+      @include d-flex-center();
+    }
   }
 
-  .ipv_footer_instructions {
+  .ipv-instructions {
     font-size: 15px;
     line-height: 24px;
     text-align: left;
   }
 
-  .ipv_code {
+  .ipv-code {
     font-weight: bold;
     font-size: 26px;
     line-height: 31px;
@@ -126,6 +135,10 @@
     color: var(--primary);
     margin-top: 10px;
     text-align: left;
+  }
+
+  [class^="video-recorder__Wrapper"] {
+    border-radius: 6px;
   }
 
   .doc-upload-note-row {

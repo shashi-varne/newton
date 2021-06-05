@@ -129,13 +129,13 @@ const IpvVideo = (props) => {
   const renderInitialIllustration = useCallback(() => {
     return (
       <div className="instructions-container" data-aid='instructions-container'>
-        <div className="ipv_footer_instructions" data-aid='ipv-footer-instructions'>
+        <div className="ipv-instructions" data-aid='ipv-instructions'>
           Start recording,{' '}
           <strong>by reading the following verification numbers loud</strong>{' '}
           while looking at the camera
         </div>
-        <div className="ipv_code" data-aid='ipv-code'>{ipvcode}</div>
-        <div style={{display: "flex", justifyContent: "center"}}>
+        <div className="ipv-code" data-aid='ipv-code'>{ipvcode}</div>
+        <div className="ipv-initial-asset">
           <img
             src={require(`assets/${productName}/state_ipv_number.svg`)}
             alt="Upload Selfie"
@@ -172,12 +172,10 @@ const IpvVideo = (props) => {
                 {errorContent}
               </WVInfoBubble>
             }
-            {!isWeb && file && (
-              <img
-                src={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
-                className="preview"
-                alt="Uploaded IPV Video"
-              />
+            {isWeb && file && (
+              <KycUploadContainer.Image
+              illustration={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
+            />
             )}
             {isWeb && !errorContent && (
               renderInitialIllustration()
@@ -199,15 +197,15 @@ const IpvVideo = (props) => {
               <KycUploadContainer.Button
                 dataAid='open-camera-btn'
                 type="outlined"
-                buttonTitle="OPEN CAMERA"
                 onClick={handleClick}
-              />
+              >
+                OPEN CAMERA
+              </KycUploadContainer.Button>
             }
             {!isWeb && !errorContent &&
               <KycUploadContainer.Button
                 dataAid='take-video-btn'
                 type="outlined"
-                buttonTitle={uploadCTAText}
                 fileName="ipv_video"
                 withPicker
                 nativePickerMethodName="open_video_camera"
@@ -219,7 +217,9 @@ const IpvVideo = (props) => {
                   message: "Look at the screen and read the verification number loud",
                   ipv_code: ipvcode
                 }}
-              />
+              >
+                {uploadCTAText}
+              </KycUploadContainer.Button>
             }
           </KycUploadContainer>
           {!errorContent &&
