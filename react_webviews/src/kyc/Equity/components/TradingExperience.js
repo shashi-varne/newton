@@ -57,7 +57,7 @@ const TradingExperience = (props) => {
       let body = {
         kyc: {
           equity_data: {
-            "fno_required": true,
+            // "fno_required": true,
             "trading_experience": experience
           },
         },
