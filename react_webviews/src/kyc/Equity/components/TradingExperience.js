@@ -38,10 +38,8 @@ const TradingExperience = (props) => {
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      // TO DO change 
-      const selectedOption = TRADING_EXPERIENCE_VALUES.find(element => element.name === kyc?.equity_data?.meta_data?.trading_experience) || {}
-      setExperience(selectedOption.value || "0-1");
-      setOldState(selectedOption.value || "")
+      setExperience(kyc?.equity_data?.meta_data?.trading_experience || "0-1");
+      setOldState(kyc?.equity_data?.meta_data?.trading_experience || "")
     }
   }, [kyc]);
 

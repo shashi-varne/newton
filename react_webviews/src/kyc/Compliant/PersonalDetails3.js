@@ -193,7 +193,7 @@ const PersonalDetails3 = (props) => {
           </div>
         </main>
         <footer data-aid='kyc-footer'>
-          By tapping ‘save and continue’ I agree that I am not a PEP(politically
+          By tapping ‘save and continue’ I agree that I am not a PEP (politically
           exposed person)
         </footer>
       </div>

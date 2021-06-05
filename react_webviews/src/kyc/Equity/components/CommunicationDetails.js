@@ -292,7 +292,9 @@ const CommunicationDetails = (props) => {
           )}
           {!showOtpContainer && (
             <div className="kcd-email-subtext">
-              We'll keep you updated on your investments
+              {communicationType === "email"
+                ? "We'll keep you updated on your investments"
+                : "We’ll send an OTP to verify your mobile number"}
             </div>
           )}
           {showOtpContainer && (
