@@ -9,19 +9,21 @@ import { Imgc } from "../../../common/ui/Imgc";
 const productName = getConfig().productName;
 const NriError = (props) => {
   const navigate = navigateFunc.bind(props);
+  const stateParams = props?.location?.state;
   
   return (
     <Container
       data-aid='nri-error-screen'
       hidePageTitle
       twoButtonVertical={true}
-      button1Props={{
+      button1Props={stateParams?.originState === "invest" ? {} :
+      {
         type: "primary",
         title: "COMPLETE MUTUAL FUND KYC",
         onClick: () => navigate(PATHNAME_MAPPER.journey)
       }}
       button2Props={{
-        type: "secondary",
+        type: stateParams?.originState === "invest" ? "primary" : "secondary",
         title: "HOME",
         onClick: () => nativeCallback({ action: "exit" })
       }}

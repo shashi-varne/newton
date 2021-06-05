@@ -554,26 +554,32 @@ export function openKyc() {
 
 export function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
-  
   storageService().set("kycStartPoint", "stocks");
-  if (kycJourneyStatus === "rejected") {
-    handleKycSubmittedOrRejectedState();
+  
+  if (userKyc.address.meta_data.is_nri) {
+    this.navigate(PATHNAME_MAPPER.nriError, {
+      state: {originState: "invest"}
+    });
   } else {
-    if (kycJourneyStatus === "ground") {
-      this.navigate(PATHNAME_MAPPER.stocksStatus);
-    } else if (kycJourneyStatus === "ground_pan") {
-      this.navigate(PATHNAME_MAPPER.journey, {
-        state: {
-          show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
-          fromState: "invest",
-        },
-      });
-    } else if (isKycCompleted(userKyc)) {
-      this.navigate(PATHNAME_MAPPER.accountInfo)
+    if (kycJourneyStatus === "rejected") {
+      handleKycSubmittedOrRejectedState();
     } else {
-      this.navigate(kycStatusData.next_state, {
-        state: { fromState: "invest" },
-      });
+      if (kycJourneyStatus === "ground") {
+        this.navigate(PATHNAME_MAPPER.stocksStatus);
+      } else if (kycJourneyStatus === "ground_pan") {
+        this.navigate(PATHNAME_MAPPER.journey, {
+          state: {
+            show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
+            fromState: "invest",
+          },
+        });
+      } else if (isKycCompleted(userKyc)) {
+        this.navigate(PATHNAME_MAPPER.accountInfo)
+      } else {
+        this.navigate(kycStatusData.next_state, {
+          state: { fromState: "invest" },
+        });
+      }
     }
   }
 }
