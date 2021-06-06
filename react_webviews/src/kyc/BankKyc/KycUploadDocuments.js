@@ -113,7 +113,7 @@ const KycUploadDocuments = (props) => {
         if (isPanFailedAndNotApproved) {
           navigate(PATHNAME_MAPPER.uploadPan);
         } else {
-          if (kyc.sign_status !== 'signed') {
+          if (kyc.equity_sign_status !== 'signed') {
             navigate(PATHNAME_MAPPER.tradingExperience);
           } else {
             navigate(PATHNAME_MAPPER.journey);

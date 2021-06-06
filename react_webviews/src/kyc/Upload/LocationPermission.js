@@ -66,6 +66,12 @@ const LocationPermission = ({
   useEffect(() => {
     setPageContent(PAGE_TYPE_CONTENT_MAP[pageType]);
   }, [pageType]);
+
+  const fetchCountryFromResults = (results) => {
+    const addressObjs = results[0]?.address_components;
+    const countryAddressObj = addressObjs.find(obj => obj.types.includes("country"));
+    return countryAddressObj.long_name;
+  }
   
   const locationCallbackSuccess = async (data) => {
     if (data.location_permission_denied) {
@@ -74,12 +80,14 @@ const LocationPermission = ({
       try {
         setIsApiRunning(true);        
         const geocoderService = new window.google.maps.Geocoder();
-        geocoderService.geocode({ location: {
-          lat: data.location.lat,
-          lng: data.location.lng,
-        }}, (results, status) => {
+        geocoderService.geocode({
+          location: {
+            lat: data.location.lat,
+            lng: data.location.lng,
+          }
+        }, (results, status) => {
           if (status === 'OK') {
-            const country = results[0]?.address_components?.[0]?.long_name;
+            const country = fetchCountryFromResults(results);
             setIsApiRunning(false);
             if (country !== 'India') {
               setPageType("invalid-region");
