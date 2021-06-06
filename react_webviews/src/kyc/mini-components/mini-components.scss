@@ -1,80 +1,21 @@
-.kyc-dl-aadhaar-dialog .heading {
-  width: 55%;
-  color: #160d2e;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.kyc-dl-aadhaar-dialog .img-right-top {
-  align-self: flex-start;
-  position: relative;
-  bottom: 10px;
-  left: 10px;
-}
-
-.kyc-dl-aadhaar-dialog .dialog-actions {
-  margin-top: 25px;
-
-  button {
-    padding: 14px 0;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-}
-
-.kyc-show-aadhar {
-  line-height: 1.5;
-}
-
-.kyc-show-aadhar .header {
+.kyc-show-aadhar-content {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  padding-top: 10px;
 }
 
-.kyc-show-aadhar .description {
-  color: #767e86;
-  font-size: 14px;
-}
-
-.kyc-show-aadhar .content {
-  display: flex;
-  align-items: center;
-}
-
-.kyc-show-aadhar .content .info-box {
+.kyc-show-aadhar-content .info-box {
   display: flex;
   justify-content: space-between;
   flex: 1 0 40%;
 }
 
-.kyc-show-aadhar .content .info-box .title {
+.kyc-show-aadhar-content .info-box .title {
   margin-left: 10px;
   color: #767e86;
   width: 100%;
   font-size: 13px;
   white-space: nowrap;
-}
-
-.kyc-show-aadhar .action-btn {
-  background-color: var(--secondary);
-  margin-top: 15px;
-  text-align: center;
-  text-transform: uppercase;
-  padding: 13px;
-  font-weight: bold;
-  min-width: 140px;
-  display: block;
-
-  .MuiButton-label {
-    text-transform: uppercase;
-    color: white;
-  }
-}
-
-.kyc-show-aadhar .action-btn:hover {
-  background-color: var(--secondary);
-  color: white;
 }
 
 .alert-status-info {
@@ -285,7 +226,7 @@
       justify-content: space-between;
       align-items: center;
       color: #160d2e;
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 600;
 
       .text {
