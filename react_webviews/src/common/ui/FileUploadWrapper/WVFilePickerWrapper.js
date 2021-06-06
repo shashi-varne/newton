@@ -7,16 +7,17 @@ import FileAccessDialog from './FileAccessDialog';
 const isWeb = getConfig().Web;
 
 const openFileHandler = (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) => {
-  if (getConfig().html_camera) {
+  if (isWeb) {
     const filepicker = document.getElementById(filepickerId);
     if (filepicker){
       filepicker.click();
     }
   } else {
     window.callbackWeb[methodName]({
+      type: 'doc',
       doc_type: docName,
-      upload: nativeHandler, // callback from native
-      ...fileHandlerParams,
+      upload: nativeHandler,
+      ...fileHandlerParams // callback from native
     });
   }
 }
@@ -36,7 +37,7 @@ const validateFileTypeAndSize = (file, supportedTypes, sizeLimit) => {
   const sizeInBytes = sizeLimit * 1000 * 1000;
   
   if (!isArray(supportedTypes)) {
-    supportedTypes = [supportedTypes]
+    supportedTypes = [supportedTypes];
   }
   
   if (!supportedTypes.includes(fileType)) {
@@ -68,7 +69,7 @@ export const WVFilePickerWrapper = ({
   const onFileSelected = async (file) => {
     try {
       // Basic size and file type validations
-      const errMsg = validateFileTypeAndSize(file, supportedFormats, sizeLimit)
+      const errMsg = validateFileTypeAndSize(file, supportedFormats, sizeLimit);
       if (errMsg) throw errMsg;
 
       // Additional file validations, if any
