@@ -75,7 +75,7 @@ const TradingExperience = (props) => {
 
   const handleNavigation = () => {
     if (kyc.initial_kyc_status === "compliant") {
-      if (!isDocSubmittedOrApproved("pan")) {
+      if (!isDocSubmittedOrApproved("equity_pan")) {
         navigate(PATHNAME_MAPPER.uploadPan);
         return;
       }

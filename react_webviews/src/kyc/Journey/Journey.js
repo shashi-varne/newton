@@ -6,7 +6,7 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isKycCompleted, updateQueryStringParameter } from "../common/functions";
+import { isDigilockerFlow, isEquityApplSubmittedOrApproved, isKycCompleted, updateQueryStringParameter } from "../common/functions";
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -276,7 +276,8 @@ const Journey = (props) => {
       ) {
         topTitle = 'Investment pending'
         investmentPending = true
-      } else if (isCompliant || isKycDone) {
+      } else if (isCompliant) {
+        // || isKycDone) {
         topTitle = `What's next?`
       } else if (show_aadhaar) {
         topTitle = 'Steps to follow:'
@@ -354,6 +355,7 @@ const Journey = (props) => {
         bank: '/kyc/compliant/bank-details',
         sign: PATHNAME_MAPPER.uploadSign,
         pan: PATHNAME_MAPPER.homeKyc,
+        trading_esign: PATHNAME_MAPPER.tradingExperience
       }
       navigate(stateMapper[key], {
         state: {
@@ -527,18 +529,21 @@ const Journey = (props) => {
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
     // var customerVerified = journeyStatus === 'ground_premium' ? false : true
-    var isKycDone = TRADING_ENABLED && isKycCompleted(kyc);
+    // Todo: uncomment isKycDone check when handling existing user (when we get landing screen conditions)
+    // var isKycDone = TRADING_ENABLED && isKycCompleted(kyc) && !isEquityApplSubmittedOrApproved(kyc);
     var kycJourneyData = initJourneyData() || []
-    var headerKey = isKycDone
-      ? "kycDone"
-      : isCompliant
+    var headerKey = 
+      // isKycDone
+      // ? "kycDone"
+      // : 
+      isCompliant
       ? "compliant"
       : dlCondition
       ? "dlFlow"
       : "default";
     var headerData = HEADER_MAPPER_DATA[headerKey];
     if(isCompliant) {
-      if (journeyStatus === "ground_premium") {
+      if (journeyStatus === "ground_premium" || journeyStatus === "incomplete") {
         headerData.title = "You’re eligible for premium onboarding!";
       }
       if (kyc.address.meta_data.is_nri) {
@@ -649,7 +654,9 @@ const Journey = (props) => {
             <div className="left">
               <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
               <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
-              {!show_aadhaar && (isCompliant || isKycDone) && (
+              {!show_aadhaar && isCompliant &&
+              // (isCompliant || isKycDone ) &&
+              (
                 <FastAndSecureDisclaimer options={HEADER_BOTTOM_DATA} />
               )}
             </div>
@@ -658,7 +665,9 @@ const Journey = (props) => {
               alt=""
             />
           </div>
-          {show_aadhaar && !isCompliant && !isKycDone && (
+          {show_aadhaar && !isCompliant && 
+          // !isKycDone && 
+          (
             <FastAndSecureDisclaimer alignInRow options={DL_HEADER_BOTTOM_DATA} />
           )}
           <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>

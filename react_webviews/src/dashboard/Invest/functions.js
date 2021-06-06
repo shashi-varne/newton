@@ -32,6 +32,7 @@ export async function initialize() {
   this.openKyc = openKyc.bind(this);
   this.openStocks = openStocks.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
+  this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
@@ -513,8 +514,8 @@ export function openPremiumOnboardBottomSheet(
   }
 }
 
-export function handleKycSubmittedOrRejectedState () {
-  let { userKyc, kycJourneyStatusMapperData, } = this.state;
+export function handleKycSubmittedOrRejectedState() {
+  let { userKyc, kycJourneyStatusMapperData } = this.state;
 
   if (userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
@@ -533,7 +534,7 @@ export function openKyc() {
 
   storageService().set("kycStartPoint", "mf");
   if (kycJourneyStatus === "submitted" || kycJourneyStatus === "rejected") {
-    handleKycSubmittedOrRejectedState();
+    this.handleKycSubmittedOrRejectedState();
   } else {
     if (kycJourneyStatus === "ground") {
       this.navigate("/kyc/home");
@@ -562,7 +563,7 @@ export function openStocks() {
     });
   } else {
     if (kycJourneyStatus === "rejected") {
-      handleKycSubmittedOrRejectedState();
+      this.handleKycSubmittedOrRejectedState();
     } else {
       if (kycJourneyStatus === "ground") {
         this.navigate(PATHNAME_MAPPER.stocksStatus);

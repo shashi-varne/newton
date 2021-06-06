@@ -291,6 +291,10 @@ export const eqkycDocsGroupMapper = {
     title: "PAN details",
     doc: "PAN card"
   },
+  "equity_pan": {
+    title: "PAN details",
+    doc: "PAN card"
+  },
   "sign": {
     title: "Signature",
     doc: "Signature"
