@@ -181,7 +181,7 @@ const PersonalDetails1 = (props) => {
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle-text'>
-          Please fill your basic details for further verification
+          Enter the details below for further verification
         </div>
         <main data-aid='kyc-personal-details'>
           <Input

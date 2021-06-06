@@ -556,7 +556,7 @@ export function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
   storageService().set("kycStartPoint", "stocks");
   
-  if (userKyc.address.meta_data.is_nri) {
+  if (userKyc?.address?.meta_data?.is_nri) {
     this.navigate(PATHNAME_MAPPER.nriError, {
       state: {originState: "invest"}
     });

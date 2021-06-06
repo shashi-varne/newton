@@ -138,11 +138,11 @@ const NRIAddressDetails2 = (props) => {
 
   let address_proof = "";
 
-  if (kyc?.address?.meta_data?.is_nri) {
-    address_proof = "Passport";
-  } else {
+  // if (kyc?.address?.meta_data?.is_nri) {
+  //   address_proof = "Passport";
+  // } else {
     address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
-  }
+  // }
 
   const getPageDetails = (userKyc) => {
     let pageDetails = {}
@@ -194,7 +194,7 @@ const NRIAddressDetails2 = (props) => {
       headerData={{ goBack }}
     >
       <section data-aid='kyc-address-details-2'>
-        <div className="sub-title" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
+        <div className="kyc-main-subtitle" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
         <form className="form-container" data-aid='kyc-form-container'>
           <TextField
             label="Pincode"
