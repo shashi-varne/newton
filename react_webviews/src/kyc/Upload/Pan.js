@@ -47,7 +47,7 @@ const Pan = (props) => {
 
   const handleOtherPlatformNavigation = () => {
     if (kyc.kyc_status === 'compliant') {
-      if (!isDocSubmittedOrApproved("identification"))
+      if (!isDocSubmittedOrApproved("equity_identification"))
         navigate(PATHNAME_MAPPER.uploadSelfie);
       else {
         if (!isDocSubmittedOrApproved("equity_income"))

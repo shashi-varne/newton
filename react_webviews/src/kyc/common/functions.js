@@ -201,7 +201,12 @@ export async function checkDocsPending(kyc = {}) {
 
 export async function pendingDocsList(kyc = {}) {
   if (isEmpty(kyc)) return false;
-  let docsToCheck = ["pan", "identification", "address", "bank", "ipvvideo", "sign"];
+  let docsToCheck = ["pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
+  
+  if (kyc?.kyc_type === "manual") {
+    docsToCheck = docsToCheck.filter((doc) => doc !== "equity_identification");
+    docsToCheck.push("identification");
+  }
   
   if (kyc?.address?.meta_data.is_nri) {
     docsToCheck.push("nri_address");
