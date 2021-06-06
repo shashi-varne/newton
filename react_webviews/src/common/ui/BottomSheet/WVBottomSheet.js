@@ -55,7 +55,6 @@ const WVBottomSheet = ({
     <Dialog
       data-aid={`wv-bottomsheet-${dataAidSuffix}`}
       id="wv-bottomsheet"
-      data-aid='wv-bottomsheet'
       open={isOpen}
       onClose={onClose}
       className={`wv-bottomsheet ${classes.container}`}
@@ -64,7 +63,10 @@ const WVBottomSheet = ({
       {...props}
     >
       <DialogContent>
-        <div className={`wv-bottomsheet-content ${classes.content}`} data-aid={`wv-bottomsheet-content-${dataAidSuffix}`}>
+        <div
+          className={`wv-bottomsheet-content ${classes.content}`}
+          data-aid={`wv-bottomsheet-content-${dataAidSuffix}`}
+        >
           <div className="wv-bc-left">
             {title &&
               <div className={`wv-bcl-title ${classes.title}`} data-aid={`wv-bcl-title-${dataAidSuffix}`}>
@@ -87,7 +89,11 @@ const WVBottomSheet = ({
             }
           </div>
         </div>
-        {children}
+        {children &&
+          <div className="wv-bottomsheet-child-content">
+            {children}
+          </div>
+        }
       </DialogContent>
       <DialogActions>
         <WVButtonLayout
