@@ -69,7 +69,7 @@ const LocationPermission = ({
 
   const fetchCountryFromResults = (results) => {
     const addressObjs = results[0]?.address_components;
-    const countryAddressObj = addressObjs.find(obj => obj.type.includes("country"));
+    const countryAddressObj = addressObjs.find(obj => obj.types.includes("country"));
     return countryAddressObj.long_name;
   }
   
