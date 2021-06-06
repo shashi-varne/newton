@@ -674,7 +674,7 @@ const Journey = (props) => {
           {!show_aadhaar && !isCompliant && (
             <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle'>
               <WVInfoBubble isDismissable isOpen type="info">
-                Please keep your <b>PAN</b> {kyc?.pan?.meta_data?.pan_number}{" "}
+                Please keep your <b>PAN card</b> ({kyc?.pan?.meta_data?.pan_number}){" "}
                 and <b>address proof</b> handy to complete KYC
               </WVInfoBubble>
             </div>
