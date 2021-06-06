@@ -232,6 +232,10 @@
     margin-top: -10px;
   }
 
+  .form-download-btn {
+    justify-content: space-between;
+  }
+
   .page-content {
     margin-top: 25px;
     margin-bottom: 30px;
@@ -239,14 +243,13 @@
 
     .step {
       .step-content {
-        margin: 10px 0 30px 40px;
-        color: var(--steelgrey);
-
         .step-note {
           color: var(--steelgrey);
-          margin-top: 16px;
           line-height: 21px;
-          text-transform: initial;
+          
+          div:nth-child(1) {
+            font-weight: 500;
+          }
         }
       }
     }
@@ -265,7 +268,7 @@
   justify-content: space-between;
 
   .kyc-main-subtitle {
-    padding-bottom: 30px;
+    margin-bottom: 30px;
   }
 
   .kcd-google-button {

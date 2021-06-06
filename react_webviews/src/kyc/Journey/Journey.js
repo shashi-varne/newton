@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { getConfig, getBasePath, isMobile } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
-import Alert from '../mini-components/Alert'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
@@ -19,14 +18,14 @@ import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import { getJourneyData } from './JourneyFunction';
 
-const headerDataMapper = {
+const HEADER_MAPPER_DATA = {
   kycDone: {
     icon: "ic_premium_onboarding_mid",
     title: "Finish account upgrade",
     subtitle: "",
   },
   compliant: {
-    icon: "ic_premium_onboarding_mid",
+    icon: "ic_premium_onboarding",
     title: "Premium onboarding",
     subtitle: "",
   },
@@ -48,7 +47,21 @@ const headerDataMapper = {
   },
 };
 
+const HEADER_BOTTOM_DATA = [
+  {
+    title:"Fast & secure",
+    icon:"ic_instant.svg"
+  },
+  {
+    title:"100% paperless",
+    icon:"ic_no_doc.svg"
+  }
+]
+
+const DL_HEADER_BOTTOM_DATA = HEADER_BOTTOM_DATA.reverse();
+
 const config = getConfig();
+const productName = config.productName
 const TRADING_ENABLED = isTradingEnabled();
 
 const Journey = (props) => {
@@ -424,7 +437,6 @@ const Journey = (props) => {
     }
   }
 
-  const productName = config.productName
   const basePath = getBasePath();
   const handleProceed = () => {
     const redirect_url = encodeURIComponent(
@@ -525,7 +537,7 @@ const Journey = (props) => {
       : dlCondition
       ? "dlFlow"
       : "default";
-    var headerData = headerDataMapper[headerKey];
+    var headerData = HEADER_MAPPER_DATA[headerKey];
     if(isCompliant) {
       if (journeyStatus === "ground_premium") {
         headerData.title = "You’re eligible for premium onboarding!";
@@ -634,40 +646,12 @@ const Journey = (props) => {
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
         <div className="kyc-journey" data-aid='kyc-journey-data'>
-          {/* {journeyStatus === 'ground_premium' && (
-            <div className="kyc-journey-caption">
-              fast track your investment!
-            </div>
-          )} */}
           <div className="kyc-pj-content" data-aid='kyc-pj-content'>
             <div className="left">
               <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
               <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
-              {(show_aadhaar || isCompliant || isKycDone) && (
-                <>
-                  <div className="kyc-pj-bottom" data-aid='kyc-pj-bottom'>
-                    <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-one'>
-                      <img
-                        src={require(`assets/${productName}/ic_no_doc.svg`)}
-                        alt=""
-                        className="icon"
-                      />
-                      <div className="pj-bottom-info-content">
-                        100% paperless
-                      </div>
-                    </div>
-                    <div className="pj-bottom-info-box" data-aid='pj-bottom-info-box-two'>
-                      <img
-                        src={require(`assets/${productName}/ic_instant.svg`)}
-                        alt="No document asked"
-                        className="icon"
-                      />
-                      <div className="pj-bottom-info-content">
-                        Fast & secure
-                      </div>
-                    </div>
-                  </div>
-                </>
+              {!show_aadhaar && (isCompliant || isKycDone) && (
+                <FastAndSecureDisclaimer options={HEADER_BOTTOM_DATA} />
               )}
             </div>
             <img
@@ -675,7 +659,9 @@ const Journey = (props) => {
               alt=""
             />
           </div>
-          
+          {show_aadhaar && !isCompliant && !isKycDone && (
+            <FastAndSecureDisclaimer alignInRow options={DL_HEADER_BOTTOM_DATA} />
+          )}
           <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
           {!show_aadhaar && !isCompliant && (
             <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle'>
@@ -746,6 +732,17 @@ const Journey = (props) => {
               </div>
             ))}
           </main>
+          {show_aadhaar && (
+            <footer className="footer">
+              <div>
+                INITIATIVE BY
+              </div>
+              <img
+                src={require(`assets/ic_gov_meit.svg`)}
+                alt="Initiative by Ministry of Electronics and Information Technology"
+              />
+            </footer>
+          )}
         </div>
       )}
       <ShowAadharDialog
@@ -771,3 +768,29 @@ const Journey = (props) => {
 }
 
 export default Journey
+
+export const FastAndSecureDisclaimer = ({options=[], alignInRow }) => {
+  return (
+    <div
+      className={`kyc-pj-bottom ${alignInRow && "flex-between"}`}
+      data-aid="kyc-pj-bottom"
+    >
+      {options.map((data, index) => {
+        return (
+          <div
+            className="pj-bottom-info-box"
+            data-aid="pj-bottom-info-box-one"
+            key={index}
+          >
+            <img
+              src={require(`assets/${config.productName}/${data.icon}`)}
+              alt=""
+              className="icon"
+            />
+            <div className="pj-bottom-info-content">{data.title}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};

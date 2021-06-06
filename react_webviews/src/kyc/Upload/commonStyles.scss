@@ -42,11 +42,19 @@
 }
 
 #kyc-upload-progress {
-  .header {
-    font-size: 20px;
-    color: #160d2e;
-    font-weight: 600;
+  .kup-header {
+    align-items: flex-start;
+
+    .generic-page-title {
+      font-size: 20px;
+      line-height: 31px;
+    }
+
+    img {
+      margin-left: 20px;
+    }
   }
+
   .kyc-upload-card {
     border: 1px solid beige;
     padding: 10px 0 10px 0;
@@ -77,6 +85,11 @@
       font-size: 13px;
       margin-left: 10px;
     }
+  }
+
+  .kup-footer {
+    text-align: center;
+    margin-top: 45px;
   }
 }
 
@@ -415,8 +428,9 @@
 }
 
 .kyc-fno-income-proof {
+  margin-top: 20px;
   .kyc-fip-title {
-    margin: 20px 0 10px;
+    margin-bottom: 10px;
     font-size: 13px;
     line-height: 21px;
     color: var(--dark);

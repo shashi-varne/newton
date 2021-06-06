@@ -388,17 +388,27 @@ const KycBankDetails = (props) => {
                 id="account_number"
                 disabled={isApiRunning || disableFields.account_number_disabled}
               />
-              <Input
+              <TextField
                 label="Re-enter account number"
-                class="input"
+                className="input"
                 value={bankData.c_account_number}
                 error={form_data.c_account_number_error ? true : false}
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
                 maxLength={16}
                 type="text"
-                inputMode="numeric"
-                id="c_account_number"
+                InputProps={{
+                  inputMode:"numeric",
+                  endAdornment: (
+                    <>
+                      {bankData.account_number && bankData.account_number === bankData.c_account_number && (
+                        <InputAdornment position="end">
+                          <img className="kbd-can-check-icon" alt="" src={require(`assets/completed_step.svg`)} />
+                        </InputAdornment>
+                      )}
+                    </>
+                  ),
+                }}
                 disabled={
                   isApiRunning || disableFields.c_account_number_disabled
                 }
