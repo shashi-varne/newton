@@ -1,6 +1,7 @@
 import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
+import { isTradingEnabled } from '../utils/functions'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -10,6 +11,8 @@ const DOCUMENTS_MAPPER = {
   UTILITY_BILL: 'Gas receipt',
   LAT_BANK_PB: 'Passbook',
 }
+
+const TRADING_ENABLED = isTradingEnabled();
 
 export async function getAccountSummary(params = {}) {
   const url = '/api/user/account/summary'
@@ -290,6 +293,10 @@ export function getKycAppStatus(kyc) {
     }
 
   if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
+    status = 'incomplete';
+  }
+
+  if (kyc.kyc_status === 'compliant' && TRADING_ENABLED && (kyc.equity_application_status !== 'submitted' || kyc.equity_application_status !== 'complete')) {
     status = 'incomplete';
   }
 
