@@ -14,6 +14,7 @@ import "./KycUploadDocuments.scss";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import { getFlow } from "../common/functions";
 import { nativeCallback } from "../../utils/native_callback";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 
 const config = getConfig();
 const KycUploadDocuments = (props) => {
@@ -72,8 +73,8 @@ const KycUploadDocuments = (props) => {
 
   const handleSubmit = async () => {
     sendEvents('next')
-    if (selected === null || !file) return;
     try {
+      if (selected === null || !file) throw new Error("No file added");
       setIsApiRunning("button");
       const result = await uploadBankDocuments(
         file,
@@ -84,7 +85,7 @@ const KycUploadDocuments = (props) => {
         updateKyc(result.kyc)
       setShowPendingModal(true);
     } catch (err) {
-      toast("Image upload failed, please retry")
+      toast(err.message || "Image upload failed, please retry")
     } finally {
       setIsApiRunning(false);
     }
@@ -280,7 +281,13 @@ const KycUploadDocuments = (props) => {
         </main>
         {selectedDocValue && (
           <div className="sample-document" data-aid='kyc-sample-document-text' onClick={handleSampleDocument}>
-            view sample document
+            <WVClickableTextElement
+                color="secondary"
+                onClick={handleSampleDocument}
+                dataAidSuffix="bank"
+              >
+                VIEW SAMPLE DOCUMENT
+              </WVClickableTextElement>
           </div>
         )}
         <footer className="ssl-container" data-aid='kyc-footer'>

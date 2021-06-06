@@ -28,6 +28,7 @@
     .value {
       line-height: 15px;
       color: #160d2e;
+      margin-top: 2px;
     }
   }
 
@@ -80,6 +81,7 @@
 
     .selected-doc {
       color: var(--primary);
+      border-color: var(--primary);
       font-weight: 600;
 
       .kyc-upload-doc-check-icon {
@@ -179,9 +181,9 @@
 
   .sample-document {
     margin: 0 auto;
-    font-size: 10px;
+    font-size: 8px;
     text-transform: uppercase;
-    font-weight: 800;
+    font-weight: bold;
     margin-top: 30px;
     text-align: center;
     color: var(--secondary);
