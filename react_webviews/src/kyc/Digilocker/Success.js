@@ -4,8 +4,9 @@ import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import { DL_DOCS } from '../constants'
 import "./Digilocker.scss";
 
+const config = getConfig();
+const productName = config.productName;
 const Success = (props) => {
-  const productName = getConfig().productName;
   const proceed = () => {
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
@@ -20,7 +21,7 @@ const Success = (props) => {
     >
       <section id="digilocker-success" data-aid='kyc-digilocker-success'>
         <div className="kyc-main-subtitle" data-aid='kyc-page-desc-text'>
-          Tap on Proceed to allow fisdom to access your following documents
+          Tap on proceed to allow {config.code} to access your following documents
         </div>
         <main className="esign-steps" data-aid='kyc-esign-steps'>
           {DL_DOCS.map(({ name, icon }, idx) => (
