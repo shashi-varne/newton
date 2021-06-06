@@ -53,7 +53,7 @@ const CommunicationDetails = (props) => {
   const [showOtpContainer, setShowOtpContainer] = useState(false);
   const [showDotLoader, setShowDotLoader] = useState(false);
   const { user, kyc, isLoading, updateKyc } = useUserKycHook();
-  const isNri = kyc.address?.meta_data?.is_nri || false;
+  const isNri = kyc?.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
   const [isKycDone, setIsKycDone] = useState();
   const [totalPages, setTotalPages] = useState();
