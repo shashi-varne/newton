@@ -28,10 +28,9 @@ Example syntax:
 import './WVBottomSheet.scss';
 import React from 'react';
 import 'react-circular-progressbar/dist/styles.css';
-import Dialog, {
-  DialogContent,
-  DialogActions
-} from 'material-ui/Dialog';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import { Imgc } from '../Imgc';
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';

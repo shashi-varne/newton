@@ -53,7 +53,7 @@ import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2
 import Native from "./Native/Native";
 import LocationPermission from "./Upload/LocationPermission";
 import SelfieSteps from "./Upload/SelfieSteps";
-import FnOIncomeProof from "./Upload/F&OIncomeProof";
+import FnOIncomeProof from "./Upload/FnOIncomeProof";
 
 // Equity Components
 import TradingExperience from "./Equity/components/TradingExperience";
@@ -65,7 +65,7 @@ import DocumentVerification from "./Equity/components/DocumentVerification";
 import ManualSignature from "./Equity/components/ManualSignature";
 import CommunicationDetails from "./Equity/components/CommunicationDetails";
 import CommunicationCallback from "./Equity/components/CommunicationCallback";
-import FnOSampleDocuments from "./Upload/F&OSampleDocuments";
+import FnOSampleDocuments from "./Upload/FnOSampleDocuments";
 
 const Kyc = (props) => {
   const { url } = props.match;

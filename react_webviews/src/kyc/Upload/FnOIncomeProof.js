@@ -69,7 +69,7 @@ const FnOIncomeProof = (props) => {
     Toast('Please select a pdf file only');
   }
 
-  const uploadDocument = async () => {
+  const uploadAndGoNext = async () => {
     try {
       const data = {
         doc_password: filePassword || undefined,
@@ -78,29 +78,22 @@ const FnOIncomeProof = (props) => {
       setIsApiRunning("button")
       const result = await upload(selectedFile, 'income', data);
       updateKyc(result.kyc);
+      setOpenBottomSheet(true);
     } catch (err) {
       console.error(err);
       Toast('Something went wrong! Please try again')
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
 
-  const goNext = async (skip) => {
-    if (!skip) {
-      await uploadDocument();
-    }
-    
+  const goNext = async () => {
     const areDocsPending = checkDocsPending(kyc);
+    
     if (areDocsPending) {
       navigate('/kyc/document-verification');
     } else {
-      if (skip) {
-        navigate('/kyc-esign/info');
-      } else {
-        setOpenBottomSheet(true);
-      }
+      navigate('/kyc-esign/info');
     }
   }
 
@@ -113,16 +106,16 @@ const FnOIncomeProof = (props) => {
       canSkip
       hidePageTitle
       hideHamburger
-      handleClick={goNext}
-      onSkipClick={() => goNext(true)}
-      title="Provide income proof for F&O trading"
+      handleClick={uploadAndGoNext}
+      onSkipClick={goNext}
+      title="Provide income proof for FnO trading"
       buttonTitle="Upload"
       disable={!selectedFile}
       showLoader={isApiRunning}
       skelton={isLoading}
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
-        <WVInPageTitle>Provide income proof for F&O trading</WVInPageTitle>
+        <WVInPageTitle>Provide income proof for FnO trading</WVInPageTitle>
         <span className="kyc-fno-header-optional-text"> (Optional)</span>
       </WVInPageHeader>
       <WVInfoBubble>
@@ -203,7 +196,7 @@ const FnOIncomeProof = (props) => {
         button1Props={{
           title: 'Continue',
           type: 'primary',
-          onClick: () => navigate('/kyc-esign/info')
+          onClick: goNext
         }}
       />
     </Container>

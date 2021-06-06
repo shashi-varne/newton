@@ -49,11 +49,11 @@ const WVFileUploadCard = ({
         <div
           data-aid={`wv-file-upload-card-${dataAidSuffix}`}
           className={`
-          wv-file-upload-card
-          ${classes.container}
-          ${className}
-        `}
-          style={{ border: selectedFile ? '1px solid var(--primary)' : '' }}
+            wv-file-upload-card
+            ${selectedFile ? 'wv-fuc-selected' : ''}
+            ${classes.container}
+            ${className}
+          `}
         >
           <div className="wv-fuc-left" data-aid={`wv-fuc-left-${dataAidSuffix}`}>
             <div className="wv-fuc-left-title">

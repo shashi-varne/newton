@@ -19,6 +19,8 @@ body[data-device="web"]{
     left: -20px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   .MuiDialogActions-root {

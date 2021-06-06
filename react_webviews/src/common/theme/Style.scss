@@ -1077,19 +1077,22 @@ $header-title-font-size: 20px;
 
 .main-top-title-new2 {
   font-size: 20px !important;
-  color: #160d2e !important;
+  color: var(--dark) !important;
   font-weight: 400 !important;
 }
 
 @mixin main-top-title-header-base {
   font-size: 16px !important;
-  color: #160d2e;
+  color: var(--dark);
   font-weight: 400 !important;
 }
 
 .main-top-title-header {
   @include main-top-title-header-base();
-  color: #160d2e;
+  // white-space: nowrap;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
+  // max-width: 95%;
 }
 
 .main-top-title-header-old {
