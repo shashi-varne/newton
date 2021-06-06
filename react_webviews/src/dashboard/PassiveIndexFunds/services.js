@@ -10,7 +10,7 @@ export async function getFundDetailsList(body) {
   try {
     const res = await Api.post(`/api/funds/passive/index/category/${this.state.title}`, body);
     let result = res.pfwresponse?.result?.funds;
-    var resultData = res.pfwresponse.result;
+    var resultData = res.pfwresponse?.result;
     let fundDescription = res.pfwresponse?.result?.category_explainer
 
     this.setState({ skelton: false })
