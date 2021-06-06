@@ -25,7 +25,7 @@ const HEADER_MAPPER_DATA = {
     subtitle: "",
   },
   compliant: {
-    icon: "ic_premium_onboarding_mid",
+    icon: "ic_premium_onboarding",
     title: "Premium onboarding",
     subtitle: "",
   },
