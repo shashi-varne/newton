@@ -275,11 +275,11 @@ const CommunicationDetails = (props) => {
               helperText={formData.mobile_error}
               onChange={handleChange("mobile")}
               type="text"
-              inputMode="numeric"
               disabled={showLoader}
               autoFocus
               className="kcd-input-field"
               InputProps={{
+                inputMode:"numeric",
                 endAdornment: showOtpContainer && (
                   <InputAdornment position="end">
                     <div className="kcd-input-edit" onClick={handleEdit}>
