@@ -14,6 +14,7 @@ import "./KycUploadDocuments.scss";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import { getFlow } from "../common/functions";
 import { nativeCallback } from "../../utils/native_callback";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 
 const config = getConfig();
 const KycUploadDocuments = (props) => {
@@ -280,7 +281,13 @@ const KycUploadDocuments = (props) => {
         </main>
         {selectedDocValue && (
           <div className="sample-document" data-aid='kyc-sample-document-text' onClick={handleSampleDocument}>
-            view sample document
+            <WVClickableTextElement
+                color="secondary"
+                onClick={handleSampleDocument}
+                dataAidSuffix="bank"
+              >
+                VIEW SAMPLE DOCUMENT
+              </WVClickableTextElement>
           </div>
         )}
         <footer className="ssl-container" data-aid='kyc-footer'>
