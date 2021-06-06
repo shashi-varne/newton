@@ -156,7 +156,12 @@ const Journey = (props) => {
             status = 'init'
             break
           }
-        } else if (['esign', 'bank_esign', 'trading_esign'].includes(journeyData[i].key)) {
+        } else if (journeyData[i].key === "trading_esign") {
+          if (kyc.equity_sign_status !== 'signed') {
+            status = 'init'
+            break
+          }
+        } else if (['esign', 'bank_esign'].includes(journeyData[i].key)) {
           if (kyc.sign_status !== 'signed') {
             status = 'init'
             break
