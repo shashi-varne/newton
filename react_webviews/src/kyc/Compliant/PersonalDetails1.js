@@ -81,6 +81,7 @@ const PersonalDetails1 = (props) => {
       },
     };
     if (isNri) {
+      keysToCheck.push("tin_number");
       item.kyc.nri_address = {
         tin_number: tin_number || "",
       };
