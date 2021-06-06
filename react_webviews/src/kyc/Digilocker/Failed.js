@@ -7,6 +7,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import "./Digilocker.scss";
+import { PATHNAME_MAPPER } from "../constants";
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,7 @@ const Failed = (props) => {
     try {
       setIsApiRunning(true);
       await setKycType("manual");
-      navigate("/kyc/journey", { state: { fromState: '/kyc/digilocker/failed' }});
+      navigate(PATHNAME_MAPPER.journey);
     } catch (err) {
       toast(err.message);
     } finally {
@@ -37,10 +38,6 @@ const Failed = (props) => {
 
   const productName = getConfig().productName;
 
-  const goBack = () => {
-    navigate("/kyc/journey", { state: { fromState: '/kyc/digilocker/failed' }});
-  }
-  
   return (
     <Container
       title="Aadhaar KYC Failed!"
@@ -58,7 +55,7 @@ const Failed = (props) => {
         showLoader: isApiRunning
       }}
       skelton={isLoading}
-      headerData={{ icon: "close", goBack }}
+      headerData={{ icon: "close" }}
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         <img
