@@ -172,7 +172,7 @@ const IpvVideo = (props) => {
                 {errorContent}
               </WVInfoBubble>
             }
-            {isWeb && file && (
+            {!isWeb && file && (
               <KycUploadContainer.Image
               illustration={require(`assets/${productName}/video_uploaded_placeholder.svg`)}
             />
