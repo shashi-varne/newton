@@ -56,7 +56,7 @@ const Pan = (props) => {
       }
     } else {
       if (dlFlow) {
-        if (kyc.sign_status !== 'signed') {
+        if (kyc.equity_sign_status !== 'signed') {
           navigate(PATHNAME_MAPPER.tradingExperience);
         } else {
           navigate(PATHNAME_MAPPER.journey);
