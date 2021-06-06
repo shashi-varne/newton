@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getConfig, isTradingEnabled } from "utils/functions";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import WVSteps from "../../common/ui/Steps/WVSteps"
 import { isReadyToInvest } from "../../kyc/services";
 
@@ -60,16 +61,10 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         </div>
       </header>
       {show_note && (
-        <div className="alert-status-info" data-aid='alert-status-info'>
-          <img src={require(`assets/attention_icon_new.svg`)} alt="" />
-          <div className="text">
-            <div className="title" data-aid='kyc-note-text'>Note</div>
-            <div data-aid='kyc-content-text'>
-              Your bank verification is still pending. You will be able to
-              invest once your bank is verified.
-            </div>
-          </div>
-        </div>
+        <WVInfoBubble hasTitle customTitle="Note" type="warning">
+          Your bank verification is still pending. You will be able to invest
+          once your bank is verified.
+        </WVInfoBubble>
       )}
       {showAccountStatus && 
         <div className="account-status-container" data-aid='account-status-container'>

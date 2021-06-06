@@ -226,6 +226,10 @@
         width: 22px;
         margin-right: 10px;
       }
+
+      .kbd-can-check-icon {
+        width: 15px;
+      }
     }
   }
 }
@@ -295,3 +299,16 @@
 }
 
 ///////////// BANK VERIFY END //////////////
+
+.penny-bank-verification-dialog-content {
+  align-items: center;
+  margin: -15px -15px 0 0;
+
+  .wv-bc-left {
+    flex: 0 1 72%;
+  }
+}
+
+.penny-bank-verification-dialog-subtitle {
+  margin: 10px 0 0;
+}

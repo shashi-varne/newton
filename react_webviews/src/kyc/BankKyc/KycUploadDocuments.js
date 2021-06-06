@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
-import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
 import { checkPanFetchStatus, isDigilockerFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -14,6 +13,7 @@ import "./KycUploadDocuments.scss";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import { getFlow } from "../common/functions";
 import { nativeCallback } from "../../utils/native_callback";
+import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 
 const config = getConfig();
@@ -214,7 +214,7 @@ const KycUploadDocuments = (props) => {
           </div>
 
           <div className="edit" data-aid='kyc-edit' onClick={handleEdit}>
-            edit
+            EDIT
           </div>
         </div>
         <main data-aid='kyc-upload-documents'>
@@ -297,15 +297,25 @@ const KycUploadDocuments = (props) => {
           />
         </footer>
       </section>
-      <PendingBankVerificationDialog
-        open={showPendingModal}
-        close={setShowPendingModal}
+      <WVBottomSheet
+        isOpen={showPendingModal}
+        image={require(`assets/${config.productName}/ic_bank_partial_add.svg`)}
         title="Bank Verification Pending!"
-        description="We’ve added your bank account details. The verification is in progress, meanwhile you can continue with KYC"
-        label="CONTINUE"
-        proceed={proceed}
-        cancel={setShowPendingModal}
-      />
+        onClose={() => setShowPendingModal(false)}
+        button1Props={{
+          title: "CONTINUE",
+          type: "primary",
+          onClick: proceed,
+        }}
+        classes={{
+          content: "penny-bank-verification-dialog-content",
+        }}
+      >
+        <div className="generic-page-subtitle penny-bank-verification-dialog-subtitle">
+          We’ve added your bank account details. The verification is in
+          progress, meanwhile you can continue with KYC
+        </div>
+      </WVBottomSheet>
     </Container>
   );
 };
