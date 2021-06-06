@@ -7,7 +7,7 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isKycCompleted, updateQueryStringParameter } from "../common/functions";
+import { isDigilockerFlow, isEquityApplSubmittedOrApproved, isKycCompleted, updateQueryStringParameter } from "../common/functions";
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -516,7 +516,7 @@ const Journey = (props) => {
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
     // var customerVerified = journeyStatus === 'ground_premium' ? false : true
-    var isKycDone = TRADING_ENABLED && isKycCompleted(kyc);
+    var isKycDone = TRADING_ENABLED && isKycCompleted(kyc) && !isEquityApplSubmittedOrApproved(kyc);
     var kycJourneyData = initJourneyData() || []
     var headerKey = isKycDone
       ? "kycDone"

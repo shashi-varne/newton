@@ -1,5 +1,4 @@
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
-import { isTradingEnabled } from '../../utils/functions'
 import { isEmpty, storageService } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS } from '../constants'
 
@@ -202,6 +201,11 @@ export async function checkDocsPending(kyc = {}) {
 export async function pendingDocsList(kyc = {}) {
   if (isEmpty(kyc)) return false;
   let docsToCheck = ["pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
+
+  if (kyc.kyc_status === "compliant") {
+    docsToCheck = docsToCheck.filter((doc) => doc !== "pan");
+    docsToCheck.push("equity_pan");
+  }
   
   if (kyc?.kyc_type === "manual") {
     docsToCheck = docsToCheck.filter((doc) => doc !== "equity_identification");
@@ -296,6 +300,8 @@ export const getFlow = (kycData) => {
 }
 
 export const isKycCompleted = (kyc) => {
+  if (isEmpty(kyc)) return false;
+
   if (kyc?.kyc_status === "compliant") {
     return (kyc?.application_status_v2 === "submitted" ||
     kyc?.application_status_v2 === "complete");
@@ -307,3 +313,8 @@ export const isKycCompleted = (kyc) => {
     );
   }
 };
+
+export const isEquityApplSubmittedOrApproved = (kyc) => {
+  if (isEmpty(kyc)) return false;
+  return (kyc.equity_application_status === "submitted" || kyc.equity_application_status === "approved");
+}
