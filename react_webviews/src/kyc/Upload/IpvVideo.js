@@ -70,6 +70,7 @@ const IpvVideo = (props) => {
 
   const onFileSelectComplete = (file) => {
     setFile(file);
+    setUploadCTAText("TAKE VIDEO AGAIN");
   }
 
   const onFileSelectError = () => {

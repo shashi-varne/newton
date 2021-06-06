@@ -74,7 +74,11 @@ const LocationPermission = ({
       try {
         setIsApiRunning(true);        
         const geocoderService = new window.google.maps.Geocoder();
-        geocoderService.geocode({ location: {
+        geocoderService.geocode({ 
+        componentRestrictions: {
+          country: 'India',
+        },
+        location: {
           lat: data.location.lat,
           lng: data.location.lng,
         }}, (results, status) => {
