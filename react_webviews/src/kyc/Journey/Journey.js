@@ -509,7 +509,7 @@ const Journey = (props) => {
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
     var journeyStatus = getKycAppStatus(kyc).status || ''
-    var dlCondition = isDigilockerFlow()
+    var dlCondition = isDigilockerFlow(kyc)
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
