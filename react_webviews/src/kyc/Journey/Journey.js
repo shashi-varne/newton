@@ -714,7 +714,7 @@ const Journey = (props) => {
                   }
                 >
                   <div className="flex flex-between" data-aid='kyc-field-value'>
-                    <span className="field_key">
+                    <span className={item.status === "completed" ? "completed_field_key" : "field_key"}>
                       {item.title}
                       {item?.value ? ':' : ''}
                     </span>

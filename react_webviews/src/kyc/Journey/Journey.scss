@@ -143,13 +143,18 @@
     font-size: 12px;
   }
 
+  .completed_field_key {
+    color: var(--dark);
+  }
+
   .field_key {
-    color: #160d2e;
+    color: var(--steelgrey);
   }
 
   .field_value {
     margin-left: 10px;
     font-weight: 500;
+    letter-spacing: 1px;
   }
 }
 
@@ -162,6 +167,10 @@
 .kyc-journey .steps-container .step .title__selected {
   color: #333333;
   font-weight: 600;
+
+  .field_key {
+    color: var(--dark);
+  }
 }
 
 .kyc-journey .footer {

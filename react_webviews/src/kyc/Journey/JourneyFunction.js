@@ -1,4 +1,5 @@
 import { isTradingEnabled } from "utils/functions";
+import { panUiSet } from "../common/functions";
 
 const TRADING_ENABLED = isTradingEnabled();
 
@@ -9,7 +10,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       {
         key: 'pan',
         title: 'PAN',
-        value: kyc?.pan?.meta_data?.pan_number,
+        value: panUiSet(kyc?.pan?.meta_data?.pan_number),
         status: 'completed',
         isEditAllowed: false,
         inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
@@ -86,7 +87,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       {
         key: 'pan',
         title: 'PAN',
-        value: kyc?.pan?.meta_data?.pan_number,
+        value: panUiSet(kyc?.pan?.meta_data?.pan_number),
         status: 'completed',
         isEditAllowed: true,
         inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
