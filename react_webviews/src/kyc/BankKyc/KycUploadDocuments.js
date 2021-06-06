@@ -72,8 +72,8 @@ const KycUploadDocuments = (props) => {
 
   const handleSubmit = async () => {
     sendEvents('next')
-    if (selected === null || !file) return;
     try {
+      if (selected === null || !file) throw new Error("No file added");
       setIsApiRunning("button");
       const result = await uploadBankDocuments(
         file,
@@ -84,7 +84,7 @@ const KycUploadDocuments = (props) => {
         updateKyc(result.kyc)
       setShowPendingModal(true);
     } catch (err) {
-      toast("Image upload failed, please retry")
+      toast(err.message || "Image upload failed, please retry")
     } finally {
       setIsApiRunning(false);
     }
