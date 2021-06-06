@@ -25,7 +25,7 @@ const Failed = (props) => {
     try {
       setIsApiRunning(true);
       await setKycType("manual");
-      navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }});
+      navigate("/kyc/journey", { state: { fromState: '/kyc/digilocker/failed' }});
     } catch (err) {
       toast(err.message);
     } finally {
@@ -38,7 +38,7 @@ const Failed = (props) => {
   const productName = getConfig().productName;
 
   const goBack = () => {
-    navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }});
+    navigate("/kyc/journey", { state: { fromState: '/kyc/digilocker/failed' }});
   }
   
   return (

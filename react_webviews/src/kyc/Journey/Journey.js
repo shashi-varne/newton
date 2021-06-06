@@ -557,7 +557,7 @@ const Journey = (props) => {
       !show_aadhaar &&
       user.kyc_registration_v2 !== 'submitted' &&
       user.kyc_registration_v2 !== 'complete' &&
-      fromState !== "digilocker-failed"
+      fromState !== "/kyc/digilocker/failed"
     ) {
       if (
         !storageService().get('show_aadhaar') &&
