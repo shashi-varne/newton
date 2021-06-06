@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";

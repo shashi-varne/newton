@@ -292,7 +292,7 @@ const KycUploadDocuments = (props) => {
       </section>
       <WVBottomSheet
         isOpen={showPendingModal}
-        image={require(`assets/${config.productName}/ic_bank_partial_added.svg`)}
+        image={require(`assets/${config.productName}/ic_bank_partial_add.svg`)}
         title="Bank Verification Pending!"
         onClose={() => setShowPendingModal(false)}
         button1Props={{
@@ -301,10 +301,10 @@ const KycUploadDocuments = (props) => {
           onClick: proceed,
         }}
         classes={{
-          content: "pending-bank-verification-dialog-content",
+          content: "penny-bank-verification-dialog-content",
         }}
       >
-        <div className="generic-page-subtitle pending-bank-verification-dialog-subtitle">
+        <div className="generic-page-subtitle penny-bank-verification-dialog-subtitle">
           We’ve added your bank account details. The verification is in
           progress, meanwhile you can continue with KYC
         </div>
