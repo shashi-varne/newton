@@ -341,6 +341,7 @@ const Journey = (props) => {
         bank: '/kyc/compliant/bank-details',
         sign: PATHNAME_MAPPER.uploadSign,
         pan: PATHNAME_MAPPER.homeKyc,
+        trading_esign: PATHNAME_MAPPER.tradingExperience
       }
       navigate(stateMapper[key], {
         state: {
