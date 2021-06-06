@@ -7,7 +7,7 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isKycCompleted, updateQueryStringParameter } from "../common/functions";
+import { isDigilockerFlow, isKycCompleted, updateQueryStringParameter } from "../common/functions";
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -509,17 +509,12 @@ const Journey = (props) => {
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
     var journeyStatus = getKycAppStatus(kyc).status || ''
-    var dlCondition =
-      !isCompliant &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== '' &&
-      kyc.dl_docs_status !== 'init' &&
-      kyc.dl_docs_status !== null
+    var dlCondition = isDigilockerFlow()
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
-    var customerVerified = journeyStatus === 'ground_premium' ? false : true
+    // var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var isKycDone = TRADING_ENABLED && isKycCompleted(kyc);
     var kycJourneyData = initJourneyData() || []
     var headerKey = isKycDone

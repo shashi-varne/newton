@@ -36,6 +36,11 @@ const Failed = (props) => {
   const {kyc, isLoading} = useUserKycHook();
 
   const productName = getConfig().productName;
+
+  const goBack = () => {
+    navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }});
+  }
+  
   return (
     <Container
       title="Aadhaar KYC Failed!"
@@ -53,7 +58,7 @@ const Failed = (props) => {
         showLoader: isApiRunning
       }}
       skelton={isLoading}
-      headerData={{ icon: "close" }}
+      headerData={{ icon: "close", goBack }}
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         <img
@@ -66,12 +71,12 @@ const Failed = (props) => {
           your DigiLocker.
         </div>
       </section>
-      <AadhaarDialog
+      {/* <AadhaarDialog
         open={open}
         id="kyc-aadhaar-dialog"
         close={close}
         kyc={kyc}
-      />
+      /> */}
     </Container>
   );
 };
