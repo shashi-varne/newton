@@ -17,6 +17,9 @@ const ManualSignature = (props) => {
   const renderStep1Content = useCallback(() => {
     return (
       <>
+        <div className="step-note" data-aid='step-note-manual-sign' style={{ marginBottom: '20px' }}>
+          Form with instructions is emailed at <b style={{color: "#161A2E"}}>{kyc?.identification?.meta_data.email || ""}</b>
+        </div>
         <WVButton
           variant='outlined'
           size='large'
@@ -26,15 +29,12 @@ const ManualSignature = (props) => {
           onClick={handleDownloadFormsClick}
           showLoader={isApiRunning}
         >
-          <div className="download-text" data-aid='download-text'>DOWNLOAD FORMS</div>
+          <div data-aid='download-text'>DOWNLOAD FORMS</div>
           <img
             alt="Download button"
             src={require("assets/download.svg")}
           />
         </WVButton>
-        <div className="step-note" data-aid='step-note-manual-sign'>
-          Form with instructions is emailed at <b style={{color: "#161A2E"}}>{kyc?.identification?.meta_data.email || ""}</b>
-        </div>
       </>
     )
   }, [isApiRunning]);
@@ -54,7 +54,7 @@ const ManualSignature = (props) => {
   const renderStep3Content = useCallback(() => {
     return (
       <div className="step-note">
-        <div><b>{companyDetails.NAME}</b></div>
+        <div>{companyDetails.NAME}</div>
         <div>{companyDetails.ADDRESS}</div>
       </div>
     )

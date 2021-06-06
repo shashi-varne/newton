@@ -19,7 +19,7 @@ const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
     title: 'Bank statement',
     subtitle: 'Last 6 months',
-    nativePickerMethodName: 'open_gallery',
+    nativePickerMethodName: 'open_file',
     supportedFormats: "pdf",
     fileName: "bank-statement",
     api_doc_type: "bank_statement",
@@ -27,7 +27,7 @@ const UPLOAD_OPTIONS_MAP = {
   'itr': {
     title: 'Income tax returns',
     subtitle: 'Any ITR copy within the last 2 years',
-    nativePickerMethodName: 'open_gallery',
+    nativePickerMethodName: 'open_file',
     supportedFormats: "pdf",
     fileName: "itr",
     api_doc_type: "itr_acknowledgement",
@@ -35,7 +35,7 @@ const UPLOAD_OPTIONS_MAP = {
   'salary-slip': {
     title: 'Salary slips',
     subtitle: 'Last 3 months',
-    nativePickerMethodName: 'open_gallery',
+    nativePickerMethodName: 'open_file',
     supportedFormats: "pdf",
     fileName: "salary-slip",
     api_doc_type: "payslips",
@@ -121,7 +121,7 @@ const FnOIncomeProof = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
     >
-      <WVInPageHeader>
+      <WVInPageHeader style={{ marginBottom: '15px' }}>
         <WVInPageTitle>Provide income proof for F&O trading</WVInPageTitle>
         <span className="kyc-fno-header-optional-text"> (Optional)</span>
       </WVInPageHeader>
