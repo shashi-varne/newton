@@ -161,17 +161,17 @@ class CustomButton extends Component {
 
 const styles = {
   button: {
-    padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px 0px !important',
+    padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px !important',
     borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 6,
-    fontSize: '12px !important',
     boxShadow: 'none',
-    fontWeight: 'bold',
-    letterSpacing: '1px',
-    // boxShadow: '0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149)',
     width: !getConfig().isMobileDevice ? 'auto' :  '100%'
   },
   label: {
+    fontFamily: 'Rubik',
+    fontSize: '12px !important',
+    fontWeight: 'bold',
     textTransform: 'uppercase',
+    letterSpacing: '1px',
   },
 }
 

@@ -323,7 +323,7 @@
 #sample-docs {
   .title {
     font-size: 20px;
-    color: #160d2e;
+    color: color(--dark);
     font-weight: 600;
   }
 
@@ -340,10 +340,10 @@
   }
 
   .doc .doc-name {
-    font-weight: 800;
+    font-weight: 500;
     font-size: 13px;
     line-height: 21px;
-    color: #0a1d32;
+    color: var(--dark);
   }
 
   .doc fieldset legend {
