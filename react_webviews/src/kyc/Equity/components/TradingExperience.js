@@ -57,7 +57,7 @@ const TradingExperience = (props) => {
       let body = {
         kyc: {
           equity_data: {
-            "fno_required": true,
+            // "fno_required": true,
             "trading_experience": experience
           },
         },
@@ -80,7 +80,8 @@ const TradingExperience = (props) => {
         return;
       }
     } 
-    if (!isDocSubmittedOrApproved("identification"))
+    if ((kyc?.kyc_type !== "manual" && !isDocSubmittedOrApproved("equity_identification")) ||
+      (kyc?.kyc_type === "manual" && !isDocSubmittedOrApproved("identification")))
       navigate(PATHNAME_MAPPER.uploadSelfie);
     else {
       if (!isDocSubmittedOrApproved("equity_income"))

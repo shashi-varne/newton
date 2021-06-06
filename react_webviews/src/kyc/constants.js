@@ -295,6 +295,11 @@ export const eqkycDocsGroupMapper = {
     title: "Signature",
     doc: "Signature"
   },
+  "equity_identification": {
+    title: "Personal details",
+    doc: "Selfie"
+  },
+  // identification is used only in case of manual flow (non-DL)
   "identification": {
     title: "Personal details",
     doc: "Selfie"

@@ -7,6 +7,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import "./Digilocker.scss";
+import { PATHNAME_MAPPER } from "../constants";
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,7 @@ const Failed = (props) => {
     try {
       setIsApiRunning(true);
       await setKycType("manual");
-      navigate("/kyc/journey", { state: { fromState: 'digilocker-failed' }});
+      navigate(PATHNAME_MAPPER.journey);
     } catch (err) {
       toast(err.message);
     } finally {
@@ -36,6 +37,7 @@ const Failed = (props) => {
   const {kyc, isLoading} = useUserKycHook();
 
   const productName = getConfig().productName;
+
   return (
     <Container
       title="Aadhaar KYC Failed!"
@@ -66,12 +68,12 @@ const Failed = (props) => {
           your DigiLocker.
         </div>
       </section>
-      <AadhaarDialog
+      {/* <AadhaarDialog
         open={open}
         id="kyc-aadhaar-dialog"
         close={close}
         kyc={kyc}
-      />
+      /> */}
     </Container>
   );
 };

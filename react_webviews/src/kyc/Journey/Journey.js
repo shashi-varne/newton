@@ -6,7 +6,7 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isKycCompleted, updateQueryStringParameter } from "../common/functions";
+import { isDigilockerFlow, isKycCompleted, updateQueryStringParameter } from "../common/functions";
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -222,7 +222,13 @@ const Journey = (props) => {
               } else {
                 if (journeyData[i].key === 'bank') {
                   // this condition covers users who are not penny verified
-                  if (kyc[data.name].meta_data_status === 'approved' && kyc[data.name].meta_data.bank_status !== 'verified') {
+                  const isBankNotPennyVerified = (kyc[data.name].meta_data_status === 'approved' && 
+                    kyc[data.name].meta_data.bank_status !== 'verified') || (kyc[data.name].meta_data_status === 'submitted' && 
+                    kyc[data.name].meta_data.bank_status === 'submitted') || (kyc[data.name].meta_data_status === 'rejected' && 
+                    kyc[data.name].meta_data.bank_status === 'rejected') || (kyc[data.name].meta_data_status === 'submitted' && 
+                    kyc[data.name].meta_data.bank_status === 'pd_triggered')
+
+                  if (isBankNotPennyVerified) {
                     status = 'init';
                     break;
                   }
@@ -515,17 +521,12 @@ const Journey = (props) => {
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
     var journeyStatus = getKycAppStatus(kyc).status || ''
-    var dlCondition =
-      !isCompliant &&
-      !kyc.address.meta_data.is_nri &&
-      kyc.dl_docs_status !== '' &&
-      kyc.dl_docs_status !== 'init' &&
-      kyc.dl_docs_status !== null
+    var dlCondition = isDigilockerFlow(kyc)
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
-    var customerVerified = journeyStatus === 'ground_premium' ? false : true
+    // var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var isKycDone = TRADING_ENABLED && isKycCompleted(kyc);
     var kycJourneyData = initJourneyData() || []
     var headerKey = isKycDone
@@ -568,7 +569,7 @@ const Journey = (props) => {
       !show_aadhaar &&
       user.kyc_registration_v2 !== 'submitted' &&
       user.kyc_registration_v2 !== 'complete' &&
-      fromState !== "digilocker-failed"
+      fromState !== "/kyc/digilocker/failed"
     ) {
       if (
         !storageService().get('show_aadhaar') &&
@@ -748,13 +749,13 @@ const Journey = (props) => {
         onClose={() => setDlAadhaar(false)}
         redirect={cancel}
       />
-      <AadhaarDialog
+      {/* <AadhaarDialog
         open={aadhaarLinkDialog}
         onClose={() => {
           setAadhaarLinkDialog(false)
         }}
         kyc={kyc}
-      />
+      /> */}
       <KycBackModal
         id="kyc-back-modal"
         open={goBackModal}
