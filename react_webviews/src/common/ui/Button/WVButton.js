@@ -27,7 +27,7 @@ const WVButton = ({ showLoader, children, dataAidSuffix, ...props }) => {
 
 const styles = {
   root: {
-    padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px 0px !important',
+    padding: !getConfig().isMobileDevice ? '12px 15px 12px 15px !important' : '16px !important',
     borderRadius: 6,
     textTransform: 'uppercase',
     fontSize: '12px !important',
@@ -37,7 +37,13 @@ const styles = {
     display: !getConfig().isMobileDevice ? 'flex' : 'inline-flex', 
     width: !getConfig().isMobileDevice ? 'auto' : '100%'
   },
-  label: {},
+  label: {
+    fontFamily: 'Rubik',
+    fontSize: '12px !important',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+  },
 }
 
 export default withStyles(styles)(WVButton);
