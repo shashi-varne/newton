@@ -132,7 +132,7 @@ const IpvVideo = (props) => {
       <div className="instructions-container" data-aid='instructions-container'>
         <div className="ipv-instructions" data-aid='ipv-instructions'>
           Start recording,{' '}
-          <strong>by reading the following verification numbers loud</strong>{' '}
+          <span>by reading the following verification numbers loud</span>{' '}
           while looking at the camera
         </div>
         <div className="ipv-code" data-aid='ipv-code'>{ipvcode}</div>

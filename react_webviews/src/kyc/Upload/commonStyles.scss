@@ -29,7 +29,7 @@
     margin: 0 auto;
     text-align: center;
     font-size: 14px;
-    color: #160d2e;
+    color: var(--dark);
   }
 
   .trust {
@@ -57,7 +57,7 @@
 
   .kyc-upload-card {
     border: 1px solid beige;
-    padding: 10px 0 10px 0;
+    padding: 10px 20px 10px 0;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -65,24 +65,16 @@
     margin: 10px 0 10px 0;
     line-height: 1.5;
 
-    .image {
-      position: relative;
-
-      .check-icon {
-        position: absolute;
-        width: 12px;
-        left: 49px;
-        top: 9px;
-      }
-    }
-
     .title {
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 24px;
       margin-left: 10px;
       font-weight: 500;
     }
 
     .subtitle {
-      color: #8d879b;
+      color: var(--steelgrey);
       font-size: 13px;
       margin-left: 10px;
     }
@@ -128,7 +120,7 @@
   }
 
   .instructions-container {
-    margin: 10px 10px 0 10px;
+    margin: 10px 10px 5px 10px;
 
     .ipv-initial-asset {
       @include d-flex-center();
@@ -139,6 +131,10 @@
     font-size: 15px;
     line-height: 24px;
     text-align: left;
+
+    span {
+      font-weight: 500;
+    }
   }
 
   .ipv-code {
@@ -239,7 +235,7 @@
 .kyc-doc-upload-container .caption {
   text-align: center;
   line-height: 1.5;
-  color: #160d2e;
+  color: var(--dark);
   margin-bottom: 10px;
 }
 

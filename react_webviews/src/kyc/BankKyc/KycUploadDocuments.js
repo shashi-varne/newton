@@ -303,7 +303,7 @@ const KycUploadDocuments = (props) => {
         title="Bank verification pending!"
         onClose={() => setShowPendingModal(false)}
         button1Props={{
-          title: "CONTINUE",
+          title: "CONTINUE WITH KYC",
           type: "primary",
           onClick: proceed,
         }}
