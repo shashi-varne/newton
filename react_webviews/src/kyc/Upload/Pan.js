@@ -7,7 +7,7 @@ import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser } from '../common/functions'
+import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
@@ -27,6 +27,7 @@ const Pan = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const areDocsPending = checkDocsPending(kyc);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -47,12 +48,18 @@ const Pan = (props) => {
 
   const handleOtherPlatformNavigation = () => {
     if (kyc.kyc_status === 'compliant') {
-      if (!isDocSubmittedOrApproved("equity_identification"))
+      if (!isDocSubmittedOrApproved("equity_identification")) {
         navigate(PATHNAME_MAPPER.uploadSelfie);
-      else {
-        if (!isDocSubmittedOrApproved("equity_income"))
+      } else {
+        if (!isDocSubmittedOrApproved("equity_income")) {
           navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
-        else navigate(PATHNAME_MAPPER.kycEsign)
+        } else {
+          if (areDocsPending) {
+            navigate(PATHNAME_MAPPER.documentVerification);
+          } else {
+            navigate(PATHNAME_MAPPER.kycEsign);
+          }
+        }
       }
     } else {
       if (dlFlow) {
@@ -61,7 +68,9 @@ const Pan = (props) => {
         } else {
           navigate(PATHNAME_MAPPER.journey);
         }
-      } else navigate(PATHNAME_MAPPER.uploadProgress);
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress);
+      }
     }
   };
 

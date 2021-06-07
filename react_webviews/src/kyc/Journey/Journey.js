@@ -10,7 +10,6 @@ import { isDigilockerFlow, isEquityApplSubmittedOrApproved, isKycCompleted, upda
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
-import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import { isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
@@ -69,7 +68,6 @@ const Journey = (props) => {
   const urlParams = getUrlParams(props?.location?.search)
   const stateParams = props?.location?.state;
   const [isApiRunning, setIsApiRunning] = useState(false)
-  const [aadhaarLinkDialog, setAadhaarLinkDialog] = useState(false)
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
@@ -107,7 +105,8 @@ const Journey = (props) => {
   }
 
   const openGoBackModal = () => {
-    if (user?.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete") {
+    if ((kyc?.application_status_v2 !== "submitted" && kyc?.application_status_v2 !== "complete") ||
+      (kyc?.equity_application_status !== "submitted" && kyc?.equity_application_status !== "complete")) {
       setGoBackModal(true)
     } else {
       backHandlingCondition();
@@ -548,7 +547,7 @@ const Journey = (props) => {
       : "default";
     var headerData = HEADER_MAPPER_DATA[headerKey];
     if(isCompliant) {
-      if (journeyStatus === "ground_premium" || journeyStatus === "incomplete") {
+      if (journeyStatus === "ground_premium") {
         headerData.title = "You’re eligible for premium onboarding!";
       }
       if (kyc.address.meta_data.is_nri) {
@@ -763,13 +762,6 @@ const Journey = (props) => {
         onClose={() => setDlAadhaar(false)}
         redirect={cancel}
       />
-      {/* <AadhaarDialog
-        open={aadhaarLinkDialog}
-        onClose={() => {
-          setAadhaarLinkDialog(false)
-        }}
-        kyc={kyc}
-      /> */}
       <KycBackModal
         id="kyc-back-modal"
         open={goBackModal}

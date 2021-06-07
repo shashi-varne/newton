@@ -295,9 +295,15 @@ const Home = (props) => {
             });
           }
         } else {
-          navigate(`${PATHNAME_MAPPER.journey}`, {
-            searchParams: `${config.searchParams}&show_aadhaar=true`,
-          });
+          if (kyc?.application_status_v2 !== "init" && kyc?.kyc_type === "manual") {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=false`,
+            });
+          } else {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=true`,
+            });
+          }
         }
       }
     }
