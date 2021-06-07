@@ -50,7 +50,7 @@ const FundChart = (props) => {
   };
 
   const buttonConfigMapper = () => {
-    BUTTON_MAPPER.map((item) => {
+    BUTTON_MAPPER.forEach((item) => {
       let obj = {};
       obj.count = item.count;
       obj.type = item.type;

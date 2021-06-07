@@ -155,7 +155,13 @@ function PassiveFundDetails({ history }) {
               </p>
               <p
                 className="pfd-nav-returns"
-                style={{ fontWeight: "700", color: "#7ED321" }}
+                style={{
+                  fontWeight: "700",
+                  color:
+                    fundDetails?.performance?.primary_return >= 0
+                      ? "#7ED321"
+                      : "#D0021B",
+                }}
               >
                 {fundDetails?.performance?.primary_return}%
               </p>
