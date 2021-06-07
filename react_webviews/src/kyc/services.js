@@ -296,10 +296,6 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
-  if (TRADING_ENABLED && (kyc.equity_application_status !== 'submitted' || kyc.equity_application_status !== 'complete')) {
-    status = 'incomplete';
-  }
-
   if (TRADING_ENABLED && (kyc.equity_application_status === 'submitted' || kyc.equity_application_status === 'complete') && kyc.equity_sign_status !== "signed") {
     status = 'incomplete';
   }
