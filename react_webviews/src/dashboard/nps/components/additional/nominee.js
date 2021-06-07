@@ -7,6 +7,7 @@ import SelectWithoutIcon from "common/ui/SelectWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
 import { storageService, capitalize } from "utils/validators";
 import { formatDate } from "utils/validators";
+import { validateAlphabets } from "../../../../utils/validators";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
@@ -60,6 +61,8 @@ class NpsNominee extends Component {
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
+
+    if(name === "nominee_name" && value && !validateAlphabets(value)) return;
 
     if (name === "nominee_dob") {
       var input = document.getElementById("nominee_dob");
