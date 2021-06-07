@@ -43,14 +43,16 @@ const StocksStatus = (props) => {
   const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
-    const kycAppStatusData = getKycAppStatus(kyc);
-    const status = kycAppStatusData.status;
-    if (kyc.equity_application_status === "submitted") {
-      setData(STATUS_MAPPER["submitted"]);
-    } else if (status === "ground") {
-      setData(STATUS_MAPPER["init"]);
-    } else {
-      setData(STATUS_MAPPER["incomplete"]);
+    if (!isEmpty(kyc)) {
+      const kycAppStatusData = getKycAppStatus(kyc);
+      const status = kycAppStatusData.status;
+      if (kyc.equity_application_status === "submitted") {
+        setData(STATUS_MAPPER["submitted"]);
+      } else if (status === "ground") {
+        setData(STATUS_MAPPER["init"]);
+      } else {
+        setData(STATUS_MAPPER["incomplete"]);
+      }
     }
   }, [kyc]);
 
@@ -61,7 +63,8 @@ const StocksStatus = (props) => {
       } else {
         navigate(data.path, {
           state: {
-            show_aadhaar: !kyc.address.meta_data.is_nri ? true : false,
+            show_aadhaar: !kyc?.address?.meta_data?.is_nri ?
+            (kyc?.kyc_type !== "manual" ? true : false) : false,
           },
         });
       }
