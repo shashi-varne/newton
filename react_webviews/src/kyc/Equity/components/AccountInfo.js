@@ -4,7 +4,7 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
-import { isEmailOrMobileVerified, isKycCompleted } from "../../common/functions";
+import { isEmailOrMobileVerified } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
@@ -40,7 +40,7 @@ const AccountInfo = (props) => {
       Toast("Accept T&C to proceed");
       return;
     }
-    if (isKycCompleted(kyc)) {
+    if (kyc?.mf_kyc_processed) {
       if (!isEmailOrMobileVerified()) {
         navigate(PATHNAME_MAPPER.communicationDetails);
       } else {

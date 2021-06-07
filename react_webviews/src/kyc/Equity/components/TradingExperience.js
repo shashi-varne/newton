@@ -9,6 +9,7 @@ import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
 import WVSelect from "../../../common/ui/Select/WVSelect";
 import { navigate as navigateFunc, } from "../../../utils/functions";
+import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
 
 const TRADING_EXPERIENCE_VALUES = [
   {
@@ -33,6 +34,7 @@ const TradingExperience = (props) => {
   const [experience, setExperience] = useState("");
   const [oldState, setOldState] = useState("");
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [goBackModal, setGoBackModal] = useState(false)
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
   const [areDocsPending, setDocStatus] = useState();
@@ -107,8 +109,20 @@ const TradingExperience = (props) => {
     setExperience(selectedOption.value)
   }
 
-  const goBack = () => {
+  const closeConfirmBackDialog = () => {
+    setGoBackModal(false);
+  };
+
+  const redirectToJourney = () => {
     navigate(PATHNAME_MAPPER.journey);
+  };
+
+  const goBack = () => {
+    if (kyc?.my_kyc_processed) {
+      setGoBackModal(true)
+    } else {
+      navigate(PATHNAME_MAPPER.journey);
+    }
   }
 
   return (
@@ -135,6 +149,14 @@ const TradingExperience = (props) => {
           value={experience}
           onChange={handleChange}
         />
+        {kyc?.mf_kyc_processed && goBackModal ?
+          <ConfirmBackDialog
+           isOpen={goBackModal}
+           close={closeConfirmBackDialog}
+           goBack={redirectToJourney}
+         />
+         : null
+        }
       </div>
     </Container>
   );
