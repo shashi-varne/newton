@@ -22,7 +22,8 @@
   padding: 20px 2px 20px 20px;
   background-size: cover;
   background-repeat: no-repeat;
-  color: #160d2e;
+  border-radius: 12px;
+  color: var(--dark);
   margin-top: 20px;
 
   .stocks-title {
@@ -221,7 +222,7 @@
     .kdvm-title {
       font-size: 15px;
       line-height: 24px;
-      color: #160d2e;
+      color: var(--dark);
       font-weight: 600;
     }
   }
@@ -312,7 +313,7 @@
   .kcd-email-subtext {
     font-size: 11px;
     line-height: 18px;
-    color: #878787;
+    color: var(--steelgrey);
     padding-top: 5px;
   }
 

@@ -560,11 +560,7 @@ const Journey = (props) => {
       kycJourneyData[1]?.status === "init"
     ) {
       kycJourneyData[1].disc = (
-        <WVInfoBubble
-          hasTitle
-          customTitle="Please ensure your mobile is linked with Aadhaar"
-          type="info"
-        />
+        <WVInfoBubble>Please ensure your mobile is linked with Aadhaar</WVInfoBubble>
       );
     }
     var ctaText = ''

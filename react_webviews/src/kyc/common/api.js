@@ -164,10 +164,18 @@ export const upload = async (file, type, data = {}) => {
         formData.append('doc_password', data.doc_password);
         break;
       case 'identification':
-        formData.append('kyc_product_type', data.kyc_product_type);
-        formData.append('location_coordinates', `${data.lat},${data.lng}`);
-        formData.append('live_score', data.live_score);
-        formData.append('forced', data.forced);
+        if (data.kyc_product_type) {
+          formData.append('kyc_product_type', data.kyc_product_type);
+        }
+        if (data.lat && data.lng) {
+          formData.append('location_coordinates', `${data.lat},${data.lng}`);
+        }
+        if (data.live_score) {
+          formData.append('live_score', data.live_score);
+        }
+        if (data.forced) {
+          formData.append('forced', data.forced);
+        }
         break;
       default:
         break
