@@ -6,10 +6,19 @@ import { PATHNAME_MAPPER } from "../../constants";
 import { nativeCallback } from "../../../utils/native_callback";
 import { Imgc } from "../../../common/ui/Imgc";
 
-const productName = getConfig().productName;
+const config = getConfig();
+const productName = config.productName;
 const NriError = (props) => {
   const navigate = navigateFunc.bind(props);
   const stateParams = props?.location?.state;
+
+  const handleClick = () => {
+    if(config.Web) {
+      navigate("/");
+    } else {
+      nativeCallback({ action: "exit_web" });
+    }
+  }
   
   return (
     <Container
@@ -25,7 +34,7 @@ const NriError = (props) => {
       button2Props={{
         type: stateParams?.originState === "invest" ? "primary" : "secondary",
         title: "HOME",
-        onClick: () => nativeCallback({ action: "exit" })
+        onClick: handleClick
       }}
     >
       <div className="status-info">
