@@ -208,6 +208,7 @@ const Pan = (props) => {
               onClose={() => setIsOpen(false)}
               disableBackdropClick
               onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
+              kyc={kyc}
             />
           }
         </section>

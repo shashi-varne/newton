@@ -1,19 +1,14 @@
 import React from "react";
 import { getConfig, isTradingEnabled } from "../../../utils/functions";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
-import { storageService } from "../../../utils/validators";
 
 const productName = getConfig().productName;
 const TRADING_ENABLED = isTradingEnabled();
-const kyc = storageService().getObject("kyc");
 const uploadStatus = {
   success: {
     icon: "ic_indian_resident.svg",
     title: "PAN uploaded",
-    subtitle: !TRADING_ENABLED ? 
-      "Great, just one more step to go! Now complete eSign to get investment ready" : 
-      (kyc?.all_dl_doc_statuses?.pan_fetch_status === "failed" ? 
-      "You’re almost there, now give details for your trading account" : "You're almost there, now take a selfie"),
+    subtitle: "You're almost there, now take a selfie",
     ctaText: "CONTINUE",
   },
   failed: {
@@ -24,11 +19,18 @@ const uploadStatus = {
   },
 };
 
-const PanUploadStatus = ({ status, isOpen, onClose, disableBackdropClick, onCtaClick }) => {
+const PanUploadStatus = ({ status, isOpen, kyc, onClose, disableBackdropClick, onCtaClick }) => {
   if (!status) return '';
 
   const data = uploadStatus[status] || {};
   
+  if (status === "success") {
+    data.subtitle = !TRADING_ENABLED
+      ? "Great, just one more step to go! Now complete eSign to get investment ready"
+      : kyc?.all_dl_doc_statuses?.pan_fetch_status === "failed"
+      ? "You’re almost there, now give details for your trading account"
+      : "You're almost there, now take a selfie";
+  }
 
   return (
     <WVBottomSheet
