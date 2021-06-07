@@ -1,5 +1,5 @@
 import React, {useEffect, useState, Fragment} from "react";
-import { getConfig } from "../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening";
 import useUserKycHook from "../../common/hooks/userKycHook";
@@ -7,9 +7,12 @@ import { isEmpty } from "../../../utils/validators";
 import { getPendingDocuments } from "../../common/functions";
 import { nativeCallback } from '../../../utils/native_callback';
 import "./commonStyles.scss";
+import { PATHNAME_MAPPER } from "../../constants";
 
-const productName = getConfig().productName;
+const config = getConfig();
+const productName = config.productName;
 const DocumentVerification = (props) => {
+  const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
   const [docs, setDocs] = useState([]);
 
@@ -25,7 +28,15 @@ const DocumentVerification = (props) => {
   }, [kyc]);
 
   const handleCTAClick = () => {
-    nativeCallback({ action: "exit" })
+    if(config.Web) {
+      navigate("/");
+    } else {
+      nativeCallback({ action: "exit_web" })
+    }
+  }
+
+  const goBack = () => {
+    navigate(PATHNAME_MAPPER.stocksStatus);
   }
 
   return (
@@ -37,6 +48,7 @@ const DocumentVerification = (props) => {
       hidePageTitle
       type="outlined"
       skelton={isLoading}
+      headerData={{ goBack }}
     >
       <div className="kyc-document-verification" data-aid='kyc-document-verification'>
         <header className="kyc-document-verification-header" data-aid='kyc-document-verification-header'>
