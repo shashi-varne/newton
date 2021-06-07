@@ -5,7 +5,7 @@ import Container from "../common/Container";
 import Api from "../../utils/api";
 import toast from "../../common/ui/Toast";
 import { storageService } from "../../utils/validators";
-import { getBasePath } from "../../utils/functions";
+import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
 const genericErrorMessage = "Something went wrong!";
@@ -18,6 +18,7 @@ class Notification extends Component {
       showLoader: false,
       notifications: [],
     };
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentDidMount() {
@@ -117,6 +118,10 @@ class Notification extends Component {
     }
   }
 
+  goBack = () => {
+    this.navigate("/");
+  }
+
   render() {
     let { notifications } = this.state;
     return (
@@ -125,6 +130,7 @@ class Notification extends Component {
         noFooter={true}
         skelton={this.state.showLoader}
         title="Notification"
+        headerData={{ goBack: this.goBack }}
       >
         <div className="notification">
           {notifications.length === 0 && (
