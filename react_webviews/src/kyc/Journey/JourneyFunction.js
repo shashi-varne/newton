@@ -94,7 +94,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       },
       {
         key: 'digilocker',
-        title: 'Connect to digilocker',
+        title: 'Connect to DigiLocker',
         status: 'init',
         isEditAllowed: false,
         inputsForStatus: ['dl_docs_status'],
