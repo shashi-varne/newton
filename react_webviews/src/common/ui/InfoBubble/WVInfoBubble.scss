@@ -18,21 +18,24 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
-
+      
       span {
         font-weight: 600;
         font-size: 13px;
         line-height: 21px;
       }
     }
-
+    
     .wv-ib-content-desc {
       text-align: left;
       font-size: 13px;
       line-height: 21px;
       color: var(--steelgrey);
       word-break: break-word;
+    }
+
+    .wv-ib-content-title + .wv-ib-content-desc {
+      margin-top: 6px;
     }
   }
 }

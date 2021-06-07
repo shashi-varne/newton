@@ -17,7 +17,8 @@ import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Report = (props) => {
-  const productName = getConfig().productName;
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -119,6 +120,23 @@ const Report = (props) => {
   };
 
   const proceed = () => {
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "kyc",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf"
+        }
+      }
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
     if (getConfig().Web) {
       navigate(PATHNAME_MAPPER.invest);
     } else {
@@ -131,11 +149,48 @@ const Report = (props) => {
   };
 
   const checkNPSAndProceed = () => {
+    let _event = {};
     if (user.nps_investment) {
+      _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "kyc",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "reports",
+          },
+        },
+      };
+      // send event
+      if (!config.Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (config.isIframe) {
+        window.callbackWeb.sendEvent(_event);
+      }
+
       if (!getConfig().isIframe) {
         navigate(PATHNAME_MAPPER.reports);
       }
     } else {
+      _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "kyc",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "mf",
+          },
+        },
+      };
+      // send event
+      if (!config.Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (config.isIframe) {
+        window.callbackWeb.sendEvent(_event);
+      }
+
       if (getConfig().Web) {
         navigate(PATHNAME_MAPPER.invest);
       } else {
