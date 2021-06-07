@@ -6,15 +6,16 @@ import Container from "../../common/Container";
 import MenuListDropDown from '../../../common/ui/MenuListDropDown'
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
 import { FUND_CATEGORY, ACTIVE_PASSIVE_FACTS_CAROUSEL, KEY_INSIGHTS_CAROUSEL } from "../constants";
+import { storageService } from "utils/validators";
 import { initialize } from "../common/commonFunctions";
 import { nativeCallback } from "../../../utils/native_callback";
 import GenericFactCarousel from "../../../common/ui/GenericFactCarousel";
 import GenericContentCarousel from "../../../common/ui/GenericContentCarousel";
 import VideoBlockImageSection from "../mini-components/VideoBlockImageSection"
 import { Imgc } from "../../../common/ui/Imgc";
-import KeyInsightBackground from "../../../assets/passiveFundKeyInsights.svg"
-import ActivePassiveBackground from "../../../assets/active_passive_background.svg"
-import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle"
+import KeyInsightBackground from "../../../assets/passiveFundKeyInsights.svg";
+import ActivePassiveBackground from "../../../assets/active_passive_background.svg";
+import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -37,6 +38,13 @@ class Landing extends Component {
   ref = player => {
     this.player = player
   }
+
+  handleClick = (data) => {
+    const categoryName = data.key === "global_indices" ? "global_index_funds" : data.key;
+    this.sendEvents("next", categoryName);
+    storageService().set("category_index_name", data.title);
+    this.navigate(`${data.key}/fund-list`, data.title);
+  };
 
   sendEvents = (userAction, fundCategory) => {
     let eventObj = {

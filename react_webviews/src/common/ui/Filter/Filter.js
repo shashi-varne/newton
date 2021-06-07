@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import DiyDialog from './DiyDialog'
-import Button from 'common/ui/Button'
-import { isEmpty } from "utils/validators";
-import SortFilter from './SortFilter'
-import "./commonStyles.scss"
+import React, { useState } from 'react';
+import DiyDialog from './DiyDialog';
+import Button from 'common/ui/Button';
+import { isEmpty } from 'lodash';
+import SortFilter from './SortFilter';
+import "./commonStyles.scss";
 
 const Filter = ({
   isOpen,

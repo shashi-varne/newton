@@ -1,7 +1,7 @@
 import React from "react";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { isEmpty } from "utils/validators";
+import { isEmpty } from 'lodash';
 import "./commonStyles.scss";
 
 const SortFilter = ({

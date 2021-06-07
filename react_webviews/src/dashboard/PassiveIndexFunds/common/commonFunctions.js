@@ -8,7 +8,6 @@ export async function initialize() {
   this.navigate = navigate.bind(this);
   this.countCarouselSwipe = countCarouselSwipe.bind(this);
   this.productName = productName.bind(this);
-  this.handleClick = handleClick.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -38,11 +37,3 @@ export function countCarouselSwipe(index) {
     card_swipe_count: this.state.card_swipe_count + 1,
   });
 }
-
-export function handleClick(data) {
-  const categoryName =
-    data.key === "global_indices" ? "global_index_funds" : data.key;
-  this.sendEvents("next", categoryName);
-  storageService().set("category_index_name", data.title);
-  this.navigate(`${data.key}/fund-list`, data.title);
-} // move

@@ -1,6 +1,6 @@
 import React from 'react'
 import StarRating from "./StarRating"
-import { isEmpty } from "utils/validators";
+import { isEmpty } from 'lodash';
 
 function GenericListCard(props) {
     const value = props.value;
