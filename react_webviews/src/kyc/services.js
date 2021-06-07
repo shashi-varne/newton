@@ -410,7 +410,9 @@ export function isReadyToInvest() {
       (kycRTI.friendly_application_status === "submitted" &&
         kycRTI.bank.meta_data_status === "approved")
     ) {
-      return true;
+      if (!TRADING_ENABLED || (TRADING_ENABLED && kycRTI.equity_sign_status === "signed")) {
+        return true;
+      }
     } else if (userRTI.kyc_registration_v2 === "complete") {
       return true;
     } else if (kycRTI.provisional_action_status === "approved") {
