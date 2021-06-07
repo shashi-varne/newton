@@ -5,8 +5,10 @@ import { storageService, getUrlParams } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
+import { getBasePath } from "../utils/functions";
 
-const isMobileView = getConfig().isMobileDevice;
+const config = getConfig();
+const isMobileView = config.isMobileDevice;
 const errorMessage = "Something went wrong!";
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
@@ -25,7 +27,7 @@ export function initialize() {
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
-  let redirectUrl = encodeURIComponent(`${window.location.origin}/`);
+  let redirectUrl = encodeURIComponent(`${getBasePath()}/${config.searchParams}`);
   const partners = [
     "hbl",
     "sbm",
@@ -53,13 +55,13 @@ export function initialize() {
   );
 
   let facebookUrl =
-    getConfig().base_url +
+    config.base_url +
     "/auth/facebook?redirect_url=" +
     socialRedirectUrl +
     "&referrer=" +
     referrer;
   let googleUrl =
-    getConfig().base_url +
+    config.base_url +
     "/auth/google?redirect_url=" +
     socialRedirectUrl +
     "&referrer=" +
@@ -179,7 +181,7 @@ export async function emailLogin(body) {
         this.setState({ isApiRunning: false });
         return;
       }
-      if (getConfig().Web && kycResult.data.partner.partner.data) {
+      if (config.Web && kycResult.data.partner.partner.data) {
         storageService().set(
           "partner",
           kycResult.data.partner.partner.data.name
@@ -264,7 +266,7 @@ export async function mobileLogin(body) {
 export async function emailRegister(body) {
   try {
     const res = await Api.post(
-      `/api/user/register?email=${body.email}&password=${body.password}&redirect_url=${body.redirectUrl}&referrer_code=${body.referrer_code}`,
+      `/api/user/register?email=${body.email}&password=${body.password}&redirect_url=${body.redirect_url}&referrer_code=${body.referrer_code}`,
       body
     );
     const { result, status_code: status } = res.pfwresponse;
@@ -389,7 +391,7 @@ export async function otpVerification(body) {
         return;
       }
 
-      if (getConfig().Web && kycResult.data.partner.partner.data) {
+      if (config.Web && kycResult.data.partner.partner.data) {
         storageService().set(
           "partner",
           kycResult.data.partner.partner.data.name

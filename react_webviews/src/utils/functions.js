@@ -141,7 +141,7 @@ export function getParamsMark(data) {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url="https://react-test-dot-plutus-staging.appspot.com" } = main_query_params;
+  let { base_url } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
@@ -150,6 +150,9 @@ export const getConfig = () => {
 
   let base_href = window.sessionStorage.getItem('base_href') || '';
   let base_url_default = '';
+  
+  const isStaging = origin.indexOf('staging') >= 0;
+  const isLocal = origin.indexOf('localhost') >=0;
 
   if(base_href) {
     base_url_default = window.location.origin;
@@ -163,8 +166,14 @@ export const getConfig = () => {
     if(isProdFinity) {
       base_url_default = 'https://api.mywaywealth.com';
     }
+
   }
   
+  // change server url here
+  if (isStaging || isLocal) {
+    base_url = "https://anandb-dot-plutus-staging.appspot.com";
+  }
+
   if(base_url_default) {
     base_url = base_url_default;
   }
