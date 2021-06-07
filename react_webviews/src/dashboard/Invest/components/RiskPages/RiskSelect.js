@@ -128,7 +128,6 @@ const RiskSelect = ({
       }
       <div style={{ marginTop: '30px' }}>
         <FSelect
-          preselectFirst
           options={riskProfiles}
           indexBy='name'
           renderItem={riskOpt =>

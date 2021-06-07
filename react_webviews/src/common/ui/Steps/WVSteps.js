@@ -17,6 +17,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const WVSteps = ({
+  dataAidSuffix,
   title, // Title for the step
   stepNum, // Number to show for the step
   stepType, // Sets step index circle color and content - values: default/pending/completed [default='default']
@@ -24,8 +25,8 @@ const WVSteps = ({
   classes // additional styling support
 }) => {
   return (
-    <div className={`wv-step ${classes.stepContainer}`}>
-      <div className="wv-step-header">
+    <div className={`wv-step ${classes.stepContainer}`} data-aid={`wv-step-${dataAidSuffix}`}>
+      <div className="wv-step-header" data-aid={`wv-step-header-${dataAidSuffix}`}>
         <div
           id="wv-sh-number"
           className={`wv-sh-number-${stepType} ${classes.stepNumber}`}
@@ -38,7 +39,7 @@ const WVSteps = ({
         </div>
         <div id="wv-sh-title">{title}</div>
       </div>
-      <div className={`wv-step-content ${classes.stepContent}`}>
+      <div className={`wv-step-content ${classes.stepContent}`} data-aid={`wv-step-content-${dataAidSuffix}`}>
         {children}
       </div>
     </div>

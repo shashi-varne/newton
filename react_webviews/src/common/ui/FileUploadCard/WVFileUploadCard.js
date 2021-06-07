@@ -6,6 +6,7 @@ import { isFunction } from 'lodash';
 import PropTypes from 'prop-types';
 
 const WVFileUploadCard = ({
+  dataAidSuffix,
   title,
   subtitle,
   file,
@@ -19,13 +20,11 @@ const WVFileUploadCard = ({
 
   useEffect(() => {
     if (selectedFile) {
-      if (selectedFile.name.length > 8) {
-        setTruncatedFileName(
-          selectedFile.name.slice(0, 8) +
-          '...'
-        );
+      const fileName = selectedFile.name || selectedFile.file_name;
+      if (fileName.length > 8) {
+        setTruncatedFileName(fileName.slice(0, 8) + '...');
       } else {
-        setTruncatedFileName(selectedFile.name);
+        setTruncatedFileName(fileName);
       }
       setFileType(selectedFile.type.split("/")[1]);
     }
@@ -42,17 +41,19 @@ const WVFileUploadCard = ({
     <>
       <WVFilePickerWrapper
         {...wrapperProps}
+        dataAidSuffix={dataAidSuffix}
         onFileSelectComplete={onFileSelected}
       >
         <div
+          data-aid={`wv-file-upload-card-${dataAidSuffix}`}
           className={`
-          wv-file-upload-card
-          ${classes.container}
-          ${className}
-        `}
-          style={{ border: selectedFile ? '1px solid var(--primary)' : '' }}
+            wv-file-upload-card
+            ${selectedFile ? 'wv-fuc-selected' : ''}
+            ${classes.container}
+            ${className}
+          `}
         >
-          <div className="wv-fuc-left">
+          <div className="wv-fuc-left" data-aid={`wv-fuc-left-${dataAidSuffix}`}>
             <div className="wv-fuc-left-title">
               {title}
             </div>
@@ -60,7 +61,7 @@ const WVFileUploadCard = ({
               {subtitle}
             </div>
           </div>
-          <div className="wv-fuc-right">
+          <div className="wv-fuc-right" data-aid={`wv-fuc-right-${dataAidSuffix}`}>
             <SVG
               preProcessor={code => code.replace(
                 /fill=".*?"/g, `fill=${selectedFile ? '#24154C' : '#767E86'}`
