@@ -37,7 +37,7 @@ const Selfie = (props) => {
   const { kyc, isLoading, updateKyc } = useUserKycHook();
   const [tadingFlow, setTradingFlow] = useState();
   const [isCamLoading, setIsCamLoading] = useState();
-  const [areDocsPending, setDocStatus] = useState();
+  const [areDocsPending, setDocPendingStatus] = useState();
   const navigate = navigateFunc.bind(props)
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const Selfie = (props) => {
     setTradingFlow(tradeFlow);
     setIsCamLoading(tradeFlow);
     const docStatus = await checkDocsPending(kyc);
-    setDocStatus(docStatus)
+    setDocPendingStatus(docStatus)
   }
   
   const handleNavigation = () => {

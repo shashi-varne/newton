@@ -27,7 +27,7 @@ const Pan = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const {kyc, isLoading, updateKyc} = useUserKycHook();
-  const [areDocsPending, setDocStatus] = useState();
+  const [areDocsPending, setDocPendingStatus] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -40,7 +40,7 @@ const Pan = (props) => {
       setDlFlow(true);
     }
     const docStatus = await checkDocsPending(kyc);
-    setDocStatus(docStatus)
+    setDocPendingStatus(docStatus)
   }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
