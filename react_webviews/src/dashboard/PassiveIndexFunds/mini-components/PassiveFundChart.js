@@ -67,6 +67,9 @@ const FundChart = (props) => {
   buttonConfigMapper();
 
   const chopDates = (dates1) => {
+    if(!dates1[0] || !dates1[1]){
+      return;
+    }
     let seriesAMin = dates1[0][0];
     let seriesAMax = dates1[dates1.length - 1][0];
     let maximum = seriesAMax;
