@@ -26,6 +26,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import PennyFailedDialog from "../mini-components/PennyFailedDialog";
 
 const config = getConfig();
+let titleText = "Enter bank account details";
 
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -35,6 +36,7 @@ const KycBankDetails = (props) => {
   const params = props.match.params || {};
   const userType = params.userType || "";
   const isEdit = props.location.state?.isEdit || false;
+  titleText = "Edit bank account details"
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({
@@ -339,7 +341,7 @@ const KycBankDetails = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
       handleClick={handleClick}
-      title="Enter bank account details"
+      title={titleText}
       data-aid='kyc-enter-bank-account-details-screen'
     >
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>

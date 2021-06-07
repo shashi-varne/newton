@@ -93,7 +93,9 @@ const KycUploadDocuments = (props) => {
 
   const handleEdit = () => {
     sendEvents('edit')
-    navigate(`/kyc/${userType}/bank-details`);
+    navigate(`/kyc/${userType}/bank-details`, {
+      state: { isEdit: true }
+    });
   };
 
   const handleSampleDocument = () => {

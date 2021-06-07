@@ -128,7 +128,9 @@ const KycBankVerify = (props) => {
 
   const checkBankDetails = () => {
     sendEvents("check bank details", "bottom_sheet");
-    navigate(`/kyc/${userType}/bank-details`);
+    navigate(`/kyc/${userType}/bank-details`, {
+      state: { isEdit: true }
+    });
   };
 
   const uploadDocuments = () => {
@@ -192,7 +194,9 @@ const KycBankVerify = (props) => {
 
   const edit = () => () => {
     sendEvents('edit');
-    navigate(`/kyc/${userType}/bank-details`);
+    navigate(`/kyc/${userType}/bank-details`, {
+      state: { isEdit: true }
+    });
   };
 
   const sendEvents = (userAction, screen_name) => {
