@@ -47,7 +47,9 @@ const Selfie = (props) => {
   })
 
   const initialize = async () => {
-    setTradingFlow(TRADING_ENABLED && kyc.kyc_type !== "manual");
+    const tradeFlow = TRADING_ENABLED && kyc.kyc_type !== "manual"
+    setTradingFlow(tradeFlow);
+    setIsCamLoading(tradeFlow);
     const docStatus = await checkDocsPending(kyc);
     setDocStatus(docStatus)
   }
