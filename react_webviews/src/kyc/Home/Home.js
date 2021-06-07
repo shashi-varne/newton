@@ -287,7 +287,7 @@ const Home = (props) => {
       } else {
         sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
         if (is_nri) {
-          if (!TRADING_ENABLED && kycProductType === "stocks") {
+          if (!TRADING_ENABLED && is_nri && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
           } else {
             navigate(`${PATHNAME_MAPPER.journey}`, {
