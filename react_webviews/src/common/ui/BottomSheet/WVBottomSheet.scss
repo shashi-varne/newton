@@ -19,10 +19,12 @@ body[data-device="web"]{
     left: -20px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   .MuiDialogActions-root {
-    margin: 0;
+    margin: 0 20px 20px;
   }
 }
 
@@ -41,6 +43,9 @@ body[data-device="web"]{
       color: var(--dark);
       margin-top: 10px;
       word-break: break-word;
+    }
+
+    .wv-bcl-title::first-letter {
       text-transform: capitalize;
     }
     
@@ -49,23 +54,24 @@ body[data-device="web"]{
       line-height: 21px;
       color: var(--steelgrey);
       word-break: break-word;
-      margin: 10px 0 20px;
+      margin-top: 20px;
+    }
+
+    .wv-bcl-subtitle::first-letter {
       text-transform: capitalize;
     }
   }
 
   .wv-bc-right {
     margin-left: 20px;
-
-    // .wv-bcr-image {
-    // }
   }
-  
+}
+
+.wv-bottomsheet-child-content {
+  margin-top: 20px;
 }
 
 /* Actions Section */
 .wv-bottomsheet-actions {
-  padding: 20px;
   margin: 0 !important;
-  display: flex;
 }
