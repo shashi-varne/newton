@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { isDocSubmittedOrApproved } from "../../common/functions"
+import { checkDocsPending, isDocSubmittedOrApproved } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
@@ -35,6 +35,7 @@ const TradingExperience = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
+  const areDocsPending = checkDocsPending(kyc);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -81,12 +82,18 @@ const TradingExperience = (props) => {
       }
     } 
     if ((kyc?.kyc_type !== "manual" && !isDocSubmittedOrApproved("equity_identification")) ||
-      (kyc?.kyc_type === "manual" && !isDocSubmittedOrApproved("identification")))
-      navigate(PATHNAME_MAPPER.uploadSelfie);
-    else {
-      if (!isDocSubmittedOrApproved("equity_income"))
+      (kyc?.kyc_type === "manual" && !isDocSubmittedOrApproved("identification"))) {
+        navigate(PATHNAME_MAPPER.uploadSelfie);
+    } else {
+      if (!isDocSubmittedOrApproved("equity_income")) {
         navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
-      else navigate(PATHNAME_MAPPER.kycEsign)
+      } else {
+        if (areDocsPending) {
+          navigate(PATHNAME_MAPPER.documentVerification)
+        } else {
+          navigate(PATHNAME_MAPPER.kycEsign)
+        }
+      } 
     }
   }
 

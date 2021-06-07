@@ -65,6 +65,7 @@ export const PATHNAME_MAPPER = {
   selfieSteps: '/kyc/upload/selfie-steps',
   stocksStatus: '/kyc/stocks-status',
   accountInfo: '/kyc/account-info',
+  documentVerification: '/kyc/document-verification',
 }
 
 export const STORAGE_CONSTANTS = {
