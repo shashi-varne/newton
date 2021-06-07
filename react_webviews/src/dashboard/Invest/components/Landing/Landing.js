@@ -113,6 +113,7 @@ class Landing extends Component {
   render() {
     const {
       isReadyToInvestBase,
+      isEquityCompletedBase,
       kycStatusLoader,
       productName,
       investCardsData,
@@ -207,19 +208,21 @@ class Landing extends Component {
                 case "stocks":
                   return (
                     <React.Fragment key={index}>
-                      <div className="invest-main-top-title" 
-                        onClick={() => this.clickCard("stocks") } 
-                        data-aid='stocks-title'
-                      >
-                        <WVButton
-                          variant='contained'
-                          size='large'
-                          color="secondary"
-                          // fullWidth
+                      {!isEquityCompletedBase && (
+                        <div className="invest-main-top-title" 
+                          onClick={() => this.clickCard("stocks") } 
+                          data-aid='stocks-title'
                         >
-                          Stocks
-                        </WVButton>
-                      </div>
+                          <WVButton
+                            variant='contained'
+                            size='large'
+                            color="secondary"
+                            // fullWidth
+                          >
+                            Stocks
+                          </WVButton>
+                        </div>
+                      )}
                     </React.Fragment>
                   );
                 case "ourRecommendations":

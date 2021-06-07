@@ -299,7 +299,19 @@ export const getFlow = (kycData) => {
   return flow;
 }
 
-export const isEquityApplSubmittedOrApproved = (kyc) => {
+export const isEquityApplSubmittedOrComplete = (kyc) => {
   if (isEmpty(kyc)) return false;
-  return (kyc.equity_application_status === "submitted" || kyc.equity_application_status === "approved");
+  return (kyc.equity_application_status === "submitted" || kyc.equity_application_status === "complete");
+}
+
+export const isMfApplSubmittedOrComplete = (kyc) => {
+  if (isEmpty(kyc)) return false;
+  return (kyc.application_status_v2 === "submitted" || kyc.application_status_v2 === "complete");
+}
+
+export const isEquityCompleted = () => {
+  const kyc = storageService().getObject("kyc");
+  if (isEmpty(kyc)) return false;
+
+  return (kyc.equity_application_status === "complete" && kyc.equity_sign_status === "signed");
 }

@@ -14,6 +14,7 @@ import {
 import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
+import { isEquityCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -430,6 +431,7 @@ export function initilizeKyc() {
     }
   }
   let isReadyToInvestBase = isReadyToInvest();
+  let isEquityCompletedBase = isEquityCompleted();
   let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
 
   this.setState({
@@ -439,6 +441,7 @@ export function initilizeKyc() {
     userKyc,
     kycJourneyStatus,
     isReadyToInvestBase,
+    isEquityCompletedBase,
     getKycAppStatusData,
   });
   let bottom_sheet_dialog_data_premium = {};

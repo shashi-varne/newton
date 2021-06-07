@@ -32,19 +32,19 @@ const UploadCard = (props) => {
             id={`check-icon-rejected_${index+1}`}
           />
         )}
-        {doc_status === "submitted" && (
-          <img
-            src={require(`assets/success_icon.svg`)}
-            alt=""
-            className="check-icon"
-            id={`check-icon-submitted_${index+1}`}
-          />
-        )}
       </div>
       <div>
         <div className="title" id={`title_${index+1}`} data-aid={`title_${index+1}`}>{title}</div>
         {subtitle && <div className="subtitle" id={`subtitle_${index+1}`} data-aid={`subtitle_${index+1}`}>{subtitle}</div>}
       </div>
+      {['submitted', 'approved'].includes(doc_status) &&
+        <img
+          src={require(`assets/badge-success.svg`)}
+          alt="submitted"
+          style={{ marginLeft: 'auto' }}
+          id={`check-icon-submitted_${index + 1}`}
+        />
+      }
     </div>
   );
 };
