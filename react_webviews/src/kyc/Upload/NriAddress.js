@@ -2,7 +2,7 @@ import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { NRI_DOCUMENTS_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from 'common/ui/Toast'
@@ -89,12 +89,8 @@ const NRIAddressUpload = (props) => {
     return addressLine
   }
 
-  const addressProofKey = kyc?.address?.meta_data?.is_nri
-    ? 'passport'
-    : kyc?.address_doc_type
-  const addressProof = kyc?.address?.meta_data?.is_nri
-    ? 'Passport'
-    : DOCUMENTS_MAPPER[kyc?.address_doc_type]
+  const addressProofKey = kyc?.address_doc_type
+  const addressProof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )

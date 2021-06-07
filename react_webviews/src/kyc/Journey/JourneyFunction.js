@@ -214,6 +214,10 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       },
     ]
 
+    if(!isCompliant && kyc?.address?.meta_data?.is_nri) {
+      journeyData[3].inputsForStatus.push('nri_address')
+    }
+
     if (
       isCompliant &&
       kyc?.identification?.meta_data?.marital_status &&

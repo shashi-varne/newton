@@ -191,7 +191,7 @@ const PersonalDetails1 = (props) => {
             disabled={isApiRunning}
           />
           <Input
-            label="Date of birth(DD/MM/YYYY)"
+            label="Date of birth (DD/MM/YYYY)"
             class="input"
             value={form_data.dob || ""}
             error={form_data.dob_error ? true : false}

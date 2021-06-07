@@ -9,7 +9,8 @@ import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
 
-const productName = getConfig().productName;
+const config = getConfig();
+const productName = config.productName;
 const BENEFITS = [
   {
     icon: "one_account.svg",
@@ -117,8 +118,21 @@ const AccountInfo = (props) => {
             />
             <div className="kaim-terms-info">
               I agree to have read and understood the{" "}
-              <span>Terms & conditions</span> and{" "}
-              <span>Equity Annexure</span>{" "}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={config.termsLink}
+              >
+                Terms & conditions
+              </a>{" "}
+              and{" "}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={config.termsLink}
+              >
+                Equity Annexure
+              </a>{" "}
             </div>
           </div>
           <SecurityDisclaimer />

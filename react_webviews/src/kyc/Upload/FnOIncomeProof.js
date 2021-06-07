@@ -88,7 +88,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const goNext = async () => {
-    const areDocsPending = checkDocsPending(kyc);
+    const areDocsPending = await checkDocsPending(kyc);
     
     if (areDocsPending) {
       navigate('/kyc/document-verification');

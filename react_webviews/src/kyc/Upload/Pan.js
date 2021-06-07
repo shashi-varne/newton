@@ -27,15 +27,21 @@ const Pan = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const {kyc, isLoading, updateKyc} = useUserKycHook();
-  const areDocsPending = checkDocsPending(kyc);
+  const [areDocsPending, setDocsPendingStatus] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      if (isDigilockerFlow(kyc)) {
-        setDlFlow(true);
-      }
+      initialize();
     }
   }, [kyc]);
+
+  const initialize = async () => {
+    if (isDigilockerFlow(kyc)) {
+      setDlFlow(true);
+    }
+    const docStatus = await checkDocsPending(kyc);
+    setDocsPendingStatus(docStatus)
+  }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
     setFile(newFile);
