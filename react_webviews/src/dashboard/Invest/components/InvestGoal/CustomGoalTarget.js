@@ -44,7 +44,7 @@ const CustomGoalTarget = (props) => {
     let helperText = "";
     if(!investAmount) {
       helperText = 'This is required';
-    } else if (investAmount < 500) {
+    } else if (investAmount < funnelGoalData.min_sip_amount) {
       helperText = `Minimum amount should be atleast ${formatAmountInr(500)}`;
     }
     return helperText;

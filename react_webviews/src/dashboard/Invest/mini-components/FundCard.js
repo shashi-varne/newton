@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatAmountInr } from 'utils/validators';
 import RatingStar from '../../../fund_details/common/RatingStar';
 import { navigate as navigateFunc } from 'utils/functions';
@@ -32,6 +32,19 @@ const FundCard = ({
     mf: { mfname, rating, isin, amc_logo_small,mftype_name, mftype },
   } = fund;
   const navigate = navigateFunc.bind(parentProps);
+  const [fundTypeClassName, setFundTypeClassName] = useState("");
+  useEffect(() => {
+    setFundTypeClassName(
+      STOCKS_FUND_LIST.includes(mftype)
+        ? "recommendations-funds-stock"
+        : BOND_FUND_LIST.includes(mftype)
+        ? "recommendations-funds-bond"
+        : HYBRID_FUND_LIST.includes(mftype)
+        ? "recommendations-funds-hybrid"
+        : ""
+    );
+  }, [mftype]);
+
   const handleGraph = () => {
     if(!graph) {
       return;
@@ -54,20 +67,8 @@ const FundCard = ({
       <div className='recommendations-funds-item-info'>
         <div className='recommendations-funds-item-name'>{mfname}</div>
         <div className='recommendations-funds-item-status'>
-        <span
-            className={
-              STOCKS_FUND_LIST.includes(mftype)
-                ? "recommendations-funds-stock"
-                : BOND_FUND_LIST.includes(mftype)
-                ? "recommendations-funds-bond"
-                : HYBRID_FUND_LIST.includes(mftype)
-                ? "recommendations-funds-hybrid"
-                : ""
-            }
-          >
-            {mftype_name}
-          </span>
-          <span>{amount && formatAmountInr(amount)}</span>
+        <span className={fundTypeClassName}>{mftype_name}</span>
+        <span>{amount && formatAmountInr(amount)}</span>
         </div>
         <div className='recommendations-funds-item-rating'>
           <RatingStar value={rating} />
