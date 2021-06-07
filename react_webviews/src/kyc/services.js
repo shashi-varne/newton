@@ -292,19 +292,15 @@ export function getKycAppStatus(kyc) {
       status = 'incomplete';
     }
 
-  if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && !TRADING_ENABLED && kyc.sign_status !== 'signed') {
+  if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
   }
 
-  if (kyc.kyc_status !== 'compliant' && (kyc.equity_application_status === 'submitted' || kyc.equity_application_status === 'complete') && TRADING_ENABLED && kyc.equity_sign_status !== 'signed') {
+  if (TRADING_ENABLED && (kyc.equity_application_status !== 'submitted' || kyc.equity_application_status !== 'complete')) {
     status = 'incomplete';
   }
 
-  if (kyc.kyc_status === 'compliant' && TRADING_ENABLED && (kyc.equity_application_status !== 'submitted' || kyc.equity_application_status !== 'complete')) {
-    status = 'incomplete';
-  }
-
-  if (kyc.kyc_status === 'compliant' && TRADING_ENABLED && (kyc.equity_application_status === 'submitted' || kyc.equity_application_status === 'complete') && kyc.equity_sign_status !== "signed") {
+  if (TRADING_ENABLED && (kyc.equity_application_status === 'submitted' || kyc.equity_application_status === 'complete') && kyc.equity_sign_status !== "signed") {
     status = 'incomplete';
   }
 
