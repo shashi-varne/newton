@@ -22,7 +22,6 @@ import Otp from "../mini-components/Otp";
 import {
   getTotalPagesInPersonalDetails,
   isDigilockerFlow,
-  isKycCompleted,
 } from "../../common/functions";
 import WVButton from "../../../common/ui/Button/WVButton";
 
@@ -70,7 +69,7 @@ const CommunicationDetails = (props) => {
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
       setFormData({ ...data });
-      setIsKycDone(isKycCompleted(kyc));
+      setIsKycDone(kyc?.mf_kyc_processed);
       setIsDlFlow(isDigilockerFlow(kyc));
       setTotalPages(getTotalPagesInPersonalDetails());
     }
@@ -279,7 +278,7 @@ const CommunicationDetails = (props) => {
               autoFocus
               className="kcd-input-field"
               InputProps={{
-                inputMode:"numeric",
+                // inputMode:"numeric",
                 endAdornment: showOtpContainer && (
                   <InputAdornment position="end">
                     <div className="kcd-input-edit" onClick={handleEdit}>
@@ -287,6 +286,10 @@ const CommunicationDetails = (props) => {
                     </div>
                   </InputAdornment>
                 ),
+              }}
+              // eslint-disable-next-line
+              inputProps={{
+                inputMode: "numeric"
               }}
             />
           )}

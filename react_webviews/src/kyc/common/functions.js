@@ -187,8 +187,8 @@ export async function checkDocsPending(kyc = {}) {
   if (isEmpty(kyc)) return false;
   let pendingDocs = [];
 
-  const incompleteApplication = kyc.application_status_v2 !== "submitted" || kyc.application_status_v2 !== "complete" ||
-    kyc.equity_application_status !== "submitted" || kyc.equity_application_status !== "complete";
+  const incompleteApplication = (kyc.application_status_v2 !== "submitted" && kyc.application_status_v2 !== "complete") ||
+    (kyc.equity_application_status !== "submitted" && kyc.equity_application_status !== "complete");
 
   if (incompleteApplication) {
     pendingDocs = await pendingDocsList(kyc);
@@ -298,21 +298,6 @@ export const getFlow = (kycData) => {
   }
   return flow;
 }
-
-export const isKycCompleted = (kyc) => {
-  if (isEmpty(kyc)) return false;
-
-  if (kyc?.kyc_status === "compliant") {
-    return (kyc?.application_status_v2 === "submitted" ||
-    kyc?.application_status_v2 === "complete");
-  } else {
-    return (
-      (kyc?.application_status_v2 === "submitted" ||
-        kyc?.application_status_v2 === "complete") &&
-      kyc.sign_status === "signed"
-    );
-  }
-};
 
 export const isEquityApplSubmittedOrApproved = (kyc) => {
   if (isEmpty(kyc)) return false;

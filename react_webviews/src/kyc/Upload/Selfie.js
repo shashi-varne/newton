@@ -35,16 +35,30 @@ const Selfie = (props) => {
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const { kyc, isLoading, updateKyc } = useUserKycHook();
-  const TRADING_FLOW = TRADING_ENABLED && kyc.kyc_type !== "manual";
-  const [isCamLoading, setIsCamLoading] = useState(TRADING_FLOW);
-  const areDocsPending = checkDocsPending(kyc);
+  const [isTradingFlow, setIsTradingFlow] = useState();
+  const [isCamLoading, setIsCamLoading] = useState();
+  const [areDocsPending, setDocsPendingStatus] = useState();
   const navigate = navigateFunc.bind(props)
+
+  useEffect(() => {
+    if(!isEmpty(kyc)) {
+      initialize();
+    }
+  })
+
+  const initialize = async () => {
+    const TRADING_FLOW = TRADING_ENABLED && kyc.kyc_type !== "manual"
+    setIsTradingFlow(TRADING_FLOW);
+    setIsCamLoading(TRADING_FLOW);
+    const docStatus = await checkDocsPending(kyc);
+    setDocsPendingStatus(docStatus)
+  }
   
   const handleNavigation = () => {
     if (bottomSheetType === "failed") {
       setOpenBottomSheet(false)
     } else {
-      if (TRADING_FLOW) {
+      if (isTradingFlow) {
         if (!isDocSubmittedOrApproved("equity_income")) {
           navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
         } else {
@@ -67,7 +81,7 @@ const Selfie = (props) => {
     }     
     try { 
       let params = {};
-      if (TRADING_FLOW) {
+      if (isTradingFlow) {
         params = {
           lat: locationData?.lat,
           lng: locationData?.lng,
@@ -119,7 +133,7 @@ const Selfie = (props) => {
   }
 
   const onCaptureSuccess = async (result) => {
-    if (TRADING_FLOW) {
+    if (isTradingFlow) {
       setIsLiveCamOpen(false);
       if (result.imgBase64 && result['liveness-score']) {
         setFile(result.fileBlob);
@@ -208,7 +222,7 @@ const Selfie = (props) => {
               illustration={require(`assets/${productName}/selfie_placeholder.svg`)}
             />
             <KycUploadContainer.Button
-              onClick={TRADING_FLOW ? openLiveCamera : openWebcam} /* For SDK users, we currently do not use LiveCamera or Location */
+              onClick={isTradingFlow ? openLiveCamera : openWebcam} /* For SDK users, we currently do not use LiveCamera or Location */
               showLoader={isCamLoading}
             >
               {file ? "Retake" : "Open Camera"}
@@ -220,7 +234,7 @@ const Selfie = (props) => {
               Know More
             </WVClickableTextElement>
           </div>
-          {TRADING_FLOW ?
+          {isTradingFlow ?
             <>
               <WVLiveCamera
                 open={isLiveCamOpen}

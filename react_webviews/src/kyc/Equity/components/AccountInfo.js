@@ -4,12 +4,13 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
-import { isEmailOrMobileVerified, isKycCompleted } from "../../common/functions";
+import { isEmailOrMobileVerified } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
 
-const productName = getConfig().productName;
+const config = getConfig();
+const productName = config.productName;
 const BENEFITS = [
   {
     icon: "one_account.svg",
@@ -39,7 +40,7 @@ const AccountInfo = (props) => {
       Toast("Accept T&C to proceed");
       return;
     }
-    if (isKycCompleted(kyc)) {
+    if (kyc?.mf_kyc_processed) {
       if (!isEmailOrMobileVerified()) {
         navigate(PATHNAME_MAPPER.communicationDetails);
       } else {
@@ -117,8 +118,21 @@ const AccountInfo = (props) => {
             />
             <div className="kaim-terms-info">
               I agree to have read and understood the{" "}
-              <span>Terms & conditions</span> and{" "}
-              <span>Equity Annexure</span>{" "}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={config.termsLink}
+              >
+                Terms & conditions
+              </a>{" "}
+              and{" "}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={config.termsLink}
+              >
+                Equity Annexure
+              </a>{" "}
             </div>
           </div>
           <SecurityDisclaimer />

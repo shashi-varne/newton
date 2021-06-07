@@ -280,7 +280,7 @@ const KycUploadDocuments = (props) => {
           )}
         </main>
         {selectedDocValue && (
-          <div className="sample-document" data-aid='kyc-sample-document-text' onClick={handleSampleDocument}>
+          <div className="sample-document" data-aid='kyc-sample-document-text'>
             <WVClickableTextElement
                 color="secondary"
                 onClick={handleSampleDocument}

@@ -76,6 +76,7 @@ const LocationPermission = ({
   const locationCallbackSuccess = async (data) => {
     if (data.location_permission_denied) {
       setPermissionWarning(true);
+      setIsApiRunning(false);
     } else {
       try {
         setIsApiRunning(true);        

@@ -2,6 +2,7 @@ import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
+import { kycSubmit } from './common/api'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -410,7 +411,9 @@ export function isReadyToInvest() {
       (kycRTI.friendly_application_status === "submitted" &&
         kycRTI.bank.meta_data_status === "approved")
     ) {
-      return true;
+      if (!TRADING_ENABLED || (TRADING_ENABLED && kycRTI.equity_sign_status === "signed")) {
+        return true;
+      }
     } else if (userRTI.kyc_registration_v2 === "complete") {
       return true;
     } else if (kycRTI.provisional_action_status === "approved") {
@@ -432,4 +435,17 @@ export function isReadyToInvest() {
   }
 
   return false;
+}
+
+export async function setKycProductType(data) {
+  try {
+    const submitResult = await kycSubmit(data);
+    if (!submitResult) {
+      throw new Error("Something went wrong");
+    }
+    return true;
+  } catch (err) {
+    console.log(err.message);
+    toast(err.message || "Something went wrong");
+  } 
 }

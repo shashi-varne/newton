@@ -94,7 +94,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       },
       {
         key: 'digilocker',
-        title: 'Connect to digilocker',
+        title: 'Connect to DigiLocker',
         status: 'init',
         isEditAllowed: false,
         inputsForStatus: ['dl_docs_status'],
@@ -213,6 +213,10 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: ['esign'],
       },
     ]
+
+    if(!isCompliant && kyc?.address?.meta_data?.is_nri) {
+      journeyData[3].inputsForStatus.push('nri_address')
+    }
 
     if (
       isCompliant &&

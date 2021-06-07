@@ -94,6 +94,7 @@ const ManualSignature = (props) => {
       handleClick={handleCTAClick}
       data-aid='kyc-manual-signature-screen'
       skelton={isLoading}
+      disable={isApiRunning}
     >
       <section id="manual-signature" data-aid='manual-signature'>
         <div className="generic-page-subtitle manual-signature-subtile" data-aid='generic-page-subtitle'>

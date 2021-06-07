@@ -70,6 +70,7 @@
       font-size: 15px;
       line-height: 24px;
       margin-left: 10px;
+      font-weight: 500;
     }
 
     .subtitle {
@@ -101,7 +102,7 @@
   }
 
   .sub-title {
-    margin-top: -15px;
+    margin-top: -10px;
     font-size: 13px;
     line-height: 21px;
     margin-bottom: 20px;
@@ -183,13 +184,14 @@
     column-gap: 10px;
     color: var(--dark);
     font-weight: 500;
-    margin-top: -10px;
+    margin-bottom: 10px;
 
     .edit {
       color: var(--secondary);
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 700;
       cursor: pointer;
+      letter-spacing: 1px;
     }
   }
 
@@ -421,6 +423,7 @@
   font-size: 20px;
   line-height: 32px;
   color: var(--steelgrey);
+  margin-left: 10px;
 }
 
 .kyc-fno-income-proof {

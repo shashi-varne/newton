@@ -88,7 +88,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const goNext = async () => {
-    const areDocsPending = checkDocsPending(kyc);
+    const areDocsPending = await checkDocsPending(kyc);
     
     if (areDocsPending) {
       navigate('/kyc/document-verification');
@@ -108,15 +108,14 @@ const FnOIncomeProof = (props) => {
       hideHamburger
       handleClick={uploadAndGoNext}
       onSkipClick={goNext}
-      title="Provide income proof for FnO trading"
+      title="Provide income proof for F&O trading"
       buttonTitle="Upload"
       disable={!selectedFile}
       showLoader={isApiRunning}
       skelton={isLoading}
     >
       <WVInPageHeader style={{ marginBottom: '15px' }}>
-        <WVInPageTitle>Provide income proof for FnO trading</WVInPageTitle>
-        <span className="kyc-fno-header-optional-text"> (Optional)</span>
+        <WVInPageTitle>Provide income proof for F&O trading <span className="kyc-fno-header-optional-text"> (Optional)</span></WVInPageTitle>
       </WVInPageHeader>
       <WVInfoBubble>
         In case of multiple files/images, merge them into a single pdf to upload
