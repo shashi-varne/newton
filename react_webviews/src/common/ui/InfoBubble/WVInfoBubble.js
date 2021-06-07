@@ -18,15 +18,17 @@ Example syntax:
 import './WVInfoBubble.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { getConfig } from 'utils/functions';
+import { getConfig } from 'utils/functions';
 import Fade from '@material-ui/core/Fade';
 import SVG from 'react-inlinesvg';
 
+const config = getConfig();
+
 const TYPES = {
   'info': {
-    icon: 'badge-info',
-    iconColor: '#6650AB', // getConfig().styles.primaryColor
-    bgColor: '#E8E0FF',
+    icon: config.productName === 'finity' ? 'badge-info-finity' : 'badge-info',
+    iconColor: config.styles.primaryColor,
+    bgColor: config.styles.highlightColor,
     titleColor: '#6650AB',
     title: 'Note',
   },
