@@ -6,12 +6,12 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isEquityApplSubmittedOrComplete, updateQueryStringParameter } from "../common/functions";
+import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParameter } from "../common/functions";
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import KycBackModal from '../mini-components/KycBack'
-import { isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
+import { navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
@@ -61,7 +61,6 @@ const DL_HEADER_BOTTOM_DATA = HEADER_BOTTOM_DATA.reverse();
 
 const config = getConfig();
 const productName = config.productName
-const TRADING_ENABLED = isTradingEnabled();
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -105,9 +104,7 @@ const Journey = (props) => {
   }
 
   const openGoBackModal = () => {
-    const goBackCondition = (kyc?.application_status_v2 !== "submitted" && kyc?.application_status_v2 !== "complete") ||
-      (kyc?.equity_application_status !== "submitted" && kyc?.equity_application_status !== "complete") ||
-      (TRADING_ENABLED && isEquityApplSubmittedOrComplete(kyc) && kyc?.equity_sign_status !== "signed");
+    const goBackCondition = isIncompleteEquityApplication(kyc);
 
     if (goBackCondition) {
       setGoBackModal(true)
