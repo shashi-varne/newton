@@ -44,7 +44,7 @@ const Selfie = (props) => {
     if(!isEmpty(kyc)) {
       initialize();
     }
-  })
+  }, [kyc])
 
   const initialize = async () => {
     const docStatus = await checkDocsPending(kyc);
