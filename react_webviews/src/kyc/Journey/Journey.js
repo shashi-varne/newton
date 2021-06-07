@@ -10,7 +10,6 @@ import { isDigilockerFlow, isEquityApplSubmittedOrApproved, isKycCompleted, upda
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
-import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import { isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
@@ -69,7 +68,6 @@ const Journey = (props) => {
   const urlParams = getUrlParams(props?.location?.search)
   const stateParams = props?.location?.state;
   const [isApiRunning, setIsApiRunning] = useState(false)
-  const [aadhaarLinkDialog, setAadhaarLinkDialog] = useState(false)
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
@@ -763,13 +761,6 @@ const Journey = (props) => {
         onClose={() => setDlAadhaar(false)}
         redirect={cancel}
       />
-      {/* <AadhaarDialog
-        open={aadhaarLinkDialog}
-        onClose={() => {
-          setAadhaarLinkDialog(false)
-        }}
-        kyc={kyc}
-      /> */}
       <KycBackModal
         id="kyc-back-modal"
         open={goBackModal}
