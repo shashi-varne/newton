@@ -21,6 +21,7 @@ class Landing extends Component {
     super(props);
     this.state = {
       screen_name: 'landing_screen',
+      playing: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -30,9 +31,8 @@ class Landing extends Component {
   }
 
   handleClickFullscreen = () => {
-    this.setState({ video_clicked: 'yes' })
+    this.setState({ video_clicked: 'yes', playing: !this.state.playing })
     screenfull.request(findDOMNode(this.player));
-    this.setState({ playing: !this.state.playing });
   }
 
   ref = player => {
