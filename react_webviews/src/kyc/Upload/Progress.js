@@ -23,10 +23,12 @@ const Progress = (props) => {
   if (!isEmpty(kyc) && !isLoading) {
     documents = getDocuments(kyc);
     for (let document of documents) {
-      if (
-        document.doc_status === "submitted" ||
-        document.doc_status === "approved"
-      ) {
+      const notBankDocStatus = (document.key !== "bank" && (document.doc_status === "submitted" || document.doc_status === "approved"));
+      const bankDocStatus = (document.key === "bank" && (document.doc_status === "submitted" || document.doc_status === "approved") && 
+      (kyc.bank.meta_data.bank_status === "doc_submitted" || kyc.bank.meta_data.bank_status === "verified"));
+
+      const submittedOrApprovedCondition = notBankDocStatus || bankDocStatus;
+      if (submittedOrApprovedCondition) {
         totalDocs++;
       }
     }
@@ -36,7 +38,11 @@ const Progress = (props) => {
   const handleCards = (key, index) => {
     sendEvents("next", key)
     if (disableNext) return;
-    if (documents[index].doc_status === "approved") return;
+    const approvedCondition = (key !== "bank" && documents[index].doc_status === "approved") ||
+    (key === "bank" && documents[index].doc_status === "approved" &&
+    (kyc.bank.meta_data.bank_status === "doc_submitted" || kyc.bank.meta_data.bank_status === "verified"));
+
+    if (approvedCondition) return;
     const stateMapper = {
       pan: PATHNAME_MAPPER.uploadPan,
       address: PATHNAME_MAPPER.uploadAddress,
@@ -107,7 +113,9 @@ const Progress = (props) => {
           {documents.map((document, index) => (
             <div key={index} className="document" data-aid={`kyc-document-${index+1}`}>
               <UploadCard
+                kyc={kyc}
                 default_image={document.default_image}
+                docKey={document.key}
                 title={document.title}
                 subtitle={document.subtitle}
                 doc_status={document.doc_status}
