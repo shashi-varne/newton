@@ -260,7 +260,11 @@ export function getKycAppStatus(kyc) {
     result.status = status;
     return result;
   } else {
-    status = kyc.application_status_v2;
+    if (!TRADING_ENABLED) {
+      status = kyc.application_status_v2;
+    } else {
+      status = kyc.equity_application_status;
+    }
   }
 
   if (!kyc.pan.meta_data.pan_number || (kyc.pan.meta_data.pan_number &&
