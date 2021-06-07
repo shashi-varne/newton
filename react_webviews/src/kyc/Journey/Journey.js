@@ -548,7 +548,7 @@ const Journey = (props) => {
       : "default";
     var headerData = HEADER_MAPPER_DATA[headerKey];
     if(isCompliant) {
-      if (journeyStatus === "ground_premium" || journeyStatus === "incomplete") {
+      if (journeyStatus === "ground_premium") {
         headerData.title = "You’re eligible for premium onboarding!";
       }
       if (kyc.address.meta_data.is_nri) {
