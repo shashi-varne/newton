@@ -39,7 +39,7 @@ const KnowMore = ({ isOpen, close }) => {
           </div>
           <div className="content">
             <div className="text" data-aid='kyc-content-step-2'>
-              <b>Step 2 - </b> Say your Name and stop recording video
+              <b>Step 2 - </b> Say the verification code and stop recording
             </div>
             <img
               alt="start-recording"
