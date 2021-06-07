@@ -22,7 +22,6 @@ import Otp from "../mini-components/Otp";
 import {
   getTotalPagesInPersonalDetails,
   isDigilockerFlow,
-  isKycCompleted,
 } from "../../common/functions";
 import WVButton from "../../../common/ui/Button/WVButton";
 
@@ -70,7 +69,7 @@ const CommunicationDetails = (props) => {
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
       setFormData({ ...data });
-      setIsKycDone(isKycCompleted(kyc));
+      setIsKycDone(kyc?.mf_kyc_processed);
       setIsDlFlow(isDigilockerFlow(kyc));
       setTotalPages(getTotalPagesInPersonalDetails());
     }

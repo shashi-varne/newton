@@ -6,7 +6,7 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isEquityApplSubmittedOrApproved, isKycCompleted, updateQueryStringParameter } from "../common/functions";
+import { isDigilockerFlow, updateQueryStringParameter } from "../common/functions";
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
