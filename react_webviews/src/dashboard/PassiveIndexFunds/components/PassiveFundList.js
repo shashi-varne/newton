@@ -95,19 +95,16 @@ class FundList extends Component {
         });
     }
 
-    yearFilter = (time) => {
+    yearFilter = async (time) => {
         let body = this.state.body || {};
         const SelectedYear = SELECTED_YEAR[time] || "five_year_return";
-        this.setState({
-            selected: SelectedYear,
-            yearValue: time,
-        });
         body["return_type"] = SelectedYear;
 
-        this.getFundDetailsList(body);
+        const { result, fundDescription } = await this.getFundDetailsList(body);
+        this.setState({ result, fundDescription, selected: SelectedYear, yearValue: time, })
     }
 
-    setSortFilter = (item) => {
+    setSortFilter = async (item) => {
 
         let body = {
             "filter_by": item["Sort by"] || "returns",
@@ -126,9 +123,9 @@ class FundList extends Component {
             body["dividend"] = "true"
         }
 
-        this.setState({ body });
 
-        this.getFundDetailsList(body)
+        const { result, fundDescription } = await this.getFundDetailsList(body);
+        this.setState({ result, fundDescription, body })
     }
 
     sendEvents = (userAction, fundSelected) => {
@@ -178,7 +175,7 @@ class FundList extends Component {
                             </span>
                         </p>
                     )}
-                    <p className="fund-number">{result?.length} FUNDS</p>
+                    <p className="fund-number">{result?.length || 0} FUNDS</p>
                     <YearFilter
                         filterArray={YEARS_FILTERS}
                         selected={this.state.yearValue || "1Y"}
@@ -192,7 +189,7 @@ class FundList extends Component {
                                     <GenericListCard
                                         data={item}
                                         morning_star_rating={item?.morning_star_rating}
-                                        starclassName={item?.morning_star_rating ?  "" :  "star-icon-na" }
+                                        starclassName={item?.morning_star_rating ? "" : "star-icon-na"}
                                         title={item["legal_name"]}
                                         subtitle={item["tracking_index"]}
                                         image={item.amc_logo_big}
@@ -200,7 +197,7 @@ class FundList extends Component {
                                             [{ 'title1': 'EXPENSE RATIO', 'title2': 'RETURNS' },
                                             {
                                                 'title1': item["expense_ratio"], 'className1': 'return', "tag1": "%",
-                                                'title2': item[this.state.selected], 'className2':    item[this.state.selected] >= 0 ? 'return color-green' : 'return color-red', "tag2": item[this.state.selected] ? `%` : 'NA',
+                                                'title2': item[this.state.selected], 'className2': item[this.state.selected] >= 0 ? 'return color-green' : 'return color-red', "tag2": item[this.state.selected] ? `%` : 'NA',
                                             },
                                             { 'title1': 'TRACKING ERROR' },
                                             { 'title1': item["tracking_error"] || "NA", 'className1': 'return', "tag1": item["tracking_error"] ? `% [${this.state.yearValue}]` : '' }]
