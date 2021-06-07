@@ -6,7 +6,7 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, updateQueryStringParameter } from "../common/functions";
+import { isDigilockerFlow, isEquityApplSubmittedOrComplete, updateQueryStringParameter } from "../common/functions";
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -105,8 +105,11 @@ const Journey = (props) => {
   }
 
   const openGoBackModal = () => {
-    if ((kyc?.application_status_v2 !== "submitted" && kyc?.application_status_v2 !== "complete") ||
-      (kyc?.equity_application_status !== "submitted" && kyc?.equity_application_status !== "complete")) {
+    const goBackCondition = (kyc?.application_status_v2 !== "submitted" && kyc?.application_status_v2 !== "complete") ||
+      (kyc?.equity_application_status !== "submitted" && kyc?.equity_application_status !== "complete") ||
+      (TRADING_ENABLED && isEquityApplSubmittedOrComplete(kyc) && kyc?.equity_sign_status !== "signed");
+
+    if (goBackCondition) {
       setGoBackModal(true)
     } else {
       backHandlingCondition();
