@@ -162,6 +162,7 @@ const NriAddressDetails1 = (props) => {
             onChange={handleChange("mobile_number")}
             type="text"
             disabled={isApiRunning}
+            inputMode="numeric"
           />
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

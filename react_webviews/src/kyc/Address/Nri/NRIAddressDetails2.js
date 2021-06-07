@@ -110,7 +110,7 @@ const NRIAddressDetails2 = (props) => {
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    if (name === "nri_pincode" && !validateNumber(value)) return;
+    if (value && name === "nri_pincode" && !validateNumber(value)) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value) {
@@ -204,6 +204,9 @@ const NRIAddressDetails2 = (props) => {
             margin="normal"
             helperText={form_data.nri_pincode_error || ""}
             error={form_data.nri_pincode_error ? true : false}
+            inputProps={{
+              inputMode="numeric"
+            }}
           />
           <TextField
             label="Address"
