@@ -51,12 +51,12 @@ const DocumentVerification = (props) => {
             Once the below documents are verified by us, you can complete eSign
             to start investing
           </div>
-          {docs.length && docs.map((docObj) => (
+          {docs.length ? docs.map((docObj) => (
             <Fragment key={docObj.title}>
               <div className="kdvm-title">{docObj.title}</div>
               <div className="kdvm-subtitle">{docObj.doc || "No doc submitted"}</div>
             </Fragment>
-          ))}
+          )) : ""}
           <WVJourneyShortening
             title="Next step"
             stepName="Complete esign"
