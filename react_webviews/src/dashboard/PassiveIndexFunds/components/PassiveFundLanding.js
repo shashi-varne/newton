@@ -71,7 +71,7 @@ class Landing extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        classHeader="header-color-blue"
+        classHeader="passive-index-header-color"
         customBackButtonColor="white"
         noPadding
       >
@@ -98,6 +98,11 @@ class Landing extends Component {
                     alt=""
                   />
                 }
+                config={{
+                  youtube: {
+                    playerVars: { modestbranding: 1, rel: 0, fs: 1 }
+                  }
+                }}
               />
             </div>
             <VideoBlockImageSection />

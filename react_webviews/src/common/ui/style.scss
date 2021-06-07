@@ -1592,16 +1592,21 @@ padding-right: 12px !important;
       font-size: 13px;
       margin-top: -14px;
     }
-    .color{
+    .color-green{
       color: #7ED321 !important;
       font-weight: 700;
 
     }
-    .amc-logo-small{
-     width: 50px;
-     height: 50px;
-}
+    .color-red{
+      color: #D0021B !important;
+      font-weight: 700;
+    }
+
+      .amc-logo-small{
+      width: 50px;
+      height: 50px;
   }
+}
 
 
 .fundlist-data {
@@ -1617,23 +1622,23 @@ padding-right: 12px !important;
   cursor: pointer;
   margin: 0 auto;
 
-.text-block {
-  width: 36px;
-  height: 24px;
-  background-color: #F0F7FF;
-  color: var(--steelgrey);
-  padding-top: 4px;
-  border-radius: 4px;
-}
+  .text-block {
+    width: 36px;
+    height: 24px;
+    background-color: #F0F7FF;
+    color: var(--steelgrey);
+    padding-top: 4px;
+    border-radius: 4px;
+  }
 
-.selected {
+  .selected {
   color: white !important;
   background-color: var(--primary) !important;
-}
-
-p {
-  text-align: center !important;
   }
+
+  p {
+    text-align: center !important;
+   }
 
 }
 

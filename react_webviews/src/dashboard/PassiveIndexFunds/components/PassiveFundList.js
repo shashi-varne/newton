@@ -199,10 +199,10 @@ class FundList extends Component {
                                             [{ 'title1': 'EXPENSE RATIO', 'title2': 'RETURNS' },
                                             {
                                                 'title1': item["expense_ratio"], 'className1': 'return', "tag1": "%",
-                                                'title2': item[this.state.selected], 'className2': 'return color', "tag2": item[this.state.selected] ? `%` : 'Na',
+                                                'title2': item[this.state.selected], 'className2':    item[this.state.selected] >= 0 ? 'return color-green' : 'return color-red', "tag2": item[this.state.selected] ? `%` : 'NA',
                                             },
                                             { 'title1': 'TRACKING ERROR' },
-                                            { 'title1': item["tracking_error"] || "Na", 'className1': 'return', "tag1": item["tracking_error"] ? `% [${this.state.yearValue}]` : '' }]
+                                            { 'title1': item["tracking_error"] || "NA", 'className1': 'return', "tag1": item["tracking_error"] ? `% [${this.state.yearValue}]` : '' }]
                                         }
                                         key={index}
                                         handleClick={() => this.clickCard(item)}
