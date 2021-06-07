@@ -2,6 +2,9 @@ import React from 'react'
 import StarIcon from "@material-ui/icons/Star";
 
 function StarRating({value}) {
+  if(!value){
+    return 'NA'
+  }
     return (
         <>
            {[...Array(5)].map(

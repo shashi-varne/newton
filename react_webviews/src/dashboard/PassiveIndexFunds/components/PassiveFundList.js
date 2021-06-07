@@ -192,6 +192,7 @@ class FundList extends Component {
                                     <GenericListCard
                                         data={item}
                                         morning_star_rating={item?.morning_star_rating}
+                                        starclassName={item?.morning_star_rating ?  "" :  "star-icon-na" }
                                         title={item["legal_name"]}
                                         subtitle={item["tracking_index"]}
                                         image={item.amc_logo_big}
