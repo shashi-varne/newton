@@ -78,6 +78,7 @@ const LocationPermission = ({
       setPermissionWarning(true);
       setIsApiRunning(false);
     } else {
+      setPermissionWarning(false);
       try {
         setIsApiRunning(true);        
         const geocoderService = new window.google.maps.Geocoder();

@@ -4,7 +4,9 @@ import { getConfig } from '../../../utils/functions';
 import DotDotLoaderNew from '../DotDotLoaderNew';
 import { disableBodyTouch } from '../../../utils/validators';
 
-const WVButton = ({ showLoader, children, dataAidSuffix, ...props }) => {
+const noop = () => {};
+
+const WVButton = ({ showLoader, children, dataAidSuffix, onClick, ...props }) => {
   if (showLoader) {
     disableBodyTouch(); //disable touch
   } else {
@@ -12,7 +14,11 @@ const WVButton = ({ showLoader, children, dataAidSuffix, ...props }) => {
   }
 
   return (
-    <Button {...props} data-aid={`wv-button-${dataAidSuffix}`}>
+    <Button
+      {...props}
+      onClick={showLoader ? noop : onClick}
+      data-aid={`wv-button-${dataAidSuffix}`}
+    >
       {showLoader ?
         <DotDotLoaderNew
           styleBounce={{
