@@ -177,7 +177,7 @@ const Journey = (props) => {
             }
 
             if (data === 'bank' && ((kyc[data].meta_data_status === 'init' || kyc[data].meta_data_status === 'rejected') ||
-              (kyc[data].meta_data_status === 'approved' && kyc[data].meta_data.bank_status !== 'verified'))) { // this condition covers users who are not penny verified
+              (kyc[data].meta_data_status === 'approved' && kyc[data].meta_data.bank_status === 'submited'))) { // this condition covers users who are not penny verified
               status = 'init'
               break
             }

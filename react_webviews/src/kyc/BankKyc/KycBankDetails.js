@@ -220,7 +220,8 @@ const KycBankDetails = (props) => {
         },
       });
       if (!result) return;
-      if (result.kyc.bank.meta_data_status === "approved") {
+      if (result.kyc.bank.meta_data_status === "approved" &&
+        (result.kyc.bank.meta_data.bank_status === "doc_submitted" || result.kyc.bank.meta_data.bank_status === "verified")) {
         handleNavigation();
       } else {
         navigate(`/kyc/${userType}/bank-verify`);
