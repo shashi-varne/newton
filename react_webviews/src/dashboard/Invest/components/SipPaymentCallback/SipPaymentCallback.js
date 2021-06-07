@@ -48,7 +48,7 @@ const SipPaymentCallback = (props) => {
   let paymentError = false;
   if (status === "error" || status === "failed") {
     paymentError = true;
-    if (!message)
+    if (!message || message === "None")
       message = "Something went wrong, please retry with correct details";
   }
 
@@ -118,16 +118,8 @@ const SipPaymentCallback = (props) => {
             target.section === "in_flow"
           ) {
             let auto_debit_campaign_url = target.url;
-            auto_debit_campaign_url +=
-              // eslint-disable-next-line
-              (auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?") +
-              "generic_callback=true&plutus_redirect_url=" +
-              encodeURIComponent(
-                basePath +
-                  "/" +
-                  "?is_secure=" +
-                  storageService().get("is_secure")
-              );
+            // eslint-disable-next-line
+            auto_debit_campaign_url = `${auto_debit_campaign_url}${auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}`)}`
             window.location.href = auto_debit_campaign_url;
           } else if (
             campaign.campaign.name !== "auto_debit_campaign" ||
@@ -135,18 +127,8 @@ const SipPaymentCallback = (props) => {
             campaign.campaign.name !== "indb_mandate_campaign"
           ) {
             let url = campaign.notification_visual_data.target[0].url;
-            url +=
-              // eslint-disable-next-line
-              (url.match(/[\?]/g) ? "&" : "?") +
-              "generic_callback=true&plutus_redirect_url=" +
-              encodeURIComponent(
-                basePath +
-                  "/" +
-                  "?base_url=" +
-                  config.base_url +
-                  "&is_secure=" +
-                  storageService().get("is_secure")
-              );
+            // eslint-disable-next-line
+            url = `${url}${url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}`)}`
             window.location.href = url;
           }
         });

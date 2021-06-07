@@ -13,8 +13,10 @@ import {
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
+import { getBasePath } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
+const config = getConfig();
 export async function initialize() {
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
@@ -603,11 +605,13 @@ export function handleCampaignNotification () {
     const target = data?.notification_visual_data?.target;
     if (target?.length >= 1) {
       // eslint-disable-next-line no-unused-expressions
-      target.forEach((el, idx) => {
+      target.some((el, idx) => {
         if (el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
           acc = el;
           acc.campaign_name = data?.campaign?.name;
+          return true;
         }
+        return false;
       });
     }
     return acc;
@@ -621,8 +625,8 @@ export function handleCampaignNotification () {
 
 export function handleCampaignRedirection (url) {
   let campLink = url;
+  // Adding redirect url for testing
   // eslint-disable-next-line
-  campLink += (campLink.match(/[\?]/g) ? "&" : "?") +
-  "generic_callback=true";
+  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}`)}`
   window.location.href = campLink;
 }
