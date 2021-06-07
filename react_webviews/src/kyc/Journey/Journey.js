@@ -555,6 +555,9 @@ const Journey = (props) => {
           "You are investment ready, just share few details to start investing";
       }
     }
+    if(headerKey === "default" && show_aadhaar && !kyc.address.meta_data.is_nri) {
+      headerData.icon = "icn_aadhaar_kyc"
+    }
     if (
       kycJourneyData[1]?.key === "digilocker" &&
       kycJourneyData[1]?.status === "init"
