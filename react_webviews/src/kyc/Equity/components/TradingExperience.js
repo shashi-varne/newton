@@ -35,14 +35,20 @@ const TradingExperience = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
-  const areDocsPending = checkDocsPending(kyc);
+  const [areDocsPending, setDocStatus] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      setExperience(kyc?.equity_data?.meta_data?.trading_experience || "0-1");
-      setOldState(kyc?.equity_data?.meta_data?.trading_experience || "")
+      initialize();
     }
   }, [kyc]);
+
+  const initialize = async () => {
+    setExperience(kyc?.equity_data?.meta_data?.trading_experience || "0-1");
+    setOldState(kyc?.equity_data?.meta_data?.trading_experience || "")
+    const docStatus = await checkDocsPending(kyc);
+    setDocStatus(docStatus)
+  }
 
   const handleClick = () => {
     if (oldState === experience) {
