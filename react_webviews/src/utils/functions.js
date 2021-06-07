@@ -167,12 +167,12 @@ export const getConfig = () => {
       base_url_default = 'https://api.mywaywealth.com';
     }
 
+    // change server url here
+    if (isStaging || isLocal) {
+      base_url_default = "https://anandb-dot-plutus-staging.appspot.com";
+    }
   }
   
-  // change server url here
-  if (isStaging || isLocal) {
-    base_url = "https://anandb-dot-plutus-staging.appspot.com";
-  }
 
   if(base_url_default) {
     base_url = base_url_default;
