@@ -23,6 +23,7 @@ import { getConfig, isTradingEnabled, navigate as navigateFunc } from "utils/fun
 import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { nativeCallback } from "../../utils/native_callback";
+import PennyFailedDialog from "../mini-components/PennyFailedDialog";
 
 const config = getConfig();
 
@@ -59,6 +60,7 @@ const KycBankDetails = (props) => {
   });
   const [dl_flow, setDlFlow] = useState(false);
   const [ifscDisabled, setIfscDisabled] = useState(false);
+  const [isPennyFailed, setIsPennyFailed] = useState(false);
   const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
@@ -117,6 +119,7 @@ const KycBankDetails = (props) => {
   };
 
   const uploadDocuments = () => {
+    sendEvents("upload documents", "bottom_sheet");
     navigate(`/kyc/${kyc.kyc_status}/upload-documents`);
   };
 
@@ -221,7 +224,12 @@ const KycBankDetails = (props) => {
         navigate(`/kyc/${userType}/bank-verify`);
       }
     } catch (err) {
-      toast(err.message || genericErrorMessage);
+      if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
+        (kyc?.bank.meta_data_status === "rejected" && kyc?.bank.meta_data.bank_status === "rejected")) {
+          setIsPennyFailed(true);
+      } else {
+        toast(err.message || genericErrorMessage);
+      }
     } finally {
       setIsApiRunning(false);
     }
@@ -298,12 +306,17 @@ const KycBankDetails = (props) => {
     return { bankData: bank, formData: formData, bankIcon: bankIcon };
   };
 
-  const sendEvents = (userAction) => {
+  const checkBankDetails = () => {
+    sendEvents("check bank details", "bottom_sheet");
+    setIsPennyFailed(false);
+  };
+
+  const sendEvents = (userAction, screen_name) => {
     let eventObj = {
       "event_name": 'KYC_registration',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "bank_details",
+        "screen_name": screen_name || "bank_details",
         "account_number": bankData.account_number ? "yes" : "no",
         "c_account_number": bankData.c_account_number ? "yes" : "no",
         "ifsc_code": form_data.ifsc_code_error ? "invalid" : bankData.ifsc_code ? "yes" : "no",
@@ -439,6 +452,13 @@ const KycBankDetails = (props) => {
             isOpen= {isPennyExhausted}
             redirect={redirect}
             uploadDocuments={uploadDocuments}
+          />
+        )}
+        {isPennyFailed && (
+          <PennyFailedDialog
+          isOpen={isPennyFailed}
+          uploadDocuments={uploadDocuments}
+          checkBankDetails={checkBankDetails}
           />
         )}
       </div>

@@ -11,10 +11,9 @@ import {
   premiumBottomSheetMapper,
   sdkInvestCardMapper
 } from "./constants";
-import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
+import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
-import { isKycCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -553,7 +552,7 @@ export function openKyc() {
   }
 }
 
-export function openStocks() {
+export async function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
   storageService().set("kycStartPoint", "stocks");
   
@@ -574,8 +573,15 @@ export function openStocks() {
             fromState: "invest",
           },
         });
-      } else if (isKycCompleted(userKyc)) {
-        this.navigate(PATHNAME_MAPPER.accountInfo)
+      } else if (userKyc?.kyc_product_type !== "equity") {
+        const payload = {
+          "kyc":{},
+          "set_kyc_product_type": "equity"
+        }
+        const isProductTypeSet = await setKycProductType(payload);
+        if (isProductTypeSet) {
+          this.navigate(PATHNAME_MAPPER.accountInfo)
+        }
       } else {
         this.navigate(kycStatusData.next_state, {
           state: { fromState: "invest" },
