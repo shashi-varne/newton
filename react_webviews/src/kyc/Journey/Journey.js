@@ -105,7 +105,8 @@ const Journey = (props) => {
   }
 
   const openGoBackModal = () => {
-    if (user?.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete") {
+    if ((kyc?.application_status_v2 !== "submitted" && kyc?.application_status_v2 !== "complete") ||
+      (kyc?.equity_application_status !== "submitted" && kyc?.equity_application_status !== "complete")) {
       setGoBackModal(true)
     } else {
       backHandlingCondition();
