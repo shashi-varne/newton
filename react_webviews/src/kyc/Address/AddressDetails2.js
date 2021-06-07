@@ -224,7 +224,7 @@ const AddressDetails2 = (props) => {
             helperText={form_data.pincode_error || ""}
             error={form_data.pincode_error ? true : false}
             inputProps={{
-              inputMode="numeric"
+              inputMode:"numeric"
             }}
           /> 
           <TextField

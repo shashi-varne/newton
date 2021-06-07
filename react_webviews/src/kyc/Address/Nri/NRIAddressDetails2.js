@@ -205,7 +205,7 @@ const NRIAddressDetails2 = (props) => {
             helperText={form_data.nri_pincode_error || ""}
             error={form_data.nri_pincode_error ? true : false}
             inputProps={{
-              inputMode="numeric"
+              inputMode: "numeric"
             }}
           />
           <TextField
