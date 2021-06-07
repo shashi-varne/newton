@@ -279,7 +279,7 @@ const CommunicationDetails = (props) => {
               autoFocus
               className="kcd-input-field"
               InputProps={{
-                inputMode:"numeric",
+                // inputMode:"numeric",
                 endAdornment: showOtpContainer && (
                   <InputAdornment position="end">
                     <div className="kcd-input-edit" onClick={handleEdit}>
@@ -287,6 +287,10 @@ const CommunicationDetails = (props) => {
                     </div>
                   </InputAdornment>
                 ),
+              }}
+              // eslint-disable-next-line
+              inputProps={{
+                inputMode: "numeric"
               }}
             />
           )}

@@ -398,7 +398,7 @@ const KycBankDetails = (props) => {
                 maxLength={16}
                 type="text"
                 InputProps={{
-                  inputMode:"numeric",
+                  // inputMode:"numeric",
                   endAdornment: (
                     <>
                       {bankData.account_number && bankData.account_number === bankData.c_account_number && (
@@ -408,6 +408,10 @@ const KycBankDetails = (props) => {
                       )}
                     </>
                   ),
+                }}
+                // eslint-disable-next-line
+                inputProps={{
+                  inputMode: "numeric"
                 }}
                 disabled={
                   isApiRunning || disableFields.c_account_number_disabled
