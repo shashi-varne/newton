@@ -14,7 +14,7 @@ import {
 import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
-import { isEquityCompleted } from "../../kyc/common/functions";
+import { isEquityCompleted, isKycCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -559,7 +559,7 @@ export async function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
   storageService().set("kycStartPoint", "stocks");
   
-  if (userKyc?.address?.meta_data?.is_nri) {
+  if (userKyc?.address?.meta_data?.is_nri && isKycCompleted(userKyc)) {
     this.navigate(PATHNAME_MAPPER.nriError, {
       state: {originState: "invest"}
     });
