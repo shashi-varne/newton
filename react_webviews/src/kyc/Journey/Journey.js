@@ -280,8 +280,7 @@ const Journey = (props) => {
       ) {
         topTitle = 'Investment pending'
         investmentPending = true
-      } else if (isCompliant) {
-        // || isKycDone) {
+      } else if (isCompliant || isKycDone) {
         topTitle = `What's next?`
       } else if (show_aadhaar) {
         topTitle = 'Steps to follow:'
@@ -533,13 +532,12 @@ const Journey = (props) => {
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
     // var customerVerified = journeyStatus === 'ground_premium' ? false : true
-    // Todo: uncomment isKycDone check when handling existing user (when we get landing screen conditions)
-    // var isKycDone = TRADING_ENABLED && isKycCompleted(kyc) && !isEquityApplSubmittedOrApproved(kyc);
+    var isKycDone = kyc?.mf_kyc_processed;
     var kycJourneyData = initJourneyData() || []
     var headerKey = 
-      // isKycDone
-      // ? "kycDone"
-      // : 
+      isKycDone
+      ? "kycDone"
+      : 
       isCompliant
       ? "compliant"
       : dlCondition
@@ -661,8 +659,7 @@ const Journey = (props) => {
             <div className="left">
               <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
               <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
-              {!show_aadhaar && isCompliant &&
-              // (isCompliant || isKycDone ) &&
+              {!show_aadhaar && isCompliant && (isCompliant || isKycDone) &&
               (
                 <FastAndSecureDisclaimer options={HEADER_BOTTOM_DATA} />
               )}
@@ -672,8 +669,7 @@ const Journey = (props) => {
               alt=""
             />
           </div>
-          {show_aadhaar && !isCompliant && 
-          // !isKycDone && 
+          {show_aadhaar && !isCompliant && !isKycDone && 
           (
             <FastAndSecureDisclaimer alignInRow options={DL_HEADER_BOTTOM_DATA} />
           )}

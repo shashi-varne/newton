@@ -2,6 +2,7 @@ import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
+import { kycSubmit } from './common/api'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -434,4 +435,17 @@ export function isReadyToInvest() {
   }
 
   return false;
+}
+
+export async function setKycProductType(data) {
+  try {
+    const submitResult = await kycSubmit(data);
+    if (!submitResult) {
+      throw new Error("Something went wrong");
+    }
+    return true;
+  } catch (err) {
+    console.log(err.message);
+    toast(err.message || "Something went wrong");
+  } 
 }
