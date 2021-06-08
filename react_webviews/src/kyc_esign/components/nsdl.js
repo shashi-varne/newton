@@ -10,7 +10,7 @@ import toast from "../../common/ui/Toast";
 import Api from "../../utils/api";
 import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
-import { isEmpty } from "../../utils/validators";
+import { isEmpty } from "lodash";
 import { isDigilockerFlow } from "../../kyc/common/functions";
 import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
 
@@ -150,8 +150,8 @@ class DigiStatus extends Component {
   };
 
   sendEvents = (userAction, screenName) => {
-    const kyc = storageService().getObject("kyc");
-    const user = storageService().getObject("user");
+    const kyc = storageService().getObject("kyc") || {};
+    const user = storageService().getObject("user") || {};
     let dl_flow = false;
     if (!isEmpty(kyc) && !isEmpty(user)) {
       if (
