@@ -39,13 +39,14 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         {(dl_flow || kyc?.kyc_status === "compliant") && !show_note && (
           <div className="title" data-aid='kyc-header-title'>KYC complete!</div>
         )}
-        {show_note && (
+        {!TRADING_ENABLED && kyc?.kyc_status === "compliant" && show_note && (
           <div className="title" data-aid='kyc-header-title'>Great! Your KYC application is submitted!</div>
         )}
-        {(!dl_flow && !show_note) && (
-          <div className="title" data-aid='kyc-header-title'>Kudos! KYC application is submitted!</div>
+        {(kyc?.kyc_status !== 'compliant' && !dl_flow && !show_note) && (
+          <div className="title" data-aid='kyc-header-title'>
+            Kudos! KYC application is submitted!</div>
         )}
-        {!dl_flow && (
+        {kyc?.kyc_status !== 'compliant' && !dl_flow && (
           <div className="text" data-aid='kyc-header-text'>
             <img src={require(`assets/eta_icon.svg`)} alt="" />
             Approves in one working day
