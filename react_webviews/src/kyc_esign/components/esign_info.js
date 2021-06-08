@@ -11,8 +11,6 @@ import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import { isDigilockerFlow } from '../../kyc/common/functions';
 
 const config = getConfig();
-const TRADING_ENABLED = isTradingEnabled();
-
 class ESignInfo extends Component {
   constructor(props) {
     super(props);
@@ -38,7 +36,8 @@ class ESignInfo extends Component {
       if (isDigilockerFlow(kyc)) {
         dl_flow = true;
       }
-      this.setState({ dl_flow, kyc });
+      const tradingFlow = isTradingEnabled(kyc);
+      this.setState({ dl_flow, kyc, tradingFlow });
     }
   };
 
@@ -73,7 +72,7 @@ class ESignInfo extends Component {
 
     try {
       const params = {};
-      if (TRADING_ENABLED) {
+      if (this.state.tradingFlow) {
         params.kyc_product_type = "equity";
       }
       const url = `/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`;
@@ -123,7 +122,7 @@ class ESignInfo extends Component {
   }
 
   goNext = () => {
-    if(!TRADING_ENABLED) {
+    if(!this.state.tradingFlow) {
       this.handleClick()
     } else {
       this.setState({ showAadharDialog: true })

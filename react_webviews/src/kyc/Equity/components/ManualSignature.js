@@ -9,10 +9,13 @@ import ContactUs from "../../../common/components/contact_us";
 import { companyDetails } from "../../constants";
 import { getKRAForm } from "../../common/api"
 import "./commonStyles.scss";
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 
+const config = getConfig();
 const ManualSignature = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const {kyc, isLoading} = useUserKycHook();
+  const navigate = navigateFunc.bind(props)
 
   const renderStep1Content = useCallback(() => {
     return (
@@ -78,7 +81,11 @@ const ManualSignature = (props) => {
   }
 
   const handleCTAClick = () => {
-    nativeCallback({ action: "exit" })
+    if(config.Web) {
+      navigate("/");
+    } else {
+      nativeCallback({ action: "exit_web" })
+    }
   }
 
   const stepsToRender = [

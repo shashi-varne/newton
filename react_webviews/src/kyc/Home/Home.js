@@ -6,7 +6,7 @@ import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
@@ -24,8 +24,7 @@ const residentialStatusOptions = [
   },
 ];
 
-const TRADING_ENABLED = isTradingEnabled();
-
+const config = getConfig();
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -45,7 +44,11 @@ const Home = (props) => {
   const [openCheckCompliant, setOpenCheckCompliant] = useState(false);
   const [residentialStatus, setResidentialStatus] = useState(true);
   const [userName, setUserName] = useState("");
-  const config = getConfig();
+  const [tradingEnabled, setTradingEnabled] = useState()
+
+  const isTradingEnabled = (isIndian) => {
+    return !config.isSdk && isIndian
+  }
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -54,6 +57,7 @@ const Home = (props) => {
   const initialize = () => {
     setPan(kyc.pan?.meta_data?.pan_number || "");
     setResidentialStatus(!kyc.address?.meta_data?.is_nri);
+    setTradingEnabled(isTradingEnabled(!kyc.address?.meta_data?.is_nri));
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
@@ -130,7 +134,7 @@ const Home = (props) => {
       }
     };
 
-    if(TRADING_ENABLED) {
+    if(tradingEnabled) {
       body.kyc_product_type = "equity"
     };
 
@@ -167,6 +171,7 @@ const Home = (props) => {
 
   const handleResidentialStatus = (event) => {
     let value = event.target ? event.target.value : event;
+    setTradingEnabled(isTradingEnabled(value !== 1))
     setResidentialStatus(residentialStatusOptions[value].value);
   };
 
@@ -244,7 +249,7 @@ const Home = (props) => {
         },
       };
 
-      if(TRADING_ENABLED) {
+      if(tradingEnabled) {
         body.set_kyc_product_type = "equity";
       }
 
@@ -275,7 +280,7 @@ const Home = (props) => {
       const kycProductType = storageService().get("kycStartPoint");
       if (isUserCompliant || kyc_status === "compliant") {
         if (is_nri) {
-          if (!TRADING_ENABLED && kycProductType === "stocks") {
+          if (!tradingEnabled && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
           } else {
             navigate(PATHNAME_MAPPER.journey);
@@ -287,7 +292,7 @@ const Home = (props) => {
       } else {
         sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
         if (is_nri) {
-          if (!TRADING_ENABLED && kycProductType === "stocks") {
+          if (!tradingEnabled && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
           } else {
             navigate(`${PATHNAME_MAPPER.journey}`, {
@@ -341,6 +346,7 @@ const Home = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
+  console.log("trading enabled ",tradingEnabled)
   return (
     <Container
       events={sendEvents("just_set_events")}
