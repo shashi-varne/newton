@@ -18,7 +18,6 @@ import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
 const { productName } = config;
-const TRADING_ENABLED = isTradingEnabled();
 
 const Selfie = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -38,6 +37,7 @@ const Selfie = (props) => {
   const [isCamLoading, setIsCamLoading] = useState();
   const [isTradingFlow, setIsTradingFlow] = useState(false);
   const [areDocsPending, setDocsPendingStatus] = useState();
+  const [tradingEnabled, setTradingEnabled] = useState();
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
@@ -49,7 +49,9 @@ const Selfie = (props) => {
   const initialize = async () => {
     const docStatus = await checkDocsPending(kyc);
     setDocsPendingStatus(docStatus)
-    const tradingFlow = TRADING_ENABLED && kyc.kyc_type !== "manual";
+    const tradeFlow = isTradingEnabled(kyc);
+    setTradingEnabled(tradeFlow);
+    const tradingFlow = tradeFlow && kyc.kyc_type !== "manual";
     setIsTradingFlow(tradingFlow);
     setIsCamLoading(tradingFlow);
   }
@@ -90,7 +92,7 @@ const Selfie = (props) => {
         };
       }
 
-      if (TRADING_ENABLED && kyc.kyc_type === "manual") {
+      if (tradingEnabled && kyc.kyc_type === "manual") {
         params = {
           forced: true,
           kyc_product_type: 'equity'

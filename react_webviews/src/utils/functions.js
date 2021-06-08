@@ -1,5 +1,5 @@
 // import colors from '../common/theme/Style.scss';
-import { checkValidString, getUrlParams, storageService } from './validators';
+import { checkValidString, getUrlParams, isEmpty, storageService } from './validators';
 import $ from 'jquery';
 import { 
   basePartnerConfig, 
@@ -488,8 +488,8 @@ export function getBasePath() {
   return window.location.origin + basename;
 }
 
-export function isTradingEnabled() {
-  const kyc = storageService().getObject("kyc");
+export function isTradingEnabled(userKyc = {}) {
+  const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
   return !getConfig().isSdk && !kyc?.address?.meta_data.is_nri
 }
 const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);

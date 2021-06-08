@@ -1,9 +1,9 @@
 import { isTradingEnabled } from "utils/functions";
 import { panUiSet } from "../common/functions";
 
-const TRADING_ENABLED = isTradingEnabled();
-
 export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
+  const TRADING_ENABLED = isTradingEnabled(kyc);
+
   let journeyData = [];
   if (isCompliant) {
     journeyData = [

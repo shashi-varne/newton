@@ -16,7 +16,6 @@ import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
 const productName = config.productName;
-const TRADING_ENABLED = isTradingEnabled();
 
 const Pan = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -28,6 +27,7 @@ const Pan = (props) => {
   const [bottomSheetType, setBottomSheetType] = useState('');
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [areDocsPending, setDocsPendingStatus] = useState();
+  const [tradingEnabled, setTradingEnabled] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -40,7 +40,8 @@ const Pan = (props) => {
       setDlFlow(true);
     }
     const docStatus = await checkDocsPending(kyc);
-    setDocsPendingStatus(docStatus)
+    setDocsPendingStatus(docStatus);
+    setTradingEnabled(isTradingEnabled(kyc))
   }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
@@ -89,7 +90,7 @@ const Pan = (props) => {
   };
 
   const handleNavigation = () => {
-    if (TRADING_ENABLED) {
+    if (tradingEnabled) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();
@@ -201,7 +202,7 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          {TRADING_ENABLED && kyc.kyc_type !== "manual" && bottomSheetType &&
+          {tradingEnabled && kyc.kyc_type !== "manual" && bottomSheetType &&
             <PanUploadStatus
               status={bottomSheetType}
               isOpen={isOpen}

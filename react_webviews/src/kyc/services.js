@@ -13,8 +13,6 @@ const DOCUMENTS_MAPPER = {
   LAT_BANK_PB: 'Passbook',
 }
 
-const TRADING_ENABLED = isTradingEnabled();
-
 export async function getAccountSummary(params = {}) {
   const url = '/api/user/account/summary'
   if (isEmpty(params)) {
@@ -191,6 +189,7 @@ async function setNpsData(result) {
 }
 
 export function getKycAppStatus(kyc) {
+  const TRADING_ENABLED = isTradingEnabled(kyc);
   var rejected = 0;
   var metaRejected = 0;
   var docRejected = 0;
@@ -400,6 +399,7 @@ function getAddressProof(userKyc) {
 export function isReadyToInvest() {
   let userRTI = storageService().getObject("user");
   let kycRTI = storageService().getObject("kyc");
+  const TRADING_ENABLED = isTradingEnabled(kycRTI);
 
   if (!kycRTI || !userRTI) {
     return false;

@@ -322,3 +322,18 @@ export const isIncompleteEquityApplication = (kyc) => {
   (kyc.equity_application_status !== "submitted" && kyc.equity_application_status !== "complete") ||
   (isEquityApplSubmittedOrComplete(kyc) && kyc.equity_sign_status !== "signed"));
 }
+
+export const isKycCompleted = (kyc) => {
+  if (isEmpty(kyc)) return false;
+
+  if (kyc?.kyc_status === "compliant") {
+    return (kyc?.application_status_v2 === "submitted" ||
+    kyc?.application_status_v2 === "complete");
+  } else {
+    return (
+      (kyc?.application_status_v2 === "submitted" ||
+        kyc?.application_status_v2 === "complete") &&
+      kyc.sign_status === "signed"
+    );
+  }
+};
