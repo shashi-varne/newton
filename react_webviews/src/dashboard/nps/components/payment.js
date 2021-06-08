@@ -42,6 +42,8 @@ class NpsPaymentCallback extends Component {
       // storageService().setObject('kyc', result.kyc_app);
   
       let currentUser = storageService().getObject("user");
+      currentUser.nps_investment = true;
+      storageService().setObject("user", currentUser)
       let _event = {
         event_name: "journey_details",
         properties: {
