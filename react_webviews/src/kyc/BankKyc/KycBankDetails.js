@@ -24,6 +24,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import { nativeCallback } from "../../utils/native_callback";
 import PennyFailedDialog from "../mini-components/PennyFailedDialog";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 const config = getConfig();
 let titleText = "Enter bank account details";
@@ -63,6 +64,7 @@ const KycBankDetails = (props) => {
   const [dl_flow, setDlFlow] = useState(false);
   const [ifscDisabled, setIfscDisabled] = useState(false);
   const [isPennyFailed, setIsPennyFailed] = useState(false);
+  const [goBackModal, setGoBackModal] = useState(false);
   const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
@@ -314,6 +316,22 @@ const KycBankDetails = (props) => {
     setIsPennyFailed(false);
   };
 
+  const closeConfirmBackDialog = () => {
+    setGoBackModal(false);
+  };
+
+  const goBackToPath = () => {
+    if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
+      navigate(PATHNAME_MAPPER.uploadProgress)
+    } else {
+      navigate(PATHNAME_MAPPER.journey);
+    }
+  };
+
+  const goBack = () => {
+    setGoBackModal(true)
+  }
+
   const sendEvents = (userAction, screen_name) => {
     let eventObj = {
       "event_name": 'KYC_registration',
@@ -343,6 +361,7 @@ const KycBankDetails = (props) => {
       skelton={isLoading}
       handleClick={handleClick}
       title={titleText}
+      headerData={{goBack}}
       data-aid='kyc-enter-bank-account-details-screen'
     >
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
@@ -464,6 +483,14 @@ const KycBankDetails = (props) => {
           checkBankDetails={checkBankDetails}
           />
         )}
+        {goBackModal ?
+          <ConfirmBackDialog
+           isOpen={goBackModal}
+           close={closeConfirmBackDialog}
+           goBack={goBackToPath}
+         />
+         : null
+        }
       </div>
     </Container>
   );

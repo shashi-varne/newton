@@ -15,6 +15,7 @@ import { getFlow } from "../common/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 const config = getConfig();
 const KycUploadDocuments = (props) => {
@@ -23,9 +24,11 @@ const KycUploadDocuments = (props) => {
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [file, setFile] = useState(null);
   const [dlFlow, setDlFlow] = useState(false);
+  const [goBackModal, setGoBackModal] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const navigate = navigateFunc.bind(props);
+  const fromState = props.location?.state?.fromState || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -171,6 +174,28 @@ const KycUploadDocuments = (props) => {
     }
   };
 
+  const closeConfirmBackDialog = () => {
+    setGoBackModal(false);
+  };
+
+  const goBackToPath = () => {
+    if (fromState.indexOf("/kyc/add-bank/details") !== -1) {
+      props.history.goBack();
+      return;
+    } else {
+      if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    }
+    
+  };
+
+  const goBack = () => {
+    setGoBackModal(true)
+  }
+
   const selectedDocValue =
     selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
@@ -202,6 +227,7 @@ const KycUploadDocuments = (props) => {
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title="Upload documents"
+      headerData={{goBack}}
       data-aid='kyc-upload-documents-page'
       events={sendEvents("just_set_events")}
     >
@@ -318,6 +344,14 @@ const KycUploadDocuments = (props) => {
           progress, meanwhile you can continue with KYC.
         </div>
       </WVBottomSheet>
+      {goBackModal ?
+        <ConfirmBackDialog
+          isOpen={goBackModal}
+          close={closeConfirmBackDialog}
+          goBack={goBackToPath}
+        />
+        : null
+      }
     </Container>
   );
 };
