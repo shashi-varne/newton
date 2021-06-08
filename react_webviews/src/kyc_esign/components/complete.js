@@ -42,7 +42,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         {!TRADING_ENABLED && kyc?.kyc_status === "compliant" && show_note && (
           <div className="title" data-aid='kyc-header-title'>Great! Your KYC application is submitted!</div>
         )}
-        {(kyc?.kyc_status !== 'compliant' && !dl_flow && !show_note) && (
+        {(kyc?.kyc_status !== 'compliant' && !dl_flow) && (
           <div className="title" data-aid='kyc-header-title'>
             Kudos! KYC application is submitted!</div>
         )}
