@@ -275,7 +275,7 @@ const Home = (props) => {
       const kycProductType = storageService().get("kycStartPoint");
       if (isUserCompliant || kyc_status === "compliant") {
         if (is_nri) {
-          if (!TRADING_ENABLED && kycProductType === "stocks") {
+          if (!TRADING_ENABLED && is_nri && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
           } else {
             navigate(PATHNAME_MAPPER.journey);
