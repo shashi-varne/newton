@@ -51,10 +51,6 @@ class Container extends Component {
       case "/kyc/personal-details4":
       case "/kyc/dl/personal-details3":
       case "/kyc/compliant-personal-details4":
-      case "/kyc/compliant/bank-details":
-      case "/kyc/non-compliant/bank-details":
-      case "/kyc/compliant/upload-documents":
-      case "/kyc/non-compliant/upload-documents":
       case "/kyc/upload/fno-sample-documents":
       case "/kyc/digilocker/success":
       case "/kyc/digilocker/failed":
