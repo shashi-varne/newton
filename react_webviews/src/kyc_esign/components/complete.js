@@ -12,11 +12,11 @@ const stepsData = [
 
 const config = getConfig();
 const productName = config.productName;
-const TRADING_ENABLED = isTradingEnabled();
 const isReadyToInvestUser = isReadyToInvest();
 
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
+  const TRADING_ENABLED = isTradingEnabled(kyc);
   const showAccountStatus = (dl_flow || kyc?.kyc_status === "compliant") && TRADING_ENABLED && !show_note;
 
   useEffect(() => {

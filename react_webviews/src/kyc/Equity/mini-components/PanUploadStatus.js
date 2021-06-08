@@ -3,7 +3,6 @@ import { getConfig, isTradingEnabled } from "../../../utils/functions";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 
 const productName = getConfig().productName;
-const TRADING_ENABLED = isTradingEnabled();
 const uploadStatus = {
   success: {
     icon: "ic_indian_resident.svg",
@@ -23,6 +22,7 @@ const PanUploadStatus = ({ status, isOpen, kyc, onClose, disableBackdropClick, o
   if (!status) return '';
 
   const data = uploadStatus[status] || {};
+  const TRADING_ENABLED = isTradingEnabled(kyc);
   
   if (status === "success") {
     data.subtitle = !TRADING_ENABLED
