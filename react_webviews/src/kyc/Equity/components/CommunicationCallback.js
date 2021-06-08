@@ -3,7 +3,6 @@ import toast from "../../../common/ui/Toast";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { getUrlParams, isEmpty } from "../../../utils/validators";
 import { isDigilockerFlow } from "../../common/functions";
-import { isReadyToInvest } from "../../services";
 import { PATHNAME_MAPPER } from "../../constants";
 import Container from "../../common/Container";
 import { navigate as navigateFunc } from "../../../utils/functions";
@@ -24,8 +23,7 @@ const CommunicationCallback = (props) => {
 
   useEffect(() => {
     if (!isEmpty(kyc) && goNext) {
-      const isReadyToInvestBase = isReadyToInvest();
-      if (isReadyToInvestBase) {
+      if (kyc.mf_kyc_processed) {
         navigate(PATHNAME_MAPPER.tradingExperience);
         return;
       }
