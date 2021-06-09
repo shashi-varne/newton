@@ -1,20 +1,21 @@
 // Filter Bottom Sheet
 .filter-bottom-sheet {
   position: relative;
-  min-height: 375px !important;
+  min-height: 465px !important;
   .heading {
     font-size: 20px;
     font-weight: 700;
     line-height: 32px;
     letter-spacing: 0px;
+    margin: 0px 0px 20px 0px;
   }
   .filter {
     .body {
-      height: 340px !important;
+      height: 430px !important;
       padding-bottom: 70px;
       .MuiFormControlLabel-root {
-        margin-top: 10px;
-        margin-bottom: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
         margin-left: 0px;
         .MuiSvgIcon-root {
           fill: var(--primary);
@@ -30,6 +31,7 @@
           color: var(--dark);
           width: 100%;
           margin-left: 5px;
+          margin-top: -2px !important;
         }
 
         .fc-subtitle {
