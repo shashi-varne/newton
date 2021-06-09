@@ -370,8 +370,8 @@ class GroupHealthReportDetails extends Component {
     renderSteps = (option, index) => {
         return (
             <div key={index} className="tile">
-                <Imgc className="icon" 
-                    className="render-steps-icon"
+                <Imgc
+                    className="render-steps-icon icon"
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">

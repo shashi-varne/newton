@@ -297,7 +297,7 @@ class ReportDetails extends Component {
           <div className="AccordionTitle" onClick={() => this.toggleAccordion()}>
             <div className="AccordionList">
               <span className="AccordionList1">
-                <Imgc className="baxa-report-bottom-img" className="AccordionListIcon" src={(this.state.accordionTab) ? shrink : expand} alt="" width="20" />
+                <Imgc className="baxa-report-bottom-img AccordionListIcon" src={(this.state.accordionTab) ? shrink : expand} alt="" width="20" />
               </span>
               <span style={{marginLeft: '10px'}}>How to claim the policy?</span>
             </div>
