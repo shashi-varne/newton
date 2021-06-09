@@ -71,10 +71,10 @@ $(document).ready(function () {
     gtag('config', 'AW-930930371');
   }
 
-  if (getConfig().Web && getConfig().productName === "finity") {
-    runHotjar();
-    runGoogleAds();
-  }
+  // if (getConfig().Web && getConfig().productName === "finity") {
+  //   runHotjar();
+  //   runGoogleAds();
+  // }
 });
 
 ReactDOM.render(<App />, document.getElementById('root'));
