@@ -162,6 +162,7 @@ class FundList extends Component {
                 skelton={this.state.skelton}
                 showError={this.state.showError}
                 errorData={this.state.errorData}
+                background="passive-fund-list-page"
             >
                 <div>
                     {this.state.fundDescription && (
