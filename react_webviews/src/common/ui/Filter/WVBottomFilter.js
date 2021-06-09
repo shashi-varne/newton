@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import FilterButton from "./FilterButton";
-import Filter from "./Filter";
-import "./commonStyles.scss";
+import WVFilterButton from "./WVFilterButton";
+import WVFilter from "./WVFilter";
+import "./WVFilterCommonStyles.scss";
 import { getConfig } from '../../../utils/functions';
 
 const isMobileDevice = getConfig().isMobileDevice;
 
-const BottomFilter = ({
+const WVBottomFilter = ({
+    dataAidSuffix,
     filterOptions,
     getSortedFilter,
     defaultFilter
@@ -22,11 +23,13 @@ const BottomFilter = ({
     }
 
     return (
-        <footer className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} >
-            <FilterButton
+        <footer className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} data-aid={`diy-cart-${dataAidSuffix}`}>
+            <WVFilterButton
+                dataAidSuffix={dataAidSuffix}
                 onClick={() => setFilterActive(true)}
             />
-            <Filter
+            <WVFilter
+                dataAidSuffix={dataAidSuffix}
                 isOpen={filterActive}
                 setFilterActive={setFilterActive}
                 setSortFilter={setSortFilter}
@@ -38,4 +41,4 @@ const BottomFilter = ({
     )
 }
 
-export default BottomFilter;
+export default WVBottomFilter;

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import DiyDialog from './DiyDialog';
+import WVDiyDialog from './WVDiyDialog';
 import Button from 'common/ui/Button';
 import { isEmpty } from 'lodash';
-import SortFilter from './SortFilter';
-import "./commonStyles.scss";
+import SortFilter from './WVSortFilter';
+import "./WVFilterCommonStyles.scss";
 
-const Filter = ({
+const WVFilter = ({
+  dataAidSuffix,
   isOpen,
   setFilterActive,
   setRenderApi,
@@ -35,8 +36,8 @@ const Filter = ({
   }
   
   return (
-    <DiyDialog close={close} open={isOpen}>
-      <section className="diy-bottom-sheet diy-filter-bottom-sheet filter-bottom-sheet">
+    <WVDiyDialog close={close} open={isOpen}>
+      <section className="diy-bottom-sheet diy-filter-bottom-sheet filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
         <p className="heading">FILTERS</p>
         <main className="filter">
           <div className="title">
@@ -46,6 +47,7 @@ const Filter = ({
                   let filter_options = Object.keys(item)[0];
                   return (
                     <li
+                      data-aid={`filter-bottom-sheet-${dataAidSuffix}-${idx+1}`}
                       key={idx}
                       role="button"
                       tabIndex="0"
@@ -61,7 +63,7 @@ const Filter = ({
                 })}
             </ul>
           </div>
-          <div className="body">
+          <div className="body" data-aid={`body-${dataAidSuffix}`}>
             <SortFilter
               selectedTab={activeTab}
               localSortFilter={localSortFilter}
@@ -70,8 +72,9 @@ const Filter = ({
             />
           </div>
         </main>
-        <footer className="filter-buttons">
+        <footer className="filter-buttons" data-aid={`filter-btn-footer-${dataAidSuffix}`}>
           <Button
+            dataAid={`apply-btn-${dataAidSuffix}`}
             twoButton
             dualbuttonwithouticon
             handleClickOne={reset}
@@ -81,8 +84,8 @@ const Filter = ({
           />
         </footer>
       </section>
-    </DiyDialog>
+    </WVDiyDialog>
   )
 }
 
-export default Filter;
+export default WVFilter;
