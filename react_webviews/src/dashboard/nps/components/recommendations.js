@@ -256,7 +256,7 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran, pension_house, recommendations } = this.state;
+    let { pran, pension_house, recommendations, amount } = this.state;
 
     let data = {
       amount: this.state.amount,
@@ -283,7 +283,8 @@ class Recommendations extends Component {
       let pgLink = result.investments.pg_link;
 
       let plutus_redirect_url = encodeURIComponent(
-        getBasePath() + `/nps/redirect` + getConfig().searchParams
+        // getBasePath() + `/nps/redirect` + getConfig().searchParams
+        `${getBasePath()}/nps/payment/callback/one-time/${amount}/${result.investments.id}`
       );
 
       pgLink +=
