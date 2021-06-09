@@ -25,7 +25,7 @@ const StatusCallback = (props) => {
         <WVInfoBubble
         type="error"
         hasTitle
-        customTitle="Note"
+        customTitle="Error"
       >
         {error}
       </WVInfoBubble>
