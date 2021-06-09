@@ -4,7 +4,7 @@ import { storageService } from "utils/validators";
 import { initialize } from "../common/commonFunctions";
 import { getFundDetailsList } from "../services"
 import BottomFilter from "../../../common/ui/Filter/BottomFilter";
-import YearFilter from "../../../common/ui/YearFilter";
+import WVYearFilter from "../../../common/ui/YearFilter/WVYearFilter";
 import GenericListCard from "../../../common/ui/GenericListCard"
 import { YEARS_FILTERS, BOTTOM_FILTER_NAME, SELECTED_YEAR } from "../constants";
 import "./PassiveFundDetails.scss";
@@ -176,7 +176,7 @@ class FundList extends Component {
                         </p>
                     )}
                     <p className="fund-number">{result?.length || 0} FUNDS</p>
-                    <YearFilter
+                    <WVYearFilter
                         filterArray={YEARS_FILTERS}
                         selected={this.state.yearValue || "1Y"}
                         onClick={this.yearFilter}

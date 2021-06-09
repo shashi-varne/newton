@@ -1,7 +1,21 @@
+/*
+
+Use: List of Years in a row and user can pick any one year from the list
+
+Example syntax:
+<WVYearFilter> 
+filterArray={YEARS_FILTERS}                           // Array of YearslIST
+selected={this.state.yearValue}                       // Selected Year from the array of YearsList
+onClick={this.yearFilter}                             // oncLICK Action [yearFilter]
+</WVYearFilter>
+*/
+
+
+import "./WVYearFilterSheet.scss"
 import React from 'react'
 import { isEmpty } from 'lodash';
 
-function YearFilter(props) {
+function WVYearFilter(props) {
 
     const selected = props.selected;
     const data = props.filterArray;
@@ -20,4 +34,4 @@ function YearFilter(props) {
     )
 };
 
-export default YearFilter;
+export default WVYearFilter;

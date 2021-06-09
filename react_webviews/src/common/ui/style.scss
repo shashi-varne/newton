@@ -1487,32 +1487,6 @@ padding-right: 12px !important;
   margin: 10px 0 20px 0;
 }
 
-.year-filter {
-  display: flex !important;
-  justify-content: space-between;
-  cursor: pointer;
-  margin: 0 auto;
-
-  .text-block {
-    width: 36px;
-    height: 24px;
-    background-color: #F0F7FF;
-    color: var(--steelgrey);
-    padding-top: 4px;
-    border-radius: 4px;
-  }
-
-  .selected {
-  color: white !important;
-  background-color: var(--primary) !important;
-  }
-
-  p {
-    text-align: center !important;
-   }
-
-}
-
 // generic fact carousel
 .generic-fact-carousel {
   width: 100%;
