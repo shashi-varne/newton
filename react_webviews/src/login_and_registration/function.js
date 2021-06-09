@@ -55,7 +55,7 @@ export function initialize() {
     getBasePath() + "/social/callback" + rebalancingRedirectUrl
   );
 
-  this.setUserAgent();
+  // this.setUserAgent();
 
   let facebookUrl =
     config.base_url +
