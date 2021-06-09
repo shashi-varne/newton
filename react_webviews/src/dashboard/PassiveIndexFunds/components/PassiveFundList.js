@@ -5,7 +5,7 @@ import { initialize } from "../common/commonFunctions";
 import { getFundDetailsList } from "../services"
 import BottomFilter from "../../../common/ui/Filter/BottomFilter";
 import WVYearFilter from "../../../common/ui/YearFilter/WVYearFilter";
-import GenericListCard from "../../../common/ui/GenericListCard"
+import WVGenericListCard from "../../../common/ui/GenericListCard/WVGenericListCard"
 import { YEARS_FILTERS, BOTTOM_FILTER_NAME, SELECTED_YEAR } from "../constants";
 import "./PassiveFundDetails.scss";
 import { nativeCallback } from "../../../utils/native_callback";
@@ -186,7 +186,7 @@ class FundList extends Component {
                         {!isEmpty(result) &&
                             result.map((item, index) => {
                                 return (
-                                    <GenericListCard
+                                    <WVGenericListCard
                                         data={item}
                                         morning_star_rating={item?.morning_star_rating}
                                         starclassName={item?.morning_star_rating ? "" : "star-icon-na"}

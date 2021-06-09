@@ -1,8 +1,9 @@
+import "./WVGenericListCardSheet.Scss"
 import React from 'react'
-import StarRating from "./StarRating"
+import StarRating from "../StarRating"
 import { isEmpty } from 'lodash';
 
-function GenericListCard(props) {
+function WVGenericListCard(props) {
     const value = props.value;
 
     return (
@@ -32,4 +33,4 @@ function GenericListCard(props) {
     )
 };
 
-export default GenericListCard;
+export default WVGenericListCard;

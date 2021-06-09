@@ -4,7 +4,7 @@ Use: List of Years in a row and user can pick any one year from the list
 
 Example syntax:
 <WVYearFilter> 
-filterArray={YEARS_FILTERS}                           // Array of YearslIST
+filterArray={YEARS_FILTERS}                           // Array of Yearslist
 selected={this.state.yearValue}                       // Selected Year from the array of YearsList
 onClick={this.yearFilter}                             // oncLICK Action [yearFilter]
 </WVYearFilter>
