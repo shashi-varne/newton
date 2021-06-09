@@ -186,7 +186,7 @@ class Recommendations extends Component {
                     recommendations.pension_house.image
                   }
                   alt="NPS"
-                  style={{ width: "70px" }}
+                  className="md-dialog-content-nps-pension-house-image"
                 />
                 <div
                   style={{
