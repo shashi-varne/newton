@@ -1,11 +1,12 @@
 import Button from "@material-ui/core/Button";
 import React from "react";
-import "./commonStyles.scss"
+import "./WVFilterCommonStyles.scss"
 
-const FilterButton = (props) => {
+const WVFilterButton = (props) => {
   return (
-    <div className="filter-btn">
+    <div className="filter-btn" data-aid={`filter-btn-${props.dataAidSuffix}`}>
       <Button
+        data-aid={`filter-button-${props.dataAidSuffix}`}
         {...props}
         style={{ width: "138px", border: "1px solid rgba(255,255,255,0.5)"}}
       >
@@ -23,4 +24,4 @@ const FilterButton = (props) => {
   );
 };
 
-export default FilterButton;
+export default WVFilterButton;

@@ -28,14 +28,14 @@ class MenuListDropDownClass extends Component {
     renderPorductList(props, index, array) {
         if (!props.disabled) {
             return (
-                <div className='menulist-dropdown' key={index + 1} onClick={() => this.props.handleClickEntry(props)}>
+                <div className='menulist-dropdown' data-aid={`menulist-dropdown-${index+1}`} key={index + 1} onClick={() => this.props.handleClickEntry(props)}>
                     <div className='menulist-dropdown-types'>
                         <img src={props.icon} className="menulist-dropdown-logos_small" alt="" />
                         <div className='menulist-dropdown-line-style'
                             style={{ width: array.length - 1 !== index ? `calc(100% - 85px)` : '100%', paddingBottom: array.length - 1 !== index ? '20px' : '40px' }}>
-                            <div className='menulist-dropdown-logos_text'>{props.title} {props.tag && <span className="recommended-tag">{props.tag}</span>}
+                            <div className='menulist-dropdown-logos_text' data-aid={`menulist-dropdown-logos_text-${index+1}`}>{props.title} {props.tag && <span className="recommended-tag">{props.tag}</span>}
                                 {props.resume_flag && <span className='menu-list-resume_flag'>Resume</span>}</div>
-                            <div className='menulist-dropdown-logos_subtext'>{props.subtitle}</div>
+                            <div className='menulist-dropdown-logos_subtext' data-aid={`menulist-dropdown-logos_subtext-${index+1}`}>{props.subtitle}</div>
                         </div>
                     </div>
                 </div>
@@ -48,19 +48,19 @@ class MenuListDropDownClass extends Component {
 
         return (
             <div key={index}>
-                <div className='menu-list-dropdown' onClick={() => this.props.handleClick(props, index)}>
+                <div className='menu-list-dropdown' data-aid={`menu-list-dropdown-${this.props.dataAidSuffix}-${index+1}`} onClick={() => this.props.handleClick(props, index)}>
                     <div className='menulist-block'>
                         <img src={props.icon} alt="" className='image-icon' />
                         <div className='dropdown-elements'
                             style={(props.type === 'drop-down') ? { borderBottomStyle: this.state.menulistProducts.length - 1 !== index && this.props.value === index ? '' : 'solid' }
                                 :
                                 { borderBottomStyle: this.state.menulistProducts.length - 1 !== index ? 'solid' : '' }}>
-                            <div className='menu-title' >{props.title} {' '}
+                            <div className='menu-title' data-aid={`menu-title-${this.props.dataAidSuffix}-${index+1}`}>{props.title} {' '}
                                 {props.resume_flag && <span className='menu-list-resume_flag'>Resume</span>}
                                 {props.type === 'drop-down' && <span className='menulist-img'>
                                     <img src={props.dropDownArrow} alt="" style={{ transform: this.props.value === index ? `rotate(180deg)` : '' }} /></span>}
                             </div>
-                            <div className='menu-subtitle'>{props.subtitle}</div>
+                            <div className='menu-subtitle' data-aid={`menu-subtitle-${this.props.dataAidSuffix}-${index+1}`}>{props.subtitle}</div>
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@ class MenuListDropDownClass extends Component {
                         <div style={{ width: '100%' }}
                             onClick={() => this.props.handleClick(props.key, props.title)}>
                             {props.formate === 'object' &&
-                                <div className="menulist-dropdown-lists">
+                                <div className="menulist-dropdown-lists" data-aid="menulist-dropdown-lists">
                                     <div className='products' style={{ marginTop: '-8px' }}>
                                         {props.component.map(this.renderPorductList)}
                                     </div>
@@ -84,8 +84,8 @@ class MenuListDropDownClass extends Component {
     render() {
         return (
             <Fragment>
-                <div className='menulist-products'>
-                    {this.props.title && <h1 className='menulist-header-title'>{this.props.title}</h1>}
+                <div className='menulist-products' data-aid={`menulist-products-${this.props.dataAidSuffix}`}>
+                    {this.props.title && <h1 className='menulist-header-title'data-aid={`menulist-header-title-${this.props.dataAidSuffix}`}>{this.props.title}</h1>}
                     {this.state.menulistProducts.map(this.renderPorducts)}
                 </div>
             </Fragment >

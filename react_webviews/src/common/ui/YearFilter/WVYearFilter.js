@@ -19,13 +19,14 @@ function WVYearFilter(props) {
 
     const selected = props.selected;
     const data = props.filterArray;
+    const dataAidSuffix = props.dataAidSuffix
 
     return (
-        <div className="year-filter">
+        <div className="year-filter" data-aid={`year-filter-${dataAidSuffix}`}>
             {!isEmpty(data) &&
                 data.map((item, index) => {
                     return (
-                        <p className={`text-block ${selected === item.text ? 'selected' : ''}`} onClick={() => props.onClick(item.text)} key={index}>
+                        <p className={`text-block ${selected === item.text ? 'selected' : ''}`} onClick={() => props.onClick(item.text)} key={index} data-aid={`text-block-${dataAidSuffix}-${index+1}`}>
                             {item.text}
                         </p>
                     );

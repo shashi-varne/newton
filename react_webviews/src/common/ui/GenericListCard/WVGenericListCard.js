@@ -7,9 +7,9 @@ function WVGenericListCard(props) {
     const value = props.value;
 
     return (
-        <div className="card generic-card" onClick={() => props.handleClick()}>
+        <div className="card generic-card" onClick={() => props.handleClick()} data-aid={`generic-card-${props.dataAidSuffix}`}>
             <div className="generic-card-details">
-                <div className="content">
+                <div className="content" data-aid={`generic-card-content-${props.dataAidSuffix}`}>
                     <div className="title">{props?.title}</div>
                     <div className='subtitle' >{props?.subtitle}
                         <img src={require(`assets/split.svg`)} alt='' className='split-img' />
@@ -23,7 +23,7 @@ function WVGenericListCard(props) {
             {!isEmpty(value) &&
                 value.map((item, index) => {
                     return (
-                        <div className="generic-card-details" key={index}>
+                        <div className="generic-card-details" key={index} data-aid={`generic-card-details-${props.dataAidSuffix}-${index+1}`}>
                             <p className={`tc-title  ${item.className1}`}>{item.title1}{item.tag1}</p>
                             <p className={`tc-title  ${item.className2}`}>{item.title2}{item.tag2}</p>
                         </div>

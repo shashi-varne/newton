@@ -81,11 +81,12 @@ class Landing extends Component {
         errorData={this.state.errorData}
         classHeader="passive-index-header-color"
         customBackButtonColor="white"
+        data-aid={"passive-fund-landing-screen"}
         noPadding
       >
-        <div>
-          <div className="educational-video-block">
-            <WVInPageSubtitle children={"Get started with index funds"} className='inpage-subtitle' />
+        <div data-aid="passive-fund-landing-section">
+          <div className="educational-video-block" data-aid="educational-video-block">
+            <WVInPageSubtitle children={"Get started with index funds"} className='inpage-subtitle' dataAidSuffix="fundlanding" />
             <div className="player-wrapper" onClick={this.handleClickFullscreen}>
               <ReactPlayer
                 className="react-player"
@@ -115,14 +116,15 @@ class Landing extends Component {
             </div>
             <VideoBlockImageSection />
           </div>
-          <div className="content-main">
-            <h1 className="category-title">Top index funds</h1>
+          <div className="content-main" data-aid="content-main">
+            <h1 className="category-title" data-aid="category-title-1">Top index funds</h1>
             <WVMenuListDropDown
+              dataAidSuffix={'passive-category'}
               menulistProducts={FUND_CATEGORY}
               value={this.state.value}
               handleClick={this.handleClick}
             />
-            <h1 className="category-title">Key insights</h1>
+            <h1 className="category-title" data-aid="category-title-2">Key insights</h1>
             <div className="react-responsive-carousel">
               <GenericContentCarousel
                 customData={KEY_INSIGHTS_CAROUSEL}
@@ -134,7 +136,7 @@ class Landing extends Component {
                 }}
               />
             </div>
-            <h1 className="category-title">Passive vs. Active investing</h1>
+            <h1 className="category-title" data-aid="category-title-3">Passive vs. Active investing</h1>
             <div className="react-responsive-carousel">
               <GenericFactCarousel
                 customData={ACTIVE_PASSIVE_FACTS_CAROUSEL}

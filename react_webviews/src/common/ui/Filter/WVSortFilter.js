@@ -2,9 +2,9 @@ import React from "react";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { isEmpty } from 'lodash';
-import "./commonStyles.scss";
+import "./WVFilterCommonStyles.scss";
 
-const SortFilter = ({
+const WVSortFilter = ({
   selectedTab,
   localSortFilter,
   setLocalSortFilter,
@@ -63,4 +63,4 @@ const SortFilter = ({
   );
 };
 
-export default SortFilter; 
+export default WVSortFilter; 
