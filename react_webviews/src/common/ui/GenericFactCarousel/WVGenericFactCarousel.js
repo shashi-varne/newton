@@ -1,3 +1,18 @@
+/*
+
+Use:
+- Carousels in which dynamic content is there with heading, an image, content
+- Pass along the data and carousel styles such as background color or image 
+
+Example:
+<WVGenericFactCarousel
+  customData={} ***Required***
+  callbackFromParent={function} 
+  carouselPageStyle={styles}
+/>
+
+*/
+
 import React from "react";
 import WVCustomCarousel from "../CustomCarousel/WVCustomCarousel";
 import PropTypes from "prop-types";
@@ -6,14 +21,14 @@ import "./WVGenericFactCarousel.scss";
 
 function WVGenericFactCarousel({
   callbackFromParent,
-  showStatus,
-  showArrows,
-  showThumbs,
-  infiniteLoop,
-  indicatorStyles,
-  customData,
+  showStatus, // [default: false]
+  showArrows, // [default: true]
+  showThumbs, // [default: false]
+  infiniteLoop, // to have infinite scroll or the carousel [defaults: false]
+  indicatorStyles, // styles object if custom indicator style to be added
+  customData, //data for the carousel
   carouselPageStyle,
-  classes,
+  classes, // for styling things other than what is provided
   dataAidSuffix,
 }) {
   const arrowStyles = {

@@ -1,3 +1,18 @@
+/*
+
+Use:
+- To create a carousel that needs to be dynamic w.r.t content.
+- Just provide the title text and the content along with the background image/color and other styles.
+
+Example:
+<WVGenericContentCarousel
+  customData={} *** Required ***
+  callbackFromParent={function}
+  carouselPageStyle={styles}
+  dataAidSuffix=""
+/>
+
+*/
 import React from "react";
 import WVCustomCarousel from "../CustomCarousel/WVCustomCarousel";
 import ReactHtmlParser from "react-html-parser";
@@ -5,11 +20,11 @@ import PropTypes from "prop-types";
 import "./WVGenericContentCarousel.scss";
 
 function WVGenericContentCarousel({
-  callbackFromParent,
-  showStatus,
-  showArrows,
-  showThumbs,
-  infiniteLoop,
+  callbackFromParent, // any function to be called in the parent component
+  showStatus, // [default: false]
+  showArrows, // [default: true]
+  showThumbs, // [default: false]
+  infiniteLoop, // infinite scroll [default: false]
   indicatorStyles,
   customData,
   carouselPageStyle,

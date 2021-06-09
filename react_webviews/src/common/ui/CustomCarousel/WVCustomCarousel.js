@@ -1,3 +1,23 @@
+/*
+Use:
+- Provides the basic wrapper structure for the carousel
+- Everything wrapped with the component would be rendered as it is
+- Provides functionality to provide own indicator styles and arrow styles
+
+Example: 
+
+<WVCustomCarousel
+  showStatus={boolean} // defaults: false
+  showArrows={showArrows} // defaults: true
+  showThumbs={showThumbs} // defaults: false
+  infiniteLoop={infiniteLoop} // defaults: false
+  indicatorStyles={indicatorStyles} 
+  callbackFromParent={callbackFromParent}
+>
+  {content to be displayed}
+</WVCustomCarousel>
+*/
+
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -7,14 +27,14 @@ import PropTypes from "prop-types";
 const productName = getConfig().productName;
 
 function WVCustomCarousel({
-  callbackFromParent,
+  callbackFromParent, // any function to be called with each slide
   showStatus,
   showArrows,
   showThumbs,
   infiniteLoop,
-  indicatorStyles,
-  children,
-  customArrowStyle
+  indicatorStyles, // object to define custom styles
+  children, // content to be rendered
+  customArrowStyle,
 }) {
   const onChangeEvent = () => {
     let x = document.getElementsByClassName("offer-slide-img");
@@ -82,7 +102,7 @@ WVCustomCarousel.defaultProps = {
     margin: "1px 3px",
     borderRadius: "1.5px",
   },
-  customArrowStyle: {}
+  customArrowStyle: {},
 };
 
 export default WVCustomCarousel;
