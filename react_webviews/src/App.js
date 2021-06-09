@@ -37,6 +37,7 @@ import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 import Partner from "./partner"
 import Tooltip from 'common/ui/Tooltip';
 import 'common/theme/Style.scss';
+import ComponentTest from './ComponentTest';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -103,6 +104,7 @@ class App extends Component {
               <Route path='/fund-details' component={FundDetails} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/partner' component={Partner} />
+              <Route path='/component-test' component={ComponentTest} />
               <Route component={NotFound} />
             </Switch>
           

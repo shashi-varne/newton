@@ -78,15 +78,15 @@ const WVBottomSheet = ({
               </Subtitle>
             }
           </div>
-          <div className="wv-bc-right">
-            {image &&
+          {image &&
+            <div className="wv-bc-right">
               <Imgc
                 className={`wv-bcr-image ${classes.image}`}
                 alt=""
                 src={image}
               />
-            }
-          </div>
+            </div>
+          }
         </div>
         {children &&
           <div className="wv-bottomsheet-child-content">
@@ -104,23 +104,18 @@ const WVBottomSheet = ({
             Placed on top in a 'stacked'/'stackedOR' layout,
             left in a 'horizontal' layout
           */}
-          <WVButtonLayout.Button
-            title={button1Props.title}
-            type={button1Props.type}
-            {...button1Props}
-          />
+          <WVButtonLayout.Button {...button1Props} dataAidSuffix={dataAidSuffix}>
+            {button1Props.title}
+          </WVButtonLayout.Button>
           {buttonLayout === 'stackedOR' && <WVButtonLayout.ORDivider />}
           {/*
             Placed at the bottom in a 'stacked'/'stackedOR' layout,
             right in a 'horizontal' layout
           */}
           {!isEmpty(button2Props) &&
-            <WVButtonLayout.Button
-              dataAidSuffix={dataAidSuffix}
-              title={button2Props.title}
-              type={button2Props.type}
-              {...button2Props}
-            />
+            <WVButtonLayout.Button {...button2Props} dataAidSuffix={dataAidSuffix}>
+              {button2Props.title}
+            </WVButtonLayout.Button>
           }
         </WVButtonLayout>
       </DialogActions>
