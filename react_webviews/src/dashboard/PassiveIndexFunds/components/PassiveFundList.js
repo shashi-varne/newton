@@ -11,6 +11,7 @@ import "./PassiveFundDetails.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 import { isEmpty } from 'lodash';
 import Checkbox from '@material-ui/core/Checkbox';
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 class FundList extends Component {
     constructor(props) {
@@ -101,8 +102,23 @@ class FundList extends Component {
         body["return_type"] = SelectedYear;
 
         const { result, fundDescription } = await this.getFundDetailsList(body);
-        this.setState({ result, fundDescription, selected: SelectedYear, yearValue: time, })
+        this.setState({ result, fundDescription, selected: SelectedYear, yearValue: time, }, () => this.handleScroll())
     }
+
+    handleScroll = (id) => {
+        setTimeout(function () {
+            let element = document.getElementById("HeaderHeight");
+            if (!element || element === null) {
+                return;
+            }
+
+            scrollIntoView(element, {
+                block: "start",
+                inline: "nearest",
+                behavior: "smooth",
+            });
+        }, 50);
+    };
 
     setSortFilter = async (item) => {
 
@@ -164,7 +180,7 @@ class FundList extends Component {
                 errorData={this.state.errorData}
                 background="passive-fund-list-page"
             >
-                <div>
+                <div id={"passive-fund-list"}>
                     {this.state.fundDescription && (
                         <p className="category-description">
                             {this.state.fundDescription.substring(0, 90)}
