@@ -6,6 +6,7 @@ import { storageService } from "utils/validators";
 import { formatAmountInr } from "../../../utils/validators";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
+import { getBasePath } from "../../../utils/functions";
 
 class NpsInvestments extends Component {
   constructor(props) {
@@ -108,7 +109,7 @@ class NpsInvestments extends Component {
   redirection = (url, name='',item) => {
     this.sendEvents('next', 'NPS investments', item)
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + `/nps/investments` + getConfig().searchParams
+      getBasePath() + `/nps/investments` + getConfig().searchParams
     );
 
     let back_url = paymentRedirectUrl;
