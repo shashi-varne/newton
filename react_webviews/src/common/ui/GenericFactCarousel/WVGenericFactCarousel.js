@@ -67,8 +67,8 @@ function WVGenericFactCarousel({
 const renderCarousel = (data, index, style, classes, dataAidSuffix) => {
   return (
     <div
-      className={`generic-fact-carousel ${classes.carouselContainer}`}
-      data-aid={`generic-fact-carousel-${dataAidSuffix}`}
+      className={`wv-generic-fact-carousel ${classes.carouselContainer}`}
+      data-aid={`wv-generic-fact-carousel-${dataAidSuffix}`}
       key={index}
       style={{ ...style }}
     >

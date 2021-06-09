@@ -36,8 +36,8 @@ function WVGenericContentCarousel({
 const renderCarousel = (data, index, style, classes, dataAidSuffix) => {
   return (
     <div
-      className={`generic-content-carousel ${classes.carouselContainer}`}
-      data-aid={`generic-content-carousel-${dataAidSuffix}`}
+      className={`wv-generic-content-carousel ${classes.carouselContainer}`}
+      data-aid={`wv-generic-content-carousel-${dataAidSuffix}`}
       key={index}
       style={{ ...style }}
     >
