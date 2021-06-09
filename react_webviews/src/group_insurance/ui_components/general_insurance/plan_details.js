@@ -376,7 +376,7 @@ class PlanDetailsClass extends Component {
         display: 'flex', alignItems: 'center', borderTop: index === 0 ? '1px solid #EFEDF2' : '', borderBottom: '1px solid #EFEDF2', paddingTop: '15px',
         paddingBottom: '15px', cursor: 'pointer'
       }}>
-        <Imgc className="plan-details-icon" src={props.icon} alt="" style={{width: '30px' , height: '30px' }} />
+        <Imgc className="plan-details-render-img" src={props.icon} alt="" />
         <div style={{marginRight: '10px'}} />
         <div>
           <div className="plan-details-text">{props.disc} ?</div>
@@ -684,7 +684,7 @@ class PlanDetailsClass extends Component {
               fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
               display: 'flex', width: 'fit-content', background: '#ede9f5', padding: '0px 10px 0 10px'
             }}>
-              <Imgc style={{ margin: '0px 5px 0 0', width: '10px', minHeight: '23px' }} src={this.state.instant_icon} alt="" />
+              <Imgc className="instant-issurance-img" src={this.state.instant_icon} alt="" />
               instant policy issuance
               </div>
           </div>}
@@ -788,7 +788,7 @@ class PlanDetailsClass extends Component {
         }
         {this.props.parent.state.product_key !== 'CORONA' &&
           <div className="accident-plan-claim">
-            <Imgc style={{width: '20px', height:'20px', margin: 0 }} className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
+            <Imgc className="accident-plan-claim-icon" src={this.state.ic_claim_assist} alt="" />
             <div>
               <div className="accident-plan-claim-title">Claim assistance</div>
               <div className="accident-plan-claim-subtitle">{this.state.quoteData.claim_assistance_line ||
@@ -799,7 +799,7 @@ class PlanDetailsClass extends Component {
         {this.props.parent.state.provider !== 'hdfcergo' &&
           <div className="accident-plan-read"
             onClick={() => this.openInBrowser(this.state.quoteData.read_document, 'read_document')}>
-            <Imgc style={{width: '20px', height:'20px' }} className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
+            <Imgc className="accident-plan-read-icon" src={this.state.ic_read} alt="" />
             <div className="accident-plan-read-text" style={styles.color}>Read Detailed Document</div>
           </div>}
 

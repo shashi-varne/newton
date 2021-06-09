@@ -440,7 +440,7 @@ class FyntuneLanding extends Component {
                 <div className="rc-tile-left">
                   <div className="">
                     <Imgc
-                      style={{width: 70, height: 50}}
+                      className="resume-card-logo"
                       src={this.state.resume_data.lead.logo}
                       alt=""
                     />
@@ -486,20 +486,17 @@ class FyntuneLanding extends Component {
         <div className="his" >
           <div className="horizontal-images-scroll">
             <Imgc
-              style={{width : '170px' , height: '115px' }}
-              className="image"
+              className="image imgc-space3"
               src={require(`assets/${this.state.productName}/ic_why_fyn1.png`)}
               alt=""
             />
             <Imgc
-              style={{width : '170px' , height: '115px' }}
-              className="image"
+              className="image imgc-space3"
               src={require(`assets/${this.state.productName}/ic_why_fyn2.png`)}
               alt=""
             />
             <Imgc
-              style={{width : '170px' , height: '115px' }}
-              className="image"
+              className="image imgc-space3"
               src={require(`assets/${this.state.productName}/ic_why_fyn3.png`)}
               alt=""
             />

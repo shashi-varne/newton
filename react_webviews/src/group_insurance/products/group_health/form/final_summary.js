@@ -792,7 +792,7 @@ class GroupHealthPlanFinalSummary extends Component {
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
-                        <Imgc src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" style={{width: '30px' , height: '30px' }} />
+                        <Imgc src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" className="final-summary-tile" />
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
@@ -808,7 +808,7 @@ class GroupHealthPlanFinalSummary extends Component {
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
-                        <Imgc src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" style={{width: '30px' , height: '30px' }} />
+                        <Imgc src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" className="final-summary-tile" />
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
@@ -854,7 +854,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         {props.title}
                     </div>
                     <div className="bct-icon">
-                        <Imgc style={{width: '14px', height: '14px'}} src={require(`assets/${props.open ? 'minus_icon' : 'plus_icon'}.svg`)} alt="" />
+                        <Imgc className="accordian-marker" src={require(`assets/${props.open ? 'minus_icon' : 'plus_icon'}.svg`)} alt="" />
                     </div>
                 </div>
 
@@ -993,7 +993,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
 
                     <div className="tc-right">
-                        <Imgc src={require(`assets/${this.state.providerData.logo_card}`)} alt="" style={{width:'50px', height: '50px' }} />
+                        <Imgc src={require(`assets/${this.state.providerData.logo_card}`)} alt="" className="insurance-logo-top-right" />
                     </div>
                 </div>
 
@@ -1003,7 +1003,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <Imgc src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" style={{width:'30px', height: '30px' }}/>
+                            <Imgc src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" className="final-summary-tile"/>
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -1017,7 +1017,7 @@ class GroupHealthPlanFinalSummary extends Component {
                    
                     { this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0) && <div className="member-tile">
                         <div className="mt-left">
-                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" style={{width:'30px', height: '30px' }} />
+                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" className="final-summary-tile" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -1031,7 +1031,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" style={{width:'30px', height: '30px' }} />
+                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" className="final-summary-tile" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -1046,7 +1046,7 @@ class GroupHealthPlanFinalSummary extends Component {
                    {this.state.quotation.floater_type && this.state.quotation.insurance_type !== 'self' &&
                     <div className="member-tile">
                         <div className="mt-left">
-                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" style={{width:'30px', height: '30px' }}/>
+                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" className="final-summary-tile"/>
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -1060,7 +1060,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" style={{width:'30px', height: '30px' }}/>
+                            <Imgc src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" className="final-summary-tile"/>
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -1091,7 +1091,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     {this.state.provider === 'GMC' ?
                         (<div className="member-tile">
                             <div className="mt-left">
-                                <Imgc src={require(`assets/${this.state.productName}/ic_hs_pay_freq.svg`)} alt="" style={{width:'30px', height: '30px' }}/>
+                                <Imgc src={require(`assets/${this.state.productName}/ic_hs_pay_freq.svg`)} alt="" className="final-summary-tile"/>
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">

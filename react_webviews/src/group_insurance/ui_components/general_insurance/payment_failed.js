@@ -72,7 +72,7 @@ class PaymentFailedClass extends Component {
         classOverRideContainer="payment-failed"
       >
         <div>
-          <div className="payment-failed-icon"><Imgc style={{width: '320px', height: '160px'}} src={this.state.failed_icon} alt="" /></div>
+          <div className="payment-failed-icon"><Imgc className="payment-failed-img" src={this.state.failed_icon} alt="" /></div>
           <div className="payment-failed-title">Payment Failed!</div>
           <div className="payment-failed-subtitle">Seems like an internal issue. Don’t worry we are on to it, please retry after sometime.</div>
         </div>

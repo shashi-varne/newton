@@ -136,7 +136,7 @@ class DiseasesSpecificPlan extends Component {
         display: 'flex', alignItems: 'center', width : '100%'
       }}>
         <div style={{ display: 'flex' , width : '100%'}}>
-          <Imgc src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt=""   className='dplan' style={{ width: '40px', height: '40px' , marginTop: '18px' }}/>
+          <Imgc className="disease_specific_plan_img" src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt=""/>
           <div style={{ marginRight: '25px'}}  />
           <div style={{ borderBottomWidth: '1px',
                   borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: this.state.insuranceProducts.length - 1 !== index ? '20px' : '40px',

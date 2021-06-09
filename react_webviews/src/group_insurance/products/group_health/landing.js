@@ -349,7 +349,7 @@ class GroupHealthLanding extends Component {
             </div>
         </div>
             <div className="title-image">
-                <Imgc style={{width:'50px', minHeight:'50px' }} src={require(`assets/${this.state.providerConfig.logo_card}`)} alt=""/>
+                <Imgc  className="insurance-logo-top-right" src={require(`assets/${this.state.providerConfig.logo_card}`)} alt=""/>
             </div>
         </div>
 

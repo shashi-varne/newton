@@ -162,7 +162,7 @@ class GroupHealthPlanList extends Component {
                         <Imgc
                             src={require(`assets/${this.state.providerData.logo_card}`)}
                             alt=""
-                            style={{ maxWidth: '140px', width: '50px' , height: '50px' }} />
+                            className="insurance-logo-top-right" />
                     </div>
                 </div>
 

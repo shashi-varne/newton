@@ -328,7 +328,7 @@ class GroupHealthPlanPremiumSummary extends Component {
             <div className="tc-right">
               <Imgc
                 src={require(`assets/${this.state.providerData.logo_card}`)}
-                style={{width:'50px', height:'50px'}}
+                className="insurance-logo-top-right"
                 alt=""
               />
             </div>

@@ -240,7 +240,7 @@ class Landing extends Component {
         display: 'flex', alignItems: 'center', width : '100%', justifyContent: 'space-between', cursor: 'pointer'
       }}>
         <div style={{ display: 'flex' , width : '100%' }}>
-          <Imgc src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ width: '56px' , height: '56px' , marginTop: '20px' }} />
+          <Imgc src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" className="insurance-landing-product-list-img"/>
           <div style={{ marginRight: '24px' }}  />
           <div style={{ borderBottomWidth: '1px',  width : '100%',
                           borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '25px' ,   paddingBottom: '25px'}} >
@@ -323,25 +323,25 @@ class Landing extends Component {
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
             <div className="inactive-entry-card" onClick={this.toToReports}>
-              <Imgc style={{width: '40px', height: '40px'}} alt="inactive-policy-card" src={require(`assets/${this.state.type}/policy_icon.svg`)} />
+              <Imgc className="inactive-policy-logo" alt="inactive-policy-card" src={require(`assets/${this.state.type}/policy_icon.svg`)} />
               <div className="inactive-right">
                 <p className="inactive-title">Your policies</p>
                 <p className="inactive-subtitle">{this.state.showCustomReportCardText ? `${this.state.customReportCardText} ${this.state.noOfReports > 1   ? '+' + (this.state.noOfReports - 1) + ' more': '' }` :'Looks like you have zero coverage'}</p>
               </div>
             </div>
             <div className="advisory-entry-container" onClick={(e)=>this.goToAdvisory(e)}>  
-              <Imgc className="advisory-entry" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt="" style={{width: '100%' , minHeight: '140px' }} />
+              <Imgc className="advisory-entry-img" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt="advisory-logo"/>
               <p className="adivsory-card-heading">Do you have adequate insurance coverage?</p>
               <button className="advisory-entry-button">{this.state.advisory_button_text}</button>
             </div>
             <div style={{ margin: "18px 0 26px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px', color: '#160d2e' }}> Get Insured with ease </div>
           <div className="his">
             <div className="horizontal-images-scroll">
-              <Imgc style={{width : '218px' , height: '164px' }} className="imgc-space image"  src={require(`assets/${this.state.type}/icn_free.svg`)} alt=""/>
+              <Imgc className="imgc-space image"  src={require(`assets/${this.state.type}/icn_free.svg`)} alt=""/>
               <div style={{marginRight: '20px'}} />
-              <Imgc style={{width : '218px' , height: '164px' }} className="imgc-space image" src={require(`assets/${this.state.type}/icn_assistance.svg`)} alt="" />
+              <Imgc className="imgc-space image" src={require(`assets/${this.state.type}/icn_assistance.svg`)} alt="" />
               <div style={{marginRight: '20px'}} />
-              <Imgc style={{width : '218px' , height: '164px' }} className="imgc-space image" src={require(`assets/${this.state.type}/icn_zero_paper.svg`)} alt="" />
+              <Imgc className="imgc-space image" src={require(`assets/${this.state.type}/icn_zero_paper.svg`)} alt="" />
             </div>
           </div>
 
@@ -351,17 +351,17 @@ class Landing extends Component {
 
           <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}> What our customers say </div>
           <div className="his"> <div className="horizontal-images-scroll">
-              <Imgc style={{  height: '160px' , width: '280px'}}  className="imgc-space image" src={require(`assets/${this.state.type}/icn_review_1.svg`)} alt=""/>
+              <Imgc  className="imgc-space2 image" src={require(`assets/${this.state.type}/icn_review_1.svg`)} alt=""/>
               <div style={{marginRight: '20px'}} />
-              <Imgc style={{  height: '160px' , width: '280px'}}  className="imgc-space image" src={require(`assets/${this.state.type}/icn_review_2.svg`)} alt=""/>
+              <Imgc  className="imgc-space2 image" src={require(`assets/${this.state.type}/icn_review_2.svg`)} alt=""/>
               <div style={{marginRight: '20px'}} />
-              <Imgc style={{  height: '160px' , width: '280px'}}  className="imgc-space image" src={require(`assets/${this.state.type}/icn_review_3.svg`)} alt=""/>
+              <Imgc  className="imgc-space2 image" src={require(`assets/${this.state.type}/icn_review_3.svg`)} alt=""/>
             </div>
           </div>
 
           <div  className="generic-subtitle-heading">Insurance with fisdom is 100% safe</div>
                     <div style={{display : 'flex' , justifyContent : 'center', height : '20px'}}>
-                     <div><Imgc className="image" src={require(`assets/irdanewlogo1.svg`)} alt="" style={{marginRight : '2px', minHeight:'20px', width:'17px' }}/>  </div>
+                     <div><Imgc className="irdia-image-bottom" src={require(`assets/irdanewlogo1.svg`)} alt=""/>  </div>
                      <span className='generic-subtitle-heading-IRDAI'>
                        <div>IRDAI REGISTERED </div>  
                        <div className='generic-subtitle-heading-IRDAI-number'>CA0505</div>

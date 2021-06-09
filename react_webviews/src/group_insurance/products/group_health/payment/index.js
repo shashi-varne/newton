@@ -290,7 +290,7 @@ class GroupHealthPayment extends Component {
       >
         <div className="gold-payment-container" id="goldSection">
           <div>
-            <Imgc style={{ width: '100%', minHeight: '160px' }}
+            <Imgc className="payment-screen-banner" style={{ width: '100%', minHeight: '160px' }}
               src={require(`assets/${this.state.productName}/${this.state.commonMapper['top_icon']}.svg`)}
               alt="" />
           </div>
@@ -369,8 +369,7 @@ class GroupHealthPayment extends Component {
             {this.state.paymentSuccess &&
               <div style={{ margin: '30px 0 30px 0', display: 'flex', position: 'relative' }} className="highlight-text highlight-color-info">
                 <div>
-                 {this.state.providerData.logo && <Imgc className="highlight-text11"
-                    style={{width: '30px', height: '30px', margin: 0}}
+                 {this.state.providerData.logo && <Imgc className="payment-screen-product-logo"
                     src={require(`assets/${this.state.providerData.logo}`)}
                     alt="info" />}
                 </div>

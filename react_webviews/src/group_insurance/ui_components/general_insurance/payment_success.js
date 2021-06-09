@@ -387,7 +387,7 @@ class PaymentSuccessClass extends Component {
       >
         <div>
           <div className="payment-success-heading">
-            <Imgc style={{width: '60px', height: '60px', margin: 0}} className="payment-success-icon" src={thumb} alt="" width="60" />
+            <Imgc className="payment-success-icon" src={thumb} alt=""/>
             <div style={{marginLeft: '15px'}} >
               <div className="payment-success-title">Payment successful</div>
               <div className="payment-success-subtitle">One final step! Share your address and you are insured. </div>

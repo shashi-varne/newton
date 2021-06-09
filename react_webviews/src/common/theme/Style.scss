@@ -476,6 +476,10 @@ button {
     font-size: 16px;
     font-weight: 300; 
   }
+  .resume-card-logo{
+    width: 70px !important;
+    height: 50px !important;
+  }
 }
 .fyntune-how-to-step{
   width: 70px !important;
@@ -1324,6 +1328,18 @@ $header-title-font-size: 20px;
   .horizontal-images-scroll {
     display: flex;
     width: fit-content;
+    .imgc-space.image{
+      width: 218px !important;
+      height: 164px !important;
+    }
+    .imgc-space2.image{
+      width: 280px !important;
+      height: 160px !important;
+    }
+    .imgc-space3.image{
+      width: 170px !important;
+      height: 115px !important;
+    }
     .image {
       margin: 0 20px 0px 0;
       border-radius: 4px;

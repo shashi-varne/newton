@@ -365,7 +365,7 @@ class PlanSuccessClass extends Component {
         skelton={this.state.skelton}
       >
         <div className="plan-success-heading">
-          <div className="plan-success-heading-icon"><Imgc style={{width: '320px', height: '160px'}} src={this.state.congratulations_icon} alt="" /></div>
+          <div className="plan-success-heading-icon"><Imgc className="plan-success-heading-img" src={this.state.congratulations_icon} alt="" /></div>
           <div className="plan-success-heading-title">Congratulations!</div>
           <div className="plan-success-heading-subtitle">{product_config[this.getProductKey()].top_title1} <span className="plan-success-heading-subtitle-bold">
             {product_config[this.getProductKey()].top_title2}</span>

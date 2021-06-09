@@ -109,6 +109,10 @@
   text-align: center;
    margin-bottom: 30px;
 }
+.plan-success-heading-img{
+  width: 360px !important;
+  height: 160px !important;
+}
 .plan-success-heading-title {
   color: #4a4a4a;
    font-size: 16px;
@@ -179,6 +183,10 @@
 }
 .payment-failed-icon {
   text-align: center; margin-bottom: 30px;
+  .payment-failed-img{
+    width: 320px !important;
+    height: 160px !important;
+  }
 }
 .payment-failed-title {
   color: #160d2e;
@@ -221,8 +229,10 @@
    align-items: center;
    padding: 20px 10px;
 }
-.payment-success-icon {
-  margin-right: 15px;
+.payment-success-icon{
+  margin: 0;
+  width: 60px !important;
+  height: 60px !important;
 }
 .payment-success-title {
   color: #160d2e;
@@ -266,6 +276,10 @@
 }
 .plan-details-icon {
   margin-right: 15px;
+}
+.plan-details-render-img{
+  width: 30px !important;
+  height: 30px !important;
 }
 .plan-details-text {
   color: #160d2e;
@@ -414,13 +428,13 @@
    padding: 0 15px;
 }
 .accident-plan-claim-icon {
-  margin-right: 10px;
+  width: 20px !important;
+  height: 20px !important;
 }
 .accident-plan-claim-title {
   color: #160d2e;
    font-size: 14px;
    margin-bottom: 10px;
-   margin-left: 10px;
    font-weight: 500;
 }
 .accident-plan-claim-subtitle {
@@ -957,6 +971,10 @@
     color: var(--primary);
     margin: 0 0 5px 0;
   }
+  .render-steps-icon{
+    width: 80px !important;
+    height: 60px !important;
+  }
 }
 
 .group-health-plan-select-sum-assured {
@@ -1140,11 +1158,19 @@
     }
   }
 }
+.insurance-logo-top-right{
+  width: 50px !important;
+  height: 50px !important;
+}
 
 .group-health-final-summary {
   .member-tile {
       display: flex;
       margin: 16px 0 16px 0;
+      .final-summary-tile{
+        width: 30px !important;
+        height: 30px !important;
+      }
       .mt-right {
         margin: 0 0 0 10px;
         display: flex;
@@ -1173,6 +1199,10 @@
     .bct-top {
       display: flex;
       justify-content: space-between;
+      .accordian-marker{
+        width: 14px !important;
+        height: 14px !important;
+      }
     }
     
     .bc-tile {
@@ -1315,7 +1345,7 @@
   }
   
   .insurance_plans_logos{
-    margin-right:25px !important;
+    margin: 20px 25px 15px 0 !important;
     width:  40px !important;
     height: 40px !important;
     border-radius: 2px;
@@ -1330,12 +1360,6 @@
     margin-left: 3px;
     padding-left: 3px;
     padding-right: 3px;
-  }
-
-  .dplan{
-    margin: 18px 26px 0px 8px !important;
-    width: 40px !important; 
-    height: 40px !important;
   }
 
   .imgc-box{
@@ -1514,6 +1538,12 @@
   }
 }
 
+.insurance-landing-product-list-img{
+  width: 56px !important;
+  height: 56px !important;
+  margin-top: 20px !important;
+}
+
 .inactive-entry-card{
   display: flex;
   justify-content: left;
@@ -1523,6 +1553,10 @@
   margin: 10px 0 40px 0;
   cursor: pointer;
   img, p{margin: 0}
+  .inactive-policy-logo{
+    width: 40px !important;
+    height: 40px !important;
+  }
   
   .inactive-right{
     margin-left: 20px;
@@ -1542,8 +1576,9 @@
   width: 100%;
   margin: 20px 0;
   position: relative;
-  img{
-    width: 100%;
+  .advisory-entry-img{
+    width: 100% !important;
+    min-height: 140px !important;
     object-fit: cover;
   }
   .adivsory-card-heading{
@@ -1700,7 +1735,14 @@
     .rec-profile{
       display: flex;
       align-items: flex-start;
-
+      
+      .rec-profile-left{
+        .profile-pic{
+          width: 120px !important;
+          height: 120px !important;
+        }  
+      }
+      
       .rec-profile-right{
         padding-left: 15px;
         margin-top: 5px;
@@ -1942,4 +1984,50 @@
   #asset_amount, #health_cover_amount, #term_cover_amount, #critical_cover_amount, #corona_cover_amount{
     padding-left: 12.5px;
   }
+}
+
+.irdia-image-bottom{
+  margin-right: 2px;
+  min-height: 20px;
+  width: 17px !important;
+}
+
+.select-floater-img{
+  width: 14px !important;
+  height: 14px !important;
+  margin: 0 !important;
+}
+
+.disease_specific_plan_img{
+  margin: 18px 26px 0px 8px !important;
+  width: 40px !important; 
+  height: 40px !important;
+}
+
+.health-insurance-plan-list-img{
+  width: 50px !important;
+  height: 50px !important;
+  margin-top: 15px;
+}
+
+.health-landing-img-left{
+  margin-left: 15px;
+}
+
+.instant-issurance-img{
+  margin: 0 5px 0 0 !important;
+  width: 10px !important;
+  min-height: 23px !important;
+}
+
+.baxa-report-download-icon{
+  width: 14px !important;
+  height: 14px !important;
+  margin: 0;
+}
+
+.baxa-report-bottom-img{
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0;
 }

@@ -182,7 +182,7 @@ class FyntuneReportDetails extends Component {
                         </div>
 
                         <div className="tc-right">
-                            <Imgc style={{width: '50px', height: '50px'}} src={this.state.policy_data.logo} alt="" />
+                            <Imgc className="insurance-logo-top-right" src={this.state.policy_data.logo} alt="" />
                         </div>
                     </div>
 

@@ -241,7 +241,7 @@ class AdivsoryRecommendations extends Component {
                             <p className="rec-profile-heading">Your profile</p>
                             <div className="rec-profile">
                                 <div className="rec-profile-left">
-                                    <Imgc style={{width: '120px', height: '120px'}} alt="" src={require(`assets/${this.state.type}/${this.state.profile_image}.svg`)}/>
+                                    <Imgc className="profile-pic" alt="" src={require(`assets/${this.state.type}/${this.state.profile_image}.svg`)}/>
                                 </div>
                                 {user_data && (
                                     <div className="rec-profile-right">

@@ -371,7 +371,7 @@ class GroupHealthReportDetails extends Component {
         return (
             <div key={index} className="tile">
                 <Imgc className="icon" 
-                    style={{width: '80px', height: '60px'}}
+                    className="render-steps-icon"
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">
@@ -455,7 +455,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
 
                         <div className="tc-right">
-                            <Imgc style={{width: '50px', height: '50px'}} src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                            <Imgc className="insurance-logo-top-right" src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
                         </div>
                     </div>
 

@@ -29,7 +29,7 @@ class DetailsCard extends Component {
                         
                     </div>
                     {
-                        item.headingLogo && <Imgc style={{width: '36px', height: '36px'}} alt="product-icon" src={`${item.headingLogo}`}/>
+                        item.headingLogo && <Imgc className="details-card-logo" alt="product-icon" src={`${item.headingLogo}`}/>
                     }
                 </div>
 

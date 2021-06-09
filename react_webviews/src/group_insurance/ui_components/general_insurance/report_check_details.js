@@ -290,14 +290,14 @@ class ReportDetails extends Component {
         </div>
         {this.state.policyData.status === 'policy_issued' &&
           <div onClick={() => this.openInBrowser(this.state.policyData.coi_blob_key)} className="report-detail-download">
-            <Imgc style={{width: '14px', height: '14px', margin: 0}} src={download} alt="" />
+            <Imgc className="baxa-report-download-icon" src={download} alt="" />
             <div className="report-detail-download-text">Download Policy</div>
           </div>}
         {this.state.policyData.status === 'policy_issued' && <div className="Accordion">
           <div className="AccordionTitle" onClick={() => this.toggleAccordion()}>
             <div className="AccordionList">
               <span className="AccordionList1">
-                <Imgc style={{width: '20px', height: '20px', margin: 0}} className="AccordionListIcon" src={(this.state.accordionTab) ? shrink : expand} alt="" width="20" />
+                <Imgc className="baxa-report-bottom-img" className="AccordionListIcon" src={(this.state.accordionTab) ? shrink : expand} alt="" width="20" />
               </span>
               <span style={{marginLeft: '10px'}}>How to claim the policy?</span>
             </div>

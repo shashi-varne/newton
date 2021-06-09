@@ -134,7 +134,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                         </div>
                        {this.state.type_of_plan === "floater" && props.discount.tenure[1] > 0 && (
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
-                            <Imgc style={{ width: 10, height: 10 }} src={require(`assets/ic_discount.svg`)} alt="" />
+                            <Imgc className="save-text-icon" src={require(`assets/ic_discount.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'
@@ -143,7 +143,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                         }
                         {this.state.type_of_plan === "non_floater" && props.discount.tenure[1] > 0 && 
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
-                            <Imgc style={{ width: 10, height: 10 }} src={require(`assets/ic_discount.svg`)} alt="" />
+                            <Imgc className="save-text-icon" src={require(`assets/ic_discount.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'
