@@ -13,6 +13,10 @@
     cursor: pointer;
   }
 }
+
+.Container.passive-fund-list-page{
+  overflow: visible !important;
+}
 .fund-number{
   color: var(--steelgrey);
   line-height: 16px;

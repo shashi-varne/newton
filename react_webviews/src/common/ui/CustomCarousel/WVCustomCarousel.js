@@ -1,20 +1,40 @@
+/*
+Use:
+- Provides the basic wrapper structure for the carousel
+- Everything wrapped with the component would be rendered as it is
+- Provides functionality to provide own indicator styles and arrow styles
+
+Example: 
+
+<WVCustomCarousel
+  showStatus={boolean} // defaults: false
+  showArrows={showArrows} // defaults: true
+  showThumbs={showThumbs} // defaults: false
+  infiniteLoop={infiniteLoop} // defaults: false
+  indicatorStyles={indicatorStyles} 
+  callbackFromParent={callbackFromParent}
+>
+  {content to be displayed}
+</WVCustomCarousel>
+*/
+
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { getConfig } from "utils/functions";
 import PropTypes from "prop-types";
-
+import "./WVCustomCarousel.scss";
 const productName = getConfig().productName;
 
 function WVCustomCarousel({
-  callbackFromParent,
+  callbackFromParent, // any function to be called with each slide
   showStatus,
   showArrows,
   showThumbs,
   infiniteLoop,
-  indicatorStyles,
-  children,
-  customArrowStyle
+  indicatorStyles, // object to define custom styles
+  children, // content to be rendered
+  customArrowStyle,
 }) {
   const onChangeEvent = () => {
     let x = document.getElementsByClassName("offer-slide-img");
@@ -46,10 +66,17 @@ function WVCustomCarousel({
                 background: getConfig().styles.primaryColor,
                 width: "10px",
               }}
+              className="wv-custom-carousel-indicator-styles"
             />
           );
         }
-        return <li onClick={onClickHandler} style={indicatorStyles} />;
+        return (
+          <li
+            onClick={onClickHandler}
+            className="wv-custom-carousel-indicator-styles"
+            style={indicatorStyles}
+          />
+        );
       }}
       {...customArrowStyle}
     >
@@ -76,13 +103,8 @@ WVCustomCarousel.defaultProps = {
   infiniteLoop: false,
   indicatorStyles: {
     background: productName !== "fisdom" ? "#9CC0FF" : "#DFD8EF",
-    width: "20px",
-    height: "3px",
-    display: "inline-block",
-    margin: "1px 3px",
-    borderRadius: "1.5px",
   },
-  customArrowStyle: {}
+  customArrowStyle: {},
 };
 
 export default WVCustomCarousel;

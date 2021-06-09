@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUrlParams, storageService } from "../../../utils/validators";
 import "./PassiveFundDetails.scss";
-import Accordian from "../../../common/ui/Accordian";
+import WVAccordian from "../../../common/ui/Accordian/WVAccordian";
 import { List } from "@material-ui/core";
 import MorningStar from "../../../assets/logo_morningstar.svg";
 import moment from "moment";
@@ -230,16 +230,16 @@ function PassiveFundDetails({ history }) {
           <section className="fund-more-info">
             <List component="nav">
               <div className="pfd-line" style={{ marginTop: "13px" }}></div>
-              <Accordian title="Returns*">
+              <WVAccordian title="Returns*" dataAidSuffix="Returns">
                 <Returns
                   returnsData={fundDetails?.performance?.returns}
                   iframe={false}
                 />
-              </Accordian>
+              </WVAccordian>
               <div className="pfd-line"></div>
-              <Accordian
+              <WVAccordian
                 title="Fund's Info"
-                name="fund_info_clicked"
+                dataAidSuffix="fundInfoClicked"
                 handleClick={() => storeEventsData("fund_info_clicked")}
               >
                 <FundInfo
@@ -266,26 +266,26 @@ function PassiveFundDetails({ history }) {
                   title="Fund Managers"
                   content={fundDetails?.additional_info?.fund_managers}
                 />
-              </Accordian>
+              </WVAccordian>
               <div className="pfd-line"></div>
-              <Accordian
+              <WVAccordian
                 title="Risk Details"
-                name="more_risks_clicked"
+                dataAidSuffix="moreRisksClicked"
                 handleClick={() => storeEventsData("more_risks_clicked")}
               >
                 <RiskDetails riskDetailsData={fundDetails?.risk} />
-              </Accordian>
+              </WVAccordian>
               <div className="pfd-line"></div>
-              <Accordian
+              <WVAccordian
                 title="Portfolio Details"
-                name="portfolio_details_clicked"
+                dataAidSuffix="portfolioDetailsClicked"
                 handleClick={() => storeEventsData("portfolio_details_clicked")}
               >
                 <FundPortfolio
                   portfolio={fundDetails?.portfolio}
                   navDate={fundDetails?.performance?.nav_update_date}
                 />
-              </Accordian>
+              </WVAccordian>
               <div className="pfd-line" style={{ marginBottom: "20px" }}></div>
             </List>
           </section>
