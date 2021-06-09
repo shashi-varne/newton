@@ -189,16 +189,24 @@ export const FUND_OPTIONS = [
 
 export const BOTTOM_FILTER_NAME = [
   {
-    "Sort by": SORT_OPTIONS
+    "name": "Sort by",
+    "option": SORT_OPTIONS,
+    "key": "sort_value",
   },
   {
-    "Index": [] //   [ THIS DATA IS APPENED BY API ]
+    "name": "Index", //   [ THIS DATA IS APPENED BY API ]
+    "option": [],
+    "key": "index_value",
   },
   {
-    "Fund Option": FUND_OPTIONS
+    "name": "Fund Option",
+    "option": FUND_OPTIONS,
+    "key": "fund_option_value",
   },
   {
-    "Fund House": []  //   [ THIS DATA IS APPENED BY API ]
+    "name": "Fund House",
+    "option": [],  //   [ THIS DATA IS APPENED BY API ]
+    "key": "fund_house_value",
   }
 ];
 

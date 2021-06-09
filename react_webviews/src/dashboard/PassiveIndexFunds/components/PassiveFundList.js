@@ -72,8 +72,8 @@ class FundList extends Component {
             })
             bottomFilterOptions.forEach(element => {
 
-                if (!!element[name]) {
-                    element[name] = option
+                if (element.name === name) {
+                    element["option"] = option
                 }
 
             });
@@ -107,19 +107,19 @@ class FundList extends Component {
     setSortFilter = async (item) => {
 
         let body = {
-            "filter_by": item["Sort by"] || "returns",
-            "fund_house": item["Fund House"] || [],
+            "filter_by": item["sort_value"] || "returns",
+            "fund_house": item["fund_house_value"] || [],
             "return_type": this.state.selected || "five_year_return",
-            "subcategory": item["Index"] ? item['Index'].length === 0 ? "all" : item["Index"] : "all"
+            "subcategory": item["index_value"] ? item['index_value'].length === 0 ? "all" : item["index_value"] : "all"
         }
 
-        if (item["Sort by"] === "tracking_error" || item["Sort by"] === "expense_ratio") {
+        if (item["sort_value"] === "tracking_error" || item["sort_value"] === "expense_ratio") {
             body["sort_by"] = "low_to_high"
         } else body["sort_by"] = "high_to_low"
 
-        if (item["Fund Option"] === "Growth") {
+        if (item["fund_option_value"] === "Growth") {
             body["growth"] = "true"
-        } else if (item["Fund Option"] === "Dividend") {
+        } else if (item["fund_option_value"] === "Dividend") {
             body["dividend"] = "true"
         }
 
@@ -214,7 +214,7 @@ class FundList extends Component {
                         dataAidSuffix={'passive-card-details'}
                         filterOptions={this.state.bottomFilterOptions}
                         getSortedFilter={this.setSortFilter}
-                        defaultFilter={{ "Sort by": "tracking_error" }}
+                        defaultFilter={{ "sort_value": "tracking_error" }}
                     />
                 </div>
             </Container>

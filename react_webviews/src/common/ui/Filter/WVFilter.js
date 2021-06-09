@@ -14,8 +14,8 @@ const WVFilter = ({
   filterOptions,
   defaultFilter
 }) => {
-  const [activeTab, setActiveTab] = useState(Object.keys(filterOptions[0])[0]);
-  const [activeData, setActiveData] = useState(Object.values(filterOptions[0])[0]);
+  const [activeTab, setActiveTab] = useState(Object.keys(defaultFilter)[0]);
+  const [activeData, setActiveData] = useState(filterOptions[0].option);
   const [localSortFilter, setLocalSortFilter] = useState(defaultFilter);
   
   const close = (data) => {
@@ -43,21 +43,21 @@ const WVFilter = ({
           <div className="title">
             <ul>
               {!isEmpty(filterOptions) &&
-                filterOptions.map((item , idx) => {
-                  let filter_options = Object.keys(item)[0];
+                filterOptions.map((item, idx) => {
+                  let TabName = item.name;
                   return (
                     <li
-                      data-aid={`filter-bottom-sheet-${dataAidSuffix}-${idx+1}`}
+                      data-aid={`filter-bottom-sheet-${dataAidSuffix}-${idx + 1}`}
                       key={idx}
                       role="button"
                       tabIndex="0"
                       onClick={() => {
-                        setActiveTab(filter_options);
-                        setActiveData(item[filter_options])
+                        setActiveTab(item.key);
+                        setActiveData(item.option);
                       }}
-                      className={activeTab === filter_options ? 'selected' : 'notselected'}
+                      className={activeTab === item.key ? 'selected' : 'notselected'}
                     >
-                      {filter_options}
+                      {TabName}
                     </li>
                   );
                 })}
