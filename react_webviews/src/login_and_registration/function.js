@@ -24,6 +24,7 @@ export function initialize() {
   this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
+  this.setUserAgent = setUserAgent.bind(this);
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
@@ -73,6 +74,12 @@ export function initialize() {
     redirectUrl: redirectUrl,
     rebalancingRedirectUrl: main_query_params.redirect_url,
   });
+}
+
+export function setUserAgent() {
+  nativeCallback({ action: "set_user_agent", message: {
+    user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+  }})
 }
 
 export function formCheckFields(
