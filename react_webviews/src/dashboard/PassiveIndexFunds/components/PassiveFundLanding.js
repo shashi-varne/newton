@@ -3,7 +3,7 @@ import { findDOMNode } from 'react-dom'
 import screenfull from 'screenfull'
 import ReactPlayer from 'react-player'
 import Container from "../../common/Container";
-import MenuListDropDown from '../../../common/ui/MenuListDropDown'
+import WVMenuListDropDown from '../../../common/ui/MenuListDropDown/WVMenuListDropDown'
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
 import { FUND_CATEGORY, ACTIVE_PASSIVE_FACTS_CAROUSEL, KEY_INSIGHTS_CAROUSEL } from "../constants";
 import { storageService } from "utils/validators";
@@ -117,7 +117,7 @@ class Landing extends Component {
           </div>
           <div className="content-main">
             <h1 className="category-title">Top index funds</h1>
-            <MenuListDropDown
+            <WVMenuListDropDown
               menulistProducts={FUND_CATEGORY}
               value={this.state.value}
               handleClick={this.handleClick}

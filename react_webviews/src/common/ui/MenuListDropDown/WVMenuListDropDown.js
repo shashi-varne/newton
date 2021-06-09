@@ -1,5 +1,19 @@
+/*
+Use: MenuListDropDown for selecting category and sub-category from a dropdown
+
+Example syntax:
+  <WVMenuListDropDown
+    menulistProducts={[{key,subtitle,icon, dropDownArrow, resume_flag={true or false}}, component: [ { key,title, subtitle,icon, Product_name},}]}
+    value={this.state.value}  // THIS IS THE SELECTED INDEX OF THE DROPDOWN
+    handleClick={this.handleClick} // handleClick ACTION
+    handleClickEntry={this.handleClickEntry} // sub category handleClickEntry Action
+  />
+
+*/
+
 import React, { Component, Fragment } from 'react';
 import { getConfig } from 'utils/functions';
+import "./WVMenuListDropDownSheet.scss"
 class MenuListDropDownClass extends Component {
     constructor(props) {
         super(props);
@@ -44,7 +58,7 @@ class MenuListDropDownClass extends Component {
                             <div className='menu-title' >{props.title} {' '}
                                 {props.resume_flag && <span className='menu-list-resume_flag'>Resume</span>}
                                 {props.type === 'drop-down' && <span className='menulist-img'>
-                                    <img src={props.dropdown} alt="" style={{ transform: this.props.value === index ? `rotate(180deg)` : '' }} /></span>}
+                                    <img src={props.dropDownArrow} alt="" style={{ transform: this.props.value === index ? `rotate(180deg)` : '' }} /></span>}
                             </div>
                             <div className='menu-subtitle'>{props.subtitle}</div>
                         </div>
@@ -52,7 +66,7 @@ class MenuListDropDownClass extends Component {
                 </div>
                 <div className='menulist-block'>
                     {props.type === 'drop-down' && this.props.value === index &&
-                        <div style={{width: '100%'}}
+                        <div style={{ width: '100%' }}
                             onClick={() => this.props.handleClick(props.key, props.title)}>
                             {props.formate === 'object' &&
                                 <div className="menulist-dropdown-lists">
@@ -79,10 +93,10 @@ class MenuListDropDownClass extends Component {
     }
 }
 
-const MenuListDropDown = (props) => {
+const WVMenuListDropDown = (props) => {
     return (
         <MenuListDropDownClass {...props} />
     )
 }
 
-export default MenuListDropDown;
+export default WVMenuListDropDown;
