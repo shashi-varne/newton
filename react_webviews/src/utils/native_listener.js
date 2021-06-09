@@ -304,6 +304,21 @@ import { getConfig } from './functions';
     }
   }
 
+  exports.sendEvent = function (message) {
+    window.parent.postMessage(message, "*");
+  };
+  
+  exports.eventCallback = function (data) {
+    // events for partner uses
+    var callbackData = {};
+    callbackData.action = "event_callback";
+    callbackData.action_data = data;
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
   exports.return_data = function (data_json_str) {
     var json_data = {};
     if (data_json_str !== "" && typeof data_json_str === "string") {

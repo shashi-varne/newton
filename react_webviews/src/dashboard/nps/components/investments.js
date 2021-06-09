@@ -5,6 +5,7 @@ import Api from "utils/api";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "../../../utils/validators";
 import { getConfig } from "utils/functions";
+import { nativeCallback } from "../../../utils/native_callback";
 
 class NpsInvestments extends Component {
   constructor(props) {
@@ -104,7 +105,8 @@ class NpsInvestments extends Component {
     }
   }
 
-  redirection = (url, name='') => {
+  redirection = (url, name='',item) => {
+    this.sendEvents('next', 'NPS investments', item)
     let paymentRedirectUrl = encodeURIComponent(
       window.location.origin + `/nps/investments` + getConfig().searchParams
     );
@@ -133,7 +135,7 @@ class NpsInvestments extends Component {
   }
 
   optionClicked = (route, item) => {
-
+    this.sendEvents('next', 'NPS investments', item)
     let cardClicked = item;
     this.setState({
       cardClicked: cardClicked
@@ -143,16 +145,54 @@ class NpsInvestments extends Component {
   }
 
   investMore = () => {
+    this.sendEvents('next')
+    const config = getConfig();
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "reports",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "nps",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+
     this.navigate('/nps/amount/one-time')
   }
 
   goBack = () => {
+    this.sendEvents('back')
     this.navigate('/invest');
+  };
+
+  sendEvents = (userAction, screenName, cardClicked) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction,
+        screen_name: screenName || "NPS investments",
+        card_click: cardClicked || "",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
 
   render() {
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         fullWidthButton
         buttonTitle="INVEST MORE"
         title="NPS Investments"
@@ -169,7 +209,7 @@ class NpsInvestments extends Component {
           <div className="nps-investments">
             {this.state.npscampaign && <div
               className="list"
-              onClick={() => this.redirection(this.state.npsCampActionUrl, 'e-sign')}
+              onClick={() => this.redirection(this.state.npsCampActionUrl, 'e-sign', 'nps activation pending')}
             >
               <div className="icon">
                 <img
@@ -181,7 +221,7 @@ class NpsInvestments extends Component {
               </div>
             </div>}
 
-            <div className="list" onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url)}>
+            <div className="list" onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url, '', 'tax statement')}>
               <div className="icon">
                 <img
                   alt=''

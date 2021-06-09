@@ -32,6 +32,7 @@ import { isFunction, findIndex } from 'lodash';
 import PropTypes from 'prop-types';
 
 const WVSelect = ({
+  dataAidSuffix,
   preselectFirst, // Set this to preselect the first option from 'options' list
   options, // Array of objects to be displayed as select options
   indexBy, // Prop name to track select option by (used for equality comparison) 
@@ -40,6 +41,7 @@ const WVSelect = ({
   subtitleProp, // Name of prop to render subtitle for select option
   onChange, // Callback for when any select option is selected/changed
   renderItem, // Use this prop to pass a custom render function/component for select option
+  classes,
 }) => {
   const [selectedOpt, setSelectedOpt] = useState(value || {});
 
@@ -66,14 +68,16 @@ const WVSelect = ({
   }, []);
 
   const renderOptionProps = {
+    dataAidSuffix,
     titleProp,
     subtitleProp,
     renderItem,
-    onClick: selectOpt
+    onClick: selectOpt,
+    classes
   };
 
   return (
-    <div className="wv-select-container">
+    <div className={`wv-select-container ${classes.container}`} data-aid={`wv-select-container-${dataAidSuffix}`}>
       {options?.map((option, idx) =>
         <RenderOption
           key={option[indexBy]}
@@ -89,33 +93,37 @@ const WVSelect = ({
 
 const RenderOption = (props) => {
   const {
+    dataAidSuffix,
     option,
     optionIndex,
     selected,
     onClick,
     renderItem,
     titleProp,
-    subtitleProp
+    subtitleProp,
+    classes = {},
   } = props;
 
   return (
     <div
-      className={`wv-select-item ${selected ? 'selected' : ''}`}
+      className={`wv-select-item ${classes.item} ${selected ? 'selected' : ''}`}
+      style={{ padding: subtitleProp ? '10px 22px' : '20px 22px'}}
       key={optionIndex}
       onClick={() => onClick?.(optionIndex)}
+      data-aid={`wv-select-item-${dataAidSuffix}`}
     >
-      <div className="wv-select-item-content">
+      <div className={`wv-select-item-content ${classes.itemContent}`} data-aid={`wv-select-item-content-${dataAidSuffix}`}>
         {isFunction(renderItem) ?
           renderItem(option) :
           <>
-            <Title>{option[titleProp]}</Title>
-            <Subtitle>{option[subtitleProp]}</Subtitle>
+            {titleProp && <Title dataAidSuffix={dataAidSuffix} className={classes.title}>{option[titleProp]}</Title>}
+            {subtitleProp && <Subtitle dataAidSuffix={dataAidSuffix} className={classes.subtitle}>{option[subtitleProp]}</Subtitle>}
           </>
         }
       </div>
       {selected &&
         <img
-          className="wv-select-selected-icon"
+          className={`wv-select-selected-icon ${classes.selectedIcon}`}
           src={completed_step}
           alt="Check"
         />
@@ -125,7 +133,7 @@ const RenderOption = (props) => {
 }
 
 const Title = (props) => {
-  return (<div className="wv-select-item-title">
+  return (<div className={`wv-select-item-title ${props.className}`} data-aid={`wv-title-${props.dataAidSuffix}`}>
     {props.children}
   </div>)
 };
@@ -133,7 +141,7 @@ const Title = (props) => {
 WVSelect.ItemTitle = Title;
 
 const Subtitle = (props) => {
-  return (<div className="wv-select-item-subtitle">
+  return (<div className={`wv-select-item-subtitle ${props.className}`} data-aid={`wv-subtitle-${props.dataAidSuffix}`}>
     {props.children}
   </div>)
 };
@@ -153,6 +161,7 @@ WVSelect.propTypes = {
 
 WVSelect.defaultProps = {
   preselectFirst: false,
+  classes: {},
 }
 
 export default WVSelect;

@@ -6,16 +6,18 @@ import FileAccessDialog from './FileAccessDialog';
 
 const isWeb = getConfig().Web;
 
-const openFileHandler = (filepickerId, methodName, docName, nativeHandler) => {
-  if (getConfig().html_camera) {
+const openFileHandler = (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) => {
+  if (isWeb) {
     const filepicker = document.getElementById(filepickerId);
     if (filepicker){
       filepicker.click();
     }
   } else {
     window.callbackWeb[methodName]({
-      docName,
-      upload: nativeHandler // callback from native
+      type: 'doc',
+      doc_type: docName,
+      upload: nativeHandler,
+      ...fileHandlerParams // callback from native
     });
   }
 }
@@ -35,7 +37,7 @@ const validateFileTypeAndSize = (file, supportedTypes, sizeLimit) => {
   const sizeInBytes = sizeLimit * 1000 * 1000;
   
   if (!isArray(supportedTypes)) {
-    supportedTypes = [supportedTypes]
+    supportedTypes = [supportedTypes];
   }
   
   if (!supportedTypes.includes(fileType)) {
@@ -48,6 +50,7 @@ const validateFileTypeAndSize = (file, supportedTypes, sizeLimit) => {
 }
 
 export const WVFilePickerWrapper = ({
+  dataAidSuffix,
   nativePickerMethodName = '',
   customPickerId = 'wv-file-input',
   showOptionsDialog,
@@ -57,6 +60,7 @@ export const WVFilePickerWrapper = ({
   sizeLimit = 100,
   supportedFormats,
   fileName,
+  fileHandlerParams,
   children
 }) => {
   const [openOptionsDialog, setOpenOptionsDialog] = useState(false);
@@ -65,7 +69,7 @@ export const WVFilePickerWrapper = ({
   const onFileSelected = async (file) => {
     try {
       // Basic size and file type validations
-      const errMsg = validateFileTypeAndSize(file, supportedFormats, sizeLimit)
+      const errMsg = validateFileTypeAndSize(file, supportedFormats, sizeLimit);
       if (errMsg) throw errMsg;
 
       // Additional file validations, if any
@@ -97,14 +101,14 @@ export const WVFilePickerWrapper = ({
     if (!isWeb && showOptionsDialog) {
       setOpenOptionsDialog(true);
     } else {
-      openFileHandler(customPickerId, nativePickerMethodName, fileName, onFileSelected);
+      openFileHandler(customPickerId, nativePickerMethodName, fileName, onFileSelected, fileHandlerParams);
     }
   }
 
   const handleUploadFromDialog = (type) => {
     setOpenOptionsDialog(false);
     setFilePickerType(type);
-    openFileHandler(customPickerId, type, fileName, onFileSelected)
+    openFileHandler(customPickerId, type, fileName, onFileSelected, fileHandlerParams);
   }
 
   return (
@@ -121,6 +125,7 @@ export const WVFilePickerWrapper = ({
         onClickFunc={onElementClick}
       />
       <FileAccessDialog
+        dataAidSuffix={dataAidSuffix}
         isOpen={openOptionsDialog}
         handleUpload={handleUploadFromDialog}
         onClose={() => setOpenOptionsDialog(false)}
