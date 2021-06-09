@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import { getConfig } from 'utils/functions';
  
 import {didMount ,commonRender} from '../../common/components/container_functions';
+import { getBasePath } from '../../utils/functions';
  
 class Container extends Component {
  constructor(props) {
