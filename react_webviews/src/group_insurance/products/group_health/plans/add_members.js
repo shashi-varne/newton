@@ -12,6 +12,7 @@ import toast from '../../../../common/ui/Toast';
 import { initialize } from '../common_data';
 import ReactTooltip from "react-tooltip";
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import Checkbox from 'common/ui/Checkbox';
 
 const other_adult_member_options = [
     {
@@ -55,6 +56,8 @@ class GroupHealthPlanAddMembers extends Component {
             mother_onlycheckbox: true,
             'father_in_law_onlycheckbox': true,
             'mother_in_law_onlycheckbox': true,
+            parents_onlycheckbox: true,
+            parents_in_law_onlycheckbox: true,
             ui_members: {},
             screen_name: 'add_members_screen'
         };
@@ -101,6 +104,21 @@ class GroupHealthPlanAddMembers extends Component {
             this.setMinMax();
             ReactTooltip.rebuild();
         });
+
+        if(this.state.provider === 'STAR' && (this.state.groupHealthPlanData.account_type === 'self_family' || this.state.groupHealthPlanData.account_type === 'family')){
+            console.log(ui_members)
+            this.setState({
+                father_checked: ui_members.father || false,
+                father_in_law_checked: ui_members.father_in_law || false,
+                mother_checked: ui_members.mother || false,
+                mother_in_law_checked: ui_members.mother_in_law || false,
+                parents_checked: ui_members.father || ui_members.mother || false,
+                parents_in_law_checked: ui_members.father_in_law || ui_members.mother_in_law || false
+            }, () => {
+                this.setMinMax();
+                ReactTooltip.rebuild();
+            })
+        }
     }
 
     navigate = (pathname) => {
@@ -192,6 +210,24 @@ class GroupHealthPlanAddMembers extends Component {
                     ui_members[key] = true;
                 }
             });
+        }
+
+        if(this.state.provider === 'STAR' && ['self_family', 'family'].includes(this.state.account_type)){
+            var {father_in_law_checked, mother_in_law_checked, father_checked, mother_checked} = this.state;
+            if (father_checked) {
+                ui_members.father = true;
+            }
+
+            if (mother_checked) {
+                ui_members.mother = true;
+            }
+            if (father_in_law_checked) {
+                ui_members.father_in_law = true;
+            }
+
+            if (mother_in_law_checked) {
+                ui_members.mother_in_law = true;
+            }
         }
 
         if (['self_family', 'family'].includes(this.state.account_type)) {
@@ -367,8 +403,30 @@ class GroupHealthPlanAddMembers extends Component {
     };
 
     updateParent = (key, value) => {
+        
+        var {father_in_law_checked, mother_in_law_checked, father_checked, mother_checked} = this.state;
+        if(key[0] === 'parents_total' && !value){
+            father_checked = false; 
+            mother_checked = false;
+        }else if(key[0] === 'parents_total' && value){
+            father_checked = true; 
+            mother_checked = true;
+        }
+
+        if(key[0] === 'parents_in_law_total' && !value){
+            father_in_law_checked = false; 
+            mother_in_law_checked = false;
+        }else if(key[0] === 'parents_in_law_total' && value){
+            father_in_law_checked = true; 
+            mother_in_law_checked = true;
+        }
+
         this.setState({
-            [key]: value
+            [key]: value,
+            father_checked, 
+            mother_checked, 
+            father_in_law_checked, 
+            mother_in_law_checked
         }, () => {
             this.setMinMax();
         });
@@ -403,6 +461,29 @@ class GroupHealthPlanAddMembers extends Component {
 
     };
 
+    handleSubCheckbox = (name) =>{
+        var {father_checked, mother_checked, father_in_law_checked, mother_in_law_checked, parents_checked, parents_in_law_checked} = this.state;
+        
+        if((name === 'father' || name === 'mother') && !father_checked && !mother_checked){
+                parents_checked = false
+        }
+        if((name === 'father_in_law' || name === 'mother_in_law') && !father_in_law_checked && !mother_in_law_checked){
+                parents_in_law_checked = false
+        }
+        this.setState({
+            parents_checked, 
+            parents_in_law_checked
+        })
+    }
+
+    
+    handleCheckbox = (name) =>{
+        this.setState({
+            [name + '_checked'] : !this.state[name + '_checked'],
+        }, ()=>{
+            this.handleSubCheckbox(name);
+        });
+    }
     render() {
 
         return (
@@ -481,6 +562,66 @@ class GroupHealthPlanAddMembers extends Component {
                 <div className="generic-hr"></div>
                 <PlusMinusInput name="son" parent={this} />
                 <div className="generic-hr"></div>
+                {
+                    this.state.provider === 'STAR' && (
+                        <div>
+                            <p style={{marginTop: '25px'}}>Select parent type</p>
+                            <div className="generic-hr"></div>
+                            <PlusMinusInput name="parents" parent={this} />
+                            {
+                                this.state.parents_checked && (
+                                <div className="horizontal-checkbox-layout">
+                                    <div className="add-member-generic-checkbox">
+                                        <Checkbox 
+                                            value="Father" 
+                                            handleChange={()=>this.handleCheckbox('father')}
+                                            checked={this.state.father_checked}
+                                        />
+                                        <p>Father</p>
+                                    </div>
+                                    <div className="add-member-generic-checkbox">
+                                        <Checkbox 
+                                            value="Father" 
+                                            handleChange={()=>this.handleCheckbox('mother')}
+                                            checked={this.state.mother_checked}
+                                        />
+                                        <p>Mother</p>
+                                    </div>
+                                </div>
+                                )
+                            }
+                                
+                            <div className="generic-hr"></div>
+                            <PlusMinusInput label="Parents-in-law" name="parents_in_law" parent={this} />
+                            {
+                                this.state.parents_in_law_checked && (
+                                <div className="horizontal-checkbox-layout">
+                                    <div className="add-member-generic-checkbox">
+                                        <Checkbox 
+                                            value="Father" 
+                                            handleChange={()=>this.handleCheckbox('father_in_law')}
+                                            checked={this.state.father_in_law_checked}
+                                        />
+                                        <p>Father-in-law</p>
+                                    </div>
+                                    <div className="add-member-generic-checkbox">
+                                        <Checkbox 
+                                            value="Father" 
+                                            handleChange={()=>this.handleCheckbox('mother_in_law')}
+                                            checked={this.state.mother_in_law_checked}
+                                        />
+                                        <p>Mother-in-law</p>
+                                    </div>
+                                </div>
+                                )
+                            }
+                            
+                            <div className="generic-hr" style={{marginBottom: '30px'}}></div>
+                        </div> 
+                    )
+                }
+                
+
               </div>
             )}
 
