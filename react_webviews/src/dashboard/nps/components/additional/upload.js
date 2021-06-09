@@ -193,9 +193,9 @@ class uploadAddressProof extends Component {
 
   handleChange = (event) => {
     let value = event || "";
-    let sides = 1;
+    let sides = 2;
     if (value === 'utilitybill' || value === 'bankstatement') {
-      sides = 2
+      sides = 1;
     }
 
     this.setState({

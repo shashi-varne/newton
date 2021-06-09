@@ -5,17 +5,20 @@ import Container from "../common/Container";
 import Api from "../../utils/api";
 import toast from "../../common/ui/Toast";
 import { storageService } from "../../utils/validators";
+import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
 const genericErrorMessage = "Something went wrong!";
+const config = getConfig();
 class Notification extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productName: getConfig().productName,
+      productName: config.productName,
       showLoader: false,
       notifications: [],
     };
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentDidMount() {
@@ -78,13 +81,12 @@ class Notification extends Component {
     return notificationsData;
   }
 
-  getRedirectionUrlWebview = (url, type) => {
+  getRedirectionUrlWebview = (url, showRedirectUrl) => {
     let webRedirectionUrl = url;
-    webRedirectionUrl +=
-      // eslint-disable-next-line
-      (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
-      "generic_callback=true";
-
+    let plutusRedirectUrl = `${getBasePath()}/notification?is_secure=${storageService().get("is_secure")}`;
+    // Adding redirect url for testing
+    // eslint-disable-next-line
+    webRedirectionUrl = `${webRedirectionUrl}${webRedirectionUrl.match(/[\?]/g) ? "&" : "?"}generic_callback=true&${showRedirectUrl ?"redirect_url":"plutus_redirect_url"}=${encodeURIComponent(plutusRedirectUrl)}&campaign_version=1`
     return webRedirectionUrl;
   };
 
@@ -92,9 +94,10 @@ class Notification extends Component {
     this.sendEvents('next', target.campaign_name)
     this.setState({ showLoader: true });
     let campLink = "";
+    const showRedirectUrl = target.campaign_name === "whatsapp_consent"
     campLink = this.getRedirectionUrlWebview(
       target.url,
-      "campaigns"
+      showRedirectUrl
     );
     window.location.href = campLink;
   };
@@ -115,6 +118,10 @@ class Notification extends Component {
     }
   }
 
+  goBack = () => {
+    this.navigate("/");
+  }
+
   render() {
     let { notifications } = this.state;
     return (
@@ -123,6 +130,7 @@ class Notification extends Component {
         noFooter={true}
         skelton={this.state.showLoader}
         title="Notification"
+        headerData={{ goBack: this.goBack }}
       >
         <div className="notification">
           {notifications.length === 0 && (

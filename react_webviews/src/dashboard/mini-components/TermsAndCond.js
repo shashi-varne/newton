@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -14,6 +13,7 @@ import { getTerms } from '../Invest/common/api';
 import { getConfig } from 'utils/functions';
 
 import './mini-components.scss';
+import Button from '../../common/ui/Button';
 
 const TermsAndCond = () => {
   const [open, setOpen] = useState(false);
@@ -89,15 +89,19 @@ const TermsAndCond = () => {
           </span>
         </div>
       </div>
-      <DialogTC open={open} handleClose={handleClose} data={data[doc]} />
+      <DialogTC open={open} handleClose={handleClose} data={data[doc]} docType={doc} />
     </div>
   );
 };
 
 export default TermsAndCond;
 
-const DialogTC = ({ open, handleClose, data }) => {
+const DialogTC = ({ open, handleClose, data, docType }) => {
   const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
+  const DOC_TITLES = {
+    terms: "Terms and Conditions",
+    scheme: "Scheme Offer Documents"
+  }
 
   return (
     <>
@@ -108,7 +112,7 @@ const DialogTC = ({ open, handleClose, data }) => {
         aria-labelledby='responsive-dialog-title'
         fullWidth
       >
-        <DialogTitle classes={{ root: 't_and_c_title' }}>Terms and Conditions</DialogTitle>
+        <DialogTitle classes={{ root: 't_and_c_title' }}>{DOC_TITLES[docType] || ""}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {data ? (
@@ -121,16 +125,12 @@ const DialogTC = ({ open, handleClose, data }) => {
           </DialogContentText>
         </DialogContent>
         {data && (
-          <DialogActions style={{ margin: '20px' }}>
-            <Button
-              className='DialogButtonFullWidth'
+          <DialogActions style={{padding: "0 20px"}}>
+            <Button 
+              buttonTitle="DONE"
               onClick={handleClose}
-              color='default'
-              autoFocus
-              style={{ margin: 0 }}
-            >
-              DONE
-            </Button>
+              style={{margin: "0 auto"}}
+            />
           </DialogActions>
         )}
       </Dialog>
