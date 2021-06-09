@@ -159,6 +159,9 @@ export const upload = async (file, type, data = {}) => {
       case 'pan':
         formData.append('kyc_flow', data.kyc_flow)
         break
+      case 'sign':
+        formData.append('manual_upload', data.manual_upload)
+        break
        default:
          break
     }

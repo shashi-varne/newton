@@ -91,7 +91,8 @@ const Sign = (props) => {
     sendEvents('next')
     try {
       setIsApiRunning("button")
-      const response = await upload(file, 'sign')
+      const payload = { manual_upload: isWeb }
+      const response = await upload(file, 'sign', payload)
       if (response.status_code === 200) {
         const result = response.result;
         updateKyc(result.kyc);
