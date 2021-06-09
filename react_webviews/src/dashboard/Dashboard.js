@@ -31,6 +31,7 @@ import InvestmentProof from "./MyAccount/InvestmentProof";
 import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
+import StatusCallback from "../kyc/Native/StatusCallback";
 
 const Home = (props) => {
   const { url } = props.match;
@@ -116,6 +117,11 @@ const Home = (props) => {
           exact
           path={`${url}digilocker/callback`}
           component={DigilockerCallback}
+        />
+        <Route
+          exact
+          path={`${url}status/callback/native`}
+          component={StatusCallback}
         />
         <Route exact path={`${url}account/merge/:pan_number`} component={AccountMerge} />
         <Route exact path={`${url}account/merge/otp/:pan_number`} component={AccountMergeOtp} />
