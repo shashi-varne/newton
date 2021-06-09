@@ -1,0 +1,28 @@
+.generic-content-carousel {
+  width: 100%;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  padding: 20px 20px;
+  min-height: 116px;
+  border-radius: 6px;
+  .title {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0px;
+    color: var(--dark);
+    margin-bottom: 10px;
+    margin-top: 0;
+    text-align: left;
+  }
+  .content {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0px;
+    color: var(--steelgrey);
+    text-align: left;
+  }
+}

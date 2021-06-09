@@ -9,13 +9,14 @@ import { FUND_CATEGORY, ACTIVE_PASSIVE_FACTS_CAROUSEL, KEY_INSIGHTS_CAROUSEL } f
 import { storageService } from "utils/validators";
 import { initialize } from "../common/commonFunctions";
 import { nativeCallback } from "../../../utils/native_callback";
-import GenericFactCarousel from "../../../common/ui/GenericFactCarousel";
-import GenericContentCarousel from "../../../common/ui/GenericContentCarousel";
 import VideoBlockImageSection from "../mini-components/VideoBlockImageSection"
 import { Imgc } from "../../../common/ui/Imgc";
 import KeyInsightBackground from "../../../assets/passiveFundKeyInsights.svg";
 import ActivePassiveBackground from "../../../assets/active_passive_background.svg";
 import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
+import WVGenericContentCarousel from "../../../common/ui/GenericContentCarousel/WVGenericContentCarousel";
+import WVGenericFactCarousel from "../../../common/ui/GenericFactCarousel/WVGenericFactCarousel";
+
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -126,25 +127,27 @@ class Landing extends Component {
             />
             <h1 className="category-title" data-aid="category-title-2">Key insights</h1>
             <div className="react-responsive-carousel">
-              <GenericContentCarousel
+              <WVGenericContentCarousel
                 customData={KEY_INSIGHTS_CAROUSEL}
                 callbackFromParent={this.countCarouselSwipe}
                 selectedIndexvalue={this.state.selectedIndex}
-                style={{
+                carouselPageStyle={{
                   backgroundImage: `url(${KeyInsightBackground})`,
                   backgroundColor: "#FBFDFF"
                 }}
+                dataAidSuffix="passive-key-insights"
               />
             </div>
             <h1 className="category-title" data-aid="category-title-3">Passive vs. Active investing</h1>
             <div className="react-responsive-carousel">
-              <GenericFactCarousel
+              <WVGenericFactCarousel
                 customData={ACTIVE_PASSIVE_FACTS_CAROUSEL}
                 callbackFromParent={this.countCarouselSwipe}
-                style={{
+                carouselPageStyle={{
                   backgroundImage: `url(${ActivePassiveBackground})`,
                   backgroundColor: "#FAFCFF"
                 }}
+                dataAidSuffix="active-vs-passive"
               />
             </div>
             <WVSecurityDisclaimer />
