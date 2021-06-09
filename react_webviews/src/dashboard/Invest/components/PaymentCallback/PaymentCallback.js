@@ -6,6 +6,7 @@ import { resetRiskProfileJourney } from "../../functions";
 import "./PaymentCallback.scss";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { isIframe } from "../../../../utils/functions";
+import { storageService } from "../../../../utils/validators";
 
 const PaymentCallback = (props) => {
   const params = props.match.params || {};
@@ -15,14 +16,52 @@ const PaymentCallback = (props) => {
   let message = params.message || "";
   resetRiskProfileJourney()
   const config = getConfig();
+  const eventData = storageService().getObject('mf_invest_data')
+  let _event = {
+    event_name: "payment_status",
+    properties: {
+      status: status,
+      amount: eventData.amount,
+      payment_id: eventData.payment_id,
+      journey: {
+        name: eventData.journey_name,
+        investment_type: eventData.investment_type,
+        investment_subtype: eventData.investment_subtype || "",
+        risk_type: "",
+      },
+    },
+  };
+  // send event
+  if (!config.Web) {
+    window.callbackWeb.eventCallback(_event);
+  } else if (config.isIframe) {
+    window.callbackWeb.sendEvent(_event);
+  }
   let paymentError = false;
   if (status === "error" || status === "failed") {
     paymentError = true;
-    if (!message)
+    if (!message  || message === "None")
       message = "Something went wrong, please retry with correct details";
   }
 
   const handleClick = () => {
+    let _event = {
+      'event_name': 'journey_details',
+      'properties': {
+        'journey': {
+          'name': 'mf',
+          'trigger': 'cta',
+          'journey_status': 'complete',
+          'next_journey': 'reports'
+        }
+      }
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
     navigate("/reports");
   };
 

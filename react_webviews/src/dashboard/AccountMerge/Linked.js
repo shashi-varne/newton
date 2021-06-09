@@ -12,8 +12,11 @@ const AccountLinked = (props) => {
   const code = config.code;
   const handleClick = () => {
     if (config.Web) {
-      if (isIframe()) {
-        // handle Iframe
+      if (config.isIframe) {
+        let message = JSON.stringify({
+          type: "iframe_close",
+        });
+        window.callbackWeb.sendEvent(message);
       } else {
         navigate("/logout");
       }

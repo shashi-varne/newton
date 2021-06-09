@@ -7,6 +7,7 @@ import { navigate as navigateFunc } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const Progress = (props) => {
   const {kyc, isLoading} = useUserKycHook();
@@ -31,6 +32,7 @@ const Progress = (props) => {
   }
 
   const handleCards = (key, index) => {
+    sendEvents("next", key)
     if (disableNext) return;
     if (documents[index].doc_status === "approved") return;
     const stateMapper = {
@@ -44,11 +46,11 @@ const Progress = (props) => {
       }/bank-details`,
       sign: PATHNAME_MAPPER.uploadSign,
     };
-
     navigate(stateMapper[key]);
   };
 
   const goBack = () => {
+    sendEvents("back");
     if(disableNext) {
       props.history.goBack();
       return;
@@ -57,15 +59,33 @@ const Progress = (props) => {
     navigate('/kyc/journey')
   }
 
+  const sendEvents = (userAction, docs) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "upload_docs",
+        "docs": docs || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       noFooter={disableNext}
       disable={!canGoNext}
       classOverRideContainer="pr-container"
       skelton={isLoading}
       skeltonType="p"
       handleClick={() => {
+        sendEvents('next');
         navigate(PATHNAME_MAPPER.journey);
       }}
       title="Upload documents"

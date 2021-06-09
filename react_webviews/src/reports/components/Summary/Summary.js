@@ -192,6 +192,29 @@ const Summary = (props) => {
       nativeCallback({ events: eventObj });
     }
   };
+  const investMore = () => {
+    const config = getConfig();
+    var _event = {
+      'event_name': 'journey_details',
+      'properties': {
+        'journey': {
+          'name': 'reports',
+          'trigger': 'cta',
+          'journey_status': 'complete',
+          'next_journey': 'mf'
+        }
+      }
+    };
+    sendEvents("next", "Explore Mutual Funds");
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+
+    navigate(getPathname.invest)
+  }
 
   return (
     <Container
@@ -301,10 +324,7 @@ const Summary = (props) => {
                       <b>Invest today & grow your wealth</b>
                     </p>
                     <Button
-                      onClick={() => {
-                        sendEvents("next", "Explore Mutual Funds");
-                        navigate(getPathname.invest);
-                      }}
+                      onClick= {investMore}
                       buttonTitle="Explore Mutual Funds"
                       classes={{
                         button: "reports-invest-button",

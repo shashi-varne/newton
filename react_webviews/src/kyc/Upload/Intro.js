@@ -1,4 +1,5 @@
 import React from 'react'
+import { nativeCallback } from '../../utils/native_callback';
 import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import Container from '../common/Container'
 
@@ -11,11 +12,29 @@ const Intro = (props) => {
   }
   const navigate = navigateFunc.bind(props)
   const handleClick = () => {
+    sendEvents('next')
     navigate('/kyc/upload/progress')
   }
+  
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "upload_docs_intro"
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="CONTINUE"
+      events={sendEvents("just_set_events")}
       handleClick={handleClick}
       title='Upload documents'
     >

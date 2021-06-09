@@ -13,6 +13,7 @@ import { navigate as navigateFunc } from "utils/functions";
 import { getCVL, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER } from "../constants";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const RtaCompliantPersonalDetails = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -54,6 +55,7 @@ const RtaCompliantPersonalDetails = (props) => {
     if (user.email === null) keysToCheck.push("email");
     if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
+    sendEvents('next')
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -114,9 +116,28 @@ const RtaCompliantPersonalDetails = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "rti_info",
+        "mobile":  form_data.mobile ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid":   form_data.dob ? "yes" : "no",
+        "email": form_data.email_error ? "invalid":   form_data.email ? "yes" : "no"
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       handleClick={handleClick}

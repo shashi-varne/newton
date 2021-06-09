@@ -4,10 +4,16 @@ import WVInPageTitle from './WVInPageTitle';
 import WVInPageSubtitle from './WVInPageSubtitle';
 
 const WVInPageHeader = ({
-  children
+  dataAidSuffix,
+  children,
+  ...props
 }) => {
   return (
-    <div className="wv-in-page-header">
+    <div
+      className="wv-in-page-header"
+      data-aid={`wv-in-page-header-${dataAidSuffix}`}
+      {...props}
+    >
       {children}
     </div>
   );

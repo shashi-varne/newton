@@ -9,6 +9,14 @@
   align-items: center;
   justify-content: space-between;
 
+  &.wv-fuc-selected {
+    border: 1px solid var(--primary);
+
+    >.wv-fuc-left .wv-fuc-left-title {
+      color: var(--primary);
+    }
+  }
+
   .wv-fuc-left {
     text-align: left;
 
@@ -29,6 +37,7 @@
   .wv-fuc-right {
     display: flex;
     align-items: center;
+    padding-left: 10px;
 
     span {
       margin-left: 10px;
@@ -36,4 +45,8 @@
       text-decoration: underline;
     }
   }
+}
+
+.wv-file-upload-card.wv-fuc-selected {
+
 }
