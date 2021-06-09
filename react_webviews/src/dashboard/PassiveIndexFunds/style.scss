@@ -93,6 +93,15 @@
   z-index: 1;
   border-radius: 7px;
   margin-top: -25px !important;
+
+  .category-title{
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 27px;
+    color: var(--dark);
+    margin: 20px 0px 20px 0px;
+  }
+
 }
 
 .star-icon-na{
