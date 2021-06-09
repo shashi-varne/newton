@@ -17,7 +17,7 @@ const WVFilterButton = (props) => {
           className="title"
           style={{ color: "#35CB5D", paddingLeft: "10px", fontSize: "12px", fontWeight: "bold" }}
         >
-          Filter
+          Filters
       </div>
       </Button>
     </div>

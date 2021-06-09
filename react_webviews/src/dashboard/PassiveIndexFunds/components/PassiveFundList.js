@@ -102,7 +102,7 @@ class FundList extends Component {
         body["return_type"] = SelectedYear;
 
         const { result, fundDescription } = await this.getFundDetailsList(body);
-        this.setState({ result, fundDescription, selected: SelectedYear, yearValue: time, }, () => this.handleScroll())
+        this.setState({ result, fundDescription, selected: SelectedYear, yearValue: time, })
     }
 
     handleScroll = (id) => {
