@@ -1,7 +1,7 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig, navigate as navigateFunc } from "utils/functions";
+import { getConfig, navigate as navigateFunc, getBasePath } from "utils/functions";
 import {
   apiConstants,
   investCardsBase,
@@ -17,6 +17,7 @@ import { PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted, isKycCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
+const config = getConfig();
 export async function initialize() {
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
@@ -43,11 +44,11 @@ export async function initialize() {
     this.handleRenderCard();
   }
 
-  if ((this.state.screenName === "invest_landing" &&  getConfig().Web &&
+  if ((this.state.screenName === "invest_landing" &&  config.Web &&
       !dataSettedInsideBoot)) {
     await this.getSummary();
   }
-  if ((this.state.screenName === "sdk_landing" && !getConfig().Web &&
+  if ((this.state.screenName === "sdk_landing" && !config.Web &&
       !dataSettedInsideBoot)) {
     await this.getSummary();
   }
@@ -205,12 +206,12 @@ export function setInvestCardsData() {
     subbrokerCode = referralData.subbroker.data.subbroker_code;
   }
 
-  if (getConfig().code === "bfdlmobile") {
+  if (config.code === "bfdlmobile") {
     investCardsBase["ourRecommendations"]["instaredeem"].title = "Money +";
   }
 
   let investCardsData = {}; // stores card data to display
-  const { investSections, investSubSectionMap } = getConfig();
+  const { investSections, investSubSectionMap } = config;
 
   for (let section of investSections) {
     const subSections = investSubSectionMap[section] || [];
@@ -367,7 +368,7 @@ export async function getRecommendations(amount) {
       term: this.state.term,
       equity: this.state.equity,
       debt: this.state.debt,
-      rp_enabled: getConfig().riskEnabledFunnels
+      rp_enabled: config.riskEnabledFunnels
     });
 
     if (!result.recommendation) {
@@ -405,12 +406,12 @@ export function navigate(pathname, data = {}) {
   if (this.props.edit || data.edit) {
     this.props.history.replace({
       pathname: pathname,
-      search: getConfig().searchParams,
+      search: config.searchParams,
     });
   } else {
     this.props.history.push({
       pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
+      search: data.searchParams || config.searchParams,
       params: data.params || {},
       state: data.state || {},
     });
@@ -497,11 +498,11 @@ export function openPremiumOnboardBottomSheet(
     return "";
   }
 
-  if (getConfig().Web && this.state.screenName !== "invest_landing") {
+  if (config.Web && this.state.screenName !== "invest_landing") {
     return;
   }
 
-  if (!getConfig().Web && this.state.screenName !== "landing") {
+  if (!config.Web && this.state.screenName !== "landing") {
     return;
   }
 
@@ -623,7 +624,7 @@ export function handleRenderCard() {
   let partner = this.state.partner || storageService().get("partner") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
-  const isWeb =getConfig().Web;
+  const isWeb = config.Web;
   const hideReferral = currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
   const referralCode = !currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_apply_refferal;
   const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
@@ -658,11 +659,13 @@ export function handleCampaignNotification () {
     const target = data?.notification_visual_data?.target;
     if (target?.length >= 1) {
       // eslint-disable-next-line no-unused-expressions
-      target.forEach((el, idx) => {
+      target.some((el, idx) => {
         if (el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
           acc = el;
           acc.campaign_name = data?.campaign?.name;
+          return true;
         }
+        return false;
       });
     }
     return acc;
@@ -676,8 +679,8 @@ export function handleCampaignNotification () {
 
 export function handleCampaignRedirection (url) {
   let campLink = url;
+  // Adding redirect url for testing
   // eslint-disable-next-line
-  campLink += (campLink.match(/[\?]/g) ? "&" : "?") +
-  "generic_callback=true";
+  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}`)}`
   window.location.href = campLink;
 }

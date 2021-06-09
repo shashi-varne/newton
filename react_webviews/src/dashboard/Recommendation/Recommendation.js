@@ -1,5 +1,4 @@
 // ----------- Asset Imports -------------------
-import trust_icons from 'assets/trust_icons.svg';
 import single_star from 'assets/single_star.png';
 import morning_text from 'assets/morning_text.png';
 // ---------------------------------------------
@@ -23,6 +22,7 @@ import { get_recommended_funds } from '../Invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import toast from 'common/ui/Toast'
+import WVSecurityDisclaimer from '../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer';
 
 const sipTypesKeys = [
   "buildwealth",
@@ -335,10 +335,7 @@ const Recommendations = (props) => {
               )}
             </div>
             <TermsAndCond />
-            <div className='recommendations-trust-icons'>
-              <div>Investments with fisdom are 100% secure</div>
-              <img alt='trust_sebi_secure' src={trust_icons} />
-            </div>
+            <WVSecurityDisclaimer />
           </div>
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPendind}
