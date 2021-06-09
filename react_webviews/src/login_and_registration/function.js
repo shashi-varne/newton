@@ -51,7 +51,7 @@ export function initialize() {
     : "";
 
   let socialRedirectUrl = encodeURIComponent(
-    window.location.origin + "/social/callback" + rebalancingRedirectUrl
+    getBasePath() + "/social/callback" + rebalancingRedirectUrl
   );
 
   let facebookUrl =
