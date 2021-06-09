@@ -23,7 +23,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { getConfig } from "utils/functions";
 import PropTypes from "prop-types";
-
+import "./WVCustomCarousel.scss";
 const productName = getConfig().productName;
 
 function WVCustomCarousel({
@@ -66,10 +66,17 @@ function WVCustomCarousel({
                 background: getConfig().styles.primaryColor,
                 width: "10px",
               }}
+              className="wv-custom-carousel-indicator-styles"
             />
           );
         }
-        return <li onClick={onClickHandler} style={indicatorStyles} />;
+        return (
+          <li
+            onClick={onClickHandler}
+            className="wv-custom-carousel-indicator-styles"
+            style={indicatorStyles}
+          />
+        );
       }}
       {...customArrowStyle}
     >
@@ -96,11 +103,6 @@ WVCustomCarousel.defaultProps = {
   infiniteLoop: false,
   indicatorStyles: {
     background: productName !== "fisdom" ? "#9CC0FF" : "#DFD8EF",
-    width: "20px",
-    height: "3px",
-    display: "inline-block",
-    margin: "1px 3px",
-    borderRadius: "1.5px",
   },
   customArrowStyle: {},
 };
