@@ -22,9 +22,11 @@ class NpsPaymentCallback extends Component {
 
   onload = () => {
     let pathname = this.props.history.location.pathname.split('/');
+    console.log("props ", this.props)
     let status = pathname[pathname.length - 1];
     let amount = pathname[pathname.length - 2] || storageService().get('npsAmount');
-
+    console.log("status ", status);
+    console.log("amount ", amount);
     this.setState({
       amount: amount,
       status: status
