@@ -177,8 +177,11 @@ export const upload = async (file, type, data = {}) => {
           formData.append('forced', data.forced);
         }
         break;
-      default:
+      case 'sign':
+        formData.append('manual_upload', data.manual_upload)
         break
+       default:
+         break
     }
   }
   const url = isEmpty(doc_type) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${doc_type}`
