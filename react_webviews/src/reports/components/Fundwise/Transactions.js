@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { getTransactions, getNextTransactions } from "../../common/api";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const FundswiseTransactions = (props) => {
   const params = props?.match?.params || {};
@@ -51,8 +52,24 @@ const FundswiseTransactions = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "transactions",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="Transactions"
       noFooter={!reportData.more}
       buttonTitle="SHOW MORE"

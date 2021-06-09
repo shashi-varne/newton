@@ -8,6 +8,7 @@ import {
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Slider from "common/ui/Slider";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const sliderValues = {
   min: 1,
@@ -15,21 +16,39 @@ const sliderValues = {
   value: 2,
 };
 const productName = getConfig().productName;
-const PausePeriod = (props) => {  
+const PausePeriod = (props) => {
   const sip = storageService().getObject(storageConstants.PAUSE_SIP) || {};
   if (isEmpty(sip)) props.history.goBack();
   const navigate = navigateFunc.bind(props);
   const [period, setPeriod] = useState(sliderValues.value);
 
   const handleClick = () => () => {
+    sendEvents("next", period);
     navigate(`${getPathname.pauseCancelDetail}pause/${period}`);
   };
 
   const handleChange = () => (value) => setPeriod(value);
 
+  const sendEvents = (userAction, period) => {
+    let eventObj = {
+      event_name: "sip_pause_cancel",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Pause Period",
+      },
+    };
+    if (period) eventObj.properties["period"] = period;
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
       title="Select a Period"
+      events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       handleClick={handleClick()}
       classOverRideContainer="reports-sip-pause-period-main"
