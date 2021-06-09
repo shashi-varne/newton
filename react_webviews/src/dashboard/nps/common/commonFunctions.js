@@ -32,9 +32,11 @@ export async function initialize() {
   if (
     (isEmpty(nps_additional_details) &&
       npsAdditionalScreens.indexOf(this.state.screen_name) !== -1) ||
-    this.state.screen_name === "nps-identity"
+    this.state.screen_name === "nps-identity" || 
+    this.state.screen_name === "nps-sdk"
   ) {
-    await this.getNPSInvestmentStatus();
+    const npsData = await this.getNPSInvestmentStatus();
+    this.setState({ npsData });
   }
   nativeCallback({ action: "take_control_reset" });
 

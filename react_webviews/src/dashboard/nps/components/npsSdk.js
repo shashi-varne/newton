@@ -14,8 +14,6 @@ class NpsSdk extends Component {
 
   componentWillMount() {
     this.initialize();
-    const npsData = await this.getNPSInvestmentStatus();
-    this.setState({ npsData });
   }
 
   onload = () => {
