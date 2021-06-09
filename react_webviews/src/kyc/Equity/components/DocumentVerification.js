@@ -38,7 +38,7 @@ const DocumentVerification = (props) => {
   }
 
   const goBack = () => {
-    if (kycStartPoint === "equity") {
+    if (kycStartPoint === "stocks") {
       navigate(PATHNAME_MAPPER.stocksStatus);
     } else {
       if(config.Web) {
