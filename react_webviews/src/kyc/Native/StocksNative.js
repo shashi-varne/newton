@@ -78,6 +78,8 @@ function Native(props) {
             ...data.state
           });
         }
+      } else {
+        nativeCallback({ action: "exit_web" })
       }
     }
   }
