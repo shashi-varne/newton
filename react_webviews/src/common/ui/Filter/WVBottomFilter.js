@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import WVFilterButton from "./WVFilterButton";
 import WVFilter from "./WVFilter";
 import "./WVFilterCommonStyles.scss";
@@ -17,10 +17,12 @@ const WVBottomFilter = ({
     const [filterActive, setFilterActive] = useState(false);
     const [renderApi, setRenderApi] = useState(false);
 
-    if (!!sortFilter && !filterActive && renderApi) {
-        getSortedFilter(sortFilter);
-        setRenderApi(false)
-    }
+    useEffect(() => {
+        if (renderApi) {
+            getSortedFilter(sortFilter);
+            setRenderApi(false)
+        }
+    }, [sortFilter]);
 
     return (
         <footer className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} data-aid={`diy-cart-${dataAidSuffix}`}>
