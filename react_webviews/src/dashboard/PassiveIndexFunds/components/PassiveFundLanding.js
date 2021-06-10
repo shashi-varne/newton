@@ -3,7 +3,7 @@ import { findDOMNode } from 'react-dom'
 import screenfull from 'screenfull'
 import ReactPlayer from 'react-player'
 import Container from "../../common/Container";
-import WVMenuListDropDown from '../../../common/ui/MenuListDropDown/MenuListDropDown'
+import Menulist from "../mini-components/menuList"
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
 import { FUND_CATEGORY, ACTIVE_PASSIVE_FACTS_CAROUSEL, KEY_INSIGHTS_CAROUSEL } from "../constants";
 import { storageService } from "utils/validators";
@@ -119,7 +119,7 @@ class Landing extends Component {
           </div>
           <div className="content-main" data-aid="content-main">
             <h1 className="category-title" data-aid="category-title-1">Top index funds</h1>
-            <WVMenuListDropDown
+            <Menulist
               dataAidSuffix={'passive-category'}
               menulistProducts={FUND_CATEGORY}
               value={this.state.value}
