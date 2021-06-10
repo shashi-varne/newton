@@ -7,7 +7,7 @@ import SelectWithoutIcon from "common/ui/SelectWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
 import { storageService, capitalize } from "utils/validators";
 import { formatDate } from "utils/validators";
-import { validateAlphabets } from "../../../../utils/validators";
+import { dobFormatTest, validateAlphabets } from "../../../../utils/validators";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
@@ -65,6 +65,9 @@ class NpsNominee extends Component {
     if(name === "nominee_name" && value && !validateAlphabets(value)) return;
 
     if (name === "nominee_dob") {
+      if (!dobFormatTest(value)) {
+        return;
+      }
       var input = document.getElementById("nominee_dob");
       input.onkeyup = formatDate;
     }
@@ -141,6 +144,7 @@ class NpsNominee extends Component {
               id="nominee_dob"
               name="nominee_dob"
               label="Nominee DOB (DD/MM/YYYY)"
+              maxLength={10}
               error={form_data.nominee_dob_error ? true : false}
               helperText={form_data.nominee_dob_error}
               value={form_data.nominee_dob || ""}

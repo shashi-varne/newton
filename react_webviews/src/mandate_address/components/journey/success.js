@@ -10,6 +10,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import ContactUs from '../../../common/components/contact_us';
+import { getBasePath } from '../../../utils/functions';
 
 class MandateSuccess extends Component {
   constructor(props) {
@@ -35,7 +36,9 @@ class MandateSuccess extends Component {
 
   handleClick = () => {
     // nativeCallback({ action: 'native_back' });
-    let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
+    // Added for testing
+    let url = `${getBasePath()}/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=`
+    // let url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
     window.location.replace(url);
   }
 
