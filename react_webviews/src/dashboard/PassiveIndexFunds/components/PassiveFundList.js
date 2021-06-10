@@ -5,13 +5,28 @@ import { initialize } from "../common/commonFunctions";
 import { getFundDetailsList } from "../services"
 import WVBottomFilter from "../../../common/ui/Filter/WVBottomFilter";
 import WVYearFilter from "../../../common/ui/YearFilter/WVYearFilter";
-import WVGenericListCard from "../../../common/ui/GenericListCard/WVGenericListCard"
+import WVProductListCard from "../../../common/ui/ProductListCard/WVProductListCard";
+import StarRating from "../../../common/ui/StarRating";
 import { YEARS_FILTERS, BOTTOM_FILTER_NAME, SELECTED_YEAR } from "../constants";
 import "./PassiveFundDetails.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 import { isEmpty } from 'lodash';
 import Checkbox from '@material-ui/core/Checkbox';
 import scrollIntoView from 'scroll-into-view-if-needed';
+
+const CardSubtitle = ({ value, morning_start }) => {
+    return (
+        <div>
+            {value}
+            <span style={{ margin: "0px 5px 0px 5px" }}>
+                |
+            </span>
+            <span style={{ marginTop: morning_start ? "2px" : "1px", position: "absolute" }}>
+                <StarRating value={morning_start} />
+            </span>
+        </div>
+    );
+};
 
 class FundList extends Component {
     constructor(props) {
@@ -97,7 +112,7 @@ class FundList extends Component {
     }
 
     yearFilter = async (time) => {
-        document.getElementsByClassName("passive-fund-list-page")[0].scrollTo(0,0);
+        document.getElementsByClassName("passive-fund-list-page")[0].scrollTo(0, 0);
         let body = this.state.body || {};
         const SelectedYear = SELECTED_YEAR[time] || "five_year_return";
         body["return_type"] = SelectedYear;
@@ -122,7 +137,7 @@ class FundList extends Component {
     };
 
     setSortFilter = async (item) => {
-        document.getElementsByClassName("passive-fund-list-page")[0].scrollTo(0,0);
+        document.getElementsByClassName("passive-fund-list-page")[0].scrollTo(0, 0);
         let body = {
             "filter_by": item["sort_value"] || "returns",
             "fund_house": item["fund_house_value"] || [],
@@ -168,6 +183,32 @@ class FundList extends Component {
         })
     }
 
+    dataPropMapList = (item) => {
+        return ([{
+            title: 'Expense Ratio',
+            propName: 'expense_ratio',
+            formatter: (value) =>
+                <span style={{}}>
+                    {value ? value + "%" : "NA"}
+                </span>
+        }, {
+            title: 'Returns',
+            propName: this.state.selected,
+            formatter: (value) =>
+                <span style={{ fontWeight: 'bold', color: 'limegreen' }}>
+                    {value !== null ? value >= 0 ? "+" + value + "%" : value + "%" : "NA"}
+                </span>
+        }
+            , {
+            title: 'Tracking Error',
+            propName: 'tracking_error',
+            formatter: (value) =>
+                <span style={{}}>
+                    {value ? value + `% (${this.state.yearValue})` : 'NA'}
+                </span>
+        }])
+    };
+
     render() {
 
         const { result } = this.state
@@ -203,27 +244,15 @@ class FundList extends Component {
 
                     <React.Fragment>
                         {!isEmpty(result) &&
-                            result.map((item, index) => {
+                            result.map((item) => {
                                 return (
-                                    <WVGenericListCard
-                                        data={item}
-                                        dataAidSuffix={'passive-list-card'}
-                                        morning_star_rating={item?.morning_star_rating}
-                                        starclassName={item?.morning_star_rating ? "" : "star-icon-na"}
-                                        title={item["legal_name"]}
-                                        subtitle={item["tracking_index"]}
+                                    <WVProductListCard
+                                        classes={{ headerTitle: "wv-pdl-header-title" , headerImage : "wv-pdl-header-image"  }}
+                                        productData={item}
+                                        title={item.legal_name}
+                                        subtitle={<CardSubtitle value={item?.tracking_index} morning_start={item?.morning_star_rating} />}
                                         image={item.amc_logo_big}
-                                        value={
-                                            [{ 'title1': 'EXPENSE RATIO', 'title2': 'RETURNS' },
-                                            {
-                                                'title1': item["expense_ratio"] === null ? "NA" : item["expense_ratio"], 'className1': 'return', "tag1": "%",
-                                                'title2': item[this.state.selected] ? item[this.state.selected]>=0 ? `+${item[this.state.selected]}` : item[this.state.selected] : "", 'className2': item[this.state.selected] >= 0 ? 'return color-green' : 'return color-red', "tag2": item[this.state.selected] ? `%` : 'NA',
-                                            },
-                                            { 'title1': 'TRACKING ERROR' },
-                                            { 'title1': item["tracking_error"] || "NA", 'className1': 'return', "tag1": item["tracking_error"] ? `% [${this.state.yearValue}]` : '' }]
-                                        }
-                                        key={index}
-                                        handleClick={() => this.clickCard(item)}
+                                        contentPropsMapList={this.dataPropMapList(item)}
                                     />
                                 );
                             })}
