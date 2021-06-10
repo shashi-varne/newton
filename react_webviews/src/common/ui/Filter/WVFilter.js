@@ -52,6 +52,7 @@ const WVFilter = ({
                       role="button"
                       tabIndex="0"
                       onClick={() => {
+                        document.getElementById("scroll-container").scrollTo(0,0)
                         setActiveTab(item.key);
                         setActiveData(item.option);
                       }}
@@ -63,7 +64,7 @@ const WVFilter = ({
                 })}
             </ul>
           </div>
-          <div className="body" data-aid={`body-${dataAidSuffix}`}>
+          <div className="body" id="scroll-container" data-aid={`body-${dataAidSuffix}`}>
             <SortFilter
               selectedTab={activeTab}
               localSortFilter={localSortFilter}

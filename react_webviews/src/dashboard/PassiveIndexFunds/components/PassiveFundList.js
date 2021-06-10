@@ -97,6 +97,7 @@ class FundList extends Component {
     }
 
     yearFilter = async (time) => {
+        document.getElementsByClassName("passive-fund-list-page")[0].scrollTo(0,0);
         let body = this.state.body || {};
         const SelectedYear = SELECTED_YEAR[time] || "five_year_return";
         body["return_type"] = SelectedYear;
@@ -121,7 +122,7 @@ class FundList extends Component {
     };
 
     setSortFilter = async (item) => {
-
+        document.getElementsByClassName("passive-fund-list-page")[0].scrollTo(0,0);
         let body = {
             "filter_by": item["sort_value"] || "returns",
             "fund_house": item["fund_house_value"] || [],
@@ -215,8 +216,8 @@ class FundList extends Component {
                                         value={
                                             [{ 'title1': 'EXPENSE RATIO', 'title2': 'RETURNS' },
                                             {
-                                                'title1': item["expense_ratio"], 'className1': 'return', "tag1": "%",
-                                                'title2': item[this.state.selected], 'className2': item[this.state.selected] >= 0 ? 'return color-green' : 'return color-red', "tag2": item[this.state.selected] ? `%` : 'NA',
+                                                'title1': item["expense_ratio"] === null ? "NA" : item["expense_ratio"], 'className1': 'return', "tag1": "%",
+                                                'title2': item[this.state.selected] ? item[this.state.selected]>=0 ? `+${item[this.state.selected]}` : item[this.state.selected] : "", 'className2': item[this.state.selected] >= 0 ? 'return color-green' : 'return color-red', "tag2": item[this.state.selected] ? `%` : 'NA',
                                             },
                                             { 'title1': 'TRACKING ERROR' },
                                             { 'title1': item["tracking_error"] || "NA", 'className1': 'return', "tag1": item["tracking_error"] ? `% [${this.state.yearValue}]` : '' }]

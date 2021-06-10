@@ -163,7 +163,7 @@ function PassiveFundDetails({ history }) {
                       : "#D0021B",
                 }}
               >
-                {fundDetails?.performance?.primary_return}%
+                {fundDetails?.performance?.primary_return === null ? "NA" : fundDetails?.performance?.primary_return >=0 ? `+${fundDetails?.performance?.primary_return}%` : `${fundDetails?.performance?.primary_return}%`}
               </p>
             </div>
           </div>
@@ -204,7 +204,7 @@ function PassiveFundDetails({ history }) {
           <div>
             <p className="pfd-points">EXPENSE RATIO</p>
             <p className="pfd-values">
-              {fundDetails?.portfolio?.expense_ratio}%
+              {fundDetails?.portfolio?.expense_ratio === null ? "NA" : `${fundDetails?.portfolio?.expense_ratio}%`}
             </p>
           </div>
           <div>
