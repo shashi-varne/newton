@@ -14,6 +14,7 @@ import { formatAmountInr } from '../../../utils/validators'
 
 import '../commonStyles.scss';
 import './System.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const SystemSummary = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -33,6 +34,7 @@ const SystemSummary = (props) => {
   }
 
   const handleClick = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
       const result = await redeemOrders('system', {
@@ -79,8 +81,26 @@ const SystemSummary = (props) => {
   useEffect(() => {
     fetchTaxes()
   }, [])
+
+  const sendEvents = (userAction, index) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "tax_summary",
+        "flow": "system"
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle={'CONTINUE'}
       fullWidthButton
       classOverRideContainer="pr-container"
@@ -105,6 +125,7 @@ const SystemSummary = (props) => {
               <TaxSummaryCard
                 key={item.isin}
                 {...item}
+                sendEvents={sendEvents}
                 openCard={
                   open[item.isin]
                 }
