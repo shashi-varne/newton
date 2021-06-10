@@ -44,7 +44,7 @@ const InvestAmount = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [loader, setLoader] = useState(false);
   const [saveTaxYear, setSaveTaxYear] = useState(date.getFullYear());
-  const initialCorpusValue = 150000;
+  const maximumEligibleAmount = 150000;
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
@@ -177,8 +177,8 @@ const InvestAmount = (props) => {
     } else {
       tempAmount = userEnteredAmt;
     }
-    if (tempAmount > initialCorpusValue) {
-      tempAmount = initialCorpusValue;
+    if (tempAmount > maximumEligibleAmount) {
+      tempAmount = maximumEligibleAmount;
     }
     let taxsaved = tempAmount * 0.312;
     setCorpus(taxsaved);
