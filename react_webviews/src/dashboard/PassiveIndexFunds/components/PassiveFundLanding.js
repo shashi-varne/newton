@@ -3,7 +3,7 @@ import { findDOMNode } from 'react-dom'
 import screenfull from 'screenfull'
 import ReactPlayer from 'react-player'
 import Container from "../../common/Container";
-import WVMenuListDropDown from '../../../common/ui/MenuListDropDown/WVMenuListDropDown'
+import WVMenuListDropDown from '../../../common/ui/MenuListDropDown/MenuListDropDown'
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
 import { FUND_CATEGORY, ACTIVE_PASSIVE_FACTS_CAROUSEL, KEY_INSIGHTS_CAROUSEL } from "../constants";
 import { storageService } from "utils/validators";
