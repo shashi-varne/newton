@@ -4,14 +4,15 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { getFunds, getFundDetailsForSwitch } from "../../common/api";
 import {
-  navigate as navigateFunc,
   getAmountInInr,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FundSummaryMenu from "../mini-components/FundSummaryMenu";
 import toast from "common/ui/Toast";
 import "./commonStyles.scss";
 import { storageService } from "../../../utils/validators";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const FundswiseSummary = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -34,7 +35,8 @@ const FundswiseSummary = (props) => {
     setShowSkelton(false);
   };
 
-  const getFundDetails = (index) => {
+  const getFundDetails = (fund, index) => {
+    sendEvents('next', fund)
     storageService().setObject(
       storageConstants.REPORTS_SELECTED_FUND,
       funds[index]
@@ -54,6 +56,7 @@ const FundswiseSummary = (props) => {
   const handleSwitch = async () => {
     setMenuPosition(null);
     setShowSkelton(true);
+    sendEvents('next', selectedFund, 'switch')
     const amfi = selectedFund.mf.amfi;
     try {
       const result = await getFundDetailsForSwitch({ amfi });
@@ -73,18 +76,36 @@ const FundswiseSummary = (props) => {
 
   const handleTransactions = () => {
     const amfi = selectedFund.mf.amfi;
+    sendEvents('next', selectedFund, "transactions")
     navigate(`${getPathname.reportsFundswiseTransactions}${amfi}`);
   };
 
+  const sendEvents = (userAction, data, flow) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Track Fund Performance",
+        fund: data?.current_invested || data?.invested_amount || "",
+        over_flow_menu: flow || "",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
-    <Container title="Funds" noFooter={true} skelton={showSkelton}>
+    <Container events={sendEvents("just_set_events")} title="Funds" noFooter={true} skelton={showSkelton}>
       <div className="reports-fundswise-summary">
         {!isEmpty(funds) &&
           funds.map((fund, index) => {
             return (
               <div className="summary-fund-content" key={index}>
                 <h5>
-                  <div className="text" onClick={() => getFundDetails(index)}>
+                  <div className="text" onClick={() => getFundDetails(fund, index)}>
                     {fund.mf.friendly_name}
                   </div>
                   <div className="right-info">
@@ -94,7 +115,7 @@ const FundswiseSummary = (props) => {
                     />
                   </div>
                 </h5>
-                <div onClick={() => getFundDetails(index)}>
+                <div onClick={() => getFundDetails(fund, index)}>
                   <div className="head">
                     <span>Units: {fund.units.toFixed(4)}</span>
                     <span className="margin-left">
@@ -105,7 +126,6 @@ const FundswiseSummary = (props) => {
                     <div className="content">
                       <h5>
                         {formatAmountInr(fund.current)}
-                        {fund.current === 0 && 0}
                       </h5>
                       <div>Current Value</div>
                     </div>
@@ -124,7 +144,6 @@ const FundswiseSummary = (props) => {
                     <div className="content">
                       <h5>
                         {formatAmountInr(fund.current_invested)}
-                        {fund.current_invested === 0 && 0}
                       </h5>
                       <div>Invested Cost</div>
                     </div>

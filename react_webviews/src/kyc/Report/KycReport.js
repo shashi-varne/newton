@@ -3,20 +3,22 @@ import Container from "../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { getConfig } from "utils/functions";
 import {
-  getPathname,
-  kycDocNameMapper,
-  reportCardDetails,
-  storageConstants,
+  PATHNAME_MAPPER,
+  DOCUMENTS_MAPPER,
+  REPORT_CARD_DETAILS,
+  STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
-import { navigate as navigateFunc } from "../common/functions";
+import { getFlow } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Report = (props) => {
-  const productName = getConfig().productName;
+  const config = getConfig();
+  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -30,11 +32,11 @@ const Report = (props) => {
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
-      navigate(getPathname.uploadProgress, {
+      navigate(PATHNAME_MAPPER.uploadProgress, {
         state: {
           disableNext: true,
-          fromState: "kyc-report",
-          toState: "landing",
+          fromState: "/kyc/report",
+          toState: "/landing",
         },
       });
       return;
@@ -67,9 +69,9 @@ const Report = (props) => {
     const isNri = kyc.address.meta_data.is_nri;
     if (isNri) {
       address_proof = "Passport";
-      address_proof_nri = kycDocNameMapper[kyc.address_doc_type];
+      address_proof_nri = DOCUMENTS_MAPPER[kyc.address_doc_type];
     } else {
-      address_proof = kycDocNameMapper[kyc.address_doc_type];
+      address_proof = DOCUMENTS_MAPPER[kyc.address_doc_type];
     }
 
     setAddressProof({
@@ -81,7 +83,7 @@ const Report = (props) => {
       setButtonTitle("INVEST NOW");
     }
 
-    let reportCards = [...reportCardDetails];
+    let reportCards = [...REPORT_CARD_DETAILS];
     setIsNri(isNri);
     if (is_compliant) {
       if (isNri) {
@@ -109,6 +111,7 @@ const Report = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents('next')
     if (isCompliant) {
       proceed();
     } else {
@@ -117,30 +120,84 @@ const Report = (props) => {
   };
 
   const proceed = () => {
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "kyc",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf"
+        }
+      }
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
     if (getConfig().Web) {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     } else {
-      if (storageService().get(storageConstants.NATIVE)) {
+      if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
         nativeCallback({ action: "exit_web" });
       } else {
-        navigate(getPathname.landing);
+        navigate(PATHNAME_MAPPER.landing);
       }
     }
   };
 
   const checkNPSAndProceed = () => {
+    let _event = {};
     if (user.nps_investment) {
+      _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "kyc",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "reports",
+          },
+        },
+      };
+      // send event
+      if (!config.Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (config.isIframe) {
+        window.callbackWeb.sendEvent(_event);
+      }
+
       if (!getConfig().isIframe) {
-        navigate(getPathname.reports);
+        navigate(PATHNAME_MAPPER.reports);
       }
     } else {
+      _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "kyc",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "mf",
+          },
+        },
+      };
+      // send event
+      if (!config.Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (config.isIframe) {
+        window.callbackWeb.sendEvent(_event);
+      }
+
       if (getConfig().Web) {
-        navigate(getPathname.invest);
+        navigate(PATHNAME_MAPPER.invest);
       } else {
-        if (storageService().get(storageConstants.NATIVE)) {
+        if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
           nativeCallback({ action: "exit_web" });
         } else {
-          navigate(getPathname.landing);
+          navigate(PATHNAME_MAPPER.landing);
         }
       }
     }
@@ -306,9 +363,26 @@ const Report = (props) => {
     }
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "kyc_done",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       id="kyc-home"
+      events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       handleClick={handleClick}
       title={topTitle}

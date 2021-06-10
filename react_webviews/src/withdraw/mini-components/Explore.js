@@ -1,7 +1,8 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
-import { navigate as navigateFunc } from '../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import './mini-components.scss';
+import { getConfig } from '../../utils/functions';
 
 // Current Version of material ui does not have right alt icons
 const RightAltIcon = () => {
@@ -29,7 +30,26 @@ const tiles = [
 const Explore = (props) => {
   const navigate = navigateFunc.bind(props)
   const handleClick = () => {
-    navigate('/invest', null, true)
+    const config = getConfig();
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "withdraw",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+
+    navigate('/invest')
   }
   return (
     <section className="withdraw-explore-investment-options">

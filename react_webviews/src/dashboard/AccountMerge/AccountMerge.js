@@ -1,8 +1,7 @@
 import React from "react";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { isEmpty, storageService } from "../../utils/validators";
 import Container from "../common/Container";
-import { navigate as navigateFunc } from "../Invest/common/commonFunctions";
 import "./AccountMerge.scss";
 
 const AccountMerge = (props) => {
@@ -16,7 +15,7 @@ const AccountMerge = (props) => {
   const productName = getConfig().productName;
 
   const handleClick = () => {
-    navigate(`/account/merge/otp/${pan_number}`, null, true);
+    navigate(`/account/merge/otp/${pan_number}`);
   };
 
   return (

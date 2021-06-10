@@ -6,9 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import RatingStar from '../../../fund_details/common/RatingStar'
 import Button from 'common/ui/Button'
 import { storageService } from '../../../utils/validators'
-import { getConfig } from 'utils/functions'
-
-import { navigate as navigateFunc } from '../../Invest/common/commonFunctions'
+import { getConfig, navigate as navigateFunc } from 'utils/functions'
 
 import CartFooter from '../mini-components/CartFooter'
 import { getFundList } from '../functions'
@@ -45,6 +43,7 @@ function TabContainer(props) {
 }
 const FundList = (props) => {
   const { match, classes, ...parentProps } = props
+  const name = props?.location?.state?.name || "";
   const [value, setValue] = useState(4)
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
@@ -209,7 +208,7 @@ const FundList = (props) => {
       events={sendEvents("just_set_events")}
       classOverRIde="pr-error-container"
       noFooter
-      title={match.params?.key?.replace(/_/g, ' ') || ''}
+      title={name || match.params?.key?.replace(/_/g, ' ') || ''}
       skelton={showLoader}
       classOverRideContainer="pr-container"
       id="diy-fundlist-container"
@@ -303,15 +302,14 @@ const DiyFundCard = ({
       `/fund-details`,
       {
         searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy`,
-      },
-      true
+      }
     )
   }
   const handleInvest = () => {
     sendEvents('next', "", "", props.legal_name)
     storageService().setObject('diystore_cart', [props])
     const navigate = navigateFunc.bind(parentProps)
-    navigate('/diy/invest', null, true, parentProps.location.search)
+    navigate('/diy/invest')
   }
   return (
     <div className="diy-fund-card">

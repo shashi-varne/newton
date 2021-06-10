@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "../common/Container";
 import { isEmpty, storageService, formatAmountInr, convertInrAmountToNumber } from "utils/validators";
 import { getPathname, storageConstants } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import Input from "common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import { Imgc } from "common/ui/Imgc";
@@ -11,14 +11,36 @@ import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import PennyVerificationPending from "../../dashboard/Invest/mini-components/PennyVerificationPending";
 import InvestError from "../../dashboard/Invest/mini-components/InvestError";
 import InvestReferralDialog from "../../dashboard/Invest/mini-components/InvestReferralDialog";
-import { getConfig } from "../../utils/functions";
+import { getBasePath, getConfig } from "../../utils/functions";
 
 const InvestMore = (props) => {
   const navigate = navigateFunc.bind(props);
   const params = props?.match?.params || {};
   if (isEmpty(params) || !params.mode) props.history.goBack();
   const state = props.location.state || {};
-  if (isEmpty(state) || !state.recommendation) navigate(getPathname.reports);
+  if (isEmpty(state) || !state.recommendation) {
+    const config = getConfig();
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "mf",
+          trigger: "cta",
+          journey_status: "incomplete",
+          next_journey: "reports",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+      navigate(getPathname.reports);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    } else {
+      navigate(getPathname.reports);
+    }
+  }
   const investBody = JSON.parse(state.recommendation) || {};
   const sipOrOnetime = (params.mode || "").toLowerCase();
   let title = "INVEST";
@@ -79,7 +101,7 @@ const InvestMore = (props) => {
     };
 
     let paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/${sipOrOnetime}/${investmentObj.investment.amount}${getConfig().searchParams}`
+      `${getBasePath()}/page/callback/${sipOrOnetime}/${investmentObj.investment.amount}${getConfig().searchParams}`
     );
 
     let investmentEventData = {

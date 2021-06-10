@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Container from '../../common/Container'
 import OtpDefault from 'common/ui/otp'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import toast from 'common/ui/Toast'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import './Otp.scss';
+import { nativeCallback } from '../../../utils/native_callback'
+import { getConfig } from '../../../utils/functions'
 
 function useInterval(callback, delay) {
   const savedCallback = useRef()
@@ -30,6 +32,7 @@ function useInterval(callback, delay) {
 const Otp = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false)
+  const [resendClicked, setResendClicked] = useState(false)
   const [state, setState] = useState({
     otp: '',
     totalTime: 30,
@@ -48,6 +51,7 @@ const Otp = (props) => {
   }, 1000)
 
   const resendOtp = async () => {
+    setResendClicked(true)
     try {
       if (!isEmpty(stateParams?.resend_redeem_otp_link)) {
         const result = await resend(stateParams?.resend_redeem_otp_link)
@@ -60,18 +64,38 @@ const Otp = (props) => {
   }
 
   const verifyOtp = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button");
       let result;
       if (!isEmpty(stateParams?.verification_link) && !isEmpty(state?.otp)) {
         result = await verify(stateParams?.verification_link, state?.otp)
       }
-      navigate('/withdraw/otp/success',
-              { state : {
-                  type: stateParams?.type,
-                  message: result?.message,
-                } 
-              }, true)
+      const config = getConfig();
+      var _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "withdraw",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "mf",
+          },
+        },
+      };
+      // send event
+      if (!config.Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (config.isIframe) {
+        window.callbackWeb.sendEvent(_event);
+      }
+
+      navigate("/withdraw/otp/success", {
+        state: {
+          type: stateParams?.type,
+          message: result?.message,
+        },
+      });
       } catch (err) {
         if(err.message.includes('wrong')){
         toast(err.message, 'error')
@@ -82,7 +106,7 @@ const Otp = (props) => {
             type: stateParams?.type,
             message: err.message,
           }
-        }, true)
+        })
       }
     } finally {
       setIsApiRunning(false)
@@ -98,8 +122,27 @@ const Otp = (props) => {
     })
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": 'withdrawl_otp_screen',
+        "resend_clicked": resendClicked ? 'yes' : 'no',
+        'flow': stateParams?.type || "",
+        'otp': state.otp || ''
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       hidePageTitle
       buttonTitle="VERIFY"
       disable={state.otp.length !== 4}

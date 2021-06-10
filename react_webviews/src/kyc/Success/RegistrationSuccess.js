@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
-import { getPathname } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { PATHNAME_MAPPER } from "../constants";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const RegistrationSuccess = (props) => {
@@ -36,16 +35,16 @@ const RegistrationSuccess = (props) => {
   };
 
   const proceed = () => {
-    navigate(getPathname.invest);
+    navigate(PATHNAME_MAPPER.invest);
   };
 
   const checkNPSAndProceed = () => {
     if (user.nps_investment) {
       if (!getConfig().isIframe) {
-        navigate(getPathname.reports);
+        navigate(PATHNAME_MAPPER.reports);
       }
     } else {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     }
   };
 

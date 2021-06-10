@@ -1,26 +1,44 @@
 import React from 'react'
 import Container from '../../common/Container'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 
 import './Success.scss';
+import { nativeCallback } from '../../../utils/native_callback';
 
 const Success = (props) => {
   const successMessage = props?.location?.state?.message;
   const navigate = navigateFunc.bind(props);
   if(!successMessage){
-    navigate('');
+    navigate('/withdraw');
   }
   const type = props?.location?.state?.type
   const pageHead = type === 'switch' ? 'Switch' : 'Withdraw'
   const goTo = () => {
+    sendEvents('next')
     if (type === 'switch') {
-      navigate('/reports/switched-transaction', null, true)
+      navigate('/reports/switched-transaction')
     } else {
-      navigate('/reports/redeemed-transaction', null, true)
+      navigate('/reports/redeemed-transaction')
     }
   }
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "withdraw_successful",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
-    <Container hidepageTitle buttonTitle="Okay" handleClick={goTo}>
+    <Container hidepageTitle buttonTitle="Okay" handleClick={goTo} headerData={{icon: "close"}} events={sendEvents("just_set_events")}>
       <section id="withdraw-otp-success">
         <img
           className="thumb-img"

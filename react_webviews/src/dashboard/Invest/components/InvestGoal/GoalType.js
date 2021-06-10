@@ -2,9 +2,9 @@ import './GoalType.scss';
 import React from 'react';
 import Container from '../../../common/Container';
 
-import { navigate as navigateFunc} from '../../common/commonFunctions';
 import { nativeCallback } from '../../../../utils/native_callback';
 import { flowName } from '../../constants';
+import { navigate as navigateFunc} from 'utils/functions';
 
 const goalTypes = {
   "Retirement":{
@@ -32,7 +32,7 @@ const GoalType = (props) => {
   const navigate = navigateFunc.bind(props);
   const goNext = (name) => () => {
     sendEvents('next', name);
-    navigate(`savegoal/${name}`);
+    navigate(`/invest/savegoal/${name}`);
   }
 
   const sendEvents = (userAction, purpose) => {

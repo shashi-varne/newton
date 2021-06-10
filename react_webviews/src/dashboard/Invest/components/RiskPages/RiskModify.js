@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import InfoBox from '../../../../common/ui/F-InfoBox';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
-import { navigate as navigateFunc } from '../../common/commonFunctions';
 import FSelect from './FSelect';
-import { getConfig } from '../../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import { nativeCallback } from '../../../../utils/native_callback';
@@ -73,7 +72,7 @@ const RiskModify = ({
     if (selectedRisk !== 'Custom' && selectedRisk !== userRiskProfile) {
       await updateRiskAndFetchRecommendations();
     }
-    navigate('recommendations');
+    navigate('/invest/recommendations');
   };
 
   const toggleConfirmDialog = () => {
@@ -143,7 +142,7 @@ const RiskModify = ({
         }
         <div
           className="risk-customize-cta"
-          onClick={() => {sendEvents('custom profile'); navigate(`${funnelGoalData.id}/risk-customize`)}}>
+          onClick={() => {sendEvents('custom profile'); navigate(`/invest/${funnelGoalData.id}/risk-customize`)}}>
           Customise EQUITY to DEBT DISTRIBUTION
         </div>
         <BottomSheet

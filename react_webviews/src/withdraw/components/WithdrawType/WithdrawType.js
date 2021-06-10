@@ -3,18 +3,19 @@ import Container from '../../common/Container'
 import FundCard from '../../mini-components/FundCard'
 import isEmpty from 'lodash/isEmpty'
 import { getRecommendedFund } from '../../common/Api'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import toast from 'common/ui/Toast'
 import Typography from '@material-ui/core/Typography'
 import { getConfig } from 'utils/functions'
 import { formatAmountInr } from '../../../utils/validators'
 import '../commonStyles.scss';
 import './WithdrawType.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const Landing = (props) => {
   const { type } = props.match?.params
   const amount = props.location?.state?.amount
-  const [error, setError] = useState(false)
+  const [error, setError] = useState({})
   const [totalAmount, setTotalAmount] = useState('')
   const [value, setValue] = useState({})
   const [recommendedFunds, setRecommendedFunds] = useState(null)
@@ -25,7 +26,7 @@ const Landing = (props) => {
   const [buttonTitle, setButtonTitle] = useState('CONTINUE')
   const navigate = navigateFunc.bind(props)
   const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
-
+  const [startDate] = useState(new Date())
   const fetchRecommendedFunds = async () => {
     try {
       setShowSkeltonLoader(true)
@@ -91,8 +92,9 @@ const Landing = (props) => {
     }
   }
   const handleClick = () => {
+    sendEvents('next')
     if (zeroInvested) {
-      navigate('/invest/instaredeem', null, true)
+      navigate('/invest/instaredeem')
     } else if (fetchFailed) {
       fetchRecommendedFunds()
     } else {
@@ -101,14 +103,14 @@ const Landing = (props) => {
         return
       }
       if (type === 'manual') {
-        navigate(`self/summary`, {
+        navigate(`/withdraw/self/summary`, {
           state:{
             amounts: value,
             ...recommendedFunds[0],
           }
         })
       } else {
-        navigate(`${type}/summary`, {
+        navigate(`/withdraw/${type}/summary`, {
           state:{
             amounts: value,
             ...recommendedFunds[0],
@@ -117,8 +119,14 @@ const Landing = (props) => {
       }
     }
   }
-  const checkError = (err) => {
-    setError(err)
+  const checkError = (isin, err) => {
+    if(err) {
+      setError({ ...error, [isin]: err })
+    } else {
+      const newError = error;
+      delete newError[isin];
+      setError({...newError})
+    }
   }
 
   const getTitle = () => {
@@ -128,6 +136,7 @@ const Landing = (props) => {
       case "insta-redeem": 
         return "Instant withdraw";
       case "self":
+      case "manual":
         return "Manual withdraw";
       default:
         return "Withdraw";
@@ -161,24 +170,55 @@ const Landing = (props) => {
     }
   }
 
-  const goBack = () => {
-    navigate('');
-  }
+  const sendEvents = (userAction) => {
+
+    let redemptionType = "";
+    if(type === "insta-redeem") 
+      redemptionType = "instaredeem"
+    else if(type === "systematic")
+      redemptionType = "system"
+    else if(type === "manual")
+      redemptionType = "self"
+    else redemptionType = type;
+    
+    let statusEvent = '';
+    if(limitCrossed)
+      statusEvent = 'exhaust limit'
+    if(zeroInvested)
+      statusEvent = 'empty state'
+    if(fetchFailed)
+      statusEvent = 'redeem amount unknown'
+
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "fund_amount_split",
+        'flow': redemptionType,
+        'time_spent_on_screen': Math.ceil((new Date() - startDate) / 1000),
+      },
+    };
+    if(type === 'insta-redeem') {
+      eventObj.properties['status'] = statusEvent;
+      eventObj.properties['amount_value'] = 0 // to be checked
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       fullWidthButton
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      goBack={goBack}
-      // hideInPageTitle
-      disable={type === 'insta-redeem' ? (limitCrossed || error) : error}
-      // handleClick2={handleClick}
+      disable={type === 'insta-redeem' ? (limitCrossed || !isEmpty(error)) : !isEmpty(error)}
       handleClick={handleClick}
       skelton={isEmpty(recommendedFunds) && showSkeltonLoader}
-      // twoButton={type !== 'insta-redeem'}
-      // footerText1={totalAmount}
-      // disable2={error}
       buttonData={{
         leftTitle: "Withdraw amount",
         leftSubtitle: formatAmountInr(totalAmount),

@@ -8,8 +8,8 @@ import FormControl from "@material-ui/core/FormControl";
 import { flowName, investRedeemData } from "../../constants";
 import {
   getGoalRecommendation,
-  navigate as navigateFunc,
 } from "../../common/commonFunctions";
+import { navigate as navigateFunc } from 'utils/functions'
 import { convertInrAmountToNumber, formatAmountInr } from "../../../../utils/validators";
 import useFunnelDataHook from "../../common/funnelDataHook";
 import { nativeCallback } from '../../../../utils/native_callback';
@@ -43,7 +43,7 @@ const InvestAmount = (props) => {
       amount,
     };
     updateFunnelData(recommendations);
-    navigate('recommendations');
+    navigate('/invest/recommendations');
   };
   
   const handleChange = () => (event) => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "../../../common/Container";
 import InvestType from "../../mini-components/InvestType";
 import { flowName, investRedeemData } from "../../constants";
-import { navigate as navigateFunc } from "../../common/commonFunctions";
+import { navigate as navigateFunc } from "utils/functions";
 import useFunnelDataHook from "../../common/funnelDataHook";
 import { nativeCallback } from "../../../../utils/native_callback";
 
@@ -19,7 +19,7 @@ const Type = (props) => {
       investTypeDisplay: investType,
       order_type: investType
     });
-    navigate(`instaredeem/amount`);
+    navigate(`/invest/instaredeem/amount`);
   };
 
   const sendEvents = (userAction) => {

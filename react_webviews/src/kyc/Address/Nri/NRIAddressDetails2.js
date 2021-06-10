@@ -3,15 +3,16 @@ import React, { useState, useEffect } from "react";
 import Toast from "../../../common/ui/Toast";
 import { submit } from "../../common/api";
 import Container from "../../common/Container";
-import { kycNRIDocNameMapper } from "../../constants";
+import { NRI_DOCUMENTS_MAPPER } from "../../constants";
 import {
   compareObjects,
-  navigate as navigateFunc,
   validateFields,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
 import "../commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -40,6 +41,7 @@ const NRIAddressDetails2 = (props) => {
   const stateParams = props?.location?.state;
 
   const handleSubmit = async () => {
+    sendEvents("next")
     let keysToCheck = [
       "nri_pincode",
       "addressline",
@@ -87,9 +89,7 @@ const NRIAddressDetails2 = (props) => {
   };
 
   const handleNavigation = () => {
-    if (stateParams?.toState) {
-      navigate(stateParams?.toState, { userType: stateParams?.userType });
-    } else if (stateParams?.backToJourney) {
+    if (stateParams?.backToJourney) {
       navigate("/kyc/upload/address");
     } else if (stateParams?.userType === "compliant") {
       navigate("/kyc/compliant-personal-details4");
@@ -132,11 +132,29 @@ const NRIAddressDetails2 = (props) => {
   if (kyc?.address?.meta_data?.is_nri) {
     address_proof = "Passport";
   } else {
-    address_proof = kycNRIDocNameMapper[kyc?.address_doc_type];
+    address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
+  }
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nri_address_details_2",
+        "pincode_entered": form_data.nri_pincode ? "yes" : "no",
+        "address_entered": form_data.addressline ? "yes" : "no"
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}

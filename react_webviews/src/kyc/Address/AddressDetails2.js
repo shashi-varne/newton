@@ -4,15 +4,16 @@ import Toast from "../../common/ui/Toast";
 import { isEmpty } from "utils/validators";
 import { getPinCodeData, submit } from "../common/api";
 import Container from "../common/Container";
-import { kycDocNameMapper } from "../constants";
+import { DOCUMENTS_MAPPER } from "../constants";
 import {
   compareObjects,
-  navigate as navigateFunc,
   validateFields,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { validateNumber } from "utils/validators";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const AddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -39,6 +40,7 @@ const AddressDetails2 = (props) => {
   };
 
   const handleSubmit = async () => {
+    sendEvents("next")
     let keysToCheck = ["pincode", "addressline", "state", "city"];
 
     let result = validateFields(form_data, keysToCheck);
@@ -62,6 +64,7 @@ const AddressDetails2 = (props) => {
     userKycDetails.address.meta_data.city = form_data.city;
     userKycDetails.address.meta_data.pincode = form_data.pincode;
     userKycDetails.address.meta_data.addressline = form_data.addressline;
+    userKycDetails.address.meta_data.country = form_data.country;
 
     try {
       let item = {
@@ -77,6 +80,7 @@ const AddressDetails2 = (props) => {
         form_data.pincode;
       userKycDetails.nomination.meta_data.nominee_address.addressline =
         form_data.addressline;
+      userKycDetails.nomination.meta_data.country = form_data.country;
       const nomination_address =
         userKycDetails.nomination.meta_data.nominee_address;
       item.kyc.nomination.address = nomination_address;
@@ -173,11 +177,30 @@ const AddressDetails2 = (props) => {
     if (isNri) {
       return "Passport";
     }
-    return kycDocNameMapper[kyc?.address_doc_type];
+    return DOCUMENTS_MAPPER[kyc?.address_doc_type];
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "address_details_2",
+        "pincode_entered":  form_data.pincode ? "yes" : "no",
+        "address_entered":  form_data.addressline ? "yes" : "no",
+        "nominee_pincode_entered":  form_data.pincode ? "yes" : "no",
+        "nominee_address_entered":  form_data.addressline ? "yes" : "no"
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}

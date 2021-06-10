@@ -4,11 +4,11 @@ import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { getSummaryV2 } from "../../common/api";
 import {
-  navigate as navigateFunc,
   dateOrdinalSuffix,
 } from "../../common/functions";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const Sip = (props) => {
   const productName = getConfig().productName;
@@ -34,6 +34,7 @@ const Sip = (props) => {
   };
 
   const showDetail = (item) => {
+    sendEvents('next', item.amount, item.friendly_status);
     storageService().set(storageConstants.SELECTED_SIP, item.id);
     storageService().setObject(storageConstants.PAUSE_SIP, item);
     navigate(getPathname.sipDetails);
@@ -46,8 +47,25 @@ const Sip = (props) => {
     return name.replace(/_/g, " ").toUpperCase();
   };
 
+  const sendEvents = (userAction, amount, status) => {
+    let eventObj = {
+      "event_name": 'my_portfolio',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "Existing SIPs",
+        "fund": ("₹"+amount),
+        "status": status ? formatName(status) : ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
-    <Container title="Existing SIPs" noFooter={true} skelton={showSkelton}>
+    <Container title="Existing SIPs" noFooter={true} skelton={showSkelton} events={sendEvents("just_set_events")}>
       <div className="reports-sip">
         {!isEmpty(report) &&
           report?.sips?.active_sips?.map((sip, index) => {

@@ -3,6 +3,7 @@ import { initialize } from "../common/commonFunctions";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "utils/validators";
+import { getConfig } from "../../../utils/functions";
 
 class NpsPaymentCallback extends Component {
   constructor(props) {
@@ -20,10 +21,9 @@ class NpsPaymentCallback extends Component {
   }
 
   onload = () => {
-    let amount = storageService().get('npsAmount');
-
     let pathname = this.props.history.location.pathname.split('/');
     let status = pathname[pathname.length - 1];
+    let amount = pathname[pathname.length - 2] || storageService().get('npsAmount');
 
     this.setState({
       amount: amount,
@@ -32,33 +32,69 @@ class NpsPaymentCallback extends Component {
   };
 
   handleClick = async () => {
+    const config = getConfig();
     if (this.state.status !== 'success') {
-      this.navigate('/invest', '', true)
+      this.navigate('/invest')
     } else {
       const result = await this.getNPSInvestmentStatus();
       storageService().set('nps_additional_details_required', true);
-      storageService().setObject('nps_additional_details', result.registration_details);
-      storageService().setObject('kyc_app', result.kyc_app);
+      // storageService().setObject('nps_additional_details', result.registration_details);
+      // storageService().setObject('kyc', result.kyc_app);
   
       let currentUser = storageService().getObject("user");
- 
+      let _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "nps",
+            trigger: "cta",
+            journey_status: "incomplete",
+            next_journey: "kyc",
+          },
+        },
+      };
       if (!result.registration_details.additional_details_status) {
         if (currentUser.kyc_registration_v2 === 'init') {
-          this.navigate('/kyc/journey', '', true);
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+          this.navigate('/kyc/journey');
         } else if (currentUser.kyc_registration_v2 === 'incomplete') {
-          this.navigate('/kyc/journey', '', true);
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+          this.navigate('/kyc/journey');
         } else {
-          this.navigate('identity');
+          this.navigate('/nps/identity');
         }
       } else {
-        this.navigate('investments');
+        let _event = {
+          'event_name': 'journey_details',
+          'properties': {
+            'journey': {
+              'name': 'nps',
+              'trigger': 'cta',
+              'journey_status': 'complete',
+              'next_journey': 'reports'
+            }
+          }
+        };
+        // send event
+        if (!config.Web) {
+          window.callbackWeb.eventCallback(_event);
+        } else if (config.isIframe) {
+          window.callbackWeb.sendEvent(_event);
+        }
+        this.navigate('/nps/investments');
       }
     }
   };
-
-  goBack = () => {
-    this.navigate('/landing', "", true);
-  }
  
   render() {
     return (
@@ -67,9 +103,6 @@ class NpsPaymentCallback extends Component {
         buttonTitle="OK"
         title="Payment Status"
         handleClick={this.handleClick}
-        headerData={{
-          goBack: this.goBack
-        }}
       >
         <div className="nps-payment-callback">
           <div

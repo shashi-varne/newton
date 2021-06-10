@@ -5,8 +5,7 @@ import { formatAmountInr } from 'utils/validators'
 import './mini-components.scss';
 
 const TaxSummaryCard = ({
-  open = true,
-  handleToggle,
+  openCard,
   stcg_tax,
   ltcg_tax,
   stcg_percent,
@@ -15,45 +14,46 @@ const TaxSummaryCard = ({
   friendly_name,
   amc_logo_small,
   exit_load,
+  sendEvents,
   hideIcon = false,
   know_how_msg,
+  onClick
 }) => {
   const [showKnowMoreDialog, setShowKnowMoreDialog] = useState(false)
   const closeDialog = () => {
     setShowKnowMoreDialog(false)
   }
   const openDialog = () => {
+    sendEvents('know_how_clicked')
     setShowKnowMoreDialog(true)
   }
   const productName = getConfig().productName
   return (
     <section className="withdraw-tax-summary">
-      <div className="top flex-between-center">
+      <div className="top flex-between-center" onClick={onClick}>
         <div className="flex-center">
           <img className="fund-image" src={amc_logo_small} alt="" />
           <div className="fund-name">{friendly_name}</div>
         </div>
-        {open && !hideIcon && (
+        {openCard && !hideIcon && (
           <img
             className="icon"
             role="button"
             src={require(`assets/minus_icon.svg`)}
-            onClick={handleToggle}
             alt='minus-icon'
           />
         )}
-        {!open && !hideIcon && (
+        {!openCard && !hideIcon && (
           <img
             className="icon"
             role="button"
             src={require(`assets/plus_icon.svg`)}
-            onClick={handleToggle}
             alt='plus-icon'
           />
         )}
       </div>
-      {open && (
-        <div className={!open ? 'item item_hide' : 'item'}>
+      {openCard && (
+        <div className={!openCard ? 'item item_hide' : 'item'}>
           <div className="tile flex-between-center">
             <div className="name">Withdraw Amount</div>
             <div className="value">{formatAmountInr(withdrawal_amount)}</div>
@@ -76,7 +76,7 @@ const TaxSummaryCard = ({
           </div>
         </div>
       )}
-      {know_how_msg && (
+      {know_how_msg && openCard && (
         <footer className="summary-bottom-info flex-between">
           <div className="flex-center">
             <img

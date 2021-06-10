@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import BottomSheet from '../../common/ui/BottomSheet';
-import { getConfig } from '../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../utils/functions';
 import { formatAmountInr, getFinancialYear } from '../../utils/validators';
-import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
 import './RecommendationTopCard.scss';
 const { productName } = getConfig();
 
@@ -46,7 +45,7 @@ const RecommendationTopCard = ({
           </div>
           <div
             className="risk-profile-change-btn"
-            onClick={() => {sendEvents("change_risk_profile"); navigate(`${investType}/risk-${userRiskProfile ? 'modify' : 'select'}`)}}>
+            onClick={() => {sendEvents("change_risk_profile"); navigate(`/invest/${investType}/risk-${userRiskProfile ? 'modify' : 'select'}`)}}>
             {userRiskProfile ? "Change" : "Select"}
           </div>
           <BottomSheet

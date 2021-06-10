@@ -1,14 +1,15 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
-import { navigate as navigateFunc } from '../common/functions'
-import { getConfig, getBase64 } from 'utils/functions'
+import { getFlow } from '../common/functions'
+import { getConfig, getBase64, navigate as navigateFunc } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
+const isWeb = getConfig().Web
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -60,10 +61,11 @@ const Sign = (props) => {
     })
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   
-  const handleChange = (event) => {
+  const handleChange = (type) => (event) => {
     event.preventDefault();
+    sendEvents('get_image', type)
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -79,51 +81,81 @@ const Sign = (props) => {
   }
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else 
       native_call_handler(method_name, 'sign', 'sign.jpg', 'front')
   }
 
   const handleSubmit = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
-      const result = await upload(file, 'sign')
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      const dlFlow =
-        result.kyc.kyc_status !== 'compliant' &&
-        !result.kyc.address.meta_data.is_nri &&
-        result.kyc.dl_docs_status !== '' &&
-        result.kyc.dl_docs_status !== 'init' &&
-        result.kyc.dl_docs_status !== null
-      if (
-        props?.location?.state?.fromState === 'kyc/dl/personal-details3' ||
-        dlFlow
-      ) {
-        const type =
-          result?.kyc?.kyc_status === 'compliant'
-            ? 'compliant'
-            : 'non-compliant'
-        navigate(`/kyc/${type}/bank-details`)
-      } else {
-        if (props?.location?.state?.backToJourney) {
-          navigate('/kyc/journey')
+      const payload = { manual_upload: isWeb }
+      const response = await upload(file, 'sign', payload)
+      if (response.status_code === 200) {
+        const result = response.result;
+        updateKyc(result.kyc);
+        const dlFlow =
+          result.kyc.kyc_status !== "compliant" &&
+          !result.kyc.address.meta_data.is_nri &&
+          result.kyc.dl_docs_status !== "" &&
+          result.kyc.dl_docs_status !== "init" &&
+          result.kyc.dl_docs_status !== null;
+        if (
+          props?.location?.state?.fromState === "kyc/dl/personal-details3" ||
+          dlFlow
+        ) {
+          const type =
+            result?.kyc?.kyc_status === "compliant"
+              ? "compliant"
+              : "non-compliant";
+          navigate(`/kyc/${type}/bank-details`);
         } else {
-          navigate('/kyc/upload/progress')
+          if (props?.location?.state?.backToJourney) {
+            navigate("/kyc/journey");
+          } else {
+            navigate("/kyc/upload/progress");
+          }
         }
+      } else {
+        throw new Error(
+          response?.result?.error ||
+            response?.result?.message ||
+            "Something went wrong"
+        );
       }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
       setIsApiRunning(false)
     }
   }
 
-  const isWeb = getConfig().isWebOrSdk
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "sign_doc",
+        "type": type || "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
 
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
       disable={!file}
@@ -157,7 +189,7 @@ const Sign = (props) => {
                       ref={inputEl}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange}
+                      onChange={handleChange('gallery')}
                     />
                     <button
                       onClick={() => handleUpload("open_canvas")}
@@ -202,7 +234,7 @@ const Sign = (props) => {
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange}
+                  onChange={handleChange('gallery')}
                 />
                 <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
                   {!file && (
