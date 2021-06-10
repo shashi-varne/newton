@@ -5,9 +5,11 @@ import { storageService, getUrlParams } from "utils/validators";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
+import { getBasePath } from "../utils/functions";
 
 const isMobileView = getConfig().isMobileDevice;
 const errorMessage = "Something went wrong!";
+const basePath = getBasePath();
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.emailLogin = emailLogin.bind(this);
@@ -25,7 +27,7 @@ export function initialize() {
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
-  let redirectUrl = encodeURIComponent(`${window.location.origin}/`);
+  let redirectUrl = encodeURIComponent(`${basePath}/`);
   const partners = [
     "hbl",
     "sbm",
@@ -49,7 +51,7 @@ export function initialize() {
     : "";
 
   let socialRedirectUrl = encodeURIComponent(
-    window.location.origin + "/social/callback" + rebalancingRedirectUrl
+    basePath + "/social/callback" + rebalancingRedirectUrl
   );
 
   let facebookUrl =
