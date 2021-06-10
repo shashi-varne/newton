@@ -111,7 +111,7 @@ const FundChart = (props) => {
         formatter: function () {
           return (
             '<p class="yaxis-label">' +
-            (this.value > 0 ? " Rs " : "") +
+            (this.value > 0 ? "₹" : "") +
             this.value +
             "</p>"
           );

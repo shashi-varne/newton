@@ -4,7 +4,6 @@ Example:
 
 <WVAccordian
   title="Fund's Info"
-  name="fund_info_clicked"
   handleClick={() => storeEventsData("fund_info_clicked")}
 >
 {...content}
@@ -27,10 +26,12 @@ const WVAccordian = ({
   dataAidSuffix,
   expandIcon, // Provide custom expand icon
   collapseIcon, //Provide custom collapse icon
+  isDisabled
 }) => {
   const [open, setOpen] = useState(false);
 
   const handleAccordian = () => {
+    if (isDisabled) return;
     if (handleClick) handleClick();
     setOpen(!open);
   };
@@ -70,10 +71,12 @@ WVAccordian.propTypes = {
   handleClick: PropTypes.func,
   expandIcon: PropTypes.node,
   collapseIcon: PropTypes.node,
+  isDisabled: PropTypes.bool
 };
 
 WVAccordian.defaultProps = {
   handleClick: () => {},
   classes: {},
+  isDisabled: false
 };
 export default memo(WVAccordian);
