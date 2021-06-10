@@ -576,7 +576,7 @@ export function checkValidString(value) {
 }
 
 export function checkObjectWithinString(value) {
-  const isValueString = typeof value === "string" && ['', 'undefined', 'false'].includes(value);
+  const isValueString = typeof value === "string" && !['', 'undefined', 'false'].includes(value);
   try {
     if (isValueString) {
       const o = JSON.parse(value);
