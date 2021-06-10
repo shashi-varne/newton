@@ -4,7 +4,6 @@ import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "utils/validators";
 import { getConfig } from "../../../utils/functions";
-import { isEmpty } from "../../../utils/validators";
 
 class NpsPaymentCallback extends Component {
   constructor(props) {
@@ -24,7 +23,7 @@ class NpsPaymentCallback extends Component {
   onload = () => {
     const params = this.props.match?.params || {}
     const status = params.status;
-    if(isEmpty(params) || !params.status) {
+    if(!params.status) {
       this.navigate("/");
       return;
     }

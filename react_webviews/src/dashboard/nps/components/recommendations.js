@@ -186,7 +186,7 @@ class Recommendations extends Component {
                     recommendations.pension_house.image
                   }
                   alt="NPS"
-                  className="md-dialog-content-nps-pension-house-image"
+                  className="nrd-pension-house-image"
                 />
                 <div
                   style={{
@@ -497,7 +497,7 @@ class Recommendations extends Component {
                 <img src={require("assets/terms_agree.png")} alt="" width="25" />
                 <div>
                   By tapping on proceed, I agree that I have read the {" "}
-                  <span onClick={() => this.openInBrowser("https://www.fisdom.com/terms/")} style={{textDecoration:'underline', cursor:'pointer'}}>
+                  <span onClick={() => this.openInBrowser(config.termsLink)} style={{textDecoration:'underline', cursor:'pointer'}}>
                     terms & conditions
                   </span>
                 </div>
