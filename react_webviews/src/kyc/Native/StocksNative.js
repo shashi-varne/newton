@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { navigate as navigateFunc } from 'utils/functions'
 import { isEmpty, storageService } from '../../utils/validators'
 import { getKycAppStatus, setKycProductType } from '../services'
@@ -11,6 +11,7 @@ import { PATHNAME_MAPPER } from '../constants';
 
 function Native(props) {
   const navigate = navigateFunc.bind(props);
+  const [isApiRunning, setIsApiRunning] = useState(false);
   const { kyc, isLoading } = useUserKycHook();
   const fromState = props?.location?.state?.fromState || "";
 
@@ -32,13 +33,21 @@ function Native(props) {
   }, [kyc])
 
   const setProductType = async () => {
-    const payload = {
-      "kyc":{},
-      "set_kyc_product_type": "equity"
-    }
-    const isProductTypeSet = await setKycProductType(payload);
-    if (isProductTypeSet) {
-      navigate(PATHNAME_MAPPER.accountInfo, data)
+    try {
+      const payload = {
+        "kyc":{},
+        "set_kyc_product_type": "equity"
+      }
+      setIsApiRunning(true);
+      const isProductTypeSet = await setKycProductType(payload);
+      if (isProductTypeSet) {
+        navigate(PATHNAME_MAPPER.accountInfo, data)
+      }
+    } catch (ex) {
+      console.log(ex.message);
+      nativeCallback({ action: "exit_web" })
+    } finally {
+      setIsApiRunning(false);
     }
   }
 
@@ -55,8 +64,10 @@ function Native(props) {
 
     if (kyc?.address?.meta_data?.is_nri && isKycCompleted(kyc)) {
       navigate(PATHNAME_MAPPER.nriError, {
-        state: {originState: "invest"},
-        ...data.state
+        state: { 
+          originState: "invest",
+          ...data.state
+        },
       });
     } else {
       if (kycJourneyStatus !== "rejected") {
@@ -74,8 +85,10 @@ function Native(props) {
           setProductType();
         } else {
           navigate(kycStatusData.next_state, {
-            state: { fromState: "invest" },
-            ...data.state
+            state: { 
+              fromState: "invest", 
+              ...data.state
+            },
           });
         }
       } else {
@@ -85,7 +98,7 @@ function Native(props) {
   }
 
   return (
-    <Container skelton={isLoading} noHeader noFooter />
+    <Container skelton={isLoading || isApiRunning} noHeader noFooter />
   )
 }
 
