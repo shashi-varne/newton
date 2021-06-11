@@ -194,7 +194,7 @@ const FnOIncomeProof = (props) => {
         image={require(`assets/${productName}/doc-uploaded.svg`)}
         button1Props={{
           title: 'Continue',
-          type: 'primary',
+          variant: "contained",
           onClick: goNext
         }}
       />

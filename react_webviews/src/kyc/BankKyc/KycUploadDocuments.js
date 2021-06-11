@@ -332,7 +332,7 @@ const KycUploadDocuments = (props) => {
         onClose={() => setShowPendingModal(false)}
         button1Props={{
           title: "CONTINUE WITH KYC",
-          type: "primary",
+          variant: "contained",
           onClick: proceed,
         }}
         classes={{

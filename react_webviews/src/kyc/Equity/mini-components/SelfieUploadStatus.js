@@ -33,7 +33,7 @@ const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick }) => {
       image={data.icon && require(`assets/${productName}/${data.icon}`)}
       button1Props={{
         title: data.ctaText,
-        type: 'primary',
+        variant: "contained",
         onClick: onCtaClick,
       }}
       disableBackdropClick
