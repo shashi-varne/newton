@@ -28,7 +28,7 @@ const Type = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": 'select order type',
-        "flow": flowName['instaRedeem'],
+        "flow": flowName['insta-redeem'],
         "order_type": investType
         }
     };

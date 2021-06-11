@@ -78,7 +78,7 @@ const Landing = (props) => {
         "user_action": userAction || "",
         "screen_name": "select years",
         "years_selected": investTypeDisplay === "1Y" ? "less than 1" : "1 to 3 years",
-        "flow": flowName['parkMoney']
+        "flow": flowName['investsurplus']
         }
     };
     if (userAction === 'just_set_events') {

@@ -58,7 +58,15 @@ const PeriodWiseReturns = ({
     setInvestedValue(value);
   };
 
-  const toggleInfoSheet = () => {storageService().set('info_clicked',true); setOpenInfoSheet(!openInfoSheet)};
+  const toggleInfoSheet = () => {
+    storageService().set("info_clicked", true);
+    setOpenInfoSheet(!openInfoSheet);
+  };
+
+  const onClickTerm = (termOpt) => {
+    storageService().set("period_changed", true);
+    setCurrentTerm(termOpt);
+  };
 
   return (
     <div className='invested-amount-return-container'>
@@ -72,7 +80,7 @@ const PeriodWiseReturns = ({
               currentTerm >= termOpt && currentTerm < (termOptions[idx + 1] || 100) ?
               'selected' : ''
             }
-            onClick={() => {storageService().set("period_changed",true); setCurrentTerm(termOpt)}}>
+            onClick={() => onClickTerm(termOpt)}>
             {termOpt}YRS
           </span>
         ))}

@@ -83,7 +83,7 @@ const GoalTarget = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "select target type",
-        "flow": flowName['investForGoal'],
+        "flow": flowName['saveforgoal'],
         "goal_purpose": subtype || "",
         "target_type": type?.toLowerCase() || ""
         }

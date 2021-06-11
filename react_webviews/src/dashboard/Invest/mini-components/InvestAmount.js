@@ -195,12 +195,12 @@ const InvestAmount = (props) => {
         "user_action": userAction || "",
         "screen_name": "select invest amount",
         "amount": userEnteredAmt || "",
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || ""
+        "flow": funnelData.flow || flowName[funnelData.investType] || ""
         }
     };
     if(funnelData.investType === 'saveforgoal')
     {
-      eventObj.properties["goal_purposse"] = funnelData.subtype || "";
+      eventObj.properties["goal_purpose"] = funnelData.subtype || "";
       eventObj.properties['amount_changed'] = amountChanged ? "yes" : "no";
     }
     if (userAction === 'just_set_events') {

@@ -81,7 +81,7 @@ const Landing = (props) => {
         "user_action": userAction || "",
         "screen_name": "select order type",
         "order_type": investTypeDisplay === "sip" ? "SIP" : "OT",
-        "flow": flowName['buildWealth']
+        "flow": flowName['buildwealth']
         }
     };
     if (userAction === 'just_set_events') {

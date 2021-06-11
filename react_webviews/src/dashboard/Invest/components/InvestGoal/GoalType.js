@@ -41,7 +41,7 @@ const GoalType = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "goal select",
-        "flow": flowName['investForGoal'],
+        "flow": flowName['saveforgoal'],
         "goal_purpose": purpose || ""
         }
     };

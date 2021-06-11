@@ -95,7 +95,7 @@ const InvestAmount = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": 'select invest amount',
-        "flow": flowName['instaRedeem'],
+        "flow": flowName['insta-redeem'],
         "amount_value": amount
         }
     };

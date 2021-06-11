@@ -122,7 +122,7 @@ const RiskSelect = ({
       "properties": {
         "user_action": userAction || "",
         "screen_name": "selectrisk profile",
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || "",
+        "flow": funnelData.flow || flowName[funnelData.investType] || "",
         "profile": selectedRisk,
         "info_clicked": storageService().get('risk-info-clicked') ? 'yes' : 'no',
         }

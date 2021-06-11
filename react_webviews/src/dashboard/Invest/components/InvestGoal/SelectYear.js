@@ -102,7 +102,7 @@ const SelectYear = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "select years",
-        "flow": flowName['investForGoal'],
+        "flow": flowName['saveforgoal'],
         "goal_purpose": subtype || "",
         "years_selected": year || ""
         }

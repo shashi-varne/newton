@@ -267,7 +267,7 @@ const Recommendations = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "recommended funds",
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || "",
+        "flow": funnelData.flow || flowName[funnelData.investType] || "",
         "check_how_clicked": storageService().get("check_how_clicked") ? "yes" : "no",
         "period_changed": storageService().get("period_changed") ? "yes" : "no",
         "info_clicked": storageService().get("info_clicked") ? "yes" : "no",
@@ -292,7 +292,6 @@ const Recommendations = (props) => {
 
   const goBack = () => {
     sendEvents('back')
-    removeEventData();
     //TODO below code to be checked
     const goBackPath = props.location?.state?.goBack || "";
     if(goBackPath) {

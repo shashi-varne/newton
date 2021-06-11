@@ -88,7 +88,7 @@ const RiskCustomize = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "custom profile",
-        "flow": funnelData.flow || (funnelData.investType === "saveforgoal" ? flowName['investForGoal'] : funnelData.investType) || "",
+        "flow": funnelData.flow || flowName[funnelData.investType] || "",
         "custom_stock%": equity,
         "custom_bond%": debt,
         }

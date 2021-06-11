@@ -100,7 +100,7 @@ const CustomGoalTarget = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": "select target amount",
-        "flow": flowName['investForGoal'],
+        "flow": flowName['saveforgoal'],
         "goal_purpose": subtype || "",
         "target_amount_selected": targetAmount || ""
         }
