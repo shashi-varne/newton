@@ -173,7 +173,7 @@ const FundList = (props) => {
               "scheme_type": titleCase(match.params.type) || "",
               "add_to_cart": productType === 'finity' ? 0 : cart.length,
               "additonal_cart_value": cart.length - initialCartCount || 0,
-              "filter_clicked": storageService().get("filter_clicked")
+              "filter_clicked": storageService().getBoolean("filter_clicked")
                 ? "yes"
                 : "no",
               "flow": flowName['diy'],

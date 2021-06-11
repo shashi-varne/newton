@@ -27,8 +27,10 @@ const CartFooter = ({
     <footer className="diy-cart-footer" style={{marginLeft: isMobileDevice && 0}} >
       <FilterButton
         className="button diy-filter-button"
-        onClick={() => {storageService().set('filter_clicked',true); setFilterActive(true)}}
-      />
+        onClick={() => {
+          storageService().setBoolean("filter_clicked", true);
+          setFilterActive(true);
+        }}      />
       <DiyCartButton
         className="button"
         onClick={() => {sendEvents('cart'); setCartActive(true)}}

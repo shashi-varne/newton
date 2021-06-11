@@ -257,7 +257,7 @@ const Recommendations = (props) => {
   };
 
   const checkHow = () => {
-    storageService().set('check_how_clicked',true)
+    storageService().setBoolean('check_how_clicked',true)
     navigate("/invest/recommendations/how-we-recommend");
   }
 
@@ -268,9 +268,9 @@ const Recommendations = (props) => {
         "user_action": userAction || "",
         "screen_name": "recommended funds",
         "flow": funnelData.flow || flowName[funnelData.investType] || "",
-        "check_how_clicked": storageService().get("check_how_clicked") ? "yes" : "no",
-        "period_changed": storageService().get("period_changed") ? "yes" : "no",
-        "info_clicked": storageService().get("info_clicked") ? "yes" : "no",
+        "check_how_clicked": storageService().getBoolean("check_how_clicked") ? "yes" : "no",
+        "period_changed": storageService().getBoolean("period_changed") ? "yes" : "no",
+        "info_clicked": storageService().getBoolean("info_clicked") ? "yes" : "no",
         }
     };
     if (funnelData.investType === "saveforgoal") {

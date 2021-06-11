@@ -79,7 +79,7 @@ const RiskSelect = ({
 
   const goNext = async (skipRiskUpdate) => {
     sendEvents('next')
-    storageService().remove('risk-info-clicked');
+    storageService().remove('risk_info_clicked');
     if(!skipRiskUpdate && !selectedRisk) {
       toast("Please select your risk profile");
       return;
@@ -112,7 +112,7 @@ const RiskSelect = ({
   };
 
   const showInfo = () => {
-    storageService().set("risk-info-clicked", true);
+    storageService().setBoolean("risk_info_clicked", true);
     navigate('/invest/risk-info');
   }
 
@@ -124,7 +124,7 @@ const RiskSelect = ({
         "screen_name": "selectrisk profile",
         "flow": funnelData.flow || flowName[funnelData.investType] || "",
         "profile": selectedRisk,
-        "info_clicked": storageService().get('risk-info-clicked') ? 'yes' : 'no',
+        "info_clicked": storageService().getBoolean('risk_info_clicked') ? 'yes' : 'no',
         }
     };
     if (userAction === 'just_set_events') {

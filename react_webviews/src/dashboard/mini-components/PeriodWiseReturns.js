@@ -59,12 +59,12 @@ const PeriodWiseReturns = ({
   };
 
   const toggleInfoSheet = () => {
-    storageService().set("info_clicked", true);
+    storageService().setBoolean("info_clicked", true);
     setOpenInfoSheet(!openInfoSheet);
   };
 
   const onClickTerm = (termOpt) => {
-    storageService().set("period_changed", true);
+    storageService().setBoolean("period_changed", true);
     setCurrentTerm(termOpt);
   };
 
