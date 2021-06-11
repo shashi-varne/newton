@@ -394,12 +394,10 @@ const Report = (props) => {
       id="kyc-home"
       data-aid='kyc-home-screen'
       events={sendEvents("just_set_events")}
-      buttonTitle={buttonTitle}
-      handleClick={handleClick}
       title={topTitle}
       headerData={{ goBack }}
       skelton={isLoading}
-      noFooter={flowType === "compliant"}
+      noFooter
     >
       <div className="kyc-report" data-aid='kyc-report-section'>
         {cardDetails &&
