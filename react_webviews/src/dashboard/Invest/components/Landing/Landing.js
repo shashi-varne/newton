@@ -33,6 +33,8 @@ class Landing extends Component {
       modalData: {},
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
+      verifyDetails: true,
+      accountAlreadyExists: true,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
       isWeb: getConfig().Web,
@@ -77,6 +79,18 @@ class Landing extends Component {
       openKycPremiumLanding: false,
     });
   };
+
+  closeVerifyDetailsDialog = () => {
+    this.setState({
+      verifyDetails: false
+    })
+  }
+
+  closeAccountAlreadyExistDialog = () => {
+    this.setState({
+      accountAlreadyExists: false
+    })
+  }
 
   handleKycPremiumLanding = () => {
     if (
@@ -125,6 +139,8 @@ class Landing extends Component {
       openKycStatusDialog,
       modalData,
       openKycPremiumLanding,
+      verifyDetails,
+      accountAlreadyExists,
       stateParams,
     } = this.state;
     const {
@@ -446,8 +462,6 @@ class Landing extends Component {
             />
           )}
         </div>
-        {/* <VerifyDetailDialog type="email" data="uttam@fisdom.com"></VerifyDetailDialog> */}
-        <AccountAlreadyExistDialog type="mobile" data="98*****487" pan="CXIPP***M"></AccountAlreadyExistDialog>
         <CampaignDialog
           isOpen={this.state.openBottomSheet}
           close={this.closeCampaignDialog}
@@ -455,6 +469,23 @@ class Landing extends Component {
           data={this.state.bottom_sheet_dialog_data}
           handleClick={this.handleCampaign}
         />
+        {accountAlreadyExists && (
+          <AccountAlreadyExistDialog
+            type="mobile"
+            data="98*****487"
+            pan="CXIPP***M"
+            isOpen={accountAlreadyExists}
+            onClose={this.closeAccountAlreadyExistDialog}
+          ></AccountAlreadyExistDialog>
+        )}
+        {verifyDetails && (
+          <VerifyDetailDialog
+            type="email"
+            data="uttam@fisdom.com"
+            isOpen={verifyDetails}
+            onClose={this.closeVerifyDetailsDialog}
+          ></VerifyDetailDialog>
+        )}
       </Container>
     );
   }

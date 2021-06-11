@@ -4,18 +4,14 @@ import { getConfig } from "utils/functions";
 import WVClickableTextElement from "../../../common/ui/ClickableTextElement/WVClickableTextElement";
 const product = getConfig().productName;
 
-function VerifyDetailDialog({ type, isOpen, data }) {
+function VerifyDetailDialog({ type, isOpen, data, onClose }) {
   const editHandle = () => {
     console.log("edit clicked");
   };
 
-  const onClose = () => {
-    console.log("Dialog Closed");
-  };
-
   return (
     <WVBottomSheet
-      isOpen={true}
+      isOpen={isOpen}
       onClose={onClose}
       title={`Verify your ${type} address`}
       image={require(`../../../assets/${product}/bottomsheet_verify_${type}.svg`)}

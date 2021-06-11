@@ -3,14 +3,10 @@ import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 import { getConfig } from "utils/functions";
 const product = getConfig().productName;
 
-function AccountAlreadyExistDialog({ type, isOpen, data, pan }) {
-  const onClose = () => {
-    console.log("Dialog Closed");
-  };
-
+function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan }) {
   return (
     <WVBottomSheet
-      isOpen={true}
+      isOpen={isOpen}
       onClose={onClose}
       title={`Account already exists!`}
       image={require(`../../../assets/${product}/bottomsheet_account_exist.svg`)}
