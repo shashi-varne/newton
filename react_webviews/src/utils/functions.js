@@ -151,7 +151,7 @@ export const getConfig = () => {
   let base_href = window.sessionStorage.getItem('base_href') || '';
   let base_url_default = '';
   
-  const isStaging = origin.indexOf('staging') >= 0;
+  const isStaging = origin.indexOf('plutus-web-staging') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   if(base_href) {
@@ -167,7 +167,7 @@ export const getConfig = () => {
       base_url_default = 'https://api.mywaywealth.com';
     }
 
-    // change server url here
+    // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
       base_url_default = "https://anandb-dot-plutus-staging.appspot.com";
     }
