@@ -41,7 +41,7 @@ const Selfie = (props) => {
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
-    if(!isEmpty(kyc)) {
+    if (!isEmpty(kyc)) {
       initialize();
     }
   }, [kyc])
@@ -55,7 +55,7 @@ const Selfie = (props) => {
     setIsTradingFlow(tradingFlow);
     setIsCamLoading(tradingFlow);
   }
-  
+
   const handleNavigation = () => {
     if (bottomSheetType === "failed") {
       setOpenBottomSheet(false)
@@ -78,10 +78,16 @@ const Selfie = (props) => {
 
   const handleSubmit = async () => {
     sendEvents('next');
+
     if (bottomSheetType === "failed") {
       setBottomSheetType("");
-    }     
-    try { 
+    }
+    try {
+      if (parseFloat(selfieLiveScore) < 0.8) {
+        // eslint-disable-next-line no-throw-literal
+        throw 'Live score too low';
+      }
+
       let params = {};
       if (isTradingFlow) {
         params = {
@@ -113,7 +119,6 @@ const Selfie = (props) => {
       setBottomSheetType('failed');
       setOpenBottomSheet(true);
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
@@ -137,10 +142,14 @@ const Selfie = (props) => {
   const onCaptureSuccess = async (result) => {
     if (isTradingFlow) {
       setIsLiveCamOpen(false);
-      if (result.imgBase64 && result['liveness-score']) {
+
+      const livenessScore = result['liveness-score'];
+      if (result.imgBase64 && livenessScore) {
         setFile(result.fileBlob);
         setFileToShow(result.imgBase64);
-        setSelfieLiveScore(result['liveness-score']);
+        setSelfieLiveScore(livenessScore);
+      } else {
+        onCaptureFailure();
       }
     } else {
       setIsWebcamOpen(false);
@@ -151,7 +160,12 @@ const Selfie = (props) => {
 
   const onCaptureFailure = (error) => {
     setIsLiveCamOpen(false);
-    Toast(error.errorMsg || 'Something went wrong!');
+
+    const defaultMsg = 'Something went wrong! Please try again';
+    if (['010', 'liveness-error'].includes(error?.errorCode)) {
+      return Toast(error.errorMsg || defaultMsg);
+    }
+    Toast(defaultMsg);
   }
 
   const showSelfieSteps = () => {
