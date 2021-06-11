@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getUrlParams } from "../../../../utils/validators";
 import Container from "../../../common/Container";
 import { getPaymentStatus } from "../../common/api";
-import { navigate as navigateFunc } from "../../common/commonFunctions";
+import { navigate as navigateFunc } from "../../../../utils/functions";
 import Dialog, { DialogContent, DialogActions } from "material-ui/Dialog";
 import Button from "common/ui/Button";
 import "../../commonStyles.scss";
@@ -77,9 +77,9 @@ const PageCallback = (props) => {
           const orderType = result?.investment?.order_type;
           sendEvents("payment completed", orderType);
           if (orderType === "sip") {
-            navigate(`/sip/payment/callback/success`, null, true);
+            navigate(`/sip/payment/callback/success`);
           } else if (orderType === "onetime") {
-            navigate(`/payment/callback/success`, null, true);
+            navigate(`/payment/callback/success`);
           }
         } catch (err) {
           setErrorMessage(err);
@@ -92,7 +92,7 @@ const PageCallback = (props) => {
       default:
         setSkelton(false);
         if (!status) {
-          navigate("/landing", null, true);
+          navigate("/");
         } else {
           if (!message) message = "";
           if(status === "success")
@@ -100,11 +100,11 @@ const PageCallback = (props) => {
           else
             sendEvents("payment failed", message);
           if (investment_type === "sip") {
-            navigate(`/sip/payment/callback/${status}/${message}`, null, true);
+            navigate(`/sip/payment/callback/${status}/${message}`);
           } else if (investment_type === "onetime") {
-            navigate(`/payment/callback/${status}/${message}`, null, true);
+            navigate(`/payment/callback/${status}/${message}`);
           } else {
-            navigate("/landing", null, true);
+            navigate("/");
           }
         }
         break;
@@ -112,14 +112,14 @@ const PageCallback = (props) => {
   };
 
   const goBack = () => {
-    navigate("/", null, true);
+    navigate("/");
   };
 
   return (
     <Container noFooter skelton={skelton} headerData={{ goBack }}>
       <FailureDialog
         isOpen={openDialog}
-        handleClick={() => navigate("/invest", null, true)}
+        handleClick={() => navigate("/invest")}
         errorMessage={errorMessage}
       />
     </Container>

@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants, docMapper } from '../constants'
+import { isEmpty } from '../../utils/validators'
+import { DOCUMENTS_MAPPER } from '../constants'
 import { upload } from '../common/api'
-import { getBase64, getConfig } from '../../utils/functions'
+import { getBase64, getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
 import { combinedDocBlob } from '../common/functions'
-import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
-const getTitleList = ({ kyc }) => {
+const isWeb = getConfig().Web
+const getTitleList = ({ kyc, myAccountFlow }) => {
   let titleList = [
     'Photo of address card should have your signature',
     'Photo of address should be clear and it should not have the exposure of flash light',
@@ -20,7 +21,8 @@ const getTitleList = ({ kyc }) => {
     kyc?.kyc_status !== 'compliant' &&
     kyc?.dl_docs_status !== '' &&
     kyc?.dl_docs_status !== 'init' &&
-    kyc?.dl_docs_status !== null
+    kyc?.dl_docs_status !== null && 
+    !myAccountFlow
   ) {
     if (
       kyc.all_dl_doc_statuses.pan_fetch_status === null ||
@@ -34,8 +36,8 @@ const getTitleList = ({ kyc }) => {
   return titleList
 }
 
-const MessageComponent = (kyc) => {
-  const [titleList] = useState(getTitleList(kyc))
+const MessageComponent = (kyc, myAccountFlow) => {
+  const [titleList] = useState(getTitleList(kyc, myAccountFlow))
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (
@@ -50,6 +52,11 @@ const MessageComponent = (kyc) => {
 
 const AddressUpload = (props) => {
   const navigate = navigateFunc.bind(props)
+  const stateParams = props?.location?.state || {}
+  const isMyAccountFlow = stateParams.flow === "myAccount";
+  if(isMyAccountFlow &&  !stateParams.addressDocType) {
+    navigate("/kyc/change-address-details1");
+  }
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
@@ -58,7 +65,7 @@ const AddressUpload = (props) => {
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
-  const {kyc: kycData, isLoading} = useUserKycHook();
+  const {kyc: kycData, isLoading, updateKyc} = useUserKycHook();
   const [kyc, setKyc] = useState(
     kycData
   )
@@ -86,7 +93,7 @@ const AddressUpload = (props) => {
             doc_side: doc_side,
             show_loader: true,
           })
-          if (doc_side === 'back') {
+          if (doc_side === 'front') {
             setFrontDoc(file)
           } else {
             setBackDoc(file)
@@ -129,7 +136,8 @@ const AddressUpload = (props) => {
     })
   }
 
-  const handleChange = (type) => (event) => {
+  const handleChange = (type,openType) => (event) => {
+    sendEvents("get_image",openType, type)
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -168,7 +176,7 @@ const AddressUpload = (props) => {
   }
 
   const handleUpload = (method_name, type) => () => {
-    if(getConfig().html_camera){
+    if(isWeb){
       if (type === 'front') {
         frontDocRef.current.click()
       } else {
@@ -193,24 +201,33 @@ const AddressUpload = (props) => {
   }
 
   const handleSubmit = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
-      let result
+      let result, response
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'address', {
-          address_proof_key: addressProofKey,
+        response = await upload(frontDoc, 'address', {
+          addressProofKey: addressProofKey,
         })
       } else {
-        result = await upload(file, 'address', {
-          address_proof_key: addressProofKey,
+        response = await upload(file, 'address', {
+          addressProofKey: addressProofKey,
         })
       }
-      console.log(result)
-      setKyc(result.kyc)
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      if(response.status_code === 200) {
+        result = response.result;
+        updateKyc(result.kyc)
+        if(isMyAccountFlow) {
+          navigate('/my-account');
+        } else {
+          navigate('/kyc/upload/progress');
+        }
+      } else {
+        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong!")
+      }
     } catch (err) {
       console.error(err)
+      toast(err?.message)
     } finally {
       console.log('uploaded')
       setIsApiRunning(false)
@@ -225,11 +242,15 @@ const AddressUpload = (props) => {
   }
 
   var addressProofKey = kyc?.address?.meta_data?.is_nri
-    ? 'passport'
-    : kyc?.address_doc_type
+    ? "passport"
+    : isMyAccountFlow
+    ? stateParams.addressDocType
+    : kyc?.address_doc_type;
   var addressProof = kyc?.address?.meta_data?.is_nri
-    ? 'Passport'
-    : docMapper[kyc?.address_doc_type]
+    ? "Passport"
+    : isMyAccountFlow
+    ? DOCUMENTS_MAPPER[stateParams.addressDocType]
+    : DOCUMENTS_MAPPER[kyc?.address_doc_type];
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -261,6 +282,7 @@ const AddressUpload = (props) => {
   }
 
   const editAddress = () => {
+    sendEvents('edit')
     navigate("/kyc/address-details1", {
       state: {
         backToJourney: true,
@@ -268,31 +290,57 @@ const AddressUpload = (props) => {
     });
   };
   
-  const isWeb = getConfig().isWebOrSdk
+  const title =
+    isMyAccountFlow && kyc?.address?.meta_data?.is_nri
+      ? "Upload Indian Address Proof"
+      : "Upload address proof";
+
+  const sendEvents = (userAction, type, docSide) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "address_doc",
+        "type": type || "",
+        "doc_side": docSide || "",
+        "doc_type": addressProofKey
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
-      disable={!frontDoc && !backDoc}
+      disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
-      title="Upload address proof"
+      title={title}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address">
-          <div className="sub-title">
-            {getFullAddress()}
-            {getFullAddress() && (
-              <div className="edit" onClick={editAddress}>
-                EDIT
-              </div>
-            )}
-          </div>
+          {!isMyAccountFlow && (
+            <div className="sub-title">
+              {getFullAddress()}
+              {getFullAddress() && (
+                <div className="edit" onClick={editAddress}>
+                  EDIT
+                </div>
+              )}
+            </div>
+          )}
           <Alert
             variant="attention"
             title="Note"
-            renderMessage={() => <MessageComponent kyc={kyc} />}
+            renderMessage={() => (
+              <MessageComponent kyc={kyc} myAccountFlow={isMyAccountFlow} />
+            )}
           />
           {!isWeb && (
             <div className="kyc-doc-upload-container">
@@ -316,7 +364,7 @@ const AddressUpload = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front')}
+                      onChange={handleChange('front','open-camera')}
                       accept="image/*"
                       capture
                     />
@@ -346,7 +394,7 @@ const AddressUpload = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front')}
+                      onChange={handleChange('front','gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','front')}
@@ -392,7 +440,7 @@ const AddressUpload = (props) => {
                   ref={frontDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('front')}
+                  onChange={handleChange('front','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','front')}
@@ -438,7 +486,7 @@ const AddressUpload = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back')}
+                      onChange={handleChange('back','open-camera')}
                       accept="image/*"
                       capture
                     />
@@ -468,7 +516,7 @@ const AddressUpload = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back')}
+                      onChange={handleChange('back','gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','back')}
@@ -514,7 +562,7 @@ const AddressUpload = (props) => {
                   ref={backDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('back')}
+                  onChange={handleChange('back','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','back')}

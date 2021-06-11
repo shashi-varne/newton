@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
-import { navigate as navigateFunc } from "../../common/functions";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { getSipNote, postSipAction } from "../../common/api";
 import toast from "common/ui/Toast";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const productName = getConfig().productName;
 const PauseCancelDetail = (props) => {
@@ -49,6 +49,7 @@ const PauseCancelDetail = (props) => {
   };
 
   const handleClick = async () => {
+    sendEvents("next");
     setIsApiRunning("button");
     try {
       const result = await postSipAction({
@@ -73,9 +74,26 @@ const PauseCancelDetail = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "sip_pause_cancel",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Request Summary",
+        operation: action,
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
       title={title}
+      events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       handleClick={() => handleClick()}
       skelton={showSkelton}

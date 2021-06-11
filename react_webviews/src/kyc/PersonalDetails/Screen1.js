@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { genderOptions, maritalStatusOptions, getPathname } from "../constants";
+import { GENDER_OPTIONS, MARITAL_STATUS_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   formatDate,
   dobFormatTest,
@@ -12,12 +12,13 @@ import {
 } from "../../utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import useUserKycHook from "../common/hooks/userKycHook";
 import toast from "../../common/ui/Toast";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -64,6 +65,7 @@ const PersonalDetails1 = (props) => {
     if (user.email === null) keysToCheck.push("email");
     if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
+    sendEvents("next")
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -82,7 +84,7 @@ const PersonalDetails1 = (props) => {
     userkycDetails.identification.meta_data.marital_status =
       form_data.marital_status;
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.personalDetails2, {
+      navigate(PATHNAME_MAPPER.personalDetails2, {
         state: {
           isEdit: isEdit,
         },
@@ -104,7 +106,7 @@ const PersonalDetails1 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.personalDetails2, {
+      navigate(PATHNAME_MAPPER.personalDetails2, {
         state: {
           isEdit: isEdit,
         },
@@ -123,8 +125,8 @@ const PersonalDetails1 = (props) => {
     if (name === "mobile" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "marital_status")
-      formData[name] = maritalStatusOptions[value].value;
-    else if (name === "gender") formData[name] = genderOptions[value].value;
+      formData[name] = MARITAL_STATUS_OPTIONS[value].value;
+    else if (name === "gender") formData[name] = GENDER_OPTIONS[value].value;
     else if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
@@ -138,8 +140,31 @@ const PersonalDetails1 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "" ,
+        "screen_name": "personal_details_1",
+        "name": form_data.name ? "yes" : "no",
+        "mobile": form_data.mobile_number ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "gender": form_data.gender,
+        "marital_status": form_data.marital_status,
+        "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
+        "flow": 'general'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       handleClick={handleClick}
       skelton={isLoading}
@@ -210,7 +235,7 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.gender_error}
               width="40"
               label="Gender:"
-              options={genderOptions}
+              options={GENDER_OPTIONS}
               id="account_type"
               value={form_data.gender || ""}
               onChange={handleChange("gender")}
@@ -223,7 +248,7 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.marital_status_error}
               width="40"
               label="Marital status:"
-              options={maritalStatusOptions}
+              options={MARITAL_STATUS_OPTIONS}
               id="account_type"
               value={form_data.marital_status || ""}
               onChange={handleChange("marital_status")}

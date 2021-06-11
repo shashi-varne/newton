@@ -5,6 +5,7 @@ import { getConfig } from "../utils/functions";
 import { storageService, isFunction } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
 const partnerCode = getConfig().partner_code;
+/* eslint-disable */
 export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
     return true;
@@ -56,17 +57,10 @@ export async function proceedInvestment(data) {
       const res = await Api.post(apiConstants.triggerInvestment, body);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
-        // eslint-disable-next-line
         let pgLink = result.investments[0].pg_link;
-        pgLink +=
-          // eslint-disable-next-line
-          (pgLink.match(/[\?]/g) ? "&" : "?") +
-          "redirect_url=" +
-          paymentRedirectUrl;
-
+        pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}${partnerCode ? "&partner_code="+partnerCode : ""}`
         investmentEventData["payment_id"] = result.investments[0].id;
         storageService().setObject("mf_invest_data", investmentEventData);
-
         if (isSipDatesScreen) {
           this.setState({
             openSuccessDialog: true,
@@ -132,6 +126,25 @@ export function canDoInvestment(kyc) {
 }
 
 export function redirectToKyc(kycJourneyStatus, history) {
+  const config = getConfig();
+  let _event = {
+    event_name: "journey_details",
+    properties: {
+      journey: {
+        name: "mf",
+        trigger: "cta",
+        journey_status: "incomplete",
+        next_journey: "kyc",
+      },
+    },
+  };
+  // send event
+  if (!config.Web) {
+    window.callbackWeb.eventCallback(_event);
+  } else if (config.isIframe) {
+    var message = JSON.stringify(_event);
+    window.callbackWeb.sendEvent(_event);
+  }
   if (kycJourneyStatus === "ground") {
     navigation(history, "/kyc/home");
   } else {

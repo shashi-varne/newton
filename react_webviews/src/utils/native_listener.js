@@ -5,6 +5,7 @@
 import { isMobile } from './functions';
 import { getConfig } from './functions';
 
+
 (function (exports) {
 
   function b64toBlob(b64Data, contentType, sliceSize) {
@@ -64,6 +65,16 @@ import { getConfig } from './functions';
     }
   }
 
+  exports.login_required = function () {
+    var callbackData = {};
+    callbackData.action = "login";
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
   exports.open_canvas = function (listener) {
     listeners.push(listener);
     var callbackData = {};
@@ -71,7 +82,7 @@ import { getConfig } from './functions';
     callbackData.action_data = { file_name: listener.doc_type };
     if (typeof window.Android !== "undefined") {
       window.Android.callbackNative(JSON.stringify(callbackData));
-    } else if (isMobile.apple.device && typeof window.webkit !== "undefined") {
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
       window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
     }
   };
@@ -117,6 +128,72 @@ import { getConfig } from './functions';
     let callbackData = {};
     callbackData.action = "take_video";
     callbackData.action_data = { file_name: listener.doc_type, message: listener.message, otp: listener.ipv_code };
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+
+  exports.get_partner_code = function () {
+    var callbackData = {};
+    callbackData.action = "get_partner_code";
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.set_partner_code = function (data) {
+    document.body.setAttribute("id", data);
+    document.getElementById("logo").src = "assets/img/" + data + ".png";
+  };
+
+  exports.post_error = function (data) {
+    console.log("action_name -" + data.err_action_name);
+    console.log("error -" + data.err_message);
+  };
+
+  exports.make_bank_payment = function (data) {
+    var callbackData = {};
+    callbackData.action = "make_bank_payment";
+    callbackData.action_data = data;
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.show_top_bar = function (data) {
+    var callbackData = {};
+    callbackData.action = "show_top_bar";
+    if (data) {
+      callbackData.action_data = data;
+    }
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.hide_top_bar = function () {
+    var callbackData = {};
+    callbackData.action = "hide_top_bar";
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+
+  exports.open_browser = function (data) {
+    var callbackData = {};
+    callbackData.action = "open_browser";
+    callbackData.action_data = data;
     if (typeof window.Android !== "undefined") {
       window.Android.callbackNative(JSON.stringify(callbackData));
     } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
@@ -192,6 +269,11 @@ import { getConfig } from './functions';
 
   }
 
+  function set_session_storage(key, value) {
+    value = JSON.stringify(value);
+    window.sessionStorage.setItem(key, value);
+  }
+
   exports.send_device_data = function (data_json_str) {
     let json_data = {};
 
@@ -221,4 +303,63 @@ import { getConfig } from './functions';
       }
     }
   }
+
+  exports.sendEvent = function (message) {
+    window.parent.postMessage(message, "*");
+  };
+  
+  exports.eventCallback = function (data) {
+    // events for partner uses
+    var callbackData = {};
+    callbackData.action = "event_callback";
+    callbackData.action_data = data;
+    if (typeof window.Android !== "undefined") {
+      window.Android.callbackNative(JSON.stringify(callbackData));
+    } else if (isMobile.iOS() && typeof window.webkit !== "undefined") {
+      window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
+    }
+  };
+  exports.return_data = function (data_json_str) {
+    var json_data = {};
+    if (data_json_str !== "" && typeof data_json_str === "string") {
+      json_data = JSON.parse(data_json_str);
+    } else {
+      json_data = data_json_str;
+    }
+    set_session_storage("currentUser", true);
+    set_session_storage('is_secure', true);
+    set_session_storage("dataSettedInsideBoot", true);
+
+    if (json_data.partner) {
+      if (json_data.partner === "bfdl") {
+        set_session_storage("partner", "bfdlmobile");
+      } else if (json_data.partner === "obcweb") {
+        set_session_storage("partner", "obc");
+      } else {
+        set_session_storage("partner", json_data.partner);
+      }
+    }
+
+    if (json_data.sdk_capabilities) {
+      set_session_storage("sdk_capabilities", json_data.sdk_capabilities);
+    }
+
+    if (json_data.user_data) {
+      set_session_storage("user", json_data.user_data.user);
+      set_session_storage("kyc", json_data.user_data.kyc);
+      set_session_storage("banklist", json_data.user_data.bank_list);
+      set_session_storage("firstlogin", json_data.user_data.user.firstlogin);
+      if (json_data.user_data.partner.partner_code) {
+        var partner = json_data.user_data.partner.partner_code;
+        if (partner === "bfdl") {
+          set_session_storage("partner", "bfdlmobile");
+        } else if (partner === "obcweb") {
+          set_session_storage("partner", "obc");
+        } else {
+          set_session_storage("partner", partner);
+        }
+      }
+    }
+  }
+  
 })(window.callbackWeb ? window.callbackWeb : (window.callbackWeb = {}));

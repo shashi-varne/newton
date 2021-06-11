@@ -4,16 +4,15 @@ import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
-import { getPathname } from '../constants'
+import { PATHNAME_MAPPER } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import {
-  navigate as navigateFunc,
-} from '../common/functions'
+import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
+import { navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 
@@ -26,6 +25,7 @@ const Journey = (props) => {
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
+  const config = getConfig()
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -40,17 +40,36 @@ const Journey = (props) => {
     setGoBackModal(false)
   }
 
+  const backHandlingCondition = () => {
+    if (config.isIframe) {
+      if (config.code === 'moneycontrol') {
+        navigate("/invest/money-control");
+      } else {
+        navigate("/landing");
+      }
+      return;
+    } else if (!config.Web) {
+      if (storageService().get('native')) {
+        nativeCallback({ action: "exit_web" });
+      } else {
+        navigate("/");
+      }
+      return;
+    }
+    navigate("/landing");
+  }
+
   const openGoBackModal = () => {
     if (user?.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete") {
       setGoBackModal(true)
     } else {
-      nativeCallback({ action: "exit" })
+      backHandlingCondition();
     }
   }
 
   const confirmGoBack = () => {
       closeGoBackModal()
-      navigate('/')
+      backHandlingCondition();
   }
 
   useEffect(() => {
@@ -104,12 +123,12 @@ const Journey = (props) => {
         ) {
           for (j = 0; j < journeyData[i].inputsForStatus.length; j++) {
             let data = journeyData[i].inputsForStatus[j]
-            if (data !== 'bank' && kyc[data].doc_status === 'init') {
+            if (data !== 'bank' && (kyc[data].doc_status === 'init' || kyc[data].doc_status === 'rejected')) {
               status = 'init'
               break
             }
 
-            if (data === 'bank' && kyc[data].meta_data_status === 'init') {
+            if (data === 'bank' && (kyc[data].meta_data_status === 'init' || kyc[data].meta_data_status === 'rejected')) {
               status = 'init'
               break
             }
@@ -398,6 +417,10 @@ const Journey = (props) => {
         },
       ]
 
+      if(!isCompliant && !dlCondition && kyc?.address?.meta_data?.is_nri) {
+        journeyData[3].inputsForStatus.push('nri_address')
+      }
+
       if (
         isCompliant &&
         kyc?.identification?.meta_data?.marital_status &&
@@ -412,6 +435,7 @@ const Journey = (props) => {
   }
 
   const goNext = async () => {
+    sendEvents('next')
     try {
       if (!canSubmit()) {
         for (var i = 0; i < kycJourneyData.length; i++) {
@@ -444,6 +468,8 @@ const Journey = (props) => {
   }
 
   const handleEdit = (key, index, isEdit) => {
+    if(isEdit)
+      sendEvents('edit')
     console.log('Inside handleEdit')
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {
@@ -459,9 +485,11 @@ const Journey = (props) => {
         pan: '/kyc/home',
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        backToJourney: key === 'sign' ? true : null,
-        userType: 'compliant',
+        state: {
+          isEdit: isEdit,
+          backToJourney: key === 'sign' ? true : null,
+          userType: 'compliant',
+        }
       })
       return
     } else {
@@ -477,8 +505,10 @@ const Journey = (props) => {
         }
 
         navigate(stateMapper[key], {
-          isEdit: isEdit,
-          userType: 'non-compliant',
+          state: {
+            isEdit: isEdit,
+            userType: 'non-compliant',
+          }
         })
         return
       } else {
@@ -493,8 +523,10 @@ const Journey = (props) => {
         console.log(stateMapper[key])
       }
       navigate(stateMapper[key], {
-        isEdit: isEdit,
-        userType: 'non-compliant',
+        state: {
+          isEdit: isEdit,
+          userType: 'non-compliant',
+        }
       })
       return
     }
@@ -533,7 +565,7 @@ const Journey = (props) => {
 
   const cancel = () => {
     setDlAadhaar(false)
-    navigate(`${getPathname.journey}`, {
+    navigate(`${PATHNAME_MAPPER.journey}`, {
       searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })
@@ -588,7 +620,6 @@ const Journey = (props) => {
       }
     }
   }
-
   if (!isEmpty(kyc) && !isEmpty(user)) {
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
       navigate('/nps/identity')
@@ -607,9 +638,42 @@ const Journey = (props) => {
     }
   }
 
+  const sendEvents = (userAction, screen_name) => {
+    let stageData=0;
+    let stageDetailData='';
+    for (var i = 0; i < kycJourneyData?.length; i++) {
+      if (
+        kycJourneyData[i].status === 'init' ||
+        kycJourneyData[i].status === 'pending'
+      ) {
+        stageData = i + 1
+        stageDetailData = kycJourneyData[i].key
+        break
+      }
+    }
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "" ,
+        "screen_name": screen_name || "kyc_journey",
+        stage: stageData,
+        details: stageDetailData,
+        "rti": "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       force_hide_inpage_title
+      events={sendEvents("just_set_events")}
       buttonTitle={ctaText}
       classOverRideContainer="pr-container"
       skelton={isLoading || isEmpty(kyc) || isEmpty(user)}

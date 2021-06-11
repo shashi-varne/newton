@@ -4,10 +4,13 @@ import { Button } from "@material-ui/core";
 import toast from "../../common/ui/Toast";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import "./MyAccount.scss";
-import { getBase64, getConfig } from "../../utils/functions";
+import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { upload } from "./MyAccountFunctions";
+import { nativeCallback } from "../../utils/native_callback";
 
+const config = getConfig();
 const BlankMandateUpload = (props) => {
+  const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -16,13 +19,9 @@ const BlankMandateUpload = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [fileToShow, setFileToShow] = useState(null);
   const inputEl = useRef(null);
-  const config = getConfig();
 
   const handleClose = () => {
-    props.history.push({
-      pathname: "/my-account",
-      search: config.searchParams,
-    });
+    navigate("/my-account");
     setOpenDialog(false);
   };
 
@@ -79,8 +78,9 @@ const BlankMandateUpload = (props) => {
     });
   };
 
-  const handleChange = (event) => {
+  const handleChange = (source) => (event) => {
     event.preventDefault();
+    sendEvents('get_image', source)
     const uploadedFile = event.target.files[0];
     let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
 
@@ -96,13 +96,14 @@ const BlankMandateUpload = (props) => {
   };
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(config.Web)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'blank_mandate', 'blank_mandate.jpg', 'front')
   };
 
   const handleClick = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button");
       const result = await upload(file);
@@ -118,8 +119,25 @@ const BlankMandateUpload = (props) => {
     }
   };
 
+  const sendEvents = (userAction, source) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction,
+        "screen_name": 'upload mandate',
+        "picture": source || "",
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="Upload Mandate"
       skelton={showLoader}
       buttonTitle={uploadImageError ? "RETRY UPLOAD" : "PROCEED"}
@@ -143,7 +161,7 @@ const BlankMandateUpload = (props) => {
                     ref={inputEl}
                     type="file"
                     className="blank-mandate-upload"
-                    onChange={handleChange}
+                    onChange={handleChange('camera')}
                     accept="image/*"
                     capture
                   />
@@ -162,7 +180,7 @@ const BlankMandateUpload = (props) => {
                     ref={inputEl}
                     type="file"
                     className="blank-mandate-upload"
-                    onChange={handleChange}
+                    onChange={handleChange('gallery')}
                   />
                   <button
                     onClick={() => handleUpload("open_gallery")}
@@ -186,7 +204,7 @@ const BlankMandateUpload = (props) => {
                 ref={inputEl}
                 type="file"
                 className="blank-mandate-upload"
-                onChange={handleChange}
+                onChange={handleChange('gallery')}
               />
               <button
                 onClick={() => handleUpload("open_gallery")}

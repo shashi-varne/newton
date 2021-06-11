@@ -1,5 +1,4 @@
 // ----------- Asset Imports -------------------
-import trust_icons from 'assets/trust_icons.svg';
 import single_star from 'assets/single_star.png';
 import morning_text from 'assets/morning_text.png';
 // ---------------------------------------------
@@ -11,7 +10,7 @@ import FundCard from '../Invest/mini-components/FundCard';
 import TermsAndCond from "../mini-components/TermsAndCond"
 import { getBasePath, getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
-import { navigate as navigateFunc } from '../Invest/common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import { isInvestRefferalRequired, proceedInvestment } from '../proceedInvestmentFunctions';
 import PennyVerificationPending from '../Invest/mini-components/PennyVerificationPending';
 import InvestError from '../Invest/mini-components/InvestError';
@@ -25,6 +24,7 @@ import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import { nativeCallback } from '../../utils/native_callback';
 import toast from 'common/ui/Toast'
 import { flowName } from '../Invest/constants';
+import WVSecurityDisclaimer from '../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer';
 
 const sipTypesKeys = [
   "buildwealth",
@@ -186,7 +186,6 @@ const Recommendations = (props) => {
       navigate(
         "/invest-journey",
         { state: { investment: JSON.stringify(investmentObject) } },
-        true
       );
       return;
     } else if (sipOrOneTime === "onetime") {
@@ -254,12 +253,12 @@ const Recommendations = (props) => {
 
   const editFund = () => {
     sendEvents("fund edit")
-    navigate("recommendations/edit-funds");
+    navigate("/invest/recommendations/edit-funds");
   };
 
   const checkHow = () => {
     storageService().set('check_how_clicked',true)
-    navigate("recommendations/how-we-recommend");
+    navigate("/invest/recommendations/how-we-recommend");
   }
 
   const sendEvents = (userAction) => {
@@ -388,10 +387,7 @@ const Recommendations = (props) => {
               )}
             </div>
             <TermsAndCond />
-            <div className='recommendations-trust-icons'>
-              <div>Investments with fisdom are 100% secure</div>
-              <img alt='trust_sebi_secure' src={trust_icons} />
-            </div>
+            <WVSecurityDisclaimer />
           </div>
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPendind}

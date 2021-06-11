@@ -3,7 +3,8 @@ import './SelectYear.scss';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import Input from 'common/ui/Input';
-import { isRecurring, navigate as navigateFunc } from '../../common/commonFunctions';
+import { isRecurring } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from "utils/functions";
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import toast from 'common/ui/Toast'
@@ -56,9 +57,9 @@ const SelectYear = (props) => {
     try {
       await initJourneyData();
       if (subtype === 'other') {
-        navigate(`savegoal/${subtype}/${year}/target`);
+        navigate(`/invest/savegoal/${subtype}/${year}/target`);
       } else {
-        navigate(`savegoal/${subtype}/${year}`);
+        navigate(`/invest/savegoal/${subtype}/${year}`);
       }
     } catch (err) {
       console.log(err);

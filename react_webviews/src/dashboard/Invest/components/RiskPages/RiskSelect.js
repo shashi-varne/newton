@@ -1,10 +1,9 @@
 import './commonStyles.scss';
 import React, { useState } from 'react';
-import { getConfig } from '../../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { navigate as navigateFunc } from '../../common/commonFunctions';
 import { flowName, riskProfiles } from '../../constants';
 import FSelect from './FSelect';
 import { nativeCallback } from '../../../../utils/native_callback';
@@ -81,11 +80,15 @@ const RiskSelect = ({
   const goNext = async (skipRiskUpdate) => {
     sendEvents('next')
     storageService().remove('risk-info-clicked');
+    if(!skipRiskUpdate && !selectedRisk) {
+      toast("Please select your risk profile");
+      return;
+    }
     await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
-    let state = 'recommendations';
+    let state = '/invest/recommendations';
     if (funnelData.investType === 'saveforgoal') {
-      state = `savegoal/${funnelData.subtype}/amount`;
+      state = `/invest/savegoal/${funnelData.subtype}/amount`;
     }
     navigate(state);
   };
@@ -105,12 +108,12 @@ const RiskSelect = ({
         year: funnelData.year, // only applicable for 'saveforgoal'
         term: funnelData.term
       }
-    }, true);
+    });
   };
 
   const showInfo = () => {
     storageService().set("risk-info-clicked", true);
-    navigate('risk-info');
+    navigate('/invest/risk-info');
   }
 
   const sendEvents = (userAction) => {
@@ -154,7 +157,6 @@ const RiskSelect = ({
       }
       <div style={{ marginTop: '30px' }}>
         <FSelect
-          preselectFirst
           options={riskProfiles}
           indexBy='name'
           renderItem={riskOpt =>

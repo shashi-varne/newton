@@ -5,7 +5,7 @@ import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   bankAccountTypeOptions,
-  getPathname,
+  PATHNAME_MAPPER,
   getIfscCodeError,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
@@ -13,14 +13,15 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini-components/Alert";
 import {
   // compareObjects,
-  navigate as navigateFunc,
   validateFields,
+  getFlow
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -125,11 +126,12 @@ const KycBankDetails = (props) => {
   };
 
   const redirect = () => {
-    navigate(getPathname.journey);
+    navigate(PATHNAME_MAPPER.journey);
   };
 
   const handleClick = () => {
     if (disableFields.skip_api_call) {
+      sendEvents('next')
       handleNavigation();
     } else {
       const keysToCheck = [
@@ -140,6 +142,7 @@ const KycBankDetails = (props) => {
       ];
       const formData = { ...form_data, ...bankData };
       let result = validateFields(formData, keysToCheck);
+      sendEvents('next')
       if (!result.canSubmit) {
         let data = Object.assign({}, result.formData);
         setFormData(data);
@@ -168,9 +171,9 @@ const KycBankDetails = (props) => {
 
   const handleNavigation = () => {
     if (userType === "compliant") {
-      if (isEdit) navigate(getPathname.journey);
+      if (isEdit) navigate(PATHNAME_MAPPER.journey);
       else
-        navigate(getPathname.uploadSign, {
+        navigate(PATHNAME_MAPPER.uploadSign, {
           state: {
             backToJourney: true,
           },
@@ -183,9 +186,9 @@ const KycBankDetails = (props) => {
             kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
           kyc.pan.doc_status !== "approved"
         )
-          navigate(getPathname.uploadPan);
-        else navigate(getPathname.kycEsign);
-      } else navigate(getPathname.uploadProgress);
+          navigate(PATHNAME_MAPPER.uploadPan);
+        else navigate(PATHNAME_MAPPER.kycEsign);
+      } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
   };
 
@@ -287,9 +290,31 @@ const KycBankDetails = (props) => {
     return { bankData: bank, formData: formData, bankIcon: bankIcon };
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "bank_details",
+        "account_number": bankData.account_number ? "yes" : "no",
+        "c_account_number": bankData.c_account_number ? "yes" : "no",
+        "ifsc_code": form_data.ifsc_code_error ? "invalid" : bankData.ifsc_code ? "yes" : "no",
+        "account_type": bankData.account_type ? "yes" : "no",
+        "attempt_no": kyc.bank.meta_data.user_rejection_attempts || "",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       skelton={isLoading}
       handleClick={handleClick}

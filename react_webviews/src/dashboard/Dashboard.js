@@ -28,14 +28,19 @@ import NPS from "./nps";
 import {getConfig} from 'utils/functions';
 import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
+import Prepare from "./Invest/components/SdkLanding/Prepare";
+import Refer from "./Invest/components/SdkLanding/Refer";
+import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 
 const Home = (props) => {
   const { url } = props.match;
-  const isWeb = getConfig().Web;
+  const isSdk = getConfig().isSdk;
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}`} component={isWeb ? Invest : SdkLanding} />
+        <Route exact path={`${url}`} component={isSdk ? SdkLanding : Invest} />
+        <Route exact path={`${url}prepare`} component={Prepare} />
+        <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
         <Route path={`${url}landing`} component={Invest} />
         <Route path={`${url}diy`} component={DIY} />
@@ -124,6 +129,7 @@ const Home = (props) => {
           exact path={`${url}capital-gain`} 
           render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
         />
+        <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />
         <Route component={NotFound} />
       </Switch>
     </Fragment>

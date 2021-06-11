@@ -29,6 +29,7 @@ import Whatsapp from './whatsapp';
 import Landing from './dashboard';
 import ProtectedRoute from './common/components/ProtectedRoute';
 import FeedBack from './feedback';
+import Partner from "./partner"
 
 import Kyc from './kyc';
 import 'common/theme/Style.scss';
@@ -59,6 +60,7 @@ const Feature = () => {
       <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
       <Route path='/fund-details' component={FundDetails} />
       <Route path='/feedback' component={FeedBack} />
+      <Route path='/partner' component={Partner} />
 
       <ProtectedRoute path='/withdraw' component={Withdraw} />
       <ProtectedRoute path='/reports' component={Report} />

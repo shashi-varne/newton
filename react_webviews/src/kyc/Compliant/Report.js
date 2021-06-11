@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { reportCardDetails } from "../constants";
+import { REPORT_CARD_DETAILS } from "../constants";
 import ContactUs from "../../common/components/contact_us";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isEmpty } from "../../utils/validators";
+import { nativeCallback } from "../../utils/native_callback";
 
 const CompliantReport = (props) => {
   const [openIndex, setOpenIndex] = useState(-1);
@@ -32,7 +33,7 @@ const CompliantReport = (props) => {
   const initialize = async () => {
     let isNri = kyc.address.meta_data.is_nri;
     setIsNri(isNri);
-    let reportCards = [...reportCardDetails];
+    let reportCards = [...REPORT_CARD_DETAILS];
     if (isCompliant) {
       if (isNri) {
         reportCards.splice(4, 1); //remove docs
@@ -150,8 +151,24 @@ const CompliantReport = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "kyc_status",
+        "flow": 'premium onboarding'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
-    <Container id="kyc-home" noFooter={true} title={topTitle}>
+    <Container id="kyc-home" noFooter={true} title={topTitle} events={sendEvents("just_set_events")}>
       <div className="kyc-report">
         <main>
           <section>

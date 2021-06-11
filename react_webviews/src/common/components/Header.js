@@ -29,11 +29,13 @@ const isMobileDevice = getConfig().isMobileDevice;
 const partnerLogo = getConfig().logo;
 const isWeb = getConfig().Web;
 const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor : '';
+const backButtonColor = !isWeb ? getConfig().styles?.backButtonColor : '';
+const notificationsColor = !isWeb ? getConfig()?.styles.notificationsColor : '';
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
-  className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
+  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon, logo}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
@@ -55,13 +57,13 @@ const Header = ({ classes, title, count, total, current, goBack,
       >
         <Toolbar>
           {
-            !logo &&
+            !noBackIcon &&
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
               onClick={headerData.goBack ||
               goBack}>
               {!disableBack && !headerData.hide_icon &&
               <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backButtonColor ?  backButtonColor : new_header && !logo ? getConfig().styles.primaryColor : 'white'))}
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
               />
               }
@@ -70,7 +72,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             </IconButton>
           }
           {
-            logo && 
+            (noBackIcon || logo) && 
              <div className='sdk-header-partner-logo'>
                 <img src={require(`assets/${partnerLogo}`)} alt="partner logo" /> 
             </div>
@@ -115,7 +117,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           <>
             <div>
             {
-              !logo && 
+              !noBackIcon && !logo && 
               <div
                 style={style}
                 className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 
@@ -146,14 +148,14 @@ const Header = ({ classes, title, count, total, current, goBack,
                 <SVG
                 style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                 onClick={handleNotification}
-                preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (getConfig()?.notificationColor || 'white') : 'white'))}
+                preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + notificationsColor)}
                 src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
               />
               }
               {isMobileDevice && isWeb &&
                 <div className='mobile-navbar-menu'>
                   <IconButton onClick={handleMobileViewDrawer}>
-                    <MenuIcon style={{ color: backgroundColor ? getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white' }} />
+                    <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (noBackIcon ? 'white' : getConfig().styles.primaryColor) : 'white'}}/>
                   </IconButton>
                   <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal} />
                 </div>
@@ -168,6 +170,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           }
           </>
         }
+
         </Toolbar>
         {
           isMobileDevice &&
