@@ -108,7 +108,7 @@ const FundType = (props) => {
   const { sub_categories } = categories?.find(
     (el) => el.category.toLowerCase() === type
   ) || [];
-  const initialCartCount = (storageService().getObject(CART)).length
+  const initialCartCount = (storageService().getObject(CART))?.length
 
   const sendEvents = (userAction, cardClicked, cartCount, fundName) => {
     let eventObj = {

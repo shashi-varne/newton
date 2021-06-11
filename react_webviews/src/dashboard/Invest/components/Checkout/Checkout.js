@@ -249,8 +249,8 @@ class Checkout extends Component {
         "user_action": userAction || "",
         "amount_selected": (this.state.type !== 'diy' ? this.state.fundsData[0]?.amount : "" ) || "",
         "order_type": this.state.investType || "",
-        "scheme_type": (this.state.type !== 'diy' ? this.state.fundsData[0]?.growth_or_dividend : this.titleCase(storageService().get('diystore_category'))) || "",
-        "category_name": (this.state.type !== 'diy' ? "" : this.titleCase(storageService().get('diystore_subCategory').replace(/_/g, " "))) || "",
+        "scheme_type": (this.state.type !== 'diy' ? this.state.fundsData[0]?.growth_or_dividend : this.titleCase((storageService().get('diystore_category') || ""))) || "",
+        "category_name": (this.state.type !== 'diy' ? "" : this.titleCase((storageService().get('diystore_subCategory') || "").replace(/_/g, " "))) || "",
         "fund_name": fundName || (this.state.type !== 'diy' ? this.state.fundsData[0]?.name : "") || "",
         "flow": this.state.type || ""
         }
