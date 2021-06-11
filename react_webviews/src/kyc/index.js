@@ -50,7 +50,8 @@ import Selfie from "./Upload/Selfie";
 import IpvVideo from "./Upload/IpvVideo";
 import NRIAddressUpload from "./Upload/NriAddress";
 import ChangeAddressDetails2 from "./Address/ChangeAddress/ChangeAddressDetails2";
-import Native from "./Native/Native";
+import KycNative from "./Native/KycNative";
+import StocksNative from "./Native/StocksNative";
 import LocationPermission from "./Upload/LocationPermission";
 import SelfieSteps from "./Upload/SelfieSteps";
 import FnOIncomeProof from "./Upload/FnOIncomeProof";
@@ -73,7 +74,8 @@ const Kyc = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}/journey`} component={Journey} />
-        <Route exact path={`${url}/native`} component={Native} />
+        <Route exact path={`${url}/native`} component={KycNative} />
+        <Route exact path={`${url}/stocks/native`} component={StocksNative} />
         <Route
           exact
           path={`${url}/personal-details1`}

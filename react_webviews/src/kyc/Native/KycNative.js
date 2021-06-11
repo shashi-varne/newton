@@ -6,7 +6,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from '../../utils/native_callback';
 import Container from '../common/Container';
 
-function Native(props) {
+function KycNative(props) {
   const navigate = navigateFunc.bind(props);
   const urlParams = getUrlParams(props?.location?.search);
   const { kyc, isLoading } = useUserKycHook();
@@ -51,4 +51,4 @@ function Native(props) {
   )
 }
 
-export default Native;
+export default KycNative;
