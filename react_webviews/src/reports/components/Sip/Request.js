@@ -5,6 +5,7 @@ import { getPathname, storageConstants } from "../../constants";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { Imgc } from "common/ui/Imgc";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const Request = (props) => {
   const productName = getConfig().productName;
@@ -16,11 +17,30 @@ const Request = (props) => {
   }
 
   const handleClick = () => {
+    sendEvents("next");
     navigate(getPathname.reportsSip);
+  };
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "sip_pause_cancel",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Request Placed",
+        operation: requestData?.action || "",
+      },
+    };
+
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       hidePageTitle={true}
       buttonTitle="OK"
       handleClick={() => handleClick()}

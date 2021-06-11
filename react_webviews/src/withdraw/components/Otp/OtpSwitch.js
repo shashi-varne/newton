@@ -9,6 +9,7 @@ import { navigate as navigateFunc } from 'utils/functions'
 
 import './OtpSwitch.scss';
 import '../commonStyles.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const OtpSwitch = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -16,6 +17,7 @@ const OtpSwitch = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [otp, setOtp] = useState('')
   const [touched, setTouched] = useState(false)
+  const [resendClicked, setResendClicked] = useState(false)
   
   const handleChange = (event) => {
     if (!touched) {
@@ -43,6 +45,7 @@ const OtpSwitch = (props) => {
   const disabled = otp.length !== 4
 
   const resendOtp = async () => {
+    setResendClicked(true)
     try {
       if (!isEmpty(stateParams?.resend_redeem_otp_link)) {
         setIsApiRunning("button")
@@ -57,6 +60,7 @@ const OtpSwitch = (props) => {
   }
 
   const verifyOtp = async () => {
+    sendEvents('next')
     setIsApiRunning("button")
     try {
       let result
@@ -88,8 +92,27 @@ const OtpSwitch = (props) => {
     }
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": 'withdrawl_otp_screen',
+        "resend_clicked": resendClicked ? 'yes' : 'no',
+        'flow': 'switch',
+        'otp': otp || ''
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
       title="OTP"

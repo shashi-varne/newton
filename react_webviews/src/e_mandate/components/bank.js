@@ -10,6 +10,7 @@ import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import bank_building from 'assets/finity/bank_building.svg'
+import { storageService } from '../../utils/validators';
 
 
 class SelectBank extends Component {
@@ -159,7 +160,7 @@ class SelectBank extends Component {
       
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let paymentRedirectUrl = encodeURIComponent(
-          basepath + '/e-mandate/redirection'
+          basepath + '/e-mandate/redirection' + '?is_secure=' + storageService().get("is_secure")
         );
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
