@@ -195,53 +195,32 @@ const Report = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
-        {isCompliant && (
-          <div className="unzipped-box" data-aid='kyc-email'>
-            <div className="title">Email</div>
-            <div className="subtitle">{kyc.identification.meta_data.email}</div>
-          </div>
-        )}
+        <div className="unzipped-box" data-aid="kyc-father-name">
+          <div className="title">Name</div>
+          <div className="subtitle">{kyc.pan.meta_data.name}</div>
+        </div>
         <div className="row-align">
-          {!isCompliant && (
-            <div className="unzipped-box" data-aid='kyc-gender'>
-              <div className="title">Gender</div>
-              <div className="subtitle">
-                {kyc.identification.meta_data.gender}
-              </div>
+          <div className="unzipped-box" data-aid="kyc-gender">
+            <div className="title">Gender</div>
+            <div className="subtitle">
+              {kyc.identification.meta_data.gender}
             </div>
-          )}
-          <div className="unzipped-box" data-aid='kyc-dob'>
-            <div className="title">Dob</div>
-            <div className="subtitle">{kyc.pan.meta_data.dob}</div>
+          </div>
+          <div className="unzipped-box" data-aid="kyc-marital-status">
+            <div className="title">Marital Status</div>
+            <div className="subtitle">
+              {kyc.identification.meta_data.marital_status}
+            </div>
           </div>
         </div>
-        {!isCompliant && (
-          <>
-            <div className="unzipped-box" data-aid='kyc-marital-status'>
-              <div className="title">Marital Status</div>
-              <div className="subtitle">
-                {kyc.identification.meta_data.marital_status}
-              </div>
-            </div>
-            <div className="unzipped-box" data-aid='kyc-father-name'>
-              <div className="title">Father’s name</div>
-              <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
-            </div>
-            <div className="unzipped-box" data-aid='kyc-mother-name'>
-              <div className="title">Mother’s name</div>
-              <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
-            </div>
-          </>
-        )}
-        {isCompliant && (
-          <div className="unzipped-box" data-aid='kyc-mobile'>
-            <div className="title">Mobile</div>
-            <div className="subtitle">
-              {kyc.identification.meta_data.mobile_number}
-            </div>
-          </div>
-        )}
+        <div className="unzipped-box" data-aid="kyc-father-name">
+          <div className="title">Father’s name</div>
+          <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
+        </div>
+        <div className="unzipped-box" data-aid="kyc-mother-name">
+          <div className="title">Mother’s name</div>
+          <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
+        </div>
       </>
     );
   };
