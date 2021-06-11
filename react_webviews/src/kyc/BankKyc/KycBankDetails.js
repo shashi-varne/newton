@@ -14,7 +14,8 @@ import {
   checkDLPanFetchAndApprovedStatus,
   isDigilockerFlow,
   validateFields,
-  getFlow
+  getFlow,
+  skipBankDetails
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
@@ -75,11 +76,7 @@ const KycBankDetails = (props) => {
 
   let initialize = async () => {
     let disableData = { ...disableFields };
-    if (
-      user.active_investment ||
-      (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
-      kyc.bank.meta_data.bank_status === "doc_submitted"
-    ) {
+    if (skipBankDetails()) {
       disableData.skip_api_call = true;
       disableData.account_number_disabled = true;
       disableData.c_account_number_disabled = true;

@@ -137,9 +137,15 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
   return compare;
 };
 
-export const getTotalPagesInPersonalDetails = (isEdit = false) => {
+export const getKycUserFromSession = () => {
   const kyc = storageService().getObject("kyc") || {};
   const user = storageService().getObject("user") || {};
+
+  return { kyc, user };
+}
+
+export const getTotalPagesInPersonalDetails = (isEdit = false) => {
+  const {kyc, user} = getKycUserFromSession();
   if (isEmpty(kyc) || isEmpty(user)) {
     return "";
   }
@@ -160,8 +166,7 @@ export const getTotalPagesInPersonalDetails = (isEdit = false) => {
 };
 
 export const isEmailOrMobileVerified = () => {
-  const kyc = storageService().getObject("kyc") || {};
-  const user = storageService().getObject("user") || {};
+  const {kyc, user} = getKycUserFromSession();
   if (isEmpty(kyc) || isEmpty(user)) {
     return false;
   }
@@ -340,3 +345,13 @@ export const isKycCompleted = (kyc) => {
     );
   }
 };
+
+export const skipBankDetails = () => {
+  const {kyc, user} = getKycUserFromSession();
+
+  return (
+    user.active_investment ||
+    (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
+    kyc.bank.meta_data.bank_status === "doc_submitted"
+  );
+}

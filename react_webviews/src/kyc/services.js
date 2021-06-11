@@ -256,9 +256,11 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    status = "rejected";
-    result.status = status;
-    return result;
+    if (!TRADING_ENABLED || kyc?.kyc_product_type !== "equity") {
+      status = "rejected";
+      result.status = status;
+      return result;
+    }
   } else {
     if (!TRADING_ENABLED || kyc?.kyc_product_type !== "equity") {
       status = kyc.application_status_v2;
