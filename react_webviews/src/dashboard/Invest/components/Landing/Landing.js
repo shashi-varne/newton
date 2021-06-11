@@ -14,6 +14,8 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
+import VerifyDetailDialog from "../../mini-components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../mini-components/AccountAlreadyExistDialog";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 const isMobileDevice = getConfig().isMobileDevice;
@@ -444,6 +446,8 @@ class Landing extends Component {
             />
           )}
         </div>
+        {/* <VerifyDetailDialog type="email" data="uttam@fisdom.com"></VerifyDetailDialog> */}
+        <AccountAlreadyExistDialog type="mobile" data="98*****487" pan="CXIPP***M"></AccountAlreadyExistDialog>
         <CampaignDialog
           isOpen={this.state.openBottomSheet}
           close={this.closeCampaignDialog}
