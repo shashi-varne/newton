@@ -26,17 +26,22 @@ const WVFullscreenDialog = ({
 const Content = ({
   dataAidSuffix,
   onCloseClick,
+  closeIconPosition = 'left',
   children
 }) => {
   return (
     <DialogContent>
-      <Close
-        data-aid={`wv-close-dialog-${dataAidSuffix}`}
-        color="primary"
-        onClick={onCloseClick}
-        classes={{ root: 'wv-fullscreen-dialog-close' }}
-      />
-      {children}
+      <div style={{ textAlign: closeIconPosition, marginBottom: '40px' }}>
+        <Close
+          data-aid={`wv-close-dialog-${dataAidSuffix}`}
+          color="primary"
+          onClick={onCloseClick}
+          classes={{ root: 'wv-fullscreen-dialog-close' }}
+        />
+      </div>
+      <div>
+        {children}
+      </div>
     </DialogContent>
   );
 }

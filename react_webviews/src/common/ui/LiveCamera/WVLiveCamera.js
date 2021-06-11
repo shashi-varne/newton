@@ -80,14 +80,24 @@ const WVLiveCamera = ({
       } else if (isFunction(onCaptureFailure)) {
         onCaptureFailure(HVError);
       }
-    } else if (isFunction(onCaptureSuccess)) {
-      const fileBlob = base64ToBlob(HVResponse.imgBase64.split(",")[1], 'image/jpeg');
+    } else {
+      const livenessResult = HVResponse?.response?.result;
+      if (livenessResult?.error && isFunction(onCaptureFailure)) {
+        return onCaptureFailure({
+          errorCode: 'liveness-error',
+          errorMsg: livenessResult.error
+        });
+      }
 
-      onCaptureSuccess({
-        ...HVResponse.response.result,
-        fileBlob,
-        imgBase64: HVResponse.imgBase64
-      });
+      if (isFunction(onCaptureSuccess)) {
+        const fileBlob = base64ToBlob(HVResponse.imgBase64.split(",")[1], 'image/jpeg');
+  
+        onCaptureSuccess({
+          ...livenessResult,
+          fileBlob,
+          imgBase64: HVResponse.imgBase64
+        });
+      }
     }
   };
 

@@ -29,6 +29,7 @@ import Feature from './Feature';
 import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
+import ComponentTest from './ComponentTest';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 
@@ -95,6 +96,7 @@ const App = () => {
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               <Route path='/partner' component={Partner} />
+              <Route path='/component-test' component={ComponentTest} />
               {
                 isMobileDevice ?
                 <Route component={Feature}/>:
