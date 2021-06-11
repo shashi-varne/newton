@@ -330,7 +330,7 @@ export const getConfig = () => {
   returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
   returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
   returnConfig.isIframe = isIframe();
-  returnConfig.platform = !returnConfig.isIframe ? (!returnConfig.Web ? "sdk" : "web" ): "iframe";
+  returnConfig.platform = !returnConfig.isIframe ? (returnConfig.isSdk ? "sdk" : "web" ): "iframe";
   returnConfig.isLoggedIn = storageService().get("currentUser");
   
   return returnConfig;
