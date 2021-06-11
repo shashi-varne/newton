@@ -21,10 +21,13 @@ class NpsPaymentCallback extends Component {
   }
 
   onload = () => {
-    let pathname = this.props.history.location.pathname.split('/');
-    let status = pathname[pathname.length - 1];
-    let amount = pathname[pathname.length - 2] || storageService().get('npsAmount');
-
+    const params = this.props.match?.params || {}
+    const status = params.status;
+    if(!params.status) {
+      this.navigate("/");
+      return;
+    }
+    const amount = params.amount || storageService().get('npsAmount');
     this.setState({
       amount: amount,
       status: status
@@ -42,6 +45,8 @@ class NpsPaymentCallback extends Component {
       // storageService().setObject('kyc', result.kyc_app);
   
       let currentUser = storageService().getObject("user");
+      currentUser.nps_investment = true;
+      storageService().setObject("user", currentUser)
       let _event = {
         event_name: "journey_details",
         properties: {

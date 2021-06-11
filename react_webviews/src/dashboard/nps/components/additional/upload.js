@@ -312,6 +312,7 @@ class uploadAddressProof extends Component {
   }
 
   render() {
+    const numberOfFilesSelected = this.state.Front_file && this.state.Back_file ? 2 : (this.state.Front_file || this.state.Back_file) ? 1 : 0;
     return (
       <Container
         fullWidthButton
@@ -340,7 +341,14 @@ class uploadAddressProof extends Component {
         </div>
 
         {this.state.isSelected && this.renderCamera('Front')}
-        {this.state.isSelected && (this.state.sides === 2) && this.renderCamera('Back')}
+        {this.state.isSelected && this.state.sides === 2 && (
+          <>
+            {this.renderCamera("Back")}
+            <div className="nps-upload-file-text">
+              <b>{numberOfFilesSelected}/2</b> sides selected
+            </div>
+          </>
+        )}
       </Container>
     );
   }
