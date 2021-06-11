@@ -14,7 +14,9 @@ import { getConfig } from 'utils/functions';
 
 import './mini-components.scss';
 import Button from '../../common/ui/Button';
+import { nativeCallback } from '../../utils/native_callback';
 
+const config = getConfig();
 const TermsAndCond = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({
@@ -22,8 +24,8 @@ const TermsAndCond = () => {
     scheme: '',
   });
   const [doc, setDoc] = useState('');
-  const partner_code = getConfig().partner_code;
-  const isWeb = getConfig().Web;
+  const productName = config.productName;
+  const isWeb = config.Web;
 
   const fetchTerms = async (docType) => {
     try {
@@ -42,6 +44,15 @@ const TermsAndCond = () => {
     }
   };
 
+  const openInBrowser = (url) => () => {
+    nativeCallback({
+      action: 'open_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -53,23 +64,23 @@ const TermsAndCond = () => {
           <img alt='check_mark' src={check_mark} width='15' />
           <span>
             By clicking on the button below, I agree that I have read and accepted the{' '}
-            {isWeb && partner_code !== 'finity' && (
+            {isWeb && productName !== 'finity' && (
               <>
-                <a target='_blank' rel='noopener noreferrer' href='https://www.fisdom.com/terms/'>
+                <a target='_blank' rel='noopener noreferrer' href={config.termsLink}>
                   terms & conditions
                 </a>{' '}
                 and understood the
                 <a
                   target='_blank'
                   rel='noopener noreferrer'
-                  href='https://www.fisdom.com/scheme-offer-documents/'
+                  href={config.schemeLink}
                 >
                   {' '}
                   scheme offer documents
                 </a>
               </>
             )}
-            {isWeb && partner_code === 'finity' && (
+            {isWeb && productName === 'finity' && (
               <>
                 <span className='tc_link' onClick={handleClickOpen('terms')}>
                   terms
@@ -81,10 +92,24 @@ const TermsAndCond = () => {
                 </span>
               </>
             )}
-            {!isWeb && partner_code === 'finity' && (
+            {!isWeb && productName === 'finity' && (
               <span className='tc_link' onClick={handleClickOpen('terms')}>
                 terms
               </span>
+            )}
+            {!isWeb && productName !== 'finity' && (
+              <>
+                <a onClick={openInBrowser(config.termsLink)} >
+                  terms & conditions
+                </a>{' '}
+                and understood the
+                <a
+                  onClick={openInBrowser(config.schemeLink)}
+                >
+                  {' '}
+                  scheme offer documents
+                </a>
+              </>
             )}
           </span>
         </div>
