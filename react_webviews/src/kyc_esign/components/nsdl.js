@@ -202,7 +202,7 @@ class DigiStatus extends Component {
           status === "success"
             ? dl_flow && !show_note
               ? "START INVESTING"
-              : "OKAY"
+              : "HOME"
             : "RETRY E-SIGN"
         }
         headerData={headerData}
