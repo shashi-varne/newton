@@ -7,7 +7,7 @@ import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser } from '../common/functions'
+import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser, checkDLPanFetchStatus } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
@@ -28,6 +28,7 @@ const Pan = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [tradingEnabled, setTradingEnabled] = useState();
+  const [isPanFailed, setIsPanFailed] = useState(false);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -42,6 +43,7 @@ const Pan = (props) => {
     const docStatus = await checkDocsPending(kyc);
     setDocsPendingStatus(docStatus);
     setTradingEnabled(isTradingEnabled(kyc))
+    setIsPanFailed(checkDLPanFetchStatus(kyc));
   }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
@@ -53,27 +55,35 @@ const Pan = (props) => {
     toast('Please select image file only');
   }
 
-  const handleOtherPlatformNavigation = () => {
-    if (kyc.kyc_status === 'compliant') {
-      if (!isDocSubmittedOrApproved("equity_identification")) {
-        navigate(PATHNAME_MAPPER.uploadSelfie);
+  const commonRedirection = () => {
+    if (!isDocSubmittedOrApproved("equity_identification")) {
+      navigate(PATHNAME_MAPPER.uploadSelfie);
+    } else {
+      if (!isDocSubmittedOrApproved("equity_income")) {
+        navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
       } else {
-        if (!isDocSubmittedOrApproved("equity_income")) {
-          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+        if (areDocsPending) {
+          navigate(PATHNAME_MAPPER.documentVerification);
         } else {
-          if (areDocsPending) {
-            navigate(PATHNAME_MAPPER.documentVerification);
-          } else {
-            navigate(PATHNAME_MAPPER.kycEsign);
-          }
+          navigate(PATHNAME_MAPPER.kycEsign);
         }
       }
+    }
+  }
+
+  const handleOtherPlatformNavigation = () => {
+    if (kyc.kyc_status === 'compliant') {
+      commonRedirection();
     } else {
       if (dlFlow) {
-        if (kyc.equity_sign_status !== 'signed') {
-          navigate(PATHNAME_MAPPER.tradingExperience);
+        if (isPanFailed) {
+          commonRedirection();
         } else {
-          navigate(PATHNAME_MAPPER.journey);
+          if (kyc.equity_sign_status !== 'signed') {
+            navigate(PATHNAME_MAPPER.tradingExperience);
+          } else {
+            navigate(PATHNAME_MAPPER.journey);
+          }
         }
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress);

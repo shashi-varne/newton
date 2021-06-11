@@ -253,14 +253,17 @@ export async function getPendingDocuments(kyc = {}) {
   return pendingDocsMapper;
 }
 
-export function checkPanFetchStatus(kyc = {}) {
+export function checkDLPanFetchStatus(kyc = {}) {
   if (isEmpty(kyc)) return false;
   return (
-    (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+    kyc.all_dl_doc_statuses.pan_fetch_status === null ||
     kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-    kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-    kyc.pan.doc_status !== "approved"
-  );
+    kyc.all_dl_doc_statuses.pan_fetch_status === "failed");
+}
+
+export function checkDLPanFetchAndApprovedStatus(kyc = {}) {
+  if (isEmpty(kyc)) return false;
+  return (checkDLPanFetchStatus(kyc) && kyc.pan.doc_status !== "approved");
 }
 
 export function isNotManualAndNriUser(kyc = {}) {

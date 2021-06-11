@@ -27,7 +27,7 @@ const PanUploadStatus = ({ status, isOpen, kyc, onClose, disableBackdropClick, o
   if (status === "success") {
     data.subtitle = !TRADING_ENABLED
       ? "Great, just one more step to go! Now complete eSign to get investment ready"
-      : kyc?.all_dl_doc_statuses?.pan_fetch_status === "failed"
+      : (kyc?.all_dl_doc_statuses?.pan_fetch_status === "failed" && !kyc.equity_data.meta_data.trading_experience)
       ? "You’re almost there, now give details for your trading account"
       : "You're almost there, now take a selfie";
   }

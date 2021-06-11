@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { checkDocsPending, isDocSubmittedOrApproved } from "../../common/functions"
+import { checkDLPanFetchAndApprovedStatus, checkDocsPending, isDocSubmittedOrApproved } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
@@ -83,7 +83,8 @@ const TradingExperience = (props) => {
   };
 
   const handleNavigation = () => {
-    if (kyc.initial_kyc_status === "compliant") {
+    const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
+    if (kyc.initial_kyc_status === "compliant" || isPanFailedAndNotApproved) {
       if (!isDocSubmittedOrApproved("equity_pan")) {
         navigate(PATHNAME_MAPPER.uploadPan);
         return;

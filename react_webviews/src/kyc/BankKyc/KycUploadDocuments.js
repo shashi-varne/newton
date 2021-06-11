@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkPanFetchStatus, isDigilockerFlow } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
@@ -114,9 +114,11 @@ const KycUploadDocuments = (props) => {
       else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dlFlow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else {
           if (kyc.equity_sign_status !== 'signed') {
             navigate(PATHNAME_MAPPER.tradingExperience);
@@ -149,9 +151,11 @@ const KycUploadDocuments = (props) => {
         // }
       } else {
         if (dlFlow) {
-          const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+          const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
           if (isPanFailedAndNotApproved) {
-            navigate("/kyc/upload/pan");
+            navigate("/kyc/upload/pan", {
+              state: { goBack: PATHNAME_MAPPER.journey }
+            });
           } else {
             if (kyc.sign_status !== 'signed') {
               navigate("/kyc-esign/info");
