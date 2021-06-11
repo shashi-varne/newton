@@ -9,7 +9,9 @@ const isWeb = getConfig().Web;
 const openFileHandler = (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) => {
   if (isWeb) {
     const filepicker = document.getElementById(filepickerId);
+    
     if (filepicker){
+      filepicker.value = null; // Required to allow same file to be picked again QA-4238 (https://stackoverflow.com/questions/12030686)
       filepicker.click();
     }
   } else {
