@@ -28,7 +28,6 @@ class NfoInfo extends Component {
       "properties": {
         "screen_name": "invest in nfo",
         "user_action": userAction || "",
-        "scheme_type": "",
         "flow": flowName['nfo']
         }
     };

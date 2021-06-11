@@ -94,7 +94,7 @@ const RiskModify = ({
       "event_name": 'mf_investment',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "changerisk profile",
+        "screen_name": "change risk profile",
         "flow": funnelData.flow || flowName[funnelData.investType] || "",
         "profile": selectedRisk,
         }

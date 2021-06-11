@@ -121,7 +121,7 @@ const RiskSelect = ({
       "event_name": 'mf_investment',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "selectrisk profile",
+        "screen_name": "select risk profile",
         "flow": funnelData.flow || flowName[funnelData.investType] || "",
         "profile": selectedRisk,
         "info_clicked": storageService().getBoolean('risk_info_clicked') ? 'yes' : 'no',
