@@ -560,36 +560,41 @@ export async function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
   storageService().set("kycStartPoint", "stocks");
   
-  if (userKyc?.address?.meta_data?.is_nri && isKycCompleted(userKyc)) {
-    this.navigate(PATHNAME_MAPPER.nriError, {
-      state: {originState: "invest"}
-    });
+  if (kycJourneyStatus === "rejected") {
+    this.handleKycSubmittedOrRejectedState();
   } else {
-    if (kycJourneyStatus === "rejected") {
-      this.handleKycSubmittedOrRejectedState();
+    if (kycJourneyStatus === "ground") {
+      this.navigate(PATHNAME_MAPPER.stocksStatus);
     } else {
-      if (kycJourneyStatus === "ground") {
-        this.navigate(PATHNAME_MAPPER.stocksStatus);
-      } else if (kycJourneyStatus === "ground_pan") {
-        this.navigate(PATHNAME_MAPPER.journey, {
-          state: {
-            show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
-            fromState: "invest",
-          },
+      const isKycDone = isKycCompleted(userKyc);
+      // only NRI conditions
+      if (userKyc?.address?.meta_data?.is_nri) {
+        this.navigate(PATHNAME_MAPPER.nriError, {
+          state: {noStockOption: isKycDone ? true : false}
         });
-      } else if (userKyc?.kyc_product_type !== "equity") {
-        const payload = {
-          "kyc":{},
-          "set_kyc_product_type": "equity"
-        }
-        const isProductTypeSet = await setKycProductType(payload);
-        if (isProductTypeSet) {
-          this.navigate(PATHNAME_MAPPER.accountInfo)
-        }
       } else {
-        this.navigate(kycStatusData.next_state, {
-          state: { fromState: "invest" },
-        });
+        if (kycJourneyStatus === "ground_pan") {
+          this.navigate(PATHNAME_MAPPER.journey, {
+            state: {
+              show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
+              fromState: "invest",
+            },
+          });
+        } else if (userKyc?.kyc_product_type !== "equity" && isKycDone) {
+          // already kyc done users
+          const payload = {
+            "kyc":{},
+            "set_kyc_product_type": "equity"
+          }
+          const isProductTypeSet = await setKycProductType(payload);
+          if (isProductTypeSet) {
+            this.navigate(PATHNAME_MAPPER.accountInfo)
+          }
+        } else {
+          this.navigate(kycStatusData.next_state, {
+            state: { fromState: "invest" },
+          });
+        }
       }
     }
   }

@@ -25,14 +25,14 @@ const NriError = (props) => {
       data-aid='nri-error-screen'
       hidePageTitle
       twoButtonVertical={true}
-      button1Props={stateParams?.originState === "invest" ? {} :
+      button1Props={stateParams?.noStockOption ? {} :
       {
         type: "primary",
         title: "COMPLETE MUTUAL FUND KYC",
         onClick: () => navigate(PATHNAME_MAPPER.journey)
       }}
       button2Props={{
-        type: stateParams?.originState === "invest" ? "primary" : "secondary",
+        type: stateParams?.noStockOption ? "primary" : "secondary",
         title: "HOME",
         onClick: handleClick
       }}
