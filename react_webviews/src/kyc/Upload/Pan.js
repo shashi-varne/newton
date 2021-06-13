@@ -108,7 +108,6 @@ const Pan = (props) => {
   }
 
   const handleSubmit = async () => {
-    if (isOpen) setIsOpen(false)
     sendEvents('next')
     try {
       const data = {};
@@ -142,6 +141,10 @@ const Pan = (props) => {
     } finally {
       setIsApiRunning(false)
     }
+  }
+
+  const handleCloseBottomSheet = () => {
+    if (isOpen) setIsOpen(!isOpen);
   }
 
   const sendEvents = (userAction, type) => {
@@ -216,9 +219,9 @@ const Pan = (props) => {
             <PanUploadStatus
               status={bottomSheetType}
               isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
+              onClose={handleCloseBottomSheet}
               disableBackdropClick
-              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
+              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleCloseBottomSheet}
               kyc={kyc}
             />
           }
