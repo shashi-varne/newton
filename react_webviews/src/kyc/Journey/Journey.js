@@ -589,7 +589,9 @@ const Journey = (props) => {
   }
   if (!isEmpty(kyc) && !isEmpty(user)) {
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
-      navigate('/nps/identity')
+      navigate('/nps/identity', {
+        state: { goBack: '/invest' },
+      })
     } else if (
       user.kyc_registration_v2 === 'submitted' &&
       kyc.sign_status === 'signed'
