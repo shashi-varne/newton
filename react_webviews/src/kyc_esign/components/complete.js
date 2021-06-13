@@ -1,22 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { getConfig } from "utils/functions";
-import WVSteps from "../../common/ui/Steps/WVSteps"
 
-const stepsData = [
-  { title: "Mutual fund", status: "Ready to invest" },
-  { title: "Stocks & IPO", status: "Under process" },
-  { title: "Futures & Options", status: "Under process" }
-]
-const productName = getConfig().productName;
-
-const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
-  const [steps, setSteps] = useState(stepsData);
-
-  useEffect(() => {
-    if (dl_flow && kyc?.sign_status === "signed" && !kyc?.equity_data?.meta_data?.fno) {
-      setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
-    }
-  }, [kyc]);
+const Complete = ({ navigateToReports, dl_flow, show_note }) => {
+  const productName = getConfig().productName;
 
   return (
     <div className="kyc-esign-complete" data-aid='kyc-esign-complete'>
@@ -26,56 +12,39 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
           alt=""
         />
         {dl_flow && !show_note && (
-          <div className="title" data-aid='kyc-header-title'>KYC complete!</div>
-        )}
-        {!dl_flow && kyc?.kyc_status === "compliant" && (
-          <div className="title" data-aid='kyc-header-title'>Great! Your KYC application is submitted!</div>
+          <div className="title" data-aid='kyc-header-title'>Kudos, KYC is completed!</div>
         )}
         {(!dl_flow || show_note) && (
-          <div className="title" data-aid='kyc-header-title'>Kudos! KYC application is submitted!</div>
+          <div className="title" data-aid='kyc-header-title'>Great! Your KYC application is submitted!</div>
         )}
         {!dl_flow && (
-          <div className="text" data-aid='kyc-header-text'>
+          <div className="text">
             <img src={require(`assets/eta_icon.svg`)} alt="" />
             Approves in one working day
           </div>
         )}
-        {dl_flow && (
-          <div className="sub-title" data-aid='kyc-header-sub-title'>
-            Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds
-          </div>
-        )}
-        <div className="subtitle" data-aid='kyc-header-sub-title-2' onClick={() => navigateToReports()}>
+        <div className="subtitle"  data-aid='kyc-application-text' onClick={() => navigateToReports()}>
           View your KYC application details {" >"}
         </div>
+        {dl_flow && !show_note && (
+          <div className="message"  data-aid="kyc-complete-message">
+            Click on <span>Continue Investing</span> & choose from 5000+ mutual
+            funds to invest in.
+          </div>
+        )}
       </header>
       {show_note && (
-        <div className="alert-status-info" data-aid='alert-status-info'>
+        <div className="alert-status-info" data-aid="alert-status-info">
           <img src={require(`assets/attention_icon_new.svg`)} alt="" />
           <div className="text">
-            <div className="title" data-aid='kyc-note-text'>Note</div>
-            <div data-aid='kyc-content-text'>
+            <div className="title" data-aid="alert-status-title">Note</div>
+            <div  data-aid="alert-status-content">
               Your bank verification is still pending. You will be able to
               invest once your bank is verified.
             </div>
           </div>
         </div>
       )}
-      {dl_flow && 
-        <div className="account-status-container" data-aid='account-status-container'>
-          <div className="account-status" data-aid='account-status'>Account status</div>
-          {steps.map((step, index) => (
-            <WVSteps
-              title={step.title}
-              key={step.title}
-              stepType={step.status === "Ready to invest" ? "completed" : "pending"}
-              classes={{ stepContent: 'step-content'}}
-            >
-              <div className="status" data-aid='kyc-status'>{step.status}</div>
-            </WVSteps>
-          ))}
-        </div>
-      }
     </div>
   );
 };

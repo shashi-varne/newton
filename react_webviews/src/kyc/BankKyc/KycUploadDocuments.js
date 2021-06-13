@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Container from "../common/Container";
 import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
@@ -7,19 +7,20 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { getFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
 const config = getConfig();
-
+const isWeb = config.Web;
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [selected, setSelected] = useState(null);
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [file, setFile] = useState(null);
+  const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)

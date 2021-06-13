@@ -17,7 +17,7 @@ const Success = (props) => {
       title="Share Details"
       buttonTitle="PROCEED"
       handleClick={proceed}
-      headerData={{goBack: proceed, icon: "close" }}
+      headerData={{goBack: () => setBackDialogOpen(true) }}
       data-aid='kyc-success-page'
     >
       <section id="digilocker-success" data-aid='kyc-digilocker-success'>

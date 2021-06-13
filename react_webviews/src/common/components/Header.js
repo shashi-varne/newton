@@ -56,21 +56,9 @@ const Header = ({ classes, title, count, total, current, goBack,
       style={style}
       >
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" data-aid='tool-bar-icon-btn'
-            onClick={headerData.goBack ||
-            goBack}>
-            {!disableBack && !headerData.hide_icon &&
-            <SVG
-            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backButtonColor ?  backButtonColor : new_header && !logo ? getConfig().styles.primaryColor : 'white'))}
-            src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
-            />
-            }
-            {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
-            <Close />}
-          </IconButton>
           {
             !noBackIcon &&
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" data-aid='tool-bar-icon-btn'
               onClick={headerData.goBack ||
               goBack}>
               {!disableBack && !headerData.hide_icon &&

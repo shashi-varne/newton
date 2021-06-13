@@ -68,7 +68,7 @@ const Failed = (props) => {
         showLoader: isApiRunning
       }}
       skelton={isLoading}
-      disableBack
+      headerData={{goBack}}
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         <img

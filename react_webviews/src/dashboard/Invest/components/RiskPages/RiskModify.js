@@ -121,7 +121,7 @@ const RiskModify = ({
         }
         <div
           className="risk-customize-cta" data-aid='risk-customize-cta'
-          onClick={() => navigate(`${funnelGoalData.id}/risk-customize`)}>
+          onClick={() => navigate(`/invest/${funnelGoalData.id}/risk-customize`)}>
           Customise EQUITY to DEBT DISTRIBUTION
         </div>
         <BottomSheet
