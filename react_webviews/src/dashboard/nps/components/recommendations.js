@@ -187,7 +187,7 @@ class Recommendations extends Component {
                     recommendations.pension_house.image
                   }
                   alt="NPS"
-                  style={{ width: "70px" }}
+                  className="nrd-pension-house-image"
                 />
                 <div
                   style={{
@@ -257,7 +257,7 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran, pension_house, recommendations } = this.state;
+    let { pran, pension_house, recommendations, amount } = this.state;
 
     let data = {
       amount: this.state.amount,
@@ -284,7 +284,8 @@ class Recommendations extends Component {
       let pgLink = result.investments.pg_link;
 
       let plutus_redirect_url = encodeURIComponent(
-        getBasePath() + `/nps/redirect` + getConfig().searchParams
+        // getBasePath() + `/nps/redirect` + getConfig().searchParams
+        `${getBasePath()}/nps/payment/callback/one-time/${amount}/${result.investments.id}`
       );
 
       pgLink +=
@@ -498,7 +499,7 @@ class Recommendations extends Component {
                 <img src={require("assets/terms_agree.png")} alt="" width="25" />
                 <div>
                   By tapping on proceed, I agree that I have read the {" "}
-                  <span onClick={() => this.openInBrowser("https://www.fisdom.com/terms/")} style={{textDecoration:'underline', cursor:'pointer'}}>
+                  <span onClick={() => this.openInBrowser(config.termsLink)} style={{textDecoration:'underline', cursor:'pointer'}}>
                     terms & conditions
                   </span>
                 </div>

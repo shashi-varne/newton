@@ -14,6 +14,7 @@ const TaxSummaryCard = ({
   friendly_name,
   amc_logo_small,
   exit_load,
+  sendEvents,
   hideIcon = false,
   know_how_msg,
   onClick
@@ -23,6 +24,7 @@ const TaxSummaryCard = ({
     setShowKnowMoreDialog(false)
   }
   const openDialog = () => {
+    sendEvents('know_how_clicked')
     setShowKnowMoreDialog(true)
   }
   const productName = getConfig().productName

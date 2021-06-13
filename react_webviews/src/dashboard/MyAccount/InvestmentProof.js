@@ -6,6 +6,7 @@ import { sendInvestmentProof } from "./MyAccountFunctions";
 import toast from "common/ui/Toast";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import "./MyAccount.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const InvestmentProof = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -28,6 +29,7 @@ const InvestmentProof = (props) => {
 
   const investmentData = investmentDataMapper[type] || {};
   const emailMe = async (year) => {
+    sendEvents('next', year)
     setIsApiRunning(true);
     try {
       const result = await sendInvestmentProof({
@@ -66,9 +68,26 @@ const InvestmentProof = (props) => {
     </Dialog>
   );
 
+  const sendEvents = (userAction, year) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction,
+        "screen_name": type === 'capital-gain' ? 'capital gain' : 'elss statement',
+        "year": year || "",
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       data-aid='investment-proof-screen'
+      events={sendEvents("just_set_events")}
       title={investmentData.title}
       skelton={isApiRunning}
       noFooter={true}

@@ -76,6 +76,10 @@ const RiskSelect = ({
   }
 
   const goNext = async (skipRiskUpdate) => {
+    if(!skipRiskUpdate && !selectedRisk) {
+      toast("Please select your risk profile");
+      return;
+    }
     await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
     let state = '/invest/recommendations';
@@ -129,7 +133,6 @@ const RiskSelect = ({
       }
       <div style={{ marginTop: '30px' }}>
         <FSelect
-          preselectFirst
           options={riskProfiles}
           indexBy='name'
           renderItem={riskOpt =>

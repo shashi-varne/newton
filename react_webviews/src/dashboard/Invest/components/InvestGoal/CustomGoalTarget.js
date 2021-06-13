@@ -19,6 +19,7 @@ const CustomGoalTarget = (props) => {
   
   const [targetAmount, setTargetAmount] = useState(0);
   const [loader, setLoader] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const {
     funnelData,
     funnelGoalData,
@@ -28,24 +29,31 @@ const CustomGoalTarget = (props) => {
 
   useEffect(() => {
     setTargetAmount(
-      funnelData.corpus ||
       CUSTOM_GOAL_TARGET_MAP[subtype] || 0
     );
   }, []);
 
   const handleChange = (e) => {
     let value = e.target.value || "";
-    value = convertInrAmountToNumber(value);
-    // eslint-disable-next-line radix
-    if (!isNaN(parseInt(value))) {
-      // eslint-disable-next-line radix
-      setTargetAmount(parseInt(value));
-    } else {
-      setTargetAmount('');
+    value = convertInrAmountToNumber(value) || "";
+    setTargetAmount(value);
+    setErrorMessage(validateTargetAmount(value));
+  };
+
+  const validateTargetAmount = (investAmount) => {
+    let helperText = "";
+    if(!investAmount) {
+      helperText = 'This is required';
+    } else if (investAmount < funnelGoalData.min_sip_amount) {
+      helperText = `Minimum amount should be atleast ${formatAmountInr(500)}`;
     }
+    return helperText;
   };
 
   const fetchRecommendedFunds = async (corpus) => {
+    if(errorMessage) {
+      return;
+    }
     try {
       const params = {
         type: funnelData.investType,
@@ -103,8 +111,8 @@ const CustomGoalTarget = (props) => {
             value={targetAmount ? formatAmountInr(targetAmount) : ""}
             onChange={handleChange}
             type='text'
-            error={!targetAmount}
-            helperText={!targetAmount && 'This is a required field'}
+            error={!!errorMessage}
+            helperText={errorMessage}
             autoFocus
             inputMode='numeric'
             pattern='[0-9]*'

@@ -1,6 +1,8 @@
 import React from 'react';
+import { getConfig } from '../utils/functions';
 import './InvestInfo.scss';
 
+const productName = getConfig().productName;
 const InvestInfoData = [
   {
     title: 'Smart fund recommendation engine',
@@ -14,7 +16,7 @@ const InvestInfoData = [
   },
   {
     title: 'Bank grade security',
-    subtitle: 'Any transaction conducted via fisdom is safe and secure with 128 SSL encryption',
+    subtitle: `Any transaction conducted via ${productName} is safe and secure with 128 SSL encryption`,
     icon: require(`assets/web_icon_3.png`),
   },
   {
@@ -26,7 +28,7 @@ const InvestInfoData = [
 const InvestInfo = () => {
   return (
     <div className='info-box' data-aid='info-box'>
-      <div className='info-box-header' data-aid='info-box-header'>Why invest with fisdom?</div>
+      <div className='info-box-header' data-aid='info-box-header'>Why invest with {productName}?</div>
       <div className='info-box-content' data-aid='info-box-content'>
         {InvestInfoData.map((el, idx) => (
           <div className='info-box-data' key={idx} data-aid={`info-box-data-${idx+1}`}>

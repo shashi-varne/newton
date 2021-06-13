@@ -11,6 +11,7 @@ import './WithdrawReason.scss';
 import { getWithdrawReasons } from '../../common/Api';
 import { postWithdrawReasons } from '../../common/Api';
 import { storageService } from '../../../utils/validators';
+import {nativeCallback} from '../../../utils/native_callback'
 
 const Landing = (props) => {
   const [reasons, setReasons] = useState(null);
@@ -58,8 +59,9 @@ const Landing = (props) => {
     }
   };
 
-  const getSubQuestions = (qstn) => () => {
-    
+  const getSubQuestions = (qstn, index) => () => {
+    if((index+1) !== reasons?.options?.length)
+      sendEvents('next', index)
     if (qstn?.action?.text_input) {
       setSelectedQstn(qstn);
       setError(false);
@@ -85,6 +87,7 @@ const Landing = (props) => {
   };
 
   const handleProceed = () => {
+    sendEvents('next', reasons?.options?.length-1)
     if(value){
       const data = { choice: selectedQstn?.tag, reason: value };
       sendWithdrawReason(data);
@@ -106,10 +109,28 @@ const Landing = (props) => {
     }
   };
 
+  const sendEvents = (userAction, index) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "withdraw_options",
+        "values": index >= 0 ? index + 1 : "",
+        "source": "menu",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
-      data-aid='withdraw-reason-screen' 
-      buttonTitle='Continue' 
+      data-aid='withdraw-reason-screen'  
+      events={sendEvents("just_set_events")}
+      buttonTitle='CONTINUE' 
       fullWidthButton       
       title="Withdraw"
       noPadding 
@@ -122,7 +143,7 @@ const Landing = (props) => {
 
           <div className='withdraw-reason-list'>
             {reasons?.options?.map((el, idx) => (
-              <div className='withdraw-reason-items' data-aid={`withdraw-reason-items-${idx+1}`} onClick={getSubQuestions(el)} key={idx}>
+              <div className='withdraw-reason-items' data-aid={`withdraw-reason-items-${idx+1}`} onClick={getSubQuestions(el, idx)} key={idx}>
                 <div>{el?.title}</div>
                 <KeyboardArrowRightIcon />
               </div>

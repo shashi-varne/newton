@@ -48,7 +48,7 @@ const GoalTarget = (props) => {
         return;
       }
 
-      updateFunnelData({ ...data, corpus });
+      updateFunnelData({ ...data, corpus, userEnteredAmt: 0 });
 
       navigate(`/invest/savegoal/${subtype}/amount`);
     } catch (err) {

@@ -11,6 +11,7 @@ import { getConfig, navigate as navigateFunc } from '../../../utils/functions'
 
 import './Insta.scss';
 import '../commonStyles.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const Insta = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -23,6 +24,7 @@ const Insta = (props) => {
   }
 
   const handleClick = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
       const itype = props?.location?.state?.itype
@@ -81,9 +83,26 @@ const Insta = (props) => {
     fetchTaxes()
   }, [])
 
+  const sendEvents = (userAction, index) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "tax_summary",
+        "flow": "instaredeem"
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
       data-aid='withdraw-summary-screen'
+      events={sendEvents("just_set_events")}
       buttonTitle={'CONTINUE'}
       fullWidthButton
       classOverRideContainer="pr-container"
@@ -106,6 +125,7 @@ const Insta = (props) => {
               {taxes?.liabilities?.map((item) => (
                 <TaxSummaryCard
                   key={item.isin}
+                  sendEvents={sendEvents}
                   {...item}
                   openCard={
                     open[item.isin]

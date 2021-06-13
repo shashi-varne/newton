@@ -10,11 +10,13 @@ import { getRecommendedSwitch, postSwitchOrders } from '../../common/Api';
 import { navigate as navigateFunc } from 'utils/functions';
 import toast from 'common/ui/Toast';
 import './WithdrawSwitch.scss';
+import { nativeCallback } from '../../../utils/native_callback';
 
 const WithdrawSwitch = (props) => {
   const amount = props.location?.state?.amount;
   const [switchFunds, setSwitchFunds] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [startDate] = useState(new Date())
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedSwitch = async () => {
     try {
@@ -55,6 +57,7 @@ const WithdrawSwitch = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents('next')
     const data = switchFunds?.recommendations?.map((el) => {
       const obj = {
         from_mf: el.from_mf.mfid,
@@ -73,9 +76,28 @@ const WithdrawSwitch = (props) => {
     });
     sendSwitchOrders(data);
   };
+  
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "fund_amount_split",
+        'flow': "switch",
+        'time_spent_on_screen': Math.ceil((new Date() - startDate) / 1000),
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
       data-aid='swith-recommendations-screen'
+      events={sendEvents("just_set_events")}
       buttonTitle={`SWITCH: ${inrFormatDecimal(switchFunds?.total_switched_amount)}`}
       skelton={isLoading}
       fullWidthButton

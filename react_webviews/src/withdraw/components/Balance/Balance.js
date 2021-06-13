@@ -9,6 +9,7 @@ import toast from 'common/ui/Toast'
 import { isEmpty, formatAmountInr, convertInrAmountToNumber } from 'utils/validators'
 import Explore from '../../mini-components/Explore'
 import './Balance.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const Balance = (props) => {
   const [open, setOpen] = useState(false)
@@ -33,7 +34,8 @@ const Balance = (props) => {
     fetchBalance()
   }, [])
 
-  const redirect = (url, openModal) => {
+  const redirect = (title, url, openModal) => {
+    sendEvents('next', title)
     setType(url)
     if (!openModal) {
       navigate(url)
@@ -45,10 +47,12 @@ const Balance = (props) => {
     }
   }
   const close = () => {
+    sendEvents('back', "", "withdraw_amount")
     setOpen(false)
   }
 
   const handleSwitch = () => {
+    sendEvents('next', 'switch_now')
     setType("/withdraw/switch")
     setAmount('');
     setError(false)
@@ -94,16 +98,51 @@ const Balance = (props) => {
       return;
     }
     if (type === '/withdraw/systematic') {
+      sendEvents('next', type, "withdraw_amount")
       navigate(type, {state: {amount} })
     } else {
+      sendEvents('next', "switch_now", "withdraw_amount")
       navigate('/withdraw/switch', {state: {amount} })
     }
     return
   }
   const noInvestments = isEmpty(balance?.balance) || balance === 0
+
+  const sendEvents = (userAction, cardClicked, screenName) => {
+    let cardClickedName = "";
+    if(cardClicked === "Instant Withdraw") 
+      cardClickedName = "instant withdraw"
+    else if(cardClicked === "System Selected")
+      cardClickedName = "system_selected"
+    else if(cardClicked === "Manual")
+      cardClickedName = "self"
+    else
+      cardClickedName = cardClicked
+
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": screenName || "withdraw_screen",
+      },
+    };
+    if(screenName !== "withdraw_amount")
+      eventObj.properties["card_clicked"] = cardClickedName || "";
+    if(screenName === "withdraw_amount"){
+      eventObj.properties["flow"] = (cardClickedName === "systematic" ? "system_selected" : cardClickedName) || "";
+      eventObj.properties["value_entered"] = amount || "";
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
       data-aid='withdraw-screen'
+      events={sendEvents("just_set_events")}
       title='Withdraw'
       noFooter
       noPadding
@@ -168,8 +207,8 @@ const Balance = (props) => {
                   <div
                     className="withdraw-list-item flex"
                     key={idx}
-                    onClick={() => redirect(redirectUrl, openModal)}
                     data-aid={`withdraw-list-item flex-${idx+1}`}
+                    onClick={() => redirect(title, redirectUrl, openModal)}
                   >
                     <img
                       className="icon"

@@ -13,6 +13,7 @@ import { formatAmountInr, isEmpty } from '../../../utils/validators'
 
 import '../commonStyles.scss';
 import './Self.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const SelfSummary = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -32,6 +33,7 @@ const SelfSummary = (props) => {
   }
 
   const handleClick = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
       const itype = props?.location?.state?.itype
@@ -90,10 +92,27 @@ const SelfSummary = (props) => {
     fetchTaxes()
   }, [])
 
+  const sendEvents = (userAction, index) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "tax_summary",
+        "flow": "self"
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
 
   return (
     <Container
       data-aid='self-summary-screen'
+      events={sendEvents("just_set_events")}
       buttonTitle={'CONTINUE'}
       fullWidthButton
       classOverRideContainer="pr-container"
@@ -119,6 +138,7 @@ const SelfSummary = (props) => {
             {taxes?.liabilities?.map((item) => (
               <TaxSummaryCard
                 key={item.isin}
+                sendEvents={sendEvents}
                 {...item}
                 openCard={
                   open[item.isin]

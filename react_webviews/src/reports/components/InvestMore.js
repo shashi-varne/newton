@@ -12,14 +12,15 @@ import PennyVerificationPending from "../../dashboard/Invest/mini-components/Pen
 import InvestError from "../../dashboard/Invest/mini-components/InvestError";
 import InvestReferralDialog from "../../dashboard/Invest/mini-components/InvestReferralDialog";
 import { getBasePath, getConfig } from "../../utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
 
+const config = getConfig();
 const InvestMore = (props) => {
   const navigate = navigateFunc.bind(props);
   const params = props?.match?.params || {};
   if (isEmpty(params) || !params.mode) props.history.goBack();
   const state = props.location.state || {};
   if (isEmpty(state) || !state.recommendation) {
-    const config = getConfig();
     let _event = {
       event_name: "journey_details",
       properties: {
@@ -154,6 +155,15 @@ const InvestMore = (props) => {
     setIsReadyToPayment(result);
   };
 
+  const openInBrowser = (url) => () => {
+    nativeCallback({
+      action: 'open_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
   return (
     <Container
       data-aid='reports-invest-more'
@@ -194,13 +204,23 @@ const InvestMore = (props) => {
               />
               <div>
                 I have read and accepted the{" "}
-                <a
-                  href="https://www.fisdom.com/terms/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  terms and conditions
-                </a>
+                {config.Web ? (
+                  <a
+                    href={config.termsLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rim-terms-text"
+                  >
+                    terms and conditions
+                  </a>
+                ) : (
+                  <span
+                    className="rim-terms-text"
+                    onClick={openInBrowser(config.termsLink)}
+                  >
+                    terms and conditions
+                  </span>
+                )}
               </div>
             </div>
             <div className="invest-more-terms" data-aid='invest-more-terms-offer-doc'>
@@ -211,13 +231,23 @@ const InvestMore = (props) => {
               />
               <div>
                 I have read and understood the{" "}
-                <a
-                  href="https://www.fisdom.com/scheme-offer-documents/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  scheme offer documents
-                </a>
+                {config.Web ? (
+                  <a
+                    href={config.schemeLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rim-terms-text"
+                  >
+                    scheme offer documents
+                  </a>
+                ) : (
+                  <span
+                    className="rim-terms-text"
+                    onClick={openInBrowser(config.schemeLink)}
+                  >
+                    scheme offer documents
+                  </span>
+                )}
               </div>
             </div>
             <PennyVerificationPending

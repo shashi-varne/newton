@@ -10,6 +10,7 @@ import { getConfig } from 'utils/functions'
 import { formatAmountInr } from '../../../utils/validators'
 import '../commonStyles.scss';
 import './WithdrawType.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const Landing = (props) => {
   const { type } = props.match?.params
@@ -25,7 +26,7 @@ const Landing = (props) => {
   const [buttonTitle, setButtonTitle] = useState('CONTINUE')
   const navigate = navigateFunc.bind(props)
   const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
-
+  const [startDate] = useState(new Date())
   const fetchRecommendedFunds = async () => {
     try {
       setShowSkeltonLoader(true)
@@ -91,6 +92,7 @@ const Landing = (props) => {
     }
   }
   const handleClick = () => {
+    sendEvents('next')
     if (zeroInvested) {
       navigate('/invest/instaredeem')
     } else if (fetchFailed) {
@@ -168,9 +170,49 @@ const Landing = (props) => {
     }
   }
 
+  const sendEvents = (userAction) => {
+
+    let redemptionType = "";
+    if(type === "insta-redeem") 
+      redemptionType = "instaredeem"
+    else if(type === "systematic")
+      redemptionType = "system"
+    else if(type === "manual")
+      redemptionType = "self"
+    else redemptionType = type;
+    
+    let statusEvent = '';
+    if(limitCrossed)
+      statusEvent = 'exhaust limit'
+    if(zeroInvested)
+      statusEvent = 'empty state'
+    if(fetchFailed)
+      statusEvent = 'redeem amount unknown'
+
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "fund_amount_split",
+        'flow': redemptionType,
+        'time_spent_on_screen': Math.ceil((new Date() - startDate) / 1000),
+      },
+    };
+    if(type === 'insta-redeem') {
+      eventObj.properties['status'] = statusEvent;
+      eventObj.properties['amount_value'] = 0 // to be checked
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
       data-aid='withdraw-type-screen'
+      events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       fullWidthButton
       classOverRideContainer="pr-container"

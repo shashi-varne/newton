@@ -77,7 +77,7 @@ class PanDetails extends Component {
     if(!isEmpty(form_data.pran)) {
       is_nps_contributed = true;
     }
-    
+    this.sendEvents();
     this.setState({
       currentUser: currentUser,
       isKycApproved: isKycApproved,
@@ -86,6 +86,17 @@ class PanDetails extends Component {
       is_nps_contributed,
       isKycIdentificationApproved
     });
+  };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "pan screen",
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
 
   handleChange = (name) => (event) => {

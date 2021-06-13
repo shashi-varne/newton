@@ -8,6 +8,7 @@ import { initialize } from "../../common/commonFunctions";
 import { getConfig, getBase64 } from "utils/functions";
 import { storageService } from "utils/validators";
 import $ from "jquery";
+import { validateAlphabets } from "../../../../utils/validators";
 
 const marital_status_options = [
   {
@@ -112,6 +113,7 @@ class NpsIdentity extends Component {
   handleChange = (name) => (event) => {
     let value = event.target.value;
     let { form_data } = this.state;
+    if (value && name.includes("name") && !validateAlphabets(value)) return;
 
     form_data[name] = value;
     form_data[name + "_error"] = "";

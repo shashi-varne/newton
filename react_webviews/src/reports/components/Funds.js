@@ -346,8 +346,8 @@ const Funds = (props) => {
                       buttonTitle="INVEST MORE"
                       showLoader={isApiRunning}
                       onClick={() => getMfDetails(fund)}
-                      style={{
-                        height: "36px",
+                      classes={{
+                        button: "rf-invest-more-button"
                       }}
                     />
                   </>

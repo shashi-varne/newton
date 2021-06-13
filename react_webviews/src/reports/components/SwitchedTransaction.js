@@ -6,6 +6,7 @@ import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
 import { getSummaryV2 } from "../common/api";
+import { nativeCallback } from "../../utils/native_callback";
 
 const SwitchedTransaction = (props) => {
   const stateParams = props.location?.state || {};
@@ -45,9 +46,25 @@ const SwitchedTransaction = (props) => {
     setOpenProcess(true);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Pending Switch",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
       data-aid='reports-pending-switch-screen'
+      events={sendEvents("just_set_events")}
       noFooter={true}
       title="Pending Switch"
       skelton={showSkelton}

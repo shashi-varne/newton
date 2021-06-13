@@ -6,6 +6,7 @@ import toast from 'common/ui/Toast'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import './Otp.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 import { getConfig } from '../../../utils/functions'
 
 function useInterval(callback, delay) {
@@ -31,6 +32,7 @@ function useInterval(callback, delay) {
 const Otp = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false)
+  const [resendClicked, setResendClicked] = useState(false)
   const [state, setState] = useState({
     otp: '',
     totalTime: 30,
@@ -49,6 +51,7 @@ const Otp = (props) => {
   }, 1000)
 
   const resendOtp = async () => {
+    setResendClicked(true)
     try {
       if (!isEmpty(stateParams?.resend_redeem_otp_link)) {
         const result = await resend(stateParams?.resend_redeem_otp_link)
@@ -61,6 +64,7 @@ const Otp = (props) => {
   }
 
   const verifyOtp = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button");
       let result;
@@ -118,9 +122,28 @@ const Otp = (props) => {
     })
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": 'withdrawl_otp_screen',
+        "resend_clicked": resendClicked ? 'yes' : 'no',
+        'flow': stateParams?.type || "",
+        'otp': state.otp || ''
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
       data-aid='verify-otp-screen'
+      events={sendEvents("just_set_events")}
       hidePageTitle
       buttonTitle="VERIFY"
       disable={state.otp.length !== 4}

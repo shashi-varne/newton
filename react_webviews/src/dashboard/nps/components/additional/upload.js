@@ -193,9 +193,9 @@ class uploadAddressProof extends Component {
 
   handleChange = (event) => {
     let value = event || "";
-    let sides = 1;
+    let sides = 2;
     if (value === 'utilitybill' || value === 'bankstatement') {
-      sides = 2
+      sides = 1;
     }
 
     this.setState({
@@ -313,6 +313,7 @@ class uploadAddressProof extends Component {
   }
 
   render() {
+    const numberOfFilesSelected = this.state.Front_file && this.state.Back_file ? 2 : (this.state.Front_file || this.state.Back_file) ? 1 : 0;
     return (
       <Container
         data-aid='nps-upload-address-proof-screen'
@@ -342,7 +343,14 @@ class uploadAddressProof extends Component {
         </div>
 
         {this.state.isSelected && this.renderCamera('Front')}
-        {this.state.isSelected && (this.state.sides === 2) && this.renderCamera('Back')}
+        {this.state.isSelected && this.state.sides === 2 && (
+          <>
+            {this.renderCamera("Back")}
+            <div className="nps-upload-file-text">
+              <b>{numberOfFilesSelected}/2</b> sides selected
+            </div>
+          </>
+        )}
       </Container>
     );
   }
