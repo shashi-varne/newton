@@ -30,7 +30,7 @@ const KycBankVerify = (props) => {
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
-  const {kyc} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -104,6 +104,7 @@ const KycBankVerify = (props) => {
           setIsPennyFailed(true);
         }
       }
+      updateKycObject(result);
     } catch (err) {
       console.log(err);
     }
@@ -121,10 +122,25 @@ const KycBankVerify = (props) => {
       } else {
         setIsPennyFailed(true);
       }
+      updateKycObject(result);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const updateKycObject = (result) => {
+    let resultKyc = {
+      ...kyc,
+      bank: {
+        ...kyc.bank,
+        meta_data: {
+          ...kyc.bank.meta_data,
+          ...result.records.PBI_record
+        }
+      }
+    }
+    updateKyc(resultKyc);
+  }
 
   const checkBankDetails = () => {
     sendEvents("check bank details", "bottom_sheet");
@@ -236,6 +252,7 @@ const KycBankVerify = (props) => {
     <Container
       buttonTitle="VERIFY BANK ACCOUNT"
       events={sendEvents("just_set_events")}
+      skelton={isLoading}
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
