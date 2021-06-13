@@ -34,7 +34,7 @@ class NpsInvestType extends Component {
             >
                 <div className="nfo-scheme nps-scheme" data-aid='nps-scheme'>
                     <div>
-                        <div className="item" data-aid='nps-monthly-investment' ui-sref="nps-amount({ type: 'one_time' })">
+                        <div className="item" data-aid='nps-monthly-investment'>
                             <div className="icon">
                                 <img src={require("assets/nps_sip_icon.svg")} alt="" />
                             </div>
@@ -42,7 +42,7 @@ class NpsInvestType extends Component {
                                 <div>Monthly Investment (SIP)</div>
                             </div>
                         </div>
-                        <div className="item" data-aid='nps-one-Time-investment' ui-sref="nps-amount({ type: 'one_time' })">
+                        <div className="item" data-aid='nps-one-Time-investment'>
                             <div className="icon">
                                 <img src={require("assets/nps_one_time_icon.svg")} alt="" />
                             </div>
