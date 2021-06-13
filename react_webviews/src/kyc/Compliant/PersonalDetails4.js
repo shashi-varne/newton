@@ -14,7 +14,7 @@ import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
-import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -56,6 +56,7 @@ const PersonalDetails4 = (props) => {
 
   const handleClick = () => {
     let keysToCheck = ["dob", "name", "relationship"];
+    sendEvents('next')
     if (!isChecked) {
       let result = validateFields(form_data, keysToCheck);
       if (!result.canSubmit) {
@@ -138,9 +139,31 @@ const PersonalDetails4 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nominee_details",
+        "flow": 'premium onboarding',   
+        "name": form_data.name ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "relationship": form_data.relationship ? "yes" : "no",
+        "add_nominee": isChecked ? "no":"yes",
+        "initial_kyc_status" : "compliant"
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
@@ -150,11 +173,6 @@ const PersonalDetails4 = (props) => {
     >
       <div className="kyc-nominee">
         <main data-aid='kyc-nominee-page'>
-          <WVInfoBubble
-            type="info"
-            customTitle="Nominee details will be applicable for mutual fund investments only"
-            hasTitle
-          />
           <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked

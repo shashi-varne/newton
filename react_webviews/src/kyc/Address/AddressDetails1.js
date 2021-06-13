@@ -10,6 +10,7 @@ import SVG from "react-inlinesvg";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const AddressDetails1 = (props) => {
   const genericErrorMessage = "Something went wrong!";
@@ -68,6 +69,7 @@ const AddressDetails1 = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next")
     let keysToCheck = ["address_doc_type", "residential_status"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
@@ -143,8 +145,26 @@ const AddressDetails1 = (props) => {
     return residential_status === "NRI" ? 4 : 2;
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "address_details_1",
+        "address_proof": form_data.address_doc_type,
+        "residential_status": form_data.residential_status
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-address-details1"
       buttonTitle="SAVE AND CONTINUE"

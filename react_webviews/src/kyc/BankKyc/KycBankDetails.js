@@ -10,16 +10,18 @@ import {
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import Alert from "../mini-components/Alert";
 import {
   // compareObjects,
   validateFields,
+  getFlow
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
-import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { nativeCallback } from "../../utils/native_callback";
 
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -43,7 +45,7 @@ const KycBankDetails = (props) => {
   const [name, setName] = useState("");
   const [note, setNote] = useState({
     info_text:
-      "As per SEBI, it is mandatory for investors to provide their own bank account details",
+      "As per SEBI, it is mandatory for you to add your add bank account details.",
     variant: "info",
   });
   const [disableFields, setDisableFields] = useState({
@@ -129,6 +131,7 @@ const KycBankDetails = (props) => {
 
   const handleClick = () => {
     if (disableFields.skip_api_call) {
+      sendEvents('next')
       handleNavigation();
     } else {
       const keysToCheck = [
@@ -139,6 +142,7 @@ const KycBankDetails = (props) => {
       ];
       const formData = { ...form_data, ...bankData };
       let result = validateFields(formData, keysToCheck);
+      sendEvents('next')
       if (!result.canSubmit) {
         let data = Object.assign({}, result.formData);
         setFormData(data);
@@ -280,9 +284,31 @@ const KycBankDetails = (props) => {
     return { bankData: bank, formData: formData, bankIcon: bankIcon };
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "bank_details",
+        "account_number": bankData.account_number ? "yes" : "no",
+        "c_account_number": bankData.c_account_number ? "yes" : "no",
+        "ifsc_code": form_data.ifsc_code_error ? "invalid" : bankData.ifsc_code ? "yes" : "no",
+        "account_type": bankData.account_type ? "yes" : "no",
+        "attempt_no": kyc.bank.meta_data.user_rejection_attempts || "",
+        "flow": getFlow(kyc) || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       skelton={isLoading}
       handleClick={handleClick}
@@ -292,18 +318,11 @@ const KycBankDetails = (props) => {
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
-            {/* <Alert
+            <Alert
               variant={note.variant}
               title="Note"
               message={note.info_text}
-            /> */}
-            <WVInfoBubble
-              type={note.variant}
-              hasTitle
-              customTitle="Note"
-            >
-              {note.info_text}
-            </WVInfoBubble>
+            />
             <main data-aid='kyc-enter-bank-account-details'>
               <Input
                 label="Account holder name"

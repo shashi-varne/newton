@@ -9,6 +9,7 @@ import toast from '../../../common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import useUserKycHook from '../../common/hooks/userKycHook'
 import "../commonStyles.scss";
+import { nativeCallback } from '../../../utils/native_callback'
 
 const isWeb = getConfig().Web
 const getTitleList = () => {
@@ -107,7 +108,8 @@ const ChangeAddressDetails2 = (props) => {
     })
   }
 
-  const handleChange = (type) => (event) => {
+  const handleChange = (type, openType) => (event) => {
+    sendEvents('get_image', openType, type)
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -172,6 +174,7 @@ const ChangeAddressDetails2 = (props) => {
   }
 
   const handleSubmit = async () => {
+    sendEvents("next")
     const type = kyc?.address?.meta_data?.is_nri ? 'nri_address' : 'address'
     const addressKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'
@@ -216,9 +219,28 @@ const ChangeAddressDetails2 = (props) => {
     ? 'Upload Indian Address Proof'
     : 'Upload address proof'
 
+  const sendEvents = (userAction, source, docSide) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "upload address proof",
+        "picture": source || "",
+        "doc_side": docSide || "",
+        "doc_type": addressProof || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       hideInPageTitle
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
       handleClick={handleSubmit}
@@ -260,7 +282,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front')}
+                      onChange={handleChange('front','open-camera')}
                       accept="image/*"
                       capture
                     />
@@ -290,7 +312,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={frontDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('front')}
+                      onChange={handleChange('front','gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','front')}
@@ -336,7 +358,7 @@ const ChangeAddressDetails2 = (props) => {
                   ref={frontDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('front')}
+                  onChange={handleChange('front','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','front')}
@@ -382,7 +404,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back')}
+                      onChange={handleChange('back','open-camera')}
                       accept="image/*"
                       capture
                     />
@@ -412,7 +434,7 @@ const ChangeAddressDetails2 = (props) => {
                       ref={backDocRef}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange('back')}
+                      onChange={handleChange('back','gallery')}
                     />
                     <button
                       onClick={handleUpload('open_gallery','back')}
@@ -458,7 +480,7 @@ const ChangeAddressDetails2 = (props) => {
                   ref={backDocRef}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange('back')}
+                  onChange={handleChange('back','gallery')}
                 />
                 <button
                   onClick={handleUpload('open_gallery','back')}
