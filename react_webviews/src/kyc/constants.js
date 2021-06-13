@@ -11,23 +11,6 @@ export const API_CONSTANTS = {
   getMerge: '/api/user/account/merge?pan_number=',
 }
 
-
-export const storageConstants = {
-  USER: "user",
-  KYC: "kyc",
-  PENDING_PURCHASE: "pending_purchase",
-  PENDING_REDEMPTION: "pending_redemption",
-  PENDING_SWITCH: "pending_switch",
-  SIPS: "sips",
-  DIYSTORE_FUNDINFO: "diystore_fundInfo",
-  REPORTS_SWITCH_FUND_TO: "reports_switch_fund_to",
-  PAUSE_SIP: "pause-sip",
-  SELECTED_SIP: "selected-sip",
-  PAUSE_REQUEST_DATA: "pause-request-data",
-  MF_INVEST_DATA: "mf_invest_data",
-  REPORTS_SELECTED_FUND: "reports_selected_fund",
-};
-
 export const PATHNAME_MAPPER = {
   invest: '/invest',
   landing: '/',
@@ -277,10 +260,5 @@ export const DL_DOCS = [
   {name: 'Pan Card', icon: 'ic_pan_card'},
   {name: 'Address Details', icon: 'ic_address_details'}
 ]
-
-export const companyDetails = {
-  NAME: "Finwizard technology Private Ltd.",
-  ADDRESS: "Queens Paradise, No. 16/1, 1st Floor, Curve Rd, Shivaji Nagar, Bengaluru, Karnataka 560051"
-}
 
 export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];

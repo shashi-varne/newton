@@ -273,7 +273,7 @@ class NpsIdentity extends Component {
         banner={true}
         bannerText={this.bannerText()}
       >
-        {!selfie_needed && (
+        {selfie_needed && (
           <div className="image-prev-container" data-aid='nps-image-prev-block'>
             <div className="heading" data-aid='nps-share-your-selfie'>Share your selfie</div>
             <div className="display-flex">

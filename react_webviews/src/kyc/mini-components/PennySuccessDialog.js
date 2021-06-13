@@ -18,7 +18,7 @@ const PennySuccessDialog = ({ isOpen, redirect }) => {
     >
       <DialogContent className="penny-failed-dialog-content" data-aid='kyc-penny-failed-dialog-content'>
         <div className="title" data-aid='kyc-title'>
-          <div className="text">Bank added successfully</div>
+          <div className="text">Bank is added!</div>
           <img
             src={require(`assets/${productName}/ic_bank_added.svg`)}
             alt=""
@@ -26,7 +26,7 @@ const PennySuccessDialog = ({ isOpen, redirect }) => {
           />
         </div>
         <div className="subtitle" data-aid='kyc-subtitle'>
-          Now, tell us your trading experience in the next step
+          Hurrah! Your bank account is added. Invest securely and safely with us.
         </div>
         <Button className="button bg-full" onClick={() => redirect()} data-aid='continue-btn'>
           CONTINUE

@@ -122,7 +122,7 @@ const PaymentCallback = (props) => {
           </div>
         )}
         <div className="contact-us" data-aid='contact-us'>
-          <div>For any query, react us at</div>
+          <div>For any query, reach us at</div>
           <div className="info" data-aid='info'>
             <div className="text border-right">{config.mobile}</div>
             <div className="text">{config.email}</div>

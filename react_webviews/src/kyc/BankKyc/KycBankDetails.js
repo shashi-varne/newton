@@ -325,7 +325,7 @@ const KycBankDetails = (props) => {
             />
             <main data-aid='kyc-enter-bank-account-details'>
               <Input
-                label="Account holder name"
+                label="Account Holder name"
                 class="input"
                 value={name || ""}
                 error={form_data.name_error ? true : false}
@@ -336,7 +336,7 @@ const KycBankDetails = (props) => {
                 id="name"
               />
               <TextField
-                label="IFSC code"
+                label="IFSC Code"
                 id="ifsc_code"
                 className="input"
                 value={bankData.ifsc_code}
@@ -360,7 +360,7 @@ const KycBankDetails = (props) => {
                 disabled={isApiRunning || disableFields.ifsc_code_disabled || ifscDisabled}
               />
               <Input
-                label="Account number"
+                label="Account Number"
                 class="input"
                 value={bankData.account_number}
                 error={form_data.account_number_error ? true : false}
@@ -373,7 +373,7 @@ const KycBankDetails = (props) => {
                 disabled={isApiRunning || disableFields.account_number_disabled}
               />
               <Input
-                label="Re-enter account number"
+                label="Confirm Account Number"
                 class="input"
                 value={bankData.c_account_number}
                 error={form_data.c_account_number_error ? true : false}
@@ -393,7 +393,7 @@ const KycBankDetails = (props) => {
                   helperText={form_data.account_type_error}
                   options={accountTypes}
                   id="account_type"
-                  label="Account type"
+                  label="Account Type"
                   isAOB={true}
                   value={bankData.account_type || ""}
                   name="account_type"

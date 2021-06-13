@@ -85,19 +85,19 @@ class FundDetail extends Component {
               )}
             </div>
             <p className="overview" data-aid='nfo-overview'>
-              <b>Overview: </b>
+              <b>Overview:</b>
               {fund.overview}
             </p>
             <p className="date" data-aid='nfo-date'>
-              <b>Allotment date: </b>
+              <b>Allotment date:</b>
               {fund.allotment_date}
             </p>
             <p className="lock-in" data-aid='nfo-lock-in'>
-              <b>Lock-in: </b>
+              <b>Lock-in:</b>
               {getFormattedDate(fund.lockin_in, true)}
             </p>
             <p className="load" data-aid='nfo-load'>
-              <b>Exit load: </b>
+              <b>Exit load:</b>
               {fund.exit_load === 0 ? "Nil" : fund.exit_load}
             </p>
             <p className="disclosure" data-aid='nfo-disclosure'>
@@ -105,7 +105,7 @@ class FundDetail extends Component {
               {fund.redemption_disclosure}
             </p>
             <p className="more" data-aid='nfo-more'>
-              <b>Read more: </b>{" "}
+              <b>Read more:</b>{" "}
               <a target="_blank" href={fund.sid_link}>
                 {fund.sid_link}
               </a>

@@ -253,9 +253,9 @@ const KycUploadDocuments = (props) => {
           </div>
         </div>
         <main data-aid='kyc-upload-documents'>
-          <div className="doc-title" data-aid='kyc-doc-title'>Select document for verification</div>
+          <div className="doc-title" data-aid='kyc-doc-title'>Select the document for verification</div>
           <div className="subtitle" data-aid='kyc-subtitle'>
-            Make sure your name, account number and IFSC code is clearly visible in the document
+            Ensure your name is clearly visible in the document
           </div>
           <div className="kyc-upload-doc-options" data-aid='kyc-upload-doc-options'>
             {VERIFICATION_DOC_OPTIONS.map((data, index) => {
@@ -293,22 +293,22 @@ const KycUploadDocuments = (props) => {
           </div>
           {!isEmpty(selected) && selected >= 0 && (
              <div className="docs-image-container">
-             <div className="preview">
-               {file && fileToShow ? (
-                 <img
-                   className="preview-image"
-                   src={fileToShow}
-                   onLoad={handleImageLoad}
-                   alt="Uploaded Document"
-                 />
+              <div className="preview">
+                {file && fileToShow ? (
+                  <img
+                    className="preview-image"
+                    src={fileToShow}
+                    onLoad={handleImageLoad}
+                    alt="Uploaded Document"
+                  />
                ) : (
-                 <img
-                   className="sign-img"
-                   src={require("assets/signature_icon.svg")}
-                   alt=""
+                  <img
+                    className="sign-img"
+                    src={require("assets/signature_icon.svg")}
+                    alt=""
                  />
                )}
-             </div>              
+              </div>              
               {isWeb ? (
                 <div className="web-upload-container">
                   <div
