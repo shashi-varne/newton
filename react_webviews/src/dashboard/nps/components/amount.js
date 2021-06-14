@@ -70,6 +70,7 @@ class EnterAmount extends Component {
   render() {
     return (
       <Container
+        data-aid='nps-enter-amount-screen'
         buttonTitle="SHOW FUNDS"
         showLoader={this.state.show_loader}
         title="Enter Amount"
@@ -81,11 +82,11 @@ class EnterAmount extends Component {
           goBack: this.goBack
         }}
       >
-        <div className="enter-amount">
+        <div className="enter-amount" data-aid='nps-enter-amount'>
           <section className="page nps">
             <div className="container-padding">
               <div className="nps-card">
-                <div className="inner-container">
+                <div className="inner-container" data-aid='nps-inner-container'>
                   <div className="title">Enter amount to invest in NPS</div>
                   <Input
                     error={!!this.state.amount_error}
@@ -98,17 +99,18 @@ class EnterAmount extends Component {
                     onChange={this.handleChange("amount")}
                   />
                 </div>
-                <div className="help-text">
+                <div className="help-text" data-aid='nps-help-text'>
                   Save tax upto:{" "}
                   <span style={{ fontWeight: 500 }}>
                     {formatAmountInr(this.state.taxsaved || "0")}
                   </span>
                 </div>
 
-                <div className="tags">
+                <div className="tags" data-aid='nps-tags'>
                   <div className="tag-container">
                     {[...Array(3)].map((value = 20000, index) => (
                       <div
+                        data-aid={`nps-amt-${index+1}`}
                         key={index}
                         id={value + (index * 10000)}
                         onClick={this.handleChange("custom-amt")}

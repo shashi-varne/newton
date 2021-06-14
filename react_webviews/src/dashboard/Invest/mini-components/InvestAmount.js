@@ -186,6 +186,7 @@ const InvestAmount = (props) => {
 
   return (
     <Container
+      data-aid='i-want-to-invest-screen'
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
       title={title}
@@ -194,9 +195,9 @@ const InvestAmount = (props) => {
       handleClick={goNext}
       classOverRideContainer='pr-container'
     >
-      <section className='invest-amount-common'>
-        <div className='invest-amount-input'>
-        <p className="invest-amount-input-head">
+      <section className='invest-amount-common' data-aid='invest-amount-common'>
+        <div className='invest-amount-input' data-aid='invest-amount-input'>
+        <p className="invest-amount-input-head" data-aid='invest-amount-input-head'>
             {funnelGoalData.itype === "saveforgoal"
               ? " I can set aside"
               : "I want to invest"}
@@ -215,7 +216,7 @@ const InvestAmount = (props) => {
               pattern='[0-9]*'
             />
           </div>
-          <p className='invest-amount-input-duration'>
+          <p className='invest-amount-input-duration' data-aid='invest-amount-input-duration'>
             {(
               investTypeDisplay === 'sip' ||
               funnelGoalData.itype === 'saveforgoal'
@@ -225,13 +226,13 @@ const InvestAmount = (props) => {
           </p>
         </div>
         {!riskEnabledFunnel &&
-          <div className='invest-amount-corpus'>
+          <div className='invest-amount-corpus' data-aid='invest-amount-corpus'>
             <div className='invest-amount-corpus-duration'>
               {funnelGoalData.id === 'savetax' ?
                 `till Mar ${saveTaxYear} to save tax upto:` : `Corpus in ${year}`
               }
             </div>
-            <div className='invest-amount-corpus-amount'>{numDifferentiationInr(corpus)}</div>
+            <div className='invest-amount-corpus-amount' data-aid='invest-amount-corpus-amount'>{numDifferentiationInr(corpus)}</div>
           </div>
         }
       </section>

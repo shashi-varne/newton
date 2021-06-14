@@ -46,13 +46,13 @@ const Filter = ({
 
   return (
     <DiyDialog close={close} open={isOpen}>
-      <section className="diy-bottom-sheet diy-filter-bottom-sheet">
-        <header className="header">
+      <section className="diy-bottom-sheet diy-filter-bottom-sheet" data-aid='diy-filter-bottom-sheet'>
+        <header className="header" data-aid='diy-filter-header'>
           <b className="text">Filter</b>
           <div onClick={reset} className="reset">Reset</div>
         </header>
-        <main className="filter">
-          <div className="title">
+        <main className="filter" data-aid='filter-main'>
+          <div className="title" data-aid='filter-title'>
             <ul>
               <li
                 role="button"
@@ -80,7 +80,7 @@ const Filter = ({
               </li>
             </ul>
           </div>
-          <div className="body">
+          <div className="body" data-aid='diy-body'>
             {activeTab === 'sort' && (
               <SortFilter
                 localSortFilter={localSortFilter}
@@ -101,8 +101,9 @@ const Filter = ({
             )}
           </div>
         </main>
-        <footer>
+        <footer data-aid='filter-footer'>
           <Button
+            dataAid='apply-btn'
             fullWidth
             onClick={apply}
             buttonTitle="Apply"

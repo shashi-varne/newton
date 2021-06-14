@@ -98,12 +98,12 @@ const FundswiseSummary = (props) => {
   };
 
   return (
-    <Container events={sendEvents("just_set_events")} title="Funds" noFooter={true} skelton={showSkelton}>
-      <div className="reports-fundswise-summary">
+    <Container events={sendEvents("just_set_events")} title="Funds" noFooter={true} skelton={showSkelton} data-aid='reports-fundswise-summary-screen'>
+      <div className="reports-fundswise-summary" data-aid='reports-fundswise-summary'>
         {!isEmpty(funds) &&
           funds.map((fund, index) => {
             return (
-              <div className="summary-fund-content" key={index}>
+              <div className="summary-fund-content" key={index} data-aid='summary-fund-content'>
                 <h5>
                   <div className="text" onClick={() => getFundDetails(fund, index)}>
                     {fund.mf.friendly_name}
@@ -122,7 +122,7 @@ const FundswiseSummary = (props) => {
                       Nav: ₹ {fund.mf.curr_nav.toFixed(4)}
                     </span>
                   </div>
-                  <div className="fundswise-summary-details">
+                  <div className="fundswise-summary-details" data-aid='reports-fundswise-summary-details'>
                     <div className="content">
                       <h5>
                         {formatAmountInr(fund.current)}

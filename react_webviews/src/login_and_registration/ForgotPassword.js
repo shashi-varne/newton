@@ -53,7 +53,7 @@ class ForgotPassword extends Component {
   render() {
     let { loginType, form_data, isApiRunning, productName } = this.state;
     return (
-      <div className="login">
+      <div className="login" data-aid='login'>
         <div className="header">
           <img src={require(`assets/${config.logo}`)} alt="logo" />
         </div>
@@ -64,15 +64,16 @@ class ForgotPassword extends Component {
               alt="login"
             />
           </div>
-          <div className="login-form">
-            <div className="header-text">RESET PASSWORD</div>
-            <div className="login-type">
+          <div className="login-form" data-aid='login-form'>
+            <div className="header-text" data-aid='reset-password-text'>RESET PASSWORD</div>
+            <div className="login-type" data-aid='login-type'>
               <div
                 className="text"
                 style={{
                   fontWeight: loginType === "mobile" ? "bold" : "normal",
                 }}
                 onClick={() => this.setLoginType("mobile")}
+                data-aid='mobile-text'
               >
                 MOBILE
                 {loginType === "mobile" && <div className="underline"></div>}
@@ -84,16 +85,17 @@ class ForgotPassword extends Component {
                     fontWeight: loginType === "email" ? "bold" : "normal",
                   }}
                   onClick={() => this.setLoginType("email")}
+                  data-aid='email-text'
                 >
                   EMAIL
                   {loginType === "email" && <div className="underline"></div>}
                 </div>
               )}
             </div>
-            <div className="form">
+            <div className="form"  data-aid='form'>
               {loginType === "mobile" && (
                 <div className="form-field">
-                  <div className="country-code">
+                  <div className="country-code"  data-aid='country-code'>
                     <DropdownWithoutIcon
                       onChange={this.handleChange("code")}
                       error={!!form_data.code_error ? true : false}
@@ -138,6 +140,7 @@ class ForgotPassword extends Component {
                 </div>
               )}
               <Button
+                dataAid='reset-password-btn'
                 buttonTitle="RESET PASSWORD"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
@@ -151,7 +154,7 @@ class ForgotPassword extends Component {
                 }}
               />
             </div>
-            <div className="footer" onClick={() => this.navigate("login")}>
+            <div className="footer"  data-aid='forgot-password-footer' onClick={() => this.navigate("login")}>
               EXISTING USER? <span>LOGIN</span>
             </div>
           </div>

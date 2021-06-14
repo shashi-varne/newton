@@ -82,6 +82,7 @@ const LayoutButton = ({
 
   return (
     <WVButton
+      dataAid={props.dataAid}
       {...BUTTON_TYPE_PROPS[type]}
       fullWidth={true}
       autoFocus={true}

@@ -35,6 +35,7 @@ export default class NpsPaymentRedirect extends Component {
   render() {
     return (
       <Container
+        data-aid='nps-redirect-screen'
         classOverRide="pr-error-container"
         fullWidthButton
         hideInPageTitle

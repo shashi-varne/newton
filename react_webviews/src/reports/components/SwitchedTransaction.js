@@ -63,17 +63,18 @@ const SwitchedTransaction = (props) => {
 
   return (
     <Container
+      data-aid='reports-pending-switch-screen'
       events={sendEvents("just_set_events")}
       noFooter={true}
       title="Pending Switch"
       skelton={showSkelton}
     >
-      <div className="report-purchase">
+      <div className="report-purchase" data-aid='report-purchase'>
         {!isEmpty(transactions) &&
           transactions.map((switched, index) => {
             return (
-              <div className="purchased" key={index}>
-                <div className="switch-head">
+              <div className="purchased" key={index} data-aid='reports-purchased'>
+                <div className="switch-head" data-aid='switch-head'>
                   <div className="switch-step">
                     <div className="outline">
                       <div className="circle"></div>
@@ -90,7 +91,7 @@ const SwitchedTransaction = (props) => {
                     <div>{switched.to_mf.friendly_name}</div>
                   </div>
                 </div>
-                <div className="progress-bar">
+                <div className="progress-bar" data-aid='reports-progress-bar'>
                   <ProgressStep isCompleted={true} text="SWITCH REQUESTED" />
                   <ProgressStep
                     isCompleted={
@@ -105,7 +106,7 @@ const SwitchedTransaction = (props) => {
                   />
                   <ProgressStep isCompleted={false} text="SWITCH CONFIRMED" />
                 </div>
-                <div className="check-process">
+                <div className="check-process" data-aid='reports-check-process'>
                   <div className="text" onClick={() => handleProcess(switched)}>
                     VIEW DETAILS
                   </div>

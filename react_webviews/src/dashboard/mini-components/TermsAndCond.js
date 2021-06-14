@@ -62,15 +62,16 @@ const TermsAndCond = () => {
       <div className='recommendations-disclaimer'>
         <div className='recommendations-disclaimer-tc'>
           <img alt='check_mark' src={check_mark} width='15' />
-          <span>
+          <span data-aid='terms-and-conditions'>
             By clicking on the button below, I agree that I have read and accepted the{' '}
             {isWeb && productName !== 'finity' && (
               <>
-                <a target='_blank' rel='noopener noreferrer' href={config.termsLink}>
+                <a target='_blank' rel='noopener noreferrer' href={config.termsLink} data-aid='terms-offer-link'>
                   terms & conditions
                 </a>{' '}
                 and understood the
                 <a
+                  data-aid='scheme-offer-link'
                   target='_blank'
                   rel='noopener noreferrer'
                   href={config.schemeLink}
@@ -82,18 +83,18 @@ const TermsAndCond = () => {
             )}
             {isWeb && productName === 'finity' && (
               <>
-                <span className='tc_link' onClick={handleClickOpen('terms')}>
+                <span className='tc_link' data-aid='terms-link' onClick={handleClickOpen('terms')}>
                   terms
                 </span>{' '}
                 and understood the
-                <span className='tc_link' onClick={handleClickOpen('scheme')}>
+                <span className='tc_link' data-aid='scheme-link' onClick={handleClickOpen('scheme')}>
                   {' '}
                   scheme offer documents
                 </span>
               </>
             )}
             {!isWeb && productName === 'finity' && (
-              <span className='tc_link' onClick={handleClickOpen('terms')}>
+              <span className='tc_link' data-aid='terms-link' onClick={handleClickOpen('terms')}>
                 terms
               </span>
             )}
@@ -136,8 +137,9 @@ const DialogTC = ({ open, handleClose, data, docType }) => {
         onClose={handleClose}
         aria-labelledby='responsive-dialog-title'
         fullWidth
+        data-aid='responsive-dialog-title'
       >
-        <DialogTitle classes={{ root: 't_and_c_title' }}>{DOC_TITLES[docType] || ""}</DialogTitle>
+        <DialogTitle data-aid='terms-condition-title' classes={{ root: 't_and_c_title' }}>{DOC_TITLES[docType] || ""}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {data ? (
@@ -155,6 +157,7 @@ const DialogTC = ({ open, handleClose, data, docType }) => {
               buttonTitle="DONE"
               onClick={handleClose}
               style={{margin: "0 auto"}}
+              data-aid='done-btn'
             />
           </DialogActions>
         )}

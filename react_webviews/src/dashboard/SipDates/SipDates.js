@@ -174,13 +174,14 @@ class SipDates extends Component {
     } = this.state;
     return (
       <Container
+        data-aid='select-investment-date-screen'
         skelton={this.state.show_loader}
         handleClick={this.handleClick}
         buttonTitle={buttonTitle}
         title="Select investment date"
         showLoader={isApiRunning}
       >
-        <div className="sip-dates">
+        <div className="sip-dates" data-aid='select-investment-date'>
           {sips &&
             sips.map((sip, index) => {
               let options = [];
@@ -188,14 +189,14 @@ class SipDates extends Component {
                 options.push({ name: dateOrdinal(date) });
               });
               return (
-                <div className="card content" key={index}>
-                  <div className="text">
+                <div className="card content" key={index} data-aid='card-content'>
+                  <div className="text" data-aid='text'>
                     <div className="title">{sip.fundName}</div>
                     <div className="subtitle">
                       {formatAmountInr(sip.amount)}
                     </div>
                   </div>
-                  <div className="mid-content">Investment date</div>
+                  <div className="mid-content" data-aid='mid-content'>Investment date</div>
                   <DropdownInModal
                     options={options}
                     header_title="Available dates"

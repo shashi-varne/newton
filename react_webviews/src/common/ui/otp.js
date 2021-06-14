@@ -68,7 +68,7 @@ class OtpDefaultClass extends Component {
 
   render() {
     return (
-      <div>
+      <div data-aid='opt-input-container'>
         <div>
           <OtpInput
             numInputs={4}
@@ -110,9 +110,10 @@ class OtpDefaultClass extends Component {
               onClick={this.resendOtp}
               style={{ color: '#4A494A', margin: '0 0 0 10px', fontSize: 14, textAlign: "center" }}
               className={this.props.parent.class}
+              data-aid='opt-resend-btn'
             >
               Didn’t receive?
-              <span style={{ color: getConfig().styles.primaryColor, fontWeight: 500, cursor: 'pointer' }}>
+              <span style={{ color: getConfig().styles.primaryColor, fontWeight: 500, cursor: 'pointer' }} data-aid='resend-opt-text'>
                 &nbsp; Resend OTP
               </span>
             </div>

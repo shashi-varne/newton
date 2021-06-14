@@ -132,8 +132,7 @@ export function commonRender(props_base) {
 
     if (this.state.mounted) {
         return (
-
-   <div className={this.addContainerClass(props_base)}>
+            <div className={this.addContainerClass(props_base)} data-aid={`${this.props['data-aid']}-parent-container`}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && !this.props.loaderWithData && <Header
@@ -603,10 +602,10 @@ export function calcReadtime(endtime) {
 export function new_header_scroll() {
     return (
 
-        <div id="header-title-page"
+        <div id="header-title-page" data-aid='header-title-page'
             style={this.props.styleHeader}
             className={`header-title-page  ${this.props.classHeader}`}>
-            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }}>
+            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }}  data-aid='header-title-page-text'>
                 {this.props.title}
             </div>
 

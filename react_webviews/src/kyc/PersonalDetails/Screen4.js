@@ -31,7 +31,7 @@ const PersonalDetails4 = (props) => {
   const type = props.type || "";
   const keysToCheck = ["dob", "name", "relationship"];
 
-  const { kyc, isLoading  } = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -181,10 +181,11 @@ const PersonalDetails4 = (props) => {
       count={type === "digilocker" ? 3 : 4}
       current={type === "digilocker" ? 3 : 4}
       total={type === "digilocker" ? 3 : 4}
+      data-aid='kyc-personal-details-screen-4'
     >
       <div className="kyc-nominee">
-        <main>
-          <div className="nominee-checkbox">
+        <main data-aid='kyc-nominee-details'>
+          <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
               checked={isChecked}
@@ -221,7 +222,7 @@ const PersonalDetails4 = (props) => {
             id="dob"
             disabled={isChecked || isApiRunning}
           />
-          <div className="input">
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}

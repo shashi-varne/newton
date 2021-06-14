@@ -81,6 +81,7 @@ const RiskCustomize = (props) => {
 
   return (
     <Container
+      data-aid='customise-equity-debt-distribution-screen'
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle='Save Changes'
@@ -96,8 +97,8 @@ const RiskCustomize = (props) => {
             root: 'risk-info'
           }}
         >
-          <div className="risk-info-title">Info</div>
-          <div className="risk-info-desc">
+          <div className="risk-info-title" data-aid='risk-info-title'>Info</div>
+          <div className="risk-info-desc" data-aid='risk-info-desc'>
             We do not recommend setting custom equity & debt 
             distribution if you are unfamiliar with market dynamics.
           </div>
