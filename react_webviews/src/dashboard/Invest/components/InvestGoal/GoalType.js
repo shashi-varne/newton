@@ -33,18 +33,19 @@ const GoalType = (props) => {
   }
   return (
     <Container
+      data-aid='goal-type-screen'
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
       title="Save for a Goal"
       noFooter
       classOverRideContainer='pr-container'
     >
-     <section className="invest-goal-container">
+     <section className="invest-goal-container" data-aid='invest-goal-page'>
        <div className='title'>What is the purpose of this goal?</div>
-       <div className="invest-goal-list-type">
+       <div className="invest-goal-list-type" data-aid='invest-goal-list-type'>
         {
           Object.keys(goalTypes).map((key,idx) => {
-            return <div key={idx} className="invest-goal-list-item" onClick={goNext(goalTypes[key].name)}>
+            return <div key={idx} className="invest-goal-list-item" onClick={goNext(goalTypes[key].name)} data-aid={`invest-goal-list-item-${idx+1}`}>
               <div>
                 <img src={goalTypes[key].icon} alt={key}/>
                 </div>

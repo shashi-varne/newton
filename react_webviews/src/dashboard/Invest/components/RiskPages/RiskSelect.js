@@ -112,6 +112,7 @@ const RiskSelect = ({
 
   return (
     <Container
+      data-aid='please-select-your-risk-profile-screen'
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle="SHOW MY FUNDS"
@@ -121,14 +122,14 @@ const RiskSelect = ({
       handleClick={goNext}
       classOverRideContainer='pr-container'
     > 
-      <div className="risk-select-header">
+      <div className="risk-select-header" data-aid='pick-risk-profile'>
         <span>Please select your risk profile</span>
         <div className="risk-sh-info" onClick={showInfo}>
           Info
         </div>
       </div>
       {canSkip &&
-        <div className="risk-select-skip" onClick={() => goNext(true)}>Skip for now</div>
+        <div className="risk-select-skip" data-aid='risk-select-skip' onClick={() => goNext(true)}>Skip for now</div>
       }
       <div style={{ marginTop: '30px' }}>
         <FSelect
@@ -154,10 +155,10 @@ export default RiskSelect;
 
 const RiskOption = ({ data }) => {
   return [
-    <div className="risk-opt-title">
+    <div className="risk-opt-title" data-aid='risk-opt-title'>
       {data.name}
     </div>,
-    <div className="risk-opt-desc">
+    <div className="risk-opt-desc" data-aid='risk-opt-descy'>
       {data.desc}
     </div>
   ];

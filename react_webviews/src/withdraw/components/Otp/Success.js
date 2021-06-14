@@ -38,16 +38,16 @@ const Success = (props) => {
   };
 
   return (
-    <Container hidepageTitle buttonTitle="Okay" handleClick={goTo} headerData={{icon: "close"}} events={sendEvents("just_set_events")}>
-      <section id="withdraw-otp-success">
+    <Container hidepageTitle buttonTitle="Okay" handleClick={goTo} headerData={{icon: "close"}} events={sendEvents("just_set_events")} data-aid='opt-success-screen' >
+      <section id="withdraw-otp-success" data-aid='withdraw-otp-success'>
         <img
           className="thumb-img"
           src={require(`assets/thumb.svg`)}
           alt="Successful Operation"
           width="100"
         />
-        <div className="message">{pageHead} request placed</div>
-        <div className="withdraw-success-msg" dangerouslySetInnerHTML={{ __html: successMessage }}></div>
+        <div className="message" data-aid='withdraw-message-text'>{pageHead} request placed</div>
+        <div className="withdraw-success-msg" dangerouslySetInnerHTML={{ __html: successMessage }} data-aid='withdraw-success-msg'></div>
       </section>
     </Container>
   )

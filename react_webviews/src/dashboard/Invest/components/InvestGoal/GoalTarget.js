@@ -75,21 +75,22 @@ const GoalTarget = (props) => {
 
   return (
     <Container
+      data-aid='goal-target-screen'
       classOverRide='pr-error-container'
       title='Save for a Goal'
       noFooter
       classOverRideContainer='pr-container'
       skelton={loader}
     >
-      <section className='invest-goal-save-container'>
-        <div className='invest-goal-save-header'>
+      <section className='invest-goal-save-container' data-aid='invest-goal-save-page'>
+        <div className='invest-goal-save-header' data-aid='invest-goal-save-header'>
           How much money do you want to save for your {SUBTYPE_NAME_MAP[subtype]}?
         </div>
 
-        <div className='invest-goal-save-list'>
+        <div className='invest-goal-save-list' data-aid='invest-goal-save-list'>
           {SAVE_GOAL_MAPPER[subtype]?.map((el, idx) => {
             return (
-              <div key={idx} className='invest-goal-save-item' onClick={handleInvestedAmount(el)}>
+              <div key={idx} className='invest-goal-save-item' onClick={handleInvestedAmount(el)} data-aid={`invest-goal-save-item-${idx+1}`}>
                 <img src={el.icon} alt={el.name} width='80' />
                 <p>{el.name}</p>
                 <div className='invest-goal-save-item-corpus'>
@@ -100,7 +101,7 @@ const GoalTarget = (props) => {
             );
           })}
         </div>
-        <div className='invest-goal-set-target' onClick={setYourTarget}>
+        <div className='invest-goal-set-target' data-aid='invest-goal-set-target' onClick={setYourTarget}>
           Let me set my target
         </div>
       </section>

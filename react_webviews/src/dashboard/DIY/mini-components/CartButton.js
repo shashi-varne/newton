@@ -6,9 +6,9 @@ import "./mini-components.scss";
 
 const DiyCartButton = (props) => {
   return (
-    <Button variant="raised" color="secondary" {...props}>
+    <Button variant="raised" color="secondary" {...props} data-aid='cart-btn'>
       <img src={add_cart_icon} alt="Add to cart" />
-      <div className="title">
+      <div className="title" data-aid='cart-btn-text'>
         Cart{props.cartlength ? `(${props.cartlength})` : null}
       </div>
     </Button>

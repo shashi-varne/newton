@@ -88,6 +88,7 @@ const RiskModify = ({
 
   return (
     <Container
+      data-aid='change-risk-profile-screen'
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle='Proceed'
@@ -96,15 +97,15 @@ const RiskModify = ({
       handleClick={toggleConfirmDialog}
       classOverRideContainer='pr-container'
     >
-      <div style={{ marginTop: '10px' }}>
+      <div style={{ marginTop: '10px' }} data-aid='risk-modify'>
         <InfoBox
           image={require(`assets/${productName}/info_icon.svg`)}
           classes={{
             root: 'risk-info'
           }}
         >
-          <div className="risk-info-title">Note</div>
-          <div className="risk-info-desc">
+          <div className="risk-info-title" data-aid='risk-info-title'>Note</div>
+          <div className="risk-info-desc" data-aid='risk-info-desc'>
             If you change your risk profile, fund recommendations will change accordingly.
           </div>
         </InfoBox>
@@ -119,7 +120,7 @@ const RiskModify = ({
           />
         }
         <div
-          className="risk-customize-cta"
+          className="risk-customize-cta" data-aid='risk-customize-cta'
           onClick={() => navigate(`/invest/${funnelGoalData.id}/risk-customize`)}>
           Customise EQUITY to DEBT DISTRIBUTION
         </div>
@@ -145,13 +146,13 @@ export default RiskModify;
 
 const RiskOption = ({ data }) => {
   return [
-    <div className="risk-opt-title">
+    <div className="risk-opt-title" data-aid='risk-opt-title'>
       {data.rp_indicator}
     </div>,
-    <div className="risk-opt-desc">
+    <div className="risk-opt-desc" data-aid='risk-opt-desc'>
       {data.subtitle}
     </div>,
-    <div className="risk-opt-split">
+    <div className="risk-opt-split" data-aid='risk-opt-split'>
       <span>Distribution: </span>
       {data.equity}% Equity
       &nbsp;&nbsp;|&nbsp;&nbsp;

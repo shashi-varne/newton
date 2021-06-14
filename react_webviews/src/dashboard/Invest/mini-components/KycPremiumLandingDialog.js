@@ -21,9 +21,10 @@ const KycPremiumLandingDialog = ({
       aria-describedby="verification-failed-dialog"
       className="verification-failed-dialog"
       id="invest-bottom-dialog"
+      data-aid='invest-bottom-dialog'
     >
-      <DialogContent className="verification-failed-dialog-content kyc-premium-content">
-        <div className="title">
+      <DialogContent className="verification-failed-dialog-content kyc-premium-content" data-aid='verification-failed-dialog-content'>
+        <div className="title" data-aid='dialog-title'>
           <div className="text">{data.popup_header}</div>
           {data.icon && (
             <img
@@ -33,18 +34,18 @@ const KycPremiumLandingDialog = ({
             />
           )}
         </div>
-        <div className="subtitle" id="subtitle">
+        <div className="subtitle" id="subtitle" data-aid='dialog-subtitle'>
           {data.bold_text && <b>{data.bold_text}</b>} {data.popup_message}
         </div>
         {data.status === "ground_premium" && (
-          <div className="bottom-info">
+          <div className="bottom-info" data-aid='bottom-info'>
             <div className="bottom-info-box">
               <img
                 src={require(`assets/${productName}/ic_instant.svg`)}
                 alt=""
                 className="img"
               />
-              <div className="bottom-info-content">Instant investment</div>
+              <div className="bottom-info-content" data-aid='instant-investment'>Instant investment</div>
             </div>
             <div className="bottom-info-mid"></div>
             <div className="bottom-info-box">
@@ -53,17 +54,17 @@ const KycPremiumLandingDialog = ({
                 alt=""
                 className="img"
               />
-              <div className="bottom-info-content">No document asked</div>
+              <div className="bottom-info-content" data-aid='no-document-asked'>No document asked</div>
             </div>
           </div>
         )}
         <div className="action">
           {!data.oneButton && (
-            <Button className="button no-bg" onClick={() => cancel()}>
+            <Button className="button no-bg" onClick={() => cancel()} data-aid='not-now-btn'>
               NOT NOW
             </Button>
           )}
-          <Button className="button bg-full" onClick={() => handleClick()}>
+          <Button className="button bg-full" onClick={() => handleClick()} data-aid='dialog-btn'>
             {data.button_text}
           </Button>
         </div>

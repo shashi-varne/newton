@@ -16,10 +16,11 @@ const SuccessDialog = ({ isOpen, handleClick, sips = [], close }) => {
       aria-describedby="success-dialog"
       className="invest-common-dialog"
       id="invest-bottom-dialog"
+      data-aid='invest-bottom-dialog'
       onClose={close}
     >
-      <DialogContent className="dialog-content">
-        <div className="head-bar">
+      <DialogContent className="dialog-content" data-aid='dialog-content'>
+        <div className="head-bar" data-aid='head-bar'>
           <div className="text-left">
             Date{sips.length !== 1 && <>s</>} confirmed
           </div>
@@ -28,14 +29,14 @@ const SuccessDialog = ({ isOpen, handleClick, sips = [], close }) => {
             alt=""
           />
         </div>
-        <div className="subtitle success-text-message">
+        <div className="subtitle success-text-message" data-aid='success-text-message'>
           Your monthly SIP investment
           {sips.length !== 1 && <span>s</span>} date
           {sips.length !== 1 && <span>s</span>}
           <span>{sips.length === 1 ? " is " : " are "}</span>
           {sips.map((sip, index) => {
             return (
-              <span key={index}>
+              <span key={index} data-aid={`sips-${index+1}`}>
                 {index === sips.length - 1 && index !== 0 && (
                   <span>&nbsp;and</span>
                 )}
@@ -54,6 +55,7 @@ const SuccessDialog = ({ isOpen, handleClick, sips = [], close }) => {
           onClick={handleClick}
           classes={{ button: "invest-dialog-button" }}
           buttonTitle="CONTINUE TO PAYMENT"
+          dataAid='continue-to-payment'
         />
       </DialogActions>
     </Dialog>

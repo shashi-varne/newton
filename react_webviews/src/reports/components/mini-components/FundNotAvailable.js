@@ -14,11 +14,11 @@ const FundNotAvailable = ({ isOpen, data, close }) => {
       id="reports-no-fund-message-dialog"
     >
       <DialogContent className="reports-no-fund-message-dialog-content">
-        <div className="text">
+        <div className="text" data-aid='text'>
           Sorry! {data.mfname} is no longer available for purchase
         </div>
         <div className="align-right">
-          <Button onClick={() => close()}>OKAY</Button>
+          <Button data-aid='okay-btn' onClick={() => close()}>OKAY</Button>
         </div>
       </DialogContent>
     </Dialog>

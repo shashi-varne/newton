@@ -22,6 +22,7 @@ const Type = (props) => {
 
   return (
     <Container
+      data-aid='how-would-you-like-to-invest-screen'
       showLoader={false}
       buttonTitle="CONTINUE"
       handleClick={handleClick}

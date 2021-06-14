@@ -78,8 +78,8 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
   };
   return (
     <SlidingDialog id={id} open={open} close={close} {...props} onClick={close}>
-      <section className="kyc-dl-aadhaar-dialog">
-        <div className="flex-between">
+      <section className="kyc-dl-aadhaar-dialog" data-aid='kyc-dl-aadhaar-dialog'>
+        <div className="flex-between" data-aid='aadhaar-heading'>
           <div className="heading">
             Please ensure your mobile no. is linked with Aadhaar
           </div>
@@ -96,6 +96,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
             variant="raised"
             onClick={handleProceed}
             fullWidth
+            data-aid='proceed-btn'
           >
             PROCEED
           </Button>

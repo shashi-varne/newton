@@ -76,8 +76,9 @@ const Landing = (props) => {
       title='Park Money'
       handleClick={fetchRecommendedFunds}
       classOverRideContainer='pr-container'
+      data-aid='park-monkey-screen'
     >
-      <section className='invest-amount-common'>
+      <section className='invest-amount-common' data-aid='park-monkey-page'>
         <InvestType
           baseData={timeOptionsData}
           selected={investTypeDisplay}
