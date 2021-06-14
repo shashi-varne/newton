@@ -28,7 +28,7 @@ const Logout = (props) => {
     }
   };
 
-  return <div className="logout">Logging out...</div>;
+  return <div className="logout" data-aid='logout-text'>Logging out...</div>;
 };
 
 export default Logout;

@@ -680,16 +680,17 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
+      data-aid='kyc-journey-screen'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
-        <div className="kyc-journey">
+        <div className="kyc-journey" data-aid='kyc-journey-data'>
           {journeyStatus === 'ground_premium' && (
             <div className="kyc-journey-caption">
               fast track your investment!
             </div>
           )}
           {kyc?.kyc_status === 'compliant' && (
-            <div className="kyc-pj-content">
+            <div className="kyc-pj-content" data-aid='kyc-compliant-pj-content'>
               <div className="left">
                 <div className="pj-header">Premium Onboarding</div>
                 <div className="pj-bottom-info-box">
@@ -721,7 +722,7 @@ const Journey = (props) => {
             </div>
           )}
           {show_aadhaar && (
-            <div className="kyc-pj-content">
+            <div className="kyc-pj-content" data-aid='kyc-non-compliant-pj-content'>
               <div className="left">
                 <div className="pj-header">Aadhaar KYC</div>
                 <div className="pj-sub-text">
@@ -756,15 +757,15 @@ const Journey = (props) => {
               />
             </div>
           )}
-          <div className="kyc-journey-title">{topTitle}</div>
+          <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
           {!show_aadhaar && (
-            <div className="kyc-journey-subtitle">
+            <div className="kyc-journey-subtitle" data-aid='kyc-non-dl-compliant-subtitle'>
               Please keep your PAN ({kyc?.pan?.meta_data?.pan_number}) and
               address proof handy to complete KYC
             </div>
           )}
           {kyc?.kyc_status === 'compliant' && !investmentPending && (
-            <div className="kyc-journey-subtitle">
+            <div className="kyc-journey-subtitle" data-aid='kyc-compliant-subtitle'>
               To unlock premium onboarding, complete these simple steps
             </div>
           )}
@@ -773,14 +774,16 @@ const Journey = (props) => {
             user.active_investment &&
             user.kyc_registration_v2 !== 'submitted' && (
               <Alert
+                dataAid='kyc-registration-v2-alertbox'
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."
                 title={`Hey ${user.name}`}
               />
             )}
-          <main className="steps-container">
+          <main data-aid='kyc-journey' className="steps-container">
             {kycJourneyData.map((item, idx) => (
               <div
+                data-aid={`kyc-${item.key}`}
                 className={
                   item.status === 'completed' ? 'step step__completed' : 'step'
                 }
@@ -805,7 +808,7 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  <div className="flex flex-between">
+                  <div className="flex flex-between" data-aid='kyc-field-value'>
                     <span className="field_key">
                       {item.title}
                       {item?.value ? ':' : ''}
@@ -817,6 +820,7 @@ const Journey = (props) => {
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
+                      data-aid='kyc-edit'
                       className="edit"
                       onClick={() =>
                         handleEdit(item.key, idx, item.isEditAllowed)
@@ -827,7 +831,7 @@ const Journey = (props) => {
                   )}
                 </div>
 
-                {item?.disc && <div className="disc">{item?.disc}</div>}
+                {item?.disc && <div className="disc" data-aid='kyc-disc'>{item?.disc}</div>}
               </div>
             ))}
           </main>

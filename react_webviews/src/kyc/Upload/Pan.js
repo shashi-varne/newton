@@ -192,13 +192,15 @@ const Pan = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload PAN"
+      data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
-          <div className="sub-title">
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
           <Alert
+            dataAid='kyc-upload-pan-alertbox'
             variant="attention"
             title={title}
             message={subTitle}
@@ -209,6 +211,7 @@ const Pan = (props) => {
           {!isWeb && (
             <div
               className="kyc-doc-upload-container"
+              data-aid="kyc-doc-upload-container"
             >
               {file && fileToShow && (
                 <img src={fileToShow} className="preview" alt="" />
@@ -230,6 +233,7 @@ const Pan = (props) => {
                     <button
                       data-click-type="camera-front"
                       onClick={() => handleUpload("open_camera")}
+                      data-aid="doc-camera-button"
                       className="kyc-upload-button"
                     >
                       {!file && (
@@ -245,7 +249,7 @@ const Pan = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" data-aid="doc-camera-text">open camera</div>
                     </button>
                   </div>
                   <div className="open-gallery">
@@ -254,9 +258,11 @@ const Pan = (props) => {
                       type="file"
                       className="kyc-upload"
                       onChange={handleChange('gallery')}
+                      data-aid="doc-gallery-input"
                     />
                     <button
                       onClick={() => handleUpload("open_gallery")}
+                      data-aid="doc-gallery-button"
                       className="kyc-upload-button"
                     >
                       {!file && !fileToShow && (
@@ -272,7 +278,7 @@ const Pan = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" data-aid="doc-gallery-text">Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -280,7 +286,10 @@ const Pan = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+              <div 
+                className="kyc-doc-upload-container" 
+                data-aid="web-kyc-doc-upload-container"
+              >
               {file && fileToShow && (
                 <img
                   src={fileToShow}
@@ -297,8 +306,9 @@ const Pan = (props) => {
                   type="file"
                   className="kyc-upload"
                   onChange={handleChange('gallery')}
+                  data-aid="doc-web-gallery-input"
                 />
-                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
+                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button" data-aid="doc-gallery-button">
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -312,7 +322,7 @@ const Pan = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" data-aid="doc-gallery-text">Open Gallery</div>
                 </button>
               </div>
             </div>

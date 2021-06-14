@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Container from "../common/Container";
 import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
@@ -7,7 +7,7 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { getFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig, navigate as navigateFunc, getBase64 } from "../../utils/functions";
+import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";
@@ -236,27 +236,28 @@ const KycUploadDocuments = (props) => {
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title="Upload documents"
+      data-aid='kyc-upload-documents-page'
     >
-      <section id="kyc-bank-kyc-upload-docs">
-        <div className="banner">
+      <section id="kyc-bank-kyc-upload-docs" data-aid='kyc-bank-kyc-upload-docs'>
+        <div className="banner" data-aid='kyc-banner'>
           <div className="left">
             <img src={bankData?.ifsc_image} alt="bank" className="icon" />
-            <div className="acc_no">
+            <div className="acc_no" data-aid='kyc-acc-no'>
               <div className="title">Account number</div>
               <div className="value">{bankData?.account_number}</div>
             </div>
           </div>
 
-          <div className="edit" onClick={handleEdit}>
+          <div className="edit" data-aid='kyc-edit' onClick={handleEdit}>
             edit
           </div>
         </div>
-        <main>
-          <div className="doc-title">Select the document for verification</div>
-          <div className="subtitle">
+        <main data-aid='kyc-upload-documents'>
+          <div className="doc-title" data-aid='kyc-doc-title'>Select the document for verification</div>
+          <div className="subtitle" data-aid='kyc-subtitle'>
             Ensure your name is clearly visible in the document
           </div>
-          <div className="kyc-upload-doc-options">
+          <div className="kyc-upload-doc-options" data-aid='kyc-upload-doc-options'>
             {VERIFICATION_DOC_OPTIONS.map((data, index) => {
               const selectedType = data.value === selectedDocValue;
               const disableField =
@@ -270,6 +271,8 @@ const KycUploadDocuments = (props) => {
                   onClick={() => {
                     if (!disableField) handleDocType(index);
                   }}
+                  id={`name_${index}`}
+                  data-aid={`name_${index+1}`}
                 >
                   {data.name}
                   {selectedType && (
@@ -289,7 +292,7 @@ const KycUploadDocuments = (props) => {
             })}
           </div>
           {!isEmpty(selected) && selected >= 0 && (
-            <div className="docs-image-container">
+             <div className="docs-image-container">
               <div className="preview">
                 {file && fileToShow ? (
                   <img
@@ -298,14 +301,14 @@ const KycUploadDocuments = (props) => {
                     onLoad={handleImageLoad}
                     alt="Uploaded Document"
                   />
-                ) : (
+               ) : (
                   <img
                     className="sign-img"
                     src={require("assets/signature_icon.svg")}
                     alt=""
-                  />
-                )}
-              </div>
+                 />
+               )}
+              </div>              
               {isWeb ? (
                 <div className="web-upload-container">
                   <div
@@ -395,11 +398,11 @@ const KycUploadDocuments = (props) => {
           )}
         </main>
         {selectedDocValue && (
-          <div className="sample-document" onClick={handleSampleDocument}>
+          <div className="sample-document" data-aid='kyc-sample-document-text' onClick={handleSampleDocument}>
             view sample document
           </div>
         )}
-        <footer className="ssl-container">
+        <footer className="ssl-container" data-aid='kyc-footer'>
           <img
             src={require("assets/ssl_icon_new.svg")}
             alt="SSL Secure Encryption"

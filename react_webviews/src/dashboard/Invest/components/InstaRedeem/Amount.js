@@ -109,6 +109,7 @@ const InvestAmount = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
+      data-aid='how-would-you-like-to-invest-screen'
       showLoader={showLoader}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
@@ -118,7 +119,7 @@ const InvestAmount = (props) => {
       current="2"
       total="2"
     >
-      <div className="insta-redeem-invest-amount">
+      <div className="insta-redeem-invest-amount" data-aid='insta-redeem-invest-amount'>
         <FormControl className="form-field">
           <InputLabel htmlFor="standard-adornment-password">
             Enter amount
@@ -140,6 +141,7 @@ const InvestAmount = (props) => {
           />
           {amountError && (
             <div
+              data-aid='helper-text'
               className="helper-text"
               style={{
                 color: amountError && "red",
@@ -149,11 +151,12 @@ const InvestAmount = (props) => {
             </div>
           )}
         </FormControl>
-        <div className="tags">
+        <div className="tags" data-aid='amt-tags'>
           {tags &&
             tags.map((data, index) => {
               return (
                 <div
+                  data-aid={`amount-tag-${data.value}`}
                   key={index}
                   className="tag"
                   onClick={() => updateAmount(data.value)}

@@ -288,6 +288,7 @@ class Checkout extends Component {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
+        data-aid='nfo-mf-plan-screen'
         skelton={this.state.show_loader}
         buttonTitle={ctc_title}
         handleClick={this.handleClick}
@@ -296,20 +297,22 @@ class Checkout extends Component {
         hidePageTitle={type !== "nfo"}
         showLoader={isApiRunning}
       >
-        <div className="nfo-checkout">
+        <div className="nfo-checkout" data-aid='nfo-checkout'>
           <div
+            data-aid='nfo-checkout-invest-type'
             className="checkout-invest-type"
             style={{
               marginTop: type === "nfo" && "0",
             }}
           >
             {type === "diy" && (
-              <div className="invest-type-title">Select investment plan</div>
+              <div className="invest-type-title" data-aid='nfo-invest-type-title'>Select investment plan</div>
             )}
-            <div className="checkout-invest-type-cards">
+            <div className="checkout-invest-type-cards" data-aid='nfo-checkout-invest-type-cards'>
               {renderData.map((data, index) => {
                 return (
                   <div
+                    data-aid={`nfo-${data.value}`}
                     key={index}
                     id={data.value}
                     onClick={this.handleChange()}
@@ -327,7 +330,7 @@ class Checkout extends Component {
                         src={require(`assets/${data.icon_light}`)}
                       />
                     )}
-                    <h3 id={data.value}>{data.name}</h3>
+                    <h3 data-aid={`nfo-name-${data.value}`} id={data.value}>{data.name}</h3>
                     {investType === data.value && (
                       <img
                         className="icon"
@@ -340,20 +343,20 @@ class Checkout extends Component {
               })}
             </div>
           </div>
-          <div className="cart-items">
+          <div className="cart-items" data-aid='nfo-cart-items'>
             {fundsData && fundsData.length === 0 && (
-              <p className="message">
+              <p className="message" data-aid='nfo-message'>
                 Please add atleast one fund to make an investment.
               </p>
             )}
             {fundsData &&
               fundsData.map((fund, index) => {
                 return (
-                  <div className="item card" key={index}>
+                  <div className="item card" key={index} data-aid='nfo-item-card'>
                     <div className="icon">
                       <img alt={fund.friendly_name} src={fund.amc_logo_small} />
                     </div>
-                    <div className="text">
+                    <div className="text" data-aid='checkout-text'>
                       <h4>
                         {fund.friendly_name || fund.legal_name}
                         {type === "diy" && (
@@ -382,7 +385,7 @@ class Checkout extends Component {
                       />
                     </div>
                     {!fund["allow_purchase"][investType] && (
-                      <div className="disabled">
+                      <div className="disabled" data-aid='nfo-disabled'>
                         <div className="text">This fund is not supported</div>
                       </div>
                     )}

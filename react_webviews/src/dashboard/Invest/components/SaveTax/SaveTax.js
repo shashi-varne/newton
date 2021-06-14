@@ -105,8 +105,9 @@ const Landing = (props) => {
       handleClick={fetchRecommendedFunds}
       classOverRideContainer='pr-container'
       showLoader={loader}
+      data-aid='save-tax-screen'
     >
-      <section className='invest-amount-common'>
+      <section className='invest-amount-common' data-aid='save-tax-page'>
         <InvestType
           baseData={typeOptionsData}
           selected={investTypeDisplay}

@@ -69,11 +69,12 @@ const PeriodWiseReturns = ({
   };
 
   return (
-    <div className='invested-amount-return-container'>
-      <div className='invested-amount-return-text'>{title || 'Average returns'}</div>
-      <div className='invested-amount-year-tabs'>
+    <div className='invested-amount-return-container' data-aid='invested-amount-return-container'>
+      <div className='invested-amount-return-text' data-aid='invested-amount-return-text'>{title || 'Average returns'}</div>
+      <div className='invested-amount-year-tabs' data-aid='invested-amount-year-tabs'>
         {termOptions.map((termOpt, idx) => (
           <span
+            data-aid={`years-btn-${idx+1}`}
             key={idx}
             className={
               // Check "Explanation" above
@@ -85,18 +86,18 @@ const PeriodWiseReturns = ({
           </span>
         ))}
       </div>
-      <div className='invested-amount-corpus-values'>
+      <div className='invested-amount-corpus-values' data-aid='invested-amount-corpus-values'>
         <div className='invested-amount-corpus-invested'>
           <div className="color-box"></div>
-          <div className="text">
+          <div className="text" data-aid='amt-invest-text'>
             <h1>Amount Invested</h1>
             <div>{formatAmountInr(investedValue)}</div>
           </div>
         </div>
         <div className="invested-amount-corpus-divider"></div>
-        <div className='invested-amount-corpus-projected'>
+        <div className='invested-amount-corpus-projected' data-aid='invested-amount-corpus-projected'>
           <div className="color-box"></div>
-          <div className="text">
+          <div className="text" data-aid='return-invest-text'>
             <h1>
               Estimated Return
               {showInfo &&
@@ -120,14 +121,14 @@ const PeriodWiseReturns = ({
             }}
           >
             <>
-              <div className="avg-return-ror">
+              <div className="avg-return-ror" data-aid='avg-return-ror'>
                 <span className="value">{getRateOfInterest(equity).toFixed(2)}%*</span>
                 <span className="text">is the Rate of Return (RoR) used to estimate projected returns.</span>
               </div>
-              <div className="avg-return-content">
+              <div className="avg-return-content" data-aid='avg-return-content'>
                 Rate of return is dependent on the component of debt & equity in recommended funds for this investment
               </div>
-              <div className="avg-return-breakup">
+              <div className="avg-return-breakup" data-aid='avg-return-breakup'>
                 * Rate of return assumed for debt is {bondReturns}% and
                 rate of return assumed for equity is {stockReturns}%
               </div>

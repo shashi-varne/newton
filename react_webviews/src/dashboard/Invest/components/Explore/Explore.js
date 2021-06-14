@@ -96,6 +96,7 @@ const InvestExplore = (props) => {
   return (
     <Container
       events={sendEvents("just_set_events")}
+      data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
       title="Explore All Mutual Funds"
@@ -105,10 +106,10 @@ const InvestExplore = (props) => {
       rightIcon="search"
       handleTopIcon={handleRightIconClick}
     >
-      <section className="invest-explore-cards" id="invest-explore">
+      <section className="invest-explore-cards" id="invest-explore" data-aid='invest-explore'>
         <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (
-          <div key={title} onClick={goNext(title)}>
+          <div key={title} onClick={goNext(title)} data-aid={`explore-mf-${title}`}>
             <InvestExploreCard
               title={title}
               description={description}
@@ -116,7 +117,7 @@ const InvestExplore = (props) => {
             />
           </div>
         ))}
-        <article className="invest-explore-quote">
+        <article className="invest-explore-quote" data-aid='invest-explore-quote'>
           "When you invest you are buying a day you don’t have to work"
         </article>
       </section>

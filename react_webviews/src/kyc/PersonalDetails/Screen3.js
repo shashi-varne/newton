@@ -143,9 +143,10 @@ const PersonalDetails3 = (props) => {
       count={type === "digilocker" ? 2 : 3}
       current={type === "digilocker" ? 2 : 3}
       total={type === "digilocker" ? 3 : 4}
+      data-aid='kyc-personal-details-screen-3'
     >
-      <div className="kyc-personal-details">
-        <main>
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
+        <main  data-aid='kyc-personal-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.occupation_error ? true : false}
@@ -160,7 +161,7 @@ const PersonalDetails3 = (props) => {
               disabled={isApiRunning}
             />
           </div>
-          <div className="input">
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.income_error ? true : false}
               helperText={form_data.income_error}
@@ -175,7 +176,7 @@ const PersonalDetails3 = (props) => {
             />
           </div>
         </main>
-        <footer>
+        <footer data-aid='kyc-footer-text'>
           By tapping ‘save and continue’ I agree that I am not a PEP(politically
           exposed person)
         </footer>

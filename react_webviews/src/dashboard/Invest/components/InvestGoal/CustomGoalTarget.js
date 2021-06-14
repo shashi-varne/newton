@@ -114,6 +114,7 @@ const CustomGoalTarget = (props) => {
 
   return (
     <Container
+      data-aid='custom-goal-target-screen'
       classOverRide='pr-error-container'
       events={sendEvents("just_set_events")}
       title='Save for a Goal'
@@ -123,7 +124,7 @@ const CustomGoalTarget = (props) => {
       disable={!targetAmount}
       showLoader={loader}
     >
-      <section className='invest-goal-type-container'>
+      <section className='invest-goal-type-container' data-aid='invest-goal-type-page'>
         <div>Set your target amount</div>
         <div className='invest-goal-type-input'>
           <Input

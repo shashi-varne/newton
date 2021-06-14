@@ -42,22 +42,23 @@ class NfoInfo extends Component {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
+        data-aid='nfo-invest-screen'
         skelton={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
         title='Invest in NFO'
       >
-        <div className="nfo-info">
+        <div className="nfo-info" data-aid='nfo-info'>
           <div
             style={{
               backgroundImage: `url(${require(`assets/nfo_info_cover.png`)})`,
             }}
             className="bg-image"
           ></div>
-          <div className="info nfo-data">
+          <div className="info nfo-data" data-aid='nfo-data'>
             {nfoData.info.map((data, index) => {
               return (
-                <div key={index} className="content">
+                <div key={index} className="content" data-aid={`nfo-nfoData-${index+1}`}>
                   <img alt="" src={require(`assets/${data.icon}`)} />
                   <div className="text">
                     <div className="title">{data.title}</div>

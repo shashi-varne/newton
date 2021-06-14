@@ -116,6 +116,7 @@ const SelectYear = (props) => {
 
   return (
     <Container
+      data-aid='select-year-screen'
       classOverRide='pr-error-container'
       events={sendEvents("just_set_events")}
       buttonTitle='NEXT'
@@ -125,7 +126,7 @@ const SelectYear = (props) => {
       disable={error}
       showLoader={loader}
     >
-      <section className='invest-goal-type-container'>
+      <section className='invest-goal-type-container' data-aid='invest-goal-type-page'>
         <div>In year</div>
         <div className='invest-goal-type-input'>
           <Input

@@ -24,7 +24,7 @@ const CartFooter = ({
   const [filterActive, setFilterActive] = useState(false)
   const [cartActive, setCartActive] = useState(false)
   return (
-    <footer className="diy-cart-footer" style={{marginLeft: isMobileDevice && 0}} >
+    <footer className="diy-cart-footer" style={{marginLeft: isMobileDevice && 0}} data-aid='diy-cart-footer'>
       <FilterButton
         className="button diy-filter-button"
         onClick={() => {

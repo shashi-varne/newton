@@ -20,9 +20,10 @@ const VerificationFailedDialog = ({
       aria-describedby="verification-failed-dialog"
       className="verification-failed-dialog"
       id="invest-bottom-dialog"
+      data-aid='invest-bottom-dialog'
     >
-      <DialogContent className="verification-failed-dialog-content">
-        <div className="title">
+      <DialogContent className="verification-failed-dialog-content" data-aid='verification-failed-dialog-content'>
+        <div className="title" data-aid='dialog-title'>
           <div className="text">Invalid documents!</div>
           <img
             src={require(`assets/${productName}/ic_bank_not_added.svg`)}
@@ -30,15 +31,15 @@ const VerificationFailedDialog = ({
             className="img"
           />
         </div>
-        <div className="subtitle">
+        <div className="subtitle" data-aid='dialog-subtitle'>
           Bank account verification failed. Upload correct documents or add a
           new bank.
         </div>
         <div className="action">
-          <Button className="button no-bg" onClick={() => addBank()}>
+          <Button className="button no-bg" onClick={() => addBank()} data-aid='add-new-bank-btn'>
             ADD NEW BANK
           </Button>
-          <Button className="button bg-full" onClick={() => updateDocument()}>
+          <Button className="button bg-full" onClick={() => updateDocument()} data-aid='update-doc-btn'>
             UPDATE DOCUMENT
           </Button>
         </div>

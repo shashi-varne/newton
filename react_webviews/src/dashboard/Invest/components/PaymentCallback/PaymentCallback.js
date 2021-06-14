@@ -86,15 +86,16 @@ const PaymentCallback = (props) => {
 
   return (
     <Container
+      data-aid='payment-call-back-screen'
       buttonTitle="DONE"
       hidePageTitle
       handleClick={handleClick}
       headerData={{goBack}}
       skelton={isLoading}
     >
-      <section className="invest-payment-callback">
+      <section className="invest-payment-callback" data-aid='invest-payment-callback'>
         {!paymentError && (
-          <div className="content">
+          <div className="content" data-aid='payment-error'>
             <Imgc
               src={require(`assets/check_icon.png`)}
               alt=""
@@ -102,7 +103,7 @@ const PaymentCallback = (props) => {
             />
             <h3>Congratulations!</h3>
             <p>A very wise investment indeed</p>
-            <div className="message">
+            <div className="message" data-aid='payment-message'>
               <img
                 src={require(`assets/eta_icon.png`)}
                 alt=""
@@ -115,14 +116,14 @@ const PaymentCallback = (props) => {
           </div>
         )}
         {paymentError && (
-          <div className="content">
+          <div className="content" data-aid='payment-error'>
             <h3 className="error-title">Error</h3>
-            <p>{message}</p>
+            <p data-aid='payment-message'>{message}</p>
           </div>
         )}
-        <div className="contact-us">
+        <div className="contact-us" data-aid='contact-us'>
           <div>For any query, reach us at</div>
-          <div className="info">
+          <div className="info" data-aid='info'>
             <div className="text border-right">{config.mobile}</div>
             <div className="text">{config.email}</div>
           </div>
