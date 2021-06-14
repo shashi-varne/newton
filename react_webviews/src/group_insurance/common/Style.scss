@@ -1153,6 +1153,7 @@
     .imgc-tile{
       width: 30px !important; 
       height: 30px !important;
+      margin: 0;
     }
     .imgc-tile1{
       width: 88px !important; 
@@ -1172,16 +1173,16 @@
 .group-health-final-summary {
   .member-tile {
       display: flex;
-      margin: 16px 0 16px 0;
+      margin: 16px 0;
       .final-summary-tile{
         width: 30px !important;
         height: 30px !important;
       }
       .mt-right {
         margin: 0 0 0 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        .mtr-top{
+          margin-bottom: 2px;
+        }
     }
     
     .mtr-top {

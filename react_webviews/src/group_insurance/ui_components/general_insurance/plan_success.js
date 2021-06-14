@@ -298,7 +298,7 @@ class PlanSuccessClass extends Component {
             <div className="AccordionTitle" onClick={() => this.toggleAccordian(props.key)}>
                 <div className="AccordionList">
                 <span className="AccordionList1">
-                  <img className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
+                  <Imgc className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
                 </span>
                 <span className="AccordianTitleValue">{props.name}</span>
               </div>
