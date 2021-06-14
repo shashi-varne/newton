@@ -12,6 +12,7 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getGenderValue,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -51,7 +52,7 @@ const PersonalDetails1 = (props) => {
       residential_status:
         RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value,
       tin_number: kyc.nri_address.tin_number,
-      gender: kyc.identification.meta_data.gender || "",
+      gender: getGenderValue(kyc.identification.meta_data.gender) || "",
     };
     setIsNri(nri);
     setFormData({ ...formData });

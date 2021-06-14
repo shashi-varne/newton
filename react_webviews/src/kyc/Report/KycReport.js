@@ -8,7 +8,7 @@ import {
   STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
-import { getFlow } from "../common/functions";
+import { getFlow, getGenderValue } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { storageService, isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
@@ -203,7 +203,7 @@ const Report = (props) => {
           <div className="unzipped-box" data-aid="kyc-gender">
             <div className="title">Gender</div>
             <div className="subtitle">
-              {kyc.identification.meta_data.gender}
+              {getGenderValue(kyc.identification.meta_data.gender, "name")}
             </div>
           </div>
           <div className="unzipped-box" data-aid="kyc-marital-status">
