@@ -7,7 +7,7 @@ import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser, checkDLPanFetchStatus } from '../common/functions'
+import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, checkDLPanFetchStatus } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
@@ -128,12 +128,8 @@ const Pan = (props) => {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        if (isNotManualAndNriUser(result.kyc)) {
-          setBottomSheetType('success');
-          setIsOpen(true);
-        } else {
-          handleNavigation();
-        }
+        setBottomSheetType('success');
+        setIsOpen(true);
       }
     } catch (err) {
       toast(err?.message)
@@ -215,7 +211,7 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          {tradingEnabled && kyc.kyc_type !== "manual" && bottomSheetType &&
+          {bottomSheetType &&
             <PanUploadStatus
               status={bottomSheetType}
               isOpen={isOpen}

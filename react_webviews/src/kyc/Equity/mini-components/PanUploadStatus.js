@@ -25,10 +25,16 @@ const PanUploadStatus = ({ status, isOpen, kyc, onClose, disableBackdropClick, o
   const TRADING_ENABLED = isTradingEnabled(kyc);
   
   if (status === "success") {
+    const notManualAndNotNriCondition = (!kyc?.address?.meta_data?.is_nri && kyc?.kyc_type !== "manual")
+    ? "Great, just one more step to go! Now complete eSign to get investment ready"
+    : "Great, now continue to provide other documents to complete KYC"
+    
     data.subtitle = !TRADING_ENABLED
-      ? "Great, just one more step to go! Now complete eSign to get investment ready"
+      ? notManualAndNotNriCondition
       : (kyc?.all_dl_doc_statuses?.pan_fetch_status === "failed" && !kyc.equity_data.meta_data.trading_experience)
       ? "You’re almost there, now give details for your trading account"
+      : kyc?.kyc_type === "manual" 
+      ? "Great, now continue to provide other documents to complete KYC"
       : "You're almost there, now take a selfie";
   }
 
