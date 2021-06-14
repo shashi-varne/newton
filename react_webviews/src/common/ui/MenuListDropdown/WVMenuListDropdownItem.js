@@ -8,11 +8,11 @@
           title={item.title}                                // Title for MenuList
           subtitle={item.subtitle}                         // Subtitle for MenuList
           image={item.icon}                               // image for MenuList
-          keyname={item.key}                             // keyname (Key used to map)
+          keyname={item.key}                            // keyname (Key used to map)
           renderPorductsList={}                        // Dropdown subsection
-          handleClick={this.handleClick}               // Action
+          handleClick={this.handleClick}              // Action
           isDropDown={item.isDropDown}               // Boolean(if true then Block is a dropdown)
-          selectedValue={this.selectedValue}        // Callback Function to set Value pros from parent Page
+          children                                  // FallBack Component
         />
 
  */
@@ -34,19 +34,19 @@ const style = {
 
 
 const WVMenuListDropdownItem = ({
-    dataAidSuffix,
+    dataAidSuffix,        // for Data-aid
     index,
-    keyname,
-    selected,
-    isDropDown,
-    handleClick, //Action
-    title, // Title for MenuList
-    subtitle, // Subtitle for MenuList (shows below title)   
-    image, // Image to show on Left corner
-    classes, // Css ClassName
     renderPorductsList, // Array of Product SubSection
-    children,
-    ...props // Any other props to be sent to MenuList
+    keyname,           // For Maping renderPorductsList with renderPorducts
+    selected,         // selected Dropdown Key Value
+    isDropDown,      // Boolean  if Item is a dropdown then True
+    handleClick,    // Action
+    title,         // Title for MenuList
+    subtitle,     // Subtitle for MenuList (shows below title)   
+    image,       // Image to show on Left corner
+    classes,    // Css ClassName
+    children,  // FallBack Component
+    ...props  // Any other props to be sent to MenuList
 }) => {
 
 
