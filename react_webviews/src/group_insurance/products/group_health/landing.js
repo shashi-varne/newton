@@ -485,13 +485,12 @@ class GroupHealthLanding extends Component {
             <Imgc
               className="accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/ic_read.svg`)}
-              style={{width: '20px', minHeight: '20px'}}
+              style={{width: '20px', minHeight: '20px', margin: 0}}
               alt=""
             />
-            <div style={{ width: "10px" }} />
             <div
               className="accident-plan-read-text"
-              style={{ color: getConfig().primary }}
+              style={{ color: getConfig().primary, marginLeft: '10px' }}
             >
               Read full-policy description
             </div>
