@@ -52,7 +52,7 @@ const InvestMore = (props) => {
   const [form_data, setFormData] = useState({ amount: "", amount_error: "" });
   const { kyc: userKyc, isLoading } = useUserKycHook();
   const [dialogStates, setDialogStates] = useState({
-    openPennyVerificationPendind: false,
+    openPennyVerificationPending: false,
     openInvestError: false,
     openInvestReferral: false,
     errorMessage: "",
@@ -251,7 +251,7 @@ const InvestMore = (props) => {
               </div>
             </div>
             <PennyVerificationPending
-              isOpen={dialogStates.openPennyVerificationPendind}
+              isOpen={dialogStates.openPennyVerificationPending}
               handleClick={() => navigate("/kyc/add-bank")}
             />
             <InvestError
