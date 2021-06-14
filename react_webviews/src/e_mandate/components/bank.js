@@ -160,13 +160,13 @@ class SelectBank extends Component {
       
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let paymentRedirectUrl = encodeURIComponent(
-          basepath + '/e-mandate/redirection' + '?is_secure=' + storageService().get("is_secure")
+          basepath + '/e-mandate/redirection'
         );
         var pgLink = res.pfwresponse.result.enach_start_url;
         let app = getConfig().app;
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app + '&generic_callback=' + getConfig().generic_callback;
+          '&app=' + app + '&generic_callback=' + getConfig().generic_callback + '&is_secure=' + storageService().get("is_secure");
         
         if (getConfig().isNative) {
           if (getConfig().app === 'ios') {
