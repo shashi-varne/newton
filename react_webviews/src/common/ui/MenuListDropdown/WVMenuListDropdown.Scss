@@ -14,7 +14,7 @@
         min-height: 40px;
         margin-right: 25px;
         padding-top: 20px;
-        padding-bottom: 22px;
+        padding-bottom: 20px;
       }
       .wv-image-icon-small{
         margin: 20px 30px 0px 3px;
@@ -35,7 +35,7 @@
       .wv-dropdown-elements{
           width: 100% !important;
           padding-top: 20px;
-          padding-bottom: 22px;
+          padding-bottom: 20px;
           justify-content: space-between;
           cursor: pointer;
       }
@@ -43,6 +43,7 @@
         color: var(--dark);
         font-size: 16px;
         margin-bottom: 5px;
+        line-height: 24px;
         font-weight: 500;
         flex-grow: 1;
       }
@@ -50,7 +51,7 @@
         color: var(--steelgrey);
          font-size: 13px;
          font-weight: 400;
-         line-height: 15.41px;
+         line-height: 21px;
       }
       .menulist-img{
         color: var(--primary);
@@ -73,8 +74,8 @@
   }
 }
 
-.wv-menulist-products:last-child{
-   .wv-dropdown-elements{
-      padding-bottom: 40px !important;
-   }
+.wv-menulist-header:last-child{
+  .wv-dropdown-elements{
+    padding-bottom: 40px !important;
+  }
 }

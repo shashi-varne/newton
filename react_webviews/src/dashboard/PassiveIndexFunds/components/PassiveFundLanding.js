@@ -11,7 +11,7 @@ import { nativeCallback } from "../../../utils/native_callback";
 import VideoBlockImageSection from "../mini-components/VideoBlockImageSection"
 import { Imgc } from "../../../common/ui/Imgc";
 import { isEmpty } from 'lodash';
-import WVMenuListDropdown from "../../../common/ui/MenuListDropdown/WVMenuListDropdown"
+import WVMenuListDropdownItem from "../../../common/ui/MenuListDropdown/WVMenuListDropdownItem"
 import KeyInsightBackground from "../../../assets/passiveFundKeyInsights.svg";
 import ActivePassiveBackground from "../../../assets/active_passive_background.svg";
 import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
@@ -124,7 +124,7 @@ class Landing extends Component {
               {!isEmpty(FUND_CATEGORY) &&
                 FUND_CATEGORY.map((item) => {
                   return (
-                    <WVMenuListDropdown
+                    <WVMenuListDropdownItem
                       title={item.title}
                       subtitle={item.subtitle}
                       image={item.icon}
