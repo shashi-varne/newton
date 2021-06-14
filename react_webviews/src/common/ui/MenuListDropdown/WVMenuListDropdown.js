@@ -27,6 +27,13 @@ import PropTypes from 'prop-types';
 import arrow from "../../../assets/back_nav_bar_icon.png";
 
 
+const style = {
+    headerTitle: 'wv-menulist-dropdown-logos-text',
+    header: 'wv-menulist-header',
+    Image: 'wv-image-icon-small',
+}
+
+
 const WVMenuListDropdown = ({
     dataAidSuffix,
     index,
@@ -47,27 +54,16 @@ const WVMenuListDropdown = ({
 
     return (
 
-        <div className='wv-menulist-products' data-aid={`menulist-products-${dataAidSuffix}`} onClick={handleClick} key={index}>
+        <div className={`wv-menulist-products ${classes.header}`} data-aid={`menulist-products-${dataAidSuffix}`} onClick={handleClick} key={index}>
             <div className='wv-menu-list-dropdown' data-aid={`menu-list-dropdown-${dataAidSuffix}`}
                 onClick={() => selectedValue(keyname === value ? "" : keyname)}>
                 <div className='wv-menulist-block'>
-                    <Imgc src={image} alt="" className='wv-image-icon' />
+                    <Imgc src={image} alt="" className={`wv-image-icon ${classes.Image}`} />
                     <div className='wv-dropdown-elements'>
-                        <div className={`wv-menu-title ${classes.headerTitle}`} data-aid={`menu-title-${dataAidSuffix}`}>
-                            {title}
-                            {isDropDown &&
-                                <span className='menulist-img'>
-                                    <img src={arrow} alt="" style={{ transform: keyname === value ? `rotate(180deg)` : '' }} />
-                                </span>}
-                            {tag &&
-                                <span className="recommended-tag">
-                                    {tag}
-                                </span>}
-                            {resumeFlag &&
-                                <span className='wv-menu-list-resume-flag'>
-                                    {resumeFlag}
-                                </span>}
-                        </div>
+                        {title &&
+                            <Title classes={classes} dataAidSuffix={dataAidSuffix} isDropDown={isDropDown} keyname={keyname} value={value}>
+                                {title}
+                            </Title>}
                         {subtitle &&
                             <Subtitle classes={classes} dataAidSuffix={dataAidSuffix}>
                                 {subtitle}
@@ -83,18 +79,18 @@ const WVMenuListDropdown = ({
                         contentPropsMapList.map((propObj, idx) => {
                             if (keyname === propObj.keyBelongsTo) {
                                 return (
-                                    <WVMenuListDropdownList
+                                    <WVMenuListDropdown
                                         index={idx}
                                         title={propObj.title}
                                         subtitle={propObj.subtitle}
                                         image={propObj.image}
                                         keyname={keyname}
-                                        handleClick={handleClick}
+                                        handleClick={() => handleClick(propObj)}
                                         resumeFlag={propObj.resumeFlag}
-                                        classes={propObj.className || propObj.classes}
+                                        classes={propObj.className || style}
                                         tag={propObj.tag}
                                         dataAidSuffix={dataAidSuffix} >
-                                    </WVMenuListDropdownList>
+                                    </WVMenuListDropdown>
                                 )
                             } else return null;
                         })}
@@ -102,6 +98,19 @@ const WVMenuListDropdown = ({
         </div >
     );
 };
+
+
+const Title = ({ children, classes, isDropDown, keyname, value, dataAidSuffix }) => {
+    return (
+        <div className={`wv-menu-title ${classes?.headerTitle}`} data-aid={`menu-title-${dataAidSuffix}`}>
+            {children}
+            {isDropDown &&
+                <span className='menulist-img'>
+                    <img src={arrow} alt="" style={{ transform: keyname === value ? `rotate(180deg)` : '' }} />
+                </span>}
+        </div>
+    );
+}
 
 
 const Subtitle = ({ children, classes, dataAidSuffix }) => {
@@ -113,80 +122,26 @@ const Subtitle = ({ children, classes, dataAidSuffix }) => {
 }
 
 
-const WVMenuListDropdownList = ({
-    handleClick,
-    title,
-    subtitle,
-    resumeFlag,
-    tag,
-    image,
-    dataAidSuffix,
-    index,
-    classes,
-    ...props }) => {
-
-    return (
-
-        <div className='wv-menulist-products wv-menulist-block wv-menulist-dropdown-lists' >
-            <div className='wv-menulist-dropdown' onClick={handleClick} key={index} data-aid={`wv-menulist-dropdown-${dataAidSuffix}`}>
-                <div className='wv-menulist-dropdown-types'>
-                    <Imgc src={image} className="wv-menulist-logos-small" alt="" />
-                    <div className='wv-menulist-dropdown-line-style'>
-                        <div className={`wv-menulist-dropdown-logos-text ${classes?.headerTitle}`} data-aid={`wv-menulist-dropdown-logos-text-${dataAidSuffix}`}>
-                            {title}
-                            {tag &&
-                                <span className="recommended-tag">
-                                    {tag}
-                                </span>}
-                            {resumeFlag &&
-                                <span className='wv-menu-list-resume-flag'>
-                                    {resumeFlag}
-                                </span>}
-                        </div>
-                        <div className='wv-menulist-dropdown-logos-subtext'>
-                            <Subtitle classes={classes} dataAidSuffix={dataAidSuffix}>
-                                {subtitle}
-                            </Subtitle>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-WVMenuListDropdown.List = WVMenuListDropdownList
 
 
 WVMenuListDropdown.propTypes = {
     handleClick: PropTypes.func,
     isDropDown: PropTypes.bool,
+    title: PropTypes.node,
+    subtitle: PropTypes.node,
     keyname: PropTypes.string,
     classes: PropTypes.exact({
         card: PropTypes.string,
         header: PropTypes.string,
         headerTitle: PropTypes.string,
-        headerImage: PropTypes.string,
+        Image: PropTypes.string,
         subheader: PropTypes.string,
         children: PropTypes.string,
     }),
-    children: PropTypes.string.isRequired,
+    children: PropTypes.node,
     contentPropsMapList: PropTypes.arrayOf(PropTypes.shape({
-        title: PropTypes.string.required,
+        title: PropTypes.node,
     }))
-};
-
-WVMenuListDropdownList.propTypes = {
-    handleClick: PropTypes.func,
-    keyname: PropTypes.string,
-    classes: PropTypes.exact({
-        header: PropTypes.string,
-        headerTitle: PropTypes.string,
-        headerImage: PropTypes.string,
-        subheader: PropTypes.string,
-        children: PropTypes.string,
-    }),
-    children: PropTypes.string.isRequired,
 };
 
 WVMenuListDropdown.defaultProps = {
@@ -198,12 +153,6 @@ WVMenuListDropdown.defaultProps = {
     value: null,
     dataAidSuffix: ""
 };
-
-WVMenuListDropdownList.propTypes = {
-    handleClick: () => { },
-    classes: {},
-    dataAidSuffix: ""
-}
 
 
 export default WVMenuListDropdown;
