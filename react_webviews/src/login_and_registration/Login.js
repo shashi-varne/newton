@@ -49,7 +49,7 @@ class Login extends Component {
     let keys_to_check = ["mobile", "code"];
     if(loginType !== "email")
       this.sendEvents();
-    if (loginType === "email") keys_to_check = ["email", "password"];
+    if (loginType === "email") keys_to_check = ["email"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
   };
 
@@ -70,8 +70,8 @@ class Login extends Component {
       form_data,
       isApiRunning,
       productName,
-      facebookUrl,
-      googleUrl,
+      // facebookUrl,
+      // googleUrl,
     } = this.state;
     return (
       <div className="login" data-aid='login'>
@@ -158,7 +158,7 @@ class Login extends Component {
                       autoFocus
                     />
                   </div>
-                  <div className="form-field">
+                  {/* <div className="form-field">
                     <Input
                       error={form_data.password_error ? true : false}
                       type="password"
@@ -170,7 +170,7 @@ class Login extends Component {
                       name="email"
                       onChange={this.handleChange("password")}
                     />
-                  </div>
+                  </div> */}
                   <div
                     className="forgot_password" data-aid='forgot-password'
                     onClick={() => this.navigate("forgot-password")}
@@ -192,7 +192,7 @@ class Login extends Component {
                     }`,
                 }}
               />
-              {productName !== "finity" && (
+              {/* {productName !== "finity" && (
                 <div className="social-block" data-aid='social-block'>
                   <a
                     className="socialSignupBtns facebookBtn" data-aid='social-signupbtns-facebookbtn'
@@ -204,13 +204,13 @@ class Login extends Component {
                     GOOGLE
                   </a>
                 </div>
-              )}
+              )} */}
             </div>
-            {productName !== "finity" && (
+            {/* {productName !== "finity" && (
               <div className="footer" data-aid='footer' onClick={() => this.navigate("register")}>
                 NEW USER? <span data-aid='register-btn'>REGISTER</span>
               </div>
-            )}
+            )} */}
             {productName === "finity" && (
               <div className="features">
                 <div className="item">

@@ -538,8 +538,8 @@ export async function getKycFromSummary() {
 
 export function redirectAfterLogin(data, user) {
   const kyc = storageService().getObject("kyc");
-  if (data.firstLogin) {
-    this.navigate("/", { state: { goBack: "/" } });
+  if (!data.firstLogin) {
+    this.navigate("/referral-code", { state: { goBack: "/" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment
