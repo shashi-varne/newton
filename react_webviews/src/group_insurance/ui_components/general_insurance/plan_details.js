@@ -262,8 +262,11 @@ class PlanDetailsClass extends Component {
       if (resQuote && resQuote.pfwresponse.status_code === 200) {
 
         let quoteData = resQuote.pfwresponse.result;
+        var checkLogo = ['HEALTH_SUPER_TOPUP', 'CRITICAL_HEALTH_INSURANCE', 'HOME_INSURANCE']
+        var topLogo = checkLogo.indexOf(this.props.parent.state.product_key) >= 0 ? quoteData.logo : bhartiaxa_logo;
         this.setState({
           quoteData: quoteData,
+          topLogo,
           productTitle: quoteData.product_title || this.state.productTitle
         })
 
@@ -672,7 +675,7 @@ class PlanDetailsClass extends Component {
               <h1  style={{fontWeight:'bold'}} className="accident-plan-title">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line} 
               <span style={{fontWeight:'400'}}>{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line2}</span> </h1>
             }
-            <Imgc style={{width:'79px', height:'56px' }} src={this.state.quoteData.logo || bhartiaxa_logo} alt="" />
+            <Imgc style={{width:'79px', height:'56px' }} src={this.state.topLogo} alt="" />
           </div>
           <div className="accident-plan-subtitle">
             {this.props.parent.state.plan_data.product_tag_line}
