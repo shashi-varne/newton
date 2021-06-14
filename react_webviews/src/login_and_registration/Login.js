@@ -101,7 +101,7 @@ class Login extends Component {
               </div>
               {productName !== "finity" && (
                 <div
-                  className="text" data-aid='email'
+                  className="text"
                   style={{
                     fontWeight: loginType === "email" ? "bold" : "normal",
                   }}
