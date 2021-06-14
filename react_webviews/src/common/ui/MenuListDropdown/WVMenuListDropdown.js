@@ -15,8 +15,8 @@
           keyname={item.key}                             // keyname (Key used to map )
           contentPropsMapList={}                        // Dropdown subsection
           handleClick={this.handleClick}               // Action
-          value={this.state.selectedValue}            // Selected Value for Display Drop-down
-          isDropDown={item.isDropDown}               // Boolean(if true the then Block is a dropdown)
+          value={this.state.selectedValue}            // Selected Value to Display Drop-down subsection
+          isDropDown={item.isDropDown}               // Boolean(if true then Block is a dropdown)
           selectedValue={this.selectedValue}        // Callback Function to set Value pros from parent Page
         />
    );
