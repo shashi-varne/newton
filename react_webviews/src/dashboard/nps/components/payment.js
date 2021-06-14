@@ -58,7 +58,7 @@ class NpsPaymentCallback extends Component {
           },
         },
       };
-      if (!result.registration_details.additional_details_status) {
+      if (!result?.registration_details?.additional_details_status) {
         if (currentUser.kyc_registration_v2 === 'init') {
           // send event
           if (!config.Web) {
