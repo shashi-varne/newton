@@ -44,8 +44,7 @@ export async function initialize() {
       !dataSettedInsideBoot)) {
     await this.getSummary();
   }
-  if ((this.state.screenName === "sdk_landing" && !getConfig().Web &&
-      !dataSettedInsideBoot)) {
+  if (this.state.screenName === "sdk_landing" && !getConfig().Web) {
     await this.getSummary();
   }
   if (this.onload) this.onload();
