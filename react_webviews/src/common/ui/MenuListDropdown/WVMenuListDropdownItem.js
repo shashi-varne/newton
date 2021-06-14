@@ -9,9 +9,8 @@
           subtitle={item.subtitle}                         // Subtitle for MenuList
           image={item.icon}                               // image for MenuList
           keyname={item.key}                             // keyname (Key used to map)
-          contentPropsMapList={}                        // Dropdown subsection
+          renderPorductsList={}                        // Dropdown subsection
           handleClick={this.handleClick}               // Action
-          value={this.state.selectedValue}            // Selected Value to Display Drop-down subsection
           isDropDown={item.isDropDown}               // Boolean(if true then Block is a dropdown)
           selectedValue={this.selectedValue}        // Callback Function to set Value pros from parent Page
         />
@@ -38,7 +37,6 @@ const WVMenuListDropdownItem = ({
     dataAidSuffix,
     index,
     keyname,
-    value,
     selected,
     isDropDown,
     handleClick, //Action
@@ -46,8 +44,8 @@ const WVMenuListDropdownItem = ({
     subtitle, // Subtitle for MenuList (shows below title)   
     image, // Image to show on Left corner
     classes, // Css ClassName
-    contentPropsMapList,
-    selectedValue,  // CallBack Fun To set Selected Value
+    renderPorductsList, // Array of Product SubSection
+    children,
     ...props // Any other props to be sent to MenuList
 }) => {
 
@@ -55,14 +53,12 @@ const WVMenuListDropdownItem = ({
     return (
 
         <div className={`wv-menulist-products ${classes.header}`} data-aid={`menulist-products-${dataAidSuffix}`} onClick={handleClick} key={index}>
-            <div className='wv-menu-list-dropdown' data-aid={`menu-list-dropdown-${dataAidSuffix}`}
-            // onClick={() => selectedValue(keyname === value ? "" : keyname)}
-            >
+            <div className='wv-menu-list-dropdown' data-aid={`menu-list-dropdown-${dataAidSuffix}`}>
                 <div className='wv-menulist-block'>
                     <Imgc src={image} alt="" className={`wv-image-icon ${classes.Image}`} />
                     <div className='wv-dropdown-elements'>
                         {title &&
-                            <Title classes={classes} dataAidSuffix={dataAidSuffix} isDropDown={isDropDown} selected={selected} value={value}>
+                            <Title classes={classes} dataAidSuffix={dataAidSuffix} isDropDown={isDropDown} selected={selected} >
                                 {title}
                             </Title>}
                         {subtitle &&
@@ -74,9 +70,9 @@ const WVMenuListDropdownItem = ({
             </div>
 
 
-            {contentPropsMapList && selected === keyname &&
-                !isEmpty(contentPropsMapList) &&
-                contentPropsMapList.map((propObj, idx) => {
+            {renderPorductsList && selected === keyname &&
+                !isEmpty(renderPorductsList) &&
+                renderPorductsList.map((propObj, idx) => {
                     if (selected === propObj.keyBelongsTo) {
                         return (
                             <WVMenuListDropdownItem
@@ -94,6 +90,7 @@ const WVMenuListDropdownItem = ({
                     } else return null;
                 })
             }
+            {!renderPorductsList && selected === keyname && children}
         </div >
     );
 };
@@ -130,17 +127,28 @@ WVMenuListDropdownItem.propTypes = {
     subtitle: PropTypes.node,
     keyname: PropTypes.string,
     classes: PropTypes.exact({
-        card: PropTypes.string,
         header: PropTypes.string,
         headerTitle: PropTypes.string,
         Image: PropTypes.string,
         subheader: PropTypes.string,
-        children: PropTypes.string,
+        children: PropTypes.node,
     }),
     children: PropTypes.node,
-    contentPropsMapList: PropTypes.arrayOf(PropTypes.shape({
+    renderPorductsList: PropTypes.arrayOf(PropTypes.shape({
         title: PropTypes.node,
-    }))
+        subtitle: PropTypes.node,
+        keyname: PropTypes.string,
+        classes: PropTypes.exact({
+            header: PropTypes.string,
+            headerTitle: PropTypes.string,
+            Image: PropTypes.string,
+            subheader: PropTypes.string,
+            children: PropTypes.node,
+        }),
+    })),
+    dataAidSuffix: PropTypes.string,
+    selected: PropTypes.string,
+    keyname: PropTypes.string,
 };
 
 WVMenuListDropdownItem.defaultProps = {
@@ -149,8 +157,8 @@ WVMenuListDropdownItem.defaultProps = {
     handleClick: () => { },
     classes: {},
     isDropDown: false,
-    value: null,
-    dataAidSuffix: ""
+    dataAidSuffix: "",
+    children: PropTypes.node,
 };
 
 

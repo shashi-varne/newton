@@ -2,12 +2,14 @@ import './WVMenuListDropdown.Scss';
 import React, { useState } from "react";
 import WVMenuListDropDown from './WVMenuListDropdownItem';
 import { isEmpty } from 'lodash';
+import PropTypes from 'prop-types';
 
 
 const WVMenuListDropDownList = ({
   dataAidSuffix,
   renderPorducts,
   renderPorductsList,
+  children,
   handleClick,
   ...props
 }) => {
@@ -31,8 +33,9 @@ const WVMenuListDropDownList = ({
                 selected={selected}
                 classes={propObj.className}
                 isDropDown={propObj.isDropDown}
-                contentPropsMapList={renderPorductsList}
+                renderPorductsList={renderPorductsList}
                 dataAidSuffix={dataAidSuffix} >
+                  {children}
               </WVMenuListDropDown>
             </div>
           )
@@ -44,3 +47,21 @@ const WVMenuListDropDownList = ({
 
 
 export default WVMenuListDropDownList;
+
+
+WVMenuListDropDownList.propTypes = {
+  handleClick: PropTypes.func,
+  children: PropTypes.node,
+  renderPorducts: PropTypes.arrayOf(PropTypes.shape({
+      title: PropTypes.node,
+      subtitle: PropTypes.node,
+      isDropDown: PropTypes.bool,
+      classes: PropTypes.string,
+  }))
+};
+
+WVMenuListDropDownList.defaultProps = {
+  handleClick: () => { },
+  classes: {},
+  dataAidSuffix: "",
+};
