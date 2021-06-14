@@ -66,7 +66,7 @@ const Recommendations = (props) => {
   }, [funnelData]);
 
   const [dialogStates, setDialogStates] = useState({
-    openPennyVerificationPendind: false,
+    openPennyVerificationPending: false,
     openInvestError: false,
     errorMessage: '',
   });
@@ -390,7 +390,7 @@ const Recommendations = (props) => {
             <WVSecurityDisclaimer />
           </div>
           <PennyVerificationPending
-            isOpen={dialogStates.openPennyVerificationPendind}
+            isOpen={dialogStates.openPennyVerificationPending}
             handleClick={() => navigate("/kyc/add-bank")}
           />
           <InvestError
