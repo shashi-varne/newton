@@ -529,12 +529,12 @@ class FyntuneLanding extends Component {
             <div>
               <Imgc
                 className="accident-plan-read-icon"
-                style={{width: '30px', height: '30px'}}
+                style={{width: '30px', height: '30px', marginRight: '0' }}
                 src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
                 alt=""
               />
             </div>
-            <div style={{fontSize: '17px'}}>Frequently asked questions</div>
+            <div style={{fontSize: '17px', marginLeft: '10px'}}>Frequently asked questions</div>
           </div>
           <div className="generic-hr" style={{ marginTop: "12px" }}></div>
         </div>
