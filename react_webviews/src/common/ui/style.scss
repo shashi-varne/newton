@@ -355,12 +355,15 @@ input.default-otp-input {
   width: 20px;
 }
 
-.input-prefix-character{
-  color: #160D2E;
-  position: absolute;
-  font-size: 15px;
-  top: 26.5px;
-  left: 2px;
+.input-prefix-container{
+  position: relative;
+  .input-prefix-character{
+    color: #160D2E;
+    position: absolute;
+    font-size: 15px;
+    top: 26.5px;
+    left: 2px;
+  }
 }
 
 .status-bar-container{
