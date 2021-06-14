@@ -199,6 +199,13 @@ const Journey = (props) => {
             ) {
               journeyData[i].isEditAllowed = false
             }
+          } else if (!isCompliant && !show_aadhaar) {
+            if (
+              journeyData[i].key === 'pan' &&
+              kyc.pan.doc_status === "approved"
+            ) {
+              journeyData[i].isEditAllowed = false
+            }
           }
           for (j = 0; j < journeyData[i].inputsForStatus.length; j++) {
             for (
