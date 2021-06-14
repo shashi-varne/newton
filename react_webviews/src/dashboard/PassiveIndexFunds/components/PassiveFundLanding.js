@@ -3,7 +3,6 @@ import { findDOMNode } from 'react-dom'
 import screenfull from 'screenfull'
 import ReactPlayer from 'react-player'
 import Container from "../../common/Container";
-import Menulist from "../mini-components/menuList"
 import WVSecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer"
 import { FUND_CATEGORY, ACTIVE_PASSIVE_FACTS_CAROUSEL, KEY_INSIGHTS_CAROUSEL } from "../constants";
 import { storageService } from "utils/validators";
@@ -11,6 +10,8 @@ import { initialize } from "../common/commonFunctions";
 import { nativeCallback } from "../../../utils/native_callback";
 import VideoBlockImageSection from "../mini-components/VideoBlockImageSection"
 import { Imgc } from "../../../common/ui/Imgc";
+import { isEmpty } from 'lodash';
+import WVMenuListDropdown from "../../../common/ui/MenuListDropdown/WVMenuListDropdown"
 import KeyInsightBackground from "../../../assets/passiveFundKeyInsights.svg";
 import ActivePassiveBackground from "../../../assets/active_passive_background.svg";
 import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle";
@@ -119,12 +120,23 @@ class Landing extends Component {
           </div>
           <div className="content-main" data-aid="content-main">
             <h1 className="category-title" data-aid="category-title-1">Top index funds</h1>
-            <Menulist
-              dataAidSuffix={'passive-category'}
-              menulistProducts={FUND_CATEGORY}
-              value={this.state.value}
-              handleClick={this.handleClick}
-            />
+            <React.Fragment>
+              {!isEmpty(FUND_CATEGORY) &&
+                FUND_CATEGORY.map((item) => {
+                  return (
+                    <WVMenuListDropdown
+                      title={item.title}
+                      subtitle={item.subtitle}
+                      image={item.icon}
+                      keyname={item.key}
+                      handleClick={() => this.handleClick(item)}
+                      value={this.state.selectedValue}
+                      isDropDown={item.isDropDown}
+                      selectedValue={this.selectedValue}
+                    />
+                  );
+                })}
+            </React.Fragment>
             <h1 className="category-title" data-aid="category-title-2">Key insights</h1>
             <div className="react-responsive-carousel">
               <WVGenericContentCarousel
