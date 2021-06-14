@@ -4,10 +4,6 @@
 
     Example syntax:
 
- <React.Fragment>
-   {!isEmpty() &&
-     ARRAY.map((item) => {
-    return (
         <WVMenuListDropdown
           title={item.title}                                // Title for MenuList
           subtitle={item.subtitle}                         // Subtitle for MenuList
@@ -19,10 +15,6 @@
           isDropDown={item.isDropDown}               // Boolean(if true then Block is a dropdown)
           selectedValue={this.selectedValue}        // Callback Function to set Value pros from parent Page
         />
-   );
-  })}
- </React.Fragment>
-
 
  */
 
