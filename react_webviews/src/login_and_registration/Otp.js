@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import "./Style.scss";
-import Input from "common/ui/Input";
 import { initialize } from "./function";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import { validateNumber } from "../utils/validators";
+import OtpComp from "../kyc/Equity/mini-components/Otp";
+import WVClickableTextElement from "../common/ui/ClickableTextElement/WVClickableTextElement";
+import Container from "./common/Container";
 import Button from "../common/ui/Button";
+import Input from "common/ui/Input";
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
@@ -63,8 +66,10 @@ class Otp extends Component {
   render() {
     let { isApiRunning, otp, otp_error } = this.state;
     let disabled = otp.length !== 4;
+    let communicationType = "mobile";
+    let otpData = {};
     return (
-      <div className="login otp" data-aid='login-otp'>
+      <div className="login otp" data-aid="login-otp">
         {!isMobileView && (
           <div className="header">
             <img src={require(`assets/${config.logo}`)} alt="logo" />
@@ -84,7 +89,9 @@ class Otp extends Component {
                 <h5>Join 1000’s of Smart Investors</h5>
               </div>
             )}
-            <div className="otp-text" data-aid='otp-text'>Enter OTP</div>
+            <div className="otp-text" data-aid="otp-text">
+              Enter OTP
+            </div>
             <Input
               error={otp_error ? true : false}
               type="text"
@@ -95,11 +102,15 @@ class Otp extends Component {
               inputMode="numeric"
               autoFocus
             />
-            <div className="resend-otp" data-aid='resend-otp' onClick={() => this.resendOtp()}>
+            <div
+              className="resend-otp"
+              data-aid="resend-otp"
+              onClick={() => this.resendOtp()}
+            >
               Resend OTP
             </div>
             <Button
-              dataAid='verify-btn'
+              dataAid="verify-btn"
               buttonTitle="VERIFY"
               onClick={this.handleClick}
               showLoader={isApiRunning}
@@ -117,6 +128,30 @@ class Otp extends Component {
           </div>
         </div>
       </div>
+
+      // <div
+      //   style={{
+      //     minHeight: "100%",
+      //     width: "100%",
+      //     maxWidth: "614px",
+      //     margin: "auto",
+      //     backgroundColor: "white",
+      //     padding: "20px",
+      //   }}
+      // >
+      //   <p>Enter OTP to verify your email</p>
+      //   <p>An OTP has been sent to uttampaswan@fisdom.com</p>
+      //   <WVClickableTextElement>EDIT</WVClickableTextElement>
+      //   <div style={{marginRight: "auto"}}>
+      //   <OtpComp
+      //             otpData={otpData}
+      //             // showDotLoader={showDotLoader}
+      //             // handleOtp={handleOtp}
+      //             // resendOtp={resendOtpVerification}
+      //           />
+      //   </div>
+      //   <p>OTP should arrive within 15s</p>
+      // </div>
     );
   }
 }
