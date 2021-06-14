@@ -300,7 +300,7 @@ class PlanSuccessClass extends Component {
                 <span className="AccordionList1">
                   <img className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
                 </span>
-                <span>{props.name}</span>
+                <span className="AccordianTitleValue">{props.name}</span>
               </div>
             </div>
             {this.state.accordianTab === props.key && this.renderAccordionBody(props.key)}
