@@ -135,30 +135,26 @@ const WVMenuListDropdownList = ({
 
     return (
 
-        <div className="wv-menulist-products">
-            <div className='wv-menulist-block'>
-                <div className="wv-menulist-dropdown-lists">
-                    <div className='wv-menulist-dropdown' onClick={handleClick} key={index} data-aid={`wv-menulist-dropdown-${dataAidSuffix}`}>
-                        <div className='wv-menulist-dropdown-types'>
-                            <Imgc src={image} className="wv-menulist-logos-small" alt="" />
-                            <div className='wv-menulist-dropdown-line-style'>
-                                <div className={`wv-menulist-dropdown-logos-text ${classes?.headerTitle}`} data-aid={`wv-menulist-dropdown-logos-text-${dataAidSuffix}`}>
-                                    {title}
-                                    {tag &&
-                                        <span className="recommended-tag">
-                                            {tag}
-                                        </span>}
-                                    {resumeFlag &&
-                                        <span className='wv-menu-list-resume-flag'>
-                                            {resumeFlag}
-                                        </span>}
-                                </div>
-                                <div className='wv-menulist-dropdown-logos-subtext'>
-                                    <Subtitle classes={classes} dataAidSuffix={dataAidSuffix}>
-                                        {subtitle}
-                                    </Subtitle>
-                                </div>
-                            </div>
+        <div className='wv-menulist-products wv-menulist-block wv-menulist-dropdown-lists' >
+            <div className='wv-menulist-dropdown' onClick={handleClick} key={index} data-aid={`wv-menulist-dropdown-${dataAidSuffix}`}>
+                <div className='wv-menulist-dropdown-types'>
+                    <Imgc src={image} className="wv-menulist-logos-small" alt="" />
+                    <div className='wv-menulist-dropdown-line-style'>
+                        <div className={`wv-menulist-dropdown-logos-text ${classes?.headerTitle}`} data-aid={`wv-menulist-dropdown-logos-text-${dataAidSuffix}`}>
+                            {title}
+                            {tag &&
+                                <span className="recommended-tag">
+                                    {tag}
+                                </span>}
+                            {resumeFlag &&
+                                <span className='wv-menu-list-resume-flag'>
+                                    {resumeFlag}
+                                </span>}
+                        </div>
+                        <div className='wv-menulist-dropdown-logos-subtext'>
+                            <Subtitle classes={classes} dataAidSuffix={dataAidSuffix}>
+                                {subtitle}
+                            </Subtitle>
                         </div>
                     </div>
                 </div>
@@ -208,11 +204,13 @@ WVMenuListDropdown.defaultProps = {
     classes: {},
     isDropDown: false,
     value: null,
+    dataAidSuffix: ""
 };
 
 WVMenuListDropdownList.propTypes = {
     handleClick: () => { },
     classes: {},
+    dataAidSuffix: ""
 }
 
 
