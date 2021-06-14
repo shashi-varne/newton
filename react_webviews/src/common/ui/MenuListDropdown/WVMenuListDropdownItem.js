@@ -148,7 +148,6 @@ WVMenuListDropdownItem.propTypes = {
     })),
     dataAidSuffix: PropTypes.string,
     selected: PropTypes.string,
-    keyname: PropTypes.string,
 };
 
 WVMenuListDropdownItem.defaultProps = {
