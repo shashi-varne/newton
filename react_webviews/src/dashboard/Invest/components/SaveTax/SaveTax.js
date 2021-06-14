@@ -4,6 +4,8 @@ import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast';
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
+import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 import { isRecurring } from '../../common/commonFunctions';
 import { navigate as navigateFunc } from 'utils/functions';
 
@@ -40,6 +42,7 @@ const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const fetchRecommendedFunds = async () => {
+    sendEvents('next')
     const type = investTypeDisplay === 'onetime' ? 'savetax' : 'savetaxsip';
     const appendToFunnelData = {
       amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
@@ -76,8 +79,26 @@ const Landing = (props) => {
     setInvestTypeDisplay(type);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select order type",
+        "order_type": investTypeDisplay === "sip" ? "SIP" : "OT",
+        "flow": flowName['saveTax']
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
       title='Save Tax'

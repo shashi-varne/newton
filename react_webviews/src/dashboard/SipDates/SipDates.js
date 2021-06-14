@@ -15,6 +15,8 @@ import PennyVerificationPending from "../Invest/mini-components/PennyVerificatio
 import { getBasePath } from "../../utils/functions";
 import { proceedInvestment } from "../proceedInvestmentFunctions";
 import "./SipDates.scss";
+import { nativeCallback } from "../../utils/native_callback";
+import { flowName } from "../Invest/constants";
 
 const partnerCode = getConfig().partner_code;
 /* eslint-disable */
@@ -89,6 +91,7 @@ class SipDates extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next')
     let {
       sipBaseData,
       sips,
@@ -115,6 +118,7 @@ class SipDates extends Component {
   };
 
   handleSuccessDialog = () => {
+    this.sendEvents('next', "sip_dates_popup", {intent: "date confirmation"})
     let { investResponse, paymentRedirectUrl } = this.state;
     let pgLink = investResponse.investments[0].pg_link;
     pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}${partnerCode ? "&partner_code="+partnerCode : ""}`
@@ -143,6 +147,7 @@ class SipDates extends Component {
   };
 
   handleChange = (key) => (index) => {
+    this.sendEvents('next', 'sip_dates_popup', {intent: "date confirmation"})
     let { form_data, sips } = this.state;
     form_data[key] = index;
     sips[key].sip_date = sips[key].sip_dates[index];
@@ -163,6 +168,23 @@ class SipDates extends Component {
     this.setState({ isApiRunning: isApiRunning });
   };
 
+  sendEvents = (userAction, screenName, additionalData) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": screenName || 'investment date',
+        "user_action": userAction || "",
+        "flow": (this.state.orderType === "savetaxsip" ? flowName['saveTax'] : this.state.orderType) || "",
+        ...additionalData
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     let {
       sips,
@@ -172,8 +194,10 @@ class SipDates extends Component {
       isApiRunning,
       dialogStates,
     } = this.state;
+
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         data-aid='select-investment-date-screen'
         skelton={this.state.show_loader}
         handleClick={this.handleClick}

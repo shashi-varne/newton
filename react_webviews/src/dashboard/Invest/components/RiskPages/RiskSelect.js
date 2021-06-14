@@ -4,8 +4,10 @@ import { getConfig, navigate as navigateFunc } from '../../../../utils/functions
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { riskProfiles } from '../../constants';
+import { flowName, riskProfiles } from '../../constants';
 import FSelect from './FSelect';
+import { nativeCallback } from '../../../../utils/native_callback';
+import { storageService } from '../../../../utils/validators'
 import toast from 'common/ui/Toast'
 
 const { productName } = getConfig();
@@ -76,6 +78,8 @@ const RiskSelect = ({
   }
 
   const goNext = async (skipRiskUpdate) => {
+    sendEvents('next')
+    storageService().remove('risk_info_clicked');
     if(!skipRiskUpdate && !selectedRisk) {
       toast("Please select your risk profile");
       return;
@@ -90,6 +94,7 @@ const RiskSelect = ({
   };
 
   const gotToRiskProfiler = () => {
+    sendEvents('risk profiler')
     navigate('/risk/result-new', {
       state: {
         hideRPReset: true,
@@ -107,11 +112,31 @@ const RiskSelect = ({
   };
 
   const showInfo = () => {
+    storageService().setBoolean("risk_info_clicked", true);
     navigate('/invest/risk-info');
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select risk profile",
+        "flow": funnelData.flow || flowName[funnelData.investType] || "",
+        "profile": selectedRisk,
+        "info_clicked": storageService().getBoolean('risk_info_clicked') ? 'yes' : 'no',
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  
   return (
     <Container
+      events={sendEvents("just_set_events")}
       data-aid='please-select-your-risk-profile-screen'
       classOverRide='pr-error-container'
       fullWidthButton

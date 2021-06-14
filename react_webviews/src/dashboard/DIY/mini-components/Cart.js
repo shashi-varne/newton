@@ -9,10 +9,11 @@ import { navigate as navigateFunc } from 'utils/functions'
 
 import "./mini-components.scss";
 
-const Cart = ({ isOpen, setCartActive, cart, setCart, ...props }) => {
+const Cart = ({ isOpen, setCartActive, cart, setCart, sendEvents, ...props }) => {
   const handleRemoveFromCart = (item) => () => {
     if (cart.length > 0) {
       const updatedCartItems = cart.filter(({ isin }) => isin !== item.isin)
+      sendEvents('delete', 'card_bottom_sheet', updatedCartItems.length, item.legal_name)
       setCart(updatedCartItems)
       storageService().setObject(CART, updatedCartItems)
       if (cart.length === 1) {
@@ -22,10 +23,12 @@ const Cart = ({ isOpen, setCartActive, cart, setCart, ...props }) => {
   }
 
   const close = () => {
+    sendEvents('back')
     setCartActive(false)
   }
 
   const handleCheckoutProceed = () => {
+    sendEvents('next', 'card_bottom_sheet', cart.length, "")
     const navigate = navigateFunc.bind(props)
     navigate('/diy/invest')
   }

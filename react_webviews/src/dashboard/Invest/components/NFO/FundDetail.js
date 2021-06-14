@@ -5,6 +5,8 @@ import { navigate as navigateFunc } from "utils/functions";
 import { getFormattedDate, getSchemeOption } from "./nfoFunctions";
 import Button from "common/ui/Button";
 import "./FundDetail.scss";
+import { nativeCallback } from "../../../../utils/native_callback";
+import { flowName } from "../../constants";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -32,13 +34,32 @@ class FundDetail extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next')
     this.navigate("/advanced-investing/new-fund-offers/funds/checkout");
   };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "fund detail",
+        "user_action": userAction || "",
+        "scheme_type": "",
+        "flow": flowName['nfo']
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let { fund } = this.state;
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         data-aid='nfo-fund-details-screen'
         showLoader={this.state.show_loader}
         noFooter={true}

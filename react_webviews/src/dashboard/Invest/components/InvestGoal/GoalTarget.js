@@ -11,6 +11,8 @@ import {
   CUSTOM_GOAL_TARGET_MAP,
   SUBTYPE_NAME_MAP
 } from './constants';
+import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
 
@@ -64,17 +66,38 @@ const GoalTarget = (props) => {
   };
 
   const handleInvestedAmount = (type) => () => {
+    sendEvents('next', type.name)
     const amount = calculateCorpusValue(type.corpus);
     fetchRecommendedFunds(amount);
   };
 
   const setYourTarget = () => {
+    sendEvents('next')
     updateFunnelData({ corpus: CUSTOM_GOAL_TARGET_MAP[subtype] });
     navigate(`/invest/savegoal/${subtype}/${year}/target`);
   };
 
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select target type",
+        "flow": flowName['saveforgoal'],
+        "goal_purpose": subtype || "",
+        "target_type": type?.toLowerCase() || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       data-aid='goal-target-screen'
       classOverRide='pr-error-container'
       title='Save for a Goal'

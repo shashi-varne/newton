@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Container from "../../../common/Container";
 import InvestType from "../../mini-components/InvestType";
-import { investRedeemData } from "../../constants";
+import { flowName, investRedeemData } from "../../constants";
 import { navigate as navigateFunc } from "utils/functions";
 import useFunnelDataHook from "../../common/funnelDataHook";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const Type = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -12,6 +13,7 @@ const Type = (props) => {
   const [investType, setInvestType] = useState(funnelData.investTypeDisplay || 'onetime');
 
   const handleClick = () => {
+    sendEvents('next')
     updateFunnelData({
       amount: '',
       investTypeDisplay: investType,
@@ -20,8 +22,26 @@ const Type = (props) => {
     navigate(`/invest/instaredeem/amount`);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": 'select order type',
+        "flow": flowName['insta-redeem'],
+        "order_type": investType
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       data-aid='how-would-you-like-to-invest-screen'
       showLoader={false}
       buttonTitle="CONTINUE"

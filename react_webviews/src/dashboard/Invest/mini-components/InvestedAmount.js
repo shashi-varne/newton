@@ -15,6 +15,8 @@ import './mini-components.scss';
 import PeriodWiseReturns from '../../mini-components/PeriodWiseReturns';
 import EquityDebtSlider from './EquityDebtSlider';
 import useFunnelDataHook from '../common/funnelDataHook';
+import { nativeCallback } from '../../../utils/native_callback';
+import { flowName } from '../constants';
 
 const { stockReturns, bondReturns } = getReturnRates();
 
@@ -69,14 +71,46 @@ const InvestedAmount = (props) => {
   };
 
   const showFunds = () => {
+    sendEvents('next')
     fetchRecommendedFunds();
   };
 
+  const sendEvents = (userAction) => {
+    var risk = "high"
+    if (funnelData.investType === 'arbitrage') {
+      risk = "moderate";
+    } else {
+      if (stockSplitVal <= 50) {
+        risk = "low";
+      } else if (stockSplitVal > 50 && stockSplitVal <= 70) {
+        risk = "moderate";
+      }
+    }
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "projected value",
+        "years": term,
+        "risk apetite": risk,
+        "flow": funnelData.flow || flowName[funnelData.investType] || "",
+        }
+    };
+    if (funnelData.investType === "saveforgoal") {
+      eventObj.properties['goal_purpose'] = funnelData.subtype || "";
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   return (
     <Container
       data-aid='show-my-funds-screem'
       classOverRide='pr-error-container'
+      events={sendEvents("just_set_events")}
       buttonTitle='SHOW MY FUNDS'
       title={title}
       handleClick={showFunds}

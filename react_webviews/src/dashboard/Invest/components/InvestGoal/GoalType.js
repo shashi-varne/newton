@@ -2,6 +2,8 @@ import './GoalType.scss';
 import React from 'react';
 import Container from '../../../common/Container';
 
+import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 import { navigate as navigateFunc} from 'utils/functions';
 
 const goalTypes = {
@@ -29,12 +31,32 @@ const goalTypes = {
 const GoalType = (props) => {
   const navigate = navigateFunc.bind(props);
   const goNext = (name) => () => {
+    sendEvents('next', name);
     navigate(`/invest/savegoal/${name}`);
   }
+
+  const sendEvents = (userAction, purpose) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "goal select",
+        "flow": flowName['saveforgoal'],
+        "goal_purpose": purpose || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  
   return (
     <Container
       data-aid='goal-type-screen'
       classOverRide='pr-error-container'
+      events={sendEvents("just_set_events")}
       buttonTitle='NEXT'
       title="Save for a Goal"
       noFooter

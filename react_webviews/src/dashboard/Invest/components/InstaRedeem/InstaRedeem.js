@@ -15,6 +15,7 @@ import toast from "../../../../common/ui/Toast";
 import { isEmpty, cloneDeep, get } from "lodash";
 import { getInstaRecommendation } from "../../common/api";
 import useFunnelDataHook from "../../common/funnelDataHook";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 const { partner_code, productName } = getConfig();
 
@@ -24,6 +25,7 @@ const InstaRedeem = (props) => {
 
   const [showLoader, setShowLoader] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [knowMoreClicked, setKnowMoreClicked] = useState(false);
   const {
     funnelData,
     setFunnelData,
@@ -45,10 +47,12 @@ const InstaRedeem = (props) => {
   }, [funnelData])
 
   const handleClick = () => {
+    sendEvents('next')
     navigate("/invest/instaredeem/type");
   };
 
   const showFundInfo = (data) => {
+    sendEvents('fund details card')
     const recommendation = { mf: data };
     let dataCopy = cloneDeep(recommendation);
     dataCopy.diy_type = "recommendation";
@@ -121,8 +125,11 @@ const InstaRedeem = (props) => {
         </DialogContent>
         <DialogActions className="action">
           <Button
+            onClick={() => {
+              sendEvents("next", "insta popup");
+              setOpenDialog(false);
+            }}
             dataAid='okay-btn'
-            onClick={() => setOpenDialog(false)}
             classes={{ button: "invest-dialog-button" }}
             buttonTitle="OKAY"
           />
@@ -131,8 +138,31 @@ const InstaRedeem = (props) => {
     );
   };
 
+  const sendEvents = (userAction, screenName) => {
+    let eventObj = {
+      "event_name": 'insta_redemption_Investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": screenName || "introduction",
+        }
+    };
+    if(screenName !== "insta popup")
+    {
+      eventObj.properties["know_more_clicked"] = knowMoreClicked ? "yes" : "no";
+    }
+    if(screenName === "insta popup")
+      eventObj.properties["intent"] = "withdrawal information"
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       data-aid='start-investing-screen'
       buttonTitle="START INVESTING"
       handleClick={handleClick}
@@ -157,7 +187,7 @@ const InstaRedeem = (props) => {
               <div className="text">
                 {data.disc}
                 {data.key === "withdrawal" && (
-                  <div className="insta-redeem-know-more" data-aid={`insta-redeem-know-more-${data.key}`} onClick={() => setOpenDialog(true)}>
+                  <div className="insta-redeem-know-more" data-aid={`insta-redeem-know-more-${data.key}`} onClick={() => {setKnowMoreClicked(true); setOpenDialog(true)}}>
                     KNOW MORE
                   </div>
                 )}

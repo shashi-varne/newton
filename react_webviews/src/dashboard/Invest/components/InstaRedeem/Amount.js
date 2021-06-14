@@ -5,13 +5,14 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
-import { investRedeemData } from "../../constants";
+import { flowName, investRedeemData } from "../../constants";
 import {
   getGoalRecommendation,
 } from "../../common/commonFunctions";
 import { navigate as navigateFunc } from 'utils/functions'
 import { convertInrAmountToNumber, formatAmountInr } from "../../../../utils/validators";
 import useFunnelDataHook from "../../common/funnelDataHook";
+import { nativeCallback } from '../../../../utils/native_callback';
 
 const InvestAmount = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -33,6 +34,7 @@ const InvestAmount = (props) => {
 
   const handleClick = () => {
     setShowLoader("button");
+    sendEvents('next')
     const recommendations = {
       recommendation: [{
         ...funnelData.recommendation[0],
@@ -87,8 +89,26 @@ const InvestAmount = (props) => {
     setAmountError(amount_error);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": 'select invest amount',
+        "flow": flowName['insta-redeem'],
+        "amount_value": amount
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       data-aid='how-would-you-like-to-invest-screen'
       showLoader={showLoader}
       buttonTitle="CONTINUE"

@@ -16,6 +16,7 @@ import {
   formatAmountInr,
 } from "../../../../utils/validators";
 import "./Checkout.scss";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 class Checkout extends Component {
   constructor(props) {
@@ -155,6 +156,7 @@ class Checkout extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next')
     let { fundsData, type, investType } = this.state;
     let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (fundsData.length === 0 || allowedFunds.length === 0) {
@@ -229,6 +231,7 @@ class Checkout extends Component {
 
   deleteFund = (index) => {
     let { fundsData } = this.state;
+    this.sendEvents('delete', fundsData[index].legal_name)
     fundsData.splice(index, 1);
     const cartCount = fundsData.length;
     this.setState({
@@ -238,6 +241,36 @@ class Checkout extends Component {
     storageService().set("diystore_cartCount", cartCount);
   };
 
+  sendEvents = (userAction, fundName) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "your mutual fund plan",
+        "user_action": userAction || "",
+        "amount_selected": (this.state.type !== 'diy' ? this.state.fundsData[0]?.amount : "" ) || "",
+        "order_type": this.state.investType || "",
+        "scheme_type": (this.state.type !== 'diy' ? this.state.fundsData[0]?.growth_or_dividend : this.titleCase((storageService().get('diystore_category') || ""))) || "",
+        "category_name": (this.state.type !== 'diy' ? "" : this.titleCase((storageService().get('diystore_subCategory') || "").replace(/_/g, " "))) || "",
+        "fund_name": fundName || (this.state.type !== 'diy' ? this.state.fundsData[0]?.name : "") || "",
+        "flow": this.state.type || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+  titleCase = (text) =>{
+    if(!text)
+    return;
+    return text.toLowerCase()
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ');
+  }
+  
   render() {
     let {
       form_data,
@@ -254,6 +287,7 @@ class Checkout extends Component {
     if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         data-aid='nfo-mf-plan-screen'
         skelton={this.state.show_loader}
         buttonTitle={ctc_title}

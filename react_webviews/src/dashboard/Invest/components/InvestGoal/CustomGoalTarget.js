@@ -11,6 +11,8 @@ import useFunnelDataHook from '../../common/funnelDataHook';
 import { getConfig, navigate as navigateFunc  } from '../../../../utils/functions';
 import { CUSTOM_GOAL_TARGET_MAP } from './constants';
 import { get_recommended_funds } from '../../common/api';
+import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
 
@@ -88,13 +90,33 @@ const CustomGoalTarget = (props) => {
   };
 
   const goNext = () => {
+    sendEvents('next')
     fetchRecommendedFunds(targetAmount);
   };
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select target amount",
+        "flow": flowName['saveforgoal'],
+        "goal_purpose": subtype || "",
+        "target_amount_selected": targetAmount || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   return (
     <Container
       data-aid='custom-goal-target-screen'
       classOverRide='pr-error-container'
+      events={sendEvents("just_set_events")}
       title='Save for a Goal'
       buttonTitle='NEXT'
       handleClick={goNext}
