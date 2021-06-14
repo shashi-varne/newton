@@ -42,6 +42,8 @@ const NRIAddressDetails2 = (props) => {
     formData.state = kyc?.nri_address?.meta_data?.state || "";
     formData.city = kyc?.nri_address?.meta_data?.city || "";
     formData.country = kyc?.nri_address?.meta_data?.country || "";
+    formData.tin_number = kyc.nri_address?.tin_number || "",
+
     setFormData({ ...formData });
     setOldState({ ...formData });
   };
@@ -68,6 +70,7 @@ const NRIAddressDetails2 = (props) => {
       return;
     }
 
+    keysToCheck.push("tin_number");
     if (compareObjects(keysToCheck, oldState, form_data)) {
       handleNavigation();
       return;
@@ -79,6 +82,7 @@ const NRIAddressDetails2 = (props) => {
     userKycDetails.nri_address.meta_data.country = form_data.country;
     userKycDetails.nri_address.meta_data.pincode = form_data.nri_pincode;
     userKycDetails.nri_address.meta_data.addressline = form_data.addressline;
+    userKycDetails.nri_address.meta_data.tin_number = form_data.tin_number;
 
     try {
       let item = {
@@ -136,13 +140,7 @@ const NRIAddressDetails2 = (props) => {
     }
   }
 
-  let address_proof = "";
-
-  // if (kyc?.address?.meta_data?.is_nri) {
-  //   address_proof = "Passport";
-  // } else {
-    address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
-  // }
+  let address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
 
   const getPageDetails = (userKyc) => {
     let pageDetails = {}
@@ -193,7 +191,7 @@ const NRIAddressDetails2 = (props) => {
       data-aid='kyc-nri-address-details-screen-2'
       headerData={{ goBack }}
     >
-      <section data-aid='kyc-address-details-2'>
+      <section className="kyc-nri-address-details" data-aid='kyc-address-details-2'>
         <div className="kyc-main-subtitle" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
         <form className="form-container" data-aid='kyc-form-container'>
           <TextField
@@ -211,7 +209,6 @@ const NRIAddressDetails2 = (props) => {
           <TextField
             label="Address"
             name="addressline"
-            className=""
             value={form_data.addressline}
             helperText={form_data.addressline_error || ""}
             error={form_data.addressline_error ? true : false}
@@ -222,7 +219,6 @@ const NRIAddressDetails2 = (props) => {
           <TextField
             label="City"
             name="city"
-            className=""
             value={form_data.city}
             helperText={form_data.city_error || ""}
             error={form_data.city_error ? true : false}
@@ -232,7 +228,6 @@ const NRIAddressDetails2 = (props) => {
           <TextField
             label="State"
             name="state"
-            className=""
             value={form_data.state}
             helperText={form_data.state_error || ""}
             error={form_data.state_error ? true : false}
@@ -247,6 +242,20 @@ const NRIAddressDetails2 = (props) => {
             error={form_data.country_error ? true : false}
             margin="normal"
             onChange={handleChange}
+          />
+          <TextField
+            label="Taxpayer Identification Number (optional)"
+            value={form_data.tin_number || ""}
+            error={form_data.tin_number_error ? true : false}
+            helperText={form_data.tin_number_error || ""}
+            onChange={handleChange}
+            name="tin_number"
+            margin="normal"
+            type="text"
+            disabled={isApiRunning}
+            inputProps={{
+              maxLength: 20,
+            }}
           />
         </form>
       </section>

@@ -55,7 +55,7 @@ const PersonalDetails1 = (props) => {
       email: kyc.identification?.meta_data?.email || "",
       mobile: mobile_number,
       country_code: country_code,
-      gender: getGenderValue(kyc.identification?.meta_data?.gender ) || "",
+      gender: getGenderValue(kyc.identification?.meta_data?.gender) || "",
       marital_status: kyc.identification?.meta_data?.marital_status || "",
     };
     setFormData({ ...formData });
