@@ -420,7 +420,7 @@ class HealthInsuranceLanding extends Component {
           <Imgc src={props.icon} className='imgc health-insurance-plan-list-img'  alt="" />
           <div style={{ marginRight: '15px'}} />
           <div style={ (props.key === 'HealthInsuranceEntry') ? {width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index  && !this.state.Comprehensive ? 'solid' : '',   
-                paddingTop: '20px', paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'} : (props.key === 'DISEASE_SPECIFIC_PLANS') ? {width : '100%' ,borderBottomWidth: '1px', 
+                paddingTop: '20px', paddingBottom: '28px', justifyContent: 'space-between', cursor: 'pointer'} : (props.key === 'DISEASE_SPECIFIC_PLANS') ? {width : '100%' ,borderBottomWidth: '1px', 
                 borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index  && !this.state.DiseasesSpecificPlan ? 'solid' : '', paddingTop: '20px', paddingBottom: '22px', 
                 justifyContent: 'space-between', cursor: 'pointer'}  : {width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   
                 paddingTop: '20px', paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'} }>
