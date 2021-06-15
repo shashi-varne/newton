@@ -46,8 +46,7 @@ export async function getMyAccount() {
       }
       let npsUpload =
         this.state.currentUser.nps_investment &&
-        !result.nps_registration_details.registration_details
-          .additional_details_status;
+        !result?.nps_registration_details?.registration_details?.additional_details_status;
       storageService().setObject("nps_upload", npsUpload);
       let mandateRequired = result.razorpay_mandates.mandate_needed;
       if (mandateRequired) {

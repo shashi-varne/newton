@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
-import Button from "@material-ui/core/Button";
 import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
-import DotDotLoaderNew from '../../common/ui/DotDotLoaderNew';
 import "./Digilocker.scss";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
@@ -50,55 +48,38 @@ const Failed = (props) => {
 
   const productName = getConfig().productName;
   return (
-    <Container 
-      title="Aadhaar KYC Failed!" 
-      noFooter 
+    <Container
+      title="Aadhaar KYC Failed!"
+      data-aid='kyc-aadhaar-kyc-failed-screen'
+      twoButtonVertical={true}
+      button1Props={{
+        type: 'primary',
+        order: "1",
+        title: "RETRY",
+        onClick: retry,
+        classes: { root: 'digilocker-failed-button'}
+      }}
+      button2Props={{
+        type: 'secondary',
+        order: "2",
+        title: "UPLOAD DOCUMENTS MANUALLY",
+        onClick: manual,
+        classes: { root: 'digilocker-failed-button'},
+        showLoader: isApiRunning
+      }}
       skelton={isLoading}
       headerData={{goBack}}
     >
-      <section id="digilocker-failed">
+      <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         <img
           className="digi-image"
           alt=""
           src={require(`assets/${productName}/ils_digilocker_failed.svg`)}
         />
-        <div className="body-text1">
+        <div className="body-text1" data-aid='kyc-body-text1'>
           Aadhaar KYC has been failed because we were not able to connect to
           your Digilocker.
         </div>
-        <div className="body-text2">
-          However, you can <strong>still complete your KYC</strong> and start
-          investing in mutual funds.
-        </div>
-        {!isLoading && (
-          <footer className="footer">
-            <Button
-              variant="raised"
-              fullWidth
-              color="secondary"
-              className="raised"
-              onClick={retry}
-            >
-              RETRY
-            </Button>
-            <Button
-              variant="outlined"
-              fullWidth
-              color="secondary"
-              className="outlined"
-              onClick={manual}
-            >
-              {!isApiRunning && 'CONTINUE WITH MANUAL KYC'}
-              {isApiRunning && 
-                <div className="flex-justify-center">
-                  <DotDotLoaderNew
-                    styleBounce={{backgroundColor:'white'}}
-                  />
-                </div>
-              }
-            </Button>
-          </footer>
-        )}
       </section>
       <AadhaarDialog
         open={open}

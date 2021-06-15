@@ -6,6 +6,7 @@ import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
 import { getSummaryV2 } from "../common/api";
+import { nativeCallback } from "../../utils/native_callback";
 
 const Redeemed = (props) => {
   const stateParams = props.location?.state || {};
@@ -45,24 +46,41 @@ const Redeemed = (props) => {
     setOpenProcess(true);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Pending withdrawals",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       noFooter={true}
       title="Pending withdrawals"
       skelton={showSkelton}
+      data-aid='reports-pending-withdrawals'
     >
-      <div className="report-purchase">
+      <div className="report-purchase" data-aid='report-purchase'>
         {!isEmpty(transactions) &&
           transactions.map((redeemed, index) => {
             return (
-              <div className="purchased" key={index}>
-                <div className="redeemed-head head">
+              <div className="purchased" key={index} data-aid='reports-purchased'>
+                <div className="redeemed-head head" data-aid='reports-head'>
                   <div>{redeemed.mfname}</div>
                   {redeemed.status === "upcoming" && (
                     <img src={require(`assets/auto_debit.png`)} alt="" />
                   )}
                 </div>
-                <div className="head-info">
+                <div className="head-info" data-aid='head-info'>
                   <div className="content">
                     <img alt="" src={require(`assets/invested_amount.png`)} />
                     <div className="text redeemed-text">
@@ -89,7 +107,7 @@ const Redeemed = (props) => {
                   )}
                 </div>
                 {redeemed.trans_type !== "insta-redeem" ? (
-                  <div className="progress-bar">
+                  <div className="progress-bar" data-aid='reports-progress-bar'>
                     <ProgressStep
                       isCompleted={true}
                       text="WITHDRAW REQUESTED"
@@ -113,7 +131,7 @@ const Redeemed = (props) => {
                     />
                   </div>
                 ) : (
-                  <div className="progress-bar upcoming">
+                  <div className="progress-bar upcoming" data-aid='reports-progress-bar-upcoming'>
                     <ProgressStep
                       isCompleted={true}
                       text="WITHDRAW REQUESTED"
@@ -132,7 +150,7 @@ const Redeemed = (props) => {
                     />
                   </div>
                 )}
-                <div className="check-process">
+                <div className="check-process" data-aid='reports-check-process'>
                   <div className="text" onClick={() => handleProcess(redeemed)}>
                     VIEW DETAILS
                   </div>

@@ -7,7 +7,7 @@ class NpsSdk extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      show_loader: true,
     };
     this.initialize = initialize.bind(this);
   }
@@ -17,19 +17,19 @@ class NpsSdk extends Component {
   }
 
   onload = () => {
-    let currentUser = storageService().getObject("user");
-    let npsData = storageService().getObject("nps_data");
+    let currentUser = storageService().getObject("user") || {};
+    let npsData = this.state.npsData || storageService().getObject("nps_data") || {};
 
     if (currentUser.nps_investment || npsData.investment_status) {
-      if (npsData.registration_details.additional_details_status) {
-        storageService.setObject('nps_additional_details_required', false);
+      if (npsData?.registration_details?.additional_details_status) {
+        storageService().set('nps_additional_details_required', false);
         if (currentUser.kyc_registration_v2 === 'init' || currentUser.kyc_registration_v2 === 'incomplete') {
           this.navigate('/kyc/journey');
         } else {
           this.navigate('/nps/investments');
         }
       } else {
-        storageService.setObject('nps_additional_details_required', true);
+        storageService().set('nps_additional_details_required', true);
         if (currentUser.kyc_registration_v2 === 'init' || currentUser.kyc_registration_v2 === 'incomplete') {
           this.navigate('/kyc/journey');
         } else {

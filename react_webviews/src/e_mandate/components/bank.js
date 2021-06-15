@@ -10,6 +10,7 @@ import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import bank_building from 'assets/finity/bank_building.svg'
+import { storageService } from '../../utils/validators';
 
 
 class SelectBank extends Component {
@@ -165,7 +166,7 @@ class SelectBank extends Component {
         let app = getConfig().app;
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app + '&generic_callback=' + getConfig().generic_callback;
+          '&app=' + app + '&generic_callback=' + getConfig().generic_callback + '&is_secure=' + storageService().get("is_secure");
         
         if (getConfig().isNative) {
           if (getConfig().app === 'ios') {

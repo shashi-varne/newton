@@ -92,27 +92,28 @@ const ReferDialog = ({ isOpen, close }) => {
       aria-describedby='referral-dialog'
       className='referral-dialog'
       id='referral-dialog'
+      data-aid='referral-dialog'
       disableBackdropClick
       TransitionComponent={Transition}
     >
       <DialogContent>
-        <div className='refer-close-icon' onClick={handleClose}>
+        <div className='refer-close-icon' data-aid='refer-close-icon' onClick={handleClose}>
           <Close />
         </div>
         {user?.active_investment ? (
-          <div className='referral-message-dialog'>
-            <div className='refer-title'>Refer & Earn</div>
+          <div className='referral-message-dialog' data-aid='referral-message-dialog'>
+            <div className='refer-title' data-aid='refer-title'>Refer & Earn</div>
             <div className='referral-dialog-message'>
               <div className='referral-img-wrapper'>
                 <img src={require('assets/referal.png')} alt='send_icon' />
               </div>
               {!loader ? (
                 <div className='referral-message-wrapper'>
-                  <div className='referral-message'>{promoData?.promoMsg}</div>
+                  <div className='referral-message' data-aid='referral-message'>{promoData?.promoMsg}</div>
                   {promoData?.promoCode && (
                     <>
-                      <div className='share-refferal'>Share your referral code:</div>
-                      <div className='referral-code' ref={textToCopy}>{promoData?.promoCode}</div>
+                      <div className='share-refferal' data-aid='share-refferal'>Share your referral code:</div>
+                      <div className='referral-code' data-aid='referral-code' ref={textToCopy}>{promoData?.promoCode}</div>
                       {/* <p>{copyText}</p>
                       <button onClick={copyToClipboard}>copy</button> */}
                     </>
@@ -128,7 +129,7 @@ const ReferDialog = ({ isOpen, close }) => {
             </div>
           </div>
         ) : (
-          <div className='referral-input-container'>
+          <div className='referral-input-container' data-aid='referral-input-container'>
             <div className='referral-promo-text'>Promo / Partner Code</div>
             <div>
               <Input
@@ -149,8 +150,9 @@ const ReferDialog = ({ isOpen, close }) => {
       </DialogContent>
       {!user?.active_investment && (
         <DialogActions className='dialog-action'>
-          <Button onClick={handleClose} buttonTitle='CLOSE' classes={{ button: 'button no-bg' }} />
+          <Button dataAid='close-btn' onClick={handleClose} buttonTitle='CLOSE' classes={{ button: 'button no-bg' }} />
           <Button
+            dataAid='apply-btn'
             onClick={handlePromoCode}
             classes={{ button: 'button bg-full' }}
             buttonDisabled={!referralCode}

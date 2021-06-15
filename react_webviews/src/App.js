@@ -25,6 +25,7 @@ import DesktopLayout from './desktopLayout';
 
 
 import Feature from './Feature';
+
 import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
