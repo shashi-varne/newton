@@ -152,7 +152,6 @@ WVMenuListDropdownItem.propTypes = {
 
 WVMenuListDropdownItem.defaultProps = {
     keyname: "",
-    selectedValue: () => { },
     handleClick: () => { },
     classes: {},
     isDropDown: false,

@@ -57,7 +57,12 @@ WVMenuListDropDownList.propTypes = {
       subtitle: PropTypes.node,
       isDropDown: PropTypes.bool,
       classes: PropTypes.string,
-  }))
+  })),
+  renderPorductsList: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.node,
+    subtitle: PropTypes.node,
+    classes: PropTypes.string,
+}))
 };
 
 WVMenuListDropDownList.defaultProps = {
