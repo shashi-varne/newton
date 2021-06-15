@@ -56,6 +56,7 @@ const WVMenuListDropdownItem = ({
             <div className='wv-menu-list-dropdown' data-aid={`menu-list-dropdown-${dataAidSuffix}`}>
                 <div className='wv-menulist-block'>
                     <Imgc src={image} alt="" className={`wv-image-icon ${classes.Image}`} style={{ width : "50px"}} />
+                    <span style={{ width:"25px"}}/>
                     <div className='wv-dropdown-elements'>
                         {title &&
                             <Title classes={classes} dataAidSuffix={dataAidSuffix} isDropDown={isDropDown} selected={selected} >
