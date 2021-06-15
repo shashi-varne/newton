@@ -12,6 +12,7 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getGenderValue,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -51,7 +52,7 @@ const PersonalDetails1 = (props) => {
       email: kyc.identification?.meta_data?.email || "",
       mobile: mobile_number,
       country_code: country_code,
-      gender: kyc.identification?.meta_data?.gender || "",
+      gender: getGenderValue(kyc.identification?.meta_data?.gender) || "",
       marital_status: kyc.identification?.meta_data?.marital_status || "",
       father_name: kyc.pan?.meta_data?.father_name || "",
       mother_name: kyc.pan?.meta_data?.mother_name || "",

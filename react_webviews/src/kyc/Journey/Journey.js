@@ -582,7 +582,8 @@ const Journey = (props) => {
       !show_aadhaar &&
       user.kyc_registration_v2 !== 'submitted' &&
       user.kyc_registration_v2 !== 'complete' &&
-      fromState !== "/kyc/digilocker/failed"
+      fromState !== "/kyc/digilocker/failed" &&
+      journeyStatus !== "rejected"
     ) {
       if (
         !storageService().get('show_aadhaar') &&
@@ -596,7 +597,9 @@ const Journey = (props) => {
   }
   if (!isEmpty(kyc) && !isEmpty(user)) {
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
-      navigate('/nps/identity')
+      navigate('/nps/identity', {
+        state: { goBack: '/invest' },
+      })
     } else if (
       user.kyc_registration_v2 === 'submitted' &&
       kyc.sign_status === 'signed'

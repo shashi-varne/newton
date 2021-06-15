@@ -8,6 +8,7 @@ import { isEmailOrMobileVerified } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const config = getConfig();
 const productName = config.productName;
@@ -53,6 +54,15 @@ const AccountInfo = (props) => {
     } else {
       navigate(PATHNAME_MAPPER.homeKyc);
     }
+  };
+
+  const openInBrowser = (url) => () => {
+    nativeCallback({
+      action: "open_browser",
+      message: {
+        url: url,
+      },
+    });
   };
 
   return (
@@ -118,21 +128,43 @@ const AccountInfo = (props) => {
             />
             <div className="kaim-terms-info">
               I agree to have read and understood the{" "}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={config.termsLink}
-              >
-                Terms & conditions
-              </a>{" "}
-              and{" "}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={config.termsLink}
-              >
-                Equity Annexure
-              </a>{" "}
+              {config.Web ? (
+                <>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={config.termsLink}
+                    className="terms-text"
+                  >
+                    Terms & conditions
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={config.termsLink}
+                    className="terms-text"
+                  >
+                    Equity Annexure
+                  </a>{" "}
+                </>
+              ) : (
+                <>
+                  <span
+                    className="terms-text"
+                    onClick={openInBrowser(config.termsLink)}
+                  >
+                    Terms & conditions
+                  </span>{" "}
+                  and{" "}
+                  <span
+                    className="terms-text"
+                    onClick={openInBrowser(config.termsLink)}
+                  >
+                    Equity Annexure
+                  </span>{" "}
+                </>
+              )}
             </div>
           </div>
           <SecurityDisclaimer />
