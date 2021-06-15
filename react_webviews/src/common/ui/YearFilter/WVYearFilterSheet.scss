@@ -1,8 +1,8 @@
  .wvyear-filter {
-   display: flex !important;
+   display: flex;
    justify-content: space-between;
    cursor: pointer;
-   margin: 0px;
+   margin-bottom: 5px;
    position: sticky;
    left: 0;
    right: 0;
@@ -19,12 +19,12 @@
    }
 
    .wvselected {
-   color: white !important;
-   background-color: var(--primary) !important;
+   color: white;
+   background-color: var(--primary);
    }
 
    p {
-     text-align: center !important;
+     text-align: center;
     }
 
 }
