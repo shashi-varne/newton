@@ -27,12 +27,17 @@ import RiskInfo from "./components/RiskPages/RiskInfo";
 import HowWeRecommend from "../Recommendation/HowWeRecommend";
 
 const Invest = (props) => {
-  const { url } = props.match;
+  const { url } = props.match; console.log(url)
   return (
     <Switch>
       <Route
         exact
         path={`${url}`}
+        component={Landing}
+      />
+      <Route
+        exact
+        path={`${url}/srik`}
         component={Landing}
       />
       <Route
