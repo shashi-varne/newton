@@ -13,7 +13,7 @@ import {
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
 import { PATHNAME_MAPPER } from "../../constants";
-import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
+import { navigate as navigateFunc } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
 import {
   getTotalPagesInPersonalDetails,
@@ -21,7 +21,7 @@ import {
 } from "../../common/functions";
 // import WVButton from "../../../common/ui/Button/WVButton";
 
-const config = getConfig();
+// const config = getConfig();
 // const googleRedirectUrl = `${config.base_url}${API_CONSTANTS.socialAuth}/google?redirect_url=${encodeURIComponent(`${getBasePath()}/kyc/communication-details/callback${config.searchParams}`)}`;
 // const googleButtonTitle = (
 //   <a className="kcd-google-text" href={googleRedirectUrl}>

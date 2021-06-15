@@ -42,7 +42,7 @@ const NRIAddressDetails2 = (props) => {
     formData.state = kyc?.nri_address?.meta_data?.state || "";
     formData.city = kyc?.nri_address?.meta_data?.city || "";
     formData.country = kyc?.nri_address?.meta_data?.country || "";
-    formData.tin_number = kyc.nri_address?.tin_number || "",
+    formData.tin_number = kyc.nri_address?.tin_number || "";
 
     setFormData({ ...formData });
     setOldState({ ...formData });
