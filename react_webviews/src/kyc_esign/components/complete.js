@@ -16,7 +16,7 @@ const productName = config.productName;
 
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
-  const [tardingEnabled, setTradingEnabled] = useState(false);
+  const [tradingEnabled, setTradingEnabled] = useState(false);
   const [showAccountStatus, setShowAccountStatus] = useState(false);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         {(dl_flow || kyc?.kyc_status === "compliant") && !show_note && (
           <div className="title" data-aid='kyc-header-title'>KYC complete!</div>
         )}
-        {!tardingEnabled && kyc?.kyc_status === "compliant" && show_note && (
+        {!tradingEnabled && kyc?.kyc_status === "compliant" && show_note && (
           <div className="title" data-aid='kyc-header-title'>Great! Your KYC application is submitted!</div>
         )}
         {(kyc?.kyc_status !== 'compliant' && !dl_flow) && (
