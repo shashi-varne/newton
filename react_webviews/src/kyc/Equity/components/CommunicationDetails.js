@@ -12,27 +12,23 @@ import {
 } from "../../../utils/validators";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
-import { API_CONSTANTS, PATHNAME_MAPPER } from "../../constants";
-import {
-  getBasePath,
-  getConfig,
-  navigate as navigateFunc,
-} from "../../../utils/functions";
+import { PATHNAME_MAPPER } from "../../constants";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
 import {
   getTotalPagesInPersonalDetails,
   isDigilockerFlow,
 } from "../../common/functions";
-import WVButton from "../../../common/ui/Button/WVButton";
+// import WVButton from "../../../common/ui/Button/WVButton";
 
 const config = getConfig();
-const googleRedirectUrl = `${config.base_url}${API_CONSTANTS.socialAuth}/google?redirect_url=${encodeURIComponent(`${getBasePath()}/kyc/communication-details/callback${config.searchParams}`)}`;
-const googleButtonTitle = (
-  <a className="kcd-google-text" href={googleRedirectUrl}>
-    <img src={require(`assets/google.svg`)} alt="google" />
-    <div>Continue with Google</div>
-  </a>
-);
+// const googleRedirectUrl = `${config.base_url}${API_CONSTANTS.socialAuth}/google?redirect_url=${encodeURIComponent(`${getBasePath()}/kyc/communication-details/callback${config.searchParams}`)}`;
+// const googleButtonTitle = (
+//   <a className="kcd-google-text" href={googleRedirectUrl}>
+//     <img src={require(`assets/google.svg`)} alt="google" />
+//     <div>Continue with Google</div>
+//   </a>
+// );
 const CommunicationDetails = (props) => {
   const navigate = navigateFunc.bind(props);
   const stateParams = props.location?.state || {};
@@ -228,7 +224,7 @@ const CommunicationDetails = (props) => {
           </div>
           {communicationType === "email" ? (
             <>
-              {!showOtpContainer && (
+              {/* {!showOtpContainer && (
                 <>
                   <WVButton
                     variant="outlined"
@@ -244,7 +240,7 @@ const CommunicationDetails = (props) => {
                     className="kcd-or-divider"
                   />
                 </>
-              )}
+              )} */}
               <TextField
                 label="Email address"
                 value={formData.email || ""}
@@ -278,7 +274,6 @@ const CommunicationDetails = (props) => {
               autoFocus
               className="kcd-input-field"
               InputProps={{
-                // inputMode:"numeric",
                 endAdornment: showOtpContainer && (
                   <InputAdornment position="end">
                     <div className="kcd-input-edit" onClick={handleEdit}>
@@ -289,7 +284,7 @@ const CommunicationDetails = (props) => {
               }}
               // eslint-disable-next-line
               inputProps={{
-                inputMode: "numeric"
+                inputMode: "numeric",
               }}
             />
           )}
