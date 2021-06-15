@@ -161,14 +161,13 @@ export const getTotalPagesInPersonalDetails = (isEdit = false) => {
 
 export const isEmailOrMobileVerified = () => {
   const kyc = storageService().getObject("kyc") || {};
-  const user = storageService().getObject("user") || {};
-  if (isEmpty(kyc) || isEmpty(user)) {
+  if (isEmpty(kyc)) {
     return false;
   }
   return (
-    (user.email === null && kyc.identification?.meta_data?.email_verified) ||
-    (user.mobile === null &&
-      kyc.identification?.meta_data?.mobile_number_verified)
+    kyc.identification?.meta_data?.email_verified &&
+    kyc.identification?.meta_data?.mobile_number_verified &&
+    kyc.identification.meta_data.whatsapp_consent
   );
 };
 

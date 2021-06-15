@@ -56,7 +56,9 @@ const CommunicationDetails = (props) => {
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
-      const type = user.mobile === null ? "mobile" : "email";
+      const type = !kyc.identification.meta_data.email_verified
+        ? "email"
+        : "mobile";
       setCommunicationType(type);
       const data = { ...formData };
       data.email = kyc.identification.meta_data.email;
@@ -64,6 +66,7 @@ const CommunicationDetails = (props) => {
       const [extension, number] = mobileNumber.toString().split("|");
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
+      data.disableMobile = kyc.identification.meta_data.mobile_number_verified;
       setFormData({ ...data });
       setIsKycDone(kyc?.mf_kyc_processed);
       setIsDlFlow(isDigilockerFlow(kyc));
@@ -124,7 +127,12 @@ const CommunicationDetails = (props) => {
         setShowLoader("button");
         const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
         updateKyc(otpResult.kyc);
-        handleNavigation();
+        if (
+          otpResult.kyc.identification.meta_data.mobile_number_verified &&
+          otpResult.kyc.identification.meta_data.email_verified
+        ) {
+          handleNavigation();
+        }
       } else {
         let body = {};
         if (communicationType === "email") {
@@ -151,6 +159,13 @@ const CommunicationDetails = (props) => {
         }
         setShowLoader("button");
         const result = await sendOtp(body);
+        if (
+          communicationType === "mobile" &&
+          kyc.identification.meta_data.mobile_number_verified
+        ) {
+          handleNavigation();
+          return;
+        }
         setShowOtpContainer(true);
         setOtpId(result.otp_id);
         setOtpData({
@@ -270,7 +285,7 @@ const CommunicationDetails = (props) => {
               helperText={formData.mobile_error}
               onChange={handleChange("mobile")}
               type="text"
-              disabled={showLoader}
+              disabled={showLoader || formData.disableMobile}
               autoFocus
               className="kcd-input-field"
               InputProps={{
