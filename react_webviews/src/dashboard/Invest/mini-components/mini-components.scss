@@ -594,14 +594,40 @@
 /////////////// End of Campaign Dialog /////////////////////////
 
 ////////////// Account already exists Dialog //////////////////
-.account-already-exists-text{
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 2px;
-  letter-spacing: 0px;
-  color: #767e86;
+.account-already-exists-container{
+  .text{
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 2px;
+    letter-spacing: 0px;
+    color: #767e86;
+  }
+  .details{
+    display: flex;
+    align-items: center;
+    flex-basis: 40%;
+  }
 }
 /////////////////End of Account already exists Dialog
+
+////////////////Verify Details Dialog //////////////////@at-root
+.verify-details-container{
+  .details{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .text{
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 21px;
+      letter-spacing: 0px;
+      color: #767e86;
+      padding-left: 10px;
+    }
+  }
+}
+
+////////////////End of Verify Details Dialog ////////////
 
 @media only screen and (max-width: 700px) {
   #invest-bottom-dialog, #sdk-campaign-dialog {

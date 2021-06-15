@@ -25,31 +25,17 @@ function VerifyDetailDialog({ type, isOpen, data, onClose }) {
           console.log("DIALOG NEXT");
         },
       }}
+      classes={{
+        container: "verify-details-container",
+      }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+      <div className="details">
         <div style={{ display: "flex", alignItems: "center" }}>
           <img
             src={require(`../../../assets/bottom_sheet_icon_${type}.svg`)}
             alt=""
           />
-          <span
-            style={{
-              fontSize: "13px",
-              fontWeight: "400",
-              lineHeight: "21px",
-              letterSpacing: "0px",
-              color: "#767E86",
-              paddingLeft: "10px",
-            }}
-          >
-            {data}
-          </span>
+          <span className="text">{data}</span>
         </div>
         <WVClickableTextElement onClick={editHandle}>
           EDIT

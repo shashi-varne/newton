@@ -24,8 +24,11 @@ function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan }) {
           console.log("Button2 clicked");
         },
       }}
+      classes={{
+        container: "account-already-exists-container",
+      }}
     >
-      <p className="account-already-exists-text" style={{ paddingTop: "15px" }}>
+      <p className="text">
         Your {type === "email" ? "email address" : "mobile number"} is already
         registered with
       </p>
@@ -33,25 +36,29 @@ function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan }) {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "space-around",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div className="details">
           <img
             src={require(`../../../assets/bottom_sheet_icon_${type}.svg`)}
             alt=""
             style={{ paddingRight: "10px" }}
           />
-          <span className="account-already-exists-text">{data}</span>
+          <span className="text">{data}</span>
         </div>
-        <p className="account-already-exists-text">|</p>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ flexBasis: "20%" }}>
+          <p className="text" style={{ textAlign: "center" }}>
+            |
+          </p>
+        </div>
+        <div className="details">
           <img
             src={require(`../../../assets/bottom_sheet_icon_pan.svg`)}
             alt=""
             style={{ paddingRight: "10px" }}
           />
-          <span className="account-already-exists-text">{pan}</span>
+          <span className="text">{pan}</span>
         </div>
       </div>
     </WVBottomSheet>
