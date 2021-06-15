@@ -69,7 +69,7 @@ const WVMenuListDropdownItem = ({
                     </div>
                     {isDropDown &&
                         <div className='wv-menulist-img'>
-                            <img src={arrow} alt="" style={{ transform: selected === keyname ? `rotate(180deg)` : '' }} />
+                            <img src={arrow} alt="" style={{ transform: selected === keyname ? `rotate(180deg)` : '', marginRight:'15px' }} />
                         </div>}
                 </div>
             </div>
