@@ -3,37 +3,35 @@
     width: 100%;
     .wv-menulist-block{
         display: flex;
-        width: 100% !important;
+        width: 100%;
       }
 
     .wv-menu-list-dropdown{
       display: flex;
       align-items: center;
+      width: 100%;
       .wv-image-icon{
         width: 50px;
         min-height: 40px;
-        margin-right: 25px;
         padding-top: 20px;
         padding-bottom: 20px;
       }
       .wv-image-icon-small{
-        margin: 20px 30px 0px 3px;
-        width: 40px !important;
-        height: 40px !important;
+        margin: 20px 0px 0px 3px;
+        width: 40px;
+        height: 40px;
         border-radius: 2px;
-        padding: 3px !important;
+        padding: 3px;
       }
       .wv-menulist-dropdown-logos-text{
         color: var(--dark);
-        font-size:13px !important;
-        margin-bottom: 5px !important;
+        font-size: 13px !important;
         font-weight: 400 !important;
-        margin-bottom: 5px !important;
-        line-height: 15.41px !important;
+        line-height: 16px !important;
         width: 100%;
       } 
       .wv-dropdown-elements{
-          width: 100% !important;
+          width: 100%;
           padding-top: 20px;
           padding-bottom: 20px;
           justify-content: space-between;
@@ -43,18 +41,22 @@
         color: var(--dark);
         font-size: 16px;
         margin-bottom: 5px;
+        margin-left: 25px;
         line-height: 24px;
         font-weight: 500;
         flex-grow: 1;
       }
       .wv-menu-subtitle{
         color: var(--steelgrey);
-         font-size: 13px;
-         font-weight: 400;
-         line-height: 21px;
+        margin-left: 25px;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 21px;
       }
-      .menulist-img{
+      .wv-menulist-img{
         color: var(--primary);
+        align-items: center;
+        display: flex;
         float: right ;
       }
     }
@@ -70,12 +72,12 @@
 
 .wv-menulist-products + .wv-menulist-products .wv-menulist-header{
   .wv-dropdown-elements{
-    border-top-style: none !important;
+    border-top-style: none;
   }
 }
 
 .wv-menulist-header:last-child{
   .wv-dropdown-elements{
-    padding-bottom: 40px !important;
+    padding-bottom: 40px;
   }
 }

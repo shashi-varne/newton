@@ -18,7 +18,7 @@
  */
 
 
-import './WVMenuListDropdown.Scss';
+import './WVMenuListDropdown.scss';
 import React from "react";
 import { Imgc } from '../Imgc';
 import { isEmpty } from 'lodash';
@@ -55,7 +55,7 @@ const WVMenuListDropdownItem = ({
         <div className={`wv-menulist-products ${classes.header}`} data-aid={`menulist-products-${dataAidSuffix}`} onClick={handleClick} key={index}>
             <div className='wv-menu-list-dropdown' data-aid={`menu-list-dropdown-${dataAidSuffix}`}>
                 <div className='wv-menulist-block'>
-                    <Imgc src={image} alt="" className={`wv-image-icon ${classes.Image}`} />
+                    <Imgc src={image} alt="" className={`wv-image-icon ${classes.Image}`} style={{ width : "50px"}} />
                     <div className='wv-dropdown-elements'>
                         {title &&
                             <Title classes={classes} dataAidSuffix={dataAidSuffix} isDropDown={isDropDown} selected={selected} >
@@ -66,6 +66,10 @@ const WVMenuListDropdownItem = ({
                                 {subtitle}
                             </Subtitle>}
                     </div>
+                    {isDropDown &&
+                        <div className='wv-menulist-img'>
+                            <img src={arrow} alt="" style={{ transform: selected === keyname ? `rotate(180deg)` : '' }} />
+                        </div>}
                 </div>
             </div>
 
@@ -96,14 +100,10 @@ const WVMenuListDropdownItem = ({
 };
 
 
-const Title = ({ children, classes, isDropDown, selected, keyname, dataAidSuffix }) => {
+const Title = ({ children, classes, dataAidSuffix }) => {
     return (
         <div className={`wv-menu-title ${classes?.headerTitle}`} data-aid={`menu-title-${dataAidSuffix}`}>
             {children}
-            {isDropDown &&
-                <span className='menulist-img'>
-                    <img src={arrow} alt="" style={{ transform: selected === keyname ? `rotate(180deg)` : '' }} />
-                </span>}
         </div>
     );
 }
@@ -111,7 +111,7 @@ const Title = ({ children, classes, isDropDown, selected, keyname, dataAidSuffix
 
 const Subtitle = ({ children, classes, dataAidSuffix }) => {
     return (
-        <div className={`wv-menu-subtitle ${classes?.subheader}`} data-aid={`wv-menu-subtitle-${dataAidSuffix}`}>
+        <div className={`wv-menu-subtitle ${classes?.subheader}`} data-aid={`menu-subtitle-${dataAidSuffix}`}>
             {children}
         </div>
     );
