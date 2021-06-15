@@ -193,6 +193,7 @@ class NpsInvestments extends Component {
   render() {
     return (
       <Container
+        data-aid='nps-investments-screen'
         events={this.sendEvents("just_set_events")}
         fullWidthButton
         buttonTitle="INVEST MORE"
@@ -207,8 +208,9 @@ class NpsInvestments extends Component {
         }}
       >
         <section className="page invest nps">
-          <div className="nps-investments">
+          <div className="nps-investments" data-aid='nps-investments'>
             {this.state.npscampaign && <div
+              data-aid='nps-npscampaign-list'
               className="list"
               onClick={() => this.redirection(this.state.npsCampActionUrl, 'e-sign', 'nps activation pending')}
             >
@@ -222,7 +224,7 @@ class NpsInvestments extends Component {
               </div>
             </div>}
 
-            <div className="list" onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url, '', 'tax statement')}>
+            <div className="list" data-aid='nps-tax-statement-list' onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url, '', 'tax statement')}>
               <div className="icon">
                 <img
                   alt=''
@@ -245,6 +247,7 @@ class NpsInvestments extends Component {
             {this.state.productName !== 'bfdlmobile' && (this.state.currentUser.kyc_registration_v2 === 'init' || 
             this.state.currentUser.kyc_registration_v2 === 'incomplete') &&
               <div
+                data-aid='nps-kyc-registration-v2-list'
                 className="list"
                 onClick={() => this.optionClicked('/kyc/journey', 'complete nps transaction')}
               >
@@ -263,6 +266,7 @@ class NpsInvestments extends Component {
               </div>}
             {this.state.nps_data && this.state.nps_data.portfolio_data.length > 0 && <div
               className="list"
+              data-aid='nps-track-performance-list'
               onClick={() => this.optionClicked('performance', 'track nps performance')}
             >
               <div className="icon">
@@ -279,6 +283,7 @@ class NpsInvestments extends Component {
             </div>}
             {this.state.nps_data && this.state.nps_data?.pending_orders?.length > 0 && <div
               className="list"
+              data-aid='nps-pending-order-list'
               onClick={() => this.optionClicked('pending', 'pending order')}
             >
               <div className="icon">

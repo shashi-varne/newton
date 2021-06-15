@@ -260,3 +260,5 @@ export const DL_DOCS = [
   {name: 'Pan Card', icon: 'ic_pan_card'},
   {name: 'Address Details', icon: 'ic_address_details'}
 ]
+
+export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];

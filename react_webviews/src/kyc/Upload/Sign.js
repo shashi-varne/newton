@@ -161,15 +161,17 @@ const Sign = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Share Signature"
+      data-aid='kyc-signature-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
+        <section id="kyc-upload-pan" data-aid='kyc-upload-sign'>
           <div className="sub-title">
             Signature should match with your PAN’s signature
           </div>
           {!isWeb && (
             <div
               className="kyc-doc-upload-container"
+              data-aid="kyc-doc-upload-container"
               style={{ border: 'none' }}
             >
               {file && fileToShow && (
@@ -182,7 +184,7 @@ const Sign = (props) => {
                   alt="Upload Signature"
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid="kyc-upload-doc-actions">
                 <div className="mobile-actions">
                   <div className="open-canvas">
                     <input
@@ -194,6 +196,7 @@ const Sign = (props) => {
                     <button
                       onClick={() => handleUpload("open_canvas")}
                       className="kyc-upload-button"
+                      data-aid='kyc-open-canvas'
                     >
                       {!file && !fileToShow && (
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -203,7 +206,7 @@ const Sign = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Canvas</div>
+                      <div className="upload-action" data-aid='kyc-open-canvas-text'>Open Canvas</div>
                     </button>
                   </div>
                 </div>
@@ -212,6 +215,7 @@ const Sign = (props) => {
           )}
           {isWeb && (
             <div
+              data-aid="kyc-doc-upload-container"
               className="kyc-doc-upload-container noBorder"
               style={{ marginTop: '70px' }}
             >
@@ -229,14 +233,14 @@ const Sign = (props) => {
                   alt="Upload Signature"
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid="kyc-upload-doc-actions">
                 <input
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
                   onChange={handleChange('gallery')}
                 />
-                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
+                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button"  data-aid='kyc-gallery-button'>
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -250,7 +254,7 @@ const Sign = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>

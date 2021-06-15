@@ -16,6 +16,7 @@ const KnowMore = ({ isOpen, close }) => {
       aria-describedby="ipv-know-more-dialog"
       className="ipv-know-more-dialog"
       fullScreen={config.isMobileDevice}
+      data-aid='ipv-know-more-dialog'
     >
       <DialogContent className="know-more-dialog-content">
         <header onClick={close}>
@@ -25,10 +26,10 @@ const KnowMore = ({ isOpen, close }) => {
             className="close-icon"
           />
         </header>
-        <main>
-          <div className="title">How to make a selfie Video?</div>
+        <main data-aid='kyc-ipv-videoknowmore'>
+          <div className="title" data-aid='kyc-title'>How to make a selfie Video?</div>
           <div className="content">
-            <div className="text">
+            <div className="text" data-aid='kyc-content-step-1'> 
               <b>Step 1 - </b> Hold your PAN card and start recording.
             </div>
             <img
@@ -37,7 +38,7 @@ const KnowMore = ({ isOpen, close }) => {
             />
           </div>
           <div className="content">
-            <div className="text">
+            <div className="text" data-aid='kyc-content-step-2'>
               <b>Step 2 - </b> Say your Name and stop recording video
             </div>
             <img
@@ -48,7 +49,7 @@ const KnowMore = ({ isOpen, close }) => {
         </main>
       </DialogContent>
       <DialogActions className="action">
-        <Button onClick={close}>GOT IT!</Button>
+        <Button data-aid='got-it-btn' onClick={close}>GOT IT!</Button>
       </DialogActions>
     </Dialog>
   );

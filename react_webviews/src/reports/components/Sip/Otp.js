@@ -135,6 +135,7 @@ class Otp extends Component {
     let { userKyc, showSkelton, isApiRunning, otp_error } = this.state;
     return (
       <Container
+        data-aid='reports-otp-screen'
         events={this.sendEvents("just_set_events")}
         skelton={showSkelton}
         title="Enter OTP"
@@ -142,14 +143,14 @@ class Otp extends Component {
         showLoader={isApiRunning}
         handleClick={() => this.handleClick()}
       >
-        <div className="reports-sip-otp">
-          <div className="title">
+        <div className="reports-sip-otp" data-aid='reports-sip-otp'>
+          <div className="title" data-aid='reports-otp-title'>
             {userKyc &&
               (userKyc?.identification?.meta_data?.mobile_number ||
                 userKyc?.identification?.meta_data?.email)}
           </div>
           <OtpDefault parent={this} isDisabled={isApiRunning} />
-          {otp_error && <div className="otp-error">{otp_error}</div>}
+          {otp_error && <div className="otp-error" data-aid='reports-otp-error'>{otp_error}</div>}
         </div>
       </Container>
     );

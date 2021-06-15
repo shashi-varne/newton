@@ -2,7 +2,7 @@ import React from "react";
 
 const ProgressStep = ({ isCompleted, text, subtext }) => {
   return (
-    <div className="progress">
+    <div className="progress" data-aid='progress-step'>
       <div className="content">
         <hr className="left"></hr>
         {isCompleted ? (

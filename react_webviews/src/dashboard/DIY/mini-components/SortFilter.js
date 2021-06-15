@@ -12,7 +12,7 @@ const SortFilter = ({ localSortFilter, setLocalSortFilter}) => {
   }
 
   return (
-    <FormControl component="fieldset" className="diy-sort-filter">
+    <FormControl component="fieldset" className="diy-sort-filter" data-aid='diy-sort-filter'>
       <RadioGroup
         aria-label="Returns"
         name="sortFilter"

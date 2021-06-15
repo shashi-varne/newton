@@ -249,18 +249,12 @@ const KycBankDetails = (props) => {
     let bank = Object.assign({}, bankData);
     let bankIcon = "";
     if (
-      (code === "ktb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-      (code === "lvb" &&
-        bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-      (code === "cub" &&
-        bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
+      (code === "ktb" && bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
+      (code === "lvb" && bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
+      (code === "cub" && bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
       (code === "ippb" &&
         bankData.ifsc_code.toUpperCase().startsWith("IPOS")) ||
-      (code !== "ktb" &&
-        code !== "lvb" &&
-        code !== "cub" &&
-        code !== "ippb")
+      (code !== "ktb" && code !== "lvb" && code !== "cub" && code !== "ippb")
     ) {
       try {
         setIfscDisabled(true);
@@ -319,8 +313,9 @@ const KycBankDetails = (props) => {
       skelton={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      data-aid='kyc-enter-bank-account-details-screen'
     >
-      <div className="kyc-approved-bank">
+      <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
             <Alert
@@ -328,7 +323,7 @@ const KycBankDetails = (props) => {
               title="Note"
               message={note.info_text}
             />
-            <main>
+            <main data-aid='kyc-enter-bank-account-details'>
               <Input
                 label="Account Holder name"
                 class="input"
@@ -392,7 +387,7 @@ const KycBankDetails = (props) => {
                   isApiRunning || disableFields.c_account_number_disabled
                 }
               />
-              <div className="input">
+              <div className="input" data-aid='kyc-dropdown-withouticon'>
                 <DropdownWithoutIcon
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}
@@ -411,7 +406,7 @@ const KycBankDetails = (props) => {
         )}
         {isPennyExhausted && (
           <PennyExhaustedDialog
-            isOpen={isPennyExhausted}
+            isOpen= {isPennyExhausted}
             redirect={redirect}
             uploadDocuments={uploadDocuments}
           />

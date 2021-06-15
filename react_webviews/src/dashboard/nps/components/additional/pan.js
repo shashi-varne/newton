@@ -235,10 +235,11 @@ class PanDetails extends Component {
         onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        data-aid='dialog-bottom-popup'
       >
         <DialogContent>
-          <div className="nps-dialog" id="alert-dialog-description">
-            <div className="nps-dialog-content">
+          <div className="nps-dialog" id="alert-dialog-description" data-aid='alert-dialog-description'>
+            <div className="nps-dialog-content" data-aid='nps-dialog-content'>
               <div className="content">
                 <div className="title">{this.state.title}</div>
                 <div className="sub-title">{this.state.subtitle}</div>
@@ -248,11 +249,12 @@ class PanDetails extends Component {
                 alt=""
               />
             </div>
-            <div className="btn">
+            <div className="btn" data-aid='nps-btn'>
               <button
                 style={{ cursor: "pointer" }}
                 onClick={() => this.handleClose()}
                 className="call-back-popup-button not-now"
+                data-aid='not-now-btn'
               >
                 NOT NOW
               </button>
@@ -260,6 +262,7 @@ class PanDetails extends Component {
                 style={{ cursor: "pointer" }}
                 onClick={() => this.cta_action()}
                 className="call-back-popup-button"
+                data-aid='call-back-btn'
               >
                 {this.state.btn_text}
               </button>
@@ -292,6 +295,7 @@ class PanDetails extends Component {
     const { form_data, is_nps_contributed, currentUser, isKycApproved, isKycIdentificationApproved } = this.state;
     return (
       <Container
+        data-aid='nps-pan-details-screen'
         classOverRIde="pr-error-container"
         buttonTitle="PROCEED"
         hideInPageTitle
@@ -306,7 +310,7 @@ class PanDetails extends Component {
           goBack: this.goBack
         }}
       >
-        <div className="pan-details">
+        <div className="pan-details" data-aid='pan-details-page'>
           <FormControl fullWidth>
             <div className="InputField">
               <Input
