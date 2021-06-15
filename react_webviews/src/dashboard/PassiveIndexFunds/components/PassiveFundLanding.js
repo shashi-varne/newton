@@ -93,7 +93,7 @@ class Landing extends Component {
               <ReactPlayer
                 className="react-player"
                 ref={this.ref}
-                url="https://youtu.be/_jG3A96fu8o&ab_channel=fisdom"
+                url="https://www.youtube.com/watch?v=PO1b1eD4-Ck&ab_channel=fisdom"
                 width="100%"
                 height="180px"
                 playing={playing}
@@ -111,7 +111,7 @@ class Landing extends Component {
                 }
                 config={{
                   youtube: {
-                    playerVars: { modestbranding: 1, rel: 0, fs: 1 }
+                    playerVars: { modestbranding: 1, rel: 0, fs: 1, loop: 1,  }
                   }
                 }}
               />
