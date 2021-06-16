@@ -330,12 +330,10 @@ export const isKycCompleted = (kyc) => {
   if (isEmpty(kyc)) return false;
 
   if (kyc?.kyc_status === "compliant") {
-    return (kyc?.application_status_v2 === "submitted" ||
-    kyc?.application_status_v2 === "complete");
+    return kyc?.application_status_v2 === "complete";
   } else {
     return (
-      (kyc?.application_status_v2 === "submitted" ||
-        kyc?.application_status_v2 === "complete") &&
+        kyc?.application_status_v2 === "complete" &&
       kyc.sign_status === "signed"
     );
   }

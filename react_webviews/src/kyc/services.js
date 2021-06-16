@@ -3,6 +3,7 @@ import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
+import { isKycCompleted } from './common/functions'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -269,7 +270,7 @@ export function getKycAppStatus(kyc) {
       status = kyc.equity_application_status;
     }
   } else {
-    if (!TRADING_ENABLED || kyc?.kyc_product_type !== "equity") {
+    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isKycCompleted(kyc))) {
       status = kyc.application_status_v2;
     } else {
       status = kyc.equity_application_status;
@@ -408,7 +409,6 @@ function getAddressProof(userKyc) {
 export function isReadyToInvest() {
   let userRTI = storageService().getObject("user");
   let kycRTI = storageService().getObject("kyc");
-  const TRADING_ENABLED = isTradingEnabled(kycRTI);
 
   if (!kycRTI || !userRTI) {
     return false;
@@ -420,9 +420,7 @@ export function isReadyToInvest() {
       (kycRTI.friendly_application_status === "submitted" &&
         kycRTI.bank.meta_data_status === "approved")
     ) {
-      if (!TRADING_ENABLED || (TRADING_ENABLED && kycRTI.equity_sign_status === "signed")) {
-        return true;
-      }
+      return true;
     } else if (userRTI.kyc_registration_v2 === "complete") {
       return true;
     } else if (kycRTI.provisional_action_status === "approved") {
