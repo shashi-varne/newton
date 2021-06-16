@@ -434,7 +434,6 @@ const KycBankDetails = (props) => {
                 maxLength={16}
                 type="text"
                 InputProps={{
-                  // inputMode:"numeric",
                   endAdornment: (
                     <>
                       {bankData.account_number && bankData.account_number === bankData.c_account_number && (

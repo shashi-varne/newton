@@ -4,6 +4,7 @@ import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import WVSteps from "../../common/ui/Steps/WVSteps"
 import { isDocSubmittedOrApproved } from "../../kyc/common/functions";
 import { isReadyToInvest } from "../../kyc/services";
+import { isEmpty } from "../../utils/validators";
 
 const stepsData = [
   { title: "Mutual fund", status: "Ready to invest" },
@@ -13,20 +14,27 @@ const stepsData = [
 
 const config = getConfig();
 const productName = config.productName;
-const isReadyToInvestUser = isReadyToInvest();
 
 const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
-  const TRADING_ENABLED = isTradingEnabled(kyc);
-  const showAccountStatus = (dl_flow || kyc?.kyc_status === "compliant") && TRADING_ENABLED && !show_note;
+  const [tradingEnabled, setTradingEnabled] = useState(false);
+  const [showAccountStatus, setShowAccountStatus] = useState(false);
 
   useEffect(() => {
-    if (showAccountStatus && kyc?.sign_status === "signed" && !isDocSubmittedOrApproved("equity_income")) {
-      setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
-    }
+    if(!isEmpty(kyc)) {
+      const TRADING_ENABLED = isTradingEnabled(kyc);
+      setTradingEnabled(TRADING_ENABLED);
+      const displayAccountStatus = (dl_flow || kyc?.kyc_status === "compliant") && TRADING_ENABLED && !show_note;
+      setShowAccountStatus(displayAccountStatus);
+      const isReadyToInvestUser = isReadyToInvest();
 
-    if (isReadyToInvestUser) {
-      setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Mutual fund"))
+      if (displayAccountStatus && kyc?.sign_status === "signed" && !kyc?.equity_data?.meta_data?.fno) {
+        setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
+      }
+  
+      if (isReadyToInvestUser) {
+        setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Mutual fund"))
+      }
     }
   }, [kyc]);
 
@@ -40,7 +48,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         {(dl_flow || kyc?.kyc_status === "compliant") && !show_note && (
           <div className="title" data-aid='kyc-header-title'>KYC complete!</div>
         )}
-        {!TRADING_ENABLED && kyc?.kyc_status === "compliant" && show_note && (
+        {!tradingEnabled && kyc?.kyc_status === "compliant" && show_note && (
           <div className="title" data-aid='kyc-header-title'>Great! Your KYC application is submitted!</div>
         )}
         {(kyc?.kyc_status !== 'compliant' && !dl_flow) && (
@@ -71,7 +79,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
       {showAccountStatus && 
         <div className="account-status-container" data-aid='account-status-container'>
           <div className="account-status" data-aid='account-status'>Account status</div>
-          {steps.map((step, index) => (
+          {steps.map((step) => (
             <WVSteps
               title={step.title}
               key={step.title}

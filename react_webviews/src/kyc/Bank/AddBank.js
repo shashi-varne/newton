@@ -306,17 +306,30 @@ const AddBank = (props) => {
                 id="account_number"
                 disabled={isApiRunning}
               />
-              <Input
-                label="Confirm Account Number"
-                class="input"
+              <TextField
+                label="Re-enter account number"
+                className="input"
                 value={bankData.c_account_number}
                 error={form_data.c_account_number_error ? true : false}
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
                 maxLength={16}
-                inputMode="numeric"
                 type="text"
-                id="c_account_number"
+                InputProps={{
+                  endAdornment: (
+                    <>
+                      {bankData.account_number && bankData.account_number === bankData.c_account_number && (
+                        <InputAdornment position="end">
+                          <img className="kbd-can-check-icon" alt="" src={require(`assets/completed_step.svg`)} />
+                        </InputAdornment>
+                      )}
+                    </>
+                  ),
+                }}
+                // eslint-disable-next-line
+                inputProps={{
+                  inputMode: "numeric"
+                }}
                 disabled={isApiRunning}
               />
               <div className="input" data-aid='kyc-dropdown-withouticon'>
