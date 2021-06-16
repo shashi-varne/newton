@@ -238,6 +238,7 @@ export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Business", value: "BUSINESS" },
   { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
+  { name: "Private sector", value: "PRIVATE SECTOR" },
 ];
 
 export const getIfscCodeError = (code) => {
