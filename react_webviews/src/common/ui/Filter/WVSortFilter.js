@@ -5,37 +5,37 @@ import { isEmpty } from 'lodash';
 import "./WVFilterCommonStyles.scss";
 
 const WVSortFilter = ({
-  selectedTab,
-  localSortFilter,
-  setLocalSortFilter,
-  SortFilterData,
+  activeTab,
+  selectedFilters,
+  setSelectedFilters,
+  activeTabOptions,
 }) => {
   const handleChange = (event) => {
     if (event.target.type === "radio")
-      setLocalSortFilter({
-        ...localSortFilter,
-        [selectedTab]: event.target.value,
+      setSelectedFilters({
+        ...selectedFilters,
+        [activeTab]: event.target.value,
       });
     else {
-      let presentSelected = localSortFilter[selectedTab] || [];
+      let presentSelected = selectedFilters[activeTab] || [];
       if (presentSelected.includes(event.target.value)) {
         let newArray = presentSelected.filter(
           (item) => item !== event.target.value
         );
-        setLocalSortFilter({ ...localSortFilter, [selectedTab]: newArray });
+        setSelectedFilters({ ...selectedFilters, [activeTab]: newArray });
       } else {
         presentSelected.push(event.target.value);
-        setLocalSortFilter({
-          ...localSortFilter,
-          [selectedTab]: presentSelected,
+        setSelectedFilters({
+          ...selectedFilters,
+          [activeTab]: presentSelected,
         });
       }
     }
   };
   return (
     <FormControl component="fieldset" className="diy-sort-filter">
-        {!isEmpty(SortFilterData) &&
-          SortFilterData.map((item, idx) => {
+        {!isEmpty(activeTabOptions) &&
+          activeTabOptions.map((item, idx) => {
             return (
               <FormControlLabel
                 value={item.value}
@@ -43,7 +43,7 @@ const WVSortFilter = ({
                 key={idx}
                 control={
                   <item.control
-                    checked={(localSortFilter[selectedTab] || []).includes(
+                    checked={(selectedFilters[activeTab] || []).includes(
                       item.value
                     )}
                     color={item.color}

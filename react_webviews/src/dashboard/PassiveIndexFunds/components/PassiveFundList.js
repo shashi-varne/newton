@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { initialize } from "../common/commonFunctions";
 import { getFundDetailsList } from "../services"
-import WVBottomFilter from "../../../common/ui/Filter/WVBottomFilter";
+import WVFilter from "../../../common/ui/Filter/WVFilter";
 import WVYearFilter from "../../../common/ui/YearFilter/WVYearFilter";
 import WVProductListCard from "../../../common/ui/ProductListCard/WVProductListCard";
 import StarRating from "../../../common/ui/StarRating";
@@ -262,11 +262,16 @@ class FundList extends Component {
                                 );
                             })}
                     </React.Fragment>
-                    <WVBottomFilter
+                    <WVFilter
                         dataAidSuffix={'passive-card-details'}
                         filterOptions={this.state.bottomFilterOptions}
-                        getSortedFilter={this.setSortFilter}
-                        defaultFilter={{ "sort_value": "tracking_error" }}
+                        getSelectedOptions={this.setSortFilter}
+                        defaultFilterOption={{ "sort_value": "tracking_error" }}
+                        withButton={true}
+                        // isOpen={false}
+                        // setFilterActive={setFilterActive}
+                        // setSortFilter={setSortFilter}   /// DATA TO APi
+                        // setRenderApi={setRenderApi}
                     />
                 </div>
             </Container>
