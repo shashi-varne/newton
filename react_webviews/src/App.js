@@ -96,7 +96,6 @@ const App = () => {
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               <Route path='/partner' component={Partner} />
-              <Route path='/component-test' component={ComponentTest} />
               {
                 isMobileDevice ?
                 <Route component={Feature}/>:
@@ -104,6 +103,7 @@ const App = () => {
                   <Feature />
                 </DesktopLayout>
               }
+              <Route path='/component-test' component={ComponentTest} />
               <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>

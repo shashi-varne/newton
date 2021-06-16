@@ -12,6 +12,7 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getGenderValue,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -50,8 +51,7 @@ const PersonalDetails1 = (props) => {
       dob: kyc.pan.meta_data.dob,
       residential_status:
         RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value,
-      tin_number: kyc.nri_address.tin_number,
-      gender: kyc.identification.meta_data.gender || "",
+      gender: getGenderValue(kyc.identification.meta_data.gender) || "",
     };
     setIsNri(nri);
     setFormData({ ...formData });
@@ -72,7 +72,9 @@ const PersonalDetails1 = (props) => {
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.identification.meta_data.gender = form_data.gender;
     userkycDetails.address.meta_data.is_nri = isNri;
-    let tin_number = form_data.tin_number;
+    // if(!isNri) {
+    //   userkycDetails.identification.meta_data.tax_status = "";
+    // }
     let item = {
       kyc: {
         pan: userkycDetails.pan.meta_data,
@@ -80,12 +82,6 @@ const PersonalDetails1 = (props) => {
         identification: userkycDetails.identification.meta_data,
       },
     };
-    if (isNri) {
-      keysToCheck.push("tin_number");
-      item.kyc.nri_address = {
-        tin_number: tin_number || "",
-      };
-    }
     if (compareObjects(keysToCheck, oldState, form_data)) {
       navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
@@ -221,20 +217,6 @@ const PersonalDetails1 = (props) => {
                 disabled={isApiRunning}
               />
             </div>
-            {isNri && (
-              <Input
-                label="Tax identification number (optional)"
-                class="input"
-                value={form_data.tin_number || ""}
-                error={form_data.tin_number_error ? true : false}
-                helperText={form_data.tin_number_error || ""}
-                onChange={handleChange("tin_number")}
-                maxLength={20}
-                minLength={8}
-                type="text"
-                disabled={isApiRunning}
-              />
-            )}
           </main>
         )}
       </div>

@@ -8,7 +8,7 @@ import {
   STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
-import { getFlow } from "../common/functions";
+import { getFlow, getGenderValue } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { storageService, isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
@@ -195,53 +195,32 @@ const Report = (props) => {
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
-        {isCompliant && (
-          <div className="unzipped-box" data-aid='kyc-email'>
-            <div className="title">Email</div>
-            <div className="subtitle">{kyc.identification.meta_data.email}</div>
-          </div>
-        )}
+        <div className="unzipped-box" data-aid="kyc-father-name">
+          <div className="title">Name</div>
+          <div className="subtitle">{kyc.pan.meta_data.name}</div>
+        </div>
         <div className="row-align">
-          {!isCompliant && (
-            <div className="unzipped-box" data-aid='kyc-gender'>
-              <div className="title">Gender</div>
-              <div className="subtitle">
-                {kyc.identification.meta_data.gender}
-              </div>
+          <div className="unzipped-box" data-aid="kyc-gender">
+            <div className="title">Gender</div>
+            <div className="subtitle">
+              {getGenderValue(kyc.identification.meta_data.gender, "name")}
             </div>
-          )}
-          <div className="unzipped-box" data-aid='kyc-dob'>
-            <div className="title">Dob</div>
-            <div className="subtitle">{kyc.pan.meta_data.dob}</div>
+          </div>
+          <div className="unzipped-box" data-aid="kyc-marital-status">
+            <div className="title">Marital Status</div>
+            <div className="subtitle">
+              {kyc.identification.meta_data.marital_status}
+            </div>
           </div>
         </div>
-        {!isCompliant && (
-          <>
-            <div className="unzipped-box" data-aid='kyc-marital-status'>
-              <div className="title">Marital Status</div>
-              <div className="subtitle">
-                {kyc.identification.meta_data.marital_status}
-              </div>
-            </div>
-            <div className="unzipped-box" data-aid='kyc-father-name'>
-              <div className="title">Father’s name</div>
-              <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
-            </div>
-            <div className="unzipped-box" data-aid='kyc-mother-name'>
-              <div className="title">Mother’s name</div>
-              <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
-            </div>
-          </>
-        )}
-        {isCompliant && (
-          <div className="unzipped-box" data-aid='kyc-mobile'>
-            <div className="title">Mobile</div>
-            <div className="subtitle">
-              {kyc.identification.meta_data.mobile_number}
-            </div>
-          </div>
-        )}
+        <div className="unzipped-box" data-aid="kyc-father-name">
+          <div className="title">Father’s name</div>
+          <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
+        </div>
+        <div className="unzipped-box" data-aid="kyc-mother-name">
+          <div className="title">Mother’s name</div>
+          <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
+        </div>
       </>
     );
   };
@@ -394,12 +373,10 @@ const Report = (props) => {
       id="kyc-home"
       data-aid='kyc-home-screen'
       events={sendEvents("just_set_events")}
-      buttonTitle={buttonTitle}
-      handleClick={handleClick}
       title={topTitle}
       headerData={{ goBack }}
       skelton={isLoading}
-      noFooter={flowType === "compliant"}
+      noFooter
     >
       <div className="kyc-report" data-aid='kyc-report-section'>
         {cardDetails &&

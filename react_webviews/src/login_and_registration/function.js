@@ -10,6 +10,7 @@ import { getBasePath } from "../utils/functions";
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
 const errorMessage = "Something went wrong!";
+const basePath = getBasePath();
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.emailLogin = emailLogin.bind(this);
@@ -28,7 +29,7 @@ export function initialize() {
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
-  let redirectUrl = encodeURIComponent(`${getBasePath()}/${config.searchParams}`);
+  let redirectUrl = encodeURIComponent(`${basePath}/${config.searchParams}`);
   const partners = [
     "hbl",
     "sbm",
@@ -52,7 +53,7 @@ export function initialize() {
     : "";
 
   let socialRedirectUrl = encodeURIComponent(
-    getBasePath() + "/social/callback" + rebalancingRedirectUrl
+    basePath + "/social/callback" + rebalancingRedirectUrl
   );
 
   this.setUserAgent();

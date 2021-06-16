@@ -222,7 +222,7 @@ export const bankAccountTypeOptions = (isNri) => {
 export const GENDER_OPTIONS = [
   { name: "Male", value: "MALE" },
   { name: "Female", value: "FEMALE" },
-  { name: "Other", value: "OTHER" },
+  { name: "Other", value: "TRANSGENDER" },
 ];
 
 export const MARITAL_STATUS_OPTIONS = [
@@ -238,6 +238,7 @@ export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Business", value: "BUSINESS" },
   { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
+  { name: "Private sector", value: "PRIVATE SECTOR" },
 ];
 
 export const getIfscCodeError = (code) => {

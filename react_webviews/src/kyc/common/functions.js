@@ -1,6 +1,6 @@
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
 import { isEmpty, storageService } from '../../utils/validators'
-import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS } from '../constants'
+import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS } from '../constants'
 
 export const validateFields = (formData, keyToCheck) => {
   let canSubmit = true
@@ -161,14 +161,13 @@ export const getTotalPagesInPersonalDetails = (isEdit = false) => {
 
 export const isEmailOrMobileVerified = () => {
   const kyc = storageService().getObject("kyc") || {};
-  const user = storageService().getObject("user") || {};
-  if (isEmpty(kyc) || isEmpty(user)) {
+  if (isEmpty(kyc)) {
     return false;
   }
   return (
-    (user.email === null && kyc.identification?.meta_data?.email_verified) ||
-    (user.mobile === null &&
-      kyc.identification?.meta_data?.mobile_number_verified)
+    kyc.identification?.meta_data?.email_verified &&
+    kyc.identification?.meta_data?.mobile_number_verified &&
+    kyc.identification.meta_data.whatsapp_consent
   );
 };
 
@@ -337,3 +336,8 @@ export const isKycCompleted = (kyc) => {
     );
   }
 };
+
+export const getGenderValue = (gender="", key="value") => {
+  const generData = GENDER_OPTIONS.find(data => data.value === gender) || {};
+  return generData[key] || "";
+}
