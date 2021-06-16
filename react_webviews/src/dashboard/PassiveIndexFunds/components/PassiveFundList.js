@@ -83,8 +83,12 @@ class FundList extends Component {
                     value: item,
                     control: Checkbox,
                     title: item,
-                    labelPlacement: "end",
-                    color: "primary",
+                    labelProps: {
+                        labelPlacement: "end",
+                      },
+                      controlProps: {
+                        color: "primary",
+                      },
                 });
             })
             bottomFilterOptions.forEach(element => {

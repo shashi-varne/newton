@@ -4,7 +4,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { isEmpty } from 'lodash';
 import "./WVFilterCommonStyles.scss";
 
-const WVSortFilter = ({
+const RenderTabOptions = ({
   activeTab,
   selectedFilters,
   setSelectedFilters,
@@ -34,33 +34,33 @@ const WVSortFilter = ({
   };
   return (
     <FormControl component="fieldset" className="diy-sort-filter">
-        {!isEmpty(activeTabOptions) &&
-          activeTabOptions.map((item, idx) => {
-            return (
-              <FormControlLabel
-                value={item.value}
-                name={item.isMulti}
-                key={idx}
-                control={
-                  <item.control
-                    checked={(selectedFilters[activeTab] || []).includes(
-                      item.value
-                    )}
-                    color={item.color}
-                  />
-                }
-                label={
-                  <div className="fc-title">{item.title}
-                    {item.subtitle && <p className="fc-subtitle">{item.subtitle}</p>}
-                  </div>
-                }
-                onChange={handleChange}
-                labelPlacement={item.labelPlacement}
-              ></FormControlLabel>
-            );
-          })}
+      {!isEmpty(activeTabOptions) &&
+        activeTabOptions.map((item, idx) => {
+          return (
+            <FormControlLabel
+              value={item.value}
+              name={item.isMulti}
+              key={idx}
+              control={
+                <item.control
+                  checked={(selectedFilters[activeTab] || []).includes(
+                    item.value
+                  )}
+                  {...item.controlProps}
+                />
+              }
+              label={
+                <div className="fc-title">{item.title}
+                  {item.subtitle && <p className="fc-subtitle">{item.subtitle}</p>}
+                </div>
+              }
+              onChange={handleChange}
+              {...item.labelProps}
+            ></FormControlLabel>
+          );
+        })}
     </FormControl>
   );
 };
 
-export default WVSortFilter; 
+export default RenderTabOptions;

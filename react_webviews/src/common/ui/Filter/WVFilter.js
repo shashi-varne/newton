@@ -1,13 +1,37 @@
 import React, { useEffect, useState } from "react";
-import WVDiyDialog from './WVDiyDialog';
+// import WVDiyDialog from './WVDiyDialog';
 import Button from 'common/ui/Button';
+import WVButtonLayout from "../ButtonLayout/WVButtonLayout";
 import { isEmpty } from 'lodash';
-import SortFilter from './WVSortFilter';
+import RenderTabOptions from './RenderTabOptions';
 import { getConfig } from '../../../utils/functions';
 import "./WVFilterCommonStyles.scss";
 import WVFilterButton from "./WVFilterButton";
+import Dialog from '@material-ui/core/Dialog'
+import DialogContent from '@material-ui/core/DialogContent'
+import Slide from '@material-ui/core/Slide'
 
 const isMobileDevice = getConfig().isMobileDevice;
+
+
+function Transition(props) {
+  return <Slide direction="up" {...props} />
+}
+
+const FilterContainer = ({ close, open, children, ...props }) => {
+  return (
+    <Dialog
+      onClose={close}
+      open={open}
+      aria-labelledby="filter-dialog"
+      TransitionComponent={Transition}
+      aria-describedby="filter-dialog-slide-selection"
+      id="diy-dialog"
+    >
+      <DialogContent>{children}</DialogContent>
+    </Dialog>
+  )
+}
 
 const WVFilter = ({
   dataAidSuffix,
@@ -52,7 +76,7 @@ const WVFilter = ({
 
     <>
 
-      <WVDiyDialog close={close} open={isOpen}>
+      <FilterContainer close={close} open={isOpen}>
         <section className="diy-bottom-sheet diy-filter-bottom-sheet filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
           <p className="heading">FILTERS</p>
           <main className="filter">
@@ -81,7 +105,7 @@ const WVFilter = ({
               </ul>
             </div>
             <div className="body" id="scroll-container" data-aid={`body-${dataAidSuffix}`}>
-              <SortFilter
+              <RenderTabOptions
                 activeTab={activeTab}
                 selectedFilters={selectedFilters}
                 setSelectedFilters={setSelectedFilters}
@@ -99,12 +123,26 @@ const WVFilter = ({
               buttonOneTitle="CLEAR ALL"
               buttonTwoTitle="APPLY"
             />
+            {/* <WVButtonLayout
+              className="someClass"  // CSS FIX NEEDED!~
+            >
+              <WVButtonLayout.Button
+                type="secondary"
+                title="CLEAR ALL"
+                onClick={reset}
+              />
+              <WVButtonLayout.Button
+                type="primary"
+                title="APPLY"
+                onClick={apply}
+              />
+            </WVButtonLayout> */}
           </footer>
         </section>
-      </WVDiyDialog>
+      </FilterContainer>
 
 
-      {withButton && <div className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} data-aid={`diy-cart-${dataAidSuffix}`}>
+      {withButton && <div className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} data-aid={`filter-cart-${dataAidSuffix}`}>
         <WVFilterButton
           dataAidSuffix={dataAidSuffix}
           onClick={() => setIsOpen(true)}

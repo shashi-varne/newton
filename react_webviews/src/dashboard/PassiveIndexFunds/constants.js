@@ -131,40 +131,60 @@ export const SORT_OPTIONS = [
     value: "expense_ratio",
     control: Radio,
     title: "Expense ratio",
-    labelPlacement: "end",
-    color: "primary",
+    labelProps: {
+      labelPlacement: "end",
+    },
+    controlProps: {
+      color: "primary",
+    },
     subtitle: 'Low to high',
   },
   {
     value: "tracking_error",
     control: Radio,
     title: "Tracking error",
-    labelPlacement: "end",
-    color: "primary",
+    labelProps: {
+      labelPlacement: "end",
+    },
+    controlProps: {
+      color: "primary",
+    },
     subtitle: 'Low to high',
   },
   {
     value: "returns",
     control: Radio,
     title: "Returns",
-    labelPlacement: "end",
-    color: "primary",
+    labelProps: {
+      labelPlacement: "end",
+    },
+    controlProps: {
+      color: "primary",
+    },
     subtitle: 'High to low',
   },
   {
     value: "rating",
     control: Radio,
     title: "Ratings",
-    labelPlacement: "end",
-    color: "primary",
+    labelProps: {
+      labelPlacement: "end",
+    },
+    controlProps: {
+      color: "primary",
+    },
     subtitle: 'High to low',
   },
   {
     value: "fund_size",
     control: Radio,
     title: "Fund size",
-    labelPlacement: "end",
-    color: "primary",
+    labelProps: {
+      labelPlacement: "end",
+    },
+    controlProps: {
+      color: "primary",
+    },
     subtitle: 'High to low',
   },
 ]
@@ -175,15 +195,23 @@ export const FUND_OPTIONS = [
     value: 'Growth',
     control: Radio,
     title: "Growth",
-    labelPlacement: "end",
-    color: "primary",
+    labelProps: {
+      labelPlacement: "end",
+    },
+    controlProps: {
+      color: "primary",
+    },
   },
   {
     value: 'Dividend',
     control: Radio,
     title: "Dividend",
-    labelPlacement: "end",
-    color: "primary",
+    labelProps: {
+      labelPlacement: "end",
+    },
+    controlProps: {
+      color: "primary",
+    },
   },
 ]
 
