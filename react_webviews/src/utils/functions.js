@@ -618,7 +618,6 @@ export function validateFileTypeAndSize (file, supportedTypes, sizeLimit) {
   return "";
 }
 
-
 export {
   checkBeforeRedirection, 
   checkAfterRedirection, 
