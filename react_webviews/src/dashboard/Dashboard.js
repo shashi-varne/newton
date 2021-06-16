@@ -31,7 +31,7 @@ import InvestmentProof from "./MyAccount/InvestmentProof";
 import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
-import VerifyOtp from "./OtpVerify"
+import OtpSecondary from "../login_and_registration/OtpSecondary"
 
 const Home = (props) => {
   const { url } = props.match;
@@ -40,10 +40,7 @@ const Home = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}`} component={isSdk ? SdkLanding : Invest} />
-        <Route
-        exact
-        path={`${url}verify-otp`}
-        component={VerifyOtp} />
+        <Route exact path={`${url}verify-otp`} component={OtpSecondary} />
         <Route exact path={`${url}prepare`} component={Prepare} />
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />

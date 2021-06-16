@@ -1,7 +1,9 @@
 import React from "react";
-import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
+import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { getConfig } from "utils/functions";
-import WVClickableTextElement from "../../../common/ui/ClickableTextElement/WVClickableTextElement";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
+import "./Style.scss";
+
 const product = getConfig().productName;
 
 function VerifyDetailDialog({ type, isOpen, data, onClose }) {
@@ -14,7 +16,7 @@ function VerifyDetailDialog({ type, isOpen, data, onClose }) {
       isOpen={isOpen}
       onClose={onClose}
       title={`Verify your ${type} address`}
-      image={require(`../../../assets/${product}/bottomsheet_verify_${type}.svg`)}
+      image={require(`../../assets/${product}/bottomsheet_verify_${type}.svg`)}
       subtitle={`${
         type === "email" ? "Email" : "Mobile"
       } verification is mandatory for investment as per SEBI`}
@@ -32,7 +34,7 @@ function VerifyDetailDialog({ type, isOpen, data, onClose }) {
       <div className="details">
         <div style={{ display: "flex", alignItems: "center" }}>
           <img
-            src={require(`../../../assets/bottom_sheet_icon_${type}.svg`)}
+            src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
             alt=""
           />
           <span className="text">{data}</span>

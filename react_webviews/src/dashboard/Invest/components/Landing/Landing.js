@@ -14,8 +14,8 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
-import VerifyDetailDialog from "../../mini-components/VerifyDetailDialog";
-import AccountAlreadyExistDialog from "../../mini-components/AccountAlreadyExistDialog";
+import VerifyDetailDialog from "../../../../login_and_registration/bottomsheet/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../../../login_and_registration/bottomsheet/AccountAlreadyExistDialog";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 const isMobileDevice = getConfig().isMobileDevice;

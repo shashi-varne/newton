@@ -1,6 +1,8 @@
 import React from "react";
-import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
+import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { getConfig } from "utils/functions";
+import "./Style.scss";
+
 const product = getConfig().productName;
 
 function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan }) {
@@ -9,7 +11,7 @@ function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan }) {
       isOpen={isOpen}
       onClose={onClose}
       title={`Account already exists!`}
-      image={require(`../../../assets/${product}/bottomsheet_account_exist.svg`)}
+      image={require(`../../assets/${product}/bottomsheet_account_exist.svg`)}
       button1Props={{
         type: "secondary",
         title: `EDIT ${type === "email" ? "EMAIL" : "NUMBER"}`,
@@ -41,7 +43,7 @@ function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan }) {
       >
         <div className="details">
           <img
-            src={require(`../../../assets/bottom_sheet_icon_${type}.svg`)}
+            src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
             alt=""
             style={{ paddingRight: "10px" }}
           />
@@ -54,7 +56,7 @@ function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan }) {
         </div>
         <div className="details">
           <img
-            src={require(`../../../assets/bottom_sheet_icon_pan.svg`)}
+            src={require(`../../assets/bottom_sheet_icon_pan.svg`)}
             alt=""
             style={{ paddingRight: "10px" }}
           />
