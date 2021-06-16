@@ -47,7 +47,7 @@ class HealthInsuranceLanding extends Component {
     this.renderPorducts = this.renderPorducts.bind(this);
     this.setTermInsData = setTermInsData.bind(this);
   }
-
+  
 
   componentWillMount() {
 
