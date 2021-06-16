@@ -3,7 +3,6 @@ import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
 import { isTradingEnabled } from '../utils/functions'
 import { kycSubmit } from './common/api'
-import { isKycCompleted } from './common/functions'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -270,7 +269,7 @@ export function getKycAppStatus(kyc) {
       status = kyc.equity_application_status;
     }
   } else {
-    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isKycCompleted(kyc))) {
+    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest())) {
       status = kyc.application_status_v2;
     } else {
       status = kyc.equity_application_status;

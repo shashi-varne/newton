@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { navigate as navigateFunc } from 'utils/functions'
 import { isEmpty, storageService } from '../../utils/validators'
-import { getKycAppStatus, setKycProductType } from '../services'
+import { getKycAppStatus, isReadyToInvest, setKycProductType } from '../services'
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from '../../utils/native_callback';
 import Container from '../common/Container';
 import { kycStatusMapperInvest } from '../../dashboard/Invest/constants';
-import { isKycCompleted } from '../common/functions';
 import { PATHNAME_MAPPER } from '../constants';
 
 function Native(props) {
@@ -66,12 +65,12 @@ function Native(props) {
       if (kycJourneyStatus === "ground") {
         navigate(PATHNAME_MAPPER.stocksStatus, data);
       } else {
-        const isKycDone = isKycCompleted(kyc);
+        const isReadyToInvestUser = isReadyToInvest();
         // only NRI conditions
         if (kyc?.address?.meta_data?.is_nri) {
           navigate(PATHNAME_MAPPER.nriError, {
             state: { 
-              noStockOption: isKycDone ? true : false,
+              noStockOption: isReadyToInvestUser ? true : false,
               ...data.state
             },
           });
@@ -84,7 +83,7 @@ function Native(props) {
                 ...data.state
               },
             });
-          } else if (kyc?.kyc_product_type !== "equity" && isKycDone) {
+          } else if (kyc?.kyc_product_type !== "equity" && isReadyToInvestUser) {
             // already kyc done users
             setProductType();
           } else {

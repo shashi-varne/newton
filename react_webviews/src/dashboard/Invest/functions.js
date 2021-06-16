@@ -14,7 +14,7 @@ import {
 import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
-import { isEquityCompleted, isKycCompleted } from "../../kyc/common/functions";
+import { isEquityCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
 const config = getConfig();
@@ -566,11 +566,11 @@ export async function openStocks() {
     if (kycJourneyStatus === "ground") {
       this.navigate(PATHNAME_MAPPER.stocksStatus);
     } else {
-      const isKycDone = isKycCompleted(userKyc);
+      const isReadyToInvestUser = isReadyToInvest();
       // only NRI conditions
       if (userKyc?.address?.meta_data?.is_nri) {
         this.navigate(PATHNAME_MAPPER.nriError, {
-          state: {noStockOption: isKycDone ? true : false}
+          state: {noStockOption: isReadyToInvestUser ? true : false}
         });
       } else {
         if (kycJourneyStatus === "ground_pan") {
@@ -580,7 +580,7 @@ export async function openStocks() {
               fromState: "invest",
             },
           });
-        } else if (userKyc?.kyc_product_type !== "equity" && isKycDone) {
+        } else if (userKyc?.kyc_product_type !== "equity" && isReadyToInvestUser) {
           // already kyc done users
           const payload = {
             "kyc":{},
