@@ -10,7 +10,6 @@ import {
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Alert from "../mini-components/Alert";
 import { validateFields } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, addAdditionalBank } from "../common/api";
@@ -18,6 +17,7 @@ import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
 const AddBank = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -37,7 +37,7 @@ const AddBank = (props) => {
   const [accountTypes, setAccountTypes] = useState([]);
   const [name, setName] = useState("");
   const [note, setNote] = useState({
-    info_text:
+    message:
       "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
     variant: "info",
   });
@@ -62,15 +62,15 @@ const AddBank = (props) => {
         setIsPennyExhausted(true);
       } else if (data.user_rejection_attempts === 2) {
         setNote({
-          info_text:
+          message:
             "2 more attempts remaining! Please enter your correct account details to proceed",
-          variant: "attention",
+          variant: "error",
         });
       } else if (data.user_rejection_attempts === 1) {
         setNote({
-          info_text:
+          message:
             "Just 1 attempt is remaining! Please enter your correct account details to proceed",
-          variant: "attention",
+          variant: "error",
         });
       }
     }
@@ -251,12 +251,14 @@ const AddBank = (props) => {
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
-            <Alert
-              variant={note.variant}
-              title="Note"
-              message={note.info_text}
+            <WVInfoBubble
+              type={note.variant}
+              hasTitle
+              customTitle="Note"
               dataAid='kyc-addbank-alertbox'
-            />
+            >
+              {note.message}
+            </WVInfoBubble>
             <main data-aid='kyc-approved-bank'>
               <Input
                 label="Account Holder name"
