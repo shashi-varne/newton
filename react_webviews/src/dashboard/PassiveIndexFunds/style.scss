@@ -121,5 +121,13 @@
 
 .wv-pdl-header-image{
   margin-left: auto !important;
-  border: 0px solid  var(--dark);
+  border: 1px solid  var(--dark);
+}
+
+
+.wv-cardsubtitle{
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 400;
+  color:  var(--steelgrey);
 }
