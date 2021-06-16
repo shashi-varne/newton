@@ -1,5 +1,6 @@
 // import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams } from './validators';
+import { isArray } from 'lodash';
 import $ from 'jquery';
 
 const partnersConfigBase = {
@@ -981,4 +982,39 @@ export function getBasePath() {
     basename = basename ? basename + 'view' : '';
   }
   return window.location.origin + basename;
+}
+
+export function openFilePicker (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) {
+  if (getConfig().Web) {
+    const filepicker = document.getElementById(filepickerId);
+
+    if (filepicker) {
+      filepicker.value = null; // Required to allow same file to be picked again QA-4238 (https://stackoverflow.com/questions/12030686)
+      filepicker.click();
+    }
+  } else {
+    window.callbackWeb[methodName]({
+      type: 'doc',
+      doc_type: docName,
+      upload: nativeHandler,
+      ...fileHandlerParams // callback from native
+    });
+  }
+}
+
+export function validateFileTypeAndSize (file, supportedTypes, sizeLimit) {
+  const fileType = file.type.split("/")[1];
+  const sizeInBytes = sizeLimit * 1000 * 1000;
+
+  if (!isArray(supportedTypes)) {
+    supportedTypes = [supportedTypes];
+  }
+
+  if (!supportedTypes.includes(fileType)) {
+    return "File type not supported";
+  } else if (file.size > sizeInBytes) {
+    return `File size cannot exceed ${sizeLimit}MB`;
+  }
+
+  return "";
 }
