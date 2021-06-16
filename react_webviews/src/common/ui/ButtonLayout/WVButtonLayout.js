@@ -54,27 +54,15 @@ WVButtonLayout.defaultProps = {
 
 /* Button Component */
 
-const BUTTON_TYPE_PROPS = {
-  primary: {
-    variant: 'raised'
-  },
-  secondary: {
-    variant: 'outlined'
-  },
-  text: {}
-};
-
 const LayoutButton = ({
-  title, // Button title/text content
-  classes, // Button classes (refer MUI Button classes API)
-  type, // "primary", "secondary", "text" button types
+  classes = {}, // Button classes (refer MUI Button classes API)
+  children, 
   ...props // MUI Button props
 }) => {
   const { root: rootClass, ...otherClasses } = classes;
   const modifiedClasses = {
     root: `
       wv-layout-button
-      wv-layout-button-${type}
       ${rootClass || ''}
     `,
     ...otherClasses
@@ -82,28 +70,17 @@ const LayoutButton = ({
 
   return (
     <WVButton
-      dataAid={props.dataAid}
-      {...BUTTON_TYPE_PROPS[type]}
-      fullWidth={true}
-      autoFocus={true}
+      fullWidth
+      autoFocus
       size="large"
       color="secondary"
       classes={modifiedClasses}
       {...props}
     >
-      {title}
+      {children}
     </WVButton>
   );
 }
-
-LayoutButton.propTypes = {
-  type: PropTypes.oneOf(['primary', 'secondary', 'text']).isRequired,
-  title: PropTypes.string.isRequired,
-};
-
-LayoutButton.defaultProps = {
-  classes: {}
-};
 
 WVButtonLayout.Button = LayoutButton;
 
