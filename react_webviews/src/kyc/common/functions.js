@@ -1,4 +1,5 @@
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { isTradingEnabled } from '../../utils/functions'
 import { isEmpty, storageService } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS } from '../constants'
 
@@ -263,7 +264,9 @@ export function checkDLPanFetchStatus(kyc = {}) {
 
 export function checkDLPanFetchAndApprovedStatus(kyc = {}) {
   if (isEmpty(kyc)) return false;
-  return (checkDLPanFetchStatus(kyc) && kyc.pan.doc_status !== "approved");
+  const TRADING_ENABLED = isTradingEnabled(kyc)
+  return (checkDLPanFetchStatus(kyc) && ((!TRADING_ENABLED && kyc.pan.doc_status !== "approved") ||
+    (TRADING_ENABLED && kyc.equity_pan.doc_status !== "approved")));
 }
 
 export function isNotManualAndNriUser(kyc = {}) {
