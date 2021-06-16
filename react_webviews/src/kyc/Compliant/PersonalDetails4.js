@@ -27,7 +27,7 @@ const PersonalDetails4 = (props) => {
   if (isEdit) {
     title = "Edit nominee detail";
   }
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -169,10 +169,11 @@ const PersonalDetails4 = (props) => {
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      data-aid='kyc-personal-details-screen-4'
     >
       <div className="kyc-nominee">
-        <main>
-          <div className="nominee-checkbox">
+        <main data-aid='kyc-nominee-page'>
+          <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
               checked={isChecked}
@@ -181,7 +182,7 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-            <span>
+            <span data-aid='kyc-no-nominee-text'>
               I do not wish to add a <b>nominee</b>
             </span>
           </div>
@@ -209,7 +210,7 @@ const PersonalDetails4 = (props) => {
             id="dob"
             disabled={isChecked || isApiRunning}
           />
-          <div className="input">
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}

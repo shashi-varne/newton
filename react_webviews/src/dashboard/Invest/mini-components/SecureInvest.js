@@ -3,7 +3,7 @@ import { getConfig } from "utils/functions";
 let productName = getConfig().productName;
 const SecureInvest = () => {
   return (
-    <div className="secure-invest-bottom">
+    <div className="secure-invest-bottom" data-aid='secure-invest-bottom'>
       <div className="content">
         Investments with {productName} are 100% secure
       </div>

@@ -52,23 +52,23 @@ const Explore = (props) => {
     navigate('/invest')
   }
   return (
-    <section className="withdraw-explore-investment-options">
-      <main className="main">
+    <section className="withdraw-explore-investment-options" data-aid='withdraw-explore-investment-options'>
+      <main className="main" data-aid='explore'>
         <img
           src={require(`assets/piggy_bank@4x.png`)}
           alt="Save Money"
           className="report-details-img"
         />
         <div className="top-text">You've not invested yet!</div>
-        <Button className="cta-button" variant="raised" onClick={handleClick}>
-          <span className="cta-button-text">explore investment options</span>
+        <Button className="cta-button" variant="raised" onClick={handleClick} data-aid='cta-button'>
+          <span className="cta-button-text" data-aid='cta-button-text'>explore investment options</span>
           <RightAltIcon className="cta-button-icon" />
         </Button>
       </main>
-      <footer className="footer">
+      <footer className="footer" data-aid='explore-footer'>
         <div className="tiles">
-          {tiles.map(({ title, icon }) => (
-            <div className="tile" key={icon}>
+          {tiles.map(({ title, icon }, idx) => (
+            <div className="tile" key={icon} data-aid={`tile-${idx+1}`}>
               <img src={require(`assets/${icon}.png`)} alt={title} width="60" />
               <div className="label">{title}</div>
             </div>

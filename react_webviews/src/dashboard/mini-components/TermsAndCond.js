@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -14,7 +13,10 @@ import { getTerms } from '../Invest/common/api';
 import { getConfig } from 'utils/functions';
 
 import './mini-components.scss';
+import Button from '../../common/ui/Button';
+import { nativeCallback } from '../../utils/native_callback';
 
+const config = getConfig();
 const TermsAndCond = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({
@@ -22,8 +24,8 @@ const TermsAndCond = () => {
     scheme: '',
   });
   const [doc, setDoc] = useState('');
-  const partner_code = getConfig().partner_code;
-  const isWeb = getConfig().Web;
+  const productName = config.productName;
+  const isWeb = config.Web;
 
   const fetchTerms = async (docType) => {
     try {
@@ -42,6 +44,15 @@ const TermsAndCond = () => {
     }
   };
 
+  const openInBrowser = (url) => () => {
+    nativeCallback({
+      action: 'open_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -51,53 +62,72 @@ const TermsAndCond = () => {
       <div className='recommendations-disclaimer'>
         <div className='recommendations-disclaimer-tc'>
           <img alt='check_mark' src={check_mark} width='15' />
-          <span>
+          <span data-aid='terms-and-conditions'>
             By clicking on the button below, I agree that I have read and accepted the{' '}
-            {isWeb && partner_code !== 'finity' && (
+            {isWeb && productName !== 'finity' && (
               <>
-                <a target='_blank' rel='noopener noreferrer' href='https://www.fisdom.com/terms/'>
+                <a target='_blank' rel='noopener noreferrer' href={config.termsLink} data-aid='terms-offer-link'>
                   terms & conditions
                 </a>{' '}
                 and understood the
                 <a
+                  data-aid='scheme-offer-link'
                   target='_blank'
                   rel='noopener noreferrer'
-                  href='https://www.fisdom.com/scheme-offer-documents/'
+                  href={config.schemeLink}
                 >
                   {' '}
                   scheme offer documents
                 </a>
               </>
             )}
-            {isWeb && partner_code === 'finity' && (
+            {isWeb && productName === 'finity' && (
               <>
-                <span className='tc_link' onClick={handleClickOpen('terms')}>
+                <span className='tc_link' data-aid='terms-link' onClick={handleClickOpen('terms')}>
                   terms
                 </span>{' '}
                 and understood the
-                <span className='tc_link' onClick={handleClickOpen('scheme')}>
+                <span className='tc_link' data-aid='scheme-link' onClick={handleClickOpen('scheme')}>
                   {' '}
                   scheme offer documents
                 </span>
               </>
             )}
-            {!isWeb && partner_code === 'finity' && (
-              <span className='tc_link' onClick={handleClickOpen('terms')}>
+            {!isWeb && productName === 'finity' && (
+              <span className='tc_link' data-aid='terms-link' onClick={handleClickOpen('terms')}>
                 terms
               </span>
+            )}
+            {!isWeb && productName !== 'finity' && (
+              <>
+                <a onClick={openInBrowser(config.termsLink)} >
+                  terms & conditions
+                </a>{' '}
+                and understood the
+                <a
+                  onClick={openInBrowser(config.schemeLink)}
+                >
+                  {' '}
+                  scheme offer documents
+                </a>
+              </>
             )}
           </span>
         </div>
       </div>
-      <DialogTC open={open} handleClose={handleClose} data={data[doc]} />
+      <DialogTC open={open} handleClose={handleClose} data={data[doc]} docType={doc} />
     </div>
   );
 };
 
 export default TermsAndCond;
 
-const DialogTC = ({ open, handleClose, data }) => {
+const DialogTC = ({ open, handleClose, data, docType }) => {
   const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
+  const DOC_TITLES = {
+    terms: "Terms and Conditions",
+    scheme: "Scheme Offer Documents"
+  }
 
   return (
     <>
@@ -107,8 +137,9 @@ const DialogTC = ({ open, handleClose, data }) => {
         onClose={handleClose}
         aria-labelledby='responsive-dialog-title'
         fullWidth
+        data-aid='responsive-dialog-title'
       >
-        <DialogTitle classes={{ root: 't_and_c_title' }}>Terms and Conditions</DialogTitle>
+        <DialogTitle data-aid='terms-condition-title' classes={{ root: 't_and_c_title' }}>{DOC_TITLES[docType] || ""}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {data ? (
@@ -121,16 +152,13 @@ const DialogTC = ({ open, handleClose, data }) => {
           </DialogContentText>
         </DialogContent>
         {data && (
-          <DialogActions style={{ margin: '20px' }}>
-            <Button
-              className='DialogButtonFullWidth'
+          <DialogActions style={{padding: "0 20px"}}>
+            <Button 
+              buttonTitle="DONE"
               onClick={handleClose}
-              color='default'
-              autoFocus
-              style={{ margin: 0 }}
-            >
-              DONE
-            </Button>
+              style={{margin: "0 auto"}}
+              data-aid='done-btn'
+            />
           </DialogActions>
         )}
       </Dialog>

@@ -479,6 +479,15 @@ export const sdkInvestCardMapper = [
   }
 ]
 
+export const flowName = {
+  buildwealth: "build wealth",
+  diy: "diy",
+  "insta-redeem": "insta-redeem",
+  saveforgoal: "invest for goal",
+  nfo: "nfo",
+  investsurplus: "park my savings",
+  saveTax: "tax saving",
+};
 export const prepareInvestMaaper = [
   {
     key: "invest",

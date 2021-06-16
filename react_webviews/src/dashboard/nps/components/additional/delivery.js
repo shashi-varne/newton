@@ -128,7 +128,7 @@ class NpsDelivery extends Component {
 
   bannerText = () => {
     return (
-      <span>
+      <span data-aid='nps-banner-text'>
         You will get the <b>PRAN</b> card delivered to this address
       </span>
     );
@@ -138,6 +138,7 @@ class NpsDelivery extends Component {
     let { form_data } = this.state;
     return (
       <Container
+        data-aid='nps-confirm-delivery-details'
         buttonTitle="CONTINUE"
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
@@ -150,8 +151,8 @@ class NpsDelivery extends Component {
         banner={true}
         bannerText={this.bannerText()}
       >
-        <div className="nps-delivery-details">
-          <div className="title" style={{marginBottom: '20px'}}>PRAN delivery address</div>
+        <div className="nps-delivery-details" data-aid='nps-delivery-details'>
+          <div className="title" data-aid='nps-title' style={{marginBottom: '20px'}}>PRAN delivery address</div>
 
           <div className="InputField">
             <Input

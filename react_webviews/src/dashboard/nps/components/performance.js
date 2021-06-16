@@ -42,16 +42,17 @@ class NpsPerformance extends Component {
   render() {
     return (
       <Container
+        data-aid='nps-track-performance-screen'
         title="Track NPS Performance"
         showLoader={this.state.show_loader}
         noFooter
       >
         <section className="page nps">
           <div className="pending container-padding">
-            <div className="list">
+            <div className="list" data-aid='nps-track-performance'>
               {this.state.nps_performance && this.state.nps_performance.map((item, index) =>
-              (<div className="fund">
-                <div className="list-item">
+              (<div className="fund" data-aid='nps-fund'>
+                <div className="list-item" data-aid='nps-list-item'>
                   <div className="text">
                     <div className="tier">TIER {item.account_type}</div>
                     <h1>{item.name}</h1>
@@ -60,7 +61,7 @@ class NpsPerformance extends Component {
                     <img src={item.image} alt='' />
                   </div>
                 </div>
-                <div className="display-flex">
+                <div className="display-flex" data-aid='nps-total-invested-amount'>
                   <div>
                     <h3>Total invested value</h3>
                     <span>{formatAmountInr(item.total_invested_amount)}</span>
@@ -71,15 +72,15 @@ class NpsPerformance extends Component {
                   </div>
                 </div>
                 <div className="divider"></div>
-                {item.schemes.map((el, index) => <div className="npsscheme" key={index}>
-                  <div className="text">
+                {item.schemes.map((el, index) => <div className="nps-npsscheme" key={index} data-aid='nps-npsscheme'>
+                  <div className="text" data-aid='nps-text'>
                     <div
                       className={`category ${el.category === 'E' ? 'equity' : el.category === 'C' ? 'corporate' : 'gov'}`}
                     >
                       {this.getFullName(el.category)}
                     </div>
                   </div>
-                  <div className="display-flex">
+                  <div className="display-flex" data-aid='nps-closing-balance'>
                     <div>
                       <h3>Invested : {"{item.scheme_amount | inrFormat}"}</h3>
                     </div>
@@ -90,7 +91,7 @@ class NpsPerformance extends Component {
                 </div>)}
               </div>))}
             </div>
-            <div className="tnc">
+            <div className="tnc" data-aid='nps-tnc'>
               *Total invested value that you have invested for your PRAN:{" "}
               {this.state.pran} through any source.
             </div>

@@ -11,6 +11,8 @@ import {
   CUSTOM_GOAL_TARGET_MAP,
   SUBTYPE_NAME_MAP
 } from './constants';
+import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const riskEnabled = getConfig().riskEnabledFunnels;
 
@@ -48,7 +50,7 @@ const GoalTarget = (props) => {
         return;
       }
 
-      updateFunnelData({ ...data, corpus });
+      updateFunnelData({ ...data, corpus, userEnteredAmt: 0 });
 
       navigate(`/invest/savegoal/${subtype}/amount`);
     } catch (err) {
@@ -64,32 +66,54 @@ const GoalTarget = (props) => {
   };
 
   const handleInvestedAmount = (type) => () => {
+    sendEvents('next', type.name)
     const amount = calculateCorpusValue(type.corpus);
     fetchRecommendedFunds(amount);
   };
 
   const setYourTarget = () => {
+    sendEvents('next')
     updateFunnelData({ corpus: CUSTOM_GOAL_TARGET_MAP[subtype] });
     navigate(`/invest/savegoal/${subtype}/${year}/target`);
   };
 
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select target type",
+        "flow": flowName['saveforgoal'],
+        "goal_purpose": subtype || "",
+        "target_type": type?.toLowerCase() || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
+      data-aid='goal-target-screen'
       classOverRide='pr-error-container'
       title='Save for a Goal'
       noFooter
       classOverRideContainer='pr-container'
       skelton={loader}
     >
-      <section className='invest-goal-save-container'>
-        <div className='invest-goal-save-header'>
+      <section className='invest-goal-save-container' data-aid='invest-goal-save-page'>
+        <div className='invest-goal-save-header' data-aid='invest-goal-save-header'>
           How much money do you want to save for your {SUBTYPE_NAME_MAP[subtype]}?
         </div>
 
-        <div className='invest-goal-save-list'>
+        <div className='invest-goal-save-list' data-aid='invest-goal-save-list'>
           {SAVE_GOAL_MAPPER[subtype]?.map((el, idx) => {
             return (
-              <div key={idx} className='invest-goal-save-item' onClick={handleInvestedAmount(el)}>
+              <div key={idx} className='invest-goal-save-item' onClick={handleInvestedAmount(el)} data-aid={`invest-goal-save-item-${idx+1}`}>
                 <img src={el.icon} alt={el.name} width='80' />
                 <p>{el.name}</p>
                 <div className='invest-goal-save-item-corpus'>
@@ -100,7 +124,7 @@ const GoalTarget = (props) => {
             );
           })}
         </div>
-        <div className='invest-goal-set-target' onClick={setYourTarget}>
+        <div className='invest-goal-set-target' data-aid='invest-goal-set-target' onClick={setYourTarget}>
           Let me set my target
         </div>
       </section>

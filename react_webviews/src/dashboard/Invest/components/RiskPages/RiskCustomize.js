@@ -10,6 +10,8 @@ import InfoBox from '../../../../common/ui/F-InfoBox';
 import { getConfig } from '../../../../utils/functions';
 import BottomSheet from '../../../../common/ui/BottomSheet';
 import useFunnelDataHook from '../../common/funnelDataHook';
+import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const { productName } = getConfig();
 
@@ -60,6 +62,7 @@ const RiskCustomize = (props) => {
 
 
   const goNext = async () => {
+    sendEvents('next')
     try {
       await fetchRecommendations();
       navigate('/invest/recommendations');
@@ -79,9 +82,29 @@ const RiskCustomize = (props) => {
     setShowConfirmDialog(!showConfirmDialog);
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "custom profile",
+        "flow": funnelData.flow || flowName[funnelData.investType] || "",
+        "custom_stock%": equity,
+        "custom_bond%": debt,
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  console.log(funnelData)
   return (
     <Container
+      data-aid='customise-equity-debt-distribution-screen'
       classOverRide='pr-error-container'
+      events={sendEvents("just_set_events")}
       fullWidthButton
       buttonTitle='Save Changes'
       helpContact
@@ -96,8 +119,8 @@ const RiskCustomize = (props) => {
             root: 'risk-info'
           }}
         >
-          <div className="risk-info-title">Info</div>
-          <div className="risk-info-desc">
+          <div className="risk-info-title" data-aid='risk-info-title'>Info</div>
+          <div className="risk-info-desc" data-aid='risk-info-desc'>
             We do not recommend setting custom equity & debt 
             distribution if you are unfamiliar with market dynamics.
           </div>

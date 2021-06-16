@@ -70,6 +70,10 @@
 
 .recommendations-disclaimers {
   margin: 60px 0;
+
+  .wv-security-disclaimer {
+    margin-top: 40px !important;
+  }
 }
 
 .recommendations-disclaimer-morning {
@@ -78,6 +82,7 @@
   font-size: 13px;
   img {
     margin-right: 5px;
+    height: 18px;
   }
 }
 

@@ -1,5 +1,4 @@
 // ----------- Asset Imports -------------------
-import trust_icons from 'assets/trust_icons.svg';
 import single_star from 'assets/single_star.png';
 import morning_text from 'assets/morning_text.png';
 // ---------------------------------------------
@@ -22,7 +21,10 @@ import { get, isArray } from 'lodash';
 import { get_recommended_funds } from '../Invest/common/api';
 import RecommendationTopCard from './RecommendationTopCard';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
+import { nativeCallback } from '../../utils/native_callback';
 import toast from 'common/ui/Toast'
+import { flowName } from '../Invest/constants';
+import WVSecurityDisclaimer from '../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer';
 
 const sipTypesKeys = [
   "buildwealth",
@@ -64,7 +66,7 @@ const Recommendations = (props) => {
   }, [funnelData]);
 
   const [dialogStates, setDialogStates] = useState({
-    openPennyVerificationPendind: false,
+    openPennyVerificationPending: false,
     openInvestError: false,
     errorMessage: '',
   });
@@ -119,6 +121,7 @@ const Recommendations = (props) => {
   }, []);
 
   const goNext = (investReferralData, isReferralGiven, handleGraph) => {
+    sendEvents('next')
     let investmentObject = {};
     if (funnelData.type !== "riskprofile") {
       var allocations = [];
@@ -249,15 +252,62 @@ const Recommendations = (props) => {
   }, [recommendations]);
 
   const editFund = () => {
+    sendEvents("fund edit")
     navigate("/invest/recommendations/edit-funds");
   };
 
   const checkHow = () => {
+    storageService().setBoolean('check_how_clicked',true)
     navigate("/invest/recommendations/how-we-recommend");
+  }
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "recommended funds",
+        "flow": funnelData.flow || flowName[funnelData.investType] || "",
+        "check_how_clicked": storageService().getBoolean("check_how_clicked") ? "yes" : "no",
+        "period_changed": storageService().getBoolean("period_changed") ? "yes" : "no",
+        "info_clicked": storageService().getBoolean("info_clicked") ? "yes" : "no",
+        }
+    };
+    if (funnelData.investType === "saveforgoal") {
+      eventObj.properties['goal_purpose'] = funnelData.subtype || "";
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      removeEventData();
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+  const removeEventData = () => {
+    storageService().remove("check_how_clicked") 
+    storageService().remove("period_changed")
+    storageService().remove("info_clicked")
+  }
+
+  const goBack = () => {
+    sendEvents('back')
+    //TODO below code to be checked
+    const goBackPath = props.location?.state?.goBack || "";
+    if(goBackPath) {
+      props.history.push({
+        pathname: goBackPath,
+        search: getConfig().searchParams,
+      });
+      return;
+    }
+    props.history.goBack();
   }
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
+      data-aid='recommended-funds-screen'
       buttonTitle={
         currentUser &&
         !currentUser.active_investment &&
@@ -270,8 +320,9 @@ const Recommendations = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       hidePageTitle
+      headerData={{goBack}}
     > 
-      <div className="recommendation-page">
+      <div className="recommendation-page" data-aid='recommendation-page'>
         {riskEnabledFunnel && funnelData.showRecommendationTopCards &&
           <>
             {renderTopCard &&
@@ -281,6 +332,7 @@ const Recommendations = (props) => {
                   funnelData
                 }}
                 parentProps={props}
+                sendEvents={sendEvents}
               />
             }
             <PeriodWiseReturns
@@ -294,8 +346,8 @@ const Recommendations = (props) => {
             />
           </>
         }
-        <section className='recommendations-section'>
-          <div className='recommendations-header'>
+        <section className='recommendations-section' data-aid='recommendations-section'>
+          <div className='recommendations-header' data-aid='recommendations-header'>
             <div className="recommendation-title">Our Recommendation</div>
             <div className="recommendation-how-button" onClick={checkHow}>
               <span>How?</span>
@@ -306,7 +358,7 @@ const Recommendations = (props) => {
               </div>
             )}
           </div>
-          <div className='recommendations-funds-lists'>
+          <div className='recommendations-funds-lists' data-aid='recommendations-funds-lists'>
             {recommendations &&
               recommendations?.map((el, idx) => (
                 <FundCard 
@@ -318,15 +370,15 @@ const Recommendations = (props) => {
                   parentProps={props} />
               ))}
           </div>
-          <div className='recommendations-total-investment'>
+          <div className='recommendations-total-investment' data-aid='recommendations-total-investment'>
             <div>Total investment</div>
             <div style={{ textAlign: 'right' }}>
               <div>{recommendations?.length ? formatAmountInr(funnelData.amount) : '₹0'}</div>
               {funnelData.investTypeDisplay === 'sip' && <div className='amount-per-month'>per month</div>}
             </div>
           </div>
-          <div className="recommendations-disclaimers">
-            <div className="recommendations-disclaimer-morning">
+          <div className="recommendations-disclaimers" data-aid='recommendations-disclaimers'>
+            <div className="recommendations-disclaimer-morning" data-aid='recommendations-disclaimer-morning'>
               <img alt="single_star" src={single_star} />
               {partner_code !== "hbl" ? (
                 <img alt="morning_star" width="100" src={morning_text} />
@@ -335,19 +387,16 @@ const Recommendations = (props) => {
               )}
             </div>
             <TermsAndCond />
-            <div className='recommendations-trust-icons'>
-              <div>Investments with fisdom are 100% secure</div>
-              <img alt='trust_sebi_secure' src={trust_icons} />
-            </div>
+            <WVSecurityDisclaimer />
           </div>
           <PennyVerificationPending
-            isOpen={dialogStates.openPennyVerificationPendind}
-            handleClick={() => navigate("/kyc/add-bank", null, true)}
+            isOpen={dialogStates.openPennyVerificationPending}
+            handleClick={() => navigate("/kyc/add-bank")}
           />
           <InvestError
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
-            handleClick={() => navigate("/invest", null, true)}
+            handleClick={() => navigate("/invest")}
             close={() => handleDialogStates("openInvestError", false)}
           />
           <InvestReferralDialog
