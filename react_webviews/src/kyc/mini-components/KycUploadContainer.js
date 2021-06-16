@@ -77,6 +77,7 @@ const Button = ({
   onFileSelectError,
   supportedFormats,
   customPickerId,
+  customClickHandler,
   withPicker,
   children,
   ...props
@@ -93,6 +94,7 @@ const Button = ({
         supportedFormats={supportedFormats}
         customPickerId={customPickerId}
         fileHandlerParams={fileHandlerParams}
+        customClickHandler={customClickHandler}
       >
         <WVButton
           dataAidSuffix={dataAidSuffix}
