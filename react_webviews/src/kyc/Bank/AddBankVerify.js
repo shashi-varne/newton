@@ -37,6 +37,7 @@ const AddBankVerify = (props) => {
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const stateParams = props.location?.state || {};
 
   useEffect(() => {
     initialize();
@@ -204,6 +205,18 @@ const AddBankVerify = (props) => {
     updateKyc(resultKyc);
   }
 
+  const goBack = () => {
+    if(stateParams.goBackToAddBank) {
+      navigate(PATHNAME_MAPPER.addBank, {
+        state: {
+          bank_id: bankData.bank_id
+        }
+      })
+    } else {
+      props.history.goBack();
+    }
+  }
+
   return (
     <Container
       buttonTitle="VERIFY BANK ACCOUNT"
@@ -213,6 +226,7 @@ const AddBankVerify = (props) => {
       handleClick={handleClick}
       title="Verify your bank account"
       data-aid='kyc-approved-bank-verify-screen'
+      headerData={{ goBack }}
     >
       <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
         <WVInfoBubble

@@ -7,6 +7,7 @@ import {
   bankAccountTypeOptions,
   PATHNAME_MAPPER,
   getIfscCodeError,
+  STORAGE_CONSTANTS,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -18,13 +19,15 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { storageService } from "../../utils/validators";
 
 const AddBank = (props) => {
   const genericErrorMessage = "Something Went wrong!";
   const code = getConfig().code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const bank_id = props.location.state?.bank_id || "";
+  const stateParams = props.location.state || {};
+  const bank_id = stateParams.bank_id || "";
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({
@@ -41,7 +44,7 @@ const AddBank = (props) => {
       "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
     variant: "info",
   });
-
+  const [ifscDisabled, setIfscDisabled] = useState(false);
   const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
@@ -136,7 +139,11 @@ const AddBank = (props) => {
         toast("Congratulations!, new account added succesfully");
         navigate(PATHNAME_MAPPER.bankList);
       } else {
-        navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`);
+        navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`, {
+          state: {
+            goBackToAddBank: true
+          }
+        });
       }
     } catch (err) {
       toast(err.message || genericErrorMessage);
@@ -194,7 +201,7 @@ const AddBank = (props) => {
         code !== "cub" &&
         code !== "ippb")
     ) {
-      setIsApiRunning("button");
+      setIfscDisabled(true);
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
@@ -212,7 +219,7 @@ const AddBank = (props) => {
       } catch (err) {
         console.log(err);
       } finally {
-        setIsApiRunning(false);
+        setIfscDisabled(false);
       }
     } else {
       bank.branch_name = "";
@@ -237,6 +244,14 @@ const AddBank = (props) => {
     }
   }
 
+  const goBack = () => {
+    if(stateParams.goBack === "exit" && storageService().getBoolean(STORAGE_CONSTANTS.NATIVE)) {
+      nativeCallback({ action: "exit_web"})
+    } else {
+      navigate(PATHNAME_MAPPER.bankList)
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
@@ -247,6 +262,7 @@ const AddBank = (props) => {
       handleClick={handleClick}
       title="Enter bank account details"
       data-aid='kyc-add-bank-screen'
+      headerData={{ goBack }}
     >
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
@@ -293,7 +309,7 @@ const AddBank = (props) => {
                     </>
                   ),
                 }}
-                disabled={isApiRunning}
+                disabled={isApiRunning || ifscDisabled}
               />
               <Input
                 label="Account number"
