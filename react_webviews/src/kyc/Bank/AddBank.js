@@ -261,7 +261,7 @@ const AddBank = (props) => {
             </WVInfoBubble>
             <main data-aid='kyc-approved-bank'>
               <Input
-                label="Account Holder name"
+                label="Account holder name"
                 class="input"
                 value={name || ""}
                 error={form_data.name_error ? true : false}
@@ -272,7 +272,7 @@ const AddBank = (props) => {
                 id="name"
               />
               <TextField
-                label="IFSC Code"
+                label="IFSC code"
                 id="ifsc_code"
                 className="input"
                 value={bankData.ifsc_code}
@@ -296,7 +296,7 @@ const AddBank = (props) => {
                 disabled={isApiRunning}
               />
               <Input
-                label="Account Number"
+                label="Account number"
                 class="input"
                 value={bankData.account_number}
                 error={form_data.account_number_error ? true : false}
@@ -340,7 +340,7 @@ const AddBank = (props) => {
                   helperText={form_data.account_type_error}
                   options={accountTypes}
                   id="account_type"
-                  label="Account Type"
+                  label="Account type"
                   isAOB={true}
                   value={bankData.account_type || ""}
                   name="account_type"
