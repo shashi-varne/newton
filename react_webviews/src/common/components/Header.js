@@ -154,7 +154,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                 <SVG
                   style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                   onClick={handleNotification}
-                  preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (getConfig()?.notificationColor || 'white') : 'white'))}
+                  preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (notificationsColor || 'white') : 'white'))}
                   src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
                 />
               }
