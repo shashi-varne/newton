@@ -580,14 +580,17 @@ export async function openStocks() {
               fromState: "invest",
             },
           });
-        } else if (userKyc?.kyc_product_type !== "equity" && isReadyToInvestUser) {
+        } else if ((userKyc?.kyc_product_type !== "equity" && isReadyToInvestUser) || userKyc?.mf_kyc_processed) {
           // already kyc done users
-          const payload = {
-            "kyc":{},
-            "set_kyc_product_type": "equity"
+          let isProductTypeSet;
+          if (!userKyc?.mf_kyc_processed) {
+            const payload = {
+              "kyc":{},
+              "set_kyc_product_type": "equity"
+            }
+            isProductTypeSet = await setKycProductType(payload);
           }
-          const isProductTypeSet = await setKycProductType(payload);
-          if (isProductTypeSet) {
+          if (isProductTypeSet || userKyc?.mf_kyc_processed) {
             this.navigate(PATHNAME_MAPPER.accountInfo)
           }
         } else {

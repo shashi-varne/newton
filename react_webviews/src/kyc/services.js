@@ -269,7 +269,7 @@ export function getKycAppStatus(kyc) {
       status = kyc.equity_application_status;
     }
   } else {
-    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest())) {
+    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest()) || kyc?.mf_kyc_processed) {
       status = kyc.application_status_v2;
     } else {
       status = kyc.equity_application_status;
