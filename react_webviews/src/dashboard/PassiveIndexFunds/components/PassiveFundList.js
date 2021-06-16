@@ -247,12 +247,13 @@ class FundList extends Component {
                             result.map((item) => {
                                 return (
                                     <WVProductListCard
-                                        classes={{ headerTitle: "wv-pdl-header-title" , headerImage : "wv-pdl-header-image"  }}
+                                        classes={{ headerTitle: "wv-pdl-header-title" , headerImage : "wv-pdl-header-image",  }}
                                         productData={item}
                                         title={item.legal_name}
                                         subtitle={<CardSubtitle value={item?.tracking_index} morning_start={item?.morning_star_rating} />}
                                         image={item.amc_logo_big}
                                         contentPropsMapList={this.dataPropMapList(item)}
+                                        handelClick={() => this.clickCard(item)}
                                     />
                                 );
                             })}

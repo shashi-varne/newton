@@ -46,16 +46,17 @@ import { isFunction } from 'lodash';
 import PropTypes from 'prop-types';
 
 const WVProductListCard = ({
+  handelClick,
   productData,
   title,
   subtitle,
   image,
   classes = {},
   children,
-  contentPropsMapList
+  contentPropsMapList,
 }) => {
   return (
-    <Card className={`wv-product-card ${classes.card}`}>
+    <Card className={`wv-product-card ${classes.card}`}  onClick={handelClick}>
       <div className={`wv-product-card-header ${classes.header}`}>
         <div className={`wv-pch-title ${classes.headerTitle}`}>
           {title}
@@ -126,6 +127,7 @@ WVProductListCard.propTypes = {
 
 WVProductListCard.defaultProps = {
   classes: {},
+  handelClick: () => {},
 };
 
 export default WVProductListCard;
