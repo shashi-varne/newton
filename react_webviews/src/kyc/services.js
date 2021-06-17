@@ -261,11 +261,15 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    status = "rejected";
-    result.status = status;
-    return result;
-  } else {
     if (!TRADING_ENABLED || kyc?.kyc_product_type !== "equity") {
+      status = "rejected";
+      result.status = status;
+      return result;
+    } else {
+      status = kyc.equity_application_status;
+    }
+  } else {
+    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest()) || kyc?.mf_kyc_processed) {
       status = kyc.application_status_v2;
     } else {
       status = kyc.equity_application_status;
@@ -404,7 +408,6 @@ function getAddressProof(userKyc) {
 export function isReadyToInvest() {
   let userRTI = storageService().getObject("user");
   let kycRTI = storageService().getObject("kyc");
-  const TRADING_ENABLED = isTradingEnabled(kycRTI);
 
   if (!kycRTI || !userRTI) {
     return false;
@@ -416,9 +419,7 @@ export function isReadyToInvest() {
       (kycRTI.friendly_application_status === "submitted" &&
         kycRTI.bank.meta_data_status === "approved")
     ) {
-      if (!TRADING_ENABLED || (TRADING_ENABLED && kycRTI.equity_sign_status === "signed")) {
-        return true;
-      }
+      return true;
     } else if (userRTI.kyc_registration_v2 === "complete") {
       return true;
     } else if (kycRTI.provisional_action_status === "approved") {

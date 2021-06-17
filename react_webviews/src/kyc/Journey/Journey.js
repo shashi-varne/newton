@@ -11,7 +11,7 @@ import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import KycBackModal from '../mini-components/KycBack'
-import { navigate as navigateFunc } from '../../utils/functions'
+import { isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
@@ -196,6 +196,13 @@ const Journey = (props) => {
               kyc.dl_docs_status !== null &&
               kyc.dl_docs_status !== '' &&
               kyc.dl_docs_status !== 'init'
+            ) {
+              journeyData[i].isEditAllowed = false
+            }
+          } else if (!isCompliant && !show_aadhaar) {
+            if (
+              journeyData[i].key === 'pan' &&
+              kyc.pan.doc_status === "approved"
             ) {
               journeyData[i].isEditAllowed = false
             }
@@ -589,11 +596,12 @@ const Journey = (props) => {
     }
   }
   if (!isEmpty(kyc) && !isEmpty(user)) {
+    const TRADING_ENABLED = isTradingEnabled(kyc);
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
       navigate('/nps/identity', {
         state: { goBack: '/invest' },
       })
-    } else if (
+    } else if (!TRADING_ENABLED &&
       user.kyc_registration_v2 === 'submitted' &&
       kyc.sign_status === 'signed'
     ) {

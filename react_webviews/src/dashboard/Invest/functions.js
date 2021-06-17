@@ -14,7 +14,7 @@ import {
 import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
-import { isEquityCompleted, isKycCompleted } from "../../kyc/common/functions";
+import { isEquityCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
 const config = getConfig();
@@ -426,6 +426,7 @@ export function initilizeKyc() {
   let getKycAppStatusData = getKycAppStatus(userKyc);
   let kycJourneyStatus = getKycAppStatusData.status;
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  const rejectedItems = getKycAppStatusData.rejectedItems;
   if (isCompliant) {
     if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
       kycStatusData = kycStatusMapperInvest["ground_premium"];
@@ -444,6 +445,7 @@ export function initilizeKyc() {
     isReadyToInvestBase,
     isEquityCompletedBase,
     getKycAppStatusData,
+    rejectedItems,
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
@@ -518,9 +520,9 @@ export function openPremiumOnboardBottomSheet(
 }
 
 export function handleKycSubmittedOrRejectedState() {
-  let { userKyc, kycJourneyStatusMapperData } = this.state;
+  let { userKyc, kycJourneyStatusMapperData, rejectedItems } = this.state;
 
-  if (userKyc.bank.meta_data_status === "rejected") {
+  if (rejectedItems.length === 1 && userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
   } else {
     let modalData = kycJourneyStatusMapperData;
@@ -560,36 +562,44 @@ export async function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
   storageService().set("kycStartPoint", "stocks");
   
-  if (userKyc?.address?.meta_data?.is_nri && isKycCompleted(userKyc)) {
-    this.navigate(PATHNAME_MAPPER.nriError, {
-      state: {originState: "invest"}
-    });
+  if (kycJourneyStatus === "rejected") {
+    this.handleKycSubmittedOrRejectedState();
   } else {
-    if (kycJourneyStatus === "rejected") {
-      this.handleKycSubmittedOrRejectedState();
+    if (kycJourneyStatus === "ground") {
+      this.navigate(PATHNAME_MAPPER.stocksStatus);
     } else {
-      if (kycJourneyStatus === "ground") {
-        this.navigate(PATHNAME_MAPPER.stocksStatus);
-      } else if (kycJourneyStatus === "ground_pan") {
-        this.navigate(PATHNAME_MAPPER.journey, {
-          state: {
-            show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
-            fromState: "invest",
-          },
+      const isReadyToInvestUser = isReadyToInvest();
+      // only NRI conditions
+      if (userKyc?.address?.meta_data?.is_nri) {
+        this.navigate(PATHNAME_MAPPER.nriError, {
+          state: {noStockOption: isReadyToInvestUser ? true : false}
         });
-      } else if (userKyc?.kyc_product_type !== "equity") {
-        const payload = {
-          "kyc":{},
-          "set_kyc_product_type": "equity"
-        }
-        const isProductTypeSet = await setKycProductType(payload);
-        if (isProductTypeSet) {
-          this.navigate(PATHNAME_MAPPER.accountInfo)
-        }
       } else {
-        this.navigate(kycStatusData.next_state, {
-          state: { fromState: "invest" },
-        });
+        if (kycJourneyStatus === "ground_pan") {
+          this.navigate(PATHNAME_MAPPER.journey, {
+            state: {
+              show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
+              fromState: "invest",
+            },
+          });
+        } else if ((userKyc?.kyc_product_type !== "equity" && isReadyToInvestUser) || userKyc?.mf_kyc_processed) {
+          // already kyc done users
+          let isProductTypeSet;
+          if (!userKyc?.mf_kyc_processed) {
+            const payload = {
+              "kyc":{},
+              "set_kyc_product_type": "equity"
+            }
+            isProductTypeSet = await setKycProductType(payload);
+          }
+          if (isProductTypeSet || userKyc?.mf_kyc_processed) {
+            this.navigate(PATHNAME_MAPPER.accountInfo)
+          }
+        } else {
+          this.navigate(kycStatusData.next_state, {
+            state: { fromState: "invest" },
+          });
+        }
       }
     }
   }

@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
-import { checkPanFetchStatus, isDigilockerFlow } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow } from "../common/functions";
 import { getFlow } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
@@ -30,7 +30,7 @@ const KycBankVerify = (props) => {
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
-  const {kyc} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -104,6 +104,7 @@ const KycBankVerify = (props) => {
           setIsPennyFailed(true);
         }
       }
+      updateKycObject(result);
     } catch (err) {
       console.log(err);
     }
@@ -121,10 +122,25 @@ const KycBankVerify = (props) => {
       } else {
         setIsPennyFailed(true);
       }
+      updateKycObject(result);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const updateKycObject = (result) => {
+    let resultKyc = {
+      ...kyc,
+      bank: {
+        ...kyc.bank,
+        meta_data: {
+          ...kyc.bank.meta_data,
+          ...result.records.PBI_record
+        }
+      }
+    }
+    updateKyc(resultKyc);
+  }
 
   const checkBankDetails = () => {
     sendEvents("check bank details", "bottom_sheet");
@@ -144,9 +160,11 @@ const KycBankVerify = (props) => {
       else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else {
           navigate(PATHNAME_MAPPER.tradingExperience);
         }
@@ -171,9 +189,11 @@ const KycBankVerify = (props) => {
       // }
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else navigate(PATHNAME_MAPPER.kycEsign);
       } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
@@ -232,6 +252,7 @@ const KycBankVerify = (props) => {
     <Container
       buttonTitle="VERIFY BANK ACCOUNT"
       events={sendEvents("just_set_events")}
+      skelton={isLoading}
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}

@@ -177,7 +177,6 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
             name: 'nomination',
             keys: ['name', 'dob', 'relationship'],
           },
-          // { name: "nomination", keys: ["name", "dob", "relationship"] }
         ],
       },
       {
@@ -187,7 +186,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         isEditAllowed: true,
         inputsForStatus: [
           { name: 'address', keys: ['pincode'] },
-          { name: 'nomination', keys: ['address'] },
+          // { name: 'nomination', keys: ['address'] },
         ],
       },
       {

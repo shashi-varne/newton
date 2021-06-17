@@ -6,7 +6,7 @@ import {
 } from "../../common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listener";
-import { navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { storageService } from "../../utils/validators";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
@@ -122,10 +122,16 @@ class Container extends Component {
   };
 
   redirectToJourney = () => {
+    const kyc = storageService().getObject("kyc");
+    this.navigate = navigateFunc.bind(this.props);
+    const config = getConfig();
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-    this.navigate("/kyc/journey");
+    let showAadhaar = !(kyc.address.meta_data.nri || kyc.kyc_type === "manual");
+    this.navigate("/kyc/journey", {
+      searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
+    });
   };
 
   render() {

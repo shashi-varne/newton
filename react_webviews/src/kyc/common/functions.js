@@ -1,4 +1,5 @@
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { isTradingEnabled } from '../../utils/functions'
 import { isEmpty, storageService } from '../../utils/validators'
 import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS } from '../constants'
 
@@ -137,9 +138,15 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
   return compare;
 };
 
-export const getTotalPagesInPersonalDetails = (isEdit = false) => {
+export const getKycUserFromSession = () => {
   const kyc = storageService().getObject("kyc") || {};
   const user = storageService().getObject("user") || {};
+
+  return { kyc, user };
+}
+
+export const getTotalPagesInPersonalDetails = (isEdit = false) => {
+  const {kyc, user} = getKycUserFromSession();
   if (isEmpty(kyc) || isEmpty(user)) {
     return "";
   }
@@ -198,13 +205,8 @@ export async function checkDocsPending(kyc = {}) {
 
 export async function pendingDocsList(kyc = {}) {
   if (isEmpty(kyc)) return false;
-  let docsToCheck = ["pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
+  let docsToCheck = ["equity_pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
 
-  if (kyc.kyc_status === "compliant") {
-    docsToCheck = docsToCheck.filter((doc) => doc !== "pan");
-    docsToCheck.push("equity_pan");
-  }
-  
   if (kyc?.kyc_type === "manual") {
     docsToCheck = docsToCheck.filter((doc) => doc !== "equity_identification");
     docsToCheck.push("identification");
@@ -252,14 +254,19 @@ export async function getPendingDocuments(kyc = {}) {
   return pendingDocsMapper;
 }
 
-export function checkPanFetchStatus(kyc = {}) {
+export function checkDLPanFetchStatus(kyc = {}) {
   if (isEmpty(kyc)) return false;
   return (
-    (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+    kyc.all_dl_doc_statuses.pan_fetch_status === null ||
     kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-    kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-    kyc.pan.doc_status !== "approved"
-  );
+    kyc.all_dl_doc_statuses.pan_fetch_status === "failed");
+}
+
+export function checkDLPanFetchAndApprovedStatus(kyc = {}) {
+  if (isEmpty(kyc)) return false;
+  const TRADING_ENABLED = isTradingEnabled(kyc)
+  return (checkDLPanFetchStatus(kyc) && ((!TRADING_ENABLED && kyc.pan.doc_status !== "approved") ||
+    (TRADING_ENABLED && kyc.equity_pan.doc_status !== "approved")));
 }
 
 export function isNotManualAndNriUser(kyc = {}) {
@@ -326,16 +333,24 @@ export const isKycCompleted = (kyc) => {
   if (isEmpty(kyc)) return false;
 
   if (kyc?.kyc_status === "compliant") {
-    return (kyc?.application_status_v2 === "submitted" ||
-    kyc?.application_status_v2 === "complete");
+    return kyc?.application_status_v2 === "complete";
   } else {
     return (
-      (kyc?.application_status_v2 === "submitted" ||
-        kyc?.application_status_v2 === "complete") &&
+        kyc?.application_status_v2 === "complete" &&
       kyc.sign_status === "signed"
     );
   }
 };
+
+export const skipBankDetails = () => {
+  const {kyc, user} = getKycUserFromSession();
+
+  return (
+    user.active_investment ||
+    (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
+    kyc.bank.meta_data.bank_status === "doc_submitted"
+  );
+}
 
 export const getGenderValue = (gender="", key="value") => {
   const generData = GENDER_OPTIONS.find(data => data.value === gender) || {};

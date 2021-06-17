@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getConfig, isTradingEnabled } from "utils/functions";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import WVSteps from "../../common/ui/Steps/WVSteps"
+import { isDocSubmittedOrApproved } from "../../kyc/common/functions";
 import { isReadyToInvest } from "../../kyc/services";
 import { isEmpty } from "../../utils/validators";
 
@@ -10,6 +11,7 @@ const stepsData = [
   { title: "Stocks & IPO", status: "Under process" },
   { title: "Futures & Options", status: "Under process" }
 ]
+const initialSubtitleText = "Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds";
 
 const config = getConfig();
 const productName = config.productName;
@@ -18,12 +20,13 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   const [steps, setSteps] = useState(stepsData);
   const [tradingEnabled, setTradingEnabled] = useState(false);
   const [showAccountStatus, setShowAccountStatus] = useState(false);
+  const [tradingSubtitleText, setTradingSubtitleText] = useState(initialSubtitleText);
 
   useEffect(() => {
     if(!isEmpty(kyc)) {
       const TRADING_ENABLED = isTradingEnabled(kyc);
       setTradingEnabled(TRADING_ENABLED);
-      const displayAccountStatus = (dl_flow || kyc?.kyc_status === "compliant") && TRADING_ENABLED && !show_note;
+      const displayAccountStatus = TRADING_ENABLED && !show_note;
       setShowAccountStatus(displayAccountStatus);
       const isReadyToInvestUser = isReadyToInvest();
 
@@ -33,6 +36,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
   
       if (isReadyToInvestUser) {
         setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Mutual fund"))
+        setTradingSubtitleText("Trading & demat A/c will be ready in 2 hours")
       }
     }
   }, [kyc]);
@@ -44,17 +48,17 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
           src={require(`assets/${productName}/ic_process_done.svg`)}
           alt=""
         />
-        {(dl_flow || kyc?.kyc_status === "compliant") && !show_note && (
+        {showAccountStatus && (
           <div className="title" data-aid='kyc-header-title'>KYC complete!</div>
         )}
-        {!tradingEnabled && kyc?.kyc_status === "compliant" && show_note && (
+        {!tradingEnabled && show_note && (
           <div className="title" data-aid='kyc-header-title'>Great! Your KYC application is submitted!</div>
         )}
-        {(kyc?.kyc_status !== 'compliant' && !dl_flow) && (
+        {/* {(kyc?.kyc_status !== 'compliant' && !dl_flow) && (
           <div className="title" data-aid='kyc-header-title'>
             Kudos! KYC application is submitted!</div>
-        )}
-        {kyc?.kyc_status !== 'compliant' && !dl_flow && (
+        )} */}
+        {!tradingEnabled && kyc?.kyc_status !== 'compliant' && !dl_flow && (
           <div className="text" data-aid='kyc-header-text'>
             <img src={require(`assets/eta_icon.svg`)} alt="" />
             Approves in one working day
@@ -62,7 +66,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         )}
         {showAccountStatus && (
           <div className="sub-title" data-aid='kyc-header-sub-title'>
-            Trading & demat A/c will be ready in 2 hours. Till then you can start investing in mutual funds
+            {tradingSubtitleText}
           </div>
         )}
         <div className="subtitle" data-aid='kyc-header-sub-title-2' onClick={() => navigateToReports()}>

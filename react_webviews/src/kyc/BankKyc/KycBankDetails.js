@@ -11,10 +11,11 @@ import {
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import {
-  checkPanFetchStatus,
+  checkDLPanFetchAndApprovedStatus,
   isDigilockerFlow,
   validateFields,
-  getFlow
+  getFlow,
+  skipBankDetails
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
@@ -75,11 +76,7 @@ const KycBankDetails = (props) => {
 
   let initialize = async () => {
     let disableData = { ...disableFields };
-    if (
-      user.active_investment ||
-      (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
-      kyc.bank.meta_data.bank_status === "doc_submitted"
-    ) {
+    if (skipBankDetails()) {
       disableData.skip_api_call = true;
       disableData.account_number_disabled = true;
       disableData.c_account_number_disabled = true;
@@ -173,9 +170,11 @@ const KycBankDetails = (props) => {
       else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else {
           navigate(PATHNAME_MAPPER.tradingExperience);
         }
@@ -197,9 +196,11 @@ const KycBankDetails = (props) => {
       //   });handleSdkNavigation
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved)
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         else navigate(PATHNAME_MAPPER.kycEsign);
       } else navigate(PATHNAME_MAPPER.uploadProgress);
     }

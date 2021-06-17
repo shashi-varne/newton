@@ -92,7 +92,10 @@ const PersonalDetails4 = (props) => {
       userkycDetails.nomination.meta_data.name = form_data.name;
       userkycDetails.nomination.meta_data.relationship = form_data.relationship;
       body.kyc = {
-        nomination: userkycDetails.nomination.meta_data,
+        nomination: {
+          ...userkycDetails.nomination.meta_data,
+          nominee_optional: false
+        }
       };
     }
     saveCompliantPersonalDetails2(body);

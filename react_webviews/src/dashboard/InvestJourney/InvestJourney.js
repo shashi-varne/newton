@@ -86,6 +86,7 @@ const InvestJourney = (props) => {
       userKyc: userKyc,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
+      navigate: navigate
     });
   };
 

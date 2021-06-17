@@ -3,7 +3,7 @@ import Container from '../common/Container'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
-import { isDigilockerFlow, getFlow } from '../common/functions'
+import { isDigilockerFlow, getFlow, skipBankDetails } from '../common/functions'
 import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
@@ -42,7 +42,11 @@ const Sign = (props) => {
       const type = result?.kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
 
       if (dlFlow || type === "compliant") {
-        navigate(`/kyc/${type}/bank-details`);
+        if (!skipBankDetails()) {
+          navigate(`/kyc/${type}/bank-details`);
+        } else {
+          navigate(PATHNAME_MAPPER.journey);
+        }
       } else {
         if (props?.location?.state?.backToJourney) {
           navigate(PATHNAME_MAPPER.journey);

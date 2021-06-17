@@ -265,14 +265,14 @@ export const ADDRESS_PROOF_OPTIONS = [
   { name: "Passport", value: "PASSPORT" },
   { name: "Aadhaar card", value: "AADHAAR" },
   { name: "Voter ID", value: "VOTER_ID_CARD" },
-  { name: "Gas receipt", value: "UTILITY_BILL" },
+  // { name: "Gas receipt", value: "UTILITY_BILL" },
   { name: "Passbook", value: "LAT_BANK_PB" }
 ];
 
 export const NRI_ADDRESS_PROOF_OPTIONS = [
   { name: "Driving license", value: "DL" },
-  { name: "Passport", value: "PASSPORT" },
-  { name: "Passport", value: "PASSPORT" } 
+  { name: "Gas receipt", value: "UTILITY_BILL" },
+  { name: "Passbook", value: "LAT_BANK_PB" } 
 ]
 
 export const DL_DOCS = [
@@ -289,10 +289,6 @@ export const companyDetails = {
 export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 export const eqkycDocsGroupMapper = {
-  "pan": {
-    title: "PAN details",
-    doc: "PAN card"
-  },
   "equity_pan": {
     title: "PAN details",
     doc: "PAN card"
