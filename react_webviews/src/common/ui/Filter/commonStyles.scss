@@ -13,7 +13,7 @@
     width: 100%;
     position: relative;
     min-height: 465px !important;
-    .heading {
+    .wv-heading {
       font-size: 20px;
       font-weight: 700;
       line-height: 32px;
@@ -59,12 +59,12 @@
           rgba(255, 255, 255, 0)
         );
       }
-      .body {
+      .wv-body {
         flex: 4;
         overflow-y: auto;
         overflow-x: hidden;
         height: 340px;
-        .render-tab-options-container {
+        .wv-render-tab-options-container {
           margin: 0 10px;
         }
 
@@ -78,7 +78,7 @@
           .MuiCheckbox-root {
             left: 0;
           }
-          .tab-option-title {
+          .wv-tab-option-title {
             position: relative;
             line-height: 21px;
             font-size: 16px;
@@ -87,7 +87,7 @@
             margin-left: 5px;
           }
 
-          .tab-option-subtitle {
+          .wv-tab-option-subtitle {
             position: absolute;
             margin-top: 5px;
             color: var(--steelgrey);

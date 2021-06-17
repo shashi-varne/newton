@@ -34,7 +34,7 @@ const RenderTabOptions = ({
     }
   };
   return (
-    <FormControl component="fieldset" className="render-tab-options-container">
+    <FormControl component="fieldset" className="wv-render-tab-options-container">
       {!isEmpty(activeTabOptions) &&
         activeTabOptions.map((item, idx) => {
           return (
@@ -52,8 +52,8 @@ const RenderTabOptions = ({
                 />
               }
               label={
-                <div className="tab-option-title">{item.title}
-                  {item.subtitle && <p className="tab-option-subtitle">{item.subtitle}</p>}
+                <div className="wv-tab-option-title">{item.title}
+                  {item.subtitle && <p className="wv-tab-option-subtitle">{item.subtitle}</p>}
                 </div>
               }
               onChange={handleChange}

@@ -68,7 +68,7 @@ const WVFilter = ({
 
       <FilterContainer close={closeFilter} open={isOpen}>
         <section className="wv-filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
-          <p className="heading">FILTERS</p>
+          <p className="wv-heading">FILTERS</p>
           <main className="wv-filter">
             <div className="wv-title">
               <ul>
@@ -89,7 +89,7 @@ const WVFilter = ({
                   })}
               </ul>
             </div>
-            <div className="body" id="scroll-container" data-aid={`body-${dataAidSuffix}`}>
+            <div className="wv-body" id="scroll-container" data-aid={`body-${dataAidSuffix}`}>
               <RenderTabOptions
                 dataAidSuffix={dataAidSuffix}
                 activeTab={activeTab}
