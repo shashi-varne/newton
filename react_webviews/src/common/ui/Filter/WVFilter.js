@@ -32,6 +32,7 @@ const FilterContainer = ({ close, open, children, ...props }) => {
 }
 
 const WVFilter = ({
+  openFilter,                 // Default condition needed to Open/Closer Filter
   dataAidSuffix,
   onApplyClicked,           // Function CallBack From The Parent Which Sends the Filtered Data To the API
   withButton,              //  If User Wants Filter With Button
@@ -40,19 +41,19 @@ const WVFilter = ({
 }) => {
   const [activeTab, setActiveTab] = useState(defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key);
   const [activeTabOptions, setActiveTabOptions] = useState(filterOptions[0].option);
-  const [selectedOptions, onOptionsSelected] = useState(defaultSelectedTab || {});
-  const [isOpen, setIsOpen] = useState(withButton ? false : true);
+  const [selectedFilters, setSelectedFilters] = useState(defaultSelectedTab || {});
+  const [isOpen, setIsOpen] = useState(openFilter);
 
   const closeFilter = () => {
     setIsOpen(false);
   };
 
   const applyFilters = () => {
-    onApplyClicked(selectedOptions)
+    onApplyClicked(selectedFilters)
   }
 
   const reset = () => {
-    onOptionsSelected(defaultSelectedTab || {})
+    setSelectedFilters(defaultSelectedTab || {})
     setActiveTab(activeTab)
   }
 
@@ -93,8 +94,8 @@ const WVFilter = ({
               <RenderTabOptions
                 dataAidSuffix={dataAidSuffix}
                 activeTab={activeTab}
-                selectedOptions={selectedOptions}
-                onOptionsSelected={onOptionsSelected}
+                selectedFilters={selectedFilters}
+                onOptionsSelected={setSelectedFilters}
                 activeTabOptions={activeTabOptions}
               />
             </div>
