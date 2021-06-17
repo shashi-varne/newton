@@ -627,7 +627,7 @@ export function ghGetMember(lead, providerConfig) {
     'parent_in_law_account2_key'
   ];
   const { add_members_screen: { son_max, daughter_max }} = providerConfig;
-
+  console.log(son_max, daughter_max)
   let backend_child_keys = [];
   for (let i = 0; i < (son_max + daughter_max); i++) {
     backend_child_keys.push(`child_account${i+1}_key`);
@@ -640,6 +640,11 @@ export function ghGetMember(lead, providerConfig) {
     'parents': ['parent_account1_key', 'parent_account2_key'],
     'parents_in_law': ['parent_in_law_account1_key', 'parent_in_law_account2_key'],
   };
+
+  if(lead.vendor === 'star' && (lead.insurance_type === 'family' || lead.insurance_type === 'self_family')){
+    allowed_as_per_account['family'] = [...allowed_as_per_account['family'], 'parent_account1_key', 'parent_account2_key', 'parent_in_law_account1_key', 'parent_in_law_account2_key']
+    allowed_as_per_account['self_family'] = [...allowed_as_per_account['self_family'], 'parent_account1_key', 'parent_account2_key', 'parent_in_law_account1_key', 'parent_in_law_account2_key']
+  } 
   const allowed_mapper = allowed_as_per_account[lead.insurance_type];
 
   let member_base = [];

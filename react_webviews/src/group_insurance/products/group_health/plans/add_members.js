@@ -404,32 +404,40 @@ class GroupHealthPlanAddMembers extends Component {
 
     updateParent = (key, value) => {
         
-        var {father_in_law_checked, mother_in_law_checked, father_checked, mother_checked} = this.state;
-        if(key[0] === 'parents_total' && !value){
-            father_checked = false; 
-            mother_checked = false;
-        }else if(key[0] === 'parents_total' && value){
-            father_checked = true; 
-            mother_checked = true;
-        }
+        if(this.state.provider === 'STAR' && (this.state.account_type === 'family' || this.state.account_type === 'self_family')){
+            var {father_in_law_checked, mother_in_law_checked, father_checked, mother_checked} = this.state;
+            if(key[0] === 'parents_total' && !value){
+                father_checked = false; 
+                mother_checked = false;
+            }else if(key[0] === 'parents_total' && value){
+                father_checked = true; 
+                mother_checked = true;
+            }
+    
+            if(key[0] === 'parents_in_law_total' && !value){
+                father_in_law_checked = false; 
+                mother_in_law_checked = false;
+            }else if(key[0] === 'parents_in_law_total' && value){
+                father_in_law_checked = true; 
+                mother_in_law_checked = true;
+            }
 
-        if(key[0] === 'parents_in_law_total' && !value){
-            father_in_law_checked = false; 
-            mother_in_law_checked = false;
-        }else if(key[0] === 'parents_in_law_total' && value){
-            father_in_law_checked = true; 
-            mother_in_law_checked = true;
+            this.setState({
+                [key]: value,
+                father_checked, 
+                mother_checked, 
+                father_in_law_checked, 
+                mother_in_law_checked
+            }, () => {
+                this.setMinMax();
+            });
+        }else{
+            this.setState({
+                [key]: value
+            }, () => {
+                this.setMinMax();
+            });
         }
-
-        this.setState({
-            [key]: value,
-            father_checked, 
-            mother_checked, 
-            father_in_law_checked, 
-            mother_in_law_checked
-        }, () => {
-            this.setMinMax();
-        });
     };
 
     handleChangeRadio = name => event => {
