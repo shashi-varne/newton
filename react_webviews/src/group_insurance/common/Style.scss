@@ -188,7 +188,9 @@
   color: #878787;
 }
 .payment-failed-icon {
-  text-align: center; margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
   .payment-failed-img{
     width: 320px !important;
     height: 160px !important;
@@ -1511,8 +1513,8 @@
     position: absolute;
     right: 6%;
     bottom:10%;
-    width: 100px; 
-    height: 82px;
+    width: 100px !important; 
+    height: 82px !important;
   }
   .hi-landing-banner-header{
     font-size: calc(20px + 0.5vw);
