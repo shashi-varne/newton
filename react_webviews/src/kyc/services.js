@@ -215,11 +215,6 @@ export function getKycAppStatus(kyc) {
     ];
   }
 
-  if(TRADING_ENABLED && kyc?.kyc_type !== "manual") {
-    let object =  { name: "equity_identification", keys: ["doc_status", "meta_data_status"] };
-    fieldsToCheck.push(object);
-  }
-
   if (kyc.address.meta_data.is_nri) {
     var obj = {
       name: "nri_address",

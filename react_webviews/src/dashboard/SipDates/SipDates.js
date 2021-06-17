@@ -108,9 +108,9 @@ class SipDates extends Component {
       body: sipBaseData,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: isSipDatesScreen,
-      history: this.props.history,
       handleApiRunning: this.handleApiRunning,
       handleDialogStates: this.handleDialogStates,
+      navigate: this.navigate,
     });
   };
 

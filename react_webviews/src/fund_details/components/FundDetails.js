@@ -278,10 +278,10 @@ const FundDetails = ({ classes, history }) => {
       body: body,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: false,
-      history: history,
       userKyc: kyc,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
+      navigate: navigate,
     });
   };
 

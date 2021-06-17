@@ -223,9 +223,9 @@ const Recommendations = (props) => {
         investmentEventData: investmentEventData,
         paymentRedirectUrl: paymentRedirectUrl,
         isSipDatesScreen: false,
-        history: props.history,
         handleApiRunning: handleApiRunning,
         handleDialogStates: handleDialogStates,
+        navigate: navigate,
       });
   };
 
@@ -339,12 +339,12 @@ const Recommendations = (props) => {
           </div>
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPendind}
-            handleClick={() => navigate("/kyc/add-bank", null, true)}
+            handleClick={() => navigate("/kyc/add-bank")}
           />
           <InvestError
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
-            handleClick={() => navigate("/invest", null, true)}
+            handleClick={() => navigate("/invest")}
             close={() => handleDialogStates("openInvestError", false)}
           />
           <InvestReferralDialog

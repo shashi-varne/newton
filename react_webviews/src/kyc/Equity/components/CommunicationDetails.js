@@ -73,11 +73,6 @@ const CommunicationDetails = (props) => {
       setTotalPages(getTotalPagesInPersonalDetails());
       if(showOtpContainer) {
         setShowOtpContainer(false);
-        setOtpData({
-          otp: "",
-          totalTime: 30,
-          timeAvailable: 30,
-        })
       }
     }
   }, [kyc, user]);
