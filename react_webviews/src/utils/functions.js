@@ -138,6 +138,25 @@ export function getParamsMark(data) {
   return (data.match(/[?]/g) ? "&": "?");
 }
 
+export const getPlatformConfig = () => {
+  const config = {};
+  if (isMobile.Android() && typeof window.Android !== 'undefined') {
+    config.app = 'android';
+    config.Android = true;
+  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
+    config.app = 'ios';
+    config.iOS = true;
+  } else {
+    if (storageService().get("is_secure")) {
+      return;
+    }
+    config.app = 'web';
+    config.Web = true;
+  }
+
+  return config;
+}
+
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
@@ -286,15 +305,12 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + 'insurance_allweb=' + insurance_allweb;
   }
 
-  if (isMobile.Android() && typeof window.Android !== 'undefined') {
-    returnConfig.app = 'android';
-    returnConfig.Android = true;
-  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
-    returnConfig.app = 'ios';
-    returnConfig.iOS = true;
-  } else {
-    returnConfig.app = 'web';
-    returnConfig.Web = true;
+  const platformConfig = getPlatformConfig();
+  if (platformConfig) {
+    returnConfig = {
+      ...returnConfig,
+      platformConfig
+    }
   }
 
   // eslint-disable-next-line
