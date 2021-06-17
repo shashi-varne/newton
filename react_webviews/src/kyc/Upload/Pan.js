@@ -140,7 +140,7 @@ const Pan = (props) => {
   }
 
   const handleCloseBottomSheet = () => {
-    if (isOpen) setIsOpen(!isOpen);
+    setIsOpen(false);
   }
 
   const sendEvents = (userAction, type) => {
