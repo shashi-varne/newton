@@ -101,7 +101,7 @@ const WVFilter = ({
             </div>
           </main>
           <WVButtonLayout
-            className="wv-filter-buttons"  // CSS FIX NEEDED!~
+            className="wv-filter-buttons"
           >
             <WVButtonLayout.Button
               type="secondary"
