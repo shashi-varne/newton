@@ -537,9 +537,14 @@ input.default-otp-input {
     font-size: 14px;
   }
 
-  .completed-icon {
-    width: 14px;
-    margin: 4px 0 0 8px;
+  .completed-icon, .select-floater-img {
+    width: 14px !important;
+    height: 14px !important;
+    margin: 0;
+  }
+  .save-text-icon{
+    width: 10px !important;
+    height: 10px !important;
   }
 }
 
@@ -786,7 +791,10 @@ body[data-device="mobile"] {
     margin: "0 0 0 10px";
     z-index: 99999;
   }
-
+  .generic-tooltip-img{
+    width: 14px !important;
+    height: 14px !important;
+  }
   .tooltip-arrrow {
     right: 20px;
     position: relative;
@@ -1263,6 +1271,10 @@ label{
 .react-select__indicators{
 padding-right: 12px !important;
 }
+.imgc-box-landing{
+  width: 70px !important;
+  min-height: 60px !important;
+}
 
 .details-card-container{
   font-family: 'Rubik', sans-serif;
@@ -1306,9 +1318,9 @@ padding-right: 12px !important;
     display: flex;
     align-items: center;
     justify-content: space-between;    
-    img{
-      width: 36px;
-      height: 36px;
+    .details-card-logo{
+      width: 36px !important;
+      height: 36px !important;
       object-fit: cover;
       background-color: #fff;
       align-self: flex-start;
