@@ -11,7 +11,6 @@ import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, isNotManu
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
-import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
@@ -182,12 +181,15 @@ const Pan = (props) => {
             />
             <KycUploadContainer.Button
               withPicker
-              showOptionsDialog
-              nativePickerMethodName="open_gallery"
-              fileName="pan"
-              onFileSelectComplete={onFileSelectComplete}
-              onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_IMAGE_TYPES}
+              filePickerProps={{
+                showOptionsDialog: true,
+                shouldCompress: true,
+                nativePickerMethodName: "open_gallery",
+                fileName: "pan",
+                onFileSelectComplete: onFileSelectComplete,
+                onFileSelectError: onFileSelectError,
+                supportedFormats: SUPPORTED_IMAGE_TYPES
+              }}
             />
           </KycUploadContainer>
           <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
