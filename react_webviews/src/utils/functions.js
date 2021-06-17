@@ -309,7 +309,7 @@ export const getConfig = () => {
   if (platformConfig) {
     returnConfig = {
       ...returnConfig,
-      platformConfig
+      ...platformConfig
     }
   }
 
@@ -348,7 +348,7 @@ export const getConfig = () => {
   returnConfig.isIframe = isIframe();
   returnConfig.platform = !returnConfig.isIframe ? (!returnConfig.Web ? "sdk" : "web" ): "iframe";
   returnConfig.isLoggedIn = storageService().get("currentUser");
-  
+  console.log(returnConfig);
   return returnConfig;
 };
 
