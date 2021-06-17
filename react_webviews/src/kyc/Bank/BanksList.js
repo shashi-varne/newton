@@ -70,6 +70,10 @@ const BanksList = (props) => {
     }
   }
 
+  const goBack = () => {
+    navigate("/my-account");
+  }
+
   return (
     <Container
       skelton={showLoader}
@@ -83,6 +87,7 @@ const BanksList = (props) => {
       title="Bank accounts"
       type="outlined"
       data-aid='kyc-add-other-bank-screen'
+      headerData={{ goBack }}
     >
       <div className="banks-list" data-aid='kyc-banks-list'>
         {banks.map((bank, index) => {
