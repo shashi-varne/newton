@@ -43,13 +43,12 @@ const WVFilter = ({
   const [selectedOptions, onOptionsSelected] = useState(defaultSelectedTab || {});
   const [isOpen, setIsOpen] = useState(withButton ? false : true);
 
-  const closeFilter = (data) => {
+  const closeFilter = () => {
     setIsOpen(false);
   };
 
   const applyFilters = () => {
     onApplyClicked(selectedOptions)
-    closeFilter('apply')
   }
 
   const reset = () => {
