@@ -4,10 +4,10 @@ import Slider from "common/ui/Slider";
 
 const CheckInvestment = ({ investData, handleChange, handleInvestData }) => {
   return (
-    <div className="check-investment">
+    <div className="check-investment" data-aid='check-investment'>
       <p>Check what would you have made with mutual funds?</p>
       <label>Mode :</label>
-      <div className="invest-type">
+      <div className="invest-type" data-aid='invest-type'>
         <div className="invest-type-button">
           <div className="text">Monthly(SIP)</div>
           <span
@@ -37,7 +37,7 @@ const CheckInvestment = ({ investData, handleChange, handleInvestData }) => {
           </span>
         </div>
       </div>
-      <div className="invested-slider-container">
+      <div className="invested-slider-container" data-aid='invested-slider-container'>
         <div className="invested-slider-head">
           Invested Amount :{" "}
           <span>
@@ -67,7 +67,7 @@ const CheckInvestment = ({ investData, handleChange, handleInvestData }) => {
           </div>
         </div>
       </div>
-      <div className="invested-slider-container">
+      <div className="invested-slider-container" data-aid='invested-slider-time-container'>
         <div className="invested-slider-head">
           For :{" "}
           <span>
@@ -90,7 +90,7 @@ const CheckInvestment = ({ investData, handleChange, handleInvestData }) => {
           <div className="invested-slider-right">20 Y</div>
         </div>
       </div>
-      <div className="report-result-tile">
+      <div className="report-result-tile" data-aid='report-result-tile'>
         You could have made : {formatAmountInr(investData.projectedValue)}
       </div>
     </div>

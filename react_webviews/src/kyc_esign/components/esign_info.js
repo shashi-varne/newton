@@ -160,7 +160,7 @@ class ESignInfo extends Component {
         events={this.sendEvents("just_set_events")}
         showLoader={show_loader}
         title='eSign KYC'
-        handleClick={this.goNext}
+        handleClick={this.handleClick}
         buttonTitle='PROCEED'
         headerData={headerData}
         data-aid='kyc-esign-screen'
@@ -217,10 +217,14 @@ class ESignInfo extends Component {
           buttonLayout="stacked"
           title="Please ensure your mobile is linked with your Aadhaar"
           subtitle=""
-          button1Props={{ title: "PROCEED", type: "primary", onClick: this.handleClick }}
+          button1Props={{
+            title: "PROCEED",
+            variant: "contained",
+            onClick: this.handleClick
+          }}
           button2Props={{
             title: "Don't have aadhaar linked mobile?",
-            type: "textOnly",
+            variant: "text",
             onClick: () => this.navigate("/kyc/manual-signature"),
           }}
           image={require(`assets/${productName}/ic_aadhaar_handy.svg`)}

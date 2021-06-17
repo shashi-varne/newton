@@ -37,18 +37,19 @@ class FinityAppUpdateInfo extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="UPDATE NOW"
+        data-aid='kyc-esign-finity-app-update-screen'
       >
-        <div style={{textAlign: 'center'}}>
+        <div style={{textAlign: 'center'}} data-aid='finity-app-update-info-page'>
             <div>
                 <img src={this.state.update_insurance_icon} alt="" />
             </div>
 
             <div style={{fontSize: 24,color: 'black' , fontWeight: 500,
                 margin: '20px 0 10px 0'}}>
-                <span>New version available</span>
+                <span data-aid='version-text'>New version available</span>
             </div>
 
-            <div style={{color: '#6d7278', fontSize: 13}}>
+            <div style={{color: '#6d7278', fontSize: 13}} data-aid='bottom-text'>
             We have changed our brand name from 'Mywaywealth' to 'Finity'. Please update to get latest features and the best experience.
             </div>
         </div>

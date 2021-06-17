@@ -7,7 +7,8 @@ const { productName } = getConfig();
 
 const RecommendationTopCard = ({
   data = {},
-  parentProps
+  parentProps,
+  sendEvents
 }) => {
   const navigate = navigateFunc.bind(parentProps);
   const { userRiskProfile, funnelData } = data;
@@ -19,9 +20,9 @@ const RecommendationTopCard = ({
       const toggleRiskInfoDialog = () => setShowRiskInfo(!showRiskInfo);
 
       return (
-        <div className="risk-profile-card">
+        <div className="risk-profile-card" data-aid='risk-profile-card'>
           <img src={require(`assets/${productName}/risk_profile.svg`)} alt="" className="left-img" />
-          <div className="risk-details">
+          <div className="risk-details" data-aid='risk-details'>
             {userRiskProfile ?
               <>
                 <div className="risk-details-header">
@@ -43,8 +44,9 @@ const RecommendationTopCard = ({
             }
           </div>
           <div
+            data-aid='risk-profile-change-btn'
             className="risk-profile-change-btn"
-            onClick={() => navigate(`/invest/${investType}/risk-${userRiskProfile ? 'modify' : 'select'}`)}>
+            onClick={() => {sendEvents("change_risk_profile"); navigate(`/invest/${investType}/risk-${userRiskProfile ? 'modify' : 'select'}`)}}>
             {userRiskProfile ? "Change" : "Select"}
           </div>
           <BottomSheet
@@ -61,7 +63,7 @@ const RecommendationTopCard = ({
       );
     } else if (['savetax', 'savetaxsip'].includes(funnelData.investType)) {
       return (
-        <div className="tax-card">
+        <div className="tax-card" data-aid='tax-card'>
           <img src={require('assets/sale.svg')} alt="" />
           <div className="text">Tax savings for {getFinancialYear()}</div>
           <div className="amount">{formatAmountInr(funnelData.corpus)}</div>
@@ -71,7 +73,7 @@ const RecommendationTopCard = ({
   }
 
   return (
-    <div className="recommendation-top-card">
+    <div className="recommendation-top-card" data-aid='recommendation-top-card'>
       {renderContent()}
     </div>
   );

@@ -196,7 +196,7 @@ const AddressDetails1 = (props) => {
           <div className="input" data-aid='kyc-address-proof'>
             <div className="address-label" data-aid='address-label'>Address proof:</div>
             <div className="address-proof" data-aid='address-proof'>
-            {ADDRESS_PROOF_OPTIONS.map((data, index) => {
+              {ADDRESS_PROOF_OPTIONS.map((data, index) => {
                 const selected = form_data.address_doc_type === data.value;
                 const disabled =
                   form_data.residential_status === "NRI" || isApiRunning;

@@ -11,10 +11,11 @@ import {
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import {
-  checkPanFetchStatus,
+  checkDLPanFetchAndApprovedStatus,
   isDigilockerFlow,
   validateFields,
-  getFlow
+  getFlow,
+  skipBankDetails
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
@@ -51,7 +52,7 @@ const KycBankDetails = (props) => {
   const [name, setName] = useState("");
   const [note, setNote] = useState({
     info_text:
-      "As per SEBI, it is mandatory for investors to provide their own bank account details",
+      "As per SEBI, it is mandatory for you to add your add bank account details.",
     variant: "info",
   });
   const [disableFields, setDisableFields] = useState({
@@ -75,11 +76,7 @@ const KycBankDetails = (props) => {
 
   let initialize = async () => {
     let disableData = { ...disableFields };
-    if (
-      user.active_investment ||
-      (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
-      kyc.bank.meta_data.bank_status === "doc_submitted"
-    ) {
+    if (skipBankDetails()) {
       disableData.skip_api_call = true;
       disableData.account_number_disabled = true;
       disableData.c_account_number_disabled = true;
@@ -173,9 +170,11 @@ const KycBankDetails = (props) => {
       else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else {
           navigate(PATHNAME_MAPPER.tradingExperience);
         }
@@ -197,9 +196,11 @@ const KycBankDetails = (props) => {
       //   });handleSdkNavigation
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved)
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         else navigate(PATHNAME_MAPPER.kycEsign);
       } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
@@ -376,7 +377,7 @@ const KycBankDetails = (props) => {
             </WVInfoBubble>
             <main data-aid='kyc-enter-bank-account-details'>
               <Input
-                label="Account holder name"
+                label="Account Holder name"
                 class="input"
                 value={name || ""}
                 error={form_data.name_error ? true : false}
@@ -387,7 +388,7 @@ const KycBankDetails = (props) => {
                 id="name"
               />
               <TextField
-                label="IFSC code"
+                label="IFSC Code"
                 id="ifsc_code"
                 className="input"
                 value={bankData.ifsc_code}
@@ -411,7 +412,7 @@ const KycBankDetails = (props) => {
                 disabled={isApiRunning || disableFields.ifsc_code_disabled || ifscDisabled}
               />
               <Input
-                label="Account number"
+                label="Account Number"
                 class="input"
                 value={bankData.account_number}
                 error={form_data.account_number_error ? true : false}
@@ -457,7 +458,7 @@ const KycBankDetails = (props) => {
                   helperText={form_data.account_type_error}
                   options={accountTypes}
                   id="account_type"
-                  label="Account type"
+                  label="Account Type"
                   isAOB={true}
                   value={bankData.account_type || ""}
                   name="account_type"

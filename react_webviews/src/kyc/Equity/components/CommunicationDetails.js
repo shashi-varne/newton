@@ -71,6 +71,9 @@ const CommunicationDetails = (props) => {
       setIsKycDone(kyc?.mf_kyc_processed);
       setIsDlFlow(isDigilockerFlow(kyc));
       setTotalPages(getTotalPagesInPersonalDetails());
+      if(showOtpContainer) {
+        setShowOtpContainer(false);
+      }
     }
   }, [kyc, user]);
 

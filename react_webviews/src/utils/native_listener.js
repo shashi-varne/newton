@@ -56,9 +56,10 @@ import { getConfig } from './functions';
     for (let i = 0; i < listeners.length; i++) {
       let l = listeners[i];
       if (l.type === 'doc' && (l.doc_type === d.file_name || l.doc_type === d.doc_type)) {
-        let file = b64toBlob(d.blobBase64, d.mime_type || d.file_type, '');
+        const { blobBase64, mime_type, file_type, ...otherProps } = d;
+        let file = b64toBlob(blobBase64, mime_type || file_type, '');
         file.file_name = d.file_name_local;
-        l.upload(file);
+        l.upload(file, otherProps);
         listeners.splice(i, 1);
         i--;
       }
@@ -91,7 +92,10 @@ import { getConfig } from './functions';
     listeners.push(listener);
     let callbackData = {};
     callbackData.action = 'take_picture';
-    callbackData.action_data = { file_name: listener.doc_type };
+    callbackData.action_data = {
+      file_name: listener.doc_type,
+      check_liveness: listener.check_liveness
+    };
     if (typeof window.Android !== 'undefined') {
       window.Android.callbackNative(JSON.stringify(callbackData));
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {

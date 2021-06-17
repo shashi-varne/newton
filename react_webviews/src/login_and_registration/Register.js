@@ -52,7 +52,7 @@ class Register extends Component {
     this.setState({ form_data: form_data });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     let { form_data, registerType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if(registerType !== "email")
@@ -60,6 +60,7 @@ class Register extends Component {
     if (registerType === "email")
       keys_to_check = ["email", "password", "confirm_password"];
     this.formCheckFields(keys_to_check, form_data, "REGISTER", registerType);
+    event.preventDefault();
   };
 
   handleCheckbox = () => {
@@ -102,14 +103,15 @@ class Register extends Component {
             />
           </div>
           <div className="login-form" data-aid='login-form'>
-            <div className="header-text">REGISTER</div>
-            <div className="login-type">
+            <div className="header-text" data-aid='register-text'>REGISTER</div>
+            <div className="login-type" data-aid='login-type'>
               <div
                 className="text"
                 style={{
                   fontWeight: registerType === "mobile" ? "bold" : "normal",
                 }}
                 onClick={() => this.setRegistrationType("mobile")}
+                data-aid='mobile-text'
               >
                 MOBILE
                 {registerType === "mobile" && <div className="underline"></div>}
@@ -120,12 +122,13 @@ class Register extends Component {
                   fontWeight: registerType === "email" ? "bold" : "normal",
                 }}
                 onClick={() => this.setRegistrationType("email")}
+                data-aid='email-text'
               >
                 EMAIL
                 {registerType === "email" && <div className="underline"></div>}
               </div>
             </div>
-            <div className="form" data-aid='form'>
+            <form className="form" data-aid='form' onSubmit={this.handleClick}>
               {registerType === "mobile" && (
                 <div className="form-field">
                   <div className="country-code" data-aid='country-code'>
@@ -201,8 +204,8 @@ class Register extends Component {
                 </>
               )}
               {referralCheck && (
-                <div className="form-field referral-code-input">
-                  <FormControl className="referral-form" id="referral-form">
+                <div className="form-field referral-code-input" data-aid='referral-code-input'>
+                  <FormControl className="referral-form" id="referral-form" data-aid='referral-form'>
                     <InputLabel>Enter referral/partner code</InputLabel>
                     <InputUI
                       className="input"
@@ -215,6 +218,7 @@ class Register extends Component {
                           <div
                             className="verify-button"
                             onClick={() => this.verifyCode(form_data)}
+                            data-aid='verify-btn'
                           >
                             {isPromoApiRunning ? (
                               <div className="loader">
@@ -229,7 +233,7 @@ class Register extends Component {
                     />
                   </FormControl>
                   {form_data.referral_code_error && (
-                    <div className="helper-text">
+                    <div className="helper-text" data-aid='helper-text'>
                       {form_data.referral_code_error}
                     </div>
                   )}
@@ -251,6 +255,7 @@ class Register extends Component {
                 buttonTitle="REGISTER"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
+                buttonType="submit"
                 style={{
                   width: "100%",
                   letterSpacing: "2px",
@@ -264,6 +269,7 @@ class Register extends Component {
                 <div
                   className="resend-verification"
                   onClick={() => this.resendVerificationLink()}
+                  data-aid='resend-verification'
                 >
                   <span>Resend verification link </span>
                   <span className="loader">
@@ -281,14 +287,14 @@ class Register extends Component {
                   GOOGLE
                 </a>
               </div>
-            </div>
+            </form>
             <div className="footer"  data-aid='footer' onClick={() => this.navigate("login")}>
               EXISTING USER? <span data-aid='login-btn'>LOGIN</span>
             </div>
             <div className="agree-terms" data-aid='agree-terms'>
-              By signing in, you agree to fisdom's{" "}
+              By signing in, you agree to {config.productName}'s{" "}
               <a
-                href="https://www.fisdom.com/terms/"
+                href={config.termsLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -296,7 +302,7 @@ class Register extends Component {
               </a>{" "}
               and{" "}
               <a
-                href="https://www.fisdom.com/privacy/"
+                href={config.privacyLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >

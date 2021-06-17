@@ -52,7 +52,7 @@ const InvestMore = (props) => {
   const [form_data, setFormData] = useState({ amount: "", amount_error: "" });
   const { kyc: userKyc, isLoading } = useUserKycHook();
   const [dialogStates, setDialogStates] = useState({
-    openPennyVerificationPendind: false,
+    openPennyVerificationPending: false,
     openInvestError: false,
     openInvestReferral: false,
     errorMessage: "",
@@ -132,9 +132,9 @@ const InvestMore = (props) => {
       investmentEventData: investmentEventData,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: false,
-      history: props.history,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
+      navigate: navigate,
       handleIsRedirectToPayment,
     });
   };
@@ -166,6 +166,7 @@ const InvestMore = (props) => {
 
   return (
     <Container
+      data-aid='reports-invest-more'
       hidePageTitle={true}
       buttonTitle={title}
       handleClick={() => handleClick()}
@@ -178,10 +179,10 @@ const InvestMore = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
     >
-      <div className="reports-invest-more">
+      <div className="reports-invest-more" data-aid='reports-invest-more'>
         {!isReadyToPayment && (
           <>
-            <div className="text">I would like to invest</div>
+            <div className="text" data-aid='reports-text'>I would like to invest</div>
             <Input
               error={form_data.amount_error ? true : false}
               helperText={form_data.amount_error || ""}
@@ -192,10 +193,10 @@ const InvestMore = (props) => {
               value={formatAmountInr(form_data.amount) || ""}
               onChange={handleAmount()}
             />
-            <div className="text invest-more-margin">
+            <div className="text invest-more-margin" data-aid='reports-text-mfname'>
               As {params.mode} in {investBody.mfname}
             </div>
-            <div className="invest-more-terms invest-more-terms-padding">
+            <div className="invest-more-terms invest-more-terms-padding" data-aid='invest-more-term-condition'>
               <Checkbox
                 class="checkbox"
                 checked={termsCheck}
@@ -222,7 +223,7 @@ const InvestMore = (props) => {
                 )}
               </div>
             </div>
-            <div className="invest-more-terms">
+            <div className="invest-more-terms" data-aid='invest-more-terms-offer-doc'>
               <Checkbox
                 class="checkbox"
                 checked={schemeCheck}
@@ -250,7 +251,7 @@ const InvestMore = (props) => {
               </div>
             </div>
             <PennyVerificationPending
-              isOpen={dialogStates.openPennyVerificationPendind}
+              isOpen={dialogStates.openPennyVerificationPending}
               handleClick={() => navigate("/kyc/add-bank")}
             />
             <InvestError
@@ -267,13 +268,13 @@ const InvestMore = (props) => {
           </>
         )}
         {isReadyToPayment && (
-          <div className="payment-redirect">
+          <div className="payment-redirect" data-aid='reports-payment-redirect'>
             <Imgc
               src={require(`assets/payment.png`)}
               alt="Redirecting to Payment Gateway"
               className="img"
             />
-            <div className="payment-text">
+            <div className="payment-text" data-aid='reports-payment-text'>
               <h4>Redirecting to your bank...</h4>
               <p>
                 This transaction is completely safe as it is handled by your

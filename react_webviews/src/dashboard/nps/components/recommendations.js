@@ -169,8 +169,9 @@ class Recommendations extends Component {
           <div
             className="group-health-bmi-dialog"
             id="alert-dialog-description"
+            data-aid='alert-dialog-description'
           >
-            <div className="md-dialog-content">
+            <div className="md-dialog-content" data-aid='nps-md-dialog-content'>
               {pran && <div>
                 <div className="pran-title">Contribution to your existing NPS</div>
                 <div className="pran-subtitle">
@@ -212,7 +213,7 @@ class Recommendations extends Component {
                 </div>
               </div>}
 
-              <div className="mid-content">
+              <div className="mid-content" data-aid='nps-mid-content'>
                 {all_charges &&
                   all_charges.map((item, index) => (
                     <div className="nps-payment" key={index}>
@@ -234,7 +235,7 @@ class Recommendations extends Component {
                   ))}
               </div>
             </div>
-            <div>
+            <div data-aid='nps-call-back-popup-button'>
               <button
                 style={{ cursor: "pointer" }}
                 onClick={() => this.payment()}
@@ -330,6 +331,7 @@ class Recommendations extends Component {
 
     return (
       <Container
+        data-aid='nps-recommended-fund-screen'
         fullWidthButton
         buttonTitle="PROCEED"
         title="Recommended fund"
@@ -344,8 +346,8 @@ class Recommendations extends Component {
         }}
       >
         {!display_summary_only && (
-          <div>
-            <div className="fund">
+          <div data-aid='nps-display-summary-only'>
+            <div className="fund" data-aid='nps-fund'>
               <div
                 className="replace"
                 onClick={() => {
@@ -374,8 +376,8 @@ class Recommendations extends Component {
               </div>
             </div>
 
-            <div className="fund-detail">
-              <div className="risk">
+            <div className="fund-detail" data-aid='nps-fund-detail'>
+              <div className="risk" data-aid='nps-risk'>
                 <p>
                   <b>Risk:</b> {this.getFormatted(this.state.risk || "")}
                 </p>
@@ -396,8 +398,8 @@ class Recommendations extends Component {
                   currentRisk={this.state.risk}
                 />
               </div>
-              <div className="allocation">
-                <div className="graph">
+              <div className="allocation" data-aid='nps-allocation'>
+                <div className="graph" data-aid='nps-graph'>
                   <PieChart
                     height={isMobileDevice ? 100 : 180}
                     width={isMobileDevice ? 100 : 180}
@@ -410,7 +412,7 @@ class Recommendations extends Component {
                     Asset allocation
                   </div>
                 </div>
-                <div className="stats">
+                <div className="stats" data-aid='nps-stats'>
                   <ul>
                     <li>
                       <div className="">
@@ -461,7 +463,7 @@ class Recommendations extends Component {
               </div>
             </div>
 
-            <div className="bill">
+            <div className="bill" data-aid='nps-bill'>
               {all_charges &&
                 all_charges.map((item, index) => (
                   <div
@@ -477,7 +479,7 @@ class Recommendations extends Component {
                     <div className="right">{inrFormatDecimal2(item.value)}</div>
                   </div>
                 ))}
-              <div className="note">
+              <div className="note" data-aid='nps-note'>
                 <div className="heading">Note:</div>
                 <div>
                   <span>1.</span> Your subsequent investments will go into the
@@ -493,7 +495,7 @@ class Recommendations extends Component {
                   apply on your investment.
                 </div>
               </div>
-              <div className="terms">
+              <div className="terms" data-aid='nps-terms'>
                 <img src={require("assets/terms_agree.png")} alt="" width="25" />
                 <div>
                   By tapping on proceed, I agree that I have read the {" "}
@@ -574,6 +576,7 @@ const RiskSelectDialog = ({
 
   return (
     <Dialog
+      data-aid='dialog-recommendations'
       fullScreen={false}
       open={open}
       onClose={onClose}
@@ -582,13 +585,13 @@ const RiskSelectDialog = ({
         paperScrollPaper: 'risk-level'
       }}
     >
-      <DialogTitle id="form-dialog-title" className="edit-title">
+      <DialogTitle id="form-dialog-title" className="edit-title" data-aid='form-dialog-title'>
         Choose Risk Level
       </DialogTitle>
       <DialogContent>
         <DialogContentText className="nps-flex-box" component="div">
           {Object.entries(riskLevelMap).map(([key, value]) => (
-            <div className="edit-risk" key={key} onClick={() => setSelectedRisk(key)}>
+            <div className="edit-risk" key={key} onClick={() => setSelectedRisk(key)} data-aid='nps-edit-risk'>
               <div>{value}</div>
               <Radio
                 checked={key === selectedRisk}
@@ -602,6 +605,7 @@ const RiskSelectDialog = ({
       </DialogContent>
       <DialogActions>
         <Button
+          data-aid='nps-dialog-apply-btn'
           className="DialogButtonFullWidth"
           color="default"
           autoFocus

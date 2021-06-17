@@ -47,6 +47,7 @@ const PausePeriod = (props) => {
 
   return (
     <Container
+      data-aid='reports-select-a-period-screen'
       title="Select a Period"
       events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
@@ -55,10 +56,10 @@ const PausePeriod = (props) => {
       classOverRide="reports-sip-pause-period-container"
     >
       {!isEmpty(sip) && (
-        <div className="reports-sip-pause-period">
-          <div>
+        <div className="reports-sip-pause-period" data-aid='reports-sip-pause-period'>
+          <div data-aid='reports-mf-name-screen'>
             <div className="mf-name">{sip.mfname}</div>
-            <div className="content">
+            <div className="content" data-aid='reports-spi-date'>
               <img
                 src={require(`assets/${productName}/sip_date_icon.svg`)}
                 alt=""
@@ -76,7 +77,7 @@ const PausePeriod = (props) => {
                 </div>
               </div>
             </div>
-            <div className="content">
+            <div className="content" data-aid='reports-sip-amount'>
               <img
                 src={require(`assets/${productName}/amount_icon.svg`)}
                 alt=""
@@ -87,8 +88,8 @@ const PausePeriod = (props) => {
               </div>
             </div>
           </div>
-          <div className="slider-container">
-            <div className="head">
+          <div className="slider-container" data-aid='reports-slider-container'>
+            <div className="head" data-aid='reports-head'>
               Pause for: <b>{period} months </b>
             </div>
             <Slider
@@ -97,7 +98,7 @@ const PausePeriod = (props) => {
               max={sliderValues.max}
               onChange={handleChange()}
             />
-            <div className="bottom">
+            <div className="bottom" data-aid='reports-bottom'>
               <div>{sliderValues.min} MONTH</div>
               <div>{sliderValues.max} MONTHS</div>
             </div>

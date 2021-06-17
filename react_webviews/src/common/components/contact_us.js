@@ -3,7 +3,7 @@ import { getConfig } from 'utils/functions';
 class ContactUsClass extends Component {
     render() {
         return (
-            <div className="success-bottom">
+            <div className="success-bottom" data-aid='contact-us'>
                 <div className="success-bottom1" data-aid='contact-query'>
                 For any query, reach us at
                 </div>

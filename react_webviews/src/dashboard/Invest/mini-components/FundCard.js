@@ -60,17 +60,17 @@ const FundCard = ({
     return;
   };
   return (
-    <div className={`recommendations-funds-item ${classOverRide}`} onClick={handleGraph}>
+    <div className={`recommendations-funds-item ${classOverRide}`} onClick={handleGraph} data-aid='recommendations-funds-item'>
       <div className='recommendations-funds-item-icon'>
         <img alt={amc_logo_small} src={amc_logo_small} />
       </div>
-      <div className='recommendations-funds-item-info'>
+      <div className='recommendations-funds-item-info' data-aid='recommendations-funds-item-info'>
         <div className='recommendations-funds-item-name'>{mfname}</div>
-        <div className='recommendations-funds-item-status'>
+        <div className='recommendations-funds-item-status' data-aid='recommendations-funds-item-status'>
         <span className={fundTypeClassName}>{mftype_name}</span>
         <span>{amount && formatAmountInr(amount)}</span>
         </div>
-        <div className='recommendations-funds-item-rating'>
+        <div className='recommendations-funds-item-rating' data-aid='recommendations-funds-item-rating'>
           <RatingStar value={rating} />
         </div>
       </div>

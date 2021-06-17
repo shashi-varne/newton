@@ -20,7 +20,7 @@ const UploadCard = (props) => {
   (kyc?.bank?.meta_data?.bank_status === "doc_submitted" || kyc?.bank?.meta_data?.bank_status === "verified"));
   const submittedCondition = (docKey !== "bank" && doc_status === "submitted") ||
   (docKey === "bank" && doc_status === "submitted" &&
-  (kyc?.bank?.meta_data?.bank_status === "doc_submitted"));
+  (kyc?.bank?.meta_data?.bank_status === "doc_submitted" || kyc?.bank?.meta_data?.bank_status === "verified"));
   return (
     <div className="kyc-upload-card" data-aid='kyc-upload-card' onClick={onClick}>
       <div className="image">
