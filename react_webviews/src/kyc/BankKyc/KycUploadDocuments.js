@@ -301,12 +301,16 @@ const KycUploadDocuments = (props) => {
               </div>
               <KycUploadContainer.Button
                 withPicker
-                showOptionsDialog
-                nativePickerMethodName="open_gallery"
-                fileName="doc"
-                onFileSelectComplete={onFileSelectComplete}
-                onFileSelectError={onFileSelectError}
-                supportedFormats={SUPPORTED_IMAGE_TYPES}
+                filePickerProps={{
+                  showOptionsDialog: true,
+                  shouldCompress: true,
+                  nativePickerMethodName: "open_gallery",
+                  fileName: "doc",
+                  onFileSelectComplete,
+                  onFileSelectError,
+                  supportedFormats: SUPPORTED_IMAGE_TYPES
+                }}
+                
               />
             </KycUploadContainer>
           )}

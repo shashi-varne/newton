@@ -102,12 +102,12 @@ const Failed = (props) => {
       data-aid='kyc-aadhaar-kyc-failed-screen'
       twoButtonVertical={true}
       button1Props={{
-        type: 'primary',
+        variant: "contained",
         title: "RETRY",
         onClick: handleProceed,
       }}
       button2Props={{
-        type: 'secondary',
+        variant: "outlined",
         title: "UPLOAD DOCUMENTS MANUALLY",
         onClick: manual,
         showLoader: isApiRunning

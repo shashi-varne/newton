@@ -33,7 +33,7 @@ const Selfie = (props) => {
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const { kyc, isLoading, updateKyc } = useUserKycHook();
-  const [isCamLoading, setIsCamLoading] = useState();
+  const [isCamLoading, setIsCamLoading] = useState(true);
   const [isTradingFlow, setIsTradingFlow] = useState(false);
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [fileHandlerParams, setFileHandlerParams] = useState();
@@ -48,17 +48,17 @@ const Selfie = (props) => {
   const initialize = async () => {
     const docStatus = await checkDocsPending(kyc);
     setDocsPendingStatus(docStatus)
-    const tradeFlow = isTradingEnabled(kyc);
-    const tradingFlow = tradeFlow && kyc.kyc_type !== "manual";
+    const tradingFlow = isTradingEnabled(kyc);
     setIsTradingFlow(tradingFlow);
-    setIsCamLoading(tradingFlow);
   }
 
   const handleNavigation = () => {
     if (bottomSheetType === "failed") {
-      setOpenBottomSheet(false)
+      setOpenBottomSheet(false);
+      setFile(null);
+      setFileToShow(null);
     } else {
-      if (isTradingFlow) {
+      if (isTradingFlow && kyc?.kyc_type !== "manual") {
         if (!isDocSubmittedOrApproved("equity_income")) {
           navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
         } else {
@@ -102,12 +102,8 @@ const Selfie = (props) => {
       setIsApiRunning("button");
       const result = await upload(file, 'identification', params);
       updateKyc(result.kyc);
-      if (isNotManualAndNriUser(result.kyc)) {
-        setBottomSheetType('success');
-        setOpenBottomSheet(true);
-      } else {
-        handleNavigation();
-      }
+      setBottomSheetType('success');
+      setOpenBottomSheet(true);
     } catch (err) {
       console.error(err);
       setBottomSheetType('failed');
@@ -221,7 +217,7 @@ const Selfie = (props) => {
   const renderButton = useCallback(() => {
     let buttonProps = {};
     if (isWeb) {
-      Object.assign(buttonProps, {
+      buttonProps = Object.assign(buttonProps, {
         showLoader: isCamLoading,
         onClick: openLiveCamera
       });
@@ -246,7 +242,7 @@ const Selfie = (props) => {
         {file ? "Retake" : "Open Camera"}
       </KycUploadContainer.Button>
     );
-  }, [isCamLoading]);
+  }, [isCamLoading, isWeb, isNative, file]);
 
   return (
     <Container

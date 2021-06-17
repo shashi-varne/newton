@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { getConfig, isTradingEnabled } from "utils/functions";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 import WVSteps from "../../common/ui/Steps/WVSteps"
-import { isDocSubmittedOrApproved } from "../../kyc/common/functions";
 import { isReadyToInvest } from "../../kyc/services";
 import { isEmpty } from "../../utils/validators";
 
@@ -34,7 +33,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
       }
   
-      if (isReadyToInvestUser) {
+      if (isReadyToInvestUser && kyc?.mf_kyc_processed) {
         setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Mutual fund"))
         setTradingSubtitleText("Trading & demat A/c will be ready in 2 hours")
       }

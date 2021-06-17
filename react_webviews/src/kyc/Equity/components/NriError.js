@@ -27,12 +27,12 @@ const NriError = (props) => {
       twoButtonVertical={true}
       button1Props={stateParams?.noStockOption ? {} :
       {
-        type: "primary",
+        variant: "contained",
         title: "COMPLETE MUTUAL FUND KYC",
         onClick: () => navigate(PATHNAME_MAPPER.journey)
       }}
       button2Props={{
-        type: stateParams?.noStockOption ? "primary" : "secondary",
+        variant: stateParams?.noStockOption ? "contained" : "outlined",
         title: "HOME",
         onClick: handleClick
       }}

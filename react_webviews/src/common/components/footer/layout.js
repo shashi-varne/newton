@@ -288,11 +288,13 @@ export class FooterLayoutBase extends Component {
     return(
       <WVButtonLayout layout="stacked">
         <WVButtonLayout.Button
-          {...button1Props}
-        />
+          {...button1Props}>
+          {button1Props.title}
+        </WVButtonLayout.Button>
         <WVButtonLayout.Button
-          {...button2Props}
-        />
+          {...button2Props}>
+          {button2Props.title}
+        </WVButtonLayout.Button>
       </WVButtonLayout>
     )
   }
