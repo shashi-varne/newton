@@ -9,7 +9,7 @@
     align-self: flex-end;
   }
 
-  .filter-bottom-sheet {
+  .wv-filter-bottom-sheet {
     width: 100%;
     position: relative;
     min-height: 465px !important;
@@ -21,10 +21,10 @@
       margin: 0px 0px 20px 0px;
     }
 
-    .filter {
+    .wv-filter {
       display: flex;
       background-color: #fff;
-      .title {
+      .wv-title {
         background-color: #e8e8e8;
         margin-left: -20px;
         font-size: 15px;
@@ -45,11 +45,11 @@
               cursor: pointer;
             }
           }
-          .wv-tabs {
+          .wv-tab {
             background-color: transparent !important;
             color: var(--steelgrey);
           }
-          .wv-selected-tab {
+          .tab-option {
             background-color: #fff !important;
           }
         }
@@ -64,7 +64,7 @@
         overflow-y: auto;
         overflow-x: hidden;
         height: 340px;
-        .render-tab-filter-container {
+        .render-tab-options-container {
           margin: 0 10px;
         }
 
@@ -78,10 +78,9 @@
           .MuiCheckbox-root {
             left: 0;
           }
-          .wv-selected-tab-title {
+          .tab-option-title {
             position: relative;
             line-height: 21px;
-            font-weight: normal;
             font-size: 16px;
             color: var(--dark);
             width: 100%;
@@ -89,7 +88,7 @@
             margin-top: -2px !important;
           }
 
-          .wv-selected-tab-subtitle {
+          .tab-option-subtitle {
             position: absolute;
             margin-top: 5px;
             color: var(--steelgrey);
@@ -114,6 +113,13 @@
       }
     }
   }
+}
+
+.wv-filter-btn-title{
+  color: #35CB5D;
+  padding-left: 10px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .wv-filter-with-btn {

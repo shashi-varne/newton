@@ -17,7 +17,7 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 
 const CardSubtitle = ({ value, morning_start }) => {
     return (
-        <div className="wv-cardsubtitle">
+        <div className="wv-card-subtitle">
             {value}
             <span style={{ margin: "0px 5px 0px 5px" }}>
                 |
@@ -83,9 +83,6 @@ class FundList extends Component {
                     value: item,
                     control: Checkbox,
                     title: item,
-                    labelProps: {
-                        labelPlacement: "end",
-                      },
                       controlProps: {
                         color: "primary",
                       },
@@ -270,8 +267,8 @@ class FundList extends Component {
                     <WVFilter
                         dataAidSuffix={'passive-card-details'}
                         filterOptions={this.state.bottomFilterOptions}
-                        getSelectedOptions={this.setSortFilter}
-                        defaultFilterOption={{ "sort_value": "tracking_error" }}
+                        onApplyClicked={this.setSortFilter}
+                        defaultSelectedTab={{ "sort_value": "tracking_error" }}
                         withButton={true}
                         // isOpen={false}
                         // setFilterActive={setFilterActive}

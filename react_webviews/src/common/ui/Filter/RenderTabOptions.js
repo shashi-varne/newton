@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash';
 import "./commonStyles.scss";
 
 const RenderTabOptions = ({
+  dataAidSuffix,
   activeTab,
   selectedFilters,
   setSelectedFilters,
@@ -33,11 +34,12 @@ const RenderTabOptions = ({
     }
   };
   return (
-    <FormControl component="fieldset" className="render-tab-filter-container">
+    <FormControl component="fieldset" className="render-tab-options-container">
       {!isEmpty(activeTabOptions) &&
         activeTabOptions.map((item, idx) => {
           return (
             <FormControlLabel
+              data-aid={`tab-options-${dataAidSuffix}-${idx+1}`}
               value={item.value}
               name={item.isMulti}
               key={idx}
@@ -46,16 +48,16 @@ const RenderTabOptions = ({
                   checked={(selectedFilters[activeTab] || []).includes(
                     item.value
                   )}
-                  {...item.controlProps}
+                  {...item?.controlProps}
                 />
               }
               label={
-                <div className="wv-selected-tab-title">{item.title}
-                  {item.subtitle && <p className="wv-selected-tab-subtitle">{item.subtitle}</p>}
+                <div className="tab-option-title">{item.title}
+                  {item.subtitle && <p className="tab-option-subtitle">{item.subtitle}</p>}
                 </div>
               }
               onChange={handleChange}
-              {...item.labelProps}
+              {...item?.labelProps}
             ></FormControlLabel>
           );
         })}

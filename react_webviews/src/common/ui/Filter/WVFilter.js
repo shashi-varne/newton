@@ -33,31 +33,31 @@ const FilterContainer = ({ close, open, children, ...props }) => {
 
 const WVFilter = ({
   dataAidSuffix,
-  getSelectedOptions,         // Function CallBack From The Parent Which Sends the Filtered Data To the API
-  withButton,                //  If User Wants Filter With Button
-  filterOptions,            //  Data For the Filter Dialog Box
-  defaultFilterOption,     // default Option Selected In filter Dialog Box
+  onApplyClicked,           // Function CallBack From The Parent Which Sends the Filtered Data To the API
+  withButton,              //  If User Wants Filter With Button
+  filterOptions,          //  Data For the Filter Dialog Box
+  defaultSelectedTab,    // default Option Selected In filter Dialog Box
 }) => {
-  const [activeTab, setActiveTab] = useState(defaultFilterOption ? Object.keys(defaultFilterOption)[0] : filterOptions[0].key);
+  const [activeTab, setActiveTab] = useState(defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key);
   const [activeTabOptions, setActiveTabOptions] = useState(filterOptions[0].option);
-  const [selectedFilters, setSelectedFilters] = useState(defaultFilterOption || {});
+  const [selectedFilters, setSelectedFilters] = useState(defaultSelectedTab || {});
   const [isOpen, setIsOpen] = useState(withButton ? false : true);
 
-  const close = (data) => {
+  const closeFilter = (data) => {
     setIsOpen(false);
   };
 
-  const apply = () => {
-    getSelectedOptions(selectedFilters)
-    close('apply')
+  const applyFilters = () => {
+    onApplyClicked(selectedFilters)
+    closeFilter('apply')
   }
 
   const reset = () => {
-    setSelectedFilters(defaultFilterOption || {})
+    setSelectedFilters(defaultSelectedTab || {})
     setActiveTab(activeTab)
   }
 
-  const onFilterClick = (item) => {
+  const onTabSelected = (item) => {
     document.getElementById("scroll-container").scrollTo(0, 0)
     setActiveTab(item.key);
     setActiveTabOptions(item.option);
@@ -67,25 +67,24 @@ const WVFilter = ({
 
     <>
 
-      <FilterContainer close={close} open={isOpen}>
-        <section className="filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
+      <FilterContainer close={closeFilter} open={isOpen}>
+        <section className="wv-filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
           <p className="heading">FILTERS</p>
-          <main className="filter">
-            <div className="title">
+          <main className="wv-filter">
+            <div className="wv-title">
               <ul>
                 {!isEmpty(filterOptions) &&
                   filterOptions.map((item, idx) => {
-                    let TabName = item.name;
                     return (
                       <li
                         data-aid={`filter-bottom-sheet-${dataAidSuffix}-${idx + 1}`}
                         key={idx}
                         role="button"
-                        tabIndex="0"
-                        onClick={() => onFilterClick(item)}
-                        className={`wv-tabs ${activeTab === item.key ? 'wv-selected-tab' : ''}`}
+                        tabIndex={`${idx}`}
+                        onClick={() => onTabSelected(item)}
+                        className={`wv-tab ${activeTab === item.key ? 'tab-option' : ''}`}
                       >
-                        {TabName}
+                        {item.name}
                       </li>
                     );
                   })}
@@ -93,6 +92,7 @@ const WVFilter = ({
             </div>
             <div className="body" id="scroll-container" data-aid={`body-${dataAidSuffix}`}>
               <RenderTabOptions
+                dataAidSuffix={dataAidSuffix}
                 activeTab={activeTab}
                 selectedFilters={selectedFilters}
                 setSelectedFilters={setSelectedFilters}
@@ -111,7 +111,7 @@ const WVFilter = ({
             <WVButtonLayout.Button
               type="primary"
               title="APPLY"
-              onClick={apply}
+              onClick={applyFilters}
             />
           </WVButtonLayout>
         </section>
