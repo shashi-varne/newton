@@ -5,7 +5,7 @@ import WVButtonLayout from "../ButtonLayout/WVButtonLayout";
 import { isEmpty } from 'lodash';
 import RenderTabOptions from './RenderTabOptions';
 import { getConfig } from '../../../utils/functions';
-import "./WVFilterCommonStyles.scss";
+import "./commonStyles.scss";
 import WVFilterButton from "./WVFilterButton";
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -26,7 +26,7 @@ const FilterContainer = ({ close, open, children, ...props }) => {
       aria-labelledby="filter-dialog"
       TransitionComponent={Transition}
       aria-describedby="filter-dialog-slide-selection"
-      id="diy-dialog"
+      id="filter-dialog"
     >
       <DialogContent>{children}</DialogContent>
     </Dialog>
@@ -77,7 +77,7 @@ const WVFilter = ({
     <>
 
       <FilterContainer close={close} open={isOpen}>
-        <section className="diy-bottom-sheet diy-filter-bottom-sheet filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
+        <section className="filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
           <p className="heading">FILTERS</p>
           <main className="filter">
             <div className="title">
@@ -96,7 +96,7 @@ const WVFilter = ({
                           setActiveTab(item.key);
                           setActiveTabOptions(item.option);
                         }}
-                        className={activeTab === item.key ? 'selected' : 'notselected'}
+                        className={`wv-tabs ${activeTab === item.key ? 'wv-selected-tab' : ''}`}
                       >
                         {TabName}
                       </li>
@@ -142,7 +142,7 @@ const WVFilter = ({
       </FilterContainer>
 
 
-      {withButton && <div className="diy-cart-footer" style={{ marginLeft: isMobileDevice && 0 }} data-aid={`filter-cart-${dataAidSuffix}`}>
+      {withButton && <div className="wv-filter-with-btn" style={{ marginLeft: isMobileDevice && 0 }} data-aid={`filter-cart-${dataAidSuffix}`}>
         <WVFilterButton
           dataAidSuffix={dataAidSuffix}
           onClick={() => setIsOpen(true)}

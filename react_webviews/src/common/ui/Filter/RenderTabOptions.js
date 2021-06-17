@@ -2,7 +2,7 @@ import React from "react";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { isEmpty } from 'lodash';
-import "./WVFilterCommonStyles.scss";
+import "./commonStyles.scss";
 
 const RenderTabOptions = ({
   activeTab,
@@ -33,7 +33,7 @@ const RenderTabOptions = ({
     }
   };
   return (
-    <FormControl component="fieldset" className="diy-sort-filter">
+    <FormControl component="fieldset" className="render-tab-filter-container">
       {!isEmpty(activeTabOptions) &&
         activeTabOptions.map((item, idx) => {
           return (
@@ -50,8 +50,8 @@ const RenderTabOptions = ({
                 />
               }
               label={
-                <div className="fc-title">{item.title}
-                  {item.subtitle && <p className="fc-subtitle">{item.subtitle}</p>}
+                <div className="wv-selected-tab-title">{item.title}
+                  {item.subtitle && <p className="wv-selected-tab-subtitle">{item.subtitle}</p>}
                 </div>
               }
               onChange={handleChange}
