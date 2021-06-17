@@ -103,6 +103,7 @@ const InvestJourney = (props) => {
   const ctcTitle = userKyc && !canDoInvestment(userKyc) ? "CONTINUE TO KYC" : "PROCEED"
   return (
     <Container
+      data-aid='how-it-works-screen'
       classOverRide="pr-error-container"
       buttonTitle={ctcTitle}
       title="How it works"
@@ -111,16 +112,16 @@ const InvestJourney = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
     >
-      <section className="invest-journey-container">
-        <div className="invest-journey-header">
+      <section className="invest-journey-container" data-aid='invest-journey-page'>
+        <div className="invest-journey-header" data-aid='invest-journey-header'>
           <div>
             <img alt="safe_secure_journey" src={safe_secure_journey} />
           </div>
           <div>With fisdom, investment is easy & secure</div>
         </div>
-        <div className="invest-journey-steps">
+        <div className="invest-journey-steps" data-aid='invest-journey-steps'>
           <div className="invest-journey-connect">
-            <div className="invest-journey-connect-content">
+            <div className="invest-journey-connect-content" data-aid='invest-journey-step-1'>
               <div className="invest-journey-connect-icon">
                 <img alt="account_icon" src={account_icon} />
               </div>
@@ -132,7 +133,7 @@ const InvestJourney = (props) => {
                 </div>
               </div>
             </div>
-            <div className="invest-journey-connect-content">
+            <div className="invest-journey-connect-content" data-aid='invest-journey-step-2'>
               <div className="invest-journey-connect-icon">
                 <img alt="bse_icon" src={bse_icon} />
               </div>
@@ -142,7 +143,7 @@ const InvestJourney = (props) => {
                 <div>via secured gateway - BillDesk</div>
               </div>
             </div>
-            <div className="invest-journey-connect-content">
+            <div className="invest-journey-connect-content" data-aid='invest-journey-step-3'>
               <div className="invest-journey-connect-icon">
                 <img alt="fund_house_icon" src={fund_house_icon} />
               </div>

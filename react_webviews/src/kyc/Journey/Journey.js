@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getConfig, getBasePath, isMobile } from 'utils/functions'
+import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
@@ -245,12 +245,12 @@ const Journey = (props) => {
         journeyData[i].status = status
       }
 
-      // if (isCompliant) {
-      //   journeyData[0].status = 'init'
-      //   if (customerVerified) {
-      //     journeyData[0].status = 'completed'
-      //   }
-      // }
+      if (isCompliant) {
+        journeyData[0].status = 'init'
+        if (customerVerified) {
+          journeyData[0].status = 'completed'
+        }
+      }
 
       for (i = 0; i < journeyData.length - 1; i++) {
         if (journeyData[i].status === 'init') {
@@ -284,10 +284,9 @@ const Journey = (props) => {
         topTitle = `What's next?`
       } else if (show_aadhaar) {
         topTitle = 'Steps to follow:'
+      } else {
+        topTitle = 'KYC journey'
       }
-      //  else {
-      //   topTitle = 'KYC journey'
-      // }
       return journeyData
     }
     return []
@@ -348,10 +347,10 @@ const Journey = (props) => {
     console.log('Inside handleEdit')
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {
-      // if (key === 'pan' && !customerVerified) {
-      //   navigate('/kyc/compliant-confirm-pan')
-      //   return
-      // }
+      if (key === 'pan' && !customerVerified) {
+        navigate('/kyc/compliant-confirm-pan')
+        return
+      }
       stateMapper = {
         personal: PATHNAME_MAPPER.compliantPersonalDetails1,
         nominee: PATHNAME_MAPPER.compliantPersonalDetails4,
@@ -514,8 +513,7 @@ const Journey = (props) => {
   }
 
   const proceed = () => {
-    // setAadhaarLinkDialog(true)
-    handleProceed();
+    setAadhaarLinkDialog(true)
   }
 
   if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -678,9 +676,9 @@ const Journey = (props) => {
               </WVInfoBubble>
             </div>
           )}
-          {isCompliant && !investmentPending && (
-            <div className="kyc-compliant-subtitle" data-aid='kyc-compliant-subtitle'>
-              Complete the remaining steps to start investing
+          {kyc?.kyc_status === 'compliant' && !investmentPending && (
+            <div className="kyc-journey-subtitle" data-aid='kyc-compliant-subtitle'>
+              To unlock premium onboarding, complete these simple steps
             </div>
           )}
 
@@ -718,7 +716,7 @@ const Journey = (props) => {
                       {item?.value ? ':' : ''}
                     </span>
                     {item?.value && (
-                      <span className="field_value">{item?.value}</span>
+                      <span className="field_value"> {item?.value}</span>
                     )}
                   </div>
 

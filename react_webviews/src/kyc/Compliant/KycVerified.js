@@ -70,6 +70,7 @@ const KycVerified = (props) => {
       handleClick={handleClick}
       title="KYC verified"
       data-aid='kyc-compliant-verify-screen'
+      skelton={isLoading}
     >
       <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete'>
         <header data-aid='kyc-compliant-verify-header'>

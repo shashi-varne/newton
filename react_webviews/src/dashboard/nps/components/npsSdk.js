@@ -21,7 +21,7 @@ class NpsSdk extends Component {
     let npsData = this.state.npsData || storageService().getObject("nps_data") || {};
 
     if (currentUser.nps_investment || npsData.investment_status) {
-      if (npsData.registration_details.additional_details_status) {
+      if (npsData?.registration_details?.additional_details_status) {
         storageService().set('nps_additional_details_required', false);
         if (currentUser.kyc_registration_v2 === 'init' || currentUser.kyc_registration_v2 === 'incomplete') {
           this.navigate('/kyc/journey');
@@ -33,7 +33,11 @@ class NpsSdk extends Component {
         if (currentUser.kyc_registration_v2 === 'init' || currentUser.kyc_registration_v2 === 'incomplete') {
           this.navigate('/kyc/journey');
         } else {
-          this.navigate('/nps/identity');
+          this.navigate("/nps/identity", {
+            state: {
+              goBack: "/",
+            },
+          });
         }
       }
     } else {

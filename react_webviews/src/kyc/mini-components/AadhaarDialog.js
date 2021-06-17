@@ -24,7 +24,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
-    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
+    if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -32,7 +32,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
         });
       }
       nativeCallback({ action: "take_back_button_control", message: data });
-    } else if (!isMobile.any()) {
+    } else if (!config.Web) {
       const redirectData = {
         show_toolbar: false,
         icon: "back",

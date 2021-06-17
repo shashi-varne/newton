@@ -24,7 +24,6 @@ import DesktopLayout from './desktopLayout';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 
-import Partner from "./partner"
 import Feature from './Feature';
 import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
@@ -94,7 +93,6 @@ const App = () => {
               <Route path='/social/callback' component={SocialCallback} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
-              <Route path='/partner' component={Partner} />
               {
                 isMobileDevice ?
                 <Route component={Feature}/>:

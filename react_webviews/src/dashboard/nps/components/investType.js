@@ -21,6 +21,7 @@ class NpsInvestType extends Component {
     render() {
         return (
             <Container
+                data-aid='nps-select-invest-type-screen'
                 classOverRide="pr-error-container"
                 fullWidthButton
                 noFooter
@@ -31,9 +32,9 @@ class NpsInvestType extends Component {
                 handleClick={this.handleClick}
                 classOverRideContainer="pr-container"
             >
-                <div className="nfo-scheme nps-scheme">
+                <div className="nfo-scheme nps-scheme" data-aid='nps-scheme'>
                     <div>
-                        <div className="item" ui-sref="nps-amount({ type: 'one_time' })">
+                        <div className="item" data-aid='nps-monthly-investment'>
                             <div className="icon">
                                 <img src={require("assets/nps_sip_icon.svg")} alt="" />
                             </div>
@@ -41,7 +42,7 @@ class NpsInvestType extends Component {
                                 <div>Monthly Investment (SIP)</div>
                             </div>
                         </div>
-                        <div className="item" ui-sref="nps-amount({ type: 'one_time' })">
+                        <div className="item" data-aid='nps-one-Time-investment'>
                             <div className="icon">
                                 <img src={require("assets/nps_one_time_icon.svg")} alt="" />
                             </div>

@@ -238,9 +238,9 @@ export async function mobileLogin(body) {
         storageService.setObject("user_promo", item);
       }
 
-      if (this.state.isPromoSuccess && this.state.referral_code !== "") {
+      if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
         let item = {
-          promo_code: this.state.referral_code,
+          promo_code: this.state.form_data.referral_code,
         };
         storageService().setObject("user_promo", item);
       }

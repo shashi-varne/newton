@@ -236,13 +236,13 @@ const Funds = (props) => {
   };
 
   return (
-    <Container hidePageTitle={true} noFooter={true} skelton={showSkelton}>
-      <div className="reports-funds">
+    <Container hidePageTitle={true} noFooter={true} skelton={showSkelton} data-aid='reports-funds-screen'>
+      <div className="reports-funds" data-aid='reports-funds'>
         {!isEmpty(funds) &&
           funds.map((fund, index) => {
             return (
-              <div className="reports-fund-content" key={index}>
-                <h5 onClick={() => handleTiles(index)}>
+              <div className="reports-fund-content" key={index} data-aid='reports-fund-content'>
+                <h5 onClick={() => handleTiles(index)} data-aid={fund.mf.friendly_name}>
                   <div>{fund.mf.friendly_name}</div>
                   <div className="right-info">
                     {fund.current_earnings.percent &&
@@ -268,11 +268,11 @@ const Funds = (props) => {
                 </h5>
                 {openIndex === index && (
                   <>
-                    <div onClick={() => handleTiles(index)}>
+                    <div onClick={() => handleTiles(index)} data-aid='funds-folio'>
                       <div className="head">
                         Folio No: {fund.folio_details[0].folio_number}
                       </div>
-                      <div className="summary">
+                      <div className="summary" data-aid='reports-funds-summary'>
                         <div className="content">
                           <div className="amount">
                             {formatAmountInr(fund.current)}
@@ -320,7 +320,7 @@ const Funds = (props) => {
                         </div>
                       </div>
                       <hr className="hr-break" />
-                      <div className="summary">
+                      <div className="summary" data-aid='reports-funds-summary-content'>
                         <div className="content">
                           <div className="amount">
                             {formatAmountInr(fund.mf.curr_nav)}
@@ -342,6 +342,7 @@ const Funds = (props) => {
                       </div>
                     </div>
                     <Button
+                      dataAid='reports-invest-more-btn'
                       buttonTitle="INVEST MORE"
                       showLoader={isApiRunning}
                       onClick={() => getMfDetails(fund)}

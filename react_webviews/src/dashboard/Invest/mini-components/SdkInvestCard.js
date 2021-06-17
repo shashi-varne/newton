@@ -26,9 +26,9 @@ const SdkInvestCard = ({
     titleBg = require(`assets/fisdom/${titleImg}`);
   }
   return (
-    <div className={`card sdk-landing-card ${isLoading && 'disable-card-action'}`} style={{ height: height }} onClick={handleCard}>
+    <div className={`card sdk-landing-card ${isLoading && 'disable-card-action'}`} style={{ height: height }} onClick={handleCard} data-aid='sdk-landing-card'>
       <div className='text' style={{ backgroundImage: `url(${titleBg})` }}>
-        <div className='title'>{title}</div>
+        <div className='title' data-aid='sdk-landing-card-title'>{title}</div>
         {referralCode ? (
           <Input
             type='text'
@@ -38,7 +38,7 @@ const SdkInvestCard = ({
             disabled={dotLoader}
           />
         ) : (
-          <div className={`subtitle ${dot && 'subtitle-status'}`} style={{color}}>
+          <div className={`subtitle ${dot && 'subtitle-status'}`} style={{color}} data-aid='subtitle-status'>
             {
               dot && !isLoading && <span className='sdk-card-dot' style={{background:color}}></span>
             }
@@ -51,7 +51,7 @@ const SdkInvestCard = ({
       <div className={`imageWrapper ${referralCode ? 'sdk-refferal-wrapper' : ''}`}>
         {referralCode ? (
           <div>
-            <Button className={`sdk-refferal-btn ${!referral && 'disable-refferal-btn'}`} onClick={handleReferral} disabled={!referral}>
+            <Button className={`sdk-refferal-btn ${!referral && 'disable-refferal-btn'}`} onClick={handleReferral} disabled={!referral} data-aid='sdk-refferal-btn'>
               {
                 dotLoader ? <DotLoader />
                : 'Apply'

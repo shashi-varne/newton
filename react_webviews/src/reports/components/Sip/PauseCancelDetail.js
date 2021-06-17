@@ -92,6 +92,7 @@ const PauseCancelDetail = (props) => {
 
   return (
     <Container
+      data-aid='reports-pausecancel-details-screen'
       title={title}
       events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
@@ -100,8 +101,8 @@ const PauseCancelDetail = (props) => {
       showLoader={isApiRunning}
     >
       {!isEmpty(sip) && (
-        <div className="reports-sip-pause-cancel-detail">
-          <div>
+        <div className="reports-sip-pause-cancel-detail" data-aid='reports-sip-pause-cancel-detail'>
+          <div data-aid='reports-pauseCancelCard'>
             <div className="mf-name">{sip.mfname}</div>
             {action === "pause" && (
               <PauseCancelCard
@@ -124,7 +125,7 @@ const PauseCancelDetail = (props) => {
                 />
               </>
             )}
-            <div className="alert">
+            <div className="alert" data-aid='reports-alert'>
               <div className="title">
                 <img src={require(`assets/attention_icon.svg`)} alt="" />
                 <div>Note</div>
@@ -142,7 +143,7 @@ export default PauseCancelDetail;
 
 export const PauseCancelCard = ({ icon, title, subtitle }) => {
   return (
-    <div className="content">
+    <div className="content" data-aid='reports-card-content'>
       <img src={require(`assets/${productName}/${icon}`)} alt="" />
       <div>
         <div className="title">{title}</div>
