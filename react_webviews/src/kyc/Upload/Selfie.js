@@ -283,7 +283,9 @@ const Selfie = (props) => {
                   fileName: 'selfie',
                   supportedFormats: SUPPORTED_IMAGE_TYPES,
                   onFileSelectComplete: onCaptureSuccess,
-                  onFileSelectError: onCaptureFailure
+                  onFileSelectError: onCaptureFailure,
+                  fileHandlerParams: isNative ? { check_liveness: true } : {},
+                  customClickHandler: isNative ? onOpenCameraClick : ''
                 }}
               >
                 {file ? "Retake" : "Open Camera"}
