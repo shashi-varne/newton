@@ -9,6 +9,9 @@ import AccountMerge from "../mini-components/AccountMerge";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
+import { ConfirmPan } from "../Equity/mini-components/ConfirmPan";
+import CheckCompliant from "../Equity/mini-components/CheckCompliant";
 
 const residentialStatusOptions = [
   {
@@ -26,7 +29,6 @@ const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);
-  const [buttonTitle, setButtonTitle] = useState("CHECK STATUS");
   const [isStartKyc, setIsStartKyc] = useState(false);
   const [isUserCompliant, setIsUserCompliant] = useState();
   const [pan, setPan] = useState("");
@@ -59,8 +61,9 @@ const Home = (props) => {
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
-      title: "Are you investment ready?",
-      subtitle: "We need your PAN to check if you’re investment ready",
+      title: "Verify PAN",
+      subtitle:
+        "As per SEBI, valid PAN is mandatory to open a trading & demat account",
       kycConfirmPanScreen: false,
     };
     if (
@@ -88,18 +91,6 @@ const Home = (props) => {
     setHomeData({ ...data });
   };
 
-  const renderData = {
-    incomplete: {
-      title: "KYC is incomplete!",
-      subtitle:
-        "As per Govt norm. you need to do a one-time registration process to complete KYC.",
-    },
-    success: {
-      title: `Hey ${userName},`,
-      subtitle: "You’re investment ready and eligible for premium onboarding.",
-    },
-  };
-
   const handleClick = async () => {
     
     try {
@@ -117,7 +108,6 @@ const Home = (props) => {
         setPanError("Invalid PAN number");
         return;
       }
-
       const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
       if (skipApiCall || isStartKyc) {
         setIsStartKyc(true);
@@ -127,7 +117,8 @@ const Home = (props) => {
         } else {
           setIsUserCompliant(false);
         }
-        savePan(kyc.address?.meta_data?.is_nri || false);
+        setOpenConfirmPan(true);
+        return;
       }
       setShowLoader("button");
       await checkPanValidity(true);
@@ -155,7 +146,7 @@ const Home = (props) => {
       if (showConfirmPan) setOpenConfirmPan(true);
     } catch (err) {
       console.log(err);
-      throw new Error(err.message);
+      toast(err.message);
     } finally {
       setShowLoader(false);
     }
@@ -166,17 +157,15 @@ const Home = (props) => {
     let value = target ? target.value.trim() : event;
     let limit = target?.maxLength;
 
-    // added event listener to remove the character after limit is reached
     if (value.length > limit) {
-      return
-    }  
-     
+      return;
+    }
+
     setPan(value);
     if (value) setPanError("");
     else setPanError("This is required");
     if (isStartKyc) {
       setIsStartKyc(false);
-      setButtonTitle("CHECK STATUS");
     }
   };
 
@@ -215,7 +204,7 @@ const Home = (props) => {
       let response = await checkMerge(pan.toUpperCase());
       if (!response) return;
       let { result, status_code } = response;
-      let { different_login, auth_ids} = result;
+      let { different_login, auth_ids } = result;
       if (status_code === 200) {
         setAuthIds(auth_ids);
         setAccountMergeData({
@@ -363,7 +352,7 @@ const Home = (props) => {
       events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-home"
-      buttonTitle={buttonTitle}
+      buttonTitle="CONTINUE"
       showLoader={showLoader}
       handleClick={handleClick}
       title={homeData.title}
@@ -397,6 +386,14 @@ const Home = (props) => {
               />
             </div>
           </main>
+          <ConfirmPan
+            isOpen={openConfirmPan}
+            name={userName}
+            pan={pan}
+            close={() => setOpenConfirmPan(false)}
+            handleClick={handleConfirmPan}
+          />
+          <CheckCompliant isOpen={openCheckCompliant} />
           <AccountMerge
             isOpen={openAccountMerge}
             close={closeAccountMerge}

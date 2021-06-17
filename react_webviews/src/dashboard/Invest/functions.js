@@ -17,6 +17,8 @@ import { PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
+const config = getConfig();
+
 export async function initialize() {
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
@@ -47,7 +49,7 @@ export async function initialize() {
       !dataSettedInsideBoot)) {
     await this.getSummary();
   }
-  if (this.state.screenName === "sdk_landing" && !getConfig().Web) {
+  if (this.state.screenName === "sdk_landing" && !config.Web) {
     await this.getSummary();
   }
   if (this.onload) this.onload();
