@@ -143,6 +143,12 @@ const Pan = (props) => {
     setIsOpen(false);
   }
 
+  const handleRetryClick = () => {
+    handleCloseBottomSheet();
+    setFile(null);
+    setFileToShow(null);
+  }
+
   const sendEvents = (userAction, type) => {
     let eventObj = {
       "event_name": 'KYC_registration',
@@ -217,7 +223,7 @@ const Pan = (props) => {
               isOpen={isOpen}
               onClose={handleCloseBottomSheet}
               disableBackdropClick
-              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleCloseBottomSheet}
+              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleRetryClick}
               kyc={kyc}
             />
           }

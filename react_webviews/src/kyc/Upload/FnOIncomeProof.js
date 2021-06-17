@@ -43,7 +43,7 @@ const UPLOAD_OPTIONS_MAP = {
   
 }
 
-const OR = (
+const ORElem = (
   <div className="kyc-fno-OR">OR</div>
 );
 
@@ -134,7 +134,7 @@ const FnOIncomeProof = (props) => {
             file={selectedFile}
           />
         }
-        {!selectedFile && OR}
+        {!selectedFile && ORElem}
         {(!selectedFile || (selectedType === 'itr')) &&
           <WVFileUploadCard
             {...UPLOAD_OPTIONS_MAP['itr']}
@@ -145,7 +145,7 @@ const FnOIncomeProof = (props) => {
             file={selectedFile}
           />
         }
-        {!selectedFile && OR}
+        {!selectedFile && ORElem}
         {(!selectedFile || (selectedType === 'salary-slip')) &&
           <WVFileUploadCard
             {...UPLOAD_OPTIONS_MAP['salary-slip']}
@@ -194,7 +194,7 @@ const FnOIncomeProof = (props) => {
         image={require(`assets/${productName}/doc-uploaded.svg`)}
         button1Props={{
           title: 'Continue',
-          type: 'primary',
+          variant: "contained",
           onClick: goNext
         }}
       />

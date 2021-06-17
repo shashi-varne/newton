@@ -14,7 +14,7 @@ const PennySuccessDialog = ({ isOpen, redirect }) => {
       button1Props={{
         title: "CONTINUE",
         onClick: redirect,
-        type: "primary",
+        variant: "contained",
       }}
       classes={{
         content: "penny-bank-verification-dialog-content",
