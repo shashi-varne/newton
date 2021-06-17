@@ -20,7 +20,6 @@ export async function proceedInvestment(data) {
     investmentEventData,
     body,
     paymentRedirectUrl,
-    history,
     handleApiRunning,
     handleDialogStates,
     handleIsRedirectToPayment,

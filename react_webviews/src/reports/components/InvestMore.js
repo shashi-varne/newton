@@ -132,9 +132,9 @@ const InvestMore = (props) => {
       investmentEventData: investmentEventData,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: false,
-      history: props.history,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
+      navigate: navigate,
       handleIsRedirectToPayment,
     });
   };
