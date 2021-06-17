@@ -426,6 +426,7 @@ export function initilizeKyc() {
   let getKycAppStatusData = getKycAppStatus(userKyc);
   let kycJourneyStatus = getKycAppStatusData.status;
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  const rejectedItems = getKycAppStatusData.rejectedItems;
   if (isCompliant) {
     if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
       kycStatusData = kycStatusMapperInvest["ground_premium"];
@@ -444,6 +445,7 @@ export function initilizeKyc() {
     isReadyToInvestBase,
     isEquityCompletedBase,
     getKycAppStatusData,
+    rejectedItems,
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
@@ -518,9 +520,9 @@ export function openPremiumOnboardBottomSheet(
 }
 
 export function handleKycSubmittedOrRejectedState() {
-  let { userKyc, kycJourneyStatusMapperData } = this.state;
+  let { userKyc, kycJourneyStatusMapperData, rejectedItems } = this.state;
 
-  if (userKyc.bank.meta_data_status === "rejected") {
+  if (rejectedItems.length === 1 && userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
   } else {
     let modalData = kycJourneyStatusMapperData;
