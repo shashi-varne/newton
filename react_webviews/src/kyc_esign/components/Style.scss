@@ -6,6 +6,12 @@ $text-color1: var(--steelgrey);
     line-height: 21px;
 }
 
+@mixin d-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .digi-status {
     color: $text-color1;
     
@@ -89,7 +95,7 @@ $text-color1: var(--steelgrey);
       line-height: 9px;
       letter-spacing: 1px;
       text-transform: uppercase;
-      color: #767E86;
+      color: $text-color1;
     }
 
     .bottom-image {
@@ -130,9 +136,7 @@ $text-color1: var(--steelgrey);
     }
 
     .text {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include d-flex-center();
       font-size: 14px;
       line-height: 19px;
       color: $text-color1;
@@ -149,7 +153,7 @@ $text-color1: var(--steelgrey);
       font-size: 13px;
       line-height: 22px;
       text-align: center;
-      color: #767e86;
+      color: $text-color1;
       margin-top: 30px;
     }
 
@@ -160,9 +164,37 @@ $text-color1: var(--steelgrey);
       margin: 30px 0 0 0;
       cursor: pointer;
     }
+
+    .sub-title {
+      @include d-flex-center();
+      font-size: 13px;
+      line-height: 22px;
+      color: $text-color1
+    }
   }
 
   .wv-info-bubble {
     margin-top: 25px;
+  }
+
+  .account-status-container {
+    margin: 40px 0;
+
+    .account-status {
+      font-weight: 500;
+      font-size: 17px;
+      line-height: 20px;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+
+    .status {
+      color: $text-color1;
+    }
+
+    .step-content {
+      margin-top: -10px;
+      text-transform: initial;
+    }
   }
 }

@@ -204,16 +204,13 @@ const AddressUpload = (props) => {
             />
             <KycUploadContainer.Button
               withPicker
-              filePickerProps={{
-                showOptionsDialog: true,
-                shouldCompress: true,
-                nativePickerMethodName: "open_gallery",
-                fileName: "address_proof_front",
-                customPickerId: "wv-input-front",
-                onFileSelectComplete: onFileSelectComplete('front'),
-                onFileSelectError: onFileSelectError,
-                supportedFormats: SUPPORTED_IMAGE_TYPES
-              }}
+              showOptionsDialog
+              nativePickerMethodName="open_gallery"
+              fileName="address_proof_front"
+              customPickerId="wv-input-front"
+              onFileSelectComplete={onFileSelectComplete('front')}
+              onFileSelectError={onFileSelectError}
+              supportedFormats={SUPPORTED_IMAGE_TYPES}
             />
           </KycUploadContainer>
 
@@ -231,16 +228,13 @@ const AddressUpload = (props) => {
                 />
                 <KycUploadContainer.Button
                   withPicker
-                  filePickerProps={{
-                    showOptionsDialog: true,
-                    shouldCompress: true,
-                    nativePickerMethodName: "open_gallery",
-                    fileName: "address_proof_rear",
-                    customPickerId: "wv-input-back",
-                    onFileSelectComplete: onFileSelectComplete('back'),
-                    onFileSelectError: onFileSelectError,
-                    supportedFormats: SUPPORTED_IMAGE_TYPES
-                  }}
+                  showOptionsDialog
+                  nativePickerMethodName="open_gallery"
+                  fileName="address_proof_rear"
+                  customPickerId="wv-input-back"
+                  onFileSelectComplete={onFileSelectComplete('back')}
+                  onFileSelectError={onFileSelectError}
+                  supportedFormats={SUPPORTED_IMAGE_TYPES}
                 />
               </KycUploadContainer>
             </>

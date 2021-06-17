@@ -72,12 +72,6 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         <div className="subtitle" data-aid='kyc-header-sub-title-2' onClick={() => navigateToReports()}>
           View your KYC application details {" >"}
         </div>
-        {dl_flow && !show_note && (
-          <div className="message"  data-aid="kyc-complete-message">
-            Click on <span>Continue Investing</span> & choose from 5000+ mutual
-            funds to invest in.
-          </div>
-        )}
       </header>
       {show_note && (
         <WVInfoBubble hasTitle customTitle="Note" type="warning">
