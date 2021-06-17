@@ -276,6 +276,7 @@ function PassiveFundDetails({ history }) {
                 style={{
                   width: "calc(100% - 30px)",
                   height: "100%",
+                  borderRadius: "6px 6px 0 0"
                 }}
               />
             </div>
@@ -303,13 +304,14 @@ function PassiveFundDetails({ history }) {
               style={{
                 width: "calc(100% - 30px)",
                 height: "100%",
+                borderRadius: "0 0 6px 6px"
               }}
             />
           </div>
         )}
         <div
           className="pfd-line"
-          style={{ marginTop: "18px", marginBottom: "18px" }}
+          style={{ marginTop: "30px", marginBottom: "18px" }}
         ></div>
         <div className="pf-flex pfd-padding" style={{ paddingBottom: "18px" }}>
           <div>
