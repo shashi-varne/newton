@@ -267,7 +267,25 @@ const Selfie = (props) => {
               fileToShow={fileToShow}
               illustration={require(`assets/${productName}/selfie_placeholder.svg`)}
             />
-            {renderButton()}
+            {isWeb ?
+              <KycUploadContainer.Button
+                showLoader={isCamLoading}
+                onClick={openLiveCamera}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button> :
+              <KycUploadContainer.Button
+                withPicker
+                nativePickerMethodName='open_camera'
+                fileName='selfie'
+                supportedFormats={SUPPORTED_IMAGE_TYPES}
+                onFileSelectComplete={onCaptureSuccess}
+                onFileSelectError={onCaptureFailure}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button>
+            }
+            {/* {renderButton()} */}
           </KycUploadContainer>
           <div className="kyc-selfie-intructions">
             <span id="kyc-si-text">How to take selfie?</span>
@@ -285,15 +303,13 @@ const Selfie = (props) => {
             />
           }
           {!isSdk &&
-            <>
-              <LocationPermission
-                isOpen={isLocnPermOpen}
-                onInit={onLocationInit}
-                onClose={closeLocnPermDialog}
-                onLocationFetchSuccess={onLocationFetchSuccess}
-                parentProps={props}
-              />
-            </>
+            <LocationPermission
+              isOpen={isLocnPermOpen}
+              onInit={onLocationInit}
+              onClose={closeLocnPermDialog}
+              onLocationFetchSuccess={onLocationFetchSuccess}
+              parentProps={props}
+            />
           }
           <SelfieUploadStatus
             status={bottomSheetType}
