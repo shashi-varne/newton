@@ -8,9 +8,9 @@ Example :
        filterOptions={}                                             // Array of object passed to bottomFilter Options.
        onApplyClicked={this.setSortFilter}                         // Action.
        defaultSelectedTab={{ "sort_value": "tracking_error" }}    // default selected Tab if need.
-       withButton={true}                                         // bottomFilter with botton control.
+       withButton={true}                                         // bottomFilter with button control.
        openFilterProp={isOpen}                                  // openFilterProp to open filter from parent as prop.
-       onFilterClose={(ele) => this.openFilter(ele)}           // function to contol opening/ closing onFilterClose, can be used to send openFilterProp as True (or) False.
+       onFilterClose={(ele) => this.openFilter(ele)}           // function to contol opening/closing onFilterClose, can be used to set openFilterProp as True (or) False.
     />
 
 */
