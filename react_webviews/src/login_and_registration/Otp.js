@@ -47,15 +47,20 @@ class Otp extends Component {
     this.setState({ otp: otp, otp_error: otp_error });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
+    event.preventDefault();
+    const { otp, isApiRunning } = this.state;
+    if(otp.length !== 4 || isApiRunning) {
+      return;
+    }
     if (this.state.forgot) {
       this.verifyForgotOtp({
-        otp: this.state.otp,
+        otp: otp,
       });
     } else {
       this.otpVerification({
         mobile_number: this.state.mobile_number,
-        otp: this.state.otp,
+        otp: otp,
       });
     }
   };
@@ -71,7 +76,7 @@ class Otp extends Component {
           </div>
         )}
         <div className={`${!isMobileView && "content"} otp-content`}>
-          <div className={`${isMobileView && "otp-model-mini"} otp-model`}>
+          <form className={`${isMobileView && "otp-model-mini"} otp-model`} onSubmit={this.handleClick} >
             {productName === "finity" && (
               <div class="logo" data-aid='logo-text'>
                 <img src={require(`assets/finity_navlogo.png`)} alt="finity" />
@@ -114,7 +119,7 @@ class Otp extends Component {
                 }`,
               }}
             />
-          </div>
+          </form>
         </div>
       </div>
     );

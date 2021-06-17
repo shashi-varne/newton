@@ -342,11 +342,11 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
-  returnConfig.isSdk = storageService().get("is_secure"); 
+  returnConfig.isSdk = storageService().get("is_secure");
   returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
   returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
   returnConfig.isIframe = isIframe();
-  returnConfig.platform = !returnConfig.isIframe ? (!returnConfig.Web ? "sdk" : "web" ): "iframe";
+  returnConfig.platform = !returnConfig.isIframe ? (returnConfig.Web ? "web" : "sdk" ): "iframe";
   returnConfig.isLoggedIn = storageService().get("currentUser");
   console.log(returnConfig);
   return returnConfig;

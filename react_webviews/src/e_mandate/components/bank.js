@@ -157,6 +157,8 @@ class SelectBank extends Component {
       let bank_data = { selected_bank: this.state.selected_bank };
       const res = await Api.post('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe, bank_data);
       let basepath = getBasePath();
+
+      const redirect_url = encodeURIComponent(`${basepath}/invest${getConfig().searchParams}&is_secure=${storageService().get("is_secure")}`);
       
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let paymentRedirectUrl = encodeURIComponent(
@@ -166,8 +168,10 @@ class SelectBank extends Component {
         let app = getConfig().app;
         // eslint-disable-next-line
         pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
-          '&app=' + app + '&generic_callback=' + getConfig().generic_callback + '&is_secure=' + storageService().get("is_secure");
+          '&app=' + app + '&generic_callback=' + getConfig().generic_callback + '&is_secure=' + storageService().get("is_secure") + '&redirect_url='+redirect_url;
         
+        console.log("is sdk ", getConfig().isSdk)
+        console.log("is native ", getConfig().isNative)
         if (getConfig().isNative) {
           if (getConfig().app === 'ios') {
             nativeCallback({
@@ -191,7 +195,7 @@ class SelectBank extends Component {
                 action_name: 'positive',
                 action_text: 'Yes',
                 action_type: 'redirect',
-                redirect_url: paymentRedirectUrl
+                redirect_url: redirect_url
               }, {
                 action_name: 'negative',
                 action_text: 'No',
