@@ -201,7 +201,7 @@ class FundList extends Component {
                 propName: this.state.selected,
                 formatter: (value) =>
                     <span style={{
-                        fontWeight: 'bold', color: value !== null ? 'limegreen' : 'gray',
+                        color: value !== null ? 'limegreen' : 'gray',
                         fontSize: "13px", lineHeight: "21px", fontWeight: "700"
                     }}>
                         {value !== null ? value >= 0 ? "+" + value + "%" : value + "%" : "NA"}
@@ -252,9 +252,10 @@ class FundList extends Component {
 
                     <React.Fragment>
                         {!isEmpty(result) &&
-                            result.map((item) => {
+                            result.map((item, index) => {
                                 return (
                                     <WVProductListCard
+                                        key={index}
                                         classes={{ headerTitle: "wv-pdl-header-title", headerImage: "wv-pdl-header-image", }}
                                         productData={item}
                                         title={item.legal_name}

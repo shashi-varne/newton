@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-// import WVDiyDialog from './WVDiyDialog';
+import React, { useState } from "react";
 import Button from 'common/ui/Button';
 import WVButtonLayout from "../ButtonLayout/WVButtonLayout";
 import { isEmpty } from 'lodash';
@@ -44,21 +43,9 @@ const WVFilter = ({
   const [activeTabOptions, setActiveTabOptions] = useState(filterOptions[0].option);
   const [selectedFilters, setSelectedFilters] = useState(defaultFilterOption || {});
   const [isOpen, setIsOpen] = useState(withButton ? false : true);
-  // const [renderApi, setRenderApi] = useState(false);
-
-
-  // useEffect(() => {
-  //   if (renderApi) {
-  //     getSelectedOptions(selectedFilters);
-  //     setRenderApi(false)
-  //   }
-  // }, [selectedFilters]);
-
 
   const close = (data) => {
     setIsOpen(false);
-    // if (data === "apply") setRenderApi(true);
-    // else setRenderApi(false);
   };
 
   const apply = () => {
@@ -69,7 +56,6 @@ const WVFilter = ({
   const reset = () => {
     setSelectedFilters(defaultFilterOption || {})
     setActiveTab(activeTab)
-    // close()
   }
 
   return (
