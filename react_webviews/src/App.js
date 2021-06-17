@@ -31,6 +31,7 @@ import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
+import ComponentTest from './ComponentTest';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -102,6 +103,7 @@ const App = () => {
                   <Feature />
                 </DesktopLayout>
               }
+              <Route path='/component-test' component={ComponentTest} />
               <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>
