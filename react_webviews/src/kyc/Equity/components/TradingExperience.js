@@ -86,7 +86,9 @@ const TradingExperience = (props) => {
     const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
     if (kyc.initial_kyc_status === "compliant" || isPanFailedAndNotApproved) {
       if (!isDocSubmittedOrApproved("equity_pan")) {
-        navigate(PATHNAME_MAPPER.uploadPan);
+        navigate(PATHNAME_MAPPER.uploadPan, {
+          state: { goBack: "/kyc/trading-experience" }
+        });
         return;
       }
     } 
