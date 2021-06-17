@@ -25,6 +25,11 @@ const PAGE_TYPE_CONTENT_MAP = {
     title: 'Allow location access',
     subtitle: 'As per SEBI, we need to capture your location while you take the selfie',
   },
+  'verifying-location': {
+    imgElem: locationIcon,
+    title: 'Verifying location access',
+    subtitle: 'As per SEBI, we need to capture your location while you take the selfie',
+  },
   'invalid-region': {
     imgElem: foreignLocationIcon,
     title: 'You cannot proceed with KYC',
@@ -45,7 +50,7 @@ const LocationPermission = ({
   onLocationFetchSuccess,
   onLocationFetchFailure,
 }) => {
-  const [pageType, setPageType] = useState('permission-denied');
+  const [pageType, setPageType] = useState('verifying-location');
   const [pageContent, setPageContent] = useState({});
   const [permissionWarning, setPermissionWarning] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(true);
@@ -75,6 +80,7 @@ const LocationPermission = ({
   
   const locationCallbackSuccess = async (data) => {
     if (data.location_permission_denied) {
+      setPageType('permission-denied');
       setPermissionWarning(true);
       setIsApiRunning(false);
     } else {

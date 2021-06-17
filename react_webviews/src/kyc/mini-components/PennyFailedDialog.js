@@ -14,12 +14,12 @@ const PennyFailedDialog = ({ isOpen, checkBankDetails, uploadDocuments }) => {
       button1Props={{
         title: "CHECK BANK DETAILS",
         onClick: checkBankDetails,
-        type: "primary",
+        variant: "contained",
       }}
       button2Props={{
         title: "UPLOAD BANK DOCUMENTS",
         onClick: uploadDocuments,
-        type: "secondary",
+        variant: "outlined",
       }}
       classes={{
         content: "penny-bank-verification-dialog-content",

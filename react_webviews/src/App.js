@@ -29,9 +29,9 @@ import Feature from './Feature';
 import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
+import ComponentTest from './ComponentTest';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
-import ComponentTest from './ComponentTest';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,

@@ -85,7 +85,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
       button1Props={{
         title:"PROCEED",
         onClick: handleProceed,
-        type: "primary"
+        variant: "contained",
       }}
     />
   );

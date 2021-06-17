@@ -19,7 +19,7 @@ export const ConfirmPan = ({ isOpen, name, pan, handleClick, close }) => {
       button1Props={{ title: "EDIT PAN", type: "secondary", onClick: close }}
       button2Props={{
         title: "CONFIRM PAN",
-        type: "primary",
+        variant: "contained",
         onClick: handleClick,
       }}
       image={require(`assets/${productName}/kyc_status_icon.svg`)}
