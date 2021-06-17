@@ -626,6 +626,6 @@ export function handleCampaignRedirection (url) {
   let campLink = url;
   // Adding redirect url for testing
   // eslint-disable-next-line
-  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&is_secure=${storageService().get("is_secure")}`
+  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}`)}`
   window.location.href = campLink;
 }

@@ -86,7 +86,7 @@ class Notification extends Component {
     let plutusRedirectUrl = `${getBasePath()}/notification?is_secure=${storageService().get("is_secure")}`;
     // Adding redirect url for testing
     // eslint-disable-next-line
-    webRedirectionUrl = `${webRedirectionUrl}${webRedirectionUrl.match(/[\?]/g) ? "&" : "?"}generic_callback=true&campaign_version=1&is_secure=${storageService().get("is_secure")}`
+    webRedirectionUrl = `${webRedirectionUrl}${webRedirectionUrl.match(/[\?]/g) ? "&" : "?"}generic_callback=true&${showRedirectUrl ?"redirect_url":"plutus_redirect_url"}=${encodeURIComponent(plutusRedirectUrl)}&campaign_version=1`
     return webRedirectionUrl;
   };
 
