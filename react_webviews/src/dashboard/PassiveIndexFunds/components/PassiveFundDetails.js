@@ -35,12 +35,13 @@ function PassiveFundDetails({ history }) {
   const [fundInfoClicked, setFundInfoClicked] = useState(false);
   const [portfolioDetailsClicked, setPortfolioDetailsClicked] = useState(false);
   const [moreRisksClicked, setMoreRisksClicked] = useState(false);
-  const { isins } = getUrlParams();
   const fund = storageService().getObject("diystore_fundInfo") || {};
   const [periodWiseData, setPeriodWiseData] = useState({});
   const [currentReturnsKey, setCurrentReturns] = useState("3M");
   const [xaxisFormat, setXaxisFormat] = useState("yyyy");
   const [returnsData, setReturnsData] = useState({});
+  const [yearFilterOptions, setYearFilterOptions] = useState([]);
+  const { isins } = getUrlParams();
 
   useEffect(() => {
     (async () => {
@@ -50,6 +51,16 @@ function PassiveFundDetails({ history }) {
         const allButtons = ["1M", "3M", "6M", "1Y", "3Y", "5Y"];
         setCurrentReturns(
           allButtons[response?.text_report[0].performance.returns.length - 1]
+        );
+        setYearFilterOptions(
+          YEARS_FILTERS.map((item, index) => {
+            if (index > response?.text_report[0].performance.returns.length - 1)
+              return {
+                ...item,
+                disabled: true,
+              };
+            return item;
+          })
         );
         setFundDetails(response?.text_report[0]);
         setReturnsData(response?.text_report[0].performance.returns);
@@ -64,7 +75,6 @@ function PassiveFundDetails({ history }) {
     })();
   }, []);
   const getTimeInMs = (time) => time * 60 * 60 * 24 * 1000;
-
   const fetch_graph_data = async (isin) => {
     setGraph(null);
     const graph_data = await fetch_fund_graph(isin);
@@ -197,7 +207,12 @@ function PassiveFundDetails({ history }) {
               {fundDetails?.performance?.friendly_name}
             </p>
             <Imgc
-              style={{ marginLeft: "40px", width: "50px", height: "50px" }}
+              style={{
+                marginLeft: "40px",
+                width: "50px",
+                height: "50px",
+                border: "1px solid var(--highlight)",
+              }}
               src={fundDetails?.performance?.amc_logo_small}
               alt=""
             />
@@ -225,21 +240,27 @@ function PassiveFundDetails({ history }) {
             </div>
             <div>
               <p className="pfd-points" style={{ color: "var(--dark)" }}>
-                RETURNS({currentReturnsKey})
+                RETURNS{currentReturnsKey && `(${currentReturnsKey})`}
               </p>
               <p
                 className="pfd-nav-returns"
                 style={{
                   fontWeight: "700",
                   color:
-                    fundDetails?.performance?.primary_return >= 0
+                    returnsData === [] ||
+                    returnsData[BUTTON_MAPPER[currentReturnsKey]?.index] ===
+                      undefined
+                      ? "var(--steelgray)"
+                      : returnsData[BUTTON_MAPPER[currentReturnsKey].index]
+                          ?.value >= 0
                       ? "#7ED321"
                       : "#D0021B",
                   textAlign: "right",
                 }}
               >
-                {returnsData[BUTTON_MAPPER[currentReturnsKey].index] ===
-                undefined
+                {returnsData === [] ||
+                returnsData[BUTTON_MAPPER[currentReturnsKey]?.index] ===
+                  undefined
                   ? "NA"
                   : returnsData[BUTTON_MAPPER[currentReturnsKey].index]
                       ?.value >= 0
@@ -276,7 +297,7 @@ function PassiveFundDetails({ history }) {
                 style={{
                   width: "calc(100% - 30px)",
                   height: "100%",
-                  borderRadius: "6px 6px 0 0"
+                  borderRadius: "6px 6px 0 0",
                 }}
               />
             </div>
@@ -285,7 +306,7 @@ function PassiveFundDetails({ history }) {
         {graph ? (
           <div style={{ padding: "0 20px" }}>
             <WVYearFilter
-              filterArray={YEARS_FILTERS}
+              filterArray={yearFilterOptions}
               selected={currentReturnsKey}
               onClick={yearFilter}
               dataAidSuffix={"passive-year-filter"}
@@ -304,7 +325,7 @@ function PassiveFundDetails({ history }) {
               style={{
                 width: "calc(100% - 30px)",
                 height: "100%",
-                borderRadius: "0 0 6px 6px"
+                borderRadius: "0 0 6px 6px",
               }}
             />
           </div>
@@ -469,7 +490,9 @@ function PassiveFundDetails({ history }) {
           >
             Expense ratio:{" "}
             <span style={{ fontWeight: "400" }}>
-              {fundDetails?.portfolio?.expense_ratio}%
+              {fundDetails?.portfolio?.expense_ratio === null
+                ? "NA"
+                : `${fundDetails?.portfolio?.expense_ratio}%`}
             </span>
           </p>
           <p className="pfd-values" style={{ color: "var(--steelgrey)" }}>
