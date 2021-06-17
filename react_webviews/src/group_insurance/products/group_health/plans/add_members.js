@@ -106,7 +106,6 @@ class GroupHealthPlanAddMembers extends Component {
         });
 
         if(this.state.provider === 'STAR' && (this.state.groupHealthPlanData.account_type === 'self_family' || this.state.groupHealthPlanData.account_type === 'family')){
-            console.log(ui_members)
             this.setState({
                 father_checked: ui_members.father || false,
                 father_in_law_checked: ui_members.father_in_law || false,

@@ -627,7 +627,7 @@ export function ghGetMember(lead, providerConfig) {
     'parent_in_law_account2_key'
   ];
   const { add_members_screen: { son_max, daughter_max }} = providerConfig;
-  console.log(son_max, daughter_max)
+  
   let backend_child_keys = [];
   for (let i = 0; i < (son_max + daughter_max); i++) {
     backend_child_keys.push(`child_account${i+1}_key`);
