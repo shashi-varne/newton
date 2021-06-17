@@ -65,13 +65,14 @@ const Sip = (props) => {
   }
 
   return (
-    <Container title="Existing SIPs" noFooter={true} skelton={showSkelton} events={sendEvents("just_set_events")}>
-      <div className="reports-sip">
+    <Container title="Existing SIPs" noFooter={true} skelton={showSkelton} events={sendEvents("just_set_events")} data-aid='reports-existing-sips-screen'>
+      <div className="reports-sip" data-aid='reports-sip'>
         {!isEmpty(report) &&
           report?.sips?.active_sips?.map((sip, index) => {
             return (
-              <div key={index} className="sip" onClick={() => showDetail(sip)}>
+              <div key={index} className="sip" onClick={() => showDetail(sip)} data-aid='sip'>
                 <div
+                  data-aid='reports-friendly-status'
                   className={`status ${
                     sip.friendly_status === "cancelled"
                       ? "sip-red-text"
@@ -85,8 +86,8 @@ const Sip = (props) => {
                   <div className="dot"></div>
                   <div className="name">{formatName(sip.friendly_status)}</div>
                 </div>
-                <div className="mf-name">{sip.mfname}</div>
-                <div className="bottom">
+                <div className="mf-name" data-aid='reports-mf-name'>{sip.mfname}</div>
+                <div className="bottom" data-aid='reports-bottom-content'>
                   <div className="content">
                     <img
                       alt=""

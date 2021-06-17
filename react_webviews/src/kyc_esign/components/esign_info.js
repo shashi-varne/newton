@@ -160,7 +160,7 @@ class ESignInfo extends Component {
         events={this.sendEvents("just_set_events")}
         showLoader={show_loader}
         title='eSign KYC'
-        handleClick={this.goNext}
+        handleClick={this.handleClick}
         buttonTitle='PROCEED'
         headerData={headerData}
         data-aid='kyc-esign-screen'

@@ -17,7 +17,6 @@ import { PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted } from "../../kyc/common/functions";
 
 let errorMessage = "Something went wrong!";
-const config = getConfig();
 export async function initialize() {
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
@@ -48,8 +47,7 @@ export async function initialize() {
       !dataSettedInsideBoot)) {
     await this.getSummary();
   }
-  if ((this.state.screenName === "sdk_landing" && !config.Web &&
-      !dataSettedInsideBoot)) {
+  if (this.state.screenName === "sdk_landing" && !getConfig().Web) {
     await this.getSummary();
   }
   if (this.onload) this.onload();
@@ -169,7 +167,8 @@ export async function setNpsData(response) {
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
         storageService().setObject("nps_additional_details", result.registration_details);
-        if (!result.registration_details.additional_details_status) {
+        storageService().setObject("nps_data", result);
+        if (!result?.registration_details?.additional_details_status) {
           storageService().set("nps_additional_details_required", true);
         } else {
           storageService().set("nps_additional_details_required", false);

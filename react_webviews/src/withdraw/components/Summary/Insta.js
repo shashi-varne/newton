@@ -101,6 +101,7 @@ const Insta = (props) => {
 
   return (
     <Container
+      data-aid='withdraw-summary-screen'
       events={sendEvents("just_set_events")}
       buttonTitle={'CONTINUE'}
       fullWidthButton
@@ -118,9 +119,9 @@ const Insta = (props) => {
     >
       {!isEmpty(taxes) && (
         <>
-          <section id="withdraw-insta-summary">
+          <section id="withdraw-insta-summary" data-aid='withdraw-insta-summary'>
             <div className="title">Tax Summary</div>
-            <main className="fund-list">
+            <main className="fund-list" data-aid='fund-list'>
               {taxes?.liabilities?.map((item) => (
                 <TaxSummaryCard
                   key={item.isin}

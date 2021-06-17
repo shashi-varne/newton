@@ -13,13 +13,13 @@ import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { nativeCallback } from '../../utils/native_callback'
 
 const isWeb = getConfig().Web
+
 const Sign = (props) => {
   const navigate = navigateFunc.bind(props)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
   // const [showLoader, setShowLoader] = useState(false)
-
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (file, fileBase64) => {
@@ -40,7 +40,6 @@ const Sign = (props) => {
       updateKyc(result.kyc);
       const dlFlow = isDigilockerFlow(result.kyc);
       const type = result?.kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
-
       if (dlFlow || type === "compliant") {
         if (!skipBankDetails()) {
           navigate(`/kyc/${type}/bank-details`);
@@ -79,7 +78,6 @@ const Sign = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
-
 
   return (
     <Container

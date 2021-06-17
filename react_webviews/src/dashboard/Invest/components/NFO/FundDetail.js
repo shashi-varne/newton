@@ -5,6 +5,8 @@ import { navigate as navigateFunc } from "utils/functions";
 import { getFormattedDate, getSchemeOption } from "./nfoFunctions";
 import Button from "common/ui/Button";
 import "./FundDetail.scss";
+import { nativeCallback } from "../../../../utils/native_callback";
+import { flowName } from "../../constants";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -32,45 +34,66 @@ class FundDetail extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next')
     this.navigate("/advanced-investing/new-fund-offers/funds/checkout");
   };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "fund detail",
+        "user_action": userAction || "",
+        "scheme_type": "",
+        "flow": flowName['nfo']
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let { fund } = this.state;
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
+        data-aid='nfo-fund-details-screen'
         showLoader={this.state.show_loader}
         noFooter={true}
         title="Fund Details"
       >
         {fund && (
-          <div className="nfo-fund-detail">
+          <div className="nfo-fund-detail" data-aid='nfo-fund-detail'>
             <img
               className="icon"
               alt={fund.friendly_name}
               src={fund.amc_logo_small}
             />
             {fund.nfo_recommendation && (
-              <span className="nfo-recommended">RECOMMENDED</span>
+              <span className="nfo-recommended" data-aid='nfo-recommended'>RECOMMENDED</span>
             )}
             <h3>{fund.friendly_name}</h3>
-            <div className="duration">
+            <div className="duration" data-aid='duration'>
               <b>Launch: </b> {getFormattedDate(fund.start_date, true)} /{" "}
               <b>Closure: </b>
               {getFormattedDate(fund.end_date, true)}
             </div>
-            <div className="tags">
+            <div className="tags" data-aid='nfo-tags'>
               <span className="text-capitalize">
                 {getSchemeOption(fund.scheme_option)}
               </span>
               {fund.tax_plan === "elss" && <span>Tax saving</span>}
             </div>
             <Button
+              dataAid='invest-btn'
               onClick={this.handleClick}
               buttonTitle="INVEST"
               classes={{ button: "nfo-invest-button" }}
             />
-            <div className="risk">
+            <div className="risk" data-aid='nfo-risk'>
               <div className="text">
                 <b>Risk</b>
                 <div className="subtitle">{fund.riskometer_v2}</div>
@@ -82,28 +105,28 @@ class FundDetail extends Component {
                 />
               )}
             </div>
-            <p className="overview">
+            <p className="overview" data-aid='nfo-overview'>
               <b>Overview:</b>
               {fund.overview}
             </p>
-            <p className="date">
+            <p className="date" data-aid='nfo-date'>
               <b>Allotment date:</b>
               {fund.allotment_date}
             </p>
-            <p className="lock-in">
+            <p className="lock-in" data-aid='nfo-lock-in'>
               <b>Lock-in:</b>
               {getFormattedDate(fund.lockin_in, true)}
             </p>
-            <p className="load">
+            <p className="load" data-aid='nfo-load'>
               <b>Exit load:</b>
               {fund.exit_load === 0 ? "Nil" : fund.exit_load}
             </p>
-            <p className="disclosure">
-              <b>Redemption disclosure:</b>
+            <p className="disclosure" data-aid='nfo-disclosure'>
+              <b>Redemption disclosure: </b>
               {fund.redemption_disclosure}
             </p>
-            <p className="more">
-              <b>Read more:</b>
+            <p className="more" data-aid='nfo-more'>
+              <b>Read more:</b>{" "}
               <a target="_blank" href={fund.sid_link}>
                 {fund.sid_link}
               </a>

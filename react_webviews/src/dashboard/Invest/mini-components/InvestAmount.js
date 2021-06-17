@@ -20,6 +20,8 @@ import {
 } from '../../../utils/validators';
 import useFunnelDataHook from '../common/funnelDataHook';
 import './mini-components.scss';
+import { nativeCallback } from '../../../utils/native_callback';
+import { flowName } from '../constants';
 
 const date = new Date();
 const month = date.getMonth();
@@ -43,6 +45,7 @@ const InvestAmount = (props) => {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loader, setLoader] = useState(false);
+  const [amountChanged, setAmountChanged]= useState(false);
   const [saveTaxYear, setSaveTaxYear] = useState(date.getFullYear());
   const maximumEligibleAmount = 150000;
   const navigate = navigateFunc.bind(props);
@@ -64,6 +67,7 @@ const InvestAmount = (props) => {
   }, []);
 
   const handleChange = (e) => {
+    setAmountChanged(true);
     let value = e.target.value || "";
     // eslint-disable-next-line radix
     value = parseInt(convertInrAmountToNumber(value));
@@ -158,6 +162,7 @@ const InvestAmount = (props) => {
   };
 
   const goNext = () => {
+    sendEvents('next')
     if (!userEnteredAmt) {
       return;
     }
@@ -184,8 +189,32 @@ const InvestAmount = (props) => {
     setCorpus(taxsaved);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select invest amount",
+        "amount": userEnteredAmt || "",
+        "flow": funnelData.flow || flowName[funnelData.investType] || ""
+        }
+    };
+    if(funnelData.investType === 'saveforgoal')
+    {
+      eventObj.properties["goal_purpose"] = funnelData.subtype || "";
+      eventObj.properties['amount_changed'] = amountChanged ? "yes" : "no";
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
+      data-aid='i-want-to-invest-screen'
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
       title={title}
@@ -194,9 +223,9 @@ const InvestAmount = (props) => {
       handleClick={goNext}
       classOverRideContainer='pr-container'
     >
-      <section className='invest-amount-common'>
-        <div className='invest-amount-input'>
-        <p className="invest-amount-input-head">
+      <section className='invest-amount-common' data-aid='invest-amount-common'>
+        <div className='invest-amount-input' data-aid='invest-amount-input'>
+        <p className="invest-amount-input-head" data-aid='invest-amount-input-head'>
             {funnelGoalData.itype === "saveforgoal"
               ? " I can set aside"
               : "I want to invest"}
@@ -215,7 +244,7 @@ const InvestAmount = (props) => {
               pattern='[0-9]*'
             />
           </div>
-          <p className='invest-amount-input-duration'>
+          <p className='invest-amount-input-duration' data-aid='invest-amount-input-duration'>
             {(
               investTypeDisplay === 'sip' ||
               funnelGoalData.itype === 'saveforgoal'
@@ -225,13 +254,13 @@ const InvestAmount = (props) => {
           </p>
         </div>
         {!riskEnabledFunnel &&
-          <div className='invest-amount-corpus'>
+          <div className='invest-amount-corpus' data-aid='invest-amount-corpus'>
             <div className='invest-amount-corpus-duration'>
               {funnelGoalData.id === 'savetax' ?
                 `till Mar ${saveTaxYear} to save tax upto:` : `Corpus in ${year}`
               }
             </div>
-            <div className='invest-amount-corpus-amount'>{numDifferentiationInr(corpus)}</div>
+            <div className='invest-amount-corpus-amount' data-aid='invest-amount-corpus-amount'>{numDifferentiationInr(corpus)}</div>
           </div>
         }
       </section>

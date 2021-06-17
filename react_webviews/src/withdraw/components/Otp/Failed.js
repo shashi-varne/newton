@@ -34,13 +34,13 @@ const Failed = (props) => {
   };
 
   return (
-    <Container hidePageTitle buttonTitle="RETRY" handleClick={goTo} events={sendEvents("just_set_events")}>
-      <section id="withdraw-otp-failed">
+    <Container hidePageTitle buttonTitle="RETRY" handleClick={goTo} events={sendEvents("just_set_events")} data-aid='otp-failed-screen'>
+      <section id="withdraw-otp-failed" data-aid='withdraw-otp-failed'>
         {partnerCode === 'bfdlmobile' && (
-          <div className="header">Money + Withdraw</div>
+          <div className="header" data-aid='opt-header'>Money + Withdraw</div>
         )}
         {partnerCode !== 'bfdlmobile' && (
-          <div className="header">Instant Withdraw</div>
+          <div className="header" data-aid='opt-header'>Instant Withdraw</div>
         )}
         <img
           className="failed-icon"
@@ -48,8 +48,8 @@ const Failed = (props) => {
           alt="Successful Operation"
           width="100"
         />
-        <div className="failed-title">Something went wrong!</div>
-        <div className="failed-subtitle">
+        <div className="failed-title" data-aid='failed-title'>Something went wrong!</div>
+        <div className="failed-subtitle" data-aid='failed-subtitle'>
           If instant withdraw was successful, you will get the money within 30
           mins. Otherwise, please try again after some time.
         </div>

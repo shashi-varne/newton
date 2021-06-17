@@ -111,6 +111,7 @@ const SelfSummary = (props) => {
 
   return (
     <Container
+      data-aid='self-summary-screen'
       events={sendEvents("just_set_events")}
       buttonTitle={'CONTINUE'}
       fullWidthButton
@@ -129,11 +130,11 @@ const SelfSummary = (props) => {
       type="withProvider"
     >
       {!isEmpty(taxes) && (
-        <section id="withdraw-manual-summary">
+        <section id="withdraw-manual-summary" data-aid='withdraw-manual-summary'>
           <TaxLiability stcg={taxes?.stcg_tax} ltcg={taxes?.ltcg_tax} />
           <ExitLoad exit_load={taxes?.exit_load} />
-          <div className="tax-summary">Tax Summary</div>
-          <main className="fund-list">
+          <div className="tax-summary" data-aid='tax-summary'>Tax Summary</div>
+          <main className="fund-list" data-aid='fund-list'>
             {taxes?.liabilities?.map((item) => (
               <TaxSummaryCard
                 key={item.isin}

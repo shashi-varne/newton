@@ -636,9 +636,9 @@ const FundDetails = ({ classes, history }) => {
         )}
         {type === "mf" && (
           <>
-            {dialogStates.openPennyVerificationPendind && (
+            {dialogStates.openPennyVerificationPending && (
               <PennyVerificationPending
-                isOpen={dialogStates.openPennyVerificationPendind}
+                isOpen={dialogStates.openPennyVerificationPending}
                 handleClick={() => navigate("/kyc/add-bank")}
               />
             )}

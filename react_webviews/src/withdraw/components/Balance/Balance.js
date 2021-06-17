@@ -141,6 +141,7 @@ const Balance = (props) => {
 
   return (
     <Container
+      data-aid='withdraw-screen'
       events={sendEvents("just_set_events")}
       title='Withdraw'
       noFooter
@@ -154,26 +155,26 @@ const Balance = (props) => {
     >
       {!isEmpty(balance) && !noInvestments && (
         <>
-          <section id="withdraw-balance">
-            <div className="report-header">
-              <div className="title">Withdrawable Balance</div>
-              <div className="amount">
+          <section id="withdraw-balance" data-aid='withdraw-balance'>
+            <div className="report-header" data-aid='report-header'>
+              <div className="title" data-aid='withdraw-title-text' >Withdrawable Balance</div>
+              <div className="amount" data-aid='withdraw-amount'>
                 {formatAmountInr(balance?.balance) || 0}
               </div>
               <div className="withdrawable-tile">
-                <div className="tile">
+                <div className="tile" data-aid='withdraw-balance-tile'>
                   <div className="tile-text">Total Balance</div>
                   <div className="tile-amount">
                     {formatAmountInr(balance?.total_balance) || 0}
                   </div>
                 </div>
-                <div className="tile">
+                <div className="tile" data-aid='withdraw-pending-switch-tile'>
                   <div className="tile-text">Pending Switch</div>
                   <div className="tile-amount">
                     {formatAmountInr(balance?.switch_pending_amount) || 0}
                   </div>
                 </div>
-                <div className="tile">
+                <div className="tile" data-aid='withdraw-pending-redemption-tile'>
                   <div className="tile-text">Pending Redemption</div>
                   <div className="tile-amount">
                     {formatAmountInr(balance?.redeem_pending_amount)|| 0}
@@ -181,7 +182,7 @@ const Balance = (props) => {
                 </div>
               </div>
             </div>
-            <main className="Card">
+            <main className="Card" data-aid='card-block'>
               <img
                 src={require(`assets/surplus_graph.png`)}
                 className="withdraw-mid-tile-img"
@@ -192,19 +193,21 @@ const Balance = (props) => {
                 debt funds and get up to 4% more returns than bank!
               </div>
               <Button
+                dataAid='switch-now-btn'
                 buttonTitle="Switch Now"
                 onClick={handleSwitch}
                 classes={{ button: "withdraw-mid-tile-text2" }}
                 type="outlined"
               />
             </main>
-            <footer className="footer Card">
+            <footer className="footer Card" data-aid='footer-card'>
               <div className="title">Withdraw</div>
               {withdrawOptions.map(
                 ({ title, desc, redirectUrl, openModal }, idx) => (
                   <div
                     className="withdraw-list-item flex"
                     key={idx}
+                    data-aid={`withdraw-list-item flex-${idx+1}`}
                     onClick={() => redirect(title, redirectUrl, openModal)}
                   >
                     <img
@@ -213,7 +216,7 @@ const Balance = (props) => {
                       width="40"
                       alt='withdraw-icon'
                     />
-                    <div className="text">
+                    <div className="text" data-aid={`withdraw-list-text-${idx+1}`}>
                       <div className="header">{title}</div>
                       <div className="desc">{desc}</div>
                     </div>

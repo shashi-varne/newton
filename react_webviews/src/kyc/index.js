@@ -36,7 +36,7 @@ import PersonalDetails2 from "./PersonalDetails/Screen2";
 import PersonalDetails3 from "./PersonalDetails/Screen3";
 import PersonalDetails4 from "./PersonalDetails/Screen4";
 import KycUploadDocuments from "./BankKyc/KycUploadDocuments";
-import BankSampleDocuments from "./BankKyc/BankSampleDocuments";
+import SampleDocuments from "./BankKyc/SampleDocuments";
 import AddressDetails2 from "./Address/AddressDetails2";
 import AddressDetails1 from "./Address/AddressDetails1";
 import DigilockerPersonalDetails1 from "./Digilocker/PersonalDetails1";
@@ -187,7 +187,7 @@ const Kyc = (props) => {
           component={Nominee}
         />
         <Route 
-          exact
+          exact 
           path={`${url}/report`} 
           component={Report} 
         />
@@ -279,7 +279,7 @@ const Kyc = (props) => {
         <Route
           exact
           path={`${url}/sample-documents`}
-          component={BankSampleDocuments}
+          component={SampleDocuments}
         />
         <Route
           exact

@@ -52,7 +52,7 @@ const KycBankDetails = (props) => {
   const [name, setName] = useState("");
   const [note, setNote] = useState({
     info_text:
-      "As per SEBI, it is mandatory for investors to provide their own bank account details",
+      "As per SEBI, it is mandatory for you to add your add bank account details.",
     variant: "info",
   });
   const [disableFields, setDisableFields] = useState({
@@ -377,7 +377,7 @@ const KycBankDetails = (props) => {
             </WVInfoBubble>
             <main data-aid='kyc-enter-bank-account-details'>
               <Input
-                label="Account holder name"
+                label="Account Holder name"
                 class="input"
                 value={name || ""}
                 error={form_data.name_error ? true : false}
@@ -388,7 +388,7 @@ const KycBankDetails = (props) => {
                 id="name"
               />
               <TextField
-                label="IFSC code"
+                label="IFSC Code"
                 id="ifsc_code"
                 className="input"
                 value={bankData.ifsc_code}
@@ -412,7 +412,7 @@ const KycBankDetails = (props) => {
                 disabled={isApiRunning || disableFields.ifsc_code_disabled || ifscDisabled}
               />
               <Input
-                label="Account number"
+                label="Account Number"
                 class="input"
                 value={bankData.account_number}
                 error={form_data.account_number_error ? true : false}
@@ -458,7 +458,7 @@ const KycBankDetails = (props) => {
                   helperText={form_data.account_type_error}
                   options={accountTypes}
                   id="account_type"
-                  label="Account type"
+                  label="Account Type"
                   isAOB={true}
                   value={bankData.account_type || ""}
                   name="account_type"
