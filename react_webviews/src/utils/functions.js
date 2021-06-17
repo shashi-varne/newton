@@ -286,13 +286,15 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + 'insurance_allweb=' + insurance_allweb;
   }
 
+  returnConfig.isSdk = storageService().get("is_secure");
+
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
     returnConfig.app = 'android';
     returnConfig.Android = true;
   } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
     returnConfig.app = 'ios';
     returnConfig.iOS = true;
-  } else {
+  } else if(!returnConfig.isSdk) {
     returnConfig.app = 'web';
     returnConfig.Web = true;
   }
@@ -326,11 +328,10 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
-  returnConfig.isSdk = storageService().get("is_secure"); 
   returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
   returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
   returnConfig.isIframe = isIframe();
-  returnConfig.platform = !returnConfig.isIframe ? (returnConfig.isSdk ? "sdk" : "web" ): "iframe";
+  returnConfig.platform = !returnConfig.isIframe ? (returnConfig.Web ? "web" : "sdk" ): "iframe";
   returnConfig.isLoggedIn = storageService().get("currentUser");
   
   return returnConfig;
