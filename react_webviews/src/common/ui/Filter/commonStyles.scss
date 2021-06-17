@@ -63,8 +63,7 @@
         flex: 4;
         overflow-y: auto;
         overflow-x: hidden;
-        height: 430px !important;
-        padding-bottom: 70px;
+        height: 340px;
         .render-tab-filter-container {
           margin: 0 10px;
         }
@@ -102,19 +101,16 @@
       }
     }
 
-    .filter-buttons {
-      .FlexButton {
-        display: flex;
-        justify-content: space-around;
-        position: absolute;
-        bottom: 10px;
-        width: 100%;
-        button {
-          width: 35%;
-        }
-        button:first-child {
-          background-color: white;
-        }
+    .wv-filter-buttons{
+      display: flex;
+      justify-content: space-around;
+      .MuiButton-outlinedSecondary{
+        border: none;
+      }
+      padding-top: 20px;
+      button {
+        width: 35%;
+        margin-right: 5px;
       }
     }
   }

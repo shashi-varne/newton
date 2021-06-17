@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import Button from 'common/ui/Button';
-import WVButtonLayout from "../ButtonLayout/WVButtonLayout";
-import { isEmpty } from 'lodash';
-import RenderTabOptions from './RenderTabOptions';
-import { getConfig } from '../../../utils/functions';
 import "./commonStyles.scss";
+import React, { useState } from "react";
+import { isEmpty } from 'lodash';
+import { getConfig } from '../../../utils/functions';
+import WVButtonLayout from "../ButtonLayout/WVButtonLayout";
+import RenderTabOptions from './RenderTabOptions';
 import WVFilterButton from "./WVFilterButton";
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -37,7 +36,7 @@ const WVFilter = ({
   getSelectedOptions,         // Function CallBack From The Parent Which Sends the Filtered Data To the API
   withButton,                //  If User Wants Filter With Button
   filterOptions,            //  Data For the Filter Dialog Box
-  defaultFilterOption,    // default Option Selected In filter Dialog Box
+  defaultFilterOption,     // default Option Selected In filter Dialog Box
 }) => {
   const [activeTab, setActiveTab] = useState(defaultFilterOption ? Object.keys(defaultFilterOption)[0] : filterOptions[0].key);
   const [activeTabOptions, setActiveTabOptions] = useState(filterOptions[0].option);
@@ -56,6 +55,12 @@ const WVFilter = ({
   const reset = () => {
     setSelectedFilters(defaultFilterOption || {})
     setActiveTab(activeTab)
+  }
+
+  const onFilterClick = (item) => {
+    document.getElementById("scroll-container").scrollTo(0, 0)
+    setActiveTab(item.key);
+    setActiveTabOptions(item.option);
   }
 
   return (
@@ -77,11 +82,7 @@ const WVFilter = ({
                         key={idx}
                         role="button"
                         tabIndex="0"
-                        onClick={() => {
-                          document.getElementById("scroll-container").scrollTo(0, 0)
-                          setActiveTab(item.key);
-                          setActiveTabOptions(item.option);
-                        }}
+                        onClick={() => onFilterClick(item)}
                         className={`wv-tabs ${activeTab === item.key ? 'wv-selected-tab' : ''}`}
                       >
                         {TabName}
@@ -99,31 +100,20 @@ const WVFilter = ({
               />
             </div>
           </main>
-          <footer className="filter-buttons" data-aid={`filter-btn-footer-${dataAidSuffix}`}>
-            <Button
-              dataAid={`apply-btn-${dataAidSuffix}`}
-              twoButton
-              dualbuttonwithouticon
-              handleClickOne={reset}
-              handleClickTwo={apply}
-              buttonOneTitle="CLEAR ALL"
-              buttonTwoTitle="APPLY"
+          <WVButtonLayout
+            className="wv-filter-buttons"  // CSS FIX NEEDED!~
+          >
+            <WVButtonLayout.Button
+              type="secondary"
+              title="CLEAR ALL"
+              onClick={reset}
             />
-            {/* <WVButtonLayout
-              className="someClass"  // CSS FIX NEEDED!~
-            >
-              <WVButtonLayout.Button
-                type="secondary"
-                title="CLEAR ALL"
-                onClick={reset}
-              />
-              <WVButtonLayout.Button
-                type="primary"
-                title="APPLY"
-                onClick={apply}
-              />
-            </WVButtonLayout> */}
-          </footer>
+            <WVButtonLayout.Button
+              type="primary"
+              title="APPLY"
+              onClick={apply}
+            />
+          </WVButtonLayout>
         </section>
       </FilterContainer>
 
