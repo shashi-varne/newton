@@ -527,24 +527,6 @@ export function navigate(pathname, data = {}) {
   }
 }
 
-export function openFilePicker (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) {
-  if (getConfig().Web) {
-    const filepicker = document.getElementById(filepickerId);
-
-    if (filepicker) {
-      filepicker.value = null; // Required to allow same file to be picked again QA-4238 (https://stackoverflow.com/questions/12030686)
-      filepicker.click();
-    }
-  } else {
-    window.callbackWeb[methodName]({
-      type: 'doc',
-      doc_type: docName,
-      upload: nativeHandler,
-      ...fileHandlerParams // callback from native
-    });
-  }
-}
-
 export function isNpsOutsideSdk(fromState, toState) {
   let config = getConfig();
   if (config?.landingconfig?.nps === 'inside_sdk') {
@@ -601,7 +583,25 @@ export const base64ToBlob = (b64Data, contentType = '', sliceSize = 512) => {
   return blob;
 }
 
-export function validateFileTypeAndSize(file, supportedTypes, sizeLimit) {
+export function openFilePicker (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) {
+  if (getConfig().Web) {
+    const filepicker = document.getElementById(filepickerId);
+
+    if (filepicker) {
+      filepicker.value = null; // Required to allow same file to be picked again QA-4238 (https://stackoverflow.com/questions/12030686)
+      filepicker.click();
+    }
+  } else {
+    window.callbackWeb[methodName]({
+      type: 'doc',
+      doc_type: docName,
+      upload: nativeHandler,
+      ...fileHandlerParams // callback from native
+    });
+  }
+}
+
+export function validateFileTypeAndSize (file, supportedTypes, sizeLimit) {
   const fileType = file.type.split("/")[1];
   const sizeInBytes = sizeLimit * 1000 * 1000;
 

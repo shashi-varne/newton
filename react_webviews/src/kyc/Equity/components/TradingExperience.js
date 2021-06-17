@@ -92,8 +92,7 @@ const TradingExperience = (props) => {
         return;
       }
     } 
-    if ((kyc?.kyc_type !== "manual" && !isDocSubmittedOrApproved("equity_identification")) ||
-      (kyc?.kyc_type === "manual" && !isDocSubmittedOrApproved("identification"))) {
+    if (!isDocSubmittedOrApproved("equity_identification")) {
         navigate(PATHNAME_MAPPER.uploadSelfie);
     } else {
       if (!isDocSubmittedOrApproved("equity_income")) {
