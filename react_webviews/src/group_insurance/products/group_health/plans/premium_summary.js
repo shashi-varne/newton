@@ -12,6 +12,7 @@ import ReligarePremium from "../religare/religare_premium";
 import HDFCPremium from "../hdfc/hdfc_premium";
 import StarPremium from "../Star/star_premium";
 import GMCPremium from "../gmc/gmc_premium";
+import {Imgc} from '../../../../common/ui/Imgc'
 import { isEmpty } from "../../../../utils/validators";
 
 class GroupHealthPlanPremiumSummary extends Component {
@@ -333,8 +334,9 @@ class GroupHealthPlanPremiumSummary extends Component {
         <div className="group-health-plan-premium-summary">
           <div className="group-health-top-content-plan-logo">
             <div className="tc-right">
-              <img
+              <Imgc
                 src={require(`assets/${this.state.providerData.logo_card}`)}
+                className="insurance-logo-top-right"
                 alt=""
               />
             </div>

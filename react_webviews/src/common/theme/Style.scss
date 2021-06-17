@@ -453,6 +453,13 @@ button {
   margin-right: 10px;
 }
 
+.resume-hero-container{
+  text-align: center;
+  .resume-hero-img{ 
+    width: 320px !important;
+    height: 160px !important;
+  }
+}
 .resume-page-content{
   font-size: 14px;
   color: grey;
@@ -469,6 +476,14 @@ button {
     font-size: 16px;
     font-weight: 300; 
   }
+  .resume-card-logo{
+    width: 70px !important;
+    height: 50px !important;
+  }
+}
+.fyntune-how-to-step{
+  width: 70px !important;
+  height: 60px !important;
 }
 .fyntune-heading {
   font-size: 17px;
@@ -532,8 +547,9 @@ button {
 .landing-hero-container{
   width: 100%;
 }
-.landing-hero-img{
+.fyntune-landing-hero-img{
   width: 100%;
+  min-height: 160px;
   object-fit: cover;
 }
 
@@ -1195,6 +1211,10 @@ $header-title-font-size: 20px;
   }
   .common-steps-images_steps{
     margin: 20px 0 0 0;
+      .what-is-covered-img{
+        width: 70px !important;
+        height: 60px !important;
+      }
   }
 }
 
@@ -1238,6 +1258,17 @@ $header-title-font-size: 20px;
       margin: 0px;
     }
   }
+}
+
+.Imgc-title-img{
+  height: 100px !important;
+  width: 100px !important;
+  margin-right: 45px !important;
+}
+
+.Imgc-title-img2{
+  height: 112px !important;
+  width: 172px !important;
 }
 
 .generic-page-title {
@@ -1301,6 +1332,18 @@ $header-title-font-size: 20px;
   .horizontal-images-scroll {
     display: flex;
     width: fit-content;
+    .imgc-space.image{
+      width: 218px !important;
+      height: 164px !important;
+    }
+    .imgc-space2.image{
+      width: 280px !important;
+      height: 160px !important;
+    }
+    .imgc-space3.image{
+      width: 170px !important;
+      height: 115px !important;
+    }
     .image {
       margin: 0 20px 0px 0;
       border-radius: 4px;
@@ -1308,7 +1351,9 @@ $header-title-font-size: 20px;
     }
   }
 }
-
+.imgc-space{
+  margin-right: 0 !important;
+}
 
 .common-faqs {
   .common-faqs-tile {
