@@ -4,6 +4,7 @@ import { isFunction } from 'lodash';
 import toast from '../Toast';
 import FileAccessDialog from './FileAccessDialog';
 import { openFilePicker, validateFileTypeAndSize } from '../../../utils/functions';
+import Compressor from 'compressorjs';
 
 const isWeb = getConfig().Web;
 
@@ -14,6 +15,20 @@ export function promisableGetBase64(file) {
       resolve(ev.target.result)
     }
     reader.readAsDataURL(file)
+  })
+}
+
+const compressImage = async (file) => {
+  return new Promise((resolve, reject) => {
+    new Compressor(file, {
+      quality: 0.7, // can go above but ideally not below 0.6
+      success(compressed) {
+        resolve(compressed);
+      },
+      error(err) {
+        reject(err.message);
+      },
+    })
   })
 }
 
@@ -30,6 +45,7 @@ export const WVFilePickerWrapper = ({
   fileName,
   fileHandlerParams,
   customClickHandler,
+  shouldCompress,
   children
 }) => {
   const [openOptionsDialog, setOpenOptionsDialog] = useState(false);
@@ -50,6 +66,10 @@ export const WVFilePickerWrapper = ({
       let fileBase64 = '';
 
       if (file.type.split("/")[0] === 'image') {
+        if (shouldCompress) {
+          const compressedBlob = await compressImage(file);
+          file = new File([compressedBlob], file.name || "file");
+        }
         fileBase64 = await promisableGetBase64(file);
       }
 
