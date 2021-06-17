@@ -1,3 +1,21 @@
+/*
+
+Use: FilterBotomSheet Where User Can send data and get back selected data from the BottomSheet
+
+Example :
+       <WVFilter
+       dataAidSuffix={'}                                             // For data-aid.
+       filterOptions={}                                             // Array of object passed to bottomFilter Options.
+       onApplyClicked={this.setSortFilter}                         // Action.
+       defaultSelectedTab={{ "sort_value": "tracking_error" }}    // default selected Tab if need.
+       withButton={true}                                         // bottomFilter with botton control.
+       openFilterProp={isOpen}                                  // openFilterProp to open filter from parent as prop.
+       onFilterClose={(ele) => this.openFilter(ele)}           // function to contol opening/ closing onFilterClose, can be used to send openFilterProp as True (or) False.
+    />
+
+*/
+
+
 import "./commonStyles.scss";
 import React, { useState } from "react";
 import { isEmpty } from 'lodash';
@@ -32,24 +50,28 @@ const FilterContainer = ({ close, open, children, ...props }) => {
 }
 
 const WVFilter = ({
-  openFilter,                 // Default condition needed to Open/Closer Filter
+  openFilterProp,              // Default condition needed to Open/Closer Filter From Parent.
+  onFilterClose,              // Function CallBack Which can Be used to Open/Close The Filter From Parent. 
   dataAidSuffix,
-  onApplyClicked,           // Function CallBack From The Parent Which Sends the Filtered Data To the API
-  withButton,              //  If User Wants Filter With Button
-  filterOptions,          //  Data For the Filter Dialog Box
-  defaultSelectedTab,    // default Option Selected In filter Dialog Box
+  onApplyClicked,           // Function CallBack From The Parent Which Sends the Filtered Data To the API.
+  withButton,              //  If User Wants Filter With Button.
+  filterOptions,          //  Data For the Filter Dialog Box.
+  defaultSelectedTab,    // default Option Selected In filter Dialog Box.
 }) => {
   const [activeTab, setActiveTab] = useState(defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key);
   const [activeTabOptions, setActiveTabOptions] = useState(filterOptions[0].option);
   const [selectedFilters, setSelectedFilters] = useState(defaultSelectedTab || {});
-  const [isOpen, setIsOpen] = useState(openFilter);
+  const [isOpen, setIsOpen] = useState(openFilterProp);
 
   const closeFilter = () => {
+    onFilterClose(false)
     setIsOpen(false);
   };
 
   const applyFilters = () => {
-    onApplyClicked(selectedFilters)
+    setIsOpen(false);
+    onApplyClicked(selectedFilters);
+    if (openFilterProp) onFilterClose(false)
   }
 
   const reset = () => {
@@ -67,7 +89,7 @@ const WVFilter = ({
 
     <>
 
-      <FilterContainer close={closeFilter} open={isOpen}>
+      <FilterContainer close={closeFilter} open={isOpen || openFilterProp}>
         <section className="wv-filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
           <p className="wv-heading">FILTERS</p>
           <main className="wv-filter">

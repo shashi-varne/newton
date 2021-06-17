@@ -270,10 +270,6 @@ class FundList extends Component {
                         onApplyClicked={this.setSortFilter}
                         defaultSelectedTab={{ "sort_value": "tracking_error" }}
                         withButton={true}
-                        // isOpen={false}
-                        // setFilterActive={setFilterActive}
-                        // setSortFilter={setSortFilter}   /// DATA TO APi
-                        // setRenderApi={setRenderApi}
                     />
                 </div>
             </Container>
