@@ -216,8 +216,10 @@ export function getKycAppStatus(kyc) {
   }
 
   if(TRADING_ENABLED && kyc?.kyc_type !== "manual") {
-    let object =  { name: "equity_identification", keys: ["doc_status", "meta_data_status"] };
-    fieldsToCheck.push(object);
+    fieldsToCheck.push({ name: "equity_identification", keys: ["doc_status", "meta_data_status"] });
+    if(kyc.kyc_status === "compliant") {
+      fieldsToCheck.push({ name: "equity_pan", keys: ["doc_status", "meta_data_status"] })
+    }
   }
 
   if (kyc.address.meta_data.is_nri) {
