@@ -514,7 +514,7 @@ export async function getPlanDetails(){
                             parent_total++;
                         }
                     }
-                    for (var key in parents_in_law_keys) {
+                    for (let key in parents_in_law_keys) {
                         if (ui_members[parents_in_law_keys[key]]) {
                             parents_in_law_total++;
                         }
