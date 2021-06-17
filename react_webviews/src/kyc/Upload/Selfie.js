@@ -224,16 +224,18 @@ const Selfie = (props) => {
     } else {
       buttonProps = {
         withPicker: true,
-        nativePickerMethodName: 'open_camera',
-        fileName: 'selfie',
-        supportedFormats: SUPPORTED_IMAGE_TYPES,
-        onFileSelectComplete: onCaptureSuccess,
-        onFileSelectError: onCaptureFailure,
+        filePickerProps: {
+          nativePickerMethodName: 'open_camera',
+          fileName: 'selfie',
+          supportedFormats: SUPPORTED_IMAGE_TYPES,
+          onFileSelectComplete: onCaptureSuccess,
+          onFileSelectError: onCaptureFailure,
+        }
       }
       if (isNative) {
         // To trigger HyperVerge's Live Camera in Native
-        buttonProps.fileHandlerParams = { check_liveness: true };
-        buttonProps.customClickHandler = onOpenCameraClick;
+        buttonProps.filePickerProps.fileHandlerParams = { check_liveness: true };
+        buttonProps.filePickerProps.customClickHandler = onOpenCameraClick;
       }
     }
 
@@ -276,11 +278,13 @@ const Selfie = (props) => {
               </KycUploadContainer.Button> :
               <KycUploadContainer.Button
                 withPicker
-                nativePickerMethodName='open_camera'
-                fileName='selfie'
-                supportedFormats={SUPPORTED_IMAGE_TYPES}
-                onFileSelectComplete={onCaptureSuccess}
-                onFileSelectError={onCaptureFailure}
+                filePickerProps={{
+                  nativePickerMethodName: 'open_camera',
+                  fileName: 'selfie',
+                  supportedFormats: SUPPORTED_IMAGE_TYPES,
+                  onFileSelectComplete: onCaptureSuccess,
+                  onFileSelectError: onCaptureFailure
+                }}
               >
                 {file ? "Retake" : "Open Camera"}
               </KycUploadContainer.Button>
