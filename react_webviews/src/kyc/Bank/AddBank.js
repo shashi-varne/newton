@@ -7,10 +7,10 @@ import {
   bankAccountTypeOptions,
   PATHNAME_MAPPER,
   getIfscCodeError,
+  STORAGE_CONSTANTS,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Alert from "../mini-components/Alert";
 import { validateFields } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, addAdditionalBank } from "../common/api";
@@ -18,13 +18,16 @@ import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { storageService } from "../../utils/validators";
 
 const AddBank = (props) => {
   const genericErrorMessage = "Something Went wrong!";
   const code = getConfig().code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const bank_id = props.location.state?.bank_id || "";
+  const stateParams = props.location.state || {};
+  const bank_id = stateParams.bank_id || "";
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({
@@ -37,11 +40,11 @@ const AddBank = (props) => {
   const [accountTypes, setAccountTypes] = useState([]);
   const [name, setName] = useState("");
   const [note, setNote] = useState({
-    info_text:
+    message:
       "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
     variant: "info",
   });
-
+  const [ifscDisabled, setIfscDisabled] = useState(false);
   const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
@@ -62,15 +65,15 @@ const AddBank = (props) => {
         setIsPennyExhausted(true);
       } else if (data.user_rejection_attempts === 2) {
         setNote({
-          info_text:
+          message:
             "2 more attempts remaining! Please enter your correct account details to proceed",
-          variant: "attention",
+          variant: "error",
         });
       } else if (data.user_rejection_attempts === 1) {
         setNote({
-          info_text:
+          message:
             "Just 1 attempt is remaining! Please enter your correct account details to proceed",
-          variant: "attention",
+          variant: "error",
         });
       }
     }
@@ -136,7 +139,11 @@ const AddBank = (props) => {
         toast("Congratulations!, new account added succesfully");
         navigate(PATHNAME_MAPPER.bankList);
       } else {
-        navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`);
+        navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`, {
+          state: {
+            goBackToAddBank: true
+          }
+        });
       }
     } catch (err) {
       toast(err.message || genericErrorMessage);
@@ -194,7 +201,7 @@ const AddBank = (props) => {
         code !== "cub" &&
         code !== "ippb")
     ) {
-      setIsApiRunning("button");
+      setIfscDisabled(true);
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
@@ -212,7 +219,7 @@ const AddBank = (props) => {
       } catch (err) {
         console.log(err);
       } finally {
-        setIsApiRunning(false);
+        setIfscDisabled(false);
       }
     } else {
       bank.branch_name = "";
@@ -237,6 +244,14 @@ const AddBank = (props) => {
     }
   }
 
+  const goBack = () => {
+    if(stateParams.goBack === "exit" && storageService().getBoolean(STORAGE_CONSTANTS.NATIVE)) {
+      nativeCallback({ action: "exit_web"})
+    } else {
+      navigate(PATHNAME_MAPPER.bankList)
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
@@ -247,19 +262,22 @@ const AddBank = (props) => {
       handleClick={handleClick}
       title="Enter bank account details"
       data-aid='kyc-add-bank-screen'
+      headerData={{ goBack }}
     >
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
-            <Alert
-              variant={note.variant}
-              title="Note"
-              message={note.info_text}
+            <WVInfoBubble
+              type={note.variant}
+              hasTitle
+              customTitle="Note"
               dataAid='kyc-addbank-alertbox'
-            />
+            >
+              {note.message}
+            </WVInfoBubble>
             <main data-aid='kyc-approved-bank'>
               <Input
-                label="Account Holder name"
+                label="Account holder name"
                 class="input"
                 value={name || ""}
                 error={form_data.name_error ? true : false}
@@ -270,7 +288,7 @@ const AddBank = (props) => {
                 id="name"
               />
               <TextField
-                label="IFSC Code"
+                label="IFSC code"
                 id="ifsc_code"
                 className="input"
                 value={bankData.ifsc_code}
@@ -291,10 +309,10 @@ const AddBank = (props) => {
                     </>
                   ),
                 }}
-                disabled={isApiRunning}
+                disabled={isApiRunning || ifscDisabled}
               />
               <Input
-                label="Account Number"
+                label="Account number"
                 class="input"
                 value={bankData.account_number}
                 error={form_data.account_number_error ? true : false}
@@ -338,7 +356,7 @@ const AddBank = (props) => {
                   helperText={form_data.account_type_error}
                   options={accountTypes}
                   id="account_type"
-                  label="Account Type"
+                  label="Account type"
                   isAOB={true}
                   value={bankData.account_type || ""}
                   name="account_type"
