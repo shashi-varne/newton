@@ -112,11 +112,14 @@ const Sign = (props) => {
             </div>
             <KycUploadContainer.Button
               withPicker
-              nativePickerMethodName={!isWeb ? 'open_canvas' : 'open_gallery'}
-              fileName="signature"
-              onFileSelectComplete={onFileSelectComplete}
-              onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_IMAGE_TYPES}
+              filePickerProps={{
+                nativePickerMethodName: !isWeb ? 'open_canvas' : 'open_gallery',
+                shouldCompress: isWeb,
+                fileName: "signature",
+                onFileSelectComplete: onFileSelectComplete,
+                onFileSelectError: onFileSelectError,
+                supportedFormats: SUPPORTED_IMAGE_TYPES
+              }}
             >
               {!file ? "SIGN" : "SIGN AGAIN"}
             </KycUploadContainer.Button>

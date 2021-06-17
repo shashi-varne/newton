@@ -206,18 +206,22 @@ const IpvVideo = (props) => {
             {!isWeb && !errorContent &&
               <KycUploadContainer.Button
                 dataAid='take-video-btn'
-                type="outlined"
-                fileName="ipv_video"
+                outlined
                 withPicker
-                nativePickerMethodName="open_video_camera"
-                onFileSelectComplete={onFileSelectComplete}
-                onFileSelectError={onFileSelectError}
-                supportedFormats={SUPPORTED_VIDEO_TYPES}
-                fileHandlerParams={{
-                  doc_type: "ipvvideo",
-                  message: "Look at the screen and read the verification number loud",
-                  ipv_code: ipvcode
+                filePickerProps={{
+                  showOptionsDialog: true,
+                  nativePickerMethodName: "open_video_camera",
+                  fileName: "ipv_video",
+                  onFileSelectComplete: onFileSelectComplete,
+                  onFileSelectError: onFileSelectError,
+                  supportedFormats: SUPPORTED_VIDEO_TYPES,
+                  fileHandlerParams: {
+                    doc_type: "ipvvideo",
+                    message: "Look at the screen and read the verification number loud",
+                    ipv_code: ipvcode
+                  }
                 }}
+                back
               >
                 {uploadCTAText}
               </KycUploadContainer.Button>
