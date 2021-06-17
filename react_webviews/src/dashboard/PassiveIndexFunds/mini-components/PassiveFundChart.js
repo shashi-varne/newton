@@ -1,11 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 import ReactHighcharts from "react-highcharts/ReactHighstock.src";
 import moment from "moment";
 import $ from "jquery";
-import { nativeCallback } from "../../../utils/native_callback";
-import { getConfig } from "../../../utils/functions";
 import "./commonStyles.scss";
-import { BUTTON_MAPPER } from "../constants";
+
 ReactHighcharts.Highcharts.setOptions({
   lang: {
     rangeSelectorZoom: "",
@@ -26,80 +24,9 @@ ReactHighcharts.Highcharts.addEvent(
 );
 
 const FundChart = (props) => {
-  const fundGraph = props?.graphData.graph_report[0].graph_data_for_amfi;
-  const productName = getConfig().productName;
-  let format = "yyyy";
-  let d1Series = [];
+  let format = props.xaxisFormat;
   let duration = 0;
-  let buttonConfig = [];
 
-  const prevSelectedMonth = useRef();
-  const sendEvents = (monthValue) => {
-    if (prevSelectedMonth.current !== monthValue) {
-      let eventObj = {
-        event_name: "fund_detail",
-        properties: {
-          investment_horizon: monthValue,
-          channel: productName,
-        },
-      };
-
-      nativeCallback({ events: eventObj });
-    }
-    prevSelectedMonth.current = monthValue;
-  };
-
-  const buttonConfigMapper = () => {
-    BUTTON_MAPPER.forEach((item) => {
-      let obj = {};
-      obj.count = item.count;
-      obj.type = item.type;
-      obj.text = item.type === "year" ? `${item.count}Y` : `${item.count}M`;
-      obj.events = {
-        click: function () {
-          format = item.type === "year" && item.count !== 1 ? "yyyy" : "ddmm";
-          sendEvents(obj.text.toUpperCase());
-        },
-      };
-      buttonConfig.push(obj);
-    });
-  };
-  buttonConfigMapper();
-
-  const chopDates = (dates1) => {
-    if(!dates1[0] || !dates1[1]){
-      return;
-    }
-    let seriesAMin = dates1[0][0];
-    let seriesAMax = dates1[dates1.length - 1][0];
-    let maximum = seriesAMax;
-    let minimum = seriesAMin;
-    let d1 = moment(minimum).utc();
-    let d2 = moment(maximum).utc();
-
-    let days = d2.diff(d1, "days");
-    if (days >= 5 * 365) {
-      duration = 5;
-    } else if (days >= 3 * 365) {
-      duration = 4;
-    } else if (days >= 365) {
-      duration = 3;
-    } else if (days >= 30 * 6) {
-      duration = 2;
-    } else if (days >= 30 * 3) {
-      duration = 1;
-    } else if (days >= 30) {
-      duration = 0;
-    }
-
-    for (let i = 0; i < dates1.length; i++) {
-      if (dates1[i][0] > minimum && dates1[i][0] < maximum) {
-        d1Series.push(dates1[i]);
-      }
-    }
-  };
-
-  chopDates(fundGraph);
   const configPrice = {
     title: {
       text: undefined,
@@ -250,7 +177,7 @@ const FundChart = (props) => {
       verticalAlign: "bottom",
       x: 0,
       y: 0,
-      enabled: true,
+      enabled: false,
       selected: duration,
       inputEnabled: false,
       buttonPosition: {
@@ -276,11 +203,11 @@ const FundChart = (props) => {
           },
         },
       },
-      buttons: [...buttonConfig],
+      // buttons: [...buttonConfig],
     },
     series: [
       {
-        data: d1Series,
+        data: props.graphData,
       },
     ],
   };
@@ -291,10 +218,13 @@ const FundChart = (props) => {
     </div>
   );
 };
-const RenderChart = (props) => {
+const RenderChart = ({ modifyCurrentReturns, graphData, xaxisFormat }) => {
   return (
     <div style={{ padding: "0 15px" }}>
-      <FundChart graphData={props.graphData} />
+      <FundChart
+        xaxisFormat={xaxisFormat}
+        graphData={graphData}
+      />
     </div>
   );
 };

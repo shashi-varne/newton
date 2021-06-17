@@ -22,6 +22,10 @@ import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig } from "../../../utils/functions";
 import { Imgc } from "../../../common/ui/Imgc";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
+import WVYearFilter from "../../../common/ui/YearFilter/WVYearFilter";
+import { YEARS_FILTERS, BUTTON_MAPPER } from "../constants";
+
+const productName = getConfig().productName;
 
 function PassiveFundDetails({ history }) {
   const [isLoading, setLoading] = useState(true);
@@ -33,13 +37,22 @@ function PassiveFundDetails({ history }) {
   const [moreRisksClicked, setMoreRisksClicked] = useState(false);
   const { isins } = getUrlParams();
   const fund = storageService().getObject("diystore_fundInfo") || {};
+  const [periodWiseData, setPeriodWiseData] = useState({});
+  const [currentReturnsKey, setCurrentReturns] = useState("3M");
+  const [xaxisFormat, setXaxisFormat] = useState("yyyy");
+  const [returnsData, setReturnsData] = useState({});
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
         const response = await fetch_fund_details(isins);
+        const allButtons = ["1M", "3M", "6M", "1Y", "3Y", "5Y"];
+        setCurrentReturns(
+          allButtons[response?.text_report[0].performance.returns.length - 1]
+        );
         setFundDetails(response?.text_report[0]);
+        setReturnsData(response?.text_report[0].performance.returns);
         setLoading(false);
         if (response?.text_report?.length === 1) {
           await fetch_graph_data(response?.text_report[0]?.isin);
@@ -50,11 +63,52 @@ function PassiveFundDetails({ history }) {
       }
     })();
   }, []);
+  const getTimeInMs = (time) => time * 60 * 60 * 24 * 1000;
 
   const fetch_graph_data = async (isin) => {
     setGraph(null);
     const graph_data = await fetch_fund_graph(isin);
-    setGraph(graph_data);
+    const amfi_data = graph_data.graph_report[0].graph_data_for_amfi;
+    const maxi = amfi_data[amfi_data.length - 1][0];
+    const one_month_minimum = maxi - getTimeInMs(30);
+    const three_month_minimum = maxi - getTimeInMs(90);
+    const six_month_minimum = maxi - getTimeInMs(180);
+    const one_year_minimum = maxi - getTimeInMs(365);
+    const three_year_minimum = maxi - getTimeInMs(1095);
+    const five_year_minimum = maxi - getTimeInMs(1825);
+    let choppedData = {
+      "1M": [],
+      "3M": [],
+      "6M": [],
+      "1Y": [],
+      "3Y": [],
+      "5Y": [],
+    };
+    for (var i = 0; i < amfi_data.length; i++) {
+      let presentValue = amfi_data[i][0];
+      if (presentValue <= maxi) {
+        if (presentValue >= one_month_minimum) {
+          choppedData["1M"].push(amfi_data[i]);
+        }
+        if (presentValue >= three_month_minimum) {
+          choppedData["3M"].push(amfi_data[i]);
+        }
+        if (presentValue >= six_month_minimum) {
+          choppedData["6M"].push(amfi_data[i]);
+        }
+        if (presentValue >= one_year_minimum) {
+          choppedData["1Y"].push(amfi_data[i]);
+        }
+        if (presentValue >= three_year_minimum) {
+          choppedData["3Y"].push(amfi_data[i]);
+        }
+        if (presentValue >= five_year_minimum) {
+          choppedData["5Y"].push(amfi_data[i]);
+        }
+      }
+    }
+    setPeriodWiseData(choppedData);
+    setGraph(graph_data.graph_report[0].graph_data_for_amfi);
   };
 
   const handleClose = () => {
@@ -106,6 +160,26 @@ function PassiveFundDetails({ history }) {
     }
   };
 
+  const yearFilter = (time) => {
+    if (BUTTON_MAPPER[time].index + 1 > returnsData.length) return;
+    setCurrentReturns(time);
+    setGraph(periodWiseData[time]);
+    setXaxisFormat(BUTTON_MAPPER[time].format);
+    yearSendEvents(time);
+  };
+
+  const yearSendEvents = (monthValue) => {
+    let eventObj = {
+      event_name: "fund_detail",
+      properties: {
+        investment_horizon: monthValue,
+        channel: productName,
+      },
+    };
+
+    nativeCallback({ events: eventObj });
+  };
+
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -151,7 +225,7 @@ function PassiveFundDetails({ history }) {
             </div>
             <div>
               <p className="pfd-points" style={{ color: "var(--dark)" }}>
-                Returns
+                RETURNS({currentReturnsKey})
               </p>
               <p
                 className="pfd-nav-returns"
@@ -161,9 +235,20 @@ function PassiveFundDetails({ history }) {
                     fundDetails?.performance?.primary_return >= 0
                       ? "#7ED321"
                       : "#D0021B",
+                  textAlign: "right",
                 }}
               >
-                {fundDetails?.performance?.primary_return === null ? "NA" : fundDetails?.performance?.primary_return >=0 ? `+${fundDetails?.performance?.primary_return}%` : `${fundDetails?.performance?.primary_return}%`}
+                {returnsData[BUTTON_MAPPER[currentReturnsKey].index] ===
+                undefined
+                  ? "NA"
+                  : returnsData[BUTTON_MAPPER[currentReturnsKey].index]
+                      ?.value >= 0
+                  ? `+${
+                      returnsData[BUTTON_MAPPER[currentReturnsKey].index]?.value
+                    }%`
+                  : `${
+                      returnsData[BUTTON_MAPPER[currentReturnsKey].index]?.value
+                    }%`}
               </p>
             </div>
           </div>
@@ -177,7 +262,7 @@ function PassiveFundDetails({ history }) {
           }}
         >
           {graph ? (
-            <FundChart graphData={graph} />
+            <FundChart xaxisFormat={xaxisFormat} graphData={graph} />
           ) : (
             <div
               style={{
@@ -196,6 +281,32 @@ function PassiveFundDetails({ history }) {
             </div>
           )}
         </section>
+        {graph ? (
+          <div style={{ padding: "0 20px" }}>
+            <WVYearFilter
+              filterArray={YEARS_FILTERS}
+              selected={currentReturnsKey}
+              onClick={yearFilter}
+              dataAidSuffix={"passive-year-filter"}
+            />
+          </div>
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "grid",
+              placeItems: "center",
+            }}
+          >
+            <SkeltonRect
+              style={{
+                width: "calc(100% - 30px)",
+                height: "100%",
+              }}
+            />
+          </div>
+        )}
         <div
           className="pfd-line"
           style={{ marginTop: "18px", marginBottom: "18px" }}
@@ -204,7 +315,9 @@ function PassiveFundDetails({ history }) {
           <div>
             <p className="pfd-points">EXPENSE RATIO</p>
             <p className="pfd-values">
-              {fundDetails?.portfolio?.expense_ratio === null ? "NA" : `${fundDetails?.portfolio?.expense_ratio}%`}
+              {fundDetails?.portfolio?.expense_ratio === null
+                ? "NA"
+                : `${fundDetails?.portfolio?.expense_ratio}%`}
             </p>
           </div>
           <div>
@@ -317,6 +430,7 @@ function PassiveFundDetails({ history }) {
           title: "OKAY",
           onClick: handleClose,
         }}
+        onClose={handleClose}
         image={fundDetails?.performance?.amc_logo_small}
         title={fundDetails?.performance?.friendly_name}
         classes={{
