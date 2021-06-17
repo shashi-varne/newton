@@ -7,27 +7,27 @@ import "./commonStyles.scss";
 const RenderTabOptions = ({
   dataAidSuffix,
   activeTab,
-  selectedFilters,
-  setSelectedFilters,
+  selectedOptions,
+  onOptionsSelected,
   activeTabOptions,
 }) => {
   const handleChange = (event) => {
     if (event.target.type === "radio")
-      setSelectedFilters({
-        ...selectedFilters,
+      onOptionsSelected({
+        ...selectedOptions,
         [activeTab]: event.target.value,
       });
     else {
-      let presentSelected = selectedFilters[activeTab] || [];
+      let presentSelected = selectedOptions[activeTab] || [];
       if (presentSelected.includes(event.target.value)) {
         let newArray = presentSelected.filter(
           (item) => item !== event.target.value
         );
-        setSelectedFilters({ ...selectedFilters, [activeTab]: newArray });
+        onOptionsSelected({ ...selectedOptions, [activeTab]: newArray });
       } else {
         presentSelected.push(event.target.value);
-        setSelectedFilters({
-          ...selectedFilters,
+        onOptionsSelected({
+          ...selectedOptions,
           [activeTab]: presentSelected,
         });
       }
@@ -45,7 +45,7 @@ const RenderTabOptions = ({
               key={idx}
               control={
                 <item.control
-                  checked={(selectedFilters[activeTab] || []).includes(
+                  checked={(selectedOptions[activeTab] || []).includes(
                     item.value
                   )}
                   {...item?.controlProps}

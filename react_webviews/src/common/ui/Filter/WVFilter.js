@@ -40,7 +40,7 @@ const WVFilter = ({
 }) => {
   const [activeTab, setActiveTab] = useState(defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key);
   const [activeTabOptions, setActiveTabOptions] = useState(filterOptions[0].option);
-  const [selectedFilters, setSelectedFilters] = useState(defaultSelectedTab || {});
+  const [selectedOptions, onOptionsSelected] = useState(defaultSelectedTab || {});
   const [isOpen, setIsOpen] = useState(withButton ? false : true);
 
   const closeFilter = (data) => {
@@ -48,12 +48,12 @@ const WVFilter = ({
   };
 
   const applyFilters = () => {
-    onApplyClicked(selectedFilters)
+    onApplyClicked(selectedOptions)
     closeFilter('apply')
   }
 
   const reset = () => {
-    setSelectedFilters(defaultSelectedTab || {})
+    onOptionsSelected(defaultSelectedTab || {})
     setActiveTab(activeTab)
   }
 
@@ -94,8 +94,8 @@ const WVFilter = ({
               <RenderTabOptions
                 dataAidSuffix={dataAidSuffix}
                 activeTab={activeTab}
-                selectedFilters={selectedFilters}
-                setSelectedFilters={setSelectedFilters}
+                selectedOptions={selectedOptions}
+                onOptionsSelected={onOptionsSelected}
                 activeTabOptions={activeTabOptions}
               />
             </div>
