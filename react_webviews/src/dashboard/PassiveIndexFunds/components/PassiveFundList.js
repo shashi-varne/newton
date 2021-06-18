@@ -3,12 +3,13 @@ import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { initialize } from "../common/commonFunctions";
 import { getFundDetailsList } from "../services"
-import WVBottomFilter from "../../../common/ui/Filter/WVBottomFilter";
+import WVFilter from "../../../common/ui/Filter/WVFilter";
 import WVYearFilter from "../../../common/ui/YearFilter/WVYearFilter";
 import WVProductListCard from "../../../common/ui/ProductListCard/WVProductListCard";
 import StarRating from "../../../common/ui/StarRating";
 import { YEARS_FILTERS, BOTTOM_FILTER_NAME, SELECTED_YEAR } from "../constants";
 import "./PassiveFundDetails.scss";
+import "../style.scss"
 import { nativeCallback } from "../../../utils/native_callback";
 import { isEmpty } from 'lodash';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -16,7 +17,7 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 
 const CardSubtitle = ({ value, morning_start }) => {
     return (
-        <div>
+        <div className="wv-card-subtitle">
             {value}
             <span style={{ margin: "0px 5px 0px 5px" }}>
                 |
@@ -82,8 +83,9 @@ class FundList extends Component {
                     value: item,
                     control: Checkbox,
                     title: item,
-                    labelPlacement: "end",
-                    color: "primary",
+                      controlProps: {
+                        color: "primary",
+                      },
                 });
             })
             bottomFilterOptions.forEach(element => {
@@ -192,12 +194,15 @@ class FundList extends Component {
                     {value ? value + "%" : "NA"}
                 </span>
         }, {
-            title: 'Returns',
-            propName: this.state.selected,
-            formatter: (value) =>
-                <span style={{ fontWeight: 'bold', color: 'limegreen' }}>
-                    {value !== null ? value >= 0 ? "+" + value + "%" : value + "%" : "NA"}
-                </span>
+                title: 'Returns',
+                propName: this.state.selected,
+                formatter: (value) =>
+                    <span style={{
+                        color: value !== null ? 'limegreen' : 'gray',
+                        fontSize: "13px", lineHeight: "21px", fontWeight: "700"
+                    }}>
+                        {value !== null ? value >= 0 ? "+" + value + "%" : value + "%" : "NA"}
+                    </span>
         }
             , {
             title: 'Tracking Error',
@@ -234,20 +239,21 @@ class FundList extends Component {
                             </span>
                         </p>
                     )}
-                    <p className="fund-number">{result?.length || 0} FUNDS</p>
                     <WVYearFilter
                         filterArray={YEARS_FILTERS}
                         selected={this.state.yearValue || "1Y"}
                         onClick={this.yearFilter}
                         dataAidSuffix={'passive-year-filter'}
                     />
+                    <p className="fund-number">{result?.length || 0} FUNDS</p>
 
                     <React.Fragment>
                         {!isEmpty(result) &&
-                            result.map((item) => {
+                            result.map((item, index) => {
                                 return (
                                     <WVProductListCard
-                                        classes={{ headerTitle: "wv-pdl-header-title" , headerImage : "wv-pdl-header-image",  }}
+                                        key={index}
+                                        classes={{ headerTitle: "wv-pdl-header-title", headerImage: "wv-pdl-header-image", }}
                                         productData={item}
                                         title={item.legal_name}
                                         subtitle={<CardSubtitle value={item?.tracking_index} morning_start={item?.morning_star_rating} />}
@@ -258,11 +264,12 @@ class FundList extends Component {
                                 );
                             })}
                     </React.Fragment>
-                    <WVBottomFilter
+                    <WVFilter
                         dataAidSuffix={'passive-card-details'}
                         filterOptions={this.state.bottomFilterOptions}
-                        getSortedFilter={this.setSortFilter}
-                        defaultFilter={{ "sort_value": "tracking_error" }}
+                        onApplyClicked={this.setSortFilter}
+                        defaultSelectedTab={{ "sort_value": "tracking_error" }}
+                        withButton={true}
                     />
                 </div>
             </Container>
