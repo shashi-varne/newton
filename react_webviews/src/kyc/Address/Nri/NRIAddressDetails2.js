@@ -140,7 +140,7 @@ const NRIAddressDetails2 = (props) => {
     }
   }
 
-  let address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
+  let addressProof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type] || "";
 
   const getPageDetails = (userKyc) => {
     let pageDetails = {}
@@ -192,7 +192,11 @@ const NRIAddressDetails2 = (props) => {
       headerData={{ goBack }}
     >
       <section className="kyc-nri-address-details" data-aid='kyc-address-details-2'>
-        <div className="kyc-main-subtitle" data-aid='kyc-sub-title'>Address as per {address_proof}</div>
+        <div className="kyc-main-subtitle" data-aid="kyc-sub-title">
+          {kyc.kyc_status === "compliant"
+            ? "Enter address details"
+            : `Address as per ${addressProof}`}
+        </div>
         <form className="form-container" data-aid='kyc-form-container'>
           <TextField
             label="Pincode"
