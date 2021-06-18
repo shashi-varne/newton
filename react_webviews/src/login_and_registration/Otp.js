@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import "./Style.scss";
-import Input from "common/ui/Input";
 import { initialize } from "./function";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import { validateNumber } from "../utils/validators";
-import Button from "../common/ui/Button";
+import OtpComp from "../kyc/Equity/mini-components/Otp";
+import WVClickableTextElement from "../common/ui/ClickableTextElement/WVClickableTextElement";
+import WVButtonLayout from "../common/ui/ButtonLayout/WVButtonLayout";
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
@@ -16,6 +17,10 @@ class Otp extends Component {
     this.state = {
       otp: "",
       isApiRunning: false,
+      otpData: {
+        totalTime: 15,
+        timeAvailable: 15,
+      },
     };
     this.initialize = initialize.bind(this);
   }
@@ -38,83 +43,55 @@ class Otp extends Component {
     this.initialize();
   }
 
-  handleChange = (name) => (event) => {
-    let value = event.target ? event.target.value : event;
-    if (value && (!validateNumber(value) || value.length > 4)) return;
-    let { otp, otp_error } = this.state;
-    otp = value;
-    otp_error = "";
-    this.setState({ otp: otp, otp_error: otp_error });
+  handleClick = () => {
+    this.otpVerification({
+      mobile_number: this.state.mobile_number,
+      otp: this.state.otpData["otp"],
+    });
   };
 
-  handleClick = () => {
-    if (this.state.forgot) {
-      this.verifyForgotOtp({
-        otp: this.state.otp,
-      });
-    } else {
-      this.otpVerification({
-        mobile_number: this.state.mobile_number,
-        otp: this.state.otp,
-      });
-    }
+  handleOtp = (otp) => {
+    this.setState({
+      otpData: { ...this.state.otpData, otp },
+    });
   };
 
   render() {
-    let { isApiRunning, otp, otp_error } = this.state;
-    let disabled = otp.length !== 4;
+    let { isApiRunning, otpData } = this.state;
+    let disabled = otpData.otp?.length !== 4;
+    let communicationType = "mobile";
+    let showDotLoader = false;
     return (
-      <div className="login otp" data-aid='login-otp'>
-        {!isMobileView && (
-          <div className="header">
-            <img src={require(`assets/${config.logo}`)} alt="logo" />
-          </div>
-        )}
-        <div className={`${!isMobileView && "content"} otp-content`}>
-          <div className={`${isMobileView && "otp-model-mini"} otp-model`}>
-            {productName === "finity" && (
-              <div class="logo">
-                <img src={require(`assets/finity_navlogo.png`)} alt="finity" />
-                <h5>Direct Mutual Funds | NPS</h5>
-              </div>
-            )}
-            {isMobileView && productName !== "finity" && (
-              <div class="logo">
-                <img src={require(`assets/logo_highres_f.png`)} alt="fisdom" />
-                <h5>Join 1000’s of Smart Investors</h5>
-              </div>
-            )}
-            <div className="otp-text" data-aid='otp-text'>Enter OTP</div>
-            <Input
-              error={otp_error ? true : false}
-              type="text"
-              value={otp}
-              helperText={otp_error || ""}
-              class="input"
-              onChange={this.handleChange("otp")}
-              inputMode="numeric"
-              autoFocus
-            />
-            <div className="resend-otp" data-aid='resend-otp' onClick={() => this.resendOtp()}>
-              Resend OTP
-            </div>
-            <Button
-              dataAid='verify-btn'
-              buttonTitle="VERIFY"
-              onClick={this.handleClick}
-              showLoader={isApiRunning}
-              disable={disabled}
-              style={{
-                maxWidth: "180px",
-                minWidth: "180px",
-                letterSpacing: "2px",
-                minHeight: "45px",
-                borderRadius: `${
-                  config?.uiElements?.button?.borderRadius || "2px"
-                }`,
-              }}
-            />
-          </div>
+      <div className="verify-otp-container">
+        <p className="title">{`Enter OTP to verify your ${
+          communicationType === "email" ? "email" : "number"
+        }`}</p>
+        <div className="verify-otp-header">
+          <p>
+            An OTP has been sent to{" "}
+            <span style={{ fontWeight: "500", marginRight: "23px" }}>
+              {this.state.mobile_number}
+            </span>
+          </p>
+          <WVClickableTextElement>EDIT</WVClickableTextElement>
+        </div>
+        <div className="kcd-otp-content">
+          <OtpComp
+            otpData={this.state.otpData}
+            showDotLoader={showDotLoader}
+            handleOtp={this.handleOtp}
+            resendOtp={this.resendOtp}
+          />
+        </div>
+        <div>
+          <WVButtonLayout.Button
+            type="primary"
+            title="VERIFY"
+            onClick={this.handleClick}
+            // disable={disabled}
+            showLoader={isApiRunning}
+            className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button"}
+          />
         </div>
       </div>
     );
