@@ -22,7 +22,7 @@ const InvestCard = (props) => {
         <img src={require(`assets/${productName}/${props.data.icon}`)} alt="" />
       </div>
     </div>
-      {props?.data.microtext && <div className="invest-card">
+      {props?.data?.microtext && <div className="invest-card">
           <p className="micro-text"> {props?.data.microtext} </p></div>}
     </>
   );
