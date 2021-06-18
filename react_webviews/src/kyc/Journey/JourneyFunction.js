@@ -29,6 +29,8 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
               'email',
               'occupation',
               'gross_annual_income',
+              'email_verified',
+              'mobile_number_verified',
             ],
           },
           {
@@ -107,8 +109,15 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: [
           { name: 'pan', keys: ['name', 'father_name', 'mother_name'] },
           {
-            name: 'identification',
-            keys: ['email', 'mobile_number', 'gender', 'marital_status'],
+            name: "identification",
+            keys: [
+              "email",
+              "mobile_number",
+              "gender",
+              "marital_status",
+              "email_verified",
+              "mobile_number_verified",
+            ],
           },
           {
             name: 'nomination',
@@ -170,8 +179,15 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
             keys: ['name', 'dob', 'father_name', 'mother_name'],
           },
           {
-            name: 'identification',
-            keys: ['email', 'mobile_number', 'gender', 'marital_status'],
+            name: "identification",
+            keys: [
+              "email",
+              "mobile_number",
+              "gender",
+              "marital_status",
+              "email_verified",
+              "mobile_number_verified",
+            ],
           },
           {
             name: 'nomination',

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { getConfig, getBasePath, isMobile } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
-import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
+import { storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
@@ -16,6 +16,7 @@ import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import { getJourneyData } from './JourneyFunction';
+import { isEmpty } from 'lodash'
 
 const HEADER_MAPPER_DATA = {
   kycDone: {
@@ -544,8 +545,7 @@ const Journey = (props) => {
     var headerKey = 
       isKycDone
       ? "kycDone"
-      : 
-      isCompliant
+      : isCompliant
       ? "compliant"
       : dlCondition
       ? "dlFlow"
@@ -654,7 +654,7 @@ const Journey = (props) => {
       events={sendEvents("just_set_events")}
       buttonTitle={ctaText}
       classOverRideContainer="pr-container"
-      skelton={isLoading || isEmpty(kyc) || isEmpty(user)}
+      skelton={isLoading}
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
