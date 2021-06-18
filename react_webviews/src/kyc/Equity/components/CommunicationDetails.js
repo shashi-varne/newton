@@ -278,6 +278,10 @@ const CommunicationDetails = (props) => {
                     </InputAdornment>
                   ),
                 }}
+                // eslint-disable-next-line
+                inputProps={{
+                  disabled: showOtpContainer
+                }}
               />
             </>
           ) : (
@@ -302,6 +306,7 @@ const CommunicationDetails = (props) => {
               }}
               // eslint-disable-next-line
               inputProps={{
+                disabled: showOtpContainer,
                 inputMode: "numeric",
               }}
             />
