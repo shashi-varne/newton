@@ -23,6 +23,7 @@ class Earnings extends Component {
       campaign_expiry_date: '',
       refer_message_1: '',
       refer_message_2: '',
+      refer_message_3: '',
       referral_code: '',
       type_of_referee_identifier: '',
       total_earnings: 0.00,
@@ -41,7 +42,7 @@ class Earnings extends Component {
     ])
       .then(axios.spread((listRes, campaignRes) => {
         const { data, next_page } = listRes.data.pfwresponse.result;
-        const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, type_of_referee_identifier, total_earnings } = campaignRes.data.pfwresponse.result;
+        const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, refer_message_3, referral_code, type_of_referee_identifier, total_earnings } = campaignRes.data.pfwresponse.result;
 
         this.setState({
           show_loader: false,
@@ -50,6 +51,7 @@ class Earnings extends Component {
           campaign_expiry_date,
           refer_message_1,
           refer_message_2,
+          refer_message_3,
           referral_code,
           type_of_referee_identifier,
           total_earnings,
@@ -218,7 +220,7 @@ class Earnings extends Component {
             <div>
               <h1>{this.state.refer_message_1}</h1>
               <p>
-                {this.state.refer_message_2}
+                {this.state.refer_message_3}
               </p>
               <div className="Share">
                 <p>REFERRAL CODE</p>
@@ -245,8 +247,8 @@ class Earnings extends Component {
     if (this.state.total_earnings == 0 && this.state.data.length > 0) {
       return (
         <div className="List pad15">
-          <h1>Remind and Earn</h1>
-          <p>Remind your friends and family to invest with {this.state.type} and you get ₹{this.state.amount_per_referral} when they invest.</p>
+          <h1>Earn more</h1>
+          <p>Remind your friends to invest with {this.state.type} & increase your Paytm earnings. Get ₹{this.state.amount_per_referral} for every friend who invests</p>
           <div className="Referres">
             {this.renderList()}
           </div>
@@ -259,7 +261,7 @@ class Earnings extends Component {
       return (
         <div className="List pad15">
           <h1>Earn more</h1>
-          <p>by reminding your friends who already signed up on {this.state.type} with your code</p>
+          <p>Remind your friends to invest with {this.state.type} & increase your Paytm earnings. Get ₹{this.state.amount_per_referral} for every friend who invests</p>
           <div className="Referres">
             {this.renderList()}
           </div>
