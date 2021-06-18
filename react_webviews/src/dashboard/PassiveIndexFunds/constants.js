@@ -67,7 +67,7 @@ export const FUND_CATEGORY = [
   {
     key: 'nifty_backers',
     title: 'Nifty backers',
-    subtitle: 'Invest in Nifty backers funds',
+    subtitle: 'Invest in Nifty backed funds',
     icon: require(`assets/${product_name}/nifty_backers.svg`)
   },
   {
