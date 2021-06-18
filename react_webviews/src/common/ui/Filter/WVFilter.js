@@ -37,7 +37,7 @@ const FilterContainer = ({ close, open, children, ...props }) => {
   return (
     <Dialog
       onClose={close}
-      open={open}
+      open={open || false}
       aria-labelledby="filter-dialog"
       TransitionComponent={Transition}
       aria-describedby="filter-dialog-slide-selection"

@@ -22,7 +22,7 @@ function VideoBlockImageSection() {
                 <div>
                     <img src={require("../../../assets/passive_info3.svg")} alt="" />
                 </div>
-                <p>Mirror the market</p>
+                <p>Mirror the index</p>
             </div>
         </div>
     )
