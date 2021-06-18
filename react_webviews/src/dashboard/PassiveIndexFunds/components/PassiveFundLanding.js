@@ -34,7 +34,9 @@ class Landing extends Component {
 
   handleClickFullscreen = () => {
     this.setState({ video_clicked: 'yes', playing: !this.state.playing })
-    screenfull.request(findDOMNode(this.player));
+    setTimeout(() => {
+      screenfull.request(findDOMNode(this.player));
+    }, 1000);
   }
 
   ref = player => {
