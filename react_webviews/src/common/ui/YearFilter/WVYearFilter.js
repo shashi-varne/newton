@@ -26,7 +26,7 @@ function WVYearFilter(props) {
             {!isEmpty(data) &&
                 data.map((item, index) => {
                     return (
-                        <p className={`wvtext-block ${selected === item.text ? 'wvselected' : ''}`} onClick={() => props.onClick(item.text)} key={index} data-aid={`text-block-${dataAidSuffix}-${index+1}`}>
+                        <p className={`wvtext-block ${selected === item.text ? 'wvselected' : ''} ${item.disabled ? 'disabled' : ''}`} onClick={() => props.onClick(item.text)} key={index} data-aid={`text-block-${dataAidSuffix}-${index+1}`}>
                             {item.text}
                         </p>
                     );
