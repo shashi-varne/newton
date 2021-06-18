@@ -12,7 +12,7 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
-  isEmailOrMobileVerified,
+  isEmailAndMobileVerified,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit, getCVL } from "../common/api";
@@ -110,7 +110,7 @@ const PersonalDetails3 = (props) => {
         userType: "compliant",
       },
     };
-    if (isEmailOrMobileVerified()) {
+    if (isEmailAndMobileVerified()) {
       if (isNri) {
         navigate(PATHNAME_MAPPER.nriAddressDetails2, data);
       } else {

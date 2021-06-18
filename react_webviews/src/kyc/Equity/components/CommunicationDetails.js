@@ -71,7 +71,7 @@ const CommunicationDetails = (props) => {
       setIsKycDone(kyc?.mf_kyc_processed);
       setIsDlFlow(isDigilockerFlow(kyc));
       setTotalPages(getTotalPagesInPersonalDetails());
-      if(showOtpContainer) {
+      if (showOtpContainer) {
         setShowOtpContainer(false);
       }
     }
@@ -280,7 +280,7 @@ const CommunicationDetails = (props) => {
                 }}
                 // eslint-disable-next-line
                 inputProps={{
-                  disabled: showOtpContainer
+                  disabled: showOtpContainer,
                 }}
               />
             </>
@@ -315,7 +315,9 @@ const CommunicationDetails = (props) => {
             <div className="kcd-email-subtext">
               {communicationType === "email"
                 ? "We'll keep you updated on your investments"
-                : "We’ll send an OTP to verify your mobile number"}
+                : !formData.disableMobile
+                ? "We’ll send an OTP to verify your mobile number"
+                : ""}
             </div>
           )}
           {showOtpContainer && (

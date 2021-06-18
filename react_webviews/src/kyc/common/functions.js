@@ -146,13 +146,12 @@ export const getKycUserFromSession = () => {
 }
 
 export const getTotalPagesInPersonalDetails = (isEdit = false) => {
-  const {kyc, user} = getKycUserFromSession();
-  if (isEmpty(kyc) || isEmpty(user)) {
+  const { kyc } = getKycUserFromSession();
+  if (isEmpty(kyc)) {
     return "";
   }
   const isCompliant = kyc.kyc_status === "compliant";
   const isNri = kyc?.address?.meta_data?.is_nri || false;
-  const isEmailAndMobileVerified = isEmailOrMobileVerified()
   const dlCondition =
     !isCompliant &&
     !isNri &&
@@ -161,20 +160,20 @@ export const getTotalPagesInPersonalDetails = (isEdit = false) => {
     kyc.dl_docs_status !== null;
   let totalPages = 5;
   if (isNri && isCompliant) totalPages++;
-  if (isEmailAndMobileVerified && isEdit) totalPages--;
+  if (isEmailAndMobileVerified() && isEdit) totalPages--;
   if (dlCondition) totalPages--;
   return totalPages;
 };
 
-export const isEmailOrMobileVerified = () => {
-  const kyc = storageService().getObject("kyc") || {};
+export const isEmailAndMobileVerified = () => {
+  const { kyc } = getKycUserFromSession();
   if (isEmpty(kyc)) {
     return false;
   }
   return (
     kyc.identification?.meta_data?.email_verified &&
     kyc.identification?.meta_data?.mobile_number_verified &&
-    kyc.identification.meta_data.whatsapp_consent
+    (kyc?.mf_kyc_processed && kyc.kyc_product_type !== "equity" ? kyc.whatsapp_consent : true)
   );
 };
 

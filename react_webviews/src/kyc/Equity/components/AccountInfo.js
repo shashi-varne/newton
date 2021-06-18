@@ -4,7 +4,7 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
-import { isEmailOrMobileVerified } from "../../common/functions";
+import { isEmailAndMobileVerified } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
@@ -42,7 +42,7 @@ const AccountInfo = (props) => {
       return;
     }
     if (kyc?.mf_kyc_processed) {
-      if (!isEmailOrMobileVerified()) {
+      if (!isEmailAndMobileVerified()) {
         navigate(PATHNAME_MAPPER.communicationDetails);
       } else {
         if (kyc?.bank?.meta_data_status === "approved" && kyc?.bank?.meta_data?.bank_status !== "verified") {
