@@ -66,6 +66,7 @@ const WVProductListCard = ({
             className={`wv-pch-image ${classes.headerImage}`}
             alt=""
             src={image}
+            style={{width: "40px" , minHeight: "40px"}}
           />
         }
       </div>
@@ -76,8 +77,8 @@ const WVProductListCard = ({
       }
       {contentPropsMapList &&
         <div className={`wv-product-card-detail ${classes.detail}`}>
-          {contentPropsMapList.map(propObj => (
-            <div className="wv-pcd-item">
+          {contentPropsMapList.map((propObj, index) => (
+            <div className="wv-pcd-item" key = {index}>
               <div className={`wv-pcdi-title ${classes.detailTitle}`}>
                 {propObj.title}
               </div>
