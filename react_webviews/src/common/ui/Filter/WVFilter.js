@@ -9,14 +9,14 @@ Example :
        onApplyClicked={this.setSortFilter}                         // Action.
        defaultSelectedTab={{ "sort_value": "tracking_error" }}    // default selected Tab if need.
        withButton={true}                                         // bottomFilter with button control.
-       openFilterProp={isOpen}                                  // openFilterProp to open filter from parent as prop.
+       openFilter={isOpen}                                  // openFilter to open filter from parent as prop.
     />
 
 */
 
 
 import "./commonStyles.scss";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { isEmpty } from 'lodash';
 import { getConfig } from '../../../utils/functions';
 import WVButtonLayout from "../ButtonLayout/WVButtonLayout";
@@ -49,7 +49,7 @@ const FilterContainer = ({ close, open, children, ...props }) => {
 }
 
 const WVFilter = ({
-  openFilterProp,             // Default condition needed to Open/Closer Filter From Parent.
+  openFilter,                 // Default condition needed to Open/Closer Filter From Parent.
   dataAidSuffix,             // for data-aid.
   onApplyClicked,           // Function CallBack From The Parent Which Sends the Filtered Data To the API.
   withButton,              //  If User Wants Filter With Button.
@@ -59,16 +59,11 @@ const WVFilter = ({
   const [activeTab, setActiveTab] = useState(defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key);
   const [activeTabOptions, setActiveTabOptions] = useState(filterOptions[0].option);
   const [selectedFilters, setSelectedFilters] = useState(defaultSelectedTab || {});
-  const [isOpen, setIsOpen] = useState(openFilterProp);
-  const notInitialRender = useRef(false);
+  const [isOpen, setIsOpen] = useState(openFilter);
 
   useEffect(() => {
-    if (notInitialRender.current) {
-      setIsOpen(!isOpen)
-    } else {
-      notInitialRender.current = true
-    }
-  }, [openFilterProp])
+      setIsOpen(openFilter)
+  }, [openFilter])
 
 
   const closeFilter = () => {
