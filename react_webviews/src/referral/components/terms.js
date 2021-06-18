@@ -24,41 +24,41 @@ class Terms extends Component {
         background='GreyBackground'
         noFooter={true}
       >
-        <div className="Terms pad25">
+        <div className="Terms">
           <div className="List">
             <div className="Number">1.</div>
             <div className="Text">
-              The recommended amount per each referral is a special offer for you and may not applicable for other investors. {this.state.type} decides and has the right to allocate or terminate any special offer.
+              The reward amount per referral is an exclusive offer just for you & may not be applicable for other investors. {this.state.type} reserves the right to allocate, withhold and amend this special offer at any time.
             </div>
           </div>
           <div className="List">
             <div className="Number">2.</div>
             <div className="Text">
-              You will be eligible to receive the referral amount only if the person you refer starts investment for at <span className="BoldText">least ₹ 1000</span>, if investing in <span className="BoldText">SIP</span> or for at least <span className="BoldText">₹ 25000</span>, if investing in one time.
+              You will be eligible to receive the referral money only if your referred friend makes an investment for a minimum of ₹500 for SIP and ₹1,000 for a one-time investment.
             </div>
           </div>
           <div className="List">
             <div className="Number">3.</div>
             <div className="Text">
-              You will only receive the referral amount if the person you refer invests before the mentioned <span className="BoldText">deadline</span>.
+              You will receive the referral amount only if your referred friend makes the investment within the deadline specified.
             </div>
           </div>
           <div className="List">
             <div className="Number">4.</div>
             <div className="Text">
-              You will not be eligible for any referral amount if the person you refers doesn’t input your <span className="BoldText">referral code</span> before investing from his/her app.
+              You will not receive the referral amount if your referred friend doesn’t enter your referral code upon app installation.
             </div>
           </div>
           <div className="List">
             <div className="Number">5.</div>
             <div className="Text">
-              The person you refer will not receive any kind of referral amount upon starting <span className="BoldText">his/her first investment</span>.
+              Your referred friends will not receive any reward amount upon making their first investment on Finity.
             </div>
           </div>
           <div className="List">
             <div className="Number">6.</div>
             <div className="Text">
-              After the person you refer invests, you will receive the eligible referral amount in the form of <span className="BoldText">Paytm cash</span> in your <span className="BoldText">Paytm wallet</span> registered with your number <span className="BoldText">+{this.state.params.mobile}</span>.
+              You will receive the referral amount (Paytm cash) in your Paytm wallet registered with your mobile number.
             </div>
           </div>
         </div>

@@ -190,7 +190,7 @@ class Earnings extends Component {
         <h1>Refer your family and friends</h1>
         <p>& get <span className="BoldText">₹{this.state.amount_per_referral}</span> in Paytm after their first investment</p>
         <div className="Share">
-          <p>Share your code</p>
+          <p>REFERRAL CODE</p>
           <h2>{this.state.referral_code}</h2>
         </div>
         <div className="ShareButton">
@@ -202,7 +202,7 @@ class Earnings extends Component {
             size="large"
             color="secondary"
             onClick={this.shareHandler} >
-            Share Now
+            REFER NOW
           </Button>
         </div>
       </div>
@@ -221,7 +221,7 @@ class Earnings extends Component {
                 {this.state.refer_message_2}
               </p>
               <div className="Share">
-                <p>Share your code</p>
+                <p>REFERRAL CODE</p>
                 <h2>{this.state.referral_code}</h2>
               </div>
               <div className="ShareButton">
@@ -233,7 +233,7 @@ class Earnings extends Component {
                   size="large"
                   color="secondary"
                   onClick={this.shareHandler} >
-                  Share Now
+                  REFER NOW
                 </Button>
               </div>
             </div>
@@ -276,7 +276,7 @@ class Earnings extends Component {
         noFooter={true}
       >
         <div className="Earning">
-          <div className={`ReferPaytmGrid pad25 GreyBackground ${(this.state.total_earnings > 0) ? '' : 'EarningsPaytmGrid'}`}>
+          <div className={`ReferPaytmGrid pad20 ${(this.state.total_earnings > 0) ? '' : 'EarningsPaytmGrid'}`}>
             <Grid container spacing={24} alignItems="center">
               <Grid item xs={3}>
                 <img src={wallet} alt="" />

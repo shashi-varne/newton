@@ -6,7 +6,6 @@ import Api from 'utils/api';
 import wallet from 'assets/earning_wallet_icon.png';
 import gift from 'assets/refer_gift_icon.png';
 import diwali_banner from 'assets/diwali_banner.svg';
-import hand from 'assets/hand_icon.png';
 import Button from 'material-ui/Button';
 import Grid from '@material-ui/core/Grid';
 import qs from 'qs';
@@ -160,7 +159,7 @@ class Details extends Component {
         background='GreyBackground'
         noFooter={true}
       >
-        <div className="Refer pad15">
+        <div className="Refer">
           <Card nopadding={true}>
             {(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? <img src={diwali_banner} alt="" /> : <img src={gift} alt="" />}
             <div className={`margin_top ${(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id) ? 'nomargin' : ''}`} style={{ padding: '15px' }}>
@@ -170,7 +169,7 @@ class Details extends Component {
                 {this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id && <span>(Minimum <strong>₹1000</strong> SIP)</span>}
               </p>
               <div className="Share">
-                <p>Share your code</p>
+                <p>REFERRAL CODE</p>
                 <h2>{this.state.referral_code}</h2>
               </div>
               <div className="ShareButton">
@@ -182,7 +181,7 @@ class Details extends Component {
                   size="large"
                   color="secondary"
                   onClick={this.shareHandler} >
-                  Share Now
+                  REFER NOW
                 </Button>
               </div>
             </div>
@@ -214,10 +213,10 @@ class Details extends Component {
             <Card nopadding={true}>
               <Grid container spacing={24} alignItems="center" className="ReferTermsGrid">
                 <Grid item xs={3}>
-                  <img src={hand} alt="" />
+                  <img src={require(`assets/${this.state.type}/hand.svg`)} alt="" />
                 </Grid>
                 <Grid item xs={9}>
-                  {(this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id && this.state.campaign_start_date) ? <p>Offer is valid from:</p> : <p>Your friends should invest before</p>}
+                  {(this.state.current_campaign_id === this.state.campaign_id && this.state.campaign_start_date) ? <p>Offer is valid from:</p> : <p>Your friends should invest before</p>}
                   {this.getExpiryDate()}
                 </Grid>
               </Grid>
