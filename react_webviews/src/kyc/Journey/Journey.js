@@ -244,6 +244,12 @@ const Journey = (props) => {
                     break;
                   }
                 }
+
+                const keysToCheck = ["email_verified", "mobile_number_verified"]
+                if(data.name === "identification" && keysToCheck.includes(data.keys[k]) && !kyc[data.name]['meta_data'][data.keys[k]]) {
+                  status = 'init';
+                  break;
+                }
               }
             }
           }
@@ -462,7 +468,7 @@ const Journey = (props) => {
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
-    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
+    if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -470,7 +476,7 @@ const Journey = (props) => {
         });
       }
       nativeCallback({ action: "take_back_button_control", message: data });
-    } else if (!isMobile.any()) {
+    } else if (!config.Web) {
       const redirectData = {
         show_toolbar: false,
         icon: "back",
@@ -544,8 +550,7 @@ const Journey = (props) => {
     var headerKey = 
       isKycDone
       ? "kycDone"
-      : 
-      isCompliant
+      : isCompliant
       ? "compliant"
       : dlCondition
       ? "dlFlow"
@@ -654,7 +659,7 @@ const Journey = (props) => {
       events={sendEvents("just_set_events")}
       buttonTitle={ctaText}
       classOverRideContainer="pr-container"
-      skelton={isLoading || isEmpty(kyc) || isEmpty(user)}
+      skelton={isLoading}
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}

@@ -64,7 +64,7 @@ const Header = ({ classes, title, count, total, current, goBack,
         <Toolbar>
           {
             !noBackIcon &&
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" data-aid='tool-bar-icon-btn'
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
               onClick={headerData.goBack ||
               goBack}
               data-aid='tool-bar-icon-btn'
