@@ -16,7 +16,7 @@ export const ConfirmPan = ({ isOpen, name, pan, handleClick, close }) => {
       isOpen={isOpen}
       title="Confirm PAN"
       subtitle={subtitle}
-      button1Props={{ title: "EDIT PAN", type: "secondary", onClick: close }}
+      button1Props={{ title: "EDIT PAN", variant: "outlined", onClick: close }}
       button2Props={{
         title: "CONFIRM PAN",
         variant: "contained",
