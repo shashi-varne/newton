@@ -67,7 +67,7 @@ export const FUND_CATEGORY = [
   {
     key: 'nifty_backers',
     title: 'Nifty backers',
-    subtitle: 'Invest in Nifty backers funds',
+    subtitle: 'Invest in Nifty backed funds',
     icon: require(`assets/${product_name}/nifty_backers.svg`)
   },
   {
@@ -217,29 +217,29 @@ export const BOTTOM_FILTER_NAME = [
   }
 ];
 
-export const BUTTON_MAPPER = [
-  {
-    count: 1,
-    type: "month",
+export const BUTTON_MAPPER = {
+  "1M": {
+    index: 0,
+    format: "ddmm"
   },
-  {
-    count: 3,
-    type: "month",
+  "3M": {
+    index: 1,
+    format: "ddmm"
   },
-  {
-    count: 6,
-    type: "month",
+  "6M": {
+    index: 2,
+    format: "ddmm"
   },
-  {
-    count: 1,
-    type: "year",
+  "1Y": {
+    index: 3,
+    format: "ddmm"
   },
-  {
-    count: 3,
-    type: "year",
+  "3Y": {
+    index: 4,
+    format: "yyyy"
   },
-  {
-    count: 5,
-    type: "year",
+  "5Y": {
+    index: 5,
+    format: "yyyy"
   },
-];
+}
