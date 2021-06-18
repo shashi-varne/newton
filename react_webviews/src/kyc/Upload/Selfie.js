@@ -33,7 +33,7 @@ const Selfie = (props) => {
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const { kyc, isLoading, updateKyc } = useUserKycHook();
-  const [isCamLoading, setIsCamLoading] = useState();
+  const [isCamLoading, setIsCamLoading] = useState(true);
   const [isTradingFlow, setIsTradingFlow] = useState(false);
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [fileHandlerParams, setFileHandlerParams] = useState();
@@ -48,17 +48,17 @@ const Selfie = (props) => {
   const initialize = async () => {
     const docStatus = await checkDocsPending(kyc);
     setDocsPendingStatus(docStatus)
-    const tradeFlow = isTradingEnabled(kyc);
-    const tradingFlow = tradeFlow && kyc.kyc_type !== "manual";
+    const tradingFlow = isTradingEnabled(kyc);
     setIsTradingFlow(tradingFlow);
-    setIsCamLoading(tradingFlow);
   }
 
   const handleNavigation = () => {
     if (bottomSheetType === "failed") {
-      setOpenBottomSheet(false)
+      setOpenBottomSheet(false);
+      setFile(null);
+      setFileToShow(null);
     } else {
-      if (isTradingFlow) {
+      if (isTradingFlow && kyc?.kyc_type !== "manual") {
         if (!isDocSubmittedOrApproved("equity_income")) {
           navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
         } else {
@@ -102,12 +102,8 @@ const Selfie = (props) => {
       setIsApiRunning("button");
       const result = await upload(file, 'identification', params);
       updateKyc(result.kyc);
-      if (isNotManualAndNriUser(result.kyc)) {
-        setBottomSheetType('success');
-        setOpenBottomSheet(true);
-      } else {
-        handleNavigation();
-      }
+      setBottomSheetType('success');
+      setOpenBottomSheet(true);
     } catch (err) {
       console.error(err);
       setBottomSheetType('failed');
@@ -221,23 +217,25 @@ const Selfie = (props) => {
   const renderButton = useCallback(() => {
     let buttonProps = {};
     if (isWeb) {
-      Object.assign(buttonProps, {
+      buttonProps = Object.assign(buttonProps, {
         showLoader: isCamLoading,
         onClick: openLiveCamera
       });
     } else {
       buttonProps = {
         withPicker: true,
-        nativePickerMethodName: 'open_camera',
-        fileName: 'selfie',
-        supportedFormats: SUPPORTED_IMAGE_TYPES,
-        onFileSelectComplete: onCaptureSuccess,
-        onFileSelectError: onCaptureFailure,
+        filePickerProps: {
+          nativePickerMethodName: 'open_camera',
+          fileName: 'selfie',
+          supportedFormats: SUPPORTED_IMAGE_TYPES,
+          onFileSelectComplete: onCaptureSuccess,
+          onFileSelectError: onCaptureFailure,
+        }
       }
       if (isNative) {
         // To trigger HyperVerge's Live Camera in Native
-        buttonProps.fileHandlerParams = { check_liveness: true };
-        buttonProps.customClickHandler = onOpenCameraClick;
+        buttonProps.filePickerProps.fileHandlerParams = { check_liveness: true };
+        buttonProps.filePickerProps.customClickHandler = onOpenCameraClick;
       }
     }
 
@@ -246,7 +244,7 @@ const Selfie = (props) => {
         {file ? "Retake" : "Open Camera"}
       </KycUploadContainer.Button>
     );
-  }, [isCamLoading]);
+  }, [isCamLoading, isWeb, isNative, file]);
 
   return (
     <Container
@@ -271,7 +269,29 @@ const Selfie = (props) => {
               fileToShow={fileToShow}
               illustration={require(`assets/${productName}/selfie_placeholder.svg`)}
             />
-            {renderButton()}
+            {isWeb ?
+              <KycUploadContainer.Button
+                showLoader={isCamLoading}
+                onClick={openLiveCamera}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button> :
+              <KycUploadContainer.Button
+                withPicker
+                filePickerProps={{
+                  nativePickerMethodName: 'open_camera',
+                  fileName: 'selfie',
+                  supportedFormats: SUPPORTED_IMAGE_TYPES,
+                  onFileSelectComplete: onCaptureSuccess,
+                  onFileSelectError: onCaptureFailure,
+                  fileHandlerParams: isNative ? { check_liveness: true } : {},
+                  customClickHandler: isNative ? onOpenCameraClick : ''
+                }}
+              >
+                {file ? "Retake" : "Open Camera"}
+              </KycUploadContainer.Button>
+            }
+            {/* {renderButton()} */}
           </KycUploadContainer>
           <div className="kyc-selfie-intructions">
             <span id="kyc-si-text">How to take selfie?</span>
@@ -289,15 +309,13 @@ const Selfie = (props) => {
             />
           }
           {!isSdk &&
-            <>
-              <LocationPermission
-                isOpen={isLocnPermOpen}
-                onInit={onLocationInit}
-                onClose={closeLocnPermDialog}
-                onLocationFetchSuccess={onLocationFetchSuccess}
-                parentProps={props}
-              />
-            </>
+            <LocationPermission
+              isOpen={isLocnPermOpen}
+              onInit={onLocationInit}
+              onClose={closeLocnPermDialog}
+              onLocationFetchSuccess={onLocationFetchSuccess}
+              parentProps={props}
+            />
           }
           <SelfieUploadStatus
             status={bottomSheetType}
