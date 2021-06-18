@@ -66,7 +66,6 @@ const KycVerified = (props) => {
       id="kyc-compliant-verify"
       events={sendEvents("just_set_events")}
       buttonTitle="INVEST NOW"
-      skelton={isLoading}
       handleClick={handleClick}
       title="KYC verified"
       data-aid='kyc-compliant-verify-screen'
