@@ -10,14 +10,13 @@ Example :
        defaultSelectedTab={{ "sort_value": "tracking_error" }}    // default selected Tab if need.
        withButton={true}                                         // bottomFilter with button control.
        openFilterProp={isOpen}                                  // openFilterProp to open filter from parent as prop.
-       onFilterClose={(ele) => this.openFilter(ele)}           // function to contol opening/closing onFilterClose, can be used to set openFilterProp as True (or) False.
     />
 
 */
 
 
 import "./commonStyles.scss";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { isEmpty } from 'lodash';
 import { getConfig } from '../../../utils/functions';
 import WVButtonLayout from "../ButtonLayout/WVButtonLayout";
@@ -50,9 +49,8 @@ const FilterContainer = ({ close, open, children, ...props }) => {
 }
 
 const WVFilter = ({
-  openFilterProp,              // Default condition needed to Open/Closer Filter From Parent.
-  onFilterClose,              // Function CallBack Which can Be used to Open/Close The Filter From Parent. 
-  dataAidSuffix,
+  openFilterProp,             // Default condition needed to Open/Closer Filter From Parent.
+  dataAidSuffix,             // for data-aid.
   onApplyClicked,           // Function CallBack From The Parent Which Sends the Filtered Data To the API.
   withButton,              //  If User Wants Filter With Button.
   filterOptions,          //  Data For the Filter Dialog Box.
@@ -62,16 +60,24 @@ const WVFilter = ({
   const [activeTabOptions, setActiveTabOptions] = useState(filterOptions[0].option);
   const [selectedFilters, setSelectedFilters] = useState(defaultSelectedTab || {});
   const [isOpen, setIsOpen] = useState(openFilterProp);
+  const notInitialRender = useRef(false);
+
+  useEffect(() => {
+    if (notInitialRender.current) {
+      setIsOpen(!isOpen)
+    } else {
+      notInitialRender.current = true
+    }
+  }, [openFilterProp])
+
 
   const closeFilter = () => {
-    onFilterClose(false)
     setIsOpen(false);
   };
 
   const applyFilters = () => {
     setIsOpen(false);
     onApplyClicked(selectedFilters);
-    if (openFilterProp) onFilterClose(false)
   }
 
   const reset = () => {
@@ -89,7 +95,7 @@ const WVFilter = ({
 
     <>
 
-      <FilterContainer close={closeFilter} open={isOpen || openFilterProp}>
+      <FilterContainer close={closeFilter} open={isOpen}>
         <section className="wv-filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
           <p className="wv-heading">FILTERS</p>
           <main className="wv-filter">
