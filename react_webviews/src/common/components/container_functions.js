@@ -299,6 +299,7 @@ export function check_hide_header_title() {
 
 export function getHeightFromTop() {
     var el = document.getElementsByClassName('Container')[0];
+    if(!el) return;
     var height = el.getBoundingClientRect().top;
     return height;
 }

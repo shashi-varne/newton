@@ -98,7 +98,7 @@ const PaymentOptions = (props) => {
         },
       };
 
-      if (isMobile.iOS) {
+      if (isMobile.iOS()) {
         if (!partner_check) {
           redirectData.show_toolbar = true;
         } else if (getConfig().code !== "alb") {

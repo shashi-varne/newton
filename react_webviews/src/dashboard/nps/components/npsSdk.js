@@ -33,7 +33,11 @@ class NpsSdk extends Component {
         if (currentUser.kyc_registration_v2 === 'init' || currentUser.kyc_registration_v2 === 'incomplete') {
           this.navigate('/kyc/journey');
         } else {
-          this.navigate('/nps/identity');
+          this.navigate("/nps/identity", {
+            state: {
+              goBack: "/",
+            },
+          });
         }
       }
     } else {

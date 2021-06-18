@@ -52,7 +52,7 @@ class Register extends Component {
     this.setState({ form_data: form_data });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     let { form_data, registerType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if(registerType !== "email")
@@ -60,6 +60,7 @@ class Register extends Component {
     if (registerType === "email")
       keys_to_check = ["email", "password", "confirm_password"];
     this.formCheckFields(keys_to_check, form_data, "REGISTER", registerType);
+    event.preventDefault();
   };
 
   handleCheckbox = () => {
@@ -127,7 +128,7 @@ class Register extends Component {
                 {registerType === "email" && <div className="underline"></div>}
               </div>
             </div>
-            <div className="form" data-aid='form'>
+            <form className="form" data-aid='form' onSubmit={this.handleClick}>
               {registerType === "mobile" && (
                 <div className="form-field">
                   <div className="country-code" data-aid='country-code'>
@@ -254,6 +255,7 @@ class Register extends Component {
                 buttonTitle="REGISTER"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
+                buttonType="submit"
                 style={{
                   width: "100%",
                   letterSpacing: "2px",
@@ -285,7 +287,7 @@ class Register extends Component {
                   GOOGLE
                 </a>
               </div>
-            </div>
+            </form>
             <div className="footer"  data-aid='footer' onClick={() => this.navigate("login")}>
               EXISTING USER? <span data-aid='login-btn'>LOGIN</span>
             </div>

@@ -44,13 +44,14 @@ class Login extends Component {
     this.setState({ form_data: form_data });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if(loginType !== "email")
       this.sendEvents();
     if (loginType === "email") keys_to_check = ["email", "password"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
+    event.preventDefault()
   };
 
   sendEvents = (userAction) => {
@@ -113,7 +114,7 @@ class Login extends Component {
                 </div>
               )}
             </div>
-            <div className="form" data-aid='form'>
+            <form className="form" data-aid='form' onSubmit={this.handleClick} >
               {loginType === "mobile" && (
                 <div className="form-field">
                   <div className="country-code" data-aid='country-code'>
@@ -184,6 +185,7 @@ class Login extends Component {
               <Button
                 dataAid='login-btn'
                 buttonTitle="LOGIN"
+                buttonType="submit"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
                 style={{
@@ -207,7 +209,7 @@ class Login extends Component {
                   </a>
                 </div>
               )}
-            </div>
+            </form>
             {productName !== "finity" && (
               <div className="footer" data-aid='footer' onClick={() => this.navigate("register")}>
                 NEW USER? <span data-aid='register-btn'>REGISTER</span>

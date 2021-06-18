@@ -277,7 +277,7 @@ const Summary = (props) => {
                         </div>
                       </div>
                       {report.past.redeemed > 0 && (
-                        <div className="pointer" data-aid='reports-pointer' onClick={toggleheader()}>
+                        <div className="pointer" data-aid='reports-pointer' onClick={() => toggleheader()}>
                           View redeemed investments
                         </div>
                       )}
@@ -309,7 +309,7 @@ const Summary = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="pointer" data-aid='reports-pointer' onClick={toggleheader()}>
+                  <div className="pointer" data-aid='reports-pointer' onClick={() => toggleheader()}>
                     View current investments
                   </div>
                 </>

@@ -43,11 +43,12 @@ class ForgotPassword extends Component {
     this.setState({ form_data: form_data });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if (loginType === "email") keys_to_check = ["email"];
     this.formCheckFields(keys_to_check, form_data, "RESET", loginType);
+    event.preventDefault();
   };
 
   render() {
@@ -92,7 +93,7 @@ class ForgotPassword extends Component {
                 </div>
               )}
             </div>
-            <div className="form"  data-aid='form'>
+            <form className="form"  data-aid='form' onSubmit={this.handleClick}>
               {loginType === "mobile" && (
                 <div className="form-field">
                   <div className="country-code"  data-aid='country-code'>
@@ -153,7 +154,7 @@ class ForgotPassword extends Component {
                   }`,
                 }}
               />
-            </div>
+            </form>
             <div className="footer"  data-aid='forgot-password-footer' onClick={() => this.navigate("login")}>
               EXISTING USER? <span>LOGIN</span>
             </div>

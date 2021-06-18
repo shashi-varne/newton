@@ -25,13 +25,18 @@ const headerIconMapper = {
   search: search,
   restart: restart
 }
-const isMobileDevice = getConfig().isMobileDevice;
-const partnerLogo = getConfig().logo;
-const isWeb = getConfig().Web;
-const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor : '';
-const backButtonColor = !isWeb ? getConfig().styles?.backButtonColor : '';
-const notificationsColor = !isWeb ? getConfig()?.styles.notificationsColor : '';
-
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
+const partnerLogo = config.logo;
+const isWeb = config.Web;
+const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
+const backButtonColor = !isWeb ? config.styles?.backButtonColor : '';
+const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
+console.log("sdk check in header ", config.isSdk);
+console.log("web check in header ", isWeb);
+console.log("app check in header ", config.app);
+console.log("platform check in header", config.platform);
+console.log("user agent in header", navigator.userAgent);
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, customBackButtonColor,
