@@ -88,27 +88,31 @@ const CommunicationDetails = (props) => {
       data.mobileNumberVerified =
         kyc.identification.meta_data.mobile_number_verified;
       if (data.mobileNumberVerified) {
-        let contacts = storageService().getObject("contacts") || {};
-        if (isEmpty(contacts)) {
-          setShowSkelton(true);
-          try {
-            const result = await getContactsFromSummary();
-            contacts = result.data?.contacts?.contacts?.data || {};
-          } catch (err) {
-            toast(err.message);
-          } finally {
-            setShowSkelton(false);
-          }
-        }
-        const contact =
-          contacts?.verified_mobile_contacts?.find((element) => {
-            const [, mobileNumber] = element.contact_value.split("|");
-            return mobileNumber === number;
-          }) || {};
-        data.contact_id = contact.id;
+        data.contact_id = await getContactId(number);
       }
     }
     setFormData({ ...data });
+  };
+
+  const getContactId = async (number) => {
+    let contacts = storageService().getObject("contacts") || {};
+    if (isEmpty(contacts)) {
+      setShowSkelton(true);
+      try {
+        const result = await getContactsFromSummary();
+        contacts = result.data?.contacts?.contacts?.data || {};
+      } catch (err) {
+        toast(err.message);
+      } finally {
+        setShowSkelton(false);
+      }
+    }
+    const contact =
+      contacts?.verified_mobile_contacts?.find((element) => {
+        const mobileNumber = element.contact_value?.split("|")[1];
+        return mobileNumber === number;
+      }) || {};
+    return contact.id;
   };
 
   const handleChange = (name) => (event) => {
@@ -222,12 +226,12 @@ const CommunicationDetails = (props) => {
       } else {
         const body = getPayLoad();
         if (!body) return;
-        setShowLoader("button");
         if (communicationType === "mobile" && formData.mobileNumberVerified) {
           if (!formData.whatsappConsent) {
             handleNavigation();
             return;
           }
+          setShowLoader("button");
           const contactResult = await sendWhatsappConsent(body);
           const whatsappConsent =
             contactResult?.contact_details?.whatsapp_consent;
@@ -235,6 +239,7 @@ const CommunicationDetails = (props) => {
           handleNavigation();
           return;
         }
+        setShowLoader("button");
         const result = await sendOtp(body);
         setShowOtpContainer(true);
         setOtpData({
