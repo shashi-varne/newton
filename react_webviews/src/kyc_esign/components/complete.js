@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getConfig, isTradingEnabled } from "utils/functions";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
-import WVSteps from "../../common/ui/Steps/WVSteps"
+import WVSteps from "../../common/ui/Steps/WVSteps";
+import { isDocSubmittedOrApproved } from "../../kyc/common/functions";
 import { isReadyToInvest } from "../../kyc/services";
 import { isEmpty } from "../../utils/validators";
 
@@ -29,7 +30,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
       setShowAccountStatus(displayAccountStatus);
       const isReadyToInvestUser = isReadyToInvest();
 
-      if (displayAccountStatus && kyc?.sign_status === "signed" && !kyc?.equity_data?.meta_data?.fno) {
+      if (displayAccountStatus && kyc?.sign_status === "signed" && !isDocSubmittedOrApproved("equity_income")) {
         setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
       }
   
