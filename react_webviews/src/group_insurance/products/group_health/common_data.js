@@ -1210,9 +1210,9 @@ export function memberKeyMapper(member_key) {
 
 export function filterReportData(reportData){
     var activeReports = [], pendingReports = [], inactiveReports = [];
-    var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted'];
+    var pending_statuses = ['pending', 'init', 'incomplete', 'pending_from_vendor', 'request_pending', 'plutus_submitted', 'payment_done'];
     var issued_statuses = ['issued', 'policy_issued', 'success', 'complete'];
-
+    
     reportData.forEach(report =>{
       let policy_status = report.status;
       if(issued_statuses.indexOf(policy_status.toLowerCase()) > -1){
@@ -1392,7 +1392,6 @@ export function setReportData(termData, group_insurance_policies, health_insuran
                 color: y.cssMapper.color,
                 topTextRightColor: bracketColor
             }
-
             var bottomValues = [
              {
                 'title': 'COVER AMOUNT',
