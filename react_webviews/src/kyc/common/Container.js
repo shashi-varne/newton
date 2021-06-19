@@ -54,6 +54,7 @@ class Container extends Component {
       case "/kyc/upload/fno-income-proof":
       case "/kyc/digilocker/success":
       case "/kyc/digilocker/failed":
+      case "/kyc/trading-experience":
         this.setState({ openConfirmBack: true });
         openDialog=true;
         break;
