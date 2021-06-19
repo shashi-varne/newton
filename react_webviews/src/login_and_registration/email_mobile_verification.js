@@ -4,6 +4,7 @@ import Container from "../dashboard/common/Container";
 import Input from "common/ui/Input";
 import { getConfig } from 'utils/functions';
 import { countries } from "./constants";
+import { initialize } from "./function";
 import DropDownNew from "common/ui/DropDownNew";
 import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle";
 import Checkbox from "../common/ui/Checkbox";
@@ -16,17 +17,16 @@ class EnterVerifyDetails extends Component {
         this.state = {
             productName: getConfig().productName,
             form_data: {},
-            isMobile: false,
-            isEmail: true,
+            isMobile: true,
+            isEmail: false,
         }
+        this.initialize = initialize.bind(this);
     }
 
     componentWillMount() {
-
+        this.initialize();
         countries.map((item, idx) => {
-
             item.name = "+" + item.value;
-
         })
 
     }
@@ -55,7 +55,7 @@ class EnterVerifyDetails extends Component {
                 buttonTitle="CONTINUE"
                 handleClick={() => this.handleClicks()}
                 canSkip={true}
-                onSkipClick={() => console.log("hello")}
+                onSkipClick={() => this.navigate("/")}
                 showLoader={this.state.show_loader}
                 title={isMobile ? "Enter Your Number to get started" : "Share your email address"}>
                 <div className="form" data-aid='form'>

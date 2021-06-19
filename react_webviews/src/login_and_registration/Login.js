@@ -8,6 +8,7 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
 import { nativeCallback } from "../utils/native_callback";
+import Checkbox from "../common/ui/Checkbox";
 
 const config = getConfig();
 class Login extends Component {
@@ -47,7 +48,7 @@ class Login extends Component {
   handleClick = () => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
-    if(loginType !== "email")
+    if (loginType !== "email")
       this.sendEvents();
     if (loginType === "email") keys_to_check = ["email"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
@@ -142,6 +143,19 @@ class Login extends Component {
                   />
                 </div>
               )}
+
+              {loginType === "mobile" && (<div className="declaration-container">
+                <Checkbox
+                  defaultChecked
+                  checked={this.state.checked}
+                  color="default"
+                  value="checked"
+                  name="checked"
+                  handleChange={() => console.log("clicked")}
+                  className="Checkbox"
+                />
+                <p>I agree to receive important investment updates on WhatsApp</p>
+              </div>)}
               {loginType === "email" && (
                 <>
                   <div className="form-field">
@@ -158,19 +172,6 @@ class Login extends Component {
                       autoFocus
                     />
                   </div>
-                  {/* <div className="form-field">
-                    <Input
-                      error={form_data.password_error ? true : false}
-                      type="password"
-                      value={form_data.password}
-                      helperText={form_data.password_error || ""}
-                      class="input"
-                      id="password"
-                      label="Password"
-                      name="email"
-                      onChange={this.handleChange("password")}
-                    />
-                  </div> */}
                   <div
                     className="forgot_password" data-aid='forgot-password'
                     onClick={() => this.navigate("forgot-password")}
