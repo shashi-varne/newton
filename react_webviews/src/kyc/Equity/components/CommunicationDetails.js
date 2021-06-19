@@ -46,10 +46,8 @@ const CommunicationDetails = (props) => {
   });
   const [otpData, setOtpData] = useState({
     otp: "",
-    totalTime: 30,
-    timeAvailable: 30,
+    otpId: "",
   });
-  const [otpId, setOtpId] = useState("");
   const [buttonTitle, setButtonTitle] = useState("CONTINUE");
   const [showLoader, setShowLoader] = useState(false);
   const [showOtpContainer, setShowOtpContainer] = useState(false);
@@ -80,32 +78,35 @@ const CommunicationDetails = (props) => {
       : "mobile";
     setCommunicationType(type);
     const data = { ...formData };
-    data.email = kyc.identification.meta_data.email;
-    let mobileNumber = kyc.identification.meta_data.mobile_number || "";
-    const [extension, number] = mobileNumber.toString().split("|");
-    if (extension) mobileNumber = number;
-    data.mobile = mobileNumber;
-    data.mobileNumberVerified =
-      kyc.identification.meta_data.mobile_number_verified;
-    if (data.mobileNumberVerified && type === "mobile") {
-      let contacts = storageService().getObject("contacts") || {};
-      if (isEmpty(contacts)) {
-        setShowSkelton(true);
-        try {
-          const result = await getContactsFromSummary();
-          contacts = result.data?.contacts?.contacts?.data || {};
-        } catch (err) {
-          toast(err.message);
-        } finally {
-          setShowSkelton(false);
+    if (type === "email") {
+      data.email = kyc.identification.meta_data.email;
+    } else {
+      let mobileNumber = kyc.identification.meta_data.mobile_number || "";
+      const [extension, number] = mobileNumber.toString().split("|");
+      if (extension) mobileNumber = number;
+      data.mobile = mobileNumber;
+      data.mobileNumberVerified =
+        kyc.identification.meta_data.mobile_number_verified;
+      if (data.mobileNumberVerified) {
+        let contacts = storageService().getObject("contacts") || {};
+        if (isEmpty(contacts)) {
+          setShowSkelton(true);
+          try {
+            const result = await getContactsFromSummary();
+            contacts = result.data?.contacts?.contacts?.data || {};
+          } catch (err) {
+            toast(err.message);
+          } finally {
+            setShowSkelton(false);
+          }
         }
+        const contact =
+          contacts?.verified_mobile_contacts?.find((element) => {
+            const [, mobileNumber] = element.contact_value.split("|");
+            return mobileNumber === number;
+          }) || {};
+        data.contact_id = contact.id;
       }
-      const contact =
-        contacts?.verified_mobile_contacts?.find((element) => {
-          const [, mobileNumber] = element.contact_value.split("|");
-          return mobileNumber === number;
-        }) || {};
-      data.contact_id = contact.id;
     }
     setFormData({ ...data });
   };
@@ -135,12 +136,10 @@ const CommunicationDetails = (props) => {
   const resendOtpVerification = async () => {
     setShowDotLoader(true);
     try {
-      const result = await resendOtp(otpId);
-      setOtpId(result.otp_id);
+      const result = await resendOtp(otpData.otpId);
       setOtpData({
         otp: "",
-        totalTime: 30,
-        timeAvailable: 30,
+        otpId: result.otp_id,
       });
     } catch (err) {
       toast(err.message);
@@ -160,7 +159,7 @@ const CommunicationDetails = (props) => {
         return;
       }
       setShowLoader("button");
-      const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
+      const otpResult = await verifyOtp(otpData);
       updateKyc(otpResult.kyc);
       if (
         otpResult.kyc.identification.meta_data.mobile_number_verified &&
@@ -238,11 +237,9 @@ const CommunicationDetails = (props) => {
         }
         const result = await sendOtp(body);
         setShowOtpContainer(true);
-        setOtpId(result.otp_id);
         setOtpData({
           otp: "",
-          totalTime: 30,
-          timeAvailable: 30,
+          otpId: result.otp_id,
         });
         setButtonTitle("VERIFY");
       }
@@ -399,6 +396,7 @@ const CommunicationDetails = (props) => {
               <div className="kcd-otp-content">
                 <Otp
                   otpData={otpData}
+                  totalTime={30}
                   showDotLoader={showDotLoader}
                   handleOtp={handleOtp}
                   resendOtp={resendOtpVerification}
