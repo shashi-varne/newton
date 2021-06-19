@@ -531,6 +531,7 @@ export async function getKycFromSummary() {
     user: ["user"],
     partner: ["partner"],
     campaign: ["user_campaign"],
+    contacts: ["contacts"],
     referral: ["subbroker", "p2p"],
   });
   if (!res || !res.pfwresponse) throw errorMessage;
@@ -540,6 +541,7 @@ export async function getKycFromSummary() {
     let kyc = result.data.kyc.kyc.data;
     storageService().setObject("kyc", kyc);
     storageService().setObject("user", user);
+    storageService().setObject("contacts", result?.data?.contacts?.contacts?.data);
     return result;
   } else {
     throw result.message || result.error || errorMessage;

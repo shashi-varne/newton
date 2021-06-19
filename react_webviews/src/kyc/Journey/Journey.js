@@ -10,12 +10,12 @@ import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParam
 import { getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
-import KycBackModal from '../mini-components/KycBack'
 import { isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
 import { getJourneyData } from './JourneyFunction';
+import ConfirmBackDialog from '../mini-components/ConfirmBackDialog'
 
 const HEADER_MAPPER_DATA = {
   kycDone: {
@@ -778,11 +778,10 @@ const Journey = (props) => {
         onClose={() => setDlAadhaar(false)}
         redirect={cancel}
       />
-      <KycBackModal
-        id="kyc-back-modal"
-        open={goBackModal}
-        confirm={confirmGoBack}
-        cancel={closeGoBackModal}
+      <ConfirmBackDialog
+        goBack={confirmGoBack}
+        close={closeGoBackModal}
+        isOpen={goBackModal}
       />
     </Container>
   )
