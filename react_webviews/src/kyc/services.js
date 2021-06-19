@@ -71,6 +71,7 @@ export async function initData() {
         nps: ['nps_user'],
         bank_list: ['bank_list'],
         referral: ['subbroker', 'p2p'],
+        contacts: ["contacts"],
       }
       const result = await getAccountSummary(queryParams)
       if(!result) return;
@@ -86,6 +87,7 @@ export async function initData() {
       partner: ['partner'],
       bank_list: ['bank_list'],
       referral: ['subbroker', 'p2p'],
+      contacts: ["contacts"],
     }
     const result = await getAccountSummary(queryParams)
     if(!result) return;
@@ -111,6 +113,7 @@ async function setSummaryData(result) {
   storageService().setObject("npsUser", result.data.nps.nps_user.data);
   storageService().setObject("banklist", result.data.bank_list.bank_list.data);
   storageService().setObject("referral", result.data.referral);
+  storageService().setObject("contacts", result.data.contacts.contacts.data);
   let partner = "";
   let consent_required = false;
   if (result.data.partner.partner.data) {

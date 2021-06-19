@@ -13,7 +13,8 @@ export const API_CONSTANTS = {
   sendOtp: '/api/communication/send/otp',
   resendOtp: '/api/communication/resend/otp',
   verifyOtp: '/api/communication/verify/otp',
-  socialAuth: '/api/communication'
+  socialAuth: '/api/communication',
+  sendContactConsent: '/api/communication/contact/consent'
 }
 
 export const PATHNAME_MAPPER = {
