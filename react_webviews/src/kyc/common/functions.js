@@ -274,7 +274,7 @@ export function isNotManualAndNriUser(kyc = {}) {
 }
 
 export function isDocSubmittedOrApproved(doc) {
-  const kyc = storageService().getObject("kyc") || {}; 
+  const { kyc = {} } = getKycUserFromSession(); 
   if (isEmpty(kyc)) return false;
   return kyc[doc]?.doc_status === "submitted" || kyc[doc]?.doc_status === "approved";
 }

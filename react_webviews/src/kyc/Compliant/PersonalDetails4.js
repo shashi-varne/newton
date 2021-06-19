@@ -9,6 +9,7 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  isDocSubmittedOrApproved,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -122,7 +123,7 @@ const PersonalDetails4 = (props) => {
     // } else {
     //   navigate(PATHNAME_MAPPER.journey);
     // }
-    if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+    if (!isDocSubmittedOrApproved("sign")) {
       navigate(PATHNAME_MAPPER.uploadSign);
     } else {
       navigate(PATHNAME_MAPPER.journey)
