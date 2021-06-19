@@ -162,6 +162,9 @@ const AddBank = (props) => {
 
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
+    if(name === "ifsc_code") {
+      value = value.toUpperCase();
+    }
     bank[name] = value;
     if (!value) {
       formData[`${name}_error`] = "This is required";
