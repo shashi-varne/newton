@@ -59,7 +59,10 @@ class PanDetails extends Component {
     let { form_data, isKycApproved, is_nps_contributed, isKycIdentificationApproved } = this.state;
 
     isKycApproved = userKyc.pan.meta_data_status === 'approved';
-    isKycIdentificationApproved = userKyc.identification?.meta_data_status === 'approved';
+    isKycIdentificationApproved =
+      userKyc.identification?.meta_data?.mobile_number &&
+      userKyc.identification?.meta_data?.email &&
+      userKyc.identification?.meta_data_status === "approved";
     form_data.dob = userKyc.pan.meta_data.dob || "";
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 

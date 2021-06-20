@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
 import UploadCard from "./UploadCard";
 import { getDocuments } from "../services";
@@ -9,12 +9,14 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig } from "../../utils/functions";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 const productName = getConfig().productName;
 const Progress = (props) => {
   const {kyc, isLoading} = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
+  const [openConfirmBack, setOpenConfirmBack] = useState(false);
 
   let documents = [];
   let totalDocs = 0;
@@ -63,8 +65,7 @@ const Progress = (props) => {
       props.history.goBack();
       return;
     }
-    const navigate = navigateFunc.bind(props)
-    navigate('/kyc/journey')
+    setOpenConfirmBack(true);
   }
 
   const sendEvents = (userAction, docs) => {
@@ -132,6 +133,11 @@ const Progress = (props) => {
             src={require(`assets/${productName}/trust_icons.svg`)}
           />
         </footer>
+        <ConfirmBackDialog 
+          isOpen={openConfirmBack}
+          goBack={() => navigate('/kyc/journey')}
+          cancel={() => setOpenConfirmBack(false)}
+        />
       </section>
     </Container>
   );

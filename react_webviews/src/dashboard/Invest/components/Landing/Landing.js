@@ -210,13 +210,14 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEquityCompletedBase && (
                         <div className="invest-main-top-title" 
-                          onClick={() => this.clickCard("stocks") } 
+                          onClick={() => {!kycStatusLoader && this.clickCard("stocks") }} 
                           data-aid='stocks-title'
                         >
                           <WVButton
                             variant='contained'
                             size='large'
                             color="secondary"
+                            disabled={kycStatusLoader}
                             // fullWidth
                           >
                             Stocks
