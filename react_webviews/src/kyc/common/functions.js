@@ -173,7 +173,8 @@ export const isEmailAndMobileVerified = () => {
   return (
     kyc.identification?.meta_data?.email_verified &&
     kyc.identification?.meta_data?.mobile_number_verified &&
-    (kyc?.mf_kyc_processed && kyc.kyc_product_type !== "equity" ? kyc.whatsapp_consent : true)
+    kyc.whatsapp_consent
+    // (!kyc?.mf_kyc_processed && kyc.kyc_product_type !== "equity" ? kyc.whatsapp_consent : true)
   );
 };
 

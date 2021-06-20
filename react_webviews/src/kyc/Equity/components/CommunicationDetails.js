@@ -227,7 +227,7 @@ const CommunicationDetails = (props) => {
         const body = getPayLoad();
         if (!body) return;
         if (communicationType === "mobile" && formData.mobileNumberVerified) {
-          if (!formData.whatsappConsent) {
+          if (formData.whatsappConsent === kyc.whatsapp_consent) {
             handleNavigation();
             return;
           }
