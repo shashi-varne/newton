@@ -183,7 +183,7 @@ class Landing extends Component {
                   return (
                     <React.Fragment key={index}>
                       {!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
-                      ((tradingEnabled && !isEquityCompletedBase))) && (
+                      (tradingEnabled && !isEquityCompletedBase)) && (
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
