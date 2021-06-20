@@ -67,6 +67,7 @@ const KycBankDetails = (props) => {
   const [isPennyFailed, setIsPennyFailed] = useState(false);
   const [goBackModal, setGoBackModal] = useState(false);
   const { kyc, user, isLoading } = useUserKycHook();
+  const goBackPath = props.location?.state?.goBack || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -325,10 +326,14 @@ const KycBankDetails = (props) => {
   };
 
   const goBackToPath = () => {
-    if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
-      navigate(PATHNAME_MAPPER.uploadProgress)
+    if (goBackPath) {
+      navigate(goBackPath);
     } else {
-      navigate(PATHNAME_MAPPER.journey);
+      if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
     }
   };
 

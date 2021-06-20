@@ -7,7 +7,7 @@ import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, checkDLPanFetchStatus } from '../common/functions'
+import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, checkDLPanFetchAndApprovedStatus } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
@@ -42,7 +42,7 @@ const Pan = (props) => {
     const docStatus = await checkDocsPending(kyc);
     setDocsPendingStatus(docStatus);
     setTradingEnabled(isTradingEnabled(kyc))
-    setIsPanFailed(checkDLPanFetchStatus(kyc));
+    setIsPanFailed(checkDLPanFetchAndApprovedStatus(kyc));
   }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
@@ -76,7 +76,15 @@ const Pan = (props) => {
     } else {
       if (dlFlow) {
         if (isPanFailed) {
-          commonRedirection();
+          if (kyc.equity_sign_status !== 'signed') {
+            if (!kyc.equity_data.meta_data.trading_experience) {
+              navigate(PATHNAME_MAPPER.tradingExperience);
+            } else {
+              commonRedirection();
+            }
+          } else {
+            navigate(PATHNAME_MAPPER.journey);
+          }
         } else {
           if (kyc.equity_sign_status !== 'signed') {
             navigate(PATHNAME_MAPPER.tradingExperience);

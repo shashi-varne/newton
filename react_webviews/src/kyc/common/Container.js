@@ -9,6 +9,7 @@ import "../../utils/native_listener";
 import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { storageService } from "../../utils/validators";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { PATHNAME_MAPPER } from "../constants";
 
 class Container extends Component {
   constructor(props) {
@@ -54,6 +55,7 @@ class Container extends Component {
       case "/kyc/upload/fno-income-proof":
       case "/kyc/digilocker/success":
       case "/kyc/digilocker/failed":
+      case "/kyc/trading-experience":
         this.setState({ openConfirmBack: true });
         openDialog=true;
         break;
@@ -128,10 +130,14 @@ class Container extends Component {
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-    let showAadhaar = !(kyc.address.meta_data.nri || kyc.kyc_type === "manual");
-    this.navigate("/kyc/journey", {
-      searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
-    });
+    const showAadhaar = !(kyc.address.meta_data.nri || kyc.kyc_type === "manual");
+    if (kyc.kyc_status !== "compliant") {
+      this.navigate(PATHNAME_MAPPER.journey, {
+        searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
+      });
+    } else {
+      this.navigate(PATHNAME_MAPPER.journey)
+    }
   };
 
   render() {

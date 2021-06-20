@@ -70,7 +70,7 @@ function Native(props) {
         if (kyc?.address?.meta_data?.is_nri) {
           navigate(PATHNAME_MAPPER.nriError, {
             state: { 
-              noStockOption: isReadyToInvestUser ? true : false,
+              noStockOption: (isReadyToInvestUser || kyc?.application_status_v2 === "submitted"),
               ...data.state
             },
           });

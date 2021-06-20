@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getConfig, isTradingEnabled } from "utils/functions";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
-import WVSteps from "../../common/ui/Steps/WVSteps"
+import WVSteps from "../../common/ui/Steps/WVSteps";
+import { isDocSubmittedOrApproved } from "../../kyc/common/functions";
 import { isReadyToInvest } from "../../kyc/services";
 import { isEmpty } from "../../utils/validators";
 
@@ -29,7 +30,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
       setShowAccountStatus(displayAccountStatus);
       const isReadyToInvestUser = isReadyToInvest();
 
-      if (displayAccountStatus && kyc?.sign_status === "signed" && !kyc?.equity_data?.meta_data?.fno) {
+      if (displayAccountStatus && kyc?.sign_status === "signed" && !isDocSubmittedOrApproved("equity_income")) {
         setSteps((stepsArr) => stepsArr.filter((step) => step.title !== "Futures & Options"))
       }
   
@@ -50,14 +51,14 @@ const Complete = ({ navigateToReports, dl_flow, show_note, kyc }) => {
         {showAccountStatus && (
           <div className="title" data-aid='kyc-header-title'>KYC complete!</div>
         )}
-        {!tradingEnabled && show_note && (
+        {!tradingEnabled && (
           <div className="title" data-aid='kyc-header-title'>Great! Your KYC application is submitted!</div>
         )}
         {/* {(kyc?.kyc_status !== 'compliant' && !dl_flow) && (
           <div className="title" data-aid='kyc-header-title'>
             Kudos! KYC application is submitted!</div>
         )} */}
-        {!tradingEnabled && kyc?.kyc_status !== 'compliant' && !dl_flow && (
+        {!tradingEnabled && (
           <div className="text" data-aid='kyc-header-text'>
             <img src={require(`assets/eta_icon.svg`)} alt="" />
             Approves in one working day
