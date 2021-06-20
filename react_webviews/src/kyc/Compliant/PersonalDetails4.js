@@ -26,9 +26,9 @@ const PersonalDetails4 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  let title = "Nominee detail";
+  let title = "Nominee details";
   if (isEdit) {
-    title = "Edit nominee detail";
+    title = "Edit nominee details";
   }
   const [totalPages, setTotalPages] = useState();
   const { kyc, user, isLoading } = useUserKycHook();
@@ -214,7 +214,7 @@ const PersonalDetails4 = (props) => {
             disabled={isChecked || isApiRunning}
           />
           <Input
-            label="Date of birth(DD/MM/YYYY)"
+            label="Date of birth (DD/MM/YYYY)"
             class="input"
             value={form_data.dob || ""}
             error={form_data.dob_error ? true : false}

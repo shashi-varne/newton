@@ -38,7 +38,7 @@ const KycPremiumLandingDialog = ({
           {data.bold_text && <b>{data.bold_text}</b>} {data.popup_message}
         </div>
         {data.status === "ground_premium" && (
-          <div className="bottom-info" data-aid='bottom-info'>
+          <div className="vfdc-bottom-info" data-aid='bottom-info'>
             <div className="bottom-info-box">
               <img
                 src={require(`assets/${productName}/ic_instant.svg`)}
