@@ -126,6 +126,7 @@ class Landing extends Component {
       modalData,
       openKycPremiumLanding,
       stateParams,
+      tradingEnabled,
     } = this.state;
     const {
       ourRecommendations,
@@ -181,7 +182,8 @@ class Landing extends Component {
                 case "kyc":
                   return (
                     <React.Fragment key={index}>
-                      {!isReadyToInvestBase && kycStatusData && !kycStatusLoader && (
+                      {!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
+                      ((tradingEnabled && !isEquityCompletedBase))) && (
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"

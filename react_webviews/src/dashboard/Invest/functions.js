@@ -15,6 +15,7 @@ import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/s
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted } from "../../kyc/common/functions";
+import { isTradingEnabled } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
 const config = getConfig();
@@ -438,6 +439,7 @@ export function initilizeKyc() {
   let isReadyToInvestBase = isReadyToInvest();
   let isEquityCompletedBase = isEquityCompleted();
   let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
+  const TRADING_ENABLED = isTradingEnabled(userKyc);
 
   this.setState({
     isCompliant,
@@ -449,6 +451,7 @@ export function initilizeKyc() {
     isEquityCompletedBase,
     getKycAppStatusData,
     rejectedItems,
+    tradingEnabled: TRADING_ENABLED,
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
