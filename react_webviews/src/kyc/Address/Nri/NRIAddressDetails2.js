@@ -103,7 +103,7 @@ const NRIAddressDetails2 = (props) => {
   const handleNavigation = () => {
     const data = { state: { isEdit } };
     if (stateParams?.backToJourney) {
-      navigate("/kyc/upload/address", data);
+      navigate("/kyc/upload/address-nri", data);
     } else if (stateParams?.userType === "compliant") {
       navigate("/kyc/compliant-personal-details4", data);
     } else {
@@ -140,7 +140,7 @@ const NRIAddressDetails2 = (props) => {
     }
   }
 
-  let addressProof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type] || "";
+  let addressProof = NRI_DOCUMENTS_MAPPER[kyc?.nri_address_doc_type] || "";
 
   const getPageDetails = (userKyc) => {
     let pageDetails = {}

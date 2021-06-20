@@ -227,7 +227,7 @@ const CommunicationDetails = (props) => {
         const body = getPayLoad();
         if (!body) return;
         if (communicationType === "mobile" && formData.mobileNumberVerified) {
-          if (!formData.whatsappConsent) {
+          if (formData.whatsappConsent === kyc.whatsapp_consent) {
             handleNavigation();
             return;
           }
@@ -376,7 +376,7 @@ const CommunicationDetails = (props) => {
               }}
               // eslint-disable-next-line
               inputProps={{
-                disabled: showOtpContainer,
+                disabled: showOtpContainer || formData.mobileNumberVerified,
                 inputMode: "numeric",
               }}
             />
