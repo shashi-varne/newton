@@ -66,7 +66,7 @@ class PanDetails extends Component {
     form_data.dob = userKyc.pan.meta_data.dob || "";
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 
-    form_data.email = userKyc.address.meta_data.email || "";
+    form_data.email = userKyc.identification.meta_data.email || "";
     let mobile_number = userKyc.identification?.meta_data?.mobile_number || "";
     let country_code = "";
     if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
@@ -194,7 +194,7 @@ class PanDetails extends Component {
     });
 
     if (canSubmit) {
-      let { pan, address, identification } = userKyc;
+      let { pan, identification } = userKyc;
 
       if (is_nps_contributed) {
         storageService().set("nps_pran_number", form_data.pran);
@@ -204,7 +204,7 @@ class PanDetails extends Component {
       pan.meta_data.dob = form_data.dob;
       pan.meta_data.pan_number = form_data.pan;
 
-      address.meta_data.email = form_data.email;
+      identification.meta_data.email = form_data.email;
 
       let mobile_number = form_data.mobile_number?.toString();
       if (form_data.country_code) {
@@ -215,7 +215,6 @@ class PanDetails extends Component {
       let data = {
         kyc: {
           pan: pan.meta_data,
-          address: address.meta_data,
           identification: identification.meta_data,
         },
       };
