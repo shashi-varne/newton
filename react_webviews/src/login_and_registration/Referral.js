@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import Container from "../dashboard/common/Container";
 import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle"
 import Input from "common/ui/Input";
-import { getConfig } from 'utils/functions';
+import { initialize } from "./function";
+import { getConfig } from "utils/functions";
 
 
 class Referral extends Component {
@@ -16,10 +17,11 @@ class Referral extends Component {
       form_data: {},
       isPromoApiRunning: false,
     }
+    this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
-
+    this.initialize();
   }
 
 
@@ -51,7 +53,7 @@ class Referral extends Component {
         button2Props={{
           type: 'secondary',
           title: "SKIP",
-          onClick: () => console.log("A"),
+          onClick: () => this.navigate("/verify"),
           showLoader: false,
         }}
         showLoader={this.state.show_loader}

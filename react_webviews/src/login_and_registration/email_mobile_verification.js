@@ -4,9 +4,12 @@ import Container from "../dashboard/common/Container";
 import Input from "common/ui/Input";
 import { getConfig } from 'utils/functions';
 import { countries } from "./constants";
+import { initialize } from "./function";
+import { validateNumber } from "utils/validators";
+import { nativeCallback } from "../utils/native_callback";
 import DropDownNew from "common/ui/DropDownNew";
-import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle";
 import Checkbox from "../common/ui/Checkbox";
+import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle";
 
 
 class EnterVerifyDetails extends Component {
@@ -15,34 +18,52 @@ class EnterVerifyDetails extends Component {
         super(props);
         this.state = {
             productName: getConfig().productName,
-            form_data: {},
-            isMobile: false,
-            isEmail: true,
+            form_data: { whatsapp_consent: true,},
+            isMobile: true,
+            isEmail: false,
+            loginType: "mobile",
         }
+        this.initialize = initialize.bind(this);
     }
 
     componentWillMount() {
-
+        this.initialize();
         countries.map((item, idx) => {
-
             item.name = "+" + item.value;
-
         })
-
     }
 
     handleChange = (name) => (event) => {
         let value = event.target ? event.target.value : event;
+        if (name === "mobile" && value && !validateNumber(value)) return;
         let { form_data } = this.state;
         form_data[name] = value;
+        if (name === "whatsapp_consent") form_data[name] = !form_data?.whatsapp_consent;
         form_data[`${name}_error`] = "";
         this.setState({ form_data: form_data });
     };
 
-    handleClicks() {
-        console.log('hi')
+    handleClick() {
+        let { form_data, loginType } = this.state;
+        const secoundary = true;
+        let keys_to_check = ["mobile", "code"];
+        if (loginType !== "email")
+            this.sendEvents();
+        if (loginType === "email") keys_to_check = ["email"];
+        this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType , secoundary);
     }
 
+
+    sendEvents = (userAction) => {
+        let eventObj = {
+          "event_name": 'otp sent to user',
+        };
+        if (userAction === 'just_set_events') {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+      }
 
     render() {
 
@@ -53,9 +74,9 @@ class EnterVerifyDetails extends Component {
                 fullWidthButton={true}
                 onlyButton={true}
                 buttonTitle="CONTINUE"
-                handleClick={() => this.handleClicks()}
+                handleClick={() => this.handleClick()}
                 canSkip={true}
-                onSkipClick={() => console.log("hello")}
+                onSkipClick={() => this.navigate("/")}
                 showLoader={this.state.show_loader}
                 title={isMobile ? "Enter Your Number to get started" : "Share your email address"}>
                 <div className="form" data-aid='form'>
@@ -93,11 +114,12 @@ class EnterVerifyDetails extends Component {
                             <div className="declaration-container">
                                 <Checkbox
                                     defaultChecked
-                                    checked={this.state.checked}
+                                    checked={form_data?.whatsapp_consent}
                                     color="default"
                                     value="checked"
                                     name="checked"
-                                    handleChange={() => console.log("clicked")}
+                                    handleChange={this.handleChange("whatsapp_consent")}
+                                    index={form_data?.whatsapp_consent}
                                     className="Checkbox"
                                 />
                                 <p>I agree to receive important investment updates on WhatsApp</p>

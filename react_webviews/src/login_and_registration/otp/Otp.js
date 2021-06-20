@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import "./Style.scss";
-import { initialize } from "./function";
+import "../Style.scss";
+import { initialize } from "../function";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
-import { validateNumber } from "../utils/validators";
-import OtpComp from "../kyc/Equity/mini-components/Otp";
-import WVClickableTextElement from "../common/ui/ClickableTextElement/WVClickableTextElement";
-import WVButtonLayout from "../common/ui/ButtonLayout/WVButtonLayout";
+import { validateNumber } from "../../utils/validators";
+import OtpComp from "./reset_opt";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
+import WVButtonLayout from "../../common/ui/ButtonLayout/WVButtonLayout";
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
@@ -27,16 +27,17 @@ class Otp extends Component {
 
   componentWillMount() {
     let { state } = this.props.location || {};
-    if (!state || !state.mobile_number) {
-      toast("Mobile number not provided");
-      this.props.history.goBack();
-      return;
-    }
-    let mobile_number = state.mobile_number;
+    // if (!state || !state.mobile_number) {
+    //   toast("Mobile number not provided");
+    //   this.props.history.goBack();
+    //   return;
+    // }
+    let {mobile_number , otp_id}  = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     let forgot = state.forgot;
     this.setState({
       mobile_number: mobile_number,
+      otp_id: otp_id,
       rebalancing_redirect_url: rebalancing_redirect_url,
       forgot: forgot,
     });
@@ -44,9 +45,13 @@ class Otp extends Component {
   }
 
   handleClick = () => {
+
+    console.log(this.state.mobile_number , this.state.otpData, this.state.otp_id);
+
     this.otpVerification({
       mobile_number: this.state.mobile_number,
-      otp: this.state.otpData["otp"],
+      otp_value: this.state.otpData["otp"],
+      otp_id: this.state.otp_id,
     });
   };
 
@@ -73,7 +78,7 @@ class Otp extends Component {
               {this.state.mobile_number}
             </span>
           </p>
-          <WVClickableTextElement>EDIT</WVClickableTextElement>
+          <WVClickableTextElement onClick={() => this.props.history.goBack()}>EDIT</WVClickableTextElement>
         </div>
         <div className="kcd-otp-content">
           <OtpComp
@@ -88,7 +93,7 @@ class Otp extends Component {
             type="primary"
             title="VERIFY"
             onClick={this.handleClick}
-            // disable={disabled}
+            disable={disabled}
             showLoader={isApiRunning}
             className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button"}
           />

@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Login from './login_and_registration/Login';
 import Register from './login_and_registration/Register';
-import Otp from './login_and_registration/Otp';
+import Otp from './login_and_registration/otp/Otp';
 import ForgotPassword from './login_and_registration/ForgotPassword';
 import Logout from './login_and_registration/Logout';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';

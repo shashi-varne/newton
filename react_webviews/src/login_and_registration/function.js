@@ -79,7 +79,8 @@ export function formCheckFields(
   keys_to_check,
   form_data,
   userAction,
-  loginType
+  loginType,
+  secoundary
 ) {
   let canSubmit = true;
   for (let key of keys_to_check) {
@@ -123,7 +124,7 @@ export function formCheckFields(
   }
 
   let { redirectUrl, referrer = "" } = this.state;
-
+  console.log("ggggggggggggggggggggggggggggggggggggggggggggg")
   let body = {};
   this.setState({ isApiRunning: "button" });
   if (loginType === "email" && userAction === "LOGIN") {
@@ -145,8 +146,16 @@ export function formCheckFields(
     else body.email = form_data.email;
     this.forgotPassword(body);
   } else {
-    body.redirect_url = redirectUrl;
-    body.mobile_number = `${form_data["code"]}|${form_data["mobile"]}`;
+    // body.redirect_url = redirectUrl;
+    body.mobile = `${form_data["code"]}|${form_data["mobile"]}`;
+    body.whatsapp_consent = form_data["whatsapp_consent"];
+    console.log("1234567890")
+    if(secoundary){
+      body.secoundary = true
+    }
+
+    console.log("111111111111111111111111111111")
+
     this.mobileLogin(body);
   }
 }
@@ -222,36 +231,53 @@ export async function emailLogin(body) {
   }
 }
 
-export async function mobileLogin(body) {
+export async function mobileLogin(body) { 
   try {
-    const res = await Api.get(
-      `/api/iam/userauthstatus?auth_type=mobile&auth_value=${body.mobile_number}`
+    const res = await Api.post(
+      `/api/communication/send/otp`, body
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       toast("OTP is sent successfully to your mobile number.");
-      if (this.state.referrer) {
-        let item = {
-          promo_code: this.state.referrer,
-        };
-        storageService.setObject("user_promo", item);
-      }
+      // if (this.state.referrer) {
+      //   let item = {
+      //     promo_code: this.state.referrer,
+      //   };
+      //   storageService.setObject("user_promo", item);
+      // }
 
-      if (this.state.isPromoSuccess && this.state.referral_code !== "") {
-        let item = {
-          promo_code: this.state.referral_code,
-        };
-        storageService().setObject("user_promo", item);
-      }
+      // if (this.state.isPromoSuccess && this.state.referral_code !== "") {
+      //   let item = {
+      //     promo_code: this.state.referral_code,
+      //   };
+      //   storageService().setObject("user_promo", item);
+      // }
 
-      this.setState({ isApiRunning: false });
-      this.navigate("mobile/verify", {
-        state: {
-          mobile_number: body.mobile_number,
-          rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
-          forgot: false,
-        },
-      });
+      storageService().setObject("otp_id", result?.otp_id );
+      console.log(result , result?.otp_id  )
+      const a=   storageService().get("otp_id"); console.log(a)
+
+      this.setState({ isApiRunning: false});
+
+      if(body?.secoundary){
+        this.navigate("verify-Secoundary", {
+          state: {
+            mobile_number: body.mobile,
+            // rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
+            forgot: false,
+            otp_id: result?.otp_id,
+          },
+        });
+      } else {
+        this.navigate("mobile/verify", {
+          state: {
+            mobile_number: body.mobile,
+            // rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
+            forgot: false,
+            otp_id: result?.otp_id,
+          },
+        });
+      }
     } else {
       toast(result.message || result.error || errorMessage);
     }
@@ -368,7 +394,7 @@ export async function otpVerification(body) {
   this.setState({ isApiRunning: "button" });
   try {
     const res = await Api.post(
-      `/api/mobile/login?mobile_number=${body.mobile_number}&otp=${body.otp}`
+      `/api/communication/verify/otp/${body.otp_id}?otp=${body.otp_value}`
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
@@ -384,7 +410,7 @@ export async function otpVerification(body) {
         return;
       }
       let userData = {};
-      let kycResult = await getKycFromSummary();
+      let kycResult = await getKycFromSummary(); // here
 
       if (!kycResult) {
         this.setState({ isApiRunning: false });
@@ -418,7 +444,7 @@ export async function otpVerification(body) {
           storageService().get("deeplink_url")
         );
       } else {
-        this.redirectAfterLogin(result, user);
+        this.redirectAfterLogin(result, user);  // here
       }
     } else {
       toast(result.message || result.error || errorMessage);
@@ -448,10 +474,10 @@ export async function applyCode(user) {
   }
 }
 
-export async function resendOtp() {
+export async function resendOtp(otp_id) { console.log('otp id' , otp_id)
   this.setState({ isApiRunning: "button" });
   try {
-    const res = await Api.get(`/api/resendotp`);
+    const res = await Api.get(`/api/communication/resend/otp/${otp_id}>`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
@@ -538,7 +564,7 @@ export async function getKycFromSummary() {
 
 export function redirectAfterLogin(data, user) {
   const kyc = storageService().getObject("kyc");
-  if (!data.firstLogin) {
+  if (data.firstLogin) {
     this.navigate("/referral-code", { state: { goBack: "/" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&

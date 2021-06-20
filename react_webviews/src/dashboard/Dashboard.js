@@ -33,6 +33,7 @@ import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 import Referral from "../login_and_registration/Referral"
 import EnterVerifyDetails from "../login_and_registration/email_mobile_verification"
+import EnterSecoundaryDetails from "../login_and_registration/OtpSecondary"
 import OtpSecondary from "../login_and_registration/OtpSecondary"
 
 const Home = (props) => {
@@ -42,6 +43,7 @@ const Home = (props) => {
     <Fragment>
       <Switch>
         <Route exact path={`${url}verify`} component={EnterVerifyDetails} />
+        <Route exact path={`${url}verify-Secoundary`} component={EnterSecoundaryDetails} />
         <Route path={`${url}referral-code`} component={Referral} />
         <Route exact path={`${url}`} component={isSdk ? SdkLanding : Invest} />
         <Route exact path={`${url}verify-otp`} component={OtpSecondary} />
