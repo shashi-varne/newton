@@ -28,9 +28,9 @@ const PersonalDetails4 = (props) => {
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
-  let title = "Nominee detail";
+  let title = "Nominee details";
   if (isEdit) {
-    title = "Edit nominee detail";
+    title = "Edit nominee details";
   }
   const type = props.type || "";
   const keysToCheck = ["dob", "name", "relationship"];

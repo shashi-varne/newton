@@ -85,6 +85,7 @@ const Journey = (props) => {
   }
 
   const backHandlingCondition = () => {
+    const kycStartPoint = storageService().get("kycStartPoint");
     if (config.isIframe) {
       if (config.code === 'moneycontrol') {
         navigate("/invest/money-control");
@@ -93,16 +94,16 @@ const Journey = (props) => {
       }
       return;
     } else if (!config.Web) {
-      if (storageService().get('native')) {
+      if (storageService().get('native') && (!TRADING_ENABLED || kycStartPoint !== "stocks")) {
         nativeCallback({ action: "exit_web" });
-      } else if (storageService().get("kycStartPoint") === "stocks"){
+      } else if (kycStartPoint === "stocks" && TRADING_ENABLED){
         navigate(PATHNAME_MAPPER.stocksStatus);
       } else {
         navigate("/");
       }
       return;
     }
-    if (storageService().get("kycStartPoint") === "stocks"){
+    if (kycStartPoint === "stocks" && TRADING_ENABLED){
       navigate(PATHNAME_MAPPER.stocksStatus);
     } else {
       navigate("/");
@@ -607,7 +608,7 @@ const Journey = (props) => {
     }
   }
   if (!isEmpty(kyc) && !isEmpty(user)) {
-    const TRADING_ENABLED = isTradingEnabled(kyc);
+    var TRADING_ENABLED = isTradingEnabled(kyc);
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
       navigate('/nps/identity', {
         state: { goBack: '/invest' },
