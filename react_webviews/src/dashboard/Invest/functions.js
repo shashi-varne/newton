@@ -575,7 +575,7 @@ export async function openStocks() {
       // only NRI conditions
       if (userKyc?.address?.meta_data?.is_nri) {
         this.navigate(PATHNAME_MAPPER.nriError, {
-          state: {noStockOption: isReadyToInvestUser ? true : false}
+          state: {noStockOption: (isReadyToInvestUser || userKyc?.application_status_v2 === "submitted")}
         });
       } else {
         if (kycJourneyStatus === "ground_pan") {
