@@ -103,7 +103,9 @@ class SdkLanding extends Component {
 
   addBank = () => {
     const userKyc = this.state.userKyc || {};
-    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`, {
+      state: { goBack: "/invest" }
+    });
   };
 
   updateDocument = () => {

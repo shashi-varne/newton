@@ -15,6 +15,7 @@ import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
 import { openFilePicker } from "../../utils/functions";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 const config = getConfig();
 const { productName, isNative, Web: isWeb, isSdk } = config;
@@ -37,6 +38,7 @@ const Selfie = (props) => {
   const [isTradingFlow, setIsTradingFlow] = useState(false);
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [fileHandlerParams, setFileHandlerParams] = useState();
+  const [goBackModal, setGoBackModal] = useState(false);
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
@@ -246,6 +248,22 @@ const Selfie = (props) => {
     );
   }, [isCamLoading, isWeb, isNative, file]);
 
+  const closeConfirmBackDialog = () => {
+    setGoBackModal(false);
+  };
+
+  const goBackToPath = () => {
+    if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
+      navigate(PATHNAME_MAPPER.uploadProgress)
+    } else {
+      navigate(PATHNAME_MAPPER.journey);
+    }
+  };
+
+  const goBack = () => {
+    setGoBackModal(true)
+  }
+
   return (
     <Container
       buttonTitle="Upload"
@@ -254,6 +272,7 @@ const Selfie = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Take a selfie"
+      headerData={{goBack}}
       data-aid='kyc-upload-selfie-screen'
       events={sendEvents("just_set_events")}
     >
@@ -324,6 +343,14 @@ const Selfie = (props) => {
             onClose={() => setOpenBottomSheet(false)}
             onCtaClick={handleNavigation}
           />
+          {goBackModal ?
+            <ConfirmBackDialog
+              isOpen={goBackModal}
+              close={closeConfirmBackDialog}
+              goBack={goBackToPath}
+            />
+            : null
+          }
         </section>
       )}
     </Container>

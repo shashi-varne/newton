@@ -11,12 +11,12 @@ import { PATHNAME_MAPPER } from "../../constants";
 
 const config = getConfig();
 const productName = config.productName;
-const kycStartPoint = storageService().get("kycStartPoint");
 
 const DocumentVerification = (props) => {
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
   const [docs, setDocs] = useState([]);
+  const kycStartPoint = storageService().get("kycStartPoint");
 
   useEffect(() => {
     const init = async () => {

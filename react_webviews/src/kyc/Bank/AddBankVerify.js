@@ -60,7 +60,7 @@ const AddBankVerify = (props) => {
     try {
       setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
       if (result.code === "ERROR") {
         toast(result.message);
       } else if (userKyc.address.meta_data.is_nri) {
@@ -69,7 +69,8 @@ const AddBankVerify = (props) => {
         pennyLoader();
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -117,6 +118,10 @@ const AddBankVerify = (props) => {
       updateKycObject(result);
     } catch (err) {
       console.log(err);
+      clearInterval(countdownInterval);
+      setCountdownInterval(null);
+      setIsPennyOpen(false);
+      setIsPennyFailed(true);
     }
   };
 
@@ -135,6 +140,7 @@ const AddBankVerify = (props) => {
       updateKycObject(result);
     } catch (err) {
       console.log(err);
+      setIsPennyFailed(true);
     }
   };
 

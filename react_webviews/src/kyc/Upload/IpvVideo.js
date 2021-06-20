@@ -12,6 +12,7 @@ import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
+import Toast from '../../common/ui/Toast'
 
 const config = getConfig();
 const productName = config.productName
@@ -107,8 +108,13 @@ const IpvVideo = (props) => {
   }
 
   const onVideoRecorderError = (error) => {
+    console.log(error.message);
+    if (error.message === "Permission denied") {
+      setNoCameraPermission(!noCameraPermission);
+    } else {
+      Toast("Something went wrong!")
+    }
     setShowVideoRecorder(!showVideoRecoreder);
-    setNoCameraPermission(!noCameraPermission);
   }
 
   const sendEvents = (userAction, type) => {
@@ -190,7 +196,7 @@ const IpvVideo = (props) => {
                 showReplayControls
                 replayVideoAutoplayAndLoopOff
                 onRecordingComplete={onRecordingComplete}
-                countdownTime={15}
+                timeLimit={15000}
                 onError={onVideoRecorderError}
               />
             }

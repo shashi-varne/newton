@@ -50,7 +50,7 @@ const KycBankVerify = (props) => {
     try {
       setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bankData.bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
       if (result.code === "ERROR") {
         toast(result.message);
       } else if (kyc.address.meta_data.is_nri) {
@@ -60,6 +60,7 @@ const KycBankVerify = (props) => {
       }
     } catch (err) {
       console.log(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -88,7 +89,7 @@ const KycBankVerify = (props) => {
   const checkBankStatusStep1 = async () => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
       if (result.records.PBI_record.bank_status === "verified") {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
@@ -107,6 +108,10 @@ const KycBankVerify = (props) => {
       updateKycObject(result);
     } catch (err) {
       console.log(err);
+      clearInterval(countdownInterval);
+      setCountdownInterval(null);
+      setIsPennyOpen(false);
+      setIsPennyFailed(true);
     }
   };
 
@@ -114,7 +119,7 @@ const KycBankVerify = (props) => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
       setIsPennyOpen(false);
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
       if (result.records.PBI_record.bank_status === "verified") {
         setIsPennySuccess(true);
       } else if (result.records.PBI_record.user_rejection_attempts === 0) {
@@ -125,6 +130,7 @@ const KycBankVerify = (props) => {
       updateKycObject(result);
     } catch (err) {
       console.log(err);
+      setIsPennyFailed(true);
     }
   };
 
