@@ -376,7 +376,7 @@ const CommunicationDetails = (props) => {
               }}
               // eslint-disable-next-line
               inputProps={{
-                disabled: showOtpContainer,
+                disabled: showOtpContainer || formData.mobileNumberVerified,
                 inputMode: "numeric",
               }}
             />
