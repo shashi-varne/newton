@@ -677,7 +677,7 @@ const Journey = (props) => {
             <div className="left">
               <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
               <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
-              {!show_aadhaar && (isCompliant || isKycDone) &&
+              {!show_aadhaar && isCompliant && (isCompliant || isKycDone) &&
               (
                 <FastAndSecureDisclaimer options={HEADER_BOTTOM_DATA} />
               )}
