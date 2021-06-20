@@ -75,22 +75,14 @@ const Pan = (props) => {
       commonRedirection();
     } else {
       if (dlFlow) {
-        if (isPanFailed) {
-          if (kyc.equity_sign_status !== 'signed') {
-            if (!kyc.equity_data.meta_data.trading_experience) {
-              navigate(PATHNAME_MAPPER.tradingExperience);
-            } else {
-              commonRedirection();
-            }
-          } else {
-            navigate(PATHNAME_MAPPER.journey);
-          }
-        } else {
-          if (kyc.equity_sign_status !== 'signed') {
+        if (kyc.equity_sign_status !== 'signed') {
+          if (isPanFailed && !kyc.equity_data.meta_data.trading_experience) {
             navigate(PATHNAME_MAPPER.tradingExperience);
           } else {
-            navigate(PATHNAME_MAPPER.journey);
+            commonRedirection();
           }
+        } else {
+          navigate(PATHNAME_MAPPER.journey);
         }
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress);
