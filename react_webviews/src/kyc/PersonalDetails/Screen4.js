@@ -9,7 +9,8 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
-  getFlow
+  getFlow,
+  isDocSubmittedOrApproved
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -120,7 +121,11 @@ const PersonalDetails4 = (props) => {
 
   const handleNavigation = () => {
     if (type === "digilocker") {
-      navigate(PATHNAME_MAPPER.uploadSign);
+      if(!isDocSubmittedOrApproved("sign")) {
+        navigate(PATHNAME_MAPPER.uploadSign);
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
     } else {
       navigate(PATHNAME_MAPPER.journey);
     }

@@ -619,7 +619,7 @@ const Journey = (props) => {
       navigate('/kyc/report', {
         state: { goBack: '/invest' },
       })
-    } else if (
+    } else if (!TRADING_ENABLED &&
       user.kyc_registration_v2 === 'complete' &&
       kyc.sign_status === 'signed'
     ) {
@@ -677,7 +677,7 @@ const Journey = (props) => {
             <div className="left">
               <div className="pj-header" data-aid='kyc-pj-header'>{headerData.title}</div>
               <div className="pj-sub-text" data-aid='kyc-pj-sub-text'>{headerData.subtitle}</div>
-              {!show_aadhaar && isCompliant && (isCompliant || isKycDone) &&
+              {!show_aadhaar && (isCompliant || isKycDone) &&
               (
                 <FastAndSecureDisclaimer options={HEADER_BOTTOM_DATA} />
               )}
@@ -687,17 +687,22 @@ const Journey = (props) => {
               alt=""
             />
           </div>
-          {show_aadhaar && !isCompliant && !isKycDone && 
+          {!isCompliant && ((show_aadhaar && !isKycDone) || (!show_aadhaar && isKycDone)) && 
           (
             <FastAndSecureDisclaimer alignInRow options={DL_HEADER_BOTTOM_DATA} />
           )}
           <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
-          {!show_aadhaar && !isCompliant && (
+          {!show_aadhaar && !isCompliant && !isKycDone && (
             <div className="kyc-journey-subtitle" data-aid='kyc-journey-subtitle'>
               <WVInfoBubble isDismissable isOpen type="info">
                 Please keep your <b>PAN card</b> ({kyc?.pan?.meta_data?.pan_number}){" "}
                 and <b>address proof</b> handy to complete KYC
               </WVInfoBubble>
+            </div>
+          )}
+          {isKycDone && (
+            <div className="kyc-compliant-subtitle" data-aid="kyc-complete-subtitle">
+              Complete the last few steps to open your trading and demat account
             </div>
           )}
           {isCompliant && !investmentPending && (

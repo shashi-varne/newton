@@ -206,11 +206,6 @@ export async function pendingDocsList(kyc = {}) {
   if (isEmpty(kyc)) return false;
   let docsToCheck = ["equity_pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
 
-  if (kyc?.kyc_type === "manual") {
-    docsToCheck = docsToCheck.filter((doc) => doc !== "equity_identification");
-    docsToCheck.push("identification");
-  }
-  
   if (kyc?.address?.meta_data.is_nri) {
     docsToCheck.push("nri_address");
   }
@@ -274,7 +269,7 @@ export function isNotManualAndNriUser(kyc = {}) {
 }
 
 export function isDocSubmittedOrApproved(doc) {
-  const kyc = storageService().getObject("kyc") || {}; 
+  const { kyc = {} } = getKycUserFromSession(); 
   if (isEmpty(kyc)) return false;
   return kyc[doc]?.doc_status === "submitted" || kyc[doc]?.doc_status === "approved";
 }
