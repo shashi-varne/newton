@@ -385,7 +385,7 @@ export function getDocuments(userKyc) {
     const data = {
       key: "nriaddress",
       title: "Foreign Address proof",
-      subtitle: DOCUMENTS_MAPPER[userKyc.address_doc_type],
+      subtitle: DOCUMENTS_MAPPER[userKyc.nri_address_doc_type],
       doc_status: userKyc.nri_address.doc_status,
       default_image: "regi_default.svg",
       approved_image:"regi_approved.svg",

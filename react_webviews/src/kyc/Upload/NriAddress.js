@@ -89,8 +89,8 @@ const NRIAddressUpload = (props) => {
     return addressLine
   }
 
-  const addressProofKey = kyc?.address_doc_type
-  const addressProof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type]
+  const addressProofKey = kyc?.nri_address_doc_type
+  const addressProof = NRI_DOCUMENTS_MAPPER[addressProofKey]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )

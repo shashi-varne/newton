@@ -43,7 +43,7 @@ const NriAddressDetails1 = (props) => {
     let formData = {
       mobile_number: mobile_number,
       country_code: country_code,
-      address_doc_type: kyc.address_doc_type || "",
+      address_doc_type: kyc.nri_address_doc_type || "",
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
@@ -67,13 +67,13 @@ const NriAddressDetails1 = (props) => {
       });
       return;
     }
-    let mobile_number = form_data.mobile;
+    let mobile_number = form_data.mobile_number;
     if (form_data.country_code) {
       mobile_number = form_data.country_code + "|" + mobile_number;
     }
     let userkycDetails = { ...kyc };
     userkycDetails.nri_address.meta_data.mobile_number = mobile_number;
-    userkycDetails.nri_address.meta_data.address_doc_type =
+    userkycDetails.nri_address.meta_data.nri_address_doc_type =
       form_data.address_doc_type;
     saveNriAddressDetails1(userkycDetails);
   };
