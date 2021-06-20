@@ -8,7 +8,7 @@ import {
   STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
-import { getFlow, getGenderValue } from "../common/functions";
+import { getFlow, getGenderValue, isDigilockerFlow } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { storageService, isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
@@ -52,6 +52,7 @@ const Report = (props) => {
 
   const initialize = () => {
     let compliant = kyc.kyc_status === "compliant";
+    const dlFlow = isDigilockerFlow(kyc);
     setIsCompliant(compliant);
     if (
       compliant &&
@@ -66,7 +67,7 @@ const Report = (props) => {
     const nri = kyc.address.meta_data.is_nri;
     if (nri) {
       address_proof = "Passport";
-      address_proof_nri = DOCUMENTS_MAPPER[kyc.address_doc_type];
+      address_proof_nri = DOCUMENTS_MAPPER[kyc.nri_address_doc_type];
     } else {
       address_proof = DOCUMENTS_MAPPER[kyc.address_doc_type];
     }
@@ -84,12 +85,12 @@ const Report = (props) => {
     setIsNri(nri);
     if (compliant) {
       reportCards.splice(5, 1); //remove docs
-      if (!nri) {
-        reportCards.splice(2, 1); //remove address
-      }
+    }
+    if(dlFlow || (compliant && !nri)) {
+      reportCards.splice(2, 1); //remove address
     }
     if (kyc.nomination.nominee_optional) {
-      if (compliant && !nri) {
+      if ((compliant && !nri) || dlFlow) {
         reportCards.splice(2, 1);
       } else {
         reportCards.splice(3, 1);
@@ -213,10 +214,12 @@ const Report = (props) => {
             </div>
           </div>
         </div>
-        <div className="unzipped-box" data-aid="kyc-father-name">
-          <div className="title">Father’s name</div>
-          <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
-        </div>
+        {!isCompliant && (
+          <div className="unzipped-box" data-aid="kyc-father-name">
+            <div className="title">Father’s name</div>
+            <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
+          </div>
+        )}
         <div className="unzipped-box" data-aid="kyc-mother-name">
           <div className="title">Mother’s name</div>
           <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
