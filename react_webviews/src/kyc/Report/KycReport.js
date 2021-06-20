@@ -51,7 +51,7 @@ const Report = (props) => {
   }, [kyc, user]);
 
   const initialize = () => {
-    let compliant = kyc.kyc_status === "compliant" ? true : true;
+    let compliant = kyc.kyc_status === "compliant";
     setIsCompliant(compliant);
     if (
       compliant &&

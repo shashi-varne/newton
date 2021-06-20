@@ -95,12 +95,18 @@ const Journey = (props) => {
     } else if (!config.Web) {
       if (storageService().get('native')) {
         nativeCallback({ action: "exit_web" });
+      } else if (storageService().get("kycStartPoint") === "stocks"){
+        navigate(PATHNAME_MAPPER.stocksStatus);
       } else {
         navigate("/");
       }
       return;
     }
-    navigate("/landing");
+    if (storageService().get("kycStartPoint") === "stocks"){
+      navigate(PATHNAME_MAPPER.stocksStatus);
+    } else {
+      navigate("/");
+    }
   }
 
   const openGoBackModal = () => {

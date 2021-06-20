@@ -337,7 +337,6 @@ const KycUploadDocuments = (props) => {
         isOpen={showPendingModal}
         image={require(`assets/${config.productName}/ic_bank_partial_add.svg`)}
         title="Bank verification pending!"
-        onClose={() => setShowPendingModal(false)}
         button1Props={{
           title: "CONTINUE WITH KYC",
           variant: "contained",
