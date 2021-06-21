@@ -130,7 +130,7 @@ class Container extends Component {
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
-    const showAadhaar = !(kyc.address.meta_data.nri || kyc.kyc_type === "manual");
+    const showAadhaar = !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual");
     if (kyc.kyc_status !== "compliant") {
       this.navigate(PATHNAME_MAPPER.journey, {
         searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`

@@ -45,6 +45,7 @@ const StocksStatus = (props) => {
   const [data, setData] = useState({});
   const [isApiRunning, setIsApiRunning] = useState(false);
   const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const stateParams = props.location?.state || {};
 
   useEffect(() => {
     initialize();
@@ -65,11 +66,15 @@ const StocksStatus = (props) => {
   }, [kyc]);
 
   const initialize = async () => {
+    const landingScreens = ["/landing", "/", "/invest"]
+    if(landingScreens.includes(stateParams.fromState) && !isEmpty(kyc)) {
+      return;
+    }
     try {
       setIsApiRunning(true);
       await getUserKycFromSummary();
-      let kyc = storageService().getObject("kyc") || {};
-      updateKyc(kyc);
+      let kycDetails = storageService().getObject("kyc") || {};
+      updateKyc(kycDetails);
     } catch (ex) {
       console.log(ex.toString());
       Toast(ex.message || "Something went wrong");

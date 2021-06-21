@@ -97,8 +97,12 @@ const AddressDetails1 = (props) => {
     if(isNri !== kyc.address.meta_data.is_nri) {
       if(!isNri && kyc.kyc_product_type !== "equity") {
         body.set_kyc_product_type = "equity";
+        if(kyc.kyc_status !== "compliant")
+          body.set_kyc_type = "manual";
       } else if(isNri && kyc.kyc_product_type === "equity") {
         body.set_kyc_product_type = "mf";
+        if(kyc.kyc_status !== "compliant")
+          body.set_kyc_type = "init";
       } 
     }
     let userkycDetails = { ...kyc };
