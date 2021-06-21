@@ -161,7 +161,8 @@ class Landing extends Component {
           {
             !kycStatusLoader &&
             <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
-              {isReadyToInvestBase 
+              {((!tradingEnabled && isReadyToInvestBase) ||
+-                (tradingEnabled && isEquityCompletedBase)) 
                 ? " Your KYC is verified, You’re ready to invest"
                 : "Invest in your future"}
             </div>
@@ -182,7 +183,8 @@ class Landing extends Component {
                 case "kyc":
                   return (
                     <React.Fragment key={index}>
-                      {!kycStatusLoader && kycStatusData && !isReadyToInvestBase && (
+                      {!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
+-                      (tradingEnabled && !isEquityCompletedBase)) && (
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
