@@ -18,7 +18,7 @@
 
 .Refer h1 {
   margin: 0;
-  color: #371a83;
+  color: var(--primary);
   font-weight: bold;
   font-size: 20px;
   line-height: 32px;
@@ -85,8 +85,11 @@
   color: #00bdf2;
 }
 .ReferPaytmGrid h1 {
-  color: #371a83;
+  color: #161A2E;
   margin: 0;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 32px;
 }
 .ReferPaytmGrid h1 span {
   font-size: 22px;
@@ -114,17 +117,18 @@
   text-align: left;
 }
 .Earning .List h1 {
-  color: #4a4a4a;
+  color: #161A2E;
   margin: 0;
   font-weight: bold;
-  font-size: 20px;
-  line-height: 32px;
+  font-size: 15px;
+  line-height: 24px;
+  padding-top: 30px;
 }
 .Earning .List p {
   margin: 10px 0;
-  color: #878787;
-  line-height: 1.3em;
-  font-size: 16px;
+  font-size: 13px;
+  line-height: 21px;
+  color: #767E86;
   margin-bottom: 30px;
 }
 .Earning .List img {
@@ -154,12 +158,17 @@
   transform: translate(-50%, -50%);
 }
 .Earning .List .Item .name {
-  color: #4a4a4a;
-  font-size: 18px;
+  color: #161A2E;
+  font-size: 13px;
+  line-height: 21px;
 }
 .Earning .List .Item .action {
   color: secondary;
-  font-size: 16px;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: uppercase;
+  text-align: right;
   margin: 0;
 }
 .Earning .List .Item .GreyText {

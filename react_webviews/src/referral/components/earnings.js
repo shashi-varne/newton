@@ -127,7 +127,7 @@ class Earnings extends Component {
       return <h3 onClick={() => this.remindHandler(length, item, index)} className="action">Remind</h3>;
     }
     if (item.investment_status === 'success') {
-      return <h3 className="action GreyText">Invested</h3>
+      return <h3 className="action GreyText">Earned {item.amount_earned}</h3>
     }
   }
 
@@ -161,10 +161,10 @@ class Earnings extends Component {
             <Grid item xs={3}>
               {this.renderIcon(item)}
             </Grid>
-            <Grid item xs={6}>
-              <span className="name">{this.capitalize((item.referee_name.length > 10) ? item.referee_name.replace('91|', '').substring(0, 10) + '...' : item.referee_name)}</span>
+            <Grid item xs={5}>
+              <span className="name">{this.capitalize((item.referee_name.length > 15) ? item.referee_name.replace('+91|', '').substring(0, 10) + '...' : item.referee_name)}</span>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
               {this.renderAction(dataLength, item, i)}
             </Grid>
           </Grid>
@@ -246,7 +246,7 @@ class Earnings extends Component {
     // eslint-disable-next-line
     if (this.state.total_earnings == 0 && this.state.data.length > 0) {
       return (
-        <div className="List pad15">
+        <div className="List">
           <h1>Earn more</h1>
           <p>Remind your friends to invest with {this.state.type} & increase your Paytm earnings. Get ₹{this.state.amount_per_referral} for every friend who invests</p>
           <div className="Referres">
@@ -259,7 +259,7 @@ class Earnings extends Component {
     }
     if (this.state.total_earnings > 0 && this.state.data.length > 0) {
       return (
-        <div className="List pad15">
+        <div className="List">
           <h1>Earn more</h1>
           <p>Remind your friends to invest with {this.state.type} & increase your Paytm earnings. Get ₹{this.state.amount_per_referral} for every friend who invests</p>
           <div className="Referres">
