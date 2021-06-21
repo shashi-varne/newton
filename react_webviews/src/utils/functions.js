@@ -454,6 +454,9 @@ function getPartnerConfig(partner_code) {
       label: '#767E86',
       type: 'fisdom',
       // inputFocusedColor: '#4f2da7',
+      colors: {
+        primary1: "#DFD8EF",
+      },
       productName: 'fisdom',
       appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
       termsLink: 'https://www.fisdom.com/terms/',
@@ -473,6 +476,9 @@ function getPartnerConfig(partner_code) {
       skelton_color: '#E7E7E7',
       label: '#767E86',
       type: 'finity',
+      colors: {
+        primary1: "#C6C2F9"
+      },
       // inputFocusedColor: '#3792fc',
       productName: 'finity',
       mobile: '+91-8048039999',
@@ -581,6 +587,14 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
   html.style.setProperty('--color-action-disable', '#E8ECF1');
+
+  html.style.setProperty(`--mustard`, '#FFDA2C');
+  html.style.setProperty(`--pink`, '#F16FA0');
+  html.style.setProperty(`--purple`, '#A38CEB');
+  html.style.setProperty(`--lime`, '#7ED321');
+  html.style.setProperty(`--red`, '#D0021B');
+  html.style.setProperty(`--primaryVariant1`, `${config_to_return.colors.primary1}`);
+  html.style.setProperty(`--steelgrey`, '#767E86');
 
   return config_to_return;
 }

@@ -1,0 +1,37 @@
+.wv-journey-card__with-step {
+  position: relative;
+}
+
+.wv-journey-card-content .body-text2 {
+  color: var(--steelgrey);
+}
+
+.wv-journey-card {
+  border: 1px solid var(--primaryVariant1);
+  border-radius: 4px;
+}
+
+.wv-journey-card-icon {
+  display: block;
+}
+
+.wv-journey-card-step {
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  line-height: 21px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  transform: translateX(-50%);
+  z-index: 20;
+  font-weight: 600;
+}
