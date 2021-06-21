@@ -92,14 +92,14 @@
   line-height: calc(11px * 1.6);
 }
 
-.small-text-1 {
+.small-text1 {
   color: #0A1D32;
   font-size: 10px;
   font-weight: 600;
   line-height: calc(10px * 1.6);
 }
 
-.small-text-2 {
+.small-text2 {
   color: #0A1D32;
   font-size: 10px;
   line-height: calc(10px * 1.6);
@@ -116,4 +116,24 @@
   color: #0A1D32;
   font-size: 8px;
   line-height: calc(10px * 1.6);
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.m-left-2x {
+  margin-top: calc(var(--spacing) * 2);
+}
+
+.pd-2x {
+  padding: calc(var(--spacing) * 2);
 }

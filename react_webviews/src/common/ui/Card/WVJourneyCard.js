@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import WVCard from './WVCard'
-import { isEmpty, isFunction } from 'lodash'
+import { isFunction } from 'lodash'
 
 import './WVJourneyCard.scss'
 
@@ -45,7 +45,7 @@ function WVJourneyCard({
             alt={title}
           />
         )}
-        {withStep && <StepCount count={stepCount} />}
+        {withStep && <StepCount count={stepCount} classes={classes} />}
       </div>
     </WVCard>
   )
@@ -58,6 +58,14 @@ WVJourneyCard.propTypes = {
   renderTitle: PropTypes.func,
   renderSubtitle: PropTypes.func,
   stepCount: PropTypes.number,
+  classes: PropTypes.shape({
+    container: PropTypes.string,
+    content: PropTypes.string,
+    title: PropTypes.string,
+    subtitle: PropTypes.string,
+    icon: PropTypes.string,
+    step: PropTypes.string,
+  }),
 }
 
 WVJourneyCard.defaultProps = {
@@ -69,12 +77,15 @@ WVJourneyCard.defaultProps = {
   classes: {},
 }
 
-export function StepCount({ count }) {
-  return <div className="wv-journey-card-step">{count}</div>
+export function StepCount({ count, classes }) {
+  return <div className={`wv-journey-card-step ${classes?.step}`}>{count}</div>
 }
 
 StepCount.propTypes = {
   count: PropTypes.number,
+  classes: PropTypes.shape({
+    step: PropTypes.string,
+  }),
 }
 
 export default WVJourneyCard
