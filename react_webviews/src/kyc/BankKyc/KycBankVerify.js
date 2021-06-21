@@ -223,7 +223,7 @@ const KycBankVerify = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": screen_name || "verify_bank_account",
-        "initial_kyc_status": kyc.initial_kyc_status,
+        "initial_kyc_status": kyc?.initial_kyc_status,
         "flow": getFlow(kyc) || ""
       }
     };
