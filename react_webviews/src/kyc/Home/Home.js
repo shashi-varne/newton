@@ -251,6 +251,8 @@ const Home = (props) => {
 
       if(tradingEnabled) {
         body.set_kyc_product_type = "equity";
+      } else {
+        body.set_kyc_product_type = "mf";
       }
 
       let result = await kycSubmit(body);

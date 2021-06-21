@@ -72,9 +72,6 @@ const PersonalDetails1 = (props) => {
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.identification.meta_data.gender = form_data.gender;
     userkycDetails.address.meta_data.is_nri = isNri;
-    // if(!isNri) {
-    //   userkycDetails.identification.meta_data.tax_status = "";
-    // }
     let item = {
       kyc: {
         pan: userkycDetails.pan.meta_data,
@@ -82,6 +79,11 @@ const PersonalDetails1 = (props) => {
         identification: userkycDetails.identification.meta_data,
       },
     };
+    if(!isNri && kyc.kyc_product_type !== "equity") {
+      item.set_kyc_product_type = "equity";
+    } else if(isNri && kyc.kyc_product_type === "equity") {
+      item.set_kyc_product_type = "mf";
+    }
     if (compareObjects(keysToCheck, oldState, form_data)) {
       navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
