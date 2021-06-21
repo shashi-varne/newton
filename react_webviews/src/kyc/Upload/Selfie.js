@@ -105,13 +105,12 @@ const Selfie = (props) => {
       const result = await upload(file, 'identification', params);
       updateKyc(result.kyc);
       setBottomSheetType('success');
-      setOpenBottomSheet(true);
     } catch (err) {
       console.error(err);
       setBottomSheetType('failed');
-      setOpenBottomSheet(true);
     } finally {
-      setIsApiRunning(false)
+      setIsApiRunning(false);
+      setOpenBottomSheet(true);
     }
   }
 
