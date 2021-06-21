@@ -124,7 +124,7 @@ export function formCheckFields(
   }
 
   let { redirectUrl, referrer = "" } = this.state;
-  console.log("ggggggggggggggggggggggggggggggggggggggggggggg")
+
   let body = {};
   this.setState({ isApiRunning: "button" });
   if (loginType === "email" && userAction === "LOGIN") {
@@ -149,12 +149,9 @@ export function formCheckFields(
     // body.redirect_url = redirectUrl;
     body.mobile = `${form_data["code"]}|${form_data["mobile"]}`;
     body.whatsapp_consent = form_data["whatsapp_consent"];
-    console.log("1234567890")
     if(secoundary){
       body.secoundary = true
     }
-
-    console.log("111111111111111111111111111111")
 
     this.mobileLogin(body);
   }
@@ -254,9 +251,7 @@ export async function mobileLogin(body) {
       // }
 
       storageService().setObject("otp_id", result?.otp_id );
-      console.log(result , result?.otp_id  )
-      const a=   storageService().get("otp_id"); console.log(a)
-
+      const a=   storageService().get("otp_id");
       this.setState({ isApiRunning: false});
 
       if(body?.secoundary){
@@ -324,7 +319,7 @@ export async function emailRegister(body) {
   }
 }
 
-export async function verifyCode(form_data) {
+export async function verifyCode(form_data) { console.log(form_data)
   if (!form_data.referral_code) {
     form_data[`referral_code_error`] = "This is required";
     this.setState({ form_data: form_data });
@@ -474,7 +469,7 @@ export async function applyCode(user) {
   }
 }
 
-export async function resendOtp(otp_id) { console.log('otp id' , otp_id)
+export async function resendOtp(otp_id) {
   this.setState({ isApiRunning: "button" });
   try {
     const res = await Api.get(`/api/communication/resend/otp/${otp_id}>`);
@@ -564,7 +559,7 @@ export async function getKycFromSummary() {
 
 export function redirectAfterLogin(data, user) {
   const kyc = storageService().getObject("kyc");
-  if (data.firstLogin) {
+  if (!data.firstLogin) {
     this.navigate("/referral-code", { state: { goBack: "/" } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
