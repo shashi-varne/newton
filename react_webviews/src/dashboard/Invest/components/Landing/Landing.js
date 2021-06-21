@@ -183,8 +183,8 @@ class Landing extends Component {
                 case "kyc":
                   return (
                     <React.Fragment key={index}>
-                      {!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
--                      (tradingEnabled && !isEquityCompletedBase)) && (
+                      {(!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
+-                      (tradingEnabled && !isEquityCompletedBase))) ? (
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
@@ -207,7 +207,7 @@ class Landing extends Component {
                             }}
                           />
                         </div>
-                      )}
+                      ): null}
                     </React.Fragment>
                   );
                 case "stocks":
