@@ -231,7 +231,6 @@ import { getConfig } from './functions';
     let callbackData = {};
     callbackData.action = 'get_device_data';
     if (typeof window.Android !== 'undefined') {
-      console.log("android")
       window.Android.callbackNative(JSON.stringify(callbackData));
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       window.webkit.messageHandlers.callbackNative.postMessage(callbackData);
@@ -239,30 +238,39 @@ import { getConfig } from './functions';
       navigator.permissions.query({
         name: 'geolocation'
       }).then(function(result) {
-          navigator.geolocation.getCurrentPosition(position => {
-            let data = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              location_permission_denied: false
-            }
-            window.callbackWeb.send_device_data(data);
-          })
+          
+        const onLocationFetchSuccess = (position) => {
+          let data = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            location_permission_denied: false
+          }
+          window.callbackWeb.send_device_data(data);
+        };
+
+        const onLocationFetchFailure = () => {
+          let data = {
+            location_permission_denied: true
+          }
+          window.callbackWeb.send_device_data(data);
+        };
+
+        navigator.geolocation.getCurrentPosition(onLocationFetchSuccess, onLocationFetchFailure);
   
+        if (result.state === 'denied') {
+          onLocationFetchFailure();
+        }
+
+        /*
+          onchange does not currently work in Mozilla due to a bug in Mozilla itself.
+          The same behaviour is now also handled using onLocationFetchFailure passed into
+          geolocation.getCurrentPosition's error callback param
+        */
+        result.onchange = function() {
           if (result.state === 'denied') {
-            let data = {
-              location_permission_denied: true
-            }
-            window.callbackWeb.send_device_data(data);
+            onLocationFetchFailure();
           }
-  
-          result.onchange = function() {
-            if (result.state === 'denied') {
-              let data = {
-                location_permission_denied: true
-              }
-              window.callbackWeb.send_device_data(data);
-            }
-          }
+        }
       })
     }
 
