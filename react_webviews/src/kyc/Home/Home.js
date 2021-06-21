@@ -270,7 +270,7 @@ const Home = (props) => {
       } else {
         setIsUserCompliant(false);
       }
-      handleNavigation(is_nri, result.kyc.kyc_status);
+      handleNavigation(is_nri, result.kyc);
     } catch (err) {
       console.log(err);
       toast(err.message || genericErrorMessage);
@@ -279,16 +279,16 @@ const Home = (props) => {
     }
   };
 
-  const handleNavigation = (is_nri, kyc_status) => {
+  const handleNavigation = (is_nri, kycDetails) => {
     if (
-      (isUserCompliant || kyc_status === "compliant") &&
+      (isUserCompliant || kycDetails.kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
       sendEvents("next", "pan_entry")
       navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       const kycProductType = storageService().get("kycStartPoint");
-      if (isUserCompliant || kyc_status === "compliant") {
+      if (isUserCompliant || kycDetails.kyc_status === "compliant") {
         if (is_nri) {
           if (!tradingEnabled && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
@@ -310,7 +310,7 @@ const Home = (props) => {
             });
           }
         } else {
-          if (kyc?.application_status_v2 !== "init" && kyc?.kyc_type === "manual") {
+          if (kycDetails?.application_status_v2 !== "init" && kycDetails?.kyc_type === "manual") {
             navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${config.searchParams}&show_aadhaar=false`,
             });
@@ -332,7 +332,7 @@ const Home = (props) => {
     if (skipApiCall) {
       handleNavigation(
         kyc.address?.meta_data?.is_nri || false,
-        kyc?.kyc_status
+        kyc
       );
     } else {
       setOpenCheckCompliant(true);
@@ -356,7 +356,6 @@ const Home = (props) => {
       nativeCallback({ events: eventObj });
     }
   }
-  console.log("trading enabled ",tradingEnabled)
   return (
     <Container
       events={sendEvents("just_set_events")}
