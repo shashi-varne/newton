@@ -13,6 +13,7 @@ import { initialize } from '../common_data';
 import ReactTooltip from "react-tooltip";
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import Checkbox from 'common/ui/Checkbox';
+import Toast from '../../../../common/ui/Toast';
 
 const other_adult_member_options = [
     {
@@ -329,6 +330,38 @@ class GroupHealthPlanAddMembers extends Component {
         if(provider === 'STAR' && total_insured < 2 && this.state.account_type !== 'self_family') {
             toast('Please select atleast one more member');
             canProceed = false;
+        }
+
+        if(provider === 'STAR' && (this.state.account_type === 'self_family' || this.state.account_type === 'family')){
+            var parent_keys = ['father', 'mother']; var parents_in_law_keys = ['father_in_law', 'mother_in_law'];
+            var parent_count = 0; var parent_in_law_count = 0;
+            
+            for(let y of parent_keys) 
+                if(ui_members[y]) parent_count++;   
+
+            for(let y of parents_in_law_keys) 
+                if(ui_members[y]) parent_in_law_count++;
+                   
+            adult_total -= parent_count + parent_in_law_count;
+            total_insured = adult_total + child_total;
+            
+            if(parent_count || parent_in_law_count){
+                if(this.state.account_type === 'family'){
+                    if(!this.state.other_adult_member){
+                        Toast('Please select an adult member');
+                        canProceed = false
+                    }
+                    if(total_insured < 2 && child_total === 0){
+                        Toast('Please select at least one child')
+                        canProceed = false
+                    }
+                }else if(this.state.account_type === 'self_family'){
+                    if(total_insured < 2 && child_total === 0){
+                        Toast('Please select spouse or a child')
+                        canProceed = false
+                    }
+                }
+            }
         }
 
         if(canProceed) {

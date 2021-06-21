@@ -696,11 +696,26 @@ export function ghGetMember(lead, providerConfig) {
     obj.backend_key = 'self_account_key';
     obj.key = 'applicant';
     member_base.push(obj);
+  }
 
+  if(lead.vendor === 'star' && (lead.insurance_type === 'family' || lead.insurance_type === 'self_family')){
+    member_base = starMemberSort(member_base);
   }
 
   return member_base; 
+}
 
+export function starMemberSort(current_member_data){
+  var dobOrder = ['self', 'wife', 'daughter', 'daughter1', 'daughter2', 'daughter3', 'son', 'son1', 'son2', 'son3', 'father', 'mother', 'father_in_law', 'mother_in_law']
+  var member_base = [];
+  for(let x of dobOrder){
+    for(let y of current_member_data){
+      if(x === y.key){
+          member_base.push(y);
+      }   
+    }
+  }
+  return member_base;
 }
 
 export function getCssMapperReport(policy) {
