@@ -96,12 +96,8 @@ const Journey = (props) => {
     } else if (!config.Web) {
       if (storageService().get('native') && (!TRADING_ENABLED || kycStartPoint !== "stocks")) {
         nativeCallback({ action: "exit_web" });
-      } else if (kycStartPoint === "stocks" && TRADING_ENABLED){
-        navigate(PATHNAME_MAPPER.stocksStatus);
-      } else {
-        navigate("/");
+        return;
       }
-      return;
     }
     if (kycStartPoint === "stocks" && TRADING_ENABLED){
       navigate(PATHNAME_MAPPER.stocksStatus);

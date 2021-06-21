@@ -252,14 +252,14 @@ const Home = (props) => {
         },
       };
 
-      const setKycType = kyc.kyc_status === "non-compliant" && !isDigilockerFlow(kyc);
+      const addkycType = kyc.kyc_status === "non-compliant" && !isDigilockerFlow(kyc);
       if(tradingEnabled) {
         body.set_kyc_product_type = "equity";
-        if(setKycType)
+        if(addkycType && kyc.kyc_type !== "manual")
           body.set_kyc_type = "manual";
       } else {
         body.set_kyc_product_type = "mf";
-        if(setKycType)
+        if(addkycType && kyc.kyc_type !== "init")
           body.set_kyc_type = "init";
       }
 
@@ -267,6 +267,9 @@ const Home = (props) => {
       if (!result) return;
       if (result?.kyc?.kyc_status === "compliant") {
         setIsUserCompliant(true);
+        if(result?.kyc?.kyc_type !== "init") {
+          result = await kycSubmit({ kyc: {}, set_kyc_type: "init"})
+        }
       } else {
         setIsUserCompliant(false);
       }
@@ -325,7 +328,7 @@ const Home = (props) => {
   };
 
   const handleConfirmPan = async () => {
-    const skipApiCall =
+    const skipApiCall = 
       pan === kyc?.pan?.meta_data?.pan_number &&
       kyc.address?.meta_data?.is_nri === !residentialStatus;
     setOpenConfirmPan(false);
