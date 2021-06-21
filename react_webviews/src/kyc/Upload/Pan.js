@@ -27,7 +27,7 @@ const Pan = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [tradingEnabled, setTradingEnabled] = useState();
-  const [isPanFailed, setIsPanFailed] = useState(false);
+  const [isPanAvailable, setIsPanAvailable] = useState(false);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -42,7 +42,7 @@ const Pan = (props) => {
     const docStatus = await checkDocsPending(kyc);
     setDocsPendingStatus(docStatus);
     setTradingEnabled(isTradingEnabled(kyc))
-    setIsPanFailed(checkDLPanFetchAndApprovedStatus(kyc));
+    setIsPanAvailable(isDocSubmittedOrApproved("equity_pan"));
   }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
@@ -76,7 +76,7 @@ const Pan = (props) => {
     } else {
       if (dlFlow) {
         if (kyc.equity_sign_status !== 'signed') {
-          if (isPanFailed && !kyc.equity_data.meta_data.trading_experience) {
+          if (isPanAvailable && !kyc.equity_data.meta_data.trading_experience) {
             navigate(PATHNAME_MAPPER.tradingExperience);
           } else {
             commonRedirection();
