@@ -147,10 +147,10 @@ const Report = (props) => {
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
                 <div className="subtitle">
-                  {kyc.address.meta_data.addressline},
-                  {kyc.address.meta_data.city},{kyc.address.meta_data.state},
-                  {kyc.address.meta_data.country},
-                  {kyc.address.meta_data.pincode}
+                  {kyc.nri_address.meta_data.addressline},
+                  {kyc.nri_address.meta_data.city},{kyc.nri_address.meta_data.state},
+                  {kyc.nri_address.meta_data.country},
+                  {kyc.nri_address.meta_data.pincode}
                 </div>
               </div>
             )}
