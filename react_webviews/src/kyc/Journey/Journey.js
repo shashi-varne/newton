@@ -224,9 +224,11 @@ const Journey = (props) => {
               ) {
                 if (
                   data.name === 'nomination' &&
-                  (kyc.nomination.nominee_optional ||
-                    (kyc.address.meta_data.is_nri &&
-                      kyc.nomination.nominee_optional === null))
+                  (kyc.nomination.nominee_optional 
+                    // ||
+                    // (kyc.address.meta_data.is_nri &&
+                    //   kyc.nomination.nominee_optional === null)
+                      )
                 ) {
                   //
                 } else {
