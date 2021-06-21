@@ -90,6 +90,9 @@ const KycBankVerify = (props) => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
       if (!result) throw new Error("No result. Something went wrong");
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
@@ -105,7 +108,7 @@ const KycBankVerify = (props) => {
           setIsPennyFailed(true);
         }
       }
-      updateKycObject(result);
+      updateKyc(result.kyc_app);
     } catch (err) {
       console.log(err);
       clearInterval(countdownInterval);
@@ -120,6 +123,9 @@ const KycBankVerify = (props) => {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
       setIsPennyOpen(false);
       if (!result) throw new Error("No result. Something went wrong");
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         setIsPennySuccess(true);
       } else if (result.records.PBI_record.user_rejection_attempts === 0) {
@@ -127,26 +133,12 @@ const KycBankVerify = (props) => {
       } else {
         setIsPennyFailed(true);
       }
-      updateKycObject(result);
+      updateKyc(result.kyc_app);
     } catch (err) {
       console.log(err);
       setIsPennyFailed(true);
     }
   };
-
-  const updateKycObject = (result) => {
-    let resultKyc = {
-      ...kyc,
-      bank: {
-        ...kyc.bank,
-        meta_data: {
-          ...kyc.bank.meta_data,
-          ...result.records.PBI_record
-        }
-      }
-    }
-    updateKyc(resultKyc);
-  }
 
   const checkBankDetails = () => {
     sendEvents("check bank details", "bottom_sheet");
@@ -231,7 +223,7 @@ const KycBankVerify = (props) => {
       "properties": {
         "user_action": userAction || "",
         "screen_name": screen_name || "verify_bank_account",
-        "initial_kyc_status": kyc.initial_kyc_status,
+        "initial_kyc_status": kyc?.initial_kyc_status,
         "flow": getFlow(kyc) || ""
       }
     };

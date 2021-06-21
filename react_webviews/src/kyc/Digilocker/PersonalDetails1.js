@@ -194,7 +194,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={showLoader}
+            disabled={showLoader || !!kyc?.pan?.meta_data.name}
           />
           <Input
             label="Father's name"
