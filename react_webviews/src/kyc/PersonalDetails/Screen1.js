@@ -189,7 +189,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={isApiRunning || !!kyc.pan.meta_data.name}
+            disabled={isApiRunning || !!kyc?.pan?.meta_data?.name}
           />
           <Input
             label="Date of birth (DD/MM/YYYY)"
