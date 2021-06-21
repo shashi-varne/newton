@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
 import {
   PATHNAME_MAPPER,
   DOCUMENTS_MAPPER,
   REPORT_CARD_DETAILS,
-  STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
 import { getFlow, getGenderValue, isDigilockerFlow } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
-import { storageService, isEmpty } from "../../utils/validators";
+import { isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Report = (props) => {
-  const flowType = props?.type || "";
-  const config = getConfig();
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -24,7 +20,6 @@ const Report = (props) => {
   const [isNri, setIsNri] = useState(false);
   const [topTitle, setTopTitle] = useState("KYC details");
   const [addressProof, setAddressProof] = useState({});
-  const [buttonTitle, setButtonTitle] = useState("OK");
   const goBackPage = props.location.state?.goBack || "";
 
   const handleTiles = (index, key) => {
@@ -77,10 +72,6 @@ const Report = (props) => {
       address_proof_nri,
     });
 
-    if (compliant) {
-      setButtonTitle("INVEST NOW");
-    }
-
     let reportCards = [...REPORT_CARD_DETAILS];
     setIsNri(nri);
     if (compliant) {
@@ -97,100 +88,6 @@ const Report = (props) => {
       }
     }
     setCardDetails(reportCards);
-  };
-
-  const handleClick = () => {
-    sendEvents('next')
-    if (isCompliant) {
-      proceed();
-    } else {
-      checkNPSAndProceed();
-    }
-  };
-
-  const proceed = () => {
-    let _event = {
-      event_name: "journey_details",
-      properties: {
-        journey: {
-          name: "kyc",
-          trigger: "cta",
-          journey_status: "complete",
-          next_journey: "mf"
-        }
-      }
-    };
-    // send event
-    if (!config.Web) {
-      window.callbackWeb.eventCallback(_event);
-    } else if (config.isIframe) {
-      window.callbackWeb.sendEvent(_event);
-    }
-    
-    if (config.Web) {
-      navigate(PATHNAME_MAPPER.invest);
-    } else {
-      if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
-        nativeCallback({ action: "exit_web" });
-      } else {
-        navigate(PATHNAME_MAPPER.landing);
-      }
-    }
-  };
-
-  const checkNPSAndProceed = () => {
-    let _event = {};
-    if (user.nps_investment) {
-      _event = {
-        event_name: "journey_details",
-        properties: {
-          journey: {
-            name: "kyc",
-            trigger: "cta",
-            journey_status: "complete",
-            next_journey: "reports",
-          },
-        },
-      };
-      // send event
-      if (!config.Web) {
-        window.callbackWeb.eventCallback(_event);
-      } else if (config.isIframe) {
-        window.callbackWeb.sendEvent(_event);
-      }
-      if (!config.isIframe) {
-        navigate(PATHNAME_MAPPER.reports);
-      }
-    } else {
-      _event = {
-        event_name: "journey_details",
-        properties: {
-          journey: {
-            name: "kyc",
-            trigger: "cta",
-            journey_status: "complete",
-            next_journey: "mf",
-          },
-        },
-      };
-
-      // send event
-      if (!config.Web) {
-        window.callbackWeb.eventCallback(_event);
-      } else if (config.isIframe) {
-        window.callbackWeb.sendEvent(_event);
-      }
-
-      if (config.Web) {
-        navigate(PATHNAME_MAPPER.invest);
-      } else {
-        if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
-          nativeCallback({ action: "exit_web" });
-        } else {
-          navigate(PATHNAME_MAPPER.landing);
-        }
-      }
-    }
   };
 
   const personalDetails = () => {
