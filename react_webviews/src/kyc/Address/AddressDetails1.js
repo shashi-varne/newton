@@ -64,6 +64,7 @@ const AddressDetails1 = (props) => {
       address_doc_type: address_doc_type,
       residential_status:
         RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value || "",
+      disableResidentialStatus: !!kyc.identification.meta_data.tax_status
     };
     setFormData({ ...formData });
   };
@@ -77,9 +78,9 @@ const AddressDetails1 = (props) => {
       setFormData(data);
       return;
     }
-    const is_nri = form_data.residential_status === "NRI";
+    const isNri = form_data.residential_status === "NRI";
     if (
-      is_nri === kyc.address.meta_data.is_nri &&
+      isNri === kyc.address.meta_data.is_nri &&
       kyc.address_doc_type === form_data.address_doc_type
     ) {
       navigate(PATHNAME_MAPPER.addressDetails2, {
@@ -90,22 +91,28 @@ const AddressDetails1 = (props) => {
       });
       return;
     }
+    let body = {
+      kyc: {}
+    };
+    if(isNri !== kyc.address.meta_data.is_nri) {
+      if(!isNri && kyc.kyc_product_type !== "equity") {
+        body.set_kyc_product_type = "equity";
+      } else if(isNri && kyc.kyc_product_type === "equity") {
+        body.set_kyc_product_type = "mf";
+      } 
+    }
     let userkycDetails = { ...kyc };
     userkycDetails.address.meta_data.address_doc_type =
       form_data.address_doc_type;
-    userkycDetails.address.meta_data.is_nri = is_nri;
-    saveAddressDetails1(userkycDetails);
+    userkycDetails.address.meta_data.is_nri = isNri;
+    body.kyc.address = userkycDetails.address.meta_data;
+    saveAddressDetails1(body);
   };
 
-  const saveAddressDetails1 = async (userKyc) => {
+  const saveAddressDetails1 = async (body) => {
     setIsApiRunning("button");
     try {
-      let item = {
-        kyc: {
-          address: userKyc.address.meta_data,
-        },
-      };
-      const submitResult = await kycSubmit(item);
+      const submitResult = await kycSubmit(body);
       if (!submitResult) return;
       navigate(PATHNAME_MAPPER.addressDetails2, {
         state: {
@@ -190,7 +197,8 @@ const AddressDetails1 = (props) => {
               id="account_type"
               value={form_data.residential_status || ""}
               onChange={handleChange("residential_status")}
-              disabled={isApiRunning}
+              disabled={form_data.disableResidentialStatus || isApiRunning}
+              disabledWithValue={form_data.disableResidentialStatus}
             />
           </div>
           <div className="input" data-aid='kyc-address-proof'>
