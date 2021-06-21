@@ -253,8 +253,12 @@ const Home = (props) => {
 
       if(tradingEnabled) {
         body.set_kyc_product_type = "equity";
+        if(kyc.kyc_status === "non-compliant")
+          body.set_kyc_type = "manual";
       } else {
         body.set_kyc_product_type = "mf";
+        if(kyc.kyc_status === "non-compliant")
+          body.set_kyc_type = "init";
       }
 
       let result = await kycSubmit(body);

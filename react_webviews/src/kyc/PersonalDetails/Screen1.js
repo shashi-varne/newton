@@ -189,7 +189,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={isApiRunning}
+            disabled={isApiRunning || !!form_data.name}
           />
           <Input
             label="Date of birth (DD/MM/YYYY)"
