@@ -66,7 +66,7 @@ const StocksStatus = (props) => {
   }, [kyc]);
 
   const initialize = async () => {
-    const landingScreens = ["/invest", "/", "/invest"]
+    const landingScreens = ["/landing", "/", "/invest"]
     if(landingScreens.includes(stateParams.fromState) && !isEmpty(kyc)) {
       return;
     }
