@@ -6,10 +6,7 @@ import "./Style.scss";
 
 const product = getConfig().productName;
 
-function VerifyDetailDialog({ type, isOpen, data, onClose }) {
-  const editHandle = () => {
-    console.log("edit clicked");
-  };
+function VerifyDetailDialog({ type, isOpen, data, onClose, editDetails  }) {
 
   return (
     <WVBottomSheet
@@ -39,7 +36,7 @@ function VerifyDetailDialog({ type, isOpen, data, onClose }) {
           />
           <span className="text">{data}</span>
         </div>
-        <WVClickableTextElement onClick={editHandle}>
+        <WVClickableTextElement onClick={editDetails}>
           EDIT
         </WVClickableTextElement>
       </div>

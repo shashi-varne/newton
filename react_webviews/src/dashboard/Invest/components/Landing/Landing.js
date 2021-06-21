@@ -66,6 +66,10 @@ class Landing extends Component {
     this.navigate("/kyc/add-bank");
   };
 
+  editDetails = () => {
+    this.navigate("/verify");
+  }
+
   closeVerificationFailed = () => {
     this.setState({ verificationFailed: false });
   };
@@ -474,6 +478,7 @@ class Landing extends Component {
             type="mobile"
             data="98*****487"
             pan="CXIPP***M"
+            editDetails={this.editDetails}
             isOpen={accountAlreadyExists}
             onClose={this.closeAccountAlreadyExistDialog}
           ></AccountAlreadyExistDialog>
@@ -482,6 +487,7 @@ class Landing extends Component {
           <VerifyDetailDialog
             type="email"
             data="uttam@fisdom.com"
+            editDetails={this.editDetails}
             isOpen={verifyDetails}
             onClose={this.closeVerifyDetailsDialog}
           ></VerifyDetailDialog>

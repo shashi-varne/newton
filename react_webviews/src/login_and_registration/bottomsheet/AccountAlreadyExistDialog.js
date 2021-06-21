@@ -5,7 +5,7 @@ import "./Style.scss";
 
 const product = getConfig().productName;
 
-function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan }) {
+function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan, editDetails }) {
   return (
     <WVBottomSheet
       isOpen={isOpen}
@@ -15,9 +15,7 @@ function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan }) {
       button1Props={{
         type: "secondary",
         title: `EDIT ${type === "email" ? "EMAIL" : "NUMBER"}`,
-        onClick: () => {
-          console.log("Button1 clicked");
-        },
+        onClick: editDetails,
       }}
       button2Props={{
         type: "primary",

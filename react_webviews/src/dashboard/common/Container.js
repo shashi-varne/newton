@@ -56,8 +56,6 @@ class Container extends Component {
         return;
       }
     }
-
-    console.log("Container props...", this.props);
     
     if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
