@@ -12,6 +12,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { ConfirmPan } from "../Equity/mini-components/ConfirmPan";
 import CheckCompliant from "../Equity/mini-components/CheckCompliant";
+import { isDigilockerFlow } from "../common/functions";
 
 const residentialStatusOptions = [
   {
@@ -251,13 +252,14 @@ const Home = (props) => {
         },
       };
 
+      const setKycType = kyc.kyc_status === "non-compliant" && !isDigilockerFlow(kyc);
       if(tradingEnabled) {
         body.set_kyc_product_type = "equity";
-        if(kyc.kyc_status === "non-compliant")
+        if(setKycType)
           body.set_kyc_type = "manual";
       } else {
         body.set_kyc_product_type = "mf";
-        if(kyc.kyc_status === "non-compliant")
+        if(setKycType)
           body.set_kyc_type = "init";
       }
 
