@@ -33,8 +33,10 @@ class Landing extends Component {
       modalData: {},
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
-      verifyDetails: true,
-      accountAlreadyExists: true,
+      verifyDetails: false,
+      verifyDetailsData: {},
+      accountAlreadyExists: false,
+      accountAlreadyExistsData : {},
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
       isWeb: getConfig().Web,
@@ -66,8 +68,13 @@ class Landing extends Component {
     this.navigate("/kyc/add-bank");
   };
 
-  editDetails = () => {
-    this.navigate("/verify");
+
+  setAccountAlreadyExistsData = (show, data) => {
+    this.setState({
+      accountAlreadyExists: show,
+      accountAlreadyExistsData: data,
+      verifyDetails: false
+    })
   }
 
   closeVerificationFailed = () => {
@@ -130,7 +137,9 @@ class Landing extends Component {
     handleCampaignRedirection(campLink);
   }
 
+  
   render() {
+    console.log(this.state.accountAlreadyExistsData)
     const {
       isReadyToInvestBase,
       isEquityCompletedBase,
@@ -441,7 +450,7 @@ class Landing extends Component {
                 </span>
               </div>
             )}
-          <VerificationFailedDialog
+          {/* <VerificationFailedDialog
             isOpen={verificationFailed}
             close={this.closeVerificationFailed}
             addBank={this.addBank}
@@ -464,21 +473,20 @@ class Landing extends Component {
               handleClick={this.handleKycPremiumLanding}
               data={modalData}
             />
-          )}
+          )} */}
         </div>
-        <CampaignDialog
+        {/* <CampaignDialog
           isOpen={this.state.openBottomSheet}
           close={this.closeCampaignDialog}
           cancel={this.closeCampaignDialog}
           data={this.state.bottom_sheet_dialog_data}
           handleClick={this.handleCampaign}
-        />
+        /> */}
         {accountAlreadyExists && (
           <AccountAlreadyExistDialog
             type="mobile"
             data="98*****487"
             pan="CXIPP***M"
-            editDetails={this.editDetails}
             isOpen={accountAlreadyExists}
             onClose={this.closeAccountAlreadyExistDialog}
           ></AccountAlreadyExistDialog>
@@ -487,7 +495,7 @@ class Landing extends Component {
           <VerifyDetailDialog
             type="email"
             data="uttam@fisdom.com"
-            editDetails={this.editDetails}
+            showAccountAlreadyExist={this.setAccountAlreadyExistsData}
             isOpen={verifyDetails}
             onClose={this.closeVerifyDetailsDialog}
           ></VerifyDetailDialog>

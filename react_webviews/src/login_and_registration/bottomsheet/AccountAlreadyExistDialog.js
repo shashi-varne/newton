@@ -1,11 +1,34 @@
 import React from "react";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { getConfig } from "utils/functions";
+import { withRouter } from "react-router-dom";
 import "./Style.scss";
 
 const product = getConfig().productName;
 
-function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan, editDetails }) {
+function AccountAlreadyExistDialog({
+  type,
+  isOpen,
+  onClose,
+  data,
+  pan,
+  history,
+}) {
+  const navigate = (pathname) => {
+    history.push({
+      pathname: pathname,
+      search: getConfig().searchParams,
+    });
+  };
+
+  const handleClick = () => {
+    navigate("/");
+  };
+
+  const editDetails = () => {
+    navigate("/verify");
+  };
+
   return (
     <WVBottomSheet
       isOpen={isOpen}
@@ -65,4 +88,4 @@ function AccountAlreadyExistDialog({ type, isOpen, onClose, data, pan, editDetai
   );
 }
 
-export default AccountAlreadyExistDialog;
+export default withRouter(AccountAlreadyExistDialog);
