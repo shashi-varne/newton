@@ -64,6 +64,7 @@ const AddressDetails1 = (props) => {
       address_doc_type: address_doc_type,
       residential_status:
         RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value || "",
+      disableResidentialStatus: !!kyc.identification.meta_data.tax_status
     };
     setFormData({ ...formData });
   };
@@ -196,7 +197,8 @@ const AddressDetails1 = (props) => {
               id="account_type"
               value={form_data.residential_status || ""}
               onChange={handleChange("residential_status")}
-              disabled={isApiRunning}
+              disabled={form_data.disableResidentialStatus || isApiRunning}
+              disabledWithValue={form_data.disableResidentialStatus}
             />
           </div>
           <div className="input" data-aid='kyc-address-proof'>

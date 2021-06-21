@@ -44,7 +44,8 @@ const Home = (props) => {
   const [openCheckCompliant, setOpenCheckCompliant] = useState(false);
   const [residentialStatus, setResidentialStatus] = useState(true);
   const [userName, setUserName] = useState("");
-  const [tradingEnabled, setTradingEnabled] = useState()
+  const [tradingEnabled, setTradingEnabled] = useState();
+  const [disableResidentialStatus, setDisableResidentialStatus] = useState();
 
   const isTradingEnabled = (isIndian) => {
     return !config.isSdk && isIndian
@@ -58,6 +59,7 @@ const Home = (props) => {
     setPan(kyc.pan?.meta_data?.pan_number || "");
     setResidentialStatus(!kyc.address?.meta_data?.is_nri);
     setTradingEnabled(isTradingEnabled(!kyc.address?.meta_data?.is_nri));
+    setDisableResidentialStatus(!!kyc.identification.meta_data.tax_status)
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
@@ -384,7 +386,8 @@ const Home = (props) => {
                 options={residentialStatusOptions}
                 value={residentialStatus}
                 onChange={handleResidentialStatus}
-                disabled={showLoader}
+                disabled={showLoader || disableResidentialStatus}
+                disabledWithValue={disableResidentialStatus}
               />
             </div>
           </main>

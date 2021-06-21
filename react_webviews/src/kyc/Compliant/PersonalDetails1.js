@@ -52,6 +52,7 @@ const PersonalDetails1 = (props) => {
       residential_status:
         RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value,
       gender: getGenderValue(kyc.identification.meta_data.gender) || "",
+      disableResidentialStatus: !!kyc.identification.meta_data.tax_status
     };
     setIsNri(nri);
     setFormData({ ...formData });
@@ -216,7 +217,8 @@ const PersonalDetails1 = (props) => {
                 id="account_type"
                 value={form_data.residential_status || ""}
                 onChange={handleChange("residential_status")}
-                disabled={isApiRunning}
+                disabled={form_data.disableResidentialStatus || isApiRunning}
+                disabledWithValue={form_data.disableResidentialStatus}
               />
             </div>
           </main>
