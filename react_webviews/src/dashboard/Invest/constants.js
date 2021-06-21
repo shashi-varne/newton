@@ -372,6 +372,13 @@ export const kycStatusMapperInvest = {
     button_text: "CHECK STATUS",
     next_state: "/kyc/upload/progress",
   },
+  complete: {
+    icon: "ic_card_kyc_default.svg",
+    title: "Upgrade your account",
+    subtitle: "Don’t miss out good returns by Delaying",
+    button_text: "UPGRADE NOW",
+    next_state: "/kyc/journey",
+  },
 };
 
 export const premiumBottomSheetMapper = {
