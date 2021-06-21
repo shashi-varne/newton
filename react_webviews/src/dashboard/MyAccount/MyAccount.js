@@ -4,6 +4,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import { initializeComponentFunctions } from "./MyAccountFunctions";
 import Container from "../common/Container";
 import Button from "material-ui/Button";
+import UserDetails from "./UserDetails";
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -138,6 +139,7 @@ class MyAccount extends Component {
       isReadyToInvestBase,
       userKyc,
       currentUser,
+      contacts,
     } = this.state;
     let bank = userKyc.bank || {};
     return (
@@ -149,6 +151,11 @@ class MyAccount extends Component {
       >
         <div className="my-account">
           <div className="my-account-content">
+            <UserDetails
+              pan_no={userKyc?.pan?.meta_data?.pan_number}
+              contacts={contacts}
+              name={currentUser?.name}
+            />
             <div className="account">
               <div className="account-head-title">Account options</div>
               {isReadyToInvestBase && (
