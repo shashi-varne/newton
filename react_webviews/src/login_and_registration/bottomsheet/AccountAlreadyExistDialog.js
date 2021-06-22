@@ -12,7 +12,6 @@ function AccountAlreadyExistDialog({
   isOpen,
   onClose,
   data,
-  pan,
   history,
 }) {
   const navigate = (pathname, data={}) => {

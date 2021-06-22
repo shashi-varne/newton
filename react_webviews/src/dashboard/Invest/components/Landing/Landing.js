@@ -503,6 +503,7 @@ class Landing extends Component {
               showAccountAlreadyExist={this.setAccountAlreadyExistsData}
               isOpen={verifyDetails}
               onClose={this.closeVerifyDetailsDialog}
+              parent={this}
             ></VerifyDetailDialog>
           )}
         {accountAlreadyExists && (

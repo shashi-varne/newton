@@ -6,6 +6,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import { getBasePath } from "../utils/functions";
+import Toast from "../common/ui/Toast";
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
@@ -615,3 +616,69 @@ export const logout = async () => {
     toast(e);
   }
 };
+
+
+
+export async function authCheckApi(type,data) {
+  let error = ""
+    try {
+      this.setState({
+        loading: true,
+      });
+      // Checking if that id has some other account associated
+      const response = await Api.get(
+        `/api/iam/auth/check?contact_type=${type}&contact_value=lakshya123@fisdom.com`
+      );
+      if (response.pfwresponse.status_code === 200) {
+        if (response.pfwresponse.result.message === "No user found") {
+          // If no user user found, generating the otp and redirecting to the otp screen
+          let body = {};
+          if (type === "email") body.email = 'lakshya123@fisdom.com';
+          else {body.mobile = data.contact_value;
+          body.whatsapp_consent = true;} // by default should this be true or false in case of bottomsheet?
+          const otpResponse = await Api.post(
+            "/api/communication/send/otp",
+            body
+          );
+          console.log(otpResponse)
+          if (otpResponse.pfwresponse.status_code === 200) {
+            // OTP_ID GENERATED, NAGIVATE TO THE OTP VERIFICATION SCREEN
+            let res = {
+              user: false,
+              otp_id: otpResponse.pfwresponse.result.otp_id
+            }
+            return res
+          } else {
+            error =
+              otpResponse.pfwresponse.result.message ||
+              otpResponse.pfwresponse.result.error ||
+              "Something went wrong!";
+            throw error;
+          }
+        } else {
+          // If User found then showing the other dialog box
+          let res = {
+            user: true,
+            data: response.pfwresponse.result.user
+          }
+          // this.props.showAccountAlreadyExist(
+          //   true,
+          //   response.pfwresponse.result.user
+          // );
+          return res
+        }
+      } else {
+        error =
+              response.pfwresponse.result.message ||
+              response.pfwresponse.result.error ||
+              "Something went wrong!";
+        throw error;
+      }
+    } catch (err) {
+      Toast(err, "error");
+    } finally {
+      this.setState({
+        loading: false,
+      });
+    }
+}

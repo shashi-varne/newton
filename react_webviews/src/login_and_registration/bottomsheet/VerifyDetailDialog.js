@@ -1,111 +1,89 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
+import React, { Component } from "react";
 import { getConfig } from "utils/functions";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import Toast from "../../common/ui/Toast";
-import Api from "../../utils/api";
+// import Toast from "../../common/ui/Toast";
+// import Api from "../../utils/api";
 import { isEmpty } from "lodash";
+import { authCheckApi } from "../function";
 import "./Style.scss";
 
 const product = getConfig().productName;
+class VerifyDetailDialog extends Component {
+  constructor(props) {
+    super(props);
 
-function VerifyDetailDialog({
-  type,
-  isOpen,
-  data,
-  onClose,
-  history,
-  showAccountAlreadyExist,
-}) {
-  const [loading, setLoading] = useState(false);
-  const navigate = (pathname, data = {}) => {
-    history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      state: data,
-    });
-  };
+    this.state = {
+      loading: false,
+    };
+    this.authCheckApi = authCheckApi.bind(this);
+  }
 
-  const handleClick = async () => {
-    let error = "";
+  handleClick = async () => {
+    const { data, type } = this.props;
     if (isEmpty(data)) {
-      navigate("/verify");
+      this.props.parent.navigate("/verify", {
+      // data like email/mobile goes here
+      });
     } else {
-      try {
-        setLoading(true);
-        // Checking if that id has some other account associated
-        const response = await Api.get(
-          `/api/iam/auth/check?contact_type=${type}&contact_value=${data.contact_value}`
-        );
-        setLoading(false);
-        if (response.pfwresponse.status_code === 200) {
-          if (response.pfwresponse.result.message === "No user found") {
-            // If no user user found, generating the otp and redirecting to the otp screen
-            let body = {};
-            if(type === "email")
-              body.email = data.contact_value
-            else
-              body.mobile = data.contact_value;
-              body.whatsapp_consent = true // by default should this be true or false in case of bottomsheet?
-            const response = await Api.post('/api/communication/send/otp', body)
-            console.log(response)
-          } else {
-            // If User found then showing the other dialog box
-            showAccountAlreadyExist(true, response.pfwresponse.result.user);
-          }
-        } else {
-          error =
-            response.pfwresponse.result.message ||
-            response.pfwresponse.result.error ||
-            "Something went wrong!";
-          throw error;
-        }
-      } catch (err) {
-        Toast(err, "error");
+      const response = await this.authCheckApi(type, data);
+      if (response.user === false) {
+        this.props.parent.navigate("verify-Secoundary", {
+          state: {
+            mobile_number: data.contact_value,
+            forgot: false, // flag to be checked
+            otp_id: response.otp_id,
+          }})
+      } else if (response.user === true) {
+        this.props.showAccountAlreadyExist(true, response.data);
       }
     }
   };
 
-  const editDetails = () => {
-    navigate("/verify");
+  editDetails = () => {
+    this.props.parent.navigate("/verify",{
+      // data like email/mobile goes here
+    });
   };
 
-  return (
-    <WVBottomSheet
-      isOpen={isOpen}
-      onClose={onClose}
-      title={`Verify your ${type} address`}
-      image={require(`../../assets/${product}/bottomsheet_verify_${type}.svg`)}
-      subtitle={`${
-        type === "email" ? "Email" : "Mobile"
-      } verification is mandatory for investment as per SEBI`}
-      button1Props={{
-        type: "primary",
-        title: "CONTINUE",
-        onClick: handleClick,
-        showLoader: loading,
-      }}
-      classes={{
-        container: "verify-details-container",
-      }}
-    >
-      {!isEmpty(data) && (
-        <div className="details">
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
-              alt=""
-            />
-            <span className="text">{data?.contact_value}</span>
+  render() {
+    const { isOpen, onClose, type, data } = this.props;
+    return (
+      <WVBottomSheet
+        isOpen={isOpen}
+        onClose={onClose}
+        title={`Verify your ${type} address`}
+        image={require(`../../assets/${product}/bottomsheet_verify_${type}.svg`)}
+        subtitle={`${
+          type === "email" ? "Email" : "Mobile"
+        } verification is mandatory for investment as per SEBI`}
+        button1Props={{
+          type: "primary",
+          title: "CONTINUE",
+          onClick: this.handleClick,
+          showLoader: this.state.loading,
+        }}
+        classes={{
+          container: "verify-details-container",
+        }}
+      >
+        {!isEmpty(data) && (
+          <div className="details">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
+                alt=""
+              />
+              <span className="text">{data?.contact_value}</span>
+            </div>
+            <WVClickableTextElement onClick={this.editDetails}>
+              EDIT
+            </WVClickableTextElement>
           </div>
-          <WVClickableTextElement onClick={editDetails}>
-            EDIT
-          </WVClickableTextElement>
-        </div>
-      )}
-    </WVBottomSheet>
-  );
+        )}
+      </WVBottomSheet>
+    );
+  }
 }
 
-export default withRouter(VerifyDetailDialog);
+export default VerifyDetailDialog;
