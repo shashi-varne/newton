@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { getConfig } from "utils/functions";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-// import Toast from "../../common/ui/Toast";
-// import Api from "../../utils/api";
+import Toast from "../../common/ui/Toast";
+import Api from "../../utils/api";
 import { isEmpty } from "lodash";
 import { authCheckApi } from "../function";
 import "./Style.scss";
@@ -20,20 +20,53 @@ class VerifyDetailDialog extends Component {
   }
 
   handleClick = async () => {
+    let error = "";
     const { data, type } = this.props;
     if (isEmpty(data)) {
       this.props.parent.navigate("/verify", {
-      // data like email/mobile goes here
+        // data like email/mobile goes here
       });
     } else {
       const response = await this.authCheckApi(type, data);
       if (response.user === false) {
-        this.props.parent.navigate("verify-Secoundary", {
-          state: {
-            mobile_number: data.contact_value,
-            forgot: false, // flag to be checked
-            otp_id: response.otp_id,
-          }})
+        let body = {};
+        if (type === "email") {
+          body.email = data.contact_value;
+        } else {
+          body.mobile = data.contact_value;
+          body.whatsapp_consent = true;
+        } // by default should this be true or false in case of bottomsheet?
+        try {
+          this.setState({
+            loading: true,
+          });
+          const otpResponse = await Api.post(
+            "/api/communication/send/otp",
+            body
+          );
+          if (otpResponse.pfwresponse.status_code === 200) {
+            // OTP_ID GENERATED, NAGIVATE TO THE OTP VERIFICATION SCREEN
+            this.props.parent.navigate("verify-Secoundary", {
+              state: {
+                mobile_number: data.contact_value,
+                forgot: false, // flag to be checked
+                otp_id: otpResponse.pfwresponse.result.otp_id,
+              },
+            });
+          } else {
+            error =
+              otpResponse.pfwresponse.result.message ||
+              otpResponse.pfwresponse.result.error ||
+              "Something went wrong!";
+            throw error;
+          }
+        } catch (err) {
+          Toast(err);
+        } finally {
+          this.setState({
+            loading: false,
+          });
+        }
       } else if (response.user === true) {
         this.props.showAccountAlreadyExist(true, response.data);
       }
@@ -41,7 +74,7 @@ class VerifyDetailDialog extends Component {
   };
 
   editDetails = () => {
-    this.props.parent.navigate("/verify",{
+    this.props.parent.navigate("/verify", {
       // data like email/mobile goes here
     });
   };
