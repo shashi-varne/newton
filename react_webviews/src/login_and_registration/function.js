@@ -638,6 +638,31 @@ export async function authCheckApi(type, data) {
   }
 }
 
+export async function authCheckApiCall(type, data) {
+  try {
+    this.setState({
+      loading: true,
+    });
+    const response = await Api.get(
+      `/api/iam/auth/check?contact_type=${type}&contact_value=${data.contact_value}`
+    );
+    const { result, status_code: status } = response.pfwresponse;
+
+    this.setState({ loading: false,});
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw new Error(result.error || result.message || "Something went wrong!");
+    }
+  }
+  catch (err) {
+    console.log(err)
+    this.setState({ loading: false,});
+    Toast(err, "error");
+  }
+};
+
 export async function generateOtp(type, data) {
   let error = "";
   let body = {};
