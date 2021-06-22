@@ -6,6 +6,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
 import { nativeCallback } from "../utils/native_callback";
 import { getBasePath } from "../utils/functions";
+import Toast from "../common/ui/Toast";
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
@@ -593,3 +594,86 @@ export const logout = async () => {
     toast(e);
   }
 };
+
+
+
+export async function authCheckApi(type, data) {
+  let error = "";
+  let res = {};
+  try {
+    this.setState({
+      loading: true,
+    });
+    // Checking if that id has some other account associated
+    const response = await Api.get(
+      `/api/iam/auth/check?contact_type=${type}&contact_value=${data.contact_value}`
+    );
+    if (response.pfwresponse.status_code === 200) {
+      if (response.pfwresponse.result.message === "No user found") {
+        // If no user user found, generating the otp and redirecting to the otp screen
+        res = {
+          user: false,
+        };
+      } else {
+        // If User found then showing the other dialog box
+        res = {
+          user: true,
+          data: response.pfwresponse.result.user,
+        };
+      }
+    } else {
+      error =
+        response.pfwresponse.result.message ||
+        response.pfwresponse.result.error ||
+        "Something went wrong!";
+      throw error;
+    }
+  } catch (err) {
+    Toast(err, "error");
+  } finally {
+    this.setState({
+      loading: false,
+    });
+    return res;
+  }
+}
+
+export async function generateOtp(type, data) {
+  let error = "";
+  let body = {};
+  let res = {};
+  if (type === "email") {
+    body.email = data.contact_value;
+  } else {
+    body.mobile = data.contact_value;
+    body.whatsapp_consent = true;
+  } // by default should this be true or false in case of bottomsheet?
+  try {
+    this.setState({
+      loading: true,
+    });
+    const otpResponse = await Api.post("/api/communication/send/otp", body);
+    if (otpResponse.pfwresponse.status_code === 200) {
+      // OTP_ID GENERATED, NAGIVATE TO THE OTP VERIFICATION SCREEN
+      res = {
+        otp: "success",
+        otp_id: otpResponse.pfwresponse.result.otp_id,
+        contact_value: data.contact_value,
+        contact_type: type,
+      };
+    } else {
+      error =
+        otpResponse.pfwresponse.result.message ||
+        otpResponse.pfwresponse.result.error ||
+        "Something went wrong!";
+      throw error;
+    }
+  } catch (err) {
+    Toast(err);
+  } finally {
+    this.setState({
+      loading: false,
+    });
+    return res;
+  }
+}

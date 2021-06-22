@@ -503,6 +503,7 @@ class Landing extends Component {
               showAccountAlreadyExist={this.setAccountAlreadyExistsData}
               isOpen={verifyDetails}
               onClose={this.closeVerifyDetailsDialog}
+              parent={this}
             ></VerifyDetailDialog>
           )}
         {accountAlreadyExists && (
@@ -512,6 +513,7 @@ class Landing extends Component {
             data={this.state.accountAlreadyExistsData}
             isOpen={accountAlreadyExists}
             onClose={this.closeAccountAlreadyExistDialog}
+            parent={this}
           ></AccountAlreadyExistDialog>
         )}
       </Container>
