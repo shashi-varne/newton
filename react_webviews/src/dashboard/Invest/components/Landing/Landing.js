@@ -513,6 +513,7 @@ class Landing extends Component {
             data={this.state.accountAlreadyExistsData}
             isOpen={accountAlreadyExists}
             onClose={this.closeAccountAlreadyExistDialog}
+            parent={this}
           ></AccountAlreadyExistDialog>
         )}
       </Container>

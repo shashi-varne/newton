@@ -30,17 +30,15 @@ class VerifyDetailDialog extends Component {
       const response = await this.authCheckApi(type, data);
       if (response.user === false) {
         const otpResponse = await this.generateOtp(type, data);
-        if(otpResponse.otp === "success")
-        {
+        if (otpResponse.otp === "success") {
           this.props.parent.navigate("verify-Secoundary", {
-          state: {
-            mobile_number: data.contact_value,
-            forgot: false, // flag to be checked
-            otp_id: otpResponse.otp_id,
-          },
-        });
+            state: {
+              mobile_number: data.contact_value,
+              forgot: false, // flag to be checked
+              otp_id: otpResponse.otp_id,
+            },
+          });
         }
-        
       } else if (response.user === true) {
         this.props.showAccountAlreadyExist(true, response.data);
       }
@@ -49,7 +47,9 @@ class VerifyDetailDialog extends Component {
 
   editDetails = () => {
     this.props.parent.navigate("/verify", {
-      // data like email/mobile goes here
+      state: {
+        // data like email/mobile goes here
+      },
     });
   };
 
