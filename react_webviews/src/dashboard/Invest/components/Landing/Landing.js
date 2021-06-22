@@ -510,7 +510,6 @@ class Landing extends Component {
             type={this.state.verifyDetailsType}
             // data="98*****487" // accountAlreadyExistsData
             data={this.state.accountAlreadyExistsData}
-            pan="CXIPP***M" //accountAlreadyExistsData
             isOpen={accountAlreadyExists}
             onClose={this.closeAccountAlreadyExistDialog}
           ></AccountAlreadyExistDialog>
