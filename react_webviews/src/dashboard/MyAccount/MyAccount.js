@@ -48,6 +48,14 @@ class MyAccount extends Component {
     });
   };
 
+  setAccountAlreadyExistsData = (show, data, type) => {
+    this.setState({
+      accountAlreadyExists: show,
+      accountAlreadyExistsData: data,
+      verifyDetails: false,
+      verifyDetailsType: type,
+    })
+  };
   renderDialog = () => {
     return (
       <Dialog
@@ -162,6 +170,7 @@ class MyAccount extends Component {
               contacts={contacts}
               name={currentUser?.name}
               handleClick={(path) => this.handleClick(path)}
+              showAccountAlreadyExist={(show, data, type) => this.setAccountAlreadyExistsData(show, data, type)}
             />
             <div className="account">
               <div className="account-head-title">Account options</div>

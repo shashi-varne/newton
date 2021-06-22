@@ -19,6 +19,10 @@ export class AccountAlreadyExistDialog extends Component {
   handleClick = async () => {
     const { type, data } = this.props;
     let body = {};
+    if (data?.from === "my-account") {
+      this.props.parent.navigate("/kyc/communication-details")
+      return;
+    };
     if (type === "email") {
       body.email = data?.email;
     } else {
@@ -47,7 +51,7 @@ export class AccountAlreadyExistDialog extends Component {
   };
 
   render() {
-    const { data, isOpen, onClose, type } = this.props;
+    const { data, isOpen, onClose, type } = this.props; console.log(type)
     return (
       <WVBottomSheet
         isOpen={isOpen}

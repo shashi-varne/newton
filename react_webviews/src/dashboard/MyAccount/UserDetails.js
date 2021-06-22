@@ -17,7 +17,7 @@ class MyaccountDetails extends Component {
         if (prevProp.contacts !== this.props.contacts) {
             const contacts = this.props.contacts;
             const auth_type = contacts?.auth_type;
-            const verification_done = false //contacts?.verification_done;
+            const verification_done = contacts?.verification_done; // false
             let contact_value = "";
 
             if (verification_done) {
@@ -30,6 +30,7 @@ class MyaccountDetails extends Component {
                 is_auth: auth_type === "mobile" ? contacts?.verified_mobile_contacts[0]?.contact_value : contacts?.verified_email_contacts[0]?.contact_value,
                 verification_done: verification_done,
                 contact_value: contact_value,
+                auth_type: auth_type,
             })
         }
     };
@@ -38,12 +39,15 @@ class MyaccountDetails extends Component {
     handleClick = async (verified) => {
 
         if (verified) return;
-        const { is_auth, contact_value, unique_user } = this.state;
-        const type = is_auth === 'mobile' ? is_auth : "email"
-        const result = await this.authCheckApi(type, { "contact_value": contact_value })
-        console.log(result)
-        if (!result?.is_user) {
+        const { auth_type, contact_value } = this.state;
+        const type = auth_type === 'mobile' ? auth_type : "email"
+        let result = await this.authCheckApi(type, { "contact_value": contact_value })
+        if (result?.is_user) {
             this.props.handleClick("/kyc/communication-details")
+        }
+        else if (result?.is_user) {
+            result.user.from = "my-account"
+            this.props.showAccountAlreadyExist(true, result.user, type);
         }
     }
 
