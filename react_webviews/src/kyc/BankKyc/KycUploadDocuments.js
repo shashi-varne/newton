@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow, isEquityCompleted } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
@@ -16,8 +16,11 @@ import { nativeCallback } from "../../utils/native_callback";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { isReadyToInvest } from "../services";
 
 const config = getConfig();
+const INIT_BOTTOMSHEET_TEXT = "We've added your bank account details. The verification is in progress, meanwhile you can continue with KYC."
+
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -26,15 +29,16 @@ const KycUploadDocuments = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const [goBackModal, setGoBackModal] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
-  const [fileToShow, setFileToShow] = useState(null)
+  const [fileToShow, setFileToShow] = useState(null);
+  const [bottomsheetText, setBottomSheetText] = useState(INIT_BOTTOMSHEET_TEXT);
+  const [bottomsheetCtaText, setBottomSheetCtaText] = useState("CONTINUE WITH KYC");
+  const [tradingEnabled, setTradingEnabled] = useState(false);
   const navigate = navigateFunc.bind(props);
   const fromState = props.location?.state?.fromState || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      if (isDigilockerFlow(kyc)) {
-        setDlFlow(true);
-      }
+      initialize();
     }
   }, [kyc]);
 
@@ -55,6 +59,19 @@ const KycUploadDocuments = (props) => {
     bankData = kyc?.additional_approved_banks?.find(function (obj) {
       return obj.bank_id === Number(bank_id);
     });
+  }
+
+  const initialize = () => {
+    if (isDigilockerFlow(kyc)) {
+      setDlFlow(true);
+    }
+    const tradeFlow = isTradingEnabled(kyc)
+    setTradingEnabled(tradeFlow);
+
+    if ((!tradeFlow && isReadyToInvest()) || (tradeFlow && isEquityCompleted())) {
+      setBottomSheetText("We've added your bank account details. The verification is in progress.")
+      setBottomSheetCtaText("OKAY");
+    }
   }
 
   const onFileSelectComplete = (file, fileBase64) => {
@@ -171,7 +188,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const proceed = () => {
-    if (isTradingEnabled()) {
+    if (tradingEnabled) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();
@@ -338,7 +355,7 @@ const KycUploadDocuments = (props) => {
         image={require(`assets/${config.productName}/ic_bank_partial_add.svg`)}
         title="Bank verification pending!"
         button1Props={{
-          title: "CONTINUE WITH KYC",
+          title: bottomsheetCtaText,
           variant: "contained",
           onClick: proceed,
         }}
@@ -347,8 +364,7 @@ const KycUploadDocuments = (props) => {
         }}
       >
         <div className="generic-page-subtitle penny-bank-verification-dialog-subtitle">
-          We’ve added your bank account details. The verification is in
-          progress, meanwhile you can continue with KYC.
+         {bottomsheetText}
         </div>
       </WVBottomSheet>
       {goBackModal ?
