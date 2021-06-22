@@ -29,6 +29,7 @@ class MyaccountDetails extends Component {
                 } else {
                     this.setState({
                         contact_value: verified_mobile?.contact_value,
+                        contact_type: verified_mobile?.contact_type,
                     })
                 }
             };
@@ -46,11 +47,13 @@ class MyaccountDetails extends Component {
                     } else {
                         this.setState({
                             contact_value: verified_email?.contact_value,
+                            contact_type: verified_email?.contact_type,
                         })
                     }
                 } else {
                     this.setState({
                         contact_value: verified_email?.contact_value,
+                        contact_type: verified_email?.contact_type,
                     })
                 }
             };
@@ -61,7 +64,8 @@ class MyaccountDetails extends Component {
                 let unverified_mobile_contacts = contacts?.unverified_mobile_contacts[0]
 
                 this.setState({
-                    contact_value: unverified_mobile_contacts?.contact_value
+                    contact_value: unverified_mobile_contacts?.contact_value,
+                    contact_type: unverified_mobile_contacts?.contact_type,
                 })
             }
 
@@ -70,7 +74,8 @@ class MyaccountDetails extends Component {
                 verified = false
                 let unverified_email_contacts = contacts?.unverified_email_contacts[0]
                 this.setState({
-                    contact_value: unverified_email_contacts?.contact_value
+                    contact_value: unverified_email_contacts?.contact_value,
+                    contact_type: unverified_email_contacts?.contact_type,
                 })
             }
             this.setState({
@@ -81,7 +86,7 @@ class MyaccountDetails extends Component {
     };
 
 
-    handleClick = (verified) => {
+    handleClick = async (verified) => {
         if (verified) return;
     }
 
@@ -107,24 +112,24 @@ class MyaccountDetails extends Component {
 
 const UserDetails = (props) => {
 
-    // if (props.contacts) {
-    //     props.contacts.unverified_email_contacts = [
-    //         {
-    //             contact_type: "email",
-    //             contact_value: "srikantagowda07",
-    //             contact_verified: true,
-    //             dt_created: "21/06/2021 07:58",
-    //             dt_updated: "21/06/2021 14:20",
-    //             id: 2055,
-    //             is_auth: true,
-    //             sms_consent: true,
-    //             sms_subscribed: true,
-    //             user_id: "6586478659371009",
-    //             whatsapp_consent: true,
-    //             whatsapp_subscribed: true,
-    //         }
-    //     ]
-    // }
+    if (props.contacts) {
+        props.contacts.unverified_email_contacts = [
+            {
+                contact_type: "email",
+                contact_value: "srikantagowda07",
+                contact_verified: true,
+                dt_created: "21/06/2021 07:58",
+                dt_updated: "21/06/2021 14:20",
+                id: 2055,
+                is_auth: true,
+                sms_consent: true,
+                sms_subscribed: true,
+                user_id: "6586478659371009",
+                whatsapp_consent: true,
+                whatsapp_subscribed: true,
+            }
+        ]
+    }
 
 
     return (<MyaccountDetails {...props} />)
