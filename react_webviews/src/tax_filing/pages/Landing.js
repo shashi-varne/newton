@@ -55,11 +55,9 @@ const LandingPage = () => {
         // }}
       />
       <WVTag
-        variant="success"
+        variant="info"
         label="free"
         dataAidSuffix="tax2win-free-tag"
-        backgroundColor="#F0F7FF"
-        color="#767E86"
       />
       {/* <GetStarted /> */}
       <Carousal
