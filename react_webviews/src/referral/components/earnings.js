@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import Container from '../common/Container';
 import wallet from 'assets/earning_wallet_icon.png';
-import divider from 'assets/or_line.png';
 import Button from 'material-ui/Button';
 import Grid from '@material-ui/core/Grid';
 import { getAcronym } from 'utils/functions';
@@ -12,6 +11,7 @@ import Api from 'utils/api';
 import InfiniteScroll from 'react-infinite-scroller';
 import qs from 'qs';
 import { getConfig } from '../../utils/functions';
+import { capitalize } from '../../utils/validators';
 
 class Earnings extends Component {
   constructor(props) {
@@ -89,10 +89,6 @@ class Earnings extends Component {
     });
   }
 
-  capitalize = (string) => {
-    return string.toLowerCase().replace(/(^|\s)[a-z]/g, function (f) { return f.toUpperCase(); })
-  }
-
   shareHandler = () => {
     let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${this.state.referral_code.toUpperCase()}. Click here to download: ${this.state.link}`;
     let eventObj = {
@@ -107,7 +103,7 @@ class Earnings extends Component {
   }
 
   remindHandler = (length, item, index) => {
-    let message = `Hey, looks like you have downloaded the ${this.state.type} app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap: ${this.state.link}`;
+    let message = `Hey, looks like you have downloaded the ${capitalize(this.state.type)} app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap: ${this.state.link}`;
     let eventObj = {
       "event_name": "remind_clicked",
       "properties": {
@@ -162,7 +158,7 @@ class Earnings extends Component {
               {this.renderIcon(item)}
             </Grid>
             <Grid item xs={5}>
-              <span className="name">{this.capitalize((item.referee_name.length > 15) ? item.referee_name.replace('+91|', '').substring(0, 10) + '...' : item.referee_name)}</span>
+              <span className="name">{capitalize((item.referee_name.length > 15) ? item.referee_name.replace('+91|', '').substring(0, 10) + '...' : item.referee_name)}</span>
             </Grid>
             <Grid item xs={4}>
               {this.renderAction(dataLength, item, i)}
@@ -244,41 +240,26 @@ class Earnings extends Component {
       );
     }
     // eslint-disable-next-line
-    if (this.state.total_earnings == 0 && this.state.data.length > 0) {
       return (
         <div className="List">
           <h1>Earn more</h1>
-          <p>Remind your friends to invest with {this.state.type} & increase your Paytm earnings. Get ₹{this.state.amount_per_referral} for every friend who invests</p>
-          <div className="Referres">
-            {this.renderList()}
-          </div>
-          <img src={divider} alt="" />
-          {this.renderFandF()}
-        </div>
-      );
-    }
-    if (this.state.total_earnings > 0 && this.state.data.length > 0) {
-      return (
-        <div className="List">
-          <h1>Earn more</h1>
-          <p>Remind your friends to invest with {this.state.type} & increase your Paytm earnings. Get ₹{this.state.amount_per_referral} for every friend who invests</p>
+          <p>Remind your friends to invest with {capitalize(this.state.type)} & increase your Paytm earnings. Get ₹{this.state.amount_per_referral} for every friend who invests</p>
           <div className="Referres">
             {this.renderList()}
           </div>
         </div>
       );
     }
-  }
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={'Earnings'}
+        title={'My earnings'}
         noFooter={true}
       >
         <div className="Earning">
-          <div className={`ReferPaytmGrid pad20 ${(this.state.total_earnings > 0) ? '' : 'EarningsPaytmGrid'}`}>
+          <div className="ReferPaytmGrid pad20">
             <Grid container spacing={24} alignItems="center">
               <Grid item xs={3}>
                 <img src={wallet} alt="" />

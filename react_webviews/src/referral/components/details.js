@@ -185,7 +185,7 @@ class Details extends Component {
             </div>
           </Card>
 
-          <Card nopadding={(!this.state.campaign_expiry_date) ? true : false}>
+          <Card nopadding={true}>
             <Grid container spacing={24} alignItems="center" className={`ReferPaytmGrid (!this.state.campaign_expiry_date) ? ReferTermsGrid : ''`} onClick={() => this.navigate('/referral/earnings')}>
               <Grid item xs>
                 <img src={wallet} alt="" />

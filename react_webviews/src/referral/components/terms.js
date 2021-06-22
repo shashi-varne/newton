@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import qs from 'qs';
 import { getConfig } from '../../utils/functions';
+import { capitalize } from '../../utils/validators';
 
 class Terms extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class Terms extends Component {
           <div className="List">
             <div className="Number">1.</div>
             <div className="Text">
-              The reward amount per referral is an exclusive offer just for you & may not be applicable for other investors. {this.state.type} reserves the right to allocate, withhold and amend this special offer at any time.
+              The reward amount per referral is an exclusive offer just for you & may not be applicable for other investors. {capitalize(this.state.type)} reserves the right to allocate, withhold and amend this special offer at any time.
             </div>
           </div>
           <div className="List">
