@@ -38,10 +38,13 @@ class MyaccountDetails extends Component {
     handleClick = async (verified) => {
 
         if (verified) return;
-        const { is_auth, contact_value } = this.state;
+        const { is_auth, contact_value, unique_user } = this.state;
         const type = is_auth === 'mobile' ? is_auth : "email"
         const result = await this.authCheckApi(type, { "contact_value": contact_value })
         console.log(result)
+        if (!result?.is_user) {
+            this.props.handleClick("/kyc/communication-details")
+        }
     }
 
 

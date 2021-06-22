@@ -25,7 +25,7 @@ class MyAccount extends Component {
       userKyc: {},
       openDialog: false,
       verifyDetails: false,
-      accountAlreadyExists: true,
+      accountAlreadyExists: false,
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -161,6 +161,7 @@ class MyAccount extends Component {
               pan_no={userKyc?.pan?.meta_data?.pan_number}
               contacts={contacts}
               name={currentUser?.name}
+              handleClick={(path) => this.handleClick(path)}
             />
             <div className="account">
               <div className="account-head-title">Account options</div>

@@ -607,12 +607,13 @@ export async function authCheckApi(type, data) {
     const response = await Api.get(
       `/api/iam/auth/check?contact_type=${type}&contact_value=${data.contact_value}`
     );
-    if (response.pfwresponse.status_code === 200) {
-      return response;
+    const { result, status_code: status } = response.pfwresponse;
+    if (status === 200) {
+      return result;
     } else {
       error =
-        response.pfwresponse.result.message ||
-        response.pfwresponse.result.error ||
+        result.message ||
+        result.error ||
         "Something went wrong!";
       throw error;
     }

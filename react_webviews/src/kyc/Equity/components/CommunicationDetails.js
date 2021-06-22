@@ -178,6 +178,10 @@ const CommunicationDetails = (props) => {
   };
 
   const handleNavigation = () => {
+    if(stateParams?.fromState === "/my-account") {
+      navigate(stateParams?.fromState);
+      return;
+    }
     if (isKycDone) {
       navigate(PATHNAME_MAPPER.tradingExperience);
       return;

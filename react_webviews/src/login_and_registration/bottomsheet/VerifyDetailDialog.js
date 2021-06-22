@@ -25,9 +25,9 @@ class VerifyDetailDialog extends Component {
         // data like email/mobile goes here
       });
     } else {
-      const response = await this.authCheckApi(type, data);
-      console.log(response);
-      if (response.pfwresponse.result.is_user === false) {
+      const result = await this.authCheckApi(type, data);
+      console.log(result);
+      if (result.is_user === false) {
         let body = {};
         if (type === "email") {
           body.email = data.contact_value;
@@ -41,14 +41,14 @@ class VerifyDetailDialog extends Component {
             state: {
               mobile_number: data.contact_value,
               forgot: false, // flag to be checked
-              otp_id: otpResponse.pfwresponse.result.otp_id,
+              otp_id: otpResponse.otp_id,
             },
           });
         }
-      } else if (response.pfwresponse.result.is_user === true) {
+      } else if (result.is_user === true) {
         this.props.showAccountAlreadyExist(
           true,
-          response.pfwresponse.result.user
+          result.user
         );
       }
     }
