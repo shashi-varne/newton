@@ -2,7 +2,7 @@ import "./MyAccount.scss";
 import React, { Component } from 'react';
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
-import { authCheckApiCall } from "../../login_and_registration/function";
+import { authCheckApi } from "../../login_and_registration/function";
 // import { isEmpty } from "lodash"
 
 class MyaccountDetails extends Component {
@@ -10,7 +10,7 @@ class MyaccountDetails extends Component {
         super(props);
         this.state = {
         }
-        this.authCheckApiCall = authCheckApiCall.bind(this);
+        this.authCheckApi = authCheckApi.bind(this);
     }
 
     componentDidUpdate(prevProp) {
@@ -40,7 +40,7 @@ class MyaccountDetails extends Component {
         if (verified) return;
         const { is_auth, contact_value } = this.state;
         const type = is_auth === 'mobile' ? is_auth : "email"
-        const result = await this.authCheckApiCall(type, { "contact_value": contact_value })
+        const result = await this.authCheckApi(type, { "contact_value": contact_value })
         console.log(result)
     }
 

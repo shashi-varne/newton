@@ -18,14 +18,20 @@ export class AccountAlreadyExistDialog extends Component {
 
   handleClick = async () => {
     const { type, data } = this.props;
-    const contact_value = type === "email" ? data.email : data.mobile;
-    const otpResponse = await this.generateOtp(type, { contact_value });
-    if (otpResponse.otp === "success") {
+    let body = {};
+    if (type === "email") {
+      body.email = data.email;
+    } else {
+      body.mobile = data.mobile;
+      body.whatsapp_consent = true;
+    } // by default should this be true or false in case of bottomsheet?
+    const otpResponse = await this.generateOtp(body);
+    if (otpResponse) {
       this.props.parent.navigate("verify-Secoundary", {
         state: {
           mobile_number: data.contact_value,
           forgot: false, // flag to be checked
-          otp_id: otpResponse.otp_id,
+          otp_id: otpResponse.pfwresponse.result.otp_id,
         },
       });
     }
