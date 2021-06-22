@@ -136,7 +136,7 @@ const Progress = (props) => {
         <ConfirmBackDialog 
           isOpen={openConfirmBack}
           goBack={() => navigate('/kyc/journey')}
-          cancel={() => setOpenConfirmBack(false)}
+          close={() => setOpenConfirmBack(false)}
         />
       </section>
     </Container>
