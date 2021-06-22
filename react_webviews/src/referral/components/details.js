@@ -8,7 +8,6 @@ import gift from 'assets/refer_gift_icon.png';
 import diwali_banner from 'assets/diwali_banner.svg';
 import Button from 'material-ui/Button';
 import Grid from '@material-ui/core/Grid';
-import qs from 'qs';
 import { nativeCallback } from 'utils/native_callback';
 import Dialog, {
   DialogActions,
@@ -33,7 +32,6 @@ class Details extends Component {
       mobile: '',
       total_earnings: 0.00,
       openDialog: false,
-      params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
       link: getConfig().appLink,
       campaign_id: 5319998917574656
