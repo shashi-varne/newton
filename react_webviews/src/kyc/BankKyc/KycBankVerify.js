@@ -108,7 +108,7 @@ const KycBankVerify = (props) => {
           setIsPennyFailed(true);
         }
       }
-      updateKyc(result.kyc_app);
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
       clearInterval(countdownInterval);
@@ -133,7 +133,7 @@ const KycBankVerify = (props) => {
       } else {
         setIsPennyFailed(true);
       }
-      updateKyc(result.kyc_app);
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
       setIsPennyFailed(true);
