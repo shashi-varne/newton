@@ -7,6 +7,51 @@
     padding-bottom: 20px;
     background: #f1f1f1;
 
+    .my-acct-details{
+      padding: 20px;
+      background-color: white;
+      color: var(--dark);
+      .my-acct-user-name{
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 24px;
+        margin-bottom: 10px;
+      }
+      .my-acct-user-auth{
+        font-weight: 500;
+        margin-bottom: 5px;
+        font-size: 13px;
+        line-height: 21px;
+      }
+      .my-acct-user-details{
+        color: var(--steelgrey);
+        margin-bottom: 5px;
+      }
+
+      .my-acct-tag{
+        color: limegreen;
+        background-color: white;
+        float: right;
+        margin-right: 15px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 15px;
+        cursor: pointer;
+      }
+
+      .my-acct-verified-tag{
+        background-color: limegreen;
+        color: white;
+        border-radius: 100px;
+        height: 16px;
+        font-size: 10px;
+        font-weight: 500;
+        width: 70px;
+        text-align: center;
+        padding: 1px;
+      }
+    }
+
     .account {
       background-color: white;
 

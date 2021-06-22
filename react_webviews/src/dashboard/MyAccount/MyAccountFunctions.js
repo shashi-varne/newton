@@ -140,6 +140,8 @@ export async function getMyAccount() {
         npsUpload: npsUpload,
         investment80C: investment80C,
         Capitalgain: Capitalgain,
+        user: result?.user,
+        contacts: result?.contacts,
         isReadyToInvestBase,
       });
     } else {

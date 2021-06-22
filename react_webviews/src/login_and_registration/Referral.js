@@ -25,8 +25,9 @@ class Referral extends Component {
   }
 
 
-  
-
+  componentDidUpdate(){
+    if(this.state.promo_status === "Valid")  this.navigate("/verify")
+  }
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
@@ -48,7 +49,7 @@ class Referral extends Component {
         button1Props={{
           type: 'primary',
           title: "CONTINUE",
-          onClick: () => console.log("H"),
+          onClick : () => this.verifyCode(form_data)
         }}
         button2Props={{
           type: 'secondary',
@@ -64,10 +65,10 @@ class Referral extends Component {
 
         <div className="form-field">
           <Input
-            error={form_data.confirm_password_error ? true : false}
+            error={form_data?.referral_code ? true : false}
             type="text"
-            value={form_data.confirm_password}
-            helperText={form_data.confirm_password_error || ""}
+            value={form_data.referral_code}
+            helperText={form_data.referral_code_error || ""}
             class="input"
             id="referral_code"
             label="Referral code"
