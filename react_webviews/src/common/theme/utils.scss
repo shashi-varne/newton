@@ -34,6 +34,10 @@
   justify-content: flex-end;
 }
 
+.space-between {
+  justify-content: space-between;
+}
+
 .block {
   display: block;
 }
@@ -68,14 +72,14 @@
 
 .heading3-medium {
   color: #0A1D32;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px;
   line-height: calc(15px * 1.6);
 }
 
 .body-text1 {
   color: #0A1D32;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 13px;
   line-height: calc(13px * 1.6);
 }
@@ -95,7 +99,7 @@
 .small-text1 {
   color: #0A1D32;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: calc(10px * 1.6);
 }
 
@@ -108,7 +112,7 @@
 .micro1 {
   color: #0A1D32;
   font-size: 8px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: calc(10px * 1.6);
 }
 
@@ -131,9 +135,21 @@
 }
 
 .m-left-2x {
+  margin-left: calc(var(--spacing) * 2);
+}
+
+.m-top-2x {
   margin-top: calc(var(--spacing) * 2);
 }
 
 .pd-2x {
   padding: calc(var(--spacing) * 2);
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
 }
