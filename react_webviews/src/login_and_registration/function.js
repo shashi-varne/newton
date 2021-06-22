@@ -599,7 +599,6 @@ export const logout = async () => {
 
 export async function authCheckApi(type, data) {
   let error = "";
-  let res = {};
   try {
     this.setState({
       loading: true,
@@ -609,18 +608,7 @@ export async function authCheckApi(type, data) {
       `/api/iam/auth/check?contact_type=${type}&contact_value=${data.contact_value}`
     );
     if (response.pfwresponse.status_code === 200) {
-      if (response.pfwresponse.result.message === "No user found") {
-        // If no user user found, generating the otp and redirecting to the otp screen
-        res = {
-          user: false,
-        };
-      } else {
-        // If User found then showing the other dialog box
-        res = {
-          user: true,
-          data: response.pfwresponse.result.user,
-        };
-      }
+      return response;
     } else {
       error =
         response.pfwresponse.result.message ||
@@ -634,33 +622,19 @@ export async function authCheckApi(type, data) {
     this.setState({
       loading: false,
     });
-    return res;
   }
 }
 
-export async function generateOtp(type, data) {
+export async function generateOtp(data) {
   let error = "";
-  let body = {};
-  let res = {};
-  if (type === "email") {
-    body.email = data.contact_value;
-  } else {
-    body.mobile = data.contact_value;
-    body.whatsapp_consent = true;
-  } // by default should this be true or false in case of bottomsheet?
   try {
     this.setState({
       loading: true,
     });
-    const otpResponse = await Api.post("/api/communication/send/otp", body);
+    const otpResponse = await Api.post("/api/communication/send/otp", data);
     if (otpResponse.pfwresponse.status_code === 200) {
       // OTP_ID GENERATED, NAGIVATE TO THE OTP VERIFICATION SCREEN
-      res = {
-        otp: "success",
-        otp_id: otpResponse.pfwresponse.result.otp_id,
-        contact_value: data.contact_value,
-        contact_type: type,
-      };
+      return otpResponse;
     } else {
       error =
         otpResponse.pfwresponse.result.message ||
@@ -674,6 +648,5 @@ export async function generateOtp(type, data) {
     this.setState({
       loading: false,
     });
-    return res;
   }
 }

@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { getConfig } from "utils/functions";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import Toast from "../../common/ui/Toast";
-import Api from "../../utils/api";
 import { isEmpty } from "lodash";
 import { authCheckApi, generateOtp } from "../function";
 import "./Style.scss";
@@ -28,19 +26,30 @@ class VerifyDetailDialog extends Component {
       });
     } else {
       const response = await this.authCheckApi(type, data);
-      if (response.user === false) {
-        const otpResponse = await this.generateOtp(type, data);
-        if (otpResponse.otp === "success") {
+      console.log(response);
+      if (response.pfwresponse.result.is_user === false) {
+        let body = {};
+        if (type === "email") {
+          body.email = data.contact_value;
+        } else {
+          body.mobile = data.contact_value;
+          body.whatsapp_consent = true;
+        } // by default should this be true or false in case of bottomsheet?
+        const otpResponse = await this.generateOtp(body);
+        if (otpResponse) {
           this.props.parent.navigate("verify-Secoundary", {
             state: {
               mobile_number: data.contact_value,
               forgot: false, // flag to be checked
-              otp_id: otpResponse.otp_id,
+              otp_id: otpResponse.pfwresponse.result.otp_id,
             },
           });
         }
-      } else if (response.user === true) {
-        this.props.showAccountAlreadyExist(true, response.data);
+      } else if (response.pfwresponse.result.is_user === true) {
+        this.props.showAccountAlreadyExist(
+          true,
+          response.pfwresponse.result.user
+        );
       }
     }
   };
