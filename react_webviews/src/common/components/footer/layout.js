@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
 import Button from '../../../common/ui/Button';
-import {
-  inrFormatDecimal
-} from '../../../utils/validators';
+import { inrFormatDecimal } from '../../../utils/validators';
+import { isEmpty } from 'lodash';
 import Dialog, {
   DialogActions,
   DialogTitle,
@@ -11,7 +10,6 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
-
 import down_arrow from 'assets/down_arrow.svg';
 import up_arrow from 'assets/up_arrow.svg';
 import SVG from 'react-inlinesvg';
@@ -287,14 +285,16 @@ export class FooterLayoutBase extends Component {
   VerticalButtonLayout = ({ button1Props, button2Props }) => {
     return(
       <WVButtonLayout layout="stacked">
-        <WVButtonLayout.Button
-          {...button1Props}>
-          {button1Props.title}
-        </WVButtonLayout.Button>
-        <WVButtonLayout.Button
-          {...button2Props}>
-          {button2Props.title}
-        </WVButtonLayout.Button>
+        {!isEmpty(button1Props) &&
+          <WVButtonLayout.Button {...button1Props}>
+            {button1Props.title}
+          </WVButtonLayout.Button>
+        }
+        {!isEmpty(button2Props) &&
+          <WVButtonLayout.Button {...button2Props}>
+            {button2Props.title}
+          </WVButtonLayout.Button>
+        }
       </WVButtonLayout>
     )
   }
