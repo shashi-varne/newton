@@ -72,6 +72,7 @@ export async function getSummary() {
       partner: ["partner"],
       bank_list: ["bank_list"],
       referral: ["subbroker", "p2p"],
+      contacts: ["contacts"]
     });
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
@@ -101,6 +102,7 @@ export function setSummaryData(result) {
   storageService().set("currentUser", true);
   storageService().setObject("user", result.data.user.user.data);
   storageService().setObject("kyc", result.data.kyc.kyc.data);
+  storageService().setObject("contactDetails", result.data.contacts.contacts.data)
 
   let campaignData = getCampaignBySection(
     result.data.campaign.user_campaign.data
