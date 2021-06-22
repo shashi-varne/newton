@@ -155,7 +155,7 @@ class Details extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={'Refer & Earn'}
+        title={'Refer and Earn'}
         background='GreyBackground'
         noFooter={true}
       >
@@ -197,7 +197,7 @@ class Details extends Component {
                 <h1><span>₹</span>{this.state.total_earnings}</h1>
               </Grid>
               <Grid item xs>
-                <h2 className="view">View</h2>
+                <h2 className="view">VIEW</h2>
               </Grid>
             </Grid>
             {
