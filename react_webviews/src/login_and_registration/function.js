@@ -616,6 +616,7 @@ export const logout = async () => {
 
 export async function authCheckApi(type, data) {
   let error = "";
+  let res = {};
   try {
     this.setState({
       loading: true,
@@ -627,17 +628,15 @@ export async function authCheckApi(type, data) {
     if (response.pfwresponse.status_code === 200) {
       if (response.pfwresponse.result.message === "No user found") {
         // If no user user found, generating the otp and redirecting to the otp screen
-        let res = {
+        res = {
           user: false,
         };
-        return res;
       } else {
         // If User found then showing the other dialog box
-        let res = {
+        res = {
           user: true,
           data: response.pfwresponse.result.user,
         };
-        return res;
       }
     } else {
       error =
@@ -652,5 +651,46 @@ export async function authCheckApi(type, data) {
     this.setState({
       loading: false,
     });
+    return res;
+  }
+}
+
+export async function generateOtp(type, data) {
+  let error = "";
+  let body = {};
+  let res = {};
+  if (type === "email") {
+    body.email = data.contact_value;
+  } else {
+    body.mobile = data.contact_value;
+    body.whatsapp_consent = true;
+  } // by default should this be true or false in case of bottomsheet?
+  try {
+    this.setState({
+      loading: true,
+    });
+    const otpResponse = await Api.post("/api/communication/send/otp", body);
+    if (otpResponse.pfwresponse.status_code === 200) {
+      // OTP_ID GENERATED, NAGIVATE TO THE OTP VERIFICATION SCREEN
+      res = {
+        otp: "success",
+        otp_id: otpResponse.pfwresponse.result.otp_id,
+        contact_value: data.contact_value,
+        contact_type: type,
+      };
+    } else {
+      error =
+        otpResponse.pfwresponse.result.message ||
+        otpResponse.pfwresponse.result.error ||
+        "Something went wrong!";
+      throw error;
+    }
+  } catch (err) {
+    Toast(err);
+  } finally {
+    this.setState({
+      loading: false,
+    });
+    return res;
   }
 }
