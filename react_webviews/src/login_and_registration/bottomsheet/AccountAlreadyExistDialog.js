@@ -20,16 +20,16 @@ export class AccountAlreadyExistDialog extends Component {
     const { type, data } = this.props;
     let body = {};
     if (type === "email") {
-      body.email = data.email;
+      body.email = data?.email;
     } else {
-      body.mobile = data.mobile;
+      body.mobile = data?.mobile;
       body.whatsapp_consent = true;
     } // by default should this be true or false in case of bottomsheet?
     const otpResponse = await this.generateOtp(body);
     if (otpResponse) {
       this.props.parent.navigate("verify-Secoundary", {
         state: {
-          mobile_number: data.contact_value,
+          mobile_number: data?.contact_value,
           forgot: false, // flag to be checked
           otp_id: otpResponse.pfwresponse.result.otp_id,
         },
@@ -80,7 +80,7 @@ export class AccountAlreadyExistDialog extends Component {
             justifyContent: "space-around",
           }}
         >
-          {(type === "email" ? data.mobile : data.email) && (
+          {(type === "email" ? data?.mobile : data?.email) && (
             <div className="details">
               <img
                 src={require(`../../assets/bottom_sheet_icon_${type}.svg`)}
@@ -88,25 +88,25 @@ export class AccountAlreadyExistDialog extends Component {
                 style={{ paddingRight: "10px" }}
               />
               <span className="text">
-                {type === "email" ? data.mobile : data.email}
+                {type === "email" ? data?.mobile : data?.email}
               </span>
             </div>
           )}
-          {(type === "email" ? data.mobile : data.email) && data.pan_number && (
+          {(type === "email" ? data?.mobile : data?.email) && data?.pan_number && (
             <div style={{ flexBasis: "20%" }}>
               <p className="text" style={{ textAlign: "center" }}>
                 |
               </p>
             </div>
           )}
-          {data.pan_number && (
+          {data?.pan_number && (
             <div className="details">
               <img
                 src={require(`../../assets/bottom_sheet_icon_pan.svg`)}
                 alt=""
                 style={{ paddingRight: "10px" }}
               />
-              <span className="text">{data.pan_number}</span>
+              <span className="text">{data?.pan_number}</span>
             </div>
           )}
         </div>
