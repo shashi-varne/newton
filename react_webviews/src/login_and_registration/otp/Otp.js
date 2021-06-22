@@ -3,7 +3,7 @@ import "../Style.scss";
 import { initialize } from "../function";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
-import { validateNumber } from "../../utils/validators";
+// import { validateNumber } from "../../utils/validators";
 import OtpComp from "./reset_opt";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import WVButtonLayout from "../../common/ui/ButtonLayout/WVButtonLayout";
@@ -27,11 +27,11 @@ class Otp extends Component {
 
   componentWillMount() {
     let { state } = this.props.location || {};
-    // if (!state || !state.mobile_number) {
-    //   toast("Mobile number not provided");
-    //   this.props.history.goBack();
-    //   return;
-    // }
+    if (!state || !state.mobile_number) {
+      toast("Mobile number not provided");
+      this.props.history.goBack();
+      return;
+    }
     let {mobile_number , otp_id}  = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     let forgot = state.forgot;

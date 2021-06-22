@@ -236,24 +236,7 @@ export async function mobileLogin(body) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       toast("OTP is sent successfully to your mobile number.");
-      // if (this.state.referrer) {
-      //   let item = {
-      //     promo_code: this.state.referrer,
-      //   };
-      //   storageService.setObject("user_promo", item);
-      // }
-
-      // if (this.state.isPromoSuccess && this.state.referral_code !== "") {
-      //   let item = {
-      //     promo_code: this.state.referral_code,
-      //   };
-      //   storageService().setObject("user_promo", item);
-      // }
-
-      storageService().setObject("otp_id", result?.otp_id );
-      const a=   storageService().get("otp_id");
       this.setState({ isApiRunning: false});
-
       if(body?.secoundary){
         this.navigate("verify-Secoundary", {
           state: {
@@ -319,7 +302,7 @@ export async function emailRegister(body) {
   }
 }
 
-export async function verifyCode(form_data) { console.log(form_data)
+export async function verifyCode(form_data) {
   if (!form_data.referral_code) {
     form_data[`referral_code_error`] = "This is required";
     this.setState({ form_data: form_data });
@@ -405,7 +388,7 @@ export async function otpVerification(body) {
         return;
       }
       let userData = {};
-      let kycResult = await getKycFromSummary(); // here
+      let kycResult = await getKycFromSummary();
 
       if (!kycResult) {
         this.setState({ isApiRunning: false });
@@ -439,7 +422,7 @@ export async function otpVerification(body) {
           storageService().get("deeplink_url")
         );
       } else {
-        this.redirectAfterLogin(result, user);  // here
+        this.redirectAfterLogin(result, user);
       }
     } else {
       toast(result.message || result.error || errorMessage);

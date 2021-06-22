@@ -18,7 +18,7 @@ class EnterVerifyDetails extends Component {
         super(props);
         this.state = {
             productName: getConfig().productName,
-            form_data: { whatsapp_consent: true,},
+            form_data: { whatsapp_consent: true, },
             isMobile: true,
             isEmail: false,
             loginType: "mobile",
@@ -50,20 +50,20 @@ class EnterVerifyDetails extends Component {
         if (loginType !== "email")
             this.sendEvents();
         if (loginType === "email") keys_to_check = ["email"];
-        this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType , secoundary);
+        this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, secoundary);
     }
 
 
     sendEvents = (userAction) => {
         let eventObj = {
-          "event_name": 'otp sent to user',
+            "event_name": 'otp sent to user',
         };
         if (userAction === 'just_set_events') {
-          return eventObj;
+            return eventObj;
         } else {
-          nativeCallback({ events: eventObj });
+            nativeCallback({ events: eventObj });
         }
-      }
+    }
 
     render() {
 
@@ -82,8 +82,8 @@ class EnterVerifyDetails extends Component {
                 <div className="form" data-aid='form'>
                     {isMobile && (
                         <div>
-                            <div className="form-field" style={{ display: "flex" }}>
-                                <span className="country-code" data-aid='country-code' style={{ width: "115px", marginRight: '15px' }}>
+                            <div className="login-form-field">
+                                <span className="country-code" data-aid='country-code'>
                                     <DropDownNew
                                         onChange={this.handleChange("code")}
                                         error={form_data.code_error ? true : false}
@@ -96,19 +96,21 @@ class EnterVerifyDetails extends Component {
                                         isAOB={true}
                                     />
                                 </span>
-                                <Input
-                                    error={form_data.mobile_error ? true : false}
-                                    type="text"
-                                    value={form_data.mobile || ""}
-                                    helperText={form_data.mobile_error || ""}
-                                    class="input mobile-number"
-                                    id="mobile"
-                                    label="Enter mobile number"
-                                    name="mobile"
-                                    onChange={this.handleChange("mobile")}
-                                    inputMode="numeric"
-                                    autoFocus
-                                />
+                                <span className="mobile-number-login">
+                                    <Input
+                                        error={form_data.mobile_error ? true : false}
+                                        type="text"
+                                        value={form_data.mobile || ""}
+                                        helperText={form_data.mobile_error || ""}
+                                        class="input mobile-number"
+                                        id="mobile"
+                                        label="Enter mobile number"
+                                        name="mobile"
+                                        onChange={this.handleChange("mobile")}
+                                        inputMode="numeric"
+                                        autoFocus
+                                    />
+                                </span>
                             </div>
                             <WVInPageSubtitle children={"We'll send an OTP to verify your mobile number"} />
                             <div className="declaration-container">
