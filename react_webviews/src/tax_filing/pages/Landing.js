@@ -6,6 +6,7 @@ import WVTag from 'common/ui/Tag/WVTag'
 import HowToSteps from 'common/ui/HowToSteps'
 import StepsToFollow from '../../common/ui/stepsToFollow'
 import Carousal from '../mini-components/Carousal'
+import WVMenuListDropdownItem from '../../common/ui/MenuListDropdown/WVMenuListDropdownItem'
 
 // import { gettingStartedSteps } from '../constants'
 
@@ -54,23 +55,39 @@ const LandingPage = () => {
         //   step: 'pd-2x',
         // }}
       />
-      <WVTag
-        variant="info"
-        label="free"
-        dataAidSuffix="tax2win-free-tag"
-      />
+      <WVTag variant="info" label="free" dataAidSuffix="tax2win-free-tag" />
       {/* <GetStarted /> */}
       <Carousal
         title="Taxation made simple"
         subtitle="File ITR easily, quickly and with maximum tax savings"
         dataAidSuffix="tax-filing-itr-carousel"
       />
+      <WVMenuListDropdownItem
+        image={require(`assets/${productName}/icn_self_itr.svg`)}
+        title="asdasjkdhakjsdasd"
+        subtitle="asdasjkdhasjkdhajksdhasjkhdjkasjksd"
+      />
+      <WVMenuListDropdownItem
+        image={require(`assets/${productName}/icn_ca.svg`)}
+        title={<Title title="Do it yourself" />}
+        subtitle="asdasjkdhasjkdhajksdhasjkhdjkasjksd"
+      />
     </Container>
   )
 }
 
 const Title = ({ title }) => {
-  return <h5>Custom {title}</h5>
+  return (
+    <div className="flex">
+      <div className="heading3-medium">Do it yourself</div> 
+      <WVTag
+        variant="attention"
+        label="free"
+        dataAidSuffix="tax2win-free-tag"
+        classes={{ container: 'align-self-start m-left-2x' }}
+      />
+    </div>
+  )
 }
 
 const Subtitle = () => {
