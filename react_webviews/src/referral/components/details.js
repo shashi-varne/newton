@@ -107,7 +107,7 @@ class Details extends Component {
 
       this.props.history.push({
         pathname: pathname,
-        search: '?base_url=' + this.state.params.base_url
+        search: getConfig().searchParams
       });
     } else {
       this.setState({
@@ -125,7 +125,7 @@ class Details extends Component {
 
     this.props.history.push({
       pathname: pathname,
-      search: '?mobile=' + this.state.mobile + '&base_url=' + this.state.params.base_url
+      search: getConfig().searchParams + '&mobile=' + this.state.mobile
     });
   }
 
