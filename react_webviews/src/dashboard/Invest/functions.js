@@ -74,7 +74,6 @@ export async function getSummary() {
       referral: ["subbroker", "p2p"],
       contacts: ["contacts"]
     });
-    console.log(res)
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setSummaryData(result);

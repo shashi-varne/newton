@@ -33,10 +33,11 @@ class Landing extends Component {
       modalData: {},
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
-      verifyDetails: false,
-      verifyDetailsData: {},
-      accountAlreadyExists: false,
-      accountAlreadyExistsData : {},
+      verifyDetails: true, // to be changed
+      verifyDetailsType: 'email', // to be changed
+      verifyDetailsData: [],
+      accountAlreadyExists: true, // to be changed
+      accountAlreadyExistsData : [],
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
       isWeb: getConfig().Web,
@@ -54,6 +55,20 @@ class Landing extends Component {
   onload = () => {
     this.initilizeKyc();
     const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
+    const contactDetails = storageService().getObject("contactDetails");
+    if (!isEmpty(contactDetails?.unverified_mobile_contacts || []) && isEmpty(contactDetails?.verified_mobile_contacts || [])) {
+      this.setState({
+        verifyDetails: true,
+        verifyDetailsData: contactDetails.unverified_mobile_contacts[0],
+        verifyDetailsType: "mobile",
+      });
+    } else if (!isEmpty(contactDetails?.unverified_email_contacts || []) && isEmpty(contactDetails?.verified_email_contacts || []) ) {
+      this.setState({
+        verifyDetails: true,
+        verifyDetailsData: contactDetails.unverified_email_contacts[0],
+        verifyDetailsType: "email",
+      });
+    }
     if (!isBottomSheetDisplayed && this.state.isWeb) {
       this.handleCampaignNotification();
     }
@@ -67,7 +82,6 @@ class Landing extends Component {
   updateDocument = () => {
     this.navigate("/kyc/add-bank");
   };
-
 
   setAccountAlreadyExistsData = (show, data) => {
     this.setState({
@@ -139,7 +153,6 @@ class Landing extends Component {
 
   
   render() {
-    console.log(this.state.accountAlreadyExistsData)
     const {
       isReadyToInvestBase,
       isEquityCompletedBase,
@@ -482,23 +495,25 @@ class Landing extends Component {
           data={this.state.bottom_sheet_dialog_data}
           handleClick={this.handleCampaign}
         /> */}
+          {verifyDetails && (
+            <VerifyDetailDialog
+              type={this.state.verifyDetailsType}
+              // data="uttam@fisdom.com" // verifyDetailsData
+              data={this.state.verifyDetailsData}
+              showAccountAlreadyExist={this.setAccountAlreadyExistsData}
+              isOpen={verifyDetails}
+              onClose={this.closeVerifyDetailsDialog}
+            ></VerifyDetailDialog>
+          )}
         {accountAlreadyExists && (
           <AccountAlreadyExistDialog
-            type="mobile"
-            data="98*****487"
-            pan="CXIPP***M"
+            type={this.state.verifyDetailsType}
+            // data="98*****487" // accountAlreadyExistsData
+            data={this.state.accountAlreadyExistsData}
+            pan="CXIPP***M" //accountAlreadyExistsData
             isOpen={accountAlreadyExists}
             onClose={this.closeAccountAlreadyExistDialog}
           ></AccountAlreadyExistDialog>
-        )}
-        {verifyDetails && (
-          <VerifyDetailDialog
-            type="email"
-            data="uttam@fisdom.com"
-            showAccountAlreadyExist={this.setAccountAlreadyExistsData}
-            isOpen={verifyDetails}
-            onClose={this.closeVerifyDetailsDialog}
-          ></VerifyDetailDialog>
         )}
       </Container>
     );
