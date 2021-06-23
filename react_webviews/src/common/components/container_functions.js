@@ -193,7 +193,7 @@ export function commonRender(props_base) {
                     ${this.props.noPadding ? "no-padding" : ""}`}>
                     <div
                         className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
-                        style={{ display: this.props.skelton ? 'none' : '', ...this.props?.parentStyles }}
+                        style={{ display: this.props.skelton ? 'none' : '' }}
                     >
                         {this.props.children}
                     </div>
