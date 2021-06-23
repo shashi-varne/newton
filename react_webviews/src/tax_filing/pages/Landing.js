@@ -7,36 +7,41 @@ import HowToSteps from 'common/ui/HowToSteps'
 import StepsToFollow from '../../common/ui/stepsToFollow'
 import Carousal from '../mini-components/Carousal'
 import WVMenuListDropdownItem from '../../common/ui/MenuListDropdown/WVMenuListDropdownItem'
+import FeatureListItem from '../mini-components/FeatureListItem'
 
 // import { gettingStartedSteps } from '../constants'
 
-// function GetStarted({ title = 'Why eFile with us?', steps }) {
-//   const gettingStartedSteps = [
-//     {
-//       icon: 'icn_secure_safe',
-//       title: 'Secure & Safe ',
-//       subtitle: 'Income tax department authorized platform',
-//     },
-//     {
-//       icon: 'icn_tax_savings',
-//       title: 'Maximum tax savings',
-//       subtitle: 'Get every tax deduction you are eligible for',
-//     },
-//     {
-//       icon: 'icn_calculator',
-//       title: '100% accuracy',
-//       subtitle: 'Precise calculations to avoid overpaying of taxes',
-//     },
-//   ]
-//   return (
-//     <HowToSteps
-//       style={{ margin: '0px 0px 0px 0px', paddingTop: 0 }}
-//       baseData={{ title, options: gettingStartedSteps }}
-//       classNameIcon="steps-icon"
-//       showSkelton={true}
-//     />
-//   )
-// }
+function GetStarted({ title = 'Why eFile with us?', steps }) {
+  const productName = getConfig().productName
+  const gettingStartedSteps = [
+    {
+      frontImage: require('assets/icn_secure_safe.svg'),
+      bgImage: require(`assets/${productName}/bg_why_icons.svg`),
+      title: 'Secure & Safe ',
+      subtitle: 'Income tax department authorized platform',
+    },
+    {
+      frontImage: require('assets/icn_tax_savings.svg'),
+      bgImage: require(`assets/${productName}/bg_why_icons.svg`),
+      title: 'Maximum tax savings',
+      subtitle: 'Get every tax deduction you are eligible for',
+    },
+    {
+      frontImage: require('assets/icn_calculator.svg'),
+      bgImage: require(`assets/${productName}/bg_why_icons.svg`),
+      title: '100% accuracy',
+      subtitle: 'Precise calculations to avoid overpaying of taxes',
+    },
+  ]
+  return (
+    <FeatureListItem
+      imgSrc={require('assets/icn_secure_safe.svg')}
+      bgImgSrc={require(`assets/${productName}/bg_why_icons.svg`)}
+      title={`Secure & Safe`}
+      subtitle={`Income tax department authorized platform`}
+    />
+  )
+}
 
 const LandingPage = () => {
   const productName = getConfig().productName
@@ -56,7 +61,7 @@ const LandingPage = () => {
         // }}
       />
       <WVTag variant="info" label="free" dataAidSuffix="tax2win-free-tag" />
-      {/* <GetStarted /> */}
+      <GetStarted />
       <Carousal
         title="Taxation made simple"
         subtitle="File ITR easily, quickly and with maximum tax savings"
@@ -79,7 +84,7 @@ const LandingPage = () => {
 const Title = ({ title }) => {
   return (
     <div className="flex">
-      <div className="heading3-medium">Do it yourself</div> 
+      <div className="heading3-medium">Do it yourself</div>
       <WVTag
         variant="attention"
         label="free"
