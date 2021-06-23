@@ -19,8 +19,6 @@ class SecondaryVerification extends Component {
         this.state = {
             productName: getConfig().productName,
             form_data: { whatsapp_consent: true, code: "+91"},
-            isMobile: true,
-            isEmail: false,
             loginType: "mobile",
         }
         this.initialize = initialize.bind(this);
@@ -33,6 +31,16 @@ class SecondaryVerification extends Component {
         })
     }
 
+    componentDidMount() {
+        this.setState({
+            form_data:{
+                ...this.state.form_data,
+                mobile: this.props.location?.state?.contactValue
+            },
+            loginType: this.props.location?.communicationType || "mobile"// to be changed
+        })
+    }
+    
     handleChange = (name) => (event) => {
         let value = event.target ? event.target.value : event;
         if (name === "mobile" && value && !validateNumber(value)) return;
@@ -52,7 +60,6 @@ class SecondaryVerification extends Component {
         this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, true);
     }
 
-
     sendEvents = (userAction) => {
         let eventObj = {
             "event_name": 'otp sent to user',
@@ -65,8 +72,7 @@ class SecondaryVerification extends Component {
     }
 
     render() {
-
-        const { isMobile, isEmail, form_data } = this.state;
+        const {loginType, form_data } = this.state;
 
         return (
             <Container
@@ -77,9 +83,9 @@ class SecondaryVerification extends Component {
                 canSkip={true}
                 onSkipClick={() => this.navigate("/")}
                 showLoader={this.state.isApiRunning}
-                title={isMobile ? "Enter Your Number to get started" : "Share your email address"}>
+                title={loginType === "mobile" ? "Enter Your Number to get started" : "Share your email address"}>
                 <div className="form" data-aid='form'>
-                    {isMobile && (
+                    {loginType === "mobile" && (
                         <div>
                             <div className="login-form-field">
                                 <span className="country-code" data-aid='country-code'>
@@ -127,7 +133,7 @@ class SecondaryVerification extends Component {
                             </div>
                         </div>
                     )}
-                    {isEmail &&
+                    {loginType === "email" &&
                         <>
                             <div className="form-field">
                                 <Input

@@ -21,8 +21,8 @@ class VerifyDetailDialog extends Component {
   handleClick = async () => {
     const { data, type } = this.props;
     if (isEmpty(data)) {
-      this.props.parent.navigate("/verify", {
-        // data like email/mobile goes here
+      this.props.parent.navigate("/secondary-verification", {
+        communicationType: type
       });
     } else {
       const result = await this.authCheckApi(type, data);
@@ -46,18 +46,16 @@ class VerifyDetailDialog extends Component {
           });
         }
       } else if (result.is_user === true) {
-        this.props.showAccountAlreadyExist(
-          true,
-          result.user
-        );
+        this.props.showAccountAlreadyExist(true, result.user);
       }
     }
   };
 
   editDetails = () => {
-    this.props.parent.navigate("/verify", {
+    this.props.parent.navigate("/secondary-verification", {
       state: {
-        // data like email/mobile goes here
+        communicationType: this.props?.type,
+        contactValue: this.props?.data?.contact_value,
       },
     });
   };

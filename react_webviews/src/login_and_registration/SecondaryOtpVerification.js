@@ -16,6 +16,8 @@ export class SecondaryOtpVerification extends Component {
         totalTime: 15,
         timeAvailable: 15,
       },
+      communicationType: "mobile",
+      showDotLoader: false
     };
     this.initialize = initialize.bind(this);
   }
@@ -27,7 +29,7 @@ export class SecondaryOtpVerification extends Component {
       this.props.history.goBack();
       return;
     }
-    let { mobile_number, otp_id } = state;
+    let { mobile_number, otp_id, communicationType } = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     let forgot = state.forgot;
     this.setState({
@@ -35,9 +37,11 @@ export class SecondaryOtpVerification extends Component {
       otp_id: otp_id,
       rebalancing_redirect_url: rebalancing_redirect_url,
       forgot: forgot,
+      communicationType: communicationType
     });
     this.initialize();
-  }
+  }  
+
   handleOtp = (otp) => {
     this.setState({
       otpData: { ...this.state.otpData, otp },
@@ -63,13 +67,13 @@ export class SecondaryOtpVerification extends Component {
 
 
   render() {
-    let showDotLoader = false;
-    let communicationType = "email";
+    const {showDotLoader, communicationType} = this.state;
     return (
       <Container
         title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"
           }`}
         buttonTitle="VERIFY"
+        showLoader={this.state.isApiRunning} 
         canSkip={true}
         onSkipClick={() => this.navigate("/")}
         handleClick={() => this.handleClick()}
@@ -78,9 +82,14 @@ export class SecondaryOtpVerification extends Component {
           <div className="verify-otp-header">
             <p>
               An OTP has been sent to{" "}
-              <span style={{ fontWeight: "500", marginRight: "23px" }}>uttampaswan@fisdom.com</span>
+              <span style={{ fontWeight: "500", marginRight: "23px" }}>{this.state.mobile_number}</span>
             </p>
-            <WVClickableTextElement onClick={() => this.props.history.goBack()}>EDIT</WVClickableTextElement>
+            <WVClickableTextElement onClick={() => this.navigate('/secondary-verification',{
+              state:{
+                communicationType: communicationType,
+                contactValue: this.state.mobile_number
+              }
+            })}>EDIT</WVClickableTextElement>
           </div>
           <div className="kcd-otp-content">
           <OtpComp

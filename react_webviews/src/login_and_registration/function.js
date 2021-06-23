@@ -150,6 +150,7 @@ export function formCheckFields(
     // body.redirect_url = redirectUrl;
     body.mobile = `${form_data["code"]}|${form_data["mobile"]}`;
     body.whatsapp_consent = form_data["whatsapp_consent"];
+    body.communicationType = loginType
     if(secondaryVerification){
       body.secondaryVerification = true
     }
@@ -245,6 +246,7 @@ export async function mobileLogin(body) {
             // rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
             forgot: false,
             otp_id: result?.otp_id,
+            communicationType: body.communicationType
           },
         });
       } else {

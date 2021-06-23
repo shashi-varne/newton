@@ -42,7 +42,7 @@ export class AccountAlreadyExistDialog extends Component {
   };
 
   editDetails = () => {
-    this.props.parent.navigate("/verify", {
+    this.props.parent.navigate("/kyc/communication-details", {
       state: {
         page: "landing",
         edit: true,
