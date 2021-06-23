@@ -142,16 +142,16 @@ class Earnings extends Component {
   renderIcon = (item) => {
     if (item.type_of_referee_identifier === 'name') {
       return (
-        <div className={`icon ${(item.investment_status === 'success' && item.earning > 0) ? 'DarkGreyBackground' : ''}`}><span>{getAcronym(item.referee_name.toUpperCase())}</span></div>
+        <div className={`icon ${(item.investment_status === 'success' && item.amount_earned > 0) ? 'DarkGreyBackground' : ''}`}><span>{getAcronym(item.referee_name.toUpperCase())}</span></div>
       );
     } else if (item.type_of_referee_identifier === 'email') {
       return (
-        <div className={`icon ${(item.investment_status === 'success' && item.earning > 0) ? 'DarkGreyBackground' : ''}`}><span>@</span></div>
+        <div className={`icon ${(item.investment_status === 'success' && item.amount_earned > 0) ? 'DarkGreyBackground' : ''}`}><span>@</span></div>
       );
 
     } else if (item.type_of_referee_identifier === 'mobile') {
       return (
-        <div className={`icon ${(item.investment_status === 'success' && item.earning > 0) ? 'DarkGreyBackground' : ''}`}><span>{item.referee_name.slice(-2)}</span></div>
+        <div className={`icon ${(item.investment_status === 'success' && item.amount_earned > 0) ? 'DarkGreyBackground' : ''}`}><span>{item.referee_name.slice(-2)}</span></div>
       );
     }
   }
