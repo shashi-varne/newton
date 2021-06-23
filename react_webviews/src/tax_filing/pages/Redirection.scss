@@ -1,0 +1,26 @@
+.tax-filing-full-height {
+  height: 100%;
+}
+
+.tax-bottom-pd-20-important {
+  padding-bottom: 20px !important;
+}
+
+.tax-filing-redirection-loader {
+  border: 3px solid#D6D6D6;
+  border-top: 3px solid#878787;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

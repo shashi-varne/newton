@@ -42,6 +42,26 @@
   align-self: flex-start;
 }
 
+.align-self-center {
+  align-self: center;
+}
+
+.justify-self-center {
+  justify-self: center;
+}
+
+.align-self-end {
+  align-self: flex-end;
+}
+
+.align-self-start {
+  align-self: flex-start;
+}
+
+.no-wrap {
+  flex-wrap: nowrap;
+}
+
 .block {
   display: block;
 }

@@ -31,9 +31,7 @@ function PersonalDetails(props) {
   }
 
   const handleClick = () => {
-    /**
-     * Handle the handle click
-     */
+    navigate('/tax-filing/redirection', {}, false)
   }
 
   return (
@@ -42,6 +40,7 @@ function PersonalDetails(props) {
       smallTitle="Fill your details to start"
       buttonTitle="CONTINUE"
       handleClick={handleClick}
+      showDotDot={true}
     >
       <form className="block tax-filing-details">
         <Input

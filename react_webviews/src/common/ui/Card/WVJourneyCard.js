@@ -24,7 +24,7 @@ function WVJourneyCard({
         container: `wv-journey-card wv-journey-card__with-step ${classes?.card}`,
       }}
       withShadow={false}
-      data-aid={`wv-journey-card ${dataAidSuffix}`}
+      dataAidSuffix={`wv-journey-card-${dataAidSuffix}`}
       {...props}
     >
       <div className={`flex-between ${classes?.container}`}>

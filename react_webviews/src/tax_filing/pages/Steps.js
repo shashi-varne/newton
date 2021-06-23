@@ -21,6 +21,7 @@ function Steps(props) {
       smallTitle={`Effortless, economic & error-free`}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
+      showLoader={false}
     >
       {taxFilingSteps.map(({ title, subtitle, icon }, idx) => (
         <WVJourneyCard
@@ -29,7 +30,7 @@ function Steps(props) {
           classes={{ card: 'm-top-3x' }}
           subtitle={subtitle}
           iconSrc={require(`assets/${productName}/${icon}.svg`)}
-          dataAidSuffix={`tax-filing-step-${title}`}
+          dataAidSuffix={`tax-filing-step-${idx}`}
           stepCount={idx + 1}
         />
       ))}
