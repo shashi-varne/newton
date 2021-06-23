@@ -95,6 +95,7 @@ export function setSummaryData(result) {
   this.setState({
     currentUser: currentUser,
     userKyc: userKyc,
+    contactDetails: result.data.contacts.contacts.data
   });
   if (result.data.kyc.kyc.data.firstlogin) {
     storageService().set("firstlogin", true);
@@ -102,8 +103,6 @@ export function setSummaryData(result) {
   storageService().set("currentUser", true);
   storageService().setObject("user", result.data.user.user.data);
   storageService().setObject("kyc", result.data.kyc.kyc.data);
-  storageService().setObject("contactDetails", result.data.contacts.contacts.data)
-
   let campaignData = getCampaignBySection(
     result.data.campaign.user_campaign.data
   );

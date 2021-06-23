@@ -33,11 +33,11 @@ class Landing extends Component {
       modalData: {},
       openKycStatusDialog: false,
       openKycPremiumLanding: false,
-      verifyDetails: true, // to be changed
-      verifyDetailsType: 'email', // to be changed
-      verifyDetailsData: [],
-      accountAlreadyExists: true, // to be changed
-      accountAlreadyExistsData : [],
+      verifyDetails: false,
+      verifyDetailsType: '',
+      verifyDetailsData: {},
+      accountAlreadyExists: false,
+      accountAlreadyExistsData : {},
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
       isWeb: getConfig().Web,
@@ -54,19 +54,28 @@ class Landing extends Component {
 
   onload = () => {
     this.initilizeKyc();
-    const isBottomSheetDisplayed = storageService().get('is_bottom_sheet_displayed');
-    const contactDetails = storageService().getObject("contactDetails");
-    if (!isEmpty(contactDetails?.unverified_mobile_contacts || []) && isEmpty(contactDetails?.verified_mobile_contacts || [])) {
+    const isBottomSheetDisplayed = storageService().get(
+      "is_bottom_sheet_displayed"
+    );
+    const { contactDetails } = this.state;
+    if (contactDetails?.verification_done === null) {
       this.setState({
         verifyDetails: true,
-        verifyDetailsData: contactDetails.unverified_mobile_contacts[0],
-        verifyDetailsType: "mobile",
+        verifyDetailsData: {},
+        verifyDetailsType:
+          contactDetails?.auth_type === "mobile" ? "email" : "mobile",
       });
-    } else if (!isEmpty(contactDetails?.unverified_email_contacts || []) && isEmpty(contactDetails?.verified_email_contacts || []) ) {
+    } else if (contactDetails?.verification_done === false) {
       this.setState({
         verifyDetails: true,
-        verifyDetailsData: contactDetails.unverified_email_contacts[0],
-        verifyDetailsType: "email",
+        verifyDetailsData:
+          contactDetails[
+            `unverified_${
+              contactDetails?.auth_type === "mobile" ? "email" : "mobile"
+            }_contacts`
+          ][0],
+        verifyDetailsType:
+          contactDetails?.auth_type === "mobile" ? "email" : "mobile",
       });
     }
     if (!isBottomSheetDisplayed && this.state.isWeb) {
@@ -463,7 +472,7 @@ class Landing extends Component {
                 </span>
               </div>
             )}
-          {/* <VerificationFailedDialog
+          <VerificationFailedDialog
             isOpen={verificationFailed}
             close={this.closeVerificationFailed}
             addBank={this.addBank}
@@ -486,15 +495,15 @@ class Landing extends Component {
               handleClick={this.handleKycPremiumLanding}
               data={modalData}
             />
-          )} */}
+          )}
         </div>
-        {/* <CampaignDialog
+        <CampaignDialog
           isOpen={this.state.openBottomSheet}
           close={this.closeCampaignDialog}
           cancel={this.closeCampaignDialog}
           data={this.state.bottom_sheet_dialog_data}
           handleClick={this.handleCampaign}
-        /> */}
+        />
           {verifyDetails && (
             <VerifyDetailDialog
               type={this.state.verifyDetailsType}
