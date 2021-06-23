@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import Card from '../common/Card';
 import Api from 'utils/api';
-import wallet from 'assets/earning_wallet_icon.png';
+import wallet from 'assets/wallet_icon.svg';
 import gift from 'assets/refer_gift_icon.png';
 import diwali_banner from 'assets/diwali_banner.svg';
 import Button from 'material-ui/Button';
@@ -137,7 +137,13 @@ class Details extends Component {
       }
     };
 
-    nativeCallback({ action: 'share', message: { message: message }, events: eventObj });
+    if(getConfig().Android) {
+      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false }, events: eventObj });
+    }
+
+    if (getConfig().iOS) {
+      nativeCallback({ action: 'share', message: { message: message }, events: eventObj });
+    }
   }
 
   getExpiryDate = () => {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Container from '../common/Container';
-import wallet from 'assets/earning_wallet_icon.png';
+import wallet from 'assets/wallet_icon.svg';
 import Button from 'material-ui/Button';
 import Grid from '@material-ui/core/Grid';
 import { getAcronym } from 'utils/functions';
@@ -99,7 +99,13 @@ class Earnings extends Component {
       }
     };
 
-    nativeCallback({ action: 'share', message: { message: message }, events: eventObj });
+    if(getConfig().Android) {
+      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false }, events: eventObj });
+    }
+
+    if (getConfig().iOS) {
+      nativeCallback({ action: 'share', message: { message: message }, events: eventObj });
+    }
   }
 
   remindHandler = (length, item, index) => {
