@@ -23,7 +23,7 @@
 }
 
 .justify-center {
-  justify-content: center; 
+  justify-content: center;
 }
 
 .justify-start {
@@ -70,7 +70,7 @@
 .heading3-bolder {
   color: var(--gunmetal);
   font-weight: bold;
-  font-size:  15px;
+  font-size: 15px;
   line-height: calc(15px * 1.6);
 }
 
@@ -160,4 +160,12 @@
 
 .text-secondary {
   color: var(--steelgrey);
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.pointer {
+  cursor: pointer;
 }

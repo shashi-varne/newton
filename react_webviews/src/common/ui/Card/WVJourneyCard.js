@@ -20,7 +20,7 @@ function WVJourneyCard({
 }) {
   return (
     <WVCard
-      className="wv-journey-card wv-journey-card__with-step"
+      classes={{ container: 'wv-journey-card wv-journey-card__with-step' }}
       withShadow={false}
       data-aid={`wv-journey-card ${dataAidSuffix}`}
       {...props}
@@ -58,7 +58,7 @@ WVJourneyCard.propTypes = {
   renderTitle: PropTypes.func,
   renderSubtitle: PropTypes.func,
   stepCount: PropTypes.number,
-  classes: PropTypes.shape({
+  classes: PropTypes.exact({
     container: PropTypes.string,
     content: PropTypes.string,
     title: PropTypes.string,
@@ -83,7 +83,7 @@ export function StepCount({ count, classes }) {
 
 StepCount.propTypes = {
   count: PropTypes.number,
-  classes: PropTypes.shape({
+  classes: PropTypes.exact({
     step: PropTypes.string,
   }),
 }

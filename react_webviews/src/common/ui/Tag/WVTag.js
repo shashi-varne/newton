@@ -35,7 +35,7 @@ WVTag.propTypes = {
   backgroundColor: PropTypes.string,
   color: PropTypes.string,
   variant: PropTypes.string,
-  classes: PropTypes.shape({
+  classes: PropTypes.exact({
     container: PropTypes.string,
     label: PropTypes.string,
   }),

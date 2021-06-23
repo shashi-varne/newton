@@ -181,7 +181,7 @@ WVMenuListDropdownItem.defaultProps = {
   classes: {},
   isDropDown: false,
   dataAidSuffix: '',
-  children: PropTypes.node,
+  children: '',
 }
 
 export default WVMenuListDropdownItem

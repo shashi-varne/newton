@@ -8,6 +8,9 @@ import StepsToFollow from '../../common/ui/stepsToFollow'
 import Carousal from '../mini-components/Carousal'
 import WVMenuListDropdownItem from '../../common/ui/MenuListDropdown/WVMenuListDropdownItem'
 import FeatureListItem from '../mini-components/FeatureListItem'
+import WVCard from 'common/ui/Card/WVCard'
+
+import './Landing.scss'
 
 // import { gettingStartedSteps } from '../constants'
 
@@ -76,7 +79,11 @@ const LandingPage = () => {
         image={require(`assets/${productName}/icn_ca.svg`)}
         title={<Title title="Do it yourself" />}
         subtitle="asdasjkdhasjkdhajksdhasjkhdjkasjksd"
-      />
+      ></WVMenuListDropdownItem>
+      <WVCard classes={{ container: 'tax-filing-entry-card pointer flex align-center' }}>
+        <img src={require(`assets/icn_my_itr.svg`)} alt="MY ITR" />
+        <div className="m-left-2x heading3-medium text-white">MY ITR</div>
+      </WVCard>
     </Container>
   )
 }
