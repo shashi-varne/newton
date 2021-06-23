@@ -6,7 +6,7 @@ import UiSkelton from 'common/ui/Skelton';
 import Footer from 'common/components/footer';
 import Header from 'common/components/Header';
 
-import React from "react";
+import React, { Fragment } from "react";
 
 import Button from "material-ui/Button";
 import Dialog, {
@@ -594,20 +594,26 @@ export function calcReadtime(endtime) {
 
 export function new_header_scroll() {
     return (
+        <Fragment>
+            <div id="header-title-page"
+                style={this.props.styleHeader}
+                className={`header-title-page  ${this.props.classHeader}`}>
+                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }}>
+                    {this.props.title}
+                </div>
 
-        <div id="header-title-page"
-            style={this.props.styleHeader}
-            className={`header-title-page  ${this.props.classHeader}`}>
-            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }}>
-                {this.props.title}
+                {this.state.inPageTitle && this.props.count &&
+                    <span color="inherit"
+                        className={`header-title-page-count-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
+                        <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
+                    </span>}
             </div>
-
-            {this.state.inPageTitle && this.props.count &&
-                <span color="inherit"
-                    className={`header-title-page-count-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
-                    <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
-                </span>}
-        </div>
-
+            {this?.props?.smallTitle && (
+                <div className={`body-text2 text-secondary m-top-1x pd-left-2x ${this.props?.classSmallTitle}`}>
+                    {this.props?.smallTitle}
+                </div>
+            )}
+            
+        </Fragment>
     )
 }

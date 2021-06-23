@@ -142,12 +142,20 @@
   margin-left: calc(var(--spacing) * 2);
 }
 
+.m-top-1x {
+  margin-top: var(--spacing);
+}
+
 .m-top-2x {
   margin-top: calc(var(--spacing) * 2);
 }
 
 .pd-2x {
   padding: calc(var(--spacing) * 2);
+}
+
+.pd-left-2x {
+  padding-left: calc(var(--spacing) * 2);
 }
 
 .relative {
