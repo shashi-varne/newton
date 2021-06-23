@@ -1,5 +1,5 @@
 import React from 'react'
-import './FeatureList.scss'
+import './FeatureListItem.scss'
 
 function FeatureListItem({ imgSrc, bgImgSrc, title, subtitle }) {
   return (

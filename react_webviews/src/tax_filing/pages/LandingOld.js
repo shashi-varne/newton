@@ -3,8 +3,6 @@ import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVJourneyCard from 'common/ui/Card/WVJourneyCard'
 import WVTag from 'common/ui/Tag/WVTag'
-import HowToSteps from 'common/ui/HowToSteps'
-import StepsToFollow from '../../common/ui/stepsToFollow'
 import Carousal from '../mini-components/Carousal'
 import WVMenuListDropdownItem from '../../common/ui/MenuListDropdown/WVMenuListDropdownItem'
 import FeatureListItem from '../mini-components/FeatureListItem'
@@ -50,7 +48,7 @@ const LandingPage = () => {
   const productName = getConfig().productName
 
   return (
-    <Container>
+    <Container buttonTitle="CONTINUE">
       <h1>Welcome to tax2win tax filing landing page.</h1>
       <WVJourneyCard
         title="Title"
@@ -80,7 +78,11 @@ const LandingPage = () => {
         title={<Title title="Do it yourself" />}
         subtitle="asdasjkdhasjkdhajksdhasjkhdjkasjksd"
       ></WVMenuListDropdownItem>
-      <WVCard classes={{ container: 'tax-filing-entry-card pointer flex align-center' }}>
+      <WVCard
+        classes={{
+          container: 'tax-filing-entry-card pointer flex align-center',
+        }}
+      >
         <img src={require(`assets/icn_my_itr.svg`)} alt="MY ITR" />
         <div className="m-left-2x heading3-medium text-white">MY ITR</div>
       </WVCard>

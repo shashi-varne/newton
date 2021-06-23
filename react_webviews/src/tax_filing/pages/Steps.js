@@ -5,14 +5,22 @@ import WVJourneyCard from 'common/ui/Card/WVJourneyCard'
 
 import { taxFilingSteps } from '../constants'
 
+import { navigate as navigateFunc } from '../common/functions'
+
 import './Steps.scss'
 
 function Steps(props) {
+  const navigate = navigateFunc.bind(props)
   const productName = getConfig().productName
+  const handleClick = () => {
+    navigate(`/tax-filing/personal-details`, {}, false)
+  }
   return (
     <Container
       title="eFile in 3 easy steps"
       smallTitle={`Effortless, economic & error-free`}
+      buttonTitle="CONTINUE"
+      handleClick={handleClick}
     >
       {taxFilingSteps.map(({ title, subtitle, icon }, idx) => (
         <WVJourneyCard
