@@ -121,7 +121,13 @@ class Earnings extends Component {
       }
     };
 
-    nativeCallback({ action: 'remind', message: { message: message }, events: eventObj });
+    if(getConfig().Android) {
+      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false }, events: eventObj });
+    }
+
+    if (getConfig().iOS) {
+      nativeCallback({ action: 'remind', message: { message: message }, events: eventObj });
+    }
   }
 
   renderAction = (length, item, index) => {
