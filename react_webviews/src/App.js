@@ -53,6 +53,10 @@ if(isBottomSheetDisplayed) {
   storageService().set("is_bottom_sheet_displayed", false);
 }
 
+const verifyDetailsSheetDisplayed = storageService().get('verifyDetailsSheetDisplayed');
+if(verifyDetailsSheetDisplayed)
+  storageService().set("verifyDetailsSheetDisplayed", false)
+  
 const isBottomSheetDisplayedKycPremium = storageService().get(
   "is_bottom_sheet_displayed_kyc_premium"
 );

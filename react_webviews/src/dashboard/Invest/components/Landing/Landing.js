@@ -57,26 +57,31 @@ class Landing extends Component {
     const isBottomSheetDisplayed = storageService().get(
       "is_bottom_sheet_displayed"
     );
-    const { contactDetails } = this.state;
-    if (contactDetails?.verification_done === null) {
-      this.setState({
-        verifyDetails: true,
-        verifyDetailsData: {},
-        verifyDetailsType:
-          contactDetails?.auth_type === "mobile" ? "email" : "mobile",
-      });
-    } else if (contactDetails?.verification_done === false) {
-      this.setState({
-        verifyDetails: true,
-        verifyDetailsData:
-          contactDetails[
-            `unverified_${
-              contactDetails?.auth_type === "mobile" ? "email" : "mobile"
-            }_contacts`
-          ][0],
-        verifyDetailsType:
-          contactDetails?.auth_type === "mobile" ? "email" : "mobile",
-      });
+    const isVerifyDetailsSheetDisplayed  = storageService().get("verifyDetailsSheetDisplayed")
+    if (!isVerifyDetailsSheetDisplayed) {
+      const { contactDetails } = this.state;
+      if (contactDetails?.verification_done === null) {
+        this.setState({
+          verifyDetails: true,
+          verifyDetailsData: {},
+          verifyDetailsType:
+            contactDetails?.auth_type === "mobile" ? "email" : "mobile",
+        });
+        storageService().set("verifyDetailsSheetDisplayed", true);
+      } else if (contactDetails?.verification_done === false) {
+        this.setState({
+          verifyDetails: true,
+          verifyDetailsData:
+            contactDetails[
+              `unverified_${
+                contactDetails?.auth_type === "mobile" ? "email" : "mobile"
+              }_contacts`
+            ][0],
+          verifyDetailsType:
+            contactDetails?.auth_type === "mobile" ? "email" : "mobile",
+        });
+        storageService().set("verifyDetailsSheetDisplayed", true);
+      }
     }
     if (!isBottomSheetDisplayed && this.state.isWeb) {
       this.handleCampaignNotification();
