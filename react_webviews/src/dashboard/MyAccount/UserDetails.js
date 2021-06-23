@@ -17,7 +17,7 @@ class MyaccountDetails extends Component {
         if (prevProp.contacts !== this.props.contacts) {
             const contacts = this.props.contacts;
             const auth_type = contacts?.auth_type;
-            const verification_done = contacts?.verification_done; // false
+            const verification_done = false //contacts?.verification_done; // change This
             let contact_value = "";
 
             if (verification_done) {
@@ -40,14 +40,24 @@ class MyaccountDetails extends Component {
 
         if (verified) return;
         const { auth_type, contact_value } = this.state;
-        const type = auth_type === 'mobile' ? auth_type : "email"
-        let result = await this.authCheckApi(type, { "contact_value": contact_value })
+        const contact_type = auth_type === 'mobile' ? "email" : auth_type;
+        let result = await this.authCheckApi(contact_type, { "contact_value": contact_value })
         if (result?.is_user) {
             this.props.handleClick("/kyc/communication-details")
         }
-        else if (result?.is_user) {
+        else if (!result?.is_user) {              
+            result = {
+                "message": "User found",   // REMOVE THIS
+                "is_user": true,
+                "user": {
+                    "mobile": "9738950664",
+                    "pan_number": "HPDPK****K",
+                    "user_id": "4693250414739457",
+                    "email": "op********st@yopmail.com"
+                }
+            }
             result.user.from = "my-account"
-            this.props.showAccountAlreadyExist(true, result.user, type);
+            this.props.showAccountAlreadyExist(true, result.user, contact_type);
         }
     }
 
@@ -75,7 +85,7 @@ class MyaccountDetails extends Component {
 
 const UserDetails = (props) => {
 
-    if (props.contacts) {
+    if (props.contacts) {                                       // REMOVE THIS
         props.contacts.unverified_email_contacts = [
             {
                 contact_type: "email",
