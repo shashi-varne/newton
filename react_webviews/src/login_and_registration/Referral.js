@@ -26,7 +26,7 @@ class Referral extends Component {
 
 
   componentDidUpdate(){
-    if(this.state.promo_status === "Valid")  this.navigate("/verify")
+    if(this.state.promo_status === "Valid")  this.navigate("/secondary-verification")
   }
 
   handleChange = (name) => (event) => {
@@ -49,15 +49,16 @@ class Referral extends Component {
         button1Props={{
           type: 'primary',
           title: "CONTINUE",
+          showLoader: this.state.isPromoApiRunning,
           onClick : () => this.verifyCode(form_data)
         }}
         button2Props={{
           type: 'secondary',
           title: "SKIP",
-          onClick: () => this.navigate("/verify"),
+          onClick: () => this.navigate("/secondary-verification"),
           showLoader: false,
         }}
-        showLoader={this.state.show_loader}
+        showLoader={this.state.showLoader}
         title="Do you have a referral code?">
 
 

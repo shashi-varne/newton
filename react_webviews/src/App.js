@@ -93,7 +93,7 @@ const App = () => {
               <Route path='/w-report' component={WealthReport} />
               <Route path='/login' component={Login} />
               <Route path='/register' component={Register} />
-              <Route path='/mobile/verify' component={Otp} />
+              <Route path='/verify-otp' component={Otp} />
               <Route path='/forgot-password' component={ForgotPassword} />
               <Route path='/social/callback' component={SocialCallback} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />

@@ -81,7 +81,7 @@ export function formCheckFields(
   form_data,
   userAction,
   loginType,
-  secoundary
+  secondaryVerification
 ) {
   let canSubmit = true;
   for (let key of keys_to_check) {
@@ -150,8 +150,8 @@ export function formCheckFields(
     // body.redirect_url = redirectUrl;
     body.mobile = `${form_data["code"]}|${form_data["mobile"]}`;
     body.whatsapp_consent = form_data["whatsapp_consent"];
-    if(secoundary){
-      body.secoundary = true
+    if(secondaryVerification){
+      body.secondaryVerification = true
     }
 
     this.mobileLogin(body);
@@ -238,8 +238,8 @@ export async function mobileLogin(body) {
     if (status === 200) {
       toast("OTP is sent successfully to your mobile number.");
       this.setState({ isApiRunning: false});
-      if(body?.secoundary){
-        this.navigate("verify-Secoundary", {
+      if(body?.secondaryVerification){
+        this.navigate("secondary-otp-verification", {
           state: {
             mobile_number: body.mobile,
             // rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
@@ -248,7 +248,7 @@ export async function mobileLogin(body) {
           },
         });
       } else {
-        this.navigate("mobile/verify", {
+        this.navigate("verify-otp", {
           state: {
             mobile_number: body.mobile,
             // rebalancing_redirect_url: this.state.rebalancingRedirectUrl,

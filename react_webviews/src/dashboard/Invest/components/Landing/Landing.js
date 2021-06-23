@@ -17,7 +17,7 @@ import isEmpty from "lodash/isEmpty";
 import VerifyDetailDialog from "../../../../login_and_registration/bottomsheet/VerifyDetailDialog";
 import AccountAlreadyExistDialog from "../../../../login_and_registration/bottomsheet/AccountAlreadyExistDialog";
 
-const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
+const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout", "/verify-otp"]
 const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {

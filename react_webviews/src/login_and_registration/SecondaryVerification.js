@@ -12,13 +12,13 @@ import Checkbox from "../common/ui/Checkbox";
 import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle";
 
 
-class EnterVerifyDetails extends Component {
+class SecondaryVerification extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             productName: getConfig().productName,
-            form_data: { whatsapp_consent: true, },
+            form_data: { whatsapp_consent: true, code: "+91"},
             isMobile: true,
             isEmail: false,
             loginType: "mobile",
@@ -45,12 +45,11 @@ class EnterVerifyDetails extends Component {
 
     handleClick() {
         let { form_data, loginType } = this.state;
-        const secoundary = true;
         let keys_to_check = ["mobile", "code"];
         if (loginType !== "email")
             this.sendEvents();
         if (loginType === "email") keys_to_check = ["email"];
-        this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, secoundary);
+        this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType, true);
     }
 
 
@@ -77,7 +76,7 @@ class EnterVerifyDetails extends Component {
                 handleClick={() => this.handleClick()}
                 canSkip={true}
                 onSkipClick={() => this.navigate("/")}
-                showLoader={this.state.show_loader}
+                showLoader={this.state.isApiRunning}
                 title={isMobile ? "Enter Your Number to get started" : "Share your email address"}>
                 <div className="form" data-aid='form'>
                     {isMobile && (
@@ -89,7 +88,7 @@ class EnterVerifyDetails extends Component {
                                         error={form_data.code_error ? true : false}
                                         helperText={form_data.code_error || ""}
                                         options={countries}
-                                        value={form_data.code || "91"}
+                                        value={form_data.code || "+91"}
                                         width={20}
                                         id="code"
                                         name="code"
@@ -153,4 +152,4 @@ class EnterVerifyDetails extends Component {
     }
 }
 
-export default EnterVerifyDetails;
+export default SecondaryVerification;

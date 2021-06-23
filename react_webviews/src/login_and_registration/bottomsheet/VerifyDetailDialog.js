@@ -37,7 +37,7 @@ class VerifyDetailDialog extends Component {
         } // by default should this be true or false in case of bottomsheet?
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {
-          this.props.parent.navigate("verify-Secoundary", {
+          this.props.parent.navigate("secondary-otp-verification", {
             state: {
               mobile_number: data.contact_value,
               forgot: false, // flag to be checked

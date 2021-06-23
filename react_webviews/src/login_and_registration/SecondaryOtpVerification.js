@@ -4,8 +4,9 @@ import Container from "../dashboard/common/Container";
 import { initialize } from "./function";
 import OtpComp from "./otp/reset_opt";
 import "./Otp.scss";
+import { toast } from "react-toastify";
 
-export class OtpSecondary extends Component {
+export class SecondaryOtpVerification extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,11 +22,11 @@ export class OtpSecondary extends Component {
 
   componentWillMount() {
     let { state } = this.props.location || {};
-    // if (!state || !state.mobile_number) {
-    //   toast("Mobile number not provided");
-    //   this.props.history.goBack();
-    //   return;
-    // }
+    if (!state || !state.mobile_number) {
+      toast("Mobile number not provided");
+      this.props.history.goBack();
+      return;
+    }
     let { mobile_number, otp_id } = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     let forgot = state.forgot;
@@ -95,4 +96,4 @@ export class OtpSecondary extends Component {
   }
 }
 
-export default OtpSecondary;
+export default SecondaryOtpVerification;
