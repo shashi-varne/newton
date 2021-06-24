@@ -33,7 +33,6 @@ function MyITR(props) {
     const icn = itrStatusMappings[status].icon
     const resumable = Boolean(itrStatusMappings[status].resumable)
     const icon = require(`assets/${productName}/${icn}.svg`)
-    console.log(icon)
     return {
       ...baseItem,
       topTextLeft: text,
