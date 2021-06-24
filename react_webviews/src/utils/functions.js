@@ -597,6 +597,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--steelgrey`, '#767E86');
   html.style.setProperty(`--spacing`, '10px');
   html.style.setProperty(`--gunmetal`, '#161A2E');
+  html.style.setProperty(`--linkwater`, '#D3DBE4');
 
   return config_to_return;
 }

@@ -10,8 +10,8 @@ function WVCard({ children, withShadow, classes, dataAidSuffix, ...props }) {
   return (
     <div
       className={`${defaultClass} ${classes?.container}`}
-      {...props}
       data-aid={`wv-card-${dataAidSuffix}`}
+      {...props}
     >
       {children || ''}
     </div>

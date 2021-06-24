@@ -1,9 +1,12 @@
 import React from 'react'
 import './FeatureListItem.scss'
 
-function FeatureListItem({ imgSrc, bgImgSrc, title, subtitle }) {
+function FeatureListItem({ classes, imgSrc, bgImgSrc, title, subtitle }) {
+  const containerClasses = classes?.container
+    ? `flex align-start ${classes?.container}`
+    : `flex align-start`
   return (
-    <div className="flex align-start">
+    <div className={containerClasses}>
       <div
         className="tax-filing-feature-icn-container flex align-center justify-center"
         style={{ backgroundImage: `url(${bgImgSrc})` }}

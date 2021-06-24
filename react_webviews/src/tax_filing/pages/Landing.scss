@@ -1,3 +1,23 @@
 .tax-filing-entry-card {
   background-color: var(--primary);
 }
+
+.tax-filing-faq-section {
+  border-top: 1px solid var(--linkwater);
+  border-bottom: 1px solid var(--linkwater);
+  padding: 18px 0;
+}
+
+.tax-filing-faq-section svg {
+  fill: var(--primary);
+}
+
+.tax-filing-faq-subtitle {
+  font-size: 14px;
+  line-height: 20px;
+  color: #0a1d32;
+}
+
+.tax-filing-faq-icon-text {
+  color: var(--primary);
+}

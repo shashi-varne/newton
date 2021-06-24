@@ -55,6 +55,8 @@ export const FAQs = [
   },
 ]
 
+
+
 export const itrStatusMappings = {
   filed: {
     color: '#4F2DA7',

@@ -10,38 +10,46 @@ import WVCard from 'common/ui/Card/WVCard'
 
 import './Landing.scss'
 
-// import { gettingStartedSteps } from '../constants'
+import { getTaxFilingFeatureLists } from '../common/functions'
 
 function GetStarted({ title = 'Why eFile with us?', steps }) {
-  const productName = getConfig().productName
-  const gettingStartedSteps = [
-    {
-      frontImage: require('assets/icn_secure_safe.svg'),
-      bgImage: require(`assets/${productName}/bg_why_icons.svg`),
-      title: 'Secure & Safe ',
-      subtitle: 'Income tax department authorized platform',
-    },
-    {
-      frontImage: require('assets/icn_tax_savings.svg'),
-      bgImage: require(`assets/${productName}/bg_why_icons.svg`),
-      title: 'Maximum tax savings',
-      subtitle: 'Get every tax deduction you are eligible for',
-    },
-    {
-      frontImage: require('assets/icn_calculator.svg'),
-      bgImage: require(`assets/${productName}/bg_why_icons.svg`),
-      title: '100% accuracy',
-      subtitle: 'Precise calculations to avoid overpaying of taxes',
-    },
-  ]
-  return (
+  // const gettingStartedSteps = [
+  //   {
+  //     frontImage: require('assets/icn_secure_safe.svg'),
+  //     bgImage: require(`assets/${productName}/bg_why_icons.svg`),
+  //     title: 'Secure & Safe ',
+  //     subtitle: 'Income tax department authorized platform',
+  //   },
+  //   {
+  //     frontImage: require('assets/icn_tax_savings.svg'),
+  //     bgImage: require(`assets/${productName}/bg_why_icons.svg`),
+  //     title: 'Maximum tax savings',
+  //     subtitle: 'Get every tax deduction you are eligible for',
+  //   },
+  //   {
+  //     frontImage: require('assets/icn_calculator.svg'),
+  //     bgImage: require(`assets/${productName}/bg_why_icons.svg`),
+  //     title: '100% accuracy',
+  //     subtitle: 'Precise calculations to avoid overpaying of taxes',
+  //   },
+  // ]
+  return getTaxFilingFeatureLists().map((item) => (
     <FeatureListItem
-      imgSrc={require('assets/icn_secure_safe.svg')}
-      bgImgSrc={require(`assets/${productName}/bg_why_icons.svg`)}
-      title={`Secure & Safe`}
-      subtitle={`Income tax department authorized platform`}
+      imgSrc={item.frontImage}
+      bgImgSrc={item.bgImage}
+      title={item.title}
+      subtitle={item.subtitle}
     />
-  )
+  ))
+  // return (
+  //   {taxFilingFeatureLists.map(i)}
+  //   <FeatureListItem
+  //     imgSrc={require('assets/icn_secure_safe.svg')}
+  //     bgImgSrc={require(`assets/${productName}/bg_why_icons.svg`)}
+  //     title={`Secure & Safe`}
+  //     subtitle={`Income tax department authorized platform`}
+  //   />
+  // )
 }
 
 const LandingPage = () => {

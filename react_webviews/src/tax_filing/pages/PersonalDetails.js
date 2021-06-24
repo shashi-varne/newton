@@ -32,6 +32,7 @@ function PersonalDetails(props) {
 
   const handleClick = () => {
     navigate('/tax-filing/redirection', {}, false)
+    return
   }
 
   return (

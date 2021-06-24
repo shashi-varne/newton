@@ -14,6 +14,7 @@ function Steps(props) {
   const productName = getConfig().productName
   const handleClick = () => {
     navigate(`/tax-filing/personal-details`, {}, false)
+    return
   }
   return (
     <Container
