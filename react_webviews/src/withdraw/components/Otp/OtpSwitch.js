@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import Input from 'common/ui/Input'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import Container from '../../common/Container'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import toast from 'common/ui/Toast'
-import { navigate as navigateFunc } from '../../common/commonFunction'
-import Button from '@material-ui/core/Button'
+import Button from 'common/ui/Button'
+import { navigate as navigateFunc } from 'utils/functions'
 
 import './OtpSwitch.scss';
 import '../commonStyles.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const OtpSwitch = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -17,12 +17,17 @@ const OtpSwitch = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [otp, setOtp] = useState('')
   const [touched, setTouched] = useState(false)
+  const [resendClicked, setResendClicked] = useState(false)
   
   const handleChange = (event) => {
     if (!touched) {
       setTouched(true)
     }
-    setOtp(event.target.value)
+    const value = event.target?.value || "";
+    if(value.length > 4) {
+      return;
+    }
+    setOtp(value)
   }
 
   const getHelperText = () => {
@@ -37,12 +42,13 @@ const OtpSwitch = (props) => {
     return ''
   }
 
-  const disabled = isApiRunning || otp.length !== 4
+  const disabled = otp.length !== 4
 
   const resendOtp = async () => {
+    setResendClicked(true)
     try {
       if (!isEmpty(stateParams?.resend_redeem_otp_link)) {
-        setIsApiRunning(true)
+        setIsApiRunning("button")
         const result = await resend(stateParams?.resend_redeem_otp_link)
         toast(result?.message)
       }
@@ -54,6 +60,8 @@ const OtpSwitch = (props) => {
   }
 
   const verifyOtp = async () => {
+    sendEvents('next')
+    setIsApiRunning("button")
     try {
       let result
       if (!isEmpty(stateParams?.verification_link) && !isEmpty(otp)) {
@@ -66,8 +74,7 @@ const OtpSwitch = (props) => {
             type: stateParams?.type,
             message: result?.message,
           }
-        },
-        true
+        }
       )
     } catch (err) {
       toast(err.message)
@@ -78,25 +85,44 @@ const OtpSwitch = (props) => {
             type: stateParams?.type,
             message: err.message,
           }
-        },
-        true
+        }
       )
     } finally {
       setIsApiRunning(false)
     }
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": 'withdrawl_otp_screen',
+        "resend_clicked": resendClicked ? 'yes' : 'no',
+        'flow': 'switch',
+        'otp': otp || ''
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      data-aid='otp-switch-verify-screen'
+      events={sendEvents("just_set_events")}
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
-      hideInPageTitle
+      title="OTP"
       type="withProvider"
       noFooter
     >
-      <section id="withdraw-otp-switch" className="page otp">
-        <div className="otp-input">
-          <div className="otp-text">Enter OTP</div>
+      <section id="withdraw-otp-switch" className="page otp" data-aid='withdraw-otp-switch'>
+        <div className="otp-input" data-aid='otp-input'>
+          <div className="otp-text" data-aid='otp-text'>Enter OTP</div>
           <Input
             error={touched && otp.length !== 4 ? true : false}
             type="number"
@@ -104,29 +130,26 @@ const OtpSwitch = (props) => {
             helperText={getHelperText()}
             class="input"
             onChange={handleChange}
-            className="input"
             required
             minLength={4}
             maxLength={4}
           />
-          <div className="resend-otp" onClick={resendOtp}>
+          <div className="resend-otp" data-aid='resend-otp' onClick={resendOtp}>
             Resend OTP
           </div>
+          {stateParams.message && <div data-aid='otp-switch-message-text'>{stateParams.message}</div>}
         </div>
-        <footer className="page-footer">
+        <footer className="page-footer" data-aid='page-footer'>
         <Button
-          className={disabled ? 'disabled' : 'button'}
-          disabled={disabled}
+          dataAid='verify-btn'
+          disable={disabled}
           onClick={verifyOtp}
-          className="cta-button"
-        >
-          VERIFY{' '}
-          {isApiRunning && (
-            <div className="loader">
-              <CircularProgress size={20} thickness={3} />
-            </div>
-          )}
-        </Button>
+          buttonTitle="VERIFY"
+          showLoader={isApiRunning}
+          style={{
+            width: "180px"
+          }}
+        />
         </footer>
         
       </section>

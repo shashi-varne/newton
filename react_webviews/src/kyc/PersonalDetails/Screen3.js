@@ -3,19 +3,20 @@ import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
-  occupationTypeOptions,
-  incomeOptions,
-  getPathname,
+  OCCUPATION_TYPE_OPTIONS,
+  INCOME_OPTIONS,
+  PATHNAME_MAPPER,
 } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isEmpty } from "../../utils/validators";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails3 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -45,6 +46,7 @@ const PersonalDetails3 = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next")
     let keysToCheck = ["income", "occupation"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
@@ -87,13 +89,13 @@ const PersonalDetails3 = (props) => {
 
   const handleNavigation = () => {
     if (type === "digilocker") {
-      if (isEdit) {
-        navigate(getPathname.journey);
-      } else {
-        navigate(getPathname.digilockerPersonalDetails3);
-      }
+      navigate(PATHNAME_MAPPER.digilockerPersonalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
     } else {
-      navigate(getPathname.personalDetails4, {
+      navigate(PATHNAME_MAPPER.personalDetails4, {
         state: {
           isEdit: isEdit,
         },
@@ -105,15 +107,32 @@ const PersonalDetails3 = (props) => {
     let value = event.target ? event.target.value : event;
     let formData = { ...form_data };
     if (name === "occupation")
-      formData[name] = occupationTypeOptions[value].value;
+      formData[name] = OCCUPATION_TYPE_OPTIONS[value].value;
     else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "professional_details",
+        "flow": 'general'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       showSkelton={isLoading}
       hideInPageTitle
       buttonTitle="CONTINUE"
@@ -124,9 +143,10 @@ const PersonalDetails3 = (props) => {
       count={type === "digilocker" ? 2 : 3}
       current={type === "digilocker" ? 2 : 3}
       total={type === "digilocker" ? 3 : 4}
+      data-aid='kyc-personal-details-screen-3'
     >
-      <div className="kyc-personal-details">
-        <main>
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
+        <main  data-aid='kyc-personal-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.occupation_error ? true : false}
@@ -134,18 +154,18 @@ const PersonalDetails3 = (props) => {
               width="40"
               label="Occupation detail:"
               class="occupation"
-              options={occupationTypeOptions}
+              options={OCCUPATION_TYPE_OPTIONS}
               id="account_type"
               value={form_data.occupation || ""}
               onChange={handleChange("occupation")}
               disabled={isApiRunning}
             />
           </div>
-          <div className="input">
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.income_error ? true : false}
               helperText={form_data.income_error}
-              options={incomeOptions}
+              options={INCOME_OPTIONS}
               id="relationship"
               label="Income range"
               isAOB={true}
@@ -156,7 +176,7 @@ const PersonalDetails3 = (props) => {
             />
           </div>
         </main>
-        <footer>
+        <footer data-aid='kyc-footer-text'>
           By tapping ‘save and continue’ I agree that I am not a PEP(politically
           exposed person)
         </footer>

@@ -4,16 +4,18 @@ import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { relationshipOptions, getPathname } from "../constants";
+import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
+  getFlow
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -29,7 +31,7 @@ const PersonalDetails4 = (props) => {
   const type = props.type || "";
   const keysToCheck = ["dob", "name", "relationship"];
 
-  const { kyc, isLoading  } = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -62,10 +64,11 @@ const PersonalDetails4 = (props) => {
       if (!result.canSubmit) {
         let data = { ...result.formData };
         setFormData(data);
+        sendEvents("next")
         return;
       }
     }
-
+    sendEvents("next")
     if (isChecked) {
       if (kyc.nomination.nominee_optional) {
         handleNavigation();
@@ -110,9 +113,9 @@ const PersonalDetails4 = (props) => {
 
   const handleNavigation = () => {
     if (type === "digilocker") {
-      navigate(getPathname.uploadSign);
+      navigate(PATHNAME_MAPPER.uploadSign);
     } else {
-      navigate(getPathname.journey);
+      navigate(PATHNAME_MAPPER.journey);
     }
   };
 
@@ -145,8 +148,29 @@ const PersonalDetails4 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nominee details",
+        "name": form_data.name ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "relationship": form_data.relationship ? "yes" : "no",
+        "flow": getFlow(kyc) || "",
+        "add_nominee":isChecked ? "no":"yes",
+        "initial_kyc_status" : kyc.kyc_status || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
   return (
     <Container
+      events={sendEvents("just_set_events")}
       showSkelton={isLoading}
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
@@ -157,10 +181,11 @@ const PersonalDetails4 = (props) => {
       count={type === "digilocker" ? 3 : 4}
       current={type === "digilocker" ? 3 : 4}
       total={type === "digilocker" ? 3 : 4}
+      data-aid='kyc-personal-details-screen-4'
     >
       <div className="kyc-nominee">
-        <main>
-          <div className="nominee-checkbox">
+        <main data-aid='kyc-nominee-details'>
+          <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
               checked={isChecked}
@@ -193,14 +218,15 @@ const PersonalDetails4 = (props) => {
             onChange={handleChange("dob")}
             maxLength={10}
             type="text"
+            inputMode="numeric"
             id="dob"
             disabled={isChecked || isApiRunning}
           />
-          <div className="input">
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
-              options={relationshipOptions}
+              options={RELATIONSHIP_OPTIONS}
               id="relationship"
               label="Relationship"
               isAOB={true}

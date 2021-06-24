@@ -18,6 +18,8 @@ import SVG from 'react-inlinesvg';
 import {getConfig} from 'utils/functions';
 import logo_safegold from 'assets/logo_safegold.svg';
 import logo_mmtc from 'assets/logo_mmtc.svg';
+import WVButtonLayout from '../../ui/ButtonLayout/WVButtonLayout';
+import {Imgc} from '../../ui/Imgc'
 
 export class FooterLayoutBase extends Component {
   constructor(props) {
@@ -124,7 +126,8 @@ export class FooterLayoutBase extends Component {
         style={props.buttonData.leftStyle}>
 
           {props.buttonData.logo && <div className='image-block'>
-            <img
+            <Imgc
+              style={{width:'40px', height:'40px'}}
               alt=""
               src={require(`assets/${props.buttonData.logo}`)}
               className="FooterImage" />
@@ -245,30 +248,67 @@ export class FooterLayoutBase extends Component {
     );
   };
 
-WithProviderLayoutGold = (props) => {
-  const leftArrowMapper = {
-    'up': up_arrow,
-    'down': down_arrow
+
+  WithProviderLayoutGold = (props) => {
+    const leftArrowMapper = {
+      'up': up_arrow,
+      'down': down_arrow
+    }
+    return(
+      <div className="FooterDefaultLayout">
+          {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
+          onClick={props.handleClick2}
+          style={props.buttonData.leftStyle}>
+            <div className='image-block'>
+              <img
+                alt=""
+                src={props.buttonData.provider === 'safegold' ? logo_safegold: logo_mmtc}
+                className="FooterImage" />
+            </div>
+            <div className="text-block">
+            <div className="text-block-1">{props.buttonData.leftTitle}</div>
+              <div className="text-block-2">
+                <SVG
+                  className="text-block-2-img"
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                  src={leftArrowMapper[props.buttonData.leftArrow] || down_arrow}
+                />
+                {props.buttonData.leftSubtitle}
+                </div>
+            </div>
+          </div>}
+          <div className="FlexItem2 FlexItem2-withProvider-footer" onClick={props.handleClick}>
+            <Button
+              type={props.type}
+              {...props} />
+          </div>
+          {this.renderDialog()}
+        </div>
+    )
   }
-  return(
-    <div className="FooterDefaultLayout">
-        {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
+
+  VerticalButtonLayout = ({ button1Props, button2Props }) => {
+    return(
+      <WVButtonLayout layout="stacked">
+        <WVButtonLayout.Button
+          {...button1Props}
+        />
+        <WVButtonLayout.Button
+          {...button2Props}
+        />
+      </WVButtonLayout>
+    )
+  }
+
+  WithProviderLayoutLoan = (props) => {
+    return(
+      <div className="FooterDefaultLayout">
+        {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer loan-with-provider" 
         onClick={props.handleClick2}
         style={props.buttonData.leftStyle}>
-          <div className='image-block'>
-            <img
-              alt=""
-              src={props.buttonData.provider === 'safegold' ? logo_safegold: logo_mmtc}
-              className="FooterImage" />
-          </div>
           <div className="text-block">
           <div className="text-block-1">{props.buttonData.leftTitle}</div>
             <div className="text-block-2">
-              <SVG
-                className="text-block-2-img"
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
-                src={leftArrowMapper[props.buttonData.leftArrow] || down_arrow}
-              />
               {props.buttonData.leftSubtitle}
               </div>
           </div>
@@ -280,9 +320,8 @@ WithProviderLayoutGold = (props) => {
         </div>
         {this.renderDialog()}
       </div>
-  )
-}
-
+    )
+  }
 
   render() {
     const props = this.props;
@@ -322,15 +361,22 @@ WithProviderLayoutGold = (props) => {
       }
     }
 
+    if(project === 'lending') {
+      if(type === 'withProvider') {
+        type = 'withProviderLoan';
+      }
+    }
     let renderMapper = {
         'summary': this.renderInsuranceSummary,
         'twobutton': this.TwoButtonLayout,
         'withProviderInsurance': this.WithProviderLayoutInsurance,
         'insuranceDefault': this.insuranceDefault,
+        'twoButtonVertical': this.VerticalButtonLayout,
         'default': this.renderDefaultLayout,
         'withProviderGold': this.WithProviderLayoutGold,
         'fundDetailsDualButton': this.fundDetailsDualButton,
         'withProviderWithdraw': this.WithProviderLayoutWithdraw,
+        'withProviderLoan': this.WithProviderLayoutLoan
     }
 
     let renderFunction = renderMapper[type] || renderMapper['default'];
@@ -338,7 +384,7 @@ WithProviderLayoutGold = (props) => {
 
     if(!props.noFooter) {
         return (
-            <div>
+            <div data-aid='cta-button-parent'>
               {renderFunction(props)}
               {this.renderDialog()}
             </div>

@@ -98,7 +98,7 @@ const PaymentOptions = (props) => {
         },
       };
 
-      if (isMobile.iOS) {
+      if (isMobile.iOS()) {
         if (!partner_check) {
           redirectData.show_toolbar = true;
         } else if (getConfig().code !== "alb") {
@@ -165,26 +165,28 @@ const PaymentOptions = (props) => {
 
   return (
     <Container
+      data-aid='select-payment-option-screen'
       noFooter={true}
-      showLoader={show_skelton}
+      skelton={show_skelton}
       title="Select Payment Option"
     >
-      <section className="invest-payment-options">
+      <section className="invest-payment-options" data-aid='invest-payment-options'>
         {!show_skelton &&
           pg_options &&
           pg_options.map((option, index) => {
             return (
               <div
+                data-aid='pg-options'
                 key={index}
                 className="option"
                 onClick={() => redirectPayment(option, true)}
               >
-                <div className="left">
+                <div className="left" data-aid='pg-text-info'>
                   <img src={option.banner} alt="" />
                   <div className="text">
                     <div>{option.title}</div>
                     {option.subtitle && (
-                      <div className="helper">{option.subtitle}</div>
+                      <div className="helper" data-aid='pg-helper'>{option.subtitle}</div>
                     )}
                   </div>
                 </div>
@@ -198,7 +200,7 @@ const PaymentOptions = (props) => {
               </div>
             );
           })}
-        <div className="bottom">
+        <div className="bottom" data-aid='bottom'>
           <img
             className="left"
             src={require(`assets/norton_secured_icon.png`)}

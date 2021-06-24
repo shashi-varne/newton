@@ -1,6 +1,7 @@
 // import { func } from "prop-types";
 import qs from 'qs';
 import moment from 'moment';
+import { isBoolean } from 'lodash';
 
 export function validateEmpty(string) {
   let nameSplit = string.split(" ").filter(e => e);
@@ -574,6 +575,22 @@ export function checkValidString(value) {
   }
 }
 
+export function checkObjectWithinString(value) {
+  const isValueString = typeof value === "string" && !['', 'undefined', 'false'].includes(value);
+  try {
+    if (isValueString) {
+      const o = JSON.parse(value);
+      if (o && typeof o === "object") {
+          return true;
+      }
+    }
+    return false;
+  } catch (ex) {
+    console.log(ex.toString());
+    return false;
+   }
+}
+
 export function split2(str, delim) {
   var parts = str.split(delim);
   return [parts[0], parts.splice(1, parts.length).join(delim)];
@@ -619,6 +636,8 @@ export function storageService() {
     get: get,
     setObject: setObject,
     getObject: getObject,
+    setBoolean: setBoolean,
+    getBoolean: getBoolean,
     remove: remove,
     clear: clear
   };
@@ -638,6 +657,18 @@ export function storageService() {
     return false;
   }
 
+  function setBoolean(key, value) {
+    set(key, value);
+  }
+
+  function getBoolean(key) {
+    const value = window.sessionStorage.getItem(key);
+    const isValueBoolean = checkValidString(value) && isBoolean(JSON.parse(value));
+
+    if (sessionStorageValid && isValueBoolean) return value;
+    return false;
+  }
+
   function setObject(key, value) {
     if (sessionStorageValid) {
       window.sessionStorage.setItem(key, JSON.stringify(value));
@@ -645,8 +676,10 @@ export function storageService() {
   }
 
   function getObject(key) {
-    if (sessionStorageValid && checkValidString(window.sessionStorage.getItem(key))) {
-      return JSON.parse(window.sessionStorage.getItem(key)) || {};
+    const value = window.sessionStorage.getItem(key);
+    
+    if (sessionStorageValid && checkValidString(value)) {
+      return JSON.parse(value) || {};
     }
 
     return false;
@@ -1107,9 +1140,32 @@ export function convertDateFormat(inputFormat) {
   var d = new Date(inputFormat)
   return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
 }
+
+
+export const compareObjects = (keysToCheck, oldState, newState) => {
+  let compare = true;
+  if(isEmpty(oldState) && isEmpty(newState)) return true;
+  if(isEmpty(oldState) || isEmpty(newState)) return false;
+  if(Object.keys(oldState).length !== Object.keys(newState).length) return false;
+
+  keysToCheck.forEach((key) => {
+    if ((oldState[key] && !newState[key]) || 
+        (newState[key] && !oldState[key]) || 
+         (oldState[key] && newState[key] && (oldState[key].toString().trim() !== newState[key].toString().trim()))) 
+        {
+        compare = false;
+        }
+  });
+  return compare;
+};
+
 export function Casesensitivity(str){
   if(!str || !isNaN(str)){
     return str
   }
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase() + "";
+}
+
+export function sortArrayOfObjectsByTime(array, key){
+  return array.sort((a,b) => new Date(b[key]) - new Date(a[key])) //desc
 }

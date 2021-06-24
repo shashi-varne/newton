@@ -5,18 +5,19 @@ import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   bankAccountTypeOptions,
-  getPathname,
+  PATHNAME_MAPPER,
   getIfscCodeError,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini-components/Alert";
-import { navigate as navigateFunc, validateFields } from "../common/functions";
+import { validateFields } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, addAdditionalBank } from "../common/api";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const AddBank = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -89,10 +90,11 @@ const AddBank = (props) => {
   };
 
   const redirect = () => {
-    navigate(getPathname.journey);
+    navigate(PATHNAME_MAPPER.journey);
   };
 
   const handleClick = () => {
+    sendEvents("next")
     const keysToCheck = [
       "ifsc_code",
       "account_number",
@@ -132,9 +134,9 @@ const AddBank = (props) => {
       if (!result) return;
       if (result.bank.bank_status === "approved") {
         toast("Congratulations!, new account added succesfully");
-        navigate(getPathname.bankList);
+        navigate(PATHNAME_MAPPER.bankList);
       } else {
-        navigate(`${getPathname.addBankVerify}${result.bank.bank_id}`);
+        navigate(`${PATHNAME_MAPPER.addBankVerify}${result.bank.bank_id}`);
       }
     } catch (err) {
       toast(err.message || genericErrorMessage);
@@ -220,24 +222,42 @@ const AddBank = (props) => {
     return { bankData: bank, formData: formData, bankIcon: bankIcon };
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "new bank details",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       disable={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      data-aid='kyc-add-bank-screen'
     >
-      <div className="kyc-approved-bank">
+      <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
             <Alert
               variant={note.variant}
               title="Note"
               message={note.info_text}
+              dataAid='kyc-addbank-alertbox'
             />
-            <main>
+            <main data-aid='kyc-approved-bank'>
               <Input
                 label="Account Holder name"
                 class="input"
@@ -281,6 +301,7 @@ const AddBank = (props) => {
                 helperText={form_data.account_number_error || ""}
                 onChange={handleChange("account_number")}
                 maxLength={16}
+                inputMode="numeric"
                 type="password"
                 id="account_number"
                 disabled={isApiRunning}
@@ -293,11 +314,12 @@ const AddBank = (props) => {
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
                 maxLength={16}
+                inputMode="numeric"
                 type="text"
                 id="c_account_number"
                 disabled={isApiRunning}
               />
-              <div className="input">
+              <div className="input" data-aid='kyc-dropdown-withouticon'>
                 <DropdownWithoutIcon
                   error={form_data.account_type_error ? true : false}
                   helperText={form_data.account_type_error}

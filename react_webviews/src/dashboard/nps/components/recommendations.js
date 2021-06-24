@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { inrFormatDecimal2 } from "utils/validators";
@@ -15,9 +15,13 @@ import {
 } from "@material-ui/core";
 import PieChart from "./piegraph";
 import Slide from "@material-ui/core/Slide";
+import { getBasePath } from "../../../utils/functions";
 import { keyBy } from 'lodash';
+import { isEmpty } from "../../../utils/validators";
 
-const isMobileDevice = getConfig().isMobileDevice;
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
+const partnerCode = config.partner_code;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -88,8 +92,8 @@ class Recommendations extends Component {
     let data = res;
     if (data && !pran) {
       const [recommendations] = data.recommended;
-      const altRiskOptsMap = keyBy(data.alternatives, 'risk');
-      const assetAlloc = altRiskOptsMap[recommendations.risk || this.state.risk]
+      const altRiskOptsMap = keyBy([...data.alternatives, ...data.recommended], 'risk');
+      const assetAlloc = altRiskOptsMap[recommendations?.risk || this.state.risk]
 
       this.setState(
         {
@@ -100,7 +104,7 @@ class Recommendations extends Component {
           assetAllocation: assetAlloc,
           pieChartData: createPieChartData(assetAlloc),
           skelton: this.state.display_summary_only,
-          risk: recommendations.risk || this.state.risk,
+          risk: recommendations?.risk || this.state.risk,
         },
         () => {
           this.state.display_summary_only && this.handleClick();
@@ -108,7 +112,7 @@ class Recommendations extends Component {
       );
     } else {
       this.setState({
-        all_charges: data.all_charges,
+        all_charges: data?.all_charges,
       },
       () => {
         this.state.display_summary_only && this.handleClick();
@@ -146,7 +150,7 @@ class Recommendations extends Component {
     this.setState({
       openInvestmentSummary: false,
     });
-    this.navigate("amount/one-time");
+    this.navigate("/nps/amount/one-time");
   };
 
   renderInvestmentSummary = () => {
@@ -165,8 +169,9 @@ class Recommendations extends Component {
           <div
             className="group-health-bmi-dialog"
             id="alert-dialog-description"
+            data-aid='alert-dialog-description'
           >
-            <div className="md-dialog-content">
+            <div className="md-dialog-content" data-aid='nps-md-dialog-content'>
               {pran && <div>
                 <div className="pran-title">Contribution to your existing NPS</div>
                 <div className="pran-subtitle">
@@ -182,7 +187,7 @@ class Recommendations extends Component {
                     recommendations.pension_house.image
                   }
                   alt="NPS"
-                  style={{ width: "70px" }}
+                  className="nrd-pension-house-image"
                 />
                 <div
                   style={{
@@ -208,7 +213,7 @@ class Recommendations extends Component {
                 </div>
               </div>}
 
-              <div className="mid-content">
+              <div className="mid-content" data-aid='nps-mid-content'>
                 {all_charges &&
                   all_charges.map((item, index) => (
                     <div className="nps-payment" key={index}>
@@ -230,7 +235,7 @@ class Recommendations extends Component {
                   ))}
               </div>
             </div>
-            <div>
+            <div data-aid='nps-call-back-popup-button'>
               <button
                 style={{ cursor: "pointer" }}
                 onClick={() => this.payment()}
@@ -252,7 +257,7 @@ class Recommendations extends Component {
   };
 
   handleClick = async () => {
-    let { pran } = this.state;
+    let { pran, pension_house, recommendations, amount } = this.state;
 
     let data = {
       amount: this.state.amount,
@@ -260,11 +265,10 @@ class Recommendations extends Component {
     };
 
     if (!pran) {
-      data.pension_house_id = (!this.state.display_summary_only &&
-        this.state.pension_house &&
-        this.state.pension_house.pension_house_id) ||
-      this.state.recommendations.pension_house
-        ? this.state.recommendations.pension_house.pension_house_id
+      data.pension_house_id = !isEmpty(pension_house)
+        ? pension_house.pension_house_id
+        : recommendations.pension_house
+        ? recommendations.pension_house.pension_house_id
         : "";
       data.risk = this.state.risk;
     } else {
@@ -274,10 +278,14 @@ class Recommendations extends Component {
     let result = await this.getInvestmentData(data, true);
 
     if (result) {
+      if(partnerCode) {
+        storageService().set("partner", partnerCode)
+      }
       let pgLink = result.investments.pg_link;
 
       let plutus_redirect_url = encodeURIComponent(
-        window.location.origin + `/nps/redirect` + getConfig().searchParams
+        // getBasePath() + `/nps/redirect` + getConfig().searchParams
+        `${getBasePath()}/nps/payment/callback/one-time/${amount}/${result.investments.id}`
       );
 
       pgLink +=
@@ -289,7 +297,7 @@ class Recommendations extends Component {
       if (this.state.display_summary_only) {
         this.setState({
           url: pgLink,
-          show_loader: false,
+          skelton: false,
           openInvestmentSummary: true,
         });
       } else {
@@ -298,10 +306,17 @@ class Recommendations extends Component {
     }
   };
 
-  goBack = () => {
-    this.navigate("amount/one-time");
-  };
+  handleReplace = () => {
+    const { recommendations, pension_house } = this.state;
+    const replaceObject = pension_house || recommendations?.pension_house;
+    storageService().setObject("nps-current", replaceObject);
+    this.navigate("/nps/fundreplace");
+  }
 
+  goBack = () => {
+    this.navigate('/nps/amount/one-time')
+  }
+ 
   render() {
     const {
       assetAllocation,
@@ -316,26 +331,27 @@ class Recommendations extends Component {
 
     return (
       <Container
+        data-aid='nps-recommended-fund-screen'
         fullWidthButton
         buttonTitle="PROCEED"
         title="Recommended fund"
         noFooter={display_summary_only}
         showLoader={show_loader}
         handleClick={this.handleClick}
-        headerData={{
-          goBack: this.goBack
-        }}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         {!display_summary_only && (
-          <div>
-            <div className="fund">
+          <div data-aid='nps-display-summary-only'>
+            <div className="fund" data-aid='nps-fund'>
               <div
                 className="replace"
                 onClick={() => {
-                  this.navigate("fundreplace");
+                  this.handleReplace();
                 }}
               >
                 Replace
@@ -360,8 +376,8 @@ class Recommendations extends Component {
               </div>
             </div>
 
-            <div className="fund-detail">
-              <div className="risk">
+            <div className="fund-detail" data-aid='nps-fund-detail'>
+              <div className="risk" data-aid='nps-risk'>
                 <p>
                   <b>Risk:</b> {this.getFormatted(this.state.risk || "")}
                 </p>
@@ -382,8 +398,8 @@ class Recommendations extends Component {
                   currentRisk={this.state.risk}
                 />
               </div>
-              <div className="allocation">
-                <div className="graph">
+              <div className="allocation" data-aid='nps-allocation'>
+                <div className="graph" data-aid='nps-graph'>
                   <PieChart
                     height={isMobileDevice ? 100 : 180}
                     width={isMobileDevice ? 100 : 180}
@@ -396,7 +412,7 @@ class Recommendations extends Component {
                     Asset allocation
                   </div>
                 </div>
-                <div className="stats">
+                <div className="stats" data-aid='nps-stats'>
                   <ul>
                     <li>
                       <div className="">
@@ -447,7 +463,7 @@ class Recommendations extends Component {
               </div>
             </div>
 
-            <div className="bill">
+            <div className="bill" data-aid='nps-bill'>
               {all_charges &&
                 all_charges.map((item, index) => (
                   <div
@@ -463,7 +479,7 @@ class Recommendations extends Component {
                     <div className="right">{inrFormatDecimal2(item.value)}</div>
                   </div>
                 ))}
-              <div className="note">
+              <div className="note" data-aid='nps-note'>
                 <div className="heading">Note:</div>
                 <div>
                   <span>1.</span> Your subsequent investments will go into the
@@ -479,11 +495,11 @@ class Recommendations extends Component {
                   apply on your investment.
                 </div>
               </div>
-              <div className="terms">
+              <div className="terms" data-aid='nps-terms'>
                 <img src={require("assets/terms_agree.png")} alt="" width="25" />
                 <div>
                   By tapping on proceed, I agree that I have read the {" "}
-                  <span onClick={() => this.openInBrowser("https://www.fisdom.com")} style={{textDecoration:'underline', cursor:'pointer'}}>
+                  <span onClick={() => this.openInBrowser(config.termsLink)} style={{textDecoration:'underline', cursor:'pointer'}}>
                     terms & conditions
                   </span>
                 </div>
@@ -499,30 +515,30 @@ class Recommendations extends Component {
   }
 }
 
-const createPieChartData = (allocData) => {
+const createPieChartData = (allocData = {}) => {
   return [
     {
       id: "E",
       label: "E",
-      value: allocData.e_allocation,
+      value: allocData?.e_allocation,
       color: classColorMap['E'],
     },
     {
       id: "G",
       label: "G",
-      value: allocData.g_allocation,
+      value: allocData?.g_allocation,
       color: classColorMap['G'],
     },
     {
       id: "C",
       label: "C",
-      value: allocData.c_allocation,
+      value: allocData?.c_allocation,
       color: classColorMap['C'],
     },
     {
       id: "A",
       label: "A",
-      value: allocData.a_allocation,
+      value: allocData?.a_allocation,
       color: classColorMap['A'],
     },
   ]
@@ -554,8 +570,13 @@ const RiskSelectDialog = ({
 }) => {
   const [selectedRisk, setSelectedRisk] = useState(currentRisk);
 
+  useEffect(() => {
+    setSelectedRisk(currentRisk)
+  }, [currentRisk])
+
   return (
     <Dialog
+      data-aid='dialog-recommendations'
       fullScreen={false}
       open={open}
       onClose={onClose}
@@ -564,13 +585,13 @@ const RiskSelectDialog = ({
         paperScrollPaper: 'risk-level'
       }}
     >
-      <DialogTitle id="form-dialog-title" className="edit-title">
+      <DialogTitle id="form-dialog-title" className="edit-title" data-aid='form-dialog-title'>
         Choose Risk Level
       </DialogTitle>
       <DialogContent>
         <DialogContentText className="nps-flex-box" component="div">
           {Object.entries(riskLevelMap).map(([key, value]) => (
-            <div className="edit-risk" key={key} onClick={() => setSelectedRisk(key)}>
+            <div className="edit-risk" key={key} onClick={() => setSelectedRisk(key)} data-aid='nps-edit-risk'>
               <div>{value}</div>
               <Radio
                 checked={key === selectedRisk}
@@ -584,6 +605,7 @@ const RiskSelectDialog = ({
       </DialogContent>
       <DialogActions>
         <Button
+          data-aid='nps-dialog-apply-btn'
           className="DialogButtonFullWidth"
           color="default"
           autoFocus

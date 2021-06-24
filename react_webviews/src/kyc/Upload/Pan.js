@@ -1,15 +1,15 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
 import Alert from '../mini-components/Alert'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
-import { getBase64, getConfig } from '../../utils/functions'
+import { getBase64, getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
+const isWeb = getConfig().Web;
 const getTitleList = ({ kyc }) => {
   let titleList = [
     'Photo of PAN card should have your signature',
@@ -52,9 +52,10 @@ const Pan = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
+  const [title, setTitle] = useState("Note")
   const [subTitle, setSubTitle] = useState('')
   const [showLoader, setShowLoader] = useState(false)
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   
   const inputEl = useRef(null)
 
@@ -100,7 +101,8 @@ const Pan = (props) => {
     })
   }
   
-  const handleChange = (event) => {
+  const handleChange = (type) => (event) => {
+    sendEvents('get_image', type)
     event.preventDefault();
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
@@ -117,17 +119,24 @@ const Pan = (props) => {
   }
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'pan', 'pan.jpg', 'front')
   }
 
   const handleSubmit = async () => {
+    sendEvents('next')
     try {
+      const data = {};
+      if (kyc.kyc_status !== 'compliant' && kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null) {
+        if (kyc.all_dl_doc_statuses.pan_fetch_status === null || kyc.all_dl_doc_statuses.pan_fetch_status === '' || kyc.all_dl_doc_statuses.pan_fetch_status === 'failed') {
+          data.kyc_flow =  'dl';
+        }
+      }
       setIsApiRunning("button")
-      const result = await upload(file, 'pan')
-      storageService().setObject(storageConstants.KYC, result.kyc)
+      const response = await upload(file, 'pan', data);
+      const result = response.result;
       if (
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
         (result.error && !result.ocr_pan_kyc_matches)
@@ -135,8 +144,9 @@ const Pan = (props) => {
         setSubTitle(
           'Photo of PAN should be clear and it should not have the exposure of flash light'
         )
-        setSubTitle('PAN mismatch!')
+        setTitle('PAN mismatch!')
       } else {
+        updateKyc(result.kyc)
         if (
           result.kyc.kyc_status !== 'compliant' &&
           result.kyc.dl_docs_status !== '' &&
@@ -149,33 +159,50 @@ const Pan = (props) => {
         }
       }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
 
-  const isWeb = getConfig().isWebOrSdk
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "pan_doc",
+        "type": type || "",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       classOverRideContainer="pr-container"
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
       title="Upload PAN"
+      data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
-          <div className="sub-title">
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
+          <div className="sub-title" data-aid='kyc-sub-title'>
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>
           <Alert
+            dataAid='kyc-upload-pan-alertbox'
             variant="attention"
-            title={'Note'}
+            title={title}
             message={subTitle}
             renderMessage={
               !subTitle ? () => <MessageComponent kyc={kyc} /> : null
@@ -184,6 +211,7 @@ const Pan = (props) => {
           {!isWeb && (
             <div
               className="kyc-doc-upload-container"
+              data-aid="kyc-doc-upload-container"
             >
               {file && fileToShow && (
                 <img src={fileToShow} className="preview" alt="" />
@@ -198,13 +226,14 @@ const Pan = (props) => {
                       ref={inputEl}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange}
+                      onChange={handleChange('open-camera')}
                       accept="image/*"
                       capture
                     />
                     <button
                       data-click-type="camera-front"
                       onClick={() => handleUpload("open_camera")}
+                      data-aid="doc-camera-button"
                       className="kyc-upload-button"
                     >
                       {!file && (
@@ -220,7 +249,7 @@ const Pan = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">open camera</div>
+                      <div className="upload-action" data-aid="doc-camera-text">open camera</div>
                     </button>
                   </div>
                   <div className="open-gallery">
@@ -228,10 +257,12 @@ const Pan = (props) => {
                       ref={inputEl}
                       type="file"
                       className="kyc-upload"
-                      onChange={handleChange}
+                      onChange={handleChange('gallery')}
+                      data-aid="doc-gallery-input"
                     />
                     <button
                       onClick={() => handleUpload("open_gallery")}
+                      data-aid="doc-gallery-button"
                       className="kyc-upload-button"
                     >
                       {!file && !fileToShow && (
@@ -247,7 +278,7 @@ const Pan = (props) => {
                           </g>
                         </svg>
                       )}
-                      <div className="upload-action">Open Gallery</div>
+                      <div className="upload-action" data-aid="doc-gallery-text">Open Gallery</div>
                     </button>
                   </div>
                 </div>
@@ -255,7 +286,10 @@ const Pan = (props) => {
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+              <div 
+                className="kyc-doc-upload-container" 
+                data-aid="web-kyc-doc-upload-container"
+              >
               {file && fileToShow && (
                 <img
                   src={fileToShow}
@@ -271,9 +305,10 @@ const Pan = (props) => {
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange}
+                  onChange={handleChange('gallery')}
+                  data-aid="doc-web-gallery-input"
                 />
-                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
+                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button" data-aid="doc-gallery-button">
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -287,7 +322,7 @@ const Pan = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" data-aid="doc-gallery-text">Open Gallery</div>
                 </button>
               </div>
             </div>

@@ -3,13 +3,12 @@ import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
-import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isIframe } from "../../utils/functions";
+import { getConfig, isIframe, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 
@@ -48,7 +47,7 @@ const Home = (props) => {
     };
     if (
       user.nps_investment &&
-      storageService().getObject("nps_additional_details_required")
+      storageService().get("nps_additional_details_required")
     ) {
       data.npsDetailsRequired = true;
     }
@@ -84,9 +83,15 @@ const Home = (props) => {
   };
 
   const handleClick = async () => {
+    
     try {
       if (pan.length !== 10) {
         setPanError("Minimum length is 10");
+        return;
+      }
+
+      if (pan.length > 10) {
+        setPanError("Maximum length is 10");
         return;
       }
 
@@ -97,6 +102,7 @@ const Home = (props) => {
 
       const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
       if (!isStartKyc) {
+        sendEvents("next")
         if (skipApiCall) {
           setIsStartKyc(true);
           setUserName(kyc?.pan?.meta_data?.name)
@@ -155,7 +161,15 @@ const Home = (props) => {
   };
 
   const handleChange = (event) => {
-    let value = event.target ? event.target.value.trim() : event;
+    let target = event.target;
+    let value = target ? target.value.trim() : event;
+    let limit = target?.maxLength;
+
+    // added event listener to remove the character after limit is reached
+    if (value.length > limit) {
+      return
+    }  
+     
     setPan(value);
     if (value) setPanError("");
     else setPanError("This is required");
@@ -185,8 +199,8 @@ const Home = (props) => {
 
   const handleMerge = async (step) => {
     if (step === "STEP1") {
-      storageService().setObject(storageConstants.AUTH_IDS, authIds);
-      navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
+      storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
+      navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {
         navigate("/logout");
@@ -234,6 +248,7 @@ const Home = (props) => {
   };
 
   const savePan = async (is_nri) => {
+    // sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
     try {
       setShowLoader("button");
       if (is_nri) {
@@ -268,17 +283,20 @@ const Home = (props) => {
       (isUserCompliant || kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
-      navigate(getPathname.compliantPersonalDetails1);
+      sendEvents("next", "pan_entry")
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       if (isUserCompliant || kyc_status === "compliant") {
-        navigate(getPathname.journey);
+        sendEvents("next", "pan_entry")
+        navigate(PATHNAME_MAPPER.journey);
       } else {
+        sendEvents(`${is_nri ? "no" : "yes"}`,'resident popup')
         if (is_nri) {
-          navigate(`${getPathname.journey}`, {
+          navigate(`${PATHNAME_MAPPER.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=false`,
           });
         } else {
-          navigate(`${getPathname.journey}`, {
+          navigate(`${PATHNAME_MAPPER.journey}`, {
             searchParams: `${config.searchParams}&show_aadhaar=true`,
           });
         }
@@ -286,19 +304,37 @@ const Home = (props) => {
     }
   };
 
+  const sendEvents = (userAction, screenName) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction,
+        "screen_name": screenName || "pan_check",
+        "pan": pan ? "yes" : "no",
+        "initial_kyc_status": kyc?.initial_kyc_status || ""
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
   return (
     <Container
+      events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-home"
       buttonTitle={buttonTitle}
       showLoader={showLoader}
       handleClick={handleClick}
       title={homeData.title}
+      data-aid='kyc-home-screen'
     >
       {!isEmpty(homeData) && (
-        <div className="kyc-home">
-          <div className="kyc-main-subtitle">{homeData.subtitle}</div>
-          <main>
+        <div className="kyc-home" data-aid='kyc-home-screen-page'>
+          <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>{homeData.subtitle}</div>
+          <main data-aid='kyc-home'>
             <Input
               label="Enter PAN"
               class="input"
@@ -306,6 +342,7 @@ const Home = (props) => {
               error={panError ? true : false}
               helperText={panError || ""}
               onChange={handleChange}
+              minLenth={10}
               maxLength={10}
               type="text"
               disabled={showLoader}

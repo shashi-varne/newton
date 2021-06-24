@@ -10,6 +10,7 @@ import { insuranceStateMapper, insuranceProductTitleMapper } from '../../constan
 import { nativeCallback } from 'utils/native_callback';
 import instant_fisdom from 'assets/instant_fisdom.svg';
 import instant_myway from 'assets/instant_myway.svg';
+import {Imgc} from 'common/ui/Imgc';
 
 class PlanSummaryClass extends Component {
   constructor(props) {
@@ -85,8 +86,6 @@ class PlanSummaryClass extends Component {
     }
 
     var lead = this.state.leadData;
-    console.log(lead)
-    console.log(this)
    
     if(!this.state.leadData) {
       this.setState({
@@ -288,7 +287,7 @@ class PlanSummaryClass extends Component {
       >
         <div className="plan-summary-heading">
           <div className="plan-summary-heading-text">{this.state.product_title}</div>
-          <img src={provider} alt="" />
+          <Imgc style={{width: '79px', height: '56px'}} src={provider} alt="" />
         </div>
         <div className="plan-summary-mid">
           <div className="plan-summary-mid1">

@@ -1,13 +1,13 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { isReadyToInvest, initData } from "../../kyc/services";
 
 const genericErrorMessage = "Something went wrong!";
 export async function initializeComponentFunctions() {
   this.getMyAccount = getMyAccount.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.authenticate = authenticate.bind(this);
   this.exportTransactions = exportTransactions.bind(this);
   await initData();
@@ -46,8 +46,7 @@ export async function getMyAccount() {
       }
       let npsUpload =
         this.state.currentUser.nps_investment &&
-        !result.nps_registration_details.registration_details
-          .additional_details_status;
+        !result?.nps_registration_details?.registration_details?.additional_details_status;
       storageService().setObject("nps_upload", npsUpload);
       let mandateRequired = result.razorpay_mandates.mandate_needed;
       if (mandateRequired) {
@@ -150,22 +149,6 @@ export async function getMyAccount() {
     console.log(error);
     toast(genericErrorMessage);
     this.setState({ showLoader: false });
-  }
-}
-
-export function navigate(pathname, data = {}) {
-  if (this.props.edit || data.edit) {
-    this.props.history.replace({
-      pathname: pathname,
-      search: getConfig().searchParams,
-    });
-  } else {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
   }
 }
 

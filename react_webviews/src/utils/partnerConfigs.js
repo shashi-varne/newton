@@ -52,6 +52,7 @@ export const basePartnerConfig = {
     appLink: "https://fisdom.onelink.me/CQFA/3e75c8f6",
     termsLink: "https://www.fisdom.com/terms/",
     schemeLink: "https://www.fisdom.com/scheme-offer-documents/",
+    privacyLink: "https://www.fisdom.com/privacy/",
     webAppUrl: "https://app.fisdom.com/#!/",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
@@ -65,6 +66,7 @@ export const basePartnerConfig = {
     appLink: "https://myway.onelink.me/W4GN/1f539fd2",
     termsLink: "https://finity.in/terms/",
     schemeLink: "https://finity.in/scheme/",
+    privacyLink: "https://www.finity.in/privacy/",
     webAppUrl: "https://app.mywaywealth.com/#!/",
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
@@ -425,7 +427,7 @@ export const partnerConfigs = {
     },
   },
   moneycontrol: {
-    logo: "moneycontrol.svg",
+    logo: "moneycontrol_logo.svg",
     code: "moneycontrol",
     email: "moneycontrol@finity.in",
     mobile: "+91-7829228886", // check with satendra -> mobile is of fisdom

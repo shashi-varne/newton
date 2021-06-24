@@ -3,10 +3,13 @@ import './SelectYear.scss';
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
 import Input from 'common/ui/Input';
-import { isRecurring, navigate as navigateFunc } from '../../common/commonFunctions';
+import { isRecurring } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from "utils/functions";
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import toast from 'common/ui/Toast'
+import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const currentYear = moment().year();
 const SelectYear = (props) => {
@@ -50,12 +53,13 @@ const SelectYear = (props) => {
   };
 
   const goNext = async () => {
+    sendEvents('next')
     try {
       await initJourneyData();
       if (subtype === 'other') {
-        navigate(`savegoal/${subtype}/${year}/target`);
+        navigate(`/invest/savegoal/${subtype}/${year}/target`);
       } else {
-        navigate(`savegoal/${subtype}/${year}`);
+        navigate(`/invest/savegoal/${subtype}/${year}`);
       }
     } catch (err) {
       console.log(err);
@@ -81,7 +85,7 @@ const SelectYear = (props) => {
         setErrorMsg('The year should be more than the current year');
       } else if (year > (currentYear + 100)) {
         setError(true);
-        setErrorMsg(`The max year you can invest for is ${currentYear + 100} years`);
+        setErrorMsg(`The max year you can invest for is ${currentYear + 100}`);
       } else {
         setError(false);
         setErrorMsg('');
@@ -92,9 +96,29 @@ const SelectYear = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select years",
+        "flow": flowName['saveforgoal'],
+        "goal_purpose": subtype || "",
+        "years_selected": year || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      data-aid='select-year-screen'
       classOverRide='pr-error-container'
+      events={sendEvents("just_set_events")}
       buttonTitle='NEXT'
       title='Save for a Goal'
       handleClick={goNext}
@@ -102,7 +126,7 @@ const SelectYear = (props) => {
       disable={error}
       showLoader={loader}
     >
-      <section className='invest-goal-type-container'>
+      <section className='invest-goal-type-container' data-aid='invest-goal-type-page'>
         <div>In year</div>
         <div className='invest-goal-type-input'>
           <Input

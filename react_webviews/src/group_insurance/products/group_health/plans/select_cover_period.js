@@ -3,17 +3,17 @@ import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { inrFormatDecimal } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
-import Api from 'utils/api';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import { getConfig } from 'utils/functions';
-import { storageService } from '../../../../utils/validators';
+import { storageService, isEmpty } from '../../../../utils/validators';
+import {Imgc} from 'common/ui/Imgc';
 class GroupHealthPlanSelectCoverPeriod extends Component {
     constructor(props) {
         super(props);
         this.state = {
             ctaWithProvider: true,
             premium_data: [],
-            skelton: true
+            screen_name: 'cover_period_screen'
         }
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
@@ -26,67 +26,21 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
     }
 
     onload = async() =>{
-        this.setErrorData("onload");
-        this.setState({ skelton: true });
-        let error = "";
-        let errorType = "";
+        
+        var resultData = this.state.groupHealthPlanData[this.state.screen_name];
+        let type_of_plan = this.state.groupHealthPlanData.post_body.floater_type;
+        
         this.setState({
             selectedIndex: this.state.groupHealthPlanData.selectedIndexCover || 0,
             add_on_title : this.state.providerConfig.add_on_title
         })
-        let type_of_plan = this.state.groupHealthPlanData.post_body.floater_type;
-        let post_body = this.state.groupHealthPlanData.post_body;
         
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];        
-        let body = {};
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
-        }
-        body['add_ons'] = post_body.add_ons_array;
-
-        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
-            body['floater_type'] = 'non_floater';
-        }
-        try {
-           
-            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
-            body);
-            
-            var resultData = res.pfwresponse.result;
-            
-            if (res.pfwresponse.status_code === 200){
-                
-                this.setState({
-                    premium_data: resultData.premium_details,
-                    type_of_plan: type_of_plan
-                }, () => {
-                    this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium || this.state.premium_data[0].premium);
-                })
-                this.setState({
-                    skelton: false
-                });
-            } else {
-                error = resultData.error || resultData.message
-                    || true;
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                skelton: false
-            });
-            error = true;
-            errorType = "crash";
-        }
-        if (error) {
-            this.setState({
-              errorData: {
-                ...this.state.errorData,
-                title2: error,
-                type: errorType
-              },
-              showError: "page",
-            });
-          }
+        this.setState({
+            premium_data: resultData.premium_details,
+            type_of_plan: type_of_plan
+        }, () => {
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium || this.state.premium_data[0].premium);
+        })
     }
 
     sendEvents(user_action) {
@@ -110,59 +64,9 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
     }
     handleClick = async () => {
         this.sendEvents('next');
-        this.setErrorData("submit");
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
         let plan_selected_final = this.state.premium_data[this.state.selectedIndex];
-        
-
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'plan_id', 'member_details', 'si', 'floater_type'];
-        let body = {};
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
-        }
-        body['tenure'] = plan_selected_final.tenure;
-        body['add_ons'] = post_body.add_ons_array;
-
-        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
-            body['floater_type'] = 'non_floater';
-        }
-
-        let error = "";
-        let errorType ="";
-        this.setState({
-            show_loader: "button"
-        });
-
-        try{
-            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`, body);
-            if (res.pfwresponse.status_code === 200){
-                var resultData = res.pfwresponse.result;
-                plan_selected_final = resultData.premium_details;
-            }else{
-                error = res.pfwresponse.result.error || res.pfwresponse.result.message
-                    || true;
-            }
-            
-        }catch(err){
-            console.log(err);
-            this.setState({
-                show_loader: false
-            });
-            error = true;
-            errorType = "crash"
-        }
-        if (error) {
-            this.setState({
-              errorData: {
-                ...this.state.errorData,
-                title2: error,
-                type: errorType
-              },
-              showError:true,
-              show_loader:false,
-            });
-          }
         groupHealthPlanData.plan_selected_final = plan_selected_final;
         
         var add_ons_final = {}
@@ -202,10 +106,11 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
         if(storageService().getObject('applicationPhaseReached')){
             delete groupHealthPlanData.post_body['quotation_id'];
+            if(!isEmpty(groupHealthPlanData.application_data)){
+                groupHealthPlanData.application_data = {};
+            }
         }
-
         this.setLocalProviderData(groupHealthPlanData);
-        if(!error)
         this.navigate('plan-premium-summary');
     }
 
@@ -229,7 +134,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                         </div>
                        {this.state.type_of_plan === "floater" && props.discount.tenure[1] > 0 && (
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
-                            <img style={{ width: 10 }} src={require(`assets/ic_discount.svg`)} alt="" />
+                            <Imgc className="save-text-icon" src={require(`assets/ic_discount.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'
@@ -238,7 +143,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                         }
                         {this.state.type_of_plan === "non_floater" && props.discount.tenure[1] > 0 && 
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
-                            <img style={{ width: 10 }} src={require(`assets/ic_discount.svg`)} alt="" />
+                            <Imgc className="save-text-icon" src={require(`assets/ic_discount.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'
@@ -248,7 +153,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
-                            <img src={require(`assets/completed_step.svg`)} alt="" />}
+                            <Imgc style={{ width: '14px', height: '14px', margin: 0 }} src={require(`assets/completed_step.svg`)} alt="" />}
                     </div>
                 </div>
             </div >

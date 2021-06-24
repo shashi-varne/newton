@@ -17,6 +17,7 @@ class SelectDropDown2 extends React.Component {
       multi: this.props.multi,
       value: this.props.value,
       dropUp: false,
+      productName: getConfig().productName,
     };
     this.myRef = React.createRef();
     this.determineDropUp = this.determineDropUp.bind(this);

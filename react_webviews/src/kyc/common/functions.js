@@ -204,3 +204,27 @@ export const popupWindowCenter = (w, h, url) => {
       left
   );
 }
+
+export const getFlow = (kycData) => {
+  let flow = "";
+  let dlFlow = false;
+  if (
+    kycData.kyc_status !== 'compliant' &&
+    !kycData.address?.meta_data?.is_nri &&
+    kycData.dl_docs_status !== '' &&
+    kycData.dl_docs_status !== 'init' &&
+    kycData.dl_docs_status !== null
+  ) {
+    dlFlow = true;
+  }
+  if (kycData.kyc_status === 'compliant') {
+    flow = 'premium onboarding'
+  } else {
+    if (dlFlow) {
+      flow = 'digi kyc'
+    } else {
+      flow = 'general'
+    }
+  }
+  return flow;
+}

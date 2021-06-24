@@ -8,6 +8,7 @@ import ForgotPassword from './login_and_registration/ForgotPassword';
 import Logout from './login_and_registration/Logout';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
 import WealthReport from './wealth_report';
+import SocialCallback from './login_and_registration/SocialCallback';
 
 
 import { create } from 'jss';
@@ -25,6 +26,7 @@ import DesktopLayout from './desktopLayout';
 
 import Feature from './Feature';
 
+import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
 import 'common/theme/Style.scss';
@@ -89,6 +91,7 @@ const App = () => {
               <Route path='/register' component={Register} />
               <Route path='/mobile/verify' component={Otp} />
               <Route path='/forgot-password' component={ForgotPassword} />
+              <Route path='/social/callback' component={SocialCallback} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               {
@@ -98,6 +101,7 @@ const App = () => {
                   <Feature />
                 </DesktopLayout>
               }
+              <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>
         </JssProvider>

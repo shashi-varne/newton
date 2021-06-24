@@ -94,7 +94,6 @@
   left: 0;
   right: 0;
   padding: 10px;
-  column-gap: 35px;
   margin-left: 300px;
   max-width: var(--desktop-width);
 }
@@ -124,6 +123,7 @@
 
 .diy-cart-footer .diy-filter-button {
   background-color: #fff;
+  margin-right: 35px;
 }
 
 .diy-cart-footer .diy-filter-button:hover {
@@ -226,6 +226,7 @@
 
       .reset {
         color: var(--secondary);
+        cursor: pointer;
       }
     }
 

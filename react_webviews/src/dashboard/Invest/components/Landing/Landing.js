@@ -14,6 +14,8 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 
+const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
+const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +32,8 @@ class Landing extends Component {
       openKycPremiumLanding: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      isWeb: getConfig().Web
+      isWeb: getConfig().Web,
+      stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -90,7 +93,7 @@ class Landing extends Component {
     } else if (kycJourneyStatus === "rejected") {
       this.navigate("/kyc/upload/progress", {
         state: {
-          toState: "/invest",
+          goBack: "/invest",
         },
       });
     }
@@ -118,6 +121,7 @@ class Landing extends Component {
       openKycStatusDialog,
       modalData,
       openKycPremiumLanding,
+      stateParams,
     } = this.state;
     const {
       ourRecommendations,
@@ -133,11 +137,25 @@ class Landing extends Component {
         noFooter={true}
         title="Start Investing"
         showLoader={this.state.show_loader}
+        data-aid='start-investing-screen'
+        noBackIcon={fromLoginStates.includes(stateParams.fromState)}
+        background={
+          isMobileDevice &&
+          fromLoginStates.includes(stateParams.fromState) &&
+          "invest-landing-background"
+        }
+        classHeader={
+          isMobileDevice &&
+          fromLoginStates.includes(stateParams.fromState) &&
+          (this.state.headerStyle
+            ? "invest-landing-partner-header"
+            : "invest-landing-header")
+        }
       >
-        <div className="invest-landing">
+        <div className="invest-landing" data-aid='invest-landing'>
           {
             !kycStatusLoader &&
-            <div className="generic-page-subtitle">
+            <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
               {isReadyToInvestBase 
                 ? " Your KYC is verified, You’re ready to invest"
                 : "Invest in your future"}
@@ -161,6 +179,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isReadyToInvestBase && kycStatusData && !kycStatusLoader && (
                         <div
+                          data-aid='kyc-invest-sections-cards'
                           className="kyc"
                           style={{
                             backgroundImage: `url(${require(`assets/${productName}/${kycStatusData.icon}`)})`,
@@ -174,6 +193,7 @@ class Landing extends Component {
                             {kycStatusData.subtitle}
                           </div>
                           <Button
+                            dataAid='kyc-btn'
                             buttonTitle={kycStatusData.button_text}
                             classes={{
                               button: "invest-landing-button",
@@ -188,7 +208,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEmpty(ourRecommendations) && (
                         <>
-                          <div className="invest-main-top-title">
+                          <div className="invest-main-top-title" data-aid='recommendations-title'>
                             Our recommendations
                           </div>
                           {ourRecommendations.map((item, index) => {
@@ -211,7 +231,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEmpty(diy) && (
                         <>
-                          <div className="invest-main-top-title">
+                          <div className="invest-main-top-title" data-aid='diy-title'>
                             Do it yourself
                           </div>
                           {diy.map((item, index) => {
@@ -231,12 +251,13 @@ class Landing extends Component {
                   );
                 case "bottomScrollCards":
                   return (
-                    <div className="bottom-scroll-cards" key={index}>
-                      <div className="list">
+                    <div className="bottom-scroll-cards" key={index} data-aid='bottomScrollCards-title'>
+                      <div className="list" data-aid='bottomScrollCards-list'>
                         {!isEmpty(bottomScrollCards) &&
                           bottomScrollCards.map((item, index) => {
                             return (
                               <div
+                                data-aid={item.key}
                                 key={index}
                                 className="card scroll-card"
                                 onClick={() =>
@@ -283,30 +304,32 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEmpty(financialTools) && (
                         <>
-                          <div className="invest-main-top-title">
+                          <div className="invest-main-top-title" data-aid='financial-tools-title'>
                             Financial tools
                           </div>
                           <div className="bottom-scroll-cards">
-                            <div className="list">
+                            <div className="list" data-aid='financial-tools-list'>
                               {financialTools.map((data, index) => {
                                 return (
                                   <div
+                                    data-aid={`financial-tool-${data.key}`}
                                     className="card invest-card financial-card"
                                     onClick={() => this.clickCard(data.key)}
                                     key={index}
                                   >
                                     <div className="content">
-                                      <div className="title">{data.title}</div>
+                                      <div className="title"  data-aid={`financial-tool-title-${data.key}`}>{data.title}</div>
                                       <img
                                         src={require(`assets/${productName}/${data.icon}`)}
                                         alt=""
                                         className="icon"
                                       />
                                     </div>
-                                    <div className="subtitle">
+                                    <div className="subtitle" data-aid={`financial-tool-subtitle-${data.key}`}>
                                       {data.subtitle}
                                     </div>
                                     <Button
+                                      dataAid='financial-tool-btn'
                                       buttonTitle={data.button_text}
                                       classes={{
                                         button: "invest-landing-button",
@@ -327,14 +350,15 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEmpty(popularCards) && (
                         <>
-                          <div className="invest-main-top-title">
+                          <div className="invest-main-top-title" data-aid='popularCards-tools-title'>
                             More investment options
                           </div>
                           <div className="bottom-scroll-cards">
-                            <div className="list">
+                            <div className="list" data-aid='popularCards-tools-list'>
                               {popularCards.map((item, index) => {
                                 return (
                                   <div
+                                    data-aid={`popular-cards-${item.key}`}
                                     key={index}
                                     className="card popular"
                                     onClick={() =>
@@ -362,7 +386,7 @@ class Landing extends Component {
           {productName !== "fisdom" &&
             productName !== "finity" &&
             productName !== "ktb" && (
-              <div className="invest-contact-us">
+              <div className="invest-contact-us" data-aid='invest-contact-us'>
                 In partnership with
                 <span>
                   {productName === "bfdlmobile" ||

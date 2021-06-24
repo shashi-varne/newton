@@ -56,12 +56,12 @@ const FundswiseDetails = (props) => {
   };
 
   return (
-    <Container title="Transactions" noFooter={true} skelton={showSkelton}>
-      <div className="reports-fundswise-details">
+    <Container title="Transactions" noFooter={true} skelton={showSkelton} data-aid='reprots-transactions-screen'>
+      <div className="reports-fundswise-details" data-aid='reports-fundswise-details'>
         {!isEmpty(fund) && (
           <>
             <h5>{fund.mf.friendly_name}</h5>
-            <div className="folio-number">Folio Number: {folio_number}</div>
+            <div className="folio-number" data-aid='reports-folio-number'>Folio Number: {folio_number}</div>
             {fundsSections.map((key, index) => {
               return (
                 <Fragment key={index}>
@@ -109,12 +109,12 @@ export const FundswiseDetailsCard = ({ fundData, title, showPrice }) => {
   };
   return (
     <>
-      <div className="content">{title}</div>
-      <div className="block1">
+      <div className="content" data-aid='content'>{title}</div>
+      <div className="block1" data-aid='block1'>
         <ul>
           {renderTiles.map((data, index) => {
             return (
-              <li key={index}>
+              <li key={index} data-aid='reports-value-block'>
                 <span>{tilesData[data].text}</span>
                 <span>{tilesData[data].value}</span>
               </li>

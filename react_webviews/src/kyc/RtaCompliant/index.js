@@ -8,10 +8,12 @@ import {
   isEmpty,
   validateNumber,
 } from "../../utils/validators";
-import { validateFields, navigate as navigateFunc, compareObjects } from "../common/functions";
+import { validateFields, compareObjects } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { getCVL, kycSubmit } from "../common/api";
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const RtaCompliantPersonalDetails = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -53,13 +55,14 @@ const RtaCompliantPersonalDetails = (props) => {
     if (user.email === null) keysToCheck.push("email");
     if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
+    sendEvents('next')
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
       return;
     }
     if(compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
       return
     }
     let userkycDetails = { ...kyc };
@@ -88,7 +91,7 @@ const RtaCompliantPersonalDetails = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     } catch (err) {
       console.log(err);
     } finally {
@@ -113,26 +116,46 @@ const RtaCompliantPersonalDetails = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "rti_info",
+        "mobile":  form_data.mobile ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid":   form_data.dob ? "yes" : "no",
+        "email": form_data.email_error ? "invalid":   form_data.email ? "yes" : "no"
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      data-aid='kyc-rta-compliant-screen'
     >
-      <div className="kyc-personal-details">
-        <div className="kyc-main-subtitle">
-          <div>
+      <div className="kyc-personal-details" data-aid='kyc-personal-details'>
+        <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>
+          <div data-aid='kyc-share-pan-dob'>
             <div>Share your date of birth as per PAN:</div>
             <div className="pan">{form_data.pan}</div>
           </div>
-          <div className="help" onClick={() => setIsOpen(true)}>
+          <div className="help" data-aid='kyc-help' onClick={() => setIsOpen(true)}>
             HELP
           </div>
         </div>
         {!isLoading && (
-          <main>
+          <main data-aid='kyc-personal-details'>
             <Input
               label="Date of birth(DD/MM/YYYY)"
               class="input"
@@ -165,6 +188,7 @@ const RtaCompliantPersonalDetails = (props) => {
                 helperText={form_data.mobile_error || ""}
                 onChange={handleChange("mobile")}
                 maxLength={10}
+                inputMode="numeric"
                 type="text"
               />
             )}

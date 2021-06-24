@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "../../common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { relationshipOptions, getPathname } from "../constants";
+import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import {
   validateAlphabets,
@@ -17,6 +17,7 @@ import {
 } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const Nominee = (props) => {
   const genericErrorMessage = "Something went wrong!";
@@ -34,7 +35,7 @@ const Nominee = (props) => {
     title = "Edit nominee detail";
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -53,6 +54,7 @@ const Nominee = (props) => {
   const handleClick = () => {
     let keysToCheck = ["dob", "name", "relationship"];
     let result = validateFields(form_data, keysToCheck);
+    sendEvents('next')
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -65,7 +67,7 @@ const Nominee = (props) => {
     let body = { ...finalSubmissionData };
     body.kyc.nomination = userkycDetails.nomination.meta_data;
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.kycReport);
+      navigate(PATHNAME_MAPPER.kycReport);
       return;
     }
     saveNomineeDetails(body);
@@ -76,7 +78,7 @@ const Nominee = (props) => {
       setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
-      navigate(getPathname.kycReport);
+      navigate(PATHNAME_MAPPER.kycReport);
     } catch (err) {
       console.log(err);
       toast(err.message || genericErrorMessage);
@@ -102,18 +104,40 @@ const Nominee = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nominee_details_compliant",
+        "name" :  form_data.name  ? "yes" : "no",
+        "dob":  form_data.dob_error ? "invalid":   form_data.dob ? "yes" : "no",
+        "relationship":  form_data.relationship ? "yes" : "no",
+        "pincode_entered":  kyc.nomination?.meta_data?.nominee_address?.pincode ? "yes" : "no",
+        "address_entered":  kyc.nomination?.meta_data?.nominee_address?.addressline ? "yes" : "no"    
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       id="kyc-home"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      data-aid='kyc-nominee-details-page'
     >
       <div className="kyc-nominee">
         {!isEmpty(kyc) && (
-          <main>
+          <main data-aid='kyc-nominee'>
             <Input
               label="Name"
               class="input"
@@ -133,13 +157,14 @@ const Nominee = (props) => {
               onChange={handleChange("dob")}
               maxLength={10}
               type="text"
+              inputMode="numeric"
               id="dob"
             />
-            <div className="input">
+            <div className="input" data-aid='kyc-dropdown-withouticon'>
               <DropdownWithoutIcon
                 error={form_data.relationship_error ? true : false}
                 helperText={form_data.relationship_error}
-                options={relationshipOptions}
+                options={RELATIONSHIP_OPTIONS}
                 id="relationship"
                 label="Relationship"
                 isAOB={true}

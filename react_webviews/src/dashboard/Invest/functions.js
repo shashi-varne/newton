@@ -1,7 +1,7 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import {
   apiConstants,
   investCardsBase,
@@ -13,6 +13,7 @@ import {
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
+import { getBasePath } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -24,7 +25,7 @@ export async function initialize() {
   this.getRecommendations = getRecommendations.bind(this);
   this.getRateOfInterest = getRateOfInterest.bind(this);
   this.corpusValue = corpusValue.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.clickCard = clickCard.bind(this);
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
@@ -43,8 +44,7 @@ export async function initialize() {
       !dataSettedInsideBoot)) {
     await this.getSummary();
   }
-  if ((this.state.screenName === "sdk_landing" && !getConfig().Web &&
-      !dataSettedInsideBoot)) {
+  if (this.state.screenName === "sdk_landing" && !getConfig().Web) {
     await this.getSummary();
   }
   if (this.onload) this.onload();
@@ -163,7 +163,9 @@ export async function setNpsData(response) {
       const res = await Api.get(apiConstants.npsInvestStatus);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
-        if (!result.registration_details.additional_details_status) {
+        storageService().setObject("nps_additional_details", result.registration_details);
+        storageService().setObject("nps_data", result);
+        if (!result?.registration_details?.additional_details_status) {
           storageService().set("nps_additional_details_required", true);
         } else {
           storageService().set("nps_additional_details_required", false);
@@ -253,8 +255,10 @@ export function clickCard(state, title) {
       this.navigate(fhcPath)
       break;
     case "risk_profile":
-      let riskProfilePath = "/risk/result";
-      this.navigate(riskProfilePath)
+      let riskProfilePath = "/risk/result-new";
+      this.navigate(riskProfilePath, {
+        state: { fromExternalSrc: true }
+      });
       break;
     case "top_equity":
       this.navigate(`/diy/fundlist/Equity/Multi_Cap`);
@@ -378,7 +382,6 @@ export async function getRecommendations(amount) {
       graphType: this.state.investType,
       investTypeDisplay: this.state.investTypeDisplay,
       showRecommendationTopCards: true,
-      recommendedTotalAmount: result.amount,
       ...result
     };
     storageService().setObject("funnelData", funnelData);
@@ -563,7 +566,7 @@ function handleInvestSubtitle (partner = '')  {
 
 export function handleRenderCard() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-  let partner = this.state.partner || storageService().getObject("partner") || {};
+  let partner = this.state.partner || storageService().get("partner") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
   const isWeb =getConfig().Web;
@@ -601,11 +604,13 @@ export function handleCampaignNotification () {
     const target = data?.notification_visual_data?.target;
     if (target?.length >= 1) {
       // eslint-disable-next-line no-unused-expressions
-      target.forEach((el, idx) => {
+      target.some((el, idx) => {
         if (el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
           acc = el;
           acc.campaign_name = data?.campaign?.name;
+          return true;
         }
+        return false;
       });
     }
     return acc;
@@ -619,8 +624,8 @@ export function handleCampaignNotification () {
 
 export function handleCampaignRedirection (url) {
   let campLink = url;
+  // Adding redirect url for testing
   // eslint-disable-next-line
-  campLink += (campLink.match(/[\?]/g) ? "&" : "?") +
-  "generic_callback=true";
+  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}`)}`
   window.location.href = campLink;
 }

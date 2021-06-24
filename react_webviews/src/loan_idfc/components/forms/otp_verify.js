@@ -22,7 +22,7 @@ class OtpVerification extends Component {
       proceedForOrder: false,
       base_url: getConfig().base_url,
       screen_name: "otp_verify",
-      skelton: "g",
+      skelton: false,
     };
 
     this.initialize = initialize.bind(this);
@@ -199,6 +199,7 @@ class OtpVerification extends Component {
         otp: otp,
       };
 
+      this.setErrorData("submit");
       try {
         this.setState({
           show_loader: "button",

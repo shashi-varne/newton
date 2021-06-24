@@ -254,7 +254,7 @@ const FundDetails = ({ classes, history }) => {
       sipOrOneTime = investment.order_type;
     }
     let paymentRedirectUrl = encodeURIComponent(
-      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}`
+      `${getBasePath()}/page/callback/${sipOrOneTime}/${investment.amount}${getConfig().searchParams}`
     );
 
     if (
@@ -636,9 +636,9 @@ const FundDetails = ({ classes, history }) => {
         )}
         {type === "mf" && (
           <>
-            {dialogStates.openPennyVerificationPendind && (
+            {dialogStates.openPennyVerificationPending && (
               <PennyVerificationPending
-                isOpen={dialogStates.openPennyVerificationPendind}
+                isOpen={dialogStates.openPennyVerificationPending}
                 handleClick={() => navigate("/kyc/add-bank")}
               />
             )}

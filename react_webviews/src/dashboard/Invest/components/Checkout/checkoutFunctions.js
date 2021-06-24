@@ -1,17 +1,16 @@
 import toast from "../../../../common/ui/Toast";
 import Api from "../../../../utils/api";
-import { getBasePath } from "../../../../utils/functions";
+import { getBasePath, getConfig, navigate as navigateFunc } from "../../../../utils/functions";
 import { formatAmountInr, storageService } from "../../../../utils/validators";
 import { apiConstants } from "../../constants";
 import {
   proceedInvestment,
   isInvestRefferalRequired,
 } from "../../../proceedInvestmentFunctions";
-import { navigate } from "../../functions";
 
 const errorMessage = "Something went wrong!";
 export async function initializeComponentFunctions() {
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.checkLimit = checkLimit.bind(this);
   this.goNext = goNext.bind(this);
   this.proceedInvestment = proceedInvestment.bind(this);
@@ -187,7 +186,7 @@ export async function goNext(investReferralData, isReferralGiven) {
   }
 
   let paymentRedirectUrl = encodeURIComponent(
-    `${getBasePath()}/page/callback/${investment_type}/${investment.amount}`
+    `${getBasePath()}/page/callback/${investment_type}/${investment.amount}${getConfig().searchParams}`
   );
 
   investment.allocations = allocations;

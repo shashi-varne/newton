@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { genderOptions, residentialOptions, getPathname } from "../constants";
+import { GENDER_OPTIONS, RESIDENTIAL_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import CompliantHelpDialog from "../mini-components/CompliantHelpDialog";
 import {
   formatDate,
@@ -12,11 +12,12 @@ import {
 } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { kycSubmit } from "../common/api";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -58,7 +59,7 @@ const PersonalDetails1 = (props) => {
       mobile: mobile_number,
       country_code: country_code,
       residential_status:
-        residentialOptions[selectedIndexResidentialStatus].value,
+        RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value,
       tin_number: kyc.nri_address.tin_number,
       gender: kyc.identification.meta_data.gender || "",
     };
@@ -76,6 +77,7 @@ const PersonalDetails1 = (props) => {
     if (user.email === null) keysToCheck.push("email");
     if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
+    sendEvents('next')
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -105,7 +107,7 @@ const PersonalDetails1 = (props) => {
       };
     }
     if (compareObjects(keysToCheck, oldState, form_data)) {
-      navigate(getPathname.compliantPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
       });
       return;
@@ -121,7 +123,7 @@ const PersonalDetails1 = (props) => {
         setIsApiRunning(false);
         return;
       }
-      navigate(getPathname.compliantPersonalDetails2, {
+      navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
         state: { isEdit: isEdit },
       });
     } catch (err) {
@@ -136,10 +138,10 @@ const PersonalDetails1 = (props) => {
     if (name === "mobile" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "residential_status") {
-      formData[name] = residentialOptions[value].value;
+      formData[name] = RESIDENTIAL_OPTIONS[value].value;
       if (value === 1) setIsNri(true);
       else setIsNri(false);
-    } else if (name === "gender") formData[name] = genderOptions[value].value;
+    } else if (name === "gender") formData[name] = GENDER_OPTIONS[value].value;
     else if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
@@ -153,6 +155,26 @@ const PersonalDetails1 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "personal_details_1",
+        "mobile": form_data.mobile ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
+        "gender": form_data.gender,
+        "help": isOpen ? 'yes' : 'no',
+        "flow": 'premium onboarding'      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  
   const goBack = () => {
     navigate("/kyc/journey");
   }
@@ -160,6 +182,7 @@ const PersonalDetails1 = (props) => {
   return (
     <Container
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       id="kyc-personal-details1"
       buttonTitle="CONTINUE"
       showLoader={isApiRunning}
@@ -169,19 +192,20 @@ const PersonalDetails1 = (props) => {
       current={1}
       total={3}
       headerData={{goBack}}
+      data-aid='kyc-personal-details-screen-1'
     >
-      <div className="kyc-personal-details">
-        <div className="kyc-main-subtitle">
-          <div>
+      <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
+        <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>
+          <div data-aid='kyc-share-pan-dob'>
             <div>Share your date of birth as per PAN:</div>
             <div className="pan">{form_data.pan}</div>
           </div>
-          <div className="help" onClick={() => setIsOpen(true)}>
+          <div className="help" data-aid='kyc-help' onClick={() => setIsOpen(true)}>
             HELP
           </div>
         </div>
         {!isLoading && (
-          <main>
+          <main data-aid='kyc-personal-details'>
             <Input
               label="Date of birth(DD/MM/YYYY)"
               class="input"
@@ -190,6 +214,7 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.dob_error || ""}
               onChange={handleChange("dob")}
               maxLength={10}
+              inputMode="numeric"
               type="text"
               id="dob"
               disabled={isApiRunning}
@@ -216,6 +241,7 @@ const PersonalDetails1 = (props) => {
                 onChange={handleChange("mobile")}
                 maxLength={10}
                 type="text"
+                inputMode="numeric"
                 disabled={isApiRunning}
               />
             )}
@@ -225,7 +251,7 @@ const PersonalDetails1 = (props) => {
                 helperText={form_data.gender_error}
                 width="40"
                 label="Gender:"
-                options={genderOptions}
+                options={GENDER_OPTIONS}
                 id="account_type"
                 value={form_data.gender || ""}
                 onChange={handleChange("gender")}
@@ -238,7 +264,7 @@ const PersonalDetails1 = (props) => {
                 helperText={form_data.resident_error}
                 width="40"
                 label="Residential status:"
-                options={residentialOptions}
+                options={RESIDENTIAL_OPTIONS}
                 id="account_type"
                 value={form_data.residential_status || ""}
                 onChange={handleChange("residential_status")}

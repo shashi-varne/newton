@@ -16,6 +16,8 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import {open_browser_web} from  'utils/validators';
+import {Imgc} from 'common/ui/Imgc';
+import {reportsfrequencyMapper} from 'group_insurance/constants';
 
 class FyntuneLanding extends Component {
   constructor(props) {
@@ -26,7 +28,6 @@ class FyntuneLanding extends Component {
       stepsContentMapper: fyntuneConstants.stepsContentMapper,
       stepsToFollow: fyntuneConstants.stepsToFollow,
       faq_data: fyntuneConstants.faq_data,
-      logo_cta: fyntuneConstants.logo_cta,
       openDialogRefresh: false
     };
   }
@@ -92,17 +93,24 @@ class FyntuneLanding extends Component {
     try{
       var res = await Api.get(`api/ins_service/api/insurance/fyntune/get/resumelist`);
       var resultData = res.pfwresponse.result;
-
+      var resume_frequency = '';
       if (res.pfwresponse.status_code === 200) {
-      
-      if(resultData.resume_present){
-        let fyntuneRefId = resultData.lead.fyntune_ref_id;
-        storageService().setObject('fyntune_ref_id', fyntuneRefId);
-      }
-      this.setState({
-        skelton: false
-      })
-      this.setState({ resume_data : resultData});
+        
+        if(resultData.resume_present){
+          let fyntuneRefId = resultData.lead.fyntune_ref_id;
+          storageService().setObject('fyntune_ref_id', fyntuneRefId); 
+          var frequency = resultData.lead.premium_payment_freq || resultData.lead.payout_type || '';
+          resume_frequency = reportsfrequencyMapper('FYNTUNE', frequency)
+          if(resume_frequency){
+            resume_frequency = resume_frequency.substring(1) || ''
+          }
+        }
+        
+        this.setState({ 
+          skelton: false,
+          resume_data : resultData,
+          resume_frequency: resume_frequency || ''
+        });
         
       } else {
         this.setState({
@@ -220,6 +228,7 @@ class FyntuneLanding extends Component {
     if (!this.state.resume_data.resume_present) {
       return;
     }
+    storageService().setObject('backToInsuranceLanding', true);
     let basepath = getBasePath();
     this.sendEvents("next", {resume_clicked: "yes"});
     var resume_redirection_url = this.state.resume_data.redirection_url;
@@ -305,6 +314,7 @@ class FyntuneLanding extends Component {
 
       return;
     }
+    storageService().setObject('backToInsuranceLanding', true);
     this.setErrorData('submit');
     let error = '';
     let errorType = '';
@@ -414,8 +424,8 @@ class FyntuneLanding extends Component {
       >
       <div className="fyntune-landing">
         <div className="landing-hero-container">
-            <img
-                className="landing-hero-img"
+            <Imgc
+                className="fyntune-landing-hero-img"
                 src={require(`assets/${this.state.productName}/fyntune_landing_page_hero.svg`)}
                 alt=""
               />
@@ -429,8 +439,9 @@ class FyntuneLanding extends Component {
               <div className="rc-tile" style={{ marginBottom: 0 }}>
                 <div className="rc-tile-left">
                   <div className="">
-                    <img
-                      src={require(`assets/${this.state.logo_cta}`)}
+                    <Imgc
+                      className="resume-card-logo"
+                      src={this.state.resume_data.lead.logo}
                       alt=""
                     />
                   </div>
@@ -439,7 +450,13 @@ class FyntuneLanding extends Component {
                       {this.state.resume_data.lead.base_plan_title}
                     </div>
                     <div className="rct-subtitle" style={{fontSize: '20px'}}>
-                      {inrFormatDecimal(this.state.resume_data.lead.base_premium)}/<span style={{fontSize: '16px', fontWeight: '300'}}>year</span>
+                      {inrFormatDecimal(this.state.resume_data.lead.base_premium)}
+                      {this.state.resume_frequency ? 
+                        <span>
+                          <span className="rct-subtitle-frequency">/</span><span className="rct-subtitle-frequency-value">{this.state.resume_frequency}</span>
+                        </span>:
+                      null
+                      }
                     </div>
                   </div>
                 </div>
@@ -468,18 +485,18 @@ class FyntuneLanding extends Component {
         <p className="fyntune-heading">Major benefits</p>
         <div className="his" >
           <div className="horizontal-images-scroll">
-            <img
-              className="image"
+            <Imgc
+              className="image imgc-space3"
               src={require(`assets/${this.state.productName}/ic_why_fyn1.png`)}
               alt=""
             />
-            <img
-              className="image"
+            <Imgc
+              className="image imgc-space3"
               src={require(`assets/${this.state.productName}/ic_why_fyn2.png`)}
               alt=""
             />
-            <img
-              className="image"
+            <Imgc
+              className="image imgc-space3"
               src={require(`assets/${this.state.productName}/ic_why_fyn3.png`)}
               alt=""
             />
@@ -499,6 +516,8 @@ class FyntuneLanding extends Component {
             We make this process easy with
           </p>
           <HowToSteps
+            showSkelton={true}
+            classNameIcon="fyntune-how-to-step"
             style={{ marginTop: 20, marginBottom: 0 }}
             baseData={this.state.stepsContentMapper}
           />
@@ -508,13 +527,14 @@ class FyntuneLanding extends Component {
           <div className="generic-hr" style={{marginBottom: "12px" }}></div>
           <div className="flex-center fyntune-faq" onClick={() => this.openFaqs()}>
             <div>
-              <img
+              <Imgc
                 className="accident-plan-read-icon"
+                style={{width: '30px', height: '30px', marginRight: '0' }}
                 src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
                 alt=""
               />
             </div>
-            <div style={{fontSize: '17px'}}>Frequently asked questions</div>
+            <div style={{fontSize: '17px', marginLeft: '10px'}}>Frequently asked questions</div>
           </div>
           <div className="generic-hr" style={{ marginTop: "12px" }}></div>
         </div>

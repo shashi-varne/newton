@@ -41,10 +41,21 @@ class ReplaceFund extends Component {
         return el;
       });
 
+      const npsCurrent = storageService().getObject("nps-current") || {};
+
+      let selectedIndex = 0;
+      data.pension_houses.forEach((element, index) => {
+        if(element.pension_house_id === npsCurrent.pension_house_id) {
+          selectedIndex = index;
+          return;
+        }
+      })
+
       this.setState({
         recommended: data.recommended[0].pension_house,
         pension_houses: data.pension_houses,
         show_loader: false,
+        selectedValue: selectedIndex,
       });
       
   };
@@ -59,13 +70,14 @@ class ReplaceFund extends Component {
   handleClick = () => {
     storageService().setObject('nps-recommend', this.state.nps_recommended);
     storageService().set('nps-prevpath', 'fund-replace');
-    this.navigate('recommendation/one-time')
+    this.navigate('/nps/recommendation/one-time')
   };
 
   render() {
     let { pension_houses, recommended } = this.state;
     return (
       <Container
+        data-aid='nps-replace-fund'
         fullWidthButton
         title="Replace Fund"
         skelton={this.state.skelton}
@@ -73,17 +85,18 @@ class ReplaceFund extends Component {
         buttonTitle="APPLY"
         handleClick={() => this.handleClick()}
       >
-        <section className="page invest nps">
+        <section className="page invest nps" data-aid='nps-fund-replace-page'>
           <div className="container-padding invest-body">
-            <div className="replace-funds">
+            <div className="replace-funds" data-aid='nps-replace-funds'>
               {pension_houses &&
                 pension_houses.map((element, index) => (
                   <div
+                    data-aid={`md-block-${index+1}`}
                     className="md-block"
                     key={index}
                     onClick={() => this.handleChange(index)}
                   >
-                    <div className="item">
+                    <div className="item" data-aid={`nps-item-${index+1}`}>
                       <img src={element.image} alt="" width={50} />
                       <div className="recommended-active">
                         {element.pension_house_id ===

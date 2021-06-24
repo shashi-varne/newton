@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
-import InputWithIcon from "common/ui/InputWithIcon";
+import Input from "common/ui/Input";
 import nominee from "assets/nominee.png";
 import calendar from "assets/calendar2.png";
-import relationship from "assets/relationship.png";
-import Select from "common/ui/Select";
+import SelectWithoutIcon from "common/ui/SelectWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
 import { storageService, capitalize } from "utils/validators";
 import { formatDate } from "utils/validators";
+import { dobFormatTest, validateAlphabets } from "../../../../utils/validators";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
@@ -19,7 +19,7 @@ class NpsNominee extends Component {
       form_data: {},
       nps_details: {},
       screen_name: "nps_nominee",
-      skelton: 'g'
+      skelton: "g",
     };
     this.initialize = initialize.bind(this);
   }
@@ -28,10 +28,18 @@ class NpsNominee extends Component {
     this.initialize();
   }
 
-  onload = () => {
+  onload = async () => {
     let nps_additional_details = storageService().getObject(
       "nps_additional_details"
     );
+    if (!nps_additional_details) {
+      await this.getNPSInvestmentStatus();
+      storageService().set("nps_additional_details_required", true);
+    }
+    nps_additional_details = storageService().getObject(
+      "nps_additional_details"
+    );
+
     let { nps_details } = nps_additional_details;
 
     let { form_data } = this.state;
@@ -46,7 +54,7 @@ class NpsNominee extends Component {
     this.setState({
       nps_details: nps_details,
       form_data: form_data,
-      skelton: false
+      skelton: false,
     });
   };
 
@@ -54,7 +62,12 @@ class NpsNominee extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
+    if(name === "nominee_name" && value && !validateAlphabets(value)) return;
+
     if (name === "nominee_dob") {
+      if (!dobFormatTest(value)) {
+        return;
+      }
       var input = document.getElementById("nominee_dob");
       input.onkeyup = formatDate;
     }
@@ -83,22 +96,23 @@ class NpsNominee extends Component {
         },
       };
 
-      this.updateMeta(data, "delivery");
+      await this.updateMeta(data, "/nps/delivery");
     }
   };
 
   bannerText = () => {
     return (
-      <span>
-        Please <span className="bold">confirm</span> the nominee details.
+      <span data-aid='nps-banner-text'>
+        Please <b>confirm</b> the nominee details.
       </span>
     );
-  }
+  };
 
   render() {
     let { form_data } = this.state;
     return (
       <Container
+        data-aid='nps-nominee-details-screen'
         title="Nominee Details"
         buttonTitle="SAVE AND CONTINUE"
         showLoader={this.state.show_loader}
@@ -109,9 +123,9 @@ class NpsNominee extends Component {
         banner={true}
         bannerText={this.bannerText()}
       >       
-        <div className="nps-nominee">
+        <div className="nps-nominee" data-aid='nps-nominee'>
           <div className="InputField">
-            <InputWithIcon
+            <Input
               icon={nominee}
               width="30"
               id="nominee_name"
@@ -125,12 +139,13 @@ class NpsNominee extends Component {
           </div>
 
           <div className="InputField">
-            <InputWithIcon
+            <Input
               icon={calendar}
               width="30"
               id="nominee_dob"
               name="nominee_dob"
               label="Nominee DOB (DD/MM/YYYY)"
+              maxLength={10}
               error={form_data.nominee_dob_error ? true : false}
               helperText={form_data.nominee_dob_error}
               value={form_data.nominee_dob || ""}
@@ -139,8 +154,7 @@ class NpsNominee extends Component {
           </div>
 
           <div className="InputField">
-            <Select
-              icon={relationship}
+            <SelectWithoutIcon
               width="30"
               id="relationship"
               label="Relationship"

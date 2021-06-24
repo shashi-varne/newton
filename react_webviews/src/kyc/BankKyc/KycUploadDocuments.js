@@ -1,17 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Container from "../common/Container";
-import { verificationDocOptions } from "../constants";
+import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { navigate as navigateFunc } from "../common/functions";
+import { getFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getBase64, getConfig } from "../../utils/functions";
+import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
-import { getPathname } from "../constants";
+import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
+const config = getConfig();
+const isWeb = config.Web;
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -19,10 +22,9 @@ const KycUploadDocuments = (props) => {
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
-  const isWeb = getConfig().Web;
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
     window.callbackWeb[method_name]({
@@ -98,7 +100,8 @@ const KycUploadDocuments = (props) => {
     });
   }
 
-  const handleChange = (event) => {
+  const handleChange = (type) => (event) => {
+    sendEvents('get_image', type)
     event.preventDefault();
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
@@ -119,7 +122,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'doc', 'doc.jpg', 'front')
@@ -130,23 +133,27 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleSubmit = async () => {
+    sendEvents('next')
     if (selected === null || !file) return;
     try {
       setIsApiRunning("button");
-      await uploadBankDocuments(
+      const result = await uploadBankDocuments(
         file,
-        verificationDocOptions[selected].value,
+        VERIFICATION_DOC_OPTIONS[selected].value,
         bank_id
       );
+      if(!isEmpty(result))
+        updateKyc(result.kyc)
       setShowPendingModal(true);
     } catch (err) {
-      setShowPendingModal(true);
+      toast("Image upload failed, please retry")
     } finally {
       setIsApiRunning(false);
     }
   };
 
   const handleEdit = () => {
+    sendEvents('edit')
     const navigate = navigateFunc.bind(props);
     navigate(`/kyc/${userType}/bank-details`);
   };
@@ -157,6 +164,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const proceed = () => {
+    sendEvents('next', "", 'bottom_sheet')
     const navigate = navigateFunc.bind(props);
     if (additional) {
       navigate("/kyc/add-bank");
@@ -166,7 +174,7 @@ const KycUploadDocuments = (props) => {
           navigate("/kyc/journey");
         } else {
           if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
-            navigate(getPathname.uploadSign, {
+            navigate(PATHNAME_MAPPER.uploadSign, {
               state: {
                 backToJourney: true,
               },
@@ -197,59 +205,83 @@ const KycUploadDocuments = (props) => {
   };
 
   const selectedDocValue =
-    selected !== null ? verificationDocOptions[selected].value : "";
+    selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
-  return (
+    const sendEvents = (userAction, type, screen_name) => {
+      let eventObj = {
+        "event_name": 'KYC_registration',
+        "properties": {
+          "user_action": userAction || "",
+          "screen_name": screen_name || 'bank_docs',
+          "initial_kyc_status": kyc.initial_kyc_status,
+          "flow": getFlow(kyc) || "",
+          "document":VERIFICATION_DOC_OPTIONS[selected]?.name || "",
+          "type": type || '',
+          "status" : screen_name ? "verification pending":""
+        }
+      };
+      if (userAction === 'just_set_events') {
+        return eventObj;
+      } else {
+        nativeCallback({ events: eventObj });
+      }
+    }
+
+    return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading || showLoader}
+      events={sendEvents("just_set_events")}
       hideInPageTitle
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title="Upload documents"
+      data-aid='kyc-upload-documents-page'
     >
-      <section id="kyc-bank-kyc-upload-docs">
-        <div className="banner">
+      <section id="kyc-bank-kyc-upload-docs" data-aid='kyc-bank-kyc-upload-docs'>
+        <div className="banner" data-aid='kyc-banner'>
           <div className="left">
             <img src={bankData?.ifsc_image} alt="bank" className="icon" />
-            <div className="acc_no">
+            <div className="acc_no" data-aid='kyc-acc-no'>
               <div className="title">Account number</div>
               <div className="value">{bankData?.account_number}</div>
             </div>
           </div>
 
-          <div className="edit" onClick={handleEdit}>
+          <div className="edit" data-aid='kyc-edit' onClick={handleEdit}>
             edit
           </div>
         </div>
-        <main>
-          <div className="doc-title">Select the document for verification</div>
-          <div className="subtitle">
+        <main data-aid='kyc-upload-documents'>
+          <div className="doc-title" data-aid='kyc-doc-title'>Select the document for verification</div>
+          <div className="subtitle" data-aid='kyc-subtitle'>
             Ensure your name is clearly visible in the document
           </div>
-          <div className="options">
-            {verificationDocOptions.map((data, index) => {
+          <div className="kyc-upload-doc-options" data-aid='kyc-upload-doc-options'>
+            {VERIFICATION_DOC_OPTIONS.map((data, index) => {
               const selectedType = data.value === selectedDocValue;
               const disableField =
                 kyc.address?.meta_data?.is_nri && data.value !== "cheque";
               return (
                 <div
                   key={index}
-                  className={`option-type ${selectedType && "selected"} ${
-                    disableField && "disabled"
+                  className={`kyc-upload-doc-option-type ${selectedType && "selected-doc"} ${
+                    disableField && "disabled-doc"
                   }`}
                   onClick={() => {
                     if (!disableField) handleDocType(index);
                   }}
+                  id={`name_${index}`}
+                  data-aid={`name_${index+1}`}
                 >
                   {data.name}
                   {selectedType && (
                     <SVG
-                      className="check-icon"
+                      className="kyc-upload-doc-check-icon"
                       preProcessor={(code) =>
                         code.replace(
                           /fill=".*?"/g,
-                          "fill=" + getConfig().styles.primaryColor
+                          "fill=" + config.styles.primaryColor
                         )
                       }
                       src={require(`assets/check_selected_blue.svg`)}
@@ -260,7 +292,7 @@ const KycUploadDocuments = (props) => {
             })}
           </div>
           {!isEmpty(selected) && selected >= 0 && (
-            <div className="docs-image-container">
+             <div className="docs-image-container">
               <div className="preview">
                 {file && fileToShow ? (
                   <img
@@ -269,14 +301,14 @@ const KycUploadDocuments = (props) => {
                     onLoad={handleImageLoad}
                     alt="Uploaded Document"
                   />
-                ) : (
+               ) : (
                   <img
                     className="sign-img"
                     src={require("assets/signature_icon.svg")}
                     alt=""
-                  />
-                )}
-              </div>
+                 />
+               )}
+              </div>              
               {isWeb ? (
                 <div className="web-upload-container">
                   <div
@@ -288,7 +320,7 @@ const KycUploadDocuments = (props) => {
                       ref={inputEl}
                       capture
                       style={{ display: "none" }}
-                      onChange={handleChange}
+                      onChange={handleChange('gallery')}
                     />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -317,7 +349,7 @@ const KycUploadDocuments = (props) => {
                       ref={inputEl}
                       capture
                       style={{ display: "none" }}
-                      onChange={handleChange}
+                      onChange={handleChange('open-camera')}
                     />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -343,7 +375,7 @@ const KycUploadDocuments = (props) => {
                       ref={inputEl}
                       capture
                       style={{ display: "none" }}
-                      onChange={handleChange}
+                      onChange={handleChange('gallery')}
                     />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -366,11 +398,11 @@ const KycUploadDocuments = (props) => {
           )}
         </main>
         {selectedDocValue && (
-          <div className="sample-document" onClick={handleSampleDocument}>
+          <div className="sample-document" data-aid='kyc-sample-document-text' onClick={handleSampleDocument}>
             view sample document
           </div>
         )}
-        <footer className="ssl-container">
+        <footer className="ssl-container" data-aid='kyc-footer'>
           <img
             src={require("assets/ssl_icon_new.svg")}
             alt="SSL Secure Encryption"

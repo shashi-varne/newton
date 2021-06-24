@@ -48,7 +48,7 @@ const FSelect = ({
     onClick: selectOpt
   };
   return (
-    <div className="fselect-container">
+    <div className="fselect-container" data-aid='fselect-container'>
       {options.map((opt, idx) =>
         <RenderOption
           key={opt[indexBy]}
@@ -68,11 +68,12 @@ const RenderOption = (props) => {
   if (isFunction(renderItem) && renderItem(opt)) {
     return (
       <div
+        data-aid={`fselect-item-${idx+1}`}
         className={`fselect-item ${selected ? 'selected' : ''}`}
         key={idx}
         onClick={() => onClick?.(idx)}
       >
-        <div className="fselect-item-content">
+        <div className="fselect-item-content" data-aid='fselect-item-content'>
           {
             renderItem(opt)
           }

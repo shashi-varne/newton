@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { getPathname, addressProofOptions } from "../../constants";
+import { PATHNAME_MAPPER, ADDRESS_PROOF_OPTIONS } from "../../constants";
 import { isEmpty } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import "../commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const ChangeAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -42,6 +43,7 @@ const ChangeAddressDetails1 = (props) => {
   };
 
   const handleClick = () => {
+    sendEvents("next")
     let keysToCheck = ["address_doc_type"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
@@ -49,9 +51,10 @@ const ChangeAddressDetails1 = (props) => {
       setFormData(data);
       return;
     }
-    navigate(getPathname.changeAddressDetails2, {
+    navigate(PATHNAME_MAPPER.uploadAddress, {
       state: {
-        address_doc_type: form_data.address_doc_type,
+        addressDocType: form_data.address_doc_type,
+        flow: "myAccount",
       },
     });
   };
@@ -59,14 +62,32 @@ const ChangeAddressDetails1 = (props) => {
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let formData = { ...form_data };
-    formData[name] = addressProofOptions[value].value;
+    formData[name] = ADDRESS_PROOF_OPTIONS[value].value;
     formData[`${name}_error`] = "";
     setFormData({ ...formData });
   };
 
   const disabled = kyc?.address?.meta_data?.is_nri || false;
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'my_account',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "change address",
+        "address_proof": form_data.address_doc_type 
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-change-address-details1"
       buttonTitle="SAVE AND CONTINUE"
@@ -75,16 +96,17 @@ const ChangeAddressDetails1 = (props) => {
       count={1}
       current={1}
       total={2}
+      data-aid='kyc-change-addressdetails-screen-1'
     >
       <div className="kyc-personal-details kyc-address-details">
-        <main>
+        <main data-aid='kyc-personal-details'>
           <div className={`input ${disabled && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.address_doc_type_error ? true : false}
               helperText={form_data.address_doc_type_error}
               label="Address proof:"
               class="address_doc_type"
-              options={addressProofOptions}
+              options={ADDRESS_PROOF_OPTIONS}
               id="account_type"
               value={form_data.address_doc_type || ""}
               onChange={handleChange("address_doc_type")}

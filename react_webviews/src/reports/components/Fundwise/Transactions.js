@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { getTransactions, getNextTransactions } from "../../common/api";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const FundswiseTransactions = (props) => {
   const params = props?.match?.params || {};
@@ -24,21 +25,14 @@ const FundswiseTransactions = (props) => {
       return;
     }
     setTransactions(data.transactions);
-    if (props.type === "fundswise") {
-      const result = await getTransactions();
-      if (result) {
-        setReportData(result);
-      }
-    } else {
-      setReportData(data);
-    }
+    setReportData(data);
     setShowSkelton(false);
   };
 
   const handleClick = async () => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
-      const result = await getNextTransactions(reportData.next_page);
+      const result = await getNextTransactions({ url: reportData.next_page });
       if (!result) {
         setIsApiRunning(false);
         return;
@@ -58,22 +52,38 @@ const FundswiseTransactions = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "transactions",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="Transactions"
       noFooter={!reportData.more}
       buttonTitle="SHOW MORE"
-      handleClick={() => handleClick()}
+      handleClick={handleClick}
       skelton={showSkelton}
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showSkelton}
+      showLoader={isApiRunning}
+      data-aid='reports-transactions-screen'
     >
-      <div className="reports-fundswise-transactions">
+      <div className="reports-fundswise-transactions" data-aid='reports-fundswise-transactions'>
         {!isEmpty(transactions) &&
           transactions.map((transaction, index) => {
             return (
-              <div key={index} className="transaction">
-                <div className="folio-no">
+              <div key={index} className="transaction" data-aid='transaction'>
+                <div className="folio-no" data-aid={transaction.folio_number}>
                   <span>Folio No: {transaction.folio_number}</span>
                   <span
                     className={`text ${
@@ -84,24 +94,24 @@ const FundswiseTransactions = (props) => {
                   </span>
                 </div>
                 <div className="transaction-header">{transaction.mf_name}</div>
-                <div className="details">
-                  <div className="content">
+                <div className="details" data-aid='details'>
+                  <div className="content" data-aid='reports-date'>
                     <div className="text">Date</div>
                     <h5 className="fund-info">{transaction.tdate}</h5>
                   </div>
-                  <div className="content">
+                  <div className="content" data-aid='reports-units'>
                     <div className="text">Units</div>
                     <h5 className="fund-info">
                       {transaction.units.toFixed(4)}
                     </h5>
                   </div>
-                  <div className="content">
+                  <div className="content" data-aid='reports-nav'>
                     <div className="text">Nav</div>
                     <h5 className="fund-info">
                       ₹ {transaction.nav.toFixed(4)}
                     </h5>
                   </div>
-                  <div className="content">
+                  <div className="content" data-aid='reports-amount'>
                     <div className="text">Amount</div>
                     <h5 className="fund-info">
                       {formatAmountInr(transaction.amount)}
@@ -111,7 +121,7 @@ const FundswiseTransactions = (props) => {
               </div>
             );
           })}
-        {isEmpty(transactions) && <p>No transactions to show</p>}
+        {isEmpty(transactions) && <p data-aid='no-transactions-to-show'>No transactions to show</p>}
       </div>
     </Container>
   );

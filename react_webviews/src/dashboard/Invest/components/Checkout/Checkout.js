@@ -16,6 +16,7 @@ import {
   formatAmountInr,
 } from "../../../../utils/validators";
 import "./Checkout.scss";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 class Checkout extends Component {
   constructor(props) {
@@ -155,6 +156,7 @@ class Checkout extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next')
     let { fundsData, type, investType } = this.state;
     let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (fundsData.length === 0 || allowedFunds.length === 0) {
@@ -229,6 +231,7 @@ class Checkout extends Component {
 
   deleteFund = (index) => {
     let { fundsData } = this.state;
+    this.sendEvents('delete', fundsData[index].legal_name)
     fundsData.splice(index, 1);
     const cartCount = fundsData.length;
     this.setState({
@@ -238,6 +241,36 @@ class Checkout extends Component {
     storageService().set("diystore_cartCount", cartCount);
   };
 
+  sendEvents = (userAction, fundName) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "your mutual fund plan",
+        "user_action": userAction || "",
+        "amount_selected": (this.state.type !== 'diy' ? this.state.fundsData[0]?.amount : "" ) || "",
+        "order_type": this.state.investType || "",
+        "scheme_type": (this.state.type !== 'diy' ? this.state.fundsData[0]?.growth_or_dividend : this.titleCase((storageService().get('diystore_category') || ""))) || "",
+        "category_name": (this.state.type !== 'diy' ? "" : this.titleCase((storageService().get('diystore_subCategory') || "").replace(/_/g, " "))) || "",
+        "fund_name": fundName || (this.state.type !== 'diy' ? this.state.fundsData[0]?.name : "") || "",
+        "flow": this.state.type || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+  titleCase = (text) =>{
+    if(!text)
+    return;
+    return text.toLowerCase()
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ');
+  }
+  
   render() {
     let {
       form_data,
@@ -254,6 +287,8 @@ class Checkout extends Component {
     if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
+        data-aid='nfo-mf-plan-screen'
         skelton={this.state.show_loader}
         buttonTitle={ctc_title}
         handleClick={this.handleClick}
@@ -265,20 +300,22 @@ class Checkout extends Component {
           loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
         }}
       >
-        <div className="nfo-checkout">
+        <div className="nfo-checkout" data-aid='nfo-checkout'>
           <div
+            data-aid='nfo-checkout-invest-type'
             className="checkout-invest-type"
             style={{
               marginTop: type === "nfo" && "0",
             }}
           >
             {type === "diy" && (
-              <div className="invest-type-title">Select investment plan</div>
+              <div className="invest-type-title" data-aid='nfo-invest-type-title'>Select investment plan</div>
             )}
-            <div className="checkout-invest-type-cards">
+            <div className="checkout-invest-type-cards" data-aid='nfo-checkout-invest-type-cards'>
               {renderData.map((data, index) => {
                 return (
                   <div
+                    data-aid={`nfo-${data.value}`}
                     key={index}
                     id={data.value}
                     onClick={this.handleChange()}
@@ -296,7 +333,7 @@ class Checkout extends Component {
                         src={require(`assets/${data.icon_light}`)}
                       />
                     )}
-                    <h3 id={data.value}>{data.name}</h3>
+                    <h3 data-aid={`nfo-name-${data.value}`} id={data.value}>{data.name}</h3>
                     {investType === data.value && (
                       <img
                         className="icon"
@@ -309,20 +346,20 @@ class Checkout extends Component {
               })}
             </div>
           </div>
-          <div className="cart-items">
+          <div className="cart-items" data-aid='nfo-cart-items'>
             {fundsData && fundsData.length === 0 && (
-              <p className="message">
+              <p className="message" data-aid='nfo-message'>
                 Please add atleast one fund to make an investment.
               </p>
             )}
             {fundsData &&
               fundsData.map((fund, index) => {
                 return (
-                  <div className="item card" key={index}>
+                  <div className="item card" key={index} data-aid='nfo-item-card'>
                     <div className="icon">
                       <img alt={fund.friendly_name} src={fund.amc_logo_small} />
                     </div>
-                    <div className="text">
+                    <div className="text" data-aid='checkout-text'>
                       <h4>
                         {fund.friendly_name || fund.legal_name}
                         {type === "diy" && (
@@ -351,7 +388,7 @@ class Checkout extends Component {
                       />
                     </div>
                     {!fund["allow_purchase"][investType] && (
-                      <div className="disabled">
+                      <div className="disabled" data-aid='nfo-disabled'>
                         <div className="text">This fund is not supported</div>
                       </div>
                     )}

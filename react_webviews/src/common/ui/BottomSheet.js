@@ -33,7 +33,7 @@ class BottomSheetClass extends Component {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogContent>
-                    <div className="generic-bottomsheet" id="alert-dialog-description">
+                    <div className="generic-bottomsheet" id="alert-dialog-description" data-aid='generic-bottomsheet'>
                         <div className="top">
                             <div className="t-left">
                                 <div className="header_title">{data.header_title}</div>
@@ -44,7 +44,7 @@ class BottomSheetClass extends Component {
                             </div>
                             {(data.icon || data.src) &&
                                 <div className="t-right">
-                                    <Imgc className='top-right-image'
+                                    <Imgc className={`${this.props.iconClassName} top-right-image1`}
                                         src={data.src ? data.src : require(`assets/${data.icon}`)} alt="" />
                                 </div>}
 
@@ -52,6 +52,7 @@ class BottomSheetClass extends Component {
                         {data.helpClick && getConfig().project !== 'loan' && 
                         <div className="help">
                             <Button
+                                dataAid='get-help-btn'
                                 fullWidth={true}
                                 variant="raised"
                                 size="large"
@@ -69,6 +70,7 @@ class BottomSheetClass extends Component {
 
                     {data.handleClick2 &&
                         <Button
+                            dataAid='secound-btn'
                             fullWidth={true}
                             variant="raised"
                             size="large"
@@ -81,6 +83,7 @@ class BottomSheetClass extends Component {
                         />
                     }
                     <Button
+                        dataAid='first-btn'
                         fullWidth={true}
                         variant="raised"
                         size="large"

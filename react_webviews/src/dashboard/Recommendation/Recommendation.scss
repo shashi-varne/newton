@@ -18,6 +18,7 @@
     width: 100%;
     display: flex;
     align-items: center;
+    padding-bottom: 10px;
     
     .recommendation-title {
       font-weight: 600;
@@ -60,14 +61,19 @@
     line-height: 22px;
     padding: 10px 0px;
     color: rgb(74, 74, 74);
+
     .amount-per-month{
-      font-size: 12.75px;
+      font-size: 12px;
     }
   }
 }
 
 .recommendations-disclaimers {
   margin: 60px 0;
+
+  .wv-security-disclaimer {
+    margin-top: 40px !important;
+  }
 }
 
 .recommendations-disclaimer-morning {
@@ -76,6 +82,7 @@
   font-size: 13px;
   img {
     margin-right: 5px;
+    height: 18px;
   }
 }
 
