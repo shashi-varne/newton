@@ -146,7 +146,7 @@ function Landing(props) {
       >
         <div
           style={{
-            backgroundImage: `url(${require(`assets/chat_bubble.svg`)})`,
+            backgroundImage: `url(${require(`assets/${productName}/chat_bubble.svg`)})`,
             width: '22.92px',
             height: '22.92px',
           }}
