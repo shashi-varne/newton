@@ -7,6 +7,7 @@ import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { insuranceStateMapper } from '../../constants';
 import Api from 'utils/api';
+import {Imgc} from 'common/ui/Imgc';
 
 class PaymentCallbackClass extends Component {
 
@@ -233,7 +234,7 @@ class PaymentCallbackClass extends Component {
         classOverRideContainer="payment-failed"
       >
         <div>
-          <div className="payment-failed-icon"><img src={this.state.failed_icon} alt="" /></div>
+          <div className="payment-failed-icon"><Imgc className="payment-failed-img" src={this.state.failed_icon} alt="" /></div>
           <div className="payment-failed-title">Sorry, your payment has been failed</div>
           <div className="payment-failed-subtitle">Any amount if debited from the bank account will get refunded within 5-7 days. Please try again to get policy.</div>
         </div>
