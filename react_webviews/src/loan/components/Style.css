@@ -453,7 +453,7 @@ img.gold-offer-slide-img {
 .live-price-gold .right-text {
   font-size: 10px;
   color: var(--secondary);
-  font-weight: 800;
+  font-weight: 700;
 }
 .gold-dialog .hr {
   border: 1px solid #ededed;
@@ -556,7 +556,7 @@ img.gold-offer-slide-img {
 .gold-delivery-select-address .er-button {
   color: var(--secondary);
   text-transform: uppercase;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 12px;
   margin: 5px 8px 0 0px;
 }
@@ -565,7 +565,7 @@ img.gold-offer-slide-img {
   font-size: 12px;
   color: var(--secondary);
   text-transform: uppercase;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
 }
 .gold-delivery-select-address .address-tile {
@@ -605,7 +605,7 @@ img.gold-offer-slide-img {
   font-size: 12px;
   color: var(--secondary);
   text-transform: uppercase;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
 }
 .gold-sell-select-bank .bank-tile {
@@ -769,7 +769,7 @@ img.gold-offer-slide-img {
 .gold-aw-inputs .plus-tile {
   color: #35cb5d;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   border: 1px solid;
   padding: 10px 15px 10px 15px;
   border-radius: 4px;
@@ -1060,7 +1060,7 @@ img.gold-offer-slide-img {
 .gold-landing .infoimage-block1 .bottom-content {
   color: #9e6e1d;
   font-size: 8px;
-  font-weight: 800;
+  font-weight: 700;
   bottom: 20px;
   position: absolute;
   text-transform: uppercase;
@@ -1090,7 +1090,7 @@ img.gold-offer-slide-img {
 .gold-landing .block3 .benefit-tile-title {
   color: var(--primary);
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
 }
 .gold-landing .block3 .benefit-tile-subtitle {
   color: #d3dbe4;

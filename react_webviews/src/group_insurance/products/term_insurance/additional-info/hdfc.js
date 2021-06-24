@@ -361,7 +361,7 @@ class AdditionalInfo extends Component {
   renderDeclaration = () => {
     return (
       <div>
-        <div className="SectionHead" style={{ marginBottom: 30, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Roboto' }}>
+        <div className="SectionHead" style={{ marginBottom: 30, color: 'rgb(68,68,68)', fontSize: 14, fontFamily: 'Rubik' }}>
           By tapping continue, you declare that you’re -
         </div>
         <div className="RadioBlock">

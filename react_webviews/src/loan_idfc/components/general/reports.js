@@ -51,7 +51,7 @@ class ReportDetails extends Component {
     ];
 
     let loan_status =
-      vendor_info.idfc_loan_status.indexOf(status) === -1
+      vendor_info.idfc_loan_status.includes(status)
         ? "DATA VERIFICATION PENDING"
         : vendor_info.idfc_loan_status;
 

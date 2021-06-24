@@ -17,6 +17,7 @@ import {getConfig} from 'utils/functions';
 import logo_safegold from 'assets/logo_safegold.svg';
 import logo_mmtc from 'assets/logo_mmtc.svg';
 import WVButtonLayout from '../../ui/ButtonLayout/WVButtonLayout';
+import {Imgc} from '../../ui/Imgc'
 
 export class FooterLayoutBase extends Component {
   constructor(props) {
@@ -123,7 +124,8 @@ export class FooterLayoutBase extends Component {
         style={props.buttonData.leftStyle}>
 
           {props.buttonData.logo && <div className='image-block'>
-            <img
+            <Imgc
+              style={{width:'40px', height:'40px'}}
               alt=""
               src={require(`assets/${props.buttonData.logo}`)}
               className="FooterImage" />
