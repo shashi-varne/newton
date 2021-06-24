@@ -551,7 +551,7 @@ img.gold-offer-slide-img {
   .right-text {
     font-size: 10px;
     color: var(--secondary);
-    font-weight: 800;
+    font-weight: 700;
   }
 }
 
@@ -591,6 +591,10 @@ img.gold-offer-slide-img {
 
 
 .gold-payment-container {
+  .payment-screen-banner{
+    width: 100% !important;
+    min-height: 160px !important; 
+  }
   .content-points {
     color: #0a1d32;
     font-size: 14px;
@@ -630,6 +634,11 @@ img.gold-offer-slide-img {
     color: #767e86;
     font-size: 10px;
     font-weight: 600;
+  }
+  .payment-screen-product-logo{
+    width: 30px !important;
+    height: 30px !important;
+    margin: 0;
   }
 }
 
@@ -677,7 +686,7 @@ img.gold-offer-slide-img {
   .er-button {
     color: var(--secondary);
     text-transform: uppercase;
-    font-weight: 800;
+    font-weight: 700;
     font-size: 12px;
     margin: 5px 8px 0 0px;
   }
@@ -686,7 +695,7 @@ img.gold-offer-slide-img {
     font-size: 12px;
     color: var(--secondary);
     text-transform: uppercase;
-    font-weight: 800;
+    font-weight: 700;
     cursor: pointer;
   }
   .address-tile {
@@ -732,7 +741,7 @@ img.gold-offer-slide-img {
     font-size: 12px;
     color: var(--secondary);
     text-transform: uppercase;
-    font-weight: 800;
+    font-weight: 700;
     cursor: pointer;
   }
 
@@ -921,7 +930,7 @@ img.gold-offer-slide-img {
   .plus-tile {
     color: #35cb5d;
     font-size: 12px;
-    font-weight: 800;
+    font-weight: 700;
     border: 1px solid;
     padding: 10px 15px 10px 15px;
     border-radius: 4px;
@@ -1221,7 +1230,7 @@ img.gold-offer-slide-img {
     left: -10px;
     background: var(--primary);
     color: white;
-    font-weight: 800;
+    font-weight: 700;
     border-radius: 50%;
     height: 15px;
     width: 15px;
@@ -1290,7 +1299,7 @@ img.gold-offer-slide-img {
     .bottom-content {
       color: white;
       font-size: 8px;
-      font-weight: 800;
+      font-weight: 700;
       // margin: 50px 0 0 0;
       bottom: 20px;
       position: absolute;
@@ -1331,7 +1340,7 @@ img.gold-offer-slide-img {
     .benefit-tile-title {
       color: var(--primary);
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 700;
     }
 
     .benefit-tile-subtitle {

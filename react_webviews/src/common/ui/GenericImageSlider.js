@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { getConfig } from "utils/functions";
+import {Imgc} from '../ui/Imgc'
 
 class CheckBox extends Component {
     
@@ -17,8 +18,8 @@ class CheckBox extends Component {
                 <div className="his">
                     <div className="horizontal-images-scroll">
                         {this.props.image_list.map((item, index) =>{
-                            return <img
-                                    className="image"
+                            return <Imgc
+                                    className={`image ${this.props.className}`}
                                     src={require(`assets/${item}`)}
                                     alt=""
                                 />

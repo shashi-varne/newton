@@ -6,6 +6,7 @@ import { getConfig } from 'utils/functions';
 import { getBhartiaxaStatusToState } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import '../../common/Style.scss'
+import { Imgc } from '../../../common/ui/Imgc';
 
 class DiseasesSpecificPlan extends Component {
 
@@ -135,8 +136,8 @@ class DiseasesSpecificPlan extends Component {
         display: 'flex', alignItems: 'center', width : '100%'
       }}>
         <div style={{ display: 'flex' , width : '100%'}}>
-          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : props.key === 'CORONA' ? '-18px 26px 0px 8px' : '0px 26px 0px 8px'}}/>
-          <div style={{ borderBottomWidth: '1px',
+          <Imgc className="disease_specific_plan_img" src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt=""/>
+          <div style={{ borderBottomWidth: '1px', marginLeft: '26px',
                   borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: this.state.insuranceProducts.length - 1 !== index ? '20px' : '40px',
                   justifyContent: 'space-between', cursor: 'pointer' , width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%' }}>
             <div style={{ color: '#160D2E', fontSize: '13px', marginBottom: '5px', fontWeight: 400, lineHeight : '15.41px' }}>{props.title} {' '}
