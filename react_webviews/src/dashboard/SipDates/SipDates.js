@@ -12,7 +12,7 @@ import {
 import SuccessDialog from "../Invest/mini-components/SuccessDialog";
 import InvestError from "../Invest/mini-components/InvestError";
 import PennyVerificationPending from "../Invest/mini-components/PennyVerificationPending";
-import { getBasePath, isIframe } from "../../utils/functions";
+import { getBasePath } from "../../utils/functions";
 import {
   handleIframeInvest,
   proceedInvestment,
@@ -21,14 +21,15 @@ import "./SipDates.scss";
 import { nativeCallback } from "../../utils/native_callback";
 import { flowName } from "../Invest/constants";
 
-const partnerCode = getConfig().partner_code;
+const config = getConfig();
+const partnerCode = config.partner_code;
 /* eslint-disable */
 class SipDates extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      productName: getConfig().productName,
+      productName: config.productName,
       screenName: "sip_dates",
       dialogStates: {},
       isSipDatesScreen: true,
@@ -77,7 +78,7 @@ class SipDates extends Component {
 
     const paymentRedirectUrl = encodeURIComponent(
       `${getBasePath()}/page/callback/sip/${sipBaseData.investment.amount}${
-        getConfig().searchParams
+        config.searchParams
       }`
     );
 
@@ -125,8 +126,8 @@ class SipDates extends Component {
     let { investResponse, paymentRedirectUrl } = this.state;
     let pgLink = investResponse.investments[0].pg_link;
     pgLink = `${pgLink}${pgLink.match(/[\?]/g) ? "&" : "?"}redirect_url=${paymentRedirectUrl}${partnerCode ? "&partner_code="+partnerCode : ""}`
-    if (getConfig().Web) {
-      if (isIframe()) {
+    if (config.Web) {
+      if (config.isIframe) {
         handleIframeInvest(
           pgLink,
           investResponse,

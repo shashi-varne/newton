@@ -16,8 +16,9 @@ import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
-import { getBasePath, navigate as navigateFunc, isIframe } from '../../utils/functions'
+import { getBasePath, navigate as navigateFunc } from '../../utils/functions'
 
+const config = getConfig();
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -27,7 +28,6 @@ const Journey = (props) => {
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
-  const config = getConfig()
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -568,16 +568,16 @@ const Journey = (props) => {
   const cancel = () => {
     setDlAadhaar(false)
     navigate(`${PATHNAME_MAPPER.journey}`, {
-      searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+      searchParams: `${config.searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })
   }
 
   const proceed = () => {
-    if (isIframe() && getConfig().code === "moneycontrol" && !getConfig().isMobileDevice) {
+    if (config.isIframe && config.code === "moneycontrol" && !config.isMobileDevice) {
       const redirect_url = encodeURIComponent(
         `${getBasePath()}/digilocker/callback${
-          getConfig().searchParams
+          config.searchParams
         }&is_secure=${storageService().get("is_secure")}`
       );
       handleIframeKyc(

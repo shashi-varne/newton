@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
-import { getConfig, isIframe, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { getMyAccount } from "../common/api";
 import { storageService } from "utils/validators";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
@@ -78,7 +78,7 @@ const BanksList = (props) => {
       handleClick={handleClick}
       noFooter={
         changeRequest.add_bank_enabled &&
-        ((config.web && !isIframe()) || config.native)
+        ((config.web && !config.isIframe) || storageService().get("native"))
       }
       title="Bank accounts"
       type="outlined"

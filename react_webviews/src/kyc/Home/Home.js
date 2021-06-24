@@ -8,10 +8,11 @@ import toast from "../../common/ui/Toast";
 import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isIframe, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 
+const config = getConfig();
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -30,7 +31,6 @@ const Home = (props) => {
   const isPremiumFlow = stateParams.isPremiumFlow || false;
   const { kyc, user, isLoading } = useUserKycHook();
   const [userName, setUserName] = useState('')
-  const config = getConfig();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -211,12 +211,11 @@ const Home = (props) => {
   };
 
   const accountMerge = async () => {
-    let config = getConfig();
     let email = config.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (isIframe()) {
+    if (config.isIframe) {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());

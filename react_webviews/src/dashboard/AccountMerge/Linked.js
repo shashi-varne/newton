@@ -1,13 +1,13 @@
 import React from "react";
-import { getConfig, isIframe, navigate as navigateFunc } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import { nativeCallback } from "../../utils/native_callback";
 import Container from "../common/Container";
 import "./Linked.scss";
 
+const config = getConfig();
 const AccountLinked = (props) => {
   const navigate = navigateFunc.bind(props);
-  const config = getConfig();
   const productName = config.productName;
   const code = config.code;
   const handleClick = () => {
@@ -26,7 +26,7 @@ const AccountLinked = (props) => {
   };
 
   const hideImage =
-    isIframe() && code === "moneycontrol" && config.isMobileDevice;
+    config.isIframe && code === "moneycontrol" && config.isMobileDevice;
   return (
     <Container buttonTitle="CLOSE" hidePageTitle handleClick={handleClick} data-aid='account-linked-screen'>
       <div className="account-merge-linked" data-aid='account-merge-linked'>

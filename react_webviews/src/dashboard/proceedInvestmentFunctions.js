@@ -1,10 +1,11 @@
 import toast from "../common/ui/Toast";
 import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
-import { getConfig, isIframe } from "../utils/functions";
+import { getConfig } from "../utils/functions";
 import { storageService, isFunction } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
-const partnerCode = getConfig().partner_code;
+const config = getConfig();
+const partnerCode = config.partner_code;
 /* eslint-disable */
 export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
@@ -69,8 +70,8 @@ export async function proceedInvestment(data) {
           });
           return;
         }
-        if (getConfig().Web) {
-          if (isIframe()) {
+        if (config.Web) {
+          if (config.isIframe) {
             handleIframeInvest(pgLink, result, history, handleApiRunning);
           } else {
             window.location.href = pgLink;
@@ -131,7 +132,6 @@ export function canDoInvestment(kyc) {
 }
 
 export function redirectToKyc(kycJourneyStatus, history) {
-  const config = getConfig();
   let _event = {
     event_name: "journey_details",
     properties: {
@@ -160,7 +160,7 @@ export function redirectToKyc(kycJourneyStatus, history) {
 function navigation(history, pathname, data = {}) {
   history.push({
     pathname: pathname,
-    search: getConfig().searchParams,
+    search: config.searchParams,
     state: data.state,
   });
 }
