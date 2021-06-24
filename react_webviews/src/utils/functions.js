@@ -837,12 +837,10 @@ export const getConfig = () => {
   if (
     base_url.indexOf("my.fisdom.com") >= 0 ||
     base_url.indexOf("api.mywaywealth.com") >= 0 ||
-    base_url.indexOf("api.finity.in") >= 0 ||
-    base_url_default.indexOf("my.fisdom.com") >= 0 ||
-    base_url_default.indexOf("api.mywaywealth.com") >= 0 ||
-    base_url_default.indexOf("api.finity.in") >= 0
-  )
+    base_url.indexOf("api.finity.in") >= 0
+  ) {
     isProdEnv = true;
+  }
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
