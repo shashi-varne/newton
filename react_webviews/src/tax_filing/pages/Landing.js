@@ -20,12 +20,10 @@ function Landing(props) {
   const navigate = navigateFunc.bind(props)
   const handleFAQNavigation = () => {
     navigate(`/tax-filing/faqs`, {}, false)
-    return
   }
 
   const handleMyITRNavigation = () => {
     navigate(`/tax-filing/my-itr`, {}, false)
-    return
   }
   return (
     <Container

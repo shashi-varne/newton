@@ -40,24 +40,26 @@ class Container extends Component {
   }
 
   historyGoBack = () => {
-    // let pathname = this.props.history.location.pathname
+    let pathname = this.props.history.location.pathname
 
-    // if (this.props.headerData && this.props.headerData.goBack) {
-    //   this.props.headerData.goBack()
-    //   return
-    // }
+    if (this.props.headerData && this.props.headerData.goBack) {
+      this.props.headerData.goBack()
+      return
+    }
 
-    // let action = 'back'
-    // nativeCallback({ events: this.getEvents(action) })
+    let action = 'back'
+    nativeCallback({ events: this.getEvents(action) })
 
-    // switch (pathname) {
-    //   case '/help':
-    //     nativeCallback({ action: 'exit', events: this.getEvents() })
-    //     break
-    //   default:
-    //     this.props.history.goBack()
-    // }
+    switch (pathname) {
+      case '/help':
+        nativeCallback({ action: 'exit', events: this.getEvents() })
+        break
+      default:
+        this.props.history.goBack()
+        return
+    }
     this.props.history.goBack()
+    return
   }
 
   render() {
