@@ -2,7 +2,6 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import Landing from './pages/Landing'
-import LandingOld from './pages/LandingOld'
 import PersonalDetails from './pages/PersonalDetails'
 import Steps from './pages/Steps'
 import MyITR from './pages/MyITR'
@@ -14,7 +13,6 @@ function TaxFiling(props) {
   return (
     <Switch>
       <Route exact path={`${url}`} component={Landing} />
-      <Route exact path={`${url}/landing-old`} component={LandingOld} />
       <Route exact path={`${url}/steps`} component={Steps} />
       <Route
         exact

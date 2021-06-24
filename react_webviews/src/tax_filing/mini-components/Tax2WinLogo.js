@@ -11,6 +11,7 @@ function Tax2WinLogo({ classes, ...props }) {
       <img
         src={require(`assets/logo_tax2win.svg`)}
         className="block centered"
+        alt="Tax2Win Logo"
       />
       <div
         className="helping-text text-secondary center"
