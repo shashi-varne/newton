@@ -10,6 +10,8 @@ import {initialize, openPdf} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import {formatAmount} from '../../../../utils/validators';
+import {Imgc} from '../../../../common/ui/Imgc'
+import { isEmpty } from '../../../../utils/validators';
 
 class GroupHealthPlanDetails extends Component {
 
@@ -27,7 +29,6 @@ class GroupHealthPlanDetails extends Component {
                 waiting_period: []
             },
             premiums_to_show: [],
-            skelton: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
             ic_hs_main_benefits: ic_hs_main_benefits,
             screen_name: 'plan_details_screen'
@@ -47,102 +48,13 @@ class GroupHealthPlanDetails extends Component {
     }
 
     onload = async() =>{
-        this.setErrorData("onload",true);
-        this.setState({ skelton:true});
-        let error = "";
-        let errorType = "";
-        let {provider} = this.state;
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        let post_body = groupHealthPlanData.post_body;
-
-        let keys_to_empty = ['tenure', 'sum_assured', 'tenure', 'tax_amount', 'base_premium',
-                            'total_amount', 'discount_amount', 'insured_pattern', 'type_of_plan',
-                        'selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
-        let not_req_keys_for_backend = ['selectedIndexFloater', 'selectedIndexCover', 'selectedIndexSumAssured'];
-       
-
-        for (var i in keys_to_empty) {
-
-            if(!not_req_keys_for_backend.includes(keys_to_empty[i])) {
-                post_body[keys_to_empty[i]] = '';
-            }
-            
-            groupHealthPlanData[keys_to_empty[i]] = '';
-        }
-
-        let keys_to_remove = ['base_premium', 'sum_assured', 'discount_amount', 'insured_pattern','tax_amount', 'tenure','total_amount', 'type_of_plan']
-        for(let key in keys_to_remove){
-          delete post_body[keys_to_remove[key]]
-        }
-
-
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id'];
-        
-
-        if (provider === 'STAR') {
-            post_body.sum_assured = '300000';
-            post_body.plan_id = "FHONEW";
-            allowed_post_body_keys.push('postal_code')
-        }else if(provider === 'GMC'){
-          post_body.plan_id = "fisdom_health_protect";
-          var plan_selected = {};
-          plan_selected['plan_title'] = 'fisdom HealthProtect'
-          plan_selected['copay'] = '0% copay is applicable only where insured age is less than 60 yrs, there will be 20% copay for insured whose age at the time of entry is 61 yrs and above';
-          
-          this.setState({
-            plan_selected: plan_selected
-          })
-          
-          groupHealthPlanData.plan_selected = plan_selected;
-        }
-        let body = {};
-
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
-        }
-        groupHealthPlanData.post_body = post_body;
-
-        this.setState({
-            groupHealthPlanData: groupHealthPlanData
-        })
-        this.setLocalProviderData(groupHealthPlanData);
-
-
-        try {
-
-            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,body);
-            
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-            
-                this.setState({
-                  plan_data : resultData,
-                  benefits: resultData.benefits,
-                  skelton: false
-                })
-                
-            } else {
-                error = resultData.error || resultData.message
-                    || true;
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                skelton: false
-            });
-            error = true;
-            errorType = "crash";
-        }
-        if (error) {
-            this.setState({
-              errorData: {
-                ...this.state.errorData,
-                title2: error,
-                type: errorType
-              },
-              showError: "page",
-            });
-          }
+      var groupHealthPlanData = this.state.groupHealthPlanData; 
+      var resultData = groupHealthPlanData[this.state.screen_name];
+      
+      this.setState({
+        plan_data : resultData,
+        benefits: resultData.benefits,                  
+      })
     }
 
     navigateBenefits = (type) => {
@@ -251,25 +163,85 @@ class GroupHealthPlanDetails extends Component {
         }
     }
 
-    handleClick = () => {
-
+    handleClick = async () => {
         this.sendEvents('next');
+        
         let groupHealthPlanData = this.state.groupHealthPlanData;
         
         groupHealthPlanData.plan_selected.common_data = this.state.common_data;
         groupHealthPlanData.plan_selected.extra_data = this.state.extra_data;
         groupHealthPlanData.plan_selected.premium_data = this.state.premium_data;
+        let post_body = groupHealthPlanData.post_body;
 
-        groupHealthPlanData.post_body.base_premium = groupHealthPlanData.plan_selected.base_premium;
-        groupHealthPlanData.post_body.premium = groupHealthPlanData.plan_selected.net_premium;
-        this.setLocalProviderData(groupHealthPlanData);
-        this.navigate(this.state.next_screen || 'plan-select-sum-assured');
+        if(isEmpty(groupHealthPlanData.sum_assured_screen)){
+          this.setErrorData("submit");
+          let error = "";
+          let errorType = "";
+
+          this.setState({
+            show_loader: "button"
+          })
+
+          let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type'];
+          let body = {};
+          if(this.state.provider === 'STAR'){
+            allowed_post_body_keys = [...allowed_post_body_keys, 'postal_code', 'si']
+          }
+
+          for(let key of allowed_post_body_keys){
+              body[key] = post_body[key];
+          }
+
+          try {
+            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
+            
+            var resultData = res.pfwresponse.result;
+            if (res.pfwresponse.status_code === 200) {
+                
+            groupHealthPlanData.plan_selected.premium_data = resultData.premium_details;
+            groupHealthPlanData['sum_assured_screen'] = resultData;
+            this.setLocalProviderData(groupHealthPlanData);
+            this.navigate(this.state.next_screen || 'plan-select-sum-assured');
+
+            this.setState({
+              show_loader: false
+            })
+
+            } else {
+                error = resultData.error || resultData.message
+                    || true;
+            }
+        } catch (err) {
+            console.log(err)
+            this.setState({
+                show_loader: false
+            });
+            error = true;
+            errorType = "crash";
+        }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: "page",
+              show_loader: false
+            });
+          }
+        }else{
+          this.setLocalProviderData(groupHealthPlanData);
+          this.navigate(this.state.next_screen || 'plan-select-sum-assured');
+        }
+        
     }
 
     renderSteps = (option, index) => {
         return (
             <div key={index} className="tile">
-                <img className="icon"
+                <Imgc
+                className="render-steps-icon icon"
                     src={option.img} alt="Gold" />
                 <div className="content">
                     <div className="content">
@@ -302,6 +274,7 @@ class GroupHealthPlanDetails extends Component {
             fullWidthButton={true}
             buttonTitle="SELECT SUM INSURED"
             onlyButton={true}
+            showLoader={this.state.show_loader}
             handleClick={() => this.handleClick()}
           >
             <div className="group-health-plan-details">
@@ -315,10 +288,10 @@ class GroupHealthPlanDetails extends Component {
                 </div>
 
                 <div className="tc-right">
-                  <img
+                  <Imgc
                     src={require(`assets/${providerData.logo_card}`)}
                     alt=""
-                    style={{ maxWidth: "140px" }}
+                    className="insurance-logo-top-right"
                   />
                 </div>
               </div>
@@ -381,7 +354,7 @@ class GroupHealthPlanDetails extends Component {
                     backgroundImage: `url(${this.state.ic_hs_special_benefits})`,
                   }}
                 >
-                  <img
+                  <Imgc
                     className="special-benefit-img"
                     src={require(`assets/ic_hs_special.svg`)}
                     alt=""
@@ -398,7 +371,7 @@ class GroupHealthPlanDetails extends Component {
                     backgroundImage: `url(${this.state.ic_hs_main_benefits})`,
                   }}
                 >
-                  <img
+                  <Imgc
                     className="special-benefit-img"
                     src={require(`assets/ic_hs_main.svg`)}
                     alt=""
@@ -444,7 +417,7 @@ class GroupHealthPlanDetails extends Component {
                   className="bd-tile"
                   onClick={() => this.navigateBenefits("whats_included")}
                 >
-                  <img
+                  <Imgc
                     className="bf-img"
                     src={require(`assets/${productName}/ic_whats_covered.svg`)}
                     alt=""
@@ -455,7 +428,7 @@ class GroupHealthPlanDetails extends Component {
                   className="bd-tile"
                   onClick={() => this.navigateBenefits("whats_not_included")}
                 >
-                  <img
+                  <Imgc
                     className="bf-img"
                     src={require(`assets/${productName}/ic_whats_not_covered.svg`)}
                     alt=""
@@ -466,7 +439,7 @@ class GroupHealthPlanDetails extends Component {
                   className="bd-tile"
                   onClick={() => this.navigateBenefits("how_to_claim")}
                 >
-                  <img
+                  <Imgc
                     className="bf-img"
                     src={require(`assets/${productName}/ic_how_to_claim.svg`)}
                     alt=""

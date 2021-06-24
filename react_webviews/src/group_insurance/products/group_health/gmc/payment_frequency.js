@@ -8,7 +8,7 @@ import ValueSelector from '../../../../common/ui/ValueSelector';
 import Checkbox from '../../../../common/ui/Checkbox';
 import { getConfig } from 'utils/functions';
 import toast from "../../../../common/ui/Toast";
-import { inrFormatDecimal, storageService } from 'utils/validators';
+import { inrFormatDecimal, storageService, isEmpty } from 'utils/validators';
 
 var getFrequency = {
     'MONTHLY': 'month',
@@ -37,67 +37,20 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
     }
 
     onload = async() =>{
-        this.setErrorData("onload");
-        let error = "";
-        let errorType = "";
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        let post_body = groupHealthPlanData.post_body;
-        
-        this.setState({
-            skelton: true
-        });
-
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type', 'si'];
-        let body = {};
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
+        var resultData = groupHealthPlanData[this.state.screen_name]; 
+        var optionsList = []
+        for(var x of resultData.premium_details){
+            var temp = {
+                'value': `${inrFormatDecimal(x.premium)}/${getFrequency[x.payment_frequency]}`,
+                'premium': x.premium,
+                'frequency':  getFrequency[x.payment_frequency]
+            }
+            optionsList.push(temp)
         }
 
-        try {
-            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
-            
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-
-                var optionsList = []
-                for(var x of resultData.premium_details){
-                var temp = {
-                    'value': `${inrFormatDecimal(x.premium)}/${getFrequency[x.payment_frequency]}`,
-                    'premium': x.premium,
-                    'frequency':  getFrequency[x.payment_frequency]
-                }
-                optionsList.push(temp)
-            }
-            this.setState({
-                optionsList: optionsList,
-                premium_details: resultData.premium_details,
-                skelton: false
-            })
-            
-
-            } else {
-                error = resultData.error || resultData.message || true;
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                skelton: false
-            });
-            error = true;
-            errorType = "crash";
-        }
-        if (error) {
-            this.setState({
-              errorData: {
-                ...this.state.errorData,
-                title2: error,
-                type: errorType
-              },
-              showError: "page",
-            });
-          }
           
-          if(!error){
+        //   if(!error){
               
             var freqSelected = this.state.groupHealthPlanData.paymentFrequencySelected || 'YEARLY'; 
             var payment_frequency = freqSelected;
@@ -109,11 +62,13 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
                 selectedIndex: selectedIndex,
                 payment_frequency : payment_frequency,
                 postfix: freqSelected === 'YEARLY' ? 'year': 'month',
-                checked
+                checked,
+                optionsList,
+                premium_details: resultData.premium_details
             }, () => {
                 this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].premium, `/${this.state.postfix}`);
             })
-          }
+        //   }
     }
     
 
@@ -154,79 +109,89 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         }
 
         this.sendEvents('next');
-        this.setErrorData("submit");
-        let error = "";
-        let errorType = "";
-        
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
 
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type', 'si'];
-        let body = {};
-        for(let key of allowed_post_body_keys){
-            body[key] = post_body[key];
-        }
-        body['payment_frequency'] = this.state.payment_frequency;
-        this.setState({
-            show_loader: "button"
-        });
-        try {
-            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
-            
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-                
-            var premium_details = resultData.premium_details.premium;
-            groupHealthPlanData.payment_frequency = this.state.payment_frequency.toLowerCase();
-            var plan_selected_final = {}
-            plan_selected_final['base_premium'] = premium_details.base_premium
-            plan_selected_final['tenure'] = 1;
-            plan_selected_final['payment_frequency'] = premium_details.payment_frequency; 
-            plan_selected_final['total_amount'] =premium_details.total_amount;
-            groupHealthPlanData['plan_selected_final'] = plan_selected_final;
-            groupHealthPlanData.post_body['gst'] = premium_details.gst[1];
-            groupHealthPlanData.post_body['base_premium'] = premium_details.base_premium
-            groupHealthPlanData.post_body['total_si'] = premium_details.total_si;
-            groupHealthPlanData.post_body['individual_si'] = premium_details.individual_si;
-            groupHealthPlanData.post_body['tenure'] = 1;
-            groupHealthPlanData.post_body['payment_frequency'] = premium_details.payment_frequency;
-            groupHealthPlanData.post_body['floater_type'] = premium_details.floater_type;
-            groupHealthPlanData.post_body['total_amount'] = premium_details.total_amount;
-            groupHealthPlanData['gmc_cta_postfix'] = premium_details.payment_frequency === 'MONTHLY' ? 'month' : 'year';
-            
-            groupHealthPlanData.paymentFrequencySelected = premium_details.payment_frequency;
-            if(storageService().getObject('applicationPhaseReached')){
-                delete groupHealthPlanData.post_body['quotation_id'];
+        if(groupHealthPlanData.paymentFrequencySelected !==  this.state.payment_frequency){
+            this.setErrorData("submit");
+            let error = "";
+            let errorType = "";
+
+            let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type', 'si'];
+            let body = {};
+            for(let key of allowed_post_body_keys){
+                body[key] = post_body[key];
             }
+        
+            body['payment_frequency'] = this.state.payment_frequency;
+            this.setState({
+                show_loader: "button"
+            });
+            try {
+                const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
+                
+                var resultData = res.pfwresponse.result;
+                if (res.pfwresponse.status_code === 200) {
+                
+                var premium_details = resultData.premium_details.premium;
+                groupHealthPlanData.payment_frequency = this.state.payment_frequency.toLowerCase();
+                var plan_selected_final = {}
+                plan_selected_final['base_premium'] = premium_details.base_premium
+                plan_selected_final['tenure'] = 1;
+                plan_selected_final['payment_frequency'] = premium_details.payment_frequency; 
+                plan_selected_final['total_amount'] =premium_details.total_amount;
+                groupHealthPlanData['plan_selected_final'] = plan_selected_final;
+                groupHealthPlanData.post_body['gst'] = premium_details.gst[1];
+                groupHealthPlanData.post_body['base_premium'] = premium_details.base_premium
+                groupHealthPlanData.post_body['total_si'] = premium_details.total_si;
+                groupHealthPlanData.post_body['individual_si'] = premium_details.individual_si;
+                groupHealthPlanData.post_body['tenure'] = 1;
+                groupHealthPlanData.post_body['payment_frequency'] = premium_details.payment_frequency;
+                groupHealthPlanData.post_body['floater_type'] = premium_details.floater_type;
+                groupHealthPlanData.post_body['total_amount'] = premium_details.total_amount;
+                groupHealthPlanData['gmc_cta_postfix'] = premium_details.payment_frequency === 'MONTHLY' ? 'month' : 'year';
+                
+                groupHealthPlanData.paymentFrequencySelected = premium_details.payment_frequency;
+                if(storageService().getObject('applicationPhaseReached')){
+                    delete groupHealthPlanData.post_body['quotation_id'];
+                    if(!isEmpty(groupHealthPlanData.application_data)){
+                        groupHealthPlanData.application_data = {};
+                    }
+                }
+                this.setLocalProviderData(groupHealthPlanData);
+                this.navigate('plan-good-health-dec');
+                this.setState({
+                    show_loader: false
+                });
+    
+    
+                } else {
+                    error = resultData.error || resultData.message || true;
+                }
+            } catch (err) {
+                console.log(err)
+                this.setState({
+                    show_loader: false
+                });
+                error = true;
+                errorType = "crash";
+            }
+            if (error) {
+                this.setState({
+                  errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                  },
+                  showError: "page",
+                  show_loader:false,
+                });
+            }
+        }else{
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate('plan-good-health-dec');
-            this.setState({
-                show_loader: false
-            });
-
-
-            } else {
-                error = resultData.error || resultData.message || true;
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                show_loader: false
-            });
-            error = true;
-            errorType = "crash";
         }
-        if (error) {
-            this.setState({
-              errorData: {
-                ...this.state.errorData,
-                title2: error,
-                type: errorType
-              },
-              showError: "page",
-              show_loader:false,
-            });
-        }
+        
     }
     sendEvents(user_action) {
 

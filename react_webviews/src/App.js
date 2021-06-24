@@ -20,7 +20,7 @@ import EMandate from './e_mandate';
 import RiskProfiler from './risk_profiler';
 import HNI from './external_portfolio';
 import IsipBIller from './isip';
-import HelpSupport from './help_support';
+import HelpSupport from './help_support_v2';
 import CommonLanding from './common/components/landing';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
@@ -34,7 +34,7 @@ import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
-
+import Partner from "./partner"
 import Tooltip from 'common/ui/Tooltip';
 import 'common/theme/Style.scss';
 
@@ -102,6 +102,7 @@ class App extends Component {
               <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
               <Route path='/fund-details' component={FundDetails} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <Route path='/partner' component={Partner} />
               <Route component={NotFound} />
             </Switch>
           
