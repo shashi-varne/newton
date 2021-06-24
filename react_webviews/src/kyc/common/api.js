@@ -273,7 +273,7 @@ export const getMerge = async (pan_number) => {
 }
 
 export const getKyc = async () => {
-  const res = await Api.get(apiConstants.submit)
+  const res = await Api.get(API_CONSTANTS.submit)
   const result = handleApi(res);
   if(!isEmpty(result)) {
     storageService().setObject('kyc', result.kyc);

@@ -10,7 +10,7 @@ import { getBasePath, isIframe } from "../../utils/functions";
 import "./mini-components.scss";
 
 const config = getConfig();
-const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
+const AadhaarDialog = ({ id, open, close, kyc, handleIframeKyc, ...props }) => {
   const productName = config.productName;
   const basePath = getBasePath();
   const handleProceed = () => {
