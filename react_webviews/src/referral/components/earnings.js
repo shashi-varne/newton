@@ -58,16 +58,6 @@ class Earnings extends Component {
           hasMoreItems: (next_page) ? true : false,
           nextPage: (next_page) ? next_page : null
         });
-
-        let eventObj = {
-          "event_name": "earnings_view",
-          "properties": {
-            "earnings_value": total_earnings,
-            "list_size": data.length
-          }
-        };
-
-        nativeCallback({ events: eventObj });
       }, error => {
         this.setState({ show_loader: false });
       }))
@@ -89,44 +79,50 @@ class Earnings extends Component {
     });
   }
 
-  shareHandler = () => {
-    let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${this.state.referral_code.toUpperCase()}. Click here to download: ${this.state.link}`;
+  sendEvents(user_action, user=null) {
     let eventObj = {
-      "event_name": "share_clicked",
-      "properties": {
-        "where": "earnings",
-        "earnings_value": this.state.total_earnings
-      }
+      event_name: "refer_earn",
+      event_category: "refer_earn",
+      properties: {
+        user_action: user_action,
+        event_name: "refer_earn",
+        screen_name: "my_earnings",
+        earn: this.state.total_earnings,
+        user: user,
+      },
     };
 
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+
+  shareHandler = () => {
+    let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${this.state.referral_code.toUpperCase()}. Click here to download: ${this.state.link}`;
+    this.sendEvents("share")
     if(getConfig().Android) {
-      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false }, events: eventObj });
+      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false } });
     }
 
     if (getConfig().iOS) {
-      nativeCallback({ action: 'share', message: { message: message }, events: eventObj });
+      nativeCallback({ action: 'share', message: { message: message } });
     }
   }
 
   remindHandler = (length, item, index) => {
     let message = `Hey, looks like you have downloaded the ${capitalize(this.state.type)} app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap: ${this.state.link}`;
-    let eventObj = {
-      "event_name": "remind_clicked",
-      "properties": {
-        "list_no": index + 1,
-        "application_status": item.application_status,
-        "intial_kyc_status": item.initial_kyc_status,
-        "earnings_value": this.state.total_earnings,
-        "list_size": length
-      }
-    };
+    
+    this.sendEvents("remind", item);
 
     if(getConfig().Android) {
-      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false }, events: eventObj });
+      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false } });
     }
 
     if (getConfig().iOS) {
-      nativeCallback({ action: 'remind', message: { message: message }, events: eventObj });
+      nativeCallback({ action: 'remind', message: { message: message } });
     }
   }
 
@@ -269,6 +265,7 @@ class Earnings extends Component {
         showLoader={this.state.show_loader}
         title={'My earnings'}
         noFooter={true}
+        events={this.sendEvents("just_set_events")}
       >
         <div className="Earning">
           <div className="ReferPaytmGrid pad20">
