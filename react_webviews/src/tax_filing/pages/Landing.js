@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVTag from 'common/ui/Tag/WVTag'
@@ -8,27 +8,83 @@ import FeatureListItem from '../mini-components/FeatureListItem'
 import WVCard from 'common/ui/Card/WVCard'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 
+import { taxFilingOptions } from '../constants'
 import {
   getTaxFilingFeatureLists,
   navigate as navigateFunc,
 } from '../common/functions'
+import { getITRList, getUserAccountSummary } from '../common/ApiCalls'
+import { isEmpty } from 'lodash'
+
+import { storageService } from '../../utils/validators'
 
 import './Landing.scss'
 
 function Landing(props) {
   const productName = getConfig().productName
   const navigate = navigateFunc.bind(props)
+
+  const cachedUserData = storageService().getObject('ITR_USER_SUMMARY') || {}
+
+  const [itrList, setItrList] = useState([])
+  const [userSummary, setUserSummary] = useState(cachedUserData)
+  const [errorData, setErrorData] = useState({})
+  const [showError, setShowError] = useState(false)
+  const [showLoader, setShowLoader] = useState(false)
+
+  const closeError = () => {
+    setShowError(false)
+  }
+
+  useEffect(() => {
+    fetchITRListAndUserSummary()
+  }, [])
+
+  const fetchITRListAndUserSummary = async () => {
+    try {
+      setShowLoader(true)
+      if (isEmpty(userSummary)) {
+        const [list, user] = await Promise.all([
+          getITRList(),
+          getUserAccountSummary(),
+        ])
+        setItrList([...list])
+        setUserSummary({ ...user })
+        storageService().setObject('ITR_USER_SUMMARY', user)
+        setShowLoader(false)
+        setShowError(false)
+      } else {
+        const list = await getITRList()
+        setItrList([...list])
+        setShowLoader(false)
+        setShowError(false)
+      }
+    } catch (err) {
+      setShowError(true)
+      setErrorData({
+        type: 'crash',
+        title1: err.message,
+        handleClick1: closeError(),
+      })
+      setShowLoader(false)
+    }
+  }
+
   const handleFAQNavigation = () => {
     navigate(`/tax-filing/faqs`, {}, false)
   }
 
   const handleMyITRNavigation = () => {
-    navigate(`/tax-filing/my-itr`, {}, false)
+    navigate(`/tax-filing/my-itr`, { itrList, userSummary }, false)
   }
+
   return (
     <Container
       title="File income tax returns (ITR)"
       buttonTitle="CONTINUE"
+      showError={showError}
+      errorData={errorData}
+      skelton={showLoader}
       noFooter
     >
       <Carousal
@@ -36,28 +92,43 @@ function Landing(props) {
         subtitle="File ITR easily, quickly and with maximum tax savings"
         dataAidSuffix="tax-filing-itr-carousel"
       />
-      <WVCard
-        classes={{
-          container: 'tax-filing-entry-card pointer flex align-center m-top-3x',
-        }}
-        onClick={handleMyITRNavigation}
-      >
-        <>
-          <img src={require(`assets/icn_my_itr.svg`)} alt="MY ITR" />
-          <div className="m-left-2x heading3-medium text-white">MY ITR</div>
-        </>
-      </WVCard>
+      {itrList.length > 0 && (
+        <WVCard
+          classes={{
+            container:
+              'tax-filing-entry-card pointer flex align-center m-top-3x',
+          }}
+          onClick={handleMyITRNavigation}
+        >
+          <>
+            <img src={require(`assets/icn_my_itr.svg`)} alt="MY ITR" />
+            <div className="m-left-2x heading3-medium text-white">MY ITR</div>
+          </>
+        </WVCard>
+      )}
+
       <div className="heading2 m-top-3x">Get Started</div>
-      <WVMenuListDropdownItem
-        image={require(`assets/${productName}/icn_self_itr.svg`)}
-        title="asdasjkdhakjsdasd"
-        subtitle="asdasjkdhasjkdhajksdhasjkhdjkasjksd"
-      />
-      <WVMenuListDropdownItem
-        image={require(`assets/${productName}/icn_ca.svg`)}
-        title={<CustomTitle title="Do it yourself" />}
-        subtitle="asdasjkdhasjkdhajksdhasjkhdjkasjksd"
-      ></WVMenuListDropdownItem>
+      {taxFilingOptions.map(({ title, subtitle, icon }, idx) => {
+        if (idx === 0) {
+          return (
+            <WVMenuListDropdownItem
+              key={idx}
+              image={require(`assets/${productName}/${icon}.svg`)}
+              title={<CustomTitle title={title} />}
+              subtitle={subtitle}
+            />
+          )
+        } else {
+          return (
+            <WVMenuListDropdownItem
+              key={idx}
+              image={require(`assets/${productName}/${icon}.svg`)}
+              title={title}
+              subtitle={subtitle}
+            />
+          )
+        }
+      })}
       <div className="heading2 m-top-3x">Why eFile with us?</div>
       {getTaxFilingFeatureLists().map((item, idx) => (
         <FeatureListItem

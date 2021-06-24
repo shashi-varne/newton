@@ -254,7 +254,7 @@ export function unmount() {
         }
     }
 
-    window.removeEventListener("scroll", this.onScroll, false);
+    window.removeEventListener("scroll", this.onScroll, true);
 
     this.setState({
         mounted: false

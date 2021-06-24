@@ -1,3 +1,5 @@
+export const genericErrMsg = 'Something Went Wrong'
+
 export const taxFilingSteps = [
   {
     title: 'Upload form 16',
@@ -55,15 +57,25 @@ export const FAQs = [
   },
 ]
 
-
+export const taxFilingOptions = [
+  {
+    title: 'Do it yourself',
+    subtitle: 'We guide and you file',
+    icon: 'icn_self_itr',
+  },
+  {
+    title: 'Hire a Personal CA',
+    subtitle: 'Experts file and you save',
+    icon: 'icn_ca',
+  },
+]
 
 export const itrStatusMappings = {
   filed: {
     color: '#4F2DA7',
     icon: 'icn_self_itr',
     text: 'COMPLETED',
-    resumable: false,
   },
-  open: { color: '#35CB5D', icon: 'icn_ca', text: 'STARTED' },
-  created: { color: '#B39712', icon: 'icn_self_itr', text: 'IN PROGRESS' },
+  created: { color: '#35CB5D', icon: 'icn_ca', text: 'IN PROGRESS' },
+  open: { color: '#B39712', icon: 'icn_self_itr', text: 'STARTED' },
 }
