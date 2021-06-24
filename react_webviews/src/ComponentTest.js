@@ -1,35 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Container from './fhc/common/Container';
 import { noop } from 'lodash';
-import WVBottomSheet from './common/ui/BottomSheet/WVBottomSheet';
-import WVButtonLayout from './common/ui/ButtonLayout/WVButtonLayout';
-import WVClickableTextElement from './common/ui/ClickableTextElement/WVClickableTextElement';
-import { WVFilePickerWrapper } from './common/ui/FileUploadWrapper/WVFilePickerWrapper';
+// import WVBottomSheet from './common/ui/BottomSheet/WVBottomSheet';
+// import WVButtonLayout from './common/ui/ButtonLayout/WVButtonLayout';
+// import WVClickableTextElement from './common/ui/ClickableTextElement/WVClickableTextElement';
+// import { WVFilePickerWrapper } from './common/ui/FileUploadWrapper/WVFilePickerWrapper';
 import WVFullscreenDialog from './common/ui/FullscreenDialog/WVFullscreenDialog';
-import WVInfoBubble from './common/ui/InfoBubble/WVInfoBubble';
-import WVSelect from './common/ui/Select/WVSelect';
-import Close from '@material-ui/icons/Close';
-import WVButton from './common/ui/Button/WVButton';
-import WVInPageTitle from './common/ui/InPageHeader/WVInPageTitle';
-import WVInPageHeader from './common/ui/InPageHeader/WVInPageHeader';
-import WVInPageSubtitle from './common/ui/InPageHeader/WVInPageSubtitle';
+// import WVInfoBubble from './common/ui/InfoBubble/WVInfoBubble';
+// import WVSelect from './common/ui/Select/WVSelect';
+// import Close from '@material-ui/icons/Close';
+// import WVButton from './common/ui/Button/WVButton';
+// import WVInPageTitle from './common/ui/InPageHeader/WVInPageTitle';
+// import WVInPageHeader from './common/ui/InPageHeader/WVInPageHeader';
+// import WVInPageSubtitle from './common/ui/InPageHeader/WVInPageSubtitle';
 
-const SELECT_OPTIONS = [{
-  v1: 'opt1',
-  v2: 'sub1'
-}, {
-  v1: 'opt2',
-  v2: 'sub2'
-}, {
-  v1: 'opt3',
-  v2: 'sub3'
-}, {
-  v1: 'opt4',
-  v2: 'sub4'
-}];
+// const SELECT_OPTIONS = [{
+//   v1: 'opt1',
+//   v2: 'sub1'
+// }, {
+//   v1: 'opt2',
+//   v2: 'sub2'
+// }, {
+//   v1: 'opt3',
+//   v2: 'sub3'
+// }, {
+//   v1: 'opt4',
+//   v2: 'sub4'
+// }];
 
 export default function ComponentTest() {
-  const [isOpen, setIsOpen] = useState(true);
   return (
     <Container noFooter>
       {/* ------- BottomSheet --------- */}
@@ -121,12 +120,12 @@ export default function ComponentTest() {
   );
 }
 
-const SelectItem = (item, idx) => {
-  return (
-    <>
-      <WVSelect.ItemTitle dataAidSuffix="eqkyc">{item.v1}</WVSelect.ItemTitle>
-      Hello
-      <WVSelect.ItemSubtitle>{item.v1}</WVSelect.ItemSubtitle>
-    </>
-  );
-}
+// const SelectItem = (item, idx) => {
+//   return (
+//     <>
+//       <WVSelect.ItemTitle dataAidSuffix="eqkyc">{item.v1}</WVSelect.ItemTitle>
+//       Hello
+//       <WVSelect.ItemSubtitle>{item.v1}</WVSelect.ItemSubtitle>
+//     </>
+//   );
+// }

@@ -7,7 +7,7 @@ import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, checkDLPanFetchAndApprovedStatus } from '../common/functions'
+import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";

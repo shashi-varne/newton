@@ -36,7 +36,7 @@ const AddBankVerify = (props) => {
   }
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
-  const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const { isLoading, updateKyc } = useUserKycHook();
   const stateParams = props.location?.state || {};
 
   useEffect(() => {
