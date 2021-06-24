@@ -79,7 +79,7 @@ class Earnings extends Component {
     });
   }
 
-  sendEvents(user_action, user=null) {
+  sendEvents(user_action, user = null) {
     let eventObj = {
       event_name: "refer_earn",
       event_category: "refer_earn",
@@ -103,22 +103,25 @@ class Earnings extends Component {
   shareHandler = () => {
     let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${this.state.referral_code.toUpperCase()}. Click here to download: ${this.state.link}`;
     this.sendEvents("share")
-    if(getConfig().Android) {
-      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false } });
+    if (getConfig().Android) {
+      message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${(this.state.referral_code || '').toUpperCase()}. Click here to download:`
+      let url = `${getConfig().actionUrl}?action_type=native&native_module=app%2Frefer_via_apps&message=${message}`
+      nativeCallback({ action: 'open_module', message: { action_url: url } });
     }
-
     if (getConfig().iOS) {
       nativeCallback({ action: 'share', message: { message: message } });
     }
   }
 
   remindHandler = (length, item, index) => {
-    let message = `Hey, looks like you have downloaded the ${capitalize(this.state.type)} app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap: ${this.state.link}`;
-    
+    let message = `Hey, looks like you have downloaded the ${this.state.type} app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap: ${this.state.link}`;
+
     this.sendEvents("remind", item);
 
-    if(getConfig().Android) {
-      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false } });
+    if (getConfig().Android) {
+      message = `Hey, looks like you have downloaded the ${this.state.type} app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap:`
+      let url = `${getConfig().actionUrl}?action_type=native&native_module=app%2Frefer_via_apps&message=${message}`
+      nativeCallback({ action: 'open_module', message: { action_url: url } });
     }
 
     if (getConfig().iOS) {
@@ -248,16 +251,16 @@ class Earnings extends Component {
       );
     }
     // eslint-disable-next-line
-      return (
-        <div className="List">
-          <h1>Earn more</h1>
-          <p>Remind your friends to invest with {capitalize(this.state.type)} & increase your Paytm earnings. Get ₹{this.state.amount_per_referral} for every friend who invests</p>
-          <div className="Referres">
-            {this.renderList()}
-          </div>
+    return (
+      <div className="List">
+        <h1>Earn more</h1>
+        <p>Remind your friends to invest with {capitalize(this.state.type)} & increase your Paytm earnings. Get ₹{this.state.amount_per_referral} for every friend who invests</p>
+        <div className="Referres">
+          {this.renderList()}
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
   render() {
     return (

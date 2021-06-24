@@ -136,11 +136,13 @@ class Details extends Component {
 
   shareHandler = () => {
     let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${(this.state.referral_code || '').toUpperCase()}. Click here to download: ${this.state.link}`;
-    
+
     this.sendEvents("share")
 
-    if(getConfig().Android) {
-      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false } });
+    if (getConfig().Android) {
+      message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${(this.state.referral_code || '').toUpperCase()}. Click here to download:`
+      let url = `${getConfig().actionUrl}?action_type=native&native_module=app%2Frefer_via_apps&message=${message}`
+      nativeCallback({ action: 'open_module', message: { action_url: url } });
     }
 
     if (getConfig().iOS) {
