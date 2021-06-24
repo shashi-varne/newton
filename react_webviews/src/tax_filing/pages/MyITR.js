@@ -3,16 +3,18 @@ import Container from '../common/Container'
 import DetailsCard from 'common/ui/DetailsCard'
 import { getConfig } from 'utils/functions'
 import Button from 'common/ui/Button'
+import { itrStatusMappings } from '../constants'
 
 import './MyITR.scss'
 
 function MyITR(props) {
   const productName = getConfig().productName
-  const item = {
+  const statuses = ['created', 'filed', 'open']
+  const baseItem = {
     color: '#35CB5D',
     topTextLeft: 'In Progress',
     backgroundColor: '#FFFFFF',
-    headingTitle: 'Self-filing',
+    headingTitle: 'CA-Assisted Filing',
     headingLogo: require(`assets/${productName}/icn_self_itr.svg`),
     bottomValues: [
       { title: 'Name', subtitle: 'Uttam Paswan' },
@@ -25,10 +27,27 @@ function MyITR(props) {
       },
     ],
   }
+  const items = statuses.map((status) => {
+    const text = itrStatusMappings[status].text
+    const color = itrStatusMappings[status].color
+    const icn = itrStatusMappings[status].icon
+    const resumable = Boolean(itrStatusMappings[status].resumable)
+    const icon = require(`assets/${productName}/${icn}.svg`)
+    console.log(icon)
+    return {
+      ...baseItem,
+      topTextLeft: text,
+      color,
+      renderItem: resumable ? baseItem.renderItem : null,
+      headingLogo: icon,
+    }
+  })
   return (
     <Container title="My ITR" noFooter>
       <div className="tax-filing-my-itr">
-        <DetailsCard item={item} />
+        {items.map((detail, idx) => (
+          <DetailsCard item={detail} key={idx} handleClick={() => {}} />
+        ))}
       </div>
     </Container>
   )

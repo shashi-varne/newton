@@ -80,3 +80,14 @@ export const FAQs = [
       'You can still file your tax return without Form 16. You just have to enter your basic and income details.',
   },
 ]
+
+export const itrStatusMappings = {
+  filed: {
+    color: '#4F2DA7',
+    icon: 'icn_self_itr',
+    text: 'COMPLETED',
+    resumable: false,
+  },
+  open: { color: '#35CB5D', icon: 'icn_ca', text: 'STARTED' },
+  created: { color: '#B39712', icon: 'icn_self_itr', text: 'IN PROGRESS' },
+}
