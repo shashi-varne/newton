@@ -92,17 +92,28 @@ class Details extends Component {
     });
   }
 
+  sendEvents(user_action, tncClicked) {
+    let eventObj = {
+      event_name: "refer_earn",
+      event_category: "refer_earn",
+      properties: {
+        user_action: user_action,
+        event_name: "refer_earn",
+        screen_name: "refer_and_earn",
+        tnc_clicked: tncClicked ? "yes" : "no",
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   navigate = (pathname) => {
     if (navigator.onLine) {
-      let eventObj = {
-        "event_name": "earnings_view",
-        "properties": {
-          "earnings_value": this.state.total_earnings
-        }
-      };
-
-      nativeCallback({ events: eventObj });
-
+      this.sendEvents("next");
       this.props.history.push({
         pathname: pathname,
         search: getConfig().searchParams
@@ -114,12 +125,8 @@ class Details extends Component {
     }
   }
 
-  navigateWithparam = (pathname, param) => {
-    let eventObj = {
-      "event_name": "TnC_click"
-    };
-
-    nativeCallback({ events: eventObj });
+  navigateWithparam = (pathname) => {
+    this.sendEvents("next", true)
 
     this.props.history.push({
       pathname: pathname,
@@ -129,20 +136,15 @@ class Details extends Component {
 
   shareHandler = () => {
     let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${(this.state.referral_code || '').toUpperCase()}. Click here to download: ${this.state.link}`;
-    let eventObj = {
-      "event_name": "share_clicked",
-      "properties": {
-        "where": "home",
-        "earnings_value": this.state.total_earnings
-      }
-    };
+    
+    this.sendEvents("share")
 
     if(getConfig().Android) {
-      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false }, events: eventObj });
+      nativeCallback({ action: 'share_app', message: { share_via_whatsapp: false } });
     }
 
     if (getConfig().iOS) {
-      nativeCallback({ action: 'share', message: { message: message }, events: eventObj });
+      nativeCallback({ action: 'share', message: { message: message } });
     }
   }
 
@@ -162,6 +164,7 @@ class Details extends Component {
         title={'Refer and Earn'}
         background='GreyBackground'
         noFooter={true}
+        events={this.sendEvents("just_set_events")}
       >
         <div className="Refer">
           <Card nopadding={true}>
