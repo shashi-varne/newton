@@ -28,7 +28,9 @@ function MyITR(props) {
       ]
 
       if (status !== 'completed') {
-        bottomValues.push({ renderItem: () => <Button buttonTitle="RESUME" /> })
+        bottomValues.push({
+          renderItem: () => <Button buttonTitle="RESUME" showLoader={"button"} />,
+        })
       }
 
       return {
@@ -44,9 +46,10 @@ function MyITR(props) {
   return (
     <Container title="My ITR" noFooter>
       <div className="tax-filing-my-itr">
-        {!isEmpty(myItrs) && myItrs.map((detail, idx) => (
-          <DetailsCard item={detail} key={idx} handleClick={() => {}} />
-        ))}
+        {!isEmpty(myItrs) &&
+          myItrs.map((detail, idx) => (
+            <DetailsCard item={detail} key={idx} handleClick={() => {}} />
+          ))}
       </div>
     </Container>
   )

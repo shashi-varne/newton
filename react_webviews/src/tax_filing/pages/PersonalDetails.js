@@ -41,7 +41,7 @@ function PersonalDetails(props) {
       smallTitle="Fill your details to start"
       buttonTitle="CONTINUE"
       handleClick={handleClick}
-      showDotDot={true}
+      showLoader={false}
     >
       <form className="block tax-filing-details">
         <Input
@@ -51,6 +51,8 @@ function PersonalDetails(props) {
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
+          error={true}
+          helperText="Valid name"
         />
         <Input
           type="email"

@@ -174,7 +174,7 @@ function Landing(props) {
 const CustomTitle = ({ title }) => {
   return (
     <div className="flex">
-      <div className="heading3-medium">Do it yourself</div>
+      <div className="heading3-medium">{title}</div>
       <WVTag
         variant="attention"
         label="free"
