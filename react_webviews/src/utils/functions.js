@@ -21,7 +21,7 @@ const partnersConfigBase = {
     primary_color: '#CC0E00',
     code: 'lvb',
     email: 'lvb@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message:
       "Make smart investments with zero paper work, use LVB Mobile app if you're a registered user on lvb app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: 'obc_banner.png',
@@ -34,7 +34,7 @@ const partnersConfigBase = {
     primary_color: '#213B68',
     code: 'svc',
     email: 'svc@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message:
       "Make smart investments with zero paper work, use SVC app if you're a registered user on svc app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: 'obc_banner.png',
@@ -47,7 +47,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'fisdom',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -67,7 +67,7 @@ const partnersConfigBase = {
     primary_color: '#3792FC',
     code: 'finity',
     email: 'ask@finity.in',
-    mobile: '+91-9916149111',
+    mobile: '+91-8142381423',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -87,7 +87,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'fisdom',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -156,7 +156,7 @@ const partnersConfigBase = {
     primary_color: '#2d2851',
     code: 'tvscredit',
     email: 'tvscredit@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message:
       "Make smart investments with zero paper work, use Tvs Credit app if you're a registered user on Tvs Credit app or download fisdom http:m.onelink.me/32660e84. Use my referral code ",
     banner: 'tvs_banner.png',
@@ -186,7 +186,7 @@ const partnersConfigBase = {
     logo: 'cub.png',
     primary_color: '#000180',
     code: 'cub',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     email: 'cub@fisdom.com',
     message: '',
     banner: 'bfdl_banner.png',
@@ -245,7 +245,7 @@ const partnersConfigBase = {
     logo: 'hbl.png',
     primary_color: '#0066B3',
     code: 'hbl',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     email: 'ask@fisdom.com',
     message: '',
     banner: 'bfdl_banner.png',
@@ -282,7 +282,7 @@ const partnersConfigBase = {
     logo: 'sbm.svg',
     primary_color: '#1e3769',
     code: 'sbm',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     email: 'sbm@fisdom.com',
     message: '',
     banner: 'bfdl_banner.png',
@@ -295,7 +295,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'flexi',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -313,7 +313,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'medlife',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -331,7 +331,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'life99',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -384,7 +384,7 @@ const partnersConfigBase = {
     primary_color: "#4f2da7",
     code: "taxwin",
     email: "ask@fisdom.com",
-    mobile: "+91-7829228886",
+    mobile: "+91-9642596425",
     message: "",
     banner: "obc_banner.png",
     back_button: "back_icon_white.png",
@@ -396,7 +396,7 @@ const partnersConfigBase = {
     primary_color: '#4f2da7',
     code: 'quesscorp',
     email: 'ask@fisdom.com',
-    mobile: '+91-7829228886',
+    mobile: '+91-9642596425',
     message: '',
     banner: 'obc_banner.png',
     back_button: 'back_icon_white.png',
@@ -459,7 +459,7 @@ function getPartnerConfig(partner_code) {
       termsLink: 'https://www.fisdom.com/terms/',
       schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
       askEmail: 'ask@fisdom.com',
-      mobile: '+91-7829228886',
+      mobile: '+91-9642596425',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'fisdomBackColor',
       webAppUrl: 'https://app.fisdom.com/#!/',
@@ -653,6 +653,7 @@ export const getConfig = () => {
 
 
   let { generic_callback } = main_query_params;
+  let { from_notification } = main_query_params;
   let { redirect_url } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
@@ -723,6 +724,12 @@ export const getConfig = () => {
     returnConfig.generic_callback = generic_callback;
     searchParams += getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
+  }
+  
+  if (checkValidString(from_notification)) {
+    returnConfig.from_notification = from_notification;
+    searchParams += getParamsMark(searchParams) + `from_notification=${from_notification}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `from_notification=${from_notification}`;
   }
 
   returnConfig.redirect_url = '';

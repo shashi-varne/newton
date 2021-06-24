@@ -10,7 +10,9 @@ import {storageService} from "utils/validators";
 import { setRecommendationData } from '../advisory/common_data'
 import '../common/Style.scss'
 import { isEmpty } from 'utils/validators';
+import {Imgc} from   '../../common/ui/Imgc'
 import Button from 'material-ui/Button';
+import {setReportData, getReportCardsData, getProviderObject, getProviderObject_offline} from '../products/group_health/common_data';
 
 class Landing extends Component {
 
@@ -26,6 +28,10 @@ class Landing extends Component {
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
+    this.getReportCardsData = getReportCardsData.bind(this);
+    this.setReportData = setReportData.bind(this);
+    this.getProviderObject = getProviderObject.bind(this);
+    this.getProviderObject_offline = getProviderObject_offline.bind(this);
   }
 
   componentWillMount() {
@@ -102,6 +108,9 @@ class Landing extends Component {
 
   componentDidMount(){
     this.onload();
+    //for report page routing
+    storageService().remove('backToInsuranceLanding');
+    storageService().remove('advisory_from_landing');
   }
 
   onload = async() => {
@@ -117,11 +126,6 @@ class Landing extends Component {
         var resultData = res.pfwresponse.result;
 
         if (res.pfwresponse.status_code === 200) {
-
-          this.setState({
-            skelton: false,
-          })
-          
           var advisory_resume_present = resultData.resume_present;
           var advisory_resume_status = resultData.insurance_advisory.status;
           var advisory_id = resultData.insurance_advisory.id;
@@ -149,6 +153,25 @@ class Landing extends Component {
             next_advisory_page: next_advisory_page, 
             advisory_id: advisory_id
           })
+          await this.getReportCardsData();
+          var filteredReportData = this.state.filteredReportData;
+          var showCustomReportCardText = false;
+          var customReportCardText = '';
+          
+          if(!isEmpty(filteredReportData.activeReports)){
+            showCustomReportCardText = true;
+            customReportCardText = filteredReportData.activeReports[0].product_category;
+          }else if(!isEmpty(filteredReportData.pendingReports)){
+            showCustomReportCardText = true;
+            customReportCardText = filteredReportData.pendingReports[0].product_category;
+          }
+          
+          if((this.state.reportCount.active + this.state.reportCount.pending) > 1){
+            var noOfReports = this.state.reportCount.active + this.state.reportCount.pending;
+            this.setState({noOfReports})
+          }
+          
+          this.setState({customReportCardText, showCustomReportCardText})
         } else {
           error = resultData.error || resultData.message || true;
       }
@@ -217,8 +240,9 @@ class Landing extends Component {
         display: 'flex', alignItems: 'center', width : '100%', justifyContent: 'space-between', cursor: 'pointer'
       }}>
         <div style={{ display: 'flex' , width : '100%' }}>
-          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ marginRight: '26px' }} />
-          <div style={{  borderBottomWidth: '1px',  width : '100%',
+          <Imgc src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" className="insurance-landing-product-list-img"/>
+          <div style={{ marginRight: '24px' }}  />
+          <div style={{ borderBottomWidth: '1px',  width : '100%',
                           borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '25px' ,   paddingBottom: '25px'}} >
             <div style={{ color: '#160d2e', fontSize: '15px', fontWeight: "500" , lineHeight : '20px' , margin : '5px 0 5px 0'}}>{props.title}
             </div>
@@ -229,7 +253,7 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked, advisory_clicked) {
+  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked, advisory_clicked, policies_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -239,7 +263,8 @@ class Landing extends Component {
         'banner_clicked' : banner_clicked ? true : false,
         'callback_clicked' : callback_clicked ?  true : false,
         'advisory_card_cta' : this.state.advisory_button_text,
-        'insurance_advisory_card_clicked': advisory_clicked ? true : false
+        'insurance_advisory_card_clicked': advisory_clicked ? true : false,
+        'policies': policies_clicked ? true : false
       }
     };
 
@@ -253,7 +278,15 @@ class Landing extends Component {
   goToAdvisory = (e) =>{
     e.preventDefault();
     this.sendEvents('next', "", "", "", true);
+    storageService().setObject('advisory_from_landing', true)
+    storageService().remove('backToInsuranceLanding')
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
+    return;
+  }
+  toToReports = () =>{
+    this.sendEvents('next', "", "", "", "", true);
+    storageService().setObject('backToInsuranceLanding', true);
+    this.navigate('/group-insurance/common/report')
     return;
   }
   callBackScreen = () =>{
@@ -281,7 +314,7 @@ class Landing extends Component {
               <p className="hi-landing-banner-header">{getConfig().productName} HealthProtect</p>
               <p className="hi-landing-banner-text">₹10 Lakh health cover @ just ₹728/m</p>
               <p className="hi-landing-banner-text">100% additional personal accident cover</p>
-              <img className="hi-landing-banner-img" src={require(`../../assets/hi-banner-image.svg`)} alt="" />
+              <Imgc className="hi-landing-banner-img" src={require(`../../assets/hi-banner-image.svg`)} alt="" />
               <Button variant="raised"
                 size="large" color="secondary" autoFocus className="button" onClick={() => this.navigate('/group-insurance/group-health/GMC/landing')}>
                 GET INSURED
@@ -289,35 +322,46 @@ class Landing extends Component {
             </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
+            <div className="inactive-entry-card" onClick={this.toToReports}>
+              <Imgc className="inactive-policy-logo" alt="inactive-policy-card" src={require(`assets/${this.state.type}/policy_icon.svg`)} />
+              <div className="inactive-right">
+                <p className="inactive-title">Your policies</p>
+                <p className="inactive-subtitle">{this.state.showCustomReportCardText ? `${this.state.customReportCardText} ${this.state.noOfReports > 1   ? '+' + (this.state.noOfReports - 1) + ' more': '' }` :'Looks like you have zero coverage'}</p>
+              </div>
+            </div>
             <div className="advisory-entry-container" onClick={(e)=>this.goToAdvisory(e)}>  
-              <img className="advisory-entry" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt=""/>
+              <Imgc className="advisory-entry-img" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt="advisory-logo"/>
               <p className="adivsory-card-heading">Do you have adequate insurance coverage?</p>
               <button className="advisory-entry-button">{this.state.advisory_button_text}</button>
             </div>
             <div style={{ margin: "18px 0 26px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px', color: '#160d2e' }}> Get Insured with ease </div>
           <div className="his">
             <div className="horizontal-images-scroll">
-              <img className="image"  src={require(`assets/${this.state.type}/icn_free.svg`)} alt=""/>
-              <img className="image" src={require(`assets/${this.state.type}/icn_assistance.svg`)} alt="" />
-              <img className="image" src={require(`assets/${this.state.type}/icn_zero_paper.svg`)} alt="" />
+              <Imgc className="imgc-space image"  src={require(`assets/${this.state.type}/icn_free.svg`)} alt=""/>
+              <div style={{marginRight: '20px'}} />
+              <Imgc className="imgc-space image" src={require(`assets/${this.state.type}/icn_assistance.svg`)} alt="" />
+              <div style={{marginRight: '20px'}} />
+              <Imgc className="imgc-space image" src={require(`assets/${this.state.type}/icn_zero_paper.svg`)} alt="" />
             </div>
           </div>
 
           <div className="callback-button-container">
-            <img className="image" style={{cursor: 'pointer'}} src={require(`assets/${this.state.type}/landing_call_back_button.svg`)} onClick={() => this.callBackScreen()} alt=""/>
+          <span onClick={() => this.callBackScreen()}><Imgc className="image" style={{cursor: 'pointer' , minHeight: '120px'}} src={require(`assets/${this.state.type}/landing_call_back_button.svg`)} alt=""/></span>
           </div>
 
           <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}> What our customers say </div>
           <div className="his"> <div className="horizontal-images-scroll">
-              <img className="image" src={require(`assets/${this.state.type}/icn_review_1.svg`)} alt=""/>
-              <img className="image" src={require(`assets/${this.state.type}/icn_review_2.svg`)} alt=""/>
-              <img className="image" src={require(`assets/${this.state.type}/icn_review_3.svg`)} alt=""/>
+              <Imgc  className="imgc-space2 image" src={require(`assets/${this.state.type}/icn_review_1.svg`)} alt=""/>
+              <div style={{marginRight: '20px'}} />
+              <Imgc  className="imgc-space2 image" src={require(`assets/${this.state.type}/icn_review_2.svg`)} alt=""/>
+              <div style={{marginRight: '20px'}} />
+              <Imgc  className="imgc-space2 image" src={require(`assets/${this.state.type}/icn_review_3.svg`)} alt=""/>
             </div>
           </div>
 
           <div  className="generic-subtitle-heading">Insurance with fisdom is 100% safe</div>
                     <div style={{display : 'flex' , justifyContent : 'center', height : '20px'}}>
-                     <div><img className="image" src={require(`assets/irdanewlogo1.svg`)} alt="" style={{marginRight : '2px'}}/>  </div>
+                     <div><Imgc className="irdia-image-bottom" src={require(`assets/irdanewlogo1.svg`)} alt=""/>  </div>
                      <span className='generic-subtitle-heading-IRDAI'>
                        <div>IRDAI REGISTERED </div>  
                        <div className='generic-subtitle-heading-IRDAI-number'>CA0505</div>
