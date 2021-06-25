@@ -14,6 +14,7 @@ import {
   compareObjects,
   getTotalPagesInPersonalDetails,
   getGenderValue,
+  getFlow,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -154,11 +155,9 @@ const PersonalDetails1 = (props) => {
         marital_status: form_data.marital_status
           ? form_data.marital_status.toLowerCase()
           : "",
-        // "name": form_data.name ? "yes" : "no",
-        // "mobile": form_data.mobile_number ? "yes" : "no",
-        // "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        // "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
-        // "flow": 'general'
+        "name": form_data.name ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "flow": getFlow(kyc) || ""
       },
     };
     if (userAction === "just_set_events") {

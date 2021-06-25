@@ -7,6 +7,7 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getFlow,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -115,7 +116,7 @@ const PersonalDetails2 = (props) => {
         mother_name: form_data.mother_name ? "yes" : "no",
         father_name: form_data.father_name ? "yes" : "no",
         spouse_name: form_data.spouse_name ? "yes" : "no",
-        // "flow": 'general'
+        "flow": getFlow(kyc) || ""
       },
     };
     if (userAction === "just_set_events") {
