@@ -159,13 +159,8 @@ const PersonalDetails1 = (props) => {
         mother_name: form_data.mother_name ? "yes" : "no",
         father_name: form_data.father_name ? "yes" : "no",
         spouse_name: form_data.spouse_name ? "yes" : "no",
-        // name: form_data.name ? "yes" : "no",
-        // "mobile": form_data.mobile ? "yes" : "no",
-        // "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        // "gender": form_data.gender,
-        // "marital_status": form_data.marital_status,
-        // "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
-        // "flow": 'digi kyc'
+        name: form_data.name ? "yes" : "no",
+        "flow": 'digi kyc'
       },
     };
     if (userAction === "just_set_events") {

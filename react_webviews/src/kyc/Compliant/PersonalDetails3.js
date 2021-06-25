@@ -139,7 +139,7 @@ const PersonalDetails3 = (props) => {
       "5-10L": "5_to_10",
       "10-25L": "10_to_25",
       "25-100L": "25_to_100",
-      ">100L": "above_100", // value to be checked
+      ">100L": "above_100",
     };
     let eventObj = {
       event_name: "kyc_registration",
@@ -152,7 +152,7 @@ const PersonalDetails3 = (props) => {
             : form_data.occupation.toLowerCase()
           : "",
         income_range: form_data.income ? incomeMapper[form_data.income] : "",
-        // "flow": 'general'
+        "flow": 'premium onboarding'
       },
     };
     if (userAction === "just_set_events") {
