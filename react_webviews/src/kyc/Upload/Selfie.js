@@ -39,6 +39,7 @@ const Selfie = (props) => {
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [fileHandlerParams, setFileHandlerParams] = useState();
   const [goBackModal, setGoBackModal] = useState(false);
+  // const [attempt, setAttempt] = useState(0);
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
@@ -199,12 +200,12 @@ const Selfie = (props) => {
     setIsLocnPermOpen(false);
   }
 
-  const sendEvents = (userAction, type) => {
+  const sendEvents = (userAction, screenName) => {
     let eventObj = {
       event_name: "trading_onboarding",
       properties: {
         user_action: userAction || "",
-        screen_name: "take_a_selfie",
+        screen_name: screenName || "take_a_selfie",
         // attempt: attempt
         // "type": type || "",
       },
@@ -301,6 +302,7 @@ const Selfie = (props) => {
               onClose={closeLocnPermDialog}
               onLocationFetchSuccess={onLocationFetchSuccess}
               parentProps={props}
+              sendEvents={sendEvents}
             />
           }
           <SelfieUploadStatus
