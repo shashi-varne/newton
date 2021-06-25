@@ -551,9 +551,11 @@
       position: absolute;
       right: 0;
       top: 0;
-      img{
+      .cic-right-icon{
         width: 120px;
         margin: 10px 10px 0px 0px;
+        min-width: 120px;
+        min-height: 80px;
       }
     }
   }
