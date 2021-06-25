@@ -131,9 +131,9 @@ class ESignInfo extends Component {
 
   sendEvents = (userAction, screenName) => {
     // const kyc = storageService().getObject("kyc");
+    const { tradingFlow } = this.state;
     let eventObj = {
-      // "event_name": 'KYC_registration',
-      event_name: 'trading_onboarding',
+      event_name: tradingFlow ? 'trading_onboarding' : 'KYC_registration',
       "properties": {
         "user_action": userAction || "" ,
         "screen_name": screenName || "complete_esign",

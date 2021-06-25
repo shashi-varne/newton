@@ -12,7 +12,7 @@ import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "lodash";
 import { isDigilockerFlow } from "../../kyc/common/functions";
-import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
+import { getBasePath, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -155,8 +155,7 @@ class DigiStatus extends Component {
   sendEvents = (userAction, screenName) => {
     let kyc = this.state.kyc;
       let eventObj = {
-        // "event_name": 'KYC_registration',
-        event_name: "trading_onboarding",
+        event_name: isTradingEnabled(kyc) ? "trading_onboarding" : "KYC_registration",
         properties: {
           user_action: userAction || "",
           screen_name: screenName || "kyc_verified",
