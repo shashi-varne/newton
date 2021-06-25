@@ -146,6 +146,7 @@ const Pan = (props) => {
   }
 
   const handleRetryClick = () => {
+    sendEvents("next", "pan_details_mismatch");
     handleCloseBottomSheet();
     setFile(null);
     setFileToShow(null);
