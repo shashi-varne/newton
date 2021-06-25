@@ -35,6 +35,11 @@ const NriError = (props) => {
       nativeCallback({ action: "exit_web" });
     }
   }
+
+  const handleCompleteMFKyc = () => {
+    sendEvents("complete_mf_kyc");
+    navigate(PATHNAME_MAPPER.journey)
+  }
   
   return (
     <Container
@@ -46,10 +51,7 @@ const NriError = (props) => {
       {
         variant: "contained",
         title: "COMPLETE MUTUAL FUND KYC",
-        onClick: () => {
-          sendEvents("complete_mf_kyc");
-          navigate(PATHNAME_MAPPER.journey)
-        },
+        onClick: handleCompleteMFKyc,
       }}
       button2Props={{
         variant: stateParams?.noStockOption ? "contained" : "outlined",
