@@ -62,7 +62,12 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next')
+    const {dl_flow, show_note} = this.state;
+    if (dl_flow && !show_note) {
+      this.sendEvents('next');
+    } else {
+      this.sendEvents('home');
+    }
     if (getConfig().isNative) {
       nativeCallback({ action: 'exit_web' });
     } else {
@@ -71,6 +76,7 @@ class DigiStatus extends Component {
   };
 
   navigateToReports = () => {
+    this.sendEvents("view_KYC_application");
     this.navigate("/kyc/report");
   };
 
@@ -158,7 +164,7 @@ class DigiStatus extends Component {
         event_name: isTradingEnabled(kyc) ? "trading_onboarding" : "KYC_registration",
         properties: {
           user_action: userAction || "",
-          screen_name: screenName || "kyc_verified",
+          screen_name: screenName || "kyc_complete",
           rti: "",
           initial_kyc_status: kyc.initial_kyc_status || "",
           flow: this.state.dl_flow ? "digi kyc" : "general",
