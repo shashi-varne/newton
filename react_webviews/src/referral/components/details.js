@@ -32,6 +32,7 @@ class Details extends Component {
       mobile: '',
       total_earnings: 0.00,
       openDialog: false,
+      active_campaign: true,
       type: getConfig().productName,
       link: getConfig().appLink,
       campaign_id: 5319998917574656
@@ -40,9 +41,9 @@ class Details extends Component {
 
   async componentDidMount() {
     try {
-      await Api.get('/api/referral/v2/getactivecampaign/mine').then(res => {
+      const res = await Api.get('/api/referral/v2/getactivecampaign/mine');
+      if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 200) {
         const { amount_per_referral, campaign_expiry_date, refer_message_1, refer_message_2, referral_code, mobile, total_earnings, current_campaign_id, campaign_start_date } = res.pfwresponse.result;
-
         this.setState({
           show_loader: false,
           amount_per_referral,
@@ -55,9 +56,17 @@ class Details extends Component {
           current_campaign_id,
           campaign_start_date
         });
-      }).catch(error => {
+      } else if (res.pfwstatus_code === 200 && res.pfwresponse.status_code === 400) {
+        this.setState({
+          show_loader: false,
+          active_campaign: false,
+          refer_message_1: 'Sharing is caring',
+          refer_message_2: 'Invite your family & friends to start their investment journey on Finity'
+        });
+
+      } else {
         this.setState({ show_loader: false });
-      });
+      }
     } catch (error) {
       this.setState({ show_loader: false });
     }
@@ -195,30 +204,31 @@ class Details extends Component {
               </div>
             </div>
           </Card>
-
-          <Card nopadding={true}>
-            <Grid container spacing={24} alignItems="center" className={`ReferPaytmGrid (!this.state.campaign_expiry_date) ? ReferTermsGrid : ''`} onClick={() => this.navigate('/referral/earnings')}>
-              <Grid item xs>
-                <img src={wallet} alt="" />
+          {this.state.active_campaign &&
+            <Card nopadding={true}>
+              <Grid container spacing={24} alignItems="center" className={`ReferPaytmGrid (!this.state.campaign_expiry_date) ? ReferTermsGrid : ''`} onClick={() => this.navigate('/referral/earnings')}>
+                <Grid item xs>
+                  <img src={wallet} alt="" />
+                </Grid>
+                <Grid item xs={6}>
+                  <p><span className="blue">Pay</span><span className="blue_light">tm</span> earnings</p>
+                  <h1><span>₹</span>{this.state.total_earnings}</h1>
+                </Grid>
+                <Grid item xs>
+                  <h2 className="view">VIEW</h2>
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <p><span className="blue">Pay</span><span className="blue_light">tm</span> earnings</p>
-                <h1><span>₹</span>{this.state.total_earnings}</h1>
-              </Grid>
-              <Grid item xs>
-                <h2 className="view">VIEW</h2>
-              </Grid>
-            </Grid>
-            {
-              !this.state.campaign_expiry_date &&
-              <div className="terms" onClick={() => this.navigateWithparam('/referral/terms')}>
-                *View T&C
-              </div>
-            }
-          </Card>
+              {
+                !this.state.campaign_expiry_date &&
+                <div className="terms" onClick={() => this.navigateWithparam('/referral/terms')}>
+                  *View T&C
+                </div>
+              }
+            </Card>
+          }
 
           {
-            this.state.campaign_expiry_date &&
+            (this.state.campaign_expiry_date && this.state.active_campaign) &&
             <Card nopadding={true}>
               <Grid container spacing={24} alignItems="center" className="ReferTermsGrid">
                 <Grid item xs={3}>
