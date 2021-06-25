@@ -57,7 +57,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     };
     return (
       <AppBar position="fixed" color="primary" data-aid='app-bar'
-      className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
+      className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : 'header-topbar-primary'} ${className || ''}`}
       style={style}
       >
         <Toolbar>

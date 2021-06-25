@@ -1080,6 +1080,10 @@ $header-title-font-size: 20px;
   box-shadow: none !important;
 }
 
+.header-topbar-primary {
+  background-color: var(--primary) !important;
+}
+
 .sdk-header-partner-logo{
   display: flex;
   align-items: center;
