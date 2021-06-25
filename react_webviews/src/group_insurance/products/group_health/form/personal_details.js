@@ -203,7 +203,6 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   componentWillMount() {
-    console.log('WILL MOUNT')
     this.pageTitle()
     this.initialize()
   }
