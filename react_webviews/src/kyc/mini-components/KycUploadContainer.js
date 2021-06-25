@@ -11,9 +11,13 @@ const KycUploadContainer = ({
   buttonText,
   onButtonClick,
   children,
+  dataAidSuffix
 }) => {
   return (
-    <div className={`kyc-upload-container ${classes.container}`} data-aid='kyc-upload-container'>
+    <div
+      className={`kyc-upload-container ${classes.container}`}
+      data-aid={`kyc-upload-container-${dataAidSuffix}`}
+    >
       {titleText &&
         <TitleText>{titleText}</TitleText>
       }
@@ -35,19 +39,26 @@ const KycUploadContainer = ({
   )
 }
 
-const TitleText = ({ children, className, alignLeft }) => {
+const TitleText = ({ children, className, alignLeft, dataAidSuffix }) => {
   return (
-    <div className={`kuc-caption ${className}`} style={{ textAlign: alignLeft ? 'left' : 'center' }} data-aid='title-text-caption'>{children}</div>
+    <div
+      className={`kuc-caption ${className}`}
+      dataAidSuffix={`kuc-caption-${dataAidSuffix}`}
+      style={{ textAlign: alignLeft ? 'left' : 'center' }}
+    >
+      {children}
+    </div>
   );
 }
 
 KycUploadContainer.TitleText = TitleText;
 
-const Image = ({ fileToShow, illustration, alt, className, ...props }) => {
+const Image = ({ fileToShow, illustration, alt, className, dataAidSuffix, ...props }) => {
   return (
     <img
       src={fileToShow || illustration}
       className={`kuc-image ${className}`}
+      data-aid={`kuc-image-${dataAidSuffix}`}
       alt={alt || "upload"}
       {...props}
     />
@@ -57,36 +68,21 @@ const Image = ({ fileToShow, illustration, alt, className, ...props }) => {
 KycUploadContainer.Image = Image;
 
 const Button = ({
-  fileName,
-  nativePickerMethodName,
-  onFileSelectComplete,
-  showOptionsDialog,
-  onFileSelectError,
-  supportedFormats,
-  customPickerId,
   withPicker,
+  dataAidSuffix,
   children,
-  ...props
+  filePickerProps = {}, // Check WVFilePickerWrapper for props list
+  ...buttonProps
 }) => {
   if (withPicker) {
     return (
-      <WVFilePickerWrapper
-        fileName={fileName}
-        nativePickerMethodName={nativePickerMethodName}
-        showOptionsDialog={showOptionsDialog}
-        onFileSelectComplete={onFileSelectComplete}
-        onFileSelectError={onFileSelectError}
-        supportedFormats={supportedFormats}
-        customPickerId={customPickerId}
-      >
+      <WVFilePickerWrapper {...filePickerProps}>
         <WVButton
-          dataAid='attach-doc-btn'
-          variant="outlined"
+          outlined
+          dataAidSuffix={dataAidSuffix}
           color="secondary"
-          classes={{
-            root: 'kuc-action-btn'
-          }}
-          {...props}
+          classes={{ root: 'kuc-action-btn' }}
+          {...buttonProps}
         >
           {children || 'ATTACH DOCUMENT'}
         </WVButton>
@@ -95,13 +91,11 @@ const Button = ({
   }
   return (
     <WVButton
-      dataAid='attach-doc-btn'
-      variant="outlined"
+      outlined
+      dataAid={dataAidSuffix}
       color="secondary"
-      classes={{
-        root: 'kuc-action-btn'
-      }}
-      {...props}
+      classes={{ root: 'kuc-action-btn' }}
+      {...buttonProps}
     >
       {children || 'ATTACH DOCUMENT'}
     </WVButton>

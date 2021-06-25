@@ -106,8 +106,13 @@
   margin: 30px 0;
 }
 .plan-success-heading-icon {
-  text-align: center;
-   margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+.plan-success-heading-img{
+  width: 360px !important;
+  height: 160px !important;
 }
 .plan-success-heading-title {
   color: #4a4a4a;
@@ -123,8 +128,10 @@
 }
 .AccordionListIcon {
   position: relative;
-   top: 2px;
-   margin-right: 10px;
+  top: 2px;
+  margin: 0 !important;
+  width: 20px !important;
+  height: 20px !important;
 }
 .AccordionList1 {
   margin-right: 10;
@@ -134,6 +141,9 @@
    flex-direction: row;
    align-items: center;
    position: relative;
+   .AccordianTitleValue{
+     margin-left: 10px;
+   }
 }
 .AccordionDescription {
   font-weight: 400;
@@ -178,7 +188,13 @@
   color: #878787;
 }
 .payment-failed-icon {
-  text-align: center; margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  .payment-failed-img{
+    width: 320px !important;
+    height: 160px !important;
+  }
 }
 .payment-failed-title {
   color: #160d2e;
@@ -221,8 +237,10 @@
    align-items: center;
    padding: 20px 10px;
 }
-.payment-success-icon {
-  margin-right: 15px;
+.payment-success-icon{
+  margin: 0;
+  width: 60px !important;
+  height: 60px !important;
 }
 .payment-success-title {
   color: #160d2e;
@@ -266,6 +284,10 @@
 }
 .plan-details-icon {
   margin-right: 15px;
+}
+.plan-details-render-img{
+  width: 30px !important;
+  height: 30px !important;
 }
 .plan-details-text {
   color: #160d2e;
@@ -414,7 +436,8 @@
    padding: 0 15px;
 }
 .accident-plan-claim-icon {
-  margin-right: 10px;
+  width: 20px !important;
+  height: 20px !important;
 }
 .accident-plan-claim-title {
   color: #160d2e;
@@ -435,6 +458,21 @@
 }
 .accident-plan-read-icon {
   margin-right: 10px;
+}
+.imgc-box-big-img{
+  width: 100px !important;
+  height: 80px !important;
+  margin-right: 0px !important;
+}
+.imgc-box-freq-img{
+  width:  30px !important;
+  height: 30px !important;
+  margin-right: 0px !important;
+}
+.imgc-box-plandeatils{
+  width:  80px !important;
+  height: 60px !important;
+  margin-right: 0px !important;
 }
 .accident-plan-read-text {
   font-size: 13px;
@@ -532,6 +570,106 @@
     margin: 0 5px 0 0;
   }
 }
+.Container.report-list-page {
+  padding-top: 12px;
+  overflow: visible;
+  ::-webkit-scrollbar{
+    display: none !important;
+  }
+}
+.insurance-common-report-page{
+  font-family: 'Rubik', sans-serif;
+  .tab-wrapper{
+    margin: 0 -20px;
+    height: 50%;
+  }
+  margin-top: -20px;
+  .MuiTypography-root{
+    overflow: scroll;
+  }
+  .react-swipeable-view-container{
+    min-height: 70vh;
+  }
+  
+.report-list-tab-container{
+  background-color: white;
+  z-index: 999;
+  position: sticky;
+  left: 0;
+  right: 0;
+  top: 50px;
+  list-style-type: none;
+  padding: 0;
+  font-family: 'Rubik', sans-serif;
+  margin: 30px -20px 0 -20px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+
+  .tab-swipe{
+    padding-top: 0;
+    .MuiTabs-indicator{
+      background-color: var(--primary);
+    }
+    width: 100%;
+    border-bottom: 1px solid #D6D6D6;
+    .individual-tab{
+      margin: 0;
+      flex: 1;
+    }
+  }
+  li{
+    text-transform: capitalize;
+    flex: 1;
+    text-align: center;
+    font-family: 'Rubik', sans-serif;
+    padding-bottom: 5px;
+    color: #161A2E;
+    font-size: 13px;
+    font-weight: 500;
+    span{
+      color: #767E86;
+      margin-left: 3px;
+    }
+  }
+  li.selected{
+    display: flex;font-family: 'Rubik', sans-serif;
+    color: var(--primary);
+    font-weight: 700;
+    span{
+      color: #A998D2;
+    }
+  }
+
+}
+
+.inactive-policy-background{
+  display: block;
+  margin: 50px auto 20px;
+}
+.empty-state-text{
+  text-align: center;
+  color: #767E86;
+}
+.advisory-link{
+  color: #35CB5D;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 42px;
+  cursor: pointer;
+}
+.report-top-text{
+  @media only screen and (min-width: 500px){
+    margin-top: 60px;
+  } 
+  text-align: left;
+  color: #767E86;
+  font-family: 'Rubik', sans-serif;
+  font-size: 13px;
+  margin: 20px 20px 30px 20px;
+}
+}
 .report-detail-header {
   display: flex;
 }
@@ -552,6 +690,8 @@
   padding: 10px;
   border-radius: 3px;
   margin-right: 15px;
+  width: 78px;
+  min-height: 64px !important;
 }
 .report-detail-summary {
   margin-top: 30px;
@@ -578,6 +718,7 @@
 }
 .report-detail-download-text {
   color: var(--secondary);
+  margin-left: 10px;
   font-size: 14px;
   font-weight: 400;
 }
@@ -827,12 +968,20 @@
 
   .bototm-design {
       margin: 0 0 20px 0;
+      .bf-img{
+        width: 30px !important;
+        height: 30px !important;
+      }
   }
   .settlement-info {
     font-size: 13px;
     font-weight: 400;
     color: var(--primary);
     margin: 0 0 5px 0;
+  }
+  .render-steps-icon{
+    width: 80px !important;
+    height: 60px !important;
   }
 }
 
@@ -997,18 +1146,45 @@
 .group-health-select-ped {
   margin: 0 0 50px 0;
 }
-.MuiDialogActions-root.final-summary-dialog-options{
+.MuiDialogActions-root{
   text-align: right;
 }
+
+.group-health-report-details{
+  .member-tile{
+    .imgc-tile{
+      width: 30px !important; 
+      height: 30px !important;
+      margin: 0;
+    }
+    .imgc-tile1{
+      width: 88px !important; 
+      height: 20px !important;
+    }
+    .imgc-tile2{
+      width: 88px !important; 
+      height: 20px !important;
+    }
+  }
+}
+.insurance-logo-top-right{
+  width: 50px !important;
+  height: 50px !important;
+}
+
 .group-health-final-summary {
   .member-tile {
       display: flex;
-      margin: 16px 0 16px 0;
+      margin: 16px 0;
+      .final-summary-tile{
+        width: 30px !important;
+        height: 30px !important;
+      }
       .mt-right {
         margin: 0 0 0 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        .mtr-top{
+          margin-bottom: 2px;
+        }
     }
     
     .mtr-top {
@@ -1032,6 +1208,10 @@
     .bct-top {
       display: flex;
       justify-content: space-between;
+      .accordian-marker{
+        width: 14px !important;
+        height: 14px !important;
+      }
     }
     
     .bc-tile {
@@ -1074,9 +1254,17 @@
     }
   }
 }
+.final-summary-medical-review-img{
+  width: 115px !important;
+  min-height: 80px !important; 
+}
 
 .group-health-life-insurance{
   .member-tile-fyntune {
+    .imgc-tile{
+      width: 30px !important;
+      height: 30px !important;
+    }
     display: flex;
     margin: 15px 0 15px 0;
     .mt-right-fyntune {
@@ -1103,6 +1291,7 @@
       text-transform: capitalize;
    }
   }
+  
 }
 
 .group-health-bmi-dialog {
@@ -1165,23 +1354,33 @@
   }
   
   .insurance_plans_logos{
-    margin-right:25px;
-    width: 40px;
-    height: 40px;
+    margin: 20px 25px 15px 0 !important;
+    width:  40px !important;
+    height: 40px !important;
     border-radius: 2px;
   }
 
   .insurance_plans_logos_small{
-    margin-right:25px;
-    width: 40px;
-    height: 40px;
+    margin-right:25px !important;
+    width: 40px !important;
+    height: 40px !important;
     border-radius: 2px;
     margin-top: 20px;
     margin-left: 3px;
     padding-left: 3px;
     padding-right: 3px;
   }
-  
+
+  .imgc-box{
+    margin-right:25px !important;
+    width:  40px !important;
+    height: 40px !important;
+  }
+  // .imgc-box-bigframe{
+  //   margin-right:55px !important;
+  //   width:  50px !important;
+  //   height: 50px !important;
+  // }
   .insurance_plans_logos_text{
     color: #160d2e;
     font-size:16px;
@@ -1273,7 +1472,6 @@
   border: none;
   padding: 16px 0;
   border-radius: 5px;
-  font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -1282,7 +1480,6 @@
 }
 .call-back-popup-heading{
   margin-left: 10px;
-  font-family: 'Roboto';
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -1291,12 +1488,10 @@
 #call-back-mobile-number{
   font-size: 14px;
   padding-left: 32px;
-  font-family: 'Roboto';
 }
 .mobile-number-prefix{
   position: absolute;
   display: inline;
-  font-family: 'Roboto';
   font-size: 14px;
   top: 34.4px;
   left: 2.8px;
@@ -1314,6 +1509,8 @@
     position: absolute;
     right: 6%;
     bottom:10%;
+    width: 100px !important; 
+    height: 82px !important;
   }
   .hi-landing-banner-header{
     font-size: calc(20px + 0.5vw);
@@ -1346,13 +1543,47 @@
   }
 }
 
+.insurance-landing-product-list-img{
+  width: 56px !important;
+  height: 56px !important;
+  margin-top: 20px !important;
+}
 
+.inactive-entry-card{
+  display: flex;
+  justify-content: left;
+  border-radius: 4.5px;
+  padding: 20px;
+  background-color: var(--primary);
+  margin: 10px 0 40px 0;
+  cursor: pointer;
+  img, p{margin: 0}
+  .inactive-policy-logo{
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  .inactive-right{
+    margin-left: 20px;
+    color: #F6F2FF;
+    .inactive-title{
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .inactive-subtitle{
+      font-size: 13px;
+      font-weight: 500;
+    }
+  }
+}
 .advisory-entry-container{
   width: 100%;
   margin: 20px 0;
   position: relative;
-  img{
-    width: 100%;
+  .advisory-entry-img{
+    width: 100% !important;
+    min-height: 140px !important;
     object-fit: cover;
   }
   .adivsory-card-heading{
@@ -1402,7 +1633,6 @@
   }
   .advisory-landing-title{
     position: absolute;
-    font-family: 'Roboto';
     top: 7%;
     left: 20px;
     font-size: 26px;
@@ -1415,7 +1645,6 @@
       .FiveStepPlan-title{
         padding: 10px 0;
         font-size: 15px;
-        font-family: 'Roboto';
         color:rgb(0, 0, 0)
       }
       .FiveStepPlan-subtitle{
@@ -1509,7 +1738,14 @@
     .rec-profile{
       display: flex;
       align-items: flex-start;
-
+      
+      .rec-profile-left{
+        .profile-pic{
+          width: 120px !important;
+          height: 120px !important;
+        }  
+      }
+      
       .rec-profile-right{
         padding-left: 15px;
         margin-top: 5px;
@@ -1751,4 +1987,50 @@
   #asset_amount, #health_cover_amount, #term_cover_amount, #critical_cover_amount, #corona_cover_amount{
     padding-left: 12.5px;
   }
+}
+
+.irdia-image-bottom{
+  margin-right: 2px;
+  min-height: 20px;
+  width: 17px !important;
+}
+
+.select-floater-img{
+  width: 14px !important;
+  height: 14px !important;
+  margin: 0 !important;
+}
+
+.disease_specific_plan_img{
+  margin: 20px 0 0px 3px !important;
+  width: 40px !important; 
+  height: 40px !important;
+}
+
+.health-insurance-plan-list-img{
+  width: 50px !important;
+  height: 50px !important;
+  margin-top: 15px;
+}
+
+.health-landing-img-left{
+  margin-left: 15px;
+}
+
+.instant-issurance-img{
+  margin: 0 5px 0 0 !important;
+  width: 10px !important;
+  min-height: 23px !important;
+}
+
+.baxa-report-download-icon{
+  width: 14px !important;
+  height: 14px !important;
+  margin: 0;
+}
+
+.baxa-report-bottom-img{
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0;
 }

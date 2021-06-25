@@ -1,7 +1,7 @@
 import Api from "utils/api";
 import { storageService, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc, getBasePath } from "utils/functions";
 import {
   apiConstants,
   investCardsBase,
@@ -11,11 +11,15 @@ import {
   premiumBottomSheetMapper,
   sdkInvestCardMapper
 } from "./constants";
-import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
+import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
+import { isEquityCompleted } from "../../kyc/common/functions";
+import { isTradingEnabled } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
+const config = getConfig();
+
 export async function initialize() {
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
@@ -25,12 +29,13 @@ export async function initialize() {
   this.getRecommendations = getRecommendations.bind(this);
   this.getRateOfInterest = getRateOfInterest.bind(this);
   this.corpusValue = corpusValue.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.clickCard = clickCard.bind(this);
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
   this.openStocks = openStocks.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
+  this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
@@ -41,12 +46,11 @@ export async function initialize() {
     this.handleRenderCard();
   }
 
-  if ((this.state.screenName === "invest_landing" &&  getConfig().Web &&
+  if ((this.state.screenName === "invest_landing" &&  config.Web &&
       !dataSettedInsideBoot)) {
     await this.getSummary();
   }
-  if ((this.state.screenName === "sdk_landing" && !getConfig().Web &&
-      !dataSettedInsideBoot)) {
+  if (this.state.screenName === "sdk_landing" && !config.Web) {
     await this.getSummary();
   }
   if (this.onload) this.onload();
@@ -166,7 +170,8 @@ export async function setNpsData(response) {
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
         storageService().setObject("nps_additional_details", result.registration_details);
-        if (!result.registration_details.additional_details_status) {
+        storageService().setObject("nps_data", result);
+        if (!result?.registration_details?.additional_details_status) {
           storageService().set("nps_additional_details_required", true);
         } else {
           storageService().set("nps_additional_details_required", false);
@@ -203,12 +208,12 @@ export function setInvestCardsData() {
     subbrokerCode = referralData.subbroker.data.subbroker_code;
   }
 
-  if (getConfig().code === "bfdlmobile") {
+  if (config.code === "bfdlmobile") {
     investCardsBase["ourRecommendations"]["instaredeem"].title = "Money +";
   }
 
   let investCardsData = {}; // stores card data to display
-  const { investSections, investSubSectionMap } = getConfig();
+  const { investSections, investSubSectionMap } = config;
 
   for (let section of investSections) {
     const subSections = investSubSectionMap[section] || [];
@@ -365,7 +370,7 @@ export async function getRecommendations(amount) {
       term: this.state.term,
       equity: this.state.equity,
       debt: this.state.debt,
-      rp_enabled: getConfig().riskEnabledFunnels
+      rp_enabled: config.riskEnabledFunnels
     });
 
     if (!result.recommendation) {
@@ -403,12 +408,12 @@ export function navigate(pathname, data = {}) {
   if (this.props.edit || data.edit) {
     this.props.history.replace({
       pathname: pathname,
-      search: getConfig().searchParams,
+      search: config.searchParams,
     });
   } else {
     this.props.history.push({
       pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
+      search: data.searchParams || config.searchParams,
       params: data.params || {},
       state: data.state || {},
     });
@@ -423,13 +428,16 @@ export function initilizeKyc() {
   let getKycAppStatusData = getKycAppStatus(userKyc);
   let kycJourneyStatus = getKycAppStatusData.status;
   let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  const rejectedItems = getKycAppStatusData.rejectedItems;
   if (isCompliant) {
     if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
       kycStatusData = kycStatusMapperInvest["ground_premium"];
     }
   }
   let isReadyToInvestBase = isReadyToInvest();
+  let isEquityCompletedBase = isEquityCompleted();
   let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
+  const TRADING_ENABLED = isTradingEnabled(userKyc);
 
   this.setState({
     isCompliant,
@@ -438,7 +446,10 @@ export function initilizeKyc() {
     userKyc,
     kycJourneyStatus,
     isReadyToInvestBase,
+    isEquityCompletedBase,
     getKycAppStatusData,
+    rejectedItems,
+    tradingEnabled: TRADING_ENABLED,
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
@@ -493,11 +504,11 @@ export function openPremiumOnboardBottomSheet(
     return "";
   }
 
-  if (getConfig().Web && this.state.screenName !== "invest_landing") {
+  if (config.Web && this.state.screenName !== "invest_landing") {
     return;
   }
 
-  if (!getConfig().Web && this.state.screenName !== "landing") {
+  if (!config.Web && this.state.screenName !== "landing") {
     return;
   }
 
@@ -512,10 +523,10 @@ export function openPremiumOnboardBottomSheet(
   }
 }
 
-export function handleKycSubmittedOrRejectedState () {
-  let { userKyc, kycJourneyStatusMapperData, } = this.state;
+export function handleKycSubmittedOrRejectedState() {
+  let { userKyc, kycJourneyStatusMapperData, rejectedItems } = this.state;
 
-  if (userKyc.bank.meta_data_status === "rejected") {
+  if (rejectedItems.length === 1 && userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
   } else {
     let modalData = kycJourneyStatusMapperData;
@@ -532,7 +543,7 @@ export function openKyc() {
 
   storageService().set("kycStartPoint", "mf");
   if (kycJourneyStatus === "submitted" || kycJourneyStatus === "rejected") {
-    handleKycSubmittedOrRejectedState();
+    this.handleKycSubmittedOrRejectedState();
   } else {
     if (kycJourneyStatus === "ground") {
       this.navigate("/kyc/home");
@@ -551,28 +562,49 @@ export function openKyc() {
   }
 }
 
-export function openStocks() {
+export async function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
-  
   storageService().set("kycStartPoint", "stocks");
+  
   if (kycJourneyStatus === "rejected") {
-    handleKycSubmittedOrRejectedState();
+    this.handleKycSubmittedOrRejectedState();
   } else {
     if (kycJourneyStatus === "ground") {
       this.navigate(PATHNAME_MAPPER.stocksStatus);
-    } else if (kycJourneyStatus === "ground_pan") {
-      this.navigate(PATHNAME_MAPPER.journey, {
-        state: {
-          show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
-          fromState: "invest",
-        },
-      });
-    } else if (kycJourneyStatus === "submitted" || kycJourneyStatus === "complete") {
-      this.navigate(PATHNAME_MAPPER.accountInfo)
     } else {
-      this.navigate(kycStatusData.next_state, {
-        state: { fromState: "invest" },
-      });
+      const isReadyToInvestUser = isReadyToInvest();
+      // only NRI conditions
+      if (userKyc?.address?.meta_data?.is_nri) {
+        this.navigate(PATHNAME_MAPPER.nriError, {
+          state: {noStockOption: (isReadyToInvestUser || userKyc?.application_status_v2 === "submitted")}
+        });
+      } else {
+        if (kycJourneyStatus === "ground_pan") {
+          this.navigate(PATHNAME_MAPPER.journey, {
+            state: {
+              show_aadhaar: !userKyc.address.meta_data.is_nri ? true : false,
+              fromState: "invest",
+            },
+          });
+        } else if ((userKyc?.kyc_product_type !== "equity" && isReadyToInvestUser) || userKyc?.mf_kyc_processed) {
+          // already kyc done users
+          let isProductTypeSet;
+          if (!userKyc?.mf_kyc_processed) {
+            const payload = {
+              "kyc":{},
+              "set_kyc_product_type": "equity"
+            }
+            isProductTypeSet = await setKycProductType(payload);
+          }
+          if (isProductTypeSet || userKyc?.mf_kyc_processed) {
+            this.navigate(PATHNAME_MAPPER.accountInfo)
+          }
+        } else {
+          this.navigate(kycStatusData.next_state, {
+            state: { fromState: "invest" },
+          });
+        }
+      }
     }
   }
 }
@@ -603,10 +635,10 @@ function handleInvestSubtitle (partner = '')  {
 
 export function handleRenderCard() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-  let partner = this.state.partner || storageService().getObject("partner") || {};
+  let partner = this.state.partner || storageService().get("partner") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
-  const isWeb =getConfig().Web;
+  const isWeb = config.Web;
   const hideReferral = currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
   const referralCode = !currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_apply_refferal;
   const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
@@ -641,11 +673,13 @@ export function handleCampaignNotification () {
     const target = data?.notification_visual_data?.target;
     if (target?.length >= 1) {
       // eslint-disable-next-line no-unused-expressions
-      target.forEach((el, idx) => {
+      target.some((el, idx) => {
         if (el?.view_type === 'bottom_sheet_dialog' && el?.section === 'landing') {
           acc = el;
           acc.campaign_name = data?.campaign?.name;
+          return true;
         }
+        return false;
       });
     }
     return acc;
@@ -659,8 +693,8 @@ export function handleCampaignNotification () {
 
 export function handleCampaignRedirection (url) {
   let campLink = url;
+  // Adding redirect url for testing
   // eslint-disable-next-line
-  campLink += (campLink.match(/[\?]/g) ? "&" : "?") +
-  "generic_callback=true";
+  campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}`)}`
   window.location.href = campLink;
 }

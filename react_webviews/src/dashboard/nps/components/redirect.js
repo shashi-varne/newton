@@ -29,12 +29,13 @@ export default class NpsPaymentRedirect extends Component {
         payment_status = params[i].split("/")[1];
       }
     }
-    this.navigate(`payment/callback/one-time/${amount}/${payment_status}`)
+    this.navigate(`/nps/payment/callback/one-time/${amount}/${payment_status}`)
   };
 
   render() {
     return (
       <Container
+        data-aid='nps-redirect-screen'
         classOverRide="pr-error-container"
         fullWidthButton
         hideInPageTitle

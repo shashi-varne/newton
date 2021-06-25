@@ -2,36 +2,42 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
-import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkPanFetchStatus, isDigilockerFlow, navigate as navigateFunc } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow, isEquityCompleted } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig, isTradingEnabled } from "../../utils/functions";
+import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";
-import { nativeCallback } from "../../utils/native_callback";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
+import { nativeCallback } from "../../utils/native_callback";
+import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { isReadyToInvest } from "../services";
 
 const config = getConfig();
-const isWeb = config.Web;
+const INIT_BOTTOMSHEET_TEXT = "We've added your bank account details. The verification is in progress, meanwhile you can continue with KYC."
+
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [selected, setSelected] = useState(null);
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [file, setFile] = useState(null);
   const [dlFlow, setDlFlow] = useState(false);
+  const [goBackModal, setGoBackModal] = useState(false);
   const {kyc, isLoading, updateKyc} = useUserKycHook();
-  const [fileToShow, setFileToShow] = useState(null)
-  // const [showLoader, setShowLoader] = useState(false)
+  const [fileToShow, setFileToShow] = useState(null);
+  const [bottomsheetText, setBottomSheetText] = useState(INIT_BOTTOMSHEET_TEXT);
+  const [bottomsheetCtaText, setBottomSheetCtaText] = useState("CONTINUE WITH KYC");
+  const [tradingEnabled, setTradingEnabled] = useState(false);
   const navigate = navigateFunc.bind(props);
+  const fromState = props.location?.state?.fromState || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      if (isDigilockerFlow(kyc)) {
-        setDlFlow(true);
-      }
+      initialize();
     }
   }, [kyc]);
 
@@ -54,6 +60,19 @@ const KycUploadDocuments = (props) => {
     });
   }
 
+  const initialize = () => {
+    if (isDigilockerFlow(kyc)) {
+      setDlFlow(true);
+    }
+    const tradeFlow = isTradingEnabled(kyc)
+    setTradingEnabled(tradeFlow);
+
+    if ((!tradeFlow && isReadyToInvest()) || (tradeFlow && isEquityCompleted())) {
+      setBottomSheetText("We've added your bank account details. The verification is in progress.")
+      setBottomSheetCtaText("OKAY");
+    }
+  }
+
   const onFileSelectComplete = (file, fileBase64) => {
     setFile(file);
     setFileToShow(fileBase64);
@@ -73,8 +92,8 @@ const KycUploadDocuments = (props) => {
 
   const handleSubmit = async () => {
     sendEvents('next')
-    if (selected === null || !file) return;
     try {
+      if (selected === null || !file) throw new Error("No file added");
       setIsApiRunning("button");
       const result = await uploadBankDocuments(
         file,
@@ -85,7 +104,7 @@ const KycUploadDocuments = (props) => {
         updateKyc(result.kyc)
       setShowPendingModal(true);
     } catch (err) {
-      toast("Image upload failed, please retry")
+      toast(err.message || "Image upload failed, please retry")
     } finally {
       setIsApiRunning(false);
     }
@@ -93,7 +112,9 @@ const KycUploadDocuments = (props) => {
 
   const handleEdit = () => {
     sendEvents('edit')
-    navigate(`/kyc/${userType}/bank-details`);
+    navigate(`/kyc/${userType}/bank-details`, {
+      state: { isEdit: true }
+    });
   };
 
   const handleSampleDocument = () => {
@@ -101,6 +122,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
+    sendEvents('next', "", 'bottom_sheet')
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
@@ -108,11 +130,13 @@ const KycUploadDocuments = (props) => {
       else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dlFlow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else {
-          if (kyc.sign_status !== 'signed') {
+          if (kyc.equity_sign_status !== 'signed') {
             navigate(PATHNAME_MAPPER.tradingExperience);
           } else {
             navigate(PATHNAME_MAPPER.journey);
@@ -143,9 +167,11 @@ const KycUploadDocuments = (props) => {
         // }
       } else {
         if (dlFlow) {
-          const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+          const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
           if (isPanFailedAndNotApproved) {
-            navigate("/kyc/upload/pan");
+            navigate("/kyc/upload/pan", {
+              state: { goBack: PATHNAME_MAPPER.journey }
+            });
           } else {
             if (kyc.sign_status !== 'signed') {
               navigate("/kyc-esign/info");
@@ -161,12 +187,34 @@ const KycUploadDocuments = (props) => {
   };
 
   const proceed = () => {
-    if (isTradingEnabled()) {
+    if (tradingEnabled) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();
     }
   };
+
+  const closeConfirmBackDialog = () => {
+    setGoBackModal(false);
+  };
+
+  const goBackToPath = () => {
+    if (fromState.indexOf("/kyc/add-bank/details") !== -1) {
+      props.history.goBack();
+      return;
+    } else {
+      if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    }
+    
+  };
+
+  const goBack = () => {
+    setGoBackModal(true)
+  }
 
   const selectedDocValue =
     selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
@@ -196,12 +244,13 @@ const KycUploadDocuments = (props) => {
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
-      events={sendEvents("just_set_events")}
       hideInPageTitle
       handleClick={handleSubmit}
       showLoader={isApiRunning}
       title="Upload documents"
+      headerData={{goBack}}
       data-aid='kyc-upload-documents-page'
+      events={sendEvents("just_set_events")}
     >
       <section id="kyc-bank-kyc-upload-docs" data-aid='kyc-bank-kyc-upload-docs'>
         <div className="banner" data-aid='kyc-banner'>
@@ -214,7 +263,7 @@ const KycUploadDocuments = (props) => {
           </div>
 
           <div className="edit" data-aid='kyc-edit' onClick={handleEdit}>
-            edit
+            EDIT
           </div>
         </div>
         <main data-aid='kyc-upload-documents'>
@@ -269,19 +318,29 @@ const KycUploadDocuments = (props) => {
               </div>
               <KycUploadContainer.Button
                 withPicker
-                showOptionsDialog
-                nativePickerMethodName="open_gallery"
-                fileName="doc"
-                onFileSelectComplete={onFileSelectComplete}
-                onFileSelectError={onFileSelectError}
-                supportedFormats={SUPPORTED_IMAGE_TYPES}
+                filePickerProps={{
+                  showOptionsDialog: true,
+                  shouldCompress: true,
+                  nativePickerMethodName: "open_gallery",
+                  fileName: "doc",
+                  onFileSelectComplete,
+                  onFileSelectError,
+                  supportedFormats: SUPPORTED_IMAGE_TYPES
+                }}
+                
               />
             </KycUploadContainer>
           )}
         </main>
         {selectedDocValue && (
-          <div className="sample-document" data-aid='kyc-sample-document-text' onClick={handleSampleDocument}>
-            view sample document
+          <div className="sample-document" data-aid='kyc-sample-document-text'>
+            <WVClickableTextElement
+                color="secondary"
+                onClick={handleSampleDocument}
+                dataAidSuffix="bank"
+              >
+                VIEW SAMPLE DOCUMENT
+              </WVClickableTextElement>
           </div>
         )}
         <footer className="ssl-container" data-aid='kyc-footer'>
@@ -291,15 +350,31 @@ const KycUploadDocuments = (props) => {
           />
         </footer>
       </section>
-      <PendingBankVerificationDialog
-        open={showPendingModal}
-        close={setShowPendingModal}
-        title="Bank Verification Pending!"
-        description="We’ve added your bank account details. The verification is in progress, meanwhile you can continue with KYC"
-        label="CONTINUE WITH KYC"
-        proceed={proceed}
-        cancel={setShowPendingModal}
-      />
+      <WVBottomSheet
+        isOpen={showPendingModal}
+        image={require(`assets/${config.productName}/ic_bank_partial_add.svg`)}
+        title="Bank verification pending!"
+        button1Props={{
+          title: bottomsheetCtaText,
+          variant: "contained",
+          onClick: proceed,
+        }}
+        classes={{
+          content: "penny-bank-verification-dialog-content",
+        }}
+      >
+        <div className="generic-page-subtitle penny-bank-verification-dialog-subtitle">
+         {bottomsheetText}
+        </div>
+      </WVBottomSheet>
+      {goBackModal ?
+        <ConfirmBackDialog
+          isOpen={goBackModal}
+          close={closeConfirmBackDialog}
+          goBack={goBackToPath}
+        />
+        : null
+      }
     </Container>
   );
 };

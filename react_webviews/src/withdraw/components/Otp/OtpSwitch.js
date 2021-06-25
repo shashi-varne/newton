@@ -4,11 +4,12 @@ import Container from '../../common/Container'
 import { isEmpty } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import toast from 'common/ui/Toast'
-import { navigate as navigateFunc } from '../../common/commonFunction'
 import Button from 'common/ui/Button'
+import { navigate as navigateFunc } from 'utils/functions'
 
 import './OtpSwitch.scss';
 import '../commonStyles.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const OtpSwitch = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -16,6 +17,7 @@ const OtpSwitch = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [otp, setOtp] = useState('')
   const [touched, setTouched] = useState(false)
+  const [resendClicked, setResendClicked] = useState(false)
   
   const handleChange = (event) => {
     if (!touched) {
@@ -43,6 +45,7 @@ const OtpSwitch = (props) => {
   const disabled = otp.length !== 4
 
   const resendOtp = async () => {
+    setResendClicked(true)
     try {
       if (!isEmpty(stateParams?.resend_redeem_otp_link)) {
         setIsApiRunning("button")
@@ -57,6 +60,7 @@ const OtpSwitch = (props) => {
   }
 
   const verifyOtp = async () => {
+    sendEvents('next')
     setIsApiRunning("button")
     try {
       let result
@@ -70,8 +74,7 @@ const OtpSwitch = (props) => {
             type: stateParams?.type,
             message: result?.message,
           }
-        },
-        true
+        }
       )
     } catch (err) {
       toast(err.message)
@@ -82,25 +85,44 @@ const OtpSwitch = (props) => {
             type: stateParams?.type,
             message: err.message,
           }
-        },
-        true
+        }
       )
     } finally {
       setIsApiRunning(false)
     }
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": 'withdrawl_otp_screen',
+        "resend_clicked": resendClicked ? 'yes' : 'no',
+        'flow': 'switch',
+        'otp': otp || ''
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      data-aid='otp-switch-verify-screen'
+      events={sendEvents("just_set_events")}
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
       title="OTP"
       type="withProvider"
       noFooter
     >
-      <section id="withdraw-otp-switch" className="page otp">
-        <div className="otp-input">
-          <div className="otp-text">Enter OTP</div>
+      <section id="withdraw-otp-switch" className="page otp" data-aid='withdraw-otp-switch'>
+        <div className="otp-input" data-aid='otp-input'>
+          <div className="otp-text" data-aid='otp-text'>Enter OTP</div>
           <Input
             error={touched && otp.length !== 4 ? true : false}
             type="number"
@@ -112,13 +134,14 @@ const OtpSwitch = (props) => {
             minLength={4}
             maxLength={4}
           />
-          <div className="resend-otp" onClick={resendOtp}>
+          <div className="resend-otp" data-aid='resend-otp' onClick={resendOtp}>
             Resend OTP
           </div>
-          {stateParams.message && <div>{stateParams.message}</div>}
+          {stateParams.message && <div data-aid='otp-switch-message-text'>{stateParams.message}</div>}
         </div>
-        <footer className="page-footer">
+        <footer className="page-footer" data-aid='page-footer'>
         <Button
+          dataAid='verify-btn'
           disable={disabled}
           onClick={verifyOtp}
           buttonTitle="VERIFY"

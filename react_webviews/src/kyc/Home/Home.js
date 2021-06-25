@@ -5,14 +5,14 @@ import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
-import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isTradingEnabled } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { ConfirmPan } from "../Equity/mini-components/ConfirmPan";
 import CheckCompliant from "../Equity/mini-components/CheckCompliant";
+import { isDigilockerFlow } from "../common/functions";
 
 const residentialStatusOptions = [
   {
@@ -25,8 +25,7 @@ const residentialStatusOptions = [
   },
 ];
 
-const TRADING_ENABLED = isTradingEnabled();
-
+const config = getConfig();
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -46,7 +45,12 @@ const Home = (props) => {
   const [openCheckCompliant, setOpenCheckCompliant] = useState(false);
   const [residentialStatus, setResidentialStatus] = useState(true);
   const [userName, setUserName] = useState("");
-  const config = getConfig();
+  const [tradingEnabled, setTradingEnabled] = useState();
+  const [disableResidentialStatus, setDisableResidentialStatus] = useState();
+
+  const isTradingEnabled = (isIndian) => {
+    return !config.isSdk && isIndian
+  }
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -55,6 +59,8 @@ const Home = (props) => {
   const initialize = () => {
     setPan(kyc.pan?.meta_data?.pan_number || "");
     setResidentialStatus(!kyc.address?.meta_data?.is_nri);
+    setTradingEnabled(isTradingEnabled(!kyc.address?.meta_data?.is_nri));
+    setDisableResidentialStatus(!!kyc.identification.meta_data.tax_status)
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
@@ -105,9 +111,8 @@ const Home = (props) => {
         return;
       }
       const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
-      // if (!isStartKyc) {
       sendEvents("next");
-      if (skipApiCall) {
+      if (skipApiCall || isStartKyc) {
         setIsStartKyc(true);
         setUserName(kyc?.pan?.meta_data?.name);
         if (kyc?.kyc_status === "compliant") {
@@ -120,21 +125,19 @@ const Home = (props) => {
       }
       setShowLoader("button");
       await checkPanValidity(true);
-      // }
     } catch (err) {
       toast(err.message || genericErrorMessage);
     }
   };
 
   const checkPanValidity = async (showConfirmPan = false) => {
-    // setOpenCheckCompliant(true);
     let body = {
       kyc: {
         pan_number: pan.toUpperCase(),
       }
     };
 
-    if(TRADING_ENABLED) {
+    if(tradingEnabled) {
       body.kyc_product_type = "equity"
     };
 
@@ -143,17 +146,11 @@ const Home = (props) => {
       if (isEmpty(result)) return;
       setUserName(result.kyc.name);
       setIsStartKyc(true);
-      // if (result?.kyc?.status) {
-      //   setIsUserCompliant(true);
-      // } else {
-      //   setIsUserCompliant(false);
-      // }
       if (showConfirmPan) setOpenConfirmPan(true);
     } catch (err) {
       console.log(err);
       toast(err.message);
     } finally {
-      // setOpenCheckCompliant(false);
       setShowLoader(false);
     }
   };
@@ -177,6 +174,7 @@ const Home = (props) => {
 
   const handleResidentialStatus = (event) => {
     let value = event.target ? event.target.value : event;
+    setTradingEnabled(isTradingEnabled(value !== 1))
     setResidentialStatus(residentialStatusOptions[value].value);
   };
 
@@ -238,7 +236,6 @@ const Home = (props) => {
 
   const savePan = async (is_nri) => {
     try {
-      // setShowLoader("button");
       if (is_nri) {
         kyc.address.meta_data.is_nri = true;
       } else {
@@ -256,38 +253,48 @@ const Home = (props) => {
         },
       };
 
-      if(TRADING_ENABLED) {
+      const addkycType = kyc.kyc_status === "non-compliant" && !isDigilockerFlow(kyc);
+      if(tradingEnabled) {
         body.set_kyc_product_type = "equity";
+        if(addkycType && kyc.kyc_type !== "manual")
+          body.set_kyc_type = "manual";
+      } else {
+        body.set_kyc_product_type = "mf";
+        if(addkycType && kyc.kyc_type !== "init")
+          body.set_kyc_type = "init";
       }
 
       let result = await kycSubmit(body);
       if (!result) return;
       if (result?.kyc?.kyc_status === "compliant") {
         setIsUserCompliant(true);
+        if(result?.kyc?.kyc_type !== "init") {
+          result = await kycSubmit({ kyc: {}, set_kyc_type: "init"})
+        }
       } else {
         setIsUserCompliant(false);
       }
-      handleNavigation(is_nri, result.kyc.kyc_status);
+      handleNavigation(is_nri, result.kyc);
     } catch (err) {
       console.log(err);
       toast(err.message || genericErrorMessage);
     } finally {
       setOpenCheckCompliant(false);
-      // setShowLoader(false);
     }
   };
 
-  const handleNavigation = (is_nri, kyc_status) => {
+  const handleNavigation = (is_nri, kycDetails) => {
     if (
-      (isUserCompliant || kyc_status === "compliant") &&
+      (isUserCompliant || kycDetails.kyc_status === "compliant") &&
       (homeData.kycConfirmPanScreen || isPremiumFlow)
     ) {
+      sendEvents("next", "pan_entry")
       navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
     } else {
       const kycProductType = storageService().get("kycStartPoint");
-      if (isUserCompliant || kyc_status === "compliant") {
+      if (isUserCompliant || kycDetails.kyc_status === "compliant") {
         if (is_nri) {
-          if (!TRADING_ENABLED && kycProductType === "stocks") {
+          if (!tradingEnabled && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
           } else {
             navigate(PATHNAME_MAPPER.journey);
@@ -295,10 +302,11 @@ const Home = (props) => {
         } else {
           navigate(PATHNAME_MAPPER.journey);
         }
+        sendEvents("next", "pan_entry")
       } else {
         // sendEvents(`${is_nri ? "no" : "yes"}`, "resident popup");
         if (is_nri) {
-          if (!TRADING_ENABLED && kycProductType === "stocks") {
+          if (!tradingEnabled && kycProductType === "stocks") {
             navigate(PATHNAME_MAPPER.nriError);
           } else {
             navigate(`${PATHNAME_MAPPER.journey}`, {
@@ -306,11 +314,34 @@ const Home = (props) => {
             });
           }
         } else {
-          navigate(`${PATHNAME_MAPPER.journey}`, {
-            searchParams: `${config.searchParams}&show_aadhaar=true`,
-          });
+          if (kycDetails?.application_status_v2 !== "init" && kycDetails?.kyc_type === "manual") {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=false`,
+            });
+          } else {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
+              searchParams: `${config.searchParams}&show_aadhaar=true`,
+            });
+          }
         }
       }
+    }
+  };
+
+  const handleConfirmPan = async () => {
+    sendEvents("next", "confirm_pan");
+    const skipApiCall = 
+      pan === kyc?.pan?.meta_data?.pan_number &&
+      kyc.address?.meta_data?.is_nri === !residentialStatus;
+    setOpenConfirmPan(false);
+    if (skipApiCall) {
+      handleNavigation(
+        kyc.address?.meta_data?.is_nri || false,
+        kyc
+      );
+    } else {
+      setOpenCheckCompliant(true);
+      await savePan(!residentialStatus);
     }
   };
 
@@ -330,24 +361,7 @@ const Home = (props) => {
     } else {
       nativeCallback({ events: eventObj });
     }
-  };
-
-  const handleConfirmPan = async () => {
-    sendEvents("next", "confirm_pan");
-    const skipApiCall =
-      pan === kyc?.pan?.meta_data?.pan_number &&
-      kyc.address?.meta_data?.is_nri === !residentialStatus;
-    setOpenConfirmPan(false);
-    if (skipApiCall) {
-      handleNavigation(
-        kyc.address?.meta_data?.is_nri || false,
-        kyc?.kyc_status
-      );
-    } else {
-      setOpenCheckCompliant(true);
-      await savePan(!residentialStatus);
-    }
-  };
+  }
 
   const handleClose = () => {
     sendEvents("edit_pan", "confirm_pan");
@@ -387,10 +401,10 @@ const Home = (props) => {
                 width="40"
                 label="Are you an Indian resident?"
                 options={residentialStatusOptions}
-                // id="account_type"
                 value={residentialStatus}
                 onChange={handleResidentialStatus}
-                disabled={showLoader}
+                disabled={showLoader || disableResidentialStatus}
+                disabledWithValue={disableResidentialStatus}
               />
             </div>
           </main>

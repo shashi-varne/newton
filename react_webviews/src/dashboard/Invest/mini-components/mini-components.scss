@@ -154,6 +154,18 @@
         align-items: center;
         padding: 10px 0;
         font-size: 16px;
+
+        .recommendations-funds-stock {
+          color: #C75B5B;
+        }
+
+        .recommendations-funds-bond {
+          color: #2ec5a3;
+        }
+
+        .recommendations-funds-hybrid {
+          color: #4685ce;
+        }
   
         & > p:first-child {
           color: #4685ce;
@@ -322,7 +334,7 @@
       margin: 20px 0;
     }
 
-    .bottom-info {
+    .vfdc-bottom-info {
       display: -ms-flexbox;
       display: flex;
       -ms-flex-align: center;
@@ -557,7 +569,6 @@
       width: 100%;
       padding: 5px 15px;
       font-size: 14px;
-      border-radius: 5px;
       min-height: 47px;
       font-weight: bold;
       margin: 0px !important;

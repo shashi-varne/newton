@@ -30,6 +30,7 @@ import BlankMandateUpload from "./MyAccount/BlankMandateUpload";
 import InvestmentProof from "./MyAccount/InvestmentProof";
 import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
+import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 
 const Home = (props) => {
   const { url } = props.match;
@@ -128,6 +129,7 @@ const Home = (props) => {
           exact path={`${url}capital-gain`} 
           render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
         />
+        <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />
         <Route component={NotFound} />
       </Switch>
     </Fragment>

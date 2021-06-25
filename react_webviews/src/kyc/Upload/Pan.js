@@ -2,22 +2,19 @@ import "./commonStyles.scss";
 import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import Alert from '../mini-components/Alert'
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { getConfig, isTradingEnabled } from '../../utils/functions'
+import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser, navigate as navigateFunc } from '../common/functions'
+import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
-import "./commonStyles.scss";
-import { nativeCallback } from '../../utils/native_callback'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
+import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
 const productName = config.productName;
-const TRADING_ENABLED = isTradingEnabled();
 
 const Pan = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -28,14 +25,25 @@ const Pan = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const {kyc, isLoading, updateKyc} = useUserKycHook();
+  const [areDocsPending, setDocsPendingStatus] = useState();
+  const [tradingEnabled, setTradingEnabled] = useState();
+  const [isPanAvailable, setIsPanAvailable] = useState(false);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      if (isDigilockerFlow(kyc)) {
-        setDlFlow(true);
-      }
+      initialize();
     }
   }, [kyc]);
+
+  const initialize = async () => {
+    if (isDigilockerFlow(kyc)) {
+      setDlFlow(true);
+    }
+    const docStatus = await checkDocsPending(kyc);
+    setDocsPendingStatus(docStatus);
+    setTradingEnabled(isTradingEnabled(kyc))
+    setIsPanAvailable(isDocSubmittedOrApproved("equity_pan"));
+  }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
     sendEvents("attach_document");
@@ -48,23 +56,39 @@ const Pan = (props) => {
     toast('Please select image file only');
   }
 
+  const commonRedirection = () => {
+    if (!isDocSubmittedOrApproved("equity_identification")) {
+      navigate(PATHNAME_MAPPER.uploadSelfie);
+    } else {
+      if (!isDocSubmittedOrApproved("equity_income")) {
+        navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+      } else {
+        if (areDocsPending) {
+          navigate(PATHNAME_MAPPER.documentVerification);
+        } else {
+          navigate(PATHNAME_MAPPER.kycEsign);
+        }
+      }
+    }
+  }
+
   const handleOtherPlatformNavigation = () => {
     if (kyc.kyc_status === 'compliant') {
-      if (!isDocSubmittedOrApproved("identification"))
-        navigate(PATHNAME_MAPPER.uploadSelfie);
-      else {
-        if (!isDocSubmittedOrApproved("equity_income"))
-          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
-        else navigate(PATHNAME_MAPPER.kycEsign)
-      }
+      commonRedirection();
     } else {
       if (dlFlow) {
-        if (kyc.sign_status !== 'signed') {
-          navigate(PATHNAME_MAPPER.tradingExperience);
+        if (kyc.equity_sign_status !== 'signed') {
+          if (isPanAvailable && !kyc.equity_data.meta_data.trading_experience) {
+            navigate(PATHNAME_MAPPER.tradingExperience);
+          } else {
+            commonRedirection();
+          }
         } else {
           navigate(PATHNAME_MAPPER.journey);
         }
-      } else navigate(PATHNAME_MAPPER.uploadProgress);
+      } else {
+        navigate(PATHNAME_MAPPER.uploadProgress);
+      }
     }
   };
 
@@ -78,7 +102,7 @@ const Pan = (props) => {
 
   const handleNavigation = () => {
     sendEvents("next", "pan_uploaded")
-    if (TRADING_ENABLED) {
+    if (tradingEnabled) {
       handleOtherPlatformNavigation();
     } else {
       handleSdkNavigation();
@@ -86,12 +110,7 @@ const Pan = (props) => {
   }
 
   const handleSubmit = async () => {
-    if (isOpen) {
-      sendEvents("next", "pan_details_mismatch")
-      setIsOpen(false)
-    } else {
-      sendEvents('next')
-    }
+    sendEvents('next')
     try {
       const data = {};
       if (dlFlow) {
@@ -111,12 +130,8 @@ const Pan = (props) => {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        if (isNotManualAndNriUser(result.kyc)) {
-          setBottomSheetType('success');
-          setIsOpen(true);
-        } else {
-          handleNavigation();
-        }
+        setBottomSheetType('success');
+        setIsOpen(true);
       }
     } catch (err) {
       toast(err?.message)
@@ -124,6 +139,16 @@ const Pan = (props) => {
     } finally {
       setIsApiRunning(false)
     }
+  }
+
+  const handleCloseBottomSheet = () => {
+    setIsOpen(false);
+  }
+
+  const handleRetryClick = () => {
+    handleCloseBottomSheet();
+    setFile(null);
+    setFileToShow(null);
   }
 
   const sendEvents = (userAction, screenName) => {
@@ -143,7 +168,6 @@ const Pan = (props) => {
     }
   }
 
-  
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -176,12 +200,15 @@ const Pan = (props) => {
             />
             <KycUploadContainer.Button
               withPicker
-              showOptionsDialog
-              nativePickerMethodName="open_gallery"
-              fileName="pan"
-              onFileSelectComplete={onFileSelectComplete}
-              onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_IMAGE_TYPES}
+              filePickerProps={{
+                showOptionsDialog: true,
+                shouldCompress: true,
+                nativePickerMethodName: "open_gallery",
+                fileName: "pan",
+                onFileSelectComplete: onFileSelectComplete,
+                onFileSelectError: onFileSelectError,
+                supportedFormats: SUPPORTED_IMAGE_TYPES
+              }}
             />
           </KycUploadContainer>
           <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
@@ -196,11 +223,14 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          {TRADING_ENABLED && kyc.kyc_type !== "manual" &&
+          {bottomSheetType &&
             <PanUploadStatus
               status={bottomSheetType}
               isOpen={isOpen}
-              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
+              onClose={handleCloseBottomSheet}
+              disableBackdropClick
+              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleRetryClick}
+              kyc={kyc}
             />
           }
         </section>

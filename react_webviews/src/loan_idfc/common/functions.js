@@ -93,7 +93,9 @@ export async function initialize() {
     "eligibility_screen",
     "recommended",
     "system_error",
-    "bt_info_screen"
+    "bt_info_screen",
+    "mobile_verification",
+    "otp_verify"
   ];
 
   let idfc_dmi_screens = [

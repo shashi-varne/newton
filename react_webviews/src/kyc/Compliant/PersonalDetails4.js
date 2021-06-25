@@ -7,16 +7,17 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  isDocSubmittedOrApproved,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { nativeCallback } from "../../utils/native_callback";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -25,9 +26,9 @@ const PersonalDetails4 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  let title = "Nominee detail";
+  let title = "Nominee details";
   if (isEdit) {
-    title = "Edit nominee detail";
+    title = "Edit nominee details";
   }
   const [totalPages, setTotalPages] = useState();
   const { kyc, user, isLoading } = useUserKycHook();
@@ -92,7 +93,10 @@ const PersonalDetails4 = (props) => {
       userkycDetails.nomination.meta_data.name = form_data.name;
       userkycDetails.nomination.meta_data.relationship = form_data.relationship;
       body.kyc = {
-        nomination: userkycDetails.nomination.meta_data,
+        nomination: {
+          ...userkycDetails.nomination.meta_data,
+          nominee_optional: false
+        }
       };
     }
     saveCompliantPersonalDetails2(body);
@@ -119,7 +123,7 @@ const PersonalDetails4 = (props) => {
     // } else {
     //   navigate(PATHNAME_MAPPER.journey);
     // }
-    if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+    if (!isDocSubmittedOrApproved("sign")) {
       navigate(PATHNAME_MAPPER.uploadSign);
     } else {
       navigate(PATHNAME_MAPPER.journey)
@@ -170,12 +174,10 @@ const PersonalDetails4 = (props) => {
     }
   };
 
-  const pageNumber = getTotalPagesInPersonalDetails(kyc, user, isEdit);
   return (
     <Container
       skelton={isLoading}
       events={sendEvents("just_set_events")}
-      id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       handleClick={handleClick}
@@ -187,11 +189,9 @@ const PersonalDetails4 = (props) => {
     >
       <div className="kyc-nominee">
         <main data-aid='kyc-nominee-page'>
-          <WVInfoBubble
-            type="info"
-            customTitle="Nominee details will be applicable for mutual fund investments only"
-            hasTitle
-          />
+          <WVInfoBubble type="info">
+            Nominee details will be applicable for mutual fund investments only
+          </WVInfoBubble>
           <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
@@ -215,7 +215,7 @@ const PersonalDetails4 = (props) => {
             disabled={isChecked || isApiRunning}
           />
           <Input
-            label="Date of birth(DD/MM/YYYY)"
+            label="Date of birth (DD/MM/YYYY)"
             class="input"
             value={form_data.dob || ""}
             error={form_data.dob_error ? true : false}

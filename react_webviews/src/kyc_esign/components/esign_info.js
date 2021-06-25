@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig, getBasePath, isTradingEnabled } from 'utils/functions';
+import { getConfig, getBasePath, isTradingEnabled, navigate as navigateFunc } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
-import { navigate as navigateFunc } from '../common/functions'
 import ConfirmBackModal from './confirm_back'
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
@@ -12,8 +11,6 @@ import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
 import { isDigilockerFlow } from '../../kyc/common/functions';
 
 const config = getConfig();
-const TRADING_ENABLED = isTradingEnabled();
-
 class ESignInfo extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +22,7 @@ class ESignInfo extends Component {
       showAadharDialog: false,
     }
 
-    this.navigate = navigateFunc.bind(this.props);
+    this.navigate = navigateFunc.bind(props);
   }
 
   componentDidMount = () => {
@@ -39,7 +36,8 @@ class ESignInfo extends Component {
       if (isDigilockerFlow(kyc)) {
         dl_flow = true;
       }
-      this.setState({ dl_flow, kyc });
+      const tradingFlow = isTradingEnabled(kyc);
+      this.setState({ dl_flow, kyc, tradingFlow });
     }
   };
 
@@ -61,10 +59,10 @@ class ESignInfo extends Component {
   }
 
   handleClick = async () => {
-    this.sendEvents('next')
     if(this.state.showAadharDialog) {
       this.closeAadharDialog();
     }
+    this.sendEvents('next','e sign kyc')
     let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
       basepath + '/kyc-esign/nsdl' + config.searchParams
@@ -74,7 +72,7 @@ class ESignInfo extends Component {
 
     try {
       const params = {};
-      if (TRADING_ENABLED) {
+      if (this.state.tradingFlow) {
         params.kyc_product_type = "equity";
       }
       const url = `/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`;
@@ -123,6 +121,14 @@ class ESignInfo extends Component {
     }
   }
 
+  goNext = () => {
+    if(!this.state.tradingFlow) {
+      this.handleClick()
+    } else {
+      this.setState({ showAadharDialog: true })
+    }
+  }
+
   sendEvents = (userAction, screenName) => {
     // const kyc = storageService().getObject("kyc");
     let eventObj = {
@@ -143,14 +149,6 @@ class ESignInfo extends Component {
     }
   }
   
-  goNext = () => {
-    if(!TRADING_ENABLED) {
-      this.handleClick()
-    } else {
-      this.setState({ showAadharDialog: true })
-    }
-  }
-
   render() {
     const { show_loader, productName } = this.state;
     const headerData = {
@@ -220,10 +218,14 @@ class ESignInfo extends Component {
           buttonLayout="stacked"
           title="Please ensure your mobile is linked with your Aadhaar"
           subtitle=""
-          button1Props={{ title: "PROCEED", type: "primary", onClick: this.handleClick }}
+          button1Props={{
+            title: "PROCEED",
+            variant: "contained",
+            onClick: this.handleClick
+          }}
           button2Props={{
             title: "Don't have aadhaar linked mobile?",
-            type: "textOnly",
+            variant: "text",
             onClick: () => this.navigate("/kyc/manual-signature"),
           }}
           image={require(`assets/${productName}/ic_aadhaar_handy.svg`)}

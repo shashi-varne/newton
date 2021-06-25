@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
 import UploadCard from "./UploadCard";
 import { getDocuments } from "../services";
 import { isEmpty } from "utils/validators";
+import { navigate as navigateFunc } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
-import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
+const productName = getConfig().productName;
 const Progress = (props) => {
   const { kyc, isLoading } = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
+  const [openConfirmBack, setOpenConfirmBack] = useState(false);
 
   let documents = [];
   let totalDocs = 0;
@@ -21,10 +25,12 @@ const Progress = (props) => {
   if (!isEmpty(kyc) && !isLoading) {
     documents = getDocuments(kyc);
     for (let document of documents) {
-      if (
-        document.doc_status === "submitted" ||
-        document.doc_status === "approved"
-      ) {
+      const notBankDocStatus = (document.key !== "bank" && (document.doc_status === "submitted" || document.doc_status === "approved"));
+      const bankDocStatus = (document.key === "bank" && (document.doc_status === "submitted" || document.doc_status === "approved") && 
+      (kyc.bank.meta_data.bank_status === "doc_submitted" || kyc.bank.meta_data.bank_status === "verified"));
+
+      const submittedOrApprovedCondition = notBankDocStatus || bankDocStatus;
+      if (submittedOrApprovedCondition) {
         totalDocs++;
       }
     }
@@ -34,7 +40,11 @@ const Progress = (props) => {
   const handleCards = (key, index) => {
     sendEvents("next", key);
     if (disableNext) return;
-    if (documents[index].doc_status === "approved") return;
+    const approvedCondition = (key !== "bank" && documents[index].doc_status === "approved") ||
+    (key === "bank" && documents[index].doc_status === "approved" &&
+    (kyc.bank.meta_data.bank_status === "doc_submitted" || kyc.bank.meta_data.bank_status === "verified"));
+
+    if (approvedCondition) return;
     const stateMapper = {
       pan: PATHNAME_MAPPER.uploadPan,
       address: PATHNAME_MAPPER.uploadAddress,
@@ -55,9 +65,8 @@ const Progress = (props) => {
       props.history.goBack();
       return;
     }
-    const navigate = navigateFunc.bind(props)
-    navigate('/kyc/journey')
-  };
+    setOpenConfirmBack(true);
+  }
 
   const sendEvents = (userAction, docs) => {
     let eventObj = {
@@ -86,19 +95,29 @@ const Progress = (props) => {
       skelton={isLoading}
       skeltonType="p"
       handleClick={() => {
-        sendEvents("next");
+        sendEvents('next');
         navigate(PATHNAME_MAPPER.journey);
       }}
       title="Upload documents"
       headerData={{goBack}}
       data-aid='kyc-progress-screen'
+      hidePageTitle
     >
       <section id="kyc-upload-progress" data-aid='kyc-upload-progress'>
+        <header className="flex-between kup-header">
+          <div>
+            <div className="generic-page-title">Upload documents</div>
+            <div className="generic-page-subtitle">Attach required documents to verify your personal and address details</div>
+          </div>
+          <img alt="" src={require(`assets/${productName}/upload_documents.svg`)} />
+        </header>
         <main className="documents" data-aid='kyc-progress-screen-documents'>
           {documents.map((document, index) => (
             <div key={index} className="document" data-aid={`kyc-document-${index+1}`}>
               <UploadCard
+                kyc={kyc}
                 default_image={document.default_image}
+                docKey={document.key}
                 title={document.title}
                 subtitle={document.subtitle}
                 doc_status={document.doc_status}
@@ -109,6 +128,17 @@ const Progress = (props) => {
             </div>
           ))}
         </main>
+        <footer className="kup-footer">
+          <img
+            alt=""
+            src={require(`assets/${productName}/trust_icons.svg`)}
+          />
+        </footer>
+        <ConfirmBackDialog 
+          isOpen={openConfirmBack}
+          goBack={() => navigate('/kyc/journey')}
+          close={() => setOpenConfirmBack(false)}
+        />
       </section>
     </Container>
   );

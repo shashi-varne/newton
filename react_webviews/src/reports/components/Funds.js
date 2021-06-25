@@ -3,10 +3,12 @@ import Container from "../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPathname } from "../constants";
 import { getFunds, getFundMf } from "../common/api";
-import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
+import { getAmountInInr } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import FundNotAvailable from "./mini-components/FundNotAvailable";
 import AskInvestType from "./mini-components/AskInvestType";
 import Button from "../../common/ui/Button";
+import { getConfig } from "../../utils/functions";
 
 const Funds = (props) => {
   const params = props?.match?.params || {};
@@ -83,6 +85,18 @@ const Funds = (props) => {
   };
 
   const getMfDetails = async (fund) => {
+    const config = getConfig();
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "reports",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
     setIsApiRunning("button");
     try {
       const result = await getFundMf({
@@ -111,15 +125,29 @@ const Funds = (props) => {
             itype === "buildwealth"
               ? "buildwealth"
               : dontAddSuffixInType(itype);
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+
           setInvestTypeData({
             message: "How would you like to invest in this fund?",
             button2Title: "SIP",
             button1Title: "ONE-TIME",
             handleClick1: handleInvestType("ONE-TIME", item),
-            handleClick2: handleInvestType("SIP", item),
+            handleClick2: handleInvestType("SIP", item, true),
           });
           setAskInvestType(true);
         } else if (result.sip_flag) {
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+
           setInvestTypeData({
             message: result.mfname + " is only enabled for SIP",
             button2Title: "CONTINUE",
@@ -129,6 +157,13 @@ const Funds = (props) => {
           });
           setAskInvestType(true);
         } else if (result.ot_flag) {
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+
           setInvestTypeData({
             message: result.mfname + " is only enabled for ONE-TIME",
             button2Title: "CONTINUE",
@@ -139,12 +174,26 @@ const Funds = (props) => {
           setAskInvestType(true);
         }
       } else if (canShowOnlyOt(itype) && result.ot_flag) {
+        // send event
+        if (!config.Web) {
+          window.callbackWeb.eventCallback(_event);
+        } else if (config.isIframe) {
+          window.callbackWeb.sendEvent(_event);
+        }
+
         navigate(`${getPathname.investMore}ONE-TIME`, {
           state: {
             recommendation: JSON.stringify(item),
           },
         });
       } else if (canShowOnlySip(itype) && result.sip_flag) {
+        // send event
+        if (!config.Web) {
+          window.callbackWeb.eventCallback(_event);
+        } else if (config.isIframe) {
+          window.callbackWeb.sendEvent(_event);
+        }
+
         navigate(`${getPathname.investMore}SIP`, {
           state: {
             recommendation: JSON.stringify(item),
@@ -158,16 +207,19 @@ const Funds = (props) => {
     }
   };
 
-  const handleInvestType = (invest_type, recommendation) => () => {
+  const handleInvestType = (invest_type, recommendation, addSipTag) => () => {
     if (invest_type === "SIP") {
+      if(addSipTag && recommendation.type !== "buildwealth") {
+        recommendation.type = dontAddSuffixInType(recommendation.type)
+      }
       navigate(`${getPathname.investMore}${invest_type}`, {
         state: {
           recommendation: JSON.stringify(recommendation),
         },
       });
     } else if (invest_type === "ONE-TIME") {
-      if(recommendation.type === "buildwealth") {
-        recommendation.type = "buildwealthot"
+      if (recommendation.type === "buildwealth") {
+        recommendation.type = "buildwealthot";
       }
       navigate(`${getPathname.investMore}${invest_type}`, {
         state: {
@@ -184,20 +236,22 @@ const Funds = (props) => {
   };
 
   return (
-    <Container hidePageTitle={true} noFooter={true} skelton={showSkelton}>
-      <div className="reports-funds">
+    <Container hidePageTitle={true} noFooter={true} skelton={showSkelton} data-aid='reports-funds-screen'>
+      <div className="reports-funds" data-aid='reports-funds'>
         {!isEmpty(funds) &&
           funds.map((fund, index) => {
             return (
-              <div className="reports-fund-content" key={index}>
-                <h5 onClick={() => handleTiles(index)}>
+              <div className="reports-fund-content" key={index} data-aid='reports-fund-content'>
+                <h5 onClick={() => handleTiles(index)} data-aid={fund.mf.friendly_name}>
                   <div>{fund.mf.friendly_name}</div>
                   <div className="right-info">
                     {fund.current_earnings.percent &&
                       fund.current_earnings.percent !== 0 && (
                         <div
                           className={`earning-percent ${
-                            fund.current_earnings.percent >= 0 ? "funds-green-text" : "funds-red-text"
+                            fund.current_earnings.percent >= 0
+                              ? "funds-green-text"
+                              : "funds-red-text"
                           }`}
                         >
                           {fund.current_earnings.percent > 0 && "+"}
@@ -214,11 +268,11 @@ const Funds = (props) => {
                 </h5>
                 {openIndex === index && (
                   <>
-                    <div onClick={() => handleTiles(index)}>
+                    <div onClick={() => handleTiles(index)} data-aid='funds-folio'>
                       <div className="head">
                         Folio No: {fund.folio_details[0].folio_number}
                       </div>
-                      <div className="summary">
+                      <div className="summary" data-aid='reports-funds-summary'>
                         <div className="content">
                           <div className="amount">
                             {formatAmountInr(fund.current)}
@@ -239,7 +293,9 @@ const Funds = (props) => {
                         <div className="content">
                           <div
                             className={`amount ${
-                              fund.current_earnings.amount < 0 ? "funds-red-text" : "funds-green-text"
+                              fund.current_earnings.amount < 0
+                                ? "funds-red-text"
+                                : "funds-green-text"
                             }`}
                           >
                             {getAmountInInr(fund.current_earnings.amount)}
@@ -264,7 +320,7 @@ const Funds = (props) => {
                         </div>
                       </div>
                       <hr className="hr-break" />
-                      <div className="summary">
+                      <div className="summary" data-aid='reports-funds-summary-content'>
                         <div className="content">
                           <div className="amount">
                             {formatAmountInr(fund.mf.curr_nav)}
@@ -286,11 +342,12 @@ const Funds = (props) => {
                       </div>
                     </div>
                     <Button
+                      dataAid='reports-invest-more-btn'
                       buttonTitle="INVEST MORE"
                       showLoader={isApiRunning}
                       onClick={() => getMfDetails(fund)}
-                      style={{
-                        height: "36px",
+                      classes={{
+                        button: "rf-invest-more-button"
                       }}
                     />
                   </>

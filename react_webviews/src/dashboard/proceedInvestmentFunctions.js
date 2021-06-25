@@ -14,20 +14,20 @@ export function isInvestRefferalRequired(partner_code) {
 }
 
 export async function proceedInvestment(data) {
-  let userKyc = data.userKyc || storageService().getObject("kyc") || {};
-  const kycJourneyStatus = getKycAppStatus(userKyc).status;
   let {
     sipOrOnetime,
     isSipDatesScreen,
     investmentEventData,
     body,
     paymentRedirectUrl,
-    history,
     handleApiRunning,
     handleDialogStates,
     handleIsRedirectToPayment,
+    userKyc,
+    navigate
   } = data;
 
+  const kycJourneyStatus = getKycAppStatus(userKyc).status;
   let isKycNeeded = false;
   if (
     (partnerCode === "bfdlmobile" && !data.isInvestJourney) ||
@@ -38,13 +38,13 @@ export async function proceedInvestment(data) {
   }
 
   if (isKycNeeded) {
-    redirectToKyc(kycJourneyStatus, history);
+    redirectToKyc(userKyc, kycJourneyStatus, navigate);
     return;
   }
 
   if (sipOrOnetime === "sip" && !isSipDatesScreen) {
     storageService().setObject("investmentObjSipDates", body);
-    navigation(history, "/sipdates");
+    navigate("/sipdates");
   } else {
     if (!investmentEventData) {
       investmentEventData = storageService().getObject("mf_invest_data") || {};
@@ -74,7 +74,7 @@ export async function proceedInvestment(data) {
           window.location.href = pgLink;
         } else {
           if (result.rta_enabled) {
-            navigation(history, "/payment/options", {
+            navigate("/payment/options", {
               state: {
                 pg_options: result.pg_options,
                 consent_bank: result.consent_bank,
@@ -85,7 +85,9 @@ export async function proceedInvestment(data) {
               },
             });
           } else {
-            navigation(history, "/kyc/journey");
+            navigate("/kyc/journey", {
+              state: { show_aadhaar: (userKyc.address.meta_data.nri || userKyc.kyc_type === "manual") ? false : true } 
+            });
           }
         }
       } else {
@@ -96,10 +98,10 @@ export async function proceedInvestment(data) {
         storageService().setObject("is_debit_enabled", result.is_debit_enabled);
         switch (status) {
           case 301:
-            redirectToKyc(kycJourneyStatus, history);
+            redirectToKyc(userKyc, kycJourneyStatus, navigate);
             break;
           case 302:
-            redirectToKyc(kycJourneyStatus, history);
+            redirectToKyc(userKyc, kycJourneyStatus, navigate);
             break;
           case 305:
             handleDialogStates("openPennyVerificationPending", true);
@@ -125,18 +127,31 @@ export function canDoInvestment(kyc) {
   return false;
 }
 
-export function redirectToKyc(kycJourneyStatus, history) {
-  if (kycJourneyStatus === "ground") {
-    navigation(history, "/kyc/home");
-  } else {
-    navigation(history, "/kyc/journey");
+export function redirectToKyc(userKyc, kycJourneyStatus, navigate) {
+  const config = getConfig();
+  let _event = {
+    event_name: "journey_details",
+    properties: {
+      journey: {
+        name: "mf",
+        trigger: "cta",
+        journey_status: "incomplete",
+        next_journey: "kyc",
+      },
+    },
+  };
+  // send event
+  if (!config.Web) {
+    window.callbackWeb.eventCallback(_event);
+  } else if (config.isIframe) {
+    var message = JSON.stringify(_event);
+    window.callbackWeb.sendEvent(_event);
   }
-}
-
-function navigation(history, pathname, data = {}) {
-  history.push({
-    pathname: pathname,
-    search: getConfig().searchParams,
-    state: data.state,
-  });
+  if (kycJourneyStatus === "ground") {
+    navigate("/kyc/home");
+  } else {
+    navigate("/kyc/journey", {
+      state: { show_aadhaar: (userKyc.address.meta_data.nri || userKyc.kyc_type === "manual") ? false : true } 
+    });
+  }
 }

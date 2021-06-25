@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import { getMyAccount } from "../common/api";
 import { storageService } from "utils/validators";
-import { navigate as navigateFunc } from "../common/functions";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import toast from "../../common/ui/Toast";
 import { initData } from "../services";
@@ -44,11 +43,12 @@ const BanksList = (props) => {
   };
 
   const handleClick = () => {
-    sendEvents("next")
+    sendEvents("next");
     navigate(PATHNAME_MAPPER.addBank);
   };
 
   const bank_details = (bank_id) => () => {
+    sendEvents('next')
     navigate(`${PATHNAME_MAPPER.bankDetails}${bank_id}`);
   };
 
@@ -70,6 +70,10 @@ const BanksList = (props) => {
     }
   };
 
+  const goBack = () => {
+    navigate("/my-account");
+  }
+
   return (
     <Container
       skelton={showLoader}
@@ -83,6 +87,7 @@ const BanksList = (props) => {
       title="Bank accounts"
       type="outlined"
       data-aid='kyc-add-other-bank-screen'
+      headerData={{ goBack }}
     >
       <div className="banks-list" data-aid='kyc-banks-list'>
         {banks.map((bank, index) => {

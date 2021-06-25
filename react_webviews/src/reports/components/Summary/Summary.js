@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
+import { nativeCallback } from "../../../utils/native_callback";
 import Button from "common/ui/Button";
 import {
-  navigate as navigateFunc,
   getProjectedValue,
   getAmountInInr,
 } from "../../common/functions";
@@ -33,6 +33,8 @@ const Summary = (props) => {
   const [data, setData] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
   const [investCards, setInvestCards] = useState({});
+  const [isAmountSliderUsed, setIsAmountSliderUsed] = useState(false);
+  const [isYearSliderUsed, setIsYearSliderUsed] = useState(false);
   const { user: currentUser, isLoading } = useUserKycHook();
 
   useEffect(() => {
@@ -97,6 +99,8 @@ const Summary = (props) => {
   };
 
   const handleChange = (name) => (event) => {
+    if (name === "time") setIsYearSliderUsed(true);
+    if (name === "amount") setIsAmountSliderUsed(true);
     let value = event.target ? event.target.value : event;
     handleInvestData(name, value);
   };
@@ -105,6 +109,7 @@ const Summary = (props) => {
     let investValues = { ...investData };
     investValues[name] = value;
     if (name === "investType") {
+      setIsAmountSliderUsed(false);
       investValues.amount = investValues.investType === "sip" ? 500 : 5000;
     }
     investValues[`${name}_error`] = "";
@@ -118,10 +123,37 @@ const Summary = (props) => {
   };
 
   const flowOptions = (name) => {
+    switch (name) {
+      case "reportsSip":
+        sendEvents("next", "Existing SIPs");
+        break;
+      case "reportsTransactions":
+        sendEvents("next", "Transactions");
+        break;
+      case "reportsFundswiseSummary":
+        sendEvents("next", "Track Fund Performance");
+        break;
+      case "reportsSwitched":
+        sendEvents("next", "Pending Switch");
+        break;
+      case "reportsRedeemed":
+        sendEvents("next", "Pending Withdrawals");
+        break;
+      case "reportsPurchased":
+        sendEvents("next", "Pending Purchase");
+        break;
+      case "npsInvestments":
+        sendEvents("next", "NPS Investments");
+        break;
+      default:
+        sendEvents("next");
+        break;
+    }
     navigate(getPathname[name], { state: { fromPath: "reports" } });
   };
 
   const redirectWithdraw = () => {
+    sendEvents("next", "Withdraw");
     if (currentUser.kyc_registration_v2 === "complete") {
       navigate(`${getPathname.withdrawReason}`);
       return;
@@ -136,20 +168,66 @@ const Summary = (props) => {
   };
 
   const showGoals = () => {
+    sendEvents("next", "Track my goals");
     if (report.invested === 0) return;
     navigate(getPathname.reportGoals);
   };
 
+  const sendEvents = (userAction, flow) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "my money",
+        flow: flow || "",
+        mode: (investData?.investType === "sip" ? "sip" : "ot") || "",
+        invested_amount_slider: isAmountSliderUsed ? "yes" : "no",
+        years_slider: isYearSliderUsed ? "yes" : "no",
+        // "investment_graph": $scope.isGraphUsed ? "yes" : "no", // To be checked
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+  const investMore = () => {
+    const config = getConfig();
+    var _event = {
+      'event_name': 'journey_details',
+      'properties': {
+        'journey': {
+          'name': 'reports',
+          'trigger': 'cta',
+          'journey_status': 'complete',
+          'next_journey': 'mf'
+        }
+      }
+    };
+    sendEvents("next", "Explore Mutual Funds");
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+
+    navigate(getPathname.invest)
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="My Money"
       noFooter={true}
       skelton={showSkelton || isLoading}
+      data-aid='reports-summary-screen'
     >
-      <div className="reports">
+      <div className="reports" data-aid='reports'>
         {!isEmpty(report) && (
           <>
-            <header className="reports-header">
+            <header className="reports-header" data-aid='reports-header'>
               {current && (
                 <>
                   <div className="title">Current Value</div>
@@ -158,7 +236,7 @@ const Summary = (props) => {
                   </div>
                   {report.current.invested > 0 && (
                     <>
-                      <div className="title ">
+                      <div className="title " data-aid='reports-current-invested'>
                         1 Day Change:{" "}
                         {report.current.one_day_earnings.amount >= 0 ? (
                           <span className="summary-green-text">
@@ -181,7 +259,7 @@ const Summary = (props) => {
                           </span>
                         )}
                       </div>
-                      <div className="row">
+                      <div className="row" data-aid='reports-row'>
                         <div className="content">
                           <div>Amount Invested</div>
                           <div>{formatAmountInr(report.current.invested)}</div>
@@ -199,7 +277,7 @@ const Summary = (props) => {
                         </div>
                       </div>
                       {report.past.redeemed > 0 && (
-                        <div className="pointer" onClick={toggleheader}>
+                        <div className="pointer" data-aid='reports-pointer' onClick={() => toggleheader()}>
                           View redeemed investments
                         </div>
                       )}
@@ -209,11 +287,11 @@ const Summary = (props) => {
               )}
               {!current && (
                 <>
-                  <div className="title">Redeemed Value</div>
-                  <div className="amount">
+                  <div className="title" data-aid='reports-redeemed-value'>Redeemed Value</div>
+                  <div className="amount" data-aid='reports-amount-value'>
                     {formatAmountInr(report.past.redeemed)}
                   </div>
-                  <div className="row">
+                  <div className="row" data-aid='reports-row'>
                     <div className="content">
                       <div>Purchase Cost</div>
                       <div>
@@ -231,15 +309,15 @@ const Summary = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="pointer" onClick={toggleheader}>
+                  <div className="pointer" data-aid='reports-pointer' onClick={() => toggleheader()}>
                     View current investments
                   </div>
                 </>
               )}
             </header>
-            <main>
+            <main data-aid='reports-summary-main'>
               {!currentUser.active_investment && report.pending.invested === 0 && (
-                <div className="invest-more">
+                <div className="invest-more" data-aid='reports-invest-more'>
                   <div className="invest-more-content">
                     <p>
                       You have not invested in Mutual Funds!
@@ -247,7 +325,8 @@ const Summary = (props) => {
                       <b>Invest today & grow your wealth</b>
                     </p>
                     <Button
-                      onClick={() => navigate(getPathname.invest)}
+                      dataAid='reports-explore-mf-btn'
+                      onClick= {investMore}
                       buttonTitle="Explore Mutual Funds"
                       classes={{
                         button: "reports-invest-button",
@@ -266,6 +345,7 @@ const Summary = (props) => {
                 <>
                   {currentUser.nps_investment && investCards.nps && (
                     <SummaryCard
+                      dataAid='nps-investments'
                       goNext={() => flowOptions("npsInvestments")}
                       icon={`nps_report_icon.${imageMapper[productName]}`}
                       title="NPS Investments"
@@ -275,6 +355,7 @@ const Summary = (props) => {
                     />
                   )}
                   <SummaryCard
+                    dataAid='track-my-goals'
                     goNext={showGoals}
                     icon={`goalwise.${imageMapper[productName]}`}
                     title="Track my goals"
@@ -285,6 +366,7 @@ const Summary = (props) => {
                   />
                   {data.showPendingPurchase && (
                     <SummaryCard
+                      dataAid='pending-purchase'
                       goNext={() => flowOptions("reportsPurchased")}
                       icon={`pending_purchase.${imageMapper[productName]}`}
                       title="Pending Purchase"
@@ -296,6 +378,7 @@ const Summary = (props) => {
                   )}
                   {data.showPendingRedemption && (
                     <SummaryCard
+                      dataAid='pending-withdrawals'
                       goNext={() => flowOptions("reportsRedeemed")}
                       icon={`pending_redemption.${imageMapper[productName]}`}
                       title="Pending Withdrawals"
@@ -307,6 +390,7 @@ const Summary = (props) => {
                   )}
                   {data.showPendingSwitched && (
                     <SummaryCard
+                      dataAid='pending-switch'
                       goNext={() => flowOptions("reportsSwitched")}
                       icon={`pending_purchase.${imageMapper[productName]}`}
                       title="Pending Switch"
@@ -318,6 +402,7 @@ const Summary = (props) => {
                   )}
                   {data.showSipSchedule && (
                     <SummaryCard
+                      dataAid='existing-sip'
                       goNext={() => flowOptions("reportsSip")}
                       icon={`sip.${imageMapper[productName]}`}
                       title="Existing SIPs"
@@ -330,6 +415,7 @@ const Summary = (props) => {
                   {data.showTransactions && (
                     <>
                       <SummaryCard
+                        dataAid='transactions'
                         goNext={() => flowOptions("reportsTransactions")}
                         icon={`transactions.${imageMapper[productName]}`}
                         title="Transactions"
@@ -338,6 +424,7 @@ const Summary = (props) => {
                         }
                       />
                       <SummaryCard
+                        dataAid='track-fund-performance'
                         goNext={() => flowOptions("reportsFundswiseSummary")}
                         icon={`fundwise.${imageMapper[productName]}`}
                         title="Track Fund Performance"
@@ -357,6 +444,7 @@ const Summary = (props) => {
                 />
               )}
               <SummaryCard
+                dataAid='withdraw'
                 goNext={() => redirectWithdraw()}
                 icon="ic_pf_withdraw.svg"
                 title="Withdraw"
@@ -364,14 +452,22 @@ const Summary = (props) => {
               />
               {data.insurance_active && investCards.insurance && (
                 <SummaryCard
-                  goNext={() => navigate("/group-insurance/common/report")}
+                  dataAid='insurance'
+                  goNext={() => {
+                    sendEvents("next", "Insurance");
+                    navigate("/group-insurance/common/report");
+                  }}
                   icon="ic_pf_insurance.svg"
                   title="Insurance"
                 />
               )}
               {data.gold_active_investment && investCards.gold && (
                 <SummaryCard
-                  goNext={() => navigate("/gold/my-gold")}
+                  dataAid='gold'
+                  goNext={() => {
+                    sendEvents("next", "Gold");
+                    navigate("/gold/my-gold");
+                  }}
                   icon="ic_pf_gold.svg"
                   title="Gold"
                   subtitle={`${data?.gold_details?.total_balance || 0} gm`}
@@ -393,9 +489,10 @@ export const SummaryCard = ({
   title,
   subtitle,
   iconClassName,
+  dataAid,
 }) => {
   return (
-    <div className="content" onClick={goNext}>
+    <div className="content" data-aid={dataAid} onClick={goNext}>
       <img
         alt=""
         src={require(`assets/${productName}/${icon}`)}

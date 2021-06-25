@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { PATHNAME_MAPPER } from "../../constants";
+import { NRI_ADDRESS_PROOF_OPTIONS, PATHNAME_MAPPER } from "../../constants";
 import { isEmpty, validateNumber } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import useUserKycHook from "../../common/hooks/userKycHook";
@@ -29,12 +29,6 @@ const NriAddressDetails1 = (props) => {
 
   const { kyc, isLoading } = useUserKycHook();
 
-  const ADDRESS_PROOF_OPTIONS = [
-    { name: "Driving license", value: "DL" },
-    { name: "Gas receipt", value: "UTILITY_BILL" },
-    { name: "Passbook", value: "LAT_BANK_PB" },
-  ];
-
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
   }, [kyc]);
@@ -49,7 +43,7 @@ const NriAddressDetails1 = (props) => {
     let formData = {
       mobile_number: mobile_number,
       country_code: country_code,
-      address_doc_type: kyc.address_doc_type || "",
+      address_doc_type: kyc.nri_address_doc_type || "",
     };
     setFormData({ ...formData });
     setOldState({ ...formData });
@@ -73,13 +67,13 @@ const NriAddressDetails1 = (props) => {
       });
       return;
     }
-    let mobile_number = form_data.mobile;
+    let mobile_number = form_data.mobile_number;
     if (form_data.country_code) {
       mobile_number = form_data.country_code + "|" + mobile_number;
     }
     let userkycDetails = { ...kyc };
     userkycDetails.nri_address.meta_data.mobile_number = mobile_number;
-    userkycDetails.nri_address.meta_data.address_doc_type =
+    userkycDetails.nri_address.meta_data.nri_address_doc_type =
       form_data.address_doc_type;
     saveNriAddressDetails1(userkycDetails);
   };
@@ -113,7 +107,7 @@ const NriAddressDetails1 = (props) => {
     if (name === "mobile_number" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "address_doc_type")
-      formData[name] = ADDRESS_PROOF_OPTIONS[value].value;
+      formData[name] = NRI_ADDRESS_PROOF_OPTIONS[value].value;
     else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
@@ -167,6 +161,7 @@ const NriAddressDetails1 = (props) => {
             onChange={handleChange("mobile_number")}
             type="text"
             disabled={isApiRunning}
+            inputMode="numeric"
           />
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
@@ -175,7 +170,7 @@ const NriAddressDetails1 = (props) => {
               width="40"
               label="Foreign Address proof:"
               class="address_doc_type"
-              options={ADDRESS_PROOF_OPTIONS}
+              options={NRI_ADDRESS_PROOF_OPTIONS}
               id="account_type"
               value={form_data.address_doc_type || ""}
               onChange={handleChange("address_doc_type")}

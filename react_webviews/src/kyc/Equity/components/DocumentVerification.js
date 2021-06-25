@@ -1,18 +1,22 @@
 import React, {useEffect, useState, Fragment} from "react";
-import { getConfig } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { isEmpty } from "../../../utils/validators";
+import { isEmpty, storageService } from "../../../utils/validators";
 import { getPendingDocuments } from "../../common/functions";
 import "./commonStyles.scss";
+import { PATHNAME_MAPPER } from "../../constants";
 
-const productName = getConfig().productName;
+const config = getConfig();
+const productName = config.productName;
+
 const DocumentVerification = (props) => {
-
+  const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
   const [docs, setDocs] = useState([]);
+  const kycStartPoint = storageService().get("kycStartPoint");
 
   useEffect(() => {
     const init = async () => {
@@ -27,7 +31,23 @@ const DocumentVerification = (props) => {
 
   const handleCTAClick = () => {
     sendEvents("next");
-    nativeCallback({ action: "exit" })
+    if(config.Web) {
+      navigate("/");
+    } else {
+      nativeCallback({ action: "exit_web" })
+    }
+  }
+
+  const goBack = () => {
+    if (kycStartPoint === "stocks") {
+      navigate(PATHNAME_MAPPER.stocksStatus);
+    } else {
+      if(config.Web) {
+        navigate("/");
+      } else {
+        nativeCallback({ action: "exit_web" });
+      }
+    }
   }
 
   const sendEvents = (userAction) => {
@@ -55,6 +75,7 @@ const DocumentVerification = (props) => {
       hidePageTitle
       type="outlined"
       skelton={isLoading}
+      headerData={{ goBack }}
     >
       <div className="kyc-document-verification" data-aid='kyc-document-verification'>
         <header className="kyc-document-verification-header" data-aid='kyc-document-verification-header'>
@@ -69,12 +90,12 @@ const DocumentVerification = (props) => {
             Once the below documents are verified by us, you can complete eSign
             to start investing
           </div>
-          {docs.length && docs.map((docObj) => (
+          {docs.length ? docs.map((docObj) => (
             <Fragment key={docObj.title}>
               <div className="kdvm-title">{docObj.title}</div>
-              <div className="kdvm-subtitle">{docObj.doc}</div>
+              <div className="kdvm-subtitle">{docObj.doc || "No doc submitted"}</div>
             </Fragment>
-          ))}
+          )) : ""}
           <WVJourneyShortening
             title="Next step"
             stepName="Complete esign"

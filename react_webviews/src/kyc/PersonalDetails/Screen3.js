@@ -9,11 +9,11 @@ import {
 } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
   getTotalPagesInPersonalDetails,
-  getEmailOrMobileVerifiedStatus,
+  isEmailAndMobileVerified,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -93,7 +93,7 @@ const PersonalDetails3 = (props) => {
 
   const handleNavigation = () => {
     const data = { state: { isEdit } };
-    if (!getEmailOrMobileVerifiedStatus()) {
+    if (!isEmailAndMobileVerified()) {
       navigate(PATHNAME_MAPPER.communicationDetails, data);
       return;
     }
@@ -192,7 +192,7 @@ const PersonalDetails3 = (props) => {
           </div>
         </main>
         <footer data-aid='kyc-footer-text'>
-          By tapping ‘save and continue’ I agree that I am not a PEP(politically
+          By tapping ‘save and continue’ I agree that I am not a PEP (politically
           exposed person)
         </footer>
       </div>

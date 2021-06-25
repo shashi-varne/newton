@@ -15,6 +15,8 @@ import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 
+const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
+const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {
     super(props);
@@ -31,7 +33,8 @@ class Landing extends Component {
       openKycPremiumLanding: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      isWeb: getConfig().Web
+      isWeb: getConfig().Web,
+      stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -52,7 +55,9 @@ class Landing extends Component {
 
   addBank = () => {
     const userKyc = this.state.userKyc || {};
-    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`, {
+      state: { goBack: "/invest" }
+    });
   };
 
   updateDocument = () => {
@@ -91,7 +96,7 @@ class Landing extends Component {
     } else if (kycJourneyStatus === "rejected") {
       this.navigate("/kyc/upload/progress", {
         state: {
-          toState: "/invest",
+          goBack: "/invest",
         },
       });
     }
@@ -110,6 +115,7 @@ class Landing extends Component {
   render() {
     const {
       isReadyToInvestBase,
+      isEquityCompletedBase,
       kycStatusLoader,
       productName,
       investCardsData,
@@ -119,6 +125,8 @@ class Landing extends Component {
       openKycStatusDialog,
       modalData,
       openKycPremiumLanding,
+      stateParams,
+      tradingEnabled,
     } = this.state;
     const {
       ourRecommendations,
@@ -135,12 +143,26 @@ class Landing extends Component {
         title="Start Investing"
         showLoader={this.state.show_loader}
         data-aid='start-investing-screen'
+        noBackIcon={fromLoginStates.includes(stateParams.fromState)}
+        background={
+          isMobileDevice &&
+          fromLoginStates.includes(stateParams.fromState) &&
+          "invest-landing-background"
+        }
+        classHeader={
+          isMobileDevice &&
+          fromLoginStates.includes(stateParams.fromState) &&
+          (this.state.headerStyle
+            ? "invest-landing-partner-header"
+            : "invest-landing-header")
+        }
       >
         <div className="invest-landing" data-aid='invest-landing'>
           {
             !kycStatusLoader &&
             <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
-              {isReadyToInvestBase 
+              {((!tradingEnabled && isReadyToInvestBase) ||
+-                (tradingEnabled && isEquityCompletedBase)) 
                 ? " Your KYC is verified, You’re ready to invest"
                 : "Invest in your future"}
             </div>
@@ -161,7 +183,8 @@ class Landing extends Component {
                 case "kyc":
                   return (
                     <React.Fragment key={index}>
-                      {!isReadyToInvestBase && kycStatusData && !kycStatusLoader && (
+                      {(!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
+-                      (tradingEnabled && !isEquityCompletedBase))) ? (
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
@@ -184,25 +207,28 @@ class Landing extends Component {
                             }}
                           />
                         </div>
-                      )}
+                      ): null}
                     </React.Fragment>
                   );
                 case "stocks":
                   return (
                     <React.Fragment key={index}>
-                      <div className="invest-main-top-title" 
-                        onClick={() => this.clickCard("stocks") } 
-                        data-aid='stocks-title'
-                      >
-                        <WVButton
-                          variant='contained'
-                          size='large'
-                          color="secondary"
-                          // fullWidth
+                      {!isEquityCompletedBase && (
+                        <div className="invest-main-top-title" 
+                          onClick={() => {!kycStatusLoader && this.clickCard("stocks") }} 
+                          data-aid='stocks-title'
                         >
-                          Stocks
-                        </WVButton>
-                      </div>
+                          <WVButton
+                            variant='contained'
+                            size='large'
+                            color="secondary"
+                            disabled={kycStatusLoader}
+                            // fullWidth
+                          >
+                            Stocks
+                          </WVButton>
+                        </div>
+                      )}
                     </React.Fragment>
                   );
                 case "ourRecommendations":

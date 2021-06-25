@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Input from "common/ui/Input";
 import { initialize } from "../../common/commonFunctions";
+import { nativeCallback } from "../../../../utils/native_callback";
 
 class NpsPran extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class NpsPran extends Component {
   }
 
   onload = () => {
+    this.sendEvents();
     this.setState({
       skelton: false
     })
@@ -41,9 +43,21 @@ class NpsPran extends Component {
     this.submitPran(data);
   };
 
+  sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "pran screen",
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   render() {
     return (
       <Container
+        data-aid='nps-pran-details-screen'
         buttonTitle="CONTINUE"
         title="PRAN Details"
         showLoader={this.state.show_loader}
@@ -52,7 +66,7 @@ class NpsPran extends Component {
         skelton={this.state.skelton}
         handleClick={this.handleClick}
       >
-        <div className="pran-details">
+        <div className="pran-details" data-aid='nps-pran-details'>
           <div className="InputField">
             <Input
               width="30"
@@ -64,7 +78,7 @@ class NpsPran extends Component {
               onChange={this.handleChange("pran")}
             />
           </div>
-          <div className="tnc">
+          <div className="tnc" data-aid='nps-tnc'>
             PRAN is unique account number allotted to every NPS account
             subscriber, check for it on your PAN card
           </div>

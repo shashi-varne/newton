@@ -1,80 +1,21 @@
-.kyc-dl-aadhaar-dialog .heading {
-  width: 55%;
-  color: #160d2e;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.kyc-dl-aadhaar-dialog .img-right-top {
-  align-self: flex-start;
-  position: relative;
-  bottom: 10px;
-  left: 10px;
-}
-
-.kyc-dl-aadhaar-dialog .dialog-actions {
-  margin-top: 25px;
-
-  button {
-    padding: 14px 0;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-}
-
-.kyc-show-aadhar {
-  line-height: 1.5;
-}
-
-.kyc-show-aadhar .header {
+.kyc-show-aadhar-content {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  padding-top: 10px;
 }
 
-.kyc-show-aadhar .description {
-  color: #767e86;
-  font-size: 14px;
-}
-
-.kyc-show-aadhar .content {
-  display: flex;
-  align-items: center;
-}
-
-.kyc-show-aadhar .content .info-box {
+.kyc-show-aadhar-content .info-box {
   display: flex;
   justify-content: space-between;
   flex: 1 0 40%;
 }
 
-.kyc-show-aadhar .content .info-box .title {
+.kyc-show-aadhar-content .info-box .title {
   margin-left: 10px;
   color: #767e86;
   width: 100%;
   font-size: 13px;
   white-space: nowrap;
-}
-
-.kyc-show-aadhar .action-btn {
-  background-color: var(--secondary);
-  margin-top: 15px;
-  text-align: center;
-  text-transform: uppercase;
-  padding: 13px;
-  font-weight: bold;
-  min-width: 140px;
-  display: block;
-
-  .MuiButton-label {
-    text-transform: uppercase;
-    color: white;
-  }
-}
-
-.kyc-show-aadhar .action-btn:hover {
-  background-color: var(--secondary);
-  color: white;
 }
 
 .alert-status-info {
@@ -101,115 +42,36 @@
   }
 }
 
-.resident-dialog-content {
-  main {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    h1 {
-      margin: 25px 0;
-      width: 55%;
-      color: #160d2e;
-      font-size: 20px;
-      font-weight: 600;
-      line-height: 1.1;
-    }
+.know-more-dialog-content {
+  color: var(--dark);
+  line-height: 1.5;
+  padding-bottom: 10px;
 
-    img {
-      margin: -10px -10px 0 0;
-    }
+  .title {
+    font-size: 17px;
+    color: var(--dark);
+    font-weight: 700;
   }
 
-  footer {
-    display: flex;
-    padding: 15px;
+  .content {
+    text-align: center;
 
-    button {
-      border-radius: 6px;
-      background-color: var(--secondary);
-      color: white;
-      min-height: 36px;
-      padding: 12px 15px;
-      font-weight: bold;
-      font-size: 14px;
+    .text {
+      font-size: 13px;
+      color: var(--steelgrey);
+      text-align: left;
+      padding: 15px 0 5px 0;
     }
-
-    .cancel {
-      color: #878787;
-      background-color: white;
-    }
-
-    .cancel:hover {
-      background-color: rgba(158, 158, 158, 0.2);
-    }
+  }
+  
+  .second-step-content {
+    padding-top: 40px;
   }
 }
 
-.ipv-know-more-dialog {
-  .MuiDialog-paper {
-    margin: 0 !important;
-  }
-
-  .know-more-dialog-content {
-    color: #333333;
-    line-height: 1.5;
-    padding: 15px 15px 10px 15px;
-
-    header {
-      width: 40px;
-      padding-bottom: 40px;
-      cursor: pointer;
-
-      .close-icon {
-        width: 15px;
-        height: 15px;
-      }
-    }
-
-    main {
-      padding-bottom: 30px;
-
-      .title {
-        font-size: 20px;
-        color: #160d2e;
-        font-weight: 600;
-      }
-
-      .content {
-        text-align: center;
-
-        .text {
-          font-size: 14px;
-          color: #160d2e;
-          text-align: left;
-          padding: 15px 0 5px 0;
-
-          b {
-            font-weight: 600;
-          }
-        }
-      }
-    }
-  }
-
-  .action {
-    width: 100% !important;
-    padding: 0 15px;
-    margin: 8px 0 !important;
-
-    button {
-      color: white;
-      background-color: var(--secondary);
-      width: 100%;
-      text-align: center;
-      margin: 0;
-    }
-
-    button:hover {
-      color: white;
-      background-color: var(--secondary);
-    }
-  }
+.kipv-knowmore-button {
+  padding: 14px 0 !important;
+  width: 100% !important;
 }
 
 #kyc-journey-back {
@@ -256,8 +118,8 @@
       align-items: center;
       margin: 20px 0;
       color: #160d2e;
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 17px;
+      font-weight: 500;
       line-height: 1.1;
 
       span {
@@ -271,81 +133,6 @@
       color: #767e86;
       font-size: 14px;
       margin-bottom: 10px;
-    }
-  }
-}
-
-.kyc-penny-failed-dialog {
-  .penny-failed-dialog-content {
-    padding: 15px 15px 30px 15px !important;
-
-    .title {
-      margin: -15px -15px 0 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      column-gap: 10px;
-      color: #160d2e;
-      font-size: 20px;
-      font-weight: 600;
-      padding-bottom: 10px;
-
-      .text {
-        margin: 30px 0 0px 0;
-        padding-top: 10px;
-      }
-    }
-
-    .subtitle {
-      color: #767e86;
-      font-size: 14px;
-      margin: 10px 0 20px 0;
-      line-height: 1.5;
-    }
-
-    .divider {
-      font-size: 8px;
-      width: 100%;
-      text-align: center;
-      border-bottom: 1px solid #ececec;
-      line-height: 0.1em;
-      color: #767e86;
-      margin: 20px 0;
-
-      span {
-        background: #fff;
-        padding: 0 10px;
-      }
-    }
-
-    .button {
-      width: 100%;
-      padding: 5px 15px;
-      font-size: 14px;
-      border-radius: 5px;
-      min-height: 47px;
-      font-weight: bold;
-      letter-spacing: 0.01em;
-    }
-
-    .bg-full {
-      color: white;
-      background-color: var(--secondary);
-    }
-
-    .bottom-margin {
-      margin-bottom: 30px;
-    }
-
-    .border-button {
-      color: var(--secondary);
-      background-color: white;
-      border: 1px solid var(--secondary);
-    }
-
-    .highlight-bg {
-      color: var(--secondary);
-      background-color: rgb(250, 250, 250);
     }
   }
 }
@@ -404,7 +191,7 @@
       justify-content: space-between;
       align-items: center;
       color: #160d2e;
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 600;
 
       .text {
@@ -451,6 +238,37 @@
   }
 }
 
+.kyc-back-confirm-dialog {
+  .kyc-back-confirm-dialog-content {
+    line-height: 1.5;
+    color: #160d2e;
+
+    .title {
+      margin: 10px 0 20px;
+      font-size: 15px;
+    }
+
+    .confirm-back-dialog-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      .confirm-back-button {
+        background-color: transparent;
+        width: fit-content;
+        padding: 15px 0 0 !important;
+        font-weight: bold;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .confirm-back-yes {
+        margin-right: 70px;
+      }
+    }
+  }
+}
+
 @media only screen and (max-width: 700px) {
   #kyc-bottom-dialog {
     .MuiDialog-paper {
@@ -470,15 +288,8 @@
 #sample-docs {
   .title {
     font-size: 20px;
-    color: #160d2e;
+    color: color(--dark);
     font-weight: 600;
-  }
-
-  .description {
-    font-size: 13px;
-    line-height: 21px;
-    color: #767e86;
-    margin: 10px 0 20px 0;
   }
 
   .doc fieldset {
@@ -494,10 +305,10 @@
   }
 
   .doc .doc-name {
-    font-weight: 800;
+    font-weight: 500;
     font-size: 13px;
     line-height: 21px;
-    color: #0a1d32;
+    color: var(--dark);
   }
 
   .doc fieldset legend {
@@ -525,7 +336,7 @@
   color: var(--dark);
 }
 
-.kyc-upload-container {  
+.kyc-upload-container {
   .kuc-upload {
     margin-top: 10px;
     padding: 5px;
@@ -539,7 +350,7 @@
       margin-bottom: 5px;
     }
   }
-  
+
   .kuc-action-btn {
     background-color: white !important;
     display: flex;

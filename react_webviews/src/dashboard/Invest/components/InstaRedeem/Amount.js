@@ -5,13 +5,14 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
-import { investRedeemData } from "../../constants";
+import { flowName, investRedeemData } from "../../constants";
 import {
   getGoalRecommendation,
-  navigate as navigateFunc,
 } from "../../common/commonFunctions";
+import { navigate as navigateFunc } from 'utils/functions'
 import { convertInrAmountToNumber, formatAmountInr } from "../../../../utils/validators";
 import useFunnelDataHook from "../../common/funnelDataHook";
+import { nativeCallback } from '../../../../utils/native_callback';
 
 const InvestAmount = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -33,6 +34,7 @@ const InvestAmount = (props) => {
 
   const handleClick = () => {
     setShowLoader("button");
+    sendEvents('next')
     const recommendations = {
       recommendation: [{
         ...funnelData.recommendation[0],
@@ -41,7 +43,7 @@ const InvestAmount = (props) => {
       amount,
     };
     updateFunnelData(recommendations);
-    navigate('recommendations');
+    navigate('/invest/recommendations');
   };
   
   const handleChange = () => (event) => {
@@ -87,8 +89,27 @@ const InvestAmount = (props) => {
     setAmountError(amount_error);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": 'select invest amount',
+        "flow": flowName['insta-redeem'],
+        "amount_value": amount
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
+      data-aid='how-would-you-like-to-invest-screen'
       showLoader={showLoader}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
@@ -98,7 +119,7 @@ const InvestAmount = (props) => {
       current="2"
       total="2"
     >
-      <div className="insta-redeem-invest-amount">
+      <div className="insta-redeem-invest-amount" data-aid='insta-redeem-invest-amount'>
         <FormControl className="form-field">
           <InputLabel htmlFor="standard-adornment-password">
             Enter amount
@@ -120,6 +141,7 @@ const InvestAmount = (props) => {
           />
           {amountError && (
             <div
+              data-aid='helper-text'
               className="helper-text"
               style={{
                 color: amountError && "red",
@@ -129,11 +151,12 @@ const InvestAmount = (props) => {
             </div>
           )}
         </FormControl>
-        <div className="tags">
+        <div className="tags" data-aid='amt-tags'>
           {tags &&
             tags.map((data, index) => {
               return (
                 <div
+                  data-aid={`amount-tag-${data.value}`}
                   key={index}
                   className="tag"
                   onClick={() => updateAmount(data.value)}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
+import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
-import { checkPanFetchStatus, isDigilockerFlow, navigate as navigateFunc } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -13,7 +13,7 @@ import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
-import { getConfig, isTradingEnabled } from "../../utils/functions";
+import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
 
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -29,7 +29,7 @@ const KycBankVerify = (props) => {
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
-  const {kyc} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -49,7 +49,7 @@ const KycBankVerify = (props) => {
     try {
       setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bankData.bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
       if (result.code === "ERROR") {
         toast(result.message);
       } else if (kyc.address.meta_data.is_nri) {
@@ -59,6 +59,7 @@ const KycBankVerify = (props) => {
       }
     } catch (err) {
       console.log(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -87,7 +88,10 @@ const KycBankVerify = (props) => {
   const checkBankStatusStep1 = async () => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
@@ -103,8 +107,13 @@ const KycBankVerify = (props) => {
           setIsPennyFailed(true);
         }
       }
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
+      clearInterval(countdownInterval);
+      setCountdownInterval(null);
+      setIsPennyOpen(false);
+      setIsPennyFailed(true);
     }
   };
 
@@ -112,7 +121,10 @@ const KycBankVerify = (props) => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
       setIsPennyOpen(false);
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         setIsPennySuccess(true);
       } else if (result.records.PBI_record.user_rejection_attempts === 0) {
@@ -120,18 +132,22 @@ const KycBankVerify = (props) => {
       } else {
         setIsPennyFailed(true);
       }
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
+      setIsPennyFailed(true);
     }
   };
 
   const checkBankDetails = () => {
-    // sendEvents("check bank details", "bottom_sheet");
-    navigate(`/kyc/${userType}/bank-details`);
+    sendEvents("check bank details", "bottom_sheet");
+    navigate(`/kyc/${userType}/bank-details`, {
+      state: { isEdit: true }
+    });
   };
 
   const uploadDocuments = () => {
-    // sendEvents("upload documents", "bottom_sheet");
+    sendEvents("upload documents", "bottom_sheet");
     navigate(`/kyc/${userType}/upload-documents`);
   };
 
@@ -141,9 +157,11 @@ const KycBankVerify = (props) => {
       else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else {
           navigate(PATHNAME_MAPPER.tradingExperience);
         }
@@ -194,9 +212,11 @@ const KycBankVerify = (props) => {
       // }
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else navigate(PATHNAME_MAPPER.kycEsign);
       } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
@@ -210,11 +230,16 @@ const KycBankVerify = (props) => {
     }
   };
 
-  const goToJourney = () => navigate(PATHNAME_MAPPER.journey);
+  const goToJourney = () => {
+    sendEvents("next", "bottom_sheet");
+    navigate(PATHNAME_MAPPER.journey)
+  };
 
   const edit = () => () => {
     sendEvents('edit');
-    navigate(`/kyc/${userType}/bank-details`);
+    navigate(`/kyc/${userType}/bank-details`, {
+      state: { isEdit: true }
+    });
   };
 
   const sendEvents = (userAction, screen_name) => {
@@ -247,6 +272,7 @@ const KycBankVerify = (props) => {
     <Container
       buttonTitle="VERIFY BANK ACCOUNT"
       events={sendEvents("just_set_events")}
+      skelton={isLoading}
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
@@ -254,12 +280,13 @@ const KycBankVerify = (props) => {
       data-aid='kyc-verify-bank-accont-screen'
     >
       <div className="kyc-approved-bank-verify" data-aid='kyc-approved-bank-verify'>
-        <Alert
-          variant="info"
-          title="Important"
-          message="We will credit ₹1 to verify your bank account."
-          dataAid='kyc-bankverify-alertbox'
-        />
+        <WVInfoBubble
+          type="info"
+          hasTitle
+          customTitle="Important"
+        >
+          We will credit ₹1 to your bank account for verification.
+        </WVInfoBubble>
         {isEmpty(bankData) && (
           <>
             <SkeltonRect className="verify-skelton" />

@@ -3,82 +3,118 @@ import React, { useEffect, useState } from "react";
 import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
 import "./commonStyles.scss";
-import { resendOtp, sendOtp, verifyOtp } from "../../common/api";
+import {
+  getContactsFromSummary,
+  resendOtp,
+  sendOtp,
+  sendWhatsappConsent,
+  verifyOtp,
+} from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import {
   isEmpty,
+  storageService,
   validateEmail,
   validateNumber,
 } from "../../../utils/validators";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import CheckBox from "../../../common/ui/Checkbox";
-import { API_CONSTANTS, PATHNAME_MAPPER } from "../../constants";
-import { getBasePath, getConfig } from "../../../utils/functions";
+import { PATHNAME_MAPPER } from "../../constants";
+import { navigate as navigateFunc } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
 import { nativeCallback } from "../../../utils/native_callback";
 import {
   getTotalPagesInPersonalDetails,
-  navigate as navigateFunc,
+  isDigilockerFlow,
 } from "../../common/functions";
-import { isReadyToInvest } from "../../services";
-import WVButton from "../../../common/ui/Button/WVButton";
+// import WVButton from "../../../common/ui/Button/WVButton";
 
-const config = getConfig();
-const googleButtonTitle = (
-  <a
-    className="kcd-google-text"
-    href={`${config.base_url}${
-      API_CONSTANTS.socialAuth
-    }/google?redirect_url=${encodeURIComponent(
-      `${getBasePath()}/kyc/communication-details/callback${
-        config.searchParams
-      }`
-    )}`}
-  >
-    <img src={require(`assets/google.svg`)} alt="google" />
-    <div>Continue with Google</div>
-  </a>
-);
+// const config = getConfig();
+// const googleRedirectUrl = `${config.base_url}${API_CONSTANTS.socialAuth}/google?redirect_url=${encodeURIComponent(`${getBasePath()}/kyc/communication-details/callback${config.searchParams}`)}`;
+// const googleButtonTitle = (
+//   <a className="kcd-google-text" href={googleRedirectUrl}>
+//     <img src={require(`assets/google.svg`)} alt="google" />
+//     <div>Continue with Google</div>
+//   </a>
+// );
 const CommunicationDetails = (props) => {
   const navigate = navigateFunc.bind(props);
   const stateParams = props.location?.state || {};
   const isEdit = stateParams.isEdit || false;
   const userType = stateParams.userType || "";
-  const flowType = stateParams.flowType || "";
   const [formData, setFormData] = useState({
     whatsappConsent: true,
   });
   const [otpData, setOtpData] = useState({
     otp: "",
-    totalTime: 30,
-    timeAvailable: 30,
+    otpId: "",
   });
-  const [otpId, setOtpId] = useState("");
   const [buttonTitle, setButtonTitle] = useState("CONTINUE");
   const [showLoader, setShowLoader] = useState(false);
   const [showOtpContainer, setShowOtpContainer] = useState(false);
   const [showDotLoader, setShowDotLoader] = useState(false);
-  const { user, kyc, isLoading, updateKyc } = useUserKycHook();
-  const isNri = kyc.address?.meta_data?.is_nri || false;
+  const [showSkelton, setShowSkelton] = useState(false);
+  const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const isNri = kyc?.address?.meta_data?.is_nri || false;
   const [communicationType, setCommunicationType] = useState("");
   const [isKycDone, setIsKycDone] = useState();
   const [totalPages, setTotalPages] = useState();
+  const [isDlFlow, setIsDlFlow] = useState();
 
   useEffect(() => {
-    if (!isEmpty(kyc) && !isEmpty(user)) {
-      const type = user.mobile === null ? "mobile" : "email";
-      setCommunicationType(type);
-      const data = { ...formData };
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc]);
+
+  const initialize = async () => {
+    setIsKycDone(kyc?.mf_kyc_processed);
+    setIsDlFlow(isDigilockerFlow(kyc));
+    setTotalPages(getTotalPagesInPersonalDetails());
+    if (showOtpContainer) {
+      setShowOtpContainer(false);
+    }
+    const type = !kyc.identification.meta_data.email_verified
+      ? "email"
+      : "mobile";
+    setCommunicationType(type);
+    const data = { ...formData };
+    if (type === "email") {
       data.email = kyc.identification.meta_data.email;
+    } else {
       let mobileNumber = kyc.identification.meta_data.mobile_number || "";
       const [extension, number] = mobileNumber.toString().split("|");
       if (extension) mobileNumber = number;
       data.mobile = mobileNumber;
-      setFormData({ ...data });
-      setIsKycDone(kyc?.application_status_v2 === "submitted" || kyc?.application_status_v2 === "complete");
-      setTotalPages(getTotalPagesInPersonalDetails())
+      data.mobileNumberVerified =
+        kyc.identification.meta_data.mobile_number_verified;
+      if (data.mobileNumberVerified) {
+        data.contact_id = await getContactId(number);
+      }
     }
-  }, [kyc, user]);
+    setFormData({ ...data });
+  };
+
+  const getContactId = async (number) => {
+    let contacts = storageService().getObject("contacts") || {};
+    if (isEmpty(contacts)) {
+      setShowSkelton(true);
+      try {
+        const result = await getContactsFromSummary();
+        contacts = result.data?.contacts?.contacts?.data || {};
+      } catch (err) {
+        toast(err.message);
+      } finally {
+        setShowSkelton(false);
+      }
+    }
+    const contact =
+      contacts?.verified_mobile_contacts?.find((element) => {
+        const mobileNumber = element.contact_value?.split("|")[1];
+        return mobileNumber === number;
+      }) || {};
+    return contact.id;
+  };
 
   const handleChange = (name) => (event) => {
     if (showOtpContainer || showDotLoader) {
@@ -106,12 +142,10 @@ const CommunicationDetails = (props) => {
     sendEvents("resend");
     setShowDotLoader(true);
     try {
-      const result = await resendOtp(otpId);
-      setOtpId(result.otp_id);
+      const result = await resendOtp(otpData.otpId);
       setOtpData({
         otp: "",
-        totalTime: 30,
-        timeAvailable: 30,
+        otpId: result.otp_id,
       });
     } catch (err) {
       toast(err.message);
@@ -124,50 +158,96 @@ const CommunicationDetails = (props) => {
     setOtpData({ ...otpData, otp });
   };
 
+  const otpVerification = async () => {
+    try {
+      if (otpData.otp.length !== 4) {
+        toast("Minimum otp length is 4");
+        return;
+      }
+      setShowLoader("button");
+      const otpResult = await verifyOtp(otpData);
+      updateKyc(otpResult.kyc);
+      if (
+        otpResult.kyc.identification.meta_data.mobile_number_verified &&
+        otpResult.kyc.identification.meta_data.email_verified
+      ) {
+        handleNavigation();
+      }
+    } catch (err) {
+      toast(err.message);
+    } finally {
+      setShowLoader(false);
+    }
+  };
+
+  const getPayLoad = () => {
+    let body = {};
+    if (communicationType === "email") {
+      if (!formData.email) {
+        toast("Email is mandatory!");
+        return;
+      }
+      if (!validateEmail(formData.email)) {
+        toast("Please enter valid email");
+        return;
+      }
+      body.email = formData.email;
+    } else {
+      if (!formData.mobile) {
+        toast("Mobile number is mandatory!");
+        return;
+      }
+      if (formData.mobile.length !== 10) {
+        toast("Mobile number must contains 10 digits");
+        return;
+      }
+      if (formData.mobileNumberVerified) {
+        body.consent = formData.whatsappConsent;
+        body.communication_type = "whatsapp";
+        body.contact_id = formData.contact_id;
+      } else {
+        body.mobile = formData.mobile;
+        body.whatsapp_consent = formData.whatsappConsent;
+      }
+    }
+    return body;
+  };
+
   const handleClick = async () => {
     sendEvents("next");
+    if (
+      formData.mobileNumberVerified &&
+      kyc.identification.meta_data.email_verified &&
+      kyc.whatsapp_consent
+    ) {
+      handleNavigation();
+      return;
+    }
     try {
       if (showOtpContainer) {
-        if (otpData.otp.length !== 4) {
-          toast("Minimum otp length is 4");
-          return;
-        }
-        setShowLoader("button");
-        const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
-        updateKyc(otpResult.kyc);
-        handleNavigation();
+        await otpVerification();
       } else {
-        let body = {};
-        if (communicationType === "email") {
-          if (!formData.email) {
-            toast("Email is mandatory!");
+        const body = getPayLoad();
+        if (!body) return;
+        if (communicationType === "mobile" && formData.mobileNumberVerified) {
+          if (formData.whatsappConsent === kyc.whatsapp_consent) {
+            handleNavigation();
             return;
           }
-          if (!validateEmail(formData.email)) {
-            toast("Please enter valid email");
-            return;
-          }
-          body.email = formData.email;
-        } else {
-          if (!formData.mobile) {
-            toast("Mobile number is mandatory!");
-            return;
-          }
-          if (formData.mobile.length !== 10) {
-            toast("Mobile number must contains 10 digits");
-            return;
-          }
-          body.mobile = formData.mobile;
-          body.whatsapp_consent = formData.whatsappConsent;
+          setShowLoader("button");
+          const contactResult = await sendWhatsappConsent(body);
+          const whatsappConsent =
+            contactResult?.contact_details?.whatsapp_consent;
+          updateKyc({ ...kyc, whatsapp_consent: whatsappConsent });
+          handleNavigation();
+          return;
         }
         setShowLoader("button");
         const result = await sendOtp(body);
         setShowOtpContainer(true);
-        setOtpId(result.otp_id);
         setOtpData({
           otp: "",
-          totalTime: 30,
-          timeAvailable: 30,
+          otpId: result.otp_id,
         });
         setButtonTitle("VERIFY");
       }
@@ -232,14 +312,14 @@ const CommunicationDetails = (props) => {
       } else {
         navigate(PATHNAME_MAPPER.compliantPersonalDetails4, data);
       }
-    } else if (flowType === "digilocker") {
+    } else if (isDlFlow) {
       navigate(PATHNAME_MAPPER.digilockerPersonalDetails3, data);
     } else {
       navigate(PATHNAME_MAPPER.personalDetails4, data);
     }
   };
 
-  const pageNumber = flowType === "digilocker" ? 3 : 4;
+  const pageNumber = isDlFlow ? 3 : 4;
   return (
     <Container
       events={sendEvents("just_set_events")}
@@ -247,10 +327,10 @@ const CommunicationDetails = (props) => {
       title="Communication details"
       count={!isKycDone && pageNumber}
       current={pageNumber}
-      total={totalPages}
+      total={!isKycDone && totalPages}
       handleClick={handleClick}
       showLoader={showLoader}
-      skelton={isLoading}
+      skelton={isLoading || showSkelton}
       disable={showDotLoader}
     >
       <div
@@ -267,7 +347,7 @@ const CommunicationDetails = (props) => {
           </div>
           {communicationType === "email" ? (
             <>
-              {!showOtpContainer && (
+              {/* {!showOtpContainer && (
                 <>
                   <WVButton
                     variant="outlined"
@@ -277,9 +357,13 @@ const CommunicationDetails = (props) => {
                   >
                     {googleButtonTitle}
                   </WVButton>
-                  <img src={require("assets/ORDivider.svg")} alt="" className="kcd-or-divider" />
+                  <img
+                    src={require("assets/ORDivider.svg")}
+                    alt=""
+                    className="kcd-or-divider"
+                  />
                 </>
-              )}
+              )} */}
               <TextField
                 label="Email address"
                 value={formData.email || ""}
@@ -299,6 +383,10 @@ const CommunicationDetails = (props) => {
                     </InputAdornment>
                   ),
                 }}
+                // eslint-disable-next-line
+                inputProps={{
+                  disabled: showOtpContainer,
+                }}
               />
             </>
           ) : (
@@ -309,9 +397,8 @@ const CommunicationDetails = (props) => {
               helperText={formData.mobile_error}
               onChange={handleChange("mobile")}
               type="text"
-              inputMode="numeric"
-              disabled={showLoader}
-              autoFocus
+              disabled={showLoader || formData.mobileNumberVerified}
+              autoFocus={!formData.mobileNumberVerified}
               className="kcd-input-field"
               InputProps={{
                 endAdornment: showOtpContainer && (
@@ -322,11 +409,22 @@ const CommunicationDetails = (props) => {
                   </InputAdornment>
                 ),
               }}
+              // eslint-disable-next-line
+              inputProps={{
+                disabled: showOtpContainer || formData.mobileNumberVerified,
+                inputMode: "numeric",
+              }}
             />
           )}
-          <div className="kcd-email-subtext">
-            We'll keep you updated on your investments
-          </div>
+          {!showOtpContainer && (
+            <div className="kcd-email-subtext">
+              {communicationType === "email"
+                ? "We'll keep you updated on your investments"
+                : !formData.mobileNumberVerified
+                ? "We’ll send an OTP to verify your mobile number"
+                : ""}
+            </div>
+          )}
           {showOtpContainer && (
             <div className="kcd-otp-container">
               <div className="kcd-email-subtext">
@@ -338,6 +436,7 @@ const CommunicationDetails = (props) => {
               <div className="kcd-otp-content">
                 <Otp
                   otpData={otpData}
+                  totalTime={30}
                   showDotLoader={showDotLoader}
                   handleOtp={handleOtp}
                   resendOtp={resendOtpVerification}

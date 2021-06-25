@@ -5,9 +5,9 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import {
   validateAlphabets,
@@ -17,8 +17,8 @@ import {
 } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { nativeCallback } from "../../utils/native_callback";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { nativeCallback } from "../../utils/native_callback";
 
 const Nominee = (props) => {
   const genericErrorMessage = "Something went wrong!";
@@ -141,11 +141,9 @@ const Nominee = (props) => {
       data-aid='kyc-nominee-details-page'
     >
       <div className="kyc-nominee">
-        <WVInfoBubble
-          type="info"
-          customTitle="Nominee details will be applicable for mutual fund investments only"
-          hasTitle
-        />
+        <WVInfoBubble type="info">
+          Nominee details will be applicable for mutual fund investments only
+        </WVInfoBubble>
         {!isEmpty(kyc) && (
           <main data-aid='kyc-nominee'>
             <Input

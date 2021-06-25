@@ -25,19 +25,23 @@ const headerIconMapper = {
   search: search,
   restart: restart
 }
-const isMobileDevice = getConfig().isMobileDevice;
-const partnerLogo = getConfig().logo;
-const isWeb = getConfig().Web;
-const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor : '';
-const backButtonColor = !isWeb ? getConfig().styles?.backButtonColor : '';
-const notificationsColor = !isWeb ? getConfig()?.styles.notificationsColor : '';
-
-const Header = ({
-  classes, title, count, total, current, goBack, edit, type, resetpage,
-  handleReset, smallTitle, disableBack, provider, inPageTitle, hideHamburger,
-  force_hide_inpage_title, topIcon, handleTopIcon, canSkip, onSkipClick,
-  className ,style, headerData={}, new_header, logo, notification, handleNotification
-}) => {
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
+const partnerLogo = config.logo;
+const isWeb = config.Web;
+const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
+const backButtonColor = !isWeb ? config.styles?.backButtonColor : '';
+const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
+console.log("sdk check in header ", config.isSdk);
+console.log("web check in header ", isWeb);
+console.log("app check in header ", config.app);
+console.log("platform check in header", config.platform);
+console.log("user agent in header", navigator.userAgent);
+const Header = ({ classes, title, count, total, current, goBack, 
+  edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
+  inPageTitle, hideHamburger, force_hide_inpage_title, topIcon, handleTopIcon, canSkip, onSkipClick,
+  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon, logo}) => {
+    
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
@@ -58,20 +62,25 @@ const Header = ({
       style={style}
       >
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" data-aid='tool-bar-icon-btn'
-            onClick={headerData.goBack ||
-            goBack}>
-            {!disableBack && !headerData.hide_icon &&
-            <SVG
-            preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backButtonColor ?  backButtonColor : new_header && !logo ? getConfig().styles.primaryColor : 'white'))}
-            src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
-            />
-            }
-            {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
-            <Close />}
-          </IconButton>
           {
-            logo && 
+            !noBackIcon &&
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
+              onClick={headerData.goBack ||
+              goBack}
+              data-aid='tool-bar-icon-btn'
+            >
+              {!disableBack && !headerData.hide_icon &&
+              <SVG
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backButtonColor ?  backButtonColor : new_header && !logo ? getConfig().styles.primaryColor : 'white'))}
+              src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
+              />
+              }
+              {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
+              <Close />}
+            </IconButton>
+          }
+          {
+            (noBackIcon || logo) && 
              <div className='sdk-header-partner-logo'>
                 <img src={require(`assets/${partnerLogo}`)} alt="partner logo" /> 
             </div>
@@ -116,7 +125,7 @@ const Header = ({
           <>
             <div>
             {
-              !logo && 
+              !noBackIcon && !logo && 
               <div
                 style={style}
                 className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 
@@ -150,14 +159,14 @@ const Header = ({
                 <SVG
                   style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                   onClick={handleNotification}
-                  preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (getConfig()?.notificationColor || 'white') : 'white'))}
+                  preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (notificationsColor || 'white') : 'white'))}
                   src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
                 />
               }
               {isMobileDevice && isWeb && !hideHamburger &&
                 <div className='mobile-navbar-menu'>
                   <IconButton onClick={handleMobileViewDrawer}>
-                    <MenuIcon style={{ color: backgroundColor ? getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white' }} />
+                    <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (noBackIcon ? 'white' : getConfig().styles.primaryColor) : 'white'}}/>
                   </IconButton>
                   <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal} />
                 </div>
@@ -172,6 +181,7 @@ const Header = ({
           }
           </>
         }
+
         </Toolbar>
         {
           isMobileDevice &&

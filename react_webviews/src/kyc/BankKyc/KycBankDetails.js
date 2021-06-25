@@ -10,24 +10,24 @@ import {
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Alert from "../mini-components/Alert";
 import {
-  checkPanFetchStatus,
+  checkDLPanFetchAndApprovedStatus,
   isDigilockerFlow,
-  // compareObjects,
-  navigate as navigateFunc,
   validateFields,
-  getFlow,
+  skipBankDetails
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
-import { getConfig, isTradingEnabled } from "utils/functions";
+import { getConfig, isTradingEnabled, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { nativeCallback } from "../../utils/native_callback";
 import WVInfoBubble from "../../common/ui/InfoBubble/WVInfoBubble";
+import { nativeCallback } from "../../utils/native_callback";
+import PennyFailedDialog from "../mini-components/PennyFailedDialog";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 const config = getConfig();
+let titleText = "Enter bank account details";
 
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -37,6 +37,7 @@ const KycBankDetails = (props) => {
   const params = props.match.params || {};
   const userType = params.userType || "";
   const isEdit = props.location.state?.isEdit || false;
+  if(isEdit) titleText = "Edit bank account details"
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({
@@ -45,7 +46,6 @@ const KycBankDetails = (props) => {
     account_type: "",
     ifsc_code: "",
   });
-  // const [oldState, setOldState] = useState({});
   const [bankIcon, setBankIcon] = useState("");
   const [accountTypes, setAccountTypes] = useState([]);
   const [name, setName] = useState("");
@@ -63,7 +63,10 @@ const KycBankDetails = (props) => {
   });
   const [dl_flow, setDlFlow] = useState(false);
   const [ifscDisabled, setIfscDisabled] = useState(false);
+  const [isPennyFailed, setIsPennyFailed] = useState(false);
+  const [goBackModal, setGoBackModal] = useState(false);
   const { kyc, user, isLoading } = useUserKycHook();
+  const goBackPath = props.location?.state?.goBack || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -73,11 +76,7 @@ const KycBankDetails = (props) => {
 
   let initialize = async () => {
     let disableData = { ...disableFields };
-    if (
-      user.active_investment ||
-      kyc.bank.meta_data_status === "approved" ||
-      kyc.bank.meta_data.bank_status === "doc_submitted"
-    ) {
+    if (skipBankDetails()) {
       disableData.skip_api_call = true;
       disableData.account_number_disabled = true;
       disableData.c_account_number_disabled = true;
@@ -97,13 +96,13 @@ const KycBankDetails = (props) => {
       setNote({
         info_text:
           "2 more attempts remaining! Please enter your correct account details to proceed",
-        variant: "attention",
+        variant: "error",
       });
     } else if (data.user_rejection_attempts === 1) {
       setNote({
         info_text:
           "Just 1 attempt is remaining! Please enter your correct account details to proceed",
-        variant: "attention",
+        variant: "error",
       });
     }
     if (disableData.skip_api_call) {
@@ -114,7 +113,6 @@ const KycBankDetails = (props) => {
       });
     }
     setBankData({ ...data });
-    // setOldState({...data})
     setBankIcon(data.ifsc_image || "");
     setAccountTypes([
       ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
@@ -162,10 +160,6 @@ const KycBankDetails = (props) => {
       if (!["incomplete", "submitted"].includes(bankData.bank_status)) {
         data.bank_id = "";
       }
-      // if(compareObjects(keysToCheck, oldState ,bankData)) {
-      //   navigate(`/kyc/${userType}/bank-verify`)
-      //   return
-      // }
       saveBankData(data);
     }
   };
@@ -176,9 +170,11 @@ const KycBankDetails = (props) => {
       else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else {
           navigate(PATHNAME_MAPPER.tradingExperience);
         }
@@ -200,9 +196,11 @@ const KycBankDetails = (props) => {
       //   });handleSdkNavigation
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved)
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         else navigate(PATHNAME_MAPPER.kycEsign);
       } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
@@ -225,13 +223,19 @@ const KycBankDetails = (props) => {
         },
       });
       if (!result) return;
-      if (result.kyc.bank.meta_data_status === "approved") {
+      if (result.kyc.bank.meta_data_status === "approved" &&
+        (result.kyc.bank.meta_data.bank_status === "doc_submitted" || result.kyc.bank.meta_data.bank_status === "verified")) {
         handleNavigation();
       } else {
         navigate(`/kyc/${userType}/bank-verify`);
       }
     } catch (err) {
-      toast(err.message || genericErrorMessage);
+      if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
+        (kyc?.bank.meta_data_status === "rejected" && kyc?.bank.meta_data.bank_status === "rejected")) {
+          setIsPennyFailed(true);
+      } else {
+        toast(err.message || genericErrorMessage);
+      }
     } finally {
       setIsApiRunning(false);
     }
@@ -247,6 +251,9 @@ const KycBankDetails = (props) => {
 
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
+    if(name === "ifsc_code") {
+      value = value.toUpperCase();
+    }
     bank[name] = value;
     if (!value) {
       formData[`${name}_error`] = "This is required";
@@ -308,6 +315,31 @@ const KycBankDetails = (props) => {
     return { bankData: bank, formData: formData, bankIcon: bankIcon };
   };
 
+  const checkBankDetails = () => {
+    sendEvents("check bank details", "bottom_sheet");
+    setIsPennyFailed(false);
+  };
+
+  const closeConfirmBackDialog = () => {
+    setGoBackModal(false);
+  };
+
+  const goBackToPath = () => {
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else {
+      if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
+    }
+  };
+
+  const goBack = () => {
+    setGoBackModal(true)
+  }
+
   const sendEvents = (userAction, screenName) => {
     let eventObj = {
       event_name: "kyc_registration",
@@ -347,18 +379,18 @@ const KycBankDetails = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
       handleClick={handleClick}
-      title="Enter bank account details"
+      title={titleText}
+      headerData={{goBack}}
       data-aid='kyc-enter-bank-account-details-screen'
     >
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>
         {!isLoading && (
           <>
-            {/* <Alert
-              variant={note.variant}
-              title="Note"
-              message={note.info_text}
-            /> */}
-            <WVInfoBubble type={note.variant} hasTitle customTitle="Note">
+            <WVInfoBubble
+              type={note.variant}
+              hasTitle
+              customTitle="Note"
+            >
               {note.info_text}
             </WVInfoBubble>
             <main data-aid='kyc-enter-bank-account-details'>
@@ -414,17 +446,30 @@ const KycBankDetails = (props) => {
                 id="account_number"
                 disabled={isApiRunning || disableFields.account_number_disabled}
               />
-              <Input
+              <TextField
                 label="Re-enter account number"
-                class="input"
+                className="input"
                 value={bankData.c_account_number}
                 error={form_data.c_account_number_error ? true : false}
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
                 maxLength={16}
                 type="text"
-                inputMode="numeric"
-                id="c_account_number"
+                InputProps={{
+                  endAdornment: (
+                    <>
+                      {bankData.account_number && bankData.account_number === bankData.c_account_number && (
+                        <InputAdornment position="end">
+                          <img className="kbd-can-check-icon" alt="" src={require(`assets/completed_step.svg`)} />
+                        </InputAdornment>
+                      )}
+                    </>
+                  ),
+                }}
+                // eslint-disable-next-line
+                inputProps={{
+                  inputMode: "numeric"
+                }}
                 disabled={
                   isApiRunning || disableFields.c_account_number_disabled
                 }
@@ -453,6 +498,21 @@ const KycBankDetails = (props) => {
             uploadDocuments={uploadDocuments}
           />
         )}
+        {isPennyFailed && (
+          <PennyFailedDialog
+          isOpen={isPennyFailed}
+          uploadDocuments={uploadDocuments}
+          checkBankDetails={checkBankDetails}
+          />
+        )}
+        {goBackModal ?
+          <ConfirmBackDialog
+           isOpen={goBackModal}
+           close={closeConfirmBackDialog}
+           goBack={goBackToPath}
+         />
+         : null
+        }
       </div>
     </Container>
   );

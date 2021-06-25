@@ -2,41 +2,16 @@ import "./commonStyles.scss";
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClickableTextElement'
-import { NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
+import { NRI_DOCUMENTS_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { getConfig } from '../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../utils/functions'
 import toast from 'common/ui/Toast'
 import { combinedDocBlob } from '../common/functions'
-import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
-import "./commonStyles.scss";
-import { nativeCallback } from '../../utils/native_callback'
 import { isEmpty } from 'lodash';
 import KycUploadContainer from '../mini-components/KycUploadContainer'
-
-const isWeb = getConfig().Web;
-const getTitleList = () => {
-  let titleList = [
-    'Photo of address card should have your signature',
-    'Photo of address should be clear and it should not have the exposure of flash light',
-  ]
-  
-  return titleList
-}
-
-const MessageComponent = (kyc) => {
-  const [titleList, ] = useState(getTitleList(kyc))
-  return (
-    <section className="pan-alert" data-aid='kyc-pan-alert'>
-      {titleList.map((title, idx) => (
-        <div className="row" key={idx} data-aid={`row-${idx + 1}`}>
-          <div className="order" data-aid={`order-${idx + 1}`}>{idx + 1}.</div>
-          <div className="value" data-aid={`value-${idx + 1}`}>{title}</div>
-        </div>
-      ))}
-    </section>
-  )
-}
+import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
 const productName = config.productName
@@ -48,7 +23,6 @@ const NRIAddressUpload = (props) => {
   const [backDoc, setBackDoc] = useState(null)
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
-  const [showLoader, setShowLoader] = useState(false)
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
@@ -117,12 +91,8 @@ const NRIAddressUpload = (props) => {
     return addressLine
   }
 
-  const addressProofKey = kyc?.address?.meta_data?.is_nri
-    ? 'passport'
-    : kyc?.address_doc_type
-  const addressProof = kyc?.address?.meta_data?.is_nri
-    ? 'Passport'
-    : DOCUMENTS_MAPPER[kyc?.address_doc_type]
+  const addressProofKey = kyc?.nri_address_doc_type
+  const addressProof = NRI_DOCUMENTS_MAPPER[addressProofKey]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -184,12 +154,12 @@ const NRIAddressUpload = (props) => {
     <Container
       buttonTitle="SAVE AND CONTINUE"
       skelton={isLoading}
-      events={sendEvents("just_set_events")}
       handleClick={handleSubmit}
       disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
       data-aid='kyc-upload-foreign-address-proof-screen'
+      events={sendEvents("just_set_events")}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" data-aid='kyc-upload-foreign-address-proof-page'>
@@ -202,11 +172,6 @@ const NRIAddressUpload = (props) => {
             )}
           </div>
           <div className="address-detail" data-aid='kyc-address-detail'>{getFullAddress()}</div>
-          {/* <Alert
-            variant="attention"
-            title="Note"
-            renderMessage={() => <MessageComponent kyc={kyc} />}
-          /> */}
           <KycUploadContainer.TitleText alignLeft>
             <span data-aid='kyc-address-proof-front-side'><b>Front side</b></span> of your {addressProof}
           </KycUploadContainer.TitleText>
@@ -219,13 +184,16 @@ const NRIAddressUpload = (props) => {
             />
             <KycUploadContainer.Button
               withPicker
-              showOptionsDialog
-              nativePickerMethodName="open_gallery"
-              fileName="nri_address_front"
-              customPickerId="wv-input-front"
-              onFileSelectComplete={onFileSelectComplete('front')}
-              onFileSelectError={onFileSelectError('front')}
-              supportedFormats={SUPPORTED_IMAGE_TYPES}
+              filePickerProps={{
+                showOptionsDialog: true,
+                shouldCompress: true,
+                nativePickerMethodName: "open_gallery",
+                fileName: "nri_address_front",
+                customPickerId: "wv-input-front",
+                onFileSelectComplete: onFileSelectComplete('front'),
+                onFileSelectError: onFileSelectError,
+                supportedFormats: SUPPORTED_IMAGE_TYPES
+              }}
             />
           </KycUploadContainer>
           {!onlyFrontDocRequired &&
@@ -242,13 +210,16 @@ const NRIAddressUpload = (props) => {
                 />
                 <KycUploadContainer.Button
                   withPicker
-                  showOptionsDialog
-                  nativePickerMethodName="open_gallery"
-                  fileName="nri_address_back"
-                  customPickerId="wv-input-back"
-                  onFileSelectComplete={onFileSelectComplete('back')}
-                  onFileSelectError={onFileSelectError('back')}
-                  supportedFormats={SUPPORTED_IMAGE_TYPES}
+                  filePickerProps={{
+                    showOptionsDialog: true,
+                    nativePickerMethodName: "open_gallery",
+                    shouldCompress: true,
+                    fileName: "nri_address_back",
+                    customPickerId: "wv-input-back",
+                    onFileSelectComplete: onFileSelectComplete('back'),
+                    onFileSelectError: onFileSelectError,
+                    supportedFormats: SUPPORTED_IMAGE_TYPES
+                  }}
                 />
               </KycUploadContainer>
             </>

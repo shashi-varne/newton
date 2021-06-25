@@ -10,9 +10,9 @@ import toast from "../../common/ui/Toast";
 import Api from "../../utils/api";
 import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
-import { isEmpty } from "../../utils/validators";
-import { getBasePath } from "../../utils/functions";
+import { isEmpty } from "lodash";
 import { isDigilockerFlow } from "../../kyc/common/functions";
+import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -23,6 +23,8 @@ class DigiStatus extends Component {
       params: getUrlParams(),
       skelton: true,
     };
+
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentDidMount = () => {
@@ -60,12 +62,12 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents("next");
-    /**
-     * Need to handle this
-     */
-    // nativeCallback({ action: 'exit_web' });
-    this.navigate("/invest");
+    this.sendEvents('next')
+    if (getConfig().isNative) {
+      nativeCallback({ action: 'exit_web' });
+    } else {
+      this.navigate("/invest");
+    }
   };
 
   navigateToReports = () => {
@@ -82,7 +84,7 @@ class DigiStatus extends Component {
     ) {
       if (dl_flow) {
         this.navigate("/kyc/journey", {
-          searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+          eventObjsearchParams: `${getConfig().searchParams}&show_aadhaar=true`,
         });
       } else {
         this.navigate("/kyc/journey");
@@ -189,7 +191,7 @@ class DigiStatus extends Component {
           status === "success"
             ? dl_flow && !show_note
               ? "START INVESTING"
-              : "OKAY"
+              : "HOME"
             : "RETRY E-SIGN"
         }
         headerData={headerData}

@@ -3,6 +3,7 @@ import { initialize } from "../common/commonFunctions";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "utils/validators";
+import { getConfig } from "../../../utils/functions";
 
 class NpsPaymentCallback extends Component {
   constructor(props) {
@@ -20,10 +21,13 @@ class NpsPaymentCallback extends Component {
   }
 
   onload = () => {
-    let pathname = this.props.history.location.pathname.split('/');
-    let status = pathname[pathname.length - 1];
-    let amount = pathname[pathname.length - 2] || storageService().get('npsAmount');
-
+    const params = this.props.match?.params || {}
+    const status = params.status;
+    if(!params.status) {
+      this.navigate("/");
+      return;
+    }
+    const amount = params.amount || storageService().get('npsAmount');
     this.setState({
       amount: amount,
       status: status
@@ -31,8 +35,9 @@ class NpsPaymentCallback extends Component {
   };
 
   handleClick = async () => {
+    const config = getConfig();
     if (this.state.status !== 'success') {
-      this.navigate('/invest', '', true)
+      this.navigate('/invest')
     } else {
       const result = await this.getNPSInvestmentStatus();
       storageService().set('nps_additional_details_required', true);
@@ -40,42 +45,77 @@ class NpsPaymentCallback extends Component {
       // storageService().setObject('kyc', result.kyc_app);
   
       let currentUser = storageService().getObject("user");
- 
-      if (!result.registration_details.additional_details_status) {
+      currentUser.nps_investment = true;
+      storageService().setObject("user", currentUser)
+      let _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "nps",
+            trigger: "cta",
+            journey_status: "incomplete",
+            next_journey: "kyc",
+          },
+        },
+      };
+      if (!result?.registration_details?.additional_details_status) {
         if (currentUser.kyc_registration_v2 === 'init') {
-          this.navigate('/kyc/journey', '', true);
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+          this.navigate('/kyc/journey');
         } else if (currentUser.kyc_registration_v2 === 'incomplete') {
-          this.navigate('/kyc/journey', '', true);
+          // send event
+          if (!config.Web) {
+            window.callbackWeb.eventCallback(_event);
+          } else if (config.isIframe) {
+            window.callbackWeb.sendEvent(_event);
+          }
+          this.navigate('/kyc/journey');
         } else {
-          this.navigate('identity');
+          this.navigate('/nps/identity');
         }
       } else {
-        this.navigate('investments');
+        let _event = {
+          'event_name': 'journey_details',
+          'properties': {
+            'journey': {
+              'name': 'nps',
+              'trigger': 'cta',
+              'journey_status': 'complete',
+              'next_journey': 'reports'
+            }
+          }
+        };
+        // send event
+        if (!config.Web) {
+          window.callbackWeb.eventCallback(_event);
+        } else if (config.isIframe) {
+          window.callbackWeb.sendEvent(_event);
+        }
+        this.navigate('/nps/investments');
       }
     }
   };
-
-  goBack = () => {
-    this.navigate('/landing', "", true);
-  }
  
   render() {
     return (
       <Container
+        data-aid='nps-payment-status-screen'
         showLoader={this.state.show_loader}
         buttonTitle="OK"
         title="Payment Status"
         handleClick={this.handleClick}
-        headerData={{
-          goBack: this.goBack
-        }}
       >
-        <div className="nps-payment-callback">
+        <div className="nps-payment-callback" data-aid='nps-payment-callback'>
           <div
             className="invest-sucess container-padding"
             style={{ padding: "20px" }}
           >
-            {this.state.status === 'success' && <div>
+            {this.state.status === 'success' && <div data-aid='nps-payment-successful'>
               <div className="icon">
                 <img
                   alt=""
@@ -89,7 +129,7 @@ class NpsPaymentCallback extends Component {
                 Payment of <b>{formatAmountInr(this.state.amount)}</b> towards NPS is successful
               </div>
             </div>}
-            {this.state.status !== 'success' && <div className="invest-error">
+            {this.state.status !== 'success' && <div className="invest-error" data-aid='nps-invest-error'>
               <h2>Error</h2>
               <p>Payment Failed</p>
             </div>}

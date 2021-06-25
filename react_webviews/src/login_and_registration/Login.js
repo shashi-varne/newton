@@ -7,6 +7,7 @@ import { initialize } from "./function";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
+import { nativeCallback } from "../utils/native_callback";
 
 const config = getConfig();
 class Login extends Component {
@@ -43,12 +44,26 @@ class Login extends Component {
     this.setState({ form_data: form_data });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
+    if(loginType !== "email")
+      this.sendEvents();
     if (loginType === "email") keys_to_check = ["email", "password"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
+    event.preventDefault()
   };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'otp sent to user',
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let {
@@ -72,7 +87,7 @@ class Login extends Component {
             />
           </div>
           <div className="login-form" data-aid='login-form'>
-            <div className="header-text">LOGIN</div>
+            <div className="header-text" data-aid='login-text'>LOGIN</div>
             <div className="login-type" data-aid='login-type'>
               <div
                 className="text"
@@ -80,24 +95,26 @@ class Login extends Component {
                   fontWeight: loginType === "mobile" ? "bold" : "normal",
                 }}
                 onClick={() => this.setLoginType("mobile")}
+                data-aid='mobile-text'
               >
                 MOBILE
                 {loginType === "mobile" && <div className="underline"></div>}
               </div>
               {productName !== "finity" && (
                 <div
-                  className="text" data-aid='email'
+                  className="text"
                   style={{
                     fontWeight: loginType === "email" ? "bold" : "normal",
                   }}
                   onClick={() => this.setLoginType("email")}
+                  data-aid='email-text'
                 >
                   EMAIL
                   {loginType === "email" && <div className="underline"></div>}
                 </div>
               )}
             </div>
-            <div className="form" data-aid='form'>
+            <form className="form" data-aid='form' onSubmit={this.handleClick} >
               {loginType === "mobile" && (
                 <div className="form-field">
                   <div className="country-code" data-aid='country-code'>
@@ -168,6 +185,7 @@ class Login extends Component {
               <Button
                 dataAid='login-btn'
                 buttonTitle="LOGIN"
+                buttonType="submit"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
                 style={{
@@ -191,14 +209,14 @@ class Login extends Component {
                   </a>
                 </div>
               )}
-            </div>
+            </form>
             {productName !== "finity" && (
               <div className="footer" data-aid='footer' onClick={() => this.navigate("register")}>
                 NEW USER? <span data-aid='register-btn'>REGISTER</span>
               </div>
             )}
             {productName === "finity" && (
-              <div className="features">
+              <div className="features" data-aid='login-features'>
                 <div className="item">
                   <img src={require(`assets/icons-07.png`)} alt="" />
                   <div className="title">Bank Grade Security</div>
@@ -226,9 +244,9 @@ class Login extends Component {
               </div>
             )}
             <div className="agree-terms" data-aid='agree-terms'>
-              By signing in, you agree to fisdom's{" "}
+              By signing in, you agree to {config.productName}'s{" "}
               <a
-                href="https://www.fisdom.com/terms/"
+                href={config.termsLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -236,7 +254,7 @@ class Login extends Component {
               </a>{" "}
               and{" "}
               <a
-                href="https://www.fisdom.com/privacy/"
+                href={config.privacyLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >

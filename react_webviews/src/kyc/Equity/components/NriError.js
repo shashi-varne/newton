@@ -1,11 +1,13 @@
 import React from "react";
-import { navigate as navigateFunc } from "../../common/functions";
+import { getConfig, navigate as navigateFunc, } from "../../../utils/functions";
 import Container from "../../common/Container";
-import { StatusInfo } from "../mini-components/StatusInfo";
 import "./commonStyles.scss";
 import { PATHNAME_MAPPER } from "../../constants";
 import { nativeCallback } from "../../../utils/native_callback";
+import { Imgc } from "../../../common/ui/Imgc";
 
+const config = getConfig();
+const productName = config.productName;
 const NriError = (props) => {
   const sendEvents = (userAction) => {
     let eventObj = {
@@ -23,16 +25,26 @@ const NriError = (props) => {
   };
 
   const navigate = navigateFunc.bind(props);
+  const stateParams = props?.location?.state;
 
+  const handleClick = () => {
+    sendEvents("home");
+    if(config.Web) {
+      navigate("/");
+    } else {
+      nativeCallback({ action: "exit_web" });
+    }
+  }
+  
   return (
     <Container
       events={sendEvents("just_set_events")}
       data-aid='nri-error-screen'
       hidePageTitle
       twoButtonVertical={true}
-      button1Props={{
-        type: "primary",
-        order: "1",
+      button1Props={stateParams?.noStockOption ? {} :
+      {
+        variant: "contained",
         title: "COMPLETE MUTUAL FUND KYC",
         onClick: () => {
           sendEvents("complete_mf_kyc");
@@ -40,20 +52,23 @@ const NriError = (props) => {
         },
       }}
       button2Props={{
-        type: "secondary",
-        order: "2",
+        variant: stateParams?.noStockOption ? "contained" : "outlined",
         title: "HOME",
-        onClick: () => {
-          sendEvents("home");
-          nativeCallback({ action: "exit" });
-        },
+        onClick: handleClick
       }}
     >
-      <StatusInfo
-        icon="no_stocks_nri.svg"
-        title="Currently, we don't offer trading and demat services to NRI users"
-        subtitle="Please check back later or continue with your mutual fund KYC"
-      />
+      <div className="status-info">
+        <Imgc
+          className="status-info-img"
+          src={require(`assets/${productName}/no_stocks_nri.svg`)}
+        />
+        <div className="status-info-title">
+          Currently, we don't offer trading and demat services to NRI users
+        </div>
+        <div className="status-info-subtitle">
+          Please check back later or continue with your mutual fund KYC
+        </div>
+      </div>
     </Container>
   );
 };

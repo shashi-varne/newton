@@ -3,13 +3,11 @@ import { getConfig, isTradingEnabled } from "../../../utils/functions";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 
 const productName = getConfig().productName;
-const TRADING_ENABLED = isTradingEnabled();
 const uploadStatus = {
   success: {
     icon: "ic_indian_resident.svg",
     title: "PAN uploaded",
-    subtitle: !TRADING_ENABLED ? 
-      "You're almost there, eSign your KYC form" : "You're almost there, now take a selfie",
+    subtitle: "You're almost there, now take a selfie",
     ctaText: "CONTINUE",
   },
   failed: {
@@ -20,10 +18,25 @@ const uploadStatus = {
   },
 };
 
-const PanUploadStatus = ({ status, isOpen, onCtaClick }) => {
-  const data = uploadStatus[status] || {};
-  
+const PanUploadStatus = ({ status, isOpen, kyc, onClose, disableBackdropClick, onCtaClick }) => {
   if (!status) return '';
+
+  const data = uploadStatus[status] || {};
+  const TRADING_ENABLED = isTradingEnabled(kyc);
+  
+  if (status === "success") {
+    const notManualAndNotNriCondition = (!kyc?.address?.meta_data?.is_nri && kyc?.kyc_type !== "manual")
+    ? "Great, just one more step to go! Now complete eSign to get investment ready"
+    : "Great, now continue to provide other documents to complete KYC"
+    
+    data.subtitle = !TRADING_ENABLED
+      ? notManualAndNotNriCondition
+      : (kyc?.all_dl_doc_statuses?.pan_fetch_status === "failed" && !kyc.equity_data.meta_data.trading_experience)
+      ? "You’re almost there, now give details for your trading account"
+      : kyc?.kyc_type === "manual" 
+      ? "Great, now continue to provide other documents to complete KYC"
+      : "You're almost there, now take a selfie";
+  }
 
   return (
     <WVBottomSheet
@@ -33,9 +46,10 @@ const PanUploadStatus = ({ status, isOpen, onCtaClick }) => {
       image={data.icon && require(`assets/${productName}/${data.icon}`)}
       button1Props={{
         title: data.ctaText,
-        type: 'primary',
+        variant: "contained",
         onClick: onCtaClick,
       }}
+      disableBackdropClick
     />
   );
 };

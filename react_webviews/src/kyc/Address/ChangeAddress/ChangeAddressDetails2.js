@@ -4,10 +4,9 @@ import Alert from '../../mini-components/Alert'
 import { isEmpty } from '../../../utils/validators'
 import { NRI_DOCUMENTS_MAPPER as DOCUMENTS_MAPPER, PATHNAME_MAPPER } from '../../constants'
 import { upload } from '../../common/api'
-import { getBase64, getConfig } from '../../../utils/functions'
+import { getBase64, getConfig, navigate as navigateFunc } from '../../../utils/functions'
 import toast from '../../../common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
-import { navigate as navigateFunc } from '../../common/functions'
 import useUserKycHook from '../../common/hooks/userKycHook'
 import "../commonStyles.scss";
 import { nativeCallback } from '../../../utils/native_callback'
@@ -214,8 +213,6 @@ const ChangeAddressDetails2 = (props) => {
   const title = kyc?.address?.meta_data?.is_nri
     ? 'Upload Indian Address Proof'
     : 'Upload address proof'
-
-  const isWeb = getConfig().Web
 
   const sendEvents = (userAction, source, docSide) => {
     let eventObj = {

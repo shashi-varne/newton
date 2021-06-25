@@ -1,19 +1,37 @@
 import React from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
-import { navigate as navigateFunc } from "../common/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "../../utils/validators";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 
-const productName = getConfig().productName;
+const config = getConfig();
+const productName = config.productName;
 const KycVerified = (props) => {
   const navigate = navigateFunc.bind(props);
   const { kyc, isLoading } = useUserKycHook();
   const handleClick = () => {
-    sendEvents("next");
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "kyc",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+    
+    sendEvents('next')
     if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {
@@ -21,11 +39,6 @@ const KycVerified = (props) => {
     }
   };
 
-  const applicationDetails = () => {
-    sendEvents("application_details");
-    navigate(PATHNAME_MAPPER.kycReport);
-  };
-  
   const sendEvents = (userAction) => {
     let eventObj = {
       event_name: "premium_onboard",
@@ -43,6 +56,11 @@ const KycVerified = (props) => {
     }
   };
 
+  const handleApplicationDetailsClick = () => {
+    sendEvents("application_details");
+    navigate(PATHNAME_MAPPER.kycReport)
+  }
+
   return (
     <Container
       id="kyc-compliant-verify"
@@ -51,6 +69,7 @@ const KycVerified = (props) => {
       handleClick={handleClick}
       title="KYC verified"
       data-aid='kyc-compliant-verify-screen'
+      skelton={isLoading}
     >
       <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete'>
         <header data-aid='kyc-compliant-verify-header'>
@@ -61,7 +80,7 @@ const KycVerified = (props) => {
           <div className="title" data-aid='kyc-title'>You're ready to invest!</div>
           <div
             className="subtitle margin-top"
-            onClick={() => navigate(PATHNAME_MAPPER.kycReport)}
+            onClick={handleApplicationDetailsClick}
             data-aid='kyc-application-details-text'
           >
             See KYC application details {" >"}

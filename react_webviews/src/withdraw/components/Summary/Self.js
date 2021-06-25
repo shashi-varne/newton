@@ -8,11 +8,12 @@ import { Redirect } from 'react-router-dom'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { getConfig } from 'utils/functions'
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import { formatAmountInr, isEmpty } from '../../../utils/validators'
 
 import '../commonStyles.scss';
 import './Self.scss';
+import { nativeCallback } from '../../../utils/native_callback'
 
 const SelfSummary = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -32,6 +33,7 @@ const SelfSummary = (props) => {
   }
 
   const handleClick = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
       const itype = props?.location?.state?.itype
@@ -50,7 +52,7 @@ const SelfSummary = (props) => {
         investments: [{ itype, subtype, allocations }],
       })
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('verify', { state:{...result} })
+        navigate('/withdraw/verify', { state:{...result} })
         return
       }
     } catch (err) {
@@ -90,9 +92,27 @@ const SelfSummary = (props) => {
     fetchTaxes()
   }, [])
 
+  const sendEvents = (userAction, index) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "tax_summary",
+        "flow": "self"
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
 
   return (
     <Container
+      data-aid='self-summary-screen'
+      events={sendEvents("just_set_events")}
       buttonTitle={'CONTINUE'}
       fullWidthButton
       classOverRideContainer="pr-container"
@@ -110,14 +130,15 @@ const SelfSummary = (props) => {
       type="withProvider"
     >
       {!isEmpty(taxes) && (
-        <section id="withdraw-manual-summary">
+        <section id="withdraw-manual-summary" data-aid='withdraw-manual-summary'>
           <TaxLiability stcg={taxes?.stcg_tax} ltcg={taxes?.ltcg_tax} />
           <ExitLoad exit_load={taxes?.exit_load} />
-          <div className="tax-summary">Tax Summary</div>
-          <main className="fund-list">
+          <div className="tax-summary" data-aid='tax-summary'>Tax Summary</div>
+          <main className="fund-list" data-aid='fund-list'>
             {taxes?.liabilities?.map((item) => (
               <TaxSummaryCard
                 key={item.isin}
+                sendEvents={sendEvents}
                 {...item}
                 openCard={
                   open[item.isin]

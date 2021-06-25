@@ -7,9 +7,9 @@ import Container from "../common/Container";
 import { DOCUMENTS_MAPPER } from "../constants";
 import {
   compareObjects,
-  navigate as navigateFunc,
   validateFields,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { validateNumber } from "utils/validators";
 import "./commonStyles.scss";
@@ -217,7 +217,7 @@ const AddressDetails2 = (props) => {
       data-aid='kyc-address-details-screen-2'
     >
       <section data-aid='kyc-address-details-2'>
-        <div className="sub-title" data-aid='kyc-sub-title'>Address as per {getAddressProof(kyc)}</div>
+        <div className="kyc-main-subtitle" data-aid='kyc-sub-title'>Address as per {getAddressProof(kyc)}</div>
         <form className="form-container" data-aid='kyc-form-container'>
           <TextField
             label="Pincode"
@@ -228,6 +228,9 @@ const AddressDetails2 = (props) => {
             margin="normal"
             helperText={form_data.pincode_error || ""}
             error={form_data.pincode_error ? true : false}
+            inputProps={{
+              inputMode:"numeric"
+            }}
           /> 
           <TextField
             label="Address"

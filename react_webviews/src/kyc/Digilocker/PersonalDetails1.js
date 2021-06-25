@@ -10,10 +10,11 @@ import {
 import { validateAlphabets, isEmpty} from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getGenderValue,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -51,7 +52,7 @@ const PersonalDetails1 = (props) => {
       email: kyc.identification?.meta_data?.email || "",
       mobile: mobile_number,
       country_code: country_code,
-      gender: kyc.identification?.meta_data?.gender || "",
+      gender: getGenderValue(kyc.identification?.meta_data?.gender) || "",
       marital_status: kyc.identification?.meta_data?.marital_status || "",
       father_name: kyc.pan?.meta_data?.father_name || "",
       mother_name: kyc.pan?.meta_data?.mother_name || "",
@@ -190,7 +191,7 @@ const PersonalDetails1 = (props) => {
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle-text'>
-          Please fill your basic details for further verification
+          Enter the details below for further verification
         </div>
         <main data-aid='kyc-personal-details'>
           <Input
@@ -202,7 +203,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={showLoader}
+            disabled={showLoader || !!kyc?.pan?.meta_data.name}
           />
           <Input
             label="Father's name"
@@ -253,7 +254,7 @@ const PersonalDetails1 = (props) => {
           </div>
           {form_data.marital_status === "MARRIED" && (
             <Input
-              label="Spouse"
+              label="Spouse's name"
               class="input"
               value={form_data.spouse_name || ""}
               error={form_data.spouse_name_error ? true : false}

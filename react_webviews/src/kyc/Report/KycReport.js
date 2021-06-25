@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
 import {
   PATHNAME_MAPPER,
   DOCUMENTS_MAPPER,
   REPORT_CARD_DETAILS,
-  STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
-import { navigate as navigateFunc, getFlow } from "../common/functions";
-import { storageService, isEmpty } from "../../utils/validators";
+import { getFlow, getGenderValue, isDigilockerFlow } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
+import { isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
-const config = getConfig();
 const Report = (props) => {
-  const flowType = props?.type || "";
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -23,7 +20,6 @@ const Report = (props) => {
   const [isNri, setIsNri] = useState(false);
   const [topTitle, setTopTitle] = useState("KYC details");
   const [addressProof, setAddressProof] = useState({});
-  const [buttonTitle, setButtonTitle] = useState("OK");
   const goBackPage = props.location.state?.goBack || "";
 
   const handleTiles = (index, key) => {
@@ -31,8 +27,8 @@ const Report = (props) => {
       navigate(PATHNAME_MAPPER.uploadProgress, {
         state: {
           disableNext: true,
-          fromState: "kyc-report",
-          toState: "landing",
+          fromState: "/kyc/report",
+          toState: "/landing",
         },
       });
       return;
@@ -50,7 +46,8 @@ const Report = (props) => {
   }, [kyc, user]);
 
   const initialize = () => {
-    let compliant = kyc.kyc_status === "compliant" ? true : true;
+    let compliant = kyc.kyc_status === "compliant";
+    const dlFlow = isDigilockerFlow(kyc);
     setIsCompliant(compliant);
     if (
       compliant &&
@@ -65,7 +62,7 @@ const Report = (props) => {
     const nri = kyc.address.meta_data.is_nri;
     if (nri) {
       address_proof = "Passport";
-      address_proof_nri = DOCUMENTS_MAPPER[kyc.address_doc_type];
+      address_proof_nri = DOCUMENTS_MAPPER[kyc.nri_address_doc_type];
     } else {
       address_proof = DOCUMENTS_MAPPER[kyc.address_doc_type];
     }
@@ -75,20 +72,16 @@ const Report = (props) => {
       address_proof_nri,
     });
 
-    if (compliant) {
-      setButtonTitle("INVEST NOW");
-    }
-
     let reportCards = [...REPORT_CARD_DETAILS];
     setIsNri(nri);
     if (compliant) {
       reportCards.splice(5, 1); //remove docs
-      if (!nri) {
-        reportCards.splice(2, 1); //remove address
-      }
+    }
+    if(dlFlow || (compliant && !nri)) {
+      reportCards.splice(2, 1); //remove address
     }
     if (kyc.nomination.nominee_optional) {
-      if (compliant && !nri) {
+      if ((compliant && !nri) || dlFlow) {
         reportCards.splice(2, 1);
       } else {
         reportCards.splice(3, 1);
@@ -97,95 +90,37 @@ const Report = (props) => {
     setCardDetails(reportCards);
   };
 
-  const handleClick = () => {
-    sendEvents('next')
-    if (isCompliant) {
-      proceed();
-    } else {
-      checkNPSAndProceed();
-    }
-  };
-
-  const proceed = () => {
-    if (config.Web) {
-      navigate(PATHNAME_MAPPER.invest);
-    } else {
-      if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
-        nativeCallback({ action: "exit_web" });
-      } else {
-        navigate(PATHNAME_MAPPER.landing);
-      }
-    }
-  };
-
-  const checkNPSAndProceed = () => {
-    if (user.nps_investment) {
-      if (!config.isIframe) {
-        navigate(PATHNAME_MAPPER.reports);
-      }
-    } else {
-      if (config.Web) {
-        navigate(PATHNAME_MAPPER.invest);
-      } else {
-        if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
-          nativeCallback({ action: "exit_web" });
-        } else {
-          navigate(PATHNAME_MAPPER.landing);
-        }
-      }
-    }
-  };
-
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
-        {isCompliant && (
-          <div className="unzipped-box" data-aid='kyc-email'>
-            <div className="title">Email</div>
-            <div className="subtitle">{kyc.identification.meta_data.email}</div>
-          </div>
-        )}
+        <div className="unzipped-box" data-aid="kyc-father-name">
+          <div className="title">Name</div>
+          <div className="subtitle">{kyc.pan.meta_data.name}</div>
+        </div>
         <div className="row-align">
-          {!isCompliant && (
-            <div className="unzipped-box" data-aid='kyc-gender'>
-              <div className="title">Gender</div>
-              <div className="subtitle">
-                {kyc.identification.meta_data.gender}
-              </div>
+          <div className="unzipped-box" data-aid="kyc-gender">
+            <div className="title">Gender</div>
+            <div className="subtitle">
+              {getGenderValue(kyc.identification.meta_data.gender, "name")}
             </div>
-          )}
-          <div className="unzipped-box" data-aid='kyc-dob'>
-            <div className="title">Dob</div>
-            <div className="subtitle">{kyc.pan.meta_data.dob}</div>
+          </div>
+          <div className="unzipped-box" data-aid="kyc-marital-status">
+            <div className="title">Marital Status</div>
+            <div className="subtitle">
+              {kyc.identification.meta_data.marital_status}
+            </div>
           </div>
         </div>
         {!isCompliant && (
-          <>
-            <div className="unzipped-box" data-aid='kyc-marital-status'>
-              <div className="title">Marital Status</div>
-              <div className="subtitle">
-                {kyc.identification.meta_data.marital_status}
-              </div>
-            </div>
-            <div className="unzipped-box" data-aid='kyc-father-name'>
-              <div className="title">Father’s name</div>
-              <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
-            </div>
-            <div className="unzipped-box" data-aid='kyc-mother-name'>
-              <div className="title">Mother’s name</div>
-              <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
-            </div>
-          </>
-        )}
-        {isCompliant && (
-          <div className="unzipped-box" data-aid='kyc-mobile'>
-            <div className="title">Mobile</div>
-            <div className="subtitle">
-              {kyc.identification.meta_data.mobile_number}
-            </div>
+          <div className="unzipped-box" data-aid="kyc-father-name">
+            <div className="title">Father’s name</div>
+            <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
           </div>
         )}
+        <div className="unzipped-box" data-aid="kyc-mother-name">
+          <div className="title">Mother’s name</div>
+          <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
+        </div>
       </>
     );
   };
@@ -212,10 +147,10 @@ const Report = (props) => {
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
                 <div className="subtitle">
-                  {kyc.address.meta_data.addressline},
-                  {kyc.address.meta_data.city},{kyc.address.meta_data.state},
-                  {kyc.address.meta_data.country},
-                  {kyc.address.meta_data.pincode}
+                  {kyc.nri_address.meta_data.addressline},
+                  {kyc.nri_address.meta_data.city},{kyc.nri_address.meta_data.state},
+                  {kyc.nri_address.meta_data.country},
+                  {kyc.nri_address.meta_data.pincode}
                 </div>
               </div>
             )}
@@ -337,14 +272,12 @@ const Report = (props) => {
   return (
     <Container
       id="kyc-home"
-      events={sendEvents("just_set_events")}
       data-aid='kyc-home-screen'
-      buttonTitle={buttonTitle}
-      handleClick={handleClick}
+      events={sendEvents("just_set_events")}
       title={topTitle}
       headerData={{ goBack }}
       skelton={isLoading}
-      noFooter={flowType === "compliant"}
+      noFooter
     >
       <div className="kyc-report" data-aid='kyc-report-section'>
         {cardDetails &&

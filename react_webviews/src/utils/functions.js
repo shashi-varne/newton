@@ -1,5 +1,6 @@
 // import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams, storageService } from './validators';
+import { isArray, isEmpty } from 'lodash';
 import $ from 'jquery';
 import { 
   basePartnerConfig, 
@@ -138,6 +139,25 @@ export function getParamsMark(data) {
   return (data.match(/[?]/g) ? "&": "?");
 }
 
+export const getPlatformConfig = () => {
+  const config = {};
+  if (isMobile.Android() && typeof window.Android !== 'undefined') {
+    config.app = 'android';
+    config.Android = true;
+  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
+    config.app = 'ios';
+    config.iOS = true;
+  } else {
+    if (storageService().get("is_secure")) {
+      return;
+    }
+    config.app = 'web';
+    config.Web = true;
+  }
+
+  return config;
+}
+
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
@@ -150,6 +170,9 @@ export const getConfig = () => {
 
   let base_href = window.sessionStorage.getItem('base_href') || '';
   let base_url_default = '';
+  
+  const isStaging = origin.indexOf('plutus-web-staging') >= 0;
+  const isLocal = origin.indexOf('localhost') >=0;
 
   if(base_href) {
     base_url_default = window.location.origin;
@@ -163,13 +186,20 @@ export const getConfig = () => {
     if(isProdFinity) {
       base_url_default = 'https://api.mywaywealth.com';
     }
+
+    // change server url here for local and staging url builds (Not commit id one's)
+    if (isStaging || isLocal) {
+      base_url_default = "https://anandb-dot-plutus-staging.appspot.com";
+    }
   }
   
+
   if(base_url_default) {
     base_url = base_url_default;
   }
 
   let { is_secure = false } = main_query_params;
+  let { from_notification } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
@@ -237,6 +267,12 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
   }
+  
+  if (checkValidString(from_notification)) {
+    returnConfig.from_notification = from_notification;
+    searchParams += getParamsMark(searchParams) + `from_notification=${from_notification}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `from_notification=${from_notification}`;
+  }
 
   if (sdk_capabilities) {
     returnConfig.sdk_capabilities = sdk_capabilities;
@@ -279,15 +315,12 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + 'insurance_allweb=' + insurance_allweb;
   }
 
-  if (isMobile.Android() && typeof window.Android !== 'undefined') {
-    returnConfig.app = 'android';
-    returnConfig.Android = true;
-  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
-    returnConfig.app = 'ios';
-    returnConfig.iOS = true;
-  } else {
-    returnConfig.app = 'web';
-    returnConfig.Web = true;
+  const platformConfig = getPlatformConfig();
+  if (platformConfig) {
+    returnConfig = {
+      ...returnConfig,
+      ...platformConfig
+    }
   }
 
   // eslint-disable-next-line
@@ -319,10 +352,12 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
-  returnConfig.isSdk = storageService().get("is_secure"); 
+  returnConfig.isSdk = storageService().get("is_secure");
   returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
   returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
-  
+  returnConfig.isIframe = isIframe();
+  returnConfig.platform = !returnConfig.isIframe ? (returnConfig.Web ? "web" : "sdk" ): "iframe";
+  returnConfig.isLoggedIn = storageService().get("currentUser");
   return returnConfig;
 };
 
@@ -469,7 +504,137 @@ export function getBasePath() {
   return window.location.origin + basename;
 }
 
-export function isTradingEnabled() {
-  const kyc = storageService().getObject("kyc");
+export function isTradingEnabled(userKyc = {}) {
+  const kyc = !isEmpty(userKyc) ? userKyc : storageService().getObject("kyc");
   return !getConfig().isSdk && !kyc?.address?.meta_data.is_nri
+}
+const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
+
+export function navigate(pathname, data = {}) {
+  let fromState = this?.location?.pathname || ""
+  let toState = pathname
+  
+  const redirectPath = checkBeforeRedirection(fromState, toState)
+  if (redirectPath) {
+    toState = redirectPath
+  }
+
+  data.state = {
+    ...data?.state,
+    fromState,
+    toState
+  }
+
+  if (data.edit) {
+    this.history.replace({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  } else {
+    this.history.push({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  }
+}
+
+export function isNpsOutsideSdk(fromState, toState) {
+  let config = getConfig();
+  if (config?.landingconfig?.nps === 'inside_sdk') {
+    return false;
+  }
+
+  if (fromState === "/nps/sdk" ||
+    ((fromState.indexOf("/nps/amount") !== -1) && toState === "/nps/info") ||
+    ((fromState.indexOf("/nps/payment/callback") !== -1) &&
+      ((toState.indexOf("/nps/amount") !== -1) || toState === "/nps/investments" ||
+        toState === "/nps/performance"))) {
+    return true;
+  }
+}
+
+export function listenPartnerEvents(cb) {
+  window.addEventListener("message", function (e) {
+    if (e.data !== "" && typeof e.data === "string") {
+      /* Parse events */
+      var data = JSON.parse(e.data);
+      /* Match whitelisted domains */
+      if (e.origin !== data.targetOrigin) {
+        return;
+      }
+
+      /* Store event */
+      // setEvent(data);
+      /* return events to callback */
+      cb(data);
+    } else {
+      // setEvent(e.data);
+      cb(e.data);
+    }
+  });
+}
+
+export const base64ToBlob = (b64Data, contentType = '', sliceSize = 512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+}
+
+export function openFilePicker (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) {
+  if (getConfig().Web) {
+    const filepicker = document.getElementById(filepickerId);
+
+    if (filepicker) {
+      filepicker.value = null; // Required to allow same file to be picked again QA-4238 (https://stackoverflow.com/questions/12030686)
+      filepicker.click();
+    }
+  } else {
+    window.callbackWeb[methodName]({
+      type: 'doc',
+      doc_type: docName,
+      upload: nativeHandler,
+      ...fileHandlerParams // callback from native
+    });
+  }
+}
+
+export function validateFileTypeAndSize (file, supportedTypes, sizeLimit) {
+  const fileType = file.type.split("/")[1];
+  const sizeInBytes = sizeLimit * 1000 * 1000;
+
+  if (!isArray(supportedTypes)) {
+    supportedTypes = [supportedTypes];
+  }
+
+  if (!supportedTypes.includes(fileType)) {
+    return "File type not supported";
+  } else if (file.size > sizeInBytes) {
+    return `File size cannot exceed ${sizeLimit}MB`;
+  }
+
+  return "";
+}
+
+export {
+  checkBeforeRedirection, 
+  checkAfterRedirection, 
+  backButtonHandler
 }

@@ -4,12 +4,12 @@ import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../../constants";
 import { getSipAction } from "../../common/api";
 import {
-  navigate as navigateFunc,
   dateOrdinalSuffix,
 } from "../../common/functions";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import toast from "common/ui/Toast";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const productName = getConfig().productName;
 const sip_mandate_created = ["init", "mandate_approved", "active"];
@@ -50,18 +50,22 @@ const SipDetails = (props) => {
   const handleClick = (name) => () => {
     if (name === "FIRST") {
       if (sip_mandate_created.includes(report.friendly_status)) {
+        sendEvents("cancel", report);
         navigate(`${getPathname.pauseAction}cancel`);
         return;
       }
       if (requested_pause.includes(report.friendly_status)) {
+        sendEvents("next", "resume", report.friendly_status);
         nextStep("resume");
         return;
       }
       if (requested_cancel.includes(report.friendly_status)) {
+        sendEvents("next", "restart", report.friendly_status);
         nextStep("restart");
         return;
       }
     } else {
+      sendEvents("pause", report);
       navigate(`${getPathname.pauseAction}pause`);
     }
   };
@@ -87,8 +91,30 @@ const SipDetails = (props) => {
     }
   };
 
+  const sendEvents = (userAction, flow, data) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "SIP Details",
+      },
+    };
+    if (data) {
+      eventObj.properties["status"] = formatName(data);
+    }
+    if (flow) {
+      eventObj.properties["flow"] = flow;
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="SIP Details"
       noFooter={buttonTitle ? false : true}
       twoButton={sip_mandate_created.includes(report.friendly_status)}

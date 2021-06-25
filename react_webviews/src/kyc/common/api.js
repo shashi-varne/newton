@@ -164,13 +164,24 @@ export const upload = async (file, type, data = {}) => {
         formData.append('doc_password', data.doc_password);
         break;
       case 'identification':
-        formData.append('kyc_product_type', data.kyc_product_type);
-        formData.append('location_coordinates', `${data.lat},${data.lng}`);
-        formData.append('live_score', data.live_score);
-        formData.append('forced', data.forced);
+        if (data.kyc_product_type) {
+          formData.append('kyc_product_type', data.kyc_product_type);
+        }
+        if (data.lat && data.lng) {
+          formData.append('location_coordinates', `${data.lat},${data.lng}`);
+        }
+        if (data.live_score) {
+          formData.append('live_score', data.live_score);
+        }
+        if (data.forced) {
+          formData.append('forced', data.forced);
+        }
         break;
-      default:
+      case 'sign':
+        formData.append('manual_upload', data.manual_upload)
         break
+       default:
+         break
     }
   }
   const url = isEmpty(doc_type) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${doc_type}`
@@ -300,7 +311,19 @@ export const verifyOtp = async (body) => {
   return handleApi(res);
 };
 
-export const socialAuth = async (body) => {
-  const res = await Api.post(`${API_CONSTANTS.socialAuth}/${body.provider}?redirect_url=${body.redirectUrl}`)
+export const sendWhatsappConsent = async (body) => {
+  const res = await Api.post(API_CONSTANTS.sendContactConsent, body);
   return handleApi(res);
-}
+};
+
+export const getContactsFromSummary = async () => {
+  const res = await Api.post(API_CONSTANTS.accountSummary, {
+    contacts: ["contacts"],
+  });
+  const result = handleApi(res);
+  if (result) {
+    let contacts = result.data?.contacts?.contacts?.data || {};
+    storageService().setObject("contacts", contacts);
+  }
+  return result;
+};

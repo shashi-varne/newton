@@ -1,15 +1,16 @@
 import { isTradingEnabled } from "utils/functions";
-
-const TRADING_ENABLED = isTradingEnabled();
+import { panUiSet } from "../common/functions";
 
 export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
+  const TRADING_ENABLED = isTradingEnabled(kyc);
+
   let journeyData = [];
   if (isCompliant) {
     journeyData = [
       {
         key: 'pan',
         title: 'PAN',
-        value: kyc?.pan?.meta_data?.pan_number,
+        value: panUiSet(kyc?.pan?.meta_data?.pan_number),
         status: 'completed',
         isEditAllowed: false,
         inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
@@ -28,6 +29,8 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
               'email',
               'occupation',
               'gross_annual_income',
+              'email_verified',
+              'mobile_number_verified',
             ],
           },
           {
@@ -63,7 +66,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: [
           {
             name: 'bank',
-            keys: ['account_number', 'account_type', 'ifsc_code'],
+            keys: ['account_number', 'account_type', 'ifsc_code', 'bank_status'],
           },
         ],
       },
@@ -86,14 +89,14 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
       {
         key: 'pan',
         title: 'PAN',
-        value: kyc?.pan?.meta_data?.pan_number,
+        value: panUiSet(kyc?.pan?.meta_data?.pan_number),
         status: 'completed',
         isEditAllowed: true,
         inputsForStatus: [{ name: 'pan', keys: ['pan_number'] }],
       },
       {
         key: 'digilocker',
-        title: 'Connect to digilocker',
+        title: 'Connect to DigiLocker',
         status: 'init',
         isEditAllowed: false,
         inputsForStatus: ['dl_docs_status'],
@@ -106,8 +109,15 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: [
           { name: 'pan', keys: ['name', 'father_name', 'mother_name'] },
           {
-            name: 'identification',
-            keys: ['email', 'mobile_number', 'gender', 'marital_status'],
+            name: "identification",
+            keys: [
+              "email",
+              "mobile_number",
+              "gender",
+              "marital_status",
+              "email_verified",
+              "mobile_number_verified",
+            ],
           },
           {
             name: 'nomination',
@@ -133,7 +143,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: [
           {
             name: 'bank',
-            keys: ['account_number', 'account_type', 'ifsc_code'],
+            keys: ['account_number', 'account_type', 'ifsc_code', 'bank_status'],
           },
         ],
       },
@@ -169,14 +179,20 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
             keys: ['name', 'dob', 'father_name', 'mother_name'],
           },
           {
-            name: 'identification',
-            keys: ['email', 'mobile_number', 'gender', 'marital_status'],
+            name: "identification",
+            keys: [
+              "email",
+              "mobile_number",
+              "gender",
+              "marital_status",
+              "email_verified",
+              "mobile_number_verified",
+            ],
           },
           {
             name: 'nomination',
             keys: ['name', 'dob', 'relationship'],
           },
-          // { name: "nomination", keys: ["name", "dob", "relationship"] }
         ],
       },
       {
@@ -186,7 +202,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         isEditAllowed: true,
         inputsForStatus: [
           { name: 'address', keys: ['pincode'] },
-          { name: 'nomination', keys: ['address'] },
+          // { name: 'nomination', keys: ['address'] },
         ],
       },
       {
@@ -212,6 +228,10 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: ['esign'],
       },
     ]
+
+    if(!isCompliant && kyc?.address?.meta_data?.is_nri) {
+      journeyData[3].inputsForStatus.push('nri_address')
+    }
 
     if (
       isCompliant &&

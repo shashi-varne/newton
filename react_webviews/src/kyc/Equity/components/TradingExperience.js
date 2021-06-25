@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { isDocSubmittedOrApproved, navigate as navigateFunc } from "../../common/functions"
+import { checkDLPanFetchAndApprovedStatus, checkDocsPending, isDocSubmittedOrApproved } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
+import WVSelect from "../../../common/ui/Select/WVSelect";
+import { navigate as navigateFunc, } from "../../../utils/functions";
 
-const tradingExperienceValues = [
+const TRADING_EXPERIENCE_VALUES = [
   {
     name: "0 to 1 year",
     value: "0-1",
@@ -23,7 +25,7 @@ const tradingExperienceValues = [
     value: "3-5",
   },
   {
-    name: "5 year +",
+    name: "5 years +",
     value: "5+",
   },
 ];
@@ -34,13 +36,20 @@ const TradingExperience = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
+  const [areDocsPending, setDocsPendingStatus] = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      setExperience(kyc?.equity_data?.meta_data?.trading_experience || "0-1");
-      setOldState(kyc?.equity_data?.meta_data?.trading_experience || "")
+      initialize();
     }
   }, [kyc]);
+
+  const initialize = async () => {
+    setExperience(kyc?.equity_data?.meta_data?.trading_experience || "0-1");
+    setOldState(kyc?.equity_data?.meta_data?.trading_experience || "")
+    const docStatus = await checkDocsPending(kyc);
+    setDocsPendingStatus(docStatus)
+  }
 
   const handleClick = () => {
     sendEvents("next")
@@ -57,7 +66,6 @@ const TradingExperience = (props) => {
       let body = {
         kyc: {
           equity_data: {
-            "fno_required": true,
             "trading_experience": experience
           },
         },
@@ -74,18 +82,27 @@ const TradingExperience = (props) => {
   };
 
   const handleNavigation = () => {
-    if (kyc.initial_kyc_status === "compliant") {
-      if (!isDocSubmittedOrApproved("pan")) {
-        navigate(PATHNAME_MAPPER.uploadPan);
+    const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
+    if (kyc.initial_kyc_status === "compliant" || isPanFailedAndNotApproved) {
+      if (!isDocSubmittedOrApproved("equity_pan")) {
+        navigate(PATHNAME_MAPPER.uploadPan, {
+          state: { goBack: "/kyc/trading-experience" }
+        });
         return;
       }
     } 
-    if (!isDocSubmittedOrApproved("identification"))
-      navigate(PATHNAME_MAPPER.uploadSelfie);
-    else {
-      if (!isDocSubmittedOrApproved("equity_income"))
+    if (!isDocSubmittedOrApproved("equity_identification")) {
+        navigate(PATHNAME_MAPPER.uploadSelfie);
+    } else {
+      if (!isDocSubmittedOrApproved("equity_income")) {
         navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
-      else navigate(PATHNAME_MAPPER.kycEsign)
+      } else {
+        if (areDocsPending) {
+          navigate(PATHNAME_MAPPER.documentVerification)
+        } else {
+          navigate(PATHNAME_MAPPER.kycEsign)
+        }
+      } 
     }
   }
 
@@ -110,6 +127,10 @@ const TradingExperience = (props) => {
       nativeCallback({ events: eventObj });
     }
   };
+  
+  const handleChange = (selectedOption) => {
+    setExperience(selectedOption.value)
+  }
 
   return (
     <Container
@@ -117,29 +138,24 @@ const TradingExperience = (props) => {
       buttonTitle="CONTINUE"
       handleClick={handleClick}
       title="Select trading experience"
-      noPadding
       disable={isLoading}
       showLoader={isApiRunning}
+      data-aid="select-trading-experience-screen"
     >
-      <div className="trading-experience">
-        <div className="generic-page-subtitle te-subtitle">
+      <div className="trading-experience" data-aid="trading-experience">
+        <div
+          className="generic-page-subtitle te-subtitle"
+          data-aid="generic-page-subtitle"
+        >
           As per SEBI, it is mandatory to share your trading experience
         </div>
-        {tradingExperienceValues.map((data, index) => {
-          const selected = data.value === experience;
-          return (
-            <div
-              className={`te-tile ${selected && "te-selected-tile"}`}
-              key={index}
-              onClick={() => setExperience(data.value)}
-            >
-              <div>{data.name}</div>
-              {selected && (
-                <img alt="" src={require(`assets/completed_step.svg`)} />
-              )}
-            </div>
-          );
-        })}
+        <WVSelect
+          options={TRADING_EXPERIENCE_VALUES}
+          titleProp="name"
+          indexBy="value"
+          value={experience}
+          onChange={handleChange}
+        />
       </div>
     </Container>
   );

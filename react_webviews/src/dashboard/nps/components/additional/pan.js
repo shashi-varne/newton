@@ -59,11 +59,14 @@ class PanDetails extends Component {
     let { form_data, isKycApproved, is_nps_contributed, isKycIdentificationApproved } = this.state;
 
     isKycApproved = userKyc.pan.meta_data_status === 'approved';
-    isKycIdentificationApproved = userKyc.identification?.meta_data_status === 'approved';
+    isKycIdentificationApproved =
+      userKyc.identification?.meta_data?.mobile_number &&
+      userKyc.identification?.meta_data?.email &&
+      userKyc.identification?.meta_data_status === "approved";
     form_data.dob = userKyc.pan.meta_data.dob || "";
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 
-    form_data.email = userKyc.address.meta_data.email || "";
+    form_data.email = userKyc.identification.meta_data.email || "";
     let mobile_number = userKyc.identification?.meta_data?.mobile_number || "";
     let country_code = "";
     if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
@@ -77,7 +80,7 @@ class PanDetails extends Component {
     if(!isEmpty(form_data.pran)) {
       is_nps_contributed = true;
     }
-    
+    this.sendEvents();
     this.setState({
       currentUser: currentUser,
       isKycApproved: isKycApproved,
@@ -86,6 +89,17 @@ class PanDetails extends Component {
       is_nps_contributed,
       isKycIdentificationApproved
     });
+  };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "pan screen",
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
 
   handleChange = (name) => (event) => {
@@ -180,7 +194,7 @@ class PanDetails extends Component {
     });
 
     if (canSubmit) {
-      let { pan, address, identification } = userKyc;
+      let { pan, identification } = userKyc;
 
       if (is_nps_contributed) {
         storageService().set("nps_pran_number", form_data.pran);
@@ -190,7 +204,7 @@ class PanDetails extends Component {
       pan.meta_data.dob = form_data.dob;
       pan.meta_data.pan_number = form_data.pan;
 
-      address.meta_data.email = form_data.email;
+      identification.meta_data.email = form_data.email;
 
       let mobile_number = form_data.mobile_number?.toString();
       if (form_data.country_code) {
@@ -201,7 +215,6 @@ class PanDetails extends Component {
       let data = {
         kyc: {
           pan: pan.meta_data,
-          address: address.meta_data,
           identification: identification.meta_data,
         },
       };
@@ -224,10 +237,11 @@ class PanDetails extends Component {
         onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        data-aid='dialog-bottom-popup'
       >
         <DialogContent>
-          <div className="nps-dialog" id="alert-dialog-description">
-            <div className="nps-dialog-content">
+          <div className="nps-dialog" id="alert-dialog-description" data-aid='alert-dialog-description'>
+            <div className="nps-dialog-content" data-aid='nps-dialog-content'>
               <div className="content">
                 <div className="title">{this.state.title}</div>
                 <div className="sub-title">{this.state.subtitle}</div>
@@ -237,11 +251,12 @@ class PanDetails extends Component {
                 alt=""
               />
             </div>
-            <div className="btn">
+            <div className="btn" data-aid='nps-btn'>
               <button
                 style={{ cursor: "pointer" }}
                 onClick={() => this.handleClose()}
                 className="call-back-popup-button not-now"
+                data-aid='not-now-btn'
               >
                 NOT NOW
               </button>
@@ -249,6 +264,7 @@ class PanDetails extends Component {
                 style={{ cursor: "pointer" }}
                 onClick={() => this.cta_action()}
                 className="call-back-popup-button"
+                data-aid='call-back-btn'
               >
                 {this.state.btn_text}
               </button>
@@ -263,24 +279,25 @@ class PanDetails extends Component {
     let { btn_text, form_data, auth_ids } = this.state;
     if (btn_text === "SIGN OUT") {
       if (getConfig().Web) {
-        this.navigate("/logout", '', true);
+        this.navigate("/logout");
       } else {
         nativeCallback({ action: "session_expired" });
       }
     } else if(btn_text === "LINK ACCOUNT") {
       storageService().setObject("auth_ids", auth_ids)
-      this.navigate(`/account/merge/${form_data.pan.toUpperCase()}`, '', true)
+      this.navigate(`/account/merge/${form_data.pan.toUpperCase()}`)
     }
   }
 
   goBack = () => {
-    this.navigate('/invest', '', true)
+    this.navigate('/nps/info')
   }
 
   render() {
     const { form_data, is_nps_contributed, currentUser, isKycApproved, isKycIdentificationApproved } = this.state;
     return (
       <Container
+        data-aid='nps-pan-details-screen'
         classOverRIde="pr-error-container"
         buttonTitle="PROCEED"
         hideInPageTitle
@@ -291,8 +308,11 @@ class PanDetails extends Component {
         handleClick={this.handleClick}
         goBack={this.goBack}
         handleClick1={this.handleClick}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
-        <div className="pan-details">
+        <div className="pan-details" data-aid='pan-details-page'>
           <FormControl fullWidth>
             <div className="InputField">
               <Input

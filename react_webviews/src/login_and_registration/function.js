@@ -2,11 +2,15 @@ import { validateEmail } from "utils/validators";
 import toast from "common/ui/Toast";
 import Api from "utils/api";
 import { storageService, getUrlParams } from "utils/validators";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
+import { nativeCallback } from "../utils/native_callback";
+import { getBasePath } from "../utils/functions";
 
-const isMobileView = getConfig().isMobileDevice;
+const config = getConfig();
+const isMobileView = config.isMobileDevice;
 const errorMessage = "Something went wrong!";
+const basePath = getBasePath();
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.emailLogin = emailLogin.bind(this);
@@ -18,13 +22,14 @@ export function initialize() {
   this.resendOtp = resendOtp.bind(this);
   this.forgotPassword = forgotPassword.bind(this);
   this.verifyForgotOtp = verifyForgotOtp.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
+  this.setUserAgent = setUserAgent.bind(this);
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
-  let redirectUrl = encodeURIComponent(`${window.location.origin}/`);
+  let redirectUrl = encodeURIComponent(`${basePath}/${config.searchParams}`);
   const partners = [
     "hbl",
     "sbm",
@@ -48,17 +53,19 @@ export function initialize() {
     : "";
 
   let socialRedirectUrl = encodeURIComponent(
-    window.location.origin + "/social/callback" + rebalancingRedirectUrl
+    basePath + "/social/callback" + rebalancingRedirectUrl
   );
 
+  this.setUserAgent();
+
   let facebookUrl =
-    getConfig().base_url +
+    config.base_url +
     "/auth/facebook?redirect_url=" +
     socialRedirectUrl +
     "&referrer=" +
     referrer;
   let googleUrl =
-    getConfig().base_url +
+    config.base_url +
     "/auth/google?redirect_url=" +
     socialRedirectUrl +
     "&referrer=" +
@@ -70,6 +77,12 @@ export function initialize() {
     redirectUrl: redirectUrl,
     rebalancingRedirectUrl: main_query_params.redirect_url,
   });
+}
+
+export function setUserAgent() {
+  nativeCallback({ action: "set_user_agent", message: {
+    user_agent: "Mozilla/5.0 AppleWebKit/537.36 Chrome/65.0.3325.181 Mobile Safari/537.36"
+  }})
 }
 
 export function formCheckFields(
@@ -178,7 +191,7 @@ export async function emailLogin(body) {
         this.setState({ isApiRunning: false });
         return;
       }
-      if (getConfig().Web && kycResult.data.partner.partner.data) {
+      if (config.Web && kycResult.data.partner.partner.data) {
         storageService().set(
           "partner",
           kycResult.data.partner.partner.data.name
@@ -234,9 +247,9 @@ export async function mobileLogin(body) {
         storageService.setObject("user_promo", item);
       }
 
-      if (this.state.isPromoSuccess && this.state.referral_code !== "") {
+      if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
         let item = {
-          promo_code: this.state.referral_code,
+          promo_code: this.state.form_data.referral_code,
         };
         storageService().setObject("user_promo", item);
       }
@@ -263,7 +276,7 @@ export async function mobileLogin(body) {
 export async function emailRegister(body) {
   try {
     const res = await Api.post(
-      `/api/user/register?email=${body.email}&password=${body.password}&redirect_url=${body.redirectUrl}&referrer_code=${body.referrer_code}`,
+      `/api/user/register?email=${body.email}&password=${body.password}&redirect_url=${body.redirect_url}&referrer_code=${body.referrer_code}`,
       body
     );
     const { result, status_code: status } = res.pfwresponse;
@@ -369,6 +382,10 @@ export async function otpVerification(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      let eventObj = {
+        event_name: "user loggedin",
+      };
+      nativeCallback({ events: eventObj });
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);
@@ -384,7 +401,7 @@ export async function otpVerification(body) {
         return;
       }
 
-      if (getConfig().Web && kycResult.data.partner.partner.data) {
+      if (config.Web && kycResult.data.partner.partner.data) {
         storageService().set(
           "partner",
           kycResult.data.partner.partner.data.name
@@ -505,24 +522,6 @@ export async function verifyForgotOtp(body) {
     toast(errorMessage);
   } finally {
     this.setState({ isApiRunning: false });
-  }
-}
-
-export function navigate(pathname, data = {}) {
-  if (data.edit) {
-    this.props.history.replace({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
-  } else {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
   }
 }
 

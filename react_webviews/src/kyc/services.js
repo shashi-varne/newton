@@ -1,6 +1,8 @@
 import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
 import toast from '../common/ui/Toast'
+import { isTradingEnabled } from '../utils/functions'
+import { kycSubmit } from './common/api'
 
 const DOCUMENTS_MAPPER = {
   DL: 'Driving license',
@@ -175,7 +177,8 @@ async function setNpsData(result) {
     const data = await getNPSInvestmentStatus()
     if(!data) return;
     storageService().setObject("nps_additional_details", data.registration_details);
-    if (!data.registration_details.additional_details_status) {
+    storageService().setObject("nps_data", data);
+    if (!data?.registration_details?.additional_details_status) {
       storageService().set('nps_additional_details_required', true)
     } else {
       storageService().set('nps_additional_details_required', false)
@@ -186,6 +189,7 @@ async function setNpsData(result) {
 }
 
 export function getKycAppStatus(kyc) {
+  const TRADING_ENABLED = isTradingEnabled(kyc);
   var rejected = 0;
   var metaRejected = 0;
   var docRejected = 0;
@@ -252,11 +256,19 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    status = "rejected";
-    result.status = status;
-    return result;
+    if (!TRADING_ENABLED || kyc?.kyc_product_type !== "equity") {
+      status = "rejected";
+      result.status = status;
+      return result;
+    } else {
+      status = kyc.equity_application_status;
+    }
   } else {
-    status = kyc.application_status_v2;
+    if (!TRADING_ENABLED || (kyc?.kyc_product_type !== "equity" && isReadyToInvest()) || kyc?.mf_kyc_processed) {
+      status = kyc.application_status_v2;
+    } else {
+      status = kyc.equity_application_status;
+    }
   }
 
   if (!kyc.pan.meta_data.pan_number || (kyc.pan.meta_data.pan_number &&
@@ -289,6 +301,10 @@ export function getKycAppStatus(kyc) {
     }
 
   if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
+    status = 'incomplete';
+  }
+
+  if (TRADING_ENABLED && kyc?.kyc_product_type === "equity" && (kyc.equity_application_status === 'submitted' || kyc.equity_application_status === 'complete') && kyc.equity_sign_status !== "signed") {
     status = 'incomplete';
   }
 
@@ -366,7 +382,7 @@ export function getDocuments(userKyc) {
     const data = {
       key: "nriaddress",
       title: "Foreign Address proof",
-      subtitle: DOCUMENTS_MAPPER[userKyc.address_doc_type],
+      subtitle: DOCUMENTS_MAPPER[userKyc.nri_address_doc_type],
       doc_status: userKyc.nri_address.doc_status,
       default_image: "regi_default.svg",
       approved_image:"regi_approved.svg",
@@ -420,4 +436,17 @@ export function isReadyToInvest() {
   }
 
   return false;
+}
+
+export async function setKycProductType(data) {
+  try {
+    const submitResult = await kycSubmit(data);
+    if (!submitResult) {
+      throw new Error("Something went wrong");
+    }
+    return true;
+  } catch (err) {
+    console.log(err.message);
+    toast(err.message || "Something went wrong");
+  } 
 }

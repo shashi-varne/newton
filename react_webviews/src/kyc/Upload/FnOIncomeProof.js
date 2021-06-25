@@ -8,21 +8,20 @@ import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClick
 import Toast from '../../common/ui/Toast';
 import useUserKycHook from '../common/hooks/userKycHook';
 import { upload } from '../common/api';
-import { navigate as navigateFunc } from '../common/functions';
 import { nativeCallback } from '../../utils/native_callback';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
-import { getConfig } from '../../utils/functions';
 import { storageService } from '../../utils/validators';
+import { getConfig, navigate as navigateFunc } from '../../utils/functions';
 
 const { productName } = getConfig();
 const UPLOAD_OPTIONS_MAP = {
   'bank-statement': {
     title: 'Bank statement',
     subtitle: 'Last 6 months',
-    nativePickerMethodName: 'open_gallery',
+    nativePickerMethodName: 'open_file',
     supportedFormats: "pdf",
     fileName: "bank-statement",
     api_doc_type: "bank_statement",
@@ -30,7 +29,7 @@ const UPLOAD_OPTIONS_MAP = {
   'itr': {
     title: 'Income tax returns',
     subtitle: 'Any ITR copy within the last 2 years',
-    nativePickerMethodName: 'open_gallery',
+    nativePickerMethodName: 'open_file',
     supportedFormats: "pdf",
     fileName: "itr",
     api_doc_type: "itr_acknowledgement",
@@ -38,7 +37,7 @@ const UPLOAD_OPTIONS_MAP = {
   'salary-slip': {
     title: 'Salary slips',
     subtitle: 'Last 3 months',
-    nativePickerMethodName: 'open_gallery',
+    nativePickerMethodName: 'open_file',
     supportedFormats: "pdf",
     fileName: "salary-slip",
     api_doc_type: "payslips",
@@ -46,7 +45,7 @@ const UPLOAD_OPTIONS_MAP = {
   
 }
 
-const OR = (
+const ORElem = (
   <div className="kyc-fno-OR">OR</div>
 );
 
@@ -72,7 +71,7 @@ const FnOIncomeProof = (props) => {
     Toast('Please select a pdf file only');
   }
 
-  const uploadDocument = async () => {
+  const uploadAndGoNext = async () => {
     sendEvents("next");
     try {
       const data = {
@@ -82,11 +81,11 @@ const FnOIncomeProof = (props) => {
       setIsApiRunning("button")
       const result = await upload(selectedFile, 'income', data);
       updateKyc(result.kyc);
+      setOpenBottomSheet(true);
     } catch (err) {
       console.error(err);
       Toast('Something went wrong! Please try again')
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
@@ -95,17 +94,11 @@ const FnOIncomeProof = (props) => {
     if(skip)
       sendEvents("skip");
     if (!skip) {
-      await uploadDocument();
-    }
-    
-    const areDocsPending = checkDocsPending(kyc);
-    if (areDocsPending) {
-      navigate('/kyc/document-verification');
-    } else {
-      if (skip) {
-        navigate('/kyc-esign/info');
+      const areDocsPending = await checkDocsPending(kyc);
+      if (areDocsPending) {
+        navigate('/kyc/document-verification');
       } else {
-        setOpenBottomSheet(true);
+        navigate('/kyc-esign/info');
       }
     }
   }
@@ -140,39 +133,22 @@ const FnOIncomeProof = (props) => {
     }
   };
 
-  const goBack = () => {
-    sendEvents('back')
-    removeEventData();
-    //TODO below code to be checked
-    const goBackPath = props.location?.state?.goBack || "";
-    if(goBackPath) {
-      props.history.push({
-        pathname: goBackPath,
-        search: getConfig().searchParams,
-      });
-      return;
-    }
-    props.history.goBack();
-  }
-
   return (
     <Container
       events={sendEvents("just_set_events")}
       canSkip
       hidePageTitle
       hideHamburger
-      handleClick={goNext}
-      onSkipClick={() => goNext(true)}
+      handleClick={uploadAndGoNext}
+      onSkipClick={() => goNext("skip")}
       title="Provide income proof for F&O trading"
       buttonTitle="Upload"
       disable={!selectedFile}
       showLoader={isApiRunning}
       skelton={isLoading}
-      headerData={{goBack}}
     >
-      <WVInPageHeader>
-        <WVInPageTitle>Provide income proof for F&O trading</WVInPageTitle>
-        <span className="kyc-fno-header-optional-text"> (Optional)</span>
+      <WVInPageHeader style={{ marginBottom: '15px' }}>
+        <WVInPageTitle>Provide income proof for F&O trading <span className="kyc-fno-header-optional-text"> (Optional)</span></WVInPageTitle>
       </WVInPageHeader>
       <WVInfoBubble>
         In case of multiple files/images, merge them into a single pdf to upload
@@ -191,7 +167,7 @@ const FnOIncomeProof = (props) => {
             file={selectedFile}
           />
         }
-        {!selectedFile && OR}
+        {!selectedFile && ORElem}
         {(!selectedFile || (selectedType === 'itr')) &&
           <WVFileUploadCard
             {...UPLOAD_OPTIONS_MAP['itr']}
@@ -202,7 +178,7 @@ const FnOIncomeProof = (props) => {
             file={selectedFile}
           />
         }
-        {!selectedFile && OR}
+        {!selectedFile && ORElem}
         {(!selectedFile || (selectedType === 'salary-slip')) &&
           <WVFileUploadCard
             {...UPLOAD_OPTIONS_MAP['salary-slip']}
@@ -254,8 +230,8 @@ const FnOIncomeProof = (props) => {
         image={require(`assets/${productName}/doc-uploaded.svg`)}
         button1Props={{
           title: 'Continue',
-          type: 'primary',
-          onClick: () => navigate('/kyc-esign/info')
+          variant: "contained",
+          onClick: goNext
         }}
       />
     </Container>

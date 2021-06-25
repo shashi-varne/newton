@@ -1,3 +1,7 @@
+.rubik {
+  font-family: "Rubik", "Roboto", sans-serif;
+}
+
 .kyc-main-subtitle {
   font-size: 13px;
   color: #8d879b;
@@ -149,7 +153,7 @@
     }
 
     .RadioWithIcon {
-      font-size: 16px;
+      font-size: 13px;
       color: #8d879b;
       margin-bottom: 10px;
     }
@@ -222,6 +226,10 @@
         width: 22px;
         margin-right: 10px;
       }
+
+      .kbd-can-check-icon {
+        width: 15px;
+      }
     }
   }
 }
@@ -273,7 +281,7 @@
     }
 
     .left {
-      font-weight: bold;
+      font-weight: 500;
       color: #0a1d32;
     }
 
@@ -291,3 +299,16 @@
 }
 
 ///////////// BANK VERIFY END //////////////
+
+.penny-bank-verification-dialog-content {
+  align-items: center;
+  margin: -15px -15px 0 0;
+
+  .wv-bc-left {
+    flex: 0 1 72%;
+  }
+}
+
+.penny-bank-verification-dialog-subtitle {
+  margin: 10px 0 0;
+}

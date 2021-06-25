@@ -25,6 +25,11 @@ const PAGE_TYPE_CONTENT_MAP = {
     title: 'Allow location access',
     subtitle: 'As per SEBI, we need to capture your location while you take the selfie',
   },
+  'verifying-location': {
+    imgElem: locationIcon,
+    title: 'Verifying location access',
+    subtitle: 'As per SEBI, we need to capture your location while you take the selfie',
+  },
   'invalid-region': {
     imgElem: foreignLocationIcon,
     title: 'You cannot proceed with KYC',
@@ -45,7 +50,7 @@ const LocationPermission = ({
   onLocationFetchSuccess,
   onLocationFetchFailure,
 }) => {
-  const [pageType, setPageType] = useState('permission-denied');
+  const [pageType, setPageType] = useState('verifying-location');
   const [pageContent, setPageContent] = useState({});
   const [permissionWarning, setPermissionWarning] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(true);
@@ -66,20 +71,31 @@ const LocationPermission = ({
   useEffect(() => {
     setPageContent(PAGE_TYPE_CONTENT_MAP[pageType]);
   }, [pageType]);
+
+  const fetchCountryFromResults = (results) => {
+    const addressObjs = results[0]?.address_components;
+    const countryAddressObj = addressObjs.find(obj => obj.types.includes("country"));
+    return countryAddressObj.long_name;
+  }
   
   const locationCallbackSuccess = async (data) => {
     if (data.location_permission_denied) {
+      setPageType('permission-denied');
       setPermissionWarning(true);
+      setIsApiRunning(false);
     } else {
+      setPermissionWarning(false);
       try {
         setIsApiRunning(true);        
         const geocoderService = new window.google.maps.Geocoder();
-        geocoderService.geocode({ location: {
-          lat: data.location.lat,
-          lng: data.location.lng,
-        }}, (results, status) => {
+        geocoderService.geocode({
+          location: {
+            lat: data.location.lat,
+            lng: data.location.lng,
+          }
+        }, (results, status) => {
           if (status === 'OK') {
-            const country = results[0]?.address_components?.[0]?.long_name;
+            const country = fetchCountryFromResults(results);
             setIsApiRunning(false);
             if (country !== 'India') {
               setPageType("invalid-region");
@@ -147,6 +163,7 @@ const LocationPermission = ({
       <WVFullscreenDialog.Action>
         <WVButton
           fullWidth
+            style={{ display: 'flex', margin: 'auto' }}
           onClick={onCTAClick}
           variant="outlined"
           color="secondary"

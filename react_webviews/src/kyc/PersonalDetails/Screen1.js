@@ -11,10 +11,11 @@ import {
 } from "../../utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getGenderValue,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import useUserKycHook from "../common/hooks/userKycHook";
 import toast from "../../common/ui/Toast";
@@ -54,7 +55,7 @@ const PersonalDetails1 = (props) => {
       email: kyc.identification?.meta_data?.email || "",
       mobile: mobile_number,
       country_code: country_code,
-      gender: kyc.identification?.meta_data?.gender || "",
+      gender: getGenderValue(kyc.identification?.meta_data?.gender) || "",
       marital_status: kyc.identification?.meta_data?.marital_status || "",
     };
     setFormData({ ...formData });
@@ -194,10 +195,10 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={isApiRunning}
+            disabled={isApiRunning || !!kyc?.pan?.meta_data?.name}
           />
           <Input
-            label="Date of birth(DD/MM/YYYY)"
+            label="Date of birth (DD/MM/YYYY)"
             class="input"
             value={form_data.dob || ""}
             error={form_data.dob_error ? true : false}

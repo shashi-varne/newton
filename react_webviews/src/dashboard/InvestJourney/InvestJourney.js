@@ -6,8 +6,6 @@ import bse_icon from "assets/bse_icon.png";
 import fund_house_icon from "assets/fund_house_icon.png";
 import safe_secure_journey from "assets/safe_secure_journey.png";
 
-import { navigate as navigateFunc } from "../Invest/common/commonFunctions";
-
 import "./InvestJourney.scss";
 import {
   canDoInvestment,
@@ -16,7 +14,7 @@ import {
 } from "../proceedInvestmentFunctions";
 import PennyVerificationPending from "../Invest/mini-components/PennyVerificationPending";
 import InvestError from "../Invest/mini-components/InvestError";
-import { getBasePath, getConfig } from "../../utils/functions";
+import { getBasePath, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import InvestReferralDialog from "../Invest/mini-components/InvestReferralDialog";
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { formatAmountInr } from "../../utils/validators";
@@ -88,6 +86,7 @@ const InvestJourney = (props) => {
       userKyc: userKyc,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
+      navigate: navigate
     });
   };
 
@@ -105,6 +104,7 @@ const InvestJourney = (props) => {
   const ctcTitle = userKyc && !canDoInvestment(userKyc) ? "CONTINUE TO KYC" : "PROCEED"
   return (
     <Container
+      data-aid='how-it-works-screen'
       classOverRide="pr-error-container"
       buttonTitle={ctcTitle}
       title="How it works"
@@ -113,16 +113,16 @@ const InvestJourney = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
     >
-      <section className="invest-journey-container">
-        <div className="invest-journey-header">
+      <section className="invest-journey-container" data-aid='invest-journey-page'>
+        <div className="invest-journey-header" data-aid='invest-journey-header'>
           <div>
             <img alt="safe_secure_journey" src={safe_secure_journey} />
           </div>
           <div>With fisdom, investment is easy & secure</div>
         </div>
-        <div className="invest-journey-steps">
+        <div className="invest-journey-steps" data-aid='invest-journey-steps'>
           <div className="invest-journey-connect">
-            <div className="invest-journey-connect-content">
+            <div className="invest-journey-connect-content" data-aid='invest-journey-step-1'>
               <div className="invest-journey-connect-icon">
                 <img alt="account_icon" src={account_icon} />
               </div>
@@ -134,7 +134,7 @@ const InvestJourney = (props) => {
                 </div>
               </div>
             </div>
-            <div className="invest-journey-connect-content">
+            <div className="invest-journey-connect-content" data-aid='invest-journey-step-2'>
               <div className="invest-journey-connect-icon">
                 <img alt="bse_icon" src={bse_icon} />
               </div>
@@ -144,7 +144,7 @@ const InvestJourney = (props) => {
                 <div>via secured gateway - BillDesk</div>
               </div>
             </div>
-            <div className="invest-journey-connect-content">
+            <div className="invest-journey-connect-content" data-aid='invest-journey-step-3'>
               <div className="invest-journey-connect-icon">
                 <img alt="fund_house_icon" src={fund_house_icon} />
               </div>
@@ -158,12 +158,12 @@ const InvestJourney = (props) => {
         </div>
         <PennyVerificationPending
           isOpen={dialogStates.openPennyVerificationPending}
-          handleClick={() => navigate("/kyc/add-bank", null, true)}
+          handleClick={() => navigate("/kyc/add-bank")}
         />
         <InvestError
           isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
-          handleClick={() => navigate("/invest", null, true)}
+          handleClick={() => navigate("/invest")}
           close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog

@@ -10,11 +10,11 @@ import {
 import { isEmpty } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
   getTotalPagesInPersonalDetails,
-  getEmailOrMobileVerifiedStatus,
+  isEmailAndMobileVerified,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit, getCVL } from "../common/api";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -110,7 +110,7 @@ const PersonalDetails3 = (props) => {
         userType: "compliant",
       },
     };
-    if (getEmailOrMobileVerifiedStatus()) {
+    if (isEmailAndMobileVerified()) {
       if (isNri) {
         navigate(PATHNAME_MAPPER.nriAddressDetails2, data);
       } else {
@@ -208,7 +208,7 @@ const PersonalDetails3 = (props) => {
           </div>
         </main>
         <footer data-aid='kyc-footer'>
-          By tapping ‘save and continue’ I agree that I am not a PEP(politically
+          By tapping ‘save and continue’ I agree that I am not a PEP (politically
           exposed person)
         </footer>
       </div>

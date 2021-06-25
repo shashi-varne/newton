@@ -1,12 +1,13 @@
 import './commonStyles.scss';
 import React, { useState } from 'react';
-import { getConfig } from '../../../../utils/functions';
+import { getConfig, navigate as navigateFunc } from '../../../../utils/functions';
 import Container from '../../../common/Container';
 import { get_recommended_funds } from '../../common/api';
 import useFunnelDataHook from '../../common/funnelDataHook';
-import { navigate as navigateFunc } from '../../common/commonFunctions';
-import { riskProfiles } from '../../constants';
+import { flowName, riskProfiles } from '../../constants';
 import FSelect from './FSelect';
+import { nativeCallback } from '../../../../utils/native_callback';
+import { storageService } from '../../../../utils/validators'
 import toast from 'common/ui/Toast'
 
 const { productName } = getConfig();
@@ -77,16 +78,23 @@ const RiskSelect = ({
   }
 
   const goNext = async (skipRiskUpdate) => {
+    sendEvents('next')
+    storageService().remove('risk_info_clicked');
+    if(!skipRiskUpdate && !selectedRisk) {
+      toast("Please select your risk profile");
+      return;
+    }
     await updateRiskAndFetchRecommendations(skipRiskUpdate);
 
-    let state = 'recommendations';
+    let state = '/invest/recommendations';
     if (funnelData.investType === 'saveforgoal') {
-      state = `savegoal/${funnelData.subtype}/amount`;
+      state = `/invest/savegoal/${funnelData.subtype}/amount`;
     }
     navigate(state);
   };
 
   const gotToRiskProfiler = () => {
+    sendEvents('risk profiler')
     navigate('/risk/result-new', {
       state: {
         hideRPReset: true,
@@ -100,15 +108,36 @@ const RiskSelect = ({
         year: funnelData.year, // only applicable for 'saveforgoal'
         term: funnelData.term
       }
-    }, true);
+    });
   };
 
   const showInfo = () => {
-    navigate('risk-info');
+    storageService().setBoolean("risk_info_clicked", true);
+    navigate('/invest/risk-info');
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select risk profile",
+        "flow": funnelData.flow || flowName[funnelData.investType] || "",
+        "profile": selectedRisk,
+        "info_clicked": storageService().getBoolean('risk_info_clicked') ? 'yes' : 'no',
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  
   return (
     <Container
+      events={sendEvents("just_set_events")}
+      data-aid='please-select-your-risk-profile-screen'
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle="SHOW MY FUNDS"
@@ -118,18 +147,17 @@ const RiskSelect = ({
       handleClick={goNext}
       classOverRideContainer='pr-container'
     > 
-      <div className="risk-select-header">
+      <div className="risk-select-header" data-aid='pick-risk-profile'>
         <span>Please select your risk profile</span>
         <div className="risk-sh-info" onClick={showInfo}>
           Info
         </div>
       </div>
       {canSkip &&
-        <div className="risk-select-skip" onClick={() => goNext(true)}>Skip for now</div>
+        <div className="risk-select-skip" data-aid='risk-select-skip' onClick={() => goNext(true)}>Skip for now</div>
       }
       <div style={{ marginTop: '30px' }}>
         <FSelect
-          preselectFirst
           options={riskProfiles}
           indexBy='name'
           renderItem={riskOpt =>
@@ -152,10 +180,10 @@ export default RiskSelect;
 
 const RiskOption = ({ data }) => {
   return [
-    <div className="risk-opt-title">
+    <div className="risk-opt-title" data-aid='risk-opt-title'>
       {data.name}
     </div>,
-    <div className="risk-opt-desc">
+    <div className="risk-opt-desc" data-aid='risk-opt-descy'>
       {data.desc}
     </div>
   ];

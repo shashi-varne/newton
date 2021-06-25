@@ -24,11 +24,11 @@ import DesktopLayout from './desktopLayout';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 
-import Partner from "./partner"
 import Feature from './Feature';
 import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
+import ComponentTest from './ComponentTest';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 
@@ -94,7 +94,6 @@ const App = () => {
               <Route path='/social/callback' component={SocialCallback} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
-              <Route path='/partner' component={Partner} />
               {
                 isMobileDevice ?
                 <Route component={Feature}/>:
@@ -102,6 +101,7 @@ const App = () => {
                   <Feature />
                 </DesktopLayout>
               }
+              <Route path='/component-test' component={ComponentTest} />
               <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>

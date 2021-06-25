@@ -6,7 +6,7 @@ import Process from "./mini-components/Process";
 import { storageService } from "../../utils/validators";
 import ProgressStep from "./mini-components/ProgressStep";
 import { getSummaryV2 } from "../common/api";
-import { getConfig } from "../../utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
 
 const SwitchedTransaction = (props) => {
   const stateParams = props.location?.state || {};
@@ -46,26 +46,35 @@ const SwitchedTransaction = (props) => {
     setOpenProcess(true);
   };
 
-  const goBack = () => {
-    props.history.push({
-      pathname: "/reports",
-      search: getConfig().searchParams,
-    });
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Pending Switch",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
 
   return (
     <Container
+      data-aid='reports-pending-switch-screen'
+      events={sendEvents("just_set_events")}
       noFooter={true}
       title="Pending Switch"
       skelton={showSkelton}
-      headerData={{ goBack }}
     >
-      <div className="report-purchase">
+      <div className="report-purchase" data-aid='report-purchase'>
         {!isEmpty(transactions) &&
           transactions.map((switched, index) => {
             return (
-              <div className="purchased" key={index}>
-                <div className="switch-head">
+              <div className="purchased" key={index} data-aid='reports-purchased'>
+                <div className="switch-head" data-aid='switch-head'>
                   <div className="switch-step">
                     <div className="outline">
                       <div className="circle"></div>
@@ -82,7 +91,7 @@ const SwitchedTransaction = (props) => {
                     <div>{switched.to_mf.friendly_name}</div>
                   </div>
                 </div>
-                <div className="progress-bar">
+                <div className="progress-bar" data-aid='reports-progress-bar'>
                   <ProgressStep isCompleted={true} text="SWITCH REQUESTED" />
                   <ProgressStep
                     isCompleted={
@@ -97,7 +106,7 @@ const SwitchedTransaction = (props) => {
                   />
                   <ProgressStep isCompleted={false} text="SWITCH CONFIRMED" />
                 </div>
-                <div className="check-process">
+                <div className="check-process" data-aid='reports-check-process'>
                   <div className="text" onClick={() => handleProcess(switched)}>
                     VIEW DETAILS
                   </div>

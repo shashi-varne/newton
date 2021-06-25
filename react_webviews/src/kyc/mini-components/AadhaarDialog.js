@@ -1,6 +1,4 @@
 import React from "react";
-import SlidingDialog from "./SlideBottomDialog";
-import Button from "@material-ui/core/Button";
 import { getConfig, isMobile } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { storageService } from "utils/validators";
@@ -8,9 +6,12 @@ import { updateQueryStringParameter } from "../common/functions";
 import { STORAGE_CONSTANTS } from "../constants";
 import { getBasePath } from "../../utils/functions";
 import "./mini-components.scss";
+import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
+
+const config = getConfig();
+const productName = config.productName;
 
 const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
-  const productName = getConfig().productName;
   const basePath = getBasePath();
   const handleProceed = () => {
     sendEvents('next', 'ensure_mobile_linked_to_aadhar')
@@ -26,7 +27,7 @@ const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
-    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
+    if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -34,7 +35,7 @@ const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
         });
       }
       nativeCallback({ action: "take_back_button_control", message: data });
-    } else if (!isMobile.any()) {
+    } else if (!config.Web) {
       const redirectData = {
         show_toolbar: false,
         icon: "back",
@@ -78,32 +79,18 @@ const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
     close();
   };
   return (
-    <SlidingDialog id={id} open={open} close={close} {...props} onClick={close}>
-      <section className="kyc-dl-aadhaar-dialog" data-aid='kyc-dl-aadhaar-dialog'>
-        <div className="flex-between" data-aid='aadhaar-heading'>
-          <div className="heading">
-            Please ensure your mobile no. is linked with Aadhaar
-          </div>
-          <img
-            className="img-right-top"
-            src={require(`assets/${productName}/ic_aadhaar_handy.svg`)}
-            alt=""
-          />
-        </div>
-
-        <div className="dialog-actions">
-          <Button
-            color="secondary"
-            variant="raised"
-            onClick={handleProceed}
-            fullWidth
-            data-aid='proceed-btn'
-          >
-            PROCEED
-          </Button>
-        </div>
-      </section>
-    </SlidingDialog>
+    <WVBottomSheet
+      dataAidSuffix="kyc-dl-aadhaar-dialog"
+      onClose={close}
+      isOpen={open}
+      title="Please ensure your mobile no. is linked with Aadhaar"
+      image={require(`assets/${productName}/ic_aadhaar_handy.svg`)}
+      button1Props={{
+        title:"PROCEED",
+        onClick: handleProceed,
+        variant: "contained",
+      }}
+    />
   );
 };
 

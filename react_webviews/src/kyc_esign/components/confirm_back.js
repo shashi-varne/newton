@@ -17,7 +17,7 @@ const ConfirmBackModal = ({ id, open, confirm, cancel, ...props }) => {
       <DialogContent>
         <section className="kyc-esign-gb-dailog" data-aid='kyc-esign-gb-dailog'>
           <article
-            className="text" data-aid='text'
+            className="text" data-aid='kyc-esign-text'
           >
             You are almost there, do you really want to go back?
           </article>

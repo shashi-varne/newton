@@ -193,9 +193,9 @@ class uploadAddressProof extends Component {
 
   handleChange = (event) => {
     let value = event || "";
-    let sides = 1;
+    let sides = 2;
     if (value === 'utilitybill' || value === 'bankstatement') {
-      sides = 2
+      sides = 1;
     }
 
     this.setState({
@@ -207,8 +207,8 @@ class uploadAddressProof extends Component {
 
   renderCamera = (side) => {
     return (
-      <div className="image-prev-container">
-        <div className='title'>{side} side of the address proof</div>
+      <div className="image-prev-container" data-aid='nps-image-prev-block'>
+        <div className='title' data-aid='nps-title'>{side} side of the address proof</div>
         <div className="display-flex">
           <img
             className={this.state.uploaded ? "uploaded" : "upload-img"}
@@ -220,7 +220,7 @@ class uploadAddressProof extends Component {
           />
           <div className="display-flex">
             {!getConfig().Web && (
-              <div>
+              <div data-aid='nps-upload-file'>
                 <div className="image-upload-container"
                   onClick={() => this.startUpload('open_camera', 'address', 'address.jpg', side)}>
                   <div className="icon">
@@ -229,7 +229,7 @@ class uploadAddressProof extends Component {
                       alt="Document"
                       width="30"
                     />
-                    <div className="text-center label">Camera</div>
+                    <div className="text-center label" data-aid={`nps-label-camera-${side}`}>Camera</div>
                   </div>
                 </div>
                 <div className="image-upload-container"
@@ -240,13 +240,14 @@ class uploadAddressProof extends Component {
                       alt="Document"
                       width="30"
                     />
-                    <div className="text-center label">Gallery</div>
+                    <div className="text-center label" data-aid={`nps-label-gallery-${side}`}>Gallery</div>
                   </div>
                 </div>
               </div>
             )}
             {getConfig().Web && (
               <div
+                data-aid='nps-upload-file'
                 className="image-upload-container"
                 onClick={() => this.startUpload("open_file", 'address', 'address.jpg', side)}
               >
@@ -262,7 +263,7 @@ class uploadAddressProof extends Component {
                     style={{ display: "none" }}
                     onChange={this.getPhoto}
                   />
-                  <span className="text-center label">Gallery</span>
+                  <span className="text-center label" data-aid={`nps-label-gallery-${side}`}>Gallery</span>
                 </div>
               </div>
             )}
@@ -301,7 +302,7 @@ class uploadAddressProof extends Component {
 
   bannerText = () => {
     return (
-      <span>
+      <span data-aid='nps-banner-text'>
         Please upload the <b>proof</b> for updated
             address: <br />
             <span>
@@ -312,8 +313,10 @@ class uploadAddressProof extends Component {
   }
 
   render() {
+    const numberOfFilesSelected = this.state.Front_file && this.state.Back_file ? 2 : (this.state.Front_file || this.state.Back_file) ? 1 : 0;
     return (
       <Container
+        data-aid='nps-upload-address-proof-screen'
         fullWidthButton
         buttonTitle="PROCEED"
         title="Upload Address Proof"
@@ -325,7 +328,7 @@ class uploadAddressProof extends Component {
         bannerText={this.bannerText()}
       >
 
-        <div className="nps-upload">
+        <div className="nps-upload" data-aid='nps-upload'>
           <div className="InputField">
             <SelectWithoutIcon
               width="30"
@@ -340,7 +343,14 @@ class uploadAddressProof extends Component {
         </div>
 
         {this.state.isSelected && this.renderCamera('Front')}
-        {this.state.isSelected && (this.state.sides === 2) && this.renderCamera('Back')}
+        {this.state.isSelected && this.state.sides === 2 && (
+          <>
+            {this.renderCamera("Back")}
+            <div className="nps-upload-file-text">
+              <b>{numberOfFilesSelected}/2</b> sides selected
+            </div>
+          </>
+        )}
       </Container>
     );
   }

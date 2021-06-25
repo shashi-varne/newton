@@ -1,25 +1,7 @@
-import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { isTradingEnabled } from '../../utils/functions'
 import { isEmpty, storageService } from '../../utils/validators'
-import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS } from '../constants'
-
-export function navigate(pathname, data = {}) {
-  if (data?.edit) {
-    this.history.replace({
-      pathname: pathname,
-      search: data?.searchParams || getConfig().searchParams,
-      state: data?.state || null,
-      params: data?.params || null,
-    })
-  } else {
-    this.history.push({
-      pathname: pathname,
-      search: data?.searchParams || getConfig().searchParams,
-      state: data?.state,
-      params: data?.params,
-    })
-  }
-}
+import { eqkycDocsGroupMapper, VERIFICATION_DOC_OPTIONS, ADDRESS_PROOF_OPTIONS, GENDER_OPTIONS } from '../constants'
 
 export const validateFields = (formData, keyToCheck) => {
   let canSubmit = true
@@ -42,13 +24,13 @@ export const validateFields = (formData, keyToCheck) => {
             canSubmit = false
           }
           break
-        // case 'account_number':
-        // case 'c_account_number':
-        //   if (value.length !== 16) {
-        //     formData[`${key}_error`] = 'Minimum length is 16'
-        //     canSubmit = false
-        //   }
-        //   break
+        case 'account_number':
+        case 'c_account_number':
+          if (value.length < 5) {
+            formData[`${key}_error`] = 'Minimum length is 5'
+            canSubmit = false
+          }
+          break
         case 'ifsc_code':
           if (value.length !== 11) {
             formData[`${key}_error`] = 'Minimum length is 11'
@@ -156,52 +138,20 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
   return compare;
 };
 
-export const getFlow = (kycData) => {
-  let flow = "";
-  let dlFlow = false;
-  if (
-    kycData.kyc_status !== 'compliant' &&
-    !kycData.address?.meta_data?.is_nri &&
-    kycData.dl_docs_status !== '' &&
-    kycData.dl_docs_status !== 'init' &&
-    kycData.dl_docs_status !== null
-  ) {
-    dlFlow = true;
-  }
-  if (kycData.kyc_status === 'compliant') {
-    flow = 'premium onboarding'
-  } else {
-    if (dlFlow) {
-      flow = 'digi kyc'
-    } else {
-      flow = 'general'
-    }
-  }
-  return flow;
-}
-
-export const getDLFlow = (kycData) => {
-  let dlFlow = false;
-  if (
-    kycData.kyc_status !== 'compliant' &&
-    !kycData.address?.meta_data?.is_nri &&
-    kycData.dl_docs_status !== '' &&
-    kycData.dl_docs_status !== 'init' &&
-    kycData.dl_docs_status !== null
-  ) {
-    dlFlow = true;
-  }
-  return dlFlow;
-}
-export const getTotalPagesInPersonalDetails = (isEdit = false) => {
+export const getKycUserFromSession = () => {
   const kyc = storageService().getObject("kyc") || {};
   const user = storageService().getObject("user") || {};
-  if (isEmpty(kyc) || isEmpty(user)) {
+
+  return { kyc, user };
+}
+
+export const getTotalPagesInPersonalDetails = (isEdit = false) => {
+  const { kyc } = getKycUserFromSession();
+  if (isEmpty(kyc)) {
     return "";
   }
   const isCompliant = kyc.kyc_status === "compliant";
   const isNri = kyc?.address?.meta_data?.is_nri || false;
-  const isEmailAndMobileVerified = getEmailOrMobileVerifiedStatus()
   const dlCondition =
     !isCompliant &&
     !isNri &&
@@ -210,21 +160,19 @@ export const getTotalPagesInPersonalDetails = (isEdit = false) => {
     kyc.dl_docs_status !== null;
   let totalPages = 5;
   if (isNri && isCompliant) totalPages++;
-  if (isEmailAndMobileVerified && isEdit) totalPages--;
+  if (isEmailAndMobileVerified() && isEdit) totalPages--;
   if (dlCondition) totalPages--;
   return totalPages;
 };
 
-export const getEmailOrMobileVerifiedStatus = () => {
-  const kyc = storageService().getObject("kyc") || {};
-  const user = storageService().getObject("user") || {};
-  if (isEmpty(kyc) || isEmpty(user)) {
+export const isEmailAndMobileVerified = () => {
+  const { kyc } = getKycUserFromSession();
+  if (isEmpty(kyc)) {
     return false;
   }
   return (
-    (user.email === null && kyc.identification?.meta_data?.email_verified) ||
-    (user.mobile === null &&
-      kyc.identification?.meta_data?.mobile_number_verified)
+    kyc.identification?.meta_data?.email_verified &&
+    kyc.identification?.meta_data?.mobile_number_verified
   );
 };
 
@@ -243,8 +191,7 @@ export async function checkDocsPending(kyc = {}) {
   if (isEmpty(kyc)) return false;
   let pendingDocs = [];
 
-  const incompleteApplication = kyc.application_status_v2 !== "submitted" || kyc.application_status_v2 !== "complete" ||
-    kyc.equity_application_status !== "submitted" || kyc.equity_application_status !== "complete";
+  const incompleteApplication = isIncompleteEquityApplication(kyc);
 
   if (incompleteApplication) {
     pendingDocs = await pendingDocsList(kyc);
@@ -256,13 +203,18 @@ export async function checkDocsPending(kyc = {}) {
 
 export async function pendingDocsList(kyc = {}) {
   if (isEmpty(kyc)) return false;
-  let docsToCheck = ["pan", "identification", "address", "bank", "ipvvideo", "sign"];
-  
+  let docsToCheck = ["equity_pan", "equity_identification", "address", "bank", "ipvvideo", "sign"];
+
   if (kyc?.address?.meta_data.is_nri) {
     docsToCheck.push("nri_address");
   }
 
-  return docsToCheck.filter((doc) => kyc[doc]?.doc_status !== "approved");
+  return docsToCheck.filter((doc) => {
+    return (
+      (doc !== "bank" && kyc[doc]?.doc_status !== "approved") ||
+      (doc === "bank" && kyc[doc]?.meta_data?.bank_status !== "verified") 
+    );
+  });
 }
 
 export async function getPendingDocuments(kyc = {}) {
@@ -295,14 +247,19 @@ export async function getPendingDocuments(kyc = {}) {
   return pendingDocsMapper;
 }
 
-export function checkPanFetchStatus(kyc = {}) {
+export function checkDLPanFetchStatus(kyc = {}) {
   if (isEmpty(kyc)) return false;
   return (
-    (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+    kyc.all_dl_doc_statuses.pan_fetch_status === null ||
     kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-    kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
-    kyc.pan.doc_status !== "approved"
-  );
+    kyc.all_dl_doc_statuses.pan_fetch_status === "failed");
+}
+
+export function checkDLPanFetchAndApprovedStatus(kyc = {}) {
+  if (isEmpty(kyc)) return false;
+  const TRADING_ENABLED = isTradingEnabled(kyc)
+  return (checkDLPanFetchStatus(kyc) && ((!TRADING_ENABLED && kyc.pan.doc_status !== "approved") ||
+    (TRADING_ENABLED && kyc.equity_pan.doc_status !== "approved")));
 }
 
 export function isNotManualAndNriUser(kyc = {}) {
@@ -311,7 +268,74 @@ export function isNotManualAndNriUser(kyc = {}) {
 }
 
 export function isDocSubmittedOrApproved(doc) {
-  const kyc = storageService().getObject("kyc") || {}; 
+  const { kyc = {} } = getKycUserFromSession(); 
   if (isEmpty(kyc)) return false;
   return kyc[doc]?.doc_status === "submitted" || kyc[doc]?.doc_status === "approved";
+}
+
+export const getFlow = (kycData) => {
+  let flow = "";
+  if (kycData.kyc_status === 'compliant') {
+    flow = 'premium onboarding'
+  } else {
+    if (isDigilockerFlow(kycData)) {
+      flow = 'digi kyc'
+    } else {
+      flow = 'general'
+    }
+  }
+  return flow;
+}
+
+export const isEquityApplSubmittedOrComplete = (kyc) => {
+  if (isEmpty(kyc)) return false;
+  return (kyc.equity_application_status === "submitted" || kyc.equity_application_status === "complete");
+}
+
+export const isMfApplSubmittedOrComplete = (kyc) => {
+  if (isEmpty(kyc)) return false;
+  return (kyc.application_status_v2 === "submitted" || kyc.application_status_v2 === "complete");
+}
+
+export const isEquityCompleted = () => {
+  const kyc = storageService().getObject("kyc");
+  if (isEmpty(kyc)) return false;
+
+  return (kyc.equity_application_status === "complete" && kyc.equity_sign_status === "signed");
+}
+
+export const isIncompleteEquityApplication = (kyc) => {
+  if (isEmpty(kyc)) return false;
+
+  return ((kyc.application_status_v2 !== "submitted" && kyc.application_status_v2 !== "complete") ||
+  (kyc.equity_application_status !== "submitted" && kyc.equity_application_status !== "complete") ||
+  (isEquityApplSubmittedOrComplete(kyc) && kyc.equity_sign_status !== "signed"));
+}
+
+export const isKycCompleted = (kyc) => {
+  if (isEmpty(kyc)) return false;
+
+  if (kyc?.kyc_status === "compliant") {
+    return kyc?.application_status_v2 === "complete";
+  } else {
+    return (
+        kyc?.application_status_v2 === "complete" &&
+      kyc.sign_status === "signed"
+    );
+  }
+};
+
+export const skipBankDetails = () => {
+  const {kyc, user} = getKycUserFromSession();
+
+  return (
+    user.active_investment ||
+    (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
+    kyc.bank.meta_data.bank_status === "doc_submitted"
+  );
+}
+
+export const getGenderValue = (gender="", key="value") => {
+  const generData = GENDER_OPTIONS.find(data => data.value === gender) || {};
+  return generData[key] || "";
 }

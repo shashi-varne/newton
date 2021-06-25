@@ -3,11 +3,12 @@ import Container from '../../../common/Container';
 import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast';
 
-import { navigate as navigateFunc } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import "../../commonStyles.scss"
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
-
+import {nativeCallback} from '../../../../utils/native_callback'
+import {flowName} from '../../constants'
 const term = 5;
 
 const renderData = {
@@ -35,6 +36,7 @@ const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
   
   const fetchRecommendedFunds = async () => {
+    sendEvents('next')
     const params = {
       type: investTypeDisplay === "sip" ? 'buildwealth' : 'buildwealthot',
     };
@@ -65,21 +67,40 @@ const Landing = (props) => {
   };
 
   const goNext = () => {
-    navigate('buildwealth/amount');
+    navigate('/invest/buildwealth/amount');
   };
 
   const handleChange = (type) => {
     setInvestTypeDisplay(type);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select order type",
+        "order_type": investTypeDisplay === "sip" ? "SIP" : "OT",
+        "flow": flowName['buildwealth']
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle='NEXT'
       title='Build Wealth'
       handleClick={fetchRecommendedFunds}
       showLoader={loader}
+      data-aid='buildwealth-screen'
     >
-      <section className='invest-amount-common'>
+      <section className='invest-amount-common' data-aid='invest-amount-common'>
         <InvestType
           baseData={renderData}
           selected={investTypeDisplay}

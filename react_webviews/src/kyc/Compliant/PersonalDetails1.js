@@ -10,10 +10,11 @@ import {
 } from "utils/validators";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getGenderValue,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { kycSubmit } from "../common/api";
 import { nativeCallback } from "../../utils/native_callback";
@@ -50,8 +51,8 @@ const PersonalDetails1 = (props) => {
       dob: kyc.pan.meta_data.dob,
       residential_status:
         RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value,
-      tin_number: kyc.nri_address.tin_number,
-      gender: kyc.identification.meta_data.gender || "",
+      gender: getGenderValue(kyc.identification.meta_data.gender) || "",
+      disableResidentialStatus: !!kyc.identification.meta_data.tax_status
     };
     setIsNri(nri);
     setFormData({ ...formData });
@@ -72,7 +73,6 @@ const PersonalDetails1 = (props) => {
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.identification.meta_data.gender = form_data.gender;
     userkycDetails.address.meta_data.is_nri = isNri;
-    let tin_number = form_data.tin_number;
     let item = {
       kyc: {
         pan: userkycDetails.pan.meta_data,
@@ -80,10 +80,10 @@ const PersonalDetails1 = (props) => {
         identification: userkycDetails.identification.meta_data,
       },
     };
-    if (isNri) {
-      item.kyc.nri_address = {
-        tin_number: tin_number || "",
-      };
+    if(!isNri && kyc.kyc_product_type !== "equity") {
+      item.set_kyc_product_type = "equity";
+    } else if(isNri && kyc.kyc_product_type === "equity") {
+      item.set_kyc_product_type = "mf";
     }
     if (compareObjects(keysToCheck, oldState, form_data)) {
       navigate(PATHNAME_MAPPER.compliantPersonalDetails2, {
@@ -168,6 +168,7 @@ const PersonalDetails1 = (props) => {
       skelton={isLoading}
       events={sendEvents("just_set_events")}
       id="kyc-personal-details1"
+      data-aid="kyc-personal-details-screen-1"
       buttonTitle="CONTINUE"
       showLoader={isApiRunning}
       handleClick={handleClick}
@@ -189,7 +190,7 @@ const PersonalDetails1 = (props) => {
         {!isLoading && (
           <main data-aid='kyc-personal-details'>
             <Input
-              label="Date of birth(DD/MM/YYYY)"
+              label="Date of birth (DD/MM/YYYY)"
               class="input"
               value={form_data.dob || ""}
               error={form_data.dob_error ? true : false}
@@ -224,23 +225,10 @@ const PersonalDetails1 = (props) => {
                 id="account_type"
                 value={form_data.residential_status || ""}
                 onChange={handleChange("residential_status")}
-                disabled={isApiRunning}
+                disabled={form_data.disableResidentialStatus || isApiRunning}
+                disabledWithValue={form_data.disableResidentialStatus}
               />
             </div>
-            {isNri && (
-              <Input
-                label="Tax identification number (optional)"
-                class="input"
-                value={form_data.tin_number || ""}
-                error={form_data.tin_number_error ? true : false}
-                helperText={form_data.tin_number_error || ""}
-                onChange={handleChange("tin_number")}
-                maxLength={20}
-                minLength={8}
-                type="text"
-                disabled={isApiRunning}
-              />
-            )}
           </main>
         )}
       </div>

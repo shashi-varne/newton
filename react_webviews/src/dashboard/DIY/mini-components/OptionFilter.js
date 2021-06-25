@@ -11,7 +11,7 @@ const OptionFilter = ({ localFundOption, setLocalFundOption }) => {
   }
 
   return (
-    <FormControl component="fieldset" className="diy-option-filter">
+    <FormControl component="fieldset" className="diy-option-filter" data-aid='diy-option-filter'>
       <RadioGroup
         aria-label="Fund Options"
         name="localFundOption"

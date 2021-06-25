@@ -7,11 +7,11 @@ import Disclaimer from './Disclaimer'
 import toast from 'common/ui/Toast'
 import { getTaxes, redeemOrders } from '../../common/Api'
 import { formatAmountInr, isEmpty } from '../../../utils/validators'
-import { getConfig } from '../../../utils/functions'
+import { getConfig, navigate as navigateFunc } from '../../../utils/functions'
 
 import './Insta.scss';
 import '../commonStyles.scss';
-import { navigate as navigateFunc } from '../../common/commonFunction'
+import { nativeCallback } from '../../../utils/native_callback'
 
 const Insta = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -24,6 +24,7 @@ const Insta = (props) => {
   }
 
   const handleClick = async () => {
+    sendEvents('next')
     try {
       setIsApiRunning("button")
       const itype = props?.location?.state?.itype
@@ -42,7 +43,7 @@ const Insta = (props) => {
         investments: [{ itype, name, subtype, allocations }],
       })
       if (result?.resend_redeem_otp_link && result?.verification_link) {
-        navigate('verify', { state:{...result} })
+        navigate('/withdraw/verify', { state:{...result} })
         return
       }
     } catch (err) {
@@ -82,8 +83,26 @@ const Insta = (props) => {
     fetchTaxes()
   }, [])
 
+  const sendEvents = (userAction, index) => {
+    let eventObj = {
+      "event_name": "withdraw_flow",
+      properties: {
+        "user_action": userAction,
+        "screen_name": "tax_summary",
+        "flow": "instaredeem"
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      data-aid='withdraw-summary-screen'
+      events={sendEvents("just_set_events")}
       buttonTitle={'CONTINUE'}
       fullWidthButton
       classOverRideContainer="pr-container"
@@ -91,8 +110,6 @@ const Insta = (props) => {
       hidePageTitle
       handleClick={handleClick}
       skelton={isEmpty(taxes)}
-      // twoButton={true}
-      // footerText1={getTotalAmount()}
       showLoader={isApiRunning}
       buttonData={{
         leftTitle: "Withdraw amount",
@@ -102,12 +119,13 @@ const Insta = (props) => {
     >
       {!isEmpty(taxes) && (
         <>
-          <section id="withdraw-insta-summary">
+          <section id="withdraw-insta-summary" data-aid='withdraw-insta-summary'>
             <div className="title">Tax Summary</div>
-            <main className="fund-list">
+            <main className="fund-list" data-aid='fund-list'>
               {taxes?.liabilities?.map((item) => (
                 <TaxSummaryCard
                   key={item.isin}
+                  sendEvents={sendEvents}
                   {...item}
                   openCard={
                     open[item.isin]
