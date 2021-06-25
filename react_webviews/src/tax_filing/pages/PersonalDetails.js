@@ -20,6 +20,8 @@ function PersonalDetails(props) {
     mobileNumber: false,
   })
 
+  const [showLoader, setShowLoader] = useState(false)
+
   const handleFocus = (type) => () => {
     if (errors[type]) {
       setErrors({ ...errors, [type]: false })
@@ -34,13 +36,17 @@ function PersonalDetails(props) {
         }
         break
       case 'mobileNumber':
-        if (!validateEmail(email)) {
+        if (!validateNumber(mobileNumber)) {
           setErrors({ ...errors, mobileNumber: true })
         }
+        break
       case 'name':
         if (name.length === 0) {
           setErrors({ ...errors, name: true })
         }
+        break
+      default:
+        break
     }
   }
 

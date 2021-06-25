@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVJourneyCard from 'common/ui/Card/WVJourneyCard'
+import { Imgc } from 'common/ui/Imgc'
 
-import { taxFilingSteps } from '../constants'
+import { taxFilingSteps, taxFilingAdvantages } from '../constants'
 
 import { navigate as navigateFunc } from '../common/functions'
 
@@ -35,10 +36,24 @@ function Steps(props) {
           stepCount={idx + 1}
         />
       ))}
-      {/**
-       * @todo
-       * Todo Our Advantages
-       */}
+      <div className="m-top-4x m-bottom-4x">
+        <div className="heading2">Get Started</div>
+        <div className="m-top-3x flex space-between">
+          {taxFilingAdvantages.map(({ icon, stats, group }) => (
+            <Fragment>
+              <div className="flex-column align-center">
+                <div className="tax-filing-advantages-icon flex justify-center align-center">
+                  <Imgc src={require(`assets/${productName}/${icon}.svg`)} />
+                </div>
+                <div className="center body-text2 text-secondary m-top-1x">
+                  {stats}
+                </div>
+                <div className="center body-text2 text-secondary">{group}</div>
+              </div>
+            </Fragment>
+          ))}
+        </div>
+      </div>
     </Container>
   )
 }

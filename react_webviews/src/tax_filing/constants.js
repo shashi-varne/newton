@@ -79,3 +79,13 @@ export const itrStatusMappings = {
   created: { color: '#35CB5D', icon: 'icn_ca', text: 'IN PROGRESS' },
   open: { color: '#B39712', icon: 'icn_self_itr', text: 'STARTED' },
 }
+
+export const taxFilingAdvantages = [
+  {
+    icon: 'icn_satisfied_clients',
+    stats: '400,000+',
+    group: 'Satisfied clients',
+  },
+  { icon: 'icn_service_ratings', stats: '4.7', group: 'Service ratings' },
+  { icon: 'icn_online_support', stats: '24 x 7', group: 'Online Support' },
+]
