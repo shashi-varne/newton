@@ -10,7 +10,7 @@ import { nativeCallback } from "../utils/native_callback";
 import DropDownNew from "common/ui/DropDownNew";
 import Checkbox from "../common/ui/Checkbox";
 import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle";
-
+import AccountAlreadyExistDialog from "./bottomsheet/AccountAlreadyExistDialog";
 
 class SecondaryVerification extends Component {
 
@@ -20,6 +20,7 @@ class SecondaryVerification extends Component {
             productName: getConfig().productName,
             form_data: { whatsapp_consent: true, code: "+91"},
             loginType: "mobile",
+            accountAlreadyExists: false
         }
         this.initialize = initialize.bind(this);
     }
@@ -70,6 +71,39 @@ class SecondaryVerification extends Component {
             nativeCallback({ events: eventObj });
         }
     }
+
+    // continueAccountAlreadyExists = async (type, data) => {
+    //     let body = {};
+    //     if (type === "email") {
+    //       body.email = data?.email;
+    //     } else {
+    //       body.mobile = data?.mobile;
+    //       body.whatsapp_consent = true;
+    //     } // by default should this be true or false in case of bottomsheet?
+    //     const otpResponse = await this.generateOtp(body);
+    //     if (otpResponse) {
+    //       this.navigate("secondary-otp-verification", {
+    //         state: {
+    //           mobile_number: data?.contact_value,
+    //           forgot: false, // flag to be checked
+    //           otp_id: otpResponse.pfwresponse.result.otp_id,
+    //         },
+    //       });
+    //     }
+    //   };
+    
+      editDetailsAccountAlreadyExists = () => {
+          this.setState({
+            accountAlreadyExists: false
+          })
+      };
+
+      closeAccountAlreadyExistDialog = () => {
+        this.setState({
+          accountAlreadyExists: false
+        })
+      }
+    
 
     render() {
         const {loginType, form_data } = this.state;
@@ -153,6 +187,14 @@ class SecondaryVerification extends Component {
                         </>
                     }
                 </div>
+                <AccountAlreadyExistDialog
+                type={this.state.verifyDetailsType}
+                data={this.state.accountAlreadyExistsData}
+                isOpen={this.state.accountAlreadyExists}
+                onClose={this.closeAccountAlreadyExistDialog}
+                next={this.handleClick}
+                editDetails={this.editDetailsAccountAlreadyExists}
+                ></AccountAlreadyExistDialog>
             </Container >
         )
     }

@@ -16,6 +16,7 @@ import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 import VerifyDetailDialog from "../../../../login_and_registration/bottomsheet/VerifyDetailDialog";
 import AccountAlreadyExistDialog from "../../../../login_and_registration/bottomsheet/AccountAlreadyExistDialog";
+import { generateOtp } from "../../../../login_and_registration/function";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout", "/verify-otp"]
 const isMobileDevice = getConfig().isMobileDevice;
@@ -44,6 +45,7 @@ class Landing extends Component {
       stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
+    this.generateOtp = generateOtp.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
     this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
@@ -97,14 +99,6 @@ class Landing extends Component {
     this.navigate("/kyc/add-bank");
   };
 
-  setAccountAlreadyExistsData = (show, data) => {
-    this.setState({
-      accountAlreadyExists: show,
-      accountAlreadyExistsData: data,
-      verifyDetails: false
-    })
-  }
-
   closeVerificationFailed = () => {
     this.setState({ verificationFailed: false });
   };
@@ -119,6 +113,7 @@ class Landing extends Component {
     });
   };
 
+  // email mobile verification
   closeVerifyDetailsDialog = () => {
     this.setState({
       verifyDetails: false
@@ -130,6 +125,45 @@ class Landing extends Component {
       accountAlreadyExists: false
     })
   }
+
+  setAccountAlreadyExistsData = (show, data) => {
+    this.setState({
+      accountAlreadyExists: show,
+      accountAlreadyExistsData: data,
+      verifyDetails: false
+    })
+  }
+
+  continueAccountAlreadyExists = async (type, data) => {
+    let body = {};
+    if (type === "email") {
+      body.email = data?.email;
+    } else {
+      body.mobile = data?.mobile;
+      body.whatsapp_consent = true;
+    } // by default should this be true or false in case of bottomsheet?
+    const otpResponse = await this.generateOtp(body);
+    if (otpResponse) {
+      this.navigate("secondary-otp-verification", {
+        state: {
+          mobile_number: data?.contact_value,
+          forgot: false, // flag to be checked
+          otp_id: otpResponse.pfwresponse.result.otp_id,
+        },
+      });
+    }
+  };
+
+  editDetailsAccountAlreadyExists = () => {
+    this.navigate("/kyc/communication-details", {
+      state: {
+        page: "landing",
+        edit: true,
+      },
+    });
+  };
+  // Email mobile verification end
+
 
   handleKycPremiumLanding = () => {
     if (
@@ -512,7 +546,6 @@ class Landing extends Component {
           {verifyDetails && (
             <VerifyDetailDialog
               type={this.state.verifyDetailsType}
-              // data="uttam@fisdom.com" // verifyDetailsData
               data={this.state.verifyDetailsData}
               showAccountAlreadyExist={this.setAccountAlreadyExistsData}
               isOpen={verifyDetails}
@@ -523,11 +556,11 @@ class Landing extends Component {
         {accountAlreadyExists && (
           <AccountAlreadyExistDialog
             type={this.state.verifyDetailsType}
-            // data="98*****487" // accountAlreadyExistsData
             data={this.state.accountAlreadyExistsData}
             isOpen={accountAlreadyExists}
             onClose={this.closeAccountAlreadyExistDialog}
-            parent={this}
+            next={this.continueAccountAlreadyExists}
+            editDetails={this.editDetailsAccountAlreadyExists}
           ></AccountAlreadyExistDialog>
         )}
       </Container>

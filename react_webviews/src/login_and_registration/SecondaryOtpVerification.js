@@ -24,11 +24,12 @@ export class SecondaryOtpVerification extends Component {
 
   componentWillMount() {
     let { state } = this.props.location || {};
-    if (!state || !state.mobile_number) {
-      toast("Mobile number not provided");
-      this.props.history.goBack();
-      return;
-    }
+    console.log(state)
+    // if (!state || !state.mobile_number) {
+    //   toast("Mobile number not provided");
+    //   this.props.history.goBack();
+    //   return;
+    // }
     let { mobile_number, otp_id, communicationType } = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     let forgot = state.forgot;
