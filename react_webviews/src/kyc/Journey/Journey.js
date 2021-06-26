@@ -46,7 +46,7 @@ const Journey = (props) => {
   const backHandlingCondition = () => {
     if (config.isIframe) {
       if (config.code === 'moneycontrol') {
-        navigate("/invest/money-control");
+        navigate("/");
       } else {
         navigate("/landing");
       }

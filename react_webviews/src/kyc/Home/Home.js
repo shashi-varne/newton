@@ -140,6 +140,7 @@ const Home = (props) => {
             buttonTwoTitle: 'YES',
             twoButton: true
           }
+          internalStorage.setData('isApiCall', true);
           internalStorage.setData('handleClickOne', cancel);
           internalStorage.setData('handleClickTwo', aadharKyc);
           navigate('residence-status',{state:residentData});

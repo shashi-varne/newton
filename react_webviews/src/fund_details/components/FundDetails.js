@@ -700,7 +700,7 @@ const FundDetails = ({ classes, history }) => {
     hideInPageTitle:true,
     noPadding: true,
     fullWidthButton: true,
-    handleClick:handleInvest,
+    handleClick:handleClick,
     buttonTitle:'INVEST NOW',
     skelton:isLoading,
     classOverRide:'fd-iframe-container',

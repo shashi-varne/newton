@@ -7,17 +7,41 @@ import isEmpty from 'lodash/isEmpty';
 
 
 const DialogAsPage = (props) => {
+  const [showLoader, setShowLoader] = useState('');
   let src = 'kyc_illust';
   const {state} = props.location;
   const handleClickOne = internalStorage.getData('handleClickOne');
   const handleClickTwo = internalStorage.getData('handleClickTwo');
   const handleClick = internalStorage.getData('handleClick');
+  const isApiCall = internalStorage.getData('isApiCall');
   const productName = getConfig().productName;
   if(isEmpty(state)){
     return <Redirect to={{
       pathname: "home",
       search: getConfig().searchParams,
     }} />
+  }
+
+  const handleButtonLoader = () => {
+    if(isApiCall) {
+      setShowLoader('button');
+      internalStorage.setData('isApiCall', true);
+    }
+  }
+
+  const handleButtonOneClick = () => {
+    handleButtonLoader();
+    handleClickOne();
+  }
+
+  const handleButtonTwoClick = () => {
+    handleButtonLoader();
+    handleClickTwo();
+  }
+
+  const handleButtonClick = () => {
+    handleButtonLoader();
+    handleClick();
   }
 
   switch(state?.status){
@@ -42,12 +66,14 @@ const DialogAsPage = (props) => {
       buttonOneTitle={state?.buttonOneTitle}
       buttonTwoTitle={state?.buttonTwoTitle}
       twoButton={state?.twoButton}
-      handleClickOne={handleClickOne}
-      handleClickTwo={state?.status === 'linkAccount' ? () => handleClickTwo(state?.step) :handleClickTwo }
+      handleClickOne={handleButtonOneClick}
+      handleClickTwo={state?.status === 'linkAccount' ? () => handleClickTwo(state?.step) :handleButtonTwoClick }
       buttonTitle={state?.buttonTitle}
-      handleClick={handleClick}
+      handleClick={handleButtonClick}
       title={state?.title}
       iframeRightContent={require(`assets/${productName}/${src}.svg`)}
+      showLoader={showLoader}
+      dualbuttonwithouticon={state?.twoButton}
     >
       <div className='kyc-pan-status'>
         {state?.message}

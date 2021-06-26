@@ -73,7 +73,7 @@ const PaymentCallback = (props) => {
       navigate("/kyc/journey");
     } else {
       if(isIframe() && config?.code === 'moneycontrol') {
-        navigate("/invest/money-control");
+        navigate("/");
         return;
       }
       if(config.isSdk) {
