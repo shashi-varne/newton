@@ -19,6 +19,7 @@ const Search = (props) => {
   const [showNoFundmessage, setShowNoFundmessage] = useState(false);
   const iframe = isIframe();
   const isMobileDevice = getConfig().isMobileDevice;
+  const productName = getConfig().productName;
 
   const handleChange = (event) => {
     let value = event.target.value || "";
@@ -148,6 +149,13 @@ const Search = (props) => {
             )}
           </>
         )}
+        {
+          !fundResult && iframe && !isMobileDevice && !showLoader &&(
+            <div className="diy-iframe-search-content">
+              <img src={require(`assets/${productName}/diy_search_iframe.svg`)} alt='search' />
+            </div>
+          )
+        }
       </div>
     </Container>
   );

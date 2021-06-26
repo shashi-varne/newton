@@ -18,7 +18,7 @@ import internalStorage from '../Home/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
 
 const KycBankVerify = (props) => {
-  const [count, setCount] = useState(2);
+  const [count, setCount] = useState(20);
   const [countdownInterval, setCountdownInterval] = useState();
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isPennyOpen, setIsPennyOpen] = useState(false);
@@ -180,7 +180,7 @@ const KycBankVerify = (props) => {
         } else {
           setIsPennySuccess(true);
         }
-      } else if (result.records.PBI_record.user_rejection_attempts !== 0) {
+      } else if (result.records.PBI_record.user_rejection_attempts === 0) {
         if(iframe) {
           handlePennyExhaust();
         } else {

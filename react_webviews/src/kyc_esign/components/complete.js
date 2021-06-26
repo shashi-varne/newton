@@ -9,7 +9,7 @@ const Complete = ({ navigateToReports, dl_flow, show_note }) => {
     <div className="kyc-esign-complete" data-aid='kyc-esign-complete'>
       <header data-aid='kyc-esign-header'>
         {
-          hideImage &&
+          !hideImage &&
           <img
           src={require(`assets/${productName}/ic_process_done.svg`)}
           alt=""
