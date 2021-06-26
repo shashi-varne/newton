@@ -5,7 +5,10 @@ import Button from "@material-ui/core/Button";
 import Slider from "common/ui/Slider";
 import { getPathname } from "../constants";
 import { getReportGoals } from "../common/api";
-import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
+import { getAmountInInr } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
 const sliderConstants = {
   min: 0,
@@ -31,6 +34,26 @@ const Goals = (props) => {
   };
 
   const redirectToInvestType = (goal) => {
+    sendEvents("next", goal);
+    const config = getConfig();
+    var _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "reports",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+
     let pathname = getPathname[goal?.itag?.itype] || "";
     if (!pathname) return;
     if (goal.itag.itype === "saveforgoal")
@@ -38,15 +61,38 @@ const Goals = (props) => {
     navigate(pathname);
   };
 
+  const sendEvents = (userAction, data) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Track my goals",
+        goal: data || "",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
-    <Container hidePageTitle={true} noFooter={true} skelton={showSkelton}>
-      <div className="report-goals">
+    <Container
+      hidePageTitle={true}
+      noFooter={true}
+      events={sendEvents("just_set_events")}
+      skelton={showSkelton}
+      data-aid='reports-goals-screen'
+    >
+      <div className="report-goals" data-aid='report-goals'>
         {!isEmpty(goals) &&
           goals.map((goal, index) => {
             return (
-              <div className="goal" key={index}>
+              <div className="goal" key={index} data-aid={`reports-goals-list-${goal.itag.id}`}>
                 <div
                   className="goal-info"
+                  data-aid={`goal-info-${goal.itag.id}`}
                   onClick={() =>
                     navigate(
                       `${getPathname.reportsFunds}${goal.itag.itype}/${
@@ -56,7 +102,7 @@ const Goals = (props) => {
                   }
                 >
                   <h5>{goal.itag.title}</h5>
-                  <div className="summary">
+                  <div className="summary" data-aid={`reports-summary-list-${goal.itag.id}`}>
                     <div className="content">
                       <div className="amount">
                         {formatAmountInr(goal.current)}
@@ -106,7 +152,7 @@ const Goals = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="slider-container">
+                  <div className="slider-container" data-aid={`reports-slider-container-${goal.itag.id}`}>
                     <div className="slider-head">
                       <div className="left">STOCKS ({goal.stock}%) </div>
                       <div className="right">BONDS ({goal.bond}%) </div>
@@ -120,7 +166,7 @@ const Goals = (props) => {
                   </div>
                 </div>
                 {goal.itag.itype !== "legacy" && (
-                  <Button onClick={() => redirectToInvestType(goal)}>
+                  <Button onClick={() => redirectToInvestType(goal)} data-aid={`reports-goals-btn-${goal.itag.id}`}>
                     INVEST MORE
                   </Button>
                 )}

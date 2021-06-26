@@ -20,13 +20,13 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
   } = data;
   const handleChange = (event) => {
     let value = event.target.value || "";
-    value = convertInrAmountToNumber(value);
+    value = convertInrAmountToNumber(value) || "";
     if (validateNumber(value)) {
-      checkLimit(Math.ceil(value), Math.ceil(amount),data?.mf?.isin);
       setFundValue(value);
     } else {
       setFundValue('');
     }
+    checkLimit(Math.ceil(value), Math.ceil(amount),data?.mf?.isin)
   }
   const handleToggle = () => {
     setOpen(!open);
@@ -35,35 +35,35 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
     if(num === 0) {
       calcTotalAmount(isin,num);
       setError(false);
-      checkError(false);
+      checkError(isin, false);
       return;
     }
     if (type !== 'insta-redeem') {
       if (compNum > 1000) {
         if (num < 1000) {
           setError(true);
-          setHelperText('Minimum withdrawal amount for each fund is 1000');
-          checkError(true);
+          setHelperText(`Minimum withdrawal amount for each fund is ${formatAmountInr(1000)}`);
+          checkError(isin, true);
         } else if (num > compNum) {
           setError(true);
           setHelperText('Amount cannot be more than withdrawable amount');
-          checkError(true);
+          checkError(isin, true);
           return;
         } else {
           if (error) {
             setError(false);
           }
-          checkError(false);
+          checkError(isin, false);
           calcTotalAmount(isin,num);
         }
       } else {
         if (num < compNum) {
           setError(true);
-          checkError(true);
+          checkError(isin, true);
           setHelperText('Withdrawal amount cannot be less than balance amount');
         } else if (num > compNum) {
           setError(true);
-          checkError(true);
+          checkError(isin, true);
           setHelperText(
             'Withdrawal amount cannot be greater than balance amount'
           );
@@ -71,7 +71,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
           if (error) {
             setError(false);
           }
-          checkError(false);
+          checkError(isin, false);
           calcTotalAmount(isin,num);
         }
       }
@@ -79,25 +79,25 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
       if (num > Math.ceil(compNum)) {
         setError(true);
         setHelperText('Amount cannot be more than withdrawable amount');
-        checkError(true);
+        checkError(isin, true);
       } else if (num <= 0) {
         setError(true);
-        setHelperText('Minimum withdrawal amount for fund is 1');
-        checkError(true);
+        setHelperText(`Minimum withdrawal amount for fund is ${formatAmountInr(1)}`);
+        checkError(isin, true);
         return;
       } else {
         if (error) {
           setError(false);
         }
-        checkError(false);
+        checkError(isin, false);
       }
       calcTotalAmount(isin,num);
     }
   };
 
   return (
-    <div className='withdraw-fund-card'>
-      <div className='withdraw-fund-header' onClick={handleToggle}>
+    <div className='withdraw-fund-card' data-aid='withdraw-fund-card'>
+      <div className='withdraw-fund-header' data-aid='withdraw-fund-header' onClick={handleToggle}>
         <div>
           <div className='withdraw-fund-icon'>
             <img src={amc_logo_small} alt='' />
@@ -122,18 +122,18 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
         )}
       </div>
 
-      <div className='withdraw-investment-container'>
-        <div className='withdraw-amount-container'>
+      <div className='withdraw-investment-container' data-aid='withdraw-investment-container'>
+        <div className='withdraw-amount-container' data-aid='withdraw-amount-withdrawable-text'>
           <div className='amount-header-text'>WITHDRAWABLE AMOUNT</div>
           <div>{inrFormatDecimal(Math.ceil(type === 'systematic' ? balance : amount))}</div>
         </div>
-        <div className='withdraw-amount-container'>
+        <div className='withdraw-amount-container' data-aid='withdraw-amount-investment-text'>
           <div className='investment-header-text'>INVESTMENT SINCE</div>
           <div>{invested_since}</div>
         </div>
       </div>
       <Collapse in={open}>
-        <div className='withdraw-input'>
+        <div className='withdraw-input' data-aid='withdraw-input'>
           <Input
             id='amount'
             label='Withdraw Amount'
@@ -149,7 +149,7 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError, au
           />
         </div>
       </Collapse>
-      <div className='withdraw-tax'>{data.message}</div>
+      <div className='withdraw-tax' data-aid='withdraw-tax'>{data.message}</div>
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
-import { navigate as navigateFunc } from '../common/commonFunction'
+import { navigate as navigateFunc } from 'utils/functions'
 import './mini-components.scss';
+import { getConfig } from '../../utils/functions';
 
 // Current Version of material ui does not have right alt icons
 const RightAltIcon = () => {
@@ -29,26 +30,45 @@ const tiles = [
 const Explore = (props) => {
   const navigate = navigateFunc.bind(props)
   const handleClick = () => {
-    navigate('/invest', null, true)
+    const config = getConfig();
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "withdraw",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "mf",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+
+    navigate('/invest')
   }
   return (
-    <section className="withdraw-explore-investment-options">
-      <main className="main">
+    <section className="withdraw-explore-investment-options" data-aid='withdraw-explore-investment-options'>
+      <main className="main" data-aid='explore'>
         <img
           src={require(`assets/piggy_bank@4x.png`)}
           alt="Save Money"
           className="report-details-img"
         />
         <div className="top-text">You've not invested yet!</div>
-        <Button className="cta-button" variant="raised" onClick={handleClick}>
-          <span className="cta-button-text">explore investment options</span>
+        <Button className="cta-button" variant="raised" onClick={handleClick} data-aid='cta-button'>
+          <span className="cta-button-text" data-aid='cta-button-text'>explore investment options</span>
           <RightAltIcon className="cta-button-icon" />
         </Button>
       </main>
-      <footer className="footer">
+      <footer className="footer" data-aid='explore-footer'>
         <div className="tiles">
-          {tiles.map(({ title, icon }) => (
-            <div className="tile" key={icon}>
+          {tiles.map(({ title, icon }, idx) => (
+            <div className="tile" key={icon} data-aid={`tile-${idx+1}`}>
               <img src={require(`assets/${icon}.png`)} alt={title} width="60" />
               <div className="label">{title}</div>
             </div>

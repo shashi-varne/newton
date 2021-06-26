@@ -4,16 +4,17 @@ import { dobFormatTest, formatDate, isEmpty } from "utils/validators";
 import Input from "../../common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { relationshipOptions, getPathname } from "../constants";
+import { RELATIONSHIP_OPTIONS, PATHNAME_MAPPER } from "../constants";
 import {
   validateFields,
-  navigate as navigateFunc,
   compareObjects,
 } from "../common/functions";
+import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -26,7 +27,7 @@ const PersonalDetails4 = (props) => {
   if (isEdit) {
     title = "Edit nominee detail";
   }
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -55,6 +56,7 @@ const PersonalDetails4 = (props) => {
 
   const handleClick = () => {
     let keysToCheck = ["dob", "name", "relationship"];
+    sendEvents('next')
     if (!isChecked) {
       let result = validateFields(form_data, keysToCheck);
       if (!result.canSubmit) {
@@ -108,10 +110,10 @@ const PersonalDetails4 = (props) => {
 
   const handleNavigation = () => {
     if (isChecked) {
-      if (isEdit) navigate(getPathname.journey);
+      if (isEdit) navigate(PATHNAME_MAPPER.journey);
       else navigate("/kyc/compliant/bank-details");
     } else {
-      navigate(getPathname.journey);
+      navigate(PATHNAME_MAPPER.journey);
     }
   };
 
@@ -137,18 +139,41 @@ const PersonalDetails4 = (props) => {
     setFormData({ ...formData });
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "nominee_details",
+        "flow": 'premium onboarding',   
+        "name": form_data.name ? "yes" : "no",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "relationship": form_data.relationship ? "yes" : "no",
+        "add_nominee": isChecked ? "no":"yes",
+        "initial_kyc_status" : "compliant"
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       skelton={isLoading}
+      events={sendEvents("just_set_events")}
       id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
       handleClick={handleClick}
       title={title}
+      data-aid='kyc-personal-details-screen-4'
     >
       <div className="kyc-nominee">
-        <main>
-          <div className="nominee-checkbox">
+        <main data-aid='kyc-nominee-page'>
+          <div className="nominee-checkbox" data-aid='kyc-nominee-checkbox'>
             <Checkbox
               defaultChecked
               checked={isChecked}
@@ -157,7 +182,7 @@ const PersonalDetails4 = (props) => {
               handleChange={handleChange("checkbox")}
               class="checkbox"
             />
-            <span>
+            <span data-aid='kyc-no-nominee-text'>
               I do not wish to add a <b>nominee</b>
             </span>
           </div>
@@ -185,11 +210,11 @@ const PersonalDetails4 = (props) => {
             id="dob"
             disabled={isChecked || isApiRunning}
           />
-          <div className="input">
+          <div className="input" data-aid='kyc-dropdown-withouticon'>
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
-              options={relationshipOptions}
+              options={RELATIONSHIP_OPTIONS}
               id="relationship"
               label="Relationship"
               isAOB={true}

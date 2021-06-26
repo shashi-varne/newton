@@ -25,15 +25,22 @@ const headerIconMapper = {
   search: search,
   restart: restart
 }
-const isMobileDevice = getConfig().isMobileDevice;
-const partnerLogo = getConfig().logo;
-const isWeb = getConfig().Web;
-const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor : '';
-
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
+const partnerLogo = config.logo;
+const isWeb = config.Web;
+const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
+const backButtonColor = !isWeb ? config.styles?.backButtonColor : '';
+const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
+console.log("sdk check in header ", config.isSdk);
+console.log("web check in header ", isWeb);
+console.log("app check in header ", config.app);
+console.log("platform check in header", config.platform);
+console.log("user agent in header", navigator.userAgent);
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
-  className ,style, headerData={}, new_header, logo, notification, handleNotification}) => {
+  className ,style, headerData={}, new_header, notification, handleNotification, noBackIcon, logo}) => {
     const rightIcon = headerIconMapper[topIcon];
     const [referDialog, setReferDialog] = useState(false);
     const [mobileViewDrawer, setMobileViewDrawer] = useState(false);
@@ -49,19 +56,19 @@ const Header = ({ classes, title, count, total, current, goBack,
       setReferDialog(!referDialog);
     };
     return (
-      <AppBar position="fixed" color="primary" 
+      <AppBar position="fixed" color="primary" data-aid='app-bar'
       className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
       style={style}
       >
         <Toolbar>
           {
-            !logo &&
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
+            !noBackIcon &&
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" data-aid='tool-bar-icon-btn'
               onClick={headerData.goBack ||
               goBack}>
               {!disableBack && !headerData.hide_icon &&
               <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backButtonColor ?  backButtonColor : new_header && !logo ? getConfig().styles.primaryColor : 'white'))}
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
               />
               }
@@ -70,7 +77,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             </IconButton>
           }
           {
-            logo && 
+            (noBackIcon || logo) && 
              <div className='sdk-header-partner-logo'>
                 <img src={require(`assets/${partnerLogo}`)} alt="partner logo" /> 
             </div>
@@ -115,7 +122,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           <>
             <div>
             {
-              !logo && 
+              !noBackIcon && !logo && 
               <div
                 style={style}
                 className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 
@@ -146,9 +153,17 @@ const Header = ({ classes, title, count, total, current, goBack,
                 <SVG
                 style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                 onClick={handleNotification}
-                preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (getConfig()?.notificationColor || 'white') : 'white'))}
+                preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + notificationsColor)}
                 src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
               />
+              }
+              {isMobileDevice && isWeb &&
+                <div className='mobile-navbar-menu'>
+                  <IconButton onClick={handleMobileViewDrawer}>
+                    <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (noBackIcon ? 'white' : getConfig().styles.primaryColor) : 'white'}}/>
+                  </IconButton>
+                  <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal} />
+                </div>
               }
           </div>
           {/* The product logo will come here -> (will need asset) */}
@@ -161,15 +176,6 @@ const Header = ({ classes, title, count, total, current, goBack,
           </>
         }
 
-        {
-          isMobileDevice && isWeb &&
-          <div className='mobile-navbar-menu'>
-            <IconButton onClick={handleMobileViewDrawer}>
-              <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'}}/>
-            </IconButton>
-            <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal}/>
-          </div>
-        }
         </Toolbar>
         {
           isMobileDevice &&

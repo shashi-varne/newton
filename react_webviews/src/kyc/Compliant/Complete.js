@@ -1,9 +1,8 @@
 import React from "react";
 import Container from "../common/Container";
-import { getConfig, isIframe } from "utils/functions";
+import { getConfig, navigate as navigateFunc, isIframe } from "utils/functions";
 import Alert from "../mini-components/Alert";
-import { navigate as navigateFunc } from "../common/functions";
-import { getPathname, storageConstants } from "../constants";
+import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { storageService } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
@@ -14,24 +13,42 @@ const Complete = (props) => {
   const iframe = isIframe();
 
   const handleClick = () => {
-    if (storageService().get(storageConstants.NATIVE)) {
+    sendEvents('next')
+    if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       nativeCallback({ action: "exit_web" });
     } else {
-      navigate(getPathname.invest);
+      navigate(PATHNAME_MAPPER.invest);
     }
   };
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "kyc_status",
+        "flow": 'premium onboarding'      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   return (
     <Container
       id="kyc-compliant-complete"
+      events={sendEvents("just_set_events")}
       buttonTitle="OK"
       handleClick={handleClick}
-      // force_hide_inpage_title={true}
       title='Kudos, KYC is completed!'
+      force_hide_inpage_title={true}
+      data-aid='kyc-compliant-complete-screen'
       iframeRightContent={require(`assets/${productName}/kyc_complete.svg`)}
     >
       <div className="kyc-compliant-complete">
-        <header>
+        <header data-aid='kyc-header'>
           {
             !iframe &&
             <img
@@ -42,7 +59,7 @@ const Complete = (props) => {
           {/* <div className="title">Kudos, KYC is completed!</div> */}
           <div
             className="subtitle"
-            onClick={() => navigate(getPathname.kycReport)}
+            onClick={() => navigate(PATHNAME_MAPPER.kycReport)}
           >
           {
             iframe &&
@@ -57,6 +74,7 @@ const Complete = (props) => {
           variant="warning"
           title="Note"
           message="Your bank verification is still pending. You will be able to invest once your bank is verified."
+          dataAid='kyc-pending-alertbox'
         />
       </div>
     </Container>

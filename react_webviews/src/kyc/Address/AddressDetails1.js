@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { getPathname, addressProofOptions } from "../constants";
+import { PATHNAME_MAPPER, ADDRESS_PROOF_OPTIONS } from "../constants";
 import { isEmpty } from "utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import { validateFields } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import toast from "../../common/ui/Toast";
 import SVG from "react-inlinesvg";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const AddressDetails1 = (props) => {
   const genericErrorMessage = "Something went wrong!";
@@ -22,7 +23,7 @@ const AddressDetails1 = (props) => {
   const [title, setTitle] = useState("");
   const productName = getConfig().productName;
 
-  const residentialOptions = [
+  const RESIDENTIAL_OPTIONS = [
     {
       name: "Indian",
       value: "INDIAN",
@@ -63,12 +64,13 @@ const AddressDetails1 = (props) => {
     let formData = {
       address_doc_type: address_doc_type,
       residential_status:
-        residentialOptions[selectedIndexResidentialStatus].value || "",
+        RESIDENTIAL_OPTIONS[selectedIndexResidentialStatus].value || "",
     };
     setFormData({ ...formData });
   };
 
   const handleClick = () => {
+    sendEvents("next")
     let keysToCheck = ["address_doc_type", "residential_status"];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
@@ -81,7 +83,7 @@ const AddressDetails1 = (props) => {
       is_nri === kyc.address.meta_data.is_nri &&
       kyc.address_doc_type === form_data.address_doc_type
     ) {
-      navigate(getPathname.addressDetails2, {
+      navigate(PATHNAME_MAPPER.addressDetails2, {
         state: {
           isEdit: isEdit,
           backToJourney: state.backToJourney,
@@ -106,7 +108,7 @@ const AddressDetails1 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      navigate(getPathname.addressDetails2, {
+      navigate(PATHNAME_MAPPER.addressDetails2, {
         state: {
           isEdit: isEdit,
           backToJourney: state.backToJourney,
@@ -124,7 +126,7 @@ const AddressDetails1 = (props) => {
     let value = event.target ? event.target.value : event;
     let formData = { ...form_data };
     if (name === "residential_status") {
-      formData[name] = residentialOptions[value].value;
+      formData[name] = RESIDENTIAL_OPTIONS[value].value;
       if (formData[name] === "NRI") {
         formData.address_doc_type = "PASSPORT";
       }
@@ -144,8 +146,26 @@ const AddressDetails1 = (props) => {
     return residential_status === "NRI" ? 4 : 2;
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "address_details_1",
+        "address_proof": form_data.address_doc_type,
+        "residential_status": form_data.residential_status
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       skelton={isLoading}
       id="kyc-address-details1"
       buttonTitle="SAVE AND CONTINUE"
@@ -157,9 +177,10 @@ const AddressDetails1 = (props) => {
       count={1}
       total={getTotalPages(form_data.residential_status)}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
+      data-aid='kyc-address-details-screen-1'
     >
       <div className="kyc-personal-details kyc-address-details">
-        <main>
+        <main data-aid='kyc-address-details'>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.residential_status_error ? true : false}
@@ -167,22 +188,23 @@ const AddressDetails1 = (props) => {
               width="40"
               label="Residential status:"
               class="residential_status"
-              options={residentialOptions}
+              options={RESIDENTIAL_OPTIONS}
               id="account_type"
               value={form_data.residential_status || ""}
               onChange={handleChange("residential_status")}
               disabled={isApiRunning}
             />
           </div>
-          <div className="input">
-            <div className="address-label">Address proof:</div>
-            <div className="address-proof">
-              {addressProofOptions.map((data, index) => {
+          <div className="input" data-aid='kyc-address-proof'>
+            <div className="address-label" data-aid='address-label'>Address proof:</div>
+            <div className="address-proof" data-aid='address-proof'>
+              {ADDRESS_PROOF_OPTIONS.map((data, index) => {
                 const selected = form_data.address_doc_type === data.value;
                 const disabled =
                   form_data.residential_status === "NRI" || isApiRunning;
                 return (
                   <span
+                    data-aid={`kyc-address-proof-${index+1}`}
                     key={index}
                     className={`address-proof-option ${
                       selected && `selected`
@@ -210,7 +232,7 @@ const AddressDetails1 = (props) => {
                 );
               })}
               {form_data.address_doc_type_error && (
-                <div className="helper-text">
+                <div className="helper-text" data-aid='kyc-helper-text'>
                   {form_data.address_doc_type_error}
                 </div>
               )}

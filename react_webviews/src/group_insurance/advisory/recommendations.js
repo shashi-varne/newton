@@ -17,6 +17,7 @@ import { updateLead } from './common_data';
 import { capitalizeFirstLetter } from 'utils/validators'
 import { openPdf } from './common_data';
 import { openInBrowser } from "../products/group_health/common_data";
+import {Imgc} from '../../common/ui/Imgc'
 
 class AdivsoryRecommendations extends Component { 
     constructor(props){
@@ -240,7 +241,7 @@ class AdivsoryRecommendations extends Component {
                             <p className="rec-profile-heading">Your profile</p>
                             <div className="rec-profile">
                                 <div className="rec-profile-left">
-                                    <img style={{width: '120px', height: '120px'}} alt="" src={require(`assets/${this.state.type}/${this.state.profile_image}.svg`)}/>
+                                    <Imgc className="profile-pic" alt="" src={require(`assets/${this.state.type}/${this.state.profile_image}.svg`)}/>
                                 </div>
                                 {user_data && (
                                     <div className="rec-profile-right">
@@ -267,13 +268,13 @@ class AdivsoryRecommendations extends Component {
                     <div className="recommendation-extras">
                         <div className="download-report click-pointer" onClick={()=>this.downloadReportPdf()}>
                             <span>    
-                                <img src={download} alt="" style={{marginRight: '5px'}} />     
+                                <Imgc src={download} alt="" style={{marginRight: '5px'}} />     
                                 Download report
                             </span>
                         </div>
                         <div className="email-report click-pointer"  onClick={()=>this.goToEmail()}>
                             <span>
-                                <img src={launch} alt="" style={{marginRight: '5px'}}/>
+                                <Imgc src={launch} alt="" style={{marginRight: '5px'}}/>
                                 Email report
                             </span>
                         </div>

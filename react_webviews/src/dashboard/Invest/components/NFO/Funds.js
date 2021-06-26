@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import Container from "../../../common/Container";
 import Button from "common/ui/Button";
-import { navigate } from "../../functions";
 import {
   getFormattedDate,
   getNfoRecommendation,
   getSchemeOption,
 } from "./nfoFunctions";
 import { storageService } from "utils/validators";
-import { getConfig } from "../../../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../../../utils/functions";
 import toast from "../../../../common/ui/Toast";
 import { isEmpty } from "../../../../utils/validators";
 import "./Funds.scss";
+import { nativeCallback } from "../../../../utils/native_callback";
+import { flowName } from "../../constants";
 
 class NfoFunds extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class NfoFunds extends Component {
       screenName: "nfo_funds",
       showFunds: false,
     };
-    this.navigate = navigate.bind(this);
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentDidMount() {
@@ -66,11 +67,13 @@ class NfoFunds extends Component {
   };
 
   handleClick = (fund) => () => {
+    this.sendEvents('next', fund.amfi)
     storageService().setObject("nfo_detail_fund", fund);
     this.navigate("/advanced-investing/new-fund-offers/funds/checkout");
   };
 
   detailView = (fund) => {
+    this.sendEvents("next",fund.amfi)
     storageService().setObject("nfo_detail_fund", fund);
     this.props.history.push(
       {
@@ -82,52 +85,75 @@ class NfoFunds extends Component {
       }
     );
   };
+  
+  sendEvents = (userAction, fundNo) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "select scheme",
+        "user_action": userAction || "",
+        "scheme_type": this.state.scheme || "",
+        "flow": flowName['nfo'],
+        "fund number": fundNo || ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let { nfoFunds } = this.state;
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
+        data-aid='nfo-funds-screen'
         skelton={this.state.show_loader}
         noFooter={true}
         title="NFO Funds"
       >
-        <div className="nfo-funds">
+        <div className="nfo-funds" data-aid='nfo-funds-page'>
           {isEmpty(nfoFunds) && (
-            <div className="message">
+            <div className="message" data-aid='nfo-message'>
               We are sorry ! There are no funds that match your requirements.
             </div>
           )}
           {!isEmpty(nfoFunds) &&
             nfoFunds.map((data, index) => {
               return (
-                <div key={index} className="content">
+                <div key={index} className="content" data-aid='nfo-content'>
                   <div
+                    data-aid='nfo-detailview-img'
                     className="card icon"
                     onClick={() => this.detailView(data)}
                   >
                     <img alt={data.friendly_name} src={data.amc_logo_small} />
                   </div>
-                  <div className="text">
+                  <div className="text" data-aid='nfo-text'>
                     <div
+                      data-aid='nfo-detailview-text'
                       className="title"
                       onClick={() => this.detailView(data)}
                     >
                       {data.friendly_name}
                     </div>
-                    <div className="item">
-                      <div className="sub-item">
+                    <div className="item" data-aid='nfo-item'>
+                      <div className="sub-item" data-aid='sub-item'>
                         <p>Type: {getSchemeOption(data.scheme_option)}</p>
                         <p>Category: {data.tax_plan}</p>
                       </div>
-                      <div className="invest">
+                      <div className="invest" data-aid='nfo-invest'>
                         <Button
+                          dataAid='invest-btn'
                           onClick={this.handleClick(data)}
                           buttonTitle="INVEST"
                           classes={{ button: "nfo-funds-button" }}
                         />
                       </div>
                     </div>
-                    <div className="date">
+                    <div className="date" data-aid='nfo-date'>
                       from {getFormattedDate(data.start_date)} - to{" "}
                       {getFormattedDate(data.end_date, true)}
                     </div>

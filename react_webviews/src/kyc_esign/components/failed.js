@@ -6,16 +6,16 @@ const Failed = () => {
   const iframe = isIframe();
 
   return (
-    <div className="nsdl-status">
+    <div className="nsdl-status" data-aid='nsdl-status'>
       {
         !iframe &&
-        <img
-        src={require(`assets/${productName}/ils_esign_failed.svg`)}
-        style={{ width: '100%' }}
-        alt="Nsdl Status"
-        />
+          <img
+            src={require(`assets/${productName}/ils_esign_failed.svg`)}
+            style={{ width: '100%' }}
+            alt="Nsdl Status"
+          />
       }
-      <div className="nsdl-status-text">
+      <div className="nsdl-status-text" data-aid='nsdl-status-text'>
         Sorry! the eSign verification is failed. Please try again.
       </div>
     </div>

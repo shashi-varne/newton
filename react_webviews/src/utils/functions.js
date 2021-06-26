@@ -49,19 +49,19 @@ export const isMobile = {
 
 function getPartnerConfig(partner_code) {
   let search = window.location.search;
+  let origin = window.location.origin;
+
   const ismyway =
-    search.indexOf("api.mywaywealth.com") >= 0 ||
-    search.indexOf("plutus-finwizard-pro.appspot.com") >= 0;
-  const isminvest = search.indexOf("my.barodaminvest.com") >= 0;
-  const isStaging = search.indexOf("staging") >= 0;
-  let productType = "fisdom";
-  if (
-    ismyway ||
-    partner_code === "bfdlmobile" ||
-    partner_code === "finity" ||
-    partner_code === "moneycontrol"
-  ) {
-    productType = "finity";
+    search.indexOf('api.mywaywealth.com') >= 0 ||
+    search.indexOf('plutus-finwizard-pro.appspot.com') >= 0 || 
+    origin.indexOf('wv.mywaywealth.com') >= 0 || 
+    origin.indexOf('wv.finity.in') >= 0 || 
+    origin.indexOf('api.mywaywealth.com') >= 0;
+  const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
+  const isStaging = search.indexOf('staging') >= 0;
+  let productType = 'fisdom';
+  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
+    productType = 'finity';
   }
 
   if (isminvest) {
@@ -117,6 +117,8 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, "640px");
   html.style.setProperty(`--tooltip-width`, "540px");
   html.style.setProperty("--color-action-disable", "#E8ECF1");
+  html.style.setProperty('--dark', '#0A1D32');
+  html.style.setProperty('--steelgrey', '#767E86');
 
   return config_to_return;
 }
@@ -136,10 +138,29 @@ export function getParamsMark(data) {
   return (data.match(/[?]/g) ? "&": "?");
 }
 
+export const getPlatformConfig = () => {
+  const config = {};
+  if (isMobile.Android() && typeof window.Android !== 'undefined') {
+    config.app = 'android';
+    config.Android = true;
+  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
+    config.app = 'ios';
+    config.iOS = true;
+  } else {
+    if (storageService().get("is_secure")) {
+      return;
+    }
+    config.app = 'web';
+    config.Web = true;
+  }
+
+  return config;
+}
+
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+  let { base_url="https://react-test-dot-plutus-staging.appspot.com" } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
@@ -168,6 +189,7 @@ export const getConfig = () => {
   }
 
   let { is_secure = false } = main_query_params;
+  let { from_notification } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
@@ -212,6 +234,10 @@ export const getConfig = () => {
     project = 'iw-dashboard';
   }
 
+  if(!partner_code) {
+    partner_code = storageService().get("partner") || ""
+  }
+
   if (is_secure === "true") storageService().set("is_secure", true);
 
   let returnConfig = getPartnerConfig(partner_code);
@@ -230,6 +256,12 @@ export const getConfig = () => {
     returnConfig.generic_callback = generic_callback;
     searchParams += getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
     searchParamsMustAppend +=  getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
+  }
+  
+  if (checkValidString(from_notification)) {
+    returnConfig.from_notification = from_notification;
+    searchParams += getParamsMark(searchParams) + `from_notification=${from_notification}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `from_notification=${from_notification}`;
   }
 
   if (sdk_capabilities) {
@@ -273,15 +305,12 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + 'insurance_allweb=' + insurance_allweb;
   }
 
-  if (isMobile.Android() && typeof window.Android !== 'undefined') {
-    returnConfig.app = 'android';
-    returnConfig.Android = true;
-  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
-    returnConfig.app = 'ios';
-    returnConfig.iOS = true;
-  } else {
-    returnConfig.app = 'web';
-    returnConfig.Web = true;
+  const platformConfig = getPlatformConfig();
+  if (platformConfig) {
+    returnConfig = {
+      ...returnConfig,
+      ...platformConfig
+    }
   }
 
   // eslint-disable-next-line
@@ -313,10 +342,13 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
-  returnConfig.isSdk = storageService().get("is_secure"); 
+  returnConfig.isSdk = storageService().get("is_secure");
   returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
   returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
-  
+  returnConfig.isIframe = isIframe();
+  returnConfig.platform = !returnConfig.isIframe ? (returnConfig.Web ? "web" : "sdk" ): "iframe";
+  returnConfig.isLoggedIn = storageService().get("currentUser");
+  console.log(returnConfig);
   return returnConfig;
 };
 
@@ -413,9 +445,16 @@ export function setHeights(data) {
       ? document.getElementsByClassName('Footer')[0].offsetHeight
       : 0;
 
+  const navbar =
+      document.getElementsByClassName('NavBar') && document.getElementsByClassName('NavBar')[0]
+        ? document.getElementsByClassName('NavBar')[0].offsetHeight
+        : 0;
+
   let HeaderHeight = bannerHeight + stepHeight + head + 'px';
+  const HeaderTop = head + navbar + 'px';
   if (data.header && document.getElementById('HeaderHeight')) {
     document.getElementById('HeaderHeight').style.height = HeaderHeight;
+    document.getElementById('HeaderHeight').style.top = HeaderTop;
   }
 
   // not using for now
@@ -443,6 +482,7 @@ export function capitalize(string) {
 }
 
 export function isIframe() {
+  return true;
   if (window.top !== window.self) {
     return true;
   } else {
@@ -455,4 +495,80 @@ export function getBasePath() {
     basename = basename ? basename + 'view' : '';
   }
   return window.location.origin + basename;
+}
+
+const { checkBeforeRedirection, checkAfterRedirection, backButtonHandler } = require(`./${getConfig().platform}_app`);
+
+export function navigate(pathname, data = {}) {
+  let fromState = this?.location?.pathname || ""
+  let toState = pathname
+  
+  const redirectPath = checkBeforeRedirection(fromState, toState)
+  if (redirectPath) {
+    toState = redirectPath
+  }
+
+  data.state = {
+    ...data?.state,
+    fromState,
+    toState
+  }
+
+  if (data.edit) {
+    this.history.replace({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  } else {
+    this.history.push({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+      state: data.state || {},
+    });
+  }
+}
+
+export function isNpsOutsideSdk(fromState, toState) {
+  let config = getConfig();
+  if (config?.landingconfig?.nps === 'inside_sdk') {
+    return false;
+  }
+
+  if (fromState === "/nps/sdk" ||
+    ((fromState.indexOf("/nps/amount") !== -1) && toState === "/nps/info") ||
+    ((fromState.indexOf("/nps/payment/callback") !== -1) &&
+      ((toState.indexOf("/nps/amount") !== -1) || toState === "/nps/investments" ||
+        toState === "/nps/performance"))) {
+    return true;
+  }
+}
+
+export function listenPartnerEvents(cb) {
+  window.addEventListener("message", function (e) {
+    if (e.data !== "" && typeof e.data === "string") {
+      /* Parse events */
+      var data = JSON.parse(e.data);
+      /* Match whitelisted domains */
+      if (e.origin !== data.targetOrigin) {
+        return;
+      }
+
+      /* Store event */
+      // setEvent(data);
+      /* return events to callback */
+      cb(data);
+    } else {
+      // setEvent(e.data);
+      cb(e.data);
+    }
+  });
+}
+
+export {
+  checkBeforeRedirection, 
+  checkAfterRedirection, 
+  backButtonHandler
 }

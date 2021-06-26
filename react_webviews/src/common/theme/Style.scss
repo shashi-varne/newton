@@ -15,7 +15,7 @@
 @mixin fadein-animation-base {
   animation: container-animation-fadein ease 0.15s; 
   // animation: container-animation-left-to-right ease 0.2s;
-
+  
   animation-iteration-count: 1; 
   animation-fill-mode: forwards;
 }
@@ -36,9 +36,13 @@ body[data-device="web"] #root {
   background: #f3f4f6;
 }
 
+button {
+  font-family: "Rubik", "Roboto", sans-serif;
+}
+
 body[data-device="web"] {
   height: 100%;
-
+  
   .generic-error-dialog .overlay {
     max-width: var(--desktop-width);
     margin: 0 auto;
@@ -61,17 +65,17 @@ body[data-device="web"] {
   .MuiAppBar-positionFixed {
     left: 0 !important;
   }
-
+  
   .FlexItem1-withProvider-footer .text-block-1 {
     width: auto;
   }
-
+  
   .Header {
     max-width: var(--desktop-width);
     margin: 0 auto;
     box-shadow: none;
   }
-
+  
   .Footer {
     max-width: fit-content;
     position: relative !important;
@@ -334,9 +338,8 @@ body[data-device="web"] {
   }
 
   .MuiDialogActions-root {
-    margin: 0 auto;
+    margin: 20px auto;
     width: fit-content;
-    margin-bottom: 20px;
   }
 
   .FooterImage {
@@ -480,7 +483,6 @@ body[data-device="web"] .Container {
   margin-bottom: 15px;
   color: rgb(68, 68, 68);
   font-size: 14px;
-  font-family: "Roboto";
   font-weight: 500;
 }
 
@@ -578,7 +580,6 @@ button {
   color: #ffffff;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Roboto";
 }
 
 .FooterSummaryLayout_hint {
@@ -675,6 +676,13 @@ button {
   margin-right: 10px;
 }
 
+.resume-hero-container{
+  text-align: center;
+  .resume-hero-img{ 
+    width: 320px !important;
+    height: 160px !important;
+  }
+}
 .resume-page-content{
   font-size: 14px;
   color: grey;
@@ -682,7 +690,24 @@ button {
   line-height: 20px;
 }
 .fyntune-landing{
-  font-family: "Roboto", sans-serif;
+  font-family: "Rubik", "Roboto", sans-serif;
+  
+  .rct-subtitle-frequency{
+    font-size: 20px;
+    font-weight: 400;
+  }
+  .rct-subtitle-frequency-value{
+    font-size: 16px;
+    font-weight: 300; 
+  }
+  .resume-card-logo{
+    width: 70px !important;
+    height: 50px !important;
+  }
+}
+.fyntune-how-to-step{
+  width: 70px !important;
+  height: 60px !important;
 }
 .fyntune-heading {
   font-size: 17px;
@@ -746,8 +771,9 @@ button {
 .landing-hero-container{
   width: 100%;
 }
-.landing-hero-img{
+.fyntune-landing-hero-img{
   width: 100%;
+  min-height: 160px;
   object-fit: cover;
 }
 
@@ -767,7 +793,6 @@ button {
   font-size: 18px;
   color: #79838F;
   line-height: 25px;
-  font-family: "Roboto";
 }
 
 .resume-card {
@@ -831,7 +856,6 @@ input#pan {
   padding: 20px 0;
   color: #444;
   font-size: 14px;
-  font-family: "Roboto";
   font-weight: 500;
 }
 
@@ -1164,7 +1188,6 @@ input#pan {
   color: rgb(74, 74, 74);
   margin-top: 0;
   font-size: 20px;
-  font-family: "Roboto";
   font-weight: 500;
   text-align: center;
 }
@@ -1174,7 +1197,6 @@ input#pan {
   margin-top: 10px;
   margin-bottom: 0;
   font-size: 16px;
-  font-family: "Roboto";
   text-align: center;
 }
 
@@ -1432,6 +1454,10 @@ $header-title-font-size: 20px;
   }
   .common-steps-images_steps{
     margin: 20px 0 0 0;
+      .what-is-covered-img{
+        width: 70px !important;
+        height: 60px !important;
+      }
   }
 }
 
@@ -1475,6 +1501,17 @@ $header-title-font-size: 20px;
       margin: 0px;
     }
   }
+}
+
+.Imgc-title-img{
+  height: 100px !important;
+  width: 100px !important;
+  margin-right: 45px !important;
+}
+
+.Imgc-title-img2{
+  height: 112px !important;
+  width: 172px !important;
 }
 
 .generic-page-title {
@@ -1538,6 +1575,18 @@ $header-title-font-size: 20px;
   .horizontal-images-scroll {
     display: flex;
     width: fit-content;
+    .imgc-space.image{
+      width: 218px !important;
+      height: 164px !important;
+    }
+    .imgc-space2.image{
+      width: 280px !important;
+      height: 160px !important;
+    }
+    .imgc-space3.image{
+      width: 170px !important;
+      height: 115px !important;
+    }
     .image {
       margin: 0 20px 0px 0;
       border-radius: 4px;
@@ -1545,7 +1594,9 @@ $header-title-font-size: 20px;
     }
   }
 }
-
+.imgc-space{
+  margin-right: 0 !important;
+}
 
 .common-faqs {
   .common-faqs-tile {
@@ -1615,6 +1666,10 @@ $header-title-font-size: 20px;
   margin-left: 10px;
 }
 
+.loan-with-provider{
+  margin: 10px !important;
+  margin-left: 0px !important
+}
 .FlexItem1-withProvider-footer .text-block-2 {
   color: #0a1d32;
   font-size: 15px;
@@ -1658,7 +1713,9 @@ $header-title-font-size: 20px;
     margin: 0;
   }  
 }
+// TODO: Move this into WVBottomSheet.scss
 
+// TODO: Move this into WVBottomSheet.scss
 #bottom-popup .MuiDialog-paper {
   position: fixed;
   width: 100%;
@@ -1726,7 +1783,7 @@ $header-title-font-size: 20px;
   width: 100%;
   border: 1px solid #aaa;
   background-color: #fff;
-  font-family: Helvetica, sans-serif;
+  font-family: "Rubik", "Roboto", sans-serif;
   font-weight: 300;
   font-size: 16px;
   border-bottom-left-radius: 4px;
@@ -1952,10 +2009,6 @@ $header-title-font-size: 20px;
       border: 1px solid var(--primary);
     }
   }
-}
-
-.mobile-navbar-menu{
-  margin-left: auto;
 }
   
 .OTP-title{

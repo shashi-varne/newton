@@ -1,21 +1,21 @@
 import React, { useState, useRef } from 'react'
 import Container from '../common/Container'
-import { storageService, isEmpty } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
-import { navigate as navigateFunc } from '../common/functions'
-import { getConfig, getBase64 } from 'utils/functions'
+import { getConfig, getBase64, navigate as navigateFunc } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import "./commonStyles.scss";
+import { nativeCallback } from '../../utils/native_callback'
 
+const config = getConfig();
+const productName = config.productName;
+const isWeb = config.Web;
 const Sign = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
-  const productName = getConfig().productName;
-  const isWeb = getConfig().isWebOrSdk;
   const inputEl = useRef(null)
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
@@ -61,17 +61,18 @@ const Sign = (props) => {
     })
   }
 
-  const {kyc, isLoading} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const handleUpload = (method_name) => {
-    if(getConfig().html_camera)
+    if(isWeb)
       inputEl.current.click()
     else
       native_call_handler(method_name, 'selfie', 'selfie.jpg', 'front')
   }
 
-  const handleChange = (event) => {
+  const handleChange = (type) => (event) => {
     event.preventDefault();
+    sendEvents('get_image', type)
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
 
@@ -87,37 +88,60 @@ const Sign = (props) => {
   }
 
   const handleSubmit = async () => {
+    sendEvents('next')
     const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
-      const result = await upload(file, 'identification')
-      storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/upload/progress')
+      const response = await upload(file, 'identification')
+      if(response.status_code === 200) {
+        const result = response.result
+        updateKyc(result.kyc);
+        navigate('/kyc/upload/progress')
+      } else {
+        throw new Error(response?.result?.error || response?.result?.message || "Something went wrong")
+      }
     } catch (err) {
+      toast(err?.message)
       console.error(err)
     } finally {
-      console.log('uploaded')
       setIsApiRunning(false)
     }
   }
 
   
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "selfie_doc",
+        "type": type || "",
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
+      events={sendEvents("just_set_events")}
       skelton={isLoading || showLoader}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
       title="Upload Selfie"
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
+      data-aid='kyc-upload-selfie-screen'
     >
       {!isEmpty(kyc) && (
-        <section id="kyc-upload-pan">
-          <div className="sub-title">Ears must be visible</div>
+        <section id="kyc-upload-pan" data-aid='kyc-upload-pan'>
+          <div className="sub-title" data-aid='kyc-sub-title'>Ears must be visible</div>
           {!isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {file && fileToShow && (
                 <img src={fileToShow} className="preview" alt="" />
               )}
@@ -130,13 +154,13 @@ const Sign = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '320px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
-                <div className="open-camera">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
+                <div className="open-camera" data-aid='kyc-open-camera'>
                   <input
                     ref={inputEl}
                     type="file"
                     className="kyc-upload"
-                    onChange={handleChange}
+                    onChange={handleChange('open-camera')}
                     accept="image/*"
                     capture
                   />
@@ -158,14 +182,14 @@ const Sign = (props) => {
                         </g>
                       </svg>
                     )}
-                    <div className="upload-action">open camera</div>
+                    <div className="upload-action" data-aid='kyc-open-camera-text'>open camera</div>
                   </button>
                 </div>
               </div>
             </div>
           )}
           {isWeb && (
-            <div className="kyc-doc-upload-container">
+            <div className="kyc-doc-upload-container" data-aid='kyc-doc-upload-container'>
               {file && fileToShow && (
                 <img
                   src={fileToShow}
@@ -182,14 +206,14 @@ const Sign = (props) => {
                   style={{ display: 'block', margin: '0 auto', width: '320px' }}
                 />
               )}
-              <div className="kyc-upload-doc-actions">
+              <div className="kyc-upload-doc-actions" data-aid='kyc-upload-doc-actions'>
                 <input
                   ref={inputEl}
                   type="file"
                   className="kyc-upload"
-                  onChange={handleChange}
+                  onChange={handleChange('gallery')}
                 />
-                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button">
+                <button onClick={() => handleUpload("open_gallery")} className="kyc-upload-button" data-aid='kyc-upload-btn'>
                   {!file && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -203,7 +227,7 @@ const Sign = (props) => {
                       </g>
                     </svg>
                   )}
-                  <div className="upload-action">Open Gallery</div>
+                  <div className="upload-action" data-aid='kyc-open-gallery-text'>Open Gallery</div>
                 </button>
               </div>
             </div>

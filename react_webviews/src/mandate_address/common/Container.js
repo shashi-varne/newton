@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import { getConfig } from 'utils/functions';
  
 import {didMount ,commonRender} from '../../common/components/container_functions';
+import { getBasePath } from '../../utils/functions';
  
 class Container extends Component {
  constructor(props) {
@@ -22,9 +23,13 @@ class Container extends Component {
  redirectCallback(type) {
    let url;
    if (type === 'back') {
-     url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=back&code=400&destination=';
+    // Added for testing
+     url = `${getBasePath()}/page/invest/campaign/callback?name=mandate&message=back&code=400&destination=`
+    //  url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=back&code=400&destination=';
    } else {
-     url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
+    // Added for testing
+     url = `${getBasePath()}/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=`
+    //  url = 'http://app.fisdom.com/#/page/invest/campaign/callback?name=mandate&message=success&code=200&destination=';
    }
    window.location.replace(url);
  }

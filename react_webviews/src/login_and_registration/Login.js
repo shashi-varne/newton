@@ -7,6 +7,7 @@ import { initialize } from "./function";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
+import { nativeCallback } from "../utils/native_callback";
 
 const config = getConfig();
 class Login extends Component {
@@ -43,12 +44,26 @@ class Login extends Component {
     this.setState({ form_data: form_data });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
+    if(loginType !== "email")
+      this.sendEvents();
     if (loginType === "email") keys_to_check = ["email", "password"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
+    event.preventDefault()
   };
+
+  sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'otp sent to user',
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     let {
@@ -60,7 +75,7 @@ class Login extends Component {
       googleUrl,
     } = this.state;
     return (
-      <div className="login">
+      <div className="login" data-aid='login'>
         <div className="header">
           <img src={require(`assets/${config.logo}`)} alt="logo" />
         </div>
@@ -71,15 +86,16 @@ class Login extends Component {
               alt="login"
             />
           </div>
-          <div className="login-form">
-            <div className="header-text">LOGIN</div>
-            <div className="login-type">
+          <div className="login-form" data-aid='login-form'>
+            <div className="header-text" data-aid='login-text'>LOGIN</div>
+            <div className="login-type" data-aid='login-type'>
               <div
                 className="text"
                 style={{
                   fontWeight: loginType === "mobile" ? "bold" : "normal",
                 }}
                 onClick={() => this.setLoginType("mobile")}
+                data-aid='mobile-text'
               >
                 MOBILE
                 {loginType === "mobile" && <div className="underline"></div>}
@@ -91,16 +107,17 @@ class Login extends Component {
                     fontWeight: loginType === "email" ? "bold" : "normal",
                   }}
                   onClick={() => this.setLoginType("email")}
+                  data-aid='email-text'
                 >
                   EMAIL
                   {loginType === "email" && <div className="underline"></div>}
                 </div>
               )}
             </div>
-            <div className="form">
+            <form className="form" data-aid='form' onSubmit={this.handleClick} >
               {loginType === "mobile" && (
                 <div className="form-field">
-                  <div className="country-code">
+                  <div className="country-code" data-aid='country-code'>
                     <DropdownWithoutIcon
                       onChange={this.handleChange("code")}
                       error={!!form_data.code_error ? true : false}
@@ -122,6 +139,7 @@ class Login extends Component {
                     id="mobile"
                     label="Enter mobile number"
                     name="mobile"
+                    inputMode="numeric"
                     onChange={this.handleChange("mobile")}
                     autoFocus
                   />
@@ -157,7 +175,7 @@ class Login extends Component {
                     />
                   </div>
                   <div
-                    className="forgot_password"
+                    className="forgot_password" data-aid='forgot-password'
                     onClick={() => this.navigate("forgot-password")}
                   >
                     FORGOT PASSWORD?
@@ -165,39 +183,40 @@ class Login extends Component {
                 </>
               )}
               <Button
+                dataAid='login-btn'
                 buttonTitle="LOGIN"
+                buttonType="submit"
                 onClick={this.handleClick}
                 showLoader={isApiRunning}
                 style={{
                   width: "100%",
                   letterSpacing: "2px",
                   minHeight: "45px",
-                  borderRadius: `${
-                    config?.uiElements?.button?.borderRadius || "2px"
-                  }`,
+                  borderRadius: `${config?.uiElements?.button?.borderRadius || "2px"
+                    }`,
                 }}
               />
               {productName !== "finity" && (
-                <div className="social-block">
+                <div className="social-block" data-aid='social-block'>
                   <a
-                    className="socialSignupBtns facebookBtn"
+                    className="socialSignupBtns facebookBtn" data-aid='social-signupbtns-facebookbtn'
                     href={facebookUrl}
                   >
                     FACEBOOK
                   </a>
-                  <a className="socialSignupBtns googleBtn" href={googleUrl}>
+                  <a className="socialSignupBtns googleBtn" data-aid='social-signupbtns-googlebtn' href={googleUrl}>
                     GOOGLE
                   </a>
                 </div>
               )}
-            </div>
+            </form>
             {productName !== "finity" && (
-              <div className="footer" onClick={() => this.navigate("register")}>
-                NEW USER? <span>REGISTER</span>
+              <div className="footer" data-aid='footer' onClick={() => this.navigate("register")}>
+                NEW USER? <span data-aid='register-btn'>REGISTER</span>
               </div>
             )}
             {productName === "finity" && (
-              <div className="features">
+              <div className="features" data-aid='login-features'>
                 <div className="item">
                   <img src={require(`assets/icons-07.png`)} alt="" />
                   <div className="title">Bank Grade Security</div>
@@ -224,10 +243,10 @@ class Login extends Component {
                 </div>
               </div>
             )}
-            <div className="agree-terms">
-              By signing in, you agree to fisdom's{" "}
+            <div className="agree-terms" data-aid='agree-terms'>
+              By signing in, you agree to {config.productName}'s{" "}
               <a
-                href="https://www.fisdom.com/terms/"
+                href={config.termsLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -235,7 +254,7 @@ class Login extends Component {
               </a>{" "}
               and{" "}
               <a
-                href="https://www.fisdom.com/privacy/"
+                href={config.privacyLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >

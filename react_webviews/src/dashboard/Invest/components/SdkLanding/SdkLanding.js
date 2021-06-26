@@ -12,6 +12,7 @@ import CampaignDialog from '../../mini-components/CampaignDialog';
 import './SdkLanding.scss';
 import VerificationFailedDialog from '../../mini-components/VerificationFailedDialog';
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
+import { nativeCallback } from '../../../../utils/native_callback';
 
 class SdkLanding extends Component {
   constructor(props) {
@@ -130,6 +131,10 @@ class SdkLanding extends Component {
     }
   };
 
+  goBack = () => {
+    nativeCallback({action: "exit_web"})
+  }
+
   render() {
     let {
       isReadyToInvestBase,
@@ -149,16 +154,18 @@ class SdkLanding extends Component {
         skelton={this.state.show_loader}
         noFooter={true}
         title='Hello'
-        logo
+        logo={true}
         notification
         handleNotification={this.handleNotification}
         background='sdk-background'
         classHeader={this.state.headerStyle ? 'sdk-partner-header' : 'sdk-header'}
         showLoader={this.state.show_loader}
+        headerData={{goBack:this.goBack}}
+        data-aid='sdk-landing-screen'
       >
-        <div className='sdk-landing'>
+        <div className='sdk-landing' data-aid='sdk-landing'>
           {!this.state.kycStatusLoader ? (
-            <div className='generic-page-subtitle'>
+            <div className='generic-page-subtitle' data-aid='generic-page-subtitle'>
               {isReadyToInvestBase
                 ? ' Your KYC is verified, You’re ready to invest'
                 : 'Let’s make your money work for you!'}
@@ -171,7 +178,7 @@ class SdkLanding extends Component {
 
           {/* Marketing Banners */}
           {!isEmpty(partner?.landing_marketing_banners) && (
-            <div className='landing-marketing-banners'>
+            <div className='landing-marketing-banners' data-aid='landing-marketing-banners'>
               {partner?.landing_marketing_banners?.length === 1 ? (
                 <div className='single-marketing-banner'>
                   <img
@@ -181,7 +188,7 @@ class SdkLanding extends Component {
                   />
                 </div>
               ) : (
-                <div className='marketing-banners-list'>
+                <div className='marketing-banners-list' data-aid='marketing-banners-list'>
                   {partner?.landing_marketing_banners.map((el, idx) => (
                     <div className='marketing-banner-icon-wrapper' key={idx} onClick={this.handleMarkettingBanner(el?.path)}>
                       <img src={require(`assets/${el.image}`)} alt='' style={{ width: '100%' }} />

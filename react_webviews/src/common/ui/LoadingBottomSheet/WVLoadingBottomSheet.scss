@@ -1,0 +1,63 @@
+body[data-device="web"]{
+  #wv-loading-bottom-sheet {
+    .MuiDialog-paper {
+      position: unset;
+      width: 100%;
+      bottom: unset;
+      left: unset;
+      border-radius: 8px;
+    }
+  }
+}
+  
+
+.wv-loading-bs {
+  .MuiDialog-paper {
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    left: -20px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .MuiDialogActions-root {
+    margin: 0;
+  }
+
+  .wv-lb-content {
+    padding: 15px;
+    word-break: break-word;
+
+    .wv-lbc-gif {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .wv-lbc-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+      margin: 20px 0;
+      font-weight: bold;
+      font-size: 15px;
+      line-height: 24px;
+      color: var(--dark);
+      
+      span {
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 21px;
+        color: var(--primary);
+      }
+    }
+    
+    .wv-lbc-subtitle {
+      color: var(--steelgrey);
+      font-size: 13px;
+      line-height: 21px;
+      margin-top: 5px;
+    }
+  }
+}

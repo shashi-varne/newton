@@ -10,7 +10,7 @@ import equity_icon from 'assets/finity/equity_icon.svg';
 import debt_icon from 'assets/finity/debt_icon.svg';
 import hybrid_icon from 'assets/finity/hybrid_icon.svg';
 import goal_icon from 'assets/finity/goal_icon.svg';
-import { navigate as navigateFunc } from '../../common/commonFunctions'
+import { navigate as navigateFunc } from "utils/functions";
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
 import { getConfig, isIframe } from "utils/functions";
@@ -19,6 +19,8 @@ import { getTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
 import isEmpty from 'lodash/isEmpty';
 import './Explore.scss';
+import { nativeCallback } from '../../../../utils/native_callback'
+import { flowName } from '../../constants'
 
 const iframe = isIframe();
 const isMobileDevice = getConfig().isMobileDevice;
@@ -71,18 +73,36 @@ const InvestExplore = (props) => {
   }
   const navigate = navigateFunc.bind(props)
   const goNext = (title) => () => {
-    navigate(`explore/${title}`, null, false, props.location.search)
+    sendEvents('next', title)
+    navigate(`/invest/explore/${title}`)
   }
 
   const handleRightIconClick = () => {
-    props.history.push({
-      pathname: `/diy/invest/search`,
-      search: getConfig().searchParams,
-    });
+    navigate("/diy/invest/search")
+  }
+
+  const sendEvents = (userAction, cardClicked) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "screen_name": "explore all mutual fund",
+        "user_action": userAction || "",
+        "card_clicked": cardClicked || "",
+        "flow": flowName['diy'],
+        "source": ""
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   }
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
+      data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
       title={iframe && isMobileDevice ? "" : "Explore All Mutual Funds"}
@@ -96,10 +116,10 @@ const InvestExplore = (props) => {
     >
       {
         iframe && partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :
-      <section className="invest-explore-cards" id="invest-explore">
+      <section className="invest-explore-cards" id="invest-explore" data-aid='invest-explore'>
         <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (
-          <div key={title} onClick={goNext(title)}>
+          <div key={title} onClick={goNext(title)} data-aid={`explore-mf-${title}`}>
             <InvestExploreCard
               title={title}
               description={description}
@@ -107,7 +127,7 @@ const InvestExplore = (props) => {
               />
           </div>
         ))}
-        <article className="invest-explore-quote">
+        <article className="invest-explore-quote" data-aid='invest-explore-quote'>
           "When you invest you are buying a day you don’t have to work"
         </article>
       </section>

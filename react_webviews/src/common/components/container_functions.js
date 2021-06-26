@@ -1,5 +1,5 @@
 
-import { getConfig, setHeights, isIframe } from 'utils/functions';
+import { getConfig, setHeights, listenPartnerEvents, isIframe } from 'utils/functions';
 // import { nativeCallback } from "utils/native_callback";
 import Banner from 'common/ui/Banner';
 import UiSkelton from 'common/ui/Skelton';
@@ -19,6 +19,7 @@ import '../../utils/native_listener';
 import { Imgc } from '../../common/ui/Imgc';
 import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
+import { checkAfterRedirection, backButtonHandler } from "utils/functions";
 import { isFunction } from 'lodash';
 
 let start_time = '';
@@ -27,6 +28,7 @@ const isMobileDevice = getConfig().isMobileDevice;
 
 export function didMount() {
     start_time = new Date();
+    const config = getConfig();
 
     this.getHeightFromTop = getHeightFromTop.bind(this);
     this.onScroll = onScroll.bind(this);
@@ -43,9 +45,15 @@ export function didMount() {
     this.commonRender = commonRender.bind(this);
     this.headerGoBack = headerGoBack.bind(this);
     this.renderGenericError = renderGenericError.bind(this);
+    this.checkAfterRedirection = checkAfterRedirection.bind(this);
+    this.backButtonHandler = backButtonHandler.bind(this);
+
+    const fromState = this.props?.location?.state?.fromState || "";
+    const toState = this.props?.location?.state?.toState || "";
+    this.checkAfterRedirection(this.props, fromState, toState);
 
     this.setState({
-        productName: getConfig().productName,
+        productName: config.productName,
         mounted: true,
         force_show_inpage_title: true,
         inPageTitle: true
@@ -58,6 +66,19 @@ export function didMount() {
     setHeights({ 'header': true, 'container': false });
 
     let that = this;
+    if (config.isIframe) {
+        const partnerEvents = function (res) {
+            switch (res.type) {
+              case "back_pressed":
+                that.historyGoBack();
+                break;
+  
+              default:
+                break;
+            }
+        };
+        listenPartnerEvents(partnerEvents);
+    }
     window.callbackWeb.add_listener({
         type: 'back_pressed',
         go_back: function () {
@@ -116,8 +137,7 @@ export function commonRender(props_base) {
 
     if (this.state.mounted) {
         return (
-
-   <div className={this.addContainerClass(props_base)}>
+            <div className={this.addContainerClass(props_base)} data-aid={`${this.props['data-aid']}-parent-container`}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && !iframe  && !this.props.loaderWithData && <Header
@@ -147,7 +167,8 @@ export function commonRender(props_base) {
                     hideBack={this.props.hideBack}
                     logo={this.props.logo}
                     notification={this.props.notification}
-                    handleNotification={this.props.handleNotification}          
+                    handleNotification={this.props.handleNotification}  
+                    noBackIcon={this.props.noBackIcon}        
                 />
                 }
                 {
@@ -192,7 +213,6 @@ export function commonRender(props_base) {
                         type={this.props.skelton}
                     />
                 }
-
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
@@ -240,6 +260,9 @@ export function commonRender(props_base) {
                         project={this.props.project || this.state.project}
                         dualbuttonwithouticon={this.props.dualbuttonwithouticon}
                         twoButton={this.props.twoButton}
+                        twoButtonVertical={this.props.twoButtonVertical}
+                        button1Props={this.props.button1Props}
+                        button2Props={this.props.button2Props}
                         buttonOneTitle={this.props.buttonOneTitle}
                         buttonTwoTitle={this.props.buttonTwoTitle}
                         handleClickOne={this.props.handleClickOne}
@@ -300,6 +323,7 @@ export function check_hide_header_title() {
 export function getHeightFromTop() {
     const Container = !iframe || isMobileDevice ? 'Container' : 'IframeContainer';
     var el = document.getElementsByClassName(Container)[0];
+    if(!el) return;
     var height = el.getBoundingClientRect().top;
     return height;
 }
@@ -604,10 +628,10 @@ export function calcReadtime(endtime) {
 export function new_header_scroll() {
     return (
 
-        <div id="header-title-page"
+        <div id="header-title-page" data-aid='header-title-page'
             style={this.props.styleHeader}
             className={`header-title-page  ${this.props.classHeader}`}>
-            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '' }}>
+            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }}  data-aid='header-title-page-text'>
                 {this.props.title}
             </div>
 

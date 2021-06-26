@@ -39,6 +39,17 @@
   }
 }
 
+.nps-upload-file-text {
+  text-align: center;
+  margin: 45px 0;
+  font-size: 16px;
+}
+
+.nrd-pension-house-image {
+  width: 70px;
+  height: 70px;
+}
+
 .nps-know-more-header {
   text-align: center;
   margin: 20px auto;
@@ -410,18 +421,6 @@
   .title {
     font-size: 15px;
     font-weight: 600;
-  }
-}
-
-.nps-upload {
-  .MuiInputLabel-root.MuiFormLabel-focused,
-  .MuiInputLabel-shrink {
-    font-size: 1.1rem !important;
-    font-weight: 800 !important;
-  }
-
-  .MuiMenu-paper {
-    width: 600px !important;
   }
 }
 

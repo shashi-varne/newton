@@ -1,4 +1,4 @@
-export const saveGoalMapper = {
+export const SAVE_GOAL_MAPPER = {
     retirement:[
         {
             name:"Simple",
@@ -69,10 +69,18 @@ export const saveGoalMapper = {
     ]
 }
 
-export const customGoalTargetMap = {
+export const CUSTOM_GOAL_TARGET_MAP = {
     retirement: 20000000,
     childeducation: 1000000,
     childwedding: 1500000,
     vacation: 200000,
     other: 20000000
 };
+
+export const SUBTYPE_NAME_MAP = {
+    retirement: 'retirement',
+    childeducation: "child's education",
+    childwedding: "child's wedding",
+    vacation: "vacation",
+    other: "other"
+}

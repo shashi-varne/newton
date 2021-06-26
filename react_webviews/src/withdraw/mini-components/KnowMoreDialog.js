@@ -8,9 +8,9 @@ const KnowMoreDialog = ({ open, onClose, message }) => {
   const productName = getConfig().productName
 
   return (
-    <Dialog open={open} onClose={onClose} id="withdraw-know-more">
-      <section className="withdraw-know-more-content">
-        <div className="header">
+    <Dialog open={open} onClose={onClose} id="withdraw-know-more" data-aid='withdraw-know-more'>
+      <section className="withdraw-know-more-content" data-aid='withdraw-know-more-content'>
+        <div className="header" data-aid='dialog-header'>
           <div className="title">
             Avoid taxes for better returns  
           </div>
@@ -19,7 +19,7 @@ const KnowMoreDialog = ({ open, onClose, message }) => {
             alt="Get Better Returns"
           />
         </div>
-        <p className="description">
+        <p className="description" data-aid='dialog-description'>
           {message}
         </p>
 
@@ -29,6 +29,7 @@ const KnowMoreDialog = ({ open, onClose, message }) => {
           fullWidth
           className="action-btn"
           onClick={onClose}
+          data-aid='action-btn'
         >
           GOT IT
         </Button>

@@ -2,13 +2,14 @@ import React from "react";
 import Container from "../../common/Container";
 import { isEmpty } from "utils/validators";
 import { getPathname } from "../../constants";
-import { navigate as navigateFunc } from "../../common/functions";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { Imgc } from "common/ui/Imgc";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const Action = (props) => {
   const goBack = () => {
+    sendEvents('no')
     props.history.goBack();
   };
   const params = props?.match?.params || {};
@@ -18,6 +19,7 @@ const Action = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
+    sendEvents('yes')
     if (action === "cancel") {
       navigate(`${getPathname.pauseCancelDetail}${action}/0`);
       return;
@@ -28,8 +30,26 @@ const Action = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": "sip_pause_cancel",
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "Request Confirmation",
+        "operation": action
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      data-aid='reports-action-screen'
+      events={sendEvents("just_set_events")}
       hidePageTitle={true}
       twoButton={true}
       buttonOneTitle="YES"
@@ -38,17 +58,17 @@ const Action = (props) => {
       handleClickTwo={() => goBack()}
       dualbuttonwithouticon
     >
-      <div className="reports-sip-action">
+      <div className="reports-sip-action" data-aid='reports-sip-action'>
         <Imgc
           src={require(`assets/${productName}/sip_action_illustration.svg`)}
           className="top-img"
         />
-        <p className="light-text">
+        <p className="light-text" data-aid='reports-light-text'>
           We highly recommend to stay invested for at least 3 years to get the
           best benefit of SIP.
         </p>
         {action === "cancel" && (
-          <div className="cancel">
+          <div className="cancel" data-aid='reports-cancel'>
             <div className="light-text">
               Or, you can also Pause for few months and restart later.
             </div>
@@ -61,7 +81,7 @@ const Action = (props) => {
             </div>
           </div>
         )}
-        <div>Do you still want to {action} SIP?</div>
+        <div data-aid='reports-action-message'>Do you still want to {action} SIP?</div>
       </div>
     </Container>
   );

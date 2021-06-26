@@ -3,10 +3,13 @@ import Container from '../../../common/Container';
 import InvestType from '../../mini-components/InvestType';
 import toast from 'common/ui/Toast'
 
-import { navigate as navigateFunc, isRecurring } from '../../common/commonFunctions';
+import { isRecurring } from '../../common/commonFunctions';
+import { navigate as navigateFunc } from 'utils/functions';
 import moment from 'moment';
 import useFunnelDataHook from '../../common/funnelDataHook';
 import "../../commonStyles.scss"
+import { nativeCallback } from '../../../../utils/native_callback';
+import { flowName } from '../../constants';
 
 const term = 3;
 const currentYear = moment().year();
@@ -34,6 +37,7 @@ const Landing = (props) => {
   const { initFunnelData } = useFunnelDataHook();
 
   const fetchRecommendedFunds = async () => {
+    sendEvents('next')
     const appendToFunnelData = {
       amount: 50000,
       term: investTypeDisplay === '3Y' ? 3 : 1,
@@ -60,23 +64,42 @@ const Landing = (props) => {
   };
 
   const goNext = () => {
-    navigate('investsurplus/amount');
+    navigate('/invest/investsurplus/amount');
   };
 
   const handleChange = (type) => {
     setInvestTypeDisplay(type);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'mf_investment',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "select years",
+        "years_selected": investTypeDisplay === "1Y" ? "less than 1" : "1 to 3 years",
+        "flow": flowName['investsurplus']
+        }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       classOverRide='pr-error-container'
       buttonTitle='NEXT'
       showLoader={loader}
       title='Park Money'
       handleClick={fetchRecommendedFunds}
       classOverRideContainer='pr-container'
+      data-aid='park-monkey-screen'
     >
-      <section className='invest-amount-common'>
+      <section className='invest-amount-common' data-aid='park-monkey-page'>
         <InvestType
           baseData={timeOptionsData}
           selected={investTypeDisplay}

@@ -5,6 +5,8 @@ import Api from "utils/api";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "../../../utils/validators";
 import { getConfig } from "utils/functions";
+import { nativeCallback } from "../../../utils/native_callback";
+import { getBasePath } from "../../../utils/functions";
 
 class NpsInvestments extends Component {
   constructor(props) {
@@ -35,7 +37,7 @@ class NpsInvestments extends Component {
     };
 
     campaigns.forEach(item => {
-      if (item.campaign === 'nps_esign') {
+      if (item.campaign.name === 'nps_esign') {
         npscampaign = true;
         npsCampaignData = item;
       }
@@ -85,7 +87,7 @@ class NpsInvestments extends Component {
           nps_data: nps_data
         })
       } else {
-        let title1 = result.error || result.message || "Something went wrong!";
+        let title1 = result.message || result.error || "Something went wrong!";
         this.setState({
           title1: title1,
         });
@@ -104,15 +106,15 @@ class NpsInvestments extends Component {
     }
   }
 
-  redirection = (url) => {
+  redirection = (url, name='',item) => {
+    this.sendEvents('next', 'NPS investments', item)
     let paymentRedirectUrl = encodeURIComponent(
-      window.location.origin + `/nps/investments` + getConfig().searchParams
+      getBasePath() + `/nps/investments` + getConfig().searchParams
     );
 
     let back_url = paymentRedirectUrl;
 
-    // for web no issue
-    if(getConfig().Web) {
+    if(getConfig().Web && name !== 'e-sign') {
       this.openInBrowser(url)
     } else {
       var payment_link = url;
@@ -134,26 +136,65 @@ class NpsInvestments extends Component {
   }
 
   optionClicked = (route, item) => {
-
+    this.sendEvents('next', 'NPS investments', item)
     let cardClicked = item;
     this.setState({
       cardClicked: cardClicked
     })
 
-    this.navigate(route, '', true);
+    this.navigate(route);
   }
 
   investMore = () => {
-    this.navigate('amount/one-time')
+    this.sendEvents('next')
+    const config = getConfig();
+    let _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "reports",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "nps",
+        },
+      },
+    };
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+
+    this.navigate('/nps/amount/one-time')
   }
 
   goBack = () => {
-    this.navigate('/invest', '', true);
+    this.sendEvents('back')
+    this.navigate('/invest');
+  };
+
+  sendEvents = (userAction, screenName, cardClicked) => {
+    let eventObj = {
+      event_name: "my_portfolio",
+      properties: {
+        user_action: userAction,
+        screen_name: screenName || "NPS investments",
+        card_click: cardClicked || "",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
 
   render() {
     return (
       <Container
+        data-aid='nps-investments-screen'
+        events={this.sendEvents("just_set_events")}
         fullWidthButton
         buttonTitle="INVEST MORE"
         title="NPS Investments"
@@ -167,10 +208,11 @@ class NpsInvestments extends Component {
         }}
       >
         <section className="page invest nps">
-          <div className="nps-investments">
+          <div className="nps-investments" data-aid='nps-investments'>
             {this.state.npscampaign && <div
+              data-aid='nps-npscampaign-list'
               className="list"
-              onClick={() => this.redirection(this.state.npsCampActionUrl)}
+              onClick={() => this.redirection(this.state.npsCampActionUrl, 'e-sign', 'nps activation pending')}
             >
               <div className="icon">
                 <img
@@ -182,7 +224,7 @@ class NpsInvestments extends Component {
               </div>
             </div>}
 
-            <div className="list" onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url)}>
+            <div className="list" data-aid='nps-tax-statement-list' onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url, '', 'tax statement')}>
               <div className="icon">
                 <img
                   alt=''
@@ -205,6 +247,7 @@ class NpsInvestments extends Component {
             {this.state.productName !== 'bfdlmobile' && (this.state.currentUser.kyc_registration_v2 === 'init' || 
             this.state.currentUser.kyc_registration_v2 === 'incomplete') &&
               <div
+                data-aid='nps-kyc-registration-v2-list'
                 className="list"
                 onClick={() => this.optionClicked('/kyc/journey', 'complete nps transaction')}
               >
@@ -223,6 +266,7 @@ class NpsInvestments extends Component {
               </div>}
             {this.state.nps_data && this.state.nps_data.portfolio_data.length > 0 && <div
               className="list"
+              data-aid='nps-track-performance-list'
               onClick={() => this.optionClicked('performance', 'track nps performance')}
             >
               <div className="icon">
@@ -239,6 +283,7 @@ class NpsInvestments extends Component {
             </div>}
             {this.state.nps_data && this.state.nps_data?.pending_orders?.length > 0 && <div
               className="list"
+              data-aid='nps-pending-order-list'
               onClick={() => this.optionClicked('pending', 'pending order')}
             >
               <div className="icon">

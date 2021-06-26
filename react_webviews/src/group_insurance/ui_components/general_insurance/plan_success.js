@@ -6,11 +6,12 @@ import shrink from 'assets/shrink_icn.png';
 import congratulations_fisdom from 'assets/ils_covid_success_fisdom.svg';
 import congratulations_myway from 'assets/ils_covid_success_myway.svg';
 import {
-  inrFormatDecimal
+  inrFormatDecimal, storageService
 } from '../../../utils/validators';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import {Imgc} from 'common/ui/Imgc';
 
 const product_config = {
   'PERSONAL_ACCIDENT': {
@@ -297,9 +298,9 @@ class PlanSuccessClass extends Component {
             <div className="AccordionTitle" onClick={() => this.toggleAccordian(props.key)}>
                 <div className="AccordionList">
                 <span className="AccordionList1">
-                  <img className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
+                  <Imgc className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
                 </span>
-                <span>{props.name}</span>
+                <span className="AccordianTitleValue">{props.name}</span>
               </div>
             </div>
             {this.state.accordianTab === props.key && this.renderAccordionBody(props.key)}
@@ -324,6 +325,7 @@ class PlanSuccessClass extends Component {
 
   handleClickTwo() {
     this.sendEvents('check_details');
+    storageService().setObject('backToInsuranceLanding', true);
     let path = '/group-insurance/common/reportdetails/' + this.state.lead_data.bhariaxa_policy_id;
     this.navigate(path);
   }
@@ -363,7 +365,7 @@ class PlanSuccessClass extends Component {
         skelton={this.state.skelton}
       >
         <div className="plan-success-heading">
-          <div className="plan-success-heading-icon"><img src={this.state.congratulations_icon} alt="" /></div>
+          <div className="plan-success-heading-icon"><Imgc className="plan-success-heading-img" src={this.state.congratulations_icon} alt="" /></div>
           <div className="plan-success-heading-title">Congratulations!</div>
           <div className="plan-success-heading-subtitle">{product_config[this.getProductKey()].top_title1} <span className="plan-success-heading-subtitle-bold">
             {product_config[this.getProductKey()].top_title2}</span>

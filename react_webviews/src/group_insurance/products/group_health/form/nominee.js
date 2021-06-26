@@ -72,7 +72,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         this.setState({
             form_data: form_data,
             lead: lead,
-            renderAppointee: !!(age && age < 18),
+            renderAppointee: !!(age && age < 18) && this.state.providerConfig.nominee_screen.showAppointee ? true :false,
         });
 
         this.setState({
@@ -212,7 +212,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
         
 
-        let relationMap = this.state.relationshipOptions.filter(data => data.value === relation);
+        let relationMap = this.state.relationshipOptions.filter(data => data.value.toLowerCase() === relation.toLowerCase());
 
         if (!relation || relationMap.length === 0) {
             form_data.relation_error = 'please select relation'
@@ -289,7 +289,24 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }        
             
-            this.updateLead(body);     
+            var keys_to_add = ['name', 'relation', 'dob'];
+            var current_state = {}
+            
+            for(var x in body.nominee_details){
+                if(keys_to_add.indexOf(x) >= 0){
+                    current_state[x] = body.nominee_details[x];
+                }
+            }
+            if(this.state.renderAppointee){
+                var appointee_data = body.nominee_details.appointee_details;
+                for(var y in appointee_data){
+                    if(keys_to_add.indexOf(y) >= 0){
+                        current_state[`appointee_${y}`] = appointee_data[y];
+                    }
+                }   
+            }
+
+            this.updateLead(body, '',  current_state);     
         }
     }
 

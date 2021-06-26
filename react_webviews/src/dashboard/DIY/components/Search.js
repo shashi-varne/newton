@@ -70,14 +70,15 @@ const Search = (props) => {
       title={iframe ? isMobileDevice ? 'Where do you want to invest?' : "" : "Search"}
       classOverRideContainer="diy-search-container-main"
       classOverRide="diy-search-container"
+      data-aid='diy-search-screen'
     >
-        <div className={`diy-search ${isMobileDevice ? "diy-search-mob" : ""}`}>
+        <div className={`diy-search ${isMobileDevice ? "diy-search-mob" : ""}`} data-aid='diy-search'>
       {
         iframe ? < IframeSearch value={value} handleChange={handleChange} />
         :
-        <div className="search-content">
+        <div className="search-content" data-aid='search-content'>
           <div className="search-option">
-            <div className="search-input">
+            <div className="search-input" data-aid='search-input'>
               <input
                 placeholder="Fund Search..."
                 value={value}
@@ -94,6 +95,7 @@ const Search = (props) => {
               )}
             </div>
             <div
+              data-aid='search-btn'
               className="search-button"
               style={{
                 cursor: value && value.length > 3 ? "pointer" : "not-allowed",
@@ -102,6 +104,11 @@ const Search = (props) => {
               <SearchIcon className="search-icon" />
             </div>
           </div>
+          {showErrorMessage && (
+            <div className="error-message message" data-aid='error-message message'>
+              Minimum 4 characters required
+            </div>
+          )}
         </div>
       }
       {showErrorMessage && (
@@ -121,10 +128,11 @@ const Search = (props) => {
         {!showLoader && fundResult && (
           <>
             {fundResult.length !== 0 && (
-              <div className="search-list">
+              <div className="search-list" data-aid='diy-search-list'>
                 {fundResult.map((fund, index) => {
                   return (
                     <div
+                      data-aid={`diy-fund-result-${index+1}`}
                       key={index}
                       className="text"
                       onClick={() => showFundInfo(fund)}
@@ -136,7 +144,7 @@ const Search = (props) => {
               </div>
             )}
             {fundResult.length === 0 && showNoFundmessage && (
-              <div className="message">No result found</div>
+              <div className="message" data-aid='diy-message'>No result found</div>
             )}
           </>
         )}

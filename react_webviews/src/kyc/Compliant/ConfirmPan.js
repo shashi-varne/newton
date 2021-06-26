@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { navigate as navigateFunc, panUiSet } from "../common/functions";
-import { getPathname } from "../constants";
+import { panUiSet } from "../common/functions";
+import { PATHNAME_MAPPER } from "../constants";
 import toast from "../../common/ui/Toast";
 import { kycSubmit } from "../common/api";
-import { getConfig } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../utils/native_callback";
 
 const ConfirmPan = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -19,7 +20,8 @@ const ConfirmPan = (props) => {
   const productName = getConfig().productName;
 
   const handleClick = () => {
-    navigate(getPathname.homeKyc, {
+    sendEvents('edit')
+    navigate(PATHNAME_MAPPER.homeKyc, {
       state: {
         isPremiumFlow: true,
         isEdit: true,
@@ -28,6 +30,7 @@ const ConfirmPan = (props) => {
   };
 
   const handleClick2 = async () => {
+    sendEvents('next')
     try {
       let dob = kyc.pan.meta_data.dob;
       let pan = kyc.pan?.meta_data?.pan_number;
@@ -48,17 +51,17 @@ const ConfirmPan = (props) => {
         (isUserCompliant || result.kyc.kyc_status === "compliant") &&
         (kycConfirmPanScreen || isPremiumFlow)
       ) {
-        navigate(getPathname.compliantPersonalDetails1);
+        navigate(PATHNAME_MAPPER.compliantPersonalDetails1);
       } else {
         if (isUserCompliant || result.kyc.kyc_status === "compliant") {
-          navigate(getPathname.journey);
+          navigate(PATHNAME_MAPPER.journey);
         } else {
           if (kyc.address.meta_data.is_nri) {
-            navigate(`${getPathname.journey}`, {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
             });
           } else {
-            navigate(`${getPathname.journey}`, {
+            navigate(`${PATHNAME_MAPPER.journey}`, {
               searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
             });
           }
@@ -72,9 +75,27 @@ const ConfirmPan = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      "event_name": 'premium_onboard',
+      "properties": {
+        "user_action": userAction || "",
+        "screen_name": "confirm_pan",
+        "initial_kyc_status":  "compliant",
+        "channel": getConfig().code    
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   return (
     <Container
       id="confirm-pan"
+      events={sendEvents("just_set_events")}
       buttonOneTitle="EDIT PAN"
       buttonTwoTitle="CONFIRM PAN"
       skelton={isLoading}
@@ -86,15 +107,16 @@ const ConfirmPan = (props) => {
       title='Confirm PAN'
       dualbuttonwithouticon={true}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
+      data-aid='kyc-confirm-pan-screen'
     >
-      <div className="kyc-compliant-confirm-pan">
-        <div className="kyc-main-subtitle">
+      <div className="kyc-compliant-confirm-pan" data-aid='kyc-compliant-confirm-pan'>
+        <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>
           Confirm your PAN to unlock premium onboarding
         </div>
-        <main>
+        <main data='kyc-compliant-confirm-pan'>
           <img alt="" src={require(`assets/crd_pan.png`)} />
           {kyc && (
-            <div className="pan-block-on-img">
+            <div className="pan-block-on-img" data-aid='kyc-pan_number'>
               <div className="user-name">{kyc.pan?.meta_data?.name}</div>
               <div className="pan-number">
                 PAN: <span>{panUiSet(kyc.pan?.meta_data?.pan_number)}</span>

@@ -21,6 +21,8 @@ import {  setLocalProviderData } from "./common_data";
 import MoreInfoAccordian from "../../../common/ui/MoreInfoAccordian";
 import GenericImageSlider from "../../../common/ui/GenericImageSlider";
 import {insuranceTypeMapper} from './constants';
+import {Imgc} from '../../../common/ui/Imgc'
+import { isEmpty } from "../../../utils/validators";
 
 const screen_name = "landing_screen";
 
@@ -74,7 +76,7 @@ class GroupHealthLanding extends Component {
         },
       ],
     };
-
+    var groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + this.state.providerConfig.key) || {}
     this.setState({
       stepsContentMapper: stepsContentMapper,
       offerImageData: screenData.offerImageData,
@@ -82,6 +84,7 @@ class GroupHealthLanding extends Component {
       whats_not_covered: screenData.whats_not_covered,
       screenData: screenData,
       openModuleData: openModuleData,
+      groupHealthPlanData
     });
   }
 
@@ -118,6 +121,8 @@ class GroupHealthLanding extends Component {
 
   async componentDidMount() {
    this.onload()
+   storageService().remove('reportSelectedTab');
+   storageService().remove('report_from_landing');
   }
 
   onload = async() =>{
@@ -197,21 +202,24 @@ class GroupHealthLanding extends Component {
     });
   };
   handleClick = () => {
+    let groupHealthPlanData = this.state.groupHealthPlanData;
     if(!this.state.tncChecked){
       toast('Please agree to the Terms and conditions');
       this.handleScroll();
-      return;
+      return
     }
 
-    let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + this.state.providerConfig.key) || {};
+    if(!isEmpty(groupHealthPlanData.application_data)){
+      groupHealthPlanData.application_data = {};
+      
+    }
     let post_body = groupHealthPlanData.post_body;
     if(post_body){
       delete post_body['quotation_id'];
       groupHealthPlanData.post_body  = post_body;
-      this.setLocalProviderData(groupHealthPlanData);
     }
     
-  
+    this.setLocalProviderData(groupHealthPlanData)
     this.sendEvents("next");
     storageService().setObject("resumeToPremiumHealthInsurance", false);
     this.navigate(this.state.providerConfig.get_next[screen_name]);
@@ -262,6 +270,11 @@ class GroupHealthLanding extends Component {
           storageService().set("health_insurance_application_id", this.state.applicationData.id);
           this.navigate("final-summary");
         } else {
+          var groupHealthPlanData = this.state.groupHealthPlanData;
+          if(!isEmpty(groupHealthPlanData.application_data)){
+            groupHealthPlanData.application_data = {};
+            this.setLocalProviderData(groupHealthPlanData)
+          }
           storageService().setObject("resumeToPremiumHealthInsurance", true);
           this.navigate(`plan-premium-summary`);
         }
@@ -336,7 +349,7 @@ class GroupHealthLanding extends Component {
             </div>
         </div>
             <div className="title-image">
-                <img src={require(`assets/${this.state.providerConfig.logo_card}`)} alt=""/>
+                <Imgc  className="insurance-logo-top-right" src={require(`assets/${this.state.providerConfig.logo_card}`)} alt=""/>
             </div>
         </div>
 
@@ -356,9 +369,10 @@ class GroupHealthLanding extends Component {
               <div className="rc-tile" style={{ marginBottom: 0 }}>
                 <div className="rc-tile-left">
                   <div className="">
-                    <img
+                    <Imgc
                       src={require(`assets/${this.state.providerConfig.logo_cta}`)}
                       alt=""
+                      style={{width: '50px'}}
                     />
                   </div>
                   <div className="rc-tile-premium-data">
@@ -403,8 +417,8 @@ class GroupHealthLanding extends Component {
           <div className="family-images" style={{ margin: "15px 0 15px 0", display: 'start', justifyContent: `${this.state.providerConfig.key === 'GMC' ? 'start' : 'space-between'}`}}>
             
             {this.state.providerConfig.member_assets.map((item, index) =>{
-              return <img
-              className="accident-plan-read-icon"
+              return <Imgc
+              className="imgc-box-big-img accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/${item}`)}
               alt=""
               style={{marginRight: `${this.state.providerConfig.key === 'GMC' ? '15px' : '0'}`}}
@@ -434,11 +448,13 @@ class GroupHealthLanding extends Component {
             data={this.state.whats_not_covered}
           />
           
-          <GenericImageSlider title="Key benefits" image_list={this.state.screenData.image_list[this.state.productName]}/>
+          <GenericImageSlider title="Key benefits" image_list={this.state.screenData.image_list[this.state.productName]} className={`Imgc-title-img2`}/>
 
           <HowToSteps
             style={{ margin: "20px 0px 0px 0px" }}
             baseData={this.state.stepsContentMapper}
+            classNameIcon={'imgc-box-landing'}
+            showSkelton={true}
           />
 
           <div
@@ -450,12 +466,13 @@ class GroupHealthLanding extends Component {
           <div className="generic-hr"></div>
           <div className="flex faq" onClick={() => this.openFaqs()}>
             <div>
-              <img
-                className="accident-plan-read-icon"
+              <Imgc
+                className="imgc-box-freq-img accident-plan-read-icon"
                 src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
                 alt=""
               />
             </div>
+            <div style={{ width: "10px" }} />
             <div>Frequently asked questions</div>
           </div>
           <div className="generic-hr" style={{ margin: "0px 0 40px 0" }}></div>
@@ -465,14 +482,15 @@ class GroupHealthLanding extends Component {
             style={{ padding: 0, margin: "20px 0 16px 0" }}
             onClick={() =>this.openPdf(this.state.common.details_doc, "read_document")}
             >
-            <img
+            <Imgc
               className="accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/ic_read.svg`)}
+              style={{width: '20px', minHeight: '20px', margin: 0}}
               alt=""
             />
             <div
               className="accident-plan-read-text"
-              style={{ color: getConfig().styles.primaryColor }}
+              style={{ color: getConfig().styles.primaryColor, marginLeft: '10px' }}
             >
               Read full-policy description
             </div>

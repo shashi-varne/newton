@@ -92,7 +92,10 @@ export async function initialize() {
     "main_landing_screen",
     "eligibility_screen",
     "recommended",
-    "system_error"
+    "system_error",
+    "bt_info_screen",
+    "mobile_verification",
+    "otp_verify"
   ];
 
   let idfc_dmi_screens = [
@@ -116,7 +119,7 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  if (this.state.screen_name === "calculator") {
+  if (this.state.screen_name === "calculator" || this.state.screen_name === "bt_info_screen") {
     this.onload();
   }
 
@@ -789,7 +792,7 @@ export async function get07State(body = {}) {
     } else if (result.idfc_07_state === "success" && !result.bt_eligible) {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else if (
-      result.idfc_07_state === "success" &&
+      (result.idfc_07_state === "success" || result.perfios_status === "bypass") &&
       result.vendor_application_status === "bt_bypass"
     ) {
       that.submitApplication({}, "one", "", "eligible-loan");
@@ -842,6 +845,7 @@ export async function submitApplication(
       "eligible_loan",
       "bank_upload",
       "perfios_state",
+      'bt_info_screen'
     ];
     this.setState({
       loaderWithData: screens.includes(this.state.screen_name),
@@ -1117,17 +1121,17 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-
   let { employment_type } = this.state.lead.application_info;
-  let maxAmount = employmentMapper[employment_type][1];
-
-  if (
-    form_data.amount_required &&
-    // eslint-disable-next-line
-    parseInt(form_data.amount_required) > maxAmount
-  ) {
-    form_data.amount_required_error = `Max loan amount for ${employmentMapper[employment_type][0]} is ${employmentMapper[employment_type][2]}`;
-    canSubmitForm = false;
+  if(employment_type){
+    let maxAmount = employmentMapper[employment_type.toLowerCase()][1];
+    if (
+      form_data.amount_required &&
+      // eslint-disable-next-line
+      parseInt(form_data.amount_required) > maxAmount
+    ) {
+      form_data.amount_required_error = `Max loan amount for ${employmentMapper[employment_type.toLowerCase()][0]} is ${employmentMapper[employment_type.toLowerCase()][2]}`;
+      canSubmitForm = false;
+    }
   }
 
   if (form_data.dob && !isValidDate(form_data.dob)) {

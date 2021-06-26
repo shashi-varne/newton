@@ -47,15 +47,20 @@ class Otp extends Component {
     this.setState({ otp: otp, otp_error: otp_error });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
+    event.preventDefault();
+    const { otp, isApiRunning } = this.state;
+    if(otp.length !== 4 || isApiRunning) {
+      return;
+    }
     if (this.state.forgot) {
       this.verifyForgotOtp({
-        otp: this.state.otp,
+        otp: otp,
       });
     } else {
       this.otpVerification({
         mobile_number: this.state.mobile_number,
-        otp: this.state.otp,
+        otp: otp,
       });
     }
   };
@@ -64,27 +69,27 @@ class Otp extends Component {
     let { isApiRunning, otp, otp_error } = this.state;
     let disabled = otp.length !== 4;
     return (
-      <div className="login otp">
+      <div className="login otp" data-aid='login-otp'>
         {!isMobileView && (
           <div className="header">
             <img src={require(`assets/${config.logo}`)} alt="logo" />
           </div>
         )}
         <div className={`${!isMobileView && "content"} otp-content`}>
-          <div className={`${isMobileView && "otp-model-mini"} otp-model`}>
+          <form className={`${isMobileView && "otp-model-mini"} otp-model`} onSubmit={this.handleClick} >
             {productName === "finity" && (
-              <div class="logo">
+              <div class="logo" data-aid='logo-text'>
                 <img src={require(`assets/finity_navlogo.png`)} alt="finity" />
                 <h5>Direct Mutual Funds | NPS</h5>
               </div>
             )}
             {isMobileView && productName !== "finity" && (
-              <div class="logo">
+              <div class="logo" data-aid='logo-text'>
                 <img src={require(`assets/logo_highres_f.png`)} alt="fisdom" />
                 <h5>Join 1000’s of Smart Investors</h5>
               </div>
             )}
-            <div className="otp-text">Enter OTP</div>
+            <div className="otp-text" data-aid='otp-text'>Enter OTP</div>
             <Input
               error={otp_error ? true : false}
               type="text"
@@ -92,12 +97,14 @@ class Otp extends Component {
               helperText={otp_error || ""}
               class="input"
               onChange={this.handleChange("otp")}
+              inputMode="numeric"
               autoFocus
             />
-            <div className="resend-otp" onClick={() => this.resendOtp()}>
+            <div className="resend-otp" data-aid='resend-otp' onClick={() => this.resendOtp()}>
               Resend OTP
             </div>
             <Button
+              dataAid='verify-btn'
               buttonTitle="VERIFY"
               onClick={this.handleClick}
               showLoader={isApiRunning}
@@ -112,7 +119,7 @@ class Otp extends Component {
                 }`,
               }}
             />
-          </div>
+          </form>
         </div>
       </div>
     );

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig, getBasePath } from 'utils/functions';
+import { getConfig, getBasePath, navigate as navigateFunc } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
-import { navigate as navigateFunc } from '../common/functions'
 import ConfirmBackModal from './confirm_back'
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
@@ -17,10 +16,11 @@ class ESignInfo extends Component {
       show_loader: false,
       productName: 'fisdom' || getConfig().productName,
       backModal: false,
-      dl_flow: false
+      dl_flow: false,
+      showAadharDialog: false,
     }
 
-    this.navigate = navigateFunc.bind(this.props);
+    this.navigate = navigateFunc.bind(props);
   }
 
   componentDidMount = () => {
@@ -55,7 +55,12 @@ class ESignInfo extends Component {
     this.setState({ backModal: false })
   }
 
+  closeAadharDialog = () => {
+    this.setState({showAadharDialog: false})
+  }
+
   handleClick = async () => {
+    this.sendEvents('next','e sign kyc')
     let basepath = getBasePath();
     const redirectUrl = encodeURIComponent(
       basepath + '/kyc-esign/nsdl' + getConfig().searchParams
@@ -109,6 +114,25 @@ class ESignInfo extends Component {
     }
   }
 
+  sendEvents = (userAction, screenName) => {
+    const kyc = storageService().getObject("kyc");
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "" ,
+        "screen_name": screenName || "",
+        "rti": "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": 'digi kyc'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  
   render() {
     const { show_loader, productName } = this.state;
     const headerData = {
@@ -118,33 +142,35 @@ class ESignInfo extends Component {
 
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         showLoader={show_loader}
         title='eSign KYC'
         handleClick={this.handleClick}
         buttonTitle='PROCEED'
         headerData={headerData}
         iframeRightContent={require(`assets/finity/esign-kyc.svg`)}
+        data-aid='kyc-esign-screen'
       >
         {
           !isIframe() &&
-          <div className="esign-image">
-          <img
-            src={require(`assets/${productName}/ils_esign_kyc.svg`)}
-            style={{ width: "100%" }}
-            alt="eSign KYC icon"
-            />
-        </div>
+            <div className="esign-image">
+              <img
+                src={require(`assets/${productName}/ils_esign_kyc.svg`)}
+                style={{ width: "100%" }}
+                alt="eSign KYC icon"
+                />
+            </div>
         }
-        <div className="esign-desc">
+        <div className="esign-desc" data-aid='esign-desc'>
           eSign is an online electronic signature service by UIDAI to facilitate <strong>Aadhaar holder to digitally sign</strong> documents.
         </div>
-        <div className="esign-subtitle">How to eSign documents</div>
-        <div className="esign-steps">
+        <div className="esign-subtitle" data-aid='esign-subtitle'>How to eSign documents</div>
+        <div className="esign-steps" data-aid='esign-steps'>
           <div className="step">
             <div className="icon-container">
               <img src={require(`assets/ic_verify_otp_${productName}.svg`)} alt="Verify OTP" />
             </div>
-            <div className="step-text">
+            <div className="step-text" data-aid='step-text-1'>
               1. Verify mobile and enter Aadhaar number
                 </div>
           </div>
@@ -152,7 +178,7 @@ class ESignInfo extends Component {
             <div className="icon-container">
               <img src={require(`assets/ic_esign_otp_${productName}.svg`)} alt="Esign OTP icon" />
             </div>
-            <div className="step-text">
+            <div className="step-text" data-aid='step-text-2'>
               2. Enter OTP recieved on your Aadhaar linked mobile number
                 </div>
           </div>
@@ -160,11 +186,11 @@ class ESignInfo extends Component {
             <div className="icon-container">
               <img src={require(`assets/ic_esign_done_${productName}.svg`)} alt="Esign Done icon" />
             </div>
-            <div className="step-text">
+            <div className="step-text" data-aid='step-text-3'>
               3. e-Sign is successfully done
                 </div>
           </div>
-          <div className="esign-bottom">
+          <div className="esign-bottom" data-aid='esign-bottom'>
             <div className="bottom-text">
               Initiative by
                 </div>

@@ -2,11 +2,14 @@ import { validateEmail } from "utils/validators";
 import toast from "common/ui/Toast";
 import Api from "utils/api";
 import { storageService, getUrlParams } from "utils/validators";
-import { getConfig } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { isEmpty } from "../utils/validators";
+import { nativeCallback } from "../utils/native_callback";
+import { getBasePath } from "../utils/functions";
 
 const isMobileView = getConfig().isMobileDevice;
 const errorMessage = "Something went wrong!";
+const basePath = getBasePath();
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.emailLogin = emailLogin.bind(this);
@@ -18,17 +21,37 @@ export function initialize() {
   this.resendOtp = resendOtp.bind(this);
   this.forgotPassword = forgotPassword.bind(this);
   this.verifyForgotOtp = verifyForgotOtp.bind(this);
-  this.navigate = navigate.bind(this);
+  this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
   let main_query_params = getUrlParams();
-  let { referrer, redirect_url } = main_query_params;
-  let referrerParam = referrer || "";
+  let { referrer = "" } = main_query_params;
+
+  let redirectUrl = encodeURIComponent(`${basePath}/`);
+  const partners = [
+    "hbl",
+    "sbm",
+    "flexi",
+    "medlife",
+    "life99",
+    "taxwin",
+    "ippb",
+    "quesscorp",
+  ];
+  const partner = storageService().get("partner") || "";
+  if (partners.includes(partner)) {
+    referrer = partner;
+    const deeplinkUrl = storageService().get("deeplink_url") || "";
+    if (deeplinkUrl) {
+      redirectUrl = deeplinkUrl;
+    }
+  }
+  const rebalancingRedirectUrl = main_query_params.redirect_url
+    ? `?redirect_url=${main_query_params.redirect_url}`
+    : "";
 
   let socialRedirectUrl = encodeURIComponent(
-    window.location.origin + "/social/callback" + redirect_url
-      ? "?redirect_url=" + redirect_url
-      : ""
+    basePath + "/social/callback" + rebalancingRedirectUrl
   );
 
   let facebookUrl =
@@ -36,17 +59,19 @@ export function initialize() {
     "/auth/facebook?redirect_url=" +
     socialRedirectUrl +
     "&referrer=" +
-    referrerParam;
+    referrer;
   let googleUrl =
     getConfig().base_url +
     "/auth/google?redirect_url=" +
     socialRedirectUrl +
     "&referrer=" +
-    referrerParam;
+    referrer;
   this.setState({
-    referrer: referrerParam,
+    referrer: referrer,
     facebookUrl: facebookUrl,
     googleUrl: googleUrl,
+    redirectUrl: redirectUrl,
+    rebalancingRedirectUrl: main_query_params.redirect_url,
   });
 }
 
@@ -97,17 +122,7 @@ export function formCheckFields(
     }
   }
 
-  let redirectUrl = encodeURIComponent(`${window.location.origin}/`);
-  let referrer = this.state.referrer || "";
-  const partners = ["hbl", "sbm", "flexi", "medlife", "life99", "taxwin"];
-  const partner = storageService().get("partner") || "";
-  if(partners.includes(partner)) {
-    referrer = partner;
-    const deeplinkUrl = storageService().get("deeplink_url") || "";
-    if(deeplinkUrl) {
-      redirectUrl = deeplinkUrl;
-    }
-  }
+  let { redirectUrl, referrer = "" } = this.state;
 
   let body = {};
   this.setState({ isApiRunning: "button" });
@@ -136,15 +151,25 @@ export function formCheckFields(
   }
 }
 
+export function setBaseHref() {
+  var myBaseHref =  document.getElementById('myBaseHref');
+  var pathname = window.location.pathname;
+  if(pathname.indexOf('appl/webview') !== -1) {
+    var myBaseHrefUrl = '/appl/webview/' + pathname.split('/')[3] +'/' ;
+    myBaseHref.href = myBaseHrefUrl;
+    window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+  }
+}
+
 export async function emailLogin(body) {
   try {
     const res = await Api.post(`/api/user/login`, body);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      // if (getConfig().redirect_url !== undefined) {
-      //   window.location.href = getConfig().redirect_url;
-      //   return;
-      // }
+      if (this.state.rebalancingRedirectUrl) {
+        window.location.href = this.state.rebalancingRedirectUrl;
+        return;
+      }
       storageService().setObject("user", result.user);
       if (!isMobileView && result.firstLogin) {
         storageService().setObject("first_login", result.firstLogin);
@@ -171,6 +196,7 @@ export async function emailLogin(body) {
         "campaign",
         kycResult.data.campaign.user_campaign.data
       );
+      setBaseHref();
 
       this.setState({
         currentUser: true,
@@ -211,19 +237,18 @@ export async function mobileLogin(body) {
         storageService.setObject("user_promo", item);
       }
 
-      if (this.state.isPromoSuccess && this.state.referral_code !== "") {
+      if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
         let item = {
-          promo_code: this.state.referral_code,
+          promo_code: this.state.form_data.referral_code,
         };
         storageService().setObject("user_promo", item);
       }
-      let rebalancing_redirect_url = false;
 
       this.setState({ isApiRunning: false });
       this.navigate("mobile/verify", {
         state: {
           mobile_number: body.mobile_number,
-          rebalancing_redirect_url: rebalancing_redirect_url,
+          rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
           forgot: false,
         },
       });
@@ -246,10 +271,10 @@ export async function emailRegister(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      // if (getConfig().redirect_url !== undefined) {
-      //   window.location.href = getConfig().redirect_url;
-      //   return;
-      // }
+      if (this.state.rebalancingRedirectUrl) {
+        window.location.href = this.state.rebalancingRedirectUrl;
+        return;
+      }
       if (this.state.isPromoSuccess) {
         var item = {
           user_id: result.user.user_id,
@@ -347,6 +372,10 @@ export async function otpVerification(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      let eventObj = {
+        event_name: "user loggedin",
+      };
+      nativeCallback({ events: eventObj });
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);
@@ -377,6 +406,7 @@ export async function otpVerification(body) {
         "campaign",
         kycResult.data.campaign.user_campaign.data
       );
+      setBaseHref();
 
       this.setState({
         currentUser: true,
@@ -482,24 +512,6 @@ export async function verifyForgotOtp(body) {
     toast(errorMessage);
   } finally {
     this.setState({ isApiRunning: false });
-  }
-}
-
-export function navigate(pathname, data = {}) {
-  if (data.edit) {
-    this.props.history.replace({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
-  } else {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
-      params: data.params || {},
-      state: data.state || {},
-    });
   }
 }
 

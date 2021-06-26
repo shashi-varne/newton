@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getConfig, isIframe } from "utils/functions";
+import { getConfig, navigate as navigateFunc, isIframe } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { getCampaignBySection, resetRiskProfileJourney } from "../../functions";
@@ -10,6 +10,7 @@ import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 
 const SipPaymentCallback = (props) => {
+  const navigate = navigateFunc.bind(props);
   const params = props.match.params || {};
   const status = params.status || "";
   let message = params.message || "";
@@ -24,10 +25,31 @@ const SipPaymentCallback = (props) => {
   resetRiskProfileJourney();
   const config = getConfig();
   const iframe = isIframe();
+  const eventData = storageService().getObject('mf_invest_data')
+  let _event = {
+    'event_name': 'payment_status',
+    'properties': {
+      'status': status,
+      'amount': eventData.amount,
+      'payment_id': eventData.payment_id,
+      'journey': {
+        'name': eventData.journey_name,
+        'investment_type': eventData.investment_type,
+        'investment_subtype': eventData.investment_subtype || "",
+        'risk_type': ''
+      }
+    }
+  };
+  // send event
+  if (!config.Web) {
+    window.callbackWeb.eventCallback(_event);
+  } else if (config.isIframe) {
+    window.callbackWeb.sendEvent(_event);
+  }
   let paymentError = false;
   if (status === "error" || status === "failed") {
     paymentError = true;
-    if (!message)
+    if (!message || message === "None")
       message = "Something went wrong, please retry with correct details";
   }
 
@@ -72,13 +94,6 @@ const SipPaymentCallback = (props) => {
     }
   };
 
-  const navigate = (path) => {
-    props.history.push({
-      pathname: path,
-      search: config.searchParams,
-    });
-  };
-
   const handleClick = () => {
     if (paymentError) {
       navigate("/invest");
@@ -104,16 +119,8 @@ const SipPaymentCallback = (props) => {
             target.section === "in_flow"
           ) {
             let auto_debit_campaign_url = target.url;
-            auto_debit_campaign_url +=
-              // eslint-disable-next-line
-              (auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?") +
-              "generic_callback=true&plutus_redirect_url=" +
-              encodeURIComponent(
-                basePath +
-                  "/" +
-                  "?is_secure=" +
-                  storageService().get("is_secure")
-              );
+            // eslint-disable-next-line
+            auto_debit_campaign_url = `${auto_debit_campaign_url}${auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}`)}`
             window.location.href = auto_debit_campaign_url;
           } else if (
             campaign.campaign.name !== "auto_debit_campaign" ||
@@ -121,18 +128,8 @@ const SipPaymentCallback = (props) => {
             campaign.campaign.name !== "indb_mandate_campaign"
           ) {
             let url = campaign.notification_visual_data.target[0].url;
-            url +=
-              // eslint-disable-next-line
-              (url.match(/[\?]/g) ? "&" : "?") +
-              "generic_callback=true&plutus_redirect_url=" +
-              encodeURIComponent(
-                basePath +
-                  "/" +
-                  "?base_url=" +
-                  config.base_url +
-                  "&is_secure=" +
-                  storageService().get("is_secure")
-              );
+            // eslint-disable-next-line
+            url = `${url}${url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}`)}`
             window.location.href = url;
           }
         });
@@ -156,10 +153,11 @@ const SipPaymentCallback = (props) => {
       title={!paymentError ? "Payment successful" : "Payment failed"}
       skelton={skelton}
       headerData={{goBack}}
+      data-aid='sip-payment-callback-screen'
     >
-      <section className="invest-sip-payment-callback">
+      <section className="invest-sip-payment-callback" data-aid='invest-sip-payment-callback'>
         {!paymentError && (
-          <div className="content">
+          <div className="content" data-aid='payment-error'>
             {
               !hideImage &&
               <Imgc
@@ -170,7 +168,7 @@ const SipPaymentCallback = (props) => {
             }
             <h4>Order placed</h4>
             <p>You are one step closer to your financial freedom</p>
-            <div className="message">
+            <div className="message" data-aid='payment-message'>
               <img
                 src={require(`assets/eta_icon.png`)}
                 alt=""
@@ -197,7 +195,7 @@ const SipPaymentCallback = (props) => {
           </div>
         )}
         {paymentError && (
-          <div className={`content ${iframe && 'content-iframe-style'}`}>
+          <div className={`content ${iframe && 'content-iframe-style'}`} data-aid='payment-error'>
           {
             !hideImage &&
             <Imgc
@@ -206,7 +204,7 @@ const SipPaymentCallback = (props) => {
             className="img"
             />
           }
-            <p>{message ? message : 'Something went wrong, please retry with correct details'}</p>
+            <p data-aid='payment-message'>{message ? message : 'Something went wrong, please retry with correct details'}</p>
           </div>
         )}
       </section>

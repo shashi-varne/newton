@@ -11,9 +11,9 @@ import Api from "../../utils/api";
 import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
-import { getBasePath } from "../../utils/functions";
 import kycComplete from 'assets/kyc_complete.svg';
 import esignKycFail from 'assets/finity/esign_kyc_fail.svg';
+import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -24,6 +24,8 @@ class DigiStatus extends Component {
       params: getUrlParams(),
       skelton: true,
     };
+
+    this.navigate = navigateFunc.bind(this.props);
   }
 
   componentDidMount = () => {
@@ -67,11 +69,12 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    /**
-     * Need to handle this
-     */
-    // nativeCallback({ action: 'exit_web' });
-    this.navigate("/invest");
+    this.sendEvents('next')
+    if (getConfig().isNative) {
+      nativeCallback({ action: 'exit_web' });
+    } else {
+      this.navigate("/invest");
+    }
   };
 
   navigateToReports = () => {
@@ -80,6 +83,7 @@ class DigiStatus extends Component {
 
   retry = async () => {
     let { kyc, dl_flow } = this.state;
+    this.sendEvents('next','e sign failed')
     if (
       kyc.application_status_v2 !== "init" &&
       kyc.application_status_v2 !== "submitted" &&
@@ -152,6 +156,38 @@ class DigiStatus extends Component {
     }
   };
 
+  sendEvents = (userAction, screenName) => {
+    const kyc = storageService().getObject("kyc");
+    const user = storageService().getObject("user");
+    let dl_flow = false;
+    if (!isEmpty(kyc) && !isEmpty(user)) {
+      if (
+        kyc.kyc_status !== "compliant" &&
+        !kyc.address.meta_data.is_nri &&
+        kyc.dl_docs_status !== "" &&
+        kyc.dl_docs_status !== "init" &&
+        kyc.dl_docs_status !== null
+      ) {
+        dl_flow = true;
+      }
+    let eventObj = {
+      "event_name": 'KYC_registration',
+      "properties": {
+        "user_action": userAction || "" ,
+        "screen_name": screenName || "kyc_verified",
+        "rti": "",
+        "initial_kyc_status": kyc.initial_kyc_status || "",
+        "flow": dl_flow ? 'digi kyc' : 'general'
+      }
+    };
+    if (userAction === 'just_set_events') {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+}
+
   render() {
     let { show_loader, skelton, dl_flow, show_note } = this.state;
     const { status = "failed" } = this.state.params;
@@ -162,7 +198,9 @@ class DigiStatus extends Component {
 
     return (
       <Container
+        data-aid='esign-nsdl-screen'
         showLoader={show_loader}
+        events={this.sendEvents("just_set_events")}
         title={
           status === "success" ? "eSign KYC completed" : "eSign KYC failed"
         }
