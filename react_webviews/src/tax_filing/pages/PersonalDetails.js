@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import Container from '../common/Container'
 import Input from 'common/ui/Input'
+import BottomSheet from 'common/ui/BottomSheet'
 import { validateEmail, validateNumber } from 'utils/validators'
 
 import { navigate as navigateFunc } from '../common/functions'
+import { getConfig } from 'utils/functions'
 
 import './PersonalDetails.scss'
 
 function PersonalDetails(props) {
   const navigate = navigateFunc.bind(props)
+  const productName = getConfig().productName
 
   const [name, setName] = useState('Ashish Thakur')
   const [email, setEmail] = useState('ashish.thakur@fisdom.com')
@@ -69,7 +72,6 @@ function PersonalDetails(props) {
 
   const handleClick = () => {
     navigate('/tax-filing/redirection', {}, false)
-    return
   }
 
   return (
@@ -123,6 +125,17 @@ function PersonalDetails(props) {
           required
         />
       </form>
+      <BottomSheet
+        open={false}
+        data={{
+          header_title: 'ITR Application Created',
+          content: 'Now, answer a few simple questions and get the plan',
+          src: require(`assets/${productName}/icn_application_created.svg`),
+          button_text1: 'CONTINUE',
+          handleClick1: () => {},
+          handleClose: () => {},
+        }}
+      />
     </Container>
   )
 }

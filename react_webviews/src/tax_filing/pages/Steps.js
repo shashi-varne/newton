@@ -1,23 +1,40 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVJourneyCard from 'common/ui/Card/WVJourneyCard'
 import { Imgc } from 'common/ui/Imgc'
 
-import { taxFilingSteps, taxFilingAdvantages, ITR_TYPE_KEY } from '../constants'
+import {
+  taxFilingSteps,
+  taxFilingAdvantages,
+  ITR_TYPE_KEY,
+  USER_SUMMARY_KEY,
+} from '../constants'
 
 import { navigate as navigateFunc } from '../common/functions'
+import { getUserAccountSummary } from '../common/ApiCalls'
 
 import './Steps.scss'
 import { storageService } from '../../utils/validators'
 
 function Steps(props) {
   const navigate = navigateFunc.bind(props)
+  const [showLoader, setShowLoader] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [errorData, setErrorData] = useState({})
+
   const type =
     props?.location?.params?.type || storageService().get(ITR_TYPE_KEY)
   const productName = getConfig().productName
-  const handleClick = () => {
-    navigate(`/tax-filing/personal-details`, {}, false)
+  const handleClick = async () => {
+    let userSummary = {}
+    try {
+      userSummary = await getUserAccountSummary()
+      storageService().setObject(USER_SUMMARY_KEY, userSummary)
+    } catch (err) {
+      userSummary = storageService().getObject(USER_SUMMARY_KEY)
+    }
+    navigate(`/tax-filing/personal-details`, { userSummary }, false)
   }
 
   const topTitle =
@@ -26,13 +43,14 @@ function Steps(props) {
     type === 'eCA'
       ? 'Customised, comprehensive and cost-effective'
       : 'Effortless, economic & error-free'
+
   return (
     <Container
       title={topTitle}
       smallTitle={smallTitle}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
-      showLoader={false}
+      showLoader={showLoader}
       classOverRideContainer="m-bottom-4x"
     >
       {taxFilingSteps[type].map(({ title, subtitle, icon }, idx) => (

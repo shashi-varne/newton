@@ -10,7 +10,7 @@ export const getUserAccountSummary = async () => {
   const res = await Api.post(URL, options)
 
   if (res?.pfwresponse?.status_code === 200) {
-    return res?.pfwresponse?.result?.data?.user?.user
+    return res?.pfwresponse?.result?.data?.user?.user?.data
   } else {
     throw new Error(
       res?.pfwresponse?.result?.message ||

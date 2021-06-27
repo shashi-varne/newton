@@ -13,7 +13,6 @@ import {
   taxFilingOptions,
   USER_SUMMARY_KEY,
   ITR_APPLICATIONS_KEY,
-  ITR_BACK_BUTTON_TRACKER_KEY,
 } from '../constants'
 import {
   checkIfLandedByBackButton,
@@ -34,15 +33,9 @@ function Landing(props) {
   const productName = getConfig().productName
   const navigate = navigateFunc.bind(props)
   const landedFromBackButton = checkIfLandedByBackButton()
-
-  console.log(props)
-
   const cachedUserData = storageService().getObject(USER_SUMMARY_KEY) || {}
   const cachedITRApplications =
     storageService().getObject(ITR_APPLICATIONS_KEY) || []
-
-  console.log(isEmpty(cachedUserData))
-
   const defaultUserData =
     landedFromBackButton && !isEmpty(cachedUserData) ? cachedUserData : {}
   const defaultITRApplications =
@@ -50,19 +43,11 @@ function Landing(props) {
       ? cachedITRApplications
       : []
 
-  const backButtonLanding = storageService().getObject(
-    ITR_BACK_BUTTON_TRACKER_KEY
-  )
-
-  console.log(landedFromBackButton, isEmpty(cachedUserData))
-
   const [itrList, setItrList] = useState(defaultITRApplications)
   const [userSummary, setUserSummary] = useState(defaultUserData)
   const [errorData, setErrorData] = useState({})
   const [showError, setShowError] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
-
-  console.log(itrList, userSummary)
 
   const closeError = () => {
     setShowError(false)
@@ -117,13 +102,12 @@ function Landing(props) {
   const handleITRJourneyNavigation = (type) => () => {
     setITRJourneyType(type)
     navigate(`/tax-filing/steps`, { type, userSummary }, false)
-    return
   }
 
   return (
     <Container
       title="File income tax returns (ITR)"
-      buttonTitle="CONTINUE"
+      buttonTitle={true}
       showError={showError}
       errorData={errorData}
       skelton={showLoader}
