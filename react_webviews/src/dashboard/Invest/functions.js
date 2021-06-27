@@ -513,7 +513,7 @@ export function openPremiumOnboardBottomSheet(
   }
 
   storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
-  if (userKyc.bank.meta_data_status === "rejected") {
+  if (!this.state.tradingEnabled && userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
   } else {
     this.setState({
