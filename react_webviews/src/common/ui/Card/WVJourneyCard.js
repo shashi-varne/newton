@@ -79,7 +79,15 @@ WVJourneyCard.defaultProps = {
   title: '',
   subtitle: '',
   iconSrc: '',
-  classes: {},
+  classes: {
+    card: '',
+    container: '',
+    content: '',
+    title: '',
+    subtitle: '',
+    icon: '',
+    step: '',
+  },
 }
 
 export function StepCount({ count, classes }) {

@@ -6,6 +6,7 @@ import Carousal from '../mini-components/Carousal'
 import WVMenuListDropdownItem from 'common/ui/MenuListDropdown/WVMenuListDropdownItem'
 import FeatureListItem from '../mini-components/FeatureListItem'
 import WVCard from 'common/ui/Card/WVCard'
+import { Imgc } from 'common/ui/Imgc'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 
 import {
@@ -142,7 +143,11 @@ function Landing(props) {
           onClick={handleMyITRNavigation}
         >
           <>
-            <img src={require(`assets/icn_my_itr.svg`)} alt="MY ITR" />
+            <Imgc
+              src={require(`assets/icn_my_itr.svg`)}
+              alt="MY ITR"
+              className="block"
+            />
             <div className="m-left-2x heading3-medium text-white">MY ITR</div>
           </>
         </WVCard>

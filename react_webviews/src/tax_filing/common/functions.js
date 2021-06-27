@@ -24,7 +24,7 @@ export const getTaxFilingFeatureLists = () => {
     {
       frontImage: require('assets/icn_secure_safe.svg'),
       bgImage: require(`assets/${productName}/bg_why_icons.svg`),
-      title: 'Secure & Safe ',
+      title: 'Secure & Safe',
       subtitle: 'Income tax department authorized platform',
     },
     {
