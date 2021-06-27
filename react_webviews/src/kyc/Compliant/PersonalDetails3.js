@@ -146,7 +146,7 @@ const PersonalDetails3 = (props) => {
       properties: {
         user_action: userAction || "",
         screen_name: "professional_details",
-        occupation: form_data.occupation
+        occupation_details: form_data.occupation
           ? form_data.occupation === "SELF EMPLOYED"
             ? "self_employed"
             : form_data.occupation.toLowerCase()

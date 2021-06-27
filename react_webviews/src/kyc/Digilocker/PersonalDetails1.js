@@ -156,8 +156,8 @@ const PersonalDetails1 = (props) => {
             : form_data.gender.toLowerCase()
           : "",
         marital_status: (form_data.marital_status || "").toLowerCase(),
-        mother_name: form_data.mother_name ? "yes" : "no",
-        father_name: form_data.father_name ? "yes" : "no",
+        "mother's_name": form_data.mother_name ? "yes" : "no",
+        "father's_name": form_data.father_name ? "yes" : "no",
         spouse_name: form_data.spouse_name ? "yes" : "no",
         name: form_data.name ? "yes" : "no",
         "flow": 'digi kyc'

@@ -113,8 +113,8 @@ const PersonalDetails2 = (props) => {
       properties: {
         user_action: userAction || "",
         screen_name: "personal_details_2",
-        mother_name: form_data.mother_name ? "yes" : "no",
-        father_name: form_data.father_name ? "yes" : "no",
+        "mother's_name": form_data.mother_name ? "yes" : "no",
+        "father's_name": form_data.father_name ? "yes" : "no",
         spouse_name: form_data.spouse_name ? "yes" : "no",
         "flow": getFlow(kyc) || ""
       },
