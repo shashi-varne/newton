@@ -122,7 +122,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    sendEvents('next', 'unable_to_add_bank');
+    sendEvents('next', 'bank_verification_pending');
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
@@ -199,6 +199,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const goBackToPath = () => {
+    sendEvents("back");
     if (fromState.indexOf("/kyc/add-bank/details") !== -1) {
       props.history.goBack();
       return;
