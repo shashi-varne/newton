@@ -82,6 +82,7 @@ const ManualSignature = (props) => {
   }
 
   const handleCTAClick = () => {
+    sendEvents("home");
     if(config.Web) {
       navigate("/");
     } else {
