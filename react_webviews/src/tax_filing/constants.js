@@ -1,22 +1,52 @@
 export const genericErrMsg = 'Something Went Wrong'
 
-export const taxFilingSteps = [
-  {
-    title: 'Upload form 16',
-    subtitle: 'Your income, deductions and TDS details will be auto-filled',
-    icon: 'icn_upload_form_16',
-  },
-  {
-    title: 'Review & edit',
-    subtitle: 'You can check/edit details and verify the ITR summary',
-    icon: 'icn_review_edit',
-  },
-  {
-    title: 'File ITR',
-    subtitle: 'You’ll get an acknowledgement from govt. on successful filing',
-    icon: 'icn_file_itr',
-  },
-]
+export const USER_SUMMARY_KEY = 'itr-user-summary'
+
+export const ITR_ID_KEY = 'itr-id'
+
+export const ITR_APPLICATIONS_KEY = 'itr-applications'
+
+export const ITR_BACK_BUTTON_TRACKER_KEY = 'itr-back-button-tracker'
+
+export const ITR_TYPE_KEY = 'itr-type'
+
+export const taxFilingSteps = {
+  free: [
+    {
+      title: 'Upload form 16',
+      subtitle: 'Your income, deductions and TDS details will be auto-filled',
+      icon: 'icn_upload_form_16',
+    },
+    {
+      title: 'Review & edit',
+      subtitle: 'You can check/edit details and verify the ITR summary',
+      icon: 'icn_review_edit',
+    },
+    {
+      title: 'File ITR',
+      subtitle: 'You’ll get an acknowledgement from govt. on successful filing',
+      icon: 'icn_file_itr',
+    },
+  ],
+
+  eCA: [
+    {
+      title: 'Upload form 16',
+      subtitle: 'Your income, deductions and TDS details will be auto-filled',
+      icon: 'icn_upload_form_16',
+    },
+    {
+      title: 'Review & edit',
+      subtitle: 'You can check/edit details and verify the ITR summary',
+      icon: 'icn_review_edit',
+    },
+    {
+      title: 'File ITR',
+      subtitle: 'You’ll get an acknowledgement from govt. on successful filing',
+      icon: 'icn_file_itr',
+    },
+  ],
+}
 
 export const FAQs = [
   {
@@ -62,11 +92,13 @@ export const taxFilingOptions = [
     title: 'Do it yourself',
     subtitle: 'We guide and you file',
     icon: 'icn_self_itr',
+    type: 'free',
   },
   {
     title: 'Hire a Personal CA',
     subtitle: 'Experts file and you save',
     icon: 'icn_ca',
+    type: 'eCA',
   },
 ]
 

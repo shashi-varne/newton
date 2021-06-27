@@ -8,10 +8,19 @@ import FeatureListItem from '../mini-components/FeatureListItem'
 import WVCard from 'common/ui/Card/WVCard'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 
-import { taxFilingOptions } from '../constants'
 import {
+  taxFilingOptions,
+  USER_SUMMARY_KEY,
+  ITR_APPLICATIONS_KEY,
+  ITR_BACK_BUTTON_TRACKER_KEY,
+} from '../constants'
+import {
+  checkIfLandedByBackButton,
   getTaxFilingFeatureLists,
+  initBackButtonTracker,
   navigate as navigateFunc,
+  setITRJourneyType,
+  untrackBackButtonPress,
 } from '../common/functions'
 import { getITRList, getUserAccountSummary } from '../common/ApiCalls'
 import { isEmpty } from 'lodash'
@@ -23,41 +32,66 @@ import './Landing.scss'
 function Landing(props) {
   const productName = getConfig().productName
   const navigate = navigateFunc.bind(props)
+  const landedFromBackButton = checkIfLandedByBackButton()
 
-  const cachedUserData = storageService().getObject('ITR_USER_SUMMARY') || {}
+  console.log(props)
 
-  const [itrList, setItrList] = useState([])
-  const [userSummary, setUserSummary] = useState(cachedUserData)
+  const cachedUserData = storageService().getObject(USER_SUMMARY_KEY) || {}
+  const cachedITRApplications =
+    storageService().getObject(ITR_APPLICATIONS_KEY) || []
+
+  console.log(isEmpty(cachedUserData))
+
+  const defaultUserData =
+    landedFromBackButton && !isEmpty(cachedUserData) ? cachedUserData : {}
+  const defaultITRApplications =
+    landedFromBackButton && !isEmpty(cachedITRApplications)
+      ? cachedITRApplications
+      : []
+
+  const backButtonLanding = storageService().getObject(
+    ITR_BACK_BUTTON_TRACKER_KEY
+  )
+
+  console.log(landedFromBackButton, isEmpty(cachedUserData))
+
+  const [itrList, setItrList] = useState(defaultITRApplications)
+  const [userSummary, setUserSummary] = useState(defaultUserData)
   const [errorData, setErrorData] = useState({})
   const [showError, setShowError] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
+
+  console.log(itrList, userSummary)
 
   const closeError = () => {
     setShowError(false)
   }
 
   useEffect(() => {
+    initBackButtonTracker()
     fetchITRListAndUserSummary()
+    return () => {
+      untrackBackButtonPress()
+    }
   }, [])
 
   const fetchITRListAndUserSummary = async () => {
     try {
-      setShowLoader(true)
-      if (isEmpty(userSummary)) {
+      if (!landedFromBackButton || isEmpty(itrList) || isEmpty(userSummary)) {
+        setShowLoader(true)
         const [list, user] = await Promise.all([
           getITRList(),
           getUserAccountSummary(),
         ])
         setItrList([...list])
         setUserSummary({ ...user })
-        storageService().setObject('ITR_USER_SUMMARY', user)
+        storageService().setObject(USER_SUMMARY_KEY, user)
+        storageService().setObject(ITR_APPLICATIONS_KEY, list)
         setShowLoader(false)
         setShowError(false)
       } else {
-        const list = await getITRList()
-        setItrList([...list])
-        setShowLoader(false)
-        setShowError(false)
+        setItrList([...cachedITRApplications])
+        setUserSummary({ ...cachedUserData })
       }
     } catch (err) {
       setShowError(true)
@@ -68,6 +102,7 @@ function Landing(props) {
       })
       setShowLoader(false)
     }
+    untrackBackButtonPress()
   }
 
   const handleFAQNavigation = () => {
@@ -76,6 +111,12 @@ function Landing(props) {
 
   const handleMyITRNavigation = () => {
     navigate(`/tax-filing/my-itr`, { itrList, userSummary }, false)
+  }
+
+  const handleITRJourneyNavigation = (type) => () => {
+    setITRJourneyType(type)
+    navigate(`/tax-filing/steps`, { type, userSummary }, false)
+    return
   }
 
   return (
@@ -108,14 +149,15 @@ function Landing(props) {
       )}
 
       <div className="heading2 m-top-3x">Get Started</div>
-      {taxFilingOptions.map(({ title, subtitle, icon }, idx) => {
-        if (idx === 0) {
+      {taxFilingOptions.map(({ title, subtitle, icon, type }, idx) => {
+        if (type === 'free') {
           return (
             <WVMenuListDropdownItem
               key={idx}
               image={require(`assets/${productName}/${icon}.svg`)}
               title={<CustomTitle title={title} />}
               subtitle={subtitle}
+              onClick={handleITRJourneyNavigation(type)}
             />
           )
         } else {
@@ -125,6 +167,7 @@ function Landing(props) {
               image={require(`assets/${productName}/${icon}.svg`)}
               title={title}
               subtitle={subtitle}
+              onClick={handleITRJourneyNavigation(type)}
             />
           )
         }

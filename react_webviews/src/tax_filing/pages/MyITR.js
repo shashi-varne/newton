@@ -12,7 +12,6 @@ function MyITR(props) {
   const productName = getConfig().productName
 
   const user = props?.location?.params?.userSummary.data
-  console.log(props?.location?.params)
   const myItrs = props?.location?.params?.itrList.map(
     ({ dt_created: dtCreated, itr_status: itrStatus, itr_id: itrId }) => {
       let status = itrStatus ? itrStatus : 'open'

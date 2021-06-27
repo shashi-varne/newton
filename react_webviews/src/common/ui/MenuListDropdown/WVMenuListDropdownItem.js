@@ -9,7 +9,7 @@
           subtitle={item.subtitle}                         // Subtitle for MenuList
           image={item.icon}                               // image for MenuList
           keyname={item.key}                            // keyname (Key used to map)
-          renderPorductsList={}                        // Dropdown subsection
+          renderProductsList={}                        // Dropdown subsection
           handleClick={this.handleClick}              // Action
           isDropDown={item.isDropDown}               // Boolean(if true then Block is a dropdown)
           children                                  // FallBack Component
@@ -33,8 +33,8 @@ const style = {
 const WVMenuListDropdownItem = ({
   dataAidSuffix, // for Data-aid
   index,
-  renderPorductsList, // Array of Product SubSection
-  keyname, // For Maping renderPorductsList with renderPorducts
+  renderProductsList, // Array of Product SubSection
+  keyname, // For Maping renderProductsList with renderPorducts
   selected, // selected Dropdown Key Value
   isDropDown, // Boolean  if Item is a dropdown then True
   handleClick, // Action
@@ -51,6 +51,7 @@ const WVMenuListDropdownItem = ({
       data-aid={`menulist-products-${dataAidSuffix}`}
       onClick={handleClick}
       key={index}
+      {...props}
     >
       <div
         className="wv-menu-list-dropdown"
@@ -96,10 +97,10 @@ const WVMenuListDropdownItem = ({
         </div>
       </div>
 
-      {renderPorductsList &&
+      {renderProductsList &&
         selected === keyname &&
-        !isEmpty(renderPorductsList) &&
-        renderPorductsList.map((propObj, idx) => {
+        !isEmpty(renderProductsList) &&
+        renderProductsList.map((propObj, idx) => {
           if (selected === propObj.keyBelongsTo) {
             return (
               <WVMenuListDropdownItem
@@ -116,7 +117,7 @@ const WVMenuListDropdownItem = ({
             )
           } else return null
         })}
-      {!renderPorductsList && selected === keyname && children}
+      {!renderProductsList && selected === keyname && children}
     </div>
   )
 }
@@ -157,7 +158,7 @@ WVMenuListDropdownItem.propTypes = {
     children: PropTypes.node,
   }),
   children: PropTypes.node,
-  renderPorductsList: PropTypes.arrayOf(
+  renderProductsList: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.node,
       subtitle: PropTypes.node,
@@ -173,6 +174,7 @@ WVMenuListDropdownItem.propTypes = {
   ),
   dataAidSuffix: PropTypes.string,
   selected: PropTypes.string,
+  props: PropTypes.object,
 }
 
 WVMenuListDropdownItem.defaultProps = {

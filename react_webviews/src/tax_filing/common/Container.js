@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import { didMount, commonRender } from 'common/components/container_functions'
 import { nativeCallback } from 'utils/native_callback'
 import '../../utils/native_listner'
-import { getConfig } from '../../utils/functions'
+import { trackBackButtonPress , untrackBackButtonPress } from './functions'
 
 class Container extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class Container extends Component {
       openDialog: false,
       openPopup: false,
       callbackType: '',
-      // inPageTitle: true,
+      inPageTitle: true,
       new_header: true,
       force_hide_inpage_title: false,
       project: 'tax-filing',
@@ -42,32 +42,50 @@ class Container extends Component {
   historyGoBack = () => {
     let pathname = this.props.history.location.pathname
 
-    if (this.props.headerData && this.props.headerData.goBack) {
-      this.props.headerData.goBack()
-      return
+    if (this?.props?.headerData && this?.props?.headerData?.goBack) {
+      switch (pathname) {
+        case '/tax-filing':
+          untrackBackButtonPress()
+          nativeCallback({ action: 'exit', events: this.getEvents() })
+          break
+        case '/tax-filing/steps':
+          trackBackButtonPress(pathname)
+          this.props.headerData.goBack()
+          break
+        case '/tax-filing/my-itr':
+          trackBackButtonPress(pathname)
+          this.props.headerData.goBack()
+          break
+        default:
+          this.props.headerData.goBack()
+          break
+      }
     }
 
     let action = 'back'
     nativeCallback({ events: this.getEvents(action) })
 
     switch (pathname) {
-      case '/help':
-        nativeCallback({ action: 'exit', events: this.getEvents() })
+      case '/tax-filing':
+        untrackBackButtonPress()
+        nativeCallback({ action: 'exit', events: this.getEvents('exit') });
+        break
+      case '/tax-filing/steps':
+        trackBackButtonPress(pathname)
+        this.props.history.goBack()
+        break
+      case '/tax-filing/my-itr':
+        trackBackButtonPress(pathname)
+        this.props.history.goBack()
         break
       default:
         this.props.history.goBack()
-        return
+        break
     }
-    this.props.history.goBack()
-    return
   }
 
   render() {
-    let props_base = {
-      classOverRide: 'loanMainContainer',
-      classOverRideContainer: getConfig().app === 'ios' ? 'ios-container' : '',
-    }
-    return <Fragment>{this.commonRender(props_base)}</Fragment>
+    return <Fragment>{this.commonRender()}</Fragment>
   }
 }
 
