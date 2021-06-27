@@ -178,8 +178,8 @@ const CommunicationDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if(stateParams?.fromState === "/my-account") {
-      navigate(stateParams?.fromState);
+    if(stateParams?.fromState === "/my-account" || stateParams?.fromState === "/buy-gold" ) {
+      navigate(stateParams?.goBack);
       return;
     }
     if (isKycDone) {

@@ -21,6 +21,7 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import {Imgc} from '../../../common/ui/Imgc';
+import { isEmpty } from "lodash"
 
 const plusOptionsAmount = [
   500, 1000, 2000, 5000
@@ -232,7 +233,11 @@ class GoldBuyHome extends Component {
       // this.navigate(this.state.provider + '/buy-pan');
     } 
     
-    if (!this.state.isRegistered) {
+    if (!this.state.isRegistered) { console.log(this.state.user_info , 'user_info')
+      if (isEmpty(this.state.user_info.mobile_no) || isEmpty(this.state.user_info.email)) {
+        this.navigate("/kyc/communication-details", { fromState: "/buy-gold",  goBack: `/gold/${this.state.provider}/gold-register` });
+        return; 
+      }
       this.navigate(this.state.provider + '/gold-register');
       return;
     } else {
@@ -244,10 +249,11 @@ class GoldBuyHome extends Component {
 
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, state) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: getConfig().searchParams,
+      state: state || {},
     });
   }
 
