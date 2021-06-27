@@ -291,6 +291,7 @@ body[data-device="web"] {
       flex:1 1 55%;
       img{
         width: 100%;
+        min-width: 300px;
         height: auto;
         max-width:300px;
       }

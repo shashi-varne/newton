@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import Container from '../common/Container';
+import Container from '../common/Container';
 import '../common/Style.css';
 import failed_fisdom from 'assets/error_illustration_fisdom.svg';
 import failed_myway from 'assets/error_illustration_myway.svg';
@@ -17,7 +17,8 @@ class PaymentFailedClass extends Component {
       show_loader: false,
       failed_icon: getConfig().productName !== 'fisdom' ? failed_myway : failed_fisdom,
       iframe: isIframe(),
-      iframeIcon: ils_error
+      iframeIcon: ils_error,
+      isMobileDevice: getConfig().isMobileDevice
     };
   } 
 
@@ -49,16 +50,16 @@ class PaymentFailedClass extends Component {
     }
   }
 
-  loadComponent() {
-    if (this.state.iframe) {
-      return require(`../commoniFrame/Container`).default;
-    } else {
-      return require(`../common/Container`).default;
-    }
-  }
+  // loadComponent() {
+  //   if (this.state.iframe) {
+  //     return require(`../commoniFrame/Container`).default;
+  //   } else {
+  //     return require(`../common/Container`).default;
+  //   }
+  // }
 
   render() {
-    const Container = this.loadComponent();
+    // const Container = this.loadComponent();
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -67,19 +68,21 @@ class PaymentFailedClass extends Component {
         onlyButton={true}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClick()}
-        title="Authorisation failed"
+        title="easySIP authorisation failed"
         disableBack={true}
         classOverRideContainer="payment-failed"
-        iframeIcon={this.state.iframeIcon}
+        iframeRightContent={this.state.iframeIcon}
       >
         <div>
-          {!this.state.iframe && <div className="payment-failed-icon">
+          {(!this.state.iframe || this.state.isMobileDevice )&& <div className="payment-failed-icon">
             <Imgc src={this.state.failed_icon} alt="" 
               style={{minHeight:160, width:"100%"}} 
             />
           </div>}
-          <div className="payment-failed-title">e-mandate authorization failed</div>
-          <div className="payment-failed-subtitle">Something went wrong, please retry with correct details</div>
+          <div className={`${this.state.iframe && !this.state.isMobileDevice && 'iframe-mandate-fail-text'}`}>
+            <div className="payment-failed-title">e-mandate authorization failed</div>
+            <div className="payment-failed-subtitle">Something went wrong, please retry with correct details</div>
+          </div>
         </div>
       </Container>
     );
