@@ -15,7 +15,7 @@ const DialogAsPage = (props) => {
   const handleClick = internalStorage.getData('handleClick');
   const isApiCall = internalStorage.getData('isApiCall');
   const productName = getConfig().productName;
-  if(isEmpty(state)){
+  if(isEmpty(state) || isEmpty(internalStorage.getStore())){
     return <Redirect to={{
       pathname: "home",
       search: getConfig().searchParams,
@@ -75,7 +75,7 @@ const DialogAsPage = (props) => {
       showLoader={showLoader}
       dualbuttonwithouticon={state?.twoButton}
     >
-      <div className='kyc-pan-status'>
+      <div className='kyc-dialog-page-message'>
         {state?.message}
       </div>
     </Container>
