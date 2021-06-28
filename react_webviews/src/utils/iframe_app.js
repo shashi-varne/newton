@@ -146,12 +146,12 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     //   window.callbackWeb.sendEvent(message);
     //   storageService().clear();
     //   break;
-    case '/account/merge/linked/success':
-      if (config?.code === 'moneycontrol') {
-        window.history.go(-2);
-      }// check later
-      // navigate kyc home
-      break;
+    // case '/account/merge/linked/success':
+    //   if (config?.code === 'moneycontrol') {
+    //     window.history.go(-2);
+    //   }// check later
+    //   // navigate kyc home
+    //   break;
     default:
       if(currentState === "/" && config?.code === 'moneycontrol') {
         let message = JSON.stringify({
