@@ -31,7 +31,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       } else if (isSdk) {
         nativeCallback({ action: "session_expired" });
       } else if(isIframe) {
-        // handle iframe close
+        let message = JSON.stringify({
+          type: "iframe_close",
+        });
+        window.callbackWeb.sendEvent(message);
       }
     }
     setShowLoader(false);
