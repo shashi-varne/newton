@@ -215,7 +215,6 @@ const IpvVideo = (props) => {
                 outlined
                 withPicker
                 filePickerProps={{
-                  showOptionsDialog: true,
                   nativePickerMethodName: "open_video_camera",
                   fileName: "ipv_video",
                   onFileSelectComplete: onFileSelectComplete,
