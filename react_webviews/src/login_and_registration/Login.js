@@ -8,6 +8,7 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
 import { nativeCallback } from "../utils/native_callback";
+import { Imgc } from "../common/ui/Imgc";
 
 const config = getConfig();
 class Login extends Component {
@@ -81,9 +82,10 @@ class Login extends Component {
         </div>
         <div className="login-details">
           <div className="left-image">
-            <img
+            <Imgc
               src={require(`assets/${productName}/ils_login.svg`)}
               alt="login"
+              className="login-left-icon"
             />
           </div>
           <div className="login-form" data-aid='login-form'>

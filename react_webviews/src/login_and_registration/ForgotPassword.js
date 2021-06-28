@@ -7,6 +7,7 @@ import { initialize } from "./function";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
+import { Imgc } from "../common/ui/Imgc";
 
 const config = getConfig();
 class ForgotPassword extends Component {
@@ -60,9 +61,10 @@ class ForgotPassword extends Component {
         </div>
         <div className="login-details">
           <div className="left-image">
-            <img
+            <Imgc
               src={require(`assets/${productName}/ils_login.svg`)}
               alt="login"
+              className="login-left-icon"
             />
           </div>
           <div className="login-form" data-aid='login-form'>
