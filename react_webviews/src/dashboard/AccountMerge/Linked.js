@@ -1,13 +1,13 @@
 import React from "react";
-import { getConfig, isIframe, navigate as navigateFunc } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import { nativeCallback } from "../../utils/native_callback";
 import Container from "../common/Container";
 import "./Linked.scss";
 
+const config = getConfig();
 const AccountLinked = (props) => {
   const navigate = navigateFunc.bind(props);
-  const config = getConfig();
   const productName = config.productName;
   const handleClick = () => {
     if (config.Web) {
@@ -24,7 +24,8 @@ const AccountLinked = (props) => {
     }
   };
 
-  const hideImage = isIframe() && !config.isMobileDevice;
+  const hideImage =
+    config.isIframe && config.code === "moneycontrol" && config.isMobileDevice;
   return (
     <Container 
       buttonTitle="CLOSE" 

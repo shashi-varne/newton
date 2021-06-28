@@ -220,8 +220,8 @@ export const submit = async (data) => {
   const url = `/api/kyc/v2/mine`
   const res = await Api.post(url, data)
   if (
-    res.pfwresponse.status_code === 200 &&
-    res.pfwresponse.result.message === 'success'
+    res?.pfwresponse?.status_code === 200 &&
+    res?.pfwresponse?.result?.message === 'success'
   ) {
     const result = res.pfwresponse.result
     if (result.kyc.identification.meta_data.nationality) {
@@ -270,4 +270,14 @@ export const setKycType = async (type) => {
 export const getMerge = async (pan_number) => {
   const res = await Api.post(`${API_CONSTANTS.getMerge}${pan_number}`)
   return handleApi(res);
+}
+
+export const getKyc = async () => {
+  const res = await Api.get(API_CONSTANTS.submit)
+  const result = handleApi(res);
+  if(!isEmpty(result)) {
+    storageService().setObject('kyc', result.kyc);
+    storageService().setObject('user', result.user);
+  }
+  return result;
 }

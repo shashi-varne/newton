@@ -1,16 +1,15 @@
 import React from "react";
 import SlidingDialog from "./SlideBottomDialog";
 import Button from "@material-ui/core/Button";
-import { getConfig, isMobile } from "utils/functions";
+import { getConfig, isMobile, getBasePath } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { storageService } from "utils/validators";
 import { updateQueryStringParameter } from "../common/functions";
 import { STORAGE_CONSTANTS } from "../constants";
-import { getBasePath } from "../../utils/functions";
 import "./mini-components.scss";
 
 const config = getConfig();
-const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
+const AadhaarDialog = ({ id, open, close, kyc, handleIframeKyc, ...props }) => {
   const productName = config.productName;
   const basePath = getBasePath();
   const handleProceed = () => {
@@ -19,6 +18,17 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
         getConfig().searchParams
       }&is_secure=${storageService().get("is_secure")}`
     );
+    if (config.isIframe) {
+      close();
+      handleIframeKyc(
+        updateQueryStringParameter(
+          kyc.digilocker_url,
+          "redirect_url",
+          redirect_url
+        )
+      );
+      return;
+    }
     const data = {
       url: `${basePath}/kyc/journey${
         getConfig().searchParams

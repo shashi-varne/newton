@@ -113,6 +113,9 @@ const InvestJourney = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       skelton={isLoading}
+      loaderData={{
+        loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+      }}
       iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <section className="invest-journey-container" data-aid='invest-journey-page'>

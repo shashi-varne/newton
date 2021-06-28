@@ -7,17 +7,20 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { getFlow } from "../common/functions";
+import {
+  pollProgress, popupWindowCenter, updateQueryStringParameter, getFlow
+} from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
-import { navigate as navigateFunc } from '../../utils/functions'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
+import { getBasePath, navigate as navigateFunc } from '../../utils/functions'
 
-const isMobileDevice = getConfig().isMobileDevice;
-const iframe = isIframe();
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
+const iframe = config.isIframe;
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
@@ -28,7 +31,6 @@ const Journey = (props) => {
   const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
-  const config = getConfig()
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -569,14 +571,60 @@ const Journey = (props) => {
   const cancel = () => {
     setDlAadhaar(false)
     navigate(`${PATHNAME_MAPPER.journey}`, {
-      searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+      searchParams: `${config.searchParams}&show_aadhaar=true`,
     })
     // navigate('/kyc/journey', { show_aadhar: false })
   }
 
   const proceed = () => {
-    setAadhaarLinkDialog(true)
+    if (config.isIframe && config.code === "moneycontrol" && !config.isMobileDevice) {
+      const redirect_url = encodeURIComponent(
+        `${getBasePath()}/digilocker/callback${
+          config.searchParams
+        }&is_secure=${storageService().get("is_secure")}`
+      );
+      handleIframeKyc(
+        updateQueryStringParameter(
+          kyc.digilocker_url,
+          "redirect_url",
+          redirect_url
+        )
+      )
+    } else {
+      setAadhaarLinkDialog(true)
+    }
   }
+
+  const handleIframeKyc = (url) => {
+    let popup_window = popupWindowCenter(900, 580, url);
+    setIsApiRunning("page");
+    pollProgress(600000, 5000, popup_window).then(
+      function (poll_data) {
+        popup_window.close();
+        if (poll_data.status === "success") {
+          // Success
+          navigate("/kyc/digilocker/success");
+        } else if (poll_data.status === "failed") {
+          // Failed
+          navigate("/kyc/digilocker/failed");
+        } else if (poll_data.status === "closed") {
+          // Closed
+          toast("Digilocker window closed. Please try again");
+        }
+        setIsApiRunning(false);
+      },
+      function (err) {
+        popup_window.close();
+        setIsApiRunning(false);
+        console.log(err);
+        if (err?.status === "timeout") {
+          toast("Digilocker has been timedout . Please try again");
+        } else {
+          toast("Something went wrong. Please try again.");
+        }
+      }
+    );
+  };
 
   if (!isEmpty(kyc) && !isEmpty(user)) {
     var topTitle = ''
@@ -683,6 +731,7 @@ const Journey = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
+      loaderData={{loadingText: " "}}
       iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
       data-aid='kyc-journey-screen'
     >
@@ -854,10 +903,11 @@ const Journey = (props) => {
       />
       <AadhaarDialog
         open={aadhaarLinkDialog}
-        onClose={() => {
+        close={() => {
           setAadhaarLinkDialog(false)
         }}
         kyc={kyc}
+        handleIframeKyc={handleIframeKyc}
       />
       <KycBackModal
         id="kyc-back-modal"
