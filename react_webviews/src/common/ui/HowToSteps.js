@@ -16,9 +16,9 @@ class HowToStepsClass extends Component {
   renderList = (option, index) => {
     return (
       <div key={index} className="tile tile_step" data-aid={`tile-step-${index+1}`}>
-        {option.icon && <Imgc hideSkelton={!this.props.showSkelton} className={`icon ${this.props.classNameIcon}`}
+        {option.icon && <Imgc className={`icon ${this.props.classNameIcon}`}
           src={require(`assets/${this.state.productName}/${option.icon}.svg`)} alt="Icon" />}
-        {option.img && <Imgc hideSkelton={!this.props.showSkelton} className={`icon ${this.props.classNameIcon}`}
+        {option.img && <Imgc className={`icon ${this.props.classNameIcon}`}
           src={option.img} alt="Icon" />}
         <div className="content content_step" data-aid={`content-step-${index+1}`}>
           {this.state.baseData.show_index && <span> {index + 1}. </span>}

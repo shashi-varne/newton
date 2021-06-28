@@ -28,6 +28,7 @@ import back_nav_bar_icon_up from '../../../assets/back_nav_bar_icon_up.png'
 
 import Api from '../../../utils/api'
 import { setTermInsData } from '../../common/commonFunction'
+import {Imgc} from   '../../../common/ui/Imgc'
 
 class HealthInsuranceLanding extends Component {
 
@@ -416,9 +417,10 @@ class HealthInsuranceLanding extends Component {
       <div onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center'}}>
         <div style={{ display: 'flex' , width : '100%'}}>
-          <img src={props.icon} alt="" style={{ marginRight: '15px' ,paddingTop: '20px', paddingBottom: '22px' }} />
+          <Imgc src={props.icon} className='imgc health-insurance-plan-list-img'  alt="" />
+          <div style={{ marginRight: '15px'}} />
           <div style={ (props.key === 'HealthInsuranceEntry') ? {width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index  && !this.state.Comprehensive ? 'solid' : '',   
-                paddingTop: '20px', paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'} : (props.key === 'DISEASE_SPECIFIC_PLANS') ? {width : '100%' ,borderBottomWidth: '1px', 
+                paddingTop: '20px', paddingBottom: '28px', justifyContent: 'space-between', cursor: 'pointer'} : (props.key === 'DISEASE_SPECIFIC_PLANS') ? {width : '100%' ,borderBottomWidth: '1px', 
                 borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index  && !this.state.DiseasesSpecificPlan ? 'solid' : '', paddingTop: '20px', paddingBottom: '22px', 
                 justifyContent: 'space-between', cursor: 'pointer'}  : {width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   
                 paddingTop: '20px', paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'} }>
@@ -427,19 +429,19 @@ class HealthInsuranceLanding extends Component {
                  borderRadius: 7 , padding: '2px 4px', marginTop : '-30px' , color : 'white', fontWeight : '700' , width :'40px' , left:'6px', height:'14px', 
              }}>Resume</span>}
                  {props.key === 'HealthInsuranceEntry'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
+                  <Imgc src={props.dropdown} alt="" className='imgc health-landing-img-left'  />
                   </span>}
 
                   {props.key === 'HealthInsuranceEntry'  &&  this.state.Comprehensive &&<span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.uparrow} alt="" style={{ marginLeft : '15px' }} />  
+                  <Imgc src={props.uparrow} alt="" className='imgc health-landing-img-left' />  
                   </span>}
 
                    { props.key === 'DISEASE_SPECIFIC_PLANS' && !this.state.DiseasesSpecificPlan && <span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
+                  <Imgc src={props.dropdown} alt="" className='imgc health-landing-img-left' />
                   </span>}
 
                   {props.key === 'DISEASE_SPECIFIC_PLANS' && this.state.DiseasesSpecificPlan &&<span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.uparrow} alt="" style={{ marginLeft: '15px' }} />
+                  <Imgc src={props.uparrow} alt="" className='imgc health-landing-img-left' />
                   </span>}
 
             </div>

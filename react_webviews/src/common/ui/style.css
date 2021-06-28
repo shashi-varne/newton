@@ -97,7 +97,7 @@
 .RadioLabel {
   color: var(--label);
   font-size: 14px;
-  font-family: "Roboto";
+  font-family: "Rubik", "Roboto", sans-serif;
   font-weight: 500;
 }
 .RadioWithIcon {
@@ -138,7 +138,7 @@
   text-align: left;
   /* margin-top: 8px; */
   min-height: 1em;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: "Rubik", "Roboto", sans-serif;
   line-height: 1em;
   color: #D0021B;
   position: relative;
