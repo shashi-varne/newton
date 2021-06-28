@@ -161,7 +161,7 @@ class DigiStatus extends Component {
   sendEvents = (userAction, screenName) => {
     let kyc = this.state.kyc;
       let eventObj = {
-        event_name: isTradingEnabled(kyc) ? "trading_onboarding" : "KYC_registration",
+        event_name: isTradingEnabled(kyc) ? "trading_onboarding" : "kyc_registration",
         properties: {
           user_action: userAction || "",
           screen_name: screenName || "kyc_complete",

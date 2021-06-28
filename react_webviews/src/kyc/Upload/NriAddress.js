@@ -134,7 +134,7 @@ const NRIAddressUpload = (props) => {
 
   const sendEvents = (userAction, type, docSide) => {
     let eventObj = {
-      event_name: "KYC_registration",
+      event_name: "kyc_registration",
       properties: {
         user_action: userAction || "",
         screen_name: "nri_address_doc",
