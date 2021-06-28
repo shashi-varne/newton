@@ -110,7 +110,7 @@ class Register extends Component {
               <div
                 className="text"
                 style={{
-                  fontWeight: registerType === "mobile" ? "bold" : "normal",
+                  fontWeight: registerType === "mobile" ? "500" : "normal",
                 }}
                 onClick={() => this.setRegistrationType("mobile")}
                 data-aid='mobile-text'
@@ -121,7 +121,7 @@ class Register extends Component {
               <div
                 className="text"
                 style={{
-                  fontWeight: registerType === "email" ? "bold" : "normal",
+                  fontWeight: registerType === "email" ? "500" : "normal",
                 }}
                 onClick={() => this.setRegistrationType("email")}
                 data-aid='email-text'

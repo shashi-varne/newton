@@ -94,7 +94,7 @@ class Login extends Component {
               <div
                 className="text"
                 style={{
-                  fontWeight: loginType === "mobile" ? "bold" : "normal",
+                  fontWeight: loginType === "mobile" ? "500" : "normal",
                 }}
                 onClick={() => this.setLoginType("mobile")}
                 data-aid='mobile-text'
@@ -106,7 +106,7 @@ class Login extends Component {
                 <div
                   className="text"
                   style={{
-                    fontWeight: loginType === "email" ? "bold" : "normal",
+                    fontWeight: loginType === "email" ? "500" : "normal",
                   }}
                   onClick={() => this.setLoginType("email")}
                   data-aid='email-text'
