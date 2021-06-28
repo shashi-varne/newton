@@ -120,6 +120,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     case "/sip/payment/callback":
     case "/kyc/report":
     case "/notification":
+    case "/kyc/home":
       if (config?.code === 'moneycontrol') {
         navigate("/");
         return true;
