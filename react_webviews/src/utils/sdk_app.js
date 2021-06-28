@@ -3,6 +3,7 @@ import { navigate as navigateFunc, isNpsOutsideSdk } from "utils/functions";
 import { storageService } from "utils/validators";
 import { nativeCallback } from "./native_callback";
 import { commonBackMapper } from "utils/constants";
+import { getConfig } from "./functions";
 
 export const backMapper = (state) => {
   return commonBackMapper[state] || "";
@@ -83,9 +84,9 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
         }
       }
       break;
-    case "/invest/money-control":
-      nativeCallback({ action: "exit_web" });
-      break;
+    // case "/invest/money-control":
+    //   nativeCallback({ action: "exit_web" });
+    //   break;
     case "/account/merge/linked/success":
       nativeCallback({ action: "session_expired" });
       break;
@@ -98,6 +99,10 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       }
       break;
     default:
+      if(currentState === "/" && getConfig().code === 'moneycontrol') {
+        nativeCallback({ action: "exit_web" });
+        return true; 
+      }
       if (currentState === "/" || isNpsOutsideSdk(fromState, currentState)) {
         nativeCallback({ action: "exit_web" });
       } else {

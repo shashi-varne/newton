@@ -139,13 +139,13 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         return true;
       }
       break;
-    case '/invest/money-control':
-      let message = JSON.stringify({
-        type: "iframe_close"
-      });
-      window.callbackWeb.sendEvent(message);
-      storageService().clear();
-      break;
+    // case '/invest/money-control':
+    //   let message = JSON.stringify({
+    //     type: "iframe_close"
+    //   });
+    //   window.callbackWeb.sendEvent(message);
+    //   storageService().clear();
+    //   break;
     case '/account/merge/linked/success':
       if (config?.code === 'moneycontrol') {
         window.history.go(-2);
@@ -153,6 +153,14 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
       // navigate kyc home
       break;
     default:
+      if(currentState === "/" && config?.code === 'moneycontrol') {
+        let message = JSON.stringify({
+          type: "iframe_close"
+        });
+        window.callbackWeb.sendEvent(message);
+        storageService().clear();
+        return true; 
+      }
       if (backMapper(currentState)) {
         navigate(backMapper(currentState));
         return true;
