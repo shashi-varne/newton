@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import Input from 'common/ui/Input'
 import BottomSheet from 'common/ui/BottomSheet'
@@ -6,6 +6,11 @@ import { validateEmail, validateNumber } from 'utils/validators'
 
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig } from 'utils/functions'
+import { isEmpty } from 'lodash'
+
+import { createITRApplication, getUserAccountSummary } from '../common/ApiCalls'
+import { storageService } from '../../utils/validators'
+import { ITR_TYPE_KEY } from '../constants'
 
 import './PersonalDetails.scss'
 
@@ -13,17 +18,57 @@ function PersonalDetails(props) {
   const navigate = navigateFunc.bind(props)
   const productName = getConfig().productName
 
-  const [name, setName] = useState('Ashish Thakur')
-  const [email, setEmail] = useState('ashish.thakur@fisdom.com')
-  const [mobileNumber, setMobileNumber] = useState('9999999999')
+  const closeError = () => {
+    setShowError(false)
+  }
+
+  const defaultUserSummary = props?.location?.params?.userSummary || {}
+
+  const [userSummary, setUserSummary] = useState(defaultUserSummary)
+  const [showLoader, setShowLoader] = useState(false)
+  const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [showBottomSheet, setShowBottomSheet] = useState(false)
+  const [errorData, setErrorData] = useState({})
+
+  const [name, setName] = useState(userSummary?.name || '')
+  const [email, setEmail] = useState(userSummary?.name || '')
+  const [mobileNumber, setMobileNumber] = useState(userSummary?.mobile || '')
+
+  const [, setItrId] = useState('')
+  const [itrSSOURL, setITRSSOURL] = useState('')
+
+  useEffect(() => {
+    fetchUserSummary()
+  }, [])
+
+  const fetchUserSummary = async () => {
+    try {
+      if (isEmpty(userSummary)) {
+        setShowSkeltonLoader(true)
+        const user = await getUserAccountSummary()
+        setUserSummary(user)
+        setName(user?.name)
+        setEmail(user?.email)
+        setMobileNumber(user?.mobile)
+        setShowSkeltonLoader(false)
+      }
+    } catch (err) {
+      setShowError(true)
+      setErrorData({
+        type: 'crash',
+        title: err.message,
+        handleClick: closeError,
+      })
+      setShowSkeltonLoader(false)
+    }
+  }
 
   const [errors, setErrors] = useState({
     email: false,
     name: false,
     mobileNumber: false,
   })
-
-  const [showLoader, setShowLoader] = useState(false)
 
   const handleFocus = (type) => () => {
     if (errors[type]) {
@@ -70,8 +115,47 @@ function PersonalDetails(props) {
     }
   }
 
-  const handleClick = () => {
-    navigate('/tax-filing/redirection', {}, false)
+  const handleProceed = async () => {
+    try {
+      navigate('/tax-filing/redirection', { redirectionUrl: itrSSOURL }, false)
+    } catch (err) {
+      setShowError(true)
+      setErrorData({
+        type: 'crash',
+        title1: err.message,
+        button_text1: 'CLOSE',
+        handleClick1: closeError,
+      })
+    }
+  }
+
+  const handleClick = async () => {
+    try {
+      const type = storageService().get(ITR_TYPE_KEY)
+      setShowLoader('button')
+      const itr = await createITRApplication({
+        type,
+        email,
+        name,
+        mobile: mobileNumber,
+      })
+      setItrId(itr.itr_id)
+      setITRSSOURL(itr.sso_url)
+      setShowBottomSheet(true)
+      setShowLoader(false)
+    } catch (err) {
+      setShowError(true)
+      setErrorData({
+        type: 'generic',
+        title1: err.message,
+        button_text1: 'CLOSE',
+        button_text2: 'RETRY',
+        handleClick2: handleClick,
+        handleClick1: closeError,
+      })
+      setShowBottomSheet(false)
+      setShowLoader(false)
+    }
   }
 
   return (
@@ -80,7 +164,10 @@ function PersonalDetails(props) {
       smallTitle="Fill your details to start"
       buttonTitle="CONTINUE"
       handleClick={handleClick}
-      showLoader={false}
+      showError={showError}
+      errorData={errorData}
+      skelton={showSkeltonLoader}
+      showLoader={showLoader}
     >
       <form className="block tax-filing-details">
         <Input
@@ -92,6 +179,7 @@ function PersonalDetails(props) {
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
+          disabled={!isEmpty(name)}
           error={errors?.name}
           helperText={errors?.name ? 'Please enter a valid name' : ''}
           required
@@ -105,6 +193,7 @@ function PersonalDetails(props) {
           onChange={handleChange('email')}
           class="block m-top-3x"
           variant="outlined"
+          disabled={!isEmpty(email)}
           error={errors?.email}
           helperText={errors?.email ? 'Please enter a valid email address' : ''}
           required
@@ -118,6 +207,7 @@ function PersonalDetails(props) {
           onChange={handleChange('mobileNumber')}
           class="block m-top-3x"
           variant="outlined"
+          disabled={!isEmpty(mobileNumber)}
           error={errors?.mobileNumber}
           helperText={
             errors?.mobileNumber ? 'Please enter a correct mobile number' : ''
@@ -126,13 +216,14 @@ function PersonalDetails(props) {
         />
       </form>
       <BottomSheet
-        open={false}
+        open={showBottomSheet}
         data={{
-          header_title: 'ITR Application Created',
-          content: 'Now, answer a few simple questions and get the plan',
+          header_title: 'Application created',
+          content:
+            'Great job! Only a few more details required for ITR calculation',
           src: require(`assets/${productName}/icn_application_created.svg`),
           button_text1: 'CONTINUE',
-          handleClick1: () => {},
+          handleClick1: handleProceed,
           handleClose: () => {},
         }}
       />

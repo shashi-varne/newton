@@ -19,9 +19,7 @@ import { storageService } from '../../utils/validators'
 
 function Steps(props) {
   const navigate = navigateFunc.bind(props)
-  const [showLoader, setShowLoader] = useState(false)
-  const [showError, setShowError] = useState(false)
-  const [errorData, setErrorData] = useState({})
+  const [showLoader] = useState(false)
 
   const type =
     props?.location?.params?.type || storageService().get(ITR_TYPE_KEY)

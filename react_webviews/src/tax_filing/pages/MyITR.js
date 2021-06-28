@@ -7,26 +7,57 @@ import { itrStatusMappings } from '../constants'
 import { isEmpty } from 'lodash'
 
 import { storageService } from 'utils/validators'
-
-import { getITRList, getUserAccountSummary } from '../common/ApiCalls'
+import { navigate as navigateFunc } from '../common/functions'
+import {
+  getITRList,
+  getUserAccountSummary,
+  resumeITRApplication,
+} from '../common/ApiCalls'
 import { USER_SUMMARY_KEY, ITR_APPLICATIONS_KEY } from '../constants'
 
 import './MyITR.scss'
 
 function MyITR(props) {
+  const navigate = navigateFunc.bind(props)
   const productName = getConfig().productName
   const defaultUserSummary = props?.location?.params?.userSummary || {}
   const defaultItrList = props?.location?.params?.itrList || []
 
+  const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
   const [showError, setShowError] = useState(false)
   const [errorData, setErrorData] = useState({})
+  const [resuming, setResuming] = useState('')
 
   const [itrList, setItrList] = useState(defaultItrList)
   const [userSummary, setUserSummary] = useState(defaultUserSummary)
 
   const closeError = () => {
     setShowError(false)
+  }
+
+  const handleResumeApplication = (itrId) => async () => {
+    try {
+      setShowLoader('button')
+      setResuming(itrId)
+      const result = await resumeITRApplication(itrId)
+      console.log(result)
+      setShowLoader(false)
+      navigate(
+        '/tax-filing/redirection',
+        { redirectionUrl: result?.msg?.url },
+        false
+      )
+    } catch (err) {
+      setShowLoader(false)
+      setShowError(true)
+      setErrorData({
+        type: 'crash',
+        title1: err?.message,
+        button_text1: 'CLOSE',
+        handleClick1: closeError,
+      })
+    }
   }
 
   useEffect(() => {
@@ -36,7 +67,7 @@ function MyITR(props) {
   const fetchITRListAndUserSummary = async () => {
     try {
       if (isEmpty(itrList) || isEmpty(userSummary)) {
-        setShowLoader(true)
+        setShowSkeltonLoader(true)
         const [list, user] = await Promise.all([
           getITRList(),
           getUserAccountSummary(),
@@ -45,17 +76,18 @@ function MyITR(props) {
         setUserSummary({ ...user })
         storageService().setObject(USER_SUMMARY_KEY, user)
         storageService().setObject(ITR_APPLICATIONS_KEY, list)
-        setShowLoader(false)
+        setShowSkeltonLoader(false)
         setShowError(false)
       }
     } catch (err) {
       setShowError(true)
       setErrorData({
-        type: 'crash',
+        type: 'generic',
         title1: err.message,
-        handleClick1: closeError(),
+        handleClick1: fetchITRListAndUserSummary,
+        handleClick2: closeError,
       })
-      setShowLoader(false)
+      setShowSkeltonLoader(false)
     }
   }
   let myItrs = []
@@ -76,7 +108,14 @@ function MyITR(props) {
 
         if (status !== 'completed') {
           bottomValues.push({
-            renderItem: () => <Button buttonTitle="RESUME" />,
+            renderItem: () => (
+              <Button
+                buttonTitle="RESUME"
+                onClick={handleResumeApplication(itrId)}
+                showLoader={itrId === resuming ? showLoader : ''}
+                disable={showLoader && itrId !== resuming ? true : false}
+              />
+            ),
           })
         }
 
@@ -98,7 +137,7 @@ function MyITR(props) {
       buttonTitle={true}
       showError={showError}
       errorData={errorData}
-      skelton={showLoader}
+      skelton={showSkeltonLoader}
       noFooter
     >
       <div className="tax-filing-my-itr">

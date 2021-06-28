@@ -1,7 +1,13 @@
 import { getConfig } from 'utils/functions'
 import { storageService } from '../../utils/validators'
 
-import { ITR_BACK_BUTTON_TRACKER_KEY, ITR_TYPE_KEY } from '../constants'
+import {
+  ITR_APPLICATIONS_KEY,
+  ITR_BACK_BUTTON_TRACKER_KEY,
+  ITR_ID_KEY,
+  ITR_TYPE_KEY,
+  USER_SUMMARY_KEY,
+} from '../constants'
 export function navigate(pathname, params, replace = false) {
   if (!replace) {
     this.history.push({
@@ -79,4 +85,16 @@ export const checkIfLandedByBackButton = () => {
 
 export const setITRJourneyType = (type) => {
   storageService().set(ITR_TYPE_KEY, type)
+}
+
+export const setITRID = (itrId) => {
+  storageService().set(ITR_ID_KEY, itrId)
+}
+
+export const clearITRSessionStorage = () => {
+  storageService().remove(ITR_BACK_BUTTON_TRACKER_KEY)
+  storageService().remove(ITR_ID_KEY)
+  storageService().remove(ITR_TYPE_KEY)
+  storageService().remove(ITR_APPLICATIONS_KEY)
+  storageService().remove(USER_SUMMARY_KEY)
 }
