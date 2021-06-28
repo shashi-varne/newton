@@ -57,8 +57,8 @@ const Home = (props) => {
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
-      title: "Are you investment ready?",
-      subtitle: "We need your PAN to check if you’re investment ready",
+      title: "Check if you’re investment ready",
+      subtitle: "PAN is mandatory for investing in Mutual Funds",
       kycConfirmPanScreen: false,
     };
     if (
