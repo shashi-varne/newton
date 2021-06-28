@@ -17,7 +17,7 @@ const DialogAsPage = (props) => {
   const productName = getConfig().productName;
   if(isEmpty(state) || isEmpty(internalStorage.getStore())){
     return <Redirect to={{
-      pathname: "home",
+      pathname: state.fromState || "home",
       search: getConfig().searchParams,
     }} />
   }
