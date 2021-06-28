@@ -9,30 +9,101 @@ import {
   taxFilingAdvantages,
   ITR_TYPE_KEY,
   USER_SUMMARY_KEY,
+  ITR_ID_KEY,
 } from '../constants'
 
 import { navigate as navigateFunc } from '../common/functions'
-import { getUserAccountSummary } from '../common/ApiCalls'
+import { createITRApplication, getUserAccountSummary } from '../common/ApiCalls'
 
 import './Steps.scss'
-import { storageService } from '../../utils/validators'
+import { isEmpty, storageService } from '../../utils/validators'
 
 function Steps(props) {
   const navigate = navigateFunc.bind(props)
-  const [showLoader] = useState(false)
+  const [showLoader, setShowLoader] = useState(false)
 
   const type =
     props?.location?.params?.type || storageService().get(ITR_TYPE_KEY)
+
   const productName = getConfig().productName
+
   const handleClick = async () => {
     let userSummary = {}
     try {
+      setShowLoader('button')
       userSummary = await getUserAccountSummary()
+      const type = storageService().get(ITR_TYPE_KEY)
+      if (!type) {
+        navigate('/tax-filing', {}, false)
+        return
+      }
       storageService().setObject(USER_SUMMARY_KEY, userSummary)
+      if (
+        !isEmpty(userSummary?.email) &&
+        !isEmpty(userSummary?.mobile) &&
+        !isEmpty(userSummary?.name) &&
+        !isEmpty(type)
+      ) {
+        setShowLoader('button')
+        const itr = await createITRApplication({
+          type,
+          email: userSummary?.email,
+          mobile: userSummary?.mobile,
+          name: userSummary?.name,
+        })
+        storageService().setObject(ITR_ID_KEY, itr.itr_id)
+        setShowLoader(false)
+        navigate(
+          `/tax-filing/redirection`,
+          { redirectionUrl: itr.sso_url },
+          false
+        )
+        return
+      } else {
+        setShowLoader(false)
+        navigate(`/tax-filing/personal-details`, { userSummary }, false)
+        return
+      }
     } catch (err) {
       userSummary = storageService().getObject(USER_SUMMARY_KEY)
+      const type = storageService().get(ITR_TYPE_KEY)
+      if (!type) {
+        setShowLoader(false)
+        navigate('/tax-filing', {}, false)
+        return
+      }
+      if (
+        !isEmpty(userSummary?.email) &&
+        !isEmpty(userSummary?.mobile) &&
+        !isEmpty(userSummary?.name) &&
+        type
+      ) {
+        try {
+          const itr = await createITRApplication({
+            email: userSummary?.email,
+            mobile: userSummary?.mobile,
+            name: userSummary?.name,
+            type,
+          })
+          storageService().setObject(ITR_ID_KEY, itr.itr_id)
+          setShowLoader(false)
+          navigate(
+            `/tax-filing/redirection`,
+            { redirectionUrl: itr.sso_url },
+            false
+          )
+          return
+        } catch (err) {
+          setShowLoader(false)
+          navigate(`/tax-filing/personal-details`, {}, false)
+          return
+        }
+      } else {
+        setShowLoader(false)
+        navigate(`/tax-filing/personal-details`, { userSummary }, false)
+        return
+      }
     }
-    navigate(`/tax-filing/personal-details`, { userSummary }, false)
   }
 
   const topTitle =
