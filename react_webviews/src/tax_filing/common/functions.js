@@ -49,13 +49,17 @@ export const getTaxFilingFeatureLists = () => {
 }
 
 export const trackBackButtonPress = (pathname) => {
-  const allowedPaths = ['/tax-filing/steps', '/tax-filing/my-itr']
+  const allowedPaths = [
+    '/tax-filing/steps',
+    '/tax-filing/my-itr',
+    '/tax-filing/faqs',
+  ]
   if (allowedPaths.includes(pathname)) {
-    storageService().setObject('itr-back-button-tracker', {
+    storageService().setObject(ITR_BACK_BUTTON_TRACKER_KEY, {
       backButton: true,
     })
   } else {
-    storageService().setObject('itr-back-button-tracker', {
+    storageService().setObject(ITR_BACK_BUTTON_TRACKER_KEY, {
       backButton: false,
     })
   }

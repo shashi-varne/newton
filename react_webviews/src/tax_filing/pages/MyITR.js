@@ -16,12 +16,15 @@ import {
 } from '../common/ApiCalls'
 import { USER_SUMMARY_KEY, ITR_APPLICATIONS_KEY } from '../constants'
 
+import { trackBackButtonPress } from '../common/functions'
+import { nativeCallback } from 'utils/native_callback'
+
 import './MyITR.scss'
 
 function MyITR(props) {
   const navigate = navigateFunc.bind(props)
   const productName = getConfig().productName
-  const defaultUserSummary = props?.location?.params?.userSummary?.user || {}
+  const defaultUserSummary = props?.location?.params?.userSummary || {}
   const defaultItrList = props?.location?.params?.itrList || []
 
   const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
@@ -37,8 +40,47 @@ function MyITR(props) {
     setShowError(false)
   }
 
-  const handleResumeApplication = (itrId) => async () => {
+  const sendEvents = (userAction, data = {}) => {
+    const category = data?.category || ''
+    const itrStatus = data?.status || ''
+    const itrCount = itrList.length
+    let eventObj = {}
+    if (userAction === 'next') {
+      eventObj = {
+        event_name: 'ITR',
+        properties: {
+          user_action: userAction,
+          screen_name: 'My ITR',
+          category,
+          status: itrStatus,
+          count: itrCount,
+        },
+      }
+    } else {
+      eventObj = {
+        event_name: 'ITR',
+        properties: {
+          user_action: userAction,
+          screen_name: 'My ITR',
+        },
+      }
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj
+    } else {
+      nativeCallback({ events: eventObj })
+    }
+  }
+
+  const goBack = () => {
+    trackBackButtonPress(props?.history?.location?.pathname)
+    sendEvents('back')
+    props.history.goBack()
+  }
+
+  const handleResumeApplication = (itrId, type, itrStatus) => async () => {
     try {
+      sendEvents('next', { category: type, status: itrStatus })
       setShowLoader('button')
       setResuming(itrId)
       const result = await resumeITRApplication(itrId)
@@ -53,7 +95,8 @@ function MyITR(props) {
       setShowError(true)
       setErrorData({
         type: 'crash',
-        title1: err?.message,
+        title1: 'Error',
+        title2: 'Sorry, we could not process your request.',
         button_text1: 'CLOSE',
         handleClick1: closeError,
       })
@@ -72,7 +115,6 @@ function MyITR(props) {
           getITRList(),
           getUserAccountSummary(),
         ])
-        console.log(list, summary)
         setItrList([...list])
         setUserSummary({ ...summary })
         storageService().setObject(USER_SUMMARY_KEY, summary)
@@ -120,7 +162,7 @@ function MyITR(props) {
             renderItem: () => (
               <Button
                 buttonTitle="RESUME"
-                onClick={handleResumeApplication(itrId)}
+                onClick={handleResumeApplication(itrId, type, itrStatus)}
                 showLoader={itrId === resuming ? showLoader : ''}
                 disable={showLoader && itrId !== resuming ? true : false}
               />
@@ -147,6 +189,7 @@ function MyITR(props) {
       showError={showError}
       errorData={errorData}
       skelton={showSkeltonLoader}
+      headerData={{ goBack }}
       noFooter
     >
       <div className="tax-filing-my-itr">

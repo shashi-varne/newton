@@ -4,7 +4,10 @@ import Input from 'common/ui/Input'
 import BottomSheet from 'common/ui/BottomSheet'
 import { validateEmail, validateNumber } from 'utils/validators'
 
-import { navigate as navigateFunc } from '../common/functions'
+import {
+  navigate as navigateFunc,
+  trackBackButtonPress,
+} from '../common/functions'
 import { getConfig } from 'utils/functions'
 import { isEmpty } from 'lodash'
 
@@ -33,9 +36,11 @@ function PersonalDetails(props) {
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const [errorData, setErrorData] = useState({})
 
-  const [name, setName] = useState(userSummary?.name || '')
-  const [email, setEmail] = useState(userSummary?.name || '')
-  const [mobileNumber, setMobileNumber] = useState(userSummary?.mobile || '')
+  const [name, setName] = useState(userSummary?.user?.name || '')
+  const [email, setEmail] = useState(userSummary?.user?.name || '')
+  const [mobileNumber, setMobileNumber] = useState(
+    userSummary?.user?.mobile || ''
+  )
 
   const [, setItrId] = useState('')
   const [itrSSOURL, setITRSSOURL] = useState('')
@@ -49,19 +54,13 @@ function PersonalDetails(props) {
       if (isEmpty(userSummary)) {
         setShowSkeltonLoader(true)
         const summary = await getUserAccountSummary()
-        setUserSummary(summary?.user)
+        setUserSummary(summary)
         setName(summary?.user?.name)
         setEmail(summary?.user?.email)
         setMobileNumber(summary?.user?.mobile)
         setShowSkeltonLoader(false)
       }
     } catch (err) {
-      setShowError(true)
-      setErrorData({
-        type: 'crash',
-        title: err.message,
-        handleClick: closeError,
-      })
       setShowSkeltonLoader(false)
     }
   }
@@ -119,6 +118,7 @@ function PersonalDetails(props) {
 
   const handleProceed = async () => {
     try {
+      sendEvents('next', { screenName: 'Application Created' })
       navigate('/tax-filing/redirection', { redirectionUrl: itrSSOURL }, false)
     } catch (err) {
       setShowError(true)
@@ -132,18 +132,37 @@ function PersonalDetails(props) {
   }
 
   const goBack = () => {
-    sendEvents('back')
+    trackBackButtonPress(props?.history?.location?.pathname)
+    sendEvents('back', { screenName: 'Personal Detail' })
     props.history.goBack()
   }
 
   const sendEvents = (userAction, data = {}) => {
-    const eventObj = {
-      event_name: 'ITR',
-      properties: {
-        user_action: userAction,
-        screen_name: 'Application Created',
-      },
+    const type = storageService().get(ITR_TYPE_KEY)
+    const investment_status = userSummary?.kyc?.investment_status ? 'Y' : 'N'
+    const kyc_status = userSummary?.kyc?.kyc_status ? 'Y' : 'N'
+    let eventObj = {}
+    if (data?.screenName === 'Personal Detail') {
+      eventObj = {
+        event_name: 'ITR',
+        properties: {
+          user_action: userAction,
+          screen_name: data?.screenName || 'Personal Detail',
+          category: type,
+          investment_status,
+          kyc_status,
+        },
+      }
+    } else {
+      eventObj = {
+        event_name: 'ITR',
+        properties: {
+          user_action: userAction,
+          screen_name: data?.screenName,
+        },
+      }
     }
+
     if (userAction === 'just_set_events') {
       return eventObj
     } else {
@@ -155,6 +174,7 @@ function PersonalDetails(props) {
     try {
       const type = storageService().get(ITR_TYPE_KEY)
       setShowLoader('button')
+      sendEvents('next', { screenName: 'Personal Details' })
       const itr = await createITRApplication({
         type,
         email,
@@ -180,6 +200,8 @@ function PersonalDetails(props) {
     }
   }
 
+  console.log(userSummary)
+
   return (
     <Container
       title="Personal Details"
@@ -191,6 +213,7 @@ function PersonalDetails(props) {
       headerData={{ goBack }}
       skelton={showSkeltonLoader}
       showLoader={showLoader}
+      disabled={true}
     >
       <form className="block tax-filing-details">
         <Input
@@ -202,7 +225,7 @@ function PersonalDetails(props) {
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(userSummary?.name)}
+          disabled={!isEmpty(userSummary?.user?.name)}
           error={errors?.name}
           helperText={errors?.name ? 'Please enter a valid name' : ''}
           required
@@ -216,7 +239,7 @@ function PersonalDetails(props) {
           onChange={handleChange('email')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(userSummary?.email)}
+          disabled={!isEmpty(userSummary?.user?.email)}
           error={errors?.email}
           helperText={errors?.email ? 'Please enter a valid email address' : ''}
           required
@@ -230,7 +253,7 @@ function PersonalDetails(props) {
           onChange={handleChange('mobileNumber')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(userSummary?.mobile)}
+          disabled={!isEmpty(userSummary?.user?.mobile)}
           error={errors?.mobileNumber}
           helperText={
             errors?.mobileNumber ? 'Please enter a correct mobile number' : ''

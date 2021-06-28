@@ -43,27 +43,8 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname
 
     if (this?.props?.headerData && this?.props?.headerData?.goBack) {
-      switch (pathname) {
-        case '/tax-filing':
-          untrackBackButtonPress()
-          nativeCallback({ action: 'exit', events: this.getEvents('exit') })
-          break
-        case '/tax-filing/steps':
-          trackBackButtonPress(pathname)
-          this.props.headerData.goBack()
-          break
-        case '/tax-filing/my-itr':
-          trackBackButtonPress(pathname)
-          this.props.headerData.goBack()
-          break
-        case '/tax-filing/faqs':
-          trackBackButtonPress(pathname)
-          this.props.headerData.goBack()
-          break
-        default:
-          this.props.headerData.goBack()
-          break
-      }
+      this.props.headerData.goBack()
+      return
     }
 
     let action = 'back'
@@ -72,7 +53,7 @@ class Container extends Component {
     switch (pathname) {
       case '/tax-filing':
         untrackBackButtonPress()
-        nativeCallback({ action: 'exit', events: this.getEvents('exit') })
+        nativeCallback({ action: 'exit', events: this.getEvents() })
         break
       case '/tax-filing/steps':
         trackBackButtonPress(pathname)

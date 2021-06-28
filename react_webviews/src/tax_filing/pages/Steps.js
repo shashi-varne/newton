@@ -12,7 +12,10 @@ import {
   ITR_ID_KEY,
 } from '../constants'
 
-import { navigate as navigateFunc } from '../common/functions'
+import {
+  navigate as navigateFunc,
+  trackBackButtonPress,
+} from '../common/functions'
 import { createITRApplication, getUserAccountSummary } from '../common/ApiCalls'
 
 import './Steps.scss'
@@ -34,27 +37,52 @@ function Steps(props) {
   const productName = getConfig().productName
 
   const sendEvents = (userAction, data) => {
+    const summary = storageService().getObject(USER_SUMMARY_KEY)
+
     const personal_details_exist =
-      !isEmpty(data?.user?.name) &&
-      !isEmpty(data?.user?.email) &&
-      !isEmpty(data?.user?.mobile)
+      !isEmpty(summary?.user?.name) &&
+      !isEmpty(summary?.user?.email) &&
+      !isEmpty(summary?.user?.mobile)
         ? 'yes'
         : 'no'
-    const eventObj = {
-      event_name: 'ITR',
-      properties: {
-        user_action: userAction,
-        screen_name: 'eFile in 3 steps',
-        personal_details_exist: personal_details_exist,
-        investment_status: data?.kyc?.investment_status || '',
-        kyc_status: data?.kyc?.kyc_status || '',
-      },
+
+    const investment_status = summary?.kyc?.investment_status ? 'Y' : 'N'
+    const kyc_status = summary?.kyc?.investment_status ? 'Y' : 'N'
+    let eventObj = {}
+    if (userAction === 'next') {
+      eventObj = {
+        event_name: 'ITR',
+        properties: {
+          user_action: userAction,
+          screen_name:
+            type === 'eCA' ? 'Hire expert to efile' : 'eFile in 3 steps',
+          personal_details_exist: personal_details_exist,
+          investment_status: investment_status ? 'Y' : 'N',
+          kyc_status: kyc_status ? 'Y' : 'N',
+        },
+      }
+    } else {
+      eventObj = {
+        event_name: 'ITR',
+        properties: {
+          user_action: userAction,
+          screen_name:
+            type === 'eCA' ? 'Hire expert to efile' : 'eFile in 3 steps',
+        },
+      }
     }
+
     if (userAction === 'just_set_events') {
       return eventObj
     } else {
       nativeCallback({ events: eventObj })
     }
+  }
+
+  const goBack = () => {
+    trackBackButtonPress(props?.history?.location?.pathname)
+    sendEvents('back')
+    props.history.goBack()
   }
 
   const handleClick = async () => {
@@ -83,7 +111,7 @@ function Steps(props) {
         })
         storageService().setObject(ITR_ID_KEY, itr.itr_id)
         setShowLoader(false)
-        sendEvents('next', summary)
+        sendEvents('next', {})
         navigate(
           `/tax-filing/redirection`,
           { redirectionUrl: itr.sso_url },
@@ -163,6 +191,7 @@ function Steps(props) {
       buttonTitle="CONTINUE"
       handleClick={handleClick}
       showLoader={showLoader}
+      headerData={{ goBack }}
       classOverRideContainer="m-bottom-4x"
     >
       {taxFilingSteps[type].map(({ title, subtitle, icon }, idx) => (

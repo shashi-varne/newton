@@ -72,8 +72,8 @@ function Landing(props) {
         screen_name: 'File ITR',
         card_click: data?.card_click || '',
         personal_details_exist: personal_details_exist,
-        investment_status: investment_status,
-        kyc_status: kyc_status,
+        investment_status: investment_status ? 'Y' : 'N',
+        kyc_status: kyc_status ? 'Y' : 'N',
       },
     }
     if (userAction === 'just_set_events') {
@@ -138,7 +138,7 @@ function Landing(props) {
 
   const handleITRJourneyNavigation = (type) => () => {
     sendEvents('next', { card_click: type })
-    storageService().set(ITR_TYPE_KEY, type)
+    setITRJourneyType(type)
     navigate(`/tax-filing/steps`, { type, userSummary }, false)
   }
 
