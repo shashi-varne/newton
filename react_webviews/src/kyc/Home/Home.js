@@ -230,7 +230,8 @@ const Home = (props) => {
 
   const handleMerge = async (step) => {
     if (step === "STEP1") {
-      storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
+      if(!isEmpty(authIds))
+        storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
       navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {
