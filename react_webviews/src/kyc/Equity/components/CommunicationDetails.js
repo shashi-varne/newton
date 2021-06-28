@@ -38,6 +38,7 @@ const CommunicationDetails = (props) => {
   const stateParams = props.location?.state || {};
   const isEdit = stateParams.isEdit || false;
   const userType = stateParams.userType || "";
+  const callHandelClick = stateParams.callHandelClick;
   const [formData, setFormData] = useState({
     whatsappConsent: true,
   });
@@ -73,7 +74,8 @@ const CommunicationDetails = (props) => {
       setIsDlFlow(isDigilockerFlow(kyc));
       setTotalPages(getTotalPagesInPersonalDetails());
     }
-  }, [kyc, user]);
+    if(callHandelClick && communicationType) handleClick();
+  }, [kyc, user, communicationType]);
 
   const handleChange = (name) => (event) => {
     if (showOtpContainer || showDotLoader) {
