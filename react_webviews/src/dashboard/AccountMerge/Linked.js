@@ -25,7 +25,7 @@ const AccountLinked = (props) => {
   };
 
   const hideImage =
-    config.isIframe && code === "moneycontrol" && config.isMobileDevice;
+    config.isIframe && config.code === "moneycontrol" && config.isMobileDevice;
   return (
     <Container 
       buttonTitle="CLOSE" 
