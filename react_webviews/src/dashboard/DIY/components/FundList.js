@@ -361,7 +361,6 @@ const DiyFundCard = ({
               dataAid='diy-fundlist-invest-btn'
               buttonTitle="Invest"
               style={{
-                height: '20px',
                 color: '#fff',
                 borderRadius: '4px',
                 backgroundColor: '#35cb5d',
