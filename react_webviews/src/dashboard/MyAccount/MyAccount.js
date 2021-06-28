@@ -3,7 +3,7 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { initializeComponentFunctions } from "./MyAccountFunctions";
 import Container from "../common/Container";
-// import VerifyDetailDialog from "../../login_and_registration/bottomsheet/VerifyDetailDialog";
+import VerifyDetailDialog from "../../login_and_registration/bottomsheet/VerifyDetailDialog";
 import AccountAlreadyExistDialog from "../../login_and_registration/bottomsheet/AccountAlreadyExistDialog";
 import Button from "material-ui/Button";
 import UserDetails from "./UserDetails";
@@ -52,7 +52,7 @@ class MyAccount extends Component {
     this.setState({
       accountAlreadyExists: show,
       accountAlreadyExistsData: data,
-      // verifyDetails: false,
+      verifyDetails: true,
       verifyDetailsType: type,
     });
   };
@@ -178,7 +178,7 @@ class MyAccount extends Component {
       userKyc,
       currentUser,
       contacts,
-      // verifyDetails,
+      verifyDetails,
       accountAlreadyExists,
     } = this.state;
     let bank = userKyc.bank || {};
@@ -322,7 +322,7 @@ class MyAccount extends Component {
             )}
             {this.renderDialog()}
           </div>
-          {/* {verifyDetails && (
+          {verifyDetails && (
             <VerifyDetailDialog
               type={this.state.verifyDetailsType}
               data={this.state.verifyDetailsData}
@@ -331,7 +331,7 @@ class MyAccount extends Component {
               onClose={this.closeVerifyDetailsDialog}
               parent={this}
             ></VerifyDetailDialog>
-          )} */}
+          )}
           {accountAlreadyExists && (
             <AccountAlreadyExistDialog
               type={this.state.verifyDetailsType}

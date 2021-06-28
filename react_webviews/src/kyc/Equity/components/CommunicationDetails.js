@@ -179,7 +179,7 @@ const CommunicationDetails = (props) => {
 
   const handleNavigation = () => {
     if(stateParams?.fromState === "/my-account") {
-      navigate(stateParams?.fromState);
+      navigate(stateParams?.goBack);
       return;
     }
     if (isKycDone) {

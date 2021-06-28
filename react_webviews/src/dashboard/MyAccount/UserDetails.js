@@ -42,10 +42,11 @@ class MyaccountDetails extends Component {
         const { auth_type, contact_value } = this.state;
         const contact_type = auth_type === 'mobile' ? "email" : auth_type;
         let result = await this.authCheckApi(contact_type, { "contact_value": contact_value })
-        if (result?.is_user) {
-            this.props.handleClick("/kyc/communication-details")
+        if (!result?.is_user) {
+            this.props.handleClick("/kyc/communication-details", {state: { goBack: "/my-account" }})
+            return;
         }
-        else if (!result?.is_user) {              
+        else if (result?.is_user) {              
             result = {
                 "message": "User found",   // REMOVE THIS
                 "is_user": true,
