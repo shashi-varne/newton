@@ -5,6 +5,7 @@ import { getConfig } from 'utils/functions'
 import Button from 'common/ui/Button'
 import { itrStatusMappings } from '../constants'
 import { isEmpty } from 'lodash'
+import moment from 'moment'
 
 import { storageService } from 'utils/validators'
 import { navigate as navigateFunc } from '../common/functions'
@@ -20,7 +21,7 @@ import './MyITR.scss'
 function MyITR(props) {
   const navigate = navigateFunc.bind(props)
   const productName = getConfig().productName
-  const defaultUserSummary = props?.location?.params?.userSummary || {}
+  const defaultUserSummary = props?.location?.params?.userSummary?.user || {}
   const defaultItrList = props?.location?.params?.itrList || []
 
   const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
@@ -41,7 +42,6 @@ function MyITR(props) {
       setShowLoader('button')
       setResuming(itrId)
       const result = await resumeITRApplication(itrId)
-      console.log(result)
       setShowLoader(false)
       navigate(
         '/tax-filing/redirection',
@@ -68,13 +68,14 @@ function MyITR(props) {
     try {
       if (isEmpty(itrList) || isEmpty(userSummary)) {
         setShowSkeltonLoader(true)
-        const [list, user] = await Promise.all([
+        const [list, summary] = await Promise.all([
           getITRList(),
           getUserAccountSummary(),
         ])
+        console.log(list, summary)
         setItrList([...list])
-        setUserSummary({ ...user })
-        storageService().setObject(USER_SUMMARY_KEY, user)
+        setUserSummary({ ...summary })
+        storageService().setObject(USER_SUMMARY_KEY, summary)
         storageService().setObject(ITR_APPLICATIONS_KEY, list)
         setShowSkeltonLoader(false)
         setShowError(false)
@@ -93,20 +94,28 @@ function MyITR(props) {
   let myItrs = []
   if (!isEmpty(itrList)) {
     myItrs = itrList.map(
-      ({ dt_created: dtCreated, itr_status: itrStatus, itr_id: itrId }) => {
+      ({
+        dt_created: dtCreated,
+        itr_status: itrStatus,
+        itr_id: itrId,
+        type,
+      }) => {
         let status = itrStatus ? itrStatus : 'open'
         const text = itrStatusMappings[status].text
         const color = itrStatusMappings[status].color
         const icn = itrStatusMappings[status].icon
         const icon = require(`assets/${productName}/${icn}.svg`)
-
+        // const dt = new Date(dtCreated).toLocaleDateString()
+        // const time = new Date(dtCreated).toLocaleTimeString()
+        const dateTime = moment(dtCreated).format('DD/MM/YYYY, hh:mma')
+        const filingType = type === 'eCA' ? 'CA-Assisted Filing' : 'Self-filing'
         let bottomValues = [
-          { title: 'Name', subtitle: userSummary?.name },
-          { title: 'Mobile Number', subtitle: userSummary?.mobile },
-          { title: 'Created On', subtitle: dtCreated },
+          { title: 'Name', subtitle: userSummary?.user?.name },
+          { title: 'Mobile Number', subtitle: userSummary?.user?.mobile },
+          { title: 'Created On', subtitle: dateTime },
         ]
 
-        if (status !== 'completed') {
+        if (status !== 'filed') {
           bottomValues.push({
             renderItem: () => (
               <Button
@@ -123,7 +132,7 @@ function MyITR(props) {
           color,
           topTextLeft: text,
           backgroundColor: '#FFFFFF',
-          headingTitle: 'CA-Assisted Filing',
+          headingTitle: filingType,
           headingLogo: icon,
           bottomValues,
         }

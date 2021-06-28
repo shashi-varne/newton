@@ -1,26 +1,21 @@
 import React, { useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 import Container from '../common/Container'
 import { isEmpty } from 'lodash'
-
-import { getConfig } from 'utils/functions'
+import { navigate as navigateFunc } from '../common/functions'
 
 import './Redirection.scss'
 import { clearITRSessionStorage } from '../common/functions'
 
 function Redirection(props) {
+  const navigate = navigateFunc.bind(props)
   const redirectionUrl = props?.location?.params?.redirectionUrl
+
   if (isEmpty(redirectionUrl)) {
-    return (
-      <Redirect
-        to={{
-          location: props?.location,
-          pathname: '/tax-filing/' + getConfig().searchParams,
-        }}
-      />
-    )
+    navigate('/tax-filing', {}, false)
+    return null
   }
+
   useEffect(() => {
     const timerHandle = setTimeout(() => {
       clearITRSessionStorage()

@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import { didMount, commonRender } from 'common/components/container_functions'
 import { nativeCallback } from 'utils/native_callback'
 import '../../utils/native_listner'
-import { trackBackButtonPress , untrackBackButtonPress } from './functions'
+import { trackBackButtonPress, untrackBackButtonPress } from './functions'
 
 class Container extends Component {
   constructor(props) {
@@ -46,13 +46,17 @@ class Container extends Component {
       switch (pathname) {
         case '/tax-filing':
           untrackBackButtonPress()
-          nativeCallback({ action: 'exit', events: this.getEvents() })
+          nativeCallback({ action: 'exit', events: this.getEvents('exit') })
           break
         case '/tax-filing/steps':
           trackBackButtonPress(pathname)
           this.props.headerData.goBack()
           break
         case '/tax-filing/my-itr':
+          trackBackButtonPress(pathname)
+          this.props.headerData.goBack()
+          break
+        case '/tax-filing/faqs':
           trackBackButtonPress(pathname)
           this.props.headerData.goBack()
           break
@@ -68,13 +72,17 @@ class Container extends Component {
     switch (pathname) {
       case '/tax-filing':
         untrackBackButtonPress()
-        nativeCallback({ action: 'exit', events: this.getEvents('exit') });
+        nativeCallback({ action: 'exit', events: this.getEvents('exit') })
         break
       case '/tax-filing/steps':
         trackBackButtonPress(pathname)
         this.props.history.goBack()
         break
       case '/tax-filing/my-itr':
+        trackBackButtonPress(pathname)
+        this.props.history.goBack()
+        break
+      case '/tax-filing/faqs':
         trackBackButtonPress(pathname)
         this.props.history.goBack()
         break

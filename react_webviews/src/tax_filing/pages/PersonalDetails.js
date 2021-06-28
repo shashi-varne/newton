@@ -46,11 +46,11 @@ function PersonalDetails(props) {
     try {
       if (isEmpty(userSummary)) {
         setShowSkeltonLoader(true)
-        const user = await getUserAccountSummary()
-        setUserSummary(user)
-        setName(user?.name)
-        setEmail(user?.email)
-        setMobileNumber(user?.mobile)
+        const summary = await getUserAccountSummary()
+        setUserSummary(summary?.user)
+        setName(summary?.user?.name)
+        setEmail(summary?.user?.email)
+        setMobileNumber(summary?.user?.mobile)
         setShowSkeltonLoader(false)
       }
     } catch (err) {
@@ -99,16 +99,16 @@ function PersonalDetails(props) {
   }
 
   const handleChange = (type) => (event) => {
-    const value = event.target.value.trim()
+    const value = event.target.value
     switch (type) {
       case 'name':
         setName(value)
         break
       case 'email':
-        setEmail(value)
+        setEmail(value.trim())
         break
       case 'mobileNumber':
-        setMobileNumber(value)
+        setMobileNumber(value.trim())
         break
       default:
         break
@@ -179,7 +179,7 @@ function PersonalDetails(props) {
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(name)}
+          disabled={!isEmpty(userSummary?.name)}
           error={errors?.name}
           helperText={errors?.name ? 'Please enter a valid name' : ''}
           required
@@ -193,7 +193,7 @@ function PersonalDetails(props) {
           onChange={handleChange('email')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(email)}
+          disabled={!isEmpty(userSummary?.email)}
           error={errors?.email}
           helperText={errors?.email ? 'Please enter a valid email address' : ''}
           required
@@ -207,7 +207,7 @@ function PersonalDetails(props) {
           onChange={handleChange('mobileNumber')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(mobileNumber)}
+          disabled={!isEmpty(userSummary?.mobile)}
           error={errors?.mobileNumber}
           helperText={
             errors?.mobileNumber ? 'Please enter a correct mobile number' : ''

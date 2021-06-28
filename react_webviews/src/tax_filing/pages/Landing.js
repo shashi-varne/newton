@@ -9,6 +9,8 @@ import WVCard from 'common/ui/Card/WVCard'
 import { Imgc } from 'common/ui/Imgc'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 
+import { nativeCallback } from 'utils/native_callback'
+
 import {
   taxFilingOptions,
   USER_SUMMARY_KEY,
@@ -53,6 +55,38 @@ function Landing(props) {
     setShowError(false)
   }
 
+  const sendEvents = (userAction, data = {}) => {
+    const investment_status = userSummary?.kyc?.investment_status || ''
+    const kyc_status = userSummary?.kyc?.kyc_status || ''
+    const personal_details_exist =
+      !isEmpty(userSummary?.user?.name) &&
+      !isEmpty(userSummary?.user?.mobile) &&
+      !isEmpty(userSummary?.user?.email)
+        ? 'yes'
+        : 'no'
+    const eventObj = {
+      event_name: 'ITR',
+      properties: {
+        user_action: userAction,
+        screen_name: 'File ITR',
+        card_click: data?.card_click,
+        personal_details_exist: personal_details_exist,
+        investment_status: investment_status,
+        kyc_status: kyc_status,
+      },
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj
+    } else {
+      nativeCallback({ events: eventObj })
+    }
+  }
+
+  const goBack = () => {
+    sendEvents('back')
+    props.history.goBack()
+  }
+
   useEffect(() => {
     initBackButtonTracker()
     fetchITRListAndUserSummary()
@@ -65,13 +99,13 @@ function Landing(props) {
     try {
       if (!landedFromBackButton || isEmpty(itrList) || isEmpty(userSummary)) {
         setShowLoader(true)
-        const [list, user] = await Promise.all([
+        const [list, summary] = await Promise.all([
           getITRList(),
           getUserAccountSummary(),
         ])
         setItrList([...list])
-        setUserSummary({ ...user })
-        storageService().setObject(USER_SUMMARY_KEY, user)
+        setUserSummary({ ...summary })
+        storageService().setObject(USER_SUMMARY_KEY, summary)
         storageService().setObject(ITR_APPLICATIONS_KEY, list)
         setShowLoader(false)
         setShowError(false)
@@ -92,15 +126,17 @@ function Landing(props) {
   }
 
   const handleFAQNavigation = () => {
+    sendEvents('next', { card_click: 'FAQ' })
     navigate(`/tax-filing/faqs`, {}, false)
   }
 
   const handleMyITRNavigation = () => {
+    sendEvents('next', { card_click: 'my_ITR' })
     navigate(`/tax-filing/my-itr`, { itrList, userSummary }, false)
   }
 
   const handleITRJourneyNavigation = (type) => () => {
-    setITRJourneyType(type)
+    sendEvents('next', { card_click: type })
     navigate(`/tax-filing/steps`, { type, userSummary }, false)
   }
 
@@ -111,6 +147,7 @@ function Landing(props) {
       showError={showError}
       errorData={errorData}
       skelton={showLoader}
+      headerData={{ goBack }}
       noFooter
     >
       <Carousal

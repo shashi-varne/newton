@@ -4,13 +4,16 @@ import { genericErrMsg } from '../constants'
 export const getUserAccountSummary = async () => {
   const options = {
     user: ['user'],
+    kyc: ['kyc'],
   }
 
   const URL = '/api/user/account/summary'
   const res = await Api.post(URL, options)
 
   if (res?.pfwresponse?.status_code === 200) {
-    return res?.pfwresponse?.result?.data?.user?.user?.data
+    const kyc = res?.pfwresponse?.result?.data?.kyc?.kyc?.data
+    const user = res?.pfwresponse?.result?.data?.user?.user?.data
+    return { kyc, user }
   } else {
     throw new Error(
       res?.pfwresponse?.result?.message ||
