@@ -122,7 +122,7 @@ const KycBankVerify = (props) => {
   const handlePennyFailed = () => {
     const pennyDetails = {
       title : 'Unable to add bank!',
-      message : "Bank account verification failed! No worries, please check if you've entered correct details.",
+      message : "Your bank account couldn't be verified. Enter correct bank details to proceed further.",
       buttonOneTitle: 'UPLOAD BANK DOCUMENTS',
       buttonTwoTitle: 'CHECK BANK DETAILS',
       twoButton: true,
@@ -275,7 +275,7 @@ const KycBankVerify = (props) => {
 
   return (
     <Container
-      buttonTitle="VERIFY BANK ACCOUNT"
+      buttonTitle="Confirm bank details"
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}

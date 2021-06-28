@@ -313,7 +313,7 @@ const KycBankDetails = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
       handleClick={handleClick}
-      title="Enter bank account details"
+      title="Bank details"
       iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
       data-aid='kyc-enter-bank-account-details-screen'
     >
