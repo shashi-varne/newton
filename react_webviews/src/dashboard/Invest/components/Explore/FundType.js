@@ -15,7 +15,7 @@ import { getConfig, navigate as navigateFunc } from '../../../../utils/functions
 
 const isMobileDevice = getConfig().isMobileDevice;
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
-  const navigate = navigateFunc.bind(parentProps)
+  const navigate = navigateFunc.bind(parentProps);
   const handleNavigate = (data) => {
     let dataCopy = Object.assign({}, data);
     dataCopy.category = "scheme carousel";

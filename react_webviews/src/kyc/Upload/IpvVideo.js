@@ -19,7 +19,6 @@ const IpvVideo = (props) => {
   const [ipvcode, setIpvCode] = useState('')
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [showKnowMoreDialog, setKnowMoreDialog] = useState(false)
-
   const open = () => {
     setKnowMoreDialog(true)
   }
@@ -158,6 +157,7 @@ const IpvVideo = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload video (IPV)"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-selfie-video-ipv-screen'
     >
       {!isEmpty(kyc) && (

@@ -348,7 +348,6 @@ export const getConfig = () => {
   returnConfig.isIframe = isIframe();
   returnConfig.platform = !returnConfig.isIframe ? (returnConfig.Web ? "web" : "sdk" ): "iframe";
   returnConfig.isLoggedIn = storageService().get("currentUser");
-  console.log(returnConfig);
   return returnConfig;
 };
 
@@ -421,9 +420,10 @@ export function manageDialog(id, display, aboutScroll) {
 }
 
 export function setHeights(data) {
+  const headerClass = isIframe() && getConfig().isMobileDevice ? 'IframeHeader' : 'Header';
   let head =
-    document.getElementsByClassName('Header') && document.getElementsByClassName('Header')[0]
-      ? document.getElementsByClassName('Header')[0].offsetHeight
+    document.getElementsByClassName(headerClass) && document.getElementsByClassName(headerClass)[0]
+      ? document.getElementsByClassName(headerClass)[0].offsetHeight
       : 0;
   let banner = document.getElementsByClassName('Banner')[0];
   let bannerHeight = banner ? banner.offsetHeight : 0;
@@ -481,6 +481,7 @@ export function capitalize(string) {
 }
 
 export function isIframe() {
+  return true;
   if (window.top !== window.self) {
     return true;
   } else {

@@ -107,6 +107,10 @@
       }
     }
   }
+
+  #kyc-bank-verification-dialog .MuiDialog-paper{
+    bottom: unset !important;
+  }
 }
 
 @media only screen and (max-width: 500px) {
@@ -120,5 +124,17 @@
   }
   .main-container .feature-container .ContainerWrapper header {
     width: 100% !important;
+  }
+}
+
+@media only screen and (min-width: 500px) {
+  body.IframeBody { 
+    .MuiModal-root[role='dialog']{
+      top: 0px !important;
+      margin-left: 0px !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
   }
 }

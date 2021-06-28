@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { storageService, validatePan, isEmpty } from "utils/validators";
+import { storageService, validatePan } from "utils/validators";
 import Input from "../../common/ui/Input";
 import { checkMerge, getPan, kycSubmit } from "../common/api";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
@@ -8,9 +8,11 @@ import toast from "../../common/ui/Toast";
 import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc, isIframe } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import internalStorage from './InternalStorage';
+import isEmpty from 'lodash/isEmpty';
 
 const config = getConfig();
 const Home = (props) => {
@@ -30,14 +32,28 @@ const Home = (props) => {
   const stateParams = props.match.state || {};
   const isPremiumFlow = stateParams.isPremiumFlow || false;
   const { kyc, user, isLoading } = useUserKycHook();
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState('');
+  const iFrame = isIframe();
+  // const [navigateTo, setNavigateTo] = useState('');
+  // const [x,setX] = useState(false);
+
+  const savedPan = storageService().get('pan');
+  useEffect(() => {
+    if(savedPan){
+      setPan(savedPan);
+    }
+  },[])
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
   }, [kyc, user]);
 
   const initialize = () => {
-    setPan(kyc.pan?.meta_data?.pan_number || "");
+    if(isEmpty(savedPan)){
+      setPan(kyc.pan?.meta_data?.pan_number || "");
+    } else{
+      storageService().remove('pan');
+    }
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
@@ -116,7 +132,22 @@ const Home = (props) => {
           return;
         }
         await checkCompliant();
-      } else if (!isUserCompliant) setOpenResident(true);
+      } else if (!isUserCompliant) {
+        if(iFrame) {
+          const residentData = {
+            title: 'Are you an Indian resident?',
+            buttonOneTitle: 'NO',
+            buttonTwoTitle: 'YES',
+            twoButton: true
+          }
+          internalStorage.setData('isApiCall', true);
+          internalStorage.setData('handleClickOne', cancel);
+          internalStorage.setData('handleClickTwo', aadharKyc);
+          navigate('residence-status',{state:residentData});
+        } else {
+          setOpenResident(true);
+        }
+      }
       else {
         if (skipApiCall) {
           handleNavigation(
@@ -210,12 +241,16 @@ const Home = (props) => {
     }
   };
 
+  const reEnterPan = () => {
+    navigate('home');
+  }
+
   const accountMerge = async () => {
     let email = config.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (config.isIframe) {
+    if (config.isIframe && config.partner_code !== 'moneycontrol') {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
@@ -223,23 +258,52 @@ const Home = (props) => {
       let { result, status_code } = response;
       let { different_login, auth_ids} = result;
       if (status_code === 200) {
-        setAuthIds(auth_ids);
-        setAccountMergeData({
+        const accountDetail = {
           title: "PAN Already Exists",
-          subtitle:
-            "Sorry! this PAN is already registered with another account.",
-          buttonTitle: "LINK ACCOUNT",
+          message: "Sorry! this PAN is already registered with another account.",
           step: "STEP1",
-        });
-        setOpenAccountMerge(true);
+        };
+        setAuthIds(auth_ids);
+        // setAccountMergeData(accountDetail);
+        if (iFrame) {
+          // setNavigateTo('pan-status');
+          const newData = {
+            buttonOneTitle: 'RE-ENTER PAN',
+            buttonTwoTitle: 'LINK ACCOUNT',
+            twoButton: true,
+            status: 'linkAccount'
+          }
+          storageService().set('pan',pan);
+          storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, auth_ids);
+          internalStorage.setData('handleClickOne', reEnterPan);
+          internalStorage.setData('handleClickTwo', handleMerge);
+          navigate('pan-status',{state:{...accountDetail, ...newData}});
+        } else { 
+          setAccountMergeData({...accountDetail, buttonTitle:'LINK ACCOUNT' });
+          setOpenAccountMerge(true);
+        }
       } else if (different_login) {
-        setAccountMergeData({
+        const accountDetail = {
           title: "PAN Is already registered",
-          subtitle: result?.message,
-          buttonTitle: "SIGN OUT",
+          message: result?.message,
           step: "STEP2",
-        });
-        setOpenAccountMerge(true);
+        };
+        if (iFrame) {
+          // setNavigateTo('pan-status');
+          const newData = {
+            buttonOneTitle: 'RE-ENTER PAN',
+            buttonTwoTitle: 'SIGN OUT',
+            twoButton: true,
+            status: 'signOut'
+          }
+          storageService().set('pan',pan);
+          internalStorage.setData('handleClickOne', reEnterPan);
+          internalStorage.setData('handleClickTwo', handleMerge);
+          navigate('pan-status',{state:{...accountDetail, ...newData}});
+        } else { 
+          setAccountMergeData({...accountDetail,buttonTitle:'SIGN OUT'});
+          setOpenAccountMerge(true);
+        }
       } else {
         toast(toastMessage);
       }
@@ -328,6 +392,7 @@ const Home = (props) => {
       showLoader={showLoader}
       handleClick={handleClick}
       title={homeData.title}
+      iframeRightContent={require(`assets/${config.productName}/kyc_illust.svg`)}
       data-aid='kyc-home-screen'
     >
       {!isEmpty(homeData) && (
@@ -368,6 +433,19 @@ const Home = (props) => {
             cancel={cancel}
             aadhaarKyc={aadharKyc}
           />
+          {/* {
+            (x || openAccountMerge)  &&
+            <DialogPageContainer 
+              isOpen={openAccountMerge}
+              close={closeAccountMerge}
+              data={accountMergeData}
+              handleClick={handleMerge}
+              component={AccountMerge}
+              isDialog={isDialog}
+              navigateTo={navigateTo}
+              {...props}
+            />
+          } */}
           <AccountMerge
             isOpen={openAccountMerge}
             close={closeAccountMerge}

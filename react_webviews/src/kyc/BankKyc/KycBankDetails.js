@@ -25,6 +25,7 @@ import { nativeCallback } from "../../utils/native_callback";
 
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
+  const productName = getConfig().productName;
   const code = getConfig().code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
@@ -313,6 +314,7 @@ const KycBankDetails = (props) => {
       skelton={isLoading}
       handleClick={handleClick}
       title="Enter bank account details"
+      iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
       data-aid='kyc-enter-bank-account-details-screen'
     >
       <div className="kyc-approved-bank" data-aid='kyc-approved-bank-page'>

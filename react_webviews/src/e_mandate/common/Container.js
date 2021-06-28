@@ -5,7 +5,7 @@ import { didMount, commonRender } from '../../common/components/container_functi
 
 import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listener';
-import { getConfig } from 'utils/functions';
+import { getConfig, isIframe } from 'utils/functions';
 
 
 class Container extends Component {
@@ -19,9 +19,9 @@ class Container extends Component {
       callbackType: '',
       productName: getConfig().productName,
       project: 'e-mandate',
-      inPageTitle: false,
-      new_header:false,
-      force_hide_inpage_title: true,
+      inPageTitle: isIframe() ? true : false,
+      new_header:isIframe() ? true : false,
+      force_hide_inpage_title: isIframe() ? false : true,
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { Imgc } from "common/ui/Imgc";
-import { getConfig } from "utils/functions";
+import { getConfig, isIframe } from "utils/functions";
 import {
   PATHNAME_MAPPER,
   DOCUMENTS_MAPPER,
@@ -16,6 +16,7 @@ import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
+
 const Report = (props) => {
   const config = getConfig();
   const productName = config.productName;
@@ -29,6 +30,7 @@ const Report = (props) => {
   const [buttonTitle, setButtonTitle] = useState("OK");
   const appText = "Your application is submitted.";
   const goBackPage = props.location.state?.goBack || "";
+  const iframe = isIframe();
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
@@ -388,15 +390,19 @@ const Report = (props) => {
       title={topTitle}
       noFooter={isEmpty(cardDetails)}
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
       data-aid='kyc-report-screen'
     >
       <div className="kyc-report">
         <main data-aid='kyc-report'>
-          <Imgc
-            src={require(`assets/${productName}/congratulations_illustration.svg`)}
-            alt="img"
-            className="img"
-          />
+          {
+            !iframe &&
+              <Imgc
+                src={require(`assets/${productName}/congratulations_illustration.svg`)}
+                alt="img"
+                className="img"
+              />
+          }
           <div className="congrats" data-aid='kyc-congratulations-text'>Congratulations!</div>
           <div className="text" data-aid='kyc-app-text'>{appText}</div>
           <div className="text message" data-aid='kyc-text-message'>

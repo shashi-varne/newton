@@ -15,13 +15,15 @@ import {
   DialogContentText,
 } from '@material-ui/core';
 import '../../utils/native_listener';
-import { getConfig, setHeights } from 'utils/functions';
+import { getConfig, setHeights, isIframe } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
 import { isFunction } from '../../utils/validators';
 
 import './Style.scss';
 import UiSkelton from '../../common/ui/Skelton';
-
+import IframeHeader from 'common/components/Iframe/Header';
+const iframe = isIframe();
+const isMobileDevice = getConfig().isMobileDevice;
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const x = React.useRef(true);
@@ -122,12 +124,12 @@ const Container = (props) => {
 
   return (
     <div
-      className={`ContainerWrapper   ${props.classOverRide}  ${
+      className={`${iframe && !isMobileDevice ? 'iframeContainerWrapper' :'ContainerWrapper'}   ${props.classOverRide}  ${
         getConfig().productName !== 'fisdom' ? 'blue' : ''
       }`}
     >
       {/* Header Block */}
-      {!props.noHeader && !getConfig().hide_header && (
+      {!props.noHeader && !getConfig().hide_header && !iframe ?(
         <Header
           disableBack={props.disableBack}
           title={props.title}
@@ -147,13 +149,39 @@ const Container = (props) => {
           className={props.classHeader}
           headerData={props.headerData}
         />
-      )}
+      )
+      :
+      (
+        <IframeHeader
+          disableBack={props.disableBack}
+          title={props.title}
+          smallTitle={props.smallTitle}
+          provider={props.provider}
+          count={props.count}
+          total={props.total}
+          current={props.current}
+          goBack={headerGoBack}
+          edit={props.edit}
+          type={getConfig().productName}
+          rightIcon={props.rightIcon}
+          handleRightIconClick={props.handleRightIconClick}
+          inPageTitle={inPageTitle}
+          force_hide_inpage_title={props.hideInPageTitle}
+          style={props.styleHeader}
+          className={props.classHeader}
+          headerData={props.headerData}
+        />
+      )
+    }
 
       {/* Below Header Block */}
-      <div id='HeaderHeight' style={{ top: 56 }}>
+      {
+        (!iframe || isMobileDevice)&&
+        <div id='HeaderHeight' style={{ top: 56 }}>
         {/* Loader Block */}
         {/* {renderPageLoader()} */}
       </div>
+      }
 
       {/*  */}
 
@@ -197,12 +225,14 @@ const Container = (props) => {
         <div
           style={props.styleContainer}
           className={`
-            Container 
+            ${iframe && !isMobileDevice ? 'IframeContainer' :'Container'} 
             ${props.classOverRideContainer}
             ${props.noPadding ? 'no-padding' : ''}
           `}
         >
-          {props.children}
+          <div className= 'fadein-animation'>
+            {props.children}
+          </div>
         </div>
       }
 

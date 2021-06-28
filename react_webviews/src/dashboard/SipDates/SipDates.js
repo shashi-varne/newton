@@ -219,6 +219,7 @@ class SipDates extends Component {
         loaderData={{
           loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
         }}
+        iframeRightContent={require(`assets/${this.state.productName}/sip_date.svg`)}
       >
         <div className="sip-dates" data-aid='select-investment-date'>
           {sips &&

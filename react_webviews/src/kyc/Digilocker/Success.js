@@ -17,6 +17,7 @@ const Success = (props) => {
       title="Share Details"
       buttonTitle="PROCEED"
       handleClick={proceed}
+      iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
       headerData={{goBack: () => setBackDialogOpen(true) }}
       data-aid='kyc-success-page'
     >

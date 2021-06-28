@@ -69,6 +69,7 @@ const AddressUpload = (props) => {
   const [kyc, setKyc] = useState(
     kycData
   )
+  const productName = getConfig().productName;
 
   useEffect(() => {
     setKyc(kycData)
@@ -321,6 +322,7 @@ const AddressUpload = (props) => {
       handleClick={handleSubmit}
       disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       title={title}
       data-aid='kyc-upload-adress-proof-screen'
     >

@@ -9,6 +9,8 @@ import toast from "../../common/ui/Toast";
 import "./Digilocker.scss";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
+const config = getConfig();
+const iframe = config.isIrame;
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -68,7 +70,7 @@ const Failed = (props) => {
 
 
   const goBack = () => {
-    if (getConfig().isSdk) {
+    if (config.isSdk) {
       setBackDialogOpen(true);
     } else {
       navigate("/kyc/journey", {
@@ -79,7 +81,7 @@ const Failed = (props) => {
 
   const {kyc, isLoading} = useUserKycHook();
 
-  const productName = getConfig().productName;
+  const productName = config.productName;
   return (
     <Container
       title="Aadhaar KYC Failed!"
@@ -103,13 +105,17 @@ const Failed = (props) => {
       skelton={isLoading}
       headerData={{goBack}}
       loaderData={{ loadingText: " " }}
+      iframeRightContent={require(`assets/${productName}/digilocker_failed.svg`)}
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
-        <img
-          className="digi-image"
-          alt=""
-          src={require(`assets/${productName}/ils_digilocker_failed.svg`)}
-        />
+        {
+          !iframe &&
+          <img
+            className="digi-image"
+            alt=""
+            src={require(`assets/${productName}/ils_digilocker_failed.svg`)}
+          />
+        }
         <div className="body-text1" data-aid='kyc-body-text1'>
           Aadhaar KYC has been failed because we were not able to connect to
           your Digilocker.

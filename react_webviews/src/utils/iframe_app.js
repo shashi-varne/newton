@@ -14,7 +14,7 @@ import { commonBackMapper } from "utils/constants";
     }
   };
 
-  window.callbackWeb.sendEvent(_event);
+  //window.callbackWeb.sendEvent(_event);
 // required
   // try {
   //   if ($rootScope.currentUser) {
@@ -74,12 +74,12 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       type: "iframe_close"
     });
     if(getConfig().code === 'moneycontrol' && ["/payment/callback","/sip/payment/callback"].includes(currentState)) {
-      backButtonHandlerWeb(props, fromState, currentState, params)
+      return backButtonHandlerWeb(props, fromState, currentState, params)
     } else {
       window.callbackWeb.sendEvent(message);
     }
   } else {
-    backButtonHandlerWeb(props, fromState, currentState, params)
+    return backButtonHandlerWeb(props, fromState, currentState, params)
   }
 }
 
@@ -107,7 +107,8 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") ||
     diyDirectEntryArr.includes(currentState)) {
     if (config?.code === 'moneycontrol') {
-      navigate("/invest/money-control");
+      console.log("hello from money")
+      navigate("/");
       return true;
     } else {
       navigate("/invest");
@@ -120,7 +121,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     case "/kyc/report":
     case "/notification":
       if (config?.code === 'moneycontrol') {
-        navigate("/invest/money-control");
+        navigate("/");
         return true;
       } else {
         navigate("/landing");

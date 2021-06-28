@@ -9,7 +9,6 @@ const config = getConfig();
 const AccountLinked = (props) => {
   const navigate = navigateFunc.bind(props);
   const productName = config.productName;
-  const code = config.code;
   const handleClick = () => {
     if (config.Web) {
       if (config.isIframe) {
@@ -28,7 +27,13 @@ const AccountLinked = (props) => {
   const hideImage =
     config.isIframe && code === "moneycontrol" && config.isMobileDevice;
   return (
-    <Container buttonTitle="CLOSE" hidePageTitle handleClick={handleClick} data-aid='account-linked-screen'>
+    <Container 
+      buttonTitle="CLOSE" 
+      hidePageTitle 
+      handleClick={handleClick} 
+      data-aid='account-linked-screen' 
+      iframeRightContent={require(`assets/${productName}/account_linked.svg`)}
+    >
       <div className="account-merge-linked" data-aid='account-merge-linked'>
         {!hideImage && (
           <div className="outline">

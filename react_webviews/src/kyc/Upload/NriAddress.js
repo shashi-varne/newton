@@ -43,6 +43,7 @@ const NRIAddressUpload = (props) => {
   const [file, setFile] = useState(null)
   const [state, setState] = useState({})
   const [showLoader, setShowLoader] = useState(false)
+  const productName = getConfig().productName;
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const frontDocRef = useRef(null)
@@ -280,6 +281,7 @@ const NRIAddressUpload = (props) => {
       disable={!frontDoc || (!onlyFrontDocRequired && !backDoc)}
       showLoader={isApiRunning}
       title="Upload foreign address proof"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-upload-foreign-address-proof-screen'
     >
       {!isEmpty(kyc) && (

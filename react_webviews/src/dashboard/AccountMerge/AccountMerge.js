@@ -24,6 +24,7 @@ const AccountMerge = (props) => {
       buttonTitle="SEND OTP"
       title="Link Account"
       handleClick={handleClick}
+      iframeRightContent={require(`assets/${productName}/link_account.svg`)}
     >
       <div className="account-merge" data-aid='account-merge'>
         <p>We need to verify your account credentials to link account.</p>

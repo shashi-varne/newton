@@ -16,7 +16,7 @@ const Sign = (props) => {
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
-
+  const productName = getConfig().productName;
   const inputEl = useRef(null)
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
@@ -161,6 +161,7 @@ const Sign = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Share Signature"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-signature-screen'
     >
       {!isEmpty(kyc) && (

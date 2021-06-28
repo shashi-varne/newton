@@ -29,6 +29,7 @@ const InvestJourney = (props) => {
   });
   const {kyc: userKyc, isLoading} = useUserKycHook()
   const state = props.location.state || {};
+  const productName = getConfig().productName;
   const investment =
     JSON.parse(window.localStorage.getItem("investment")) ||
     JSON.parse(state.investment);
@@ -106,6 +107,7 @@ const InvestJourney = (props) => {
       data-aid='how-it-works-screen'
       classOverRide="pr-error-container"
       buttonTitle={ctcTitle}
+      //hidePageTitle
       title="How it works"
       classOverRideContainer="pr-container"
       handleClick={goNext}
@@ -114,6 +116,7 @@ const InvestJourney = (props) => {
       loaderData={{
         loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
       }}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <section className="invest-journey-container" data-aid='invest-journey-page'>
         <div className="invest-journey-header" data-aid='invest-journey-header'>

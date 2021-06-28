@@ -11,6 +11,7 @@ import {
 import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, validateNumber } from "../../../utils/validators";
+import { getConfig } from "utils/functions";
 import "../commonStyles.scss";
 import { nativeCallback } from "../../../utils/native_callback";
 
@@ -22,6 +23,7 @@ const NRIAddressDetails2 = (props) => {
   });
   const [oldState, setOldState] = useState({});
   const navigate = navigateFunc.bind(props);
+  const productName = getConfig().productName;
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -163,6 +165,7 @@ const NRIAddressDetails2 = (props) => {
       current={4}
       count={4}
       total={4}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-nri-address-details-screen-2'
     >
       <section data-aid='kyc-address-details-2'>

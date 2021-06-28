@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "../common/Container";
-import { getConfig, navigate as navigateFunc } from "utils/functions";
+import { getConfig, navigate as navigateFunc, isIframe } from "utils/functions";
 import Alert from "../mini-components/Alert";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { storageService } from "../../utils/validators";
@@ -10,6 +10,7 @@ import "./commonStyles.scss";
 const Complete = (props) => {
   const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
+  const iframe = isIframe();
 
   const handleClick = () => {
     sendEvents('next')
@@ -41,20 +42,31 @@ const Complete = (props) => {
       events={sendEvents("just_set_events")}
       buttonTitle="OK"
       handleClick={handleClick}
+      title='Kudos, KYC is completed!'
       force_hide_inpage_title={true}
       data-aid='kyc-compliant-complete-screen'
+      iframeRightContent={require(`assets/${productName}/kyc_complete.svg`)}
     >
       <div className="kyc-compliant-complete">
         <header data-aid='kyc-header'>
-          <img
+          {
+            !iframe &&
+            <img
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""
-          />
-          <div className="title">Kudos, KYC is completed!</div>
+            />
+          }
+          {/* <div className="title">Kudos, KYC is completed!</div> */}
           <div
             className="subtitle"
             onClick={() => navigate(PATHNAME_MAPPER.kycReport)}
           >
+          {
+            iframe &&
+            <div className='kyc-compliant-complete-msg'>
+              Click on <span>Continue Investing</span> & choose from 5000+ mutual funds to invest in.
+            </div>
+          }
             See KYC application details {" >"}
           </div>
         </header>

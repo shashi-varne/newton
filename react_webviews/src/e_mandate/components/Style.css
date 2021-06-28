@@ -155,3 +155,36 @@
 .payment-failed-subtitle {
   padding: 0 25px;
 }
+
+.iframe-mandate-fail-text{
+  margin-top: 140px;
+}
+
+.iframe-mandate-fail-text .payment-failed-title {
+  text-align: left !important;
+}
+
+.iframe-mandate-fail-text .payment-failed-subtitle {
+  text-align: left !important;
+  padding-left: 0px;
+}
+
+.iframe-e-mandate-success .success-text{
+  margin-top: 140px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: left;
+}
+
+.iframe-e-mandate-success .success-text-info{
+  margin-top: 16px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color:#767E86;
+  text-align: left;
+}
+
+
+

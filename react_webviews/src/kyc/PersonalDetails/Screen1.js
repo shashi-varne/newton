@@ -17,6 +17,7 @@ import {
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { getConfig } from "utils/functions";
 import toast from "../../common/ui/Toast";
 import { nativeCallback } from "../../utils/native_callback";
 
@@ -26,6 +27,7 @@ const PersonalDetails1 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const productName = getConfig().productName;
 
   let title = "Personal details";
   if (isEdit) {
@@ -173,6 +175,7 @@ const PersonalDetails1 = (props) => {
       count="1"
       current="1"
       total="4"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-personal-details-screen-1'
     >
       <div className="kyc-personal-details">

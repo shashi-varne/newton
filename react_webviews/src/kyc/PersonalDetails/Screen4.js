@@ -15,6 +15,7 @@ import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 
 const PersonalDetails4 = (props) => {
@@ -24,6 +25,7 @@ const PersonalDetails4 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
+  const productName = getConfig().productName;
   let title = "Nominee detail";
   if (isEdit) {
     title = "Edit nominee detail";
@@ -180,6 +182,7 @@ const PersonalDetails4 = (props) => {
       title={title}
       count={type === "digilocker" ? 3 : 4}
       current={type === "digilocker" ? 3 : 4}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       total={type === "digilocker" ? 3 : 4}
       data-aid='kyc-personal-details-screen-4'
     >

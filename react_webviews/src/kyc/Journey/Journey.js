@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getConfig } from 'utils/functions'
+import { getConfig, isIframe } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
@@ -19,6 +19,9 @@ import { nativeCallback } from '../../utils/native_callback'
 import { getBasePath, navigate as navigateFunc } from '../../utils/functions'
 
 const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
+const iframe = config.isIframe;
+
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -45,7 +48,7 @@ const Journey = (props) => {
   const backHandlingCondition = () => {
     if (config.isIframe) {
       if (config.code === 'moneycontrol') {
-        navigate("/invest/money-control");
+        navigate("/");
       } else {
         navigate("/landing");
       }
@@ -729,6 +732,7 @@ const Journey = (props) => {
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
       loaderData={{loadingText: " "}}
+      iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
       data-aid='kyc-journey-screen'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
@@ -763,11 +767,13 @@ const Journey = (props) => {
                   </div>
                 </div>
               </div>
-
+            {
+              !iframe &&
               <img
-                src={require(`assets/${productName}/ic_premium_onboarding_mid.svg`)}
-                alt="Premium Onboarding"
+              src={require(`assets/${productName}/ic_premium_onboarding_mid.svg`)}
+              alt="Premium Onboarding"
               />
+            }
             </div>
           )}
           {show_aadhaar && (
@@ -799,11 +805,13 @@ const Journey = (props) => {
                   </div>
                 </div>
               </div>
-
-              <img
-                src={require(`assets/${productName}/icn_aadhaar_kyc.svg`)}
-                alt="Premium Onboarding"
-              />
+              {
+                (!iframe || isMobileDevice) &&
+                  <img
+                  src={require(`assets/${productName}/icn_aadhaar_kyc.svg`)}
+                  alt="Premium Onboarding"
+                  />
+              }
             </div>
           )}
           <div className="kyc-journey-title" data-aid='kyc-journey-title'>{topTitle}</div>
@@ -865,7 +873,9 @@ const Journey = (props) => {
                     {item?.value && (
                       <span className="field_value"> {item?.value}</span>
                     )}
+                    
                   </div>
+                  
 
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span

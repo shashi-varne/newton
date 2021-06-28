@@ -11,6 +11,7 @@ import Api from "../../utils/api";
 import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "../../utils/validators";
+import kycComplete from 'assets/kyc_complete.svg';
 import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
 
 class DigiStatus extends Component {
@@ -187,7 +188,7 @@ class DigiStatus extends Component {
 }
 
   render() {
-    let { show_loader, skelton, dl_flow, show_note } = this.state;
+    let { show_loader, skelton, dl_flow, show_note, productName } = this.state;
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
@@ -212,6 +213,7 @@ class DigiStatus extends Component {
         }
         headerData={headerData}
         skelton={skelton}
+        iframeRightContent={status === "success" ? kycComplete : require(`assets/${productName}/esign_kyc_fail.svg`)}
       >
         {/* <div className="nsdl-status">
           <img

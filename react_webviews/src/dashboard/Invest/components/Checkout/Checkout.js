@@ -35,6 +35,7 @@ class Checkout extends Component {
       currentUser: storageService().getObject("user") || {},
       dialogStates: {},
       purchaseLimitData: {},
+      productType : getConfig().productName
     };
     this.initializeComponentFunctions = initializeComponentFunctions.bind(this);
   }
@@ -299,6 +300,7 @@ class Checkout extends Component {
         loaderData={{
           loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
         }}
+        iframeRightContent={require(`assets/${this.state.productType}/invest_fund.svg`)}
       >
         <div className="nfo-checkout" data-aid='nfo-checkout'>
           <div

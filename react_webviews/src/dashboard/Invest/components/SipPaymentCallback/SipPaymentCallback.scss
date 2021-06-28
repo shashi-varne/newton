@@ -44,4 +44,33 @@
       }
     }
   }
+
+  .important-message{
+    display: flex;
+    align-items: flex-start;
+    padding: 14px 19px 17px 15px;
+    background-color: #F0F7FF;
+    border-radius: 4px;
+    .info-icon {
+      margin-right: 12px;
+    }
+    .info-msg{
+      .info-head{
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 15px;
+        margin-bottom: 10px;
+      }
+      .info-msg-content{
+        font-size: 13px;
+        color: #767E86;
+        font-weight: 400;
+        line-height: 21px;
+
+        span{
+          font-weight: 700;
+        }
+      }
+    }
+  }
 }
