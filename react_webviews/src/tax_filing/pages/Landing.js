@@ -15,6 +15,7 @@ import {
   taxFilingOptions,
   USER_SUMMARY_KEY,
   ITR_APPLICATIONS_KEY,
+  ITR_TYPE_KEY,
 } from '../constants'
 import {
   checkIfLandedByBackButton,
@@ -69,7 +70,7 @@ function Landing(props) {
       properties: {
         user_action: userAction,
         screen_name: 'File ITR',
-        card_click: data?.card_click,
+        card_click: data?.card_click || '',
         personal_details_exist: personal_details_exist,
         investment_status: investment_status,
         kyc_status: kyc_status,
@@ -137,6 +138,7 @@ function Landing(props) {
 
   const handleITRJourneyNavigation = (type) => () => {
     sendEvents('next', { card_click: type })
+    storageService().set(ITR_TYPE_KEY, type)
     navigate(`/tax-filing/steps`, { type, userSummary }, false)
   }
 
@@ -164,7 +166,7 @@ function Landing(props) {
           onClick={handleMyITRNavigation}
         >
           <>
-            <Imgc
+            <img
               src={require(`assets/icn_my_itr.svg`)}
               alt="MY ITR"
               className="block"

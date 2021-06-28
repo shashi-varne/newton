@@ -17,6 +17,7 @@ import { createITRApplication, getUserAccountSummary } from '../common/ApiCalls'
 
 import './Steps.scss'
 import { isEmpty, storageService } from '../../utils/validators'
+import { nativeCallback } from 'utils/native_callback'
 
 function Steps(props) {
   const navigate = navigateFunc.bind(props)
@@ -25,7 +26,36 @@ function Steps(props) {
   const type =
     props?.location?.params?.type || storageService().get(ITR_TYPE_KEY)
 
+  if (!type) {
+    navigate('/tax-filing', {}, false)
+    return ''
+  }
+
   const productName = getConfig().productName
+
+  const sendEvents = (userAction, data) => {
+    const personal_details_exist =
+      !isEmpty(data?.user?.name) &&
+      !isEmpty(data?.user?.email) &&
+      !isEmpty(data?.user?.mobile)
+        ? 'yes'
+        : 'no'
+    const eventObj = {
+      event_name: 'ITR',
+      properties: {
+        user_action: userAction,
+        screen_name: 'eFile in 3 steps',
+        personal_details_exist: personal_details_exist,
+        investment_status: data?.kyc?.investment_status || '',
+        kyc_status: data?.kyc?.kyc_status || '',
+      },
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj
+    } else {
+      nativeCallback({ events: eventObj })
+    }
+  }
 
   const handleClick = async () => {
     let summary = {}
@@ -53,6 +83,7 @@ function Steps(props) {
         })
         storageService().setObject(ITR_ID_KEY, itr.itr_id)
         setShowLoader(false)
+        sendEvents('next', summary)
         navigate(
           `/tax-filing/redirection`,
           { redirectionUrl: itr.sso_url },
@@ -61,6 +92,7 @@ function Steps(props) {
         return
       } else {
         setShowLoader(false)
+        sendEvents('next', summary)
         navigate(
           `/tax-filing/personal-details`,
           { userSummary: summary },
@@ -91,6 +123,7 @@ function Steps(props) {
           })
           storageService().setObject(ITR_ID_KEY, itr.itr_id)
           setShowLoader(false)
+          sendEvents('next', summary)
           navigate(
             `/tax-filing/redirection`,
             { redirectionUrl: itr.sso_url },
@@ -99,11 +132,13 @@ function Steps(props) {
           return
         } catch (err) {
           setShowLoader(false)
+          sendEvents('next', summary)
           navigate(`/tax-filing/personal-details`, {}, false)
           return
         }
       } else {
         setShowLoader(false)
+        sendEvents('next', summary)
         navigate(
           `/tax-filing/personal-details`,
           { userSummary: summary?.user },

@@ -13,7 +13,7 @@ function Redirection(props) {
 
   if (isEmpty(redirectionUrl)) {
     navigate('/tax-filing', {}, false)
-    return null
+    return ''
   }
 
   useEffect(() => {

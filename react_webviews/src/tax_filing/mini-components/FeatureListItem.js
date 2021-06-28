@@ -22,10 +22,10 @@ function FeatureListItem({ classes, imgSrc, bgImgSrc, title, subtitle }) {
       <div
         className="tax-filing-feature-icn-container flex align-center justify-center"
         style={{
-          background: `${bgColor} url(${bgImgSrc})`,
+          background: `url(${bgImgSrc})`,
         }}
       >
-        <Imgc src={imgSrc} alt={title} subtitle={subtitle} className="block" />
+        <img src={imgSrc} alt={title} subtitle={subtitle} className="block" />
       </div>
       <div className="tax-filing-feature-content m-left-2x">
         <div className="heading3-medium">{title}</div>

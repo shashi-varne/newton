@@ -12,6 +12,8 @@ import { createITRApplication, getUserAccountSummary } from '../common/ApiCalls'
 import { storageService } from '../../utils/validators'
 import { ITR_TYPE_KEY } from '../constants'
 
+import { nativeCallback } from 'utils/native_callback'
+
 import './PersonalDetails.scss'
 
 function PersonalDetails(props) {
@@ -129,6 +131,26 @@ function PersonalDetails(props) {
     }
   }
 
+  const goBack = () => {
+    sendEvents('back')
+    props.history.goBack()
+  }
+
+  const sendEvents = (userAction, data = {}) => {
+    const eventObj = {
+      event_name: 'ITR',
+      properties: {
+        user_action: userAction,
+        screen_name: 'Application Created',
+      },
+    }
+    if (userAction === 'just_set_events') {
+      return eventObj
+    } else {
+      nativeCallback({ events: eventObj })
+    }
+  }
+
   const handleClick = async () => {
     try {
       const type = storageService().get(ITR_TYPE_KEY)
@@ -166,6 +188,7 @@ function PersonalDetails(props) {
       handleClick={handleClick}
       showError={showError}
       errorData={errorData}
+      headerData={{ goBack }}
       skelton={showSkeltonLoader}
       showLoader={showLoader}
     >
