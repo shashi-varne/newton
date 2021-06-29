@@ -82,8 +82,8 @@ function Landing(props) {
   }
 
   const goBack = () => {
-    sendEvents('back')
-    props.history.goBack()
+    untrackBackButtonPress()
+    nativeCallback({ action: 'exit', events: sendEvents('back') })
   }
 
   useEffect(() => {
@@ -148,6 +148,7 @@ function Landing(props) {
       errorData={errorData}
       skelton={showLoader}
       headerData={{ goBack }}
+      events={{ event_name: 'ITR', properties: {} }}
       noFooter
     >
       <div className="tax-filing-landing">
