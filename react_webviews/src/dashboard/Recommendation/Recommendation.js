@@ -320,6 +320,9 @@ const Recommendations = (props) => {
       handleClick={goNext}
       showLoader={isApiRunning}
       hidePageTitle
+      loaderData={{
+        loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+      }}
       headerData={{goBack}}
     > 
       <div className="recommendation-page" data-aid='recommendation-page'>

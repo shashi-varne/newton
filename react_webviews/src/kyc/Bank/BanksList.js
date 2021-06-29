@@ -78,7 +78,7 @@ const BanksList = (props) => {
       handleClick={handleClick}
       noFooter={
         changeRequest.add_bank_enabled &&
-        ((config.web && !config.isIframe) || config.native)
+        ((config.web && !config.isIframe) || storageService().get("native"))
       }
       title="Bank accounts"
       type="outlined"

@@ -1,5 +1,6 @@
 import { getConfig } from 'utils/functions'
-import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
+import { calculateAge, isValidDate, validateEmail,isEmpty } from 'utils/validators'
+import { getKyc } from './api'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -153,6 +154,56 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
   });
   return compare;
 };
+
+export const pollProgress = (timeout, interval, popup_window) => {
+  const endTime = Number(new Date()) + (timeout || 3 * 1000 * 60);
+  interval = interval || 1000;
+  let checkCondition = async function (resolve, reject) {
+    if (popup_window.closed) {
+      resolve({ status: "closed" });
+    } else {
+      try {
+        const result = await getKyc();
+        if (!isEmpty(result)) {
+          if (result.kyc.dl_docs_status === 'docs_fetched') {
+            resolve({ status: "success" });
+          } else if (result.kyc.dl_docs_status === 'docs_fetch_failed') {
+            resolve({ status: "failed" });
+          } else if (Number(new Date()) < endTime) {
+            setTimeout(checkCondition, interval, resolve, reject);
+          } else {
+            reject({ status: "timeout" });
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    }
+  };
+  return new Promise(checkCondition);
+}
+
+export const popupWindowCenter = (w, h, url) => {
+  let dualScreenLeft =
+    window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+  let dualScreenTop =
+    window.screenTop !== undefined ? window.screenTop : window.screenY;
+  let left = window.screen.width / 2 - w / 2 + dualScreenLeft;
+  let top = window.screen.height / 2 - h / 2 + dualScreenTop;
+  return window.open(
+    url,
+    "_blank",
+    "width=" +
+      w +
+      ",height=" +
+      h +
+      ",resizable,scrollbars,status,top=" +
+      top +
+      ",left=" +
+      left
+  );
+}
 
 export const getFlow = (kycData) => {
   let flow = "";

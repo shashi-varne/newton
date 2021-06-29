@@ -14,6 +14,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import internalStorage from './InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
+const config = getConfig();
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -33,7 +34,6 @@ const Home = (props) => {
   const { kyc, user, isLoading } = useUserKycHook();
   const [userName, setUserName] = useState('');
   const iFrame = isIframe();
-  const config = getConfig();
   // const [navigateTo, setNavigateTo] = useState('');
   // const [x,setX] = useState(false);
 

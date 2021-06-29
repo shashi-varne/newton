@@ -5,9 +5,9 @@ import { Imgc } from "common/ui/Imgc";
 import { resetRiskProfileJourney } from "../../functions";
 import "./PaymentCallback.scss";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
-import { isIframe } from "../../../../utils/functions";
 import { storageService } from "../../../../utils/validators";
 
+const config = getConfig();
 const PaymentCallback = (props) => {
   const params = props.match.params || {};
   const navigate = navigateFunc.bind(props);
@@ -15,7 +15,6 @@ const PaymentCallback = (props) => {
   const status = params.status || "";
   let message = params.message || "";
   resetRiskProfileJourney()
-  const config = getConfig();
   const eventData = storageService().getObject('mf_invest_data')
   let _event = {
     event_name: "payment_status",
@@ -72,15 +71,7 @@ const PaymentCallback = (props) => {
     ) {
       navigate("/kyc/journey");
     } else {
-      if(isIframe() && config?.code === 'moneycontrol') {
-        navigate("/");
-        return;
-      }
-      if(config.isSdk) {
-        navigate("/");
-        return;
-      }
-      navigate("/landing");
+      navigate("/");
     }
   }
 
