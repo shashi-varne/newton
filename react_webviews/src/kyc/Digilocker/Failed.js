@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { pollProgress, popupWindowCenter } from "../common/functions";
+import { pollProgress } from "../common/functions";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -8,6 +8,7 @@ import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import "./Digilocker.scss";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { popupWindowCenter } from "../../utils/functions";
 
 const config = getConfig();
 const iframe = config.isIrame;
