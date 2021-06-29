@@ -22,6 +22,9 @@ function Redirection(props) {
       clearITRSessionStorage()
       nativeCallback({
         action: 'take_control',
+        message: {
+          back_text: 'You are almost there, do you really want to go back?',
+        },
       })
       window.location.assign(redirectionUrl)
     }, 2000)
