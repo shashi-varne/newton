@@ -194,6 +194,7 @@ function Landing(props) {
               title={title}
               subtitle={subtitle}
               onClick={handleITRJourneyNavigation(type)}
+              classes={{ headerTitle: 'heading3-medium'}}
             />
           )
         }

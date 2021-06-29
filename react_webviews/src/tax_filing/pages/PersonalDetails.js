@@ -37,7 +37,7 @@ function PersonalDetails(props) {
   const [errorData, setErrorData] = useState({})
 
   const [name, setName] = useState(userSummary?.user?.name || '')
-  const [email, setEmail] = useState(userSummary?.user?.name || '')
+  const [email, setEmail] = useState(userSummary?.user?.email || '')
   const [mobileNumber, setMobileNumber] = useState(
     userSummary?.user?.mobile || ''
   )
