@@ -34,6 +34,7 @@ const FundChart = (props) => {
     yAxis: {
       opposite: false,
       crosshair: false,
+      showLastLabel: true,
       labels: {
         formatter: function () {
           return (
@@ -67,6 +68,7 @@ const FundChart = (props) => {
     },
     plotOptions: {
       areaspline: {
+        threshold: null,
         fillColor: {
           linearGradient: [0, 0, 0, 200],
           stops: [
@@ -203,7 +205,6 @@ const FundChart = (props) => {
           },
         },
       },
-      // buttons: [...buttonConfig],
     },
     series: [
       {
