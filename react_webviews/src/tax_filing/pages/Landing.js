@@ -5,8 +5,7 @@ import WVTag from 'common/ui/Tag/WVTag'
 import Carousal from '../mini-components/Carousal'
 import WVMenuListDropdownItem from 'common/ui/MenuListDropdown/WVMenuListDropdownItem'
 import FeatureListItem from '../mini-components/FeatureListItem'
-import WVCard from 'common/ui/Card/WVCard'
-import { Imgc } from 'common/ui/Imgc'
+import WVCard from 'common/ui/WVCards/WVCard'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 
 import { nativeCallback } from 'utils/native_callback'
@@ -15,7 +14,6 @@ import {
   taxFilingOptions,
   USER_SUMMARY_KEY,
   ITR_APPLICATIONS_KEY,
-  ITR_TYPE_KEY,
 } from '../constants'
 import {
   checkIfLandedByBackButton,

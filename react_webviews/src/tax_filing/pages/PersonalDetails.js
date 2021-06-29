@@ -200,8 +200,6 @@ function PersonalDetails(props) {
     }
   }
 
-  console.log(userSummary)
-
   return (
     <Container
       title="Personal Details"

@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
-import WVJourneyCard from 'common/ui/Card/WVJourneyCard'
+import WVJourneyCard from 'common/ui/WVCards/WVJourneyCard'
 import { Imgc } from 'common/ui/Imgc'
 
 import {

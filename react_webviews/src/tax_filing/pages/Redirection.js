@@ -6,6 +6,7 @@ import { navigate as navigateFunc } from '../common/functions'
 
 import './Redirection.scss'
 import { clearITRSessionStorage } from '../common/functions'
+import { nativeCallback } from 'utils/native_callback'
 
 function Redirection(props) {
   const navigate = navigateFunc.bind(props)
@@ -19,6 +20,9 @@ function Redirection(props) {
   useEffect(() => {
     const timerHandle = setTimeout(() => {
       clearITRSessionStorage()
+      nativeCallback({
+        action: 'take_control',
+      })
       window.location.assign(redirectionUrl)
     }, 2000)
     return () => {
