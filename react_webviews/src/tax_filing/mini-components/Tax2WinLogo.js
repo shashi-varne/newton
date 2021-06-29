@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './Tax2WinLogo.scss'
 
 function Tax2WinLogo({ classes, ...props }) {
   const containerClasses = classes?.container
