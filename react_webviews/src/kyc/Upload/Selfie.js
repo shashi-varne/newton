@@ -30,7 +30,6 @@ const Selfie = (props) => {
   const [isLocInitialised, setIsLocInitialised] = useState(true);
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
-  // const [showLoader, setShowLoader] = useState(false);
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const { kyc, isLoading, updateKyc } = useUserKycHook();
@@ -39,7 +38,6 @@ const Selfie = (props) => {
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [fileHandlerParams, setFileHandlerParams] = useState();
   const [goBackModal, setGoBackModal] = useState(false);
-  // const [attempt, setAttempt] = useState(0);
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
@@ -206,8 +204,6 @@ const Selfie = (props) => {
       properties: {
         user_action: userAction || "",
         screen_name: screenName || "take_a_selfie",
-        // attempt: attempt
-        // "type": type || "",
       },
     };
     if (userAction === "just_set_events") {

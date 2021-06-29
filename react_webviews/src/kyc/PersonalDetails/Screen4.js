@@ -168,10 +168,6 @@ const PersonalDetails4 = (props) => {
         screen_name: "nominee_details",
         add_nominee: isChecked ? "no" : "yes",
         "flow": getFlow(kyc) || "",
-        // "name": form_data.name ? "yes" : "no",
-        // "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        // "relationship": form_data.relationship ? "yes" : "no",
-        // "initial_kyc_status" : kyc.kyc_status || ""
       },
     };
     if (userAction === "just_set_events") {
