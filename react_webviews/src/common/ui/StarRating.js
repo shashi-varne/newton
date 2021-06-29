@@ -2,8 +2,20 @@ import React from 'react'
 import StarIcon from "@material-ui/icons/Star";
 
 function StarRating({value}) {
-  if(!value){
-    return 'NA'
+  if (!value) {
+    return (
+      <span
+        style={{
+          fontSize: "11px",
+          fontWeight: "400",
+          lineHeight: "18px",
+          letterSpacing: "0px",
+          color: "#767E86"
+        }}
+      >
+        Unrated
+      </span>
+    );
   }
     return (
         <>
