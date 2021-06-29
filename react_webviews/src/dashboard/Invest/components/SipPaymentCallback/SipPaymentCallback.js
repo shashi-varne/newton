@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
-import { getCampaignBySection, resetRiskProfileJourney } from "../../functions";
+import { resetRiskProfileJourney } from "../../functions";
 import { getCampaign } from "../../common/api";
 import { isEmpty, storageService } from "utils/validators";
-import { initData } from "../../../../kyc/services";
+import { getCampaignBySection, initData } from "../../../../kyc/services";
 import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 
