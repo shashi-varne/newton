@@ -26,7 +26,7 @@ function Redirection(props) {
           back_text: 'You are almost there, do you really want to go back?',
         },
       })
-      window.location.assign(redirectionUrl)
+      window.location.href = redirectionUrl
     }, 2000)
     return () => {
       clearInterval(timerHandle)
