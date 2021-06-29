@@ -92,7 +92,7 @@ const NRIAddressDetails2 = (props) => {
 
   const handleNavigation = () => {
     if (stateParams?.backToJourney) {
-      navigate("/kyc/upload/address");
+      navigate("/kyc/upload/address-nri");
     } else if (stateParams?.userType === "compliant") {
       navigate("/kyc/compliant-personal-details4");
     } else {
@@ -129,13 +129,7 @@ const NRIAddressDetails2 = (props) => {
     }
   }
 
-  let address_proof = "";
-
-  if (kyc?.address?.meta_data?.is_nri) {
-    address_proof = "Passport";
-  } else {
-    address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type];
-  }
+  const address_proof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type] || "Passport";
 
   const sendEvents = (userAction) => {
     let eventObj = {

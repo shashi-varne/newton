@@ -26,11 +26,14 @@ const PersonalDetails4 = (props) => {
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
   const productName = getConfig().productName;
+  const type = props.type || "";
   let title = "Nominee detail";
+  if(type === "digilocker") {
+    title = "Add nominee";
+  }
   if (isEdit) {
     title = "Edit nominee detail";
   }
-  const type = props.type || "";
   const keysToCheck = ["dob", "name", "relationship"];
 
   const { kyc, isLoading } = useUserKycHook();

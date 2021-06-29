@@ -137,7 +137,7 @@ const PersonalDetails3 = (props) => {
       events={sendEvents("just_set_events")}
       showSkelton={isLoading}
       hideInPageTitle
-      buttonTitle="CONTINUE"
+      buttonTitle="SAVE AND CONTINUE"
       handleClick={handleClick}
       skelton={isLoading}
       showLoader={isApiRunning}

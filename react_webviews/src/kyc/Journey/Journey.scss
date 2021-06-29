@@ -69,14 +69,14 @@
 }
 
 .kyc-journey .steps-container {
-  margin-top: 40px;
+  margin-top: 30px;
   margin-left: 10px;
 }
 
 .kyc-journey .steps-container .step {
   display: flex;
   // align-items: center;
-  height: 60px;
+  min-height: 60px;
   padding-bottom: 14px;
   position: relative;
 }
@@ -117,10 +117,10 @@
 .kyc-journey .steps-container .step .title {
   margin-left: 40px;
   position: relative;
-  top: -13px;
+  // top: -13px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-basis: 100%;
 
   .edit {
@@ -136,6 +136,17 @@
 
   .field_value {
     margin-left: 10px;
+    font-weight: 500;
+  }
+
+  .alert-status-info {
+    padding-bottom: 15px;
+
+    .text {
+      color: var(--steelgrey);
+      font-weight: 400;
+      font-size: 13px;
+    }
   }
 }
 

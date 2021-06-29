@@ -14,23 +14,24 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   let current_user = storageService().get("currentUser");
   let user = storageService().get("user") || {};
   let kyc = storageService().get("kyc") || {};
-  let show_loader = current_user && !isEmpty(kyc) && !isEmpty(user) ? false : true;
-  const [showLoader, setShowLoader] = useState(show_loader);
-  const [showComponent, setShowComponent] = useState(!show_loader);
+  let loader =
+    current_user && !isEmpty(kyc) && !isEmpty(user) ? false : true;
+  const [showLoader, setShowLoader] = useState(loader);
+  const [showComponent, setShowComponent] = useState(!loader);
   const fetch = async () => {
     await initData();
     current_user = storageService().get("currentUser");
     user = storageService().get("user") || {};
     kyc = storageService().get("kyc") || {};
-    let show_component =
+    let renderComponent =
       current_user && !isEmpty(kyc) && !isEmpty(user) ? true : false;
-    setShowComponent(show_component);
-    if (!show_component) {
+    setShowComponent(renderComponent);
+    if (!renderComponent) {
       if (isNative) {
         nativeCallback({ action: "exit_web" });
       } else if (isSdk) {
         nativeCallback({ action: "session_expired" });
-      } else if(isIframe) {
+      } else if (isIframe) {
         let message = JSON.stringify({
           type: "iframe_close",
         });
@@ -50,9 +51,14 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       render={(props) => {
         if (showLoader) {
           return (
-            <div className="ContainerWrapper">
-              <div style={{ height: "56px" }}>
-              </div>
+            <div
+              className={
+                isIframe ? "iframeContainerWrapper" : "ContainerWrapper"
+              }
+            >
+              {(!isIframe || config.isMobileDevice) && (
+                <div style={{ height: "56px" }}></div>
+              )}
               <UiSkelton type />
             </div>
           );

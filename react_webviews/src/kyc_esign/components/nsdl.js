@@ -203,34 +203,19 @@ class DigiStatus extends Component {
         title={
           status === "success" ? "eSign KYC completed" : "eSign KYC failed"
         }
+        hidePageTitle
         handleClick={status === "success" ? this.handleClick : this.retry}
         buttonTitle={
           status === "success"
             ? dl_flow && !show_note
               ? "START INVESTING"
-              : "OKAY"
+              : "OK"
             : "RETRY E-SIGN"
         }
         headerData={headerData}
         skelton={skelton}
         iframeRightContent={status === "success" ? kycComplete : require(`assets/${productName}/esign_kyc_fail.svg`)}
       >
-        {/* <div className="nsdl-status">
-          <img
-            src={require(`assets/${productName}/ils_esign_${status}.svg`)}
-            style={{ width: "100%" }}
-            alt="Nsdl Status"
-          />
-          {status === "success" ?
-            <div className="nsdl-status-text">
-              You have successfully signed your KYC documents.
-            </div>
-            :
-            <div className="nsdl-status-text">
-              Sorry! the eSign verification is failed. Please try again.
-            </div>
-          }
-        </div> */}
         {status === "success" ? (
           <Complete
             navigateToReports={this.navigateToReports}

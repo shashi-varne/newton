@@ -28,6 +28,7 @@ const Report = (props) => {
   const [topTitle, setTopTitle] = useState("KYC status");
   const [addressProof, setAddressProof] = useState({});
   const [buttonTitle, setButtonTitle] = useState("OK");
+  const [dlFlow, setDlFlow] = useState(false);
   const appText = "Your application is submitted.";
   const goBackPage = props.location.state?.goBack || "";
   const iframe = isIframe();
@@ -65,6 +66,14 @@ const Report = (props) => {
     ) {
       setTopTitle("Investment status");
     }
+    const dlCondition =
+      !is_compliant &&
+      !kyc.address.meta_data.is_nri &&
+      kyc.dl_docs_status !== '' &&
+      kyc.dl_docs_status !== 'init' &&
+      kyc.dl_docs_status !== null
+
+    setDlFlow(dlCondition);
 
     let address_proof = "";
     let address_proof_nri = "";
@@ -281,10 +290,10 @@ const Report = (props) => {
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
                 <div className="subtitle">
-                  {kyc.address.meta_data.addressline},
-                  {kyc.address.meta_data.city},{kyc.address.meta_data.state},
-                  {kyc.address.meta_data.country},
-                  {kyc.address.meta_data.pincode}
+                  {kyc.nri_address.meta_data.addressline},
+                  {kyc.nri_address.meta_data.city},{kyc.address.meta_data.state},
+                  {kyc.nri_address.meta_data.country},
+                  {kyc.nri_address.meta_data.pincode}
                 </div>
               </div>
             )}
@@ -390,13 +399,13 @@ const Report = (props) => {
       title={topTitle}
       noFooter={isEmpty(cardDetails)}
       headerData={{goBack}}
-      iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
+      iframeRightContent={require(`assets/${productName}/${dlFlow ? "digilocker_kyc" : "kyc_illust"}.svg`)}
       data-aid='kyc-report-screen'
     >
       <div className="kyc-report">
         <main data-aid='kyc-report'>
           {
-            !iframe &&
+            (!iframe || config.isMobileDevice) &&
               <Imgc
                 src={require(`assets/${productName}/congratulations_illustration.svg`)}
                 alt="img"

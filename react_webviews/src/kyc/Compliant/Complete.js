@@ -43,9 +43,9 @@ const Complete = (props) => {
       buttonTitle="OK"
       handleClick={handleClick}
       title='Kudos, KYC is completed!'
-      force_hide_inpage_title={true}
+      hidePageTitle={true}
       data-aid='kyc-compliant-complete-screen'
-      iframeRightContent={require(`assets/${productName}/kyc_complete.svg`)}
+      iframeRightContent={require(`assets/kyc_complete.svg`)}
     >
       <div className="kyc-compliant-complete">
         <header data-aid='kyc-header'>
@@ -56,7 +56,7 @@ const Complete = (props) => {
             alt=""
             />
           }
-          {/* <div className="title">Kudos, KYC is completed!</div> */}
+          <div className="title">Kudos, KYC is completed!</div>
           <div
             className="subtitle"
             onClick={() => navigate(PATHNAME_MAPPER.kycReport)}
@@ -67,7 +67,7 @@ const Complete = (props) => {
               Click on <span>Continue Investing</span> & choose from 5000+ mutual funds to invest in.
             </div>
           }
-            See KYC application details {" >"}
+            View your KYC application details {" >"}
           </div>
         </header>
         <Alert

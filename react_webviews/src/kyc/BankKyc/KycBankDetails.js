@@ -222,6 +222,10 @@ const KycBankDetails = (props) => {
     if (name.includes("account_number") && value && !validateNumber(value))
       return;
 
+    if(name === "ifsc_code" && value) {
+      value = value.toUpperCase();
+    }
+
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
     bank[name] = value;

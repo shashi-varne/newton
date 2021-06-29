@@ -188,6 +188,7 @@ async function setNpsData(result) {
 }
 
 export function getKycAppStatus(kyc) {
+  if(isEmpty(kyc)) return {};
   var rejected = 0;
   var metaRejected = 0;
   var docRejected = 0;

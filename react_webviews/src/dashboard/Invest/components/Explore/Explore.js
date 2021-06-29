@@ -28,22 +28,22 @@ export const exploreMFMappings = [
   {
     title: 'Equity',
     description: 'Invest in large, mid and small-sized companies',
-    src: iframe ? equity_icon : diy_equity_icon,
+    src: iframe && !isMobileDevice ? equity_icon : diy_equity_icon,
   },
   {
     title: 'Debt',
     description: 'Stable returns with bonds and securities',
-    src: iframe ? debt_icon : diy_debt_icon,
+    src: iframe && !isMobileDevice ? debt_icon : diy_debt_icon,
   },
   {
     title: 'Hybrid',
     description: 'Perfect balance of equity and debt',
-    src: iframe ? hybrid_icon : diy_hybrid_icon,
+    src: iframe && !isMobileDevice ? hybrid_icon : diy_hybrid_icon,
   },
   {
     title: 'Goal Oriented',
     description: 'Align investments with your life goals',
-    src: iframe ? goal_icon : diy_goal_icon,
+    src: iframe && !isMobileDevice ? goal_icon : diy_goal_icon,
   },
 ]
 const partnerCode = getConfig().partner_code;
@@ -105,9 +105,9 @@ const InvestExplore = (props) => {
       data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
-      title={iframe && isMobileDevice ? "" : "Explore All Mutual Funds"}
+      title={iframe && !isMobileDevice ? "" : "Explore All Mutual Funds"}
       classOverRideContainer="pr-container"
-      force_hide_inpage_title={iframe && isMobileDevice}
+      hidePageTitle={iframe && isMobileDevice}
       handleClick={goNext}
       skelton={loader}
       rightIcon="search"

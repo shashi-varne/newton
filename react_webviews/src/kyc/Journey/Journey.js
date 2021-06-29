@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getConfig, isIframe } from 'utils/functions'
+import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import ShowAadharDialog from '../mini-components/ShowAadharDialog'
 import Alert from '../mini-components/Alert'
@@ -112,6 +112,8 @@ const Journey = (props) => {
             kyc[journeyData[i].inputsForStatus[0]] === 'init'
           ) {
             status = 'init'
+            if(iframe && !isMobileDevice)
+              journeyData[i].subtitle = <Alert variant="info" message="Please ensure your mobile is linked with Aadhar" />;
             break
           }
         } else if (
@@ -119,6 +121,11 @@ const Journey = (props) => {
           journeyData[i].key === 'bank_esign'
         ) {
           if (kyc.sign_status !== 'signed') {
+            status = 'init'
+            break
+          }
+
+          if(journeyData[i].key === 'bank_esign' && kyc.bank.meta_data_status === 'rejected') {
             status = 'init'
             break
           }
@@ -225,7 +232,7 @@ const Journey = (props) => {
         investmentPending = true
       } else if (isCompliant) {
         topTitle = 'What next?'
-      } else if (isCompliant && show_aadhaar) {
+      } else if (!isCompliant && show_aadhaar) {
         topTitle = 'Steps to follow:'
       } else {
         topTitle = 'KYC journey'
@@ -328,7 +335,7 @@ const Journey = (props) => {
         },
         {
           key: 'digilocker',
-          title: 'Connect to digilocker',
+          title: 'Connect to DigiLocker',
           status: 'init',
           isEditAllowed: false,
           inputsForStatus: ['dl_docs_status'],
@@ -460,7 +467,7 @@ const Journey = (props) => {
         }
       }
 
-      if (kyc.kyc_status === 'rejected' && !show_aadhaar) {
+      if (journeyStatus === 'rejected' && !show_aadhaar) {
         handleEdit(kycJourneyData[3].key, 3)
       }
 
@@ -672,15 +679,16 @@ const Journey = (props) => {
     }
   }
   if (!isEmpty(kyc) && !isEmpty(user)) {
+    const params = {
+      state: { goBack: '/invest' },
+    }
     if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
-      navigate('/nps/identity')
+      navigate('/nps/identity', params)
     } else if (
       user.kyc_registration_v2 === 'submitted' &&
       kyc.sign_status === 'signed'
     ) {
-      navigate('/kyc/report', {
-        state: { goBack: '/invest' },
-      })
+      navigate('/kyc/report', params)
     } else if (
       user.kyc_registration_v2 === 'complete' &&
       kyc.sign_status === 'signed'
@@ -732,7 +740,7 @@ const Journey = (props) => {
       showLoader={isApiRunning}
       headerData={{ goBack: openGoBackModal }}
       loaderData={{loadingText: " "}}
-      iframeRightContent={require(`assets/${productName}/digilocker_kyc.svg`)}
+      iframeRightContent={require(`assets/${productName}/${show_aadhaar ? "digilocker_kyc" : "kyc_illust"}.svg`)}
       data-aid='kyc-journey-screen'
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
@@ -763,7 +771,7 @@ const Journey = (props) => {
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
-                    No document asked
+                    No paperwork
                   </div>
                 </div>
               </div>
@@ -781,7 +789,7 @@ const Journey = (props) => {
               <div className="left">
                 <div className="pj-header">Aadhaar KYC</div>
                 <div className="pj-sub-text">
-                  Link with Digilocker to complete Aadhaar KYC
+                  Link with DigiLocker to complete Aadhaar KYC
                 </div>
 
                 <div className="pj-bottom-info-box">
@@ -801,7 +809,7 @@ const Journey = (props) => {
                     className="icon"
                   />
                   <div className="pj-bottom-info-content">
-                    No document asked
+                    No paperwork
                   </div>
                 </div>
               </div>
@@ -865,15 +873,17 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  <div className="flex flex-between" data-aid='kyc-field-value'>
-                    <span className="field_key">
-                      {item.title}
-                      {item?.value ? ':' : ''}
-                    </span>
-                    {item?.value && (
-                      <span className="field_value"> {item?.value}</span>
-                    )}
-                    
+                  <div>
+                    <div className="flex flex-between" data-aid='kyc-field-value'>
+                      <span className="field_key">
+                        {item.title}
+                        {item?.value ? ':' : ''}
+                      </span>
+                      {item?.value && (
+                        <span className="field_value"> {item?.value}</span>
+                      )}
+                    </div>
+                    <div>{item.subtitle}</div>
                   </div>
                   
 

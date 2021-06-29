@@ -123,7 +123,7 @@ const InvestJourney = (props) => {
           <div>
             <img alt="safe_secure_journey" src={safe_secure_journey} />
           </div>
-          <div>With fisdom, investment is easy & secure</div>
+          <div>With {productName}, investment is easy & secure</div>
         </div>
         <div className="invest-journey-steps" data-aid='invest-journey-steps'>
           <div className="invest-journey-connect">

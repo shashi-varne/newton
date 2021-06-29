@@ -133,9 +133,10 @@ const Home = (props) => {
         }
         await checkCompliant();
       } else if (!isUserCompliant) {
-        if(iFrame) {
+        if(iFrame && !config.isMobileDevice && config.code === "moneycontrol") {
           const residentData = {
-            title: 'Are you an Indian resident?',
+            title: "Residence Status",
+            message: 'Are you an Indian resident?',
             buttonOneTitle: 'NO',
             buttonTwoTitle: 'YES',
             twoButton: true
@@ -266,7 +267,7 @@ const Home = (props) => {
         };
         setAuthIds(auth_ids);
         // setAccountMergeData(accountDetail);
-        if (iFrame) {
+        if (iFrame  && !config.isMobileDevice && config.code === "moneycontrol") {
           // setNavigateTo('pan-status');
           const newData = {
             buttonOneTitle: 'RE-ENTER PAN',
@@ -289,7 +290,7 @@ const Home = (props) => {
           message: result?.message,
           step: "STEP2",
         };
-        if (iFrame) {
+        if (iFrame && !config.isMobileDevice && config.code === "moneycontrol") {
           // setNavigateTo('pan-status');
           const newData = {
             buttonOneTitle: 'RE-ENTER PAN',
@@ -410,7 +411,7 @@ const Home = (props) => {
               minLenth={10}
               maxLength={10}
               type="text"
-              disabled={showLoader}
+              disabled={!!showLoader}
               autoFocus
             />
             {isStartKyc && isUserCompliant && (
