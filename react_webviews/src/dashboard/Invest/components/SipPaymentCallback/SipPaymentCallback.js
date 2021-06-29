@@ -177,7 +177,7 @@ const SipPaymentCallback = (props) => {
               <div>Units will be allotted by next working day</div>
             </div>
             {
-              config.partner_code === 'moneycontrol' && 
+              config.code === 'moneycontrol' && 
               <div className='important-message'>
               <div className='info-icon'>
                 <img src={require(`assets/${config.productName}/info_icon.svg`)} alt="" />
@@ -186,7 +186,7 @@ const SipPaymentCallback = (props) => {
                   <div className='info-head'>Important</div>
                   <div className='info-msg-content'>
                     The Mutual Fund(s) will reflect in your Moneycontrol Portfolio
-                    once units are allocated by the AMC(s). Check the <span>‘Pending Transaction’</span>
+                    once units are allocated by the AMC(s). Check the <span>‘Pending Transaction’</span>{" "}
                     tab under ‘Portfolio’ to know more.
                   </div>
               </div>

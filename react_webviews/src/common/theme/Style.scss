@@ -112,7 +112,7 @@ body[data-device="web"] {
     }
     .nfo-checkout{
       padding: 0 20px;
-      
+
       .checkout-invest-type{
         background-color: white !important;
 
@@ -235,6 +235,15 @@ body[data-device="web"] {
     .account-merge-linked{
       text-align: left;
       margin-top: 125px;
+    }
+
+    .invest-payment-callback {
+      box-shadow: none;
+      text-align: left;
+
+      .content .message {
+        justify-content: flex-start;
+      }
     }
 
     .invest-sip-payment-callback{
