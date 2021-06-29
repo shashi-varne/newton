@@ -150,91 +150,93 @@ function Landing(props) {
       headerData={{ goBack }}
       noFooter
     >
-      <Carousal
-        title="Taxation made simple"
-        subtitle="File ITR easily, quickly and with maximum tax savings"
-        dataAidSuffix="tax-filing-itr-carousel"
-      />
-      {itrList.length > 0 && (
-        <WVCard
-          classes={{
-            container:
-              'tax-filing-entry-card pointer flex align-center m-top-3x',
-          }}
-          onClick={handleMyITRNavigation}
-        >
-          <>
-            <img
-              src={require(`assets/icn_my_itr.svg`)}
-              alt="MY ITR"
-              className="block"
-            />
-            <div className="m-left-2x heading3-medium text-white">MY ITR</div>
-          </>
-        </WVCard>
-      )}
-
-      <div className="heading2 m-top-3x">Get Started</div>
-      {taxFilingOptions.map(({ title, subtitle, icon, type }, idx) => {
-        if (type === 'free') {
-          return (
-            <WVMenuListDropdownItem
-              key={idx}
-              image={require(`assets/${productName}/${icon}.svg`)}
-              title={<CustomTitle title={title} />}
-              subtitle={subtitle}
-              onClick={handleITRJourneyNavigation(type)}
-            />
-          )
-        } else {
-          return (
-            <WVMenuListDropdownItem
-              key={idx}
-              image={require(`assets/${productName}/${icon}.svg`)}
-              title={title}
-              subtitle={subtitle}
-              onClick={handleITRJourneyNavigation(type)}
-              classes={{ headerTitle: 'heading3-medium'}}
-            />
-          )
-        }
-      })}
-      <div className="heading2 m-top-3x">Why eFile with us?</div>
-      {getTaxFilingFeatureLists().map((item, idx) => (
-        <FeatureListItem
-          imgSrc={item.frontImage}
-          bgImgSrc={item.bgImage}
-          title={item.title}
-          subtitle={item.subtitle}
-          classes={{ container: 'm-top-3x' }}
-          key={idx}
+      <div className="tax-filing-landing">
+        <Carousal
+          title="Taxation made simple"
+          subtitle="File ITR easily, quickly and with maximum tax savings"
+          dataAidSuffix="tax-filing-itr-carousel"
         />
-      ))}
-      <div
-        className="pointer m-top-4x flex align-center pointer tax-filing-faq-section"
-        onClick={handleFAQNavigation}
-      >
+        {itrList.length > 0 && (
+          <WVCard
+            classes={{
+              container:
+                'tax-filing-entry-card pointer flex align-center m-top-3x',
+            }}
+            onClick={handleMyITRNavigation}
+          >
+            <>
+              <img
+                src={require(`assets/icn_my_itr.svg`)}
+                alt="MY ITR"
+                className="block"
+              />
+              <div className="m-left-2x heading3-medium text-white">MY ITR</div>
+            </>
+          </WVCard>
+        )}
+
+        <div className="heading2 m-top-3x">Get Started</div>
+        {taxFilingOptions.map(({ title, subtitle, icon, type }, idx) => {
+          if (type === 'free') {
+            return (
+              <WVMenuListDropdownItem
+                key={idx}
+                image={require(`assets/${productName}/${icon}.svg`)}
+                title={<CustomTitle title={title} />}
+                subtitle={subtitle}
+                onClick={handleITRJourneyNavigation(type)}
+              />
+            )
+          } else {
+            return (
+              <WVMenuListDropdownItem
+                key={idx}
+                image={require(`assets/${productName}/${icon}.svg`)}
+                title={title}
+                subtitle={subtitle}
+                onClick={handleITRJourneyNavigation(type)}
+                classes={{ headerTitle: 'heading3-medium' }}
+              />
+            )
+          }
+        })}
+        <div className="heading2 m-top-3x">Why eFile with us?</div>
+        {getTaxFilingFeatureLists().map((item, idx) => (
+          <FeatureListItem
+            imgSrc={item.frontImage}
+            bgImgSrc={item.bgImage}
+            title={item.title}
+            subtitle={item.subtitle}
+            classes={{ container: 'm-top-3x' }}
+            key={idx}
+          />
+        ))}
         <div
-          style={{
-            backgroundImage: `url(${require(`assets/${productName}/chat_bubble.svg`)})`,
-            width: '22.92px',
-            height: '22.92px',
-          }}
-          className="tax-filing-faq-icon flex align-center justify-center"
+          className="pointer m-top-4x flex align-center pointer tax-filing-faq-section"
+          onClick={handleFAQNavigation}
         >
-          <div className="tax-filing-faq-icon-text">?</div>
+          <div
+            style={{
+              backgroundImage: `url(${require(`assets/${productName}/chat_bubble.svg`)})`,
+              width: '22.92px',
+              height: '22.92px',
+            }}
+            className="tax-filing-faq-icon flex align-center justify-center"
+          >
+            <div className="tax-filing-faq-icon-text">?</div>
+          </div>
+          <div className="tax-filing-faq-subtitle m-left-2x">
+            Frequently asked questions
+          </div>
         </div>
-        <div className="tax-filing-faq-subtitle m-left-2x">
-          Frequently asked questions
-        </div>
-      </div>
-      <Tax2WinLogo classes={{ container: 'm-top-4x' }} />
-      <div className="m-top-2x centered">
-        <div className="body-text2 center text-secondary">
-          For any query, reach us at
-        </div>
-        <div className="small-text1 center text-secondary uppercase">
-          support@tax2win.in
+        <Tax2WinLogo classes={{ container: 'm-top-4x' }} />
+        <div className="m-top-2x centered">
+          <div className="body-text2 center text-secondary">
+            For any query, reach us at
+          </div>
+          <div className="small-text1 center text-secondary uppercase">
+            support@tax2win.in
+          </div>
         </div>
       </div>
     </Container>
