@@ -2,19 +2,6 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
 
-  let _event = {
-    event_name: "hide_loader",
-    properties: {
-      journey: {
-        name: "",
-        trigger: "",
-        journey_status: "",
-        next_journey: ""
-      }
-    }
-  };
-
-  //window.callbackWeb.sendEvent(_event);
 // required
   // try {
   //   if ($rootScope.currentUser) {
