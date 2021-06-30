@@ -1,5 +1,4 @@
 import React from 'react'
-import { Imgc } from 'common/ui/Imgc'
 
 import { getConfig } from 'utils/functions'
 
@@ -11,12 +10,7 @@ function FeatureListItem({ classes, imgSrc, bgImgSrc, title, subtitle }) {
     : `flex align-start`
 
   const productName = getConfig().productName
-  const bgColor =
-    productName === 'fisdom'
-      ? '#E8E0FF'
-      : productName === 'finity'
-      ? '#E6F2FE'
-      : ''
+  
   return (
     <div className={containerClasses}>
       <div
