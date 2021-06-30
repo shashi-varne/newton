@@ -141,7 +141,7 @@ const SipPaymentCallback = (props) => {
   };
 
   const goBack = () => {
-    navigate("/landing");
+    navigate("/");
   }
 
   return (
