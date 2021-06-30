@@ -272,6 +272,16 @@ body[data-device="web"] {
         margin-top: 140px;
       }
     }
+
+    .generic-page-loader{
+      top: 0px !important;
+    }
+
+    #digilocker-failed{
+      .body-text1{
+        margin-top: 80px;
+      }
+    }
   }
 
   .IframeContainer.iframe-bottom-padding{

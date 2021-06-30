@@ -652,7 +652,7 @@ const Journey = (props) => {
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
-    var kycJourneyData = initJourneyData() || []
+    var kycJourneyData = initJourneyData() || [];
     var ctaText = ''
     if (canSubmit()) {
       ctaText = 'SUBMIT APPLICATION'
