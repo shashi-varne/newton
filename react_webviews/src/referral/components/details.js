@@ -186,10 +186,12 @@ class Details extends Component {
                 {this.state.refer_message_2}&nbsp;
                 {this.state.type === 'fisdom' && this.state.current_campaign_id === this.state.campaign_id && <span>(Minimum <strong>₹1000</strong> SIP)</span>}
               </p>
-              <div className="Share">
-                <p>REFERRAL CODE</p>
-                <h2>{this.state.referral_code}</h2>
-              </div>
+              {this.state.active_campaign &&
+                <div className="Share">
+                  <p>REFERRAL CODE</p>
+                  <h2>{this.state.referral_code}</h2>
+                </div>
+              }
               <div className="ShareButton">
                 <Button
                   disableRipple={true}
