@@ -36,7 +36,6 @@ class CommonLanding extends Component {
             'health-webview-other' : '/group-insurance/other-insurance/entry',
             'group-insurance': '/group-insurance',
             'health-insurance': '/group-insurance/health/landing',
-            'term-insurance': '/group-insurance/life-insurance/term/landing',
             'gold': '/gold/landing',
             'gold-buy': '/gold/buy',
             'gold-locker': '/gold/gold-locker',
