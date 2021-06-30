@@ -335,7 +335,7 @@ const DiyFundCard = ({
               </span>
             </p>
             {rating > 0 && rating < 6 && (
-              <img src={require(`assets/rating${rating}.png`)} className="diy-fc-rating" />
+              <img src={require(`assets/rating${rating}.png`)} className="diy-fc-rating" alt="" />
             )}
           </div>
           {productType !== 'finity' ? (

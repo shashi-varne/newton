@@ -122,12 +122,10 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         });
         window.callbackWeb.sendEvent(message);
         storageService().clear();
-        return true;
       } else {
         navigate("/logout");
-        return true;
       }
-      break;
+      return true;
     // case '/invest/money-control':
     //   let message = JSON.stringify({
     //     type: "iframe_close"
