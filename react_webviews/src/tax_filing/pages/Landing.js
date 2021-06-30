@@ -117,7 +117,7 @@ function Landing(props) {
       setErrorData({
         type: 'crash',
         title1: err.message,
-        handleClick1: closeError(),
+        handleClick1: closeError,
       })
       setShowLoader(false)
     }

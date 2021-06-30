@@ -16,8 +16,8 @@ export const getUserAccountSummary = async () => {
     return { kyc, user }
   } else {
     throw new Error(
-      res?.pfwresponse?.result?.message ||
-        res?.pfwresponse?.result?.error ||
+      res?.pfwresponse?.result?.error ||
+        res?.pfwresponse?.result?.message ||
         genericErrMsg
     )
   }
@@ -30,8 +30,8 @@ export const createITRApplication = async (params = {}) => {
     return res?.pfwresponse?.result
   } else {
     throw new Error(
-      res?.pfwresponse?.result?.message ||
-        res?.pfwresponse?.result?.error ||
+      res?.pfwresponse?.result?.error ||
+        res?.pfwresponse?.result?.message ||
         genericErrMsg
     )
   }
@@ -44,8 +44,8 @@ export const getITRList = async (params = {}) => {
     return res?.pfwresponse?.result
   } else {
     throw new Error(
-      res?.pfwresponse?.result?.message ||
-        res?.pfwresponse?.result?.error ||
+      res?.pfwresponse?.result?.error ||
+        res?.pfwresponse?.result?.message ||
         genericErrMsg
     )
   }
@@ -58,8 +58,23 @@ export const resumeITRApplication = async (itrId) => {
     return res?.pfwresponse?.result
   } else {
     throw new Error(
-      res?.pfwresponse?.result?.message ||
-        res?.pfwresponse?.result?.error ||
+      res?.pfwresponse?.result?.error ||
+        res?.pfwresponse?.result?.message ||
+        genericErrMsg
+    )
+  }
+}
+
+export const verifySSOTokenAndHMAC = async (token, hmac) => {
+  const URL = `/api/itr/sso`
+  const params = { token, hmac }
+  const res = await Api.get(URL, params)
+  if (res?.pfwresponse?.status_code === 200) {
+    return res?.pfwresponse?.result
+  } else {
+    throw new Error(
+      res?.pfwresponse?.result?.error ||
+        res?.pfwresponse?.result?.message ||
         genericErrMsg
     )
   }

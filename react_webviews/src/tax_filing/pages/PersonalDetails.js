@@ -12,7 +12,7 @@ import { getConfig } from 'utils/functions'
 import { isEmpty } from 'lodash'
 
 import { createITRApplication, getUserAccountSummary } from '../common/ApiCalls'
-import { storageService } from '../../utils/validators'
+import { isNumberKey, storageService } from '../../utils/validators'
 import { ITR_TYPE_KEY } from '../constants'
 
 import { nativeCallback } from 'utils/native_callback'
@@ -109,7 +109,9 @@ function PersonalDetails(props) {
         setEmail(value.trim())
         break
       case 'mobileNumber':
-        setMobileNumber(value.trim())
+        if (isNumberKey(event)) {
+          setMobileNumber(value)
+        }
         break
       default:
         break
@@ -179,7 +181,7 @@ function PersonalDetails(props) {
         type,
         email,
         name,
-        mobile: mobileNumber,
+        phone: mobileNumber,
       })
       setItrId(itr.itr_id)
       setITRSSOURL(itr.sso_url)
@@ -200,6 +202,15 @@ function PersonalDetails(props) {
     }
   }
 
+  const isDisabledProceed =
+    isEmpty(email) ||
+    isEmpty(mobileNumber) ||
+    isEmpty(name) ||
+    errors.email ||
+    errors.mobileNumber ||
+    errors.name ||
+    mobileNumber.length !== 10
+
   return (
     <Container
       title="Personal Details"
@@ -211,7 +222,7 @@ function PersonalDetails(props) {
       headerData={{ goBack }}
       skelton={showSkeltonLoader}
       showLoader={showLoader}
-      disabled={true}
+      disable={isDisabledProceed}
     >
       <form className="block tax-filing-details">
         <Input

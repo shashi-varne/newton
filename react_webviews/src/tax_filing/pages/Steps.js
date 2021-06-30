@@ -106,7 +106,7 @@ function Steps(props) {
         const itr = await createITRApplication({
           type,
           email: summary?.user?.email,
-          mobile: summary?.user?.mobile,
+          phone: summary?.user?.mobile,
           name: summary?.user?.name,
         })
         storageService().setObject(ITR_ID_KEY, itr.itr_id)
@@ -145,7 +145,7 @@ function Steps(props) {
         try {
           const itr = await createITRApplication({
             email: summary?.user?.email,
-            mobile: summary?.user?.mobile,
+            phone: summary?.user?.mobile,
             name: summary?.user?.name,
             type,
           })
