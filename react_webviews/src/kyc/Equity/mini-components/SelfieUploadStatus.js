@@ -1,5 +1,5 @@
 import React from "react";
-import { getConfig } from "../../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../../utils/functions";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 
 const productName = getConfig().productName;
@@ -19,10 +19,17 @@ const uploadStatus = {
   },
 };
 
-const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick }) => {
-  const data = uploadStatus[status] || {};
-  
+const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick, kyc }) => {
   if (!status) return '';
+  
+  const data = uploadStatus[status] || {};
+  const TRADING_ENABLED = isTradingEnabled(kyc);
+  if (status === "success") {
+    if (!TRADING_ENABLED || (kyc?.kyc_status === "non-compliant" && kyc?.kyc_type === "manual")) {
+      data.subtitle = "Great, now continue to provide other documents to complete KYC"
+    }
+  }
+  
 
   return (
     <WVBottomSheet
