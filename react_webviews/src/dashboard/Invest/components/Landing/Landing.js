@@ -136,7 +136,6 @@ class Landing extends Component {
         skelton={this.state.show_loader}
         noFooter={true}
         title="Start Investing"
-        showLoader={this.state.show_loader}
         data-aid='start-investing-screen'
         noBackIcon={fromLoginStates.includes(stateParams.fromState)}
         background={
