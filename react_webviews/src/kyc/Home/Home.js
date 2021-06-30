@@ -8,13 +8,15 @@ import toast from "../../common/ui/Toast";
 import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, navigate as navigateFunc, isIframe } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import internalStorage from './InternalStorage';
 import isEmpty from 'lodash/isEmpty';
+import { isMoneycontrolDesktopLayout } from "../common/functions";
 
 const config = getConfig();
+const showPageDialog = isMoneycontrolDesktopLayout();
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -33,7 +35,6 @@ const Home = (props) => {
   const isPremiumFlow = stateParams.isPremiumFlow || false;
   const { kyc, user, isLoading } = useUserKycHook();
   const [userName, setUserName] = useState('');
-  const iFrame = isIframe();
   // const [navigateTo, setNavigateTo] = useState('');
   // const [x,setX] = useState(false);
 
@@ -57,8 +58,8 @@ const Home = (props) => {
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
-      title: "Are you investment ready?",
-      subtitle: "We need your PAN to check if you’re investment ready",
+      title: "Check if you’re investment ready",
+      subtitle: "PAN is mandatory for investing in Mutual Funds",
       kycConfirmPanScreen: false,
     };
     if (
@@ -133,9 +134,10 @@ const Home = (props) => {
         }
         await checkCompliant();
       } else if (!isUserCompliant) {
-        if(iFrame) {
+        if(showPageDialog) {
           const residentData = {
-            title: 'Are you an Indian resident?',
+            title: "Residence Status",
+            message: 'Are you an Indian resident?',
             buttonOneTitle: 'NO',
             buttonTwoTitle: 'YES',
             twoButton: true
@@ -230,7 +232,8 @@ const Home = (props) => {
 
   const handleMerge = async (step) => {
     if (step === "STEP1") {
-      storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
+      if(!isEmpty(authIds))
+        storageService().setObject(STORAGE_CONSTANTS.AUTH_IDS, authIds);
       navigate(`${PATHNAME_MAPPER.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (config.Web) {
@@ -250,7 +253,7 @@ const Home = (props) => {
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (config.isIframe && config.partner_code !== 'moneycontrol') {
+    if (showPageDialog) {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
@@ -259,13 +262,13 @@ const Home = (props) => {
       let { different_login, auth_ids} = result;
       if (status_code === 200) {
         const accountDetail = {
-          title: "PAN Already Exists",
+          title: "PAN already exists",
           message: "Sorry! this PAN is already registered with another account.",
           step: "STEP1",
         };
         setAuthIds(auth_ids);
         // setAccountMergeData(accountDetail);
-        if (iFrame) {
+        if (showPageDialog) {
           // setNavigateTo('pan-status');
           const newData = {
             buttonOneTitle: 'RE-ENTER PAN',
@@ -288,7 +291,7 @@ const Home = (props) => {
           message: result?.message,
           step: "STEP2",
         };
-        if (iFrame) {
+        if (showPageDialog) {
           // setNavigateTo('pan-status');
           const newData = {
             buttonOneTitle: 'RE-ENTER PAN',
@@ -409,7 +412,7 @@ const Home = (props) => {
               minLenth={10}
               maxLength={10}
               type="text"
-              disabled={showLoader}
+              disabled={!!showLoader}
               autoFocus
             />
             {isStartKyc && isUserCompliant && (

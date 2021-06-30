@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { pollProgress, popupWindowCenter } from "../common/functions";
+import { pollProgress } from "../common/functions";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import AadhaarDialog from "../mini-components/AadhaarDialog";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -8,14 +8,16 @@ import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import "./Digilocker.scss";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { popupWindowCenter } from "../../utils/functions";
 
 const config = getConfig();
-const iframe = config.isIrame;
+const iframe = config.isIframe;
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isBackDialogOpen, setBackDialogOpen] = useState(false);
   const navigate = navigateFunc.bind(props);
+  const isMobileDevice = config.isMobileDevice;
 
   const close = () => {
     setOpen(false);
@@ -106,10 +108,11 @@ const Failed = (props) => {
       headerData={{goBack}}
       loaderData={{ loadingText: " " }}
       iframeRightContent={require(`assets/${productName}/digilocker_failed.svg`)}
+      showLoader={isApiRunning === "page"}
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         {
-          !iframe &&
+          (!iframe || isMobileDevice) &&
           <img
             className="digi-image"
             alt=""
@@ -118,8 +121,9 @@ const Failed = (props) => {
         }
         <div className="body-text1" data-aid='kyc-body-text1'>
           Aadhaar KYC has been failed because we were not able to connect to
-          your Digilocker.
+          your DigiLocker.
         </div>
+        <div className='body-text2'>Try again to complete KYC.</div>
       </section>
       <AadhaarDialog
         open={open}

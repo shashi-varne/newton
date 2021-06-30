@@ -13,7 +13,8 @@ import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
 import { getConfig, navigate as navigateFunc } from '../../../../utils/functions'
 
-const isMobileDevice = getConfig().isMobileDevice;
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
 const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   const navigate = navigateFunc.bind(parentProps);
   const handleNavigate = (data) => {
@@ -163,7 +164,7 @@ const FundType = (props) => {
                 name={category.name}
                 trivia={category.trivia}
                 sendEvents={sendEvents}
-                icon={require(`assets/fisdom/${category.key}.svg`)}
+                icon={require(`assets/${config.productName}/${category.key}.svg`)}
                 type={type}
                 {...props}
               />
@@ -171,7 +172,7 @@ const FundType = (props) => {
           </div>
         </section>
       </section>
-      {getConfig().productName !== "finity" && (
+      {config.productName !== "finity" && (
         <footer
           className="diy-cart-footer"
           style={{ marginLeft: isMobileDevice && 0 }}

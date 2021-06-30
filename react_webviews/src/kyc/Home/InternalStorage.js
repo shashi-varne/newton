@@ -18,6 +18,10 @@ class StorageClass {
   clearStore() {
     this.store = {};
   }
+
+  getStore() {
+    return this.store;
+  }
 }
 
 const InternalStorage = new StorageClass();

@@ -41,13 +41,13 @@ export const validateFields = (formData, keyToCheck) => {
             canSubmit = false
           }
           break
-        // case 'account_number':
-        // case 'c_account_number':
-        //   if (value.length !== 16) {
-        //     formData[`${key}_error`] = 'Minimum length is 16'
-        //     canSubmit = false
-        //   }
-        //   break
+        case 'account_number':
+        case 'c_account_number':
+          if (value.length < 5) {
+            formData[`${key}_error`] = 'Minimum length is 5'
+            canSubmit = false
+          }
+          break
         case 'ifsc_code':
           if (value.length !== 11) {
             formData[`${key}_error`] = 'Minimum length is 11'
@@ -184,27 +184,6 @@ export const pollProgress = (timeout, interval, popup_window) => {
   return new Promise(checkCondition);
 }
 
-export const popupWindowCenter = (w, h, url) => {
-  let dualScreenLeft =
-    window.screenLeft !== undefined ? window.screenLeft : window.screenX;
-  let dualScreenTop =
-    window.screenTop !== undefined ? window.screenTop : window.screenY;
-  let left = window.screen.width / 2 - w / 2 + dualScreenLeft;
-  let top = window.screen.height / 2 - h / 2 + dualScreenTop;
-  return window.open(
-    url,
-    "_blank",
-    "width=" +
-      w +
-      ",height=" +
-      h +
-      ",resizable,scrollbars,status,top=" +
-      top +
-      ",left=" +
-      left
-  );
-}
-
 export const getFlow = (kycData) => {
   let flow = "";
   let dlFlow = false;
@@ -227,4 +206,9 @@ export const getFlow = (kycData) => {
     }
   }
   return flow;
+}
+
+export const isMoneycontrolDesktopLayout = () => {
+  const config = getConfig();
+  return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
 }

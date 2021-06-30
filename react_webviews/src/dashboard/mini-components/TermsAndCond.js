@@ -64,7 +64,7 @@ const TermsAndCond = () => {
           <img alt='check_mark' src={check_mark} width='15' />
           <span data-aid='terms-and-conditions'>
             By clicking on the button below, I agree that I have read and accepted the{' '}
-            {isWeb && productName !== 'finity' && (
+            {isWeb && (productName !== 'finity' || (productName === 'finity' && config.code === "moneycontrol")) && (
               <>
                 <a target='_blank' rel='noopener noreferrer' href={config.termsLink} data-aid='terms-offer-link'>
                   terms & conditions
@@ -81,7 +81,7 @@ const TermsAndCond = () => {
                 </a>
               </>
             )}
-            {isWeb && productName === 'finity' && (
+            {isWeb && productName === 'finity' && config.code !== "moneycontrol" && (
               <>
                 <span className='tc_link' data-aid='terms-link' onClick={handleClickOpen('terms')}>
                   terms

@@ -18,7 +18,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
           />
         </header>
         <p className="description" data-aid='kyc-description'>
-          Link with Digilocker to complete paperless KYC
+          Link with DigiLocker to complete paperless KYC
         </p>
         <main className="content" data-aid='kyc-content'>
           <div className="info-box" data-aid='info-box-one'>

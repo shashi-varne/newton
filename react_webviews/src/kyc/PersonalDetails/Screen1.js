@@ -21,13 +21,13 @@ import { getConfig } from "utils/functions";
 import toast from "../../common/ui/Toast";
 import { nativeCallback } from "../../utils/native_callback";
 
+const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  const productName = getConfig().productName;
 
   let title = "Personal details";
   if (isEdit) {
@@ -192,7 +192,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={isApiRunning}
+            disabled={isApiRunning || !!kyc.pan.meta_data.name}
           />
           <Input
             label="Date of birth(DD/MM/YYYY)"

@@ -4,10 +4,10 @@ import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { getFlow } from "../common/functions";
+import { getFlow, isMoneycontrolDesktopLayout } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getBase64, getConfig, navigate as navigateFunc, isIframe } from "../../utils/functions";
+import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import InternalStorage from "../Home/InternalStorage";
@@ -25,7 +25,6 @@ const KycUploadDocuments = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const navigate = navigateFunc.bind(props);
   const productName = getConfig().productName;
-  const iframe = isIframe();
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
@@ -159,17 +158,13 @@ const KycUploadDocuments = (props) => {
       );
       if(!isEmpty(result))
         updateKyc(result.kyc)
-      if(iframe) {
+      if(isMoneycontrolDesktopLayout()) {
         bankUploadStatus();
       } else {
         setShowPendingModal(true);
       }
     } catch (err) {
-      if(iframe) {
-        bankUploadStatus();
-      } else {
-        toast("Image upload failed, please retry");
-      }
+      toast("Image upload failed, please retry");
     } finally {
       setIsApiRunning(false);
     }

@@ -67,6 +67,19 @@ export function didMount() {
 
     let that = this;
     if (config.isIframe) {
+        const hideLoaderEvent = {
+            event_name: "hide_loader",
+            properties: {
+              journey: {
+                name: "",
+                trigger: "",
+                journey_status: "",
+                next_journey: "",
+              },
+            },
+        };
+      
+        window.callbackWeb.sendEvent(hideLoaderEvent);
         const partnerEvents = function (res) {
             switch (res.type) {
               case "back_pressed":

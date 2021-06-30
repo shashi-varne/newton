@@ -4,7 +4,7 @@ import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
-import { getFlow } from "../common/functions";
+import { getFlow, isMoneycontrolDesktopLayout } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -13,10 +13,12 @@ import PennySuccessDialog from "../mini-components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { isIframe, getConfig } from "utils/functions";
+import { getConfig } from "utils/functions";
 import internalStorage from '../Home/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
 
+const showPageDialog = isMoneycontrolDesktopLayout();
+const productName = getConfig().productName;
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
   const [countdownInterval, setCountdownInterval] = useState();
@@ -25,14 +27,12 @@ const KycBankVerify = (props) => {
   const [isPennyFailed, setIsPennyFailed] = useState(false);
   const [isPennySuccess, setIsPennySuccess] = useState(false);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const productName = getConfig().productName;
   const isEdit = props.location.state?.isEdit || false;
   const params = props.match.params || {};
   const userType = params.userType || "";
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
-  const iframe = isIframe();
   const {kyc} = useUserKycHook();
 
   useEffect(() => {
@@ -122,7 +122,7 @@ const KycBankVerify = (props) => {
   const handlePennyFailed = () => {
     const pennyDetails = {
       title : 'Unable to add bank!',
-      message : "Bank account verification failed! No worries, please check if you've entered correct details.",
+      message : "Your bank account couldn't be verified. Enter correct bank details to proceed further.",
       buttonOneTitle: 'UPLOAD BANK DOCUMENTS',
       buttonTwoTitle: 'CHECK BANK DETAILS',
       twoButton: true,
@@ -140,7 +140,7 @@ const KycBankVerify = (props) => {
       if (result.records.PBI_record.bank_status === "verified") {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
-        if(iframe) {
+        if(showPageDialog) {
           handlePennySuccess();
         } else {
           setIsPennyOpen(false);
@@ -151,13 +151,13 @@ const KycBankVerify = (props) => {
         setCountdownInterval(null);
         setIsPennyOpen(false);
         if (result.records.PBI_record.user_rejection_attempts === 0) {
-          if(iframe) {
+          if(showPageDialog) {
             handlePennyExhaust();
           } else {
             setIsPennyExhausted(true);
           }
         } else {
-            if(iframe) {
+            if(showPageDialog) {
               handlePennyFailed();
             } else {
               setIsPennyFailed(true);
@@ -175,19 +175,19 @@ const KycBankVerify = (props) => {
       setIsPennyOpen(false);
       if (!result) return;
       if (result.records.PBI_record.bank_status === "verified") {
-        if(iframe) {
+        if(showPageDialog) {
           handlePennySuccess();
         } else {
           setIsPennySuccess(true);
         }
       } else if (result.records.PBI_record.user_rejection_attempts === 0) {
-        if(iframe) {
+        if(showPageDialog) {
           handlePennyExhaust();
         } else {
           setIsPennyExhausted(true);
         }
       } else {
-        if(iframe) {
+        if(showPageDialog) {
           handlePennyFailed();
         } else {
           setIsPennyFailed(true);
@@ -275,12 +275,12 @@ const KycBankVerify = (props) => {
 
   return (
     <Container
-      buttonTitle="VERIFY BANK ACCOUNT"
+      buttonTitle="Verify Bank Account"
       events={sendEvents("just_set_events")}
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}
-      title="Verify your bank account"
+      title="Confirm bank details"
       iframeRightContent={require(`assets/${productName}/add_bank.svg`)}
       data-aid='kyc-verify-bank-accont-screen'
     >

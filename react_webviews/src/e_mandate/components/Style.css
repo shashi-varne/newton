@@ -147,6 +147,7 @@
   font-weight: 700;
   line-height: 11.72px;
   letter-spacing: 1px;
+  min-width: fit-content;
 }
 .success-bottom2b {
   margin: 0 40px 0 40px;

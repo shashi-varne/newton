@@ -2,19 +2,6 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { storageService } from "utils/validators";
 import { commonBackMapper } from "utils/constants";
 
-  let _event = {
-    event_name: "hide_loader",
-    properties: {
-      journey: {
-        name: "",
-        trigger: "",
-        journey_status: "",
-        next_journey: ""
-      }
-    }
-  };
-
-  //window.callbackWeb.sendEvent(_event);
 // required
   // try {
   //   if ($rootScope.currentUser) {
@@ -63,14 +50,14 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     "/funds/",
     "/reports",
     "/withdraw",
-    "/withdraw-reason/",
+    "/withdraw/reason",
     "/payment/callback/",
     "/sip/payment/callback/",
     "/new/mandate/"
   ];
 
   if (backEnabledPages.indexOf(currentState) !== -1) {
-    var message = JSON.stringify({
+    const message = JSON.stringify({
       type: "iframe_close"
     });
     if(getConfig().code === 'moneycontrol' && ["/payment/callback","/sip/payment/callback"].includes(currentState)) {
@@ -120,6 +107,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     case "/sip/payment/callback":
     case "/kyc/report":
     case "/notification":
+    case "/kyc/home":
       if (config?.code === 'moneycontrol') {
         navigate("/");
         return true;
@@ -134,25 +122,35 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         });
         window.callbackWeb.sendEvent(message);
         storageService().clear();
+        return true;
       } else {
         navigate("/logout");
         return true;
       }
       break;
-    case '/invest/money-control':
-      let message = JSON.stringify({
-        type: "iframe_close"
-      });
-      window.callbackWeb.sendEvent(message);
-      storageService().clear();
-      break;
-    case '/account/merge/linked/success':
-      if (config?.code === 'moneycontrol') {
-        window.history.go(-2);
-      }// check later
-      // navigate kyc home
-      break;
+    // case '/invest/money-control':
+    //   let message = JSON.stringify({
+    //     type: "iframe_close"
+    //   });
+    //   window.callbackWeb.sendEvent(message);
+    //   storageService().clear();
+    //   break;
+    // case '/account/merge/linked/success':
+    //   if (config?.code === 'moneycontrol') {
+    //     window.history.go(-2);
+    //   }// check later
+    //   // navigate kyc home
+    //   break;
     default:
+      const landingScreens = ["/", "/invest", "/landing"]
+      if(landingScreens.includes(currentState) && config?.code === 'moneycontrol') {
+        let message = JSON.stringify({
+          type: "iframe_close"
+        });
+        window.callbackWeb.sendEvent(message);
+        storageService().clear();
+        return true; 
+      }
       if (backMapper(currentState)) {
         navigate(backMapper(currentState));
         return true;

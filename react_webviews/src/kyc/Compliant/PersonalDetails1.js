@@ -18,7 +18,9 @@ import { navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { kycSubmit } from "../common/api";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
+const productName = getConfig().productName;
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -193,6 +195,7 @@ const PersonalDetails1 = (props) => {
       total={3}
       headerData={{goBack}}
       data-aid='kyc-personal-details-screen-1'
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-personal-details" data-aid='kyc-personal-details-page'>
         <div className="kyc-main-subtitle" data-aid='kyc-main-subtitle'>

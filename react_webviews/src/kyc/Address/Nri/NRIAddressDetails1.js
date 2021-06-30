@@ -75,7 +75,7 @@ const NriAddressDetails1 = (props) => {
       });
       return;
     }
-    let mobile_number = form_data.mobile;
+    let mobile_number = form_data.mobile_number;
     if (form_data.country_code) {
       mobile_number = form_data.country_code + "|" + mobile_number;
     }

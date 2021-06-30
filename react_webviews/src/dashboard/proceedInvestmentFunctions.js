@@ -1,11 +1,11 @@
 import toast from "../common/ui/Toast";
 import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
-import { getConfig } from "../utils/functions";
+import { getConfig, popupWindowCenter } from "../utils/functions";
 import { storageService, isFunction } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
 const config = getConfig();
-const partnerCode = config.partner_code;
+const partnerCode = config.code;
 /* eslint-disable */
 export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
@@ -227,27 +227,6 @@ function pollProgress(timeout, interval, id, popup_window) {
     }
   };
   return new Promise(checkCondition);
-}
-
-function popupWindowCenter(w, h, url) {
-  let dualScreenLeft =
-    window.screenLeft !== undefined ? window.screenLeft : window.screenX;
-  let dualScreenTop =
-    window.screenTop !== undefined ? window.screenTop : window.screenY;
-  let left = window.screen.width / 2 - w / 2 + dualScreenLeft;
-  let top = window.screen.height / 2 - h / 2 + dualScreenTop;
-  return window.open(
-    url,
-    "_blank",
-    "width=" +
-      w +
-      ",height=" +
-      h +
-      ",resizable,scrollbars,status,top=" +
-      top +
-      ",left=" +
-      left
-  );
 }
 
 async function getInvestmentStatus(id) {

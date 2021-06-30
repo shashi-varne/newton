@@ -125,7 +125,7 @@ $text-color2: #8D879B;
     .title {
       font-size: 15px;
       color: #160d2e;
-      font-weight: 700;
+      font-weight: 500;
     }
 
     .text {
@@ -155,7 +155,7 @@ $text-color2: #8D879B;
     .subtitle {
       font-size: 14px;
       font-weight: 400;
-      color: #4f2da7;
+      color: var(--primary);
       margin: 30px 0 0 0;
       cursor: pointer;
     }

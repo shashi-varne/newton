@@ -1,6 +1,7 @@
 .invest-sip-payment-callback {
   color: #333333;
   line-height: 1.5;
+  padding-bottom: 30px;
 
   .content {
     text-align: center;
@@ -49,8 +50,10 @@
     display: flex;
     align-items: flex-start;
     padding: 14px 19px 17px 15px;
-    background-color: #F0F7FF;
+    background-color: var(--highlight);
     border-radius: 4px;
+    text-align: left;
+    
     .info-icon {
       margin-right: 12px;
     }

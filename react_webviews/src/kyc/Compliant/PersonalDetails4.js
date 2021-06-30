@@ -15,7 +15,9 @@ import { validateAlphabets } from "../../utils/validators";
 import toast from "../../common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
+const productName = getConfig().productName;
 const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
@@ -23,7 +25,7 @@ const PersonalDetails4 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  let title = "Nominee detail";
+  let title = "Add nominee";
   if (isEdit) {
     title = "Edit nominee detail";
   }
@@ -170,6 +172,7 @@ const PersonalDetails4 = (props) => {
       handleClick={handleClick}
       title={title}
       data-aid='kyc-personal-details-screen-4'
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <div className="kyc-nominee">
         <main data-aid='kyc-nominee-page'>

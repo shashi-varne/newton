@@ -111,13 +111,19 @@ body[data-device="web"] {
       max-width: 100%;
     }
     .nfo-checkout{
+      padding: 0 20px;
+
       .checkout-invest-type{
         background-color: white !important;
-
-        div#onetime {
-          box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
-        }
       }
+
+      .cart-items .item {
+        margin: 0 0 15px 0;
+      }
+    }
+
+    .invest-journey-container {
+      padding: 20px 10px 0 25px;
     }
 
     .diy-search{
@@ -184,7 +190,7 @@ body[data-device="web"] {
 
     .kyc-esign-complete{
       header{
-        margin-top: 120px;
+        margin-top: 40px;
       }
       .text {
         text-align: left;
@@ -202,6 +208,7 @@ body[data-device="web"] {
         text-align: left;
         color: #767E86;
         margin-top: 125px;
+        margin-bottom: 30px;
         span{
           font-size: 13px;
           font-weight: 500;
@@ -218,27 +225,29 @@ body[data-device="web"] {
       }
     }
 
-    .success-bottom, .esign-bottom {
+    .esign-bottom {
       position: fixed;
       bottom: 60px;
       left: 50%;
       transform: translateX(-50%);
     }
 
-    .kyc-report{
-      main{
-        .congrats,.text,.text.message{
-          text-align: left;
-        }
-        .text.message{
-          justify-content: left;
-        }
-      }
-    }
-
     .account-merge-linked{
       text-align: left;
       margin-top: 125px;
+    }
+
+    .invest-payment-callback {
+      box-shadow: none;
+      text-align: left;
+
+      .content .message {
+        justify-content: flex-start;
+      }
+    }
+
+    .sip-dates {
+      padding-left: 5px;
     }
 
     .invest-sip-payment-callback{
@@ -263,6 +272,16 @@ body[data-device="web"] {
         margin-top: 140px;
       }
     }
+
+    .generic-page-loader{
+      top: 0px !important;
+    }
+
+    #digilocker-failed{
+      .body-text1{
+        margin-top: 80px;
+      }
+    }
   }
 
   .IframeContainer.iframe-bottom-padding{
@@ -276,7 +295,7 @@ body[data-device="web"] {
     .fadein-animation{
       margin-top: 20px;
       flex: 1 1 55%;
-      overflow: hidden;
+      // overflow: hidden;
       // padding-bottom: 100px;
       min-width: 420px;
       .diy-tab-container{

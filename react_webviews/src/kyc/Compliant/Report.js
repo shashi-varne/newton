@@ -6,7 +6,9 @@ import { SkeltonRect } from "../../common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { isEmpty } from "../../utils/validators";
 import { nativeCallback } from "../../utils/native_callback";
+import { getConfig } from "../../utils/functions";
 
+const config = getConfig();
 const CompliantReport = (props) => {
   const [openIndex, setOpenIndex] = useState(-1);
   const [isCompliant] = useState(true);
@@ -168,7 +170,14 @@ const CompliantReport = (props) => {
   }
 
   return (
-    <Container id="kyc-home" noFooter={true} title={topTitle} events={sendEvents("just_set_events")} data-aid='kyc-reports-screen'>
+    <Container
+      id="kyc-home"
+      noFooter={true}
+      title={topTitle}
+      events={sendEvents("just_set_events")}
+      data-aid="kyc-reports-screen"
+      iframeRightContent={require(`assets/${config.productName}/kyc_illust.svg`)}
+    >
       <div className="kyc-report">
         <main data-aid='kyc-report'>
           <section data-aid='kyc-reports-screen-page'>
