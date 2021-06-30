@@ -160,7 +160,7 @@ export const getPlatformConfig = () => {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url="https://react-test-dot-plutus-staging.appspot.com" } = main_query_params;
+  let { base_url="https://rewrite-iframe-dot-plutus-staging.appspot.com" } = main_query_params;
   let origin = window.location.origin;
   let generic_callback = true;
 
