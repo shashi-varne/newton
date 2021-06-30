@@ -22,7 +22,7 @@ const CardSubtitle = ({ value, morning_start }) => {
             <span style={{ margin: "0px 5px 0px 5px" }}>
                 |
             </span>
-            <span style={{ marginTop: morning_start ? "2px" : "1px", position: "absolute" }}>
+            <span style={{ marginTop:  "0px", position: "absolute" }}>
                 <StarRating value={morning_start} />
             </span>
         </div>
@@ -246,7 +246,7 @@ class FundList extends Component {
                         onClick={this.yearFilter}
                         dataAidSuffix={'passive-year-filter'}
                     />
-                    <p className="fund-number">{result?.length || 0} FUNDS</p>
+                    <p className="fund-number">{result?.length || 0} ITEMS</p>
 
                     <React.Fragment>
                         {!isEmpty(result) &&
