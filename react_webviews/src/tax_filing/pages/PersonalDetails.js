@@ -11,9 +11,13 @@ import {
 import { getConfig } from 'utils/functions'
 import { isEmpty } from 'lodash'
 
-import { createITRApplication, getUserAccountSummary } from '../common/ApiCalls'
+import {
+  createITRApplication,
+  getITRUserDetails,
+  getUserAccountSummary,
+} from '../common/ApiCalls'
 import { storageService } from '../../utils/validators'
-import { ITR_TYPE_KEY } from '../constants'
+import { ITR_TYPE_KEY, USER_DETAILS, USER_SUMMARY_KEY } from '../constants'
 
 import { nativeCallback } from 'utils/native_callback'
 
@@ -27,20 +31,20 @@ function PersonalDetails(props) {
     setShowError(false)
   }
 
-  const defaultUserSummary = props?.location?.params?.userSummary || {}
+  const defaultSummary =
+    props?.location?.params?.summary ||
+    storageService().getObject(USER_SUMMARY_KEY) ||
+    {}
 
-  const [userSummary, setUserSummary] = useState(defaultUserSummary)
   const [showLoader, setShowLoader] = useState(false)
   const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
   const [showError, setShowError] = useState(false)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const [errorData, setErrorData] = useState({})
-
-  const [name, setName] = useState(userSummary?.user?.name || '')
-  const [email, setEmail] = useState(userSummary?.user?.email || '')
-  const [mobileNumber, setMobileNumber] = useState(
-    userSummary?.user?.mobile || ''
-  )
+  const [summary, setSummary] = useState(defaultSummary)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [mobileNumber, setMobileNumber] = useState('')
 
   const [, setItrId] = useState('')
   const [itrSSOURL, setITRSSOURL] = useState('')
@@ -49,18 +53,42 @@ function PersonalDetails(props) {
     fetchUserSummary()
   }, [])
 
+  const parsePhoneNumber = (number) => {
+    if (typeof number === 'string') {
+      return number.split('|').pop()
+    }
+    return number
+  }
+
   const fetchUserSummary = async () => {
     try {
-      if (isEmpty(userSummary)) {
+      if (isEmpty(defaultSummary)) {
         setShowSkeltonLoader(true)
-        const summary = await getUserAccountSummary()
-        setUserSummary(summary)
-        setName(summary?.user?.name)
-        setEmail(summary?.user?.email)
-        setMobileNumber(summary?.user?.mobile)
+        const [userDetails, summaryDetails] = await Promise.all([
+          getITRUserDetails(),
+          getUserAccountSummary(),
+        ])
+        setName(userDetails?.name)
+        setEmail(userDetails?.email)
+        setMobileNumber(parsePhoneNumber(userDetails?.phone))
+        setSummary(summaryDetails)
+        storageService().setObject(USER_DETAILS, userDetails)
+        storageService().setObject(USER_SUMMARY_KEY, summaryDetails)
+        setShowSkeltonLoader(false)
+      } else {
+        setShowSkeltonLoader(true)
+        const userDetails = await getITRUserDetails()
+        setName(userDetails?.name)
+        setEmail(userDetails?.email)
+        setMobileNumber(parsePhoneNumber(userDetails?.phone))
+        storageService().setObject(USER_DETAILS, userDetails)
         setShowSkeltonLoader(false)
       }
     } catch (err) {
+      const cachedUser = storageService().getObject(USER_DETAILS)
+      setName(cachedUser?.name || '')
+      setEmail(cachedUser?.email || '')
+      setMobileNumber(parsePhoneNumber(cachedUser?.phone) || '')
       setShowSkeltonLoader(false)
     }
   }
@@ -141,8 +169,8 @@ function PersonalDetails(props) {
 
   const sendEvents = (userAction, data = {}) => {
     const type = storageService().get(ITR_TYPE_KEY)
-    const investment_status = userSummary?.kyc?.investment_status ? 'Y' : 'N'
-    const kyc_status = userSummary?.kyc?.kyc_status ? 'Y' : 'N'
+    const investment_status = summary?.kyc?.investment_status ? 'Y' : 'N'
+    const kyc_status = summary?.kyc?.kyc_status ? 'Y' : 'N'
     let eventObj = {}
     if (data?.screenName === 'Personal Detail') {
       eventObj = {
@@ -234,7 +262,7 @@ function PersonalDetails(props) {
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(userSummary?.user?.name)}
+          disabled={!isEmpty(name)}
           error={errors?.name}
           helperText={errors?.name ? 'Please enter a valid name' : ''}
           required
@@ -248,7 +276,7 @@ function PersonalDetails(props) {
           onChange={handleChange('email')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(userSummary?.user?.email)}
+          disabled={!isEmpty(email)}
           error={errors?.email}
           helperText={errors?.email ? 'Please enter a valid email address' : ''}
           required
@@ -262,7 +290,7 @@ function PersonalDetails(props) {
           onChange={handleChange('mobileNumber')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(userSummary?.user?.mobile)}
+          disabled={!isEmpty(mobileNumber)}
           error={errors?.mobileNumber}
           helperText={
             errors?.mobileNumber ? 'Please enter a correct mobile number' : ''

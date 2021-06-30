@@ -11,10 +11,10 @@ import { storageService } from 'utils/validators'
 import { navigate as navigateFunc } from '../common/functions'
 import {
   getITRList,
-  getUserAccountSummary,
+  getITRUserDetails,
   resumeITRApplication,
 } from '../common/ApiCalls'
-import { USER_SUMMARY_KEY, ITR_APPLICATIONS_KEY } from '../constants'
+import { USER_DETAILS, ITR_APPLICATIONS_KEY } from '../constants'
 
 import { trackBackButtonPress } from '../common/functions'
 import { nativeCallback } from 'utils/native_callback'
@@ -24,7 +24,8 @@ import './MyITR.scss'
 function MyITR(props) {
   const navigate = navigateFunc.bind(props)
   const productName = getConfig().productName
-  const defaultUserSummary = props?.location?.params?.userSummary || {}
+  const defaultUserDetails = props?.location?.params?.user || {}
+
   const defaultItrList = props?.location?.params?.itrList || []
 
   const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
@@ -34,7 +35,7 @@ function MyITR(props) {
   const [resuming, setResuming] = useState('')
 
   const [itrList, setItrList] = useState(defaultItrList)
-  const [userSummary, setUserSummary] = useState(defaultUserSummary)
+  const [user, setUser] = useState(defaultUserDetails)
 
   const closeError = () => {
     setShowError(false)
@@ -109,15 +110,15 @@ function MyITR(props) {
 
   const fetchITRListAndUserSummary = async () => {
     try {
-      if (isEmpty(itrList) || isEmpty(userSummary)) {
+      if (isEmpty(itrList) || isEmpty(user)) {
         setShowSkeltonLoader(true)
-        const [list, summary] = await Promise.all([
+        const [list, userDetails] = await Promise.all([
           getITRList(),
-          getUserAccountSummary(),
+          getITRUserDetails(),
         ])
         setItrList([...list])
-        setUserSummary({ ...summary })
-        storageService().setObject(USER_SUMMARY_KEY, summary)
+        setUser({ ...userDetails })
+        storageService().setObject(USER_DETAILS, userDetails)
         storageService().setObject(ITR_APPLICATIONS_KEY, list)
         setShowSkeltonLoader(false)
         setShowError(false)
@@ -142,22 +143,21 @@ function MyITR(props) {
         itr_id: itrId,
         type,
       }) => {
-        let status = itrStatus ? itrStatus : 'open'
+        let status = itrStatus ? itrStatus : 'started'
         const text = itrStatusMappings[status].text
         const color = itrStatusMappings[status].color
         const icn = itrStatusMappings[status].icon
         const icon = require(`assets/${productName}/${icn}.svg`)
-        // const dt = new Date(dtCreated).toLocaleDateString()
-        // const time = new Date(dtCreated).toLocaleTimeString()
+
         const dateTime = moment(dtCreated).format('DD/MM/YYYY, hh:mma')
         const filingType = type === 'eCA' ? 'CA-Assisted Filing' : 'Self-filing'
         let bottomValues = [
-          { title: 'Name', subtitle: userSummary?.user?.name },
-          { title: 'Mobile Number', subtitle: userSummary?.user?.mobile },
+          { title: 'Name', subtitle: user?.name },
+          { title: 'Mobile Number', subtitle: user?.phone },
           { title: 'Created On', subtitle: dateTime },
         ]
 
-        if (status !== 'filed') {
+        if (!['completed', 'refunded'].includes(status)) {
           bottomValues.push({
             renderItem: () => (
               <Button

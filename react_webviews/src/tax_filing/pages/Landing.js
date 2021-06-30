@@ -14,6 +14,7 @@ import {
   taxFilingOptions,
   USER_SUMMARY_KEY,
   ITR_APPLICATIONS_KEY,
+  USER_DETAILS,
 } from '../constants'
 import {
   checkIfLandedByBackButton,
@@ -23,8 +24,12 @@ import {
   setITRJourneyType,
   untrackBackButtonPress,
 } from '../common/functions'
-import { getITRList, getUserAccountSummary } from '../common/ApiCalls'
-import { isEmpty } from 'lodash'
+import {
+  getITRList,
+  getITRUserDetails,
+  getUserAccountSummary,
+} from '../common/ApiCalls'
+import { isEmpty, isArray } from 'lodash'
 
 import { storageService } from '../../utils/validators'
 
@@ -34,18 +39,25 @@ function Landing(props) {
   const productName = getConfig().productName
   const navigate = navigateFunc.bind(props)
   const landedFromBackButton = checkIfLandedByBackButton()
-  const cachedUserData = storageService().getObject(USER_SUMMARY_KEY) || {}
+  const cachedUserSummaryData =
+    storageService().getObject(USER_SUMMARY_KEY) || {}
   const cachedITRApplications =
     storageService().getObject(ITR_APPLICATIONS_KEY) || []
-  const defaultUserData =
-    landedFromBackButton && !isEmpty(cachedUserData) ? cachedUserData : {}
+  const cachedUserDetails = storageService().getObject(USER_DETAILS) || {}
+  const defaultUserDetails =
+    landedFromBackButton && !isEmpty(cachedUserDetails) ? cachedUserDetails : {}
   const defaultITRApplications =
-    landedFromBackButton && !isEmpty(cachedITRApplications)
+    landedFromBackButton && isArray(cachedITRApplications)
       ? cachedITRApplications
       : []
 
+  const defaultUserSummaryDetails = isEmpty(cachedUserSummaryData)
+    ? {}
+    : cachedUserSummaryData
+
   const [itrList, setItrList] = useState(defaultITRApplications)
-  const [userSummary, setUserSummary] = useState(defaultUserData)
+  const [user, setUser] = useState(defaultUserDetails)
+  const [summary, setSummary] = useState(defaultUserSummaryDetails)
   const [errorData, setErrorData] = useState({})
   const [showError, setShowError] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
@@ -55,12 +67,10 @@ function Landing(props) {
   }
 
   const sendEvents = (userAction, data = {}) => {
-    const investment_status = userSummary?.kyc?.investment_status || ''
-    const kyc_status = userSummary?.kyc?.kyc_status || ''
+    const investment_status = summary?.user?.kyc?.investment_status || ''
+    const kyc_status = summary?.user?.kyc?.kyc_status || ''
     const personal_details_exist =
-      !isEmpty(userSummary?.user?.name) &&
-      !isEmpty(userSummary?.user?.mobile) &&
-      !isEmpty(userSummary?.user?.email)
+      !isEmpty(user?.name) && !isEmpty(user?.mobile) && !isEmpty(user?.email)
         ? 'yes'
         : 'no'
     const eventObj = {
@@ -96,21 +106,26 @@ function Landing(props) {
 
   const fetchITRListAndUserSummary = async () => {
     try {
-      if (!landedFromBackButton || isEmpty(itrList) || isEmpty(userSummary)) {
+      if (
+        !landedFromBackButton ||
+        isEmpty(user) ||
+        isEmpty(summary) ||
+        !itrList
+      ) {
         setShowLoader(true)
-        const [list, summary] = await Promise.all([
+        const [list, userDetails, summaryDetails] = await Promise.all([
           getITRList(),
+          getITRUserDetails(),
           getUserAccountSummary(),
         ])
         setItrList([...list])
-        setUserSummary({ ...summary })
-        storageService().setObject(USER_SUMMARY_KEY, summary)
+        setUser({ ...userDetails })
+        setSummary({ ...summaryDetails })
+        storageService().setObject(USER_DETAILS, userDetails)
+        storageService().setObject(USER_SUMMARY_KEY, summaryDetails)
         storageService().setObject(ITR_APPLICATIONS_KEY, list)
         setShowLoader(false)
         setShowError(false)
-      } else {
-        setItrList([...cachedITRApplications])
-        setUserSummary({ ...cachedUserData })
       }
     } catch (err) {
       setShowError(true)
@@ -127,17 +142,20 @@ function Landing(props) {
   const handleFAQNavigation = () => {
     sendEvents('next', { card_click: 'FAQ' })
     navigate(`/tax-filing/faqs`, {}, false)
+    return
   }
 
   const handleMyITRNavigation = () => {
     sendEvents('next', { card_click: 'my_ITR' })
-    navigate(`/tax-filing/my-itr`, { itrList, userSummary }, false)
+    navigate(`/tax-filing/my-itr`, { itrList, summary, user }, false)
+    return
   }
 
   const handleITRJourneyNavigation = (type) => () => {
     sendEvents('next', { card_click: type })
     setITRJourneyType(type)
-    navigate(`/tax-filing/steps`, { type, userSummary }, false)
+    navigate(`/tax-filing/steps`, { type, summary, user }, false)
+    return
   }
 
   return (

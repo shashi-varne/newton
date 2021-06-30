@@ -23,6 +23,22 @@ export const getUserAccountSummary = async () => {
   }
 }
 
+export const getITRUserDetails = async () => {
+  const URL = '/api/itr/get-user-details'
+  const res = await Api.get(URL)
+
+  if (res?.pfwresponse?.status_code === 200) {
+    const user = res?.pfwresponse?.result
+    return user
+  } else {
+    throw new Error(
+      res?.pfwresponse?.result?.error ||
+        res?.pfwresponse?.result?.message ||
+        genericErrMsg
+    )
+  }
+}
+
 export const createITRApplication = async (params = {}) => {
   const URL = '/api/itr/applications'
   const res = await Api.post(URL, params)

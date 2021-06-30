@@ -10,13 +10,18 @@ import {
   ITR_TYPE_KEY,
   USER_SUMMARY_KEY,
   ITR_ID_KEY,
+  USER_DETAILS,
 } from '../constants'
 
 import {
   navigate as navigateFunc,
   trackBackButtonPress,
 } from '../common/functions'
-import { createITRApplication, getUserAccountSummary } from '../common/ApiCalls'
+import {
+  createITRApplication,
+  getITRUserDetails,
+  getUserAccountSummary,
+} from '../common/ApiCalls'
 
 import './Steps.scss'
 import { isEmpty, storageService } from '../../utils/validators'
@@ -26,8 +31,11 @@ function Steps(props) {
   const navigate = navigateFunc.bind(props)
   const [showLoader, setShowLoader] = useState(false)
 
-  const type =
-    props?.location?.params?.type || storageService().get(ITR_TYPE_KEY)
+  let type = props?.location?.params?.type || storageService().get(ITR_TYPE_KEY)
+  let summary =
+    props?.location?.params?.summary || storageService().getObject(USER_SUMMARY_KEY)
+
+  let user = props?.location?.params?.user || storageService().getObject(USER_DETAILS)
 
   if (!type) {
     navigate('/tax-filing', {}, false)
@@ -36,13 +44,9 @@ function Steps(props) {
 
   const productName = getConfig().productName
 
-  const sendEvents = (userAction, data) => {
-    const summary = storageService().getObject(USER_SUMMARY_KEY)
-
+  const sendEvents = (userAction, data = {}) => {
     const personal_details_exist =
-      !isEmpty(summary?.user?.name) &&
-      !isEmpty(summary?.user?.email) &&
-      !isEmpty(summary?.user?.mobile)
+      !isEmpty(user?.name) && !isEmpty(user?.email) && !isEmpty(user?.mobile)
         ? 'yes'
         : 'no'
 
@@ -86,32 +90,34 @@ function Steps(props) {
   }
 
   const handleClick = async () => {
-    let summary = {}
     try {
       setShowLoader('button')
-      summary = await getUserAccountSummary()
-      const type = storageService().get(ITR_TYPE_KEY)
+      if (isEmpty(user)) {
+        user = await getITRUserDetails()
+        storageService().setObject(USER_DETAILS, user)
+      }
+
       if (!type) {
         navigate('/tax-filing', {}, false)
         return
       }
-      storageService().setObject(USER_SUMMARY_KEY, summary)
+
       if (
-        !isEmpty(summary?.user?.email) &&
-        !isEmpty(summary?.user?.mobile) &&
-        !isEmpty(summary?.user?.name) &&
+        !isEmpty(user?.email) &&
+        !isEmpty(user?.phone) &&
+        !isEmpty(user?.name) &&
         !isEmpty(type)
       ) {
         setShowLoader('button')
         const itr = await createITRApplication({
           type,
-          email: summary?.user?.email,
-          phone: summary?.user?.mobile,
-          name: summary?.user?.name,
+          email: user?.email,
+          phone: user?.mobile,
+          name: user?.name,
         })
         storageService().setObject(ITR_ID_KEY, itr.itr_id)
         setShowLoader(false)
-        sendEvents('next', {})
+        sendEvents('next')
         navigate(
           `/tax-filing/redirection`,
           { redirectionUrl: itr.sso_url },
@@ -119,39 +125,39 @@ function Steps(props) {
         )
         return
       } else {
-        setShowLoader(false)
-        sendEvents('next', summary)
+        sendEvents('next')
         navigate(
           `/tax-filing/personal-details`,
-          { userSummary: summary },
+          { summary },
           false
         )
         return
       }
     } catch (err) {
       summary = storageService().getObject(USER_SUMMARY_KEY)
-      const type = storageService().get(ITR_TYPE_KEY)
+      user = storageService().getObject(USER_DETAILS)
+      type = storageService().get(ITR_TYPE_KEY)
       if (!type) {
         setShowLoader(false)
         navigate('/tax-filing', {}, false)
         return
       }
       if (
-        !isEmpty(summary?.user?.email) &&
-        !isEmpty(summary?.user?.mobile) &&
-        !isEmpty(summary?.user?.name) &&
+        !isEmpty(user?.email) &&
+        !isEmpty(user?.phone) &&
+        !isEmpty(user?.name) &&
         type
       ) {
         try {
           const itr = await createITRApplication({
-            email: summary?.user?.email,
-            phone: summary?.user?.mobile,
-            name: summary?.user?.name,
+            email: user?.email,
+            phone: user?.phone,
+            name: user?.name,
             type,
           })
           storageService().setObject(ITR_ID_KEY, itr.itr_id)
           setShowLoader(false)
-          sendEvents('next', summary)
+          sendEvents('next')
           navigate(
             `/tax-filing/redirection`,
             { redirectionUrl: itr.sso_url },
@@ -160,18 +166,14 @@ function Steps(props) {
           return
         } catch (err) {
           setShowLoader(false)
-          sendEvents('next', summary)
-          navigate(`/tax-filing/personal-details`, {}, false)
+          sendEvents('next')
+          navigate(`/tax-filing/personal-details`, { summary }, false)
           return
         }
       } else {
         setShowLoader(false)
-        sendEvents('next', summary)
-        navigate(
-          `/tax-filing/personal-details`,
-          { userSummary: summary?.user },
-          false
-        )
+        sendEvents('next')
+        navigate(`/tax-filing/personal-details`, { summary }, false)
         return
       }
     }

@@ -10,6 +10,8 @@ export const ITR_BACK_BUTTON_TRACKER_KEY = 'itr-back-button-tracker'
 
 export const ITR_TYPE_KEY = 'itr-type'
 
+export const USER_DETAILS = 'itr-user-details'
+
 export const taxFilingSteps = {
   free: [
     {
@@ -103,13 +105,18 @@ export const taxFilingOptions = [
 ]
 
 export const itrStatusMappings = {
-  filed: {
+  completed: {
     color: '#4F2DA7',
     icon: 'icn_self_itr',
     text: 'COMPLETED',
   },
-  created: { color: '#35CB5D', icon: 'icn_ca', text: 'IN PROGRESS' },
-  open: { color: '#B39712', icon: 'icn_self_itr', text: 'STARTED' },
+  'in progress': { color: '#35CB5D', icon: 'icn_ca', text: 'IN PROGRESS' },
+  started: { color: '#B39712', icon: 'icn_self_itr', text: 'STARTED' },
+  refunded: {
+    color: '#4F2DA7',
+    icon: 'icn_self_itr',
+    text: 'COMPLETED',
+  },
 }
 
 export const taxFilingAdvantages = [
