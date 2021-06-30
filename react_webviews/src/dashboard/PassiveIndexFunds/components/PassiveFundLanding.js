@@ -100,9 +100,9 @@ class Landing extends Component {
                 height="180px"
                 playing={playing}
                 controls={true}
-                loop={true}
                 onProgress={(callback) => this.setState({ video_duration: callback?.playedSeconds })}
                 onPause={() => this.sendEvents("video_paused")}
+                onEnded={() => screenfull.exit()}
                 light={true}
                 playIcon={
                   <Imgc
@@ -113,7 +113,7 @@ class Landing extends Component {
                 }
                 config={{
                   youtube: {
-                    playerVars: { modestbranding: 1, rel: 0, fs: 1, loop: 1,  }
+                    playerVars: { modestbranding: 1, rel: 0, fs: 1, loop: 0,  }
                   }
                 }}
               />
