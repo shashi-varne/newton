@@ -200,8 +200,8 @@ const KycUploadDocuments = (props) => {
   };
 
   const goBackToPath = () => {
-    if (fromState.indexOf("/kyc/add-bank/details") !== -1) {
-      props.history.goBack();
+    if (additional) {
+      navigate(PATHNAME_MAPPER.bankList);
       return;
     } else {
       if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
