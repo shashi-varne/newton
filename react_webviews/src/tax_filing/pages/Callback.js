@@ -20,18 +20,17 @@ function Callback(props) {
     nativeCallback({ action: 'exit' })
   }
 
-  const handleExit = () => {
-    setShowError("page")
-    setErrorData({
-      type: 'internet',
-        button_text1: 'GO BACK',
-        handleClick1: exit,
-    })
-  }
-
   useEffect(() => {
     if (isEmpty(token) || isEmpty(hmac)) {
-      navigate(`/tax-filing`, {}, false)
+      setShowError('page')
+      setErrorData({
+        type: 'internet',
+        button_text1: 'GO BACK',
+        handleClick1: () => {
+          navigate(`/tax-fling`, {}, false)
+          return
+        },
+      })
     } else {
       redirect()
     }
@@ -49,7 +48,7 @@ function Callback(props) {
       })
       window.location.href = data?.url
     } catch (err) {
-      setShowError("page")
+      setShowError('page')
       setErrorData({
         type: 'crash',
         title1: 'Error',

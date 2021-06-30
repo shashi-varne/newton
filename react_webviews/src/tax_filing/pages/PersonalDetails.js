@@ -121,7 +121,7 @@ function PersonalDetails(props) {
   const handleProceed = async () => {
     try {
       sendEvents('next', { screenName: 'Application Created' })
-      navigate('/tax-filing/redirection', { redirectionUrl: itrSSOURL }, false)
+      navigate('/tax-fling/redirection', { redirectionUrl: itrSSOURL }, false)
     } catch (err) {
       setShowError(true)
       setErrorData({

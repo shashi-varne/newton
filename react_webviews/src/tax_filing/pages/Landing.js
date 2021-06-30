@@ -126,18 +126,18 @@ function Landing(props) {
 
   const handleFAQNavigation = () => {
     sendEvents('next', { card_click: 'FAQ' })
-    navigate(`/tax-filing/faqs`, {}, false)
+    navigate(`/tax-fling/faqs`, {}, false)
   }
 
   const handleMyITRNavigation = () => {
     sendEvents('next', { card_click: 'my_ITR' })
-    navigate(`/tax-filing/my-itr`, { itrList, userSummary }, false)
+    navigate(`/tax-fling/my-itr`, { itrList, userSummary }, false)
   }
 
   const handleITRJourneyNavigation = (type) => () => {
     sendEvents('next', { card_click: type })
     setITRJourneyType(type)
-    navigate(`/tax-filing/steps`, { type, userSummary }, false)
+    navigate(`/tax-fling/steps`, { type, userSummary }, false)
   }
 
   return (

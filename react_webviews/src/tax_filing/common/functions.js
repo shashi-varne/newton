@@ -50,9 +50,9 @@ export const getTaxFilingFeatureLists = () => {
 
 export const trackBackButtonPress = (pathname) => {
   const allowedPaths = [
-    '/tax-filing/steps',
-    '/tax-filing/my-itr',
-    '/tax-filing/faqs',
+    '/tax-fling/steps',
+    '/tax-fling/my-itr',
+    '/tax-fling/faqs',
   ]
   if (allowedPaths.includes(pathname)) {
     storageService().setObject(ITR_BACK_BUTTON_TRACKER_KEY, {
