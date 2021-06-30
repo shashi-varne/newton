@@ -638,7 +638,6 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   render() {
-
     let currentDate = new Date().toISOString().slice(0, 10);    
     return (
       <Container
@@ -701,6 +700,7 @@ class GroupHealthPlanPersonalDetails extends Component {
               width="40"
               label="Gender"
               class="Gender:"
+              disabledWithValue={this.state.insured_account_type === 'self_family'}
               options={genderOptions}
               id="gender"
               name="gender"
