@@ -30,7 +30,7 @@ function Steps(props) {
     props?.location?.params?.type || storageService().get(ITR_TYPE_KEY)
 
   if (!type) {
-    navigate('/tax-fling', {}, false)
+    navigate('/tax-filing', {}, false)
     return ''
   }
 
@@ -92,7 +92,7 @@ function Steps(props) {
       summary = await getUserAccountSummary()
       const type = storageService().get(ITR_TYPE_KEY)
       if (!type) {
-        navigate('/tax-fling', {}, false)
+        navigate('/tax-filing', {}, false)
         return
       }
       storageService().setObject(USER_SUMMARY_KEY, summary)
@@ -113,7 +113,7 @@ function Steps(props) {
         setShowLoader(false)
         sendEvents('next', {})
         navigate(
-          `/tax-fling/redirection`,
+          `/tax-filing/redirection`,
           { redirectionUrl: itr.sso_url },
           false
         )
@@ -122,7 +122,7 @@ function Steps(props) {
         setShowLoader(false)
         sendEvents('next', summary)
         navigate(
-          `/tax-fling/personal-details`,
+          `/tax-filing/personal-details`,
           { userSummary: summary },
           false
         )
@@ -133,7 +133,7 @@ function Steps(props) {
       const type = storageService().get(ITR_TYPE_KEY)
       if (!type) {
         setShowLoader(false)
-        navigate('/tax-fling', {}, false)
+        navigate('/tax-filing', {}, false)
         return
       }
       if (
@@ -153,7 +153,7 @@ function Steps(props) {
           setShowLoader(false)
           sendEvents('next', summary)
           navigate(
-            `/tax-fling/redirection`,
+            `/tax-filing/redirection`,
             { redirectionUrl: itr.sso_url },
             false
           )
@@ -161,14 +161,14 @@ function Steps(props) {
         } catch (err) {
           setShowLoader(false)
           sendEvents('next', summary)
-          navigate(`/tax-fling/personal-details`, {}, false)
+          navigate(`/tax-filing/personal-details`, {}, false)
           return
         }
       } else {
         setShowLoader(false)
         sendEvents('next', summary)
         navigate(
-          `/tax-fling/personal-details`,
+          `/tax-filing/personal-details`,
           { userSummary: summary?.user },
           false
         )

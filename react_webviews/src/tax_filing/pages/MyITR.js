@@ -86,7 +86,7 @@ function MyITR(props) {
       const result = await resumeITRApplication(itrId)
       setShowLoader(false)
       navigate(
-        '/tax-fling/redirection',
+        '/tax-filing/redirection',
         { redirectionUrl: result?.msg?.url },
         false
       )

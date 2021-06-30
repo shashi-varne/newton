@@ -13,7 +13,7 @@ function Redirection(props) {
   const redirectionUrl = props?.location?.params?.redirectionUrl
 
   if (isEmpty(redirectionUrl)) {
-    navigate('/tax-fling', {}, false)
+    navigate('/tax-filing', {}, false)
     return ''
   }
 

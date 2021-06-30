@@ -27,7 +27,7 @@ function Callback(props) {
         type: 'internet',
         button_text1: 'GO BACK',
         handleClick1: () => {
-          navigate(`/tax-fling`, {}, false)
+          navigate(`/tax-filing`, {}, false)
           return
         },
       })

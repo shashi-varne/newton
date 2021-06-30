@@ -104,7 +104,7 @@ class App extends Component {
               <Route path='/fund-details' component={FundDetails} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/partner' component={Partner} />
-              <Route path='/tax-fling' component={TaxFiling} />
+              <Route path='/tax-filing' component={TaxFiling} />
               <Route component={NotFound} />
             </Switch>
           
