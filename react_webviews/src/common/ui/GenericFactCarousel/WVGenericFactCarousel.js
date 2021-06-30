@@ -34,7 +34,7 @@ function WVGenericFactCarousel({
   const arrowStyles = {
     position: "absolute",
     zIndex: 2,
-    top: "40%",
+    top: "37%",
     width: 32,
     height: 32,
     cursor: "pointer",
