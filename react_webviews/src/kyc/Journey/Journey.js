@@ -17,6 +17,7 @@ import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
 import { getBasePath, navigate as navigateFunc, popupWindowCenter } from '../../utils/functions'
+import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 
 const config = getConfig();
 const isMobileDevice = config.isMobileDevice;
@@ -652,7 +653,15 @@ const Journey = (props) => {
       stateParams?.show_aadhaar || urlParams?.show_aadhaar === "true" ||
       dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
-    var kycJourneyData = initJourneyData() || []
+    var kycJourneyData = initJourneyData() || [];
+    if (
+      kycJourneyData[1]?.key === "digilocker" &&
+      kycJourneyData[1]?.status === "init"
+    ) {
+      kycJourneyData[1].disc = (
+        <WVInfoBubble>Please ensure your mobile is linked with Aadhaar</WVInfoBubble>
+      );
+    }
     var ctaText = ''
     if (canSubmit()) {
       ctaText = 'SUBMIT APPLICATION'
