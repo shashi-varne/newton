@@ -76,9 +76,11 @@ const PersonalDetails4 = (props) => {
         handleNavigation();
         return;
       }
-    } else if (compareObjects(keysToCheck, oldState, form_data)) {
-      handleNavigation();
-      return;
+    } else {
+      if (!kyc.nomination.nominee_optional && compareObjects(keysToCheck, oldState, form_data)) {
+        handleNavigation();
+        return;
+      }
     }
 
     let userkycDetails = { ...kyc };
