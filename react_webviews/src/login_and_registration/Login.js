@@ -8,6 +8,7 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
 import { nativeCallback } from "../utils/native_callback";
+import { Imgc } from "../common/ui/Imgc";
 
 const config = getConfig();
 class Login extends Component {
@@ -81,9 +82,10 @@ class Login extends Component {
         </div>
         <div className="login-details">
           <div className="left-image">
-            <img
+            <Imgc
               src={require(`assets/${productName}/ils_login.svg`)}
               alt="login"
+              className="login-left-icon"
             />
           </div>
           <div className="login-form" data-aid='login-form'>
@@ -92,7 +94,7 @@ class Login extends Component {
               <div
                 className="text"
                 style={{
-                  fontWeight: loginType === "mobile" ? "bold" : "normal",
+                  fontWeight: loginType === "mobile" ? "500" : "normal",
                 }}
                 onClick={() => this.setLoginType("mobile")}
                 data-aid='mobile-text'
@@ -104,7 +106,7 @@ class Login extends Component {
                 <div
                   className="text"
                   style={{
-                    fontWeight: loginType === "email" ? "bold" : "normal",
+                    fontWeight: loginType === "email" ? "500" : "normal",
                   }}
                   onClick={() => this.setLoginType("email")}
                   data-aid='email-text'

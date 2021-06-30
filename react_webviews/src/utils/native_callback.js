@@ -222,7 +222,7 @@ export function openModule(moduleName) {
     }
 
     let moduleNameWeb = module_mapper[moduleName] || '';
-    let module_url = `${getBasePath()}/${moduleNameWeb}${getConfig.searchParams}`;
+    let module_url = `${getBasePath()}/${moduleNameWeb}${getConfig().searchParams}`;
 
     window.location.href = module_url;
   } else {

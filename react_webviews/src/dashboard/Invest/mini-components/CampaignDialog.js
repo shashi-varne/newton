@@ -4,6 +4,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Slide from '@material-ui/core/Slide';
+import { Imgc } from '../../../common/ui/Imgc';
 
 const CampaignDialog = ({ isOpen, close, handleClick, cancel, data }) => {
   return (
@@ -23,7 +24,7 @@ const CampaignDialog = ({ isOpen, close, handleClick, cancel, data }) => {
           <div className='text'>{data?.title}</div>
         </div>
         <div className='campaign-img-container'>
-          <img src={data?.image} alt='' className='img' />
+          <Imgc src={data?.image} alt='' className='cic-right-icon' />
         </div>
         <div className='subtitle' data-aid='dialog-subtitle'>{data?.subtitle}</div>
       </DialogContent>
