@@ -30,7 +30,7 @@ export const investCardsBase = {
       icon: "passive_index_funds.svg",
       subtitle: "*Earn upto <b>2%</b> more than actively managed fund",
       title: "Passive index funds",
-      microtext: "*Based on TER averages of regular large cap and direct index funds"
+      below_card_description : "*Based on TER averages of regular large cap and direct index funds",
     },
   },
   ourRecommendations: {
