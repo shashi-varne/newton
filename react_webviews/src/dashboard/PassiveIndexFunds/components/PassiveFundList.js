@@ -55,7 +55,8 @@ class FundList extends Component {
             "subcategory": "all",
             "sort_by": "low_to_high",
             "filter_by": "tracking_error",
-            "return_type": "five_year_return"
+            "growth": "true",
+            "return_type": "five_year_return",
         }
         const { result, fundDescription } = await this.getFundDetailsList(body)
 
@@ -268,8 +269,9 @@ class FundList extends Component {
                         dataAidSuffix={'passive-card-details'}
                         filterOptions={this.state.bottomFilterOptions}
                         onApplyClicked={this.setSortFilter}
-                        defaultSelectedTab={{ "sort_value": "tracking_error" }}
+                        defaultSelectedTab={{ sort_value: "tracking_error", fund_option_value: "Growth" }}
                         withButton={true}
+                        shouldCloseFilterOnClick={true}
                     />
                 </div>
             </Container>
