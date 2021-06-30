@@ -12,7 +12,7 @@ import { getConfig } from 'utils/functions'
 import { isEmpty } from 'lodash'
 
 import { createITRApplication, getUserAccountSummary } from '../common/ApiCalls'
-import { isNumberKey, storageService } from '../../utils/validators'
+import { storageService } from '../../utils/validators'
 import { ITR_TYPE_KEY } from '../constants'
 
 import { nativeCallback } from 'utils/native_callback'
@@ -109,7 +109,7 @@ function PersonalDetails(props) {
         setEmail(value.trim())
         break
       case 'mobileNumber':
-        if (isNumberKey(event)) {
+        if (!isNaN(value)) {
           setMobileNumber(value)
         }
         break
