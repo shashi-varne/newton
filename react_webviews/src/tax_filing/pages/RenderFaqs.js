@@ -1,7 +1,7 @@
 import React from 'react'
 import Container from '../common/Container'
 import Faqs from 'common/ui/Faqs'
-import { FAQs, USER_SUMMARY_KEY } from '../constants'
+import { FAQs, USER_DETAILS, USER_SUMMARY_KEY } from '../constants'
 import { storageService } from '../../utils/validators'
 import { isEmpty } from 'lodash'
 import { nativeCallback } from 'utils/native_callback'
@@ -9,12 +9,12 @@ import { trackBackButtonPress } from '../common/functions'
 
 function RenderFAQs(props) {
   const sendEvents = (userAction, data = {}) => {
-    const summary = storageService().getObject(USER_SUMMARY_KEY)
+    const user = storageService().getObject(USER_DETAILS)
 
     const personal_details_exist =
-      !isEmpty(summary?.user?.name) &&
-      !isEmpty(summary?.user?.email) &&
-      !isEmpty(summary?.user?.mobile)
+      !isEmpty(user?.name) &&
+      !isEmpty(user?.email) &&
+      !isEmpty(user?.phone)
         ? 'yes'
         : 'no'
     const questionRead = {
@@ -39,7 +39,7 @@ function RenderFAQs(props) {
   }
 
   const goBack = () => {
-    trackBackButtonPress(props?.history?.location.pathname)
+    trackBackButtonPress(props.history.location.pathname)
     sendEvents('back')
     props.history.goBack()
   }

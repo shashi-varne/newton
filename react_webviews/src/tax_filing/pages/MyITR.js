@@ -24,9 +24,6 @@ import './MyITR.scss'
 function MyITR(props) {
   const navigate = navigateFunc.bind(props)
   const productName = getConfig().productName
-  const defaultUserDetails = props?.location?.params?.user || {}
-
-  const defaultItrList = props?.location?.params?.itrList || []
 
   const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
@@ -34,8 +31,8 @@ function MyITR(props) {
   const [errorData, setErrorData] = useState({})
   const [resuming, setResuming] = useState('')
 
-  const [itrList, setItrList] = useState(defaultItrList)
-  const [user, setUser] = useState(defaultUserDetails)
+  const [itrList, setItrList] = useState([])
+  const [user, setUser] = useState({})
 
   const closeError = () => {
     setShowError(false)

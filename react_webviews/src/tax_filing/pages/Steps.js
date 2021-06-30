@@ -1,4 +1,6 @@
-import React, { Fragment, useState } from 'react'
+import './Steps.scss'
+
+import React, { Fragment, useEffect, useState } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVJourneyCard from 'common/ui/WVCards/WVJourneyCard'
@@ -16,37 +18,41 @@ import {
 import {
   navigate as navigateFunc,
   trackBackButtonPress,
+  parsePhoneNumber,
 } from '../common/functions'
-import {
-  createITRApplication,
-  getITRUserDetails,
-  getUserAccountSummary,
-} from '../common/ApiCalls'
+import { createITRApplication, getITRUserDetails } from '../common/ApiCalls'
 
-import './Steps.scss'
-import { isEmpty, storageService } from '../../utils/validators'
+import { storageService } from '../../utils/validators'
 import { nativeCallback } from 'utils/native_callback'
+import { isEmpty } from 'lodash'
 
 function Steps(props) {
   const navigate = navigateFunc.bind(props)
+  const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [errorData, setErrorData] = useState({})
 
-  let type = props?.location?.params?.type || storageService().get(ITR_TYPE_KEY)
-  let summary =
-    props?.location?.params?.summary || storageService().getObject(USER_SUMMARY_KEY)
+  const type =
+    props?.location?.params?.type || storageService().get(ITR_TYPE_KEY) || ''
+  const summary = storageService().getObject(USER_SUMMARY_KEY) || {}
 
-  let user = props?.location?.params?.user || storageService().getObject(USER_DETAILS)
-
-  if (!type) {
+  if (!type || !summary) {
     navigate('/tax-filing', {}, false)
     return ''
+  }
+
+  const closeError = () => {
+    setShowError(false)
   }
 
   const productName = getConfig().productName
 
   const sendEvents = (userAction, data = {}) => {
     const personal_details_exist =
-      !isEmpty(user?.name) && !isEmpty(user?.email) && !isEmpty(user?.mobile)
+      !isEmpty(data?.user?.name) &&
+      !isEmpty(data?.user?.email) &&
+      !isEmpty(data?.user?.phone)
         ? 'yes'
         : 'no'
 
@@ -89,35 +95,30 @@ function Steps(props) {
     props.history.goBack()
   }
 
+  const retry = async () => {
+    closeError()
+    handleClick()
+  }
+
   const handleClick = async () => {
     try {
       setShowLoader('button')
-      if (isEmpty(user)) {
-        user = await getITRUserDetails()
-        storageService().setObject(USER_DETAILS, user)
-      }
-
-      if (!type) {
-        navigate('/tax-filing', {}, false)
-        return
-      }
-
+      const userDetails = await getITRUserDetails()
       if (
-        !isEmpty(user?.email) &&
-        !isEmpty(user?.phone) &&
-        !isEmpty(user?.name) &&
+        !isEmpty(userDetails?.email) &&
+        !isEmpty(userDetails?.phone) &&
+        !isEmpty(userDetails?.name) &&
         !isEmpty(type)
       ) {
         setShowLoader('button')
         const itr = await createITRApplication({
           type,
-          email: user?.email,
-          phone: user?.mobile,
-          name: user?.name,
+          email: userDetails?.email,
+          phone: parsePhoneNumber(userDetails?.phone),
+          name: userDetails?.name,
         })
         storageService().setObject(ITR_ID_KEY, itr.itr_id)
-        setShowLoader(false)
-        sendEvents('next')
+        sendEvents('next', { user: userDetails })
         navigate(
           `/tax-filing/redirection`,
           { redirectionUrl: itr.sso_url },
@@ -125,62 +126,30 @@ function Steps(props) {
         )
         return
       } else {
-        sendEvents('next')
+        sendEvents('next', { user: userDetails })
         navigate(
           `/tax-filing/personal-details`,
-          { summary },
+          { user: userDetails, type },
           false
         )
         return
       }
     } catch (err) {
-      summary = storageService().getObject(USER_SUMMARY_KEY)
-      user = storageService().getObject(USER_DETAILS)
-      type = storageService().get(ITR_TYPE_KEY)
-      if (!type) {
-        setShowLoader(false)
-        navigate('/tax-filing', {}, false)
-        return
-      }
-      if (
-        !isEmpty(user?.email) &&
-        !isEmpty(user?.phone) &&
-        !isEmpty(user?.name) &&
-        type
-      ) {
-        try {
-          const itr = await createITRApplication({
-            email: user?.email,
-            phone: user?.phone,
-            name: user?.name,
-            type,
-          })
-          storageService().setObject(ITR_ID_KEY, itr.itr_id)
-          setShowLoader(false)
-          sendEvents('next')
-          navigate(
-            `/tax-filing/redirection`,
-            { redirectionUrl: itr.sso_url },
-            false
-          )
-          return
-        } catch (err) {
-          setShowLoader(false)
-          sendEvents('next')
-          navigate(`/tax-filing/personal-details`, { summary }, false)
-          return
-        }
-      } else {
-        setShowLoader(false)
-        sendEvents('next')
-        navigate(`/tax-filing/personal-details`, { summary }, false)
-        return
-      }
+      setShowError(true)
+      setErrorData({
+        type: 'generic',
+        title2: err.message,
+        handleClick1: retry,
+        handleClick2: closeError,
+      })
+    } finally {
+      setShowLoader(false)
     }
   }
 
   const topTitle =
     type === 'eCA' ? 'Hire an expert to eFile' : 'eFile in 3 easy steps'
+
   const smallTitle =
     type === 'eCA'
       ? 'Customised, comprehensive and cost-effective'
@@ -192,7 +161,10 @@ function Steps(props) {
       smallTitle={smallTitle}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
+      skelton={showSkeltonLoader}
       showLoader={showLoader}
+      showError={showError}
+      errorData={errorData}
       headerData={{ goBack }}
       classOverRideContainer="m-bottom-4x"
     >

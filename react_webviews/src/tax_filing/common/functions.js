@@ -102,3 +102,10 @@ export const clearITRSessionStorage = () => {
   storageService().remove(ITR_APPLICATIONS_KEY)
   storageService().remove(USER_SUMMARY_KEY)
 }
+
+export const parsePhoneNumber = (number) => {
+  if (typeof number === 'string') {
+    return number.split('|').pop()
+  }
+  return number
+}

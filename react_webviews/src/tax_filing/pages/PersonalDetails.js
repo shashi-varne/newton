@@ -1,3 +1,5 @@
+import './PersonalDetails.scss'
+
 import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import Input from 'common/ui/Input'
@@ -7,21 +9,16 @@ import { validateEmail, validateNumber } from 'utils/validators'
 import {
   navigate as navigateFunc,
   trackBackButtonPress,
+  parsePhoneNumber,
 } from '../common/functions'
 import { getConfig } from 'utils/functions'
 import { isEmpty } from 'lodash'
 
-import {
-  createITRApplication,
-  getITRUserDetails,
-  getUserAccountSummary,
-} from '../common/ApiCalls'
+import { createITRApplication, getITRUserDetails } from '../common/ApiCalls'
 import { storageService } from '../../utils/validators'
 import { ITR_TYPE_KEY, USER_DETAILS, USER_SUMMARY_KEY } from '../constants'
 
 import { nativeCallback } from 'utils/native_callback'
-
-import './PersonalDetails.scss'
 
 function PersonalDetails(props) {
   const navigate = navigateFunc.bind(props)
@@ -31,20 +28,29 @@ function PersonalDetails(props) {
     setShowError(false)
   }
 
-  const defaultSummary =
-    props?.location?.params?.summary ||
-    storageService().getObject(USER_SUMMARY_KEY) ||
-    {}
+  const summary = storageService().getObject(USER_SUMMARY_KEY) || {}
+
+  const user = props?.location?.params?.user || {}
+
+  const type =
+    props?.location?.params?.type || storageService().get(ITR_TYPE_KEY) || ''
+
+  if (isEmpty(type)) {
+    navigate(`/tax-filing`, {}, false)
+    return
+  }
 
   const [showLoader, setShowLoader] = useState(false)
   const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
   const [showError, setShowError] = useState(false)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const [errorData, setErrorData] = useState({})
-  const [summary, setSummary] = useState(defaultSummary)
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [mobileNumber, setMobileNumber] = useState('')
+
+  const [name, setName] = useState(user?.name || '')
+  const [email, setEmail] = useState(user?.email || '')
+  const [mobileNumber, setMobileNumber] = useState(
+    parsePhoneNumber(user?.phone) || ''
+  )
 
   const [, setItrId] = useState('')
   const [itrSSOURL, setITRSSOURL] = useState('')
@@ -53,29 +59,9 @@ function PersonalDetails(props) {
     fetchUserSummary()
   }, [])
 
-  const parsePhoneNumber = (number) => {
-    if (typeof number === 'string') {
-      return number.split('|').pop()
-    }
-    return number
-  }
-
   const fetchUserSummary = async () => {
     try {
-      if (isEmpty(defaultSummary)) {
-        setShowSkeltonLoader(true)
-        const [userDetails, summaryDetails] = await Promise.all([
-          getITRUserDetails(),
-          getUserAccountSummary(),
-        ])
-        setName(userDetails?.name)
-        setEmail(userDetails?.email)
-        setMobileNumber(parsePhoneNumber(userDetails?.phone))
-        setSummary(summaryDetails)
-        storageService().setObject(USER_DETAILS, userDetails)
-        storageService().setObject(USER_SUMMARY_KEY, summaryDetails)
-        setShowSkeltonLoader(false)
-      } else {
+      if (isEmpty(user)) {
         setShowSkeltonLoader(true)
         const userDetails = await getITRUserDetails()
         setName(userDetails?.name)
@@ -85,10 +71,13 @@ function PersonalDetails(props) {
         setShowSkeltonLoader(false)
       }
     } catch (err) {
-      const cachedUser = storageService().getObject(USER_DETAILS)
-      setName(cachedUser?.name || '')
-      setEmail(cachedUser?.email || '')
-      setMobileNumber(parsePhoneNumber(cachedUser?.phone) || '')
+      showError(true)
+      setErrorData({
+        type: 'crash',
+        title2: err.message,
+        handleClick2: closeError,
+      })
+    } finally {
       setShowSkeltonLoader(false)
     }
   }
@@ -137,9 +126,7 @@ function PersonalDetails(props) {
         setEmail(value.trim())
         break
       case 'mobileNumber':
-        if (!isNaN(value)) {
-          setMobileNumber(value)
-        }
+        setMobileNumber(value)
         break
       default:
         break
@@ -147,18 +134,9 @@ function PersonalDetails(props) {
   }
 
   const handleProceed = async () => {
-    try {
-      sendEvents('next', { screenName: 'Application Created' })
-      navigate('/tax-filing/redirection', { redirectionUrl: itrSSOURL }, false)
-    } catch (err) {
-      setShowError(true)
-      setErrorData({
-        type: 'crash',
-        title1: err.message,
-        button_text1: 'CLOSE',
-        handleClick1: closeError,
-      })
-    }
+    sendEvents('next', { screenName: 'Application Created' })
+    navigate('/tax-filing/redirection', { redirectionUrl: itrSSOURL }, false)
+    return
   }
 
   const goBack = () => {
@@ -200,6 +178,11 @@ function PersonalDetails(props) {
     }
   }
 
+  const retry = () => {
+    closeError()
+    handleClick()
+  }
+
   const handleClick = async () => {
     try {
       const type = storageService().get(ITR_TYPE_KEY)
@@ -209,7 +192,7 @@ function PersonalDetails(props) {
         type,
         email,
         name,
-        phone: mobileNumber,
+        phone: parsePhoneNumber(mobileNumber),
       })
       setItrId(itr.itr_id)
       setITRSSOURL(itr.sso_url)
@@ -219,11 +202,9 @@ function PersonalDetails(props) {
       setShowError(true)
       setErrorData({
         type: 'generic',
-        title1: err.message,
-        button_text1: 'CLOSE',
-        button_text2: 'RETRY',
-        handleClick2: handleClick,
-        handleClick1: closeError,
+        title2: err.message,
+        handleClick2: closeError,
+        handleClick1: retry,
       })
       setShowBottomSheet(false)
       setShowLoader(false)

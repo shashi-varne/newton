@@ -70,7 +70,7 @@ function Landing(props) {
     const investment_status = summary?.user?.kyc?.investment_status || ''
     const kyc_status = summary?.user?.kyc?.kyc_status || ''
     const personal_details_exist =
-      !isEmpty(user?.name) && !isEmpty(user?.mobile) && !isEmpty(user?.email)
+      !isEmpty(user?.name) && !isEmpty(user?.phone) && !isEmpty(user?.email)
         ? 'yes'
         : 'no'
     const eventObj = {
@@ -131,8 +131,8 @@ function Landing(props) {
       setShowError(true)
       setErrorData({
         type: 'crash',
-        title1: err.message,
-        handleClick1: closeError,
+        title2: err.message,
+        handleClick2: closeError,
       })
       setShowLoader(false)
     }
@@ -154,7 +154,7 @@ function Landing(props) {
   const handleITRJourneyNavigation = (type) => () => {
     sendEvents('next', { card_click: type })
     setITRJourneyType(type)
-    navigate(`/tax-filing/steps`, { type, summary, user }, false)
+    navigate(`/tax-filing/steps`, { type }, false)
     return
   }
 
