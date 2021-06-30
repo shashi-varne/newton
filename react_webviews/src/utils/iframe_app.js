@@ -122,6 +122,7 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
         });
         window.callbackWeb.sendEvent(message);
         storageService().clear();
+        return true;
       } else {
         navigate("/logout");
         return true;
