@@ -232,7 +232,7 @@ class FundList extends Component {
                         <p className="category-description">
                             {this.state.fundDescription.substring(0, 90)}
                             <span style={this.state.expand ? {} : { display: "none" }}>
-                                {this.state.fundDescription.substring(91)}
+                                {this.state.fundDescription.substring(90)}
                             </span>...
                             <span className="category-desc-button" onClick={this.handleExpand}>
                                 {this.state.expand ? " LESS" : " MORE"}
