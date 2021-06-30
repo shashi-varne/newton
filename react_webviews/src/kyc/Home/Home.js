@@ -261,7 +261,7 @@ const Home = (props) => {
       let { different_login, auth_ids} = result;
       if (status_code === 200) {
         const accountDetail = {
-          title: "PAN Already Exists",
+          title: "PAN already exists",
           message: "Sorry! this PAN is already registered with another account.",
           step: "STEP1",
         };

@@ -25,17 +25,19 @@ const AccountLinked = (props) => {
   };
 
   const hideImage =
-    config.isIframe && config.code === "moneycontrol" && config.isMobileDevice;
+    config.isIframe && config.code === "moneycontrol" && !config.isMobileDevice;
   return (
     <Container 
       buttonTitle="CLOSE" 
-      hidePageTitle 
+      hidePageTitle={!hideImage}
+      title="Accounts Linked"
       handleClick={handleClick} 
       data-aid='account-linked-screen' 
       iframeRightContent={require(`assets/${productName}/account_linked.svg`)}
     >
       <div className="account-merge-linked" data-aid='account-merge-linked'>
         {!hideImage && (
+          <>
           <div className="outline">
             <Imgc
               alt=""
@@ -43,8 +45,9 @@ const AccountLinked = (props) => {
               src={require(`assets/${productName}/acconts_linked.svg`)}
             />
           </div>
+          <h3 data-aid="account-linked">Accounts Linked</h3>
+        </>
         )}
-        <h3 data-aid='account-linked'>Accounts Linked</h3>
         <p data-aid='message'>
           Congratulations! Account linked. Please Close this page, and open
           ‘Mutual Fund’ again.
