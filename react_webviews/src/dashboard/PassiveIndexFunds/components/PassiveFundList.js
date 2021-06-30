@@ -257,7 +257,7 @@ class FundList extends Component {
                                         productData={item}
                                         title={item.legal_name}
                                         subtitle={<CardSubtitle value={item?.tracking_index} morning_start={item?.morning_star_rating} />}
-                                        image={item.amc_logo_big}
+                                        image={item.amc_logo_small}
                                         contentPropsMapList={this.dataPropMapList(item)}
                                         handelClick={() => this.clickCard(item)}
                                     />
