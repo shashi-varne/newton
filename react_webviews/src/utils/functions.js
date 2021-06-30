@@ -647,7 +647,7 @@ export const getConfig = () => {
   let isProdFinity = origin.indexOf('wv.mywaywealth.com') >= 0;
 
   var base_href = window.sessionStorage.getItem('base_href') || '';
-  let base_url_default = 'https://itr-dot-plutus-staging.appspot.com';
+  let base_url_default = '';
 
   if(base_href) {
     base_url_default = window.location.origin;
@@ -730,7 +730,7 @@ export const getConfig = () => {
   let searchParamsMustAppend = ``;
 
 
-  base_url_default = 'https://itr-dot-plutus-staging.appspot.com' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
+  base_url_default = '' // removing as of now, because from backend its getting appended & in plutus_redirect_url, so need atleast one from from webview
   if(!base_url_default) {
     searchParams += getParamsMark(searchParams) + `base_url=${base_url}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `base_url=${base_url}`;
