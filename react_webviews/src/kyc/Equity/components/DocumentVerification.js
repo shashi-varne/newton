@@ -76,7 +76,7 @@ const DocumentVerification = (props) => {
           {docs.length ? docs.map((docObj) => (
             <Fragment key={docObj.title}>
               <div className="kdvm-title">{docObj.title}</div>
-              <div className="kdvm-subtitle">{docObj.doc || "No doc submitted"}</div>
+              <div className="kdvm-subtitle">{docObj.doc}</div>
             </Fragment>
           )) : ""}
           <WVJourneyShortening
