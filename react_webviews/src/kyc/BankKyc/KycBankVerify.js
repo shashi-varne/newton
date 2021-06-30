@@ -4,7 +4,7 @@ import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
-import { getFlow } from "../common/functions";
+import { getFlow, isMoneycontrolDesktopLayout } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -17,9 +17,8 @@ import { getConfig } from "utils/functions";
 import internalStorage from '../Home/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
 
-const config = getConfig();
-const showPageDialog = config.isIframe && config.code === "moneycontrol" && !config.isMobileDevice;
-const productName = config.productName;
+const showPageDialog = isMoneycontrolDesktopLayout();
+const productName = getConfig().productName;
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);
   const [countdownInterval, setCountdownInterval] = useState();

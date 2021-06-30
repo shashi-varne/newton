@@ -4,7 +4,7 @@ import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { getFlow } from "../common/functions";
+import { getFlow, isMoneycontrolDesktopLayout } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
@@ -158,7 +158,7 @@ const KycUploadDocuments = (props) => {
       );
       if(!isEmpty(result))
         updateKyc(result.kyc)
-      if(config.isIframe && config.code === "moneycontrol" && !config.isMobileDevice) {
+      if(isMoneycontrolDesktopLayout()) {
         bankUploadStatus();
       } else {
         setShowPendingModal(true);

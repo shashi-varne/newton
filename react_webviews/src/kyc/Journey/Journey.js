@@ -8,7 +8,7 @@ import { PATHNAME_MAPPER } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
-  pollProgress, updateQueryStringParameter, getFlow
+  pollProgress, updateQueryStringParameter, getFlow, isMoneycontrolDesktopLayout
 } from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -21,7 +21,7 @@ import { getBasePath, navigate as navigateFunc, popupWindowCenter } from '../../
 const config = getConfig();
 const isMobileDevice = config.isMobileDevice;
 const iframe = config.isIframe;
-
+const moneycontrolDesktopLayout = isMoneycontrolDesktopLayout();
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -112,7 +112,7 @@ const Journey = (props) => {
             kyc[journeyData[i].inputsForStatus[0]] === 'init'
           ) {
             status = 'init'
-            if(iframe && !isMobileDevice && config.code === 'moneycontrol')
+            if(moneycontrolDesktopLayout)
               journeyData[i].subtitle = <Alert variant="info" message="Please ensure your mobile is linked with Aadhar" />;
             break
           }
@@ -584,7 +584,7 @@ const Journey = (props) => {
   }
 
   const proceed = () => {
-    if (config.isIframe && config.code === "moneycontrol" && !config.isMobileDevice) {
+    if (moneycontrolDesktopLayout) {
       const redirect_url = encodeURIComponent(
         `${getBasePath()}/digilocker/callback${
           config.searchParams

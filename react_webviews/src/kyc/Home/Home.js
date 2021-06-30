@@ -8,13 +8,15 @@ import toast from "../../common/ui/Toast";
 import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, navigate as navigateFunc, isIframe } from "../../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import internalStorage from './InternalStorage';
 import isEmpty from 'lodash/isEmpty';
+import { isMoneycontrolDesktopLayout } from "../common/functions";
 
 const config = getConfig();
+const showPageDialog = isMoneycontrolDesktopLayout();
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
@@ -33,7 +35,6 @@ const Home = (props) => {
   const isPremiumFlow = stateParams.isPremiumFlow || false;
   const { kyc, user, isLoading } = useUserKycHook();
   const [userName, setUserName] = useState('');
-  const iFrame = isIframe();
   // const [navigateTo, setNavigateTo] = useState('');
   // const [x,setX] = useState(false);
 
@@ -133,7 +134,7 @@ const Home = (props) => {
         }
         await checkCompliant();
       } else if (!isUserCompliant) {
-        if(iFrame && !config.isMobileDevice && config.code === "moneycontrol") {
+        if(showPageDialog) {
           const residentData = {
             title: "Residence Status",
             message: 'Are you an Indian resident?',
@@ -252,7 +253,7 @@ const Home = (props) => {
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
     const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
-    if (config.isIframe && config.partner_code !== 'moneycontrol') {
+    if (showPageDialog) {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
@@ -267,7 +268,7 @@ const Home = (props) => {
         };
         setAuthIds(auth_ids);
         // setAccountMergeData(accountDetail);
-        if (iFrame  && !config.isMobileDevice && config.code === "moneycontrol") {
+        if (showPageDialog) {
           // setNavigateTo('pan-status');
           const newData = {
             buttonOneTitle: 'RE-ENTER PAN',
@@ -290,7 +291,7 @@ const Home = (props) => {
           message: result?.message,
           step: "STEP2",
         };
-        if (iFrame && !config.isMobileDevice && config.code === "moneycontrol") {
+        if (showPageDialog) {
           // setNavigateTo('pan-status');
           const newData = {
             buttonOneTitle: 'RE-ENTER PAN',
