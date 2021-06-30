@@ -21,7 +21,6 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import {Imgc} from '../../../common/ui/Imgc';
-import { isEmpty } from "lodash"
 
 const plusOptionsAmount = [
   500, 1000, 2000, 5000
