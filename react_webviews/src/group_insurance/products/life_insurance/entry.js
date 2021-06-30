@@ -68,8 +68,9 @@ class LifeInsuranceEntry extends Component {
         this.navigate('/group-insurance/life-insurance/savings-plan/landing');
       // }
     } else {
-      let fullPath = data.key + '/landing';
-      this.navigate('/group-insurance/life-insurance/' + fullPath);
+      this.navigate('/group-insurance/system-maintenance');
+      // let fullPath = data.key + '/landing';
+      // this.navigate('/group-insurance/life-insurance/' + fullPath);
     }
   }
 
