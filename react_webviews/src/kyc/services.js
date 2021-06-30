@@ -256,7 +256,7 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    if (!TRADING_ENABLED || kyc?.kyc_product_type !== "equity") {
+    if (!TRADING_ENABLED) {
       status = "rejected";
       result.status = status;
       return result;
