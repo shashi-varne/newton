@@ -234,7 +234,7 @@ class GoldBuyHome extends Component {
     } 
     
     if (!this.state.isRegistered) {
-      if (isEmpty(this.state.user_info.mobile_no) || isEmpty(this.state.user_info.email)) {
+      if (!this.state.user_info.mobile_number_verified || !this.state.user_info.email_verified) {
         this.navigate("/kyc/communication-details", { fromState: "/buy-gold",  goBack: `/gold/${this.state.provider}/gold-register` });
         return; 
       }

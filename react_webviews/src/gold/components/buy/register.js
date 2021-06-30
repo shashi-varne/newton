@@ -412,6 +412,10 @@ class GoldRegister extends Component {
       price_summary_clicked: true
     })
   }
+   goBack = () => {
+    this.sendEvents('back');
+    this.navigate("/gold/buy");
+  };
 
   render() {
     return (
@@ -426,6 +430,10 @@ class GoldRegister extends Component {
         buttonTitle="CONTINUE"
         buttonData={this.state.bottomButtonData}
         events={this.sendEvents('just_set_events')}
+        goBack={this.goBack}
+        headerData={{
+          goBack: this.goBack
+        }}
       >
         <div className="common-top-page-subtitle">
           We need following details to open your {gold_providers[this.state.provider].title} account
