@@ -112,7 +112,7 @@ const Journey = (props) => {
             kyc[journeyData[i].inputsForStatus[0]] === 'init'
           ) {
             status = 'init'
-            if(iframe && !isMobileDevice)
+            if(iframe && !isMobileDevice && config.code === 'moneycontrol')
               journeyData[i].subtitle = <Alert variant="info" message="Please ensure your mobile is linked with Aadhar" />;
             break
           }
