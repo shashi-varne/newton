@@ -163,23 +163,23 @@ class DigiStatus extends Component {
       ) {
         dl_flow = true;
       }
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "" ,
-        "screen_name": screenName || "kyc_verified",
-        "rti": "",
-        "initial_kyc_status": kyc.initial_kyc_status || "",
-        "flow": dl_flow ? 'digi kyc' : 'general'
+      let eventObj = {
+        "event_name": 'KYC_registration',
+        "properties": {
+          "user_action": userAction || "" ,
+          "screen_name": screenName || "kyc_verified",
+          "rti": "",
+          "initial_kyc_status": kyc?.initial_kyc_status || "",
+          "flow": dl_flow ? 'digi kyc' : 'general'
+        }
+      };
+      if (userAction === 'just_set_events') {
+        return eventObj;
+      } else {
+        nativeCallback({ events: eventObj });
       }
-    };
-    if (userAction === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
     }
   }
-}
 
   render() {
     let { show_loader, skelton, dl_flow, show_note, kyc } = this.state;
