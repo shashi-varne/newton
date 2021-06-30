@@ -50,14 +50,14 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
     "/funds/",
     "/reports",
     "/withdraw",
-    "/withdraw-reason/",
+    "/withdraw/reason",
     "/payment/callback/",
     "/sip/payment/callback/",
     "/new/mandate/"
   ];
 
   if (backEnabledPages.indexOf(currentState) !== -1) {
-    var message = JSON.stringify({
+    const message = JSON.stringify({
       type: "iframe_close"
     });
     if(getConfig().code === 'moneycontrol' && ["/payment/callback","/sip/payment/callback"].includes(currentState)) {
