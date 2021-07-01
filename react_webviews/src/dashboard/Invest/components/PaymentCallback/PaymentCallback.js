@@ -61,7 +61,11 @@ const PaymentCallback = (props) => {
     } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
-    navigate("/reports");
+    if(config.code === "moneycontrol") {
+      navigate("/");
+    } else {
+      navigate("/reports");
+    }
   };
 
   const goBack = () => {
