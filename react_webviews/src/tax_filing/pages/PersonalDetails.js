@@ -30,7 +30,7 @@ function PersonalDetails(props) {
 
   const summary = storageService().getObject(USER_SUMMARY_KEY) || {}
 
-  const user = props?.location?.params?.user || {}
+  const defaultUser = props?.location?.params?.user || {}
 
   const type =
     props?.location?.params?.type || storageService().get(ITR_TYPE_KEY) || ''
@@ -46,6 +46,7 @@ function PersonalDetails(props) {
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const [errorData, setErrorData] = useState({})
 
+  const [user, setUser] = useState(defaultUser)
   const [name, setName] = useState(user?.name || '')
   const [email, setEmail] = useState(user?.email || '')
   const [mobileNumber, setMobileNumber] = useState(
@@ -64,6 +65,7 @@ function PersonalDetails(props) {
       if (isEmpty(user)) {
         setShowSkeltonLoader(true)
         const userDetails = await getITRUserDetails()
+        setUser({ ...userDetails })
         setName(userDetails?.name)
         setEmail(userDetails?.email)
         setMobileNumber(parsePhoneNumber(userDetails?.phone))
@@ -126,7 +128,9 @@ function PersonalDetails(props) {
         setEmail(value.trim())
         break
       case 'mobileNumber':
-        setMobileNumber(value)
+        if (!isNaN(value)) {
+          setMobileNumber(value)
+        }
         break
       default:
         break
@@ -212,12 +216,12 @@ function PersonalDetails(props) {
   }
 
   const isDisabledProceed =
-    isEmpty(email) ||
-    isEmpty(mobileNumber) ||
-    isEmpty(name) ||
     errors.email ||
     errors.mobileNumber ||
     errors.name ||
+    isEmpty(name) ||
+    isEmpty(mobileNumber) ||
+    isEmpty(email) ||
     mobileNumber.length !== 10
 
   return (
@@ -243,7 +247,7 @@ function PersonalDetails(props) {
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(name)}
+          disabled={!isEmpty(user?.name)}
           error={errors?.name}
           helperText={errors?.name ? 'Please enter a valid name' : ''}
           required
@@ -257,7 +261,7 @@ function PersonalDetails(props) {
           onChange={handleChange('email')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(email)}
+          disabled={!isEmpty(user?.email) && validateEmail(user?.email)}
           error={errors?.email}
           helperText={errors?.email ? 'Please enter a valid email address' : ''}
           required
@@ -271,7 +275,7 @@ function PersonalDetails(props) {
           onChange={handleChange('mobileNumber')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(mobileNumber)}
+          disabled={!isEmpty(user?.phone) && validateNumber(user?.phone)}
           error={errors?.mobileNumber}
           helperText={
             errors?.mobileNumber ? 'Please enter a correct mobile number' : ''
