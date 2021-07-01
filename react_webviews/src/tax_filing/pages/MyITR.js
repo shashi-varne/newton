@@ -113,6 +113,10 @@ function MyITR(props) {
           getITRList(),
           getITRUserDetails(),
         ])
+        if (list.length === 0) {
+          navigate(`/tax-filing`, {}, false)
+          return
+        }
         setItrList([...list])
         setUser({ ...userDetails })
         storageService().setObject(USER_DETAILS, userDetails)
@@ -133,56 +137,61 @@ function MyITR(props) {
   }
   let myItrs = []
   if (!isEmpty(itrList)) {
-    myItrs = itrList.map(
-      ({
-        dt_created: dtCreated,
-        itr_status: itrStatus,
-        itr_id: itrId,
-        type,
-      }) => {
-        let status = itrStatus ? itrStatus : 'started'
-        const text = itrStatusMappings[status].text
-        const color = itrStatusMappings[status].color
+    myItrs = itrList
+      .sort((a, b) => {
+        return new Date(b.dt_created) - new Date(a.dt_created)
+      })
+      .map(
+        ({
+          dt_created: dtCreated,
+          itr_status: itrStatus,
+          itr_id: itrId,
+          type,
+        }) => {
+          let status = itrStatus ? itrStatus : 'started'
+          const text = itrStatusMappings[status].text
+          const color = itrStatusMappings[status].color
 
-        const icon =
-          type === 'eCA'
-            ? require(`assets/${productName}/icn_ca.svg`)
-            : require(`assets/${productName}/icn_self_itr.svg`)
+          const icon =
+            type === 'eCA'
+              ? require(`assets/${productName}/icn_ca.svg`)
+              : require(`assets/${productName}/icn_self_itr.svg`)
 
-        const dateTime = moment
-          .utc(dtCreated)
-          .local()
-          .format('DD/MM/YYYY, hh:mma')
-        const filingType = type === 'eCA' ? 'CA-Assisted Filing' : 'Self-filing'
-        let bottomValues = [
-          { title: 'Name', subtitle: user?.name },
-          { title: 'Mobile Number', subtitle: user?.phone },
-          { title: 'Created On', subtitle: dateTime },
-        ]
+          const dateTime = moment
+            .utc(dtCreated)
+            .local()
+            .format('DD/MM/YYYY, hh:mma')
+          const filingType =
+            type === 'eCA' ? 'CA-Assisted Filing' : 'Self-filing'
+          let bottomValues = [
+            { title: 'Name', subtitle: user?.name },
+            { title: 'Mobile Number', subtitle: user?.phone },
+            { title: 'Created On', subtitle: dateTime },
+          ]
 
-        if (!['completed', 'refunded'].includes(status)) {
-          bottomValues.push({
-            renderItem: () => (
-              <Button
-                buttonTitle="RESUME"
-                onClick={handleResumeApplication(itrId, type, itrStatus)}
-                showLoader={itrId === resuming ? showLoader : ''}
-                disable={showLoader && itrId !== resuming ? true : false}
-              />
-            ),
-          })
+          if (!['completed', 'refunded'].includes(status)) {
+            bottomValues.push({
+              renderItem: () => (
+                <Button
+                  buttonTitle="RESUME"
+                  onClick={handleResumeApplication(itrId, type, itrStatus)}
+                  showLoader={itrId === resuming ? showLoader : ''}
+                  disable={showLoader && itrId !== resuming ? true : false}
+                />
+              ),
+            })
+          }
+
+          return {
+            color,
+            topTextLeft: text,
+            backgroundColor: '#FFFFFF',
+            headingTitle: filingType,
+            headingLogo: icon,
+            bottomValues,
+          }
         }
-
-        return {
-          color,
-          topTextLeft: text,
-          backgroundColor: '#FFFFFF',
-          headingTitle: filingType,
-          headingLogo: icon,
-          bottomValues,
-        }
-      }
-    )
+      )
   }
 
   return (
