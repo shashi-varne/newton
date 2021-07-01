@@ -14,6 +14,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
 import { nativeCallback } from "../utils/native_callback";
+import { Imgc } from "../common/ui/Imgc";
 
 const config = getConfig();
 class Register extends Component {
@@ -97,9 +98,10 @@ class Register extends Component {
         </div>
         <div className="login-details" data-aid='login-details'>
           <div className="left-image">
-            <img
+            <Imgc
               src={require(`assets/${this.state.productName}/ils_register.svg`)}
               alt="register"
+              className="login-left-icon"
             />
           </div>
           <div className="login-form" data-aid='login-form'>
@@ -108,7 +110,7 @@ class Register extends Component {
               <div
                 className="text"
                 style={{
-                  fontWeight: registerType === "mobile" ? "bold" : "normal",
+                  fontWeight: registerType === "mobile" ? "500" : "normal",
                 }}
                 onClick={() => this.setRegistrationType("mobile")}
                 data-aid='mobile-text'
@@ -119,7 +121,7 @@ class Register extends Component {
               <div
                 className="text"
                 style={{
-                  fontWeight: registerType === "email" ? "bold" : "normal",
+                  fontWeight: registerType === "email" ? "500" : "normal",
                 }}
                 onClick={() => this.setRegistrationType("email")}
                 data-aid='email-text'
