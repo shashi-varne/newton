@@ -26,7 +26,7 @@ const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick, kyc }) => {
   const TRADING_ENABLED = isTradingEnabled(kyc);
   if (status === "success") {
     if (!TRADING_ENABLED || (kyc?.kyc_status === "non-compliant" && kyc?.kyc_type === "manual")) {
-      data.subtitle = "Great, now continue to provide other documents to complete KYC"
+      data.subtitle = ""
     }
   }
   
