@@ -275,7 +275,7 @@ function PersonalDetails(props) {
           onChange={handleChange('mobileNumber')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(user?.phone)}
+          disabled={!isEmpty(user?.phone)&& validateNumber(user?.phone)}
           error={errors?.mobileNumber}
           helperText={
             errors?.mobileNumber ? 'Please enter a correct mobile number' : ''
