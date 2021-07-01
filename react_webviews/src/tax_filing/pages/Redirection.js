@@ -12,10 +12,6 @@ function Redirection(props) {
   const navigate = navigateFunc.bind(props)
   const redirectionUrl = props?.location?.params?.redirectionUrl
 
-  if (isEmpty(redirectionUrl)) {
-    navigate('/tax-filing', {}, false)
-    return ''
-  }
 
   useEffect(() => {
     const timerHandle = setTimeout(() => {
@@ -33,6 +29,11 @@ function Redirection(props) {
       clearITRSessionStorage()
     }
   }, [])
+
+  if (isEmpty(redirectionUrl)) {
+    navigate('/tax-filing', {}, false)
+    return <></>
+  }
 
   return (
     <Container noFooter headerData={{ hide_icon: true }}>

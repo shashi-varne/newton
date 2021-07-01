@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash'
 import { verifySSOTokenAndHMAC } from '../common/ApiCalls'
 import { nativeCallback } from 'utils/native_callback'
 import { navigate as navigateFunc } from '../common/functions'
+import { getConfig, getBasePath } from 'utils/functions'
 
 function Callback(props) {
   const navigate = navigateFunc.bind(props)
@@ -40,9 +41,11 @@ function Callback(props) {
     try {
       setShowLoader(true)
       const data = await verifySSOTokenAndHMAC(token, hmac)
+      const backUrl = getBasePath() + '/tax-filing' + getConfig().searchParams
       nativeCallback({
         action: 'take_control',
         message: {
+          back_url: backUrl,
           back_text: 'You are almost there, do you really want to go back?',
         },
       })

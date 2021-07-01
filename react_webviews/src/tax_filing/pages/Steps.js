@@ -12,7 +12,6 @@ import {
   ITR_TYPE_KEY,
   USER_SUMMARY_KEY,
   ITR_ID_KEY,
-  USER_DETAILS,
 } from '../constants'
 
 import {
@@ -28,7 +27,6 @@ import { isEmpty } from 'lodash'
 
 function Steps(props) {
   const navigate = navigateFunc.bind(props)
-  const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
   const [showError, setShowError] = useState(false)
   const [errorData, setErrorData] = useState({})
@@ -119,12 +117,12 @@ function Steps(props) {
         })
         storageService().setObject(ITR_ID_KEY, itr.itr_id)
         sendEvents('next', { user: userDetails })
+        setShowLoader(false)
         navigate(
           `/tax-filing/redirection`,
           { redirectionUrl: itr.sso_url },
           false
         )
-        return
       } else {
         sendEvents('next', { user: userDetails })
         navigate(
@@ -132,9 +130,9 @@ function Steps(props) {
           { user: userDetails, type },
           false
         )
-        return
       }
     } catch (err) {
+      setShowLoader(false)
       setShowError(true)
       setErrorData({
         type: 'generic',
@@ -142,8 +140,6 @@ function Steps(props) {
         handleClick1: retry,
         handleClick2: closeError,
       })
-    } finally {
-      setShowLoader(false)
     }
   }
 
@@ -161,7 +157,6 @@ function Steps(props) {
       smallTitle={smallTitle}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
-      skelton={showSkeltonLoader}
       showLoader={showLoader}
       showError={showError}
       errorData={errorData}
@@ -190,7 +185,7 @@ function Steps(props) {
                     className="tax-filing-advantages-icon flex justify-center align-center"
                     style={{
                       backgroundColor:
-                        productName === 'finity' ? '#E6F2FE' : '',
+                        productName === 'finity' ? '#FAFCFF' : '',
                     }}
                   >
                     <Imgc src={require(`assets/${productName}/${icon}.svg`)} />

@@ -25,6 +25,7 @@ function PersonalDetails(props) {
   const productName = getConfig().productName
 
   const closeError = () => {
+    setShowLoader(false)
     setShowError(false)
   }
 
@@ -203,6 +204,7 @@ function PersonalDetails(props) {
       setShowBottomSheet(true)
       setShowLoader(false)
     } catch (err) {
+      setShowLoader(false)
       setShowError(true)
       setErrorData({
         type: 'generic',
@@ -210,8 +212,6 @@ function PersonalDetails(props) {
         handleClick2: closeError,
         handleClick1: retry,
       })
-      setShowBottomSheet(false)
-      setShowLoader(false)
     }
   }
 
@@ -254,7 +254,7 @@ function PersonalDetails(props) {
         />
         <Input
           type="email"
-          value={email}
+          value={email || ''}
           label="Email"
           onFocus={handleFocus('email')}
           onBlur={handleBlur('email')}
@@ -275,7 +275,7 @@ function PersonalDetails(props) {
           onChange={handleChange('mobileNumber')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(user?.phone) && validateNumber(user?.phone)}
+          disabled={!isEmpty(user?.phone)}
           error={errors?.mobileNumber}
           helperText={
             errors?.mobileNumber ? 'Please enter a correct mobile number' : ''
@@ -286,9 +286,12 @@ function PersonalDetails(props) {
       <BottomSheet
         open={showBottomSheet}
         data={{
-          header_title: 'Application created',
+          header_title:
+            type === 'free' ? 'Application created' : 'ITR application created',
           content:
-            'Great job! Only a few more details required for ITR calculation',
+            type === 'free'
+              ? 'Great job! Only a few more details required for ITR calculation'
+              : 'Now, answer a few simple questions and get the plan',
           src: require(`assets/${productName}/icn_application_created.svg`),
           button_text1: 'CONTINUE',
           handleClick1: handleProceed,

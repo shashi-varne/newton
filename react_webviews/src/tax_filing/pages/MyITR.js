@@ -143,10 +143,16 @@ function MyITR(props) {
         let status = itrStatus ? itrStatus : 'started'
         const text = itrStatusMappings[status].text
         const color = itrStatusMappings[status].color
-        const icn = itrStatusMappings[status].icon
-        const icon = require(`assets/${productName}/${icn}.svg`)
 
-        const dateTime = moment(dtCreated).format('DD/MM/YYYY, hh:mma')
+        const icon =
+          type === 'eCA'
+            ? require(`assets/${productName}/icn_ca.svg`)
+            : require(`assets/${productName}/icn_self_itr.svg`)
+
+        const dateTime = moment
+          .utc(dtCreated)
+          .local()
+          .format('DD/MM/YYYY, hh:mma')
         const filingType = type === 'eCA' ? 'CA-Assisted Filing' : 'Self-filing'
         let bottomValues = [
           { title: 'Name', subtitle: user?.name },

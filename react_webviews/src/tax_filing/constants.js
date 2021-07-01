@@ -33,19 +33,19 @@ export const taxFilingSteps = {
 
   eCA: [
     {
-      title: 'Upload form 16',
-      subtitle: 'Your income, deductions and TDS details will be auto-filled',
-      icon: 'icn_upload_form_16',
+      title: 'Get your expert match',
+      subtitle: 'Answer a few simple questions to get the right tax expert',
+      icon: 'icn_expert_match',
     },
     {
-      title: 'Review & edit',
-      subtitle: 'You can check/edit details and verify the ITR summary',
-      icon: 'icn_review_edit',
-    },
-    {
-      title: 'File ITR',
-      subtitle: 'You’ll get an acknowledgement from govt. on successful filing',
+      title: 'Upload documents',
+      subtitle: 'The expert prepares the ITR using the information',
       icon: 'icn_file_itr',
+    },
+    {
+      title: 'Review and file',
+      subtitle: 'Check and accept the ITR summary to complete filing',
+      icon: 'icn_review_file',
     },
   ],
 }
@@ -107,15 +107,15 @@ export const taxFilingOptions = [
 export const itrStatusMappings = {
   completed: {
     color: '#4F2DA7',
-    icon: 'icn_self_itr',
+
     text: 'COMPLETED',
   },
-  'in progress': { color: '#35CB5D', icon: 'icn_ca', text: 'IN PROGRESS' },
-  started: { color: '#B39712', icon: 'icn_self_itr', text: 'STARTED' },
+  'in progress': { color: '#F16FA0', text: 'IN PROGRESS' },
+  started: { color: '#B39712', text: 'STARTED' },
   refunded: {
-    color: '#4F2DA7',
-    icon: 'icn_self_itr',
-    text: 'COMPLETED',
+    color: '#7ED321',
+
+    text: 'ITR REFUNDED',
   },
 }
 
