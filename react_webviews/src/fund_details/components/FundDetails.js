@@ -29,7 +29,7 @@ import PennyVerificationPending from '../../dashboard/Invest/mini-components/Pen
 import InvestError from '../../dashboard/Invest/mini-components/InvestError';
 import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestReferralDialog';
 import { SkeltonRect } from '../../common/ui/Skelton';
-import { getBasePath } from '../../utils/functions';
+import { getBasePath, isMoneycontrolDesktopLayout } from '../../utils/functions';
 
 const styles = {
   root: {
@@ -664,7 +664,17 @@ const FundDetails = ({ classes, history }) => {
     setOpen(!open);
   };
 
-  const ContainerProps = !iframe || getConfig().isMobileDevice ?
+  const ContainerProps = isMoneycontrolDesktopLayout() ?
+  {
+    hideInPageTitle:true,
+    noPadding: true,
+    fullWidthButton: true,
+    handleClick:handleClick,
+    buttonTitle:'INVEST NOW',
+    skelton:isLoading,
+    classOverRide:'fd-iframe-container',
+  }
+  :
   {
     // title={fundDetails?.performance?.friendly_name},
     // hideInPageTitle={true},
@@ -694,16 +704,6 @@ const FundDetails = ({ classes, history }) => {
     showLoader:isApiRunning, // new container field
     // showLoader={isLoading || loading}, // old container field
     type: status === 'FUND_ADDED' && productType !== 'finity' ? "fundDetailsDualButton" : "",
-  }
-  :
-  {
-    hideInPageTitle:true,
-    noPadding: true,
-    fullWidthButton: true,
-    handleClick:handleClick,
-    buttonTitle:'INVEST NOW',
-    skelton:isLoading,
-    classOverRide:'fd-iframe-container',
   }
 
   return (

@@ -8,7 +8,7 @@ import { PATHNAME_MAPPER } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
-  pollProgress, updateQueryStringParameter, getFlow, isMoneycontrolDesktopLayout
+  pollProgress, updateQueryStringParameter, getFlow
 } from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -16,7 +16,7 @@ import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
-import { getBasePath, navigate as navigateFunc, popupWindowCenter } from '../../utils/functions'
+import { getBasePath, navigate as navigateFunc, popupWindowCenter, isMoneycontrolDesktopLayout } from '../../utils/functions'
 
 const config = getConfig();
 const isMobileDevice = config.isMobileDevice;

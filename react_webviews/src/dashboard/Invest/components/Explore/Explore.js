@@ -21,32 +21,35 @@ import isEmpty from 'lodash/isEmpty';
 import './Explore.scss';
 import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
+import { isMoneycontrolDesktopLayout } from '../../../../utils/functions'
 
-const iframe = isIframe();
-const isMobileDevice = getConfig().isMobileDevice;
+const config = getConfig();
+const iframe = config.isIframe;
+const isMobileDevice = config.isMobileDevice;
+const partnerCode = config.code;
+const moneycontrolDesktopLayout = isMoneycontrolDesktopLayout();
 export const exploreMFMappings = [
   {
     title: 'Equity',
     description: 'Invest in large, mid and small-sized companies',
-    src: iframe && !isMobileDevice ? equity_icon : diy_equity_icon,
+    src: moneycontrolDesktopLayout ? equity_icon : diy_equity_icon,
   },
   {
     title: 'Debt',
     description: 'Stable returns with bonds and securities',
-    src: iframe && !isMobileDevice ? debt_icon : diy_debt_icon,
+    src: moneycontrolDesktopLayout ? debt_icon : diy_debt_icon,
   },
   {
     title: 'Hybrid',
     description: 'Perfect balance of equity and debt',
-    src: iframe && !isMobileDevice ? hybrid_icon : diy_hybrid_icon,
+    src: moneycontrolDesktopLayout ? hybrid_icon : diy_hybrid_icon,
   },
   {
     title: 'Goal Oriented',
     description: 'Align investments with your life goals',
-    src: iframe && !isMobileDevice ? goal_icon : diy_goal_icon,
+    src: moneycontrolDesktopLayout ? goal_icon : diy_goal_icon,
   },
 ]
-const partnerCode = getConfig().partner_code;
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
   useEffect(() => {
@@ -105,7 +108,7 @@ const InvestExplore = (props) => {
       data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
-      title={iframe && !isMobileDevice ? "" : "Explore All Mutual Funds"}
+      title={moneycontrolDesktopLayout ? "" : "Explore All Mutual Funds"}
       classOverRideContainer="pr-container"
       hidePageTitle={iframe && isMobileDevice}
       handleClick={goNext}

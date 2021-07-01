@@ -15,11 +15,11 @@ import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
+import { isMoneycontrolDesktopLayout } from "../../utils/functions";
 
-
+const config = getConfig();
+const productName = config.productName;
 const Report = (props) => {
-  const config = getConfig();
-  const productName = config.productName;
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -31,7 +31,6 @@ const Report = (props) => {
   const [dlFlow, setDlFlow] = useState(false);
   const appText = "Your application is submitted.";
   const goBackPage = props.location.state?.goBack || "";
-  const iframe = isIframe();
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
@@ -148,7 +147,7 @@ const Report = (props) => {
     } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
-    if (getConfig().Web) {
+    if (config.Web) {
       navigate(PATHNAME_MAPPER.invest);
     } else {
       if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
@@ -180,7 +179,7 @@ const Report = (props) => {
         window.callbackWeb.sendEvent(_event);
       }
 
-      if (!getConfig().isIframe) {
+      if (!config.isIframe) {
         navigate(PATHNAME_MAPPER.reports);
       }
     } else {
@@ -202,7 +201,7 @@ const Report = (props) => {
         window.callbackWeb.sendEvent(_event);
       }
 
-      if (getConfig().Web) {
+      if (config.Web) {
         navigate(PATHNAME_MAPPER.invest);
       } else {
         if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
@@ -405,7 +404,7 @@ const Report = (props) => {
       <div className="kyc-report">
         <main data-aid='kyc-report'>
           {
-            (!iframe || config.isMobileDevice) &&
+            (!isMoneycontrolDesktopLayout()) &&
               <Imgc
                 src={require(`assets/${productName}/congratulations_illustration.svg`)}
                 alt="img"

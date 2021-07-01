@@ -354,16 +354,18 @@ const Summary = (props) => {
                       }
                     />
                   )}
-                  <SummaryCard
-                    dataAid='track-my-goals'
-                    goNext={showGoals}
-                    icon={`goalwise.${imageMapper[productName]}`}
-                    title="Track my goals"
-                    subtitle="View Goal Wise Investments"
-                    iconClassName={
-                      productName === "finity" && "reports-finity-icon"
-                    }
-                  />
+                  {data.showTrackGoals && (
+                    <SummaryCard
+                      dataAid="track-my-goals"
+                      goNext={showGoals}
+                      icon={`goalwise.${imageMapper[productName]}`}
+                      title="Track my goals"
+                      subtitle="View Goal Wise Investments"
+                      iconClassName={
+                        productName === "finity" && "reports-finity-icon"
+                      }
+                    />
+                  )}
                   {data.showPendingPurchase && (
                     <SummaryCard
                       dataAid='pending-purchase'

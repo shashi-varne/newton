@@ -30,13 +30,8 @@ const isMobileDevice = config.isMobileDevice;
 const partnerLogo = config.logo;
 const isWeb = config.Web;
 const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
-const backButtonColor = !isWeb ? config.styles?.backButtonColor : '';
+const backButtonColor = (!isWeb || config.isIframe) ? config.styles?.backButtonColor : '';
 const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
-console.log("sdk check in header ", config.isSdk);
-console.log("web check in header ", isWeb);
-console.log("app check in header ", config.app);
-console.log("platform check in header", config.platform);
-console.log("user agent in header", navigator.userAgent);
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
@@ -157,7 +152,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                 src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
               />
               }
-              {isMobileDevice && isWeb &&
+              {isMobileDevice && isWeb && !config.isIframe &&
                 <div className='mobile-navbar-menu'>
                   <IconButton onClick={handleMobileViewDrawer}>
                     <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (noBackIcon ? 'white' : getConfig().styles.primaryColor) : 'white'}}/>

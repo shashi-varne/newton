@@ -6,6 +6,7 @@ import { resetRiskProfileJourney } from "../../functions";
 import "./PaymentCallback.scss";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { storageService } from "../../../../utils/validators";
+import { isMoneycontrolDesktopLayout } from "../../../../utils/functions";
 
 const config = getConfig();
 const PaymentCallback = (props) => {
@@ -61,7 +62,11 @@ const PaymentCallback = (props) => {
     } else if (config.isIframe) {
       window.callbackWeb.sendEvent(_event);
     }
-    navigate("/reports");
+    if(config.code === "moneycontrol") {
+      navigate("/");
+    } else {
+      navigate("/reports");
+    }
   };
 
   const goBack = () => {
@@ -88,7 +93,7 @@ const PaymentCallback = (props) => {
       <section className="invest-payment-callback" data-aid='invest-payment-callback'>
         {!paymentError && (
           <div className="content" data-aid='payment-error'>
-            {(!config.isIframe || config.isMobileDevice) && (
+            {!isMoneycontrolDesktopLayout() && (
               <Imgc
                 src={require(`assets/check_icon.png`)}
                 alt=""

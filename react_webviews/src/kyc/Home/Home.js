@@ -8,12 +8,11 @@ import toast from "../../common/ui/Toast";
 import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, isMoneycontrolDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import internalStorage from './InternalStorage';
 import isEmpty from 'lodash/isEmpty';
-import { isMoneycontrolDesktopLayout } from "../common/functions";
 
 const config = getConfig();
 const showPageDialog = isMoneycontrolDesktopLayout();

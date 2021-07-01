@@ -8,16 +8,14 @@ import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import "./Digilocker.scss";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
-import { popupWindowCenter } from "../../utils/functions";
+import { isMoneycontrolDesktopLayout, popupWindowCenter } from "../../utils/functions";
 
 const config = getConfig();
-const iframe = config.isIframe;
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isBackDialogOpen, setBackDialogOpen] = useState(false);
   const navigate = navigateFunc.bind(props);
-  const isMobileDevice = config.isMobileDevice;
 
   const close = () => {
     setOpen(false);
@@ -112,7 +110,7 @@ const Failed = (props) => {
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         {
-          (!iframe || isMobileDevice) &&
+          !isMoneycontrolDesktopLayout() &&
           <img
             className="digi-image"
             alt=""

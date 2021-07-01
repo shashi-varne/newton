@@ -21,14 +21,16 @@ import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
 import { checkAfterRedirection, backButtonHandler } from "utils/functions";
 import { isFunction } from 'lodash';
+import { isMoneycontrolDesktopLayout } from '../../utils/functions';
 
 let start_time = '';
-const iframe = isIframe();
-const isMobileDevice = getConfig().isMobileDevice;
-
+const config = getConfig();
+const iframe = config.isIframe;
+const isMoneycontrol = config.code === "moneycontrol";
+const isBfdl = config.code === "bfdlmobile";
+const moneycontrolDesktopLayout = isMoneycontrolDesktopLayout();
 export function didMount() {
     start_time = new Date();
-    const config = getConfig();
 
     this.getHeightFromTop = getHeightFromTop.bind(this);
     this.onScroll = onScroll.bind(this);
@@ -58,7 +60,7 @@ export function didMount() {
         force_show_inpage_title: true,
         inPageTitle: true
     }, () => {
-        if(!iframe || isMobileDevice){
+        if(!moneycontrolDesktopLayout){
             this.onScroll();
         }
     })
@@ -98,7 +100,7 @@ export function didMount() {
             that.historyGoBack();
         }
     });
-    if(!iframe || isMobileDevice){   
+    if(!moneycontrolDesktopLayout){   
         window.addEventListener("scroll", this.onScroll, true);
         this.check_hide_header_title();
     }
@@ -109,7 +111,7 @@ export function headerGoBack() {
 }
 
 function addContainerClass (props_base){
-    const containerClass = !iframe || isMobileDevice ? 'ContainerWrapper' : 'iframeContainerWrapper';
+    const containerClass = moneycontrolDesktopLayout ? 'iframeContainerWrapper' : (isBfdl && iframe) ? 'bfdlContainerWrapper' : 'ContainerWrapper'
     return `${containerClass} ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
 }
 
@@ -153,7 +155,7 @@ export function commonRender(props_base) {
             <div className={this.addContainerClass(props_base)} data-aid={`${this.props['data-aid']}-parent-container`}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && !iframe  && !this.props.loaderWithData && <Header
+                && !this.props.showLoaderModal && !isMoneycontrol  && !this.props.loaderWithData && <Header
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
@@ -185,7 +187,7 @@ export function commonRender(props_base) {
                 />
                 }
                 {
-                    iframe &&
+                    iframe && isMoneycontrol &&
                     <IframeHeader
                         disableBack={this.props.disableBack}
                         type={getConfig().productName}
@@ -229,7 +231,7 @@ export function commonRender(props_base) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`${!iframe || isMobileDevice ? 'Container' : 'IframeContainer'}  ${this.props.background || ''} 
+                    className={`${moneycontrolDesktopLayout ? 'IframeContainer' : 'Container'}  ${this.props.background || ''} 
                     ${props_base && props_base.classOverRideContainer ? props_base.classOverRideContainer : ''} 
                     ${this.props.classOverRideContainer || '' } 
                     ${this.props.noPadding ? "no-padding" : ""}
@@ -242,7 +244,7 @@ export function commonRender(props_base) {
                         {this.props.children}
                     </div>
                     {
-                        this.props.iframeRightContent &&  iframe && !isMobileDevice &&
+                        this.props.iframeRightContent && moneycontrolDesktopLayout &&
                         <div className='iframe-right-content'>
                             <img src={this.props.iframeRightContent} alt="right_img" />
                         </div>
@@ -296,7 +298,7 @@ export function commonRender(props_base) {
 
 export function unmount() {
     window.callbackWeb.remove_listener({});
-    if(!iframe || isMobileDevice){
+    if(!moneycontrolDesktopLayout){
         window.removeEventListener("scroll", this.onScroll, false);
     }
 
@@ -334,7 +336,7 @@ export function check_hide_header_title() {
 }
 
 export function getHeightFromTop() {
-    const Container = !iframe || isMobileDevice ? 'Container' : 'IframeContainer';
+    const Container = moneycontrolDesktopLayout ? 'IframeContainer' : 'Container'
     var el = document.getElementsByClassName(Container)[0];
     if(!el) return;
     var height = el.getBoundingClientRect().top;
