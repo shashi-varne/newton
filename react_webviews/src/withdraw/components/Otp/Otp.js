@@ -3,7 +3,7 @@ import Container from '../../common/Container'
 import OtpDefault from 'common/ui/otp'
 import { navigate as navigateFunc } from 'utils/functions'
 import toast from 'common/ui/Toast'
-import { isEmpty } from '../../../utils/validators'
+import { isEmpty, validateNumber } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import './Otp.scss';
 import { nativeCallback } from '../../../utils/native_callback'
@@ -119,6 +119,7 @@ const Otp = (props) => {
   }
 
   const handleOtp = (otp) => {
+    if(otp && !validateNumber(otp)) return;
     setState((state) => {
       return {
         ...state,

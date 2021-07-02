@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Input from 'common/ui/Input'
 import Container from '../../common/Container'
-import { isEmpty } from '../../../utils/validators'
+import { isEmpty, validateNumber } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import toast from 'common/ui/Toast'
 import Button from 'common/ui/Button'
@@ -29,7 +29,7 @@ const OtpSwitch = (props) => {
       setTouched(true)
     }
     const value = event.target?.value || "";
-    if(value.length > 4) {
+    if(value.length > 4 || (value && !validateNumber(value))) {
       return;
     }
     setOtp(value)
@@ -103,7 +103,6 @@ const OtpSwitch = (props) => {
         )
       }
     } catch (err) {
-      toast(err.message)
       if(stateParams.type === "instaredeem") {
         navigate(
           '/withdraw/otp/failed',
