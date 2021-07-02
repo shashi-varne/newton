@@ -26,7 +26,6 @@ export async function proceedInvestment(data) {
     history,
     handleApiRunning,
     handleDialogStates,
-    handleIsRedirectToPayment,
   } = data;
 
   let isKycNeeded = false;
@@ -95,9 +94,6 @@ export async function proceedInvestment(data) {
           handleApiRunning(false);
         }
       } else {
-        if (isFunction(handleIsRedirectToPayment)) {
-          handleIsRedirectToPayment(false);
-        }
         let errorMessage = result.error || result.message || "Error";
         storageService().setObject("is_debit_enabled", result.is_debit_enabled);
         switch (status) {

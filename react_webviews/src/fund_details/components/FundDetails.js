@@ -670,7 +670,7 @@ const FundDetails = ({ classes, history }) => {
     noPadding: true,
     fullWidthButton: true,
     handleClick:handleClick,
-    buttonTitle:'INVEST NOW',
+    buttonTitle: type === "diy" ? 'INVEST NOW' : "OK",
     skelton:isLoading,
     classOverRide:'fd-iframe-container',
   }
