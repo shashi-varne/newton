@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { getConfig } from 'utils/functions'
-
 import './FeatureListItem.scss'
 
 function FeatureListItem({ classes, imgSrc, bgImgSrc, title, subtitle }) {
@@ -9,7 +7,6 @@ function FeatureListItem({ classes, imgSrc, bgImgSrc, title, subtitle }) {
     ? `flex align-start ${classes?.container}`
     : `flex align-start`
 
-  const productName = getConfig().productName
   
   return (
     <div className={containerClasses}>

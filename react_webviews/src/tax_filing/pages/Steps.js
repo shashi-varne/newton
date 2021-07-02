@@ -1,6 +1,6 @@
 import './Steps.scss'
 
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVJourneyCard from 'common/ui/WVCards/WVJourneyCard'
@@ -37,7 +37,7 @@ function Steps(props) {
 
   if (!type || !summary) {
     navigate('/tax-filing', {}, false)
-    return ''
+    return
   }
 
   const closeError = () => {
@@ -101,6 +101,7 @@ function Steps(props) {
   const handleClick = async () => {
     try {
       setShowLoader('button')
+
       const userDetails = await getITRUserDetails()
       if (
         !isEmpty(userDetails?.email) &&
@@ -123,6 +124,7 @@ function Steps(props) {
           { redirectionUrl: itr.sso_url },
           false
         )
+        return
       } else {
         sendEvents('next', { user: userDetails })
         navigate(
@@ -130,6 +132,7 @@ function Steps(props) {
           { user: userDetails, type },
           false
         )
+        return
       }
     } catch (err) {
       setShowLoader(false)

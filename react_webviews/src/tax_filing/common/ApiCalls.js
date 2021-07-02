@@ -45,11 +45,11 @@ export const createITRApplication = async (params = {}) => {
   if (res?.pfwresponse?.status_code === 200) {
     return res?.pfwresponse?.result
   } else {
-    throw new Error(
-      res?.pfwresponse?.result?.error ||
-        res?.pfwresponse?.result?.message ||
-        genericErrMsg
-    )
+    const messageToDisplay =
+      res?.pfwresponse.result?.message?.full_name ||
+      res?.pfwresponse.result?.message?.email ||
+      res?.pfwresponse?.result?.message?.full_name
+    throw new Error(messageToDisplay || genericErrMsg)
   }
 }
 

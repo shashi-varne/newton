@@ -4,7 +4,11 @@ import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import Input from 'common/ui/Input'
 import BottomSheet from 'common/ui/BottomSheet'
-import { validateEmail, validateNumber } from 'utils/validators'
+import {
+  validateEmail,
+  validateNumber,
+  validateAlphabets,
+} from 'utils/validators'
 
 import {
   navigate as navigateFunc,
@@ -74,7 +78,7 @@ function PersonalDetails(props) {
         setShowSkeltonLoader(false)
       }
     } catch (err) {
-      showError(true)
+      setShowError(true)
       setErrorData({
         type: 'crash',
         title2: err.message,
@@ -110,9 +114,10 @@ function PersonalDetails(props) {
         }
         break
       case 'name':
-        if (name.length === 0) {
+        if (!validateAlphabets(name)) {
           setErrors({ ...errors, name: true })
         }
+
         break
       default:
         break
@@ -141,7 +146,6 @@ function PersonalDetails(props) {
   const handleProceed = async () => {
     sendEvents('next', { screenName: 'Application Created' })
     navigate('/tax-filing/redirection', { redirectionUrl: itrSSOURL }, false)
-    return
   }
 
   const goBack = () => {
@@ -151,7 +155,6 @@ function PersonalDetails(props) {
   }
 
   const sendEvents = (userAction, data = {}) => {
-    const type = storageService().get(ITR_TYPE_KEY)
     const investment_status = summary?.kyc?.investment_status ? 'Y' : 'N'
     const kyc_status = summary?.kyc?.kyc_status ? 'Y' : 'N'
     let eventObj = {}
@@ -192,11 +195,11 @@ function PersonalDetails(props) {
     try {
       const type = storageService().get(ITR_TYPE_KEY)
       setShowLoader('button')
-      sendEvents('next', { screenName: 'Personal Details' })
+      sendEvents('next', { screenName: 'Personal Detail' })
       const itr = await createITRApplication({
         type,
         email,
-        name,
+        name: name.trim(),
         phone: parsePhoneNumber(mobileNumber),
       })
       setItrId(itr.itr_id)
@@ -240,16 +243,20 @@ function PersonalDetails(props) {
       <form className="block tax-filing-details">
         <Input
           type="text"
-          value={name}
+          value={name || ''}
           label="Name"
           onFocus={handleFocus('name')}
           onBlur={handleBlur('name')}
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(user?.name)}
+          disabled={!isEmpty(user?.name) && validateAlphabets(user?.name)}
           error={errors?.name}
-          helperText={errors?.name ? 'Please enter a valid name' : ''}
+          helperText={
+            errors?.name
+              ? 'Please enter a valid name without any special characters'
+              : ''
+          }
           required
         />
         <Input
@@ -267,18 +274,20 @@ function PersonalDetails(props) {
           required
         />
         <Input
-          type="text"
-          value={mobileNumber}
+          type="phone"
+          value={mobileNumber || ''}
           label="Mobile Number"
           onFocus={handleFocus('mobileNumber')}
           onBlur={handleBlur('mobileNumber')}
           onChange={handleChange('mobileNumber')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(user?.phone)&& validateNumber(user?.phone)}
+          disabled={!isEmpty(user?.phone) && validateNumber(user?.phone)}
           error={errors?.mobileNumber}
           helperText={
-            errors?.mobileNumber ? 'Please enter a correct mobile number' : ''
+            errors?.mobileNumber
+              ? 'Please enter a correct 10 digit mobile number'
+              : ''
           }
           required
         />
