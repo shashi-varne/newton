@@ -42,9 +42,9 @@ export async function initialize() {
   const user = storageService().getObject("user") || {};
   const screenNames = ["nps_info", "nps_amount"]
   if(config.isIframe && user.nps_investment && screenNames.includes(this.state.screen_name)) {
-    if (user.kyc_registration_v2 == 'init') {
+    if (user.kyc_registration_v2 === 'init') {
       this.navigate("/kyc/home")
-    } else if (user.kyc_registration_v2 == 'incomplete') {
+    } else if (user.kyc_registration_v2 === 'incomplete') {
       this.navigate("/kyc/journey");
     } else if (storageService().get('nps_additional_details_required')) {
       this.navigate("/nps/identity");

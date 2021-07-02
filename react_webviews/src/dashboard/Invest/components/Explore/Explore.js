@@ -21,33 +21,33 @@ import isEmpty from 'lodash/isEmpty';
 import './Explore.scss';
 import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
-import { isMoneycontrolDesktopLayout } from '../../../../utils/functions'
+import { isNewIframeDesktopLayout } from '../../../../utils/functions'
 
 const config = getConfig();
 const iframe = config.isIframe;
 const isMobileDevice = config.isMobileDevice;
 const partnerCode = config.code;
-const moneycontrolDesktopLayout = isMoneycontrolDesktopLayout();
+const newIframeDesktopLayout = isNewIframeDesktopLayout();
 export const exploreMFMappings = [
   {
     title: 'Equity',
     description: 'Invest in large, mid and small-sized companies',
-    src: moneycontrolDesktopLayout ? equity_icon : diy_equity_icon,
+    src: newIframeDesktopLayout ? equity_icon : diy_equity_icon,
   },
   {
     title: 'Debt',
     description: 'Stable returns with bonds and securities',
-    src: moneycontrolDesktopLayout ? debt_icon : diy_debt_icon,
+    src: newIframeDesktopLayout ? debt_icon : diy_debt_icon,
   },
   {
     title: 'Hybrid',
     description: 'Perfect balance of equity and debt',
-    src: moneycontrolDesktopLayout ? hybrid_icon : diy_hybrid_icon,
+    src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
   },
   {
     title: 'Goal Oriented',
     description: 'Align investments with your life goals',
-    src: moneycontrolDesktopLayout ? goal_icon : diy_goal_icon,
+    src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
   },
 ]
 const InvestExplore = (props) => {
@@ -114,7 +114,7 @@ const InvestExplore = (props) => {
       data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
-      title={moneycontrolDesktopLayout ? "" : "Explore All Mutual Funds"}
+      title={newIframeDesktopLayout ? "" : "Explore All Mutual Funds"}
       classOverRideContainer="pr-container"
       hidePageTitle={iframe && isMobileDevice}
       handleClick={goNext}

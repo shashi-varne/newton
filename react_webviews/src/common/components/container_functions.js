@@ -1,5 +1,5 @@
 
-import { getConfig, setHeights, listenPartnerEvents, isIframe } from 'utils/functions';
+import { getConfig, setHeights, listenPartnerEvents } from 'utils/functions';
 // import { nativeCallback } from "utils/native_callback";
 import Banner from 'common/ui/Banner';
 import UiSkelton from 'common/ui/Skelton';
@@ -21,14 +21,14 @@ import BottomSheet from '../../common/ui/BottomSheet';
 import { disableBodyTouch } from 'utils/validators';
 import { checkAfterRedirection, backButtonHandler } from "utils/functions";
 import { isFunction } from 'lodash';
-import { isMoneycontrolDesktopLayout } from '../../utils/functions';
+import { isNewIframeDesktopLayout } from '../../utils/functions';
 
 let start_time = '';
 const config = getConfig();
 const iframe = config.isIframe;
 const isMoneycontrol = config.code === "moneycontrol";
 const isBfdl = config.code === "bfdlmobile";
-const moneycontrolDesktopLayout = isMoneycontrolDesktopLayout();
+const newIframeDesktopLayout = isNewIframeDesktopLayout();
 export function didMount() {
     start_time = new Date();
 
@@ -60,7 +60,7 @@ export function didMount() {
         force_show_inpage_title: true,
         inPageTitle: true
     }, () => {
-        if(!moneycontrolDesktopLayout){
+        if(!newIframeDesktopLayout){
             this.onScroll();
         }
     })
@@ -100,7 +100,7 @@ export function didMount() {
             that.historyGoBack();
         }
     });
-    if(!moneycontrolDesktopLayout){   
+    if(!newIframeDesktopLayout){   
         window.addEventListener("scroll", this.onScroll, true);
         this.check_hide_header_title();
     }
@@ -111,7 +111,7 @@ export function headerGoBack() {
 }
 
 function addContainerClass (props_base){
-    const containerClass = moneycontrolDesktopLayout ? 'iframeContainerWrapper' : (isBfdl && iframe) ? 'bfdlContainerWrapper' : 'ContainerWrapper'
+    const containerClass = newIframeDesktopLayout ? 'iframeContainerWrapper' : (isBfdl && iframe) ? 'bfdlContainerWrapper' : 'ContainerWrapper'
     return `${containerClass} ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
 }
 
@@ -231,7 +231,7 @@ export function commonRender(props_base) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`${moneycontrolDesktopLayout ? 'IframeContainer' : 'Container'}  ${this.props.background || ''} 
+                    className={`${newIframeDesktopLayout ? 'IframeContainer' : 'Container'}  ${this.props.background || ''} 
                     ${props_base && props_base.classOverRideContainer ? props_base.classOverRideContainer : ''} 
                     ${this.props.classOverRideContainer || '' } 
                     ${this.props.noPadding ? "no-padding" : ""}
@@ -244,7 +244,7 @@ export function commonRender(props_base) {
                         {this.props.children}
                     </div>
                     {
-                        this.props.iframeRightContent && moneycontrolDesktopLayout &&
+                        this.props.iframeRightContent && newIframeDesktopLayout &&
                         <div className='iframe-right-content'>
                             <img src={this.props.iframeRightContent} alt="right_img" />
                         </div>
@@ -298,7 +298,7 @@ export function commonRender(props_base) {
 
 export function unmount() {
     window.callbackWeb.remove_listener({});
-    if(!moneycontrolDesktopLayout){
+    if(!newIframeDesktopLayout){
         window.removeEventListener("scroll", this.onScroll, false);
     }
 
@@ -336,7 +336,7 @@ export function check_hide_header_title() {
 }
 
 export function getHeightFromTop() {
-    const Container = moneycontrolDesktopLayout ? 'IframeContainer' : 'Container'
+    const Container = newIframeDesktopLayout ? 'IframeContainer' : 'Container'
     var el = document.getElementsByClassName(Container)[0];
     if(!el) return;
     var height = el.getBoundingClientRect().top;

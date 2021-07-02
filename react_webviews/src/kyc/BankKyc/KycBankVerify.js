@@ -16,9 +16,9 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { getConfig } from "utils/functions";
 import internalStorage from '../Home/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
-import { isMoneycontrolDesktopLayout } from "../../utils/functions";
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 
-const showPageDialog = isMoneycontrolDesktopLayout();
+const showPageDialog = isNewIframeDesktopLayout();
 const productName = getConfig().productName;
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);

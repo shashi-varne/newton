@@ -8,7 +8,7 @@ import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import "./Digilocker.scss";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
-import { isMoneycontrolDesktopLayout, popupWindowCenter } from "../../utils/functions";
+import { isNewIframeDesktopLayout, popupWindowCenter } from "../../utils/functions";
 
 const config = getConfig();
 const Failed = (props) => {
@@ -110,7 +110,7 @@ const Failed = (props) => {
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         {
-          !isMoneycontrolDesktopLayout() &&
+          !isNewIframeDesktopLayout() &&
           <img
             className="digi-image"
             alt=""

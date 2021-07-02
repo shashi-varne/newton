@@ -8,9 +8,9 @@ import { isEmpty, storageService } from "utils/validators";
 import { getCampaignBySection, initData } from "../../../../kyc/services";
 import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
-import { isMoneycontrolDesktopLayout } from "../../../../utils/functions";
+import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 
-const hideImage = isMoneycontrolDesktopLayout();
+const hideImage = isNewIframeDesktopLayout();
 const SipPaymentCallback = (props) => {
   const navigate = navigateFunc.bind(props);
   const params = props.match.params || {};

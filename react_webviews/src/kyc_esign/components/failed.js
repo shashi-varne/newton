@@ -1,5 +1,5 @@
 import React from 'react'
-import { getConfig, isMoneycontrolDesktopLayout } from 'utils/functions'
+import { getConfig, isNewIframeDesktopLayout } from 'utils/functions'
 
 const productName = getConfig().productName;
 const Failed = () => {
@@ -7,7 +7,7 @@ const Failed = () => {
   return (
     <div className="nsdl-status" data-aid='nsdl-status'>
       {
-        !isMoneycontrolDesktopLayout() &&
+        !isNewIframeDesktopLayout() &&
           <img
             src={require(`assets/${productName}/ils_esign_failed.svg`)}
             style={{ width: '100%' }}

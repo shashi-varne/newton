@@ -22,11 +22,11 @@ import { isFunction } from '../../utils/validators';
 import './Style.scss';
 import UiSkelton from '../../common/ui/Skelton';
 import IframeHeader from 'common/components/Iframe/Header';
-import { isMoneycontrolDesktopLayout } from '../../utils/functions';
+import { isNewIframeDesktopLayout } from '../../utils/functions';
 const config = getConfig();
 const iframe = config.isIframe;
 const isMobileDevice = config.isMobileDevice;
-const moneycontrolDesktopLayout = isMoneycontrolDesktopLayout();
+const newIframeDesktopLayout = isNewIframeDesktopLayout();
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const x = React.useRef(true);
@@ -127,12 +127,12 @@ const Container = (props) => {
 
   return (
     <div
-      className={`${moneycontrolDesktopLayout ? 'iframeContainerWrapper' : (config.isIframe && config.code === "bfdlmobile") ? 'bfdlContainerWrapper' : 'ContainerWrapper'}   ${props.classOverRide}  ${
+      className={`${newIframeDesktopLayout ? 'iframeContainerWrapper' : (config.isIframe && config.code === "bfdlmobile") ? 'bfdlContainerWrapper' : 'ContainerWrapper'}   ${props.classOverRide}  ${
         config.productName !== 'fisdom' ? 'blue' : ''
       }`}
     >
       {/* Header Block */}
-      {!props.noHeader && !getConfig().hide_header && !moneycontrolDesktopLayout ?(
+      {!props.noHeader && !getConfig().hide_header && !newIframeDesktopLayout ?(
         <Header
           disableBack={props.disableBack}
           title={props.title}
@@ -179,7 +179,7 @@ const Container = (props) => {
 
       {/* Below Header Block */}
       {
-        (!moneycontrolDesktopLayout || isMobileDevice)&&
+        (!newIframeDesktopLayout || isMobileDevice)&&
         <div id='HeaderHeight' style={{ top: 56 }}>
         {/* Loader Block */}
         {/* {renderPageLoader()} */}

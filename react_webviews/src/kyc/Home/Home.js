@@ -8,14 +8,14 @@ import toast from "../../common/ui/Toast";
 import ResidentDialog from "../mini-components/residentDialog";
 import Alert from "../mini-components/Alert";
 import AccountMerge from "../mini-components/AccountMerge";
-import { getConfig, isMoneycontrolDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
 import internalStorage from './InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
 const config = getConfig();
-const showPageDialog = isMoneycontrolDesktopLayout();
+const showPageDialog = isNewIframeDesktopLayout();
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";

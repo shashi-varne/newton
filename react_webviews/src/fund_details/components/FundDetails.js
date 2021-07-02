@@ -29,7 +29,7 @@ import PennyVerificationPending from '../../dashboard/Invest/mini-components/Pen
 import InvestError from '../../dashboard/Invest/mini-components/InvestError';
 import InvestReferralDialog from '../../dashboard/Invest/mini-components/InvestReferralDialog';
 import { SkeltonRect } from '../../common/ui/Skelton';
-import { getBasePath, isMoneycontrolDesktopLayout } from '../../utils/functions';
+import { getBasePath, isNewIframeDesktopLayout } from '../../utils/functions';
 
 const styles = {
   root: {
@@ -664,7 +664,7 @@ const FundDetails = ({ classes, history }) => {
     setOpen(!open);
   };
 
-  const ContainerProps = isMoneycontrolDesktopLayout() ?
+  const ContainerProps = isNewIframeDesktopLayout() ?
   {
     hideInPageTitle:true,
     noPadding: true,

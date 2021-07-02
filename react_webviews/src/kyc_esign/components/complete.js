@@ -1,7 +1,7 @@
 import React from "react";
-import {getConfig, isMoneycontrolDesktopLayout } from "../../utils/functions";
+import {getConfig, isNewIframeDesktopLayout } from "../../utils/functions";
 
-const hideImage = isMoneycontrolDesktopLayout()
+const hideImage = isNewIframeDesktopLayout()
 const Complete = ({ navigateToReports, dl_flow, show_note }) => {
   const productName = getConfig().productName;
 

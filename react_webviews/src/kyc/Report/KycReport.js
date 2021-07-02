@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { Imgc } from "common/ui/Imgc";
-import { getConfig, isIframe } from "utils/functions";
+import { getConfig } from "utils/functions";
 import {
   PATHNAME_MAPPER,
   DOCUMENTS_MAPPER,
@@ -15,7 +15,7 @@ import { storageService, isEmpty } from "../../utils/validators";
 import { SkeltonRect } from "../../common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
-import { isMoneycontrolDesktopLayout } from "../../utils/functions";
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 
 const config = getConfig();
 const productName = config.productName;
@@ -404,7 +404,7 @@ const Report = (props) => {
       <div className="kyc-report">
         <main data-aid='kyc-report'>
           {
-            (!isMoneycontrolDesktopLayout()) &&
+            (!isNewIframeDesktopLayout()) &&
               <Imgc
                 src={require(`assets/${productName}/congratulations_illustration.svg`)}
                 alt="img"

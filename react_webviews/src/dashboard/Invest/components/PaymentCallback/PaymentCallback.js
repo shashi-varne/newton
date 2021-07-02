@@ -6,7 +6,7 @@ import { resetRiskProfileJourney } from "../../functions";
 import "./PaymentCallback.scss";
 import useUserKycHook from "../../../../kyc/common/hooks/userKycHook";
 import { storageService } from "../../../../utils/validators";
-import { isMoneycontrolDesktopLayout } from "../../../../utils/functions";
+import { isNewIframeDesktopLayout } from "../../../../utils/functions";
 
 const config = getConfig();
 const PaymentCallback = (props) => {
@@ -93,7 +93,7 @@ const PaymentCallback = (props) => {
       <section className="invest-payment-callback" data-aid='invest-payment-callback'>
         {!paymentError && (
           <div className="content" data-aid='payment-error'>
-            {!isMoneycontrolDesktopLayout() && (
+            {!isNewIframeDesktopLayout() && (
               <Imgc
                 src={require(`assets/check_icon.png`)}
                 alt=""

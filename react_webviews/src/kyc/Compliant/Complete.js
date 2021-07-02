@@ -1,12 +1,12 @@
 import React from "react";
 import Container from "../common/Container";
-import { getConfig, navigate as navigateFunc, isIframe } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Alert from "../mini-components/Alert";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { storageService } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
-import { isMoneycontrolDesktopLayout } from "../../utils/functions";
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 
 const config = getConfig();
 const productName = config.productName;
@@ -52,7 +52,7 @@ const Complete = (props) => {
       <div className="kyc-compliant-complete">
         <header data-aid='kyc-header'>
           {
-            !isMoneycontrolDesktopLayout() &&
+            !isNewIframeDesktopLayout() &&
             <img
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""

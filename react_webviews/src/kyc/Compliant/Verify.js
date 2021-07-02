@@ -6,7 +6,7 @@ import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
-import { isMoneycontrolDesktopLayout } from "../../utils/functions";
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 const config = getConfig();
 const productName = config.productName;
 const Verify = (props) => {
@@ -69,7 +69,7 @@ const Verify = (props) => {
     >
       <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete'>
         <header data-aid='kyc-compliant-verify-header'>
-          {!isMoneycontrolDesktopLayout() && (
+          {!isNewIframeDesktopLayout() && (
             <img
               src={require(`assets/${productName}/ic_process_done.svg`)}
               alt=""

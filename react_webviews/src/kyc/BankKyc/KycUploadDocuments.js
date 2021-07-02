@@ -7,7 +7,7 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { getFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getBase64, getConfig, isMoneycontrolDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
+import { getBase64, getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import InternalStorage from "../Home/InternalStorage";
@@ -158,7 +158,7 @@ const KycUploadDocuments = (props) => {
       );
       if(!isEmpty(result))
         updateKyc(result.kyc)
-      if(isMoneycontrolDesktopLayout()) {
+      if(isNewIframeDesktopLayout()) {
         bankUploadStatus();
       } else {
         setShowPendingModal(true);

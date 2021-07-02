@@ -420,10 +420,10 @@ export function manageDialog(id, display, aboutScroll) {
 }
 
 export function setHeights(data) {
-  const moneycontrolDesktopLayout = isMoneycontrolDesktopLayout();
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
   const config = getConfig();
-  const headerClass = moneycontrolDesktopLayout ? 'IframeHeader' : 'Header';
-  const containerClass = moneycontrolDesktopLayout ? 'iframeContainerWrapper' : config.isIframe && config.code === "bfdlmobile" ? 'bfdlContainerWrapper' : 'ContainerWrapper'
+  const headerClass = newIframeDesktopLayout ? 'IframeHeader' : 'Header';
+  const containerClass = newIframeDesktopLayout ? 'iframeContainerWrapper' : config.isIframe && config.code === "bfdlmobile" ? 'bfdlContainerWrapper' : 'ContainerWrapper'
   let head =
     document.getElementsByClassName(headerClass) && document.getElementsByClassName(headerClass)[0]
       ? document.getElementsByClassName(headerClass)[0].offsetHeight
@@ -595,7 +595,7 @@ export const popupWindowCenter = (w, h, url) => {
   );
 }
 
-export const isMoneycontrolDesktopLayout = () => {
+export const isNewIframeDesktopLayout = () => {
   const config = getConfig();
   return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
 }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { formatAmountInr } from 'utils/validators';
-import RatingStar from '../../../fund_details/common/RatingStar';
 import { navigate as navigateFunc } from 'utils/functions';
 import './mini-components.scss';
 
