@@ -22,7 +22,7 @@ import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
-import internalStorage from '../Home/InternalStorage';
+import internalStorage from '../common/InternalStorage';
 import { isNewIframeDesktopLayout } from "../../utils/functions";
 
 const KycBankDetails = (props) => {

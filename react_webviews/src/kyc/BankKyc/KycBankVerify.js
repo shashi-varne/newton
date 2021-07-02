@@ -14,7 +14,7 @@ import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { getConfig } from "utils/functions";
-import internalStorage from '../Home/InternalStorage';
+import internalStorage from '../common/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
 import { isNewIframeDesktopLayout } from "../../utils/functions";
 

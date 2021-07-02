@@ -11,7 +11,7 @@ import AccountMerge from "../mini-components/AccountMerge";
 import { getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
-import internalStorage from './InternalStorage';
+import internalStorage from '../common/InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
 const config = getConfig();

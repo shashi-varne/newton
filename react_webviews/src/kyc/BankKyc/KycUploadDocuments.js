@@ -10,7 +10,7 @@ import SVG from "react-inlinesvg";
 import { getBase64, getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
-import InternalStorage from "../Home/InternalStorage";
+import InternalStorage from "../common/InternalStorage";
 import "./KycUploadDocuments.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
