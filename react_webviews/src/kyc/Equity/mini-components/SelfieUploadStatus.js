@@ -25,7 +25,7 @@ const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick, kyc }) => {
   const data = uploadStatus[status] || {};
   const TRADING_ENABLED = isTradingEnabled(kyc);
   if (status === "success") {
-    if (!TRADING_ENABLED || (kyc?.kyc_status === "non-compliant" && kyc?.kyc_type === "manual")) {
+    if (!TRADING_ENABLED || (kyc?.kyc_status === "non-compliant" && kyc?.kyc_type === "manual" && !kyc?.equity_data.meta_data.trading_experience)) {
       data.subtitle = ""
     }
   }

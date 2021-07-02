@@ -54,6 +54,18 @@ const Selfie = (props) => {
     setIsTradingFlow(tradingFlow);
   }
 
+  const commonNavigation = () => {
+    if (!isDocSubmittedOrApproved("equity_income")) {
+      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+    } else {
+      if (areDocsPending) {
+        navigate(PATHNAME_MAPPER.documentVerification);
+      } else {
+        navigate(PATHNAME_MAPPER.kycEsign);
+      }
+    }
+  }
+
   const handleNavigation = () => {
     if (bottomSheetType === "failed") {
       setOpenBottomSheet(false);
@@ -61,17 +73,13 @@ const Selfie = (props) => {
       setFileToShow(null);
     } else {
       if (isTradingFlow && kyc?.kyc_type !== "manual") {
-        if (!isDocSubmittedOrApproved("equity_income")) {
-          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
-        } else {
-          if (areDocsPending) {
-            navigate(PATHNAME_MAPPER.documentVerification);
-          } else {
-            navigate(PATHNAME_MAPPER.kycEsign);
-          }
-        }
+       commonNavigation();
       } else {
-        navigate(PATHNAME_MAPPER.uploadProgress);
+        if (kyc?.kyc_type === "manual" && kyc?.equity_data.meta_data.trading_experience) {
+          commonNavigation();
+        } else {
+          navigate(PATHNAME_MAPPER.uploadProgress);
+        }
       }
     }
   }
