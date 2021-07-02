@@ -111,7 +111,6 @@ const SipPaymentCallback = (props) => {
         !isEmpty(campaign) &&
         campaign.notification_visual_data.target
       ) {
-        setIsApiRunning("button");
         campaign.notification_visual_data.target.forEach((target) => {
           if (
             (campaign.campaign.name === "auto_debit_campaign" ||
@@ -119,6 +118,7 @@ const SipPaymentCallback = (props) => {
               campaign.campaign.name === "indb_mandate_campaign") &&
             target.section === "in_flow"
           ) {
+            setIsApiRunning("page");
             let auto_debit_campaign_url = target.url;
             // eslint-disable-next-line
             auto_debit_campaign_url = `${auto_debit_campaign_url}${auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}&partner_code=${config.code}`)}`
@@ -128,13 +128,13 @@ const SipPaymentCallback = (props) => {
             campaign.campaign.name !== "enach_mandate_campaign" ||
             campaign.campaign.name !== "indb_mandate_campaign"
           ) {
+            setIsApiRunning("page");
             let url = campaign.notification_visual_data.target[0].url;
             // eslint-disable-next-line
             url = `${url}${url.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${basePath}/?is_secure=${storageService().get("is_secure")}&partner_code=${config.code}`)}`
             window.location.href = url;
           }
         });
-        setIsApiRunning(false);
       } else {
         navigate("/reports");
       }

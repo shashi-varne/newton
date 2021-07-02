@@ -209,12 +209,8 @@ const NRIAddressUpload = (props) => {
     return addressLine
   }
 
-  const addressProofKey = kyc?.address?.meta_data?.is_nri
-    ? 'passport'
-    : kyc?.address_doc_type
-  const addressProof = kyc?.address?.meta_data?.is_nri
-    ? 'Passport'
-    : DOCUMENTS_MAPPER[kyc?.address_doc_type]
+  const addressProofKey = kyc?.address_doc_type || "Passport";
+  const addressProof = DOCUMENTS_MAPPER[addressProofKey] || "Passport"
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )

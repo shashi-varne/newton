@@ -17,7 +17,7 @@ const IframeSearch = ({ value, handleChange }) => {
       />
       <span className='diy-iframe-search-icon'>
         <SVG
-          style={{ marginLeft: 'auto', width: 20, cursor: 'pointer' }}
+          style={{ marginLeft: 'auto', width: 20, cursor: 'pointer', verticalAlign: 'middle' }}
           preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=#979797')}
           src={searchIcon}
         />

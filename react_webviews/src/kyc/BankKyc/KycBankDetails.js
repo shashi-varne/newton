@@ -108,7 +108,7 @@ const KycBankDetails = (props) => {
     setName(kyc.pan.meta_data.name || "");
     let data = kyc.bank.meta_data || {};
     data.c_account_number = data.account_number;
-    if (data.user_rejection_attempts !== 0) {
+    if (data.user_rejection_attempts === 0) {
       if(isNewIframeDesktopLayout()) {
         handlePennyExhaust()
       } else {
