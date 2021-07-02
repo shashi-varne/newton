@@ -132,7 +132,7 @@ const Container = (props) => {
       }`}
     >
       {/* Header Block */}
-      {!props.noHeader && !getConfig().hide_header && !newIframeDesktopLayout ?(
+      {!props.noHeader && !getConfig().hide_header && config.code !== "moneycontrol" ?(
         <Header
           disableBack={props.disableBack}
           title={props.title}

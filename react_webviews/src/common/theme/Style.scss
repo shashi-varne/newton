@@ -311,8 +311,6 @@ body[data-device="web"] {
   }
   .IframeContainer{
     display: flex;
-    overflow: hidden;
-    overflow-y: auto;
     padding-bottom: 0px !important;
     .fadein-animation{
       margin-top: 20px;
