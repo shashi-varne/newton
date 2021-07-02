@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import WVCard from './WVCard'
+import WVCard from '../Card/WVCard'
 import { isFunction } from 'lodash'
 
 import './WVJourneyCard.scss'

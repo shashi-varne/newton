@@ -5,7 +5,7 @@ import WVTag from 'common/ui/Tag/WVTag'
 import Carousal from '../mini-components/Carousal'
 import WVMenuListDropdownItem from 'common/ui/MenuListDropdown/WVMenuListDropdownItem'
 import FeatureListItem from '../mini-components/FeatureListItem'
-import WVCard from 'common/ui/WVCards/WVCard'
+import WVCard from 'common/ui/Card/WVCard'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 
 import { nativeCallback } from 'utils/native_callback'
