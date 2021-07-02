@@ -117,7 +117,7 @@ const NRIAddressDetails2 = (props) => {
     if (value && name === "nri_pincode" && !validateNumber(value)) return;
     let formData = { ...form_data };
     formData[name] = value;
-    if (!value) {
+    if (!value && name !== "tin_number") {
       formData[`${name}_error`] = "This is required";
     } else formData[`${name}_error`] = "";
     setFormData({ ...formData });

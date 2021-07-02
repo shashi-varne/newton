@@ -543,7 +543,8 @@ const Journey = (props) => {
     var stageDetail = ''
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
-    var journeyStatus = getKycAppStatus(kyc).status || ''
+    var kycAppStatus = getKycAppStatus(kyc)
+    var journeyStatus = kycAppStatus.status || ''
     var dlCondition = isDigilockerFlow(kyc)
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
@@ -593,7 +594,7 @@ const Journey = (props) => {
       user.kyc_registration_v2 !== 'submitted' &&
       user.kyc_registration_v2 !== 'complete' &&
       fromState !== "/kyc/digilocker/failed" &&
-      journeyStatus !== "rejected"
+      !kycAppStatus?.rejectedItems 
     ) {
       if (
         !storageService().get('show_aadhaar') &&
