@@ -15,7 +15,7 @@ class GroupHealthPlanStarSumInsured extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            sum_assured_data: [300000, 400000, 500000, 1000000, 1500000, 2000000, 2500000],
+            sum_assured_data: [400000, 500000, 1000000, 1500000, 2000000, 2500000],
             next_screen: '',
             premiumAmt: null,
             selectedIndex: 0,
@@ -118,6 +118,7 @@ class GroupHealthPlanStarSumInsured extends Component {
        
         const { groupHealthPlanData } = this.state;
         let post_body = groupHealthPlanData.post_body;
+        let account_type = groupHealthPlanData.account_type;
 
         let allowed_post_body_keys = ['adults', 'children', 'member_details', 'plan_id', 'postal_code'];
         let body = {};
@@ -125,7 +126,15 @@ class GroupHealthPlanStarSumInsured extends Component {
         for(let key of allowed_post_body_keys){
             body[key] = post_body[key];
         }
-        body['si'] = this.state.sum_assured_data[index]; ;
+        body['si'] = this.state.sum_assured_data[index];
+
+        if(account_type === 'family' || account_type === 'self_family'){
+            var parents_total = groupHealthPlanData.star_parents_total;
+            var parents_in_law_total = groupHealthPlanData.star_parents_in_law_total;
+            body.parents = parents_total;
+            body.parents_in_law = parents_in_law_total;
+            body.adults = body.adults - (body.parents + body.parents_in_law)
+        }
         
         try{
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/star`, body);
@@ -179,6 +188,7 @@ class GroupHealthPlanStarSumInsured extends Component {
         groupHealthPlanData.post_body.sum_assured = this.state.sum_assured_data[this.state.selectedIndex];
         groupHealthPlanData.post_body.individual_si = this.state.sum_assured_data[this.state.selectedIndex];
         groupHealthPlanData.plan_selected_final = plan_selected_final;
+        groupHealthPlanData.sum_assured_screen.premium_details = plan_selected_final;
 
         Object.assign(groupHealthPlanData.post_body, {
             tenure: plan_selected_final.tenure,
