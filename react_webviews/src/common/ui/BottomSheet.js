@@ -44,7 +44,7 @@ class BottomSheetClass extends Component {
                             </div>
                             {(data.icon || data.src) &&
                                 <div className="t-right">
-                                    <Imgc className='top-right-image'
+                                    <Imgc className={`${this.props.iconClassName} top-right-image1`}
                                         src={data.src ? data.src : require(`assets/${data.icon}`)} alt="" />
                                 </div>}
 

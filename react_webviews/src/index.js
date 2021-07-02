@@ -1,9 +1,9 @@
 import './index.css';
 import './common/theme/Style.scss';
 import "./common/ui/style.scss";
-import 'idempotent-babel-polyfill';
 import "typeface-source-sans-pro";
 import "typeface-poppins";
+import 'idempotent-babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';

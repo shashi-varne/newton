@@ -1,10 +1,10 @@
 import "./commonStyles.scss";
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from '../common/Container'
 import { isEmpty } from '../../utils/validators'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
-import { checkDocsPending, isDocSubmittedOrApproved, isNotManualAndNriUser } from '../common/functions'
+import { checkDocsPending, isDocSubmittedOrApproved } from '../common/functions'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from 'utils/functions'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
@@ -215,38 +215,6 @@ const Selfie = (props) => {
     }
   }
 
-  const renderButton = useCallback(() => {
-    let buttonProps = {};
-    if (isWeb) {
-      buttonProps = Object.assign(buttonProps, {
-        showLoader: isCamLoading,
-        onClick: openLiveCamera
-      });
-    } else {
-      buttonProps = {
-        withPicker: true,
-        filePickerProps: {
-          nativePickerMethodName: 'open_camera',
-          fileName: 'selfie',
-          supportedFormats: SUPPORTED_IMAGE_TYPES,
-          onFileSelectComplete: onCaptureSuccess,
-          onFileSelectError: onCaptureFailure,
-        }
-      }
-      if (isNative) {
-        // To trigger HyperVerge's Live Camera in Native
-        buttonProps.filePickerProps.fileHandlerParams = { check_liveness: true };
-        buttonProps.filePickerProps.customClickHandler = onOpenCameraClick;
-      }
-    }
-
-    return (
-      <KycUploadContainer.Button {...buttonProps}>
-        {file ? "Retake" : "Open Camera"}
-      </KycUploadContainer.Button>
-    );
-  }, [isCamLoading, isWeb, isNative, file]);
-
   const closeConfirmBackDialog = () => {
     setGoBackModal(false);
   };
@@ -309,7 +277,6 @@ const Selfie = (props) => {
                 {file ? "Retake" : "Open Camera"}
               </KycUploadContainer.Button>
             }
-            {/* {renderButton()} */}
           </KycUploadContainer>
           <div className="kyc-selfie-intructions">
             <span id="kyc-si-text">How to take selfie?</span>
