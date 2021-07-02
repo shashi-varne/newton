@@ -28,6 +28,11 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
     )
   }
   const handleAddToCart = () => {
+    if(config.productName === "finity") {
+      storageService().setObject('diystore_fundInfo', props)
+      navigate("/diy/invest");
+      return;
+    }
     setCart((cart) => {
       const index = cart.findIndex(({ isin }) => props.isin === isin)
       if (index !== -1) {
@@ -67,7 +72,7 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
           classes={{
             button: "invest-explore-trending-button"
           }}
-          buttonTitle={addedToCart ? 'Added' : 'Add to Cart'}
+          buttonTitle={config.productName === "finity" ? "Invest" : addedToCart ? 'Added' : 'Add to Cart'}
         />
       </div>
     </div>
@@ -148,12 +153,16 @@ const FundType = (props) => {
       data-aid='fund-type-screen'
     >
       <section id="invest-explore-fund-type" data-aid='invest-explore-fund-type'>
-        {trendingFunds[type]?.length > 0 && <h6 className="heading top-title">Top trending {type} funds</h6>}
-        <div className="scroll">
-          {trendingFunds[type]?.map((fund, idx) => (
-            <TrendingCard key={idx} cart={cart} setCart={setCart} type={type} {...fund} parentProps={props} />
-          ))}
-        </div>
+        {config.code !== "moneycontrol" && (
+          <>
+            {trendingFunds[type]?.length > 0 && <h6 className="heading top-title">Top trending {type} funds</h6>}
+            <div className="scroll">
+            {trendingFunds[type]?.map((fund, idx) => (
+              <TrendingCard key={idx} cart={cart} setCart={setCart} type={type} {...fund} parentProps={props} />
+            ))}
+            </div>
+          </>
+        )}
         <section className="categories">
           <h6 className="heading">Categories</h6>
           <div className="categories-container">
