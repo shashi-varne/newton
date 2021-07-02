@@ -162,6 +162,10 @@
   display: inline-block;
 }
 
+.m-left-1x {
+  margin-left: var(--spacing)
+}
+
 .m-left-2x {
   margin-left: calc(var(--spacing) * 2);
 }

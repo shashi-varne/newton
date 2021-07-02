@@ -189,7 +189,7 @@ function Landing(props) {
                 alt="MY ITR"
                 className="block"
               />
-              <div className="m-left-2x heading3-medium text-white">MY ITR</div>
+              <div className="m-left-2x heading3-medium text-white">My ITR</div>
             </>
           </WVCard>
         )}
@@ -264,13 +264,13 @@ function Landing(props) {
 
 const CustomTitle = ({ title }) => {
   return (
-    <div className="flex align-center vertical-align-baseline">
+    <div className="flex vertical-align-baseline">
       <div className="heading3-medium">{title}</div>
       <WVTag
         variant="attention"
         label="free"
         dataAidSuffix="tax2win-free-tag"
-        classes={{ container: 'align-self-start m-left-2x' }}
+        classes={{ container: 'align-self-start m-left-1x' }}
       />
     </div>
   )

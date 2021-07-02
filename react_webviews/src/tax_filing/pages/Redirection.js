@@ -5,14 +5,12 @@ import { Redirect } from 'react-router-dom'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 import Container from '../common/Container'
 import { isEmpty } from 'lodash'
-import { navigate as navigateFunc } from '../common/functions'
 import { getConfig, getBasePath } from 'utils/functions'
 
 import { clearITRSessionStorage } from '../common/functions'
 import { nativeCallback } from 'utils/native_callback'
 
 function Redirection(props) {
-  const navigate = navigateFunc.bind(props)
   const redirectionUrl = props?.location?.params?.redirectionUrl
 
   if (isEmpty(redirectionUrl)) {
@@ -26,7 +24,7 @@ function Redirection(props) {
       />
     )
   }
-  
+
   useEffect(() => {
     const timerHandle = setTimeout(() => {
       clearITRSessionStorage()

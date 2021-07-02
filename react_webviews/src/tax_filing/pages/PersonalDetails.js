@@ -1,6 +1,7 @@
 import './PersonalDetails.scss'
 
 import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import Container from '../common/Container'
 import Input from 'common/ui/Input'
 import BottomSheet from 'common/ui/BottomSheet'
@@ -18,9 +19,18 @@ import {
 import { getConfig } from 'utils/functions'
 import { isEmpty } from 'lodash'
 
-import { createITRApplication, getITRUserDetails } from '../common/ApiCalls'
+import {
+  createITRApplication,
+  getITRList,
+  getITRUserDetails,
+} from '../common/ApiCalls'
 import { storageService } from '../../utils/validators'
-import { ITR_TYPE_KEY, USER_DETAILS, USER_SUMMARY_KEY } from '../constants'
+import {
+  ITR_APPLICATIONS_KEY,
+  ITR_TYPE_KEY,
+  USER_DETAILS,
+  USER_SUMMARY_KEY,
+} from '../constants'
 
 import { nativeCallback } from 'utils/native_callback'
 
@@ -36,13 +46,23 @@ function PersonalDetails(props) {
   const summary = storageService().getObject(USER_SUMMARY_KEY) || {}
 
   const defaultUser = props?.location?.params?.user || {}
+  const defaultITRList =
+    props?.location?.params?.itrList ||
+    storageService().getObject(ITR_APPLICATIONS_KEY)
 
   const type =
     props?.location?.params?.type || storageService().get(ITR_TYPE_KEY) || ''
 
   if (isEmpty(type)) {
-    navigate(`/tax-filing`, {}, false)
-    return
+    return (
+      <Redirect
+        to={{
+          ...props?.location,
+          pathname: '/tax-filing',
+          search: getConfig().searchParams,
+        }}
+      />
+    )
   }
 
   const [showLoader, setShowLoader] = useState(false)
@@ -52,6 +72,7 @@ function PersonalDetails(props) {
   const [errorData, setErrorData] = useState({})
 
   const [user, setUser] = useState(defaultUser)
+  const [itrList, setITRList] = useState(defaultITRList)
   const [name, setName] = useState(user?.name || '')
   const [email, setEmail] = useState(user?.email || '')
   const [mobileNumber, setMobileNumber] = useState(
@@ -62,19 +83,24 @@ function PersonalDetails(props) {
   const [itrSSOURL, setITRSSOURL] = useState('')
 
   useEffect(() => {
-    fetchUserSummary()
+    fetchUserDetails()
   }, [])
 
-  const fetchUserSummary = async () => {
+  const fetchUserDetails = async () => {
     try {
-      if (isEmpty(user)) {
+      if (isEmpty(user) || !itrList) {
         setShowSkeltonLoader(true)
-        const userDetails = await getITRUserDetails()
+        const [userDetails, itrListDetails] = await Promise.all([
+          getITRUserDetails(),
+          getITRList(),
+        ])
         setUser({ ...userDetails })
+        setITRList([...itrListDetails])
         setName(userDetails?.name)
         setEmail(userDetails?.email)
         setMobileNumber(parsePhoneNumber(userDetails?.phone))
         storageService().setObject(USER_DETAILS, userDetails)
+        storageService().setObject(ITR_APPLICATIONS_KEY, itrListDetails)
         setShowSkeltonLoader(false)
       }
     } catch (err) {
@@ -109,7 +135,7 @@ function PersonalDetails(props) {
         }
         break
       case 'mobileNumber':
-        if (!validateNumber(mobileNumber)) {
+        if (!validateNumber(mobileNumber) && mobileNumber.length !== 10) {
           setErrors({ ...errors, mobileNumber: true })
         }
         break
@@ -193,7 +219,6 @@ function PersonalDetails(props) {
 
   const handleClick = async () => {
     try {
-      const type = storageService().get(ITR_TYPE_KEY)
       setShowLoader('button')
       sendEvents('next', { screenName: 'Personal Detail' })
       const itr = await createITRApplication({
@@ -250,7 +275,7 @@ function PersonalDetails(props) {
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(user?.name) && validateAlphabets(user?.name)}
+          disabled={!isEmpty(user?.name) && itrList.length > 0}
           error={errors?.name}
           helperText={
             errors?.name
@@ -268,7 +293,10 @@ function PersonalDetails(props) {
           onChange={handleChange('email')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(user?.email) && validateEmail(user?.email)}
+          disabled={
+            !isEmpty(user?.email) &&
+            (itrList.length > 0 || user.auth_id === 'email')
+          }
           error={errors?.email}
           helperText={errors?.email ? 'Please enter a valid email address' : ''}
           required
@@ -282,7 +310,11 @@ function PersonalDetails(props) {
           onChange={handleChange('mobileNumber')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(user?.phone) && validateNumber(user?.phone)}
+          disabled={
+            !isEmpty(user?.phone) &&
+            (itrList.length > 0 || user.auth_id === 'mobile_number') &&
+            validateNumber(user?.phone)
+          }
           error={errors?.mobileNumber}
           helperText={
             errors?.mobileNumber
