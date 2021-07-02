@@ -105,13 +105,18 @@ body[data-device="web"] {
     background: #c4c4c4; 
   }
 
+  .diy-tab-container {
+    ::-webkit-scrollbar {
+      height: 5px;
+    }
+  }
+
   .ContainerWrapper, .bfdlContainerWrapper {
     max-width: var(--desktop-width);
     margin: 0 auto;
     padding-bottom: 3px;
     overflow: auto;
   }
-
 
   //////////// Iframe Css /////////////////
   .iframeContainerWrapper{

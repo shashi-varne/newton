@@ -4,9 +4,8 @@
   .withdraw-remark-title {
     padding: 20px;
     font-size: 17px;
-    color: black;
+    color: var(--dark);
     background: #f2f2f2;
-    font-weight: 500;
     line-height: 1.4;
   }
 }
@@ -17,6 +16,7 @@
     justify-content: flex-start;
     align-items: center;
     padding: 15px;
+    color: var(--default);
 
     svg {
       margin-right: 18px;

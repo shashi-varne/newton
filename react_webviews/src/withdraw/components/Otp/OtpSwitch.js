@@ -11,6 +11,7 @@ import './OtpSwitch.scss';
 import '../commonStyles.scss';
 import { nativeCallback } from '../../../utils/native_callback'
 import { getConfig } from '../../../utils/functions'
+import WVBottomSheet from '../../../common/ui/BottomSheet/WVBottomSheet'
 
 const config = getConfig();
 const OtpSwitch = (props) => {
@@ -20,6 +21,8 @@ const OtpSwitch = (props) => {
   const [otp, setOtp] = useState('')
   const [touched, setTouched] = useState(false)
   const [resendClicked, setResendClicked] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openPopup, setOpenPopup] = useState(false);
   
   const handleChange = (event) => {
     if (!touched) {
@@ -101,15 +104,20 @@ const OtpSwitch = (props) => {
       }
     } catch (err) {
       toast(err.message)
-      navigate(
-        '/withdraw/otp/failed',
-        {
-          state:{
-            type: stateParams?.type,
-            message: err.message,
+      if(stateParams.type === "instaredeem") {
+        navigate(
+          '/withdraw/otp/failed',
+          {
+            state:{
+              type: stateParams?.type,
+              message: err.message,
+            }
           }
-        }
-      )
+        )
+      } else {
+        setErrorMessage(err.message || "Something went wrong! Please try again later");
+        setOpenPopup(true);
+      }
     } finally {
       setIsApiRunning(false)
     }
@@ -174,7 +182,15 @@ const OtpSwitch = (props) => {
           }}
         />
         </footer>
-        
+        <WVBottomSheet
+          open={openPopup}
+          subtitle={errorMessage}
+          button1Props={{
+            title: "OK",
+            variant: "contained",
+            onClick: () => setOpenPopup(false)
+          }}
+        />
       </section>
     </Container>
   )
