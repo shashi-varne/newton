@@ -271,7 +271,7 @@ class FundList extends Component {
                         onApplyClicked={this.setSortFilter}
                         defaultSelectedTab={{ sort_value: "tracking_error", fund_option_value: "Growth" }}
                         withButton={true}
-                        shouldCloseFilterOnClick={true}
+                        closeFilterOnApply={true}
                     />
                 </div>
             </Container>

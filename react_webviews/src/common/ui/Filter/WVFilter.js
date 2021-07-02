@@ -49,7 +49,7 @@ const FilterContainer = ({ close, open, children, ...props }) => {
 }
 
 const WVFilter = ({
-  shouldCloseFilterOnClick,    // If shouldCloseFilterOnClick, is True, then on Click of apply/clear button we close the filter.
+  closeFilterOnApply,    // If closeFilterOnApply, is True, then on Click of apply/clear button we close the filter.
   openFilter,                 // Default condition needed to Open/Closer Filter From Parent.
   dataAidSuffix,             // for data-aid.
   onApplyClicked,           // Function CallBack From The Parent Which Sends the Filtered Data To the API.
@@ -75,13 +75,13 @@ const WVFilter = ({
 
   const applyFilters = () => {
     onApplyClicked(selectedFilters);
-    if(shouldCloseFilterOnClick) closeFilter();
+    if(closeFilterOnApply) closeFilter();
   }
 
   const reset = () => {
     setSelectedFilters(defaultSelectedTab || {});
     onApplyClicked(defaultSelectedTab || {});
-    if (shouldCloseFilterOnClick) {
+    if (closeFilterOnApply) {
       closeFilter()
     } else {
       setActiveTab(defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key);
