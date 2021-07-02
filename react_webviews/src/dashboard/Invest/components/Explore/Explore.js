@@ -13,7 +13,7 @@ import goal_icon from 'assets/finity/goal_icon.svg';
 import { navigate as navigateFunc } from "utils/functions";
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
-import { getConfig, isIframe } from "utils/functions";
+import { getConfig } from "utils/functions";
 
 import { getTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
@@ -58,6 +58,12 @@ const InvestExplore = (props) => {
     storageService().remove(CATEGORY)
     storageService().remove(SUBCATEGORY)
     fetchTrendingFunds()
+    if(iframe) {
+      const message = JSON.stringify({
+        type: "iframe_landing_page"
+      });
+      window.callbackWeb.sendEvent(message)
+    }
   }, [])
 
   const fetchTrendingFunds = async () => {

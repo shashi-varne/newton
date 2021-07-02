@@ -74,8 +74,8 @@ export async function proceedInvestment(data) {
           if (config.isIframe) {
             handleIframeInvest(pgLink, result, history, handleApiRunning);
           } else {
+            handleApiRunning("page");
             window.location.href = pgLink;
-            handleApiRunning(false);
           }
         } else {
           if (result.rta_enabled) {

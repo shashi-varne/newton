@@ -106,7 +106,7 @@ const Failed = (props) => {
       headerData={{goBack}}
       loaderData={{ loadingText: " " }}
       iframeRightContent={require(`assets/${productName}/digilocker_failed.svg`)}
-      showLoader={isApiRunning === "page"}
+      showLoader={isApiRunning === "page" ? isApiRunning : false}
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         {

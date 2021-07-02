@@ -49,6 +49,26 @@ export async function initialize() {
     await this.getSummary();
   }
   if (this.onload) this.onload();
+  if(this.props?.location?.state?.fromState === "/kyc/registration/success") {
+    const _event = {
+      event_name: "journey_details",
+      properties: {
+        journey: {
+          name: "kyc",
+          trigger: "cta",
+          journey_status: "complete",
+          next_journey: "reports"
+        }
+      }
+    };
+
+    // send event
+    if (!config.Web) {
+      window.callbackWeb.eventCallback(_event);
+    } else if (config.isIframe) {
+      window.callbackWeb.sendEvent(_event);
+    }
+  }
 }
 
 export async function getSummary() {
@@ -373,7 +393,7 @@ export function initilizeKyc() {
   this.setState({ bottom_sheet_dialog_data_premium });
   if (premium_onb_status && !isEmpty(bottom_sheet_dialog_data_premium)) {
     let banklist = storageService().getObject("banklist");
-    if (banklist && banklist.length) {
+    if ((banklist && banklist.length) || config.code === "moneycontrol") {
       return;
     } else {
       this.openPremiumOnboardBottomSheet(

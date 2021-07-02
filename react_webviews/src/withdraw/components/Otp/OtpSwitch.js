@@ -10,7 +10,9 @@ import { navigate as navigateFunc } from 'utils/functions'
 import './OtpSwitch.scss';
 import '../commonStyles.scss';
 import { nativeCallback } from '../../../utils/native_callback'
+import { getConfig } from '../../../utils/functions'
 
+const config = getConfig();
 const OtpSwitch = (props) => {
   const navigate = navigateFunc.bind(props)
   const stateParams = props?.location?.state
@@ -67,15 +69,36 @@ const OtpSwitch = (props) => {
       if (!isEmpty(stateParams?.verification_link) && !isEmpty(otp)) {
         result = await verify(stateParams?.verification_link, otp)
       }
-      navigate(
-        '/withdraw/otp/success',
-        {
-          state: {
-            type: stateParams?.type,
-            message: result?.message,
+
+      const _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "withdraw",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "mf",
+          },
+        },
+      };
+      // send event
+      if (!config.Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (config.isIframe) {
+        window.callbackWeb.sendEvent(_event);
+      }
+
+      if(!config.isIframe || config.code === "moneycontrol") {
+        navigate(
+          '/withdraw/otp/success',
+          {
+            state: {
+              type: stateParams?.type,
+              message: result?.message,
+            }
           }
-        }
-      )
+        )
+      }
     } catch (err) {
       toast(err.message)
       navigate(

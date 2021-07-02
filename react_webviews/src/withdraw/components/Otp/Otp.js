@@ -90,12 +90,14 @@ const Otp = (props) => {
         window.callbackWeb.sendEvent(_event);
       }
 
-      navigate("/withdraw/otp/success", {
-        state: {
-          type: stateParams?.type,
-          message: result?.message,
-        },
-      });
+      if(!config.isIframe || config.code === "moneycontrol") {
+        navigate("/withdraw/otp/success", {
+          state: {
+            type: stateParams?.type,
+            message: result?.message,
+          },
+        });
+      }
       } catch (err) {
         if(err.message.includes('wrong')){
         toast(err.message, 'error')

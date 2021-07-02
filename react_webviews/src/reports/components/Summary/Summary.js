@@ -213,7 +213,9 @@ const Summary = (props) => {
       window.callbackWeb.sendEvent(_event);
     }
 
-    navigate(getPathname.invest)
+    if(!config.isIframe || config.code === "moneycontrol") {
+      navigate(getPathname.invest)
+    }
   }
 
   return (
