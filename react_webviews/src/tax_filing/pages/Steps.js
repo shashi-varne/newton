@@ -179,7 +179,7 @@ function Steps(props) {
       ))}
       {type === 'eCA' && (
         <div className="m-top-4x">
-          <div className="heading2">Get Started</div>
+          <div className="heading2">Our Advantages</div>
           <div className="m-top-3x flex space-between">
             {taxFilingAdvantages.map(({ icon, stats, group }, idx) => (
               <Fragment key={idx}>
