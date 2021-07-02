@@ -3,6 +3,7 @@ import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 import Container from '../common/Container'
 import { isEmpty } from 'lodash'
 import { navigate as navigateFunc } from '../common/functions'
+import { getConfig, getBasePath } from 'utils/functions'
 
 import './Redirection.scss'
 import { clearITRSessionStorage } from '../common/functions'
@@ -12,13 +13,14 @@ function Redirection(props) {
   const navigate = navigateFunc.bind(props)
   const redirectionUrl = props?.location?.params?.redirectionUrl
 
-
   useEffect(() => {
     const timerHandle = setTimeout(() => {
       clearITRSessionStorage()
+      const backUrl = getBasePath() + '/tax-filing' + getConfig().searchParams
       nativeCallback({
         action: 'take_control',
         message: {
+          back_url: backUrl,
           back_text: 'You are almost there, do you really want to go back?',
         },
       })
