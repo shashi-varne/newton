@@ -65,6 +65,9 @@ const PaymentCallback = (props) => {
     if(config.code === "moneycontrol") {
       navigate("/");
     } else {
+      if(config.code === "bfdlmobile" && config.isIframe) {
+        return;
+      }
       navigate("/reports");
     }
   };
