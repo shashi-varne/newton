@@ -57,7 +57,8 @@ const WVFilter = ({
   filterOptions,          //  Data For the Filter Dialog Box.
   defaultSelectedTab,    // default Option Selected In filter Dialog Box.
 }) => {
-  const [activeTab, setActiveTab] = useState(defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key);
+  const defaultTabKeyName = defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key;
+  const [activeTab, setActiveTab] = useState(defaultTabKeyName);
   const [activeTabOptions, setActiveTabOptions] = useState(filterOptions[0].option);
   const [selectedFilters, setSelectedFilters] = useState(defaultSelectedTab || {});
   const [isOpen, setIsOpen] = useState(openFilter);
@@ -68,7 +69,7 @@ const WVFilter = ({
 
 
   const closeFilter = () => {
-    setActiveTab(defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key);
+    setActiveTab(defaultTabKeyName);
     setActiveTabOptions(filterOptions[0].option);
     setIsOpen(false);
   };
@@ -84,7 +85,7 @@ const WVFilter = ({
     if (closeFilterOnApply) {
       closeFilter()
     } else {
-      setActiveTab(defaultSelectedTab ? Object.keys(defaultSelectedTab)[0] : filterOptions[0].key);
+      setActiveTab(defaultTabKeyName);
       setActiveTabOptions(filterOptions[0].option);
     };
   }
