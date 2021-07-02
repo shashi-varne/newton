@@ -1,7 +1,8 @@
+import './WVCard.scss'
+
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './WVCard.scss'
 /**
  * Component for showing a card
  */

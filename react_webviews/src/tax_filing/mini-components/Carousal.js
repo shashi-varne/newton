@@ -1,8 +1,9 @@
+import './Carousal.scss'
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import { getConfig } from 'utils/functions'
 
-import './Carousal.scss'
 
 function Carousal({ title, subtitle, dataAidSuffix }) {
   const productName = getConfig().productName

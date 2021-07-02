@@ -1,3 +1,5 @@
+import './Landing.scss'
+
 import React, { useEffect, useState } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
@@ -32,8 +34,6 @@ import {
 import { isEmpty, isArray } from 'lodash'
 
 import { storageService } from '../../utils/validators'
-
-import './Landing.scss'
 
 function Landing(props) {
   const productName = getConfig().productName
@@ -154,7 +154,7 @@ function Landing(props) {
   const handleITRJourneyNavigation = (type) => () => {
     sendEvents('next', { card_click: type })
     setITRJourneyType(type)
-    navigate(`/tax-filing/steps`, { type }, false)
+    navigate(`/tax-filing/steps`, { type, itrList }, false)
     return
   }
 
@@ -264,7 +264,7 @@ function Landing(props) {
 
 const CustomTitle = ({ title }) => {
   return (
-    <div className="flex">
+    <div className="flex align-center vertical-align-baseline">
       <div className="heading3-medium">{title}</div>
       <WVTag
         variant="attention"

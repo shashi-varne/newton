@@ -1,9 +1,10 @@
+import './WVJourneyCard.scss'
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import WVCard from '../Card/WVCard'
 import { isFunction } from 'lodash'
 
-import './WVJourneyCard.scss'
 
 function WVJourneyCard({
   title,

@@ -1,6 +1,7 @@
+import './FeatureListItem.scss'
+
 import React from 'react'
 
-import './FeatureListItem.scss'
 
 function FeatureListItem({ classes, imgSrc, bgImgSrc, title, subtitle }) {
   const containerClasses = classes?.container

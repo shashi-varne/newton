@@ -42,6 +42,14 @@ function Callback(props) {
       setShowLoader(true)
       const data = await verifySSOTokenAndHMAC(token, hmac)
       const backUrl = getBasePath() + '/tax-filing' + getConfig().searchParams
+      if (getConfig().app === 'ios') {
+        nativeCallback({
+          action: 'show_top_bar',
+          message: {
+            title: 'You are almost there, do you really want to go back?',
+          },
+        })
+      }
       nativeCallback({
         action: 'take_control',
         message: {

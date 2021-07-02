@@ -1,6 +1,7 @@
 import './Steps.scss'
 
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVJourneyCard from 'common/ui/JourneyCard/WVJourneyCard'
@@ -12,6 +13,7 @@ import {
   ITR_TYPE_KEY,
   USER_SUMMARY_KEY,
   ITR_ID_KEY,
+  ITR_APPLICATIONS_KEY,
 } from '../constants'
 
 import {
@@ -19,7 +21,11 @@ import {
   trackBackButtonPress,
   parsePhoneNumber,
 } from '../common/functions'
-import { createITRApplication, getITRUserDetails } from '../common/ApiCalls'
+import {
+  createITRApplication,
+  getITRUserDetails,
+  getITRList,
+} from '../common/ApiCalls'
 
 import { storageService } from '../../utils/validators'
 import { nativeCallback } from 'utils/native_callback'
@@ -27,17 +33,58 @@ import { isEmpty } from 'lodash'
 
 function Steps(props) {
   const navigate = navigateFunc.bind(props)
-  const [showLoader, setShowLoader] = useState(false)
-  const [showError, setShowError] = useState(false)
-  const [errorData, setErrorData] = useState({})
-
   const type =
     props?.location?.params?.type || storageService().get(ITR_TYPE_KEY) || ''
   const summary = storageService().getObject(USER_SUMMARY_KEY) || {}
 
+  const defaultITRList =
+    props?.location?.params?.itrList ||
+    storageService().get(ITR_APPLICATIONS_KEY) ||
+    []
+
+  const [showLoader, setShowLoader] = useState(false)
+  const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [errorData, setErrorData] = useState({})
+  const [itrList, setITRList] = useState(defaultITRList)
+
   if (!type || !summary) {
-    navigate('/tax-filing', {}, false)
-    return
+    return (
+      <Redirect
+        to={{
+          ...props?.location,
+          pathname: '/tax-filing',
+          search: getConfig().searchParams,
+        }}
+      />
+    )
+  }
+
+  useEffect(() => {
+    fetchItrList()
+  }, [])
+
+  const fetchItrList = async () => {
+    if (!itrList.length) {
+      try {
+        setShowSkeltonLoader(true)
+        const list = await getITRList()
+        setITRList([...list])
+        setShowSkeltonLoader(false)
+        storageService().setObject(ITR_APPLICATIONS_KEY, list)
+      } catch (err) {
+        setShowError(true)
+        setShowError({
+          type: 'generic',
+          title2: err.message,
+          handleClick1: () => {
+            closeError()
+            fetchItrList()
+          },
+          handleClick2: closeError,
+        })
+      }
+    }
   }
 
   const closeError = () => {
@@ -107,6 +154,7 @@ function Steps(props) {
         !isEmpty(userDetails?.email) &&
         !isEmpty(userDetails?.phone) &&
         !isEmpty(userDetails?.name) &&
+        itrList.length > 0 &&
         !isEmpty(type)
       ) {
         setShowLoader('button')
@@ -160,6 +208,7 @@ function Steps(props) {
       smallTitle={smallTitle}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
+      skelton={showSkeltonLoader}
       showLoader={showLoader}
       showError={showError}
       errorData={errorData}

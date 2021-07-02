@@ -53,7 +53,7 @@ export const createITRApplication = async (params = {}) => {
   }
 }
 
-export const getITRList = async (params = {}) => {
+export const getITRList = async () => {
   const URL = '/api/itr/applications'
   const res = await Api.get(URL)
   if (res?.pfwresponse?.status_code === 200) {

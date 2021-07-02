@@ -1,5 +1,5 @@
-.tax-filing-entry-card {
-  background-color: var(--primary);
+.tax-filing-landing .wv-card {
+  background: var(--primary);
 }
 
 .tax-filing-faq-section {
@@ -22,8 +22,10 @@
   color: var(--primary);
 }
 
-
-.tax-filing-landing .wv-menulist-products .wv-menu-list-dropdown .wv-menu-title {
+.tax-filing-landing
+  .wv-menulist-products
+  .wv-menu-list-dropdown
+  .wv-menu-title {
   font-weight: 600;
   color: var(--gunmetal);
   font-size: 15px;

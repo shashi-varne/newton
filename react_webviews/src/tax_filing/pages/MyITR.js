@@ -1,3 +1,5 @@
+import './MyITR.scss'
+
 import React, { useState, useEffect } from 'react'
 import Container from '../common/Container'
 import DetailsCard from 'common/ui/DetailsCard'
@@ -19,7 +21,6 @@ import { USER_DETAILS, ITR_APPLICATIONS_KEY } from '../constants'
 import { trackBackButtonPress } from '../common/functions'
 import { nativeCallback } from 'utils/native_callback'
 
-import './MyITR.scss'
 
 function MyITR(props) {
   const navigate = navigateFunc.bind(props)

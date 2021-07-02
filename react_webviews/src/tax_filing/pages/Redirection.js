@@ -1,11 +1,13 @@
+import './Redirection.scss'
+
 import React, { useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 import Container from '../common/Container'
 import { isEmpty } from 'lodash'
 import { navigate as navigateFunc } from '../common/functions'
 import { getConfig, getBasePath } from 'utils/functions'
 
-import './Redirection.scss'
 import { clearITRSessionStorage } from '../common/functions'
 import { nativeCallback } from 'utils/native_callback'
 
@@ -13,10 +15,30 @@ function Redirection(props) {
   const navigate = navigateFunc.bind(props)
   const redirectionUrl = props?.location?.params?.redirectionUrl
 
+  if (isEmpty(redirectionUrl)) {
+    return (
+      <Redirect
+        to={{
+          ...props?.location,
+          pathname: '/tax-filing',
+          search: getConfig().searchParams,
+        }}
+      />
+    )
+  }
+  
   useEffect(() => {
     const timerHandle = setTimeout(() => {
       clearITRSessionStorage()
       const backUrl = getBasePath() + '/tax-filing' + getConfig().searchParams
+      if (getConfig().app === 'ios') {
+        nativeCallback({
+          action: 'show_top_bar',
+          message: {
+            title: 'You are almost there, do you really want to go back?',
+          },
+        })
+      }
       nativeCallback({
         action: 'take_control',
         message: {
@@ -31,11 +53,6 @@ function Redirection(props) {
       clearITRSessionStorage()
     }
   }, [])
-
-  if (isEmpty(redirectionUrl)) {
-    navigate('/tax-filing', {}, false)
-    return <></>
-  }
 
   return (
     <Container noFooter headerData={{ hide_icon: true }}>
