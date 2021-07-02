@@ -23,8 +23,8 @@ const InvestCard = (props) => {
         <Imgc className="invest-card-icon" src={require(`assets/${productName}/${props.data.icon}`)} alt="" />
       </div>
     </div>
-      {props?.data?.below_card_description && <div className="invest-card">
-          <p className="below-card-description"> {props?.data.below_card_description} </p></div>}
+      {props?.data?.belowCardDescription && <div className="invest-card">
+          <p className="below-card-description"> {props?.data.belowCardDescription} </p></div>}
     </>
   );
 };
