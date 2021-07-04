@@ -163,7 +163,7 @@ function MyITR(props) {
             .local()
             .format('DD/MM/YYYY, hh:mma')
           const filingType =
-            type === 'eCA' ? 'CA-Assisted Filing' : 'Self-filing'
+            type === 'eCA' ? 'CA-assisted filing' : 'Self-filing'
           let bottomValues = [
             { title: 'Name', subtitle: user?.name },
             { title: 'Mobile Number', subtitle: user?.phone },

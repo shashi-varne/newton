@@ -135,7 +135,11 @@ function PersonalDetails(props) {
         }
         break
       case 'mobileNumber':
-        if (!validateNumber(mobileNumber) && mobileNumber.length !== 10) {
+        if (
+          !isEmpty(mobileNumber) &&
+          !validateNumber(mobileNumber) &&
+          mobileNumber.length !== 10
+        ) {
           setErrors({ ...errors, mobileNumber: true })
         }
         break
@@ -254,8 +258,8 @@ function PersonalDetails(props) {
 
   return (
     <Container
-      title="Personal Details"
-      smallTitle="Fill your details to start"
+      title="Personal details"
+      smallTitle="Fill in your details to start"
       buttonTitle="CONTINUE"
       handleClick={handleClick}
       showError={showError}

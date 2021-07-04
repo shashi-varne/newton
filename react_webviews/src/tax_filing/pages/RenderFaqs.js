@@ -43,7 +43,7 @@ function RenderFAQs(props) {
   return (
     <Container
       noFooter
-      title="Frequently Asked Questions"
+      title="Frequently asked questions"
       headerData={{ goBack }}
     >
       <div className="m-top-4x tax-filing-render-faqs-container">

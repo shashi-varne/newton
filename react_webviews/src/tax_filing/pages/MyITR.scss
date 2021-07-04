@@ -1,11 +1,33 @@
+.tax-filing-my-itr .details-card-container .card-bottom-info {
+  margin-bottom: 0px;
+  margin-top: 20px;
+  grid-row-gap: 20px;
+}
+
 .tax-filing-my-itr .details-card-container {
   margin: 0;
   margin-top: calc(var(--spacing) * 3);
+  padding: 20px;
+}
+
+.tax-filing-my-itr
+  .details-card-container
+  .card-bottom-info
+  .individual-card-info {
+  align-self: center;
+  margin: 0;
+}
+.tax-filing-my-itr
+  .details-card-container
+  .card-bottom-info
+  .individual-card-info:last-child {
+  margin-bottom: 0;
 }
 
 .tax-filing-my-itr .card-bottom-info .individual-card-info .info-subtitle {
+  margin-top: 0px;
   font-size: 11px;
-  line-height: calc(10px * 1.6);
+  line-height: calc(11px * 1.6);
 }
 
 .tax-filing-my-itr .info-title {

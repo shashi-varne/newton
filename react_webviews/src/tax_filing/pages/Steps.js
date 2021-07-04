@@ -65,7 +65,7 @@ function Steps(props) {
   }, [])
 
   const fetchItrList = async () => {
-    if (!itrList.length) {
+    if (!itrList) {
       try {
         setShowSkeltonLoader(true)
         const list = await getITRList()
@@ -213,22 +213,23 @@ function Steps(props) {
       showError={showError}
       errorData={errorData}
       headerData={{ goBack }}
-      classOverRideContainer="m-bottom-4x"
     >
-      {taxFilingSteps[type].map(({ title, subtitle, icon }, idx) => (
-        <WVJourneyCard
-          key={idx}
-          title={title}
-          classes={{ card: 'm-top-3x' }}
-          subtitle={subtitle}
-          iconSrc={require(`assets/${productName}/${icon}.svg`)}
-          dataAidSuffix={`tax-filing-step-${idx}`}
-          stepCount={idx + 1}
-        />
-      ))}
+      <div className="m-bottom-4x">
+        {taxFilingSteps[type].map(({ title, subtitle, icon }, idx) => (
+          <WVJourneyCard
+            key={idx}
+            title={title}
+            classes={{ card: 'm-top-3x' }}
+            subtitle={subtitle}
+            iconSrc={require(`assets/${productName}/${icon}.svg`)}
+            dataAidSuffix={`tax-filing-step-${idx}`}
+            stepCount={idx + 1}
+          />
+        ))}
+      </div>
       {type === 'eCA' && (
-        <div className="m-top-4x">
-          <div className="heading2">Our Advantages</div>
+        <div className="tax-filing-advantages">
+          <div className="heading2">Our advantages</div>
           <div className="m-top-3x flex space-between">
             {taxFilingAdvantages.map(({ icon, stats, group }, idx) => (
               <Fragment key={idx}>

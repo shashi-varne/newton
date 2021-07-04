@@ -194,7 +194,7 @@ function Landing(props) {
           </WVCard>
         )}
 
-        <div className="heading2 m-top-3x">Get Started</div>
+        <div className="heading2 m-top-3x">Get started</div>
         {taxFilingOptions.map(({ title, subtitle, icon, type }, idx) => {
           if (type === 'free') {
             return (
