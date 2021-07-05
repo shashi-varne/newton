@@ -8,10 +8,13 @@ import { getBasePath } from "../../utils/functions";
 import "./mini-components.scss";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 
-const productName = getConfig().productName;
-const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
+const config = getConfig();
+const productName = config.productName;
+
+const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
   const basePath = getBasePath();
   const handleProceed = () => {
+    sendEvents('next', 'ensure_mobile_linked_to_aadhar')
     const redirect_url = encodeURIComponent(
       `${basePath}/digilocker/callback${
         getConfig().searchParams

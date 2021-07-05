@@ -9,19 +9,41 @@ import { Imgc } from "../../../common/ui/Imgc";
 const config = getConfig();
 const productName = config.productName;
 const NriError = (props) => {
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "NRI_not_available",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   const navigate = navigateFunc.bind(props);
   const stateParams = props?.location?.state;
 
   const handleClick = () => {
+    sendEvents("home");
     if(config.Web) {
       navigate("/");
     } else {
       nativeCallback({ action: "exit_web" });
     }
   }
+
+  const handleCompleteMFKyc = () => {
+    sendEvents("complete_mf_kyc");
+    navigate(PATHNAME_MAPPER.journey)
+  }
   
   return (
     <Container
+      events={sendEvents("just_set_events")}
       data-aid='nri-error-screen'
       hidePageTitle
       twoButtonVertical={true}
@@ -29,7 +51,7 @@ const NriError = (props) => {
       {
         variant: "contained",
         title: "COMPLETE MUTUAL FUND KYC",
-        onClick: () => navigate(PATHNAME_MAPPER.journey)
+        onClick: handleCompleteMFKyc,
       }}
       button2Props={{
         variant: stateParams?.noStockOption ? "contained" : "outlined",

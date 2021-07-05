@@ -32,7 +32,6 @@ const Selfie = (props) => {
   const [isLocInitialised, setIsLocInitialised] = useState(true);
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
-  // const [showLoader, setShowLoader] = useState(false);
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const { kyc, isLoading, updateKyc } = useUserKycHook();
@@ -200,21 +199,20 @@ const Selfie = (props) => {
     setIsLocnPermOpen(false);
   }
 
-  const sendEvents = (userAction, type) => {
+  const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "selfie_doc",
-        "type": type || "",
-      }
+      event_name: isTradingFlow ? "trading_onboarding" : "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: screenName || "take_a_selfie",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   const closeConfirmBackDialog = () => {
     setGoBackModal(false);
@@ -301,6 +299,7 @@ const Selfie = (props) => {
               onClose={closeLocnPermDialog}
               onLocationFetchSuccess={onLocationFetchSuccess}
               parentProps={props}
+              sendEvents={sendEvents}
             />
           }
           <SelfieUploadStatus

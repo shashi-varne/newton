@@ -133,19 +133,34 @@ const PersonalDetails3 = (props) => {
   };
 
   const sendEvents = (userAction) => {
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "professional_details",
-        "flow": 'premium onboarding'      }
+    let incomeMapper = {
+      "BELOW 1L": "below_1",
+      "1-5L": "1_to_5",
+      "5-10L": "5_to_10",
+      "10-25L": "10_to_25",
+      "25-100L": "25_to_100",
+      ">100L": "above_100",
     };
-    if (userAction === 'just_set_events') {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "professional_details",
+        occupation_details: form_data.occupation
+          ? form_data.occupation === "SELF EMPLOYED"
+            ? "self_employed"
+            : form_data.occupation.toLowerCase()
+          : "",
+        income_range: form_data.income ? incomeMapper[form_data.income] : "",
+        "flow": 'premium onboarding'
+      },
+    };
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

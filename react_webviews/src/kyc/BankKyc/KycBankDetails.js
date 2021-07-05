@@ -14,8 +14,8 @@ import {
   checkDLPanFetchAndApprovedStatus,
   isDigilockerFlow,
   validateFields,
-  getFlow,
-  skipBankDetails
+  skipBankDetails,
+  getFlow
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
@@ -121,17 +121,18 @@ const KycBankDetails = (props) => {
   };
 
   const uploadDocuments = () => {
-    sendEvents("upload documents", "bottom_sheet");
+    sendEvents("upload_documents ", "unable_to_add_bank");
     navigate(`/kyc/${kyc.kyc_status}/upload-documents`);
   };
 
   const redirect = () => {
+    sendEvents("check_bank_details", "unable_to_add_bank");
     navigate(PATHNAME_MAPPER.journey);
   };
 
   const handleClick = () => {
+    sendEvents("next");
     if (disableFields.skip_api_call) {
-      sendEvents('next')
       handleNavigation();
     } else {
       const keysToCheck = [
@@ -142,7 +143,6 @@ const KycBankDetails = (props) => {
       ];
       const formData = { ...form_data, ...bankData };
       let result = validateFields(formData, keysToCheck);
-      sendEvents('next')
       if (!result.canSubmit) {
         let data = Object.assign({}, result.formData);
         setFormData(data);
@@ -317,7 +317,7 @@ const KycBankDetails = (props) => {
   };
 
   const checkBankDetails = () => {
-    sendEvents("check bank details", "bottom_sheet");
+    sendEvents("check_bank_details", "unable_to_add_bank");
     setIsPennyFailed(false);
   };
 
@@ -326,6 +326,7 @@ const KycBankDetails = (props) => {
   };
 
   const goBackToPath = () => {
+    sendEvents("back");
     if (goBackPath) {
       navigate(goBackPath);
     } else {
@@ -341,26 +342,33 @@ const KycBankDetails = (props) => {
     setGoBackModal(true)
   }
 
-  const sendEvents = (userAction, screen_name) => {
+  const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": screen_name || "bank_details",
-        "account_number": bankData.account_number ? "yes" : "no",
-        "c_account_number": bankData.c_account_number ? "yes" : "no",
-        "ifsc_code": form_data.ifsc_code_error ? "invalid" : bankData.ifsc_code ? "yes" : "no",
-        "account_type": bankData.account_type ? "yes" : "no",
-        "attempt_no": kyc.bank.meta_data.user_rejection_attempts || "",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: screenName || "enter_bank_details",
+        account_number: bankData.account_number ? "yes" : "no",
+        c_account_number: bankData.c_account_number ? "yes" : "no",
+        ifsc_code: form_data.ifsc_code_error
+          ? "invalid"
+          : bankData.ifsc_code
+          ? "yes"
+          : "no",
+        attempt_no: kyc.bank.meta_data.user_rejection_attempts || "",
         "flow": getFlow(kyc) || ""
-      }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (screenName !== "unable_to_add_bank") {
+      eventObj.properties["account_type"] = bankData.account_type;
+      eventObj.properties["bank_name"] = bankData.bank_name || "";
+    }
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -417,7 +425,11 @@ const KycBankDetails = (props) => {
                     </>
                   ),
                 }}
-                disabled={isApiRunning || disableFields.ifsc_code_disabled || ifscDisabled}
+                disabled={
+                  isApiRunning ||
+                  disableFields.ifsc_code_disabled ||
+                  ifscDisabled
+                }
               />
               <Input
                 label="Account number"

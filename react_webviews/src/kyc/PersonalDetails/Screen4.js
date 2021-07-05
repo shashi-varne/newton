@@ -69,11 +69,11 @@ const PersonalDetails4 = (props) => {
       if (!result.canSubmit) {
         let data = { ...result.formData };
         setFormData(data);
-        sendEvents("next")
+        sendEvents("next");
         return;
       }
     }
-    sendEvents("next")
+    sendEvents("next");
     if (isChecked) {
       if (kyc.nomination.nominee_optional) {
         handleNavigation();
@@ -162,24 +162,21 @@ const PersonalDetails4 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nominee details",
-        "name": form_data.name ? "yes" : "no",
-        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "relationship": form_data.relationship ? "yes" : "no",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nominee_details",
+        add_nominee: isChecked ? "no" : "yes",
         "flow": getFlow(kyc) || "",
-        "add_nominee":isChecked ? "no":"yes",
-        "initial_kyc_status" : kyc.kyc_status || ""
-      }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+
   return (
     <Container
       events={sendEvents("just_set_events")}

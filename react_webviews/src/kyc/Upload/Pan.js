@@ -46,11 +46,13 @@ const Pan = (props) => {
   }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
+    sendEvents("attach_document");
     setFile(newFile);
     setFileToShow(fileBase64);
   }
 
   const onFileSelectError = (error) => {
+    sendEvents("attach_document");
     toast('Please select image file only');
   }
 
@@ -99,6 +101,7 @@ const Pan = (props) => {
   };
 
   const handleNavigation = () => {
+    sendEvents("next", "pan_uploaded")
     if (tradingEnabled) {
       handleOtherPlatformNavigation();
     } else {
@@ -143,18 +146,19 @@ const Pan = (props) => {
   }
 
   const handleRetryClick = () => {
+    sendEvents("next", "pan_details_mismatch");
     handleCloseBottomSheet();
     setFile(null);
     setFileToShow(null);
   }
 
-  const sendEvents = (userAction, type) => {
+  const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
+      "event_name": tradingEnabled ? 'trading_onboarding' : 'kyc_registration',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "pan_doc",
-        "type": type || "",
+        "screen_name": screenName || "upload_pan",
+        // "type": type || "",
       }
     };
     if (userAction === 'just_set_events') {
@@ -232,7 +236,7 @@ const Pan = (props) => {
         </section>
       )}
     </Container>
-  )
+  );
 }
 
 export default Pan

@@ -26,6 +26,7 @@ const NRIAddressUpload = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
+    sendEvents('get_image', 'gallery', type);
     if (type === 'front') {
       setFrontDoc(file);
       setState({
@@ -41,7 +42,8 @@ const NRIAddressUpload = (props) => {
     }
   }
 
-  const onFileSelectError = () => {
+  const onFileSelectError = (type) => () => {
+    sendEvents('get_image', 'gallery', type);
     return toast('Please select image file only');
   }
 
@@ -132,21 +134,21 @@ const NRIAddressUpload = (props) => {
 
   const sendEvents = (userAction, type, docSide) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nri_address_doc",
-        "type": type || "",
-        "doc_side": docSide || "",
-        "doc_type": addressProofKey
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nri_address_doc",
+        type: type || "",
+        doc_side: docSide || "",
+        doc_type: addressProofKey,
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
   
   return (
     <Container

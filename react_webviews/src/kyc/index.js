@@ -358,6 +358,11 @@ const Kyc = (props) => {
         />
         <Route 
           exact 
+          path={`${url}/fno-sample-documents`} 
+          component={FnOSampleDocuments} 
+        />
+        <Route 
+          exact 
           path={`${url}/communication-details`} 
           component={CommunicationDetails} 
         />

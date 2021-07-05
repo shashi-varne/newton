@@ -185,23 +185,25 @@ const AddBankVerify = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "bank_details",
-        "account_number": bankData.account_number ? "yes" : "no",
-        "ifsc_code": bankData.ifsc_code ? "yes" : "no",
-        "account_type": bankData.account_type ? "yes" : "no",
-        "c_account_number": userKyc.bank?.meta_data?.account_number ? "yes" : "no",
-        "flow": getFlow(userKyc) || ""
-      }
+      event_name: "KYC_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "bank_details",
+        account_number: bankData.account_number ? "yes" : "no",
+        ifsc_code: bankData.ifsc_code ? "yes" : "no",
+        account_type: bankData.account_type ? "yes" : "no",
+        c_account_number: userKyc.bank?.meta_data?.account_number
+          ? "yes"
+          : "no",
+        flow: getFlow(userKyc) || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   const goBack = () => {
     if(stateParams.goBackToAddBank) {
