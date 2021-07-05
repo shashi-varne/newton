@@ -25,7 +25,7 @@ const BanksList = (props) => {
       const result = await getMyAccount();
       if (!result) return;
       setBanks(result.bank_mandates.banks || []);
-      setChangerequest(result.change_request || {});
+      setChangerequest(result.change_requests || {});
       setShowLoader(false);
       await initData();
       storageService().setObject(
@@ -70,16 +70,14 @@ const BanksList = (props) => {
     }
   }
 
+  const showFooter = changeRequest.add_bank_enabled && ((config.Web && !config.isIframe) || !!storageService().get("native"))
   return (
     <Container
       skelton={showLoader}
       events={sendEvents("just_set_events")}
       buttonTitle="ADD ANOTHER BANK"
       handleClick={handleClick}
-      noFooter={
-        changeRequest.add_bank_enabled &&
-        ((config.web && !config.isIframe) || storageService().get("native"))
-      }
+      noFooter={!showFooter}
       title="Bank accounts"
       type="outlined"
       data-aid='kyc-add-other-bank-screen'

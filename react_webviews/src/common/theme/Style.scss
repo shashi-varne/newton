@@ -473,6 +473,10 @@ body.IframeBody {
 
 .bfdlContainerWrapper {
   background: #fff;
+
+  .generic-page-loader {
+    top: 0px !important;
+  }
   
   .recommendations-disclaimer .tc_link,
   .reports .reports-header .summary-green-text {
