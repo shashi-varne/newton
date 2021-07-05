@@ -221,3 +221,19 @@
 .uppercase {
   text-transform: uppercase;
 }
+
+.dark {
+  color: var(--dark);
+}
+
+.bg-dark {
+  background-color: var(--dark);
+}
+
+.gunmetal {
+  color: var(--gunmetal);
+}
+
+.bg-gunmetal {
+  background-color: var(--gunmetal);
+}
