@@ -11,11 +11,13 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import LocationPermission from "./LocationPermission";
+import LocationPermDummy from "./LocationPermDummy";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
 import { openFilePicker } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { capitalize } from 'lodash';
 
 const config = getConfig();
 const { productName, isNative, Web: isWeb, isSdk } = config;
@@ -75,14 +77,18 @@ const Selfie = (props) => {
     }
   }
 
+  useEffect(() => {
+    // Reset bottomSheetType when bottomSheet is closed
+    if (!openBottomSheet) {
+      setBottomSheetType('');
+    }
+  }, [openBottomSheet]);
+
   const handleSubmit = async () => {
     sendEvents('next');
 
-    if (bottomSheetType === "failed") {
-      setBottomSheetType("");
-    }
     try {
-      if (parseFloat(selfieLiveScore) < 0.8) {
+      if (parseFloat(selfieLiveScore) < kyc?.live_score_benchmark) {
         // eslint-disable-next-line no-throw-literal
         throw 'Live score too low';
       }
@@ -90,14 +96,11 @@ const Selfie = (props) => {
       let params = {
         lat: locationData?.lat,
         lng: locationData?.lng,
+        live_score: selfieLiveScore
       };
 
       if (isTradingFlow) {
-        params = {
-          ...params,
-          live_score: selfieLiveScore,
-          kyc_product_type: 'equity'
-        };
+        params.kyc_product_type = 'equity';
       }
 
       setIsApiRunning("button");
@@ -185,10 +188,8 @@ const Selfie = (props) => {
     setIsLiveCamOpen(false);
 
     const defaultMsg = 'Something went wrong! Please try again';
-    if (['010', 'liveness-error'].includes(error?.errorCode)) {
-      return Toast(error.errorMsg || defaultMsg);
-    }
-    Toast(defaultMsg);
+    
+    Toast(capitalize(error?.errorMsg || defaultMsg));
   }
 
   const closeLocnPermDialog = (locationCloseType) => {
@@ -292,7 +293,7 @@ const Selfie = (props) => {
             />
           }
           {!isSdk &&
-            <LocationPermission
+            <LocationPermDummy
               isOpen={isLocnPermOpen}
               onInit={onLocationInit}
               onClose={closeLocnPermDialog}
