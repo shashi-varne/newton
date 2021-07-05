@@ -310,16 +310,14 @@ const Selfie = (props) => {
               parentProps={props}
             />
           }
-          {openBottomSheet &&
-            <SelfieUploadStatus
-              status={bottomSheetType}
-              isOpen={openBottomSheet}
-              disableBackdropClick
-              onClose={() => setOpenBottomSheet(false)}
-              onCtaClick={handleNavigation}
-              kyc={kyc}
-            />
-          }
+          <SelfieUploadStatus
+            status={bottomSheetType}
+            isOpen={openBottomSheet}
+            disableBackdropClick
+            onClose={() => setOpenBottomSheet(false)}
+            onCtaClick={handleNavigation}
+            kyc={kyc}
+          />
           {goBackModal ?
             <ConfirmBackDialog
               isOpen={goBackModal}
