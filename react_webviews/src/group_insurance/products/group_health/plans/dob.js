@@ -8,7 +8,7 @@ import Input from '../../../../common/ui/Input';
 import { initialize, getCityDetails, getPlanDetails, getPlanList } from '../common_data';
 import toast from '../../../../common/ui/Toast';
 import {resetInsuredMembers, getInsuredMembersUi} from '../constants';
-import { childeNameMapper } from '../../../constants';
+import { childeNameMapper, starMemberSort } from '../../../constants';
 import { isEmpty, compareObjects } from '../../../../utils/validators';
 
 
@@ -63,6 +63,12 @@ class GroupHealthPlanDob extends Component {
                 final_dob_data.push(dob_data[i]);
             }
         }
+        
+        var account_type = groupHealthPlanData.account_type; 
+        if(this.state.provider === 'STAR' && (account_type === 'family' || account_type === 'self_family')){
+            final_dob_data = starMemberSort(final_dob_data)
+        }
+        
         this.setState({
             final_dob_data: final_dob_data,
             dob_data: dob_data
