@@ -477,7 +477,7 @@ function getPartnerConfig(partner_code) {
       label: '#767E86',
       type: 'finity',
       colors: {
-        primary1: "#C6C2F9"
+        primary1: "#F0F7FF"
       },
       // inputFocusedColor: '#3792fc',
       productName: 'finity',
@@ -598,6 +598,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--spacing`, '10px');
   html.style.setProperty(`--gunmetal`, '#161A2E');
   html.style.setProperty(`--linkwater`, '#D3DBE4');
+  html.style.setProperty(`--dark`, '#0a1d32');
 
   return config_to_return;
 }

@@ -101,8 +101,10 @@ function Steps(props) {
         ? 'yes'
         : 'no'
 
-    const investment_status = summary?.kyc?.investment_status === 'complete' ? 'Y' : 'N'
-    const kyc_status = summary?.kyc?.investment_status === 'compliant' ? 'Y' : 'N'
+    const investment_status =
+      summary?.kyc?.investment_status === 'complete' ? 'Y' : 'N'
+    const kyc_status =
+      summary?.kyc?.investment_status === 'compliant' ? 'Y' : 'N'
     let eventObj = {}
     if (userAction === 'next') {
       eventObj = {
@@ -219,7 +221,9 @@ function Steps(props) {
           <WVJourneyCard
             key={idx}
             title={title}
-            classes={{ card: 'm-top-3x' }}
+            classes={{
+              card: 'm-top-3x',
+            }}
             subtitle={subtitle}
             iconSrc={require(`assets/${productName}/${icon}.svg`)}
             dataAidSuffix={`tax-filing-step-${idx}`}
