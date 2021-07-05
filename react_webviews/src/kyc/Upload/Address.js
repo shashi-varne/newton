@@ -80,6 +80,7 @@ const AddressUpload = (props) => {
       }
       updateKyc(result.kyc)
       if(isMyAccountFlow) {
+        toast("Address changed successfully");
         navigate("/my-account");
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress)

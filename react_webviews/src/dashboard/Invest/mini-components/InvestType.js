@@ -1,5 +1,6 @@
 import React from "react";
 import { getConfig } from "utils/functions";
+import { Imgc } from "../../../common/ui/Imgc";
 import './mini-components.scss';
 let productName = getConfig().productName;
 const InvestType = (props) => {
@@ -24,9 +25,10 @@ const InvestType = (props) => {
                       : "none",
                 }}
               >
-                <img
+                <Imgc
                   src={require(`assets/${productName}/${data.icon}`)}
                   alt=""
+                  className="invest-type-icon"
                 />
                 <div className="text">{data.text}</div>
               </div>

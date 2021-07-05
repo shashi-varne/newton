@@ -81,7 +81,7 @@ class SelectDropDown2 extends React.Component {
   }
 
   componentDidUpdate(prevState) {
-    if (prevState.value !== this.props.value && (this.props.value + '')) { this.setState({ selectedOption: this.props.value}) }
+    if (prevState.value !== this.props.value ) { this.setState({ selectedOption: this.props.value}) }
     if (prevState.options !== this.props.options && this.props.options) { this.setState({ options: this.props.options }) }
   }
 

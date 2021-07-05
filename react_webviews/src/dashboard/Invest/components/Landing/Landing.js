@@ -14,6 +14,7 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
+import { Imgc } from "../../../../common/ui/Imgc";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 const isMobileDevice = getConfig().isMobileDevice;
@@ -298,7 +299,7 @@ class Landing extends Component {
                                     src={require(`assets/${productName}/${item.icon_line}`)}
                                     alt=""
                                   />
-                                  <img
+                                  <Imgc
                                     src={require(`assets/${productName}/${item.icon}`)}
                                     alt=""
                                     className="icon"
@@ -347,10 +348,10 @@ class Landing extends Component {
                                   >
                                     <div className="content">
                                       <div className="title"  data-aid={`financial-tool-title-${data.key}`}>{data.title}</div>
-                                      <img
+                                      <Imgc
                                         src={require(`assets/${productName}/${data.icon}`)}
                                         alt=""
-                                        className="icon"
+                                        className="ft-icon"
                                       />
                                     </div>
                                     <div className="subtitle" data-aid={`financial-tool-subtitle-${data.key}`}>

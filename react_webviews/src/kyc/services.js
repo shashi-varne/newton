@@ -94,7 +94,7 @@ export async function initData() {
   }
 }
 
-async function setSummaryData(result) {
+export async function setSummaryData(result) {
   const currentUser = result.data.user.user.data
   const userKyc = result.data.kyc.kyc.data
   if (userKyc.firstlogin) {
@@ -138,23 +138,24 @@ async function setSummaryData(result) {
 
 export function getCampaignBySection(notifications, sections) {
   if (!sections) {
-    sections = []
+    sections = [];
   }
 
   if (!notifications) {
-    notifications = storageService().getObject('campaign') || []
+    notifications = storageService().getObject("campaign") || [];
   }
 
-  const notificationsData = notifications.map((notification) => {
-    return {
-      ...notification,
-      campaign: {
-        ...notification.campaign,
-        name: 'PlutusPendingTransactionCampaign',
-      },
+  let notificationsData = [];
+
+  for (let i = 0; i < notifications.length; i++) {
+    if (notifications[i].campaign.name === "PlutusPendingTransactionCampaign") {
+      continue;
     }
-  })
-  return notificationsData
+
+    notificationsData.push(notifications[i]);
+  }
+
+  return notificationsData;
 }
 
 function setSDKSummaryData(result) {
