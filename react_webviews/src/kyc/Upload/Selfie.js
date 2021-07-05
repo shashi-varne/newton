@@ -89,7 +89,7 @@ const Selfie = (props) => {
     sendEvents('next');
 
     try {
-      if (parseFloat(selfieLiveScore) < 0.8) {
+      if (parseFloat(selfieLiveScore) < kyc?.live_score_benchmark) {
         // eslint-disable-next-line no-throw-literal
         throw 'Live score too low';
       }
