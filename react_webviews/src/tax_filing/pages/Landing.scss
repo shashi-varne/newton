@@ -15,7 +15,7 @@
 .tax-filing-faq-subtitle {
   font-size: 14px;
   line-height: 20px;
-  color: #0a1d32;
+  color: var(--dark);
 }
 
 .tax-filing-faq-icon-text {
@@ -29,4 +29,8 @@
   font-weight: 600;
   color: var(--gunmetal);
   font-size: 15px;
+}
+
+.tax-filing-landing-features {
+  margin-top: 60px;
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import Container from '../common/Container'
 import Faqs from 'common/ui/Faqs'
-import { FAQs, USER_DETAILS } from '../constants'
+import { FAQS, USER_DETAILS } from '../constants'
 import { storageService } from '../../utils/validators'
 import { isEmpty } from 'lodash'
 import { nativeCallback } from 'utils/native_callback'
@@ -48,9 +48,9 @@ function RenderFAQs(props) {
     >
       <div className="m-top-4x tax-filing-render-faqs-container">
         <Faqs
-          options={FAQs}
+          options={FAQS}
           callback={(index) => {
-            sendEvents('next', FAQs[index])
+            sendEvents('next', FAQS[index])
           }}
         />
       </div>

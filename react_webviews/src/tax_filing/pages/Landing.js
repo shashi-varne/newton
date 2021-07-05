@@ -5,15 +5,15 @@ import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import WVTag from 'common/ui/Tag/WVTag'
 import Carousal from '../mini-components/Carousal'
-import WVMenuListDropdownItem from 'common/ui/MenuListDropdown/WVMenuListDropdownItem'
 import FeatureListItem from '../mini-components/FeatureListItem'
 import WVCard from 'common/ui/Card/WVCard'
+import ListItem from 'common/ui/ListItem/WVListItem'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 
 import { nativeCallback } from 'utils/native_callback'
 
 import {
-  taxFilingOptions,
+  TAX_FILING_OPTIONS,
   USER_SUMMARY_KEY,
   ITR_APPLICATIONS_KEY,
   USER_DETAILS,
@@ -195,31 +195,37 @@ function Landing(props) {
         )}
 
         <div className="heading2 m-top-3x">Get started</div>
-        {taxFilingOptions.map(({ title, subtitle, icon, type }, idx) => {
+        {TAX_FILING_OPTIONS.map(({ title, subtitle, icon, type }, idx) => {
           if (type === 'free') {
             return (
-              <WVMenuListDropdownItem
+              <ListItem
                 key={idx}
-                image={require(`assets/${productName}/${icon}.svg`)}
+                iconSrc={require(`assets/${productName}/${icon}.svg`)}
                 title={<CustomTitle title={title} />}
                 subtitle={subtitle}
                 onClick={handleITRJourneyNavigation(type)}
+                classes={{ container: 'pointer m-top-2x' }}
               />
             )
           } else {
             return (
-              <WVMenuListDropdownItem
+              <ListItem
                 key={idx}
-                image={require(`assets/${productName}/${icon}.svg`)}
+                iconSrc={require(`assets/${productName}/${icon}.svg`)}
                 title={title}
                 subtitle={subtitle}
                 onClick={handleITRJourneyNavigation(type)}
-                classes={{ headerTitle: 'heading3-medium' }}
+                classes={{
+                  container: 'm-top-2x pointer',
+                }}
+                withRuler={idx < TAX_FILING_OPTIONS.length - 1}
               />
             )
           }
         })}
-        <div className="heading2 m-top-3x">Why eFile with us?</div>
+        <div className="heading2 tax-filing-landing-features">
+          Why eFile with us?
+        </div>
         {getTaxFilingFeatureLists().map((item, idx) => (
           <FeatureListItem
             imgSrc={item.frontImage}
@@ -268,7 +274,7 @@ const CustomTitle = ({ title }) => {
       <div className="heading3-medium">{title}</div>
       <WVTag
         variant="attention"
-        label="free"
+        content="free"
         dataAidSuffix="tax2win-free-tag"
         classes={{ container: 'align-self-start m-left-1x' }}
       />

@@ -12,7 +12,7 @@ export const ITR_TYPE_KEY = 'itr-type'
 
 export const USER_DETAILS = 'itr-user-details'
 
-export const taxFilingSteps = {
+export const TAX_FILING_STEPS = {
   free: [
     {
       title: 'Upload form 16',
@@ -50,7 +50,7 @@ export const taxFilingSteps = {
   ],
 }
 
-export const FAQs = [
+export const FAQS = [
   {
     title: 'How can I file an income tax return in India?',
     subtitle:
@@ -89,7 +89,7 @@ export const FAQs = [
   },
 ]
 
-export const taxFilingOptions = [
+export const TAX_FILING_OPTIONS = [
   {
     title: 'Do it yourself',
     subtitle: 'We guide and you file',
@@ -104,7 +104,7 @@ export const taxFilingOptions = [
   },
 ]
 
-export const itrStatusMappings = {
+export const ITR_STATUS_MAPPINGS = {
   completed: {
     color: '#4F2DA7',
 
@@ -119,7 +119,7 @@ export const itrStatusMappings = {
   },
 }
 
-export const taxFilingAdvantages = [
+export const TAX_FILING_ADVANTAGES = [
   {
     icon: 'icn_satisfied_clients',
     stats: '400,000+',

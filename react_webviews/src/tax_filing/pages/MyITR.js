@@ -5,7 +5,7 @@ import Container from '../common/Container'
 import DetailsCard from 'common/ui/DetailsCard'
 import { getConfig } from 'utils/functions'
 import Button from 'common/ui/Button'
-import { itrStatusMappings } from '../constants'
+import { ITR_STATUS_MAPPINGS } from '../constants'
 import { isEmpty } from 'lodash'
 import moment from 'moment'
 
@@ -150,8 +150,8 @@ function MyITR(props) {
           type,
         }) => {
           let status = itrStatus ? itrStatus : 'started'
-          const text = itrStatusMappings[status].text
-          const color = itrStatusMappings[status].color
+          const text = ITR_STATUS_MAPPINGS[status].text
+          const color = ITR_STATUS_MAPPINGS[status].color
 
           const icon =
             type === 'eCA'
@@ -207,8 +207,8 @@ function MyITR(props) {
     >
       <div className="tax-filing-my-itr">
         {!isEmpty(myItrs) &&
-          myItrs.map((detail, idx) => (
-            <DetailsCard item={detail} key={idx} handleClick={() => {}} />
+          myItrs.map((detail) => (
+            <DetailsCard item={detail} key={detail.itr_id} handleClick={() => {}} />
           ))}
       </div>
     </Container>

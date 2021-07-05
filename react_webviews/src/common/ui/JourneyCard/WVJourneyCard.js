@@ -3,15 +3,10 @@ import './WVJourneyCard.scss'
 import React from 'react'
 import PropTypes from 'prop-types'
 import WVCard from '../Card/WVCard'
-import { isFunction } from 'lodash'
-
-
 function WVJourneyCard({
   title,
   subtitle,
   iconSrc,
-  renderTitle: Title,
-  renderSubtitle: Subtitle,
   withStep,
   withIcon,
   stepCount,
@@ -30,15 +25,15 @@ function WVJourneyCard({
     >
       <div className={`flex-between ${classes?.container}`}>
         <div className={`wv-journey-card-content ${classes?.content}`}>
-          {isFunction(Title) ? (
-            <Title />
-          ) : (
-            <div className={`body-text1 ${classes?.title}`}>{title}</div>
+          {title && (
+            <Title dataAidSuffix={dataAidSuffix} classes={classes}>
+              {title}
+            </Title>
           )}
-          {isFunction(Subtitle) ? (
-            <Subtitle />
-          ) : (
-            <div className={`body-text2 ${classes?.subtitle}`}>{subtitle}</div>
+          {subtitle && (
+            <Subtitle dataAidSuffix={dataAidSuffix} classes={classes}>
+              {subtitle}
+            </Subtitle>
           )}
         </div>
         {withIcon && (
@@ -56,9 +51,31 @@ function WVJourneyCard({
   )
 }
 
+function Title({ dataAidSuffix, classes, children }) {
+  return (
+    <div
+      className={`body-text1 ${classes?.title}`}
+      data-aid={`wv-journey-card-title-${dataAidSuffix}`}
+    >
+      {children}
+    </div>
+  )
+}
+
+function Subtitle({ dataAidSuffix, classes, children }) {
+  return (
+    <div
+      className={`body-text2 ${classes?.subtitle}`}
+      data-aid={`wv-journey-card-subtitle-${dataAidSuffix}`}
+    >
+      {children}
+    </div>
+  )
+}
+
 WVJourneyCard.propTypes = {
-  title: PropTypes.string,
-  subtitle: PropTypes.string,
+  title: PropTypes.node,
+  subtitle: PropTypes.node,
   iconSrc: PropTypes.string,
   renderTitle: PropTypes.func,
   renderSubtitle: PropTypes.func,
@@ -77,8 +94,6 @@ WVJourneyCard.propTypes = {
 WVJourneyCard.defaultProps = {
   withStep: true,
   withIcon: true,
-  title: '',
-  subtitle: '',
   iconSrc: '',
   classes: {
     card: '',

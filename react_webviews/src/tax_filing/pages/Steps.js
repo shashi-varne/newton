@@ -8,8 +8,8 @@ import WVJourneyCard from 'common/ui/JourneyCard/WVJourneyCard'
 import { Imgc } from 'common/ui/Imgc'
 
 import {
-  taxFilingSteps,
-  taxFilingAdvantages,
+  TAX_FILING_STEPS,
+  TAX_FILING_ADVANTAGES,
   ITR_TYPE_KEY,
   USER_SUMMARY_KEY,
   ITR_ID_KEY,
@@ -215,7 +215,7 @@ function Steps(props) {
       headerData={{ goBack }}
     >
       <div className="m-bottom-4x">
-        {taxFilingSteps[type].map(({ title, subtitle, icon }, idx) => (
+        {TAX_FILING_STEPS[type].map(({ title, subtitle, icon }, idx) => (
           <WVJourneyCard
             key={idx}
             title={title}
@@ -231,7 +231,7 @@ function Steps(props) {
         <div className="tax-filing-advantages">
           <div className="heading2">Our advantages</div>
           <div className="m-top-3x flex space-between">
-            {taxFilingAdvantages.map(({ icon, stats, group }, idx) => (
+            {TAX_FILING_ADVANTAGES.map(({ icon, stats, group }, idx) => (
               <Fragment key={idx}>
                 <div className="flex-column align-center">
                   <div
