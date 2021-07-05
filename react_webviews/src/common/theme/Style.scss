@@ -474,7 +474,8 @@ body.IframeBody {
 .bfdlContainerWrapper {
   background: #fff;
   
-  .recommendations-disclaimer .tc_link {
+  .recommendations-disclaimer .tc_link,
+  .reports .reports-header .summary-green-text {
     color: var(--secondary);
   }
 }
