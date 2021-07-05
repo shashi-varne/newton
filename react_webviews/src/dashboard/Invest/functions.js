@@ -613,6 +613,7 @@ export async function openStocks() {
           if (!userKyc?.mf_kyc_processed) {
             isProductTypeSet = setProductType();
           }
+          
           if (userKyc?.application_status_v2 === "submitted") {
             const showAadhaar = !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual");
             if (userKyc.kyc_status !== "compliant") {
