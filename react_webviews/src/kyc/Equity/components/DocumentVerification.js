@@ -1,11 +1,11 @@
 import React, {useEffect, useState, Fragment} from "react";
+import { nativeCallback } from "../../../utils/native_callback";
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import Container from "../../common/Container";
 import WVJourneyShortening from "../../../common/ui/JourneyShortening/JourneyShortening";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { isEmpty, storageService } from "../../../utils/validators";
 import { getPendingDocuments } from "../../common/functions";
-import { nativeCallback } from '../../../utils/native_callback';
 import "./commonStyles.scss";
 import { PATHNAME_MAPPER } from "../../constants";
 
@@ -30,6 +30,7 @@ const DocumentVerification = (props) => {
   }, [kyc]);
 
   const handleCTAClick = () => {
+    sendEvents("next");
     if(config.Web) {
       navigate("/");
     } else {
@@ -49,8 +50,24 @@ const DocumentVerification = (props) => {
     }
   }
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "document_verification_under_process",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       data-aid='doc-verification-screen'
       buttonTitle="HOME"
       handleClick={handleCTAClick}

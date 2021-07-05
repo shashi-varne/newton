@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow, isEquityCompleted } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, isEquityCompleted } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
@@ -11,7 +11,6 @@ import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
 import "./KycUploadDocuments.scss";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
-import { getFlow } from "../common/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
@@ -92,7 +91,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleSubmit = async () => {
-    sendEvents('next')
+    sendEvents('next');
     try {
       if (selected === null || !file) throw new Error("No file added");
       setIsApiRunning("button");
@@ -112,7 +111,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleEdit = () => {
-    sendEvents('edit')
+    sendEvents('edit');
     navigate(`/kyc/${userType}/bank-details`, {
       state: { isEdit: true }
     });
@@ -123,7 +122,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    sendEvents('next', "", 'bottom_sheet')
+    sendEvents('next', 'bank_verification_pending');
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
@@ -220,25 +219,26 @@ const KycUploadDocuments = (props) => {
   const selectedDocValue =
     selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
-    const sendEvents = (userAction, type, screen_name) => {
+    const sendEvents = (userAction, screen_name) => {
+      let docMapper = ["bank_statement", "cancelled_cheque", "passbook"];
       let eventObj = {
-        "event_name": 'KYC_registration',
-        "properties": {
-          "user_action": userAction || "",
-          "screen_name": screen_name || 'bank_docs',
-          "initial_kyc_status": kyc.initial_kyc_status,
+        event_name: "kyc_registration",
+        properties: {
+          user_action: userAction || "",
+          screen_name: screen_name || "bank_upload_documents",
+          doc_type: selected ? docMapper[selected] : "",
           "flow": getFlow(kyc) || "",
-          "document":VERIFICATION_DOC_OPTIONS[selected]?.name || "",
-          "type": type || '',
-          "status" : screen_name ? "verification pending":""
-        }
+          // "initial_kyc_status": kyc.initial_kyc_status,
+          // "type": type || '',
+          // "status" : screen_name ? "verification pending":""
+        },
       };
-      if (userAction === 'just_set_events') {
+      if (userAction === "just_set_events") {
         return eventObj;
       } else {
         nativeCallback({ events: eventObj });
       }
-    }
+    };
 
     return (
     <Container

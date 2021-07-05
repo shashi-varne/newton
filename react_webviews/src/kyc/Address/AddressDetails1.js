@@ -12,6 +12,14 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
+const ADDRESS_DOC_SELECTED_MAPPER = {
+  "DL": "driving_licence",
+  "PASSPORT": "passport",
+  "AADHAAR": "aadhar_card",
+  "VOTER_ID_CARD": "voter_id",
+  "LAT_BANK_PB": "passbook"
+}
+
 const AddressDetails1 = (props) => {
   const genericErrorMessage = "Something went wrong!";
   const navigate = navigateFunc.bind(props);
@@ -158,20 +166,20 @@ const AddressDetails1 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "address_details_1",
-        "address_proof": form_data.address_doc_type,
-        "residential_status": form_data.residential_status
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "address_details_1",
+        doc_selected: ADDRESS_DOC_SELECTED_MAPPER[form_data.address_doc_type],
+        residential_status: form_data.residential_status,
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

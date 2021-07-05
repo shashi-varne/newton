@@ -299,17 +299,17 @@ export const getKRAForm = async (params) => {
 export const sendOtp = async (body) => {
   const res = await Api.post(API_CONSTANTS.sendOtp, body)
   return handleApi(res);
-}
+};
 
 export const resendOtp = async (otpId) => {
   const res = await Api.post(`${API_CONSTANTS.resendOtp}/${otpId}`)
   return handleApi(res);
-}
+};
 
 export const verifyOtp = async (body) => {
   const res = await Api.post(`${API_CONSTANTS.verifyOtp}/${body.otpId}?otp=${body.otp}`)
   return handleApi(res);
-}
+};
 
 export const sendWhatsappConsent = async (body) => {
   const res = await Api.post(API_CONSTANTS.sendContactConsent, body);

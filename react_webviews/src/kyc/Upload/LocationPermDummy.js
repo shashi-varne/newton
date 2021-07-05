@@ -1,11 +1,11 @@
+// DUMMY COMPONENT TO MOCK THE BEHAVIOUR FOR SELFIE LOCATION PERMISSION CHECK
+
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble';
 import { getConfig } from '../../utils/functions';
-import { isFunction } from 'lodash';
-import useScript from '../../common/customHooks/useScript';
 import WVButton from '../../common/ui/Button/WVButton';
 import WVFullscreenDialog from '../../common/ui/FullscreenDialog/WVFullscreenDialog';
+import WVButtonLayout from '../../common/ui/ButtonLayout/WVButtonLayout';
 
 const { productName } = getConfig();
 const locationIcon = (
@@ -35,27 +35,28 @@ const PAGE_TYPE_CONTENT_MAP = {
     title: 'You cannot proceed with KYC',
     subtitle: 'As per SEBI regulations, your location should be in India',
   },
-  'default': {
+  'dummy-page': {
     imgElem: locationIcon,
-    title: 'Allow location access',
-    subtitle: 'As per SEBI, we need to capture your location while you take the selfie'
+    title: 'Dummy Location Test Page',
+    subtitle: 'As per SEBI regulations, we must stalk you'
   }
 };
-const GEOCODER = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCe5PrvBwabfWYOSftl0DlpGKan4o7se2A&libraries=&v=weekly"
+const dummyLocationObj = {
+  lat: "16.235325464545348",
+  lng: "80.049525743162405",
+}
 
-const LocationPermission = ({
+const LocationPermDummy= ({
   isOpen,
   onClose,
   onInit, // callback to trigger (if any) for when google geocoder module is initialised
   onLocationFetchSuccess,
   onLocationFetchFailure,
-  sendEvents
 }) => {
   const [pageType, setPageType] = useState('verifying-location');
   const [pageContent, setPageContent] = useState({});
   const [permissionWarning, setPermissionWarning] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(true);
-  const { isLoaded } = useScript(GEOCODER);
 
   useEffect(() => {
     if (isOpen) {
@@ -64,57 +65,21 @@ const LocationPermission = ({
   }, [isOpen]);
 
   useEffect(() => {
-    if (isLoaded) {
-      onInit();
-    }
-  }, [isLoaded]);
+    onInit();
+  });
   
   useEffect(() => {
     setPageContent(PAGE_TYPE_CONTENT_MAP[pageType]);
   }, [pageType]);
-
-  const fetchCountryFromResults = (results) => {
-    const addressObjs = results[0]?.address_components;
-    const countryAddressObj = addressObjs.find(obj => obj.types.includes("country"));
-    return countryAddressObj.long_name;
-  }
   
   const locationCallbackSuccess = async (data) => {
+    setIsApiRunning(false);
     if (data.location_permission_denied) {
       setPageType('permission-denied');
       setPermissionWarning(true);
-      setIsApiRunning(false);
     } else {
       setPermissionWarning(false);
-      try {
-        setIsApiRunning(true);        
-        const geocoderService = new window.google.maps.Geocoder();
-        geocoderService.geocode({
-          location: {
-            lat: data.location.lat,
-            lng: data.location.lng,
-          }
-        }, (results, status) => {
-          if (status === 'OK') {
-            const country = fetchCountryFromResults(results);
-            setIsApiRunning(false);
-            if (country !== 'India') {
-              setPageType("invalid-region");
-            } else {
-              onLocationFetchSuccess(data.location);
-            }
-          } else {
-            throw(status);
-          }
-        });
-      } catch (err) {
-        console.log(err);
-        setIsApiRunning(false);
-        toast('Something went wrong! Please try again');
-        if (isFunction(onLocationFetchFailure)) {
-          onLocationFetchFailure();
-        }
-      }
+      setPageType('dummy-page');
     }
   }
 
@@ -130,14 +95,8 @@ const LocationPermission = ({
     if (pageType === 'invalid-region') {
       onClose(pageType);
     } else {
-      sendEvents('next', 'allow_location_access');
       requestLocnPermission();
     }
-  }
-
-  const onCloseIconClick = () => {
-    sendEvents('back', 'allow_location_access');
-    onClose(pageType);
   }
 
   if (!isOpen) {
@@ -149,7 +108,7 @@ const LocationPermission = ({
       open={isOpen}
       onClose={() => onClose(pageType)}
     >
-      <WVFullscreenDialog.Content onCloseClick={onCloseIconClick}>
+      <WVFullscreenDialog.Content onCloseClick={() => onClose(pageType)}>
         <div className="kyc-loc-permission">
           <div className="kyc-loc-perm-illustration">
             {pageContent?.imgElem}
@@ -167,20 +126,30 @@ const LocationPermission = ({
           }
         </div>
       </WVFullscreenDialog.Content>
-      <WVFullscreenDialog.Action>
-        <WVButton
-          fullWidth
-            style={{ display: 'flex', margin: 'auto' }}
-          onClick={onCTAClick}
-          variant="outlined"
-          color="secondary"
-          showLoader={isApiRunning}
-        >
-          {pageType === 'invalid-region' ? "Okay" : "Allow"}
-        </WVButton>
+      <WVFullscreenDialog.Action style={{ display: 'flex', justifyContent: 'center' }}>
+        {pageType === 'dummy-page' ? 
+          <WVButtonLayout>
+            <WVButtonLayout.Button outlined onClick={() => setPageType("invalid-region")}>
+              NRI
+            </WVButtonLayout.Button>
+            <WVButtonLayout.Button contained onClick={() => onLocationFetchSuccess(dummyLocationObj)}>
+              Indian
+            </WVButtonLayout.Button>
+          </WVButtonLayout>
+          : <WVButton
+            fullWidth
+              style={{ display: 'flex', margin: 'auto' }}
+            onClick={onCTAClick}
+            variant="outlined"
+            color="secondary"
+            showLoader={isApiRunning}
+          >
+            {pageType === 'invalid-region' ? "Okay" : "Allow"}
+          </WVButton>
+        }
       </WVFullscreenDialog.Action>
     </WVFullscreenDialog>
   );
 }
 
-export default LocationPermission;
+export default LocationPermDummy;

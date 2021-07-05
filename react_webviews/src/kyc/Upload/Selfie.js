@@ -11,11 +11,13 @@ import useUserKycHook from '../common/hooks/userKycHook'
 import WVLiveCamera from "../../common/ui/LiveCamera/WVLiveCamera";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import LocationPermission from "./LocationPermission";
+import LocationPermDummy from "./LocationPermDummy";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
 import { openFilePicker } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { capitalize } from 'lodash';
 
 const config = getConfig();
 const { productName, isNative, Web: isWeb, isSdk } = config;
@@ -30,7 +32,6 @@ const Selfie = (props) => {
   const [isLocInitialised, setIsLocInitialised] = useState(true);
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
-  // const [showLoader, setShowLoader] = useState(false);
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const { kyc, isLoading, updateKyc } = useUserKycHook();
@@ -84,14 +85,18 @@ const Selfie = (props) => {
     }
   }
 
+  useEffect(() => {
+    // Reset bottomSheetType when bottomSheet is closed
+    if (!openBottomSheet) {
+      setBottomSheetType('');
+    }
+  }, [openBottomSheet]);
+
   const handleSubmit = async () => {
     sendEvents('next');
 
-    if (bottomSheetType === "failed") {
-      setBottomSheetType("");
-    }
     try {
-      if (parseFloat(selfieLiveScore) < 0.8) {
+      if (parseFloat(selfieLiveScore) < kyc?.live_score_benchmark) {
         // eslint-disable-next-line no-throw-literal
         throw 'Live score too low';
       }
@@ -99,14 +104,11 @@ const Selfie = (props) => {
       let params = {
         lat: locationData?.lat,
         lng: locationData?.lng,
+        live_score: selfieLiveScore
       };
 
       if (isTradingFlow) {
-        params = {
-          ...params,
-          live_score: selfieLiveScore,
-          kyc_product_type: 'equity'
-        };
+        params.kyc_product_type = 'equity';
       }
 
       setIsApiRunning("button");
@@ -194,10 +196,8 @@ const Selfie = (props) => {
     setIsLiveCamOpen(false);
 
     const defaultMsg = 'Something went wrong! Please try again';
-    if (['010', 'liveness-error'].includes(error?.errorCode)) {
-      return Toast(error.errorMsg || defaultMsg);
-    }
-    Toast(defaultMsg);
+    
+    Toast(capitalize(error?.errorMsg || defaultMsg));
   }
 
   const closeLocnPermDialog = (locationCloseType) => {
@@ -207,21 +207,20 @@ const Selfie = (props) => {
     setIsLocnPermOpen(false);
   }
 
-  const sendEvents = (userAction, type) => {
+  const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "selfie_doc",
-        "type": type || "",
-      }
+      event_name: isTradingFlow ? "trading_onboarding" : "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: screenName || "take_a_selfie",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   const closeConfirmBackDialog = () => {
     setGoBackModal(false);
@@ -302,12 +301,13 @@ const Selfie = (props) => {
             />
           }
           {!isSdk &&
-            <LocationPermission
+            <LocationPermDummy
               isOpen={isLocnPermOpen}
               onInit={onLocationInit}
               onClose={closeLocnPermDialog}
               onLocationFetchSuccess={onLocationFetchSuccess}
               parentProps={props}
+              sendEvents={sendEvents}
             />
           }
           <SelfieUploadStatus

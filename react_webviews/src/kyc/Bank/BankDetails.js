@@ -82,19 +82,19 @@ const BankDetails = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'my_account',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "add bank/mandate",
-        "primary_account": banks[0]?.bank_name || ""
-      }
+      event_name: "my_account",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "add bank/mandate",
+        primary_account: banks[0]?.bank_name || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

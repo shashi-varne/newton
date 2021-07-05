@@ -22,6 +22,7 @@ import CheckBox from "../../../common/ui/Checkbox";
 import { PATHNAME_MAPPER } from "../../constants";
 import { navigate as navigateFunc } from "../../../utils/functions";
 import Otp from "../mini-components/Otp";
+import { nativeCallback } from "../../../utils/native_callback";
 import {
   getTotalPagesInPersonalDetails,
   isDigilockerFlow,
@@ -138,6 +139,7 @@ const CommunicationDetails = (props) => {
   };
 
   const resendOtpVerification = async () => {
+    sendEvents("resend");
     setShowDotLoader(true);
     try {
       const result = await resendOtp(otpData.otpId);
@@ -212,6 +214,7 @@ const CommunicationDetails = (props) => {
   };
 
   const handleClick = async () => {
+    sendEvents("next");
     if (
       formData.mobileNumberVerified &&
       kyc.identification.meta_data.email_verified &&
@@ -256,9 +259,40 @@ const CommunicationDetails = (props) => {
   };
 
   const handleEdit = () => {
+    sendEvents("edit");
     if (showDotLoader) return;
     setShowOtpContainer(false);
     setButtonTitle("CONTINUE");
+  };
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: showOtpContainer
+          ? "communication_details_otp"
+          : "communication_details",
+      },
+    };
+    if (showOtpContainer) {
+      eventObj.properties.otp_entered = otpData.otp ? "yes" : "no";
+      eventObj.properties.mode_entry = "manual";
+    } else {
+      if (communicationType === "email") {
+        eventObj.properties[`email_entered`] = formData.email ? "yes" : "no";
+      } else {
+        eventObj.properties[`mobile_entered`] = formData.mobile ? "yes" : "no";
+        eventObj.properties["whatsapp_agree"] = formData.whatsappConsent
+          ? "yes"
+          : "no";
+      }
+    }
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
   };
 
   const handleNavigation = () => {
@@ -288,6 +322,7 @@ const CommunicationDetails = (props) => {
   const pageNumber = isDlFlow ? 3 : 4;
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle={buttonTitle}
       title="Communication details"
       count={!isKycDone && pageNumber}

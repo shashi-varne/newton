@@ -7,6 +7,7 @@ import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 import WVSelect from "../../../common/ui/Select/WVSelect";
 import { navigate as navigateFunc, } from "../../../utils/functions";
 
@@ -51,6 +52,7 @@ const TradingExperience = (props) => {
   }
 
   const handleClick = () => {
+    sendEvents("next")
     if (oldState === experience) {
       handleNavigation();
       return;
@@ -104,12 +106,35 @@ const TradingExperience = (props) => {
     }
   }
 
+  const sendEvents = (userAction) => {
+    const experienceMapper ={
+      "0-1": "0 to 1 years",
+      "1-3":"1 to 3 years",
+      "3-5":"3 to 5 years",
+      "5+":"more than 5 years"
+    }
+    let eventObj = {
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "select_trading_experience",
+        experience: experienceMapper[experience]
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+  
   const handleChange = (selectedOption) => {
     setExperience(selectedOption.value)
   }
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
       title="Select trading experience"

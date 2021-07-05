@@ -30,6 +30,7 @@ const IpvVideo = (props) => {
   const [noCameraFound, setNoCameraFound] = useState(false);
   const [noCameraPermission, setNoCameraPermission] = useState(false);
   const [errorContent, setErrorContent] = useState("");
+  const [attempt, setAttempt] = useState(0);
 
   const SUPPORTED_VIDEO_TYPES = ["mp4", "webm", "ogg", "x-flv", "x-ms-wmv"];
 
@@ -94,6 +95,25 @@ const IpvVideo = (props) => {
     }
   }
 
+  const sendEvents = (userAction, type) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload_ipv",
+        take_video_again: attempt !== 0 && attempt !== 1 ? "yes" : "no",
+        attempt: `attempt${attempt}`,
+        // "type": type || "",
+        // "screen_name": "selfie_video_doc",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   const handleClick = (e) => {
     if (!showVideoRecoreder) {
       setShowVideoRecorder(!showVideoRecoreder);
@@ -101,6 +121,7 @@ const IpvVideo = (props) => {
   }
 
   const onRecordingComplete = (videoBlob) => {
+    setAttempt((val) => val++);
     const fileFromBlob = new File([videoBlob], "ipv-video.webm");
     setFile(fileFromBlob);
     setUploadCTAText("TAKE VIDEO AGAIN");
@@ -115,22 +136,6 @@ const IpvVideo = (props) => {
       Toast("Something went wrong!")
     }
     setShowVideoRecorder(!showVideoRecoreder);
-  }
-
-  const sendEvents = (userAction, type) => {
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "selfie_video_doc",
-        "type": type || "",
-      }
-    };
-    if (userAction === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
   }
 
   const renderInitialIllustration = useCallback(() => {
