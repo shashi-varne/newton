@@ -67,8 +67,8 @@ function Landing(props) {
   }
 
   const sendEvents = (userAction, data = {}) => {
-    const investment_status = summary?.user?.kyc?.investment_status || ''
-    const kyc_status = summary?.user?.kyc?.kyc_status || ''
+    const investment_status = summary?.kyc?.investment_status || ''
+    const kyc_status = summary?.kyc?.kyc_status || ''
     const personal_details_exist =
       !isEmpty(user?.name) && !isEmpty(user?.phone) && !isEmpty(user?.email)
         ? 'yes'
@@ -80,8 +80,8 @@ function Landing(props) {
         screen_name: 'File ITR',
         card_click: data?.card_click || '',
         personal_details_exist: personal_details_exist,
-        investment_status: investment_status ? 'Y' : 'N',
-        kyc_status: kyc_status ? 'Y' : 'N',
+        investment_status: investment_status === 'complete' ? 'Y' : 'N',
+        kyc_status: kyc_status === 'compliant' ? 'Y' : 'N',
       },
     }
     if (userAction === 'just_set_events') {

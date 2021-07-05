@@ -185,8 +185,8 @@ function PersonalDetails(props) {
   }
 
   const sendEvents = (userAction, data = {}) => {
-    const investment_status = summary?.kyc?.investment_status ? 'Y' : 'N'
-    const kyc_status = summary?.kyc?.kyc_status ? 'Y' : 'N'
+    const investment_status = summary?.kyc?.investment_status === 'complete' ? 'Y' : 'N'
+    const kyc_status = summary?.kyc?.kyc_status === 'compliant' ? 'Y' : 'N'
     let eventObj = {}
     if (data?.screenName === 'Personal Detail') {
       eventObj = {

@@ -101,8 +101,8 @@ function Steps(props) {
         ? 'yes'
         : 'no'
 
-    const investment_status = summary?.kyc?.investment_status ? 'Y' : 'N'
-    const kyc_status = summary?.kyc?.investment_status ? 'Y' : 'N'
+    const investment_status = summary?.kyc?.investment_status === 'complete' ? 'Y' : 'N'
+    const kyc_status = summary?.kyc?.investment_status === 'compliant' ? 'Y' : 'N'
     let eventObj = {}
     if (userAction === 'next') {
       eventObj = {
