@@ -207,8 +207,8 @@ function MyITR(props) {
     >
       <div className="tax-filing-my-itr">
         {!isEmpty(myItrs) &&
-          myItrs.map((detail) => (
-            <DetailsCard item={detail} key={detail.itr_id} handleClick={() => {}} />
+          myItrs.map((detail, idx) => (
+            <DetailsCard item={detail} key={detail?.itr_id || idx} handleClick={() => {}} />
           ))}
       </div>
     </Container>
