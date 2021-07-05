@@ -539,6 +539,8 @@ export function openKyc() {
     userKyc,
     kycJourneyStatus,
     kycStatusData,
+    isReadyToInvestBase,
+    tradingEnabled
   } = this.state;
 
   storageService().set("kycStartPoint", "mf");
@@ -554,6 +556,25 @@ export function openKyc() {
           fromState: "invest",
         },
       });
+    } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity" && 
+      (isReadyToInvestBase || userKyc?.application_status_v2 === "submitted")) || userKyc?.mf_kyc_processed) {
+      // already kyc done users
+      let isProductTypeSet;
+      if (!userKyc?.mf_kyc_processed) {
+        isProductTypeSet = setProductType();
+      }
+      if (userKyc?.application_status_v2 === "submitted") {
+        const showAadhaar = !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual");
+        if (userKyc.kyc_status !== "compliant") {
+          this.navigate(PATHNAME_MAPPER.journey, {
+            searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
+          });
+        } else {
+          this.navigate(PATHNAME_MAPPER.journey)
+        }
+      } else if (isProductTypeSet || userKyc?.mf_kyc_processed) {
+        this.navigate(PATHNAME_MAPPER.accountInfo)
+      }
     } else {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },
@@ -563,7 +584,7 @@ export function openKyc() {
 }
 
 export async function openStocks() {
-  let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
+  let { userKyc, kycJourneyStatus, kycStatusData, tradingEnabled } = this.state;
   storageService().set("kycStartPoint", "stocks");
   
   if (kycJourneyStatus === "rejected") {
@@ -586,17 +607,24 @@ export async function openStocks() {
               fromState: "invest",
             },
           });
-        } else if ((userKyc?.kyc_product_type !== "equity" && isReadyToInvestUser) || userKyc?.mf_kyc_processed) {
+        } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity" && 
+          (isReadyToInvestUser || userKyc?.application_status_v2 === "submitted")) || userKyc?.mf_kyc_processed) {
           // already kyc done users
           let isProductTypeSet;
           if (!userKyc?.mf_kyc_processed) {
-            const payload = {
-              "kyc":{},
-              "set_kyc_product_type": "equity"
-            }
-            isProductTypeSet = await setKycProductType(payload);
+            isProductTypeSet = setProductType();
           }
-          if (isProductTypeSet || userKyc?.mf_kyc_processed) {
+          
+          if (userKyc?.application_status_v2 === "submitted") {
+            const showAadhaar = !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual");
+            if (userKyc.kyc_status !== "compliant") {
+              this.navigate(PATHNAME_MAPPER.journey, {
+                searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
+              });
+            } else {
+              this.navigate(PATHNAME_MAPPER.journey)
+            }
+          } else if (isProductTypeSet || userKyc?.mf_kyc_processed) {
             this.navigate(PATHNAME_MAPPER.accountInfo)
           }
         } else {
@@ -606,6 +634,21 @@ export async function openStocks() {
         }
       }
     }
+  }
+}
+
+async function setProductType() {
+  try {
+    let isProductTypeSet;
+    const payload = {
+      "kyc":{},
+      "set_kyc_product_type": "equity"
+    }
+    isProductTypeSet = await setKycProductType(payload);
+    return isProductTypeSet;
+  } catch (err) {
+    console.log(err.message);
+    toast(err.message)
   }
 }
 

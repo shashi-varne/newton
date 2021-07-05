@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { validateFields } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
+import PennyFailedDialog from "../mini-components/PennyFailedDialog";
 import { getIFSC, addAdditionalBank } from "../common/api";
 import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
@@ -26,6 +27,7 @@ const AddBank = (props) => {
   const code = getConfig().code;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
+  const [isPennyFailed, setIsPennyFailed] = useState(false);
   const stateParams = props.location.state || {};
   const bank_id = stateParams.bank_id || "";
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -146,7 +148,12 @@ const AddBank = (props) => {
         });
       }
     } catch (err) {
-      toast(err.message || genericErrorMessage);
+      if ((kyc?.bank.meta_data_status === "submitted" && kyc?.bank.meta_data.bank_status === "pd_triggered") ||
+        (kyc?.bank.meta_data_status === "rejected" && kyc?.bank.meta_data.bank_status === "rejected")) {
+          setIsPennyFailed(true);
+      } else {
+        toast(err.message || genericErrorMessage);
+      }
     } finally {
       setIsApiRunning(false);
     }
@@ -245,6 +252,10 @@ const AddBank = (props) => {
     } else {
       nativeCallback({ events: eventObj });
     }
+  };
+
+  const checkBankDetails = () => {
+    setIsPennyFailed(false);
   };
 
   const goBack = () => {
@@ -375,6 +386,13 @@ const AddBank = (props) => {
             isOpen={isPennyExhausted}
             redirect={redirect}
             uploadDocuments={uploadDocuments}
+          />
+        )}
+        {isPennyFailed && (
+          <PennyFailedDialog
+          isOpen={isPennyFailed}
+          uploadDocuments={uploadDocuments}
+          checkBankDetails={checkBankDetails}
           />
         )}
       </div>

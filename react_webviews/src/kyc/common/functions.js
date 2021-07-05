@@ -227,7 +227,11 @@ export async function getPendingDocuments(kyc = {}) {
         if (option.value === kyc[group]?.meta_data?.doc_type) {
           docType = option.name;
         }
-      })
+      });
+
+      if (!docType) {
+        docType = "Bank document"
+      }
     }
 
     if (group === "address" || group === "nri_address") {
@@ -235,7 +239,11 @@ export async function getPendingDocuments(kyc = {}) {
         if (option.value === kyc[group]?.meta_data?.doc_type) {
           docType = option.name;
         }
-      })
+      });
+
+      if (!docType) {
+        docType = "Address document"
+      }
     }
 
     return {

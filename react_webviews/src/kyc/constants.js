@@ -302,11 +302,6 @@ export const eqkycDocsGroupMapper = {
     title: "Personal details",
     doc: "Selfie"
   },
-  // identification is used only in case of manual flow (non-DL)
-  "identification": {
-    title: "Personal details",
-    doc: "Selfie"
-  },
   "address": {
     title: "Address details",
     doc: ""

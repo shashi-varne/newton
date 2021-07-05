@@ -1,13 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { navigate as navigateFunc } from 'utils/functions'
 import { isEmpty, getUrlParams, storageService } from '../../utils/validators'
-import { getKycAppStatus } from '../services'
+import { getKycAppStatus, isReadyToInvest, setKycProductType } from '../services'
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from '../../utils/native_callback';
 import Container from '../common/Container';
+import { PATHNAME_MAPPER } from '../constants';
+import { getConfig, isTradingEnabled } from '../../utils/functions';
+
+const config = getConfig();
 
 function KycNative(props) {
   const navigate = navigateFunc.bind(props);
+  const [isApiRunning, setIsApiRunning] = useState(false);
   const urlParams = getUrlParams(props?.location?.search);
   const { kyc, isLoading } = useUserKycHook();
   const fromState = props?.location?.state?.fromState || "";
@@ -19,36 +24,80 @@ function KycNative(props) {
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
-      let kycStatus = getKycAppStatus(kyc).status || '';
-      storageService().set("native", true);
+      initialize();
+    }
+  }, [kyc]);
 
-      const data = {
-        state: {
-          goBack: "exit",
-        }
+  const setProductType = async () => {
+    try {
+      const payload = {
+        "kyc":{},
+        "set_kyc_product_type": "equity"
       }
-      if (urlParams?.type === 'addbank') {
-        navigate("/kyc/approved/banks/doc", data);
-      } else if (urlParams?.type === 'banklist') {
-         navigate('/kyc/add-bank', data);
-      } else if (kycStatus === 'ground') {
-         navigate('/kyc/home', data);
-      } else if (kycStatus === "ground_pan") {
-        navigate("/kyc/journey", {
-          state: {
-            ...data.state,
-            show_aadhaar: !kyc.address.meta_data.is_nri ? true : false,
-          }
-        });
-      } else {
-        navigate('/kyc/journey', data);
+      setIsApiRunning(true);
+      const isProductTypeSet = await setKycProductType(payload);
+      if (isProductTypeSet) {
+        navigate(PATHNAME_MAPPER.accountInfo, payload)
+      }
+    } catch (ex) {
+      console.log(ex.message);
+      nativeCallback({ action: "exit_web" })
+    } finally {
+      setIsApiRunning(false);
+    }
+  };
+
+  const initialize = () => {
+    let kycStatus = getKycAppStatus(kyc).status || '';
+    storageService().set("native", true);
+    const TRADING_ENABLED = isTradingEnabled(kyc);
+    const isReadyToInvestUser = isReadyToInvest();
+    const data = {
+      state: {
+        goBack: "exit",
       }
     }
-  }, [kyc])
+    if (urlParams?.type === 'addbank') {
+      navigate("/kyc/approved/banks/doc", data);
+    } else if (urlParams?.type === 'banklist') {
+       navigate('/kyc/add-bank', data);
+    } else if (kycStatus === 'ground') {
+       navigate('/kyc/home', data);
+    } else if (kycStatus === "ground_pan") {
+      navigate("/kyc/journey", {
+        state: {
+          ...data.state,
+          show_aadhaar: !kyc.address.meta_data.is_nri ? true : false,
+        }
+      });
+    } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity" && 
+      (isReadyToInvestUser || kyc?.application_status_v2 === "submitted")) || kyc?.mf_kyc_processed) {
+      // already kyc done users
+      let isProductTypeSet;
+      if (!kyc?.mf_kyc_processed) {
+        isProductTypeSet = setProductType();
+      }
+      
+      if (kyc?.application_status_v2 === "submitted") {
+        const showAadhaar = !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual");
+        if (kyc.kyc_status !== "compliant") {
+          navigate(PATHNAME_MAPPER.journey, {
+            searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
+          });
+        } else {
+          navigate(PATHNAME_MAPPER.journey)
+        }
+      } else if (isProductTypeSet || kyc?.mf_kyc_processed) {
+        navigate(PATHNAME_MAPPER.accountInfo)
+      }
+    } else {
+      navigate('/kyc/journey', data);
+    }
+  }
 
   return (
-    <Container skelton={isLoading} noHeader noFooter />
-  )
+    <Container skelton={isLoading || isApiRunning} noHeader noFooter />
+  );
 }
 
 export default KycNative;
