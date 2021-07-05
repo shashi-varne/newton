@@ -151,7 +151,7 @@ export function redirectToKyc(userKyc, kycJourneyStatus, navigate) {
     navigate("/kyc/home");
   } else {
     navigate("/kyc/journey", {
-      state: { show_aadhaar: (userKyc.address.meta_data.nri || userKyc.kyc_type === "manual") ? false : true } 
+      state: { show_aadhaar: (userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual") ? false : true } 
     });
   }
 }

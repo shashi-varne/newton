@@ -256,7 +256,7 @@ export function getKycAppStatus(kyc) {
 
   var status;
   if (rejected > 0) {
-    if (!TRADING_ENABLED || kyc?.kyc_product_type !== "equity") {
+    if (!TRADING_ENABLED) {
       status = "rejected";
       result.status = status;
       return result;
@@ -298,7 +298,11 @@ export function getKycAppStatus(kyc) {
   if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number &&
       kyc.kyc_type === "manual" && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
       status = 'incomplete';
-    }
+  }
+
+  if (kyc.kyc_status !== 'compliant' && kyc.address.meta_data.is_nri && kyc.application_status_v2 === 'incomplete') {
+    status = 'incomplete';
+  }
 
   if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
