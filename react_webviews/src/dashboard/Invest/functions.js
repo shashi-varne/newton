@@ -162,8 +162,8 @@ export function getCampaignBySection(notifications, sections) {
 
 export async function setNpsData(response) {
   if (
-    response.data.user.user.data.nps_investment &&
-    response.data.nps.nps_user.data.is_doc_required
+    response?.data?.user?.user?.data?.nps_investment &&
+    response?.data?.nps?.nps_user?.data?.is_doc_required
   ) {
     try {
       const res = await Api.get(apiConstants.npsInvestStatus);
