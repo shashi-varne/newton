@@ -7,6 +7,7 @@ import {
   ITR_ID_KEY,
   ITR_TYPE_KEY,
   USER_SUMMARY_KEY,
+  USER_DETAILS,
 } from '../constants'
 export function navigate(pathname, params, replace = false) {
   if (!replace) {
@@ -101,6 +102,7 @@ export const clearITRSessionStorage = () => {
   storageService().remove(ITR_TYPE_KEY)
   storageService().remove(ITR_APPLICATIONS_KEY)
   storageService().remove(USER_SUMMARY_KEY)
+  storageService().remove(USER_DETAILS)
 }
 
 export const parsePhoneNumber = (number) => {

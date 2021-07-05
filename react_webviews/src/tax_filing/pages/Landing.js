@@ -20,6 +20,7 @@ import {
 } from '../constants'
 import {
   checkIfLandedByBackButton,
+  clearITRSessionStorage,
   getTaxFilingFeatureLists,
   initBackButtonTracker,
   navigate as navigateFunc,
@@ -94,6 +95,7 @@ function Landing(props) {
   const goBack = () => {
     untrackBackButtonPress()
     nativeCallback({ action: 'exit', events: sendEvents('back') })
+    clearITRSessionStorage()
   }
 
   useEffect(() => {
