@@ -219,6 +219,7 @@ const AddressUpload = (props) => {
         result = response.result;
         updateKyc(result.kyc)
         if(isMyAccountFlow) {
+          toast("Address changed successfully")
           navigate('/my-account');
         } else {
           navigate('/kyc/upload/progress');
