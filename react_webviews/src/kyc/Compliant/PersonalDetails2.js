@@ -121,9 +121,9 @@ const PersonalDetails2 = (props) => {
         marital_status: form_data.marital_status
           ? form_data.marital_status.toLowerCase()
           : "",
-        mother_name: form_data.mother_name ? "yes" : "no",
+        "mother's_name": form_data.mother_name ? "yes" : "no",
         spouse_name: form_data.spouse_name ? "yes" : "no",
-        // "flow": 'premium onboarding'
+        "flow": 'premium onboarding'
       },
     };
     if (userAction === "just_set_events") {

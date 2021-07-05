@@ -12,7 +12,7 @@ import { getUserKycFromSummary } from "../../kyc/common/api";
 import { storageService } from "../../utils/validators";
 import { isEmpty } from "lodash";
 import { isDigilockerFlow } from "../../kyc/common/functions";
-import { getBasePath, navigate as navigateFunc } from "../../utils/functions";
+import { getBasePath, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -62,7 +62,12 @@ class DigiStatus extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next')
+    const {dl_flow, show_note} = this.state;
+    if (dl_flow && !show_note) {
+      this.sendEvents('next');
+    } else {
+      this.sendEvents('home');
+    }
     if (getConfig().isNative) {
       nativeCallback({ action: 'exit_web' });
     } else {
@@ -71,6 +76,7 @@ class DigiStatus extends Component {
   };
 
   navigateToReports = () => {
+    this.sendEvents("view_KYC_application");
     this.navigate("/kyc/report");
   };
 
@@ -155,11 +161,10 @@ class DigiStatus extends Component {
   sendEvents = (userAction, screenName) => {
     let kyc = this.state.kyc;
       let eventObj = {
-        // "event_name": 'KYC_registration',
-        event_name: "trading_onboarding",
+        event_name: isTradingEnabled(kyc) ? "trading_onboarding" : "kyc_registration",
         properties: {
           user_action: userAction || "",
-          screen_name: screenName || "kyc_verified",
+          screen_name: screenName || "kyc_complete",
           rti: "",
           initial_kyc_status: kyc.initial_kyc_status || "",
           flow: this.state.dl_flow ? "digi kyc" : "general",

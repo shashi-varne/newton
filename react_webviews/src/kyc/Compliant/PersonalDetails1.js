@@ -144,11 +144,11 @@ const PersonalDetails1 = (props) => {
             ? "others"
             : form_data?.gender?.toLowerCase()
           : "",
+        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        "flow": 'premium onboarding'
         // "mobile": form_data.mobile ? "yes" : "no",
-        // "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
         // "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
         // "help": isOpen ? 'yes' : 'no',
-        // "flow": 'premium onboarding'
       },
     };
     if (userAction === "just_set_events") {

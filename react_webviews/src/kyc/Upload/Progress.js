@@ -70,11 +70,11 @@ const Progress = (props) => {
 
   const sendEvents = (userAction, docs) => {
     let eventObj = {
-      event_name: "KYC_registration",
+      event_name: "kyc_registration",
       properties: {
         user_action: userAction || "",
-        screen_name: "upload_docs",
-        docs: docs || "",
+        screen_name: "upload_documents",
+        stage: docs || "",
       },
     };
     if (userAction === "just_set_events") {
