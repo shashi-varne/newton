@@ -155,46 +155,47 @@ export function commonRender(props_base) {
             <div className={this.addContainerClass(props_base)} data-aid={`${this.props['data-aid']}-parent-container`}>
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
-                && !this.props.showLoaderModal && !isMoneycontrol  && !this.props.loaderWithData && <Header
-                    disableBack={this.props.disableBack}
-                    title={this.props.title}
-                    smallTitle={this.props.smallTitle}
-                    provider={this.props.provider}
-                    count={this.props.count}
-                    total={this.props.total}
-                    current={this.props.current}
-                    edit={this.props.edit}
-                    noBack={this.props.noBack}
-                    type={getConfig().productName}
-                    resetpage={this.props.resetpage}
-                    handleReset={this.props.handleReset}
-                    topIcon={this.props.topIcon || this.props.rightIcon}
-                    handleTopIcon={this.handleTopIcon}
-                    inPageTitle={this.state.inPageTitle}
-                    force_hide_inpage_title={this.state.force_hide_inpage_title}
-                    style={this.props.styleHeader}
-                    className={this.props.classHeader}
-                    headerData={this.props.headerData}
-                    new_header={this.state.new_header || this.state.project === 'help'}
-                    goBack={this.headerGoBack || this.historyGoBack}
-                    filterPage={this.props.filterPage}
-                    handleFilter={this.props.handleFilter} 
-                    hideBack={this.props.hideBack}
-                    logo={this.props.logo}
-                    notification={this.props.notification}
-                    handleNotification={this.props.handleNotification}  
-                    noBackIcon={this.props.noBackIcon}        
-                />
-                }
-                {
-                    iframe && isMoneycontrol &&
+                && !this.props.showLoaderModal && !this.props.loaderWithData && 
+                (isMoneycontrol && iframe ? 
                     <IframeHeader
                         disableBack={this.props.disableBack}
                         type={getConfig().productName}
                         headerData={this.props.headerData}
                         goBack={this.headerGoBack || this.historyGoBack}
                     />
-                }
+                :
+                    <Header
+                        disableBack={this.props.disableBack}
+                        title={this.props.title}
+                        smallTitle={this.props.smallTitle}
+                        provider={this.props.provider}
+                        count={this.props.count}
+                        total={this.props.total}
+                        current={this.props.current}
+                        edit={this.props.edit}
+                        noBack={this.props.noBack}
+                        type={getConfig().productName}
+                        resetpage={this.props.resetpage}
+                        handleReset={this.props.handleReset}
+                        topIcon={this.props.topIcon || this.props.rightIcon}
+                        handleTopIcon={this.handleTopIcon}
+                        inPageTitle={this.state.inPageTitle}
+                        force_hide_inpage_title={this.state.force_hide_inpage_title}
+                        style={this.props.styleHeader}
+                        className={this.props.classHeader}
+                        headerData={this.props.headerData}
+                        new_header={this.state.new_header || this.state.project === 'help'}
+                        goBack={this.headerGoBack || this.historyGoBack}
+                        filterPage={this.props.filterPage}
+                        handleFilter={this.props.handleFilter} 
+                        hideBack={this.props.hideBack}
+                        logo={this.props.logo}
+                        notification={this.props.notification}
+                        handleNotification={this.props.handleNotification}  
+                        noBackIcon={this.props.noBackIcon}        
+                    />
+                )}
+            
                 {/* Below Header Block */}
                 <div id="HeaderHeight" style={{ top: 56 }}>
 
