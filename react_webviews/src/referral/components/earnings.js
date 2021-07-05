@@ -101,13 +101,13 @@ class Earnings extends Component {
   shareHandler = () => {
     let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${(this.state.referral_code || '').toUpperCase()}. Click here to download: ${this.state.link}`;
     if (this.state.type === 'finity') {
-      message = `Hey, I found ${this.state.type} to be one of the best apps to invest in direct mutual funds at 0% commission. Use referral code  ${(this.state.referral_code || '').toUpperCase()}. Click on this link to download ${this.state.type} ${this.state.link}`;
+      message = `Hey, I found ${this.state.type} to be one of the best apps to invest in direct mutual funds at zero commission. Use referral code  ${(this.state.referral_code || '').toUpperCase()}. Click on this link to download ${this.state.type} ${this.state.link}`;
     }
     this.sendEvents("share")
     if (getConfig().Android) {
       message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${(this.state.referral_code || '').toUpperCase()}. Click here to download:`
       if (this.state.type === 'finity') {
-        message = `Hey, I found ${this.state.type} to be one of the best apps to invest in direct mutual funds at 0% commission. Use referral code  ${(this.state.referral_code || '').toUpperCase()}. Click on this link to download ${this.state.type}`;
+        message = `Hey, I found ${this.state.type} to be one of the best apps to invest in direct mutual funds at zero commission. Use referral code  ${(this.state.referral_code || '').toUpperCase()}. Click on this link to download ${this.state.type}`;
       }
       let url = `${getConfig().actionUrl}?action_type=native&native_module=app%2Frefer_via_apps&message=${message}`
       nativeCallback({ action: 'open_module', message: { action_url: url } });
