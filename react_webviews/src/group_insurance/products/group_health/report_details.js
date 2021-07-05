@@ -112,6 +112,7 @@ class GroupHealthReportDetails extends Component {
                 }
 
                 lead.member_details = member_details;
+                lead.vendor = resultData?.quotation_details?.vendor;
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 let member_base = lead.member_base;
                 let applicantIndex = member_base.findIndex(item => item.key === 'applicant');

@@ -68,6 +68,14 @@ class GroupHealthPlanPremiumSummary extends Component {
           body.account_type = groupHealthPlanData.ui_members.parents_option;
           body.insurance_type = groupHealthPlanData.ui_members.parents_option;
         }
+
+        if(post_body.account_type === 'family' || post_body.account_type === 'self_family'){
+          var parents_total = groupHealthPlanData.star_parents_total;
+          var parents_in_law_total = groupHealthPlanData.star_parents_in_law_total;
+          body.parents = parents_total;
+          body.parents_in_law = parents_in_law_total;
+          body.adults = body.adults - (body.parents + body.parents_in_law)
+        }
       }
       if(this.state.providerConfig.provider_api === 'care_plus'){
         body['payment_frequency'] = post_body.payment_frequency;
