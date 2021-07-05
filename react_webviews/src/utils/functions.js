@@ -1005,3 +1005,12 @@ export function getBasePath() {
   }
   return window.location.origin + basename;
 }
+
+export function stringToHexa(str) {
+  const arr1 = []
+  for (let i = 0; i < str.length; ++i) {
+    const hex = Number(str.charCodeAt(i)).toString(16)
+    arr1.push(hex)
+  }
+  return arr1.join('')
+}

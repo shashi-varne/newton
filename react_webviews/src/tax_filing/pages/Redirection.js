@@ -9,6 +9,7 @@ import { getConfig, getBasePath } from 'utils/functions'
 
 import { clearITRSessionStorage } from '../common/functions'
 import { nativeCallback } from 'utils/native_callback'
+import { stringToHexa } from 'utils/functions'
 
 function Redirection(props) {
   const redirectionUrl = props?.location?.params?.redirectionUrl
@@ -29,6 +30,7 @@ function Redirection(props) {
     const timerHandle = setTimeout(() => {
       clearITRSessionStorage()
       const backUrl = getBasePath() + '/tax-filing' + getConfig().searchParams
+      const fisdomReturnUrl = getBasePath() + '/tax-filing/callback'
       if (getConfig().app === 'ios') {
         nativeCallback({
           action: 'show_top_bar',
@@ -44,7 +46,8 @@ function Redirection(props) {
           back_text: 'You are almost there, do you really want to go back?',
         },
       })
-      window.location.href = redirectionUrl
+      window.location.href =
+        redirectionUrl + `&ru=${stringToHexa(fisdomReturnUrl)}`
     }, 2000)
     return () => {
       clearInterval(timerHandle)
