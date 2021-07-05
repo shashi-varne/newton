@@ -17,6 +17,7 @@ import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
 import { openFilePicker } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
+import { capitalize } from 'lodash';
 
 const config = getConfig();
 const { productName, isNative, Web: isWeb, isSdk } = config;
@@ -92,14 +93,11 @@ const Selfie = (props) => {
       let params = {
         lat: locationData?.lat,
         lng: locationData?.lng,
+        live_score: selfieLiveScore
       };
 
       if (isTradingFlow) {
-        params = {
-          ...params,
-          live_score: selfieLiveScore,
-          kyc_product_type: 'equity'
-        };
+        params.kyc_product_type = 'equity';
       }
 
       setIsApiRunning("button");
@@ -187,10 +185,8 @@ const Selfie = (props) => {
     setIsLiveCamOpen(false);
 
     const defaultMsg = 'Something went wrong! Please try again';
-    if (['010', 'liveness-error'].includes(error?.errorCode)) {
-      return Toast(error.errorMsg || defaultMsg);
-    }
-    Toast(defaultMsg);
+    
+    Toast(capitalize(error?.errorMsg || defaultMsg));
   }
 
   const closeLocnPermDialog = (locationCloseType) => {
