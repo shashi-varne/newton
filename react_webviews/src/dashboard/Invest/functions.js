@@ -539,7 +539,8 @@ export function openKyc() {
     userKyc,
     kycJourneyStatus,
     kycStatusData,
-    isReadyToInvestBase
+    isReadyToInvestBase,
+    tradingEnabled
   } = this.state;
 
   storageService().set("kycStartPoint", "mf");
@@ -555,7 +556,7 @@ export function openKyc() {
           fromState: "invest",
         },
       });
-    } else if ((userKyc?.kyc_product_type !== "equity" && 
+    } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity" && 
       (isReadyToInvestBase || userKyc?.application_status_v2 === "submitted")) || userKyc?.mf_kyc_processed) {
       // already kyc done users
       let isProductTypeSet;
@@ -583,7 +584,7 @@ export function openKyc() {
 }
 
 export async function openStocks() {
-  let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
+  let { userKyc, kycJourneyStatus, kycStatusData, tradingEnabled } = this.state;
   storageService().set("kycStartPoint", "stocks");
   
   if (kycJourneyStatus === "rejected") {
@@ -606,7 +607,7 @@ export async function openStocks() {
               fromState: "invest",
             },
           });
-        } else if ((userKyc?.kyc_product_type !== "equity" && 
+        } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity" && 
           (isReadyToInvestUser || userKyc?.application_status_v2 === "submitted")) || userKyc?.mf_kyc_processed) {
           // already kyc done users
           let isProductTypeSet;

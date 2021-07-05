@@ -7,7 +7,7 @@ import { nativeCallback } from '../../utils/native_callback';
 import Container from '../common/Container';
 import { kycStatusMapperInvest } from '../../dashboard/Invest/constants';
 import { PATHNAME_MAPPER } from '../constants';
-import { getConfig } from '../../utils/functions';
+import { getConfig, isTradingEnabled } from '../../utils/functions';
 
 const config = getConfig();
 
@@ -16,7 +16,7 @@ function Native(props) {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const { kyc, isLoading } = useUserKycHook();
   const fromState = props?.location?.state?.fromState || "";
-
+  
   const data = {
     state: {
       goBack: "exit",
@@ -57,6 +57,8 @@ function Native(props) {
     let kycJourneyStatus = getKycAppStatus(kyc).status || '';
     storageService().set("native", true);
     storageService().set("kycStartPoint", "stocks");
+    const TRADING_ENABLED = isTradingEnabled(kyc)
+
     let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
     if (kyc.kyc_status === "compliant") {
       if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
@@ -86,7 +88,7 @@ function Native(props) {
                 ...data.state
               },
             });
-          } else if ((kyc?.kyc_product_type !== "equity" && 
+          } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity" && 
             (isReadyToInvestUser || kyc?.application_status_v2 === "submitted")) || kyc?.mf_kyc_processed) {
             // already kyc done users
             let isProductTypeSet;

@@ -6,7 +6,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from '../../utils/native_callback';
 import Container from '../common/Container';
 import { PATHNAME_MAPPER } from '../constants';
-import { getConfig } from '../../utils/functions';
+import { getConfig, isTradingEnabled } from '../../utils/functions';
 
 const config = getConfig();
 
@@ -50,6 +50,7 @@ function KycNative(props) {
   const initialize = () => {
     let kycStatus = getKycAppStatus(kyc).status || '';
     storageService().set("native", true);
+    const TRADING_ENABLED = isTradingEnabled(kyc);
     const isReadyToInvestUser = isReadyToInvest();
     const data = {
       state: {
@@ -69,7 +70,7 @@ function KycNative(props) {
           show_aadhaar: !kyc.address.meta_data.is_nri ? true : false,
         }
       });
-    } else if ((kyc?.kyc_product_type !== "equity" && 
+    } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity" && 
       (isReadyToInvestUser || kyc?.application_status_v2 === "submitted")) || kyc?.mf_kyc_processed) {
       // already kyc done users
       let isProductTypeSet;
