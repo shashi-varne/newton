@@ -100,13 +100,13 @@ class Earnings extends Component {
 
   shareHandler = () => {
     let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${(this.state.referral_code || '').toUpperCase()}. Click here to download: ${this.state.link}`;
-    if (this.state.type === finity) {
+    if (this.state.type === 'finity') {
       message = `Hey, I found ${this.state.type} to be one of the best apps to invest in direct mutual funds at 0% commission. Use referral code  ${(this.state.referral_code || '').toUpperCase()}. Click on this link to download ${this.state.type} ${this.state.link}`;
     }
     this.sendEvents("share")
     if (getConfig().Android) {
       message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${(this.state.referral_code || '').toUpperCase()}. Click here to download:`
-      if (this.state.type === finity) {
+      if (this.state.type === 'finity') {
         message = `Hey, I found ${this.state.type} to be one of the best apps to invest in direct mutual funds at 0% commission. Use referral code  ${(this.state.referral_code || '').toUpperCase()}. Click on this link to download ${this.state.type}`;
       }
       let url = `${getConfig().actionUrl}?action_type=native&native_module=app%2Frefer_via_apps&message=${message}`
@@ -119,14 +119,14 @@ class Earnings extends Component {
 
   remindHandler = (length, item, index) => {
     let message = `Hey, looks like you have downloaded the ${this.state.type} app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap: ${this.state.link}`;
-    if (this.state.type === finity) {
+    if (this.state.type === 'finity') {
       message = `Hey mate, now enjoy commission-free investing on ${this.state.type}. Check out 5,000 + direct mutual funds, get quality investment advice, one-tap portfolio tracking & much more. Invest now ${this.state.link}`;
     }
     this.sendEvents("remind", item);
 
     if (getConfig().Android) {
       message = `Hey, looks like you have downloaded the ${this.state.type} app but have not started investing yet. Waiting will cost you severely in potential returns so begin today! Tap:`
-      if (this.state.type === finity) {
+      if (this.state.type === 'finity') {
         message = `Hey mate, now enjoy commission-free investing on ${this.state.type}. Check out 5,000 + direct mutual funds, get quality investment advice, one-tap portfolio tracking & much more. Invest now ${this.state.link}`;
       }
       let url = `${getConfig().actionUrl}?action_type=native&native_module=app%2Frefer_via_apps&message=${message}`
