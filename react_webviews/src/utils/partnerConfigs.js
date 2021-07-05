@@ -466,4 +466,9 @@ export const partnerConfigs = {
       },
     },
   },
+  quesscorp: {
+    code: 'quesscorp',
+    mobile: '+91-9642596425',
+    search_button: 'search.png'
+  }
 };
