@@ -82,10 +82,8 @@ class Earnings extends Component {
   sendEvents(user_action, user = null) {
     let eventObj = {
       event_name: "refer_earn",
-      event_category: "refer_earn",
       properties: {
         user_action: user_action,
-        event_name: "refer_earn",
         screen_name: "my_earnings",
         earn: this.state.total_earnings,
         user: user,

@@ -104,10 +104,8 @@ class Details extends Component {
   sendEvents(user_action, tncClicked) {
     let eventObj = {
       event_name: "refer_earn",
-      event_category: "refer_earn",
       properties: {
         user_action: user_action,
-        event_name: "refer_earn",
         screen_name: "refer_and_earn",
         tnc_clicked: tncClicked ? "yes" : "no",
       },
