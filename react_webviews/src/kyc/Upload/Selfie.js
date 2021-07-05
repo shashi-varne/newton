@@ -78,12 +78,16 @@ const Selfie = (props) => {
     }
   }
 
+  useEffect(() => {
+    // Reset bottomSheetType when bottomSheet is closed
+    if (!openBottomSheet) {
+      setBottomSheetType('');
+    }
+  }, [openBottomSheet]);
+
   const handleSubmit = async () => {
     sendEvents('next');
 
-    if (bottomSheetType === "failed") {
-      setBottomSheetType("");
-    }
     try {
       if (parseFloat(selfieLiveScore) < 0.8) {
         // eslint-disable-next-line no-throw-literal
