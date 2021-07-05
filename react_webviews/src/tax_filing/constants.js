@@ -97,7 +97,7 @@ export const TAX_FILING_OPTIONS = [
     type: 'free',
   },
   {
-    title: 'Hire a Personal CA',
+    title: 'Hire a personal CA',
     subtitle: 'Experts file and you save',
     icon: 'icn_ca',
     type: 'eCA',

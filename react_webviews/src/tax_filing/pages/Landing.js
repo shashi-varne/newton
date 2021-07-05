@@ -171,7 +171,7 @@ function Landing(props) {
     >
       <div className="tax-filing-landing">
         <Carousal
-          title="Taxation made simple"
+          title="Taxation made simple!"
           subtitle="File ITR easily, quickly and with maximum tax savings"
           dataAidSuffix="tax-filing-itr-carousel"
         />
