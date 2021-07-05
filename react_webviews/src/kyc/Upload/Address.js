@@ -149,13 +149,20 @@ const AddressUpload = (props) => {
     });
   };
 
+  const onKnowMoreClick = () => {
+    sendEvents('know_more');
+    navigate("/kyc/upload-instructions", {
+      state: { document: "address" }
+    });
+  };
+
   const sendEvents = (userAction, type, docSide) => {
     // callbackWeb.eventCallback to be added
     let eventObj = {
-      event_name: "KYC_registration",
+      event_name: "kyc_registration",
       properties: {
         user_action: userAction || "",
-        screen_name: "address_doc",
+        screen_name: "upload_address_proof",
         type: type || "",
         doc_side: docSide || "",
         doc_type: addressProofKey,
@@ -252,9 +259,7 @@ const AddressUpload = (props) => {
             <WVClickableTextElement
               color="secondary"
               className="know-more-button"
-              onClick={() => navigate("/kyc/upload-instructions", {
-                state: { document: "address" }
-              })}
+              onClick={onKnowMoreClick}
             >
               KNOW MORE
             </WVClickableTextElement>

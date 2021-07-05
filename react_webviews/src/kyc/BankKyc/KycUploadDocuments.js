@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { SUPPORTED_IMAGE_TYPES, VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow, isEquityCompleted } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, isEquityCompleted } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
@@ -91,7 +91,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleSubmit = async () => {
-    sendEvents('next')
+    sendEvents('next');
     try {
       if (selected === null || !file) throw new Error("No file added");
       setIsApiRunning("button");
@@ -111,7 +111,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleEdit = () => {
-    sendEvents('edit')
+    sendEvents('edit');
     navigate(`/kyc/${userType}/bank-details`, {
       state: { isEdit: true }
     });
@@ -122,7 +122,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleOtherPlatformNavigation = () => {
-    sendEvents('next', "", 'bottom_sheet')
+    sendEvents('next', 'bank_verification_pending');
     if (additional) {
       navigate("/kyc/add-bank");
     } else if (userType === "compliant") {
@@ -199,6 +199,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const goBackToPath = () => {
+    sendEvents("back");
     if (fromState.indexOf("/kyc/add-bank/details") !== -1) {
       props.history.goBack();
       return;
@@ -219,16 +220,16 @@ const KycUploadDocuments = (props) => {
   const selectedDocValue =
     selected !== null ? VERIFICATION_DOC_OPTIONS[selected].value : "";
 
-    const sendEvents = (userAction, type, screen_name) => {
+    const sendEvents = (userAction, screen_name) => {
       let docMapper = ["bank_statement", "cancelled_cheque", "passbook"];
       let eventObj = {
         event_name: "kyc_registration",
         properties: {
           user_action: userAction || "",
-          screen_name: screen_name || "upload_documents",
-          document: selected ? docMapper[selected] : "",
+          screen_name: screen_name || "bank_upload_documents",
+          doc_type: selected ? docMapper[selected] : "",
+          "flow": getFlow(kyc) || "",
           // "initial_kyc_status": kyc.initial_kyc_status,
-          // "flow": getFlow(kyc) || "",
           // "type": type || '',
           // "status" : screen_name ? "verification pending":""
         },

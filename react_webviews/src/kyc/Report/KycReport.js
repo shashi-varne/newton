@@ -255,10 +255,10 @@ const Report = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      event_name: "KYC_registration",
+      event_name: "kyc_registration",
       properties: {
         user_action: userAction || "",
-        screen_name: "kyc_done",
+        screen_name: "kyc_details",
         flow: getFlow(kyc) || "",
       },
     };

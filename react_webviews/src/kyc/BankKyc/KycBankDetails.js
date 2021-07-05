@@ -14,7 +14,8 @@ import {
   checkDLPanFetchAndApprovedStatus,
   isDigilockerFlow,
   validateFields,
-  skipBankDetails
+  skipBankDetails,
+  getFlow
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
@@ -316,7 +317,7 @@ const KycBankDetails = (props) => {
   };
 
   const checkBankDetails = () => {
-    sendEvents("check bank details", "bottom_sheet");
+    sendEvents("check_bank_details", "unable_to_add_bank");
     setIsPennyFailed(false);
   };
 
@@ -325,6 +326,7 @@ const KycBankDetails = (props) => {
   };
 
   const goBackToPath = () => {
+    sendEvents("back");
     if (goBackPath) {
       navigate(goBackPath);
     } else {
@@ -354,15 +356,11 @@ const KycBankDetails = (props) => {
           ? "yes"
           : "no",
         attempt_no: kyc.bank.meta_data.user_rejection_attempts || "",
-        // "flow": getFlow(kyc) || ""
+        "flow": getFlow(kyc) || ""
       },
     };
-    if (screenName != "unable_to_add_bank") {
-      eventObj.properties["account_type"] = bankData.account_type
-        ? bankData.account_type === "SB"
-          ? "savings"
-          : "current"
-        : "";
+    if (screenName !== "unable_to_add_bank") {
+      eventObj.properties["account_type"] = bankData.account_type;
       eventObj.properties["bank_name"] = bankData.bank_name || "";
     }
     if (userAction === "just_set_events") {

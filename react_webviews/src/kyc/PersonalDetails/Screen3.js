@@ -12,6 +12,7 @@ import {
   compareObjects,
   getTotalPagesInPersonalDetails,
   isEmailAndMobileVerified,
+  getFlow,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -122,20 +123,20 @@ const PersonalDetails3 = (props) => {
       "5-10L": "5_to_10",
       "10-25L": "10_to_25",
       "25-100L": "25_to_100",
-      ">100L": "above_100", // value to be checked
+      ">100L": "above_100",
     };
     let eventObj = {
       event_name: "kyc_registration",
       properties: {
         user_action: userAction || "",
         screen_name: "professional_details",
-        occupation: form_data.occupation
+        occupation_details: form_data.occupation
           ? form_data.occupation === "SELF EMPLOYED"
             ? "self_employed"
             : form_data.occupation.toLowerCase()
           : "",
         income_range: form_data.income ? incomeMapper[form_data.income] : "",
-        // "flow": 'general'
+        "flow": getFlow(kyc) || ""
       },
     };
     if (userAction === "just_set_events") {

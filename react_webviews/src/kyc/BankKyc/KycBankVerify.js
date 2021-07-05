@@ -3,7 +3,7 @@ import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
-import { checkDLPanFetchAndApprovedStatus, isDigilockerFlow } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -140,14 +140,14 @@ const KycBankVerify = (props) => {
   };
 
   const checkBankDetails = () => {
-    sendEvents("check bank details", "bottom_sheet");
+    sendEvents("check_bank_details", "unable_to_add_bank");
     navigate(`/kyc/${userType}/bank-details`, {
       state: { isEdit: true }
     });
   };
 
   const uploadDocuments = () => {
-    sendEvents("upload documents", "bottom_sheet");
+    sendEvents("upload_documents", "unable_to_add_bank");
     navigate(`/kyc/${userType}/upload-documents`);
   };
 
@@ -231,7 +231,7 @@ const KycBankVerify = (props) => {
   };
 
   const goToJourney = () => {
-    sendEvents("next", "bottom_sheet");
+    sendEvents("try_later", "unable_to_add_bank");
     navigate(PATHNAME_MAPPER.journey)
   };
 
@@ -248,15 +248,13 @@ const KycBankVerify = (props) => {
       properties: {
         user_action: userAction || "",
         screen_name: screen_name || "verify_bank_account",
+        "flow": getFlow(kyc) || ""
         // "initial_kyc_status": kyc.initial_kyc_status,
-        // "flow": getFlow(kyc) || ""
       },
     };
-    if (screen_name === "bottom_sheet") {
+    if (screen_name === "unable_to_add_bank") {
       if (isPennySuccess) eventObj.properties.status = "bank added";
       else if (isPennyFailed) eventObj.properties.status = "bank not added";
-      //  else  if() // to be checked for error
-      //   eventObj.properties.status = 'error screen';
       else if (isPennyExhausted)
         eventObj.properties.status = "unable to add bank attempts exhausted";
       else eventObj.properties.status = "";

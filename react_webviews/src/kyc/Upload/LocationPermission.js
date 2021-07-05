@@ -49,6 +49,7 @@ const LocationPermission = ({
   onInit, // callback to trigger (if any) for when google geocoder module is initialised
   onLocationFetchSuccess,
   onLocationFetchFailure,
+  sendEvents
 }) => {
   const [pageType, setPageType] = useState('verifying-location');
   const [pageContent, setPageContent] = useState({});
@@ -129,8 +130,14 @@ const LocationPermission = ({
     if (pageType === 'invalid-region') {
       onClose(pageType);
     } else {
+      sendEvents('next', 'allow_location_access');
       requestLocnPermission();
     }
+  }
+
+  const onCloseIconClick = () => {
+    sendEvents('back', 'allow_location_access');
+    onClose(pageType);
   }
 
   if (!isOpen) {
@@ -142,7 +149,7 @@ const LocationPermission = ({
       open={isOpen}
       onClose={() => onClose(pageType)}
     >
-      <WVFullscreenDialog.Content onCloseClick={() => onClose(pageType)}>
+      <WVFullscreenDialog.Content onCloseClick={onCloseIconClick}>
         <div className="kyc-loc-permission">
           <div className="kyc-loc-perm-illustration">
             {pageContent?.imgElem}

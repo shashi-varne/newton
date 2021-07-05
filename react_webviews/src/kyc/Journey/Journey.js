@@ -116,8 +116,9 @@ const Journey = (props) => {
   }
 
   const confirmGoBack = () => {
-      closeGoBackModal()
-      backHandlingCondition();
+    sendEvents("back");
+    closeGoBackModal()
+    backHandlingCondition();
   }
 
   useEffect(() => {
@@ -625,6 +626,11 @@ const Journey = (props) => {
     }
   }
 
+  const isResumeJourney = () => {
+    let fromStateArray = ["/", "/landing", "/invest", "/kyc/native", "/kyc/stocks/native"]
+    return fromStateArray.includes(fromState);
+  }
+
   const sendEvents = (userAction, screen_name) => {
     let stageData = 0;
     // let stageDetailData='';
@@ -654,10 +660,9 @@ const Journey = (props) => {
           user_action: userAction || "",
           screen_name: screen_name || "kyc_journey",
           premium_onboarding: kyc.kyc_status === "compliant" ? "yes" : "no",
-          kyc_flow: isDigilockerFlow(kyc) ? "digilocker" : "manual",
+          kyc_flow: getFlow(kyc) || "",
           step: `step${stageData}`,
-
-          // resume_journey: To be checked
+          resume_journey: isResumeJourney() ? "yes" : "no"
 
           // "stage": stageData,
           // "details": stageDetailData,

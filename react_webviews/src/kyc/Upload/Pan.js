@@ -146,6 +146,7 @@ const Pan = (props) => {
   }
 
   const handleRetryClick = () => {
+    sendEvents("next", "pan_details_mismatch");
     handleCloseBottomSheet();
     setFile(null);
     setFileToShow(null);
@@ -153,8 +154,7 @@ const Pan = (props) => {
 
   const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      // "event_name": 'KYC_registration',
-      "event_name": 'trading_onboarding',
+      "event_name": tradingEnabled ? 'trading_onboarding' : 'kyc_registration',
       "properties": {
         "user_action": userAction || "",
         "screen_name": screenName || "upload_pan",
