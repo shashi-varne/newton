@@ -411,7 +411,7 @@ button {
   border: 0;
 }
 
-.FooterDefaultLayout .footer-hover:hover{
+.FooterDefaultLayout .footer-hover:hover, .FooterSummaryLayout .footer-hover:hover{
   background-color: var(--on-hover) !important;
 }
 
