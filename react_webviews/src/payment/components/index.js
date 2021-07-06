@@ -337,6 +337,7 @@ class PaymentOption extends React.Component {
       showDebitLoader: false,
       showBilldeskLoader: false,
       skelton: true,
+      openIppbDisclaimer: false,
       productName: getConfig().productName
     };
 
