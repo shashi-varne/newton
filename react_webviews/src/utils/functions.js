@@ -726,6 +726,8 @@ export const getConfig = () => {
     generic_callback = 'true';
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
+  } else if (main_pathname.indexOf('tax-filing') >= 0) {
+    generic_callback = true
   }
 
   let search = window.location.search;
