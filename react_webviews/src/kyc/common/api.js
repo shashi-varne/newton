@@ -315,3 +315,19 @@ export const socialAuth = async (body) => {
   const res = await Api.post(`${API_CONSTANTS.socialAuth}/${body.provider}?redirect_url=${body.redirectUrl}`)
   return handleApi(res);
 }
+
+export const verifyGoldOtp = async (body) => {
+  let url = body?.verify_link + '/' + body?.provider + '?otp=' + body?.otp;
+  const res = await Api.post(url);
+  return handleApi(res);
+}
+
+export const sendGoldOtp = async (body) => {
+  const res = await Api.post("/api/gold/contact/trigger/otp", body)
+  return handleApi(res);
+}
+
+export const resendGoldOtp = async (body) => {
+  const res = await Api.get(body)
+  return handleApi(res);
+}

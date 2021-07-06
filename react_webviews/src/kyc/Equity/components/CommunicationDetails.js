@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Container from "../../common/Container";
 import TextField from "@material-ui/core/TextField";
 import "./commonStyles.scss";
-import { resendOtp, sendOtp, verifyOtp } from "../../common/api";
+import { resendOtp, sendOtp, verifyOtp , sendGoldOtp, resendGoldOtp, verifyGoldOtp} from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import {
   isEmpty,
@@ -57,6 +57,8 @@ const CommunicationDetails = (props) => {
   const [isKycDone, setIsKycDone] = useState();
   const [totalPages, setTotalPages] = useState();
   const [isDlFlow, setIsDlFlow] = useState();
+  const [goldVerificationLink, setVerificationLink] = useState();
+  const [goldResendVerificationOtpLink, setGoldResendVerificationOtpLink]  = useState();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -100,8 +102,13 @@ const CommunicationDetails = (props) => {
   const resendOtpVerification = async () => {
     setShowDotLoader(true);
     try {
+      if (stateParams?.fromState === "/buy-gold") {
+        const res = await resendGoldOtp(goldResendVerificationOtpLink);
+        console.log(res)
+      } else {
       const result = await resendOtp(otpId);
       setOtpId(result.otp_id);
+      }
       setOtpData({
         otp: "",
         totalTime: 30,
@@ -125,9 +132,18 @@ const CommunicationDetails = (props) => {
           toast("Minimum otp length is 4");
           return;
         }
+        if (stateParams?.fromState === "/buy-gold") {
+          let body = {
+            verify_link: goldVerificationLink,
+            provider: stateParams?.provider,
+            otp: otpData?.otp,
+          }
+          await verifyGoldOtp(body);
+        } else {
+          const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
+          updateKyc(otpResult.kyc);
+        }
         setShowLoader("button");
-        const otpResult = await verifyOtp({ otpId, otp: otpData.otp });
-        updateKyc(otpResult.kyc);
         handleNavigation();
       } else {
         let body = {};
@@ -154,13 +170,19 @@ const CommunicationDetails = (props) => {
           body.whatsapp_consent = formData.whatsappConsent;
         }
         setShowLoader("button");
-        const result = await sendOtp(body);
+        if (stateParams?.fromState === "/buy-gold") {
+          const result = await sendGoldOtp(body);
+          setVerificationLink(result?.verification_link);
+          setGoldResendVerificationOtpLink(result?.resend_verification_otp_link);
+        } else {
+          const result = await sendOtp(body);
+          setOtpId(result.otp_id);
+        }
         setShowOtpContainer(true);
-        setOtpId(result.otp_id);
         setOtpData({
           otp: "",
-          totalTime: 30,
-          timeAvailable: 30,
+          totalTime: 10,
+          timeAvailable: 10,
         });
         setButtonTitle("VERIFY");
       }

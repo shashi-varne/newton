@@ -383,7 +383,7 @@ class GoldRegister extends Component {
             // res.pfwresponse.result.message === 'success'  || 
             res.pfwresponse.result.mobile_verified === false || this.state.mobileAlreadyExist) {
             this.verifyMobile();
-          } else if(res.pfwresponse.result.mobile_verified === true) {
+          } else if(res.pfwresponse.result.mobile_verified === true || res.pfwresponse.result.coutinue_gold_profile_registration === true) {
             this.createUser();
           } else {
   
