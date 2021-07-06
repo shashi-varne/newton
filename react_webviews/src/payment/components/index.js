@@ -23,6 +23,7 @@ let intent_supported = false;
 let upi_others = true;
 let upi_apps = {};
 let nativeData;
+const config = getConfig();
 function getAllUrlParams(url) {
 
   // get query string from url (optional) or window
@@ -257,37 +258,37 @@ const SelectBankModal = (props) => {
 
 const IppbDisclaimer = ({ open, close }) => {
   return (
-    <Dialog open={open}>
+    <Dialog open={open} className="po-ippb-disclaimer">
       <DialogTitle className="po-ippb-disclaimer-title">
         DISCLAIMER:
       </DialogTitle>
       <DialogContent className="po-ippb-disclaimer-content">
         <p>
-          <span>1.</span> India Post Payments Bank (hereto also referred as "IPPB") has
+          <b>1.</b> India Post Payments Bank (hereto also referred as "IPPB") has
           entered into a limited term partnership with M/s Finwizard Technology
-          Pvt Ltd. (popularly known & hereafter referred as "FISDOM") to
+          Pvt Ltd. (popularly known & hereafter referred as "<span className="text-transform-uppercase">{config.productName}</span>") to
           facilitate Mutual Fund investments.
         </p>
         <p>
-          <span>2.</span> IPPB, the bank, through its field distribution teams, including the
-          BC channel will only provide referral of the "FISDOM Mobile App" to
+          <b>2.</b> IPPB, the bank, through its field distribution teams, including the
+          BC channel will only provide referral of the "<span className="text-transform-uppercase">{config.productName}</span> Mobile App" to
           its customers.
         </p>
-        <p><span>3.</span> Mutual Funds are subject to market risks.</p>
+        <p><b>3.</b> Mutual Funds are subject to market risks.</p>
         <p>
-          <span>4.</span> IPPB nor any of its affiliates, does not in any way, assure any
+          <b>4.</b> IPPB nor any of its affiliates, does not in any way, assure any
           quantum of returns from the mutual funds
         </p>
         <p>
-          <span>5.</span> IPPB and all its affiliates shall not be responsible for any kind
-          of deficiency in the services of Fisdom.
+          <b>5.</b> IPPB and all its affiliates shall not be responsible for any kind
+          of deficiency in the services of <span className="text-transform-capitalize">{config.productName}</span>.
         </p>
         <p>
-          <span>6.</span> I have read, understood and agree to the terms and conditions as
+          <b>6.</b> I have read, understood and agree to the terms and conditions as
           above.
         </p>
       </DialogContent>
-      <DialogActions>
+      <DialogActions className="po-ippb-disclaimer-actions">
         <Button buttonTitle="CONTINUE" onClick={close} style={{width: "100%"}} />
       </DialogActions>
     </Dialog>
