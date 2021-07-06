@@ -11,7 +11,7 @@ import { YEARS_FILTERS, BOTTOM_FILTER_NAME, SELECTED_YEAR } from "../constants";
 import "./PassiveFundDetails.scss";
 import "../style.scss"
 import { nativeCallback } from "../../../utils/native_callback";
-import { isEmpty } from 'lodash';
+import { isEmpty, orderBy } from 'lodash';
 import Checkbox from '@material-ui/core/Checkbox';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
@@ -79,7 +79,7 @@ class FundList extends Component {
             var uniqueArr = Array.from(uniqueSet)
         }
         if (!isEmpty(uniqueArr)) {
-            const option = uniqueArr.map((item, idx) => {
+            let option = uniqueArr.map((item, idx) => {
                 return ({
                     value: item,
                     control: Checkbox,
@@ -89,6 +89,7 @@ class FundList extends Component {
                       },
                 });
             })
+            option = orderBy(option, ['title']);
             bottomFilterOptions.forEach(element => {
 
                 if (element.name === name) {

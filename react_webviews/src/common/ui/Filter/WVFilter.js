@@ -102,7 +102,7 @@ const WVFilter = ({
 
       <FilterContainer close={closeFilter} open={isOpen}>
         <section className="wv-filter-bottom-sheet" data-aid={`filter-bottom-sheet-${dataAidSuffix}`}>
-          <p className="wv-heading">FILTERS</p>
+          <p className="wv-heading">Filters</p>
           <main className="wv-filter">
             <div className="wv-title">
               <ul>
