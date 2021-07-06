@@ -258,7 +258,7 @@ const SelectBankModal = (props) => {
 const IppbDisclaimer = ({ open, close }) => {
   return (
     <Dialog open={open}>
-      <DialogTitle className="po-ippb-discliamer-title">
+      <DialogTitle className="po-ippb-disclaimer-title">
         DISCLAIMER:
       </DialogTitle>
       <DialogContent className="po-ippb-disclaimer-content">
