@@ -15,6 +15,8 @@ import ic_close from 'assets/fisdom/ic_close.svg';
 import SVG from 'react-inlinesvg';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
+import Dialog, { DialogContent, DialogActions, DialogTitle } from "material-ui/Dialog";
+import Button from '../../common/ui/Button';
 
 let store = {};
 let intent_supported = false;
@@ -253,6 +255,45 @@ const SelectBankModal = (props) => {
   );
 };
 
+const IppbDisclaimer = ({ open, close }) => {
+  return (
+    <Dialog open={open}>
+      <DialogTitle className="po-ippb-discliamer-title">
+        DISCLAIMER:
+      </DialogTitle>
+      <DialogContent className="po-ippb-disclaimer-content">
+        <p>
+          <span>1.</span> India Post Payments Bank (hereto also referred as "IPPB") has
+          entered into a limited term partnership with M/s Finwizard Technology
+          Pvt Ltd. (popularly known & hereafter referred as "FISDOM") to
+          facilitate Mutual Fund investments.
+        </p>
+        <p>
+          <span>2.</span> IPPB, the bank, through its field distribution teams, including the
+          BC channel will only provide referral of the "FISDOM Mobile App" to
+          its customers.
+        </p>
+        <p><span>3.</span> Mutual Funds are subject to market risks.</p>
+        <p>
+          <span>4.</span> IPPB nor any of its affiliates, does not in any way, assure any
+          quantum of returns from the mutual funds
+        </p>
+        <p>
+          <span>5.</span> IPPB and all its affiliates shall not be responsible for any kind
+          of deficiency in the services of Fisdom.
+        </p>
+        <p>
+          <span>6.</span> I have read, understood and agree to the terms and conditions as
+          above.
+        </p>
+      </DialogContent>
+      <DialogActions>
+        <Button buttonTitle="CONTINUE" onClick={close} style={{width: "100%"}} />
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 class PaymentOption extends React.Component {
   constructor(props) {
     super(props);
@@ -311,6 +352,7 @@ class PaymentOption extends React.Component {
     this.selectedUpiBank = this.selectedUpiBank.bind(this);
     this.selectedBank = this.selectedBank.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.closeIppbDisclaimer = this.closeIppbDisclaimer.bind(this);
   }
 
   componentWillMount() {
@@ -335,6 +377,7 @@ class PaymentOption extends React.Component {
       if (store.partner === 'ippb') {
         intent_supported = false;
         upi_others = true;
+        this.setState({ openIppbDisclaimer: true})
       }
       const supportedBanks = store.banks.filter((item, i) => {
         return item.bank_supported;
@@ -503,6 +546,10 @@ class PaymentOption extends React.Component {
 
   closeModal() {
     this.setState({ showCancelModal: false, reason: '' });
+  }
+
+  closeIppbDisclaimer() {
+    this.setState({ openIppbDisclaimer: false });
   }
 
   selectptype(type) {
@@ -799,6 +846,12 @@ class PaymentOption extends React.Component {
                 closeBankModal={this.closeBankModal}
                 activeIndex={this.state.activeIndex} />
             }
+            {this.state.openIppbDisclaimer && (
+              <IppbDisclaimer
+                open={this.state.openIppbDisclaimer}
+                close={this.closeIppbDisclaimer}
+              />
+            )}
           </div>
         }
       </Container>

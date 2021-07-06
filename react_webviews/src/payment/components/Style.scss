@@ -1011,3 +1011,21 @@ body[data-device="web"] {
 .ic_close {
   padding: 14px 14px 0;
 }
+
+.po-ippb-discliamer-title {
+  padding-bottom: 10px !important;
+}
+
+.po-ippb-disclaimer-content {
+  p {
+    padding: 10px 0;
+    font-size: 14px;
+    color: var(--label);
+    margin: 0;
+
+    span {
+      font-weight: 600;
+      color: var(--default);
+    }
+  }
+}
