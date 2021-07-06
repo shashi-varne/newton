@@ -72,8 +72,8 @@ class Landing extends Component {
     }
   };
 
-  componentDidMount(){
-    document.addEventListener("DOMContentLoaded",  (e) => {
+  componentDidMount() {
+    document.addEventListener("DOMContentLoaded", (e) => {
       var divWidth = document.getElementsByClassName("react-player");
       this.setState({
         playerWidth: divWidth.item(0).clientWidth
@@ -105,12 +105,12 @@ class Landing extends Component {
                 ref={this.ref}
                 url="https://www.youtube.com/watch?v=PO1b1eD4-Ck&ab_channel=fisdom"
                 width="100%"
-                height={( playerWidth/1.8 ) + "px"}
+                height={(playerWidth / 1.8) + "px"}
                 playing={playing}
                 controls={true}
                 onProgress={(callback) => this.setState({ video_duration: callback?.playedSeconds })}
                 onPause={() => this.sendEvents("video_paused")}
-                onEnded={() => screenfull.exit()}
+                onEnded={() => { window.location.reload() }}
                 light={true}
                 playIcon={
                   <Imgc
@@ -121,7 +121,7 @@ class Landing extends Component {
                 }
                 config={{
                   youtube: {
-                    playerVars: { modestbranding: 1, rel: 0, fs: 1, loop: 0,  }
+                    playerVars: { modestbranding: 1, rel: 0, fs: 1, loop: 0, }
                   }
                 }}
               />
