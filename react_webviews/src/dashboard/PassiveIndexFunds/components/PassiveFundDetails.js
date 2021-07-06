@@ -41,6 +41,7 @@ function PassiveFundDetails({ history }) {
   const [xaxisFormat, setXaxisFormat] = useState("yyyy");
   const [returnsData, setReturnsData] = useState({});
   const [yearFilterOptions, setYearFilterOptions] = useState([]);
+  const [morningStarDetails, setMorningStarDetails]= useState(false);
   const { isins } = getUrlParams();
 
   useEffect(() => {
@@ -426,7 +427,7 @@ function PassiveFundDetails({ history }) {
             </List>
           </section>
         ) : null}
-        <section className="pfd-padding">
+        <section className="pfd-padding" onClick={() => setMorningStarDetails(true)}>
           <Imgc
             src={MorningStar}
             style={{ paddingBottom: "10px", width: "113px", height: "22px" }}
@@ -435,6 +436,7 @@ function PassiveFundDetails({ history }) {
           <div style={{ paddingBottom: "10px" }}>
             <StarRating value={fundDetails?.performance?.ms_rating} />
           </div>
+          {morningStarDetails &&
           <p
             className="pfd-values"
             style={{ color: "var(--steelgrey)", paddingBottom: "20px" }}
@@ -443,7 +445,7 @@ function PassiveFundDetails({ history }) {
             compared to other funds in the same category. Ratings are from 1 – 5
             stars with 5 being the highest for the best performing funds and 1
             being the lowest for poor-performing funds.
-          </p>
+          </p>}
         </section>
       </div>
       <WVBottomSheet
