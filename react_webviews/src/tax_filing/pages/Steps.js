@@ -254,6 +254,9 @@ function Steps(props) {
                     {group}
                   </div>
                 </div>
+                {idx !== TAX_FILING_ADVANTAGES.length - 1 && (
+                  <div className="divider"></div>
+                )}
               </Fragment>
             ))}
           </div>

@@ -8,3 +8,11 @@
 .tax-filing-advantages {
   padding-bottom: 30%;
 }
+
+.tax-filing-advantages .divider {
+  height: 8px;
+  width: 1px;
+  background: var(--primaryVariant4);
+  position: relative;
+  top: 52px
+}
