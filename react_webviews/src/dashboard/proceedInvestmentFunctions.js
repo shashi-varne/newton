@@ -2,7 +2,7 @@ import toast from "../common/ui/Toast";
 import { getKycAppStatus } from "../kyc/services";
 import Api from "../utils/api";
 import { getConfig, popupWindowCenter } from "../utils/functions";
-import { storageService, isFunction } from "../utils/validators";
+import { storageService } from "../utils/validators";
 import { apiConstants } from "./Invest/constants";
 const config = getConfig();
 const partnerCode = config.code;

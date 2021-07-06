@@ -127,7 +127,7 @@ const Container = (props) => {
 
   return (
     <div
-      className={`${newIframeDesktopLayout ? 'iframeContainerWrapper' : (config.isIframe && config.code === "bfdlmobile") ? 'bfdlContainerWrapper' : 'ContainerWrapper'}   ${props.classOverRide}  ${
+      className={`${newIframeDesktopLayout ? 'iframeContainerWrapper' : (iframe && config.code === "bfdlmobile") ? 'bfdlContainerWrapper' : 'ContainerWrapper'}   ${props.classOverRide}  ${
         config.productName !== 'fisdom' ? 'blue' : ''
       }`}
     >
@@ -179,7 +179,7 @@ const Container = (props) => {
 
       {/* Below Header Block */}
       {
-        (!newIframeDesktopLayout || isMobileDevice)&&
+        (!newIframeDesktopLayout)&&
         <div id='HeaderHeight' style={{ top: 56 }}>
         {/* Loader Block */}
         {/* {renderPageLoader()} */}
