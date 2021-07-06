@@ -433,19 +433,20 @@ function PassiveFundDetails({ history }) {
             style={{ paddingBottom: "10px", width: "113px", height: "22px" }}
             alt=""
           />
-          <div style={{ paddingBottom: "10px" }}>
-            <StarRating value={fundDetails?.performance?.ms_rating} />
-          </div>
           {morningStarDetails &&
-          <p
-            className="pfd-values"
-            style={{ color: "var(--steelgrey)", paddingBottom: "20px" }}
-          >
-            Funds are rated by Morningstar based on their past performance as
-            compared to other funds in the same category. Ratings are from 1 – 5
-            stars with 5 being the highest for the best performing funds and 1
-            being the lowest for poor-performing funds.
-          </p>}
+            <>
+              <div style={{ paddingBottom: "10px" }}>
+                <StarRating value={fundDetails?.performance?.ms_rating} />
+              </div>
+              <p
+                className="pfd-values"
+                style={{ color: "var(--steelgrey)", paddingBottom: "20px" }}
+              >
+                Funds are rated by Morningstar based on their past performance as
+                compared to other funds in the same category. Ratings are from 1 – 5
+                stars with 5 being the highest for the best performing funds and 1
+                being the lowest for poor-performing funds.
+          </p> </>}
         </section>
       </div>
       <WVBottomSheet
