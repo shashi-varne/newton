@@ -227,7 +227,8 @@ const Selfie = (props) => {
   };
 
   const goBackToPath = () => {
-    if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
+    if (kyc?.kyc_status === "non-compliant" &&
+     ((kyc?.kyc_type === "manual" && !kyc?.equity_data.meta_data.trading_experience) || kyc?.address?.meta_data?.is_nri)) {
       navigate(PATHNAME_MAPPER.uploadProgress)
     } else {
       navigate(PATHNAME_MAPPER.journey);
