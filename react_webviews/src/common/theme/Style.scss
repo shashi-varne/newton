@@ -411,6 +411,10 @@ button {
   border: 0;
 }
 
+.FooterDefaultLayout .footer-hover:hover{
+  background-color: var(--on-hover) !important;
+}
+
 .FooterTwoButtonLayout .FlexButton {
   display: flex;
   align-items: center;

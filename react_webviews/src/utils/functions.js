@@ -64,7 +64,7 @@ const partnersConfigBase = {
   },
   finity: {
     logo: 'finity_white_logo.png',
-    primary_color: '#3792FC',
+    primary_color: '#675AF6',
     code: 'finity',
     email: 'ask@finity.in',
     mobile: '+91-8142381423',
@@ -467,10 +467,11 @@ function getPartnerConfig(partner_code) {
       email_domain: 'fisdom.com',
     },
     finity: {
-      primary: '#3792fc',
-      secondary: '#35cb5d',
+      primary: '#675AF6',
+      secondary: '#675AF6',
+      on_hover: '#4F47BA',
       default: '#4a4a4a',
-      highlight_color: '#F0F7FF',
+      highlight_color: '#EFEEFB',
       skelton_color: '#E7E7E7',
       label: '#767E86',
       type: 'finity',
@@ -558,7 +559,8 @@ function getPartnerConfig(partner_code) {
     checkValidString(partner_code) &&
     partner_code !== 'fisdom' &&
     partner_code !== 'finity' &&
-    partner_code !== 'test'
+    partner_code !== 'test' &&
+    partner_code !== 'moneycontrol'
   ) {
     if (partner_code === 'bfdl') {
       partner_code = 'bfdlmobile';
@@ -584,6 +586,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
   html.style.setProperty('--color-action-disable', '#E8ECF1');
+  html.style.setProperty(`--on-hover`, `${config_to_return.on_hover || config_to_return.secondary }`);
 
   return config_to_return;
 }

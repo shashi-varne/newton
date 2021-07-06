@@ -215,6 +215,7 @@ const Container = (props) => {
           onlyButton={props.onlyButton}
           disable={props.disable}
           buttonData={props.buttonData}
+          classes={{button: 'footer-hover'}}
         />
       )}
       {/* No Internet */}

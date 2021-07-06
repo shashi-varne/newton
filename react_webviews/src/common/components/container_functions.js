@@ -228,6 +228,7 @@ export function commonRender(props_base) {
                         handleClickOne={this.props.handleClickOne}
                         handleClickTwo={this.props.handleClickTwo}
                         showDotDot={this.props.showDotDot}
+                        classes={{button: 'footer-hover'}}
                         {...this.props}
                     />
                 }

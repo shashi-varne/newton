@@ -89,7 +89,7 @@ const styles = function () {
         height: '80px',
       },
       topBar: {
-        backgroundColor: '#3792FC',
+        backgroundColor: getConfig().primary,
         width: '100%',
         height: '80px',
         display: 'flex',
