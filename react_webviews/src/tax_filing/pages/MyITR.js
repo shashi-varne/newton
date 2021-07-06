@@ -157,9 +157,8 @@ function MyITR(props) {
             type === 'eCA'
               ? require(`assets/${productName}/icn_ca.svg`)
               : require(`assets/${productName}/icn_self_itr.svg`)
-          const dateString = dtCreated.replace(/-/g, '/').replace('T', ' ');
           const dateTime = moment
-            .utc(dateString)
+            .utc(dtCreated + 'Z', "YYYY/MM/DDThh:mmZ")
             .local()
             .format('DD/MM/YYYY, hh:mma')
           const filingType =
