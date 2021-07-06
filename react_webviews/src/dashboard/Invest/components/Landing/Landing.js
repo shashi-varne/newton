@@ -128,6 +128,8 @@ class Landing extends Component {
       openKycPremiumLanding,
       stateParams,
       tradingEnabled,
+      kycButtonLoader,
+      stocksButtonLoader
     } = this.state;
     const {
       ourRecommendations,
@@ -193,7 +195,7 @@ class Landing extends Component {
                             backgroundImage: `url(${require(`assets/${productName}/${kycStatusData.icon}`)})`,
                           }}
                           onClick={() =>
-                            this.clickCard("kyc", kycStatusData.title)
+                            !kycButtonLoader && !stocksButtonLoader && this.clickCard("kyc", kycStatusData.title)
                           }
                         >
                           <div className="title">{kycStatusData.title}</div>
@@ -206,6 +208,7 @@ class Landing extends Component {
                             classes={{
                               button: "invest-landing-button",
                             }}
+                            showLoader={kycButtonLoader}
                           />
                         </div>
                       ): null}
@@ -216,7 +219,7 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEquityCompletedBase && (
                         <div className="invest-main-top-title" 
-                          onClick={() => {!kycStatusLoader && this.clickCard("stocks") }} 
+                          onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
                           data-aid='stocks-title'
                         >
                           <WVButton
@@ -224,6 +227,7 @@ class Landing extends Component {
                             size='large'
                             color="secondary"
                             disabled={kycStatusLoader}
+                            showLoader={stocksButtonLoader}
                             // fullWidth
                           >
                             Stocks
