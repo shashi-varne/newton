@@ -72,7 +72,7 @@ const Sign = (props) => {
         screen_name: "share_signature",
         // "type": type || "",
         // "initial_kyc_status": kyc.initial_kyc_status || "",
-        // "flow": getFlow(kyc) || ""
+        "flow": getFlow(kyc) || ""
       },
     };
     if (userAction === "just_set_events") {
