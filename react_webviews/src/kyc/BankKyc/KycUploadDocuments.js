@@ -33,7 +33,7 @@ const KycUploadDocuments = (props) => {
   const [bottomsheetCtaText, setBottomSheetCtaText] = useState("CONTINUE WITH KYC");
   const [tradingEnabled, setTradingEnabled] = useState(false);
   const navigate = navigateFunc.bind(props);
-  const fromState = props.location?.state?.fromState || "";
+  const goBackPath = props.location?.state?.goBack || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -199,7 +199,9 @@ const KycUploadDocuments = (props) => {
   };
 
   const goBackToPath = () => {
-    if (additional) {
+    if (goBackPath) {
+      navigate(goBackPath);
+    } else if (additional) {
       navigate(PATHNAME_MAPPER.bankList);
       return;
     } else {

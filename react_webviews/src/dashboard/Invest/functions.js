@@ -392,7 +392,8 @@ export function initilizeKyc() {
     } else {
       this.openPremiumOnboardBottomSheet(
         bottom_sheet_dialog_data_premium,
-        userKyc
+        userKyc,
+        TRADING_ENABLED
       );
     }
   }
@@ -400,7 +401,8 @@ export function initilizeKyc() {
 
 export function openPremiumOnboardBottomSheet(
   bottom_sheet_dialog_data_premium,
-  userKyc
+  userKyc,
+  TRADING_ENABLED
 ) {
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
@@ -419,7 +421,7 @@ export function openPremiumOnboardBottomSheet(
   }
 
   storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
-  if (!this.state.tradingEnabled && userKyc.bank.meta_data_status === "rejected") {
+  if (!TRADING_ENABLED && userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
   } else {
     this.setState({

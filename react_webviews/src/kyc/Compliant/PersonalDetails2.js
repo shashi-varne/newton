@@ -171,7 +171,7 @@ const PersonalDetails2 = (props) => {
               helperText={form_data.mother_name_error || ""}
               onChange={handleChange("mother_name")}
               type="text"
-              disabled={isApiRunning}
+              disabled={isApiRunning || (!!kyc?.pan?.meta_data.mother_name && kyc?.pan?.meta_data_status === "approved")}
             />
             {form_data.marital_status === "MARRIED" && (
               <Input
