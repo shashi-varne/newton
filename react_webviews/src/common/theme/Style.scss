@@ -1923,3 +1923,12 @@ $header-title-font-size: 20px;
     }
   }
 }
+
+input[type="checkbox"]{
+  color: var(--primary);
+}
+
+.MuiButton-raisedSecondary.MuiButton-sizeLarge.MuiButton-fullWidth:hover, 
+.MuiButton-raisedSecondary.MuiButton-sizeLarge:hover{
+  background-color: var(--on-hover);
+}

@@ -379,7 +379,7 @@ class Upload extends Component {
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_green} alt="OTM"></img>
-              <div style={{ color: '#28b24d' }}>Click here to upload</div>
+              <div style={{ color: getConfig().secondary }}>Click here to upload</div>
             </div>
           </div>
         </div>}
@@ -396,7 +396,7 @@ class Upload extends Component {
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_grey} alt="OTM"></img>
-              <div style={{ color: '#b4b4b4' }}>Click here to upload</div>
+              <div style={{color: getConfig().secondary }}>Click here to upload</div>
             </div>
           </div>
         </div>}
@@ -597,7 +597,7 @@ class Upload extends Component {
             <div style={{ color: '#4a4a4a', fontSize: 14, fontWeight: 600 }}>
               Didn’t recieve my OTM form?
             </div>
-            <div onClick={() => this.navigate('send-email')} style={{ color: '#28b24d', fontSize: 14, fontWeight: 500, marginTop: 10 }}>
+            <div onClick={() => this.navigate('send-email')} style={{ color: getConfig().secondary, fontSize: 14, fontWeight: 500, marginTop: 10 }}>
               Send me again.
           </div>
           </div>
