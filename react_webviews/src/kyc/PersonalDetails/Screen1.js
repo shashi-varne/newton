@@ -207,7 +207,7 @@ const PersonalDetails1 = (props) => {
             inputMode="numeric"
             type="text"
             id="dob"
-            disabled={isApiRunning}
+            disabled={isApiRunning || (!!kyc?.pan?.meta_data.dob && kyc?.pan?.meta_data_status === "approved")}
           />
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

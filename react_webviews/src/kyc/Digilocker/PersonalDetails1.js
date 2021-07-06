@@ -209,7 +209,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("father_name")}
             maxLength={20}
             type="text"
-            disabled={showLoader}
+            disabled={showLoader || (!!kyc?.pan?.meta_data.father_name && kyc?.pan?.meta_data_status === "approved")}
           />
           <Input
             label="Mother's name"
@@ -219,7 +219,7 @@ const PersonalDetails1 = (props) => {
             helperText={form_data.mother_name_error || ""}
             onChange={handleChange("mother_name")}
             type="text"
-            disabled={showLoader}
+            disabled={showLoader || (!!kyc?.pan?.meta_data.mother_name && kyc?.pan?.meta_data_status === "approved")}
           />
           <div className={`input ${showLoader && `disabled`}`}>
             <RadioWithoutIcon
