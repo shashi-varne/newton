@@ -210,7 +210,7 @@ class FundList extends Component {
             propName: 'tracking_error',
             formatter: (value) =>
                 <span style={{}}>
-                    {value ? value + `% (${this.state.yearValue})` : 'NA'}
+                    {value ? value + `% (1YR)` : 'NA'}
                 </span>
         }])
     };
