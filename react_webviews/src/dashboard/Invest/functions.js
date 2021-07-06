@@ -33,6 +33,7 @@ export async function initialize() {
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
   this.openStocks = openStocks.bind(this);
+  this.setProductType = setProductType.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
   this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
@@ -441,7 +442,7 @@ export function handleKycSubmittedOrRejectedState() {
   }
 }
 
-export function openKyc() {
+export async function openKyc() {
   let {
     userKyc,
     kycJourneyStatus,
@@ -468,7 +469,8 @@ export function openKyc() {
       // already kyc done users
       let isProductTypeSet;
       if (!userKyc?.mf_kyc_processed) {
-        isProductTypeSet = setProductType();
+        this.setState({ kycButtonLoader: "button"})
+        isProductTypeSet = await this.setProductType();
       }
       if (userKyc?.application_status_v2 === "submitted") {
         const showAadhaar = !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual");
@@ -493,7 +495,7 @@ export function openKyc() {
 export async function openStocks() {
   let { userKyc, kycJourneyStatus, kycStatusData, tradingEnabled } = this.state;
   storageService().set("kycStartPoint", "stocks");
-  
+
   if (kycJourneyStatus === "rejected") {
     this.handleKycSubmittedOrRejectedState();
   } else {
@@ -519,7 +521,8 @@ export async function openStocks() {
           // already kyc done users
           let isProductTypeSet;
           if (!userKyc?.mf_kyc_processed) {
-            isProductTypeSet = setProductType();
+            this.setState({ stocksButtonLoader: "button"})
+            isProductTypeSet = await this.setProductType();
           }
           
           if (userKyc?.application_status_v2 === "submitted") {
@@ -556,6 +559,8 @@ async function setProductType() {
   } catch (err) {
     console.log(err.message);
     toast(err.message)
+  } finally {
+    this.setState({ kycButtonLoader: false, stocksButtonLoader: false})
   }
 }
 
