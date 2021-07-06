@@ -25,7 +25,7 @@ const BanksList = (props) => {
       const result = await getMyAccount();
       if (!result) return;
       setBanks(result.bank_mandates.banks || []);
-      setChangerequest(result.change_request || {});
+      setChangerequest(result.change_requests || {});
       setShowLoader(false);
       await initData();
       storageService().setObject(
@@ -81,8 +81,8 @@ const BanksList = (props) => {
       buttonTitle="ADD ANOTHER BANK"
       handleClick={handleClick}
       noFooter={
-        changeRequest.add_bank_enabled &&
-        ((config.web && !config.isIframe) || config.native)
+        !(changeRequest.add_bank_enabled &&
+        ((config.Web && !config.isIframe) || !!storageService().get("native")))
       }
       title="Bank accounts"
       type="outlined"
