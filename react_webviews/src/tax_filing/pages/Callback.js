@@ -63,7 +63,6 @@ function Callback(props) {
       setErrorData({
         type: 'generic',
         title1: 'Error',
-        title2: err?.message,
         button_text1: 'CLOSE',
         handleClick1: exit,
       })
