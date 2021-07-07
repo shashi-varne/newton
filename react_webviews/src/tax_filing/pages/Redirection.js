@@ -31,14 +31,14 @@ function Redirection(props) {
       clearITRSessionStorage()
       const backUrl = getBasePath() + '/tax-filing' + getConfig().searchParams
       const fisdomReturnUrl = getBasePath() + '/tax-filing/callback'
-      if (getConfig().app === 'ios') {
-        nativeCallback({
-          action: 'show_top_bar',
-          message: {
-            title: 'You are almost there, do you really want to go back?',
-          },
-        })
-      }
+      // if (getConfig().app === 'ios') {
+      //   nativeCallback({
+      //     action: 'show_top_bar',
+      //     message: {
+      //       title: 'You are almost there, do you really want to go back?',
+      //     },
+      //   })
+      // }
       nativeCallback({
         action: 'take_control',
         message: {
