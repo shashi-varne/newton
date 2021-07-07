@@ -48,7 +48,7 @@ export const createITRApplication = async (params = {}) => {
     const messageToDisplay =
       res?.pfwresponse.result?.message?.phone ||
       res?.pfwresponse.result?.message?.email ||
-      res?.pfwresponse?.result?.message?.full_name
+      res?.pfwresponse?.result?.message?.full_name || res.pfwresponse?.result?.error || res.pfwresponse?.result?.error
     throw new Error(messageToDisplay || genericErrMsg)
   }
 }

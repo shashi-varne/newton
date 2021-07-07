@@ -136,8 +136,8 @@ function PersonalDetails(props) {
         break
       case 'mobileNumber':
         if (
-          !isEmpty(mobileNumber) &&
-          !validateNumber(mobileNumber) &&
+          isEmpty(mobileNumber) ||
+          !validateNumber(mobileNumber) ||
           mobileNumber.length !== 10
         ) {
           setErrors({ ...errors, mobileNumber: true })
@@ -185,7 +185,8 @@ function PersonalDetails(props) {
   }
 
   const sendEvents = (userAction, data = {}) => {
-    const investment_status = summary?.kyc?.investment_status === 'complete' ? 'Y' : 'N'
+    const investment_status =
+      summary?.kyc?.investment_status === 'complete' ? 'Y' : 'N'
     const kyc_status = summary?.kyc?.kyc_status === 'compliant' ? 'Y' : 'N'
     let eventObj = {}
     if (data?.screenName === 'Personal Detail') {

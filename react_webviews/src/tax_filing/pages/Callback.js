@@ -25,7 +25,7 @@ function Callback(props) {
     if (isEmpty(token) || isEmpty(hmac)) {
       setShowError('page')
       setErrorData({
-        type: 'internet',
+        type: 'generic',
         button_text1: 'GO BACK',
         handleClick1: () => {
           navigate(`/tax-filing`, {}, false)
@@ -61,9 +61,10 @@ function Callback(props) {
     } catch (err) {
       setShowError('page')
       setErrorData({
-        type: 'crash',
+        type: 'generic',
         title1: 'Error',
         title2: err?.message,
+        button_text1: 'CLOSE',
         handleClick1: exit,
       })
     }
