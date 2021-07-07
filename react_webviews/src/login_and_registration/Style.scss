@@ -91,6 +91,11 @@
           .country-code {
             width: fit-content;
             margin-bottom: -20px;
+
+            //temp fix for commit id build
+            .MuiSelect-root {
+              margin-bottom: 1px;
+            }
           }
 
           .input {
