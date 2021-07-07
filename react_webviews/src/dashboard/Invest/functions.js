@@ -447,7 +447,6 @@ export async function openKyc() {
     userKyc,
     kycJourneyStatus,
     kycStatusData,
-    isReadyToInvestBase,
     tradingEnabled
   } = this.state;
 
@@ -466,16 +465,18 @@ export async function openKyc() {
       });
     } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity") || userKyc?.mf_kyc_processed) {
       // already kyc done users
+      let result;
       if (!userKyc?.mf_kyc_processed) {
         this.setState({ kycButtonLoader: "button"})
-        await this.setProductType();
+        result = await this.setProductType();
+        this.setState({ userKyc: result?.kyc });
       }
 
-      if (userKyc?.mf_kyc_processed) {
+      if (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed) {
         this.navigate(PATHNAME_MAPPER.accountInfo)
       } else {
-        const showAadhaar = !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual");
-        if (userKyc.kyc_status !== "compliant") {
+        const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
+        if (result?.kyc?.kyc_status !== "compliant") {
           this.navigate(PATHNAME_MAPPER.journey, {
             searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
           });
@@ -517,16 +518,18 @@ export async function openStocks() {
           });
         } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity") || userKyc?.mf_kyc_processed) {
           // already kyc done users
+          let result;
           if (!userKyc?.mf_kyc_processed) {
             this.setState({ stocksButtonLoader: "button"})
-            await this.setProductType();
+            result = await this.setProductType();
+            this.setState({ userKyc: result?.kyc })
           }
 
-          if (userKyc?.mf_kyc_processed) {
+          if (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed) {
             this.navigate(PATHNAME_MAPPER.accountInfo)
           } else {
-            const showAadhaar = !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual");
-            if (userKyc.kyc_status !== "compliant") {
+            const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
+            if (result?.kyc?.kyc_status !== "compliant") {
               this.navigate(PATHNAME_MAPPER.journey, {
                 searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
               });
@@ -546,13 +549,12 @@ export async function openStocks() {
 
 async function setProductType() {
   try {
-    let isProductTypeSet;
     const payload = {
       "kyc":{},
       "set_kyc_product_type": "equity"
     }
-    isProductTypeSet = await setKycProductType(payload);
-    return isProductTypeSet;
+    const result = await setKycProductType(payload);
+    return result;
   } catch (err) {
     console.log(err.message);
     toast(err.message)
