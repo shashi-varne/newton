@@ -84,6 +84,9 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
     if (TRADING_ENABLED) {
       journeyData = [...journeyData, ...tradingJourneyData];
     }
+    if(kyc.address.meta_data.is_nri) {
+      journeyData[1].inputsForStatus.push({name: 'nri_address', keys: ['pincode']})
+    }
   } else if (!isCompliant && show_aadhaar) {
     journeyData = [
       {
@@ -230,6 +233,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
     ]
 
     if(!isCompliant && kyc?.address?.meta_data?.is_nri) {
+      journeyData[2].inputsForStatus.push({name: 'nri_address', keys: ['pincode']})
       journeyData[3].inputsForStatus.push('nri_address')
     }
 
