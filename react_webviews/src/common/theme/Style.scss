@@ -141,9 +141,9 @@ body[data-device="web"] {
   }
 
   .Loader {
-    // max-width: var(--desktop-width);
-    width: 100%;
-    margin: 0 auto;
+    max-width: var(--desktop-width);
+    // width: 100%;
+    margin: 0 auto 0 300px;
     top: 60px;
   }
 
@@ -1079,6 +1079,10 @@ $header-title-font-size: 20px;
   color: black !important;
   transition: 0.3s transform ease-in-out;
   box-shadow: none !important;
+}
+
+.header-topbar-primary {
+  background-color: var(--primary) !important;
 }
 
 .sdk-header-partner-logo{

@@ -1,6 +1,7 @@
 import React from "react";
 import { getConfig } from "utils/functions";
 import Button from "../../../common/ui/Button";
+import { Imgc } from "../../../common/ui/Imgc";
 let productName = getConfig().productName;
 const InvestCard = (props) => {
   return (
@@ -17,7 +18,7 @@ const InvestCard = (props) => {
         />
       </div>
       <div className="image-wrapper">
-        <img src={require(`assets/${productName}/${props.data.icon}`)} alt="" />
+        <Imgc className="invest-card-icon" src={require(`assets/${productName}/${props.data.icon}`)} alt="" />
       </div>
     </div>
   );

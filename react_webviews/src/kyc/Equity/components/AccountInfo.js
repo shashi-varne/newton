@@ -36,7 +36,24 @@ const AccountInfo = (props) => {
     setCheckTermsAndConditions(!checkTermsAndConditions);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "trading_and_demat_info",
+        tnc_checked: checkTermsAndConditions ? "yes" : "no",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  
   const handleClick = () => {
+    sendEvents("next");
     if(!checkTermsAndConditions) {
       Toast("Accept T&C to proceed");
       return;
@@ -67,6 +84,7 @@ const AccountInfo = (props) => {
 
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       title="Trading & demat account"
       hidePageTitle

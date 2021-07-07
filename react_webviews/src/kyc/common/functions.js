@@ -227,7 +227,11 @@ export async function getPendingDocuments(kyc = {}) {
         if (option.value === kyc[group]?.meta_data?.doc_type) {
           docType = option.name;
         }
-      })
+      });
+
+      if (!docType) {
+        docType = "Bank document"
+      }
     }
 
     if (group === "address" || group === "nri_address") {
@@ -235,7 +239,11 @@ export async function getPendingDocuments(kyc = {}) {
         if (option.value === kyc[group]?.meta_data?.doc_type) {
           docType = option.name;
         }
-      })
+      });
+
+      if (!docType) {
+        docType = "Address document"
+      }
     }
 
     return {
@@ -275,20 +283,10 @@ export function isDocSubmittedOrApproved(doc) {
 
 export const getFlow = (kycData) => {
   let flow = "";
-  let dlFlow = false;
-  if (
-    kycData.kyc_status !== 'compliant' &&
-    !kycData.address?.meta_data?.is_nri &&
-    kycData.dl_docs_status !== '' &&
-    kycData.dl_docs_status !== 'init' &&
-    kycData.dl_docs_status !== null
-  ) {
-    dlFlow = true;
-  }
   if (kycData.kyc_status === 'compliant') {
     flow = 'premium onboarding'
   } else {
-    if (dlFlow) {
+    if (isDigilockerFlow(kycData)) {
       flow = 'digi kyc'
     } else {
       flow = 'general'

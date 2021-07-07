@@ -6,8 +6,7 @@ import { isEmpty, storageService, getUrlParams } from '../../utils/validators'
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
-import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParameter } from "../common/functions";
-import { getFlow } from "../common/functions";
+import { isDigilockerFlow, isIncompleteEquityApplication, updateQueryStringParameter, getFlow } from "../common/functions";
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import { isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
@@ -117,8 +116,9 @@ const Journey = (props) => {
   }
 
   const confirmGoBack = () => {
-      closeGoBackModal()
-      backHandlingCondition();
+    sendEvents("back");
+    closeGoBackModal()
+    backHandlingCondition();
   }
 
   useEffect(() => {
@@ -361,9 +361,9 @@ const Journey = (props) => {
   }
 
   const handleEdit = (key, index, isEdit) => {
-    if(isEdit)
+    if(isEdit) {
       sendEvents('edit')
-    console.log('Inside handleEdit')
+    }
     let stateMapper = {}
     if (kyc?.kyc_status === 'compliant') {
       // if (key === 'pan' && !customerVerified) {
@@ -543,7 +543,8 @@ const Journey = (props) => {
     var stageDetail = ''
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
-    var journeyStatus = getKycAppStatus(kyc).status || ''
+    var kycAppStatus = getKycAppStatus(kyc)
+    var journeyStatus = kycAppStatus.status || ''
     var dlCondition = isDigilockerFlow(kyc)
     var show_aadhaar =
       journeyStatus === 'ground_aadhaar' ||
@@ -593,7 +594,7 @@ const Journey = (props) => {
       user.kyc_registration_v2 !== 'submitted' &&
       user.kyc_registration_v2 !== 'complete' &&
       fromState !== "/kyc/digilocker/failed" &&
-      journeyStatus !== "rejected"
+      kycAppStatus?.rejectedItems?.length === 0
     ) {
       if (
         !storageService().get('show_aadhaar') &&
@@ -626,37 +627,59 @@ const Journey = (props) => {
     }
   }
 
+  const isResumeJourney = () => {
+    let fromStateArray = ["/", "/landing", "/invest", "/kyc/native", "/kyc/stocks/native"]
+    return fromStateArray.includes(fromState);
+  }
+
   const sendEvents = (userAction, screen_name) => {
-    let stageData=0;
-    let stageDetailData='';
+    let stageData = 0;
+    // let stageDetailData='';
     for (var i = 0; i < kycJourneyData?.length; i++) {
       if (
-        kycJourneyData[i].status === 'init' ||
-        kycJourneyData[i].status === 'pending'
+        kycJourneyData[i].status === "init" ||
+        kycJourneyData[i].status === "pending"
       ) {
-        stageData = i + 1
-        stageDetailData = kycJourneyData[i].key
-        break
+        stageData = i + 1;
+        // stageDetailData = kycJourneyData[i].key
+        break;
       }
     }
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "" ,
-        "screen_name": screen_name || "kyc_journey",
-        stage: stageData,
-        details: stageDetailData,
-        "rti": "",
-        "initial_kyc_status": kyc.initial_kyc_status || "",
-        "flow": getFlow(kyc) || ""
-      }
-    };
-    if (userAction === 'just_set_events') {
+    let eventObj;
+    if (screen_name === "ensure_mobile_linked_to_aadhar") {
+      eventObj = {
+        event_name: "kyc_registration",
+        properties: {
+          user_action: userAction || "",
+          screen_name: screen_name,
+        },
+      };
+    } else {
+      eventObj = {
+        event_name: "kyc_registration",
+        properties: {
+          user_action: userAction || "",
+          screen_name: screen_name || "kyc_journey",
+          premium_onboarding: kyc.kyc_status === "compliant" ? "yes" : "no",
+          kyc_flow: getFlow(kyc) || "",
+          step: `step${stageData}`,
+          resume_journey: isResumeJourney() ? "yes" : "no"
+
+          // "stage": stageData,
+          // "details": stageDetailData,
+          // "rti": "",
+          // "initial_kyc_status": kyc.initial_kyc_status || "",
+          // "flow": getFlow(kyc) || ""
+        },
+      };
+    }
+
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

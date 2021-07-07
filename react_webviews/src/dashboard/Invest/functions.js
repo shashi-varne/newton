@@ -11,7 +11,7 @@ import {
   premiumBottomSheetMapper,
   sdkInvestCardMapper
 } from "./constants";
-import { getKycAppStatus, isReadyToInvest, setKycProductType } from "../../kyc/services";
+import { getKycAppStatus, isReadyToInvest, setKycProductType, setSummaryData } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
 import { PATHNAME_MAPPER } from "../../kyc/constants";
 import { isEquityCompleted } from "../../kyc/common/functions";
@@ -19,7 +19,6 @@ import { isTradingEnabled } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
 const config = getConfig();
-
 export async function initialize() {
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
@@ -34,6 +33,7 @@ export async function initialize() {
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
   this.openStocks = openStocks.bind(this);
+  this.setProductType = setProductType.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
   this.handleKycSubmittedOrRejectedState = handleKycSubmittedOrRejectedState.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
@@ -77,7 +77,9 @@ export async function getSummary() {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setSummaryData(result);
-      this.setState({ show_loader: false, kycStatusLoader : false });
+      currentUser = result.data.user.user.data;
+      userKyc = result.data.kyc.kyc.data;
+      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser });
     } else {
       this.setState({ show_loader: false, kycStatusLoader : false });
       toast(result.message || result.error || errorMessage);
@@ -86,102 +88,6 @@ export async function getSummary() {
     console.log(error);
     this.setState({ show_loader: false });
     toast(errorMessage);
-  }
-}
-
-export function setSummaryData(result) {
-  let currentUser = result.data.user.user.data;
-  let userKyc = result.data.kyc.kyc.data;
-  this.setState({
-    currentUser: currentUser,
-    userKyc: userKyc,
-  });
-  if (result.data.kyc.kyc.data.firstlogin) {
-    storageService().set("firstlogin", true);
-  }
-  storageService().set("currentUser", true);
-  storageService().setObject("user", result.data.user.user.data);
-  storageService().setObject("kyc", result.data.kyc.kyc.data);
-
-  let campaignData = getCampaignBySection(
-    result.data.campaign.user_campaign.data
-  );
-  storageService().setObject("campaign", campaignData);
-  storageService().setObject("npsUser", result.data.nps.nps_user.data);
-  storageService().setObject("banklist", result.data.bank_list.bank_list.data);
-  storageService().setObject("referral", result.data.referral);
-  let partner = "";
-  let consent_required = false;
-  if (result.data.partner.partner.data) {
-    partner = result.data.partner.partner.data.name;
-    consent_required = result.data.partner.partner.data.consent_required;
-  }
-  storageService().set("consent_required", consent_required);
-  if (partner === "bfdl") {
-    storageService().set("partner", "bfdlmobile");
-  } else if (partner === "obcweb") {
-    storageService().set("partner", "obc");
-  } else if (
-    result.data.referral.subbroker.data.subbroker_code === "hbl" ||
-    result.data.referral.subbroker.data.subbroker_code === "sbm" ||
-    result.data.referral.subbroker.data.subbroker_code === "flexi" ||
-    result.data.referral.subbroker.data.subbroker_code === "medlife" ||
-    result.data.referral.subbroker.data.subbroker_code === "life99"
-  ) {
-    storageService().set(
-      "partner",
-      result.data.referral.subbroker.data.subbroker_code
-    );
-  } else {
-    storageService().set("partner", partner);
-  }
-  setNpsData(result);
-}
-
-export function getCampaignBySection(notifications, sections) {
-  if (!sections) {
-    sections = [];
-  }
-
-  if (!notifications) {
-    notifications = storageService().getObject("campaign") || [];
-  }
-
-  let notificationsData = [];
-
-  for (let i = 0; i < notifications.length; i++) {
-    if (notifications[i].campaign.name === "PlutusPendingTransactionCampaign") {
-      continue;
-    }
-
-    notificationsData.push(notifications[i]);
-  }
-
-  return notificationsData;
-}
-
-export async function setNpsData(response) {
-  if (
-    response.data.user.user.data.nps_investment &&
-    response.data.nps.nps_user.data.is_doc_required
-  ) {
-    try {
-      const res = await Api.get(apiConstants.npsInvestStatus);
-      const { result, status_code: status } = res.pfwresponse;
-      if (status === 200) {
-        storageService().setObject("nps_additional_details", result.registration_details);
-        storageService().setObject("nps_data", result);
-        if (!result?.registration_details?.additional_details_status) {
-          storageService().set("nps_additional_details_required", true);
-        } else {
-          storageService().set("nps_additional_details_required", false);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  } else {
-    storageService().set("nps_additional_details_required", false);
   }
 }
 
@@ -486,7 +392,8 @@ export function initilizeKyc() {
     } else {
       this.openPremiumOnboardBottomSheet(
         bottom_sheet_dialog_data_premium,
-        userKyc
+        userKyc,
+        TRADING_ENABLED
       );
     }
   }
@@ -494,7 +401,8 @@ export function initilizeKyc() {
 
 export function openPremiumOnboardBottomSheet(
   bottom_sheet_dialog_data_premium,
-  userKyc
+  userKyc,
+  TRADING_ENABLED
 ) {
   let is_bottom_sheet_displayed_kyc_premium = storageService().get(
     "is_bottom_sheet_displayed_kyc_premium"
@@ -513,7 +421,7 @@ export function openPremiumOnboardBottomSheet(
   }
 
   storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
-  if (!this.state.tradingEnabled && userKyc.bank.meta_data_status === "rejected") {
+  if (!TRADING_ENABLED && userKyc.bank.meta_data_status === "rejected") {
     this.setState({ verificationFailed: true });
   } else {
     this.setState({
@@ -534,11 +442,13 @@ export function handleKycSubmittedOrRejectedState() {
   }
 }
 
-export function openKyc() {
+export async function openKyc() {
   let {
     userKyc,
     kycJourneyStatus,
     kycStatusData,
+    isReadyToInvestBase,
+    tradingEnabled
   } = this.state;
 
   storageService().set("kycStartPoint", "mf");
@@ -554,6 +464,26 @@ export function openKyc() {
           fromState: "invest",
         },
       });
+    } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity" && 
+      (isReadyToInvestBase || userKyc?.application_status_v2 === "submitted")) || userKyc?.mf_kyc_processed) {
+      // already kyc done users
+      let isProductTypeSet;
+      if (!userKyc?.mf_kyc_processed) {
+        this.setState({ kycButtonLoader: "button"})
+        isProductTypeSet = await this.setProductType();
+      }
+      if (userKyc?.application_status_v2 === "submitted") {
+        const showAadhaar = !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual");
+        if (userKyc.kyc_status !== "compliant") {
+          this.navigate(PATHNAME_MAPPER.journey, {
+            searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
+          });
+        } else {
+          this.navigate(PATHNAME_MAPPER.journey)
+        }
+      } else if (isProductTypeSet || userKyc?.mf_kyc_processed) {
+        this.navigate(PATHNAME_MAPPER.accountInfo)
+      }
     } else {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },
@@ -563,9 +493,9 @@ export function openKyc() {
 }
 
 export async function openStocks() {
-  let { userKyc, kycJourneyStatus, kycStatusData, } = this.state;
+  let { userKyc, kycJourneyStatus, kycStatusData, tradingEnabled } = this.state;
   storageService().set("kycStartPoint", "stocks");
-  
+
   if (kycJourneyStatus === "rejected") {
     this.handleKycSubmittedOrRejectedState();
   } else {
@@ -586,17 +516,25 @@ export async function openStocks() {
               fromState: "invest",
             },
           });
-        } else if ((userKyc?.kyc_product_type !== "equity" && isReadyToInvestUser) || userKyc?.mf_kyc_processed) {
+        } else if ((tradingEnabled && userKyc?.kyc_product_type !== "equity" && 
+          (isReadyToInvestUser || userKyc?.application_status_v2 === "submitted")) || userKyc?.mf_kyc_processed) {
           // already kyc done users
           let isProductTypeSet;
           if (!userKyc?.mf_kyc_processed) {
-            const payload = {
-              "kyc":{},
-              "set_kyc_product_type": "equity"
-            }
-            isProductTypeSet = await setKycProductType(payload);
+            this.setState({ stocksButtonLoader: "button"})
+            isProductTypeSet = await this.setProductType();
           }
-          if (isProductTypeSet || userKyc?.mf_kyc_processed) {
+          
+          if (userKyc?.application_status_v2 === "submitted") {
+            const showAadhaar = !(userKyc.address.meta_data.is_nri || userKyc.kyc_type === "manual");
+            if (userKyc.kyc_status !== "compliant") {
+              this.navigate(PATHNAME_MAPPER.journey, {
+                searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
+              });
+            } else {
+              this.navigate(PATHNAME_MAPPER.journey)
+            }
+          } else if (isProductTypeSet || userKyc?.mf_kyc_processed) {
             this.navigate(PATHNAME_MAPPER.accountInfo)
           }
         } else {
@@ -609,11 +547,29 @@ export async function openStocks() {
   }
 }
 
+async function setProductType() {
+  try {
+    let isProductTypeSet;
+    const payload = {
+      "kyc":{},
+      "set_kyc_product_type": "equity"
+    }
+    isProductTypeSet = await setKycProductType(payload);
+    return isProductTypeSet;
+  } catch (err) {
+    console.log(err.message);
+    toast(err.message)
+  } finally {
+    this.setState({ kycButtonLoader: false, stocksButtonLoader: false})
+  }
+}
+
 export const resetRiskProfileJourney = () => {
   storageService().set("came_from_risk_webview", "");
   storageService().set("firsttime_from_risk_webview_invest", "");
   return;
 };
+
 function handleInvestSubtitle (partner = '')  {
   let investCardSubtitle = 'Mutual funds, Save tax';
 
@@ -665,7 +621,6 @@ export function handleRenderCard() {
   })
   this.setState({renderLandingCards : cards});
 }
-
 
 export function handleCampaignNotification () {
   const notifications = storageService().getObject('campaign') || [];

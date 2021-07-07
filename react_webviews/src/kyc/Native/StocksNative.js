@@ -7,13 +7,16 @@ import { nativeCallback } from '../../utils/native_callback';
 import Container from '../common/Container';
 import { kycStatusMapperInvest } from '../../dashboard/Invest/constants';
 import { PATHNAME_MAPPER } from '../constants';
+import { getConfig, isTradingEnabled } from '../../utils/functions';
+
+const config = getConfig();
 
 function Native(props) {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const { kyc, isLoading } = useUserKycHook();
   const fromState = props?.location?.state?.fromState || "";
-
+  
   const data = {
     state: {
       goBack: "exit",
@@ -54,6 +57,8 @@ function Native(props) {
     let kycJourneyStatus = getKycAppStatus(kyc).status || '';
     storageService().set("native", true);
     storageService().set("kycStartPoint", "stocks");
+    const TRADING_ENABLED = isTradingEnabled(kyc)
+
     let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
     if (kyc.kyc_status === "compliant") {
       if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
@@ -83,9 +88,26 @@ function Native(props) {
                 ...data.state
               },
             });
-          } else if (kyc?.kyc_product_type !== "equity" && isReadyToInvestUser) {
+          } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity" && 
+            (isReadyToInvestUser || kyc?.application_status_v2 === "submitted")) || kyc?.mf_kyc_processed) {
             // already kyc done users
-            setProductType();
+            let isProductTypeSet;
+            if (!kyc?.mf_kyc_processed) {
+              isProductTypeSet = setProductType();
+            }
+            
+            if (kyc?.application_status_v2 === "submitted") {
+              const showAadhaar = !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual");
+              if (kyc.kyc_status !== "compliant") {
+                navigate(PATHNAME_MAPPER.journey, {
+                  searchParams: `${config.searchParams}&show_aadhaar=${showAadhaar}`
+                });
+              } else {
+                navigate(PATHNAME_MAPPER.journey)
+              }
+            } else if (isProductTypeSet || kyc?.mf_kyc_processed) {
+              navigate(PATHNAME_MAPPER.accountInfo)
+            }
           } else {
             navigate(kycStatusData.next_state, {
               state: { 

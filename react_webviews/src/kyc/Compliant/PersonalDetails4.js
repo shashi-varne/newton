@@ -76,9 +76,11 @@ const PersonalDetails4 = (props) => {
         handleNavigation();
         return;
       }
-    } else if (compareObjects(keysToCheck, oldState, form_data)) {
-      handleNavigation();
-      return;
+    } else {
+      if (!kyc.nomination.nominee_optional && compareObjects(keysToCheck, oldState, form_data)) {
+        handleNavigation();
+        return;
+      }
     }
 
     let userkycDetails = { ...kyc };
@@ -154,24 +156,25 @@ const PersonalDetails4 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nominee_details",
-        "flow": 'premium onboarding',   
-        "name": form_data.name ? "yes" : "no",
-        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "relationship": form_data.relationship ? "yes" : "no",
-        "add_nominee": isChecked ? "no":"yes",
-        "initial_kyc_status" : "compliant"
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nominee_details",
+        add_nominee: isChecked ? "no" : "yes",
+        "flow": 'premium onboarding',
+        // "name": form_data.name ? "yes" : "no",
+        // "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        // "relationship": form_data.relationship ? "yes" : "no",
+        // "flow": 'premium onboarding',
+        // "initial_kyc_status" : "compliant"
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

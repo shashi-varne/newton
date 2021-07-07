@@ -32,7 +32,6 @@ const Selfie = (props) => {
   const [isLocInitialised, setIsLocInitialised] = useState(true);
   const [locationData, setLocationData] = useState({});
   const [selfieLiveScore, setSelfieLiveScore] = useState('');
-  // const [showLoader, setShowLoader] = useState(false);
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [bottomSheetType, setBottomSheetType] = useState('');
   const { kyc, isLoading, updateKyc } = useUserKycHook();
@@ -56,6 +55,18 @@ const Selfie = (props) => {
     setIsTradingFlow(tradingFlow);
   }
 
+  const commonNavigation = () => {
+    if (!isDocSubmittedOrApproved("equity_income")) {
+      navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+    } else {
+      if (areDocsPending) {
+        navigate(PATHNAME_MAPPER.documentVerification);
+      } else {
+        navigate(PATHNAME_MAPPER.kycEsign);
+      }
+    }
+  }
+
   const handleNavigation = () => {
     if (bottomSheetType === "failed") {
       setOpenBottomSheet(false);
@@ -63,17 +74,13 @@ const Selfie = (props) => {
       setFileToShow(null);
     } else {
       if (isTradingFlow && kyc?.kyc_type !== "manual") {
-        if (!isDocSubmittedOrApproved("equity_income")) {
-          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
-        } else {
-          if (areDocsPending) {
-            navigate(PATHNAME_MAPPER.documentVerification);
-          } else {
-            navigate(PATHNAME_MAPPER.kycEsign);
-          }
-        }
+       commonNavigation();
       } else {
-        navigate(PATHNAME_MAPPER.uploadProgress);
+        if (kyc?.kyc_type === "manual" && kyc?.equity_data.meta_data.trading_experience) {
+          commonNavigation();
+        } else {
+          navigate(PATHNAME_MAPPER.uploadProgress);
+        }
       }
     }
   }
@@ -200,28 +207,28 @@ const Selfie = (props) => {
     setIsLocnPermOpen(false);
   }
 
-  const sendEvents = (userAction, type) => {
+  const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "selfie_doc",
-        "type": type || "",
-      }
+      event_name: isTradingFlow ? "trading_onboarding" : "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: screenName || "take_a_selfie",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   const closeConfirmBackDialog = () => {
     setGoBackModal(false);
   };
 
   const goBackToPath = () => {
-    if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
+    if (kyc?.kyc_status === "non-compliant" &&
+     ((kyc?.kyc_type === "manual" && !kyc?.equity_data.meta_data.trading_experience) || kyc?.address?.meta_data?.is_nri)) {
       navigate(PATHNAME_MAPPER.uploadProgress)
     } else {
       navigate(PATHNAME_MAPPER.journey);
@@ -301,6 +308,7 @@ const Selfie = (props) => {
               onClose={closeLocnPermDialog}
               onLocationFetchSuccess={onLocationFetchSuccess}
               parentProps={props}
+              sendEvents={sendEvents}
             />
           }
           <SelfieUploadStatus
@@ -309,6 +317,7 @@ const Selfie = (props) => {
             disableBackdropClick
             onClose={() => setOpenBottomSheet(false)}
             onCtaClick={handleNavigation}
+            kyc={kyc}
           />
           {goBackModal ?
             <ConfirmBackDialog

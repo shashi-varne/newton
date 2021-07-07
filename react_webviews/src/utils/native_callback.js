@@ -4,7 +4,6 @@ import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
-  console.log(events)
   let newAction = null;
   let callbackData = {};
   let project = getConfig().project;
@@ -222,7 +221,7 @@ export function openModule(moduleName) {
     }
 
     let moduleNameWeb = module_mapper[moduleName] || '';
-    let module_url = `${getBasePath()}/${moduleNameWeb}${getConfig.searchParams}`;
+    let module_url = `${getBasePath()}/${moduleNameWeb}${getConfig().searchParams}`;
 
     window.location.href = module_url;
   } else {

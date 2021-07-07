@@ -135,24 +135,31 @@ const PersonalDetails1 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "personal_details_1",
-        "mobile": form_data.mobile ? "yes" : "no",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "personal_details_1",
+        gender: form_data.gender
+          ? form_data.gender === "TRANSGENDER"
+            ? "others"
+            : form_data?.gender?.toLowerCase()
+          : "",
         "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
-        "gender": form_data.gender,
-        "flow": 'premium onboarding'      }
+        "flow": 'premium onboarding'
+        // "mobile": form_data.mobile ? "yes" : "no",
+        // "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
+        // "help": isOpen ? 'yes' : 'no',
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
   
   const goBack = () => {
+    sendEvents('back')
     navigate("/kyc/journey");
   };
 
@@ -160,6 +167,7 @@ const PersonalDetails1 = (props) => {
     <Container
       skelton={isLoading}
       events={sendEvents("just_set_events")}
+      id="kyc-personal-details1"
       data-aid="kyc-personal-details-screen-1"
       buttonTitle="CONTINUE"
       showLoader={isApiRunning}
@@ -192,7 +200,7 @@ const PersonalDetails1 = (props) => {
               inputMode="numeric"
               type="text"
               id="dob"
-              disabled={isApiRunning}
+              disabled={isApiRunning || (!!kyc?.pan?.meta_data.dob && kyc?.pan?.meta_data_status === "approved")}
             />
             <div className={`input ${isApiRunning && `disabled`}`}>
               <RadioWithoutIcon

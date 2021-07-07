@@ -13,7 +13,7 @@ import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 const productName = getConfig().productName;
 const Progress = (props) => {
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
   const [openConfirmBack, setOpenConfirmBack] = useState(false);
@@ -38,7 +38,7 @@ const Progress = (props) => {
   }
 
   const handleCards = (key, index) => {
-    sendEvents("next", key)
+    sendEvents("next", key);
     if (disableNext) return;
     const approvedCondition = (key !== "bank" && documents[index].doc_status === "approved") ||
     (key === "bank" && documents[index].doc_status === "approved" &&
@@ -70,19 +70,20 @@ const Progress = (props) => {
 
   const sendEvents = (userAction, docs) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "upload_docs",
-        "docs": docs || ""
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload_documents",
+        stage: docs || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+
 
   return (
     <Container

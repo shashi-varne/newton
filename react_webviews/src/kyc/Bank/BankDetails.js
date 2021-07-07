@@ -28,7 +28,9 @@ const BankDetails = (props) => {
       navigate(`${PATHNAME_MAPPER.addBankVerify}${bank.bank_id}`);
     } else {
       if (bank.status === "default") {
-        navigate(`/kyc/${kyc.kyc_status}/upload-documents`);
+        navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
+          state: { goBack: PATHNAME_MAPPER.bankList }
+        });
       } else {
         navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
           searchParams: `${
@@ -82,19 +84,19 @@ const BankDetails = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'my_account',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "add bank/mandate",
-        "primary_account": banks[0]?.bank_name || ""
-      }
+      event_name: "my_account",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "add bank/mandate",
+        primary_account: banks[0]?.bank_name || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container

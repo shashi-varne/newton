@@ -76,20 +76,21 @@ const ConfirmPan = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'premium_onboard',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "confirm_pan",
-        "initial_kyc_status":  "compliant",
-        "channel": getConfig().code    
-      }
+      // "event_name": 'premium_onboard',
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "confirm_pan",
+        // "initial_kyc_status":  "compliant",
+        // "channel": getConfig().code
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
