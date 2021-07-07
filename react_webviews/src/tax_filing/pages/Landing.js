@@ -99,9 +99,6 @@ function Landing(props) {
   }
 
   useEffect(() => {
-    if (getConfig().app === 'ios') {
-      nativeCallback({ action: 'hide_top_bar' })
-    }
     initBackButtonTracker()
     fetchITRListAndUserSummary()
     return () => {

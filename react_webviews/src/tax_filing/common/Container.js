@@ -25,6 +25,11 @@ class Container extends Component {
 
   componentDidMount() {
     this.didMount()
+    if (getConfig().generic_callback) {
+      if (getConfig().iOS) {
+        nativeCallback({ action: 'hide_top_bar' })
+      }
+    }
   }
 
   componentWillUnmount() {
