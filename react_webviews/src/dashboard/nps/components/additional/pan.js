@@ -44,7 +44,8 @@ class PanDetails extends Component {
       title: "",
       subtitle: "",
       isKycApproved: false,
-      isKycIdentificationApproved: false,
+      isMobileVerified: false,
+      isEmailVerified: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -56,13 +57,11 @@ class PanDetails extends Component {
   onload = () => {
     let currentUser = storageService().getObject("user");
     let userKyc = storageService().getObject("kyc");
-    let { form_data, isKycApproved, is_nps_contributed, isKycIdentificationApproved } = this.state;
+    let { form_data, isKycApproved, is_nps_contributed, isMobileVerified, isEmailVerified } = this.state;
 
     isKycApproved = userKyc.pan.meta_data_status === 'approved';
-    isKycIdentificationApproved =
-      userKyc.identification?.meta_data?.mobile_number &&
-      userKyc.identification?.meta_data?.email &&
-      userKyc.identification?.meta_data_status === "approved";
+    isMobileVerified = !!userKyc.identification?.meta_data?.mobile_number && userKyc.identification?.meta_data?.mobile_number_verified;
+    isEmailVerified = !!userKyc.identification?.meta_data?.email && userKyc.identification?.meta_data?.email_verified;
     form_data.dob = userKyc.pan.meta_data.dob || "";
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 
@@ -87,7 +86,8 @@ class PanDetails extends Component {
       userKyc: userKyc,
       form_data: form_data,
       is_nps_contributed,
-      isKycIdentificationApproved
+      isMobileVerified,
+      isEmailVerified,
     });
   };
 
@@ -294,7 +294,7 @@ class PanDetails extends Component {
   }
 
   render() {
-    const { form_data, is_nps_contributed, currentUser, isKycApproved, isKycIdentificationApproved } = this.state;
+    const { form_data, is_nps_contributed, currentUser, isKycApproved, isMobileVerified, isEmailVerified } = this.state;
     return (
       <Container
         data-aid='nps-pan-details-screen'
@@ -391,7 +391,7 @@ class PanDetails extends Component {
                   helperText={form_data.mobile_number_error}
                   value={form_data.mobile_number || ""}
                   onChange={this.handleChange("mobile_number")}
-                  disabled={isKycIdentificationApproved}
+                  disabled={isMobileVerified}
                 />
               </div>
             )}
@@ -408,7 +408,7 @@ class PanDetails extends Component {
                   helperText={form_data.email_error}
                   value={form_data.email || ""}
                   onChange={this.handleChange("email")}
-                  disabled={isKycIdentificationApproved}
+                  disabled={isEmailVerified}
                 />
               </div>
             )}
