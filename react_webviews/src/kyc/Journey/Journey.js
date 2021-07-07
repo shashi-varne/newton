@@ -442,13 +442,9 @@ const Journey = (props) => {
       if (npsDetailsReq) {
         navigate('/nps/identity')
       } else if (isCompliant) {
-        if (kyc?.bank?.meta_data_status === 'approved') {
-          navigate('/kyc/compliant-report-verified')
-        } else {
-          navigate('/kyc-esign/nsdl', {
-            searchParams: `${config.searchParams}&status=success`,
-          })
-        }
+        navigate('/kyc-esign/nsdl', {
+          searchParams: `${config.searchParams}&status=success`,
+        })
       } else {
         navigate('/kyc/report')
       }
