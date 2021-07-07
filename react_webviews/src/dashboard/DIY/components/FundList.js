@@ -23,6 +23,7 @@ import remove_cart_icon from '../../../assets/remove_cart_icon.png'
 
 import "./FundList.scss";
 import { nativeCallback } from '../../../utils/native_callback'
+import { Imgc } from '../../../common/ui/Imgc'
 
 const returnField = [
   'one_month_return',
@@ -313,11 +314,14 @@ const DiyFundCard = ({
   return (
     <div className="diy-fund-card" data-aid='diy-fund-card'>
       <div className="diy-fund-card-img">
-        <img
+        <Imgc
           src={props.amc_logo_small}
           alt="some"
-          width="90"
           onClick={() => handleClick(props)}
+          style={{
+            width: "90px",
+            height: "90px",
+          }}
         />
       </div>
       <div className="diy-fund-card-details" data-aid='diy-fund-card-details'>

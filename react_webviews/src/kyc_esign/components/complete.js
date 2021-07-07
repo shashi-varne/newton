@@ -1,9 +1,9 @@
 import React from "react";
-import { getConfig, isIframe } from "utils/functions";
+import {getConfig, isNewIframeDesktopLayout } from "../../utils/functions";
 
+const hideImage = isNewIframeDesktopLayout()
 const Complete = ({ navigateToReports, dl_flow, show_note }) => {
   const productName = getConfig().productName;
-  const hideImage = isIframe() && !getConfig().isMobileDevice;
 
   return (
     <div className="kyc-esign-complete" data-aid='kyc-esign-complete'>

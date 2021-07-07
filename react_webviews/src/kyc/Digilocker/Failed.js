@@ -8,16 +8,14 @@ import { setKycType } from "../common/api";
 import toast from "../../common/ui/Toast";
 import "./Digilocker.scss";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
-import { popupWindowCenter } from "../../utils/functions";
+import { isNewIframeDesktopLayout, popupWindowCenter } from "../../utils/functions";
 
 const config = getConfig();
-const iframe = config.isIframe;
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isBackDialogOpen, setBackDialogOpen] = useState(false);
   const navigate = navigateFunc.bind(props);
-  const isMobileDevice = config.isMobileDevice;
 
   const close = () => {
     setOpen(false);
@@ -108,11 +106,11 @@ const Failed = (props) => {
       headerData={{goBack}}
       loaderData={{ loadingText: " " }}
       iframeRightContent={require(`assets/${productName}/digilocker_failed.svg`)}
-      showLoader={isApiRunning === "page"}
+      showLoader={isApiRunning === "page" ? isApiRunning : false}
     >
       <section id="digilocker-failed"  data-aid='kyc-digilocker-failed'>
         {
-          (!iframe || isMobileDevice) &&
+          !isNewIframeDesktopLayout() &&
           <img
             className="digi-image"
             alt=""

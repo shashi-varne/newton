@@ -15,15 +15,18 @@ import {
   DialogContentText,
 } from '@material-ui/core';
 import '../../utils/native_listener';
-import { getConfig, setHeights, isIframe } from 'utils/functions';
+import { getConfig, setHeights } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
 import { isFunction } from '../../utils/validators';
 
 import './Style.scss';
 import UiSkelton from '../../common/ui/Skelton';
 import IframeHeader from 'common/components/Iframe/Header';
-const iframe = isIframe();
-const isMobileDevice = getConfig().isMobileDevice;
+import { isNewIframeDesktopLayout } from '../../utils/functions';
+const config = getConfig();
+const iframe = config.isIframe;
+const isMobileDevice = config.isMobileDevice;
+const newIframeDesktopLayout = isNewIframeDesktopLayout();
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const x = React.useRef(true);
@@ -124,12 +127,12 @@ const Container = (props) => {
 
   return (
     <div
-      className={`${iframe && !isMobileDevice ? 'iframeContainerWrapper' :'ContainerWrapper'}   ${props.classOverRide}  ${
-        getConfig().productName !== 'fisdom' ? 'blue' : ''
+      className={`${newIframeDesktopLayout ? 'iframeContainerWrapper' : (iframe && config.code === "bfdlmobile") ? 'bfdlContainerWrapper' : 'ContainerWrapper'}   ${props.classOverRide}  ${
+        config.productName !== 'fisdom' ? 'blue' : ''
       }`}
     >
       {/* Header Block */}
-      {!props.noHeader && !getConfig().hide_header && !iframe ?(
+      {!props.noHeader && !getConfig().hide_header && config.code !== "moneycontrol" ?(
         <Header
           disableBack={props.disableBack}
           title={props.title}
@@ -176,7 +179,7 @@ const Container = (props) => {
 
       {/* Below Header Block */}
       {
-        (!iframe || isMobileDevice)&&
+        (!newIframeDesktopLayout)&&
         <div id='HeaderHeight' style={{ top: 56 }}>
         {/* Loader Block */}
         {/* {renderPageLoader()} */}

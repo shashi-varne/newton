@@ -31,7 +31,7 @@ const AadhaarDialog = ({ id, open, close, kyc, handleIframeKyc, ...props }) => {
     }
     const data = {
       url: `${basePath}/kyc/journey${
-        getConfig().searchParams
+        config.searchParams
       }&show_aadhaar=true&is_secure=
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
@@ -57,7 +57,7 @@ const AadhaarDialog = ({ id, open, close, kyc, handleIframeKyc, ...props }) => {
               action_type: "redirect",
               redirect_url: encodeURIComponent(
                 `${basePath}/kyc/journey${
-                  getConfig().searchParams
+                  config.searchParams
                 }&show_aadhaar=true&is_secure=
                   ${storageService().get("is_secure")}`
               ),

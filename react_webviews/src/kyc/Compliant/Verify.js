@@ -6,6 +6,7 @@ import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 const config = getConfig();
 const productName = config.productName;
 const Verify = (props) => {
@@ -45,7 +46,7 @@ const Verify = (props) => {
         "user_action": userAction || "",
         "screen_name": "kyc_verified",
         "initial_kyc_status": kyc.initial_kyc_status || '' ,
-        "channel": getConfig().code    
+        "channel": config.code    
       }
     };
     if (userAction === 'just_set_events') {
@@ -68,7 +69,7 @@ const Verify = (props) => {
     >
       <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete'>
         <header data-aid='kyc-compliant-verify-header'>
-          {(!config.isIframe || config.isMobileDevice) && (
+          {!isNewIframeDesktopLayout() && (
             <img
               src={require(`assets/${productName}/ic_process_done.svg`)}
               alt=""

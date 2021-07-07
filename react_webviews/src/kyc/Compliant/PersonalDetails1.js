@@ -271,7 +271,8 @@ const PersonalDetails1 = (props) => {
                 id="account_type"
                 value={form_data.residential_status || ""}
                 onChange={handleChange("residential_status")}
-                disabled={isApiRunning}
+                disabled={isApiRunning || !!kyc.identification?.meta_data?.tax_status}
+                disabledWithValue={!!kyc.identification?.meta_data?.tax_status}
               />
             </div>
             {is_nri && (

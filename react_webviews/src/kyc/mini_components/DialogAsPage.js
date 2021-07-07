@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Container from '../common/Container';
 import { Redirect} from 'react-router-dom';
 import { getConfig } from "utils/functions";
-import internalStorage from '../Home/InternalStorage';
+import internalStorage from '../common/InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
 

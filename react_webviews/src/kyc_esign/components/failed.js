@@ -1,14 +1,13 @@
 import React from 'react'
-import { getConfig, isIframe } from 'utils/functions'
+import { getConfig, isNewIframeDesktopLayout } from 'utils/functions'
 
+const productName = getConfig().productName;
 const Failed = () => {
-  const productName = getConfig().productName;
-  const iframe = isIframe();
 
   return (
     <div className="nsdl-status" data-aid='nsdl-status'>
       {
-        !iframe &&
+        !isNewIframeDesktopLayout() &&
           <img
             src={require(`assets/${productName}/ils_esign_failed.svg`)}
             style={{ width: '100%' }}

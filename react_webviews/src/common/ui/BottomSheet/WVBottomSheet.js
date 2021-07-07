@@ -54,7 +54,6 @@ const WVBottomSheet = ({
     <Dialog
       data-aid={`wv-bottomsheet-${dataAidSuffix}`}
       id="wv-bottomsheet"
-      data-aid='wv-bottomsheet'
       open={isOpen}
       onClose={onClose}
       className={`wv-bottomsheet ${classes.container}`}

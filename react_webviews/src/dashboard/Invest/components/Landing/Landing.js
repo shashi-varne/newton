@@ -16,14 +16,15 @@ import isEmpty from "lodash/isEmpty";
 import { Imgc } from "../../../../common/ui/Imgc";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
-const isMobileDevice = getConfig().isMobileDevice;
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
 class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
-      productName: getConfig().productName,
+      productName: config.productName,
       screenName: "invest_landing",
       investCardsData: {},
       investSections: [],
@@ -33,7 +34,7 @@ class Landing extends Component {
       openKycPremiumLanding: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      isWeb: getConfig().Web,
+      isWeb: config.Web,
       stateParams: props.location.state || {},
     };
     this.initialize = initialize.bind(this);
@@ -105,7 +106,7 @@ class Landing extends Component {
   };
 
   handleCampaign = () => {
-    this.setState({show_loader : 'page', openBottomSheet : false});
+    this.setState({showPageLoader : 'page', openBottomSheet : false});
     let campLink = this.state.bottom_sheet_dialog_data.url;
     handleCampaignRedirection(campLink);
   }
@@ -137,8 +138,8 @@ class Landing extends Component {
         skelton={this.state.show_loader}
         noFooter={true}
         title="Start Investing"
-        showLoader={this.state.show_loader}
         data-aid='start-investing-screen'
+        showLoader={this.state.showPageLoader}
         noBackIcon={fromLoginStates.includes(stateParams.fromState)}
         background={
           isMobileDevice &&
@@ -384,15 +385,11 @@ class Landing extends Component {
               }
             })}
           <SecureInvest />
-          {productName !== "fisdom" &&
-            productName !== "finity" &&
-            productName !== "ktb" && (
+          {!["fisdom", "finity", "ktb"].includes(config.code) && (
               <div className="invest-contact-us" data-aid='invest-contact-us'>
                 In partnership with
                 <span>
-                  {productName === "bfdlmobile" ||
-                  this.state.isIframe ||
-                  this.state.finity
+                  {productName === "finity"
                     ? " Finity"
                     : " Fisdom"}
                 </span>

@@ -1,16 +1,18 @@
 import React from "react";
 import Container from "../common/Container";
-import { getConfig, navigate as navigateFunc, isIframe } from "utils/functions";
+import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Alert from "../mini-components/Alert";
 import { PATHNAME_MAPPER, STORAGE_CONSTANTS } from "../constants";
 import { storageService } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import "./commonStyles.scss";
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 
+const config = getConfig();
+const productName = config.productName;
+const iframe = config.isIframe;
 const Complete = (props) => {
-  const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
-  const iframe = isIframe();
 
   const handleClick = () => {
     sendEvents('next')
@@ -50,7 +52,7 @@ const Complete = (props) => {
       <div className="kyc-compliant-complete">
         <header data-aid='kyc-header'>
           {
-            !iframe &&
+            !isNewIframeDesktopLayout() &&
             <img
             src={require(`assets/${productName}/ic_process_done.svg`)}
             alt=""

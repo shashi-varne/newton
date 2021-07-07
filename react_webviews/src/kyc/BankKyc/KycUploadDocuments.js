@@ -4,13 +4,13 @@ import { VERIFICATION_DOC_OPTIONS } from "../constants";
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-import { getFlow, isMoneycontrolDesktopLayout } from "../common/functions";
+import { getFlow } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getBase64, getConfig, navigate as navigateFunc } from "../../utils/functions";
+import { getBase64, getConfig, isNewIframeDesktopLayout, navigate as navigateFunc } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
-import InternalStorage from "../Home/InternalStorage";
+import InternalStorage from "../common/InternalStorage";
 import "./KycUploadDocuments.scss";
 import { nativeCallback } from "../../utils/native_callback";
 
@@ -158,7 +158,7 @@ const KycUploadDocuments = (props) => {
       );
       if(!isEmpty(result))
         updateKyc(result.kyc)
-      if(isMoneycontrolDesktopLayout()) {
+      if(isNewIframeDesktopLayout()) {
         bankUploadStatus();
       } else {
         setShowPendingModal(true);

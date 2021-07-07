@@ -32,11 +32,11 @@ const PennyExhaustedDialog = ({ isOpen, redirect, uploadDocuments }) => {
         <Button
           data-aid='kyc-upload-bank-doc-btn'
           className="button bg-full bottom-margin"
-          onClick={() => uploadDocuments()}
+          onClick={uploadDocuments}
         >
           UPLOAD BANK DOCUMENTS
         </Button>
-        <Button className="button highlight-bg" onClick={() => redirect()} data-aid='kyc-try-again-btn'>
+        <Button className="button highlight-bg" onClick={redirect} data-aid='kyc-try-again-btn'>
           TRY AGAIN LATER
         </Button>
       </DialogContent>

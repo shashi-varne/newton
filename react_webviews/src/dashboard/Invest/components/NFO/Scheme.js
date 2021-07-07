@@ -48,7 +48,7 @@ class NfoScheme extends Component {
         noFooter={true}
         title="Select Scheme"
       >
-        <div className="nfo-scheme" data-aid='nfo-scheme'>
+        <div className="invest-nfo-scheme" data-aid='nfo-scheme'>
           <div className="info nfo-data">
             {nfoData.scheme.map((data, index) => {
               return (
