@@ -449,7 +449,8 @@ export async function setKycProductType(data) {
     if (!submitResult) {
       throw new Error("Something went wrong");
     }
-    return true;
+    storageService().setObject("kyc", submitResult.kyc);
+    return submitResult;
   } catch (err) {
     console.log(err.message);
     toast(err.message || "Something went wrong");
