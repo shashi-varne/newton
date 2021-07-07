@@ -75,14 +75,13 @@ class Landing extends Component {
   componentDidMount() {
     document.addEventListener("DOMContentLoaded", (e) => {
       var divWidth = document.getElementsByClassName("react-player");
-      this.setState({
-        playerWidth: divWidth.item(0).clientWidth
-      })
+      storageService().set('react-player-width', divWidth.item(0).clientWidth);
     });
   }
   render() {
 
-    const { playing, playerWidth } = this.state;
+    const { playing } = this.state;
+    const heightForPlayer = storageService().get('react-player-width');
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -105,7 +104,7 @@ class Landing extends Component {
                 ref={this.ref}
                 url="https://www.youtube.com/watch?v=PO1b1eD4-Ck&ab_channel=fisdom"
                 width="100%"
-                height={(playerWidth / 1.8) + "px"}
+                height={(heightForPlayer / 1.8) + "px"}
                 playing={playing}
                 controls={true}
                 onProgress={(callback) => this.setState({ video_duration: callback?.playedSeconds })}
