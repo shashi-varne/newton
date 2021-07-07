@@ -71,11 +71,11 @@ const AddressUpload = (props) => {
       let result;
       if (onlyFrontDocRequired) {
         result = await upload(frontDoc, 'address', {
-          address_proof_key: addressProofKey,
+          addressProofKey: addressProofKey,
         })
       } else {
         result = await upload(file, 'address', {
-          address_proof_key: addressProofKey,
+          addressProofKey: addressProofKey,
         })
       }
       updateKyc(result.kyc)
