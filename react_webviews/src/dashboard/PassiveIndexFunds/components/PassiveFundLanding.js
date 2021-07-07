@@ -97,6 +97,7 @@ class Landing extends Component {
                 ref={this.ref}
                 url="https://www.youtube.com/watch?v=PO1b1eD4-Ck&ab_channel=fisdom"
                 width="100%"
+                height="100%"
                 playing={playing}
                 controls={true}
                 onProgress={(callback) => this.setState({ video_duration: callback?.playedSeconds })}
