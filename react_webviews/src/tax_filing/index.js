@@ -8,6 +8,7 @@ import MyITR from './pages/MyITR'
 import Redirection from './pages/Redirection'
 import RenderFaqs from './pages/RenderFaqs'
 import Callback from './pages/Callback'
+import NotFound from 'common/components/NotFound'
 
 function TaxFiling(props) {
   const { url } = props.match
@@ -24,6 +25,7 @@ function TaxFiling(props) {
       <Route exact path={`${url}/redirection`} component={Redirection} />
       <Route exact path={`${url}/faqs`} component={RenderFaqs} />
       <Route exact path={`${url}/callback`} component={Callback} />
+      <Route component={NotFound} />
     </Switch>
   )
 }
