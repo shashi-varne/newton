@@ -184,6 +184,7 @@ function Landing(props) {
                 'tax-filing-entry-card pointer flex align-center m-top-3x',
             }}
             onClick={handleMyITRNavigation}
+            dataAidSuffix="tax-filing-my-itr"
           >
             <>
               <img
@@ -201,18 +202,19 @@ function Landing(props) {
           if (type === 'free') {
             return (
               <ListItem
-                key={idx}
+                key={title}
                 iconSrc={require(`assets/${productName}/${icon}.svg`)}
                 title={<CustomTitle title={title} />}
                 subtitle={subtitle}
                 onClick={handleITRJourneyNavigation(type)}
                 classes={{ container: 'pointer m-top-2x' }}
+                dataAidSuffix={`tax-filing-option-${idx}`}
               />
             )
           } else {
             return (
               <ListItem
-                key={idx}
+                key={title}
                 iconSrc={require(`assets/${productName}/${icon}.svg`)}
                 title={title}
                 subtitle={subtitle}
@@ -221,6 +223,7 @@ function Landing(props) {
                   container: 'm-top-2x pointer',
                 }}
                 withRuler={idx < TAX_FILING_OPTIONS.length - 1}
+                dataAidSuffix={`tax-filing-option-${idx}`}
               />
             )
           }
@@ -235,7 +238,7 @@ function Landing(props) {
             title={item.title}
             subtitle={item.subtitle}
             classes={{ container: 'm-top-3x' }}
-            key={idx}
+            key={item.title}
           />
         ))}
         <div

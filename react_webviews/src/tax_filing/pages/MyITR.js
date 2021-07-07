@@ -21,7 +21,6 @@ import { USER_DETAILS, ITR_APPLICATIONS_KEY } from '../constants'
 import { trackBackButtonPress } from '../common/functions'
 import { nativeCallback } from 'utils/native_callback'
 
-
 function MyITR(props) {
   const navigate = navigateFunc.bind(props)
   const productName = getConfig().productName
@@ -158,7 +157,7 @@ function MyITR(props) {
               ? require(`assets/${productName}/icn_ca.svg`)
               : require(`assets/${productName}/icn_self_itr.svg`)
           const dateTime = moment
-            .utc(dtCreated + 'Z', "YYYY/MM/DDThh:mmZ")
+            .utc(dtCreated + 'Z', 'YYYY/MM/DDThh:mmZ')
             .local()
             .format('DD/MM/YYYY, hh:mma')
           const filingType =
@@ -207,7 +206,12 @@ function MyITR(props) {
       <div className="tax-filing-my-itr">
         {!isEmpty(myItrs) &&
           myItrs.map((detail, idx) => (
-            <DetailsCard item={detail} key={detail?.itr_id || idx} handleClick={() => {}} />
+            <DetailsCard
+              item={detail}
+              key={detail?.itr_id || idx}
+              handleClick={() => {}}
+              dataAidSuffix={`tax-filing-details-${detail?.itr_id}`}
+            />
           ))}
       </div>
     </Container>
