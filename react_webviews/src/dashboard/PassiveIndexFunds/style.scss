@@ -80,25 +80,36 @@
 
 .player-wrapper {
   padding: 0px 20px;
+  width: auto; 
+  height: auto;
+}
+.react-player {
+  padding-top: 56.25%; // 16:9 Video ratio.
+  position: relative;
+}
 
+.react-player > div {
+  position: absolute; 
+  top: 0px;
 }
 
 .play-icon {
+  padding-top: 0px;
   min-width: 80px;
   min-height: 80px;
 }
 
 .play-info {
-  max-height: 150px !important;
+  max-height: 150px;
   width: auto;
 }
 
 .content-main{
-  padding: 10px 20px !important;
+  padding: 10px 20px;
   background-color: white;
   z-index: 1;
   border-radius: 7px;
-  margin-top: -25px !important;
+  margin-top: -25px;
 
   .category-title{
     font-weight: 700;
