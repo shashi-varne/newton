@@ -130,7 +130,7 @@ const LocationPermDummy= ({
         {pageType === 'dummy-page' ? 
           <WVButtonLayout>
             <WVButtonLayout.Button outlined onClick={() => setPageType("invalid-region")}>
-              NRI
+              Outside India 
             </WVButtonLayout.Button>
             <WVButtonLayout.Button contained onClick={() => onLocationFetchSuccess(dummyLocationObj)}>
               Indian
