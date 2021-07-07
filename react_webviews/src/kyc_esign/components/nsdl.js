@@ -166,7 +166,7 @@ class DigiStatus extends Component {
           user_action: userAction || "",
           screen_name: screenName || "kyc_complete",
           rti: "",
-          initial_kyc_status: kyc.initial_kyc_status || "",
+          initial_kyc_status: kyc?.initial_kyc_status || "",
           flow: this.state.dl_flow ? "digi kyc" : "general",
         },
       };
