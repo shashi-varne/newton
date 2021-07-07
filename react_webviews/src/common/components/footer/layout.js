@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Button from '../../../common/ui/Button';
 import {
-  inrFormatDecimal
+  inrFormatDecimal, isFunction
 } from '../../../utils/validators';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 
@@ -25,8 +25,12 @@ export class FooterLayoutBase extends Component {
     };
   }
 
-  clickHandler = () => {
+  clickHandler = (handleClickCallback) => {
     if (navigator.onLine) {
+      if(isFunction(handleClickCallback)) {
+        handleClickCallback();
+        return;
+      }
       this.props.handleClick();
     } else {
       this.setState({
@@ -100,7 +104,10 @@ export class FooterLayoutBase extends Component {
             twoButton={true}
             type={props.type}
             arrow={(props.edit) ? false : true}
-            {...props} />
+            {...props}
+            handleClickOne={() => this.clickHandler(props.handleClickOne)} 
+            handleClickTwo={() => this.clickHandler(props.handleClickTwo)} 
+          />
         </div>
       </div>
       )
@@ -114,7 +121,7 @@ export class FooterLayoutBase extends Component {
       return(
         <div className="FooterDefaultLayout">
         {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
-        onClick={props.handleClick2}
+        onClick={() => this.clickHandler(props.handleClick2)}
         style={props.buttonData.leftStyle}>
 
           {props.buttonData.logo && <div className='image-block'>
@@ -223,7 +230,7 @@ export class FooterLayoutBase extends Component {
               width: "20%",
               padding: "0px !important",
             }}
-            onClick={props.handleClickOne}
+            onClick={() => this.clickHandler(props.handleClickOne)} 
           />
           <Button
             buttonTitle={props.buttonTwoTitle}
@@ -232,7 +239,7 @@ export class FooterLayoutBase extends Component {
               borderBottomLeftRadius: 0,
               width: "80%",
             }}
-            onClick={props.handleClickTwo}
+            onClick={() => this.clickHandler(props.handleClickTwo)} 
           />
         </div>
         {this.renderDialog()}
@@ -249,7 +256,7 @@ export class FooterLayoutBase extends Component {
     return(
       <div className="FooterDefaultLayout">
           {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
-          onClick={props.handleClick2}
+          onClick={() => this.clickHandler(props.handleClick2)}
           style={props.buttonData.leftStyle}>
             <div className='image-block'>
               <img
@@ -296,7 +303,7 @@ export class FooterLayoutBase extends Component {
     return(
       <div className="FooterDefaultLayout">
         {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer loan-with-provider" 
-        onClick={props.handleClick2}
+        onClick={() => this.clickHandler(props.handleClick2)}
         style={props.buttonData.leftStyle}>
           <div className="text-block">
           <div className="text-block-1">{props.buttonData.leftTitle}</div>
