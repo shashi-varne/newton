@@ -266,7 +266,7 @@ class GoldRegister extends Component {
     try {
       const res = await Api.post('/api/gold/user/account/create/'  + this.state.provider);
 
-      if (res.pfwresponse.status_code === 200) {
+      if (res.pfwresponse.status_code === 200 || (res.pfwresponse.status_code === 400 && res.pfwresponse.result.error === "Registration is already done") ) {
         // place order
         this.setState({
           proceedForOrder: true
