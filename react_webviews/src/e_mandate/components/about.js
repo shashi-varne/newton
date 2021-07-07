@@ -12,7 +12,7 @@ import ic_b_fisdom from 'assets/ic_auth_bank_fisdom.svg';
 import ic_e_fisdom from 'assets/ic_auth_emandate_fisdom.svg';
 import ic_sb_fisdom from 'assets/ic_select_bank_fisdom.svg';
 import trust_icon from 'assets/trust_icons_emandate.svg';
-import illustration from 'assets/finity/illustration.svg'
+import illustration from 'assets/sip_action_illustration_myway.svg'
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
