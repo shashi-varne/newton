@@ -24,6 +24,7 @@ class Landing extends Component {
     this.state = {
       screen_name: 'landing_screen',
       playing: false,
+      unmount: true,
     };
     this.initialize = initialize.bind(this);
   }
@@ -74,7 +75,7 @@ class Landing extends Component {
 
   render() {
 
-    const { playing } = this.state;
+    const { playing, unmount } = this.state;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -91,7 +92,7 @@ class Landing extends Component {
         <div data-aid="passive-fund-landing-section">
           <div className="educational-video-block" data-aid="educational-video-block">
             <WVInPageSubtitle children={"Get started with index funds"} className='inpage-subtitle' dataAidSuffix="fundlanding" />
-            <div className="player-wrapper" onClick={this.handleClickFullscreen}>
+            {unmount && <div className="player-wrapper" onClick={this.handleClickFullscreen}>
               <ReactPlayer
                 className="react-player"
                 ref={this.ref}
@@ -102,7 +103,7 @@ class Landing extends Component {
                 controls={true}
                 onProgress={(callback) => this.setState({ video_duration: callback?.playedSeconds })}
                 onPause={() => this.sendEvents("video_paused")}
-                onEnded={() => { window.location.reload() }}
+                onEnded={() => { this.setState({ unmount: false })}}
                 light={true}
                 playIcon={
                   <Imgc
@@ -117,7 +118,8 @@ class Landing extends Component {
                   }
                 }}
               />
-            </div>
+            </div>}
+            {!unmount && this.setState({ unmount: true })}
             <VideoBlockImageSection />
           </div>
           <div className="content-main" data-aid="content-main">
