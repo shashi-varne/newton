@@ -133,7 +133,7 @@ const LocationPermDummy= ({
               Outside India 
             </WVButtonLayout.Button>
             <WVButtonLayout.Button contained onClick={() => onLocationFetchSuccess(dummyLocationObj)}>
-              Indian
+              Within India
             </WVButtonLayout.Button>
           </WVButtonLayout>
           : <WVButton

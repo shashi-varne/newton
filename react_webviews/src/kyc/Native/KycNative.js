@@ -47,11 +47,10 @@ function KycNative(props) {
     }
   };
 
-  const initialize = () => {
+  const initialize = async () => {
     let kycStatus = getKycAppStatus(kyc).status || '';
     storageService().set("native", true);
     const TRADING_ENABLED = isTradingEnabled(kyc);
-    const isReadyToInvestUser = isReadyToInvest();
     const data = {
       state: {
         goBack: "exit",
@@ -70,15 +69,15 @@ function KycNative(props) {
           show_aadhaar: !kyc.address.meta_data.is_nri ? true : false,
         }
       });
-    } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity" && 
-      (isReadyToInvestUser || kyc?.application_status_v2 === "submitted")) || kyc?.mf_kyc_processed) {
+    } else if ((TRADING_ENABLED && kyc?.kyc_product_type !== "equity") || kyc?.mf_kyc_processed) {
       // already kyc done users
-      let isProductTypeSet;
       if (!kyc?.mf_kyc_processed) {
-        isProductTypeSet = setProductType();
+        await setProductType();
       }
-      
-      if (kyc?.application_status_v2 === "submitted") {
+
+      if (kyc?.mf_kyc_processed) {
+        navigate(PATHNAME_MAPPER.accountInfo)
+      } else {
         const showAadhaar = !(kyc.address.meta_data.is_nri || kyc.kyc_type === "manual");
         if (kyc.kyc_status !== "compliant") {
           navigate(PATHNAME_MAPPER.journey, {
@@ -87,8 +86,6 @@ function KycNative(props) {
         } else {
           navigate(PATHNAME_MAPPER.journey)
         }
-      } else if (isProductTypeSet || kyc?.mf_kyc_processed) {
-        navigate(PATHNAME_MAPPER.accountInfo)
       }
     } else {
       navigate('/kyc/journey', data);

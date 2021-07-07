@@ -90,16 +90,15 @@ const FnOIncomeProof = (props) => {
     }
   }
 
-  const goNext = async (skip) => {
-    if(skip)
+  const goNext = async (event, skip) => {
+    if(skip) {
       sendEvents("skip");
-    if (!skip) {
-      const areDocsPending = await checkDocsPending(kyc);
-      if (areDocsPending) {
-        navigate('/kyc/document-verification');
-      } else {
-        navigate('/kyc-esign/info');
-      }
+    }
+    const areDocsPending = await checkDocsPending(kyc);
+    if (areDocsPending) {
+      navigate('/kyc/document-verification');
+    } else {
+      navigate('/kyc-esign/info');
     }
   }
 
@@ -140,7 +139,7 @@ const FnOIncomeProof = (props) => {
       hidePageTitle
       hideHamburger
       handleClick={uploadAndGoNext}
-      onSkipClick={() => goNext("skip")}
+      onSkipClick={(e) => goNext(e, "skip")}
       title="Provide income proof for F&O trading"
       buttonTitle="Upload"
       disable={!selectedFile}
