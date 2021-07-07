@@ -427,7 +427,7 @@ function PassiveFundDetails({ history }) {
             </List>
           </section>
         ) : null}
-        <section className="pfd-padding" onClick={() => setMorningStarDetails(true)}>
+        <section className="pfd-padding" onClick={() => setMorningStarDetails(!morningStarDetails)}>
           <Imgc
             src={MorningStar}
             style={{ paddingBottom: "10px", width: "113px", height: "22px" }}
