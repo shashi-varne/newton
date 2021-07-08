@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import UiSkelton from "../common/ui/Skelton";
 import toast from "../common/ui/Toast";
+import { navigate as navigateFunc } from "../utils/functions";
 import { getUrlParams, storageService } from "../utils/validators";
 import { partnerAuthentication } from "./function";
 
 const PartnerAuthentication = (props) => {
+  const navigate = navigateFunc.bind(props);
   const params = props.match.params || {};
   const partnerCode = params.partnerCode || "";
   const { token, view } = getUrlParams();
@@ -24,10 +26,7 @@ const PartnerAuthentication = (props) => {
       window.location.href = result.redirect_path;
     } catch (err) {
       toast(err.message);
-      const message = JSON.stringify({
-        type: "iframe_close",
-      });
-      window.callbackWeb.sendEvent(message);
+      navigate("/logout");
     }
   };
 
