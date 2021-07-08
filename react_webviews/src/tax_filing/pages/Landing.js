@@ -161,9 +161,7 @@ function Landing(props) {
     return
   }
 
-  if (getConfig().app === 'ios') {
-    nativeCallback({ action: 'take_control_reset' })
-  }
+  nativeCallback({ action: 'take_control_reset' })
 
   return (
     <Container
