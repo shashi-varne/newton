@@ -121,7 +121,7 @@ export class FooterLayoutBase extends Component {
       return(
         <div className="FooterDefaultLayout">
         {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
-        onClick={() => this.clickHandler(props.handleClick2)}
+        onClick={() => {isFunction(props.handleClick2) && this.clickHandler(props.handleClick2)}}
         style={props.buttonData.leftStyle}>
 
           {props.buttonData.logo && <div className='image-block'>
@@ -269,7 +269,7 @@ export class FooterLayoutBase extends Component {
               <div className="text-block-2">
                 <SVG
                   className="text-block-2-img"
-                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                   src={leftArrowMapper[props.buttonData.leftArrow] || down_arrow}
                 />
                 {props.buttonData.leftSubtitle}
@@ -287,13 +287,21 @@ export class FooterLayoutBase extends Component {
   }
 
   VerticalButtonLayout = ({ button1Props, button2Props }) => {
+    const buttonOneProps = {
+      ...button1Props,
+      onClick: () => this.clickHandler(button1Props.onClick)
+    }
+    const buttonTwoProps = {
+      ...button2Props,
+      onClick: () => this.clickHandler(button2Props.onClick)
+    }
     return(
       <WVButtonLayout layout="stacked">
         <WVButtonLayout.Button
-          {...button1Props}
+          {...buttonOneProps}
         />
         <WVButtonLayout.Button
-          {...button2Props}
+          {...buttonTwoProps}
         />
       </WVButtonLayout>
     )
@@ -303,7 +311,7 @@ export class FooterLayoutBase extends Component {
     return(
       <div className="FooterDefaultLayout">
         {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer loan-with-provider" 
-        onClick={() => this.clickHandler(props.handleClick2)}
+        onClick={() => {isFunction(props.handleClick2) && this.clickHandler(props.handleClick2)}}
         style={props.buttonData.leftStyle}>
           <div className="text-block">
           <div className="text-block-1">{props.buttonData.leftTitle}</div>
