@@ -119,6 +119,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty("--color-action-disable", "#E8ECF1");
   html.style.setProperty('--dark', '#0A1D32');
   html.style.setProperty('--steelgrey', '#767E86');
+  html.style.setProperty(`--red`, '#D0021B');
 
   return config_to_return;
 }

@@ -428,6 +428,9 @@ export async function otpVerification(body) {
         this.redirectAfterLogin(result, user);
       }
     } else {
+      if(result.error === "Wrong OTP is Entered"){
+        this.setState({ isWrongOtp: true })
+      }
       toast(result.message || result.error || errorMessage);
     }
   } catch (error) {

@@ -7,6 +7,7 @@ import toast from "common/ui/Toast";
 import OtpComp from "./reset_opt";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import WVButtonLayout from "../../common/ui/ButtonLayout/WVButtonLayout";
+import LoginContainer from "../LoginContainer"
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
@@ -32,7 +33,7 @@ class Otp extends Component {
       this.props.history.goBack();
       return;
     }
-    let {mobile_number , otp_id}  = state;
+    let { mobile_number, otp_id } = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     let forgot = state.forgot;
     this.setState({
@@ -45,9 +46,6 @@ class Otp extends Component {
   }
 
   handleClick = () => {
-
-    console.log(this.state.mobile_number , this.state.otpData, this.state.otp_id);
-
     this.otpVerification({
       mobile_number: this.state.mobile_number,
       otp_value: this.state.otpData["otp"],
@@ -62,43 +60,48 @@ class Otp extends Component {
   };
 
   render() {
-    let { isApiRunning, otpData } = this.state;
+    let { isApiRunning, otpData, isWrongOtp } = this.state;
     let disabled = otpData.otp?.length !== 4;
     let communicationType = "mobile";
     let showDotLoader = false;
     return (
-      <div className="verify-otp-container">
-        <p className="title">{`Enter OTP to verify your ${
-          communicationType === "email" ? "email" : "number"
-        }`}</p>
-        <div className="verify-otp-header">
-          <p>
-            An OTP has been sent to{" "}
-            <span style={{ fontWeight: "500", marginRight: "23px" }}>
-              {this.state.mobile_number}
-            </span>
-          </p>
-          <WVClickableTextElement onClick={() => this.props.history.goBack()}>EDIT</WVClickableTextElement>
+      <LoginContainer>
+        <div className="verify-otp-container">
+          <p className="title">{`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"
+            }`}</p>
+          <div className="verify-otp-header">
+            <p>
+              An OTP has been sent to{" "}
+              <span style={{ fontWeight: "500", marginRight: "23px" }}>
+                {this.state.mobile_number}
+              </span>
+            </p>
+          </div>
+          <div className="kcd-otp-content">
+            <OtpComp
+              otpData={this.state.otpData}
+              showDotLoader={showDotLoader}
+              handleOtp={this.handleOtp}
+              resendOtp={this.resendOtp}
+              isWrongOtp={isWrongOtp}
+              otp_id={this.state.otp_id}
+            />
+          </div>
+          <div>
+            <WVButtonLayout.Button
+              type="primary"
+              title="CONTINUE"
+              onClick={this.handleClick}
+              disable={disabled}
+              showLoader={isApiRunning}
+              className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button login-otp-button-web"}
+            />
+          </div>
+          <WVClickableTextElement onClick={() => this.props.history.goBack()}>
+            <p className="go-back-to-login">GO BACK TO LOGIN</p>
+          </WVClickableTextElement>
         </div>
-        <div className="kcd-otp-content">
-          <OtpComp
-            otpData={this.state.otpData}
-            showDotLoader={showDotLoader}
-            handleOtp={this.handleOtp}
-            resendOtp={this.resendOtp}
-          />
-        </div>
-        <div>
-          <WVButtonLayout.Button
-            type="primary"
-            title="VERIFY"
-            onClick={this.handleClick}
-            disable={disabled}
-            showLoader={isApiRunning}
-            className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button"}
-          />
-        </div>
-      </div>
+      </LoginContainer>
     );
   }
 }

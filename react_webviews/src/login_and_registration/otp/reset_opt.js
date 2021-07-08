@@ -29,8 +29,7 @@ class Otp extends Component {
   }
 
   resendOtp = async () => {
-    const otp_id = storageService().get("otp_id");
-    await this.props.resendOtp(otp_id);
+    await this.props.resendOtp(this.props.otp_id);
     let intervalId = setInterval(this.countdown, 1000);
 
     this.setState({
@@ -74,9 +73,10 @@ class Otp extends Component {
             placeholder="X"
             value={this.props.otpData.otp}
             isDisabled={this.props.isDisabled || false}
+            errorStyle={this.props.isWrongOtp ? "otp-error-style" : ""}
           />
         </div>
-
+        {this.props.isWrongOtp  && <p className="invalid-otp">Invalid OTP</p>}
         {timeAvailable > 0 && !this.props.showDotLoader && (
           <div className="cd-otp-time-text">
             OTP should arrive within{" "}

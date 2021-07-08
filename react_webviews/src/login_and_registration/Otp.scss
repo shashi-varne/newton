@@ -1,8 +1,6 @@
 .verify-otp-container {
   min-height: 100%;
-  width: 100%;
   max-width: 614px;
-  margin: auto;
   background-color: white;
   padding: 60px 20px 20px 20px;
   .title {
@@ -36,10 +34,20 @@
   .login-otp-button {
     margin: 20px auto;
   }
+  .login-otp-button-web{
+    margin-top: 60px;
+    width: 100%;
+  }
   .login-otp-button-mobile {
     position: absolute;
     bottom: 0;
     width: calc(100% - 40px);
+  }
+  .go-back-to-login{
+     justify-content: center;
+     display: flex;
+     font-weight: 400;
+     margin-top: 40px;
   }
 }
 .verify-otp-container-secondary{
