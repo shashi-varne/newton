@@ -3,6 +3,7 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
+import contact_finity from 'assets/address_icon_myway.svg';
 
 import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
@@ -15,6 +16,7 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import { getConfig } from '../../../utils/functions';
 
 class AddEditAddress extends Component {
   constructor(props) {
@@ -296,7 +298,7 @@ class AddEditAddress extends Component {
       >
         {/* Permanent Address Block */}
         <FormControl fullWidth>
-          <TitleWithIcon width="16" icon={contact} title="Address Details" />
+          <TitleWithIcon width="16" icon={ getConfig().productName !== 'fisdom' ?  contact_finity :contact} title="Address Details" />
           <div className="InputField">
             <Input
               error={(this.state.addressline1_error) ? true : false}
