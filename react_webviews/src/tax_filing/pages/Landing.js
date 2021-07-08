@@ -7,6 +7,7 @@ import WVTag from 'common/ui/Tag/WVTag'
 import Carousal from '../mini-components/Carousal'
 import FeatureListItem from '../mini-components/FeatureListItem'
 import WVCard from 'common/ui/Card/WVCard'
+import { Imgc } from 'common/ui/Imgc'
 import ListItem from 'common/ui/ListItem/WVListItem'
 import Tax2WinLogo from '../mini-components/Tax2WinLogo'
 
@@ -191,11 +192,9 @@ function Landing(props) {
             dataAidSuffix="tax-filing-my-itr"
           >
             <>
-              <img
-                src={require(`assets/icn_my_itr.svg`)}
-                alt="MY ITR"
-                className="block"
-              />
+              <div className="block my-itr-icon">
+                <Imgc src={require(`assets/icn_my_itr.svg`)} alt="MY ITR" />
+              </div>
               <div className="m-left-2x heading3-medium text-white">My ITR</div>
             </>
           </WVCard>

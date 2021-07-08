@@ -3,6 +3,7 @@ import './WVJourneyCard.scss'
 import React from 'react'
 import PropTypes from 'prop-types'
 import WVCard from '../Card/WVCard'
+import { Imgc } from '../Imgc'
 function WVJourneyCard({
   title,
   subtitle,
@@ -23,7 +24,7 @@ function WVJourneyCard({
       dataAidSuffix={`wv-journey-card-${dataAidSuffix}`}
       {...props}
     >
-      <div className={`flex-between ${classes?.container}`}>
+      <div className={`flex-between align-center ${classes?.container}`}>
         <div className={`wv-journey-card-content ${classes?.content}`}>
           {title && (
             <Title dataAidSuffix={dataAidSuffix} classes={classes}>
@@ -37,11 +38,9 @@ function WVJourneyCard({
           )}
         </div>
         {withIcon && (
-          <img
-            className={`wv-journey-card-icon ${classes?.icon}`}
-            src={iconSrc}
-            alt={title}
-          />
+          <div className={`block wv-journey-card-icon ${classes?.icon}`}>
+            <Imgc src={iconSrc} alt="" />
+          </div>
         )}
         {withStep && (
           <StepCount count={stepCount} classes={{ step: classes.step }} />

@@ -32,7 +32,11 @@ function ListItem({
       data-aid={`wv-list-item-${dataAidSuffix}`}
       {...props}
     >
-      {withIcon && <Imgc src={iconSrc} className={iconClasses} />}
+      {withIcon && (
+        <div className={iconClasses}>
+          <Imgc src={iconSrc} alt="" />
+        </div>
+      )}
       <div className={contentClasses}>
         {title && (
           <Title classes={classes} dataAidSuffix={dataAidSuffix}>
