@@ -1015,3 +1015,36 @@ body[data-device="web"] {
 .ic_close {
   padding: 14px 14px 0;
 }
+
+.po-ippb-disclaimer {
+  .po-ippb-disclaimer-title {
+    padding-bottom: 10px !important;
+  }
+  
+  .po-ippb-disclaimer-content {
+    p {
+      padding: 10px 0;
+      font-size: 14px;
+      color: var(--label);
+      margin: 0;
+  
+      b {
+        font-weight: 600;
+        color: var(--default);
+      }
+
+      .text-transform-uppercase {
+        text-transform: uppercase;
+      }
+
+      .text-transform-capitalize {
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  .po-ippb-disclaimer-actions {
+    margin: 0;
+    padding: 10px 20px;
+  }
+}
