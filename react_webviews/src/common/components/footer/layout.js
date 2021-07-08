@@ -270,7 +270,7 @@ export class FooterLayoutBase extends Component {
               <div className="text-block-2">
                 <SVG
                   className="text-block-2-img"
-                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+                  preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().styles.primaryColor)}
                   src={leftArrowMapper[props.buttonData.leftArrow] || down_arrow}
                 />
                 {props.buttonData.leftSubtitle}

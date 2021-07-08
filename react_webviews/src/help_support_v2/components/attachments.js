@@ -189,7 +189,7 @@ class RenderAttachment extends Component {
             />
             <SVG
               preProcessor={(code) =>
-                code.replace(/fill=".*?"/g, "fill=" + getConfig().secondary)
+                code.replace(/fill=".*?"/g, "fill=" + getConfig().styles.secondaryColor)
               }
               src={ic_clip}
             />
