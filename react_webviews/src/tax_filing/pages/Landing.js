@@ -36,6 +36,8 @@ import {
 import { isEmpty, isArray } from 'lodash'
 
 import { storageService } from '../../utils/validators'
+import useResetTakeControl from '../hooks/useResetTakeControl'
+import useBackButtonTracker from '../hooks/useBackButtonTracker'
 
 function Landing(props) {
   const productName = getConfig().productName
@@ -94,17 +96,20 @@ function Landing(props) {
   }
 
   const goBack = () => {
-    untrackBackButtonPress()
+    // untrackBackButtonPress()
     nativeCallback({ action: 'exit', events: sendEvents('back') })
     clearITRSessionStorage()
   }
 
+  useResetTakeControl()
+  useBackButtonTracker()
+
   useEffect(() => {
-    initBackButtonTracker()
+    // initBackButtonTracker()
     fetchITRListAndUserSummary()
-    return () => {
-      untrackBackButtonPress()
-    }
+    // return () => {
+    //   untrackBackButtonPress()
+    // }
   }, [])
 
   const fetchITRListAndUserSummary = async () => {
@@ -115,6 +120,7 @@ function Landing(props) {
         isEmpty(summary) ||
         !itrList
       ) {
+        console.log("Calling fetching api");
         setShowLoader(true)
         const [list, userDetails, summaryDetails] = await Promise.all([
           getITRList(),
@@ -160,8 +166,6 @@ function Landing(props) {
     navigate(`/tax-filing/steps`, { type, itrList }, false)
     return
   }
-
-  nativeCallback({ action: 'take_control_reset' })
 
   return (
     <Container

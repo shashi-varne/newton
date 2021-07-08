@@ -74,7 +74,7 @@ function Callback(props) {
   }
   return (
     <Container
-      headerData={{ goBack }}
+      headerData={{ goBack, hide_icon: true }}
       showError={showError}
       errorData={errorData}
       skelton={showLoader}
