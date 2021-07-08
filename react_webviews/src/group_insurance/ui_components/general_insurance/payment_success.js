@@ -6,7 +6,7 @@ import { FormControl } from 'material-ui/Form';
 import Input from '../../../common/ui/Input';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
-import contact_myway from 'assets/address_details_icn.svg';
+import contact_myway from 'assets/address_icon_myway.svg';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
