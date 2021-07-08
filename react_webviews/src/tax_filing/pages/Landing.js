@@ -99,6 +99,7 @@ function Landing(props) {
   }
 
   useEffect(() => {
+    nativeCallback({ action: 'take_control_reset' })
     initBackButtonTracker()
     fetchITRListAndUserSummary()
     return () => {
