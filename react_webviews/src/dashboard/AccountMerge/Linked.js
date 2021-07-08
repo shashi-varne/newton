@@ -2,6 +2,7 @@ import React from "react";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { Imgc } from "../../common/ui/Imgc";
 import { nativeCallback } from "../../utils/native_callback";
+import { storageService } from "../../utils/validators";
 import Container from "../common/Container";
 import "./Linked.scss";
 
@@ -16,6 +17,7 @@ const AccountLinked = (props) => {
           type: "iframe_close",
         });
         window.callbackWeb.sendEvent(message);
+        storageService().clear();
       } else {
         navigate("/logout");
       }

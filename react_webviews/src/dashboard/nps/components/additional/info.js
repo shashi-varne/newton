@@ -11,6 +11,7 @@ class NpsInfo extends Component {
       currentUser: false,
       benefits: false,
       withdraw: false,
+      screen_name: "nps_info"
     };
 
     this.initialize = initialize.bind(this);

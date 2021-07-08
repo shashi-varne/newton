@@ -420,7 +420,10 @@ export function manageDialog(id, display, aboutScroll) {
 }
 
 export function setHeights(data) {
-  const headerClass = isIframe() && getConfig().isMobileDevice ? 'IframeHeader' : 'Header';
+  const newIframeDesktopLayout = isNewIframeDesktopLayout();
+  const config = getConfig();
+  const headerClass = config.isIframe && config.code === "moneycontrol" && config.isMobileDevice ? 'IframeHeader' : 'Header';
+  const containerClass = newIframeDesktopLayout ? 'iframeContainerWrapper' : config.isIframe && config.code === "bfdlmobile" ? 'bfdlContainerWrapper' : 'ContainerWrapper'
   let head =
     document.getElementsByClassName(headerClass) && document.getElementsByClassName(headerClass)[0]
       ? document.getElementsByClassName(headerClass)[0].offsetHeight
@@ -435,9 +438,9 @@ export function setHeights(data) {
       ? document.getElementsByTagName('body')[0].offsetHeight
       : 0;
   let client =
-    document.getElementsByClassName('ContainerWrapper') &&
-    document.getElementsByClassName('ContainerWrapper')[0]
-      ? document.getElementsByClassName('ContainerWrapper')[0].offsetHeight
+    document.getElementsByClassName(containerClass) &&
+    document.getElementsByClassName(containerClass)[0]
+      ? document.getElementsByClassName(containerClass)[0].offsetHeight
       : 0;
   let foot =
     document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0]
@@ -590,4 +593,9 @@ export const popupWindowCenter = (w, h, url) => {
       ",left=" +
       left
   );
+}
+
+export const isNewIframeDesktopLayout = () => {
+  const config = getConfig();
+  return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
 }

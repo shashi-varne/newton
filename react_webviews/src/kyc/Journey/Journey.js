@@ -8,7 +8,7 @@ import { PATHNAME_MAPPER } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from '../../common/ui/Toast'
 import {
-  pollProgress, updateQueryStringParameter, getFlow, isMoneycontrolDesktopLayout
+  pollProgress, updateQueryStringParameter, getFlow
 } from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
@@ -16,12 +16,12 @@ import AadhaarDialog from '../mini-components/AadhaarDialog'
 import KycBackModal from '../mini-components/KycBack'
 import "./Journey.scss"
 import { nativeCallback } from '../../utils/native_callback'
-import { getBasePath, navigate as navigateFunc, popupWindowCenter } from '../../utils/functions'
+import { getBasePath, navigate as navigateFunc, popupWindowCenter, isNewIframeDesktopLayout } from '../../utils/functions'
 
 const config = getConfig();
 const isMobileDevice = config.isMobileDevice;
 const iframe = config.isIframe;
-const moneycontrolDesktopLayout = isMoneycontrolDesktopLayout();
+const newIframeDesktopLayout = isNewIframeDesktopLayout();
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
@@ -112,7 +112,7 @@ const Journey = (props) => {
             kyc[journeyData[i].inputsForStatus[0]] === 'init'
           ) {
             status = 'init'
-            if(moneycontrolDesktopLayout)
+            if(newIframeDesktopLayout)
               journeyData[i].subtitle = <Alert variant="info" message="Please ensure your mobile is linked with Aadhar" />;
             break
           }
@@ -584,7 +584,7 @@ const Journey = (props) => {
   }
 
   const proceed = () => {
-    if (moneycontrolDesktopLayout) {
+    if (newIframeDesktopLayout) {
       const redirect_url = encodeURIComponent(
         `${getBasePath()}/digilocker/callback${
           config.searchParams
@@ -666,7 +666,8 @@ const Journey = (props) => {
       !show_aadhaar &&
       user.kyc_registration_v2 !== 'submitted' &&
       user.kyc_registration_v2 !== 'complete' &&
-      fromState !== "digilocker-failed"
+      fromState !== "/kyc/digilocker/failed" &&
+      journeyStatus !== "rejected"
     ) {
       if (
         !storageService().get('show_aadhaar') &&

@@ -22,6 +22,8 @@ import toast from "../../common/ui/Toast";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { nativeCallback } from "../../utils/native_callback";
+import internalStorage from '../common/InternalStorage';
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -66,6 +68,20 @@ const KycBankDetails = (props) => {
     }
   }, [kyc, user]);
 
+  const handlePennyExhaust = () => {
+    const pennyDetails = {
+      title : 'Unable to add bank!',
+      message : "Oops! You have exhausted all the 3 attempts. Continue by uploading your documents or check back later",
+      buttonOneTitle: 'TRY AGAIN LATER',
+      buttonTwoTitle: 'UPLOAD BANK DOCUMENTS',
+      twoButton: true,
+      status: 'pennyExhausted'
+    }
+    internalStorage.setData('handleClickOne', redirect);
+    internalStorage.setData('handleClickTwo', uploadDocuments);
+    navigate('/kyc/penny-status',{state:pennyDetails});
+  }
+
   let initialize = async () => {
     let disableData = { ...disableFields };
     if (
@@ -93,7 +109,11 @@ const KycBankDetails = (props) => {
     let data = kyc.bank.meta_data || {};
     data.c_account_number = data.account_number;
     if (data.user_rejection_attempts === 0) {
-      setIsPennyExhausted(true);
+      if(isNewIframeDesktopLayout()) {
+        handlePennyExhaust()
+      } else {
+        setIsPennyExhausted(true);
+      }
     } else if (data.user_rejection_attempts === 2) {
       setNote({
         info_text:

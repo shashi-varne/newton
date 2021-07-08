@@ -94,7 +94,6 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
   if ((currentState === "/kyc-esign/nsdl" && params?.status === "success") ||
     diyDirectEntryArr.includes(currentState)) {
     if (config?.code === 'moneycontrol') {
-      console.log("hello from money")
       navigate("/");
       return true;
     } else {

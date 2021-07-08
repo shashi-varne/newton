@@ -4,7 +4,7 @@ import Alert from "../mini-components/Alert";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
-import { getFlow, isMoneycontrolDesktopLayout } from "../common/functions";
+import { getFlow } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -14,10 +14,11 @@ import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
 import { SkeltonRect } from "common/ui/Skelton";
 import useUserKycHook from "../common/hooks/userKycHook";
 import { getConfig } from "utils/functions";
-import internalStorage from '../Home/InternalStorage';
+import internalStorage from '../common/InternalStorage';
 import { nativeCallback } from "../../utils/native_callback";
+import { isNewIframeDesktopLayout } from "../../utils/functions";
 
-const showPageDialog = isMoneycontrolDesktopLayout();
+const showPageDialog = isNewIframeDesktopLayout();
 const productName = getConfig().productName;
 const KycBankVerify = (props) => {
   const [count, setCount] = useState(20);

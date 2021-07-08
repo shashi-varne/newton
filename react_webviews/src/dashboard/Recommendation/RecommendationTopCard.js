@@ -30,7 +30,7 @@ const RecommendationTopCard = ({
                   <img
                     onClick={toggleRiskInfoDialog}
                     src={require('assets/info_icon_grey.svg')}
-                    className="info-icn"
+                    className="info-icn pointer"
                     alt="i"
                   />
                 </div>

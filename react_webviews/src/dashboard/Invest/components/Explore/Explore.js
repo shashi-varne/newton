@@ -13,7 +13,7 @@ import goal_icon from 'assets/finity/goal_icon.svg';
 import { navigate as navigateFunc } from "utils/functions";
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
-import { getConfig, isIframe } from "utils/functions";
+import { getConfig } from "utils/functions";
 
 import { getTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../DIY/constants'
@@ -21,32 +21,35 @@ import isEmpty from 'lodash/isEmpty';
 import './Explore.scss';
 import { nativeCallback } from '../../../../utils/native_callback'
 import { flowName } from '../../constants'
+import { isNewIframeDesktopLayout } from '../../../../utils/functions'
 
-const iframe = isIframe();
-const isMobileDevice = getConfig().isMobileDevice;
+const config = getConfig();
+const iframe = config.isIframe;
+const isMobileDevice = config.isMobileDevice;
+const partnerCode = config.code;
+const newIframeDesktopLayout = isNewIframeDesktopLayout();
 export const exploreMFMappings = [
   {
     title: 'Equity',
     description: 'Invest in large, mid and small-sized companies',
-    src: iframe && !isMobileDevice ? equity_icon : diy_equity_icon,
+    src: newIframeDesktopLayout ? equity_icon : diy_equity_icon,
   },
   {
     title: 'Debt',
     description: 'Stable returns with bonds and securities',
-    src: iframe && !isMobileDevice ? debt_icon : diy_debt_icon,
+    src: newIframeDesktopLayout ? debt_icon : diy_debt_icon,
   },
   {
     title: 'Hybrid',
     description: 'Perfect balance of equity and debt',
-    src: iframe && !isMobileDevice ? hybrid_icon : diy_hybrid_icon,
+    src: newIframeDesktopLayout ? hybrid_icon : diy_hybrid_icon,
   },
   {
     title: 'Goal Oriented',
     description: 'Align investments with your life goals',
-    src: iframe && !isMobileDevice ? goal_icon : diy_goal_icon,
+    src: newIframeDesktopLayout ? goal_icon : diy_goal_icon,
   },
 ]
-const partnerCode = getConfig().partner_code;
 const InvestExplore = (props) => {
   const [loader, setLoader] = useState(true)
   useEffect(() => {
@@ -55,6 +58,12 @@ const InvestExplore = (props) => {
     storageService().remove(CATEGORY)
     storageService().remove(SUBCATEGORY)
     fetchTrendingFunds()
+    if(iframe) {
+      const message = JSON.stringify({
+        type: "iframe_landing_page"
+      });
+      window.callbackWeb.sendEvent(message)
+    }
   }, [])
 
   const fetchTrendingFunds = async () => {
@@ -105,7 +114,7 @@ const InvestExplore = (props) => {
       data-aid='explore-all-mutual-funds-screen'
       classOverRIde="pr-error-container"
       noFooter
-      title={iframe && !isMobileDevice ? "" : "Explore All Mutual Funds"}
+      title={newIframeDesktopLayout ? "" : "Explore All Mutual Funds"}
       classOverRideContainer="pr-container"
       hidePageTitle={iframe && isMobileDevice}
       handleClick={goNext}

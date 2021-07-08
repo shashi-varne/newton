@@ -207,8 +207,3 @@ export const getFlow = (kycData) => {
   }
   return flow;
 }
-
-export const isMoneycontrolDesktopLayout = () => {
-  const config = getConfig();
-  return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
-}

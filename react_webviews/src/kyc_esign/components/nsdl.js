@@ -203,7 +203,6 @@ class DigiStatus extends Component {
         title={
           status === "success" ? "eSign KYC completed" : "eSign KYC failed"
         }
-        hidePageTitle
         handleClick={status === "success" ? this.handleClick : this.retry}
         buttonTitle={
           status === "success"
