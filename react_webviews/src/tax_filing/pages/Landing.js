@@ -23,7 +23,6 @@ import {
   checkIfLandedByBackButton,
   clearITRSessionStorage,
   getTaxFilingFeatureLists,
-  initBackButtonTracker,
   navigate as navigateFunc,
   setITRJourneyType,
   untrackBackButtonPress,
