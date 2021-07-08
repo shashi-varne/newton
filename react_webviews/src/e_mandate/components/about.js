@@ -6,7 +6,7 @@ import shrink from 'assets/shrink_icn.png';
 import top_icon_fisdom from 'assets/sip_action_illustration_fisdom.svg';
 import top_icon_myway from 'assets/sip_action_illustration_myway.svg';
 import ic_b_myway from 'assets/ic_auth_bank_myway.svg';
-import ic_e_myway from 'assets/ic_auth_emandate_myway.svg';
+import ic_e_myway from 'assets/ic_esign_otp_finity.svg';
 import ic_sb_myway from 'assets/ic_select_bank_myway.svg';
 import ic_b_fisdom from 'assets/ic_auth_bank_fisdom.svg';
 import ic_e_fisdom from 'assets/ic_auth_emandate_fisdom.svg';
