@@ -105,11 +105,7 @@ function Landing(props) {
   useBackButtonTracker()
 
   useEffect(() => {
-    // initBackButtonTracker()
     fetchITRListAndUserSummary()
-    // return () => {
-    //   untrackBackButtonPress()
-    // }
   }, [])
 
   const fetchITRListAndUserSummary = async () => {
@@ -120,7 +116,6 @@ function Landing(props) {
         isEmpty(summary) ||
         !itrList
       ) {
-        console.log("Calling fetching api");
         setShowLoader(true)
         const [list, userDetails, summaryDetails] = await Promise.all([
           getITRList(),
