@@ -26,13 +26,13 @@ definitions:
           - unset CI
           - IS_PIPELINE=true yarn build
           - ls
-          - mv build $BITBUCKET_COMMIT
+          - mv build baa5f017326f793177a83f55c9d70bbabccedc64
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
             variables:
               KEY_FILE: $KEY_FILE
               PROJECT: 'plutus-admin'
               BUCKET: 'plutus-webview'
-              SOURCE: '$BITBUCKET_COMMIT'
+              SOURCE: 'baa5f017326f793177a83f55c9d70bbabccedc64'
 
     - step: &master-deploy
         name: Pipeline-on-demand deploy steps
