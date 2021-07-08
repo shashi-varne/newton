@@ -99,7 +99,6 @@ function Landing(props) {
   }
 
   useEffect(() => {
-    nativeCallback({ action: 'take_control_reset' })
     initBackButtonTracker()
     fetchITRListAndUserSummary()
     return () => {
@@ -159,6 +158,10 @@ function Landing(props) {
     setITRJourneyType(type)
     navigate(`/tax-filing/steps`, { type, itrList }, false)
     return
+  }
+
+  if (getConfig().app === 'ios') {
+    nativeCallback({ action: 'take_control_reset' })
   }
 
   return (
