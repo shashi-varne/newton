@@ -464,7 +464,7 @@ export async function getPlanList(){
 export async function getPlanDetails(){
     var groupHealthPlanData = this.state.groupHealthPlanData;
     var post_body = groupHealthPlanData.post_body;
-    var provider = this.state.provider;
+    var {provider, account_type, ui_members} = this.state;
     let allowed_post_body_keys = ['adults', 'children', 'member_details', 'plan_id'];
     
     
@@ -486,7 +486,7 @@ export async function getPlanDetails(){
             for(let key in keys_to_remove){
               delete post_body[keys_to_remove[key]]
             }
-
+            let body = {};
             if(provider === 'GMC'){
               post_body.plan_id = "fisdom_health_protect";
               var plan_selected = {};
@@ -503,11 +503,37 @@ export async function getPlanDetails(){
             }
             if(provider === 'STAR'){
                 allowed_post_body_keys.push('postal_code');
-            }
-            let body = {};
 
+                if(account_type === 'family' || account_type === 'self_family'){
+                    let parents_keys = ['father', 'mother'];
+                    let parents_in_law_keys = ['mother_in_law', 'father_in_law']
+                    let parent_total = 0;
+                    let parents_in_law_total = 0;
+                    for (var key in parents_keys) {
+                        if (ui_members[parents_keys[key]]) {
+                            parent_total++;
+                        }
+                    }
+                    for (let key in parents_in_law_keys) {
+                        if (ui_members[parents_in_law_keys[key]]) {
+                            parents_in_law_total++;
+                        }
+                    }
+                    body.parents = parent_total;
+                    body.parents_in_law = parents_in_law_total;
+
+                    groupHealthPlanData.star_parents_total = parent_total;
+                    groupHealthPlanData.star_parents_in_law_total = parents_in_law_total;
+                    
+                    this.setLocalProviderData(groupHealthPlanData);
+                }
+            }
             for(let key of allowed_post_body_keys){
                 body[key] = post_body[key];
+            }
+
+            if(provider === 'STAR' && (account_type === 'family' || account_type === 'self_family')){
+                body.adults = body.adults - (body.parents + body.parents_in_law)
             }
             groupHealthPlanData.post_body = post_body;
 

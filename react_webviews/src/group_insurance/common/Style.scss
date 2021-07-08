@@ -1989,6 +1989,17 @@
   }
 }
 
+
+.horizontal-checkbox-layout{
+  display: flex;
+  align-items: center;
+  margin: -20px 0 0 5%;
+  .add-member-generic-checkbox{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+}
 .irdia-image-bottom{
   margin-right: 2px;
   min-height: 20px;
@@ -2033,4 +2044,11 @@
   width: 20px !important;
   height: 20px !important;
   margin: 0;
+}
+
+.system-maintainence{
+  display: grid;
+  place-items: center;
+  margin-top: 50px;
+  height: 230px;
 }

@@ -740,13 +740,21 @@ export const idfc_config = {
                 //     "The final amount sanctioned will depend on your net monthly income, your credit bureau and other eligibility criterias.",
                 // },
                 {
-                  title: `On what criteria will the loan be sanctioned to me ?`,
+                  title: `On what criteria will the loan be sanctioned to me?`,
                   subtitle: `The final amount sanctioned will depend on your income and other factors like credit score, repayment ability, age, employer, etc.`,
                 },
                 {
                   title: `Is it necessary for me to have a salary account with IDFC FIRST Bank for getting a personal loan?`,
                   subtitle: `No, it is not mandatory to have a salary account with IDFC FIRST Bank.`,
                 },
+                {
+                  title: 'What is the maximum annual percentage rate?',
+                  subtitle: 'The Annual percentage rate is decided by our lending partner i.e, IDFC First Bank on the basis of their proprietary algorithm. It depends on the salary, demographics, credit bureau, and other eligibility criteria. For salaried, maximum annual rate is 20% and for self-employed its 28%. However a very small fraction of our customers get an interest rate higher than 16% in case of salaried and greater than 24% in case of self employed.'
+                },
+                {
+                  title: 'What is the minimum and maximum tenor of Personal loan?',
+                  subtitle: 'Minimum tenor is 12 months and maximum tenor is 48 months. For salaried users, tenor can go up to 60 months depending on the category of company.'
+                }
               ],
             },
     
