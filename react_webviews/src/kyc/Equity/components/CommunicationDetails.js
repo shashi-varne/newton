@@ -181,8 +181,8 @@ const CommunicationDetails = (props) => {
         setShowOtpContainer(true);
         setOtpData({
           otp: "",
-          totalTime: 10,
-          timeAvailable: 10,
+          totalTime: 30,
+          timeAvailable: 30,
         });
         setButtonTitle("VERIFY");
       }
