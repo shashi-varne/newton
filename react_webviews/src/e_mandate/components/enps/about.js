@@ -2,21 +2,21 @@ import React, { Component } from 'react';
 import qs from 'qs';
 
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
-import info_icon_myway from 'assets/info_icon_myway.svg'
+import info_icon_myway from 'assets/finity/info_icon_myway.svg'
 import Container from '../../common/Container';
 import { getConfig, getBasePath } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 import top_icon_fisdom from 'assets/esign_intro_illustration_fisdom.svg';
-import top_icon_myway from 'assets/esign_intro_illustration_myway.svg';
-import ic_i_myway from 'assets/ic_input_myway.svg';
-import ic_a_myway from 'assets/ic_esign_otp_finity.svg';
-import ic_otp_myway from 'assets/ic_verify_otp_finity.svg';
-import ic_e_myway from 'assets/ic_esign_done_finity.svg';
+import top_icon_myway from 'assets/finity/esign_intro_illustration_myway.svg';
+import ic_i_myway from 'assets/finity/ic_input_myway.svg';
+import ic_a_myway from 'assets/finity/ic_esign_otp_finity.svg';
+import ic_otp_myway from 'assets/finity/ic_verify_otp_finity.svg';
+import ic_e_myway from 'assets/finity/ic_esign_done_finity.svg';
 import ic_i_fisdom from 'assets/ic_input_fisdom.svg';
-import ic_a_fisdom from 'assets/ic_esign_otp_fisdom.svg';
-import ic_otp_fisdom from 'assets/ic_verify_otp_fisdom.svg';
-import ic_e_fisdom from 'assets/ic_esign_done_fisdom.svg';
+import ic_a_fisdom from 'assets/fisdom/ic_esign_otp_fisdom.svg';
+import ic_otp_fisdom from 'assets/fisdom/ic_verify_otp_fisdom.svg';
+import ic_e_fisdom from 'assets/fisdom/ic_esign_done_fisdom.svg';
 
 
 import { nativeCallback } from 'utils/native_callback';

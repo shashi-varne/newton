@@ -3,7 +3,7 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
-import contact_finity from 'assets/address_icon_myway.svg';
+import contact_finity from 'assets/finity/address_icon_myway.svg';
 
 import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';

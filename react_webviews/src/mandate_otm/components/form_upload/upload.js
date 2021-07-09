@@ -4,7 +4,7 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import camera_green from 'assets/take_pic_green.svg';
-import camera_finity from 'assets/take_pic_finity.svg';
+import camera_finity from 'assets/finity/take_pic_finity.svg';
 import camera_grey from 'assets/take_pic_grey.svg';
 import gallery_green from 'assets/go_to_gallery_green.svg';
 import gallery_grey from 'assets/go_to_gallery_grey.svg';
