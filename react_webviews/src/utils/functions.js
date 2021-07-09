@@ -469,7 +469,7 @@ function getPartnerConfig(partner_code) {
     finity: {
       primary: '#675AF6',
       secondary: '#675AF6',
-      on_hover: '#4F47BA',
+      onHover: '#4F47BA',
       disabled: '#E6E5F4',
       default: '#4a4a4a',
       highlight_color: '#EFEEFB',
@@ -587,7 +587,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
   html.style.setProperty('--color-action-disable',  `${config_to_return.disabled || '#E8ECF1'}`);
-  html.style.setProperty(`--on-hover`, `${config_to_return.on_hover || config_to_return.secondary }`);
+  html.style.setProperty(`--on-hover`, `${config_to_return.onHover || config_to_return.secondary }`);
 
   return config_to_return;
 }

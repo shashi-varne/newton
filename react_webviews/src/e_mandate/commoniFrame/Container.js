@@ -316,7 +316,6 @@ class Container extends Component {
             onlyButton={this.props.onlyButton}
             noFooter={this.props.noFooter}
             isDisabled={this.props.isDisabled}
-            classes={{button: 'footer-hover'}}
             />
         } 
         </div>
