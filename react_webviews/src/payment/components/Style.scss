@@ -271,7 +271,7 @@
     
     .upi-button button {
       width: 100%;
-      background: #b5b5b5;
+      background: var(--color-action-disable);
       border-radius: 5px;
       padding: 15px;
       border: 0;
