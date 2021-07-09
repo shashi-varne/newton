@@ -95,7 +95,6 @@ function Landing(props) {
   }
 
   const goBack = () => {
-    // untrackBackButtonPress()
     nativeCallback({ action: 'exit', events: sendEvents('back') })
     clearITRSessionStorage()
   }
