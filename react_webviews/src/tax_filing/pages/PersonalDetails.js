@@ -79,7 +79,7 @@ function PersonalDetails(props) {
     parsePhoneNumber(user?.phone) || ''
   )
 
-  const [, setItrId] = useState('')
+  const [itrId, setItrId] = useState('')
   const [itrSSOURL, setITRSSOURL] = useState('')
 
   useEffect(() => {
@@ -280,7 +280,7 @@ function PersonalDetails(props) {
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={!isEmpty(user?.name) && itrList.length > 0}
+          disabled={itrId || !isEmpty(user?.name) && itrList.length > 0}
           error={errors?.name}
           helperText={
             errors?.name
@@ -299,6 +299,7 @@ function PersonalDetails(props) {
           class="block m-top-3x"
           variant="outlined"
           disabled={
+            itrId ||
             !isEmpty(user?.email) &&
             (itrList.length > 0 || user.auth_id === 'email')
           }
@@ -316,6 +317,7 @@ function PersonalDetails(props) {
           class="block m-top-3x"
           variant="outlined"
           disabled={
+            itrId ||
             !isEmpty(user?.phone) &&
             (itrList.length > 0 || user.auth_id === 'mobile_number') &&
             validateNumber(user?.phone)
