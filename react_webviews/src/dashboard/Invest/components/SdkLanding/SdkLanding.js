@@ -154,13 +154,12 @@ class SdkLanding extends Component {
         skelton={this.state.show_loader}
         noFooter={true}
         title='Hello'
-        logo={true}
         notification
         handleNotification={this.handleNotification}
         background='sdk-background'
         classHeader={this.state.headerStyle ? 'sdk-partner-header' : 'sdk-header'}
         showLoader={this.state.show_loader}
-        headerData={{goBack:this.goBack}}
+        headerData={{goBack: this.goBack, partnerLogo: true}}
         data-aid='sdk-landing-screen'
       >
         <div className='sdk-landing' data-aid='sdk-landing'>
