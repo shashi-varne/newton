@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import UiSkelton from "../common/ui/Skelton";
 import toast from "../common/ui/Toast";
-import { navigate as navigateFunc } from "../utils/functions";
+import { getConfig, navigate as navigateFunc } from "../utils/functions";
 import { getUrlParams, storageService } from "../utils/validators";
 import { partnerAuthentication } from "./function";
 
+const config = getConfig();
 const PartnerAuthentication = (props) => {
   const navigate = navigateFunc.bind(props);
   const params = props.match.params || {};
@@ -26,12 +27,23 @@ const PartnerAuthentication = (props) => {
       window.location.href = result.redirect_path;
     } catch (err) {
       toast(err.message);
-      navigate("/logout");
+      if (config.isIframe) {
+        const message = JSON.stringify({
+          type: "iframe_close",
+        });
+        window.callbackWeb.sendEvent(message);
+      } else {
+        navigate("/logout");
+      }
     }
   };
 
   return (
-    <div className="iframeContainerWrapper">
+    <div
+      className={
+        config.isIframe ? "iframeContainerWrapper" : "ContainerWrapper"
+      }
+    >
       <UiSkelton type />
     </div>
   );
