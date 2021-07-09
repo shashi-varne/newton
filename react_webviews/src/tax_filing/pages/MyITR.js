@@ -165,8 +165,11 @@ function MyITR(props) {
           let bottomValues = [
             { title: 'Name', subtitle: user?.name },
             { title: 'Mobile Number', subtitle: user?.phone },
-            { title: 'Created On', subtitle: dateTime },
           ]
+
+          if (!['completed', 'refunded'].includes(status)) {
+            bottomValues.push({ title: 'Created On', subtitle: dateTime })
+          }
 
           if (!['completed', 'refunded'].includes(status)) {
             bottomValues.push({
