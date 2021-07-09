@@ -12,6 +12,10 @@ export const ITR_TYPE_KEY = 'itr-type'
 
 export const USER_DETAILS = 'itr-user-details'
 
+export const ITR_CREATED_KEY = 'itr-created'
+
+export const ITR_CREATED_FLAG = 'true'
+
 export const TAX_FILING_STEPS = {
   free: [
     {

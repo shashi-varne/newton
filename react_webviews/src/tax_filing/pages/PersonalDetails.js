@@ -27,6 +27,8 @@ import {
 import { storageService } from '../../utils/validators'
 import {
   ITR_APPLICATIONS_KEY,
+  ITR_CREATED_FLAG,
+  ITR_CREATED_KEY,
   ITR_TYPE_KEY,
   USER_DETAILS,
   USER_SUMMARY_KEY,
@@ -257,6 +259,9 @@ function PersonalDetails(props) {
     isEmpty(email) ||
     mobileNumber.length !== 10
 
+  const itrCreated =
+    storageService().get(ITR_CREATED_KEY) === ITR_CREATED_FLAG ? true : false
+
   return (
     <Container
       title="Personal details"
@@ -280,7 +285,9 @@ function PersonalDetails(props) {
           onChange={handleChange('name')}
           class="block m-top-3x"
           variant="outlined"
-          disabled={itrId || !isEmpty(user?.name) && itrList.length > 0}
+          disabled={
+            !isEmpty(user?.name) && (itrList.length > 0 || itrId || itrCreated)
+          }
           error={errors?.name}
           helperText={
             errors?.name
@@ -299,9 +306,11 @@ function PersonalDetails(props) {
           class="block m-top-3x"
           variant="outlined"
           disabled={
-            itrId ||
             !isEmpty(user?.email) &&
-            (itrList.length > 0 || user.auth_id === 'email')
+            (itrId ||
+              itrCreated ||
+              itrList.length > 0 ||
+              user.auth_id === 'email')
           }
           error={errors?.email}
           helperText={errors?.email ? 'Please enter a valid email address' : ''}
@@ -317,9 +326,11 @@ function PersonalDetails(props) {
           class="block m-top-3x"
           variant="outlined"
           disabled={
-            itrId ||
             !isEmpty(user?.phone) &&
-            (itrList.length > 0 || user.auth_id === 'mobile_number') &&
+            (itrId ||
+              itrCreated ||
+              itrList.length > 0 ||
+              user.auth_id === 'mobile_number') &&
             validateNumber(user?.phone)
           }
           error={errors?.mobileNumber}

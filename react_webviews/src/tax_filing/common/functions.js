@@ -8,6 +8,8 @@ import {
   ITR_TYPE_KEY,
   USER_SUMMARY_KEY,
   USER_DETAILS,
+  ITR_CREATED_KEY,
+  ITR_CREATED_FLAG,
 } from '../constants'
 export function navigate(pathname, params, replace = false) {
   if (!replace) {
@@ -96,6 +98,10 @@ export const setITRID = (itrId) => {
   storageService().set(ITR_ID_KEY, itrId)
 }
 
+export const setITRCreated = () => {
+  storageService().set(ITR_CREATED_KEY, ITR_CREATED_FLAG)
+}
+
 export const clearITRSessionStorage = () => {
   storageService().remove(ITR_BACK_BUTTON_TRACKER_KEY)
   storageService().remove(ITR_ID_KEY)
@@ -103,6 +109,7 @@ export const clearITRSessionStorage = () => {
   storageService().remove(ITR_APPLICATIONS_KEY)
   storageService().remove(USER_SUMMARY_KEY)
   storageService().remove(USER_DETAILS)
+  storageService().remove(ITR_CREATED_KEY)
 }
 
 export const parsePhoneNumber = (number) => {
