@@ -4,7 +4,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { getConfig } from 'utils/functions'
 
-
 function Carousal({ title, subtitle, dataAidSuffix }) {
   const productName = getConfig().productName
   return (
@@ -24,7 +23,9 @@ function Carousal({ title, subtitle, dataAidSuffix }) {
         />
         <hr className="absolute inline-block pass-through" />
       </div>
-      <div className="m-top-2x body-text2">{subtitle}</div>
+      <div className="m-top-2x body-text2 tax-filing-carousal-subtitle">
+        {subtitle}
+      </div>
     </div>
   )
 }
