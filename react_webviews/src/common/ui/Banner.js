@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles } from 'material-ui/styles';
 
 import hand from 'assets/hand_icon.png';
-import hand_finity from 'assets/finity/hand_icon_finity.svg';
+import hand_finity from 'assets/finity/hand.svg';
 import './style.scss';
 import { getConfig } from '../../utils/functions';
 
