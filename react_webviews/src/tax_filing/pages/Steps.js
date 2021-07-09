@@ -14,6 +14,8 @@ import {
   USER_SUMMARY_KEY,
   ITR_ID_KEY,
   ITR_APPLICATIONS_KEY,
+  ITR_CREATED_KEY,
+  ITR_CREATED_FLAG,
 } from '../constants'
 
 import {
@@ -65,7 +67,7 @@ function Steps(props) {
   }, [])
 
   const fetchItrList = async () => {
-    if (!itrList) {
+    if (isEmpty(itrList)) {
       try {
         setShowSkeltonLoader(true)
         const list = await getITRList()
@@ -150,14 +152,17 @@ function Steps(props) {
   const handleClick = async () => {
     try {
       setShowLoader('button')
-
+      const itrCreated =
+        storageService().get(ITR_CREATED_KEY) === ITR_CREATED_FLAG
+          ? true
+          : false
       const userDetails = await getITRUserDetails()
       if (
         !isEmpty(userDetails?.email) &&
         !isEmpty(userDetails?.phone) &&
         !isEmpty(userDetails?.name) &&
         itrList.length > 0 &&
-        !isEmpty(type)
+        !isEmpty(type) || itrCreated
       ) {
         setShowLoader('button')
         const itr = await createITRApplication({

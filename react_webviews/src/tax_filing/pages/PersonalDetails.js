@@ -15,6 +15,7 @@ import {
   navigate as navigateFunc,
   trackBackButtonPress,
   parsePhoneNumber,
+  setITRCreated,
 } from '../common/functions'
 import { getConfig } from 'utils/functions'
 import { isEmpty } from 'lodash'
@@ -235,6 +236,7 @@ function PersonalDetails(props) {
         phone: parsePhoneNumber(mobileNumber),
       })
       setItrId(itr.itr_id)
+      setITRCreated()
       setITRSSOURL(itr.sso_url)
       setShowBottomSheet(true)
       setShowLoader(false)
@@ -286,7 +288,7 @@ function PersonalDetails(props) {
           class="block m-top-3x"
           variant="outlined"
           disabled={
-            !isEmpty(user?.name) && (itrList.length > 0 || itrId || itrCreated)
+            (!isEmpty(user?.name) && itrList.length > 0) || itrId || itrCreated
           }
           error={errors?.name}
           helperText={
@@ -306,11 +308,10 @@ function PersonalDetails(props) {
           class="block m-top-3x"
           variant="outlined"
           disabled={
-            !isEmpty(user?.email) &&
-            (itrId ||
-              itrCreated ||
-              itrList.length > 0 ||
-              user.auth_id === 'email')
+            (!isEmpty(user?.email) &&
+              (itrList.length > 0 || user.auth_id === 'email')) ||
+            itrId ||
+            itrCreated
           }
           error={errors?.email}
           helperText={errors?.email ? 'Please enter a valid email address' : ''}
@@ -326,12 +327,11 @@ function PersonalDetails(props) {
           class="block m-top-3x"
           variant="outlined"
           disabled={
-            !isEmpty(user?.phone) &&
-            (itrId ||
-              itrCreated ||
-              itrList.length > 0 ||
-              user.auth_id === 'mobile_number') &&
-            validateNumber(user?.phone)
+            (!isEmpty(user?.phone) &&
+              (itrList.length > 0 || user.auth_id === 'mobile_number') &&
+              validateNumber(user?.phone)) ||
+            itrId ||
+            itrCreated
           }
           error={errors?.mobileNumber}
           helperText={
