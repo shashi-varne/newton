@@ -158,11 +158,12 @@ function Steps(props) {
           : false
       const userDetails = await getITRUserDetails()
       if (
-        !isEmpty(userDetails?.email) &&
-        !isEmpty(userDetails?.phone) &&
-        !isEmpty(userDetails?.name) &&
-        itrList.length > 0 &&
-        !isEmpty(type) || itrCreated
+        (!isEmpty(userDetails?.email) &&
+          !isEmpty(userDetails?.phone) &&
+          !isEmpty(userDetails?.name) &&
+          itrList.length > 0 &&
+          !isEmpty(type)) ||
+        itrCreated
       ) {
         setShowLoader('button')
         const itr = await createITRApplication({
