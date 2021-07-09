@@ -39,6 +39,11 @@ export class FooterLayoutBase extends Component {
     }
   }
 
+  dualButtonClickHandler = (handleClickCallback) => () => {
+    if(isFunction(handleClickCallback))
+      this.clickHandler(handleClickCallback);
+  }
+
   handleClose = () => {
     this.setState({
       openDialog: false
@@ -105,8 +110,8 @@ export class FooterLayoutBase extends Component {
             type={props.type}
             arrow={(props.edit) ? false : true}
             {...props}
-            handleClickOne={() => this.clickHandler(props.handleClickOne)} 
-            handleClickTwo={() => this.clickHandler(props.handleClickTwo)} 
+            handleClickOne={this.dualButtonClickHandler(props.handleClickOne)} 
+            handleClickTwo={this.dualButtonClickHandler(props.handleClickTwo)} 
           />
         </div>
       </div>
@@ -121,7 +126,7 @@ export class FooterLayoutBase extends Component {
       return(
         <div className="FooterDefaultLayout">
         {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
-        onClick={() => {isFunction(props.handleClick2) && this.clickHandler(props.handleClick2)}}
+        onClick={this.dualButtonClickHandler(props.handleClick2)}
         style={props.buttonData.leftStyle}>
 
           {props.buttonData.logo && <div className='image-block'>
@@ -230,7 +235,7 @@ export class FooterLayoutBase extends Component {
               width: "20%",
               padding: "0px !important",
             }}
-            onClick={() => this.clickHandler(props.handleClickOne)} 
+            onClick={this.dualButtonClickHandler(props.handleClickOne)} 
           />
           <Button
             buttonTitle={props.buttonTwoTitle}
@@ -239,7 +244,7 @@ export class FooterLayoutBase extends Component {
               borderBottomLeftRadius: 0,
               width: "80%",
             }}
-            onClick={() => this.clickHandler(props.handleClickTwo)} 
+            onClick={this.dualButtonClickHandler(props.handleClickTwo)} 
           />
         </div>
         {this.renderDialog()}
@@ -256,7 +261,7 @@ export class FooterLayoutBase extends Component {
     return(
       <div className="FooterDefaultLayout">
           {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer" 
-          onClick={() => this.clickHandler(props.handleClick2)}
+          onClick={this.dualButtonClickHandler(props.handleClick2)}
           style={props.buttonData.leftStyle}>
             <div className='image-block'>
               <img
@@ -289,11 +294,11 @@ export class FooterLayoutBase extends Component {
   VerticalButtonLayout = ({ button1Props, button2Props }) => {
     const buttonOneProps = {
       ...button1Props,
-      onClick: () => this.clickHandler(button1Props.onClick)
+      onClick: this.dualButtonClickHandler(button1Props.onClick)
     }
     const buttonTwoProps = {
       ...button2Props,
-      onClick: () => this.clickHandler(button2Props.onClick)
+      onClick: this.dualButtonClickHandler(button2Props.onClick)
     }
     return(
       <WVButtonLayout layout="stacked">
@@ -311,7 +316,7 @@ export class FooterLayoutBase extends Component {
     return(
       <div className="FooterDefaultLayout">
         {props.buttonData && <div className="FlexItem1 FlexItem1-withProvider-footer loan-with-provider" 
-        onClick={() => {isFunction(props.handleClick2) && this.clickHandler(props.handleClick2)}}
+        onClick={this.dualButtonClickHandler(props.handleClick2)}
         style={props.buttonData.leftStyle}>
           <div className="text-block">
           <div className="text-block-1">{props.buttonData.leftTitle}</div>
