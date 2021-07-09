@@ -94,6 +94,7 @@ body[data-device="web"] {
 
   ::-webkit-scrollbar {
     width: 10px;
+    height: 5px;
   }
 
   ::-webkit-scrollbar-track {
@@ -103,12 +104,6 @@ body[data-device="web"] {
 
   ::-webkit-scrollbar-thumb:hover {
     background: #c4c4c4; 
-  }
-
-  .diy-tab-container {
-    ::-webkit-scrollbar {
-      height: 5px;
-    }
   }
 
   .ContainerWrapper, .bfdlContainerWrapper {
