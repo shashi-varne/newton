@@ -189,7 +189,6 @@ export function commonRender(props_base) {
                         filterPage={this.props.filterPage}
                         handleFilter={this.props.handleFilter} 
                         hideBack={this.props.hideBack}
-                        logo={this.props.logo}
                         notification={this.props.notification}
                         handleNotification={this.props.handleNotification}  
                         noBackIcon={this.props.noBackIcon}        
