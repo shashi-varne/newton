@@ -113,7 +113,7 @@ function Landing(props) {
         !landedFromBackButton ||
         isEmpty(user) ||
         isEmpty(summary) ||
-        !itrList
+        isEmpty(itrList)
       ) {
         setShowLoader(true)
         const [list, userDetails, summaryDetails] = await Promise.all([
