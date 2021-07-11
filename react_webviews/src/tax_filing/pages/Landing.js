@@ -16,7 +16,6 @@ import { nativeCallback } from 'utils/native_callback'
 import {
   TAX_FILING_OPTIONS,
   USER_SUMMARY_KEY,
-  ITR_APPLICATIONS_KEY,
   USER_DETAILS,
 } from '../constants'
 import {
@@ -27,12 +26,8 @@ import {
   setITRJourneyType,
   untrackBackButtonPress,
 } from '../common/functions'
-import {
-  getITRList,
-  getITRUserDetails,
-  getUserAccountSummary,
-} from '../common/ApiCalls'
-import { isEmpty, isArray } from 'lodash'
+import { getITRUserDetails, getUserAccountSummary } from '../common/ApiCalls'
+import { isEmpty } from 'lodash'
 
 import { storageService } from '../../utils/validators'
 import useResetTakeControl from '../hooks/useResetTakeControl'
@@ -44,21 +39,15 @@ function Landing(props) {
   const landedFromBackButton = checkIfLandedByBackButton()
   const cachedUserSummaryData =
     storageService().getObject(USER_SUMMARY_KEY) || {}
-  const cachedITRApplications =
-    storageService().getObject(ITR_APPLICATIONS_KEY) || []
+
   const cachedUserDetails = storageService().getObject(USER_DETAILS) || {}
   const defaultUserDetails =
     landedFromBackButton && !isEmpty(cachedUserDetails) ? cachedUserDetails : {}
-  const defaultITRApplications =
-    landedFromBackButton && isArray(cachedITRApplications)
-      ? cachedITRApplications
-      : []
 
   const defaultUserSummaryDetails = isEmpty(cachedUserSummaryData)
     ? {}
     : cachedUserSummaryData
 
-  const [itrList, setItrList] = useState(defaultITRApplications)
   const [user, setUser] = useState(defaultUserDetails)
   const [summary, setSummary] = useState(defaultUserSummaryDetails)
   const [errorData, setErrorData] = useState({})
@@ -103,29 +92,21 @@ function Landing(props) {
   useBackButtonTracker()
 
   useEffect(() => {
-    fetchITRListAndUserSummary()
+    fetchITRUserSummary()
   }, [])
 
-  const fetchITRListAndUserSummary = async () => {
+  const fetchITRUserSummary = async () => {
     try {
-      if (
-        !landedFromBackButton ||
-        isEmpty(user) ||
-        isEmpty(summary) ||
-        isEmpty(itrList)
-      ) {
+      if (!landedFromBackButton || isEmpty(user) || isEmpty(summary)) {
         setShowLoader(true)
-        const [list, userDetails, summaryDetails] = await Promise.all([
-          getITRList(),
+        const [userDetails, summaryDetails] = await Promise.all([
           getITRUserDetails(),
           getUserAccountSummary(),
         ])
-        setItrList([...list])
         setUser({ ...userDetails })
         setSummary({ ...summaryDetails })
         storageService().setObject(USER_DETAILS, userDetails)
         storageService().setObject(USER_SUMMARY_KEY, summaryDetails)
-        storageService().setObject(ITR_APPLICATIONS_KEY, list)
         setShowLoader(false)
         setShowError(false)
       }
@@ -149,14 +130,14 @@ function Landing(props) {
 
   const handleMyITRNavigation = () => {
     sendEvents('next', { card_click: 'my_ITR' })
-    navigate(`/tax-filing/my-itr`, { itrList, summary, user }, false)
+    navigate(`/tax-filing/my-itr`, { summary, user }, false)
     return
   }
 
   const handleITRJourneyNavigation = (type) => () => {
     sendEvents('next', { card_click: type })
     setITRJourneyType(type)
-    navigate(`/tax-filing/steps`, { type, itrList }, false)
+    navigate(`/tax-filing/steps`, { type }, false)
     return
   }
 
@@ -177,7 +158,7 @@ function Landing(props) {
           subtitle="File ITR easily, quickly and with maximum tax savings"
           dataAidSuffix="tax-filing-itr-carousel"
         />
-        {itrList.length > 0 && (
+        {user?.has_itr && (
           <WVCard
             classes={{
               container:

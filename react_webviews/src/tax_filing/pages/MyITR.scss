@@ -14,9 +14,20 @@
   .details-card-container
   .card-bottom-info
   .individual-card-info {
-  align-self: center;
   margin: 0;
 }
+
+.tax-filing-my-itr
+  .details-card-container
+  .card-bottom-info
+  .individual-card-info:nth-of-type(3),
+.tax-filing-my-itr
+  .details-card-container
+  .card-bottom-info
+  .individual-card-info:nth-of-type(4) {
+  align-self: center;
+}
+
 .tax-filing-my-itr
   .details-card-container
   .card-bottom-info

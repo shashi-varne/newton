@@ -15,25 +15,13 @@ import {
   navigate as navigateFunc,
   trackBackButtonPress,
   parsePhoneNumber,
-  setITRCreated,
 } from '../common/functions'
 import { getConfig } from 'utils/functions'
 import { isEmpty } from 'lodash'
 
-import {
-  createITRApplication,
-  getITRList,
-  getITRUserDetails,
-} from '../common/ApiCalls'
+import { createITRApplication, getITRUserDetails } from '../common/ApiCalls'
 import { storageService } from '../../utils/validators'
-import {
-  ITR_APPLICATIONS_KEY,
-  ITR_CREATED_FLAG,
-  ITR_CREATED_KEY,
-  ITR_TYPE_KEY,
-  USER_DETAILS,
-  USER_SUMMARY_KEY,
-} from '../constants'
+import { ITR_TYPE_KEY, USER_DETAILS, USER_SUMMARY_KEY } from '../constants'
 
 import { nativeCallback } from 'utils/native_callback'
 
@@ -49,9 +37,6 @@ function PersonalDetails(props) {
   const summary = storageService().getObject(USER_SUMMARY_KEY) || {}
 
   const defaultUser = props?.location?.params?.user || {}
-  const defaultITRList =
-    props?.location?.params?.itrList ||
-    storageService().getObject(ITR_APPLICATIONS_KEY)
 
   const type =
     props?.location?.params?.type || storageService().get(ITR_TYPE_KEY) || ''
@@ -75,7 +60,6 @@ function PersonalDetails(props) {
   const [errorData, setErrorData] = useState({})
 
   const [user, setUser] = useState(defaultUser)
-  const [itrList, setITRList] = useState(defaultITRList)
   const [name, setName] = useState(user?.name || '')
   const [email, setEmail] = useState(user?.email || '')
   const [mobileNumber, setMobileNumber] = useState(
@@ -91,19 +75,14 @@ function PersonalDetails(props) {
 
   const fetchUserDetails = async () => {
     try {
-      if (isEmpty(user) || !itrList) {
+      if (isEmpty(user)) {
         setShowSkeltonLoader(true)
-        const [userDetails, itrListDetails] = await Promise.all([
-          getITRUserDetails(),
-          getITRList(),
-        ])
+        const userDetails = await getITRUserDetails()
         setUser({ ...userDetails })
-        setITRList([...itrListDetails])
         setName(userDetails?.name)
         setEmail(userDetails?.email)
         setMobileNumber(parsePhoneNumber(userDetails?.phone))
         storageService().setObject(USER_DETAILS, userDetails)
-        storageService().setObject(ITR_APPLICATIONS_KEY, itrListDetails)
         setShowSkeltonLoader(false)
       }
     } catch (err) {
@@ -236,8 +215,17 @@ function PersonalDetails(props) {
         phone: parsePhoneNumber(mobileNumber),
       })
       setItrId(itr.itr_id)
-      setITRCreated()
       setITRSSOURL(itr.sso_url)
+      setUser({ ...user, has_itr: true })
+      if (itr?.itr_id && itr?.sso_url) {
+        storageService().setObject(USER_DETAILS, {
+          ...user,
+          has_itr: true,
+          name,
+          email,
+          phone: mobileNumber,
+        })
+      }
       setShowBottomSheet(true)
       setShowLoader(false)
     } catch (err) {
@@ -261,8 +249,7 @@ function PersonalDetails(props) {
     isEmpty(email) ||
     mobileNumber.length !== 10
 
-  const itrCreated =
-    storageService().get(ITR_CREATED_KEY) === ITR_CREATED_FLAG ? true : false
+  const itrCreated = user?.has_itr
 
   return (
     <Container
@@ -288,7 +275,9 @@ function PersonalDetails(props) {
           class="block m-top-3x"
           variant="outlined"
           disabled={
-            (!isEmpty(user?.name) && itrList.length > 0) || itrId || itrCreated
+            (!isEmpty(user?.name) && itrCreated) ||
+            !isEmpty(itrId) ||
+            itrCreated
           }
           error={errors?.name}
           helperText={
@@ -309,8 +298,8 @@ function PersonalDetails(props) {
           variant="outlined"
           disabled={
             (!isEmpty(user?.email) &&
-              (itrList.length > 0 || user.auth_id === 'email')) ||
-            itrId ||
+              (itrCreated || user.auth_id === 'email')) ||
+            !isEmpty(itrId) ||
             itrCreated
           }
           error={errors?.email}
@@ -328,9 +317,9 @@ function PersonalDetails(props) {
           variant="outlined"
           disabled={
             (!isEmpty(user?.phone) &&
-              (itrList.length > 0 || user.auth_id === 'mobile_number') &&
+              (itrCreated || user.auth_id === 'mobile_number') &&
               validateNumber(user?.phone)) ||
-            itrId ||
+            !isEmpty(itrId) ||
             itrCreated
           }
           error={errors?.mobileNumber}
