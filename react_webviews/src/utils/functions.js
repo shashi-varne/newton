@@ -402,6 +402,42 @@ const partnersConfigBase = {
     back_button: 'back_icon_white.png',
     close_button: 'close_nav_icon.svg',
     search_button: 'search.png'
+  },
+  ippb: {
+    logo: "logo_white.png",
+    primary_color: "#3F1027",
+    code: "ippb",
+    email: "ask@fisdom.com",
+    mobile: "+91-9642596425",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  sahaj: {
+    logo: "logo_white.png",
+    primary_color: "#e5322d",
+    code: "sahaj",
+    email: "ask@fisdom.com",
+    mobile: "+91-9642596425",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  },
+  mspl: {
+    logo: "logo_white.png",
+    primary_color: "#252B69",
+    code: "mspl",
+    email: "ask@fisdom.com",
+    mobile: "+91-9642596425",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
   }
 };
 
