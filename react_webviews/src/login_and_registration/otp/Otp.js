@@ -11,7 +11,7 @@ import LoginContainer from "../LoginContainer"
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
-const productName = config.productName;
+// const productName = config.productName;
 class Otp extends Component {
   constructor(props) {
     super(props);
@@ -28,29 +28,35 @@ class Otp extends Component {
 
   componentWillMount() {
     let { state } = this.props.location || {};
-    if (!state || !state.mobile_number) {
+    if (!state) {
       toast("Mobile number not provided");
       this.props.history.goBack();
       return;
     }
-    let { mobile_number, otp_id } = state;
+    let { value, otp_id, communicationType, verify_url, resend_url, user_whatsapp_consent } = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     let forgot = state.forgot;
-    this.setState({
-      mobile_number: mobile_number,
-      otp_id: otp_id,
-      rebalancing_redirect_url: rebalancing_redirect_url,
-      forgot: forgot,
-    });
+    let body = {
+      value,
+      otp_id,
+      rebalancing_redirect_url,
+      forgot,
+      communicationType,
+      verify_url,
+      resend_url
+    }
+    if (user_whatsapp_consent) body.user_whatsapp_consent = true;
+
+    this.setState(body);
     this.initialize();
   }
 
   handleClick = () => {
-    this.otpVerification({
-      mobile_number: this.state.mobile_number,
-      otp_value: this.state.otpData["otp"],
-      otp_id: this.state.otp_id,
-    });
+    let body = {
+      otp: this.state.otpData["otp"],
+      user_whatsapp_consent: this.state.user_whatsapp_consent,
+    }
+    this.otpLoginVerification(this.state.verify_url, body);
   };
 
   handleOtp = (otp) => {
@@ -60,14 +66,14 @@ class Otp extends Component {
   };
 
   render() {
-    let { isApiRunning, otpData, isWrongOtp } = this.state;
+    let { isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
     let disabled = otpData.otp?.length !== 4;
-    let communicationType = "mobile";
+    let loginType = communicationType === "email" ? "email" : "mobile";
     let showDotLoader = false;
     return (
       <LoginContainer>
         <div className="verify-otp-container">
-          <p className="title">{`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"
+          <p className="title">{`Enter OTP to verify your ${loginType === "email" ? "email" : "number"
             }`}</p>
           <div className="verify-otp-header">
             <p>
@@ -82,9 +88,9 @@ class Otp extends Component {
               otpData={this.state.otpData}
               showDotLoader={showDotLoader}
               handleOtp={this.handleOtp}
-              resendOtp={this.resendOtp}
+              resendOtp={this.resendLoginOtp}
               isWrongOtp={isWrongOtp}
-              otp_id={this.state.otp_id}
+              resend_url={this.state.resend_url}
             />
           </div>
           <div>

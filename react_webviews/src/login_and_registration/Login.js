@@ -39,9 +39,10 @@ class Login extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (name === "mobile" && value && !validateNumber(value)) return;
     let { form_data } = this.state;
-    form_data[name] = value;
+    if (name === "mobile" && value && !validateNumber(value)) return;
+    if (name === "mobile" && form_data.code === "91" & value.length > 10) return;
+    form_data[name] = value;console.log(form_data, value )
     if (name === "whatsapp_consent") form_data[name] = !form_data?.whatsapp_consent;
     form_data[`${name}_error`] = "";
     this.setState({ form_data: form_data });
@@ -73,8 +74,6 @@ class Login extends Component {
       form_data,
       isApiRunning,
       productName,
-      // facebookUrl,
-      // googleUrl,
     } = this.state;
     return (
       <LoginContainer >
@@ -165,12 +164,6 @@ class Login extends Component {
                     autoFocus
                   />
                 </div>
-                <div
-                  className="forgot_password" data-aid='forgot-password'
-                  onClick={() => this.navigate("forgot-password")}
-                >
-                  FORGOT PASSWORD?
-                  </div>
               </>
             )}
             <Button
@@ -186,25 +179,7 @@ class Login extends Component {
                   }`,
               }}
             />
-            {/* {productName !== "finity" && (
-                <div className="social-block" data-aid='social-block'>
-                  <a
-                    className="socialSignupBtns facebookBtn" data-aid='social-signupbtns-facebookbtn'
-                    href={facebookUrl}
-                  >
-                    FACEBOOK
-                  </a>
-                  <a className="socialSignupBtns googleBtn" data-aid='social-signupbtns-googlebtn' href={googleUrl}>
-                    GOOGLE
-                  </a>
-                </div>
-              )} */}
           </div>
-          {/* {productName !== "finity" && (
-              <div className="footer" data-aid='footer' onClick={() => this.navigate("register")}>
-                NEW USER? <span data-aid='register-btn'>REGISTER</span>
-              </div>
-            )} */}
           {productName === "finity" && (
             <div className="features">
               <div className="item">

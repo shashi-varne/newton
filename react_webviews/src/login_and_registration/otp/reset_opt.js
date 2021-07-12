@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import OtpInput from "react-otp-input";
 import DotDotLoader from "../../common/ui/DotDotLoader";
-import { storageService } from "utils/validators";
 
 class Otp extends Component {
   constructor(props) {
@@ -29,7 +28,7 @@ class Otp extends Component {
   }
 
   resendOtp = async () => {
-    await this.props.resendOtp(this.props.otp_id);
+    await this.props.resendOtp(this.props.resend_url);
     let intervalId = setInterval(this.countdown, 1000);
 
     this.setState({

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Login from './login_and_registration/Login';
-import Register from './login_and_registration/Register';
+// import Register from './login_and_registration/Register';
 import Otp from './login_and_registration/otp/Otp';
-import ForgotPassword from './login_and_registration/ForgotPassword';
+// import ForgotPassword from './login_and_registration/ForgotPassword';
 import Logout from './login_and_registration/Logout';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
 import WealthReport from './wealth_report';
@@ -92,9 +92,9 @@ const App = () => {
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
               <Route path='/login' component={Login} />
-              <Route path='/register' component={Register} />
+              {/* <Route path='/register' component={Register} /> */}
               <Route path='/verify-otp' component={Otp} />
-              <Route path='/forgot-password' component={ForgotPassword} />
+              {/* <Route path='/forgot-password' component={ForgotPassword} /> */}
               <Route path='/social/callback' component={SocialCallback} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />

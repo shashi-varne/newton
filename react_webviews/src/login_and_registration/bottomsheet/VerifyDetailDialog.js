@@ -22,25 +22,25 @@ class VerifyDetailDialog extends Component {
     const { data, type } = this.props;
     if (isEmpty(data)) {
       this.props.parent.navigate("/secondary-verification", {
-        communicationType: type
+        state: {
+          communicationType: type
+        }
       });
     } else {
       const result = await this.authCheckApi(type, data);
-      console.log(result);
       if (result.is_user === false) {
         let body = {};
         if (type === "email") {
           body.email = data.contact_value;
         } else {
           body.mobile = data.contact_value;
-          body.whatsapp_consent = true;
-        } // by default should this be true or false in case of bottomsheet?
+          body.whatsapp_consent = true;  // by default should this be true or false in case of bottomsheet?
+        }
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {
           this.props.parent.navigate("secondary-otp-verification", {
             state: {
               mobile_number: data.contact_value,
-              forgot: false, // flag to be checked
               otp_id: otpResponse.otp_id,
             },
           });

@@ -24,24 +24,23 @@ export class SecondaryOtpVerification extends Component {
 
   componentWillMount() {
     let { state } = this.props.location || {};
-    console.log(state)
-    // if (!state || !state.mobile_number) {
-    //   toast("Mobile number not provided");
-    //   this.props.history.goBack();
-    //   return;
-    // }
-    let { mobile_number, otp_id, communicationType } = state;
+    if (!state) {
+      toast("Mobile number not provided");
+      this.props.history.goBack();
+      return;
+    }
+    let { value, otp_id, communicationType } = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
     let forgot = state.forgot;
     this.setState({
-      mobile_number: mobile_number,
+      value: value,
       otp_id: otp_id,
       rebalancing_redirect_url: rebalancing_redirect_url,
       forgot: forgot,
       communicationType: communicationType
     });
     this.initialize();
-  }  
+  }
 
   handleOtp = (otp) => {
     this.setState({
@@ -55,11 +54,7 @@ export class SecondaryOtpVerification extends Component {
 
 
   handleClick = () => {
-
-    console.log(this.state.mobile_number, this.state.otpData, this.state.otp_id);
-
     this.otpVerification({
-      mobile_number: this.state.mobile_number,
       otp_value: this.state.otpData["otp"],
       otp_id: this.state.otp_id,
     });
@@ -68,13 +63,13 @@ export class SecondaryOtpVerification extends Component {
 
 
   render() {
-    const {showDotLoader, communicationType} = this.state;
+    const { showDotLoader, communicationType, otp_id } = this.state;
     return (
       <Container
         title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"
           }`}
         buttonTitle="VERIFY"
-        showLoader={this.state.isApiRunning} 
+        showLoader={this.state.isApiRunning}
         canSkip={true}
         onSkipClick={() => this.navigate("/")}
         handleClick={() => this.handleClick()}
@@ -85,20 +80,21 @@ export class SecondaryOtpVerification extends Component {
               An OTP has been sent to{" "}
               <span style={{ fontWeight: "500", marginRight: "23px" }}>{this.state.mobile_number}</span>
             </p>
-            <WVClickableTextElement onClick={() => this.navigate('/secondary-verification',{
-              state:{
+            <WVClickableTextElement onClick={() => this.navigate('/secondary-verification', {
+              state: {
                 communicationType: communicationType,
                 contactValue: this.state.mobile_number
               }
             })}>EDIT</WVClickableTextElement>
           </div>
           <div className="kcd-otp-content">
-          <OtpComp
-            otpData={this.state.otpData}
-            showDotLoader={showDotLoader}
-            handleOtp={this.handleOtp}
-            resendOtp={this.resendOtp}
-          />
+            <OtpComp
+              otpData={this.state.otpData}
+              showDotLoader={showDotLoader}
+              handleOtp={this.handleOtp}
+              resendOtp={this.resendOtp}
+              resend_url={otp_id}
+            />
           </div>
         </div>
       </Container>

@@ -18,7 +18,7 @@ class SecondaryVerification extends Component {
         super(props);
         this.state = {
             productName: getConfig().productName,
-            form_data: { whatsapp_consent: true, code: "+91"},
+            form_data: { whatsapp_consent: true, code: "+91" },
             loginType: "mobile",
             accountAlreadyExists: false
         }
@@ -27,6 +27,9 @@ class SecondaryVerification extends Component {
 
     componentWillMount() {
         this.initialize();
+        const { state } = this.props.location;
+        let loginType = state?.communicationType || "mobile";
+        this.setState({ loginType })
         countries.map((item, idx) => {
             item.name = "+" + item.value;
         })
@@ -34,14 +37,13 @@ class SecondaryVerification extends Component {
 
     componentDidMount() {
         this.setState({
-            form_data:{
+            form_data: {
                 ...this.state.form_data,
                 mobile: this.props.location?.state?.contactValue
             },
-            loginType: this.props.location?.communicationType || "mobile"// to be changed
         })
     }
-    
+
     handleChange = (name) => (event) => {
         let value = event.target ? event.target.value : event;
         if (name === "mobile" && value && !validateNumber(value)) return;
@@ -91,22 +93,22 @@ class SecondaryVerification extends Component {
     //       });
     //     }
     //   };
-    
-      editDetailsAccountAlreadyExists = () => {
-          this.setState({
-            accountAlreadyExists: false
-          })
-      };
 
-      closeAccountAlreadyExistDialog = () => {
+    editDetailsAccountAlreadyExists = () => {
         this.setState({
-          accountAlreadyExists: false
+            accountAlreadyExists: false
         })
-      }
-    
+    };
+
+    closeAccountAlreadyExistDialog = () => {
+        this.setState({
+            accountAlreadyExists: false
+        })
+    }
+
 
     render() {
-        const {loginType, form_data } = this.state;
+        const { loginType, form_data } = this.state;
 
         return (
             <Container
@@ -152,7 +154,7 @@ class SecondaryVerification extends Component {
                                 </span>
                             </div>
                             <WVInPageSubtitle children={"We'll send an OTP to verify your mobile number"} />
-                            <div className="declaration-container">
+                            <div className="declaration-container whatsapp-consent">
                                 <Checkbox
                                     defaultChecked
                                     checked={form_data?.whatsapp_consent}
@@ -188,12 +190,12 @@ class SecondaryVerification extends Component {
                     }
                 </div>
                 <AccountAlreadyExistDialog
-                type={this.state.verifyDetailsType}
-                data={this.state.accountAlreadyExistsData}
-                isOpen={this.state.accountAlreadyExists}
-                onClose={this.closeAccountAlreadyExistDialog}
-                next={this.handleClick}
-                editDetails={this.editDetailsAccountAlreadyExists}
+                    type={this.state.verifyDetailsType}
+                    data={this.state.accountAlreadyExistsData}
+                    isOpen={this.state.accountAlreadyExists}
+                    onClose={this.closeAccountAlreadyExistDialog}
+                    next={this.handleClick}
+                    editDetails={this.editDetailsAccountAlreadyExists}
                 ></AccountAlreadyExistDialog>
             </Container >
         )
