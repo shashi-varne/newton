@@ -1,14 +1,7 @@
 // import colors from '../common/theme/Style.scss';
 import { checkValidString, getUrlParams, storageService } from './validators';
 import $ from 'jquery';
-import { 
-  basePartnerConfig, 
-  baseStylesConfig, 
-  baseTypographyConfig, 
-  baseUIElementsConfig, 
-  commonCardsConfig, 
-  partnerConfigs 
-} from './partnerConfigs';
+import {  getPartnerData  } from './partnerConfigs';
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;
@@ -68,10 +61,10 @@ function getPartnerConfig(partner_code) {
     productType = "minvest";
   }
 
-  // Appending base config of the productType(fisdom/finity) with the common config accross all partners
+  // Generating partnerData
+  const partnerData = getPartnerData(productType, partner_code); 
   let config_to_return = {
-    ...commonCardsConfig,
-    ...basePartnerConfig[productType],
+    ...partnerData
   };
 
   if (isStaging) {
@@ -86,26 +79,6 @@ function getPartnerConfig(partner_code) {
     partner_code = "bfdlmobile";
   }
 
-  // Generating partnerData
-  let partnerData = partnerConfigs[partner_code] || partnerConfigs["fisdom"];
-  config_to_return = {
-    ...config_to_return, // taking the base config of the productType(fisdom/finity)
-    ...partnerData, // overriding with particular partner config
-    styles: {
-      ...baseStylesConfig.common,
-      ...baseStylesConfig[productType], //taking common base styles config
-      ...partnerData?.styles, // overriding with the partner styles
-    },
-    uiElements: {
-      ...baseUIElementsConfig,
-      ...partnerData?.uiElements,
-    },
-    typography: {
-      ...baseTypographyConfig[productType],
-      ...partnerData?.typography,
-    }
-  };
-
   let html = document.querySelector(`html`);
   html.style.setProperty(`--secondary`,`${config_to_return.styles.secondaryColor}`);
   html.style.setProperty(`--highlight`,`${config_to_return.styles.highlightColor}`);
@@ -116,9 +89,10 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--label`, `${config_to_return.uiElements.formLabel.color}`);
   html.style.setProperty(`--desktop-width`, "640px");
   html.style.setProperty(`--tooltip-width`, "540px");
-  html.style.setProperty("--color-action-disable", "#E8ECF1");
+  html.style.setProperty("--color-action-disable", `${config_to_return.uiElements.button.disabledBackgroundColor}`);
   html.style.setProperty('--dark', '#0A1D32');
   html.style.setProperty('--steelgrey', '#767E86');
+  html.style.setProperty('--onfocus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
 
   return config_to_return;
 }

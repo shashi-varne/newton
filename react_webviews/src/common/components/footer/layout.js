@@ -206,7 +206,7 @@ export class FooterLayoutBase extends Component {
       }}>
       <div className={`FlexItem2 ${!props.disable ? 'FlexButtonGenericColor' : ''}`} 
         style={{
-          borderRadius: getConfig().uiElements?.bottomCta?.borderRadius || 6
+          borderRadius: getConfig().uiElements?.button?.borderRadius || 6
         }} 
       >
         <Button

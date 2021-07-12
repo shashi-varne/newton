@@ -105,16 +105,31 @@ export const baseStylesConfig = {
     primaryColor: "#4f2da7",
     secondaryColor: "#35cb5d",
     highlightColor: "#f6f2ff",
-    // backButtonColor: '#2E3192',
   },
   finity: {
     default: "#4a4a4a",
-    primaryColor: "#3792fc",
-    secondaryColor: "#35cb5d",
-    highlightColor: "#F0F7FF",
-    // backButtonColor: '#2E3192',
+    primaryColor: "#675AF6",
+    secondaryColor: "#675AF6",
+    highlightColor: "#EFEEFB",
   },
 };
+
+export const baseButtonConfig = {
+  common: {
+    borderRadius: 4,
+    disabledColor: '#FFFFFF',
+  },
+  fisdom: {
+    disabledBackgroundColor: "#E8ECF1",
+    hoverBackgroundColor: "#35cb5d",
+    focusBackgroundColor: "#119A4B",
+  },
+  finity: {
+    disabledBackgroundColor: "#E6E5F4",
+    focusBackgroundColor: "#4F47BA",
+    hoverBackgroundColor: "#4F47BA",
+  },
+}
 
 export const baseUIElementsConfig = {
   formLabel: {
@@ -200,11 +215,6 @@ export const partnerConfigs = {
       primaryColor: "#004164",
       secondaryColor: "#ff5928",
       backButtonColor: "#ff5928",
-    },
-    uiElements: {
-      bottomCta: {
-        disabledColor: "#ffffff",
-      },
     },
   },
   alb: {
@@ -296,11 +306,7 @@ export const partnerConfigs = {
     uiElements: {
       button: {
         borderRadius: 25,
-      },
-      bottomCta: {
         disabledBackgroundColor: "#F1D5C9", // same as 'cta_disabled_background'
-        disabledColor: "#ffffff", // same as cta_disabled_color
-        borderRadius: 25,
       },
     },
   },
@@ -338,11 +344,6 @@ export const partnerConfigs = {
     styles: {
       primaryColor: "#F5821F",
       secondaryColor: "#F5821F",
-    },
-    uiElements: {
-      bottomCta: {
-        disabledColor: "#ffffff",
-      },
     },
   },
   sbm: {
@@ -472,3 +473,43 @@ export const partnerConfigs = {
     search_button: 'search.png'
   }
 };
+
+export const getPartnerData = (productType, partnerCode) => {
+  // Appending base config of the productType(fisdom/finity) with the common config accross all partners
+  let partnerConfigTOReturn = {
+    ...commonCardsConfig,
+    ...basePartnerConfig[productType],
+  };
+  const partnerData = partnerConfigs[partnerCode] || partnerConfigs["fisdom"];
+  partnerConfigTOReturn = {
+    ...partnerConfigTOReturn, // taking the base config of the productType(fisdom/finity)
+    ...partnerData, // overriding with particular partner config
+    styles: {
+      ...baseStylesConfig.common,
+      ...baseStylesConfig[productType], //taking common base styles config
+      ...partnerData?.styles, // overriding with the partner styles
+    },
+    uiElements: {
+      formLabel: {
+        ...baseUIElementsConfig.formLabel,
+        ...partnerData.uiElements?.formLabel
+      },
+      header: {
+        ...partnerData.uiElements?.header
+      },
+      title: {
+        ...partnerData.uiElements?.title
+      },
+      button : {
+        ...baseButtonConfig.common,
+        ...baseButtonConfig[productType],
+        ...partnerData.uiElements?.button
+      }
+    },
+    typography: {
+      ...baseTypographyConfig[productType],
+      ...partnerData?.typography,
+    }
+  };
+  return partnerConfigTOReturn;
+}
