@@ -136,26 +136,31 @@ const UpiRows = (props) => {
             i++;
             rows.push(<div onClick={() => props.goToPayment('com.google.android.apps.nbu.paisa.user')} key={i}><img alt="payment" src={getImage('com.google.android.apps.nbu.paisa.user')} /><div className="bottomtext">GPay</div></div>)
             gpay = false;
+            continue;
           }
           if (phonepe) {
             i++;
             rows.push(<div onClick={() => props.goToPayment('com.phonepe.app')} key={i}><img alt="payment" src={getImage('com.phonepe.app')} /><div className="bottomtext">PhonePe</div></div>)
             phonepe = false;
+            continue;
           }
           if (paytm) {
             i++;
             rows.push(<div onClick={() => props.goToPayment('net.one97.paytm')} key={i}><img alt="payment" src={getImage('net.one97.paytm')} /><div className="bottomtext">Paytm</div></div>)
             paytm = false;
+            continue;
           }
 
           if (i < 3 && (!gpay || !phonepe || !paytm)) {
             i++;
             rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)} key={i}><img alt="payment" src={getImage(upi_apps[key].package_name)} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+            continue;
           }
 
         } else {
           i++;
           rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)} key={i}><img alt="payment" src={getImage(upi_apps[key].package_name)} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+          continue;
         }
       }
     }
@@ -289,7 +294,7 @@ const IppbDisclaimer = ({ open, close }) => {
         </p>
       </DialogContent>
       <DialogActions className="po-ippb-disclaimer-actions">
-        <Button buttonTitle="CONTINUE" onClick={close} style={{width: "100%"}} />
+        <Button buttonTitle="CONTINUE" onClick={close} style={{ width: "100%" }} />
       </DialogActions>
     </Dialog>
   );
@@ -379,7 +384,7 @@ class PaymentOption extends React.Component {
       if (store.partner === 'ippb') {
         intent_supported = false;
         upi_others = true;
-        this.setState({ openIppbDisclaimer: true})
+        this.setState({ openIppbDisclaimer: true })
       }
       const supportedBanks = store.banks.filter((item, i) => {
         return item.bank_supported;
@@ -760,7 +765,7 @@ class PaymentOption extends React.Component {
             </div>
             <div className="block-padding payusing">
               Pay ₹ {store.amount.toLocaleString()} using
-          </div>
+            </div>
             <div className="tabs">
               {(store.has_upi_banks || (store.upi_add_bank_url && store.upi_enabled)) && this.state.selectedBank.upi_supported &&
                 <div className="paymentcard upi tab" onClick={() => this.selectptype('upi')}>
