@@ -3,7 +3,7 @@ import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import contact from 'assets/address_details_icon.svg';
-import contact_myway from 'assets/finity/address_icon_myway.svg';
+import contact_myway from 'assets/finity/address_icon.svg';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
