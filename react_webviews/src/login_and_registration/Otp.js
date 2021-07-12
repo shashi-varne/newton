@@ -79,7 +79,7 @@ class Otp extends Component {
           <form className={`${isMobileView && "otp-model-mini"} otp-model`} onSubmit={this.handleClick} >
             {productName === "finity" && (
               <div class="logo" data-aid='logo-text'>
-                <img src={require(`assets/finity_navlogo.png`)} alt="finity" />
+                <img src={require(`assets/finity_navlogo.svg`)} alt="finity" />
                 <h5>Direct Mutual Funds | NPS</h5>
               </div>
             )}
