@@ -24,7 +24,6 @@ class LoginContainer extends Component {
           <div className="left-image">
             <img src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
           </div>
-          {/* <LoginForm /> */}
           {this.props.children}
         </div>
       </div>

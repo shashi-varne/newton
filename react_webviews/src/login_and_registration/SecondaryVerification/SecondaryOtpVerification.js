@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import WVClickableTextElement from "../common/ui/ClickableTextElement/WVClickableTextElement";
-import Container from "../dashboard/common/Container";
-import { initialize } from "./function";
-import OtpComp from "./otp/reset_opt";
-import "./Otp.scss";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
+import Container from "../../dashboard/common/Container";
+import { initialize } from "../function";
+import OtpComp from "../Otp/reset_opt";
+import "../commonStyles.scss";
 import { toast } from "react-toastify";
 
 export class SecondaryOtpVerification extends Component {

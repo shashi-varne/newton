@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Login from './login_and_registration/Login/Login.js';
-import Otp from './login_and_registration/otp/Otp';
+import Otp from './login_and_registration/Otp/Otp.js';
 import Logout from './login_and_registration/Login/Logout.js';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
 import WealthReport from './wealth_report';

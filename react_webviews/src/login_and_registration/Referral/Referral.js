@@ -1,9 +1,9 @@
-import "./commonStyles.scss";
+import "../commonStyles.scss";
 import React, { Component } from 'react';
-import Container from "../dashboard/common/Container";
-import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle"
+import Container from "../../dashboard/common/Container";
+import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle"
 import Input from "common/ui/Input";
-import { initialize } from "./function";
+import { initialize } from "../function";
 import { getConfig } from "utils/functions";
 
 

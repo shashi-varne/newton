@@ -1,16 +1,16 @@
-import "./commonStyles.scss";
+import "../commonStyles.scss";
 import React, { Component } from 'react';
-import Container from "../dashboard/common/Container";
+import Container from "../../dashboard/common/Container";
 import Input from "common/ui/Input";
 import { getConfig } from 'utils/functions';
-import { countries } from "./constants";
-import { initialize } from "./function";
+import { countries } from "../constants";
+import { initialize } from "../function";
 import { validateNumber } from "utils/validators";
-import { nativeCallback } from "../utils/native_callback";
+import { nativeCallback } from "../../utils/native_callback";
 import DropDownNew from "common/ui/DropDownNew";
-import Checkbox from "../common/ui/Checkbox";
-import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle";
-import AccountAlreadyExistDialog from "./bottomsheet/AccountAlreadyExistDialog";
+import Checkbox from "../../common/ui/Checkbox";
+import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
+import AccountAlreadyExistDialog from "../bottomsheet/AccountAlreadyExistDialog";
 
 class SecondaryVerification extends Component {
 

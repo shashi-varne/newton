@@ -31,9 +31,9 @@ import InvestmentProof from "./MyAccount/InvestmentProof";
 import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
-import Referral from "../login_and_registration/Referral"
-import SecondaryVerification from "../login_and_registration/SecondaryVerification"
-import SecondaryOtpVerification from "../login_and_registration/SecondaryOtpVerification"
+import Referral from "../login_and_registration/Referral/Referral.js"
+import SecondaryVerification from "../login_and_registration/SecondaryVerification/SecondaryVerification.js"
+import SecondaryOtpVerification from "../login_and_registration/SecondaryVerification/SecondaryOtpVerification.js"
 
 const Home = (props) => {
   const { url } = props.match;
