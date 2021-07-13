@@ -4,7 +4,7 @@ import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import { isEmpty } from "lodash";
 import { authCheckApi, generateOtp } from "../function";
-import "./Style.scss";
+import "./commonStyles.scss";
 
 const product = getConfig().productName;
 class VerifyDetailDialog extends Component {

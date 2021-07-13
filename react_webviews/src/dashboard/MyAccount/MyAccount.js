@@ -3,8 +3,8 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "../../utils/native_callback";
 import { initializeComponentFunctions } from "./MyAccountFunctions";
 import Container from "../common/Container";
-import VerifyDetailDialog from "../../login_and_registration/bottomsheet/VerifyDetailDialog";
-import AccountAlreadyExistDialog from "../../login_and_registration/bottomsheet/AccountAlreadyExistDialog";
+import VerifyDetailDialog from "../../login_and_registration/components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../login_and_registration/components/AccountAlreadyExistDialog";
 import Button from "material-ui/Button";
 import UserDetails from "./UserDetails";
 import Dialog, {

@@ -14,8 +14,8 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
-import VerifyDetailDialog from "../../../../login_and_registration/bottomsheet/VerifyDetailDialog";
-import AccountAlreadyExistDialog from "../../../../login_and_registration/bottomsheet/AccountAlreadyExistDialog";
+import VerifyDetailDialog from "../../../../login_and_registration/components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
 import { generateOtp } from "../../../../login_and_registration/function";
 import { Imgc } from "../../../../common/ui/Imgc";
 

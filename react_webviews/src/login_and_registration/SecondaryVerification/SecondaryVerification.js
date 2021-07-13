@@ -10,7 +10,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import DropDownNew from "common/ui/DropDownNew";
 import Checkbox from "../../common/ui/Checkbox";
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
-import AccountAlreadyExistDialog from "../bottomsheet/AccountAlreadyExistDialog";
+import AccountAlreadyExistDialog from "../components/AccountAlreadyExistDialog";
 
 class SecondaryVerification extends Component {
 

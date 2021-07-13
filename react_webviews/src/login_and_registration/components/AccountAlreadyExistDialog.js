@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { getConfig } from "utils/functions";
 import { isEmpty } from "lodash";
-import "./Style.scss";
+import "./commonStyles.scss";
 
 const product = getConfig().productName;
 export class AccountAlreadyExistDialog extends Component {
