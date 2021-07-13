@@ -8,10 +8,12 @@ import WVClickableTextElement from '../../common/ui/ClickableTextElement/WVClick
 import Toast from '../../common/ui/Toast';
 import useUserKycHook from '../common/hooks/userKycHook';
 import { upload } from '../common/api';
+import { nativeCallback } from '../../utils/native_callback';
 import WVInPageHeader from '../../common/ui/InPageHeader/WVInPageHeader';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import { checkDocsPending } from '../common/functions';
 import WVBottomSheet from '../../common/ui/BottomSheet/WVBottomSheet';
+import { storageService } from '../../utils/validators';
 import { getConfig, navigate as navigateFunc } from '../../utils/functions';
 
 const { productName } = getConfig();
@@ -43,7 +45,7 @@ const UPLOAD_OPTIONS_MAP = {
   
 }
 
-const OR = (
+const ORElem = (
   <div className="kyc-fno-OR">OR</div>
 );
 
@@ -70,6 +72,7 @@ const FnOIncomeProof = (props) => {
   }
 
   const uploadAndGoNext = async () => {
+    sendEvents("next");
     try {
       const data = {
         doc_password: filePassword || undefined,
@@ -87,9 +90,11 @@ const FnOIncomeProof = (props) => {
     }
   }
 
-  const goNext = async () => {
+  const goNext = async (event, skip) => {
+    if(skip) {
+      sendEvents("skip");
+    }
     const areDocsPending = await checkDocsPending(kyc);
-    
     if (areDocsPending) {
       navigate('/kyc/document-verification');
     } else {
@@ -101,13 +106,40 @@ const FnOIncomeProof = (props) => {
     setFilePassword(event.target.value);
   }
 
+  const removeEventData = () => {
+    storageService().remove("view_sample_clicked") 
+  }
+
+
+
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "provide_income_proof",
+        bank_statement: selectedType === "bank-statement" ? "yes" : "no",
+        itr: selectedType === "itr" ? "yes" : "no",
+        salary_slips: selectedType === "salary-slip" ? "yes" : "no",
+        view_sample_documets_clicked: storageService().get("view_sample_clicked") ? "yes" : "no"
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      removeEventData();
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       canSkip
       hidePageTitle
       hideHamburger
       handleClick={uploadAndGoNext}
-      onSkipClick={goNext}
+      onSkipClick={(e) => goNext(e, "skip")}
       title="Provide income proof for F&O trading"
       buttonTitle="Upload"
       disable={!selectedFile}
@@ -134,7 +166,7 @@ const FnOIncomeProof = (props) => {
             file={selectedFile}
           />
         }
-        {!selectedFile && OR}
+        {!selectedFile && ORElem}
         {(!selectedFile || (selectedType === 'itr')) &&
           <WVFileUploadCard
             {...UPLOAD_OPTIONS_MAP['itr']}
@@ -145,7 +177,7 @@ const FnOIncomeProof = (props) => {
             file={selectedFile}
           />
         }
-        {!selectedFile && OR}
+        {!selectedFile && ORElem}
         {(!selectedFile || (selectedType === 'salary-slip')) &&
           <WVFileUploadCard
             {...UPLOAD_OPTIONS_MAP['salary-slip']}
@@ -176,7 +208,10 @@ const FnOIncomeProof = (props) => {
           />
         }
         <div className="kyc-fi-sample">
-          <WVClickableTextElement onClick={() => navigate('fno-sample-documents')}>
+          <WVClickableTextElement onClick={() => {
+            storageService().set("view_sample_clicked", true);
+            navigate("fno-sample-documents");
+          }}>
             VIEW SAMPLE DOCUMENTS
           </WVClickableTextElement>
         </div>
@@ -194,7 +229,7 @@ const FnOIncomeProof = (props) => {
         image={require(`assets/${productName}/doc-uploaded.svg`)}
         button1Props={{
           title: 'Continue',
-          type: 'primary',
+          variant: "contained",
           onClick: goNext
         }}
       />

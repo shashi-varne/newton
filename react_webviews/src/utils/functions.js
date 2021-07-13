@@ -1,5 +1,6 @@
 // import colors from '../common/theme/Style.scss';
-import { checkValidString, getUrlParams, isEmpty, storageService } from './validators';
+import { checkValidString, getUrlParams, storageService } from './validators';
+import { isArray, isEmpty } from 'lodash';
 import $ from 'jquery';
 import { 
   basePartnerConfig, 
@@ -139,6 +140,25 @@ export function getParamsMark(data) {
   return (data.match(/[?]/g) ? "&": "?");
 }
 
+export const getPlatformConfig = () => {
+  const config = {};
+  if (isMobile.Android() && typeof window.Android !== 'undefined') {
+    config.app = 'android';
+    config.Android = true;
+  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
+    config.app = 'ios';
+    config.iOS = true;
+  } else {
+    if (storageService().get("is_secure")) {
+      return;
+    }
+    config.app = 'web';
+    config.Web = true;
+  }
+
+  return config;
+}
+
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
@@ -152,7 +172,7 @@ export const getConfig = () => {
   let base_href = window.sessionStorage.getItem('base_href') || '';
   let base_url_default = '';
   
-  const isStaging = origin.indexOf('staging') >= 0;
+  const isStaging = origin.indexOf('plutus-web-staging') >= 0;
   const isLocal = origin.indexOf('localhost') >=0;
 
   if(base_href) {
@@ -168,7 +188,7 @@ export const getConfig = () => {
       base_url_default = 'https://api.mywaywealth.com';
     }
 
-    // change server url here
+    // change server url here for local and staging url builds (Not commit id one's)
     if (isStaging || isLocal) {
       base_url_default = "https://anandb-dot-plutus-staging.appspot.com";
     }
@@ -296,15 +316,12 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + 'insurance_allweb=' + insurance_allweb;
   }
 
-  if (isMobile.Android() && typeof window.Android !== 'undefined') {
-    returnConfig.app = 'android';
-    returnConfig.Android = true;
-  } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
-    returnConfig.app = 'ios';
-    returnConfig.iOS = true;
-  } else {
-    returnConfig.app = 'web';
-    returnConfig.Web = true;
+  const platformConfig = getPlatformConfig();
+  if (platformConfig) {
+    returnConfig = {
+      ...returnConfig,
+      ...platformConfig
+    }
   }
 
   // eslint-disable-next-line
@@ -336,13 +353,12 @@ export const getConfig = () => {
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
-  returnConfig.isSdk = storageService().get("is_secure"); 
+  returnConfig.isSdk = storageService().get("is_secure");
   returnConfig.isWebOrSdk = returnConfig.Web || returnConfig.isSdk;
   returnConfig.isNative = !returnConfig.Web && !returnConfig.isSdk;
   returnConfig.isIframe = isIframe();
-  returnConfig.platform = !returnConfig.isIframe ? (!returnConfig.Web ? "sdk" : "web" ): "iframe";
+  returnConfig.platform = !returnConfig.isIframe ? (returnConfig.Web ? "web" : "sdk" ): "iframe";
   returnConfig.isLoggedIn = storageService().get("currentUser");
-  
   return returnConfig;
 };
 
@@ -581,6 +597,41 @@ export const base64ToBlob = (b64Data, contentType = '', sliceSize = 512) => {
 
   const blob = new Blob(byteArrays, { type: contentType });
   return blob;
+}
+
+export function openFilePicker (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) {
+  if (getConfig().Web) {
+    const filepicker = document.getElementById(filepickerId);
+
+    if (filepicker) {
+      filepicker.value = null; // Required to allow same file to be picked again QA-4238 (https://stackoverflow.com/questions/12030686)
+      filepicker.click();
+    }
+  } else {
+    window.callbackWeb[methodName]({
+      type: 'doc',
+      doc_type: docName,
+      upload: nativeHandler,
+      ...fileHandlerParams // callback from native
+    });
+  }
+}
+
+export function validateFileTypeAndSize (file, supportedTypes, sizeLimit) {
+  const fileType = file.type.split("/")[1];
+  const sizeInBytes = sizeLimit * 1000 * 1000;
+
+  if (!isArray(supportedTypes)) {
+    supportedTypes = [supportedTypes];
+  }
+
+  if (!supportedTypes.includes(fileType)) {
+    return "File type not supported";
+  } else if (file.size > sizeInBytes) {
+    return `File size cannot exceed ${sizeLimit}MB`;
+  }
+
+  return "";
 }
 
 export {

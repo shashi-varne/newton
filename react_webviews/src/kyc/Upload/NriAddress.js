@@ -26,6 +26,7 @@ const NRIAddressUpload = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
+    sendEvents('get_image', 'gallery', type);
     if (type === 'front') {
       setFrontDoc(file);
       setState({
@@ -41,7 +42,8 @@ const NRIAddressUpload = (props) => {
     }
   }
 
-  const onFileSelectError = () => {
+  const onFileSelectError = (type) => () => {
+    sendEvents('get_image', 'gallery', type);
     return toast('Please select image file only');
   }
 
@@ -64,7 +66,7 @@ const NRIAddressUpload = (props) => {
       let result;
       if (onlyFrontDocRequired) {
         result = await upload(frontDoc, 'nri_address', {
-          address_proof_key: addressProofKey,
+          addressProofKey: addressProofKey,
         })
       } else {
         result = await upload(file, 'nri_address', {
@@ -89,8 +91,8 @@ const NRIAddressUpload = (props) => {
     return addressLine
   }
 
-  const addressProofKey = kyc?.address_doc_type
-  const addressProof = NRI_DOCUMENTS_MAPPER[kyc?.address_doc_type]
+  const addressProofKey = kyc?.nri_address_doc_type
+  const addressProof = NRI_DOCUMENTS_MAPPER[addressProofKey]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
@@ -132,21 +134,21 @@ const NRIAddressUpload = (props) => {
 
   const sendEvents = (userAction, type, docSide) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nri_address_doc",
-        "type": type || "",
-        "doc_side": docSide || "",
-        "doc_type": addressProofKey
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nri_address_doc",
+        type: type || "",
+        doc_side: docSide || "",
+        doc_type: addressProofKey,
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
   
   return (
     <Container
@@ -182,13 +184,16 @@ const NRIAddressUpload = (props) => {
             />
             <KycUploadContainer.Button
               withPicker
-              showOptionsDialog
-              nativePickerMethodName="open_gallery"
-              fileName="nri_address_front"
-              customPickerId="wv-input-front"
-              onFileSelectComplete={onFileSelectComplete('front')}
-              onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_IMAGE_TYPES}
+              filePickerProps={{
+                showOptionsDialog: true,
+                shouldCompress: true,
+                nativePickerMethodName: "open_gallery",
+                fileName: "nri_address_front",
+                customPickerId: "wv-input-front",
+                onFileSelectComplete: onFileSelectComplete('front'),
+                onFileSelectError: onFileSelectError,
+                supportedFormats: SUPPORTED_IMAGE_TYPES
+              }}
             />
           </KycUploadContainer>
           {!onlyFrontDocRequired &&
@@ -205,13 +210,16 @@ const NRIAddressUpload = (props) => {
                 />
                 <KycUploadContainer.Button
                   withPicker
-                  showOptionsDialog
-                  nativePickerMethodName="open_gallery"
-                  fileName="nri_address_back"
-                  customPickerId="wv-input-back"
-                  onFileSelectComplete={onFileSelectComplete('back')}
-                  onFileSelectError={onFileSelectError}
-                  supportedFormats={SUPPORTED_IMAGE_TYPES}
+                  filePickerProps={{
+                    showOptionsDialog: true,
+                    nativePickerMethodName: "open_gallery",
+                    shouldCompress: true,
+                    fileName: "nri_address_back",
+                    customPickerId: "wv-input-back",
+                    onFileSelectComplete: onFileSelectComplete('back'),
+                    onFileSelectError: onFileSelectError,
+                    supportedFormats: SUPPORTED_IMAGE_TYPES
+                  }}
                 />
               </KycUploadContainer>
             </>

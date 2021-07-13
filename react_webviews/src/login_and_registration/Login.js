@@ -48,13 +48,14 @@ class Login extends Component {
     this.setState({ form_data: form_data });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if (loginType !== "email")
       this.sendEvents();
     if (loginType === "email") keys_to_check = ["email"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
+    event.preventDefault()
   };
 
   sendEvents = (userAction) => {

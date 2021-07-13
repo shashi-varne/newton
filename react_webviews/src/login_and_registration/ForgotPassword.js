@@ -7,6 +7,7 @@ import { initialize } from "./function";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
 import Button from "../common/ui/Button";
+import { Imgc } from "../common/ui/Imgc";
 
 const config = getConfig();
 class ForgotPassword extends Component {
@@ -43,36 +44,39 @@ class ForgotPassword extends Component {
     this.setState({ form_data: form_data });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if (loginType === "email") keys_to_check = ["email"];
     this.formCheckFields(keys_to_check, form_data, "RESET", loginType);
+    event.preventDefault();
   };
 
   render() {
     let { loginType, form_data, isApiRunning, productName } = this.state;
     return (
-      <div className="login">
+      <div className="login" data-aid='login'>
         <div className="header">
           <img src={require(`assets/${config.logo}`)} alt="logo" />
         </div>
         <div className="login-details">
           <div className="left-image">
-            <img
+            <Imgc
               src={require(`assets/${productName}/ils_login.svg`)}
               alt="login"
+              className="login-left-icon"
             />
           </div>
-          <div className="login-form">
-            <div className="header-text">RESET PASSWORD</div>
-            <div className="login-type">
+          <div className="login-form" data-aid='login-form'>
+            <div className="header-text" data-aid='reset-password-text'>RESET PASSWORD</div>
+            <div className="login-type" data-aid='login-type'>
               <div
                 className="text"
                 style={{
-                  fontWeight: loginType === "mobile" ? "bold" : "normal",
+                  fontWeight: loginType === "mobile" ? "500" : "normal",
                 }}
                 onClick={() => this.setLoginType("mobile")}
+                data-aid='mobile-text'
               >
                 MOBILE
                 {loginType === "mobile" && <div className="underline"></div>}
@@ -81,19 +85,20 @@ class ForgotPassword extends Component {
                 <div
                   className="text"
                   style={{
-                    fontWeight: loginType === "email" ? "bold" : "normal",
+                    fontWeight: loginType === "email" ? "500" : "normal",
                   }}
                   onClick={() => this.setLoginType("email")}
+                  data-aid='email-text'
                 >
                   EMAIL
                   {loginType === "email" && <div className="underline"></div>}
                 </div>
               )}
             </div>
-            <div className="form">
+            <form className="form"  data-aid='form' onSubmit={this.handleClick}>
               {loginType === "mobile" && (
                 <div className="form-field">
-                  <div className="country-code">
+                  <div className="country-code"  data-aid='country-code'>
                     <DropdownWithoutIcon
                       onChange={this.handleChange("code")}
                       error={!!form_data.code_error ? true : false}
@@ -151,8 +156,8 @@ class ForgotPassword extends Component {
                   }`,
                 }}
               />
-            </div>
-            <div className="footer" onClick={() => this.navigate("login")}>
+            </form>
+            <div className="footer"  data-aid='forgot-password-footer' onClick={() => this.navigate("login")}>
               EXISTING USER? <span>LOGIN</span>
             </div>
           </div>

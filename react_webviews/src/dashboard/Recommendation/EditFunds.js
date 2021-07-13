@@ -49,6 +49,7 @@ const EditFunds = (props) => {
 
   return (
     <Container
+      data-aid='edit-funds-screen'
       classOverRide='pr-error-container'
       buttonTitle='Done'
       title='Edit Funds'
@@ -58,7 +59,7 @@ const EditFunds = (props) => {
       <section className='recommendation-section-edit'>
         <div className='recommendations-funds-lists-edit'>
           {recommendation?.map((el, idx) => (
-            <div key={idx} className='recommendations-funds-item-edit'>
+            <div key={idx} className='recommendations-funds-item-edit'  data-aid={`recommendations-funds-item-edi-${idx+1}`}>
               <FundCard classOverRide='recommendation-edit-replace' fund={el} />
               <div className='recommendations-funds-item-replace' onClick={showAlternateFunds(el)}>
                 <img alt='replaceFund' src={replaceFund} />
@@ -84,10 +85,11 @@ const DialogContainer = ({ open, onClose }) => {
       onClose={onClose}
       aria-labelledby='responsive-dialog-title'
       className="edit-funds-dialog"
+      data-aid='edit-funds-dialog'
     >
-      <DialogTitle id='form-dialog-title'>No alternative funds available</DialogTitle>
+      <DialogTitle id='form-dialog-title' data-aid='form-dialog-title'>No alternative funds available</DialogTitle>
       <DialogActions className="edit-funds-dialog-bottom">
-        <Button buttonTitle="GOT IT" style={{width: "100px", height: "45px"}} onClick={onClose} />
+        <Button buttonTitle="GOT IT" style={{width: "100px", height: "45px"}} onClick={onClose} dataAid='got-it-btn' />
        </DialogActions>
     </Dialog>
   );

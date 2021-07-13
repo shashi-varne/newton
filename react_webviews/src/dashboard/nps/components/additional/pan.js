@@ -44,7 +44,8 @@ class PanDetails extends Component {
       title: "",
       subtitle: "",
       isKycApproved: false,
-      isKycIdentificationApproved: false,
+      isMobileVerified: false,
+      isEmailVerified: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -56,14 +57,15 @@ class PanDetails extends Component {
   onload = () => {
     let currentUser = storageService().getObject("user");
     let userKyc = storageService().getObject("kyc");
-    let { form_data, isKycApproved, is_nps_contributed, isKycIdentificationApproved } = this.state;
+    let { form_data, isKycApproved, is_nps_contributed, isMobileVerified, isEmailVerified } = this.state;
 
     isKycApproved = userKyc.pan.meta_data_status === 'approved';
-    isKycIdentificationApproved = userKyc.identification?.meta_data_status === 'approved';
+    isMobileVerified = !!userKyc.identification?.meta_data?.mobile_number && userKyc.identification?.meta_data?.mobile_number_verified;
+    isEmailVerified = !!userKyc.identification?.meta_data?.email && userKyc.identification?.meta_data?.email_verified;
     form_data.dob = userKyc.pan.meta_data.dob || "";
     form_data.pan = userKyc.pan.meta_data.pan_number || "";
 
-    form_data.email = userKyc.address.meta_data.email || "";
+    form_data.email = userKyc.identification.meta_data.email || "";
     let mobile_number = userKyc.identification?.meta_data?.mobile_number || "";
     let country_code = "";
     if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
@@ -84,7 +86,8 @@ class PanDetails extends Component {
       userKyc: userKyc,
       form_data: form_data,
       is_nps_contributed,
-      isKycIdentificationApproved
+      isMobileVerified,
+      isEmailVerified,
     });
   };
 
@@ -191,7 +194,7 @@ class PanDetails extends Component {
     });
 
     if (canSubmit) {
-      let { pan, address, identification } = userKyc;
+      let { pan, identification } = userKyc;
 
       if (is_nps_contributed) {
         storageService().set("nps_pran_number", form_data.pran);
@@ -201,7 +204,7 @@ class PanDetails extends Component {
       pan.meta_data.dob = form_data.dob;
       pan.meta_data.pan_number = form_data.pan;
 
-      address.meta_data.email = form_data.email;
+      identification.meta_data.email = form_data.email;
 
       let mobile_number = form_data.mobile_number?.toString();
       if (form_data.country_code) {
@@ -212,7 +215,6 @@ class PanDetails extends Component {
       let data = {
         kyc: {
           pan: pan.meta_data,
-          address: address.meta_data,
           identification: identification.meta_data,
         },
       };
@@ -235,10 +237,11 @@ class PanDetails extends Component {
         onClose={this.handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        data-aid='dialog-bottom-popup'
       >
         <DialogContent>
-          <div className="nps-dialog" id="alert-dialog-description">
-            <div className="nps-dialog-content">
+          <div className="nps-dialog" id="alert-dialog-description" data-aid='alert-dialog-description'>
+            <div className="nps-dialog-content" data-aid='nps-dialog-content'>
               <div className="content">
                 <div className="title">{this.state.title}</div>
                 <div className="sub-title">{this.state.subtitle}</div>
@@ -248,11 +251,12 @@ class PanDetails extends Component {
                 alt=""
               />
             </div>
-            <div className="btn">
+            <div className="btn" data-aid='nps-btn'>
               <button
                 style={{ cursor: "pointer" }}
                 onClick={() => this.handleClose()}
                 className="call-back-popup-button not-now"
+                data-aid='not-now-btn'
               >
                 NOT NOW
               </button>
@@ -260,6 +264,7 @@ class PanDetails extends Component {
                 style={{ cursor: "pointer" }}
                 onClick={() => this.cta_action()}
                 className="call-back-popup-button"
+                data-aid='call-back-btn'
               >
                 {this.state.btn_text}
               </button>
@@ -289,9 +294,10 @@ class PanDetails extends Component {
   }
 
   render() {
-    const { form_data, is_nps_contributed, currentUser, isKycApproved, isKycIdentificationApproved } = this.state;
+    const { form_data, is_nps_contributed, currentUser, isKycApproved, isMobileVerified, isEmailVerified } = this.state;
     return (
       <Container
+        data-aid='nps-pan-details-screen'
         classOverRIde="pr-error-container"
         buttonTitle="PROCEED"
         hideInPageTitle
@@ -306,7 +312,7 @@ class PanDetails extends Component {
           goBack: this.goBack
         }}
       >
-        <div className="pan-details">
+        <div className="pan-details" data-aid='pan-details-page'>
           <FormControl fullWidth>
             <div className="InputField">
               <Input
@@ -385,7 +391,7 @@ class PanDetails extends Component {
                   helperText={form_data.mobile_number_error}
                   value={form_data.mobile_number || ""}
                   onChange={this.handleChange("mobile_number")}
-                  disabled={isKycIdentificationApproved}
+                  disabled={isMobileVerified}
                 />
               </div>
             )}
@@ -402,7 +408,7 @@ class PanDetails extends Component {
                   helperText={form_data.email_error}
                   value={form_data.email || ""}
                   onChange={this.handleChange("email")}
-                  disabled={isKycIdentificationApproved}
+                  disabled={isEmailVerified}
                 />
               </div>
             )}

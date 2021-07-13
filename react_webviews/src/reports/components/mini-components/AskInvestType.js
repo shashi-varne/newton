@@ -14,12 +14,12 @@ const AskInvestType = ({ isOpen, data }) => {
       id="reports-ask-invest-type-dialog"
     >
       <DialogContent className="reports-ask-invest-type-dialog-content">
-        <div className="text">{data.message}</div>
+        <div className="text" data-aid='text-message'>{data.message}</div>
         <div className="align-right">
-          <Button className="bg-light" onClick={() => data.handleClick1()}>
+          <Button data-aid='bg-light' className="bg-light" onClick={() => data.handleClick1()}>
             {data.button1Title}
           </Button>
-          <Button className="bg-full" onClick={() => data.handleClick2()}>
+          <Button data-aid='bg-full' className="bg-full" onClick={() => data.handleClick2()}>
             {data.button2Title}
           </Button>
         </div>

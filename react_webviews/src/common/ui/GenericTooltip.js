@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getConfig } from 'utils/functions';
 import Tooltips from './TooltipLite';
+import {Imgc} from 'common/ui/Imgc';
 
 
 class GenericTooltip extends Component {
@@ -15,7 +16,7 @@ class GenericTooltip extends Component {
             <Tooltips className="generic-tooltip" classNameArrow="tooltip-arrrow" background={getConfig().styles.highlightColor}
             backgroundArrow={getConfig().styles.highlightColor}
               direction="down-end" content={this.props.content}>
-              <img src={require(`assets/${this.props.productName}/info_icon.svg`)} alt="" />
+              <Imgc className="generic-tooltip-img" src={require(`assets/${this.props.productName}/info_icon.svg`)} alt="" />
             </Tooltips>
             </div>
         );

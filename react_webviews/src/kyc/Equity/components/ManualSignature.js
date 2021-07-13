@@ -64,6 +64,7 @@ const ManualSignature = (props) => {
   }, []);
 
   const handleDownloadFormsClick = async () => {
+    sendEvents('download_forms')
     try {
       setIsApiRunning(true);
       const params = { "kyc_product_type": "equity" }
@@ -81,6 +82,7 @@ const ManualSignature = (props) => {
   }
 
   const handleCTAClick = () => {
+    sendEvents("home");
     if(config.Web) {
       navigate("/");
     } else {
@@ -94,8 +96,24 @@ const ManualSignature = (props) => {
     { "id": 3, "title": "Courier the signed documents at our given address", render: renderStep3Content }
   ]
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "manual_signature",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       title="Manual Signature"
       buttonTitle="HOME"
       handleClick={handleCTAClick}

@@ -6,6 +6,7 @@ import { getConfig, navigate as navigateFunc } from "utils/functions";
 import { getSipNote, postSipAction } from "../../common/api";
 import toast from "common/ui/Toast";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const productName = getConfig().productName;
 const PauseCancelDetail = (props) => {
@@ -48,6 +49,7 @@ const PauseCancelDetail = (props) => {
   };
 
   const handleClick = async () => {
+    sendEvents("next");
     setIsApiRunning("button");
     try {
       const result = await postSipAction({
@@ -72,17 +74,35 @@ const PauseCancelDetail = (props) => {
     }
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "sip_pause_cancel",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "Request Summary",
+        operation: action,
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+
   return (
     <Container
+      data-aid='reports-pausecancel-details-screen'
       title={title}
+      events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       handleClick={() => handleClick()}
       skelton={showSkelton}
       showLoader={isApiRunning}
     >
       {!isEmpty(sip) && (
-        <div className="reports-sip-pause-cancel-detail">
-          <div>
+        <div className="reports-sip-pause-cancel-detail" data-aid='reports-sip-pause-cancel-detail'>
+          <div data-aid='reports-pauseCancelCard'>
             <div className="mf-name">{sip.mfname}</div>
             {action === "pause" && (
               <PauseCancelCard
@@ -105,7 +125,7 @@ const PauseCancelDetail = (props) => {
                 />
               </>
             )}
-            <div className="alert">
+            <div className="alert" data-aid='reports-alert'>
               <div className="title">
                 <img src={require(`assets/attention_icon.svg`)} alt="" />
                 <div>Note</div>
@@ -123,7 +143,7 @@ export default PauseCancelDetail;
 
 export const PauseCancelCard = ({ icon, title, subtitle }) => {
   return (
-    <div className="content">
+    <div className="content" data-aid='reports-card-content'>
       <img src={require(`assets/${productName}/${icon}`)} alt="" />
       <div>
         <div className="title">{title}</div>

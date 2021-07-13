@@ -7,8 +7,8 @@ class Otp extends Component {
     super(props);
     this.state = {
       countdownInterval: null,
-      timeAvailable: this.props.otpData.timeAvailable,
-      totalTime: this.props.otpData.totalTime,
+      timeAvailable: this.props.totalTime,
+      totalTime: this.props.totalTime,
       error: this.props.isError,
       showDotLoader: this.props.showDotLoader,
     };

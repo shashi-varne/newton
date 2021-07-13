@@ -9,6 +9,7 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  isDocSubmittedOrApproved,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -25,9 +26,9 @@ const PersonalDetails4 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
-  let title = "Nominee detail";
+  let title = "Nominee details";
   if (isEdit) {
-    title = "Edit nominee detail";
+    title = "Edit nominee details";
   }
   const [totalPages, setTotalPages] = useState();
   const { kyc, user, isLoading } = useUserKycHook();
@@ -75,9 +76,11 @@ const PersonalDetails4 = (props) => {
         handleNavigation();
         return;
       }
-    } else if (compareObjects(keysToCheck, oldState, form_data)) {
-      handleNavigation();
-      return;
+    } else {
+      if (!kyc.nomination.nominee_optional && compareObjects(keysToCheck, oldState, form_data)) {
+        handleNavigation();
+        return;
+      }
     }
 
     let userkycDetails = { ...kyc };
@@ -92,7 +95,10 @@ const PersonalDetails4 = (props) => {
       userkycDetails.nomination.meta_data.name = form_data.name;
       userkycDetails.nomination.meta_data.relationship = form_data.relationship;
       body.kyc = {
-        nomination: userkycDetails.nomination.meta_data,
+        nomination: {
+          ...userkycDetails.nomination.meta_data,
+          nominee_optional: false
+        }
       };
     }
     saveCompliantPersonalDetails2(body);
@@ -119,7 +125,7 @@ const PersonalDetails4 = (props) => {
     // } else {
     //   navigate(PATHNAME_MAPPER.journey);
     // }
-    if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+    if (!isDocSubmittedOrApproved("sign")) {
       navigate(PATHNAME_MAPPER.uploadSign);
     } else {
       navigate(PATHNAME_MAPPER.journey)
@@ -150,24 +156,25 @@ const PersonalDetails4 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "nominee_details",
-        "flow": 'premium onboarding',   
-        "name": form_data.name ? "yes" : "no",
-        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "relationship": form_data.relationship ? "yes" : "no",
-        "add_nominee": isChecked ? "no":"yes",
-        "initial_kyc_status" : "compliant"
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "nominee_details",
+        add_nominee: isChecked ? "no" : "yes",
+        "flow": 'premium onboarding',
+        // "name": form_data.name ? "yes" : "no",
+        // "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
+        // "relationship": form_data.relationship ? "yes" : "no",
+        // "flow": 'premium onboarding',
+        // "initial_kyc_status" : "compliant"
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -210,7 +217,7 @@ const PersonalDetails4 = (props) => {
             disabled={isChecked || isApiRunning}
           />
           <Input
-            label="Date of birth(DD/MM/YYYY)"
+            label="Date of birth (DD/MM/YYYY)"
             class="input"
             value={form_data.dob || ""}
             error={form_data.dob_error ? true : false}

@@ -1,28 +1,14 @@
 import React, { useState } from 'react';
 import { getConfig } from "utils/functions";
-import { isArray, isFunction } from 'lodash';
+import { isFunction } from 'lodash';
 import toast from '../Toast';
 import FileAccessDialog from './FileAccessDialog';
+import { openFilePicker, validateFileTypeAndSize } from '../../../utils/functions';
+import Compressor from 'compressorjs';
 
 const isWeb = getConfig().Web;
 
-const openFileHandler = (filepickerId, methodName, docName, nativeHandler, fileHandlerParams = {}) => {
-  if (isWeb) {
-    const filepicker = document.getElementById(filepickerId);
-    if (filepicker){
-      filepicker.click();
-    }
-  } else {
-    window.callbackWeb[methodName]({
-      type: 'doc',
-      doc_type: docName,
-      upload: nativeHandler,
-      ...fileHandlerParams // callback from native
-    });
-  }
-}
-
-function getBase64(file) {
+export function promisableGetBase64(file) {
   const reader = new FileReader();
   return new Promise(resolve => {
     reader.onload = ev => {
@@ -32,21 +18,18 @@ function getBase64(file) {
   })
 }
 
-const validateFileTypeAndSize = (file, supportedTypes, sizeLimit) => {
-  const fileType = file.type.split("/")[1];
-  const sizeInBytes = sizeLimit * 1000 * 1000;
-  
-  if (!isArray(supportedTypes)) {
-    supportedTypes = [supportedTypes];
-  }
-  
-  if (!supportedTypes.includes(fileType)) {
-    return "File type not supported";
-  } else if (file.size > sizeInBytes) {
-    return `File size cannot exceed ${sizeLimit}MB`;
-  }
-  
-  return "";
+const compressImage = async (file) => {
+  return new Promise((resolve, reject) => {
+    new Compressor(file, {
+      quality: 0.7, // can go above but ideally not below 0.6
+      success(compressed) {
+        resolve(compressed);
+      },
+      error(err) {
+        reject(err.message);
+      },
+    })
+  })
 }
 
 export const WVFilePickerWrapper = ({
@@ -61,12 +44,14 @@ export const WVFilePickerWrapper = ({
   supportedFormats,
   fileName,
   fileHandlerParams,
+  customClickHandler,
+  shouldCompress,
   children
 }) => {
   const [openOptionsDialog, setOpenOptionsDialog] = useState(false);
   const [filePickerType, setFilePickerType] = useState(nativePickerMethodName);
 
-  const onFileSelected = async (file) => {
+  const onFileSelected = async (file, otherParams = {}) => {
     try {
       // Basic size and file type validations
       const errMsg = validateFileTypeAndSize(file, supportedFormats, sizeLimit);
@@ -81,11 +66,15 @@ export const WVFilePickerWrapper = ({
       let fileBase64 = '';
 
       if (file.type.split("/")[0] === 'image') {
-        fileBase64 = await getBase64(file);
+        if (shouldCompress) {
+          const compressedBlob = await compressImage(file);
+          file = new File([compressedBlob], file.name || "file");
+        }
+        fileBase64 = await promisableGetBase64(file);
       }
 
       if (isFunction(onFileSelectComplete)) {
-        onFileSelectComplete(file, fileBase64);
+        onFileSelectComplete(file, fileBase64, otherParams);
       }
     } catch(err) {
       if (isFunction(onFileSelectError)) {
@@ -98,17 +87,21 @@ export const WVFilePickerWrapper = ({
   };
 
   const onElementClick = () => {
+    const functionParams = [customPickerId, nativePickerMethodName, fileName, onFileSelected, fileHandlerParams];
+    
     if (!isWeb && showOptionsDialog) {
       setOpenOptionsDialog(true);
+    } else if (isFunction(customClickHandler)) {
+      customClickHandler(...functionParams);
     } else {
-      openFileHandler(customPickerId, nativePickerMethodName, fileName, onFileSelected, fileHandlerParams);
+      openFilePicker(...functionParams);
     }
   }
 
   const handleUploadFromDialog = (type) => {
     setOpenOptionsDialog(false);
     setFilePickerType(type);
-    openFileHandler(customPickerId, type, fileName, onFileSelected, fileHandlerParams);
+    openFilePicker(customPickerId, type, fileName, onFileSelected, fileHandlerParams);
   }
 
   return (

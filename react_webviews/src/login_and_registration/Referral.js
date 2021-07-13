@@ -49,7 +49,7 @@ class Referral extends Component {
         button1Props={{
           type: 'primary',
           title: "CONTINUE",
-          showLoader: this.state.isPromoApiRunning,
+          showLoader: isPromoApiRunning,
           onClick : () => this.verifyCode(form_data)
         }}
         button2Props={{

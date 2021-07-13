@@ -21,10 +21,13 @@ class NpsPaymentCallback extends Component {
   }
 
   onload = () => {
-    let pathname = this.props.history.location.pathname.split('/');
-    let status = pathname[pathname.length - 1];
-    let amount = pathname[pathname.length - 2] || storageService().get('npsAmount');
-
+    const params = this.props.match?.params || {}
+    const status = params.status;
+    if(!params.status) {
+      this.navigate("/");
+      return;
+    }
+    const amount = params.amount || storageService().get('npsAmount');
     this.setState({
       amount: amount,
       status: status
@@ -42,6 +45,8 @@ class NpsPaymentCallback extends Component {
       // storageService().setObject('kyc', result.kyc_app);
   
       let currentUser = storageService().getObject("user");
+      currentUser.nps_investment = true;
+      storageService().setObject("user", currentUser)
       let _event = {
         event_name: "journey_details",
         properties: {
@@ -53,7 +58,7 @@ class NpsPaymentCallback extends Component {
           },
         },
       };
-      if (!result.registration_details.additional_details_status) {
+      if (!result?.registration_details?.additional_details_status) {
         if (currentUser.kyc_registration_v2 === 'init') {
           // send event
           if (!config.Web) {
@@ -99,17 +104,18 @@ class NpsPaymentCallback extends Component {
   render() {
     return (
       <Container
+        data-aid='nps-payment-status-screen'
         showLoader={this.state.show_loader}
         buttonTitle="OK"
         title="Payment Status"
         handleClick={this.handleClick}
       >
-        <div className="nps-payment-callback">
+        <div className="nps-payment-callback" data-aid='nps-payment-callback'>
           <div
             className="invest-sucess container-padding"
             style={{ padding: "20px" }}
           >
-            {this.state.status === 'success' && <div>
+            {this.state.status === 'success' && <div data-aid='nps-payment-successful'>
               <div className="icon">
                 <img
                   alt=""
@@ -123,7 +129,7 @@ class NpsPaymentCallback extends Component {
                 Payment of <b>{formatAmountInr(this.state.amount)}</b> towards NPS is successful
               </div>
             </div>}
-            {this.state.status !== 'success' && <div className="invest-error">
+            {this.state.status !== 'success' && <div className="invest-error" data-aid='nps-invest-error'>
               <h2>Error</h2>
               <p>Payment Failed</p>
             </div>}

@@ -7,7 +7,7 @@ import SelectWithoutIcon from "common/ui/SelectWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
 import { storageService, capitalize } from "utils/validators";
 import { formatDate } from "utils/validators";
-import { validateAlphabets } from "../../../../utils/validators";
+import { dobFormatTest, validateAlphabets } from "../../../../utils/validators";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
@@ -65,6 +65,9 @@ class NpsNominee extends Component {
     if(name === "nominee_name" && value && !validateAlphabets(value)) return;
 
     if (name === "nominee_dob") {
+      if (!dobFormatTest(value)) {
+        return;
+      }
       var input = document.getElementById("nominee_dob");
       input.onkeyup = formatDate;
     }
@@ -99,7 +102,7 @@ class NpsNominee extends Component {
 
   bannerText = () => {
     return (
-      <span>
+      <span data-aid='nps-banner-text'>
         Please <b>confirm</b> the nominee details.
       </span>
     );
@@ -109,6 +112,7 @@ class NpsNominee extends Component {
     let { form_data } = this.state;
     return (
       <Container
+        data-aid='nps-nominee-details-screen'
         title="Nominee Details"
         buttonTitle="SAVE AND CONTINUE"
         showLoader={this.state.show_loader}
@@ -118,8 +122,8 @@ class NpsNominee extends Component {
         errorData={this.state.errorData}
         banner={true}
         bannerText={this.bannerText()}
-      >
-        <div className="nps-nominee">
+      >       
+        <div className="nps-nominee" data-aid='nps-nominee'>
           <div className="InputField">
             <Input
               icon={nominee}
@@ -141,6 +145,7 @@ class NpsNominee extends Component {
               id="nominee_dob"
               name="nominee_dob"
               label="Nominee DOB (DD/MM/YYYY)"
+              maxLength={10}
               error={form_data.nominee_dob_error ? true : false}
               helperText={form_data.nominee_dob_error}
               value={form_data.nominee_dob || ""}

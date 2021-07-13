@@ -13,7 +13,8 @@ export const API_CONSTANTS = {
   sendOtp: '/api/communication/send/otp',
   resendOtp: '/api/communication/resend/otp',
   verifyOtp: '/api/communication/verify/otp',
-  socialAuth: '/api/communication'
+  socialAuth: '/api/communication',
+  sendContactConsent: '/api/communication/contact/consent'
 }
 
 export const PATHNAME_MAPPER = {
@@ -222,7 +223,7 @@ export const bankAccountTypeOptions = (isNri) => {
 export const GENDER_OPTIONS = [
   { name: "Male", value: "MALE" },
   { name: "Female", value: "FEMALE" },
-  { name: "Other", value: "OTHER" },
+  { name: "Other", value: "TRANSGENDER" },
 ];
 
 export const MARITAL_STATUS_OPTIONS = [
@@ -238,6 +239,7 @@ export const OCCUPATION_TYPE_OPTIONS = [
   { name: "Business", value: "BUSINESS" },
   { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
+  { name: "Private sector", value: "PRIVATE SECTOR" },
 ];
 
 export const getIfscCodeError = (code) => {
@@ -264,14 +266,14 @@ export const ADDRESS_PROOF_OPTIONS = [
   { name: "Passport", value: "PASSPORT" },
   { name: "Aadhaar card", value: "AADHAAR" },
   { name: "Voter ID", value: "VOTER_ID_CARD" },
-  { name: "Gas receipt", value: "UTILITY_BILL" },
+  // { name: "Gas receipt", value: "UTILITY_BILL" },
   { name: "Passbook", value: "LAT_BANK_PB" }
 ];
 
 export const NRI_ADDRESS_PROOF_OPTIONS = [
   { name: "Driving license", value: "DL" },
-  { name: "Passport", value: "PASSPORT" },
-  { name: "Passport", value: "PASSPORT" } 
+  { name: "Gas receipt", value: "UTILITY_BILL" },
+  { name: "Passbook", value: "LAT_BANK_PB" } 
 ]
 
 export const DL_DOCS = [
@@ -288,10 +290,6 @@ export const companyDetails = {
 export const SUPPORTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'bmp'];
 
 export const eqkycDocsGroupMapper = {
-  "pan": {
-    title: "PAN details",
-    doc: "PAN card"
-  },
   "equity_pan": {
     title: "PAN details",
     doc: "PAN card"
@@ -301,11 +299,6 @@ export const eqkycDocsGroupMapper = {
     doc: "Signature"
   },
   "equity_identification": {
-    title: "Personal details",
-    doc: "Selfie"
-  },
-  // identification is used only in case of manual flow (non-DL)
-  "identification": {
     title: "Personal details",
     doc: "Selfie"
   },

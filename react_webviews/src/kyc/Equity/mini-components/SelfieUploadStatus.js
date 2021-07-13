@@ -1,5 +1,5 @@
 import React from "react";
-import { getConfig } from "../../../utils/functions";
+import { getConfig, isTradingEnabled } from "../../../utils/functions";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
 
 const productName = getConfig().productName;
@@ -19,10 +19,17 @@ const uploadStatus = {
   },
 };
 
-const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick }) => {
-  const data = uploadStatus[status] || {};
-  
+const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick, kyc }) => {
   if (!status) return '';
+  
+  const data = uploadStatus[status] || {};
+  const TRADING_ENABLED = isTradingEnabled(kyc);
+  if (status === "success") {
+    if (!TRADING_ENABLED || (kyc?.kyc_status === "non-compliant" && kyc?.kyc_type === "manual" && !kyc?.equity_data.meta_data.trading_experience)) {
+      data.subtitle = ""
+    }
+  }
+  
 
   return (
     <WVBottomSheet
@@ -33,7 +40,7 @@ const SelfieUploadStatus = ({ status, isOpen, onClose, onCtaClick }) => {
       image={data.icon && require(`assets/${productName}/${data.icon}`)}
       button1Props={{
         title: data.ctaText,
-        type: 'primary',
+        variant: "contained",
         onClick: onCtaClick,
       }}
       disableBackdropClick

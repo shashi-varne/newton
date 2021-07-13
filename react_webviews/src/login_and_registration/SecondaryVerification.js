@@ -30,8 +30,8 @@ class SecondaryVerification extends Component {
         const { state } = this.props.location;
         let loginType = state?.communicationType || "mobile";
         this.setState({ loginType })
-        countries.map((item, idx) => {
-            item.name = "+" + item.value;
+        countries.map((item) => {
+        return item.name = "+" + item.value;
         })
     }
 

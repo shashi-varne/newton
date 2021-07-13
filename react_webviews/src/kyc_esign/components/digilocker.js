@@ -50,7 +50,7 @@ class DigiStatus extends Component {
                 <div className="digi-status-text" data-aid='digi-status-text'>
                     Aadhaar KYC has been failed because we were not able to connect to your Digilocker.
                 </div>
-                <div className="digi-desc">
+                <div className="digi-desc" data-aid='digi-desc'>
                     However, you can <strong>still complete your KYC</strong> and start investing in mutual funds.
                 </div>
             </Fragment>

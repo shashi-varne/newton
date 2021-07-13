@@ -16,17 +16,16 @@ const WVFileUploadCard = ({
 }) => {
   const [selectedFile, setSelectedFile] = useState(file);
   const [truncatedFileName, setTruncatedFileName] = useState('');
-  const [fileType, setFileType] = useState('');
 
   useEffect(() => {
     if (selectedFile) {
       const fileName = selectedFile.name || selectedFile.file_name;
+      const fileType = selectedFile.type.split("/")[1];
       if (fileName.length > 8) {
-        setTruncatedFileName(fileName.slice(0, 8) + '...');
+        setTruncatedFileName(fileName.slice(0, 8) + '....' + fileType);
       } else {
         setTruncatedFileName(fileName);
       }
-      setFileType(selectedFile.type.split("/")[1]);
     }
   }, [selectedFile]);
 
@@ -69,8 +68,8 @@ const WVFileUploadCard = ({
               className="arrow"
               src={require('assets/paperclip.svg')}
             />
-            {selectedFile?.name &&
-              <span>{truncatedFileName + `.${fileType}`}</span>
+            {truncatedFileName &&
+              <span>{truncatedFileName}</span>
             }
           </div>
         </div>

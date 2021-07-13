@@ -25,13 +25,13 @@ const headerIconMapper = {
   search: search,
   restart: restart
 }
-const isMobileDevice = getConfig().isMobileDevice;
-const partnerLogo = getConfig().logo;
-const isWeb = getConfig().Web;
-const backgroundColor = !isWeb ? getConfig().uiElements?.header?.backgroundColor : '';
-const backButtonColor = !isWeb ? getConfig().styles?.backButtonColor : '';
-const notificationsColor = !isWeb ? getConfig()?.styles.notificationsColor : '';
-
+const config = getConfig();
+const isMobileDevice = config.isMobileDevice;
+const partnerLogo = config.logo;
+const isWeb = config.Web;
+const backgroundColor = !isWeb ? config.uiElements?.header?.backgroundColor : '';
+const backButtonColor = !isWeb ? config.styles?.backButtonColor : '';
+const notificationsColor = !isWeb || config.isSdk ? config?.styles.notificationsColor : '';
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, hideHamburger, force_hide_inpage_title, topIcon, handleTopIcon, canSkip, onSkipClick,
@@ -53,13 +53,13 @@ const Header = ({ classes, title, count, total, current, goBack,
     };
     return (
       <AppBar position="fixed" color="primary" data-aid='app-bar'
-      className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
+      className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : 'header-topbar-primary'} ${className || ''}`}
       style={style}
       >
         <Toolbar>
           {
             !noBackIcon &&
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"
               onClick={headerData.goBack ||
               goBack}
               data-aid='tool-bar-icon-btn'
@@ -154,7 +154,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                 <SVG
                   style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                   onClick={handleNotification}
-                  preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (getConfig()?.notificationColor || 'white') : 'white'))}
+                  preProcessor={code => code.replace(/fill="#FFF"/, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (notificationsColor || 'white') : 'white'))}
                   src={isEmpty(campaign) ? notificationLogo : notificationBadgeLogo}
                 />
               }

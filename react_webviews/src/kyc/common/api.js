@@ -299,19 +299,31 @@ export const getKRAForm = async (params) => {
 export const sendOtp = async (body) => {
   const res = await Api.post(API_CONSTANTS.sendOtp, body)
   return handleApi(res);
-}
+};
 
 export const resendOtp = async (otpId) => {
   const res = await Api.post(`${API_CONSTANTS.resendOtp}/${otpId}`)
   return handleApi(res);
-}
+};
 
 export const verifyOtp = async (body) => {
   const res = await Api.post(`${API_CONSTANTS.verifyOtp}/${body.otpId}?otp=${body.otp}`)
   return handleApi(res);
-}
+};
 
-export const socialAuth = async (body) => {
-  const res = await Api.post(`${API_CONSTANTS.socialAuth}/${body.provider}?redirect_url=${body.redirectUrl}`)
+export const sendWhatsappConsent = async (body) => {
+  const res = await Api.post(API_CONSTANTS.sendContactConsent, body);
   return handleApi(res);
-}
+};
+
+export const getContactsFromSummary = async () => {
+  const res = await Api.post(API_CONSTANTS.accountSummary, {
+    contacts: ["contacts"],
+  });
+  const result = handleApi(res);
+  if (result) {
+    let contacts = result.data?.contacts?.contacts?.data || {};
+    storageService().setObject("contacts", contacts);
+  }
+  return result;
+};

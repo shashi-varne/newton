@@ -65,6 +65,17 @@
     margin: 10px 0 10px 0;
     line-height: 1.5;
 
+    .image {
+      position: relative;
+
+      .check-icon {
+        position: absolute;
+        width: 12px;
+        left: 49px;
+        top: 9px;
+      }
+    }
+
     .title {
       font-weight: 500;
       font-size: 15px;

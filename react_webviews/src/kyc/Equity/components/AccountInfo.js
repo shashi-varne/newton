@@ -4,10 +4,11 @@ import Container from "../../common/Container";
 import Checkbox from "../../../common/ui/Checkbox";
 import "./commonStyles.scss";
 import SecurityDisclaimer from "../../../common/ui/SecurityDisclaimer/WVSecurityDisclaimer";
-import { isEmailOrMobileVerified } from "../../common/functions";
+import { isEmailAndMobileVerified } from "../../common/functions";
 import { PATHNAME_MAPPER } from "../../constants";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import Toast from "../../../common/ui/Toast";
+import { nativeCallback } from "../../../utils/native_callback";
 
 const config = getConfig();
 const productName = config.productName;
@@ -35,13 +36,30 @@ const AccountInfo = (props) => {
     setCheckTermsAndConditions(!checkTermsAndConditions);
   };
 
+  const sendEvents = (userAction) => {
+    let eventObj = {
+      event_name: "trading",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "trading_and_demat_info",
+        tnc_checked: checkTermsAndConditions ? "yes" : "no",
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+  
   const handleClick = () => {
+    sendEvents("next");
     if(!checkTermsAndConditions) {
       Toast("Accept T&C to proceed");
       return;
     }
     if (kyc?.mf_kyc_processed) {
-      if (!isEmailOrMobileVerified()) {
+      if (!isEmailAndMobileVerified()) {
         navigate(PATHNAME_MAPPER.communicationDetails);
       } else {
         if (kyc?.bank?.meta_data_status === "approved" && kyc?.bank?.meta_data?.bank_status !== "verified") {
@@ -55,8 +73,18 @@ const AccountInfo = (props) => {
     }
   };
 
+  const openInBrowser = (url) => () => {
+    nativeCallback({
+      action: "open_browser",
+      message: {
+        url: url,
+      },
+    });
+  };
+
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       title="Trading & demat account"
       hidePageTitle
@@ -118,21 +146,43 @@ const AccountInfo = (props) => {
             />
             <div className="kaim-terms-info">
               I agree to have read and understood the{" "}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={config.termsLink}
-              >
-                Terms & conditions
-              </a>{" "}
-              and{" "}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={config.termsLink}
-              >
-                Equity Annexure
-              </a>{" "}
+              {config.Web ? (
+                <>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={config.termsLink}
+                    className="terms-text"
+                  >
+                    Terms & conditions
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={config.termsLink}
+                    className="terms-text"
+                  >
+                    Equity Annexure
+                  </a>{" "}
+                </>
+              ) : (
+                <>
+                  <span
+                    className="terms-text"
+                    onClick={openInBrowser(config.termsLink)}
+                  >
+                    Terms & conditions
+                  </span>{" "}
+                  and{" "}
+                  <span
+                    className="terms-text"
+                    onClick={openInBrowser(config.termsLink)}
+                  >
+                    Equity Annexure
+                  </span>{" "}
+                </>
+              )}
             </div>
           </div>
           <SecurityDisclaimer />
