@@ -2,7 +2,7 @@ import React from "react";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
 import SVG from "react-inlinesvg";
-import { Button } from "material-ui";
+import Button from "common/ui/Button";
 import "./mini-components.scss";
 
 const KnowMore = ({ isOpen, close }) => {
@@ -49,7 +49,7 @@ const KnowMore = ({ isOpen, close }) => {
         </main>
       </DialogContent>
       <DialogActions className="action">
-        <Button data-aid='got-it-btn' onClick={close}>GOT IT!</Button>
+        <Button classes={{button: "ipv-km-button"}} data-aid='got-it-btn' onClick={close} buttonTitle="GOT IT!" >GOT IT!</Button>
       </DialogActions>
     </Dialog>
   );

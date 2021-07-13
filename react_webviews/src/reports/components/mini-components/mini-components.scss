@@ -25,6 +25,10 @@
       background-color: white;
       color: var(--primary);
     }
+
+    .bg-full:hover {
+      background-color: var(--on-hover-background);
+    }
   }
 }
 
