@@ -565,10 +565,10 @@ export async function applyCode(user) {
   }
 }
 
-export async function resendOtp(otp_id) { console.log(otp_id, 'otp_id')
+export async function resendOtp(otp_id) {
   this.setState({ isApiRunning: "button" });
   try {
-    const res = await Api.get(`/api/communication/resend/otp/${otp_id}>`);  
+    const res = await Api.post(`/api/communication/resend/otp/${otp_id}`);  
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
