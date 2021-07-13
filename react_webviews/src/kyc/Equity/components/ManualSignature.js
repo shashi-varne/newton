@@ -10,6 +10,7 @@ import { companyDetails } from "../../constants";
 import { getKRAForm } from "../../common/api"
 import "./commonStyles.scss";
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
+import Toast from '../../../common/ui/Toast';
 
 const config = getConfig();
 const ManualSignature = (props) => {
@@ -76,6 +77,7 @@ const ManualSignature = (props) => {
       link.click();
     } catch (err) {
       console.log(err);
+      Toast("Something went wrong");
     } finally {
       setIsApiRunning(false);
     }
