@@ -83,15 +83,13 @@
       }
     }
 
-    button {
-      min-height: 45px;
+    .rg-invest-more-button {
       width: 100%;
-      background-color: var(--secondary);
-      color: white;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
+      padding: 13px 0 !important;
     }
   }
 }

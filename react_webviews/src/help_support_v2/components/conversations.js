@@ -348,7 +348,7 @@ class TicketConversations extends Component {
                 preProcessor={(code) =>
                   code.replace(
                     /stroke=".*?"/g,
-                    "stroke=" + getConfig().secondary
+                    "stroke=" + getConfig().styles.secondaryColor
                   )
                 }
                 src={require(`assets/down_nav.svg`)}

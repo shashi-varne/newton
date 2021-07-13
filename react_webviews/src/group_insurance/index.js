@@ -206,7 +206,7 @@ import GroupHealthPlanHowToClaimStar from './products/group_health/plans/how_to_
 import GroupHealthPlanHowToClaimReligare from './products/group_health/plans/how_to_claim_religare';
 
 import StarAddress from './products/group_health/Star/star_address';
-
+import SystemMaintenance from '../group_insurance/common/SystemMaintenance';
 
 const Insurance = (props) => {
   const { url } = props.match;
@@ -549,6 +549,8 @@ const Insurance = (props) => {
           <Route path={`${url}/group-insurance/add-policy`} component={AddPolicy} />
           <Route path={`${url}/group-health/offline-to-online-report-details/:policy_id`} component={OfflineReport} />
 
+          <Route path={`${url}/system-maintenance`} component={SystemMaintenance} />
+          
           <Route component={NotFound} />
         </Switch>
       </Fragment>

@@ -249,7 +249,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 info.subtitle = member[info.key];
 
                 if(info.key === 'gender'){
-                    info.subtitle = capitalizeFirstLetter(member[info.key].toLowerCase());
+                    info.subtitle = capitalizeFirstLetter((member[info.key] || '').toLowerCase());
                 }
                 if (member.key === 'applicant') {
 
