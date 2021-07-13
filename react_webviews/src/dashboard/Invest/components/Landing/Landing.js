@@ -10,6 +10,7 @@ import KycStatusDialog from "../../mini-components/KycStatusDialog";
 import KycPremiumLandingDialog from "../../mini-components/KycPremiumLandingDialog";
 import CampaignDialog from '../../mini-components/CampaignDialog';
 import { storageService } from 'utils/validators';
+import { nativeCallback } from '../../../../utils/native_callback';
 import { SkeltonRect } from 'common/ui/Skelton';
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
@@ -44,6 +45,22 @@ class Landing extends Component {
   componentWillMount() {
     this.initialize();
   }
+
+  sendEvents = (userAction, card_name) => {
+    let eventObj = {
+      event_name: "home_screen",
+      properties: {
+        user_action: userAction,
+        card_clicked: card_name,
+      },
+    };
+
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
 
   onload = () => {
     this.initilizeKyc();
@@ -218,7 +235,10 @@ class Landing extends Component {
                               data={item}
                               key={index}
                               handleClick={() =>
-                                this.clickCard(item.key, item.title)
+                                {
+                                  this.clickCard(item.key, item.title)
+                                  this.sendEvents("next", "explore_passive_funds")
+                                }
                               }
                             />
                           );
