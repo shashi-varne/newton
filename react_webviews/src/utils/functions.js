@@ -94,8 +94,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty('--dark', '#0A1D32');
   html.style.setProperty('--steelgrey', '#767E86');
   html.style.setProperty('--on-focus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
-  html.style.setProperty('--on-hover-primary-background', `${config_to_return.uiElements.button.hoverPrimaryBackgroundColor}`);
-  html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor}`);
+  html.style.setProperty('--on-hover-background', `${config_to_return.uiElements.button.hoverBackgroundColor}`);
 
   return config_to_return;
 }
