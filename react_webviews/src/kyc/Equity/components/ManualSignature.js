@@ -11,6 +11,7 @@ import { getKRAForm } from "../../common/api"
 import "./commonStyles.scss";
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import Toast from '../../../common/ui/Toast';
+import { open_browser_web } from '../../../utils/validators';
 
 const config = getConfig();
 const ManualSignature = (props) => {
@@ -71,10 +72,17 @@ const ManualSignature = (props) => {
       const params = { "kyc_product_type": "equity" }
       const result = await getKRAForm(params);
       const formUrl = result?.filled_form_url;
-      const link = document.createElement("a");
-      link.href = formUrl;
-      link.setAttribute('download', "download");
-      link.click();
+      if (config.Web) {
+        open_browser_web(formUrl, "");
+      } else {
+        nativeCallback({ 
+          action: 'download_on_device', 
+          message: { 
+            file_name: "KRA_Form.pdf",
+            url: formUrl
+          } 
+        });
+      }
     } catch (err) {
       console.log(err);
       Toast("Something went wrong");
