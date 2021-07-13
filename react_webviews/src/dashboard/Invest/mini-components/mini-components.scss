@@ -390,6 +390,10 @@
         background-color: var(--secondary);
       }
 
+      .bg-full:hover {
+        background-color: var(--on-hover-background);
+      }
+
       .no-bg {
         background-color: white;
         color: #878787;
@@ -588,6 +592,10 @@
     .bg-full {
       color: white;
       background-color: var(--secondary);
+    }
+
+    .bg-full:hover {
+      background-color: var(--on-hover-background);
     }
 
     .no-bg {
