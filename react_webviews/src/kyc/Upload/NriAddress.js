@@ -66,7 +66,7 @@ const NRIAddressUpload = (props) => {
       let result;
       if (onlyFrontDocRequired) {
         result = await upload(frontDoc, 'nri_address', {
-          address_proof_key: addressProofKey,
+          addressProofKey: addressProofKey,
         })
       } else {
         result = await upload(file, 'nri_address', {
