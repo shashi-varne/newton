@@ -47,13 +47,15 @@ class Referral extends Component {
         twoButtonVertical={true}
         dualbuttonwithouticon={true}
         button1Props={{
-          type: 'primary',
+          variant: "contained",
+          // type: 'primary',
           title: "CONTINUE",
           showLoader: isPromoApiRunning,
           onClick : () => this.verifyCode(form_data)
         }}
         button2Props={{
-          type: 'secondary',
+          variant: "outlined",
+          // type: 'secondary',
           title: "SKIP",
           onClick: () => this.navigate("/secondary-verification"),
           showLoader: false,

@@ -119,7 +119,7 @@ class SecondaryVerification extends Component {
                 canSkip={true}
                 onSkipClick={() => this.navigate("/")}
                 showLoader={this.state.isApiRunning}
-                title={loginType === "mobile" ? "Enter Your Number to get started" : "Share your email address"}>
+                title={loginType === "mobile" ? "Share your mobile number" : "Share your email address"}>
                 <div className="form" data-aid='form'>
                     {loginType === "mobile" && (
                         <div>
