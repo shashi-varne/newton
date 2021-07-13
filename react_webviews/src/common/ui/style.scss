@@ -1126,7 +1126,7 @@ body[data-device="mobile"] {
   }
   50%,
   100% {
-    background-color: var(--onfocus-background);
+    background-color: var(--on-focus-background);
     opacity: 0.7;
   }
 }
@@ -1135,6 +1135,11 @@ body[data-device="mobile"] {
   background-color: white !important;
   border: 1px solid var(--secondary) !important;
 }
+
+.generic-button-outlined:hover {
+  background-color: var(--on-hover-secondary-background) !important;
+}
+
 .generic-button-raised {
   color: white;
   background-color: var(--secondary);

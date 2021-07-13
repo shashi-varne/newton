@@ -53,7 +53,8 @@ function getPartnerConfig(partner_code) {
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
   let productType = 'fisdom';
-  if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
+  const finityPartners = ["bfdlmobile", "finity", "moneycontrol"]
+  if (ismyway || finityPartners.includes(partner_code)) {
     productType = 'finity';
   }
 
@@ -92,7 +93,9 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty("--color-action-disable", `${config_to_return.uiElements.button.disabledBackgroundColor}`);
   html.style.setProperty('--dark', '#0A1D32');
   html.style.setProperty('--steelgrey', '#767E86');
-  html.style.setProperty('--onfocus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
+  html.style.setProperty('--on-focus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
+  html.style.setProperty('--on-hover-primary-background', `${config_to_return.uiElements.button.hoverPrimaryBackgroundColor}`);
+  html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor}`);
 
   return config_to_return;
 }
