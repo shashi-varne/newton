@@ -156,12 +156,15 @@ export class FooterLayoutBase extends Component {
   insuranceDefault = (props) => {
     return (
       <div className="FooterDefaultLayout" onClick={props.handleClick}>
-      <div className="FlexItem1">
-        <img
-          alt=""
-          src={props.logo}
-          className="FooterImage" />
-      </div>
+        {
+          props.logo && 
+          <div className="FlexItem1">
+            <img
+              alt=""
+              src={props.logo}
+              className="FooterImage" />
+          </div>
+        }
       <div className="FlexItem2">
         <Button
           type={props.type}
