@@ -434,9 +434,6 @@ export const partnerConfigs = {
     email: "moneycontrol@finity.in",
     mobile: "+91-7829228886", // check with satendra -> mobile is of fisdom
     message: "",
-    styles: {
-      primaryColor: "#3792FC",
-    },
     uiElements: {
       header: {
         backgroundColor: "#FFF", // same as white_header
