@@ -27,6 +27,8 @@ import {
   getTotalPagesInPersonalDetails,
   isDigilockerFlow,
 } from "../../common/functions";
+// import AccountAlreadyExistDialog from "../../../login_and_registration/components/AccountAlreadyExistDialog";
+// import VerifyDetailDialog from "../../../login_and_registration/components/VerifyDetailDialog";
 // import WVButton from "../../../common/ui/Button/WVButton";
 
 // const config = getConfig();
@@ -61,6 +63,8 @@ const CommunicationDetails = (props) => {
   const [isKycDone, setIsKycDone] = useState();
   const [totalPages, setTotalPages] = useState();
   const [isDlFlow, setIsDlFlow] = useState();
+  // const [verifyDetails, setVerifyDetails] = useState(false);
+  // const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -465,6 +469,26 @@ const CommunicationDetails = (props) => {
           </div>
         )}
       </div>
+      {/* {verifyDetails && (
+        <VerifyDetailDialog
+          type={verifyDetailsType}
+          data={verifyDetailsData}
+          showAccountAlreadyExist={setAccountAlreadyExistsData}
+          isOpen={verifyDetails}
+          onClose={closeVerifyDetailsDialog}
+          parent={this}
+        ></VerifyDetailDialog>
+      )}
+      {accountAlreadyExists && (
+        <AccountAlreadyExistDialog
+          type={verifyDetailsType}
+          data={accountAlreadyExistsData}
+          isOpen={accountAlreadyExists}
+          onClose={closeAccountAlreadyExistDialog}
+          editDetails={editDetailsAccountAlreadyExists}
+          next={continueAccountAlreadyExists}
+        ></AccountAlreadyExistDialog>
+      )} */}
     </Container>
   );
 };
