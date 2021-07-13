@@ -6,7 +6,7 @@ import toast from "common/ui/Toast";
 // import { validateNumber } from "../../utils/validators";
 import OtpComp from "./reset_opt";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import WVButtonLayout from "../../common/ui/ButtonLayout/WVButtonLayout";
+import WVButton from "../../common/ui/Button/WVButton";
 import LoginContainer from "../Login/LoginContainer"
 
 const config = getConfig();
@@ -94,14 +94,18 @@ class Otp extends Component {
             />
           </div>
           <div>
-            <WVButtonLayout.Button
-              type="primary"
-              title="CONTINUE"
+            <WVButton
+              variant='contained'
+              size='large'
+              color="secondary"
               onClick={this.handleClick}
-              disable={disabled}
+              disabled={false}
               showLoader={isApiRunning}
+              fullWidth
               className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button login-otp-button-web"}
-            />
+            >
+              CONTINUE
+            </WVButton>
           </div>
           <WVClickableTextElement onClick={() => this.props.history.goBack()}>
             <p className="go-back-to-login">GO BACK TO LOGIN</p>

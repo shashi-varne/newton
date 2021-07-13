@@ -15,7 +15,7 @@ export class AccountAlreadyExistDialog extends Component {
   }
 
   render() {
-    const { data, isOpen, onClose, type, next, editDetails } = this.props; console.log(type)
+    const { data, isOpen, onClose, type, next, editDetails } = this.props;
     return (
       <WVBottomSheet
         isOpen={isOpen}

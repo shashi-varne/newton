@@ -47,10 +47,6 @@ export class SecondaryOtpVerification extends Component {
       otpData: { ...this.state.otpData, otp },
     });
   };
-  resendOtpVerification = () => {
-    console.log("RESEND OTP");
-  };
-
 
 
   handleClick = () => {
