@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
 
-import safe_secure_journey from "assets/safe_secure_journey.png";
-
 import "./InvestJourney.scss";
 import {
   canDoInvestment,
@@ -121,7 +119,7 @@ const InvestJourney = (props) => {
       <section className="invest-journey-container" data-aid='invest-journey-page'>
         <div className="invest-journey-header" data-aid='invest-journey-header'>
           <div>
-            <img alt="safe_secure_journey" src={safe_secure_journey} />
+            <img alt="safe_secure_journey" src={require(`assets/${productName}/safe_secure_journey.${imageSuffix[productName]}`)} />
           </div>
           <div>With {productName}, investment is easy & secure</div>
         </div>
