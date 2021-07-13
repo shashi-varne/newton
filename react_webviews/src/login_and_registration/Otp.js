@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./Style.scss";
+import "./commonStyles.scss";
 import Input from "common/ui/Input";
 import { initialize } from "./function";
 import { getConfig } from "utils/functions";

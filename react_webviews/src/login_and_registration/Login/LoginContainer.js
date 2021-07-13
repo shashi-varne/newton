@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./Style.scss";
+import "./loginStyle.scss";
 import { getConfig } from "utils/functions";
 
 const config = getConfig();

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../Style.scss";
+import "../commonStyles.scss";
 import { initialize } from "../function";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
@@ -7,7 +7,7 @@ import toast from "common/ui/Toast";
 import OtpComp from "./reset_opt";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import WVButtonLayout from "../../common/ui/ButtonLayout/WVButtonLayout";
-import LoginContainer from "../LoginContainer"
+import LoginContainer from "../Login/LoginContainer"
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;

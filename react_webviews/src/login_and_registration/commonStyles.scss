@@ -1,0 +1,108 @@
+.otp {
+  .content {
+    height: 100%;
+  }
+
+  .otp-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .logo {
+      padding-top: 20px;
+      text-align: center;
+
+      img {
+        width: 100px;
+      }
+
+      h5 {
+        margin-bottom: 0;
+        margin-top: 15px;
+        font-weight: 500;
+        line-height: 1.1;
+        font-size: 14px;
+      }
+    }
+
+    .otp-model {
+      text-align: center;
+      width: 400px;
+      height: auto;
+      border-radius: 8px;
+      padding: 20px 0 60px 0;
+      box-shadow: -2px 2px 13px 0 rgba(209, 209, 209, 0.3);
+      border: 0.5px solid #f0f0f0;
+      font-size: 16px;
+
+      .otp-text {
+        padding-top: 60px;
+      }
+
+      .input {
+        margin: 10px 0 20px 0;
+        text-align: center;
+        width: 150px;
+      }
+
+      input {
+        text-align: center;
+      }
+
+      .resend-otp {
+        font-size: 14px;
+        cursor: pointer;
+        color: purple;
+        text-align: center;
+        margin-left: auto;
+        display: table;
+        margin-right: auto;
+        margin-bottom: 50px;
+      }
+
+      button {
+        .loader {
+          position: absolute;
+          div {
+            color: white;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+
+    .otp-model-mini {
+      width: 360px;
+      border: none;
+      box-shadow: none;
+      padding-top: 40px;
+    }
+  }
+}
+
+.declaration-container{
+  margin-left: -12px;
+  margin-top: 10px;
+  display: flex;
+  align-items: flex-start;
+  svg{
+    width: 20px;
+    height: 20px;
+  }
+  p{
+    font-size: 13px;
+    line-height: 21px;
+  }
+  .Checkbox{
+    margin-top: -2px;
+  }
+}
+
+
+@media only screen and (max-height: 900px) {
+  .whatsapp-consent{
+    position: absolute;
+    bottom: 80px;
+  }
+}
