@@ -201,8 +201,9 @@ class Landing extends Component {
                             dataAid='kyc-btn'
                             buttonTitle={kycStatusData.button_text}
                             classes={{
-                              button: "invest-landing-button",
+                              button: "invest-landing-button invest-kyc-button",
                             }}
+                            type={productName === "finity" ? "outlined" : ""}
                           />
                         </div>
                       )}

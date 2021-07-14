@@ -37,6 +37,10 @@
     letter-spacing: 0.01em;
   }
 
+  .invest-kyc-button:hover {
+    background-color: var(--on-hover-secondary-background) !important;
+  }
+
   .invest-card {
     display: flex;
     justify-content: space-between;

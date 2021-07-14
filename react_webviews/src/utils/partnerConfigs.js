@@ -123,11 +123,13 @@ export const baseButtonConfig = {
     disabledBackgroundColor: "#E8ECF1",
     focusBackgroundColor: "#119A4B",
     hoverBackgroundColor: "#35cb5d",
+    hoverSecondaryBackgroundColor: "#FFFFFF",
   },
   finity: {
     disabledBackgroundColor: "#E6E5F4",
     focusBackgroundColor: "#4F47BA",
     hoverBackgroundColor: "#4F47BA",
+    hoverSecondaryBackgroundColor: "#F5F4FD",
   },
 }
 

@@ -95,6 +95,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty('--steelgrey', '#767E86');
   html.style.setProperty('--on-focus-background', `${config_to_return.uiElements.button.focusBackgroundColor}`);
   html.style.setProperty('--on-hover-background', `${config_to_return.uiElements.button.hoverBackgroundColor}`);
+  html.style.setProperty('--on-hover-secondary-background', `${config_to_return.uiElements.button.hoverSecondaryBackgroundColor}`);
 
   return config_to_return;
 }
