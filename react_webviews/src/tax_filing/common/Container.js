@@ -53,7 +53,7 @@ class Container extends Component {
     switch (pathname) {
       case '/tax-filing':
         untrackBackButtonPress()
-        nativeCallback({ action: 'exit', events: this.getEvents() })
+        nativeCallback({ action: 'exit', events: this.getEvents("back") })
         break
       case '/tax-filing/steps':
         trackBackButtonPress(pathname)

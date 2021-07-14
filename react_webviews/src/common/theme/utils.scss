@@ -222,6 +222,10 @@
   text-transform: uppercase;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 .dark {
   color: var(--dark);
 }

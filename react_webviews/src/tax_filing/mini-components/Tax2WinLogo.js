@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { getConfig } from 'utils/functions'
 
 function Tax2WinLogo({ classes, ...props }) {
+  const productName = getConfig().productName
   const containerClasses = classes?.container
     ? `tax-filing-tax2win-logo centered ${classes?.container}`
     : `tax-filing-tax2win-logo centered`
@@ -16,7 +18,7 @@ function Tax2WinLogo({ classes, ...props }) {
         className="helping-text text-secondary center"
         style={{ marginTop: '7px' }}
       >
-        (A Fisdom company)
+        (A <span className="capitalize">{productName}</span> company)
       </div>
     </div>
   )

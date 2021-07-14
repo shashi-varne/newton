@@ -84,8 +84,8 @@ function Landing(props) {
   }
 
   const goBack = () => {
-    nativeCallback({ action: 'exit', events: sendEvents('back') })
     clearITRSessionStorage()
+    nativeCallback({ action: 'exit', events: sendEvents('back') })
   }
 
   useResetTakeControl()
