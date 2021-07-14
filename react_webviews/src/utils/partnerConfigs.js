@@ -216,6 +216,11 @@ export const partnerConfigs = {
       secondaryColor: "#ff5928",
       backButtonColor: "#ff5928",
     },
+    uiElements: {
+      button: {
+        hoverBackgroundColor: "#ff5928",
+      }
+    }
   },
   alb: {
     logo: "alb.png",
@@ -467,7 +472,6 @@ export const partnerConfigs = {
   quesscorp: {
     code: 'quesscorp',
     mobile: '+91-9642596425',
-    search_button: 'search.png'
   }
 };
 
