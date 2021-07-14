@@ -14,16 +14,17 @@ import VerificationFailedDialog from '../../mini-components/VerificationFailedDi
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
 import { nativeCallback } from '../../../../utils/native_callback';
 
+const config = getConfig();
 class SdkLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
       kycStatusLoader: false,
-      productName: getConfig().productName,
-      partner: getConfig().partner,
+      productName: config.productName,
+      partner: config.partner,
       screenName: 'sdk_landing',
-      isWeb: getConfig().Web,
+      isWeb: config.Web,
       invest_show_data: {},
       render_cards: [],
       verificationFailed: false,
@@ -34,7 +35,7 @@ class SdkLanding extends Component {
       dotLoader: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      headerStyle: getConfig().uiElements?.header?.backgroundColor
+      headerStyle: config.uiElements?.header?.backgroundColor
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
@@ -239,6 +240,16 @@ class SdkLanding extends Component {
                 );
               })}
             </div>
+          )}
+          {!["fisdom", "finity", "ktb"].includes(config.code) && (
+              <div className="invest-contact-us" data-aid='invest-contact-us'>
+                In partnership with
+                <span>
+                  {config.productName === "finity"
+                    ? " Finity"
+                    : " Fisdom"}
+                </span>
+              </div>
           )}
         </div>
         <CampaignDialog
