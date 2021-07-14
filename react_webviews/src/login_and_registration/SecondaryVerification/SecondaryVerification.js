@@ -28,8 +28,12 @@ class SecondaryVerification extends Component {
     componentWillMount() {
         this.initialize();
         const { state } = this.props.location;
+        let { form_data } = this.state;
         let loginType = state?.communicationType || "mobile";
-        this.setState({ loginType })
+        if(state.edit){
+         form_data[state?.communicationType] = state?.contactValue;
+        }
+        this.setState({ loginType, form_data })
         countries.map((item) => {
         return item.name = "+" + item.value;
         })

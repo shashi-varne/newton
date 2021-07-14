@@ -133,24 +133,25 @@ class Landing extends Component {
     this.setState({
       accountAlreadyExists: show,
       accountAlreadyExistsData: data,
-      verifyDetails: false
+      verifyDetails: false,
+      contact_type: data?.data?.contact_type,
+      contact_value: data?.data?.contact_value,
     })
   }
 
   continueAccountAlreadyExists = async (type, data) => {
     let body = {};
     if (type === "email") {
-      body.email = data?.email;
+      body.email = data?.data?.contact_value;
     } else {
-      body.mobile = data?.mobile;
+      body.mobile = data?.data?.contact_value
       body.whatsapp_consent = true;
-    } // by default should this be true or false in case of bottomsheet?
+    }
     const otpResponse = await this.generateOtp(body);
     if (otpResponse) {
       this.navigate("secondary-otp-verification", {
         state: {
-          mobile_number: data?.contact_value,
-          forgot: false, // flag to be checked
+          value: data?.contact_value,
           otp_id: otpResponse.pfwresponse.result.otp_id,
         },
       });
@@ -158,14 +159,15 @@ class Landing extends Component {
   };
 
   editDetailsAccountAlreadyExists = () => {
-    this.navigate("/kyc/communication-details", {
+    this.navigate("/secondary-verification", {
       state: {
         page: "landing",
         edit: true,
+        communicationType: this.state.contact_type,
+        contactValue: this.state.contact_value,
       },
     });
   };
-  // Email mobile verification end
 
 
   handleKycPremiumLanding = () => {

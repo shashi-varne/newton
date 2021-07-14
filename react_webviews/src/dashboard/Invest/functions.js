@@ -80,7 +80,8 @@ export async function getSummary() {
       this.setSummaryData(result);
       currentUser = result.data.user.user.data;
       userKyc = result.data.kyc.kyc.data;
-      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser });
+      let contactDetails = result.data.contacts.contacts.data;
+      this.setState({ show_loader: false, kycStatusLoader : false, userKyc, currentUser, contactDetails });
     } else {
       this.setState({ show_loader: false, kycStatusLoader : false });
       toast(result.message || result.error || errorMessage);
