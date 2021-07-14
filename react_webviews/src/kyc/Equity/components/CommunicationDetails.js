@@ -9,6 +9,7 @@ import {
   sendOtp,
   sendWhatsappConsent,
   verifyOtp,
+  authCheckApi,
 } from "../../common/api";
 import toast from "../../../common/ui/Toast";
 import {
@@ -27,8 +28,7 @@ import {
   getTotalPagesInPersonalDetails,
   isDigilockerFlow,
 } from "../../common/functions";
-// import AccountAlreadyExistDialog from "../../../login_and_registration/components/AccountAlreadyExistDialog";
-// import VerifyDetailDialog from "../../../login_and_registration/components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../../login_and_registration/components/AccountAlreadyExistDialog";
 // import WVButton from "../../../common/ui/Button/WVButton";
 
 // const config = getConfig();
@@ -63,15 +63,15 @@ const CommunicationDetails = (props) => {
   const [isKycDone, setIsKycDone] = useState();
   const [totalPages, setTotalPages] = useState();
   const [isDlFlow, setIsDlFlow] = useState();
-  // const [verifyDetails, setVerifyDetails] = useState(false);
-  // const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
+  const [continueAccountAlreadyExists, setContinueAccountAlreadyExists] = useState(false);
+  const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !continueAccountAlreadyExists) {
       initialize();
     }
-    if(callHandelClick && communicationType) handleClick();
-  }, [kyc, communicationType]);
+    if((callHandelClick && communicationType) || continueAccountAlreadyExists) handleClick();
+  }, [kyc, communicationType, continueAccountAlreadyExists]);
 
   const initialize = async () => {
     setIsKycDone(kyc?.mf_kyc_processed);
@@ -219,6 +219,9 @@ const CommunicationDetails = (props) => {
     return body;
   };
 
+  const userFound = (data) => {
+    setAccountAlreadyExists(data?.user)
+  }
   const handleClick = async () => {
     sendEvents("next");
     if (
@@ -249,6 +252,14 @@ const CommunicationDetails = (props) => {
           return;
         }
         setShowLoader("button");
+        if (!continueAccountAlreadyExists) {
+          const result = await authCheckApi(body, communicationType);
+          if (result.is_user) {
+            userFound(result);
+            setShowLoader(false);
+            return
+          }
+        }
         const result = await sendOtp(body);
         setShowOtpContainer(true);
         setOtpData({
@@ -469,26 +480,19 @@ const CommunicationDetails = (props) => {
           </div>
         )}
       </div>
-      {/* {verifyDetails && (
-        <VerifyDetailDialog
-          type={verifyDetailsType}
-          data={verifyDetailsData}
-          showAccountAlreadyExist={setAccountAlreadyExistsData}
-          isOpen={verifyDetails}
-          onClose={closeVerifyDetailsDialog}
-          parent={this}
-        ></VerifyDetailDialog>
-      )}
       {accountAlreadyExists && (
         <AccountAlreadyExistDialog
-          type={verifyDetailsType}
-          data={accountAlreadyExistsData}
+          type={communicationType}
+          data={accountAlreadyExists}
           isOpen={accountAlreadyExists}
-          onClose={closeAccountAlreadyExistDialog}
-          editDetails={editDetailsAccountAlreadyExists}
-          next={continueAccountAlreadyExists}
+          onClose={() => setAccountAlreadyExists(false)}
+          editDetails={() => setAccountAlreadyExists(false)}
+          next={() => {
+            setContinueAccountAlreadyExists(true)
+            setAccountAlreadyExists(false)
+          }}
         ></AccountAlreadyExistDialog>
-      )} */}
+      )}
     </Container>
   );
 };

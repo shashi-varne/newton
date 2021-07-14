@@ -316,6 +316,11 @@ export const sendWhatsappConsent = async (body) => {
   return handleApi(res);
 };
 
+export const authCheckApi = async (body, contact_type) => {
+  const res = await Api.get(`${API_CONSTANTS.authCheck}?contact_type=${contact_type}&contact_value=${body[contact_type]}`);
+  return handleApi(res);
+};
+
 export const getContactsFromSummary = async () => {
   const res = await Api.post(API_CONSTANTS.accountSummary, {
     contacts: ["contacts"],
