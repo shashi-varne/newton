@@ -22,12 +22,21 @@ class Referral extends Component {
 
   componentWillMount() {
     this.initialize();
+    const { state } = this.props.location;
+    let communicationType = state?.communicationType || "mobile";
+    this.setState({ communicationType })
   }
 
 
-  componentDidUpdate(){
-    if(this.state.promo_status === "Valid")  this.navigate("/secondary-verification")
-  }
+  componentDidUpdate() {
+    if (this.state.promo_status === "Valid") {
+      this.navigate("/secondary-verification", {
+        state: {
+          communicationType: this.state.communicationType === "mobile" ? "email" : "mobile"
+        }
+      })
+    };
+  };
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
@@ -48,16 +57,18 @@ class Referral extends Component {
         dualbuttonwithouticon={true}
         button1Props={{
           variant: "contained",
-          // type: 'primary',
           title: "CONTINUE",
           showLoader: isPromoApiRunning,
-          onClick : () => this.verifyCode(form_data)
+          onClick: () => this.verifyCode(form_data)
         }}
         button2Props={{
           variant: "outlined",
-          // type: 'secondary',
           title: "SKIP",
-          onClick: () => this.navigate("/secondary-verification"),
+          onClick: () => this.navigate("/secondary-verification", {
+            state: {
+              communicationType: this.state.communicationType === "mobile" ? "email" : "mobile",
+            }
+          }),
           showLoader: false,
         }}
         showLoader={this.state.showLoader}
