@@ -490,6 +490,10 @@ function getPartnerConfig(partner_code) {
       label: '#767E86',
       type: 'fisdom',
       // inputFocusedColor: '#4f2da7',
+      colors: {
+        primary1: "#DFD8EF",
+        primary4: "#482998", 
+      },
       productName: 'fisdom',
       appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
       actionUrl: 'https://fis.do/m/module',
@@ -510,6 +514,10 @@ function getPartnerConfig(partner_code) {
       skelton_color: '#E7E7E7',
       label: '#767E86',
       type: 'finity',
+      colors: {
+        primary1: "#F0F7FF",
+        primary4: "#68AEFF"
+      },
       // inputFocusedColor: '#3792fc',
       productName: 'finity',
       mobile: '+91-8048039999',
@@ -620,6 +628,19 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
   html.style.setProperty('--color-action-disable', '#E8ECF1');
+
+  html.style.setProperty(`--mustard`, '#FFDA2C');
+  html.style.setProperty(`--pink`, '#F16FA0');
+  html.style.setProperty(`--purple`, '#A38CEB');
+  html.style.setProperty(`--lime`, '#7ED321');
+  html.style.setProperty(`--red`, '#D0021B');
+  html.style.setProperty(`--primaryVariant1`, `${config_to_return.colors.primary1}`);
+  html.style.setProperty(`--primaryVariant4`, `${config_to_return.colors.primary4}`);
+  html.style.setProperty(`--steelgrey`, '#767E86');
+  html.style.setProperty(`--spacing`, '10px');
+  html.style.setProperty(`--gunmetal`, '#161A2E');
+  html.style.setProperty(`--linkwater`, '#D3DBE4');
+  html.style.setProperty(`--dark`, '#0a1d32');
 
   return config_to_return;
 }
@@ -741,6 +762,8 @@ export const getConfig = () => {
     generic_callback = 'true';
   } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
     project = 'iw-dashboard';
+  } else if (main_pathname.indexOf('tax-filing') >= 0) {
+    generic_callback = true
   }
 
   let search = window.location.search;
@@ -1025,4 +1048,13 @@ export function getBasePath() {
     basename = basename ? basename + 'view' : '';
   }
   return window.location.origin + basename;
+}
+
+export function stringToHexa(str) {
+  const arr1 = []
+  for (let i = 0; i < str.length; ++i) {
+    const hex = Number(str.charCodeAt(i)).toString(16)
+    arr1.push(hex)
+  }
+  return arr1.join('')
 }
