@@ -309,7 +309,7 @@ export async function initiateOtpApi(body, loginType) {
       this.setState({ isApiRunning: false });
       this.navigate("verify-otp", {
         state: {
-          value: body.mobile || body.email,
+          value: body.auth_value,
           rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
           communicationType: loginType,
           verify_url: result?.verify_url,

@@ -79,7 +79,7 @@ class Otp extends Component {
             <p>
               An OTP has been sent to{" "}
               <span style={{ fontWeight: "500", marginRight: "23px" }}>
-                {this.state.mobile_number}
+                {this.state.value}
               </span>
             </p>
           </div>
@@ -99,7 +99,7 @@ class Otp extends Component {
               size='large'
               color="secondary"
               onClick={this.handleClick}
-              disabled={false}
+              disabled={disabled}
               showLoader={isApiRunning}
               fullWidth
               className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button login-otp-button-web"}
