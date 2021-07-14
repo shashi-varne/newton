@@ -92,9 +92,14 @@
               width: fit-content;
               margin-bottom: -20px;
   
-              //temp fix for commit id build
-              .MuiSelect-root {
-                margin-bottom: 1px;
+              .dropdown-without-icon{
+                position: relative;
+                top: -7px;
+                left: 2px;
+
+                .MuiSelect-root {
+                  margin-bottom: 8px;
+                }
               }
             }
   

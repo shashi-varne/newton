@@ -18,7 +18,7 @@ class Login extends Component {
     this.state = {
       productName: config.productName,
       loginType: "mobile",
-      form_data: { whatsapp_consent: true,},
+      form_data: { whatsapp_consent: true, },
       isApiRunning: false,
     };
     this.initialize = initialize.bind(this);
@@ -108,17 +108,19 @@ class Login extends Component {
             {loginType === "mobile" && (
               <div className="form-field">
                 <div className="country-code" data-aid='country-code'>
-                  <DropdownWithoutIcon
-                    onChange={this.handleChange("code")}
-                    error={!!form_data.code_error ? true : false}
-                    helperText={form_data.code_error || ""}
-                    options={countries}
-                    value={form_data.code || "91"}
-                    width={20}
-                    id="code"
-                    name="code"
-                    isAOB={true}
-                  />
+                  <div  className="dropdown-without-icon">
+                    <DropdownWithoutIcon
+                      onChange={this.handleChange("code")}
+                      error={!!form_data.code_error ? true : false}
+                      helperText={form_data.code_error || ""}
+                      options={countries}
+                      value={form_data.code || "91"}
+                      width={20}
+                      id="code"
+                      name="code"
+                      isAOB={true}
+                    />
+                  </div>
                 </div>
                 <Input
                   error={form_data.mobile_error ? true : false}
