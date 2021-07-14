@@ -255,9 +255,8 @@ export async function triggerOtpApi(body, loginType) {
       if (body?.secondaryVerification) {
         this.navigate("secondary-otp-verification", {
           state: {
-            mobile_number: body.mobile,
+            value: body.mobile ||  body.email,
             rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
-            forgot: false,
             otp_id: result?.otp_id,
             communicationType: loginType,
           },
@@ -267,7 +266,6 @@ export async function triggerOtpApi(body, loginType) {
           state: {
             value: body.mobile || body.email,
             rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
-            forgot: false,
             otp_id: result?.otp_id,
             communicationType: loginType,
           },

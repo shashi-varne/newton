@@ -74,7 +74,7 @@ export class SecondaryOtpVerification extends Component {
           <div className="verify-otp-header">
             <p>
               An OTP has been sent to{" "}
-              <span style={{ fontWeight: "500", marginRight: "23px" }}>{this.state.mobile_number}</span>
+              <span style={{ fontWeight: "500", marginRight: "23px" }}>{this.state.value}</span>
             </p>
             <WVClickableTextElement onClick={() => this.navigate('/secondary-verification', {
               state: {
