@@ -164,7 +164,7 @@ const AddBank = (props) => {
 
     if (name === "ifsc_code" && value && value.length > 11) return;
 
-    if (name.includes("account_number") && value && !validateNumber(value))
+    if (name.includes("account_number") && value && (!validateNumber(value) || value.length > 16))
       return;
 
     let formData = Object.assign({}, form_data);
@@ -346,7 +346,7 @@ const AddBank = (props) => {
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
                 maxLength={16}
-                type="text"
+                type="number"
                 InputProps={{
                   endAdornment: (
                     <>
