@@ -158,6 +158,7 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
 export const pollProgress = (timeout, interval, popup_window) => {
   const endTime = Number(new Date()) + (timeout || 3 * 1000 * 60);
   interval = interval || 1000;
+  const dlSuccessStates = ["docs_fetched", "docs_fetch_failed"]
   let checkCondition = async function (resolve, reject) {
     if (popup_window.closed) {
       resolve({ status: "closed" });
@@ -165,9 +166,9 @@ export const pollProgress = (timeout, interval, popup_window) => {
       try {
         const result = await getKyc();
         if (!isEmpty(result)) {
-          if (result.kyc.dl_docs_status === 'docs_fetched') {
+          if (dlSuccessStates.includes(result?.kyc?.dl_docs_status)) {
             resolve({ status: "success" });
-          } else if (result.kyc.dl_docs_status === 'docs_fetch_failed') {
+          } else if (result.kyc?.all_dl_doc_statuses?.aadhaar_fetch_status === "failed") {
             resolve({ status: "failed" });
           } else if (Number(new Date()) < endTime) {
             setTimeout(checkCondition, interval, resolve, reject);

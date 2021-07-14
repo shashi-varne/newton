@@ -67,7 +67,7 @@ const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
           </article>
         </div>
         <Button
-          disable={addedToCart ? true : false}
+          disable={addedToCart && config.productName !== "finity" ? true : false}
           onClick={handleAddToCart}
           classes={{
             button: "invest-explore-trending-button"

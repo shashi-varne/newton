@@ -153,6 +153,9 @@ class Landing extends Component {
             ? "invest-landing-partner-header"
             : "invest-landing-header")
         }
+        headerData={{
+          partnerLogo: fromLoginStates.includes(stateParams.fromState)
+        }}
       >
         <div className="invest-landing" data-aid='invest-landing'>
           {
