@@ -85,27 +85,17 @@
           padding: 8px 0 0 5px;
           width: 100%;
           display: flex;
-          align-items: baseline;
+          align-items: flex-end;
           margin-bottom: 20px;
 
           .country-code {
             width: fit-content;
             margin-bottom: -20px;
-
-            .MuiSelect-root {
-              margin-bottom: 1px;
-            }
           }
 
           .input {
             width: 100%;
           }
-
-          // .mobile-number {
-          //   .MuiInput-underline:before {
-          //     margin-bottom: 1px;
-          //   }
-          // }
         }
 
         .referral-code-input {
