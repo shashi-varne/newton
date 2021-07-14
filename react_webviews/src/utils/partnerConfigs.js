@@ -439,11 +439,6 @@ export const partnerConfigs = {
     email: "moneycontrol@finity.in",
     mobile: "+91-7829228886", // check with satendra -> mobile is of fisdom
     message: "",
-    uiElements: {
-      header: {
-        backgroundColor: "#FFF", // same as white_header
-      },
-    },
   },
   taxwin: {
     code: "taxwin",
@@ -463,11 +458,6 @@ export const partnerConfigs = {
   google: {
     code: "google",
     mobile: "+80-48-093070",
-    uiElements: {
-      header: {
-        backgroundColor: "#FFF", // same as white_header
-      },
-    },
   },
   quesscorp: {
     code: 'quesscorp',

@@ -34,7 +34,7 @@ class SdkLanding extends Component {
       dotLoader: false,
       openBottomSheet: false,
       bottom_sheet_dialog_data: [],
-      headerStyle: getConfig().uiElements?.header
+      headerStyle: getConfig().uiElements?.header?.backgroundColor
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
