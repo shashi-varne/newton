@@ -556,7 +556,7 @@ function getPartnerConfig(partner_code) {
     origin.indexOf('api.mywaywealth.com') >= 0;
   const isminvest = search.indexOf('my.barodaminvest.com') >= 0;
   const isStaging = search.indexOf('staging') >= 0;
-  let productType = 'fisdom';
+  let productType = 'finity';
   if (ismyway || partner_code === 'bfdlmobile' || partner_code === 'finity' || partner_code === 'moneycontrol') {
     productType = 'finity';
   }
