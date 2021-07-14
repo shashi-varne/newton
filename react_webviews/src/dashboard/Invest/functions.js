@@ -447,7 +447,8 @@ export async function openKyc() {
     userKyc,
     kycJourneyStatus,
     kycStatusData,
-    tradingEnabled
+    tradingEnabled,
+    isReadyToInvestBase
   } = this.state;
 
   storageService().set("kycStartPoint", "mf");
@@ -472,7 +473,7 @@ export async function openKyc() {
         this.setState({ userKyc: result?.kyc });
       }
 
-      if (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed) {
+      if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
         this.navigate(PATHNAME_MAPPER.accountInfo)
       } else {
         const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
@@ -493,7 +494,7 @@ export async function openKyc() {
 }
           
 export async function openStocks() {
-  let { userKyc, kycJourneyStatus, kycStatusData, tradingEnabled } = this.state;
+  let { userKyc, kycJourneyStatus, kycStatusData, tradingEnabled, isReadyToInvestBase } = this.state;
   storageService().set("kycStartPoint", "stocks");
 
   if (kycJourneyStatus === "rejected") {
@@ -502,11 +503,10 @@ export async function openStocks() {
     if (kycJourneyStatus === "ground") {
       this.navigate(PATHNAME_MAPPER.stocksStatus);
     } else {
-      const isReadyToInvestUser = isReadyToInvest();
       // only NRI conditions
       if (userKyc?.address?.meta_data?.is_nri) {
         this.navigate(PATHNAME_MAPPER.nriError, {
-          state: {noStockOption: (isReadyToInvestUser || userKyc?.application_status_v2 === "submitted")}
+          state: {noStockOption: (isReadyToInvestBase || userKyc?.application_status_v2 === "submitted")}
         });
       } else {
         if (kycJourneyStatus === "ground_pan") {
@@ -525,7 +525,7 @@ export async function openStocks() {
             this.setState({ userKyc: result?.kyc })
           }
 
-          if (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed) {
+          if (isReadyToInvestBase && (result?.kyc?.mf_kyc_processed || userKyc?.mf_kyc_processed)) {
             this.navigate(PATHNAME_MAPPER.accountInfo)
           } else {
             const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");

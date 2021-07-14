@@ -16,6 +16,7 @@ function KycNative(props) {
   const urlParams = getUrlParams(props?.location?.search);
   const { kyc, isLoading } = useUserKycHook();
   const fromState = props?.location?.state?.fromState || "";
+  const isReadyToInvestUser = isReadyToInvest();
 
   if (fromState) {
     nativeCallback({ action: "exit_web"});
@@ -74,7 +75,7 @@ function KycNative(props) {
         result = await setProductType();
       }
 
-      if (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed) {
+      if (isReadyToInvestUser && (result?.kyc?.mf_kyc_processed || kyc?.mf_kyc_processed)) {
         navigate(PATHNAME_MAPPER.accountInfo)
       } else {
         const showAadhaar = !(result?.kyc?.address.meta_data.is_nri || result?.kyc?.kyc_type === "manual");
