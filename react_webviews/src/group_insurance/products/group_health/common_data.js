@@ -1352,7 +1352,7 @@ export function setReportData(termData, group_insurance_policies, health_insuran
         product_key: 'TERM_INSURANCE',
         product_category: application.quote.cover_plan + ' insurance',
         id: application.id, 
-        logo: application.quote.quote_describer.image,
+        report_logo: application.quote.quote_describer.image || application.quote.quote_provider_logo,
         product_title: application.quote.insurance_title,
         frequency: application.quote.quote_json.payment_frequency,
         company_name: 'HDFC Life Insurance',
