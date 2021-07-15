@@ -478,8 +478,9 @@ export function handleRenderCard() {
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
   const isWeb = config.Web;
-  const hideReferral = currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_share_refferal;
-  const referralCode = !currentUser.active_investment && !isWeb && !partner?.feature_manager?.hide_apply_refferal;
+  // check this
+  const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
+  const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
   const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
   const kyc = !isReadyToInvestBase;
   const cards = sdkInvestCardMapper.filter(el => {
@@ -535,4 +536,23 @@ export function handleCampaignRedirection (url) {
   // eslint-disable-next-line
   campLink = `${campLink}${campLink.match(/[\?]/g) ? "&" : "?"}generic_callback=true&plutus_redirect_url=${encodeURIComponent(`${getBasePath()}/?is_secure=${storageService().get("is_secure")}`)}`
   window.location.href = campLink;
+}
+
+export function dateValidation(endDate, startDate) {
+  const date = new Date();
+  const currentDate = (date.getMonth() + 1) + "/" + date.getDate() + "/"  +date.getFullYear();
+  if(!endDate && !startDate) return true;
+  const startDateInMs = Date.parse(startDate);
+  const endDateInMs = Date.parse(endDate);
+  const currentDateInMs = Date.parse(currentDate);
+  if(startDate && endDate && (startDateInMs <= endDateInMs) && (startDateInMs <= currentDateInMs) && (currentDateInMs <= endDateInMs)) {
+    return true;
+  } 
+  if(startDate && !endDate && (startDateInMs <= currentDateInMs)) {
+    return true;
+  } 
+  if(!startDate && endDate && (currentDateInMs <= endDateInMs)) {
+    return true;
+  }
+  return false;
 }
