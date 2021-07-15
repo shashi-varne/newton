@@ -54,7 +54,7 @@ class Otp extends Component {
   handleClick = () => {
     let body = {
       otp: this.state.otpData["otp"],
-      user_whatsapp_consent: this.state.user_whatsapp_consent,
+      user_whatsapp_consent: this.state.user_whatsapp_consent || "",
     }
     this.otpLoginVerification(this.state.verify_url, body);
   };
