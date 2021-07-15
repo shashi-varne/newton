@@ -13,6 +13,7 @@ import './SdkLanding.scss';
 import VerificationFailedDialog from '../../mini-components/VerificationFailedDialog';
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
 import { nativeCallback } from '../../../../utils/native_callback';
+import { Imgc } from '../../../../common/ui/Imgc';
 
 const config = getConfig();
 const PATHNAME_MAPPER = {
@@ -188,12 +189,19 @@ class SdkLanding extends Component {
             <div className='landing-marketing-banners' data-aid='landing-marketing-banners'>
               {landingMarketingBanners?.length === 1 ? (
                 <div className='single-marketing-banner'>
-                  <img
-                    src={require(`assets/${landingMarketingBanners[0].image}`)}
-                    alt=''
-                    style={{ width: '100%' }}
-                    onClick={this.handleMarketingBanner(landingMarketingBanners[0]?.type)}
-                  />
+                  {dateValidation(
+                    landingMarketingBanners[0]?.endDate,
+                    landingMarketingBanners[0]?.startDate
+                  ) && (
+                    <Imgc
+                      src={require(`assets/${landingMarketingBanners[0].image}`)}
+                      alt=""
+                      style={{ width: "100%", minHeight: "120px" }}
+                      onClick={this.handleMarketingBanner(
+                        landingMarketingBanners[0]?.type
+                      )}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className='marketing-banners-list' data-aid='marketing-banners-list'>
@@ -206,7 +214,7 @@ class SdkLanding extends Component {
                             key={idx}
                             onClick={this.handleMarketingBanner(el?.type)}
                           >
-                            <img
+                            <Imgc
                               src={require(`assets/${el.image}`)}
                               alt=""
                               style={{ width: "100%" }}
