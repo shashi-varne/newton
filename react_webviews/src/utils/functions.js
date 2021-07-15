@@ -1,5 +1,5 @@
 // import colors from '../common/theme/Style.scss';
-import { checkValidString, getUrlParams, storageService } from './validators';
+import { checkValidString, getUrlParams, isEmpty, storageService } from './validators';
 import $ from 'jquery';
 import { 
   basePartnerConfig, 
@@ -568,4 +568,19 @@ export {
   checkBeforeRedirection, 
   checkAfterRedirection, 
   backButtonHandler
+}
+
+export const getInvestCards = (keysToCheck=[]) => {
+  const config = getConfig();
+  const investSections = config.investSections;
+  const investSubSectionMap = config.investSubSectionMap;
+  const cardsToShow = {};
+  investSections.forEach(section => {
+    investSubSectionMap[section]?.forEach(subSections => {
+      if (keysToCheck.includes(subSections)) {
+        cardsToShow[subSections] = true;
+      }
+    })
+  })
+  return cardsToShow;
 }

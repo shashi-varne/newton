@@ -13,7 +13,7 @@ import {
 } from "./constants";
 import { getKycAppStatus, isReadyToInvest, setSummaryData } from "../../kyc/services";
 import { get_recommended_funds } from "./common/api";
-import { getBasePath } from "../../utils/functions";
+import { getBasePath, getInvestCards } from "../../utils/functions";
 
 let errorMessage = "Something went wrong!";
 const config = getConfig();
@@ -453,28 +453,23 @@ export const resetRiskProfileJourney = () => {
   return;
 };
 
-function handleInvestSubtitle (partner = '')  {
-  let investCardSubtitle = 'Mutual funds, Save tax';
+function handleInvestSubtitle ()  {
+  const investCards = getInvestCards(["nps", "gold"]);
+  let investCardSubtitle = 'Mutual funds';
+  if (investCards?.gold) {
+    investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
+  } else {
+   investCardSubtitle = 'Mutual funds, Save tax';
+  }
 
-  if (partner) {
-    let invest_screen_cards = partner.invest_screen_cards;
-    investCardSubtitle = 'Mutual funds';
-    if (invest_screen_cards?.gold) {
-      investCardSubtitle = investCardSubtitle += ', Gold, Save tax';
-    } else {
-      investCardSubtitle = 'Mutual funds, Save tax';
-    }
-
-    if (invest_screen_cards?.nps) {
-      investCardSubtitle = investCardSubtitle += ', NPS';
-    }
+  if (investCards?.nps) {
+    investCardSubtitle = investCardSubtitle += ', NPS';
   }
   return investCardSubtitle;
 };
 
 export function handleRenderCard() {
   let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
-  let partner = this.state.partner || storageService().get("partner") || {};
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
   const isWeb = config.Web;
@@ -498,7 +493,7 @@ export function handleRenderCard() {
       }
     } else {
       if(el.key === 'invest') {
-        el.subtitle = handleInvestSubtitle(partner)
+        el.subtitle = handleInvestSubtitle()
       }
       return true;
     }
