@@ -209,21 +209,26 @@ export function openNativeModule(moduleName) {
   });
 }
 
-export function openModule(moduleName) {
+export function openModule(moduleName, props) {
 
   if (getConfig().isWebOrSdk) {
 
     let module_mapper = {
-      'app/portfolio': 'reports',
-      'app/profile': 'my-account',
-      'invest/save_tax': 'invest',
-      'invest/nps': 'nps/info',
+      'app/portfolio': '/reports',
+      'app/profile': '/my-account',
+      'invest/save_tax': '/invest',
+      'invest/nps': '/nps/info',
+    }
+    
+    let moduleNameWeb = module_mapper[moduleName] || '/';
+    if(props) {
+      const navigation = navigate.bind(props);
+      navigation(moduleNameWeb)
+    } else {
+      let module_url = `${getBasePath()}${moduleNameWeb}${getConfig().searchParams}`;
+      window.location.href = module_url;
     }
 
-    let moduleNameWeb = module_mapper[moduleName] || '';
-    let module_url = `${getBasePath()}/${moduleNameWeb}${getConfig().searchParams}`;
-
-    window.location.href = module_url;
   } else {
     openNativeModule(moduleName);
   }

@@ -348,7 +348,7 @@ class Container extends Component {
         break;
       case "/group-insurance/common/report":
         if(!getConfig().from_notification){
-          openModule('app/portfolio')
+          openModule('app/portfolio', this.props)
         }else{
           nativeCallback({ events: this.getEvents('back') });
           handleNativeExit(this.props, {action: "exit"});
