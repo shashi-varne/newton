@@ -318,7 +318,7 @@ function PersonalDetails(props) {
           disabled={
             (!isEmpty(user?.phone) &&
               (itrCreated || user.auth_id === 'mobile_number') &&
-              validateNumber(user?.phone)) ||
+              validateNumber(parsePhoneNumber(user?.phone))) ||
             !isEmpty(itrId) ||
             itrCreated
           }
