@@ -5,6 +5,7 @@ import { didMount, commonRender } from '../../common/components/container_functi
 import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listener';
 import { isFunction } from '../../utils/validators';
+import { handleNativeExit } from '../../utils/native_callback';
 
 class Container extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class Container extends Component {
     let { params } = this.props.location;
 
     if (params && params.disableBack) {
-      nativeCallback({ action: 'exit' });
+      handleNativeExit(this.props, {action: "exit"});
       return;
     }
 
@@ -61,7 +62,8 @@ class Container extends Component {
     this.setState({
       openPopup: false,
     });
-    nativeCallback({ action: 'native_back', events: this.getEvents('back') });
+    nativeCallback({ events: this.getEvents('back') });
+    handleNativeExit(this.props, {action: "native_back"});
   };
 
  render() {

@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import { didMount, commonRender } from '../../common/components/container_functions';
 
 import { nativeCallback } from 'utils/native_callback';
+import { handleNativeExit } from '../../utils/native_callback';
 
 class Container extends Component {
   constructor(props) {
@@ -36,7 +37,8 @@ class Container extends Component {
 
     switch (pathname) {
       case "/help":
-        nativeCallback({ action: 'exit', events: this.getEvents() });
+        nativeCallback({ events: this.getEvents() });
+        handleNativeExit(this.props, {action: "exit"});
         break;
       default:
         if (navigator.onLine) {

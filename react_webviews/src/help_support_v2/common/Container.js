@@ -52,7 +52,8 @@ class Container extends Component {
 
     switch (pathname) {
       case "/help":
-        nativeCallback({ action: "exit", events: this.getEvents() });
+        nativeCallback({ events: this.getEvents() });
+        handleNativeExit(this.props, {action: "exit"});
         break;
       default:
         this.props.history.goBack();

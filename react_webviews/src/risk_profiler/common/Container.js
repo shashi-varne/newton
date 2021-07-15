@@ -8,6 +8,7 @@ import { getConfig } from 'utils/functions';
 
 import {didMount ,commonRender} from '../../common/components/container_functions';
 import { storageService } from '../../utils/validators';
+import { handleNativeExit } from '../../utils/native_callback';
 
 
 
@@ -67,7 +68,7 @@ class Container extends Component {
     }
 
     if (params && params.disableBack) {
-      nativeCallback({ action: 'exit' });
+      handleNativeExit(this.props, {action: "exit"});
       return;
     }
 
@@ -86,7 +87,8 @@ class Container extends Component {
           nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {
-          nativeCallback({ action: 'exit', events: this.getEvents('back') });
+          nativeCallback({ events: this.getEvents('back') });
+          handleNativeExit(this.props, {action: "exit"});
         }
         break;
       case "/risk/recommendation":
@@ -120,7 +122,8 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
+    nativeCallback({ events: this.getEvents('exit_yes') });
+    handleNativeExit(this.props, {action: this.state.callbackType});
   }
 
 

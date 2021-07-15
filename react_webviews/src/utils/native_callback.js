@@ -1,4 +1,4 @@
-import { isMobile } from './functions';
+import { isMobile, navigate } from './functions';
 import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
@@ -271,4 +271,19 @@ export function openPdfCall(data = {}) {
 
 export function redirectToLanding() {
   return `${getBasePath()}/${getConfig().searchParams}`;
+}
+
+export function handleNativeExit(props, data) {
+  const config = getConfig();
+  const navigation = navigate.bind(props);
+  if (
+    (["native_back", "exit"].includes(data.action) && !config.isNative) ||
+    (config.isSdk &&
+      props.location?.pathname === "/" &&
+      ["exit_web", "exit_module", "open_module"].includes(data.action))
+  ) {
+    navigation("/");
+  } else {
+    nativeCallback(data);
+  }
 }
