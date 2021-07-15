@@ -48,6 +48,7 @@ const Header = ({ classes, width, goBack, resetpage, handleReset, disableBack })
               <img
                 src={require(`assets/finity/finity_logo_white_moneycontrol.svg`)}
                 style={{ paddingRight: '40px', marginTop: '32px', marginBottom: '32px' }}
+                height="35"
                 alt=''
               />
             }
