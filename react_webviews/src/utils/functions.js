@@ -484,6 +484,7 @@ function getPartnerConfig(partner_code) {
     fisdom: {
       primary: '#4f2da7',
       secondary: '#35cb5d',
+      onHover: '#35cb5d',
       default: '#4a4a4a',
       highlight_color: '#f6f2ff',
       skelton_color: '#E7E7E7',
@@ -623,7 +624,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
   html.style.setProperty('--color-action-disable',  `${config_to_return.disabled || '#E8ECF1'}`);
-  html.style.setProperty(`--on-hover`, `${config_to_return.onHover || config_to_return.secondary }`);
+  html.style.setProperty(`--on-hover`, `${config_to_return.onHover ? config_to_return.onHover : config_to_return.secondary }`);
 
   return config_to_return;
 }
