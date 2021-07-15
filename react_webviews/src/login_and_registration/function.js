@@ -250,7 +250,6 @@ export async function triggerOtpApi(body, loginType) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      toast("OTP is sent successfully to your mobile number.");
       this.setState({ isApiRunning: false });
       if (body?.secondaryVerification) {
         this.navigate("secondary-otp-verification", {
@@ -283,9 +282,8 @@ export async function triggerOtpApi(body, loginType) {
         };
         storageService().setObject("user_promo", item);
       }
-    } else {
-      toast(result.message || result.error || errorMessage);
     }
+     toast(result?.message || result?.error || errorMessage);
   } catch (error) {
     console.log(error);
     toast(errorMessage);
@@ -303,7 +301,6 @@ export async function initiateOtpApi(body, loginType) {
     const res = await Api.post(`/api/user/login/v4/initiate`, formData)
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      toast("OTP is sent successfully to your mobile number.");
       this.setState({ isApiRunning: false });
       this.navigate("verify-otp", {
         state: {
@@ -316,9 +313,8 @@ export async function initiateOtpApi(body, loginType) {
         },
       });
 
-    } else {
-      toast(result?.message || result?.error || errorMessage);
-    }
+    } 
+    toast(result?.message || result?.error || errorMessage);
   } catch (error) {
     console.log(error);
     toast(errorMessage);
