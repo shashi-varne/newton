@@ -293,6 +293,20 @@ class MyAccount extends Component {
                 />
                 <div>Upload Mandate</div>
               </div>
+              <div
+                data-aid='security-setting'
+                className="account-options"
+                onClick={() => {
+                  // this.sendEvents("security setting");   [EVENT GOES HERE]
+                  this.handleClick("/security-settings");
+                }}
+              >
+                <img
+                  src={require(`assets/security.svg`)}
+                  alt=""
+                />
+                <div>Security setting</div>
+              </div>
             </div>
             {(mandate.prompt ||
               pendingMandate.show_status ||

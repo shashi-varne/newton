@@ -34,6 +34,9 @@ import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback"
 import Referral from "../login_and_registration/Referral/Referral.js"
 import SecondaryVerification from "../login_and_registration/SecondaryVerification/SecondaryVerification.js"
 import SecondaryOtpVerification from "../login_and_registration/SecondaryVerification/SecondaryOtpVerification.js"
+import SecuritySettings from "./MyAccount/2fa/SecuritySettings";
+import ForgotFisdomPin from "./MyAccount/2fa/ForgotFisdomPin"
+import ResetPin from "./MyAccount/2fa/ResetPin"
 
 const Home = (props) => {
   const { url } = props.match;
@@ -136,6 +139,9 @@ const Home = (props) => {
           render={(props) => <InvestmentProof {...props} type="capital-gain" />} 
         />
         <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />
+        <Route exact path={`${url}security-settings`} component={SecuritySettings} />
+        <Route exact path={`${url}forgot-fisdom-pin`} component={ForgotFisdomPin} />
+        <Route exact path={`${url}reset-pin`} component={ResetPin} />
         <Route component={NotFound} />
       </Switch>
     </Fragment>

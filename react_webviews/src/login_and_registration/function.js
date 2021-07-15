@@ -315,7 +315,7 @@ export async function initiateOtpApi(body, loginType) {
           user_whatsapp_consent: body?.user_whatsapp_consent || '',
         },
       });
-
+      toast(result?.message || result?.error || errorMessage);
     } else {
       toast(result?.message || result?.error || errorMessage);
     }

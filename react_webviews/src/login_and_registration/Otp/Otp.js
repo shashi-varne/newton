@@ -93,7 +93,6 @@ class Otp extends Component {
               resend_url={this.state.resend_url}
             />
           </div>
-          <div>
             <WVButton
               variant='contained'
               size='large'
@@ -106,7 +105,6 @@ class Otp extends Component {
             >
               CONTINUE
             </WVButton>
-          </div>
           <WVClickableTextElement onClick={() => this.props.history.goBack()}>
             <p className="go-back-to-login">GO BACK TO LOGIN</p>
           </WVClickableTextElement>

@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './login_and_registration/Login/Login.js';
 import Otp from './login_and_registration/Otp/Otp.js';
 import Logout from './login_and_registration/Login/Logout.js';
+import PinChangedLoginAgain from './login_and_registration/2fa/PinChangedLoginAgain';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
 import WealthReport from './wealth_report';
 
@@ -90,6 +91,7 @@ const App = () => {
               <Route path='/w-report' component={WealthReport} />
               <Route path='/login' component={Login} />
               <Route path='/verify-otp' component={Otp} />
+              <Route path='/pin-changed-login-again' component={PinChangedLoginAgain} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               {
