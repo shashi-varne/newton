@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
-import icon from 'assets/mandate_pending_icon.svg';
 import { getConfig } from 'utils/functions';
 import Input from '../../../common/ui/Input';
 import { validateEmail } from 'utils/validators';
@@ -17,7 +16,8 @@ class SendEmail extends Component {
       email: "",
       email_error: '',
       change_email: false,
-      params: qs.parse(props.history.location.search.slice(1))
+      params: qs.parse(props.history.location.search.slice(1)),
+      productName: getConfig().productName
     }
   }
 
@@ -118,7 +118,7 @@ class SendEmail extends Component {
         events={this.sendEvents('just_set_events')}
       >
         <div style={{ textAlign: 'center' }}>
-          <img style={{ width: '25%' }} src={icon} alt="OTM" />
+          <img style={{ width: '25%' }} src={require(`assets/${this.state.productName}/mandate_pending_icon.svg`)} alt="OTM" />
         </div>
         <div style={{
           color: getConfig().default,
