@@ -37,7 +37,7 @@ export const commonCardsConfig = {
     "popularCards",
   ],
   investSubSectionMap: {
-    ourRecommendations: ["instaredeem", "buildwealth", "savetax"],
+    ourRecommendations: ["buildwealth", "savetax"],
     diy: ["diyv2"],
     bottomScrollCards: ["parkmoney", "savegoal"],
     bottomCards: ["nfo"],
@@ -183,7 +183,7 @@ export const partnerConfigs = {
     message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["100_sip", "instaredeem", "buildwealth", "savetax"],
+      ourRecommendations: ["100_sip", "buildwealth", "savetax"],
       financialTools: ["risk_profile"],
     },
     landingMarketingBanners: [
@@ -212,6 +212,10 @@ export const partnerConfigs = {
     email: "alb@fisdom.com",
     message: "",
     mobile: "+91-7829733111",
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
+    },
     styles: {
       primaryColor: "#2E3192",
       secondaryColor: "#00aeef",
@@ -315,7 +319,6 @@ export const partnerConfigs = {
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: [
-        "instaredeem",
         "buildwealth",
         "insurance",
         "savetax",
@@ -363,7 +366,6 @@ export const partnerConfigs = {
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: [
-        "instaredeem",
         "buildwealth",
         "insurance",
         "savetax",
@@ -379,7 +381,6 @@ export const partnerConfigs = {
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: [
-        "instaredeem",
         "buildwealth",
         "insurance",
         "savetax",
@@ -399,7 +400,7 @@ export const partnerConfigs = {
     message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["instaredeem", "buildwealth", "savetax", "nps"],
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
     },
     referralConfig: {
       shareRefferal: false, // same as hide_share_referral but with opposite value
@@ -417,7 +418,7 @@ export const partnerConfigs = {
     message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
-      ourRecommendations: ["instaredeem", "buildwealth", "savetax", "nps"],
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
     },
     styles: {
       primaryColor: "#007AFF",
@@ -454,11 +455,9 @@ export const partnerConfigs = {
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [
-        "instaredeem",
-        "buildwealth",
-        "insurance",
         "savetax",
         "nps",
+        "insurance",
       ],
     },
   },
@@ -472,8 +471,37 @@ export const partnerConfigs = {
     },
   },
   quesscorp: {
+    logo: "quesscorp.svg",
     code: 'quesscorp',
     mobile: '+91-9642596425',
-    search_button: 'search.png'
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      diy: ["diyv2", "gold"],
+    },
+  },
+  sahaj: {
+    code: "sahaj",
+    mobile: '+91-9642596425',
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
+      diy: ["diyv2", "gold"],
+    },
+    styles: {
+      primaryColor: "#e5322d",
+    },
+  },
+  mspl: {
+    code: "mspl",
+    mobile: '+91-9642596425',
+    investSubSectionMap: {
+      ...commonCardsConfig.investSubSectionMap,
+      ourRecommendations: ["buildwealth", "savetax", "nps"],
+      diy: ["diyv2", "gold"],
+    },
+    styles: {
+      primaryColor: "#252B69",
+    },
+    navLinkOptions:{loan: true}
   }
 };
