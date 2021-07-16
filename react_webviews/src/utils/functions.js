@@ -597,8 +597,7 @@ function getPartnerConfig(partner_code) {
     checkValidString(partner_code) &&
     partner_code !== 'fisdom' &&
     partner_code !== 'finity' &&
-    partner_code !== 'test' &&
-    partner_code !== 'moneycontrol'
+    partner_code !== 'test' 
   ) {
     if (partner_code === 'bfdl') {
       partner_code = 'bfdlmobile';
@@ -1018,6 +1017,7 @@ export function capitalize(string) {
 }
 
 export function isIframe() {
+  return true;
   if (window.top !== window.self) {
     return true;
   } else {
