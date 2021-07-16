@@ -1,11 +1,10 @@
 import React, { Component , Fragment } from 'react';
 import { withRouter } from 'react-router';
 
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
 
 import {didMount ,commonRender} from '../../common/components/container_functions';
-import { handleNativeExit } from '../../utils/native_callback';
 
 
 class Container extends Component {

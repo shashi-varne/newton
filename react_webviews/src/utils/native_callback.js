@@ -1,4 +1,4 @@
-import { isMobile, navigate } from './functions';
+import { isMobile, navigate as navigateFunc } from './functions';
 import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
@@ -222,8 +222,8 @@ export function openModule(moduleName, props) {
     
     let moduleNameWeb = module_mapper[moduleName] || '/';
     if(props) {
-      const navigation = navigate.bind(props);
-      navigation(moduleNameWeb)
+      const navigate = navigateFunc.bind(props);
+      navigate(moduleNameWeb)
     } else {
       let module_url = `${getBasePath()}${moduleNameWeb}${getConfig().searchParams}`;
       window.location.href = module_url;
@@ -280,14 +280,16 @@ export function redirectToLanding() {
 
 export function handleNativeExit(props, data) {
   const config = getConfig();
-  const navigation = navigate.bind(props);
+  const navigate = navigateFunc.bind(props);
+  const nativeExitActions = ["native_back", "exit"];
+  const sdkExitActions = ["exit_web", "exit_module", "open_module"];
   if (
-    (["native_back", "exit"].includes(data.action) && !config.isNative) ||
+    (nativeExitActions.includes(data.action) && !config.isNative) ||
     (config.isSdk &&
-      props.location?.pathname === "/" &&
-      ["exit_web", "exit_module", "open_module"].includes(data.action))
+      props.location?.pathname !== "/" &&
+      sdkExitActions.includes(data.action))
   ) {
-    navigation("/");
+    navigate("/");
   } else {
     nativeCallback(data);
   }
