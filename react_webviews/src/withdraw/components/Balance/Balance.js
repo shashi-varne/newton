@@ -10,6 +10,7 @@ import { isEmpty, formatAmountInr, convertInrAmountToNumber } from 'utils/valida
 import Explore from '../../mini-components/Explore'
 import './Balance.scss';
 import { nativeCallback } from '../../../utils/native_callback'
+import { getInvestCards } from '../../../utils/functions'
 
 const Balance = (props) => {
   const [open, setOpen] = useState(false)
@@ -19,6 +20,7 @@ const Balance = (props) => {
   const [helperText, setHelperText] = useState('Please enter the amount');
   const navigate = navigateFunc.bind(props)
   const [balance, setBalance] = useState(null)
+  const investCards = getInvestCards(["instaredeem"]);
 
   const fetchBalance = async () => {
     try {
@@ -182,7 +184,7 @@ const Balance = (props) => {
                 </div>
               </div>
             </div>
-            <main className="Card" data-aid='card-block'>
+            {/* <main className="Card" data-aid='card-block'>
               <img
                 src={require(`assets/surplus_graph.png`)}
                 className="withdraw-mid-tile-img"
@@ -199,29 +201,41 @@ const Balance = (props) => {
                 classes={{ button: "withdraw-mid-tile-text2" }}
                 type="outlined"
               />
-            </main>
+            </main> */}
             <footer className="footer Card" data-aid='footer-card'>
               <div className="title">Withdraw</div>
               {withdrawOptions.map(
-                ({ title, desc, redirectUrl, openModal }, idx) => (
-                  <div
-                    className="withdraw-list-item flex"
-                    key={idx}
-                    data-aid={`withdraw-list-item flex-${idx+1}`}
-                    onClick={() => redirect(title, redirectUrl, openModal)}
-                  >
-                    <img
-                      className="icon"
-                      src={require('assets/system_withdraw_icn.png')}
-                      width="40"
-                      alt='withdraw-icon'
-                    />
-                    <div className="text" data-aid={`withdraw-list-text-${idx+1}`}>
-                      <div className="header">{title}</div>
-                      <div className="desc">{desc}</div>
-                    </div>
-                  </div>
-                )
+                ({ title, desc, redirectUrl, openModal, type }, idx) => {
+                  const showCard = type !== "instaredeem" ? true : investCards.instaredeem;
+                  return (
+                    <>
+                      {showCard && (
+                        <div
+                          className="withdraw-list-item flex"
+                          key={idx}
+                          data-aid={`withdraw-list-item flex-${idx + 1}`}
+                          onClick={() =>
+                            redirect(title, redirectUrl, openModal)
+                          }
+                        >
+                          <img
+                            className="icon"
+                            src={require("assets/system_withdraw_icn.png")}
+                            width="40"
+                            alt="withdraw-icon"
+                          />
+                          <div
+                            className="text"
+                            data-aid={`withdraw-list-text-${idx + 1}`}
+                          >
+                            <div className="header">{title}</div>
+                            <div className="desc">{desc}</div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  );
+                }
               )}
             </footer>
           </section>
