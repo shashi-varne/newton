@@ -472,7 +472,6 @@ export function handleRenderCard() {
   let currentUser = this.state.currentUser || storageService().getObject("user") || {};
   let isReadyToInvestBase = isReadyToInvest();
   const isWeb = config.Web;
-  // check this
   const hideReferral = currentUser.active_investment && !isWeb && config?.referralConfig?.shareRefferal;
   const referralCode = !currentUser.active_investment && !isWeb && config?.referralConfig?.applyRefferal;
   const myAccount = isReadyToInvestBase || userKyc.bank.doc_status === 'rejected';
