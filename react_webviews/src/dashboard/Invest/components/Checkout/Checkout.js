@@ -328,7 +328,7 @@ class Checkout extends Component {
                     }
                   >
                     {investType === data.value && (
-                      <img alt="" src={require(`assets/${data.icon}`)} />
+                      <img alt="" src={require(`assets/${config.productName}/${data.icon}`)} />
                     )}
                     {investType !== data.value && (
                       <img
@@ -342,7 +342,7 @@ class Checkout extends Component {
                       <img
                         className="icon"
                         alt=""
-                        src={require(`assets/${data.selected_icon}`)}
+                        src={require(`assets/${config.productName}/${data.selected_icon}`)}
                       />
                     )}
                   </div>

@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import Container from '../common/Container';
 import FundCard from '../Invest/mini-components/FundCard';
 import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
-import replaceFund from 'assets/replace_bfdl.png';
 
 import { navigate as navigateFunc } from 'utils/functions';
 import useFunnelDataHook from '../Invest/common/funnelDataHook';
 import isEmpty from 'lodash/isEmpty';
 import './EditFunds.scss';
 import Button from '../../common/ui/Button';
+import { getConfig } from '../../utils/functions';
 
-
+const productName = getConfig().productName;
 const EditFunds = (props) => {
   const [open, setOpen] = useState(false);
   const { funnelData } = useFunnelDataHook();
@@ -62,7 +62,7 @@ const EditFunds = (props) => {
             <div key={idx} className='recommendations-funds-item-edit'  data-aid={`recommendations-funds-item-edi-${idx+1}`}>
               <FundCard classOverRide='recommendation-edit-replace' fund={el} />
               <div className='recommendations-funds-item-replace' onClick={showAlternateFunds(el)}>
-                <img alt='replaceFund' src={replaceFund} />
+                <img alt='replaceFund' src={require(`assets/${productName}/replace_bfdl.svg`)} />
                 <div>Replace</div>
               </div>
             </div>

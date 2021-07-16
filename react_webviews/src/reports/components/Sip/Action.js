@@ -76,7 +76,7 @@ const Action = (props) => {
               className="link-container"
               onClick={() => navigate(getPathname.pausePeriod)}
             >
-              <img src={require(`assets/link_icon.svg`)} alt="" />
+              <img src={require(`assets/${productName}/link_icon.svg`)} alt="" />
               <div className="link">Pause SIP</div>
             </div>
           </div>
