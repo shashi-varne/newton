@@ -37,6 +37,8 @@ export function initialize() {
     "taxwin",
     "ippb",
     "quesscorp",
+    "sahaj",
+    "mspl"
   ];
   const partner = storageService().get("partner") || "";
   if (partners.includes(partner)) {
