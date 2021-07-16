@@ -48,7 +48,7 @@ export const basePartnerConfig = {
   fisdom: {
     productName: "fisdom",
     email: "ask@fisdom.com",
-    mobile: "+91-7829228886",
+    mobile: "+91-9642596425",
     appLink: "https://fisdom.onelink.me/CQFA/3e75c8f6",
     termsLink: "https://www.fisdom.com/terms/",
     schemeLink: "https://www.fisdom.com/scheme-offer-documents/",
@@ -62,7 +62,7 @@ export const basePartnerConfig = {
   finity: {
     productName: "finity",
     email: "ask@finity.in",
-    mobile: "+91-8048039999",
+    mobile: "+91-8142381423",
     appLink: "https://myway.onelink.me/W4GN/1f539fd2",
     termsLink: "https://finity.in/terms/",
     schemeLink: "https://finity.in/scheme/",
@@ -436,7 +436,6 @@ export const partnerConfigs = {
     logo: "moneycontrol_logo.svg",
     code: "moneycontrol",
     email: "moneycontrol@finity.in",
-    mobile: "+91-7829228886", // check with satendra -> mobile is of fisdom
     message: "",
     styles: {
       primaryColor: "#3792FC",
@@ -473,7 +472,6 @@ export const partnerConfigs = {
   quesscorp: {
     logo: "quesscorp.svg",
     code: 'quesscorp',
-    mobile: '+91-9642596425',
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       diy: ["diyv2", "gold"],
@@ -481,7 +479,6 @@ export const partnerConfigs = {
   },
   sahaj: {
     code: "sahaj",
-    mobile: '+91-9642596425',
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax", "nps"],
@@ -493,7 +490,6 @@ export const partnerConfigs = {
   },
   mspl: {
     code: "mspl",
-    mobile: '+91-9642596425',
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax", "nps"],
