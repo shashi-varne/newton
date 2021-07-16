@@ -89,7 +89,6 @@ export async function getSummary() {
 export function setInvestCardsData() {
   const disabledPartnersMap = {
     insurance: [
-      "lvb",
       "cccb",
       "sury",
       "obc",
@@ -100,7 +99,7 @@ export function setInvestCardsData() {
       "cub",
     ],
     nps: ["cccb", "sury", "obc", "svcho", "ktb", "sbm", "cub"],
-    gold: ["apna", "lvb", "cccb", "sury", "obc", "svcho", "alb", "ktb", "cub"],
+    gold: ["apna", "cccb", "sury", "obc", "svcho", "alb", "ktb", "cub"],
   };
 
   const referralData = storageService().getObject("referral") || {};
