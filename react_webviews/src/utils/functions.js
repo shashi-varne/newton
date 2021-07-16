@@ -572,15 +572,17 @@ export {
 
 export const getInvestCards = (keysToCheck=[]) => {
   const config = getConfig();
-  const investSections = config.investSections;
+  const investSections = config.investSections || [];
   const investSubSectionMap = config.investSubSectionMap;
   const cardsToShow = {};
   investSections.forEach(section => {
-    investSubSectionMap[section]?.forEach(subSections => {
-      if (keysToCheck.includes(subSections)) {
-        cardsToShow[subSections] = true;
-      }
-    })
+    if(!isEmpty(investSubSectionMap[section])) {
+      investSubSectionMap[section].forEach(subSections => {
+        if (keysToCheck.includes(subSections)) {
+          cardsToShow[subSections] = true;
+        }
+      })
+    }
   })
   return cardsToShow;
 }
