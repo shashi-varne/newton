@@ -2,7 +2,7 @@ import "./MyAccount.scss";
 import React, { Component } from 'react';
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
-import { authCheckApi } from "../../login_and_registration/function";
+import { authCheckApi } from "../../login_and_registration/functions";
 // import { isEmpty } from "lodash"
 
 class MyaccountDetails extends Component {

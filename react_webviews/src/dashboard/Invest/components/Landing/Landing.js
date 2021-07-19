@@ -16,7 +16,7 @@ import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 import VerifyDetailDialog from "../../../../login_and_registration/components/VerifyDetailDialog";
 import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
-import { generateOtp } from "../../../../login_and_registration/function";
+import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 
 const fromLoginStates = ["/login", "/logout", "/verify-otp"]

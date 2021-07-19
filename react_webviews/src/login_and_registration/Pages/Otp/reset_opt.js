@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import OtpInput from "react-otp-input";
-import DotDotLoader from "../../common/ui/DotDotLoader";
+import DotDotLoader from "../../../common/ui/DotDotLoader";
 
 class Otp extends Component {
   constructor(props) {

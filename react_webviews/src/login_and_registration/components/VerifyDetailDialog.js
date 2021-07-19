@@ -3,7 +3,7 @@ import { getConfig } from "utils/functions";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import { isEmpty } from "lodash";
-import { authCheckApi, generateOtp } from "../function";
+import { authCheckApi, generateOtp } from "../functions";
 import "./commonStyles.scss";
 
 const product = getConfig().productName;

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import "../commonStyles.scss";
-import { initialize } from "../function";
+import "../../commonStyles.scss";
+import { initialize } from "../../functions";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 // import { validateNumber } from "../../utils/validators";
 import OtpComp from "./reset_opt";
-import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import WVButton from "../../common/ui/Button/WVButton";
+import WVClickableTextElement from "../../../common/ui/ClickableTextElement/WVClickableTextElement";
+import WVButton from "../../../common/ui/Button/WVButton";
 import LoginContainer from "../Login/LoginContainer"
 
 const config = getConfig();
