@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import "./otpStyle.scss";
+import "./commonStyles.scss";
 import { initialize } from "../../functions";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 // import { validateNumber } from "../../utils/validators";
-import OtpComp from "./reset_opt";
-import WVClickableTextElement from "../../../common/ui/ClickableTextElement/WVClickableTextElement";
+import OtpComp from "../Otp/reset_opt";
 import WVButton from "../../../common/ui/Button/WVButton";
-import LoginContainer from "../Login/LoginContainer"
+import LoginContainer from "./LoginContainer"
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
@@ -105,9 +104,12 @@ class Otp extends Component {
             >
               CONTINUE
             </WVButton>
-          <WVClickableTextElement onClick={() => this.props.history.goBack()}>
+            <WVButton classes={{ label: 'go-back-to-login' }}>
+              Go Back to Login
+            </WVButton>
+          {/* <WVClickableTextElement onClick={() => this.props.history.goBack()}>
             <p className="go-back-to-login">GO BACK TO LOGIN</p>
-          </WVClickableTextElement>
+          </WVClickableTextElement> */}
         </div>
       </LoginContainer>
     );

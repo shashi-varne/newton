@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import PinChangedLoginAgain from './login_and_registration/2fa/PinChangedLoginAgain';
 import Login from './login_and_registration/pages/Login/Login.js';
-import Otp from './login_and_registration/pages/Otp/Otp.js';
+import Otp from './login_and_registration/pages/Login/VerifyOtp.js';
 import Logout from './login_and_registration/pages/Login/Logout.js';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
 import WealthReport from './wealth_report';

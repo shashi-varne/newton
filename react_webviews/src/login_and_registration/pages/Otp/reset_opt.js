@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import OtpInput from "react-otp-input";
 import DotDotLoader from "../../../common/ui/DotDotLoader";
+import WVOtp from "../../../common/ui/Otp/WVOtp";
 
 class Otp extends Component {
   constructor(props) {
@@ -61,21 +61,14 @@ class Otp extends Component {
     const { timeAvailable } = this.state;
     return (
       <div className="communication-details-otp-container">
-        <div>
-          <OtpInput
-            numInputs={4}
-            id="default-otp"
-            containerStyle="default-otp-input-container"
-            inputStyle="default-otp-input"
-            onChange={this.props.handleOtp}
-            hasErrored={true}
-            placeholder="X"
-            value={this.props.otpData.otp}
-            isDisabled={this.props.isDisabled || false}
-            errorStyle={this.props.isWrongOtp ? "otp-error-style" : ""}
-          />
-        </div>
-        {this.props.isWrongOtp  && <p className="invalid-otp">Invalid OTP</p>}
+        <WVOtp
+          onChange={this.props.handleOtp}
+          value={this.props.otpData.otp}
+          isDisabled={this.props.isDisabled || false}
+          hasError={this.props.isWrongOtp}
+          bottomText={this.props.isWrongOtp && "Invalid OTP"}
+          align="left"
+        />
         {timeAvailable > 0 && !this.props.showDotLoader && (
           <div className="cd-otp-time-text">
             OTP should arrive within{" "}

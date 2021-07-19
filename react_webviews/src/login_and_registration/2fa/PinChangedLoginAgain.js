@@ -1,6 +1,6 @@
 import "./commonStyle.scss"
 import React, { Component } from 'react';
-import LoginContainer from "../Login/LoginContainer"
+import LoginContainer from "../pages/Login/LoginContainer"
 import { Imgc } from '../../common/ui/Imgc';
 import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
 import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
