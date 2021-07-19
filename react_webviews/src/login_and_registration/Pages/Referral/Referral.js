@@ -1,4 +1,3 @@
-import "../../commonStyles.scss";
 import React, { Component } from 'react';
 import Container from "../../../dashboard/common/Container";
 import WVInPageSubtitle from "../../../common/ui/InPageHeader/WVInPageSubtitle"

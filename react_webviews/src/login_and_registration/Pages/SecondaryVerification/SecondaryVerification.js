@@ -1,4 +1,4 @@
-import "../../commonStyles.scss";
+import "./secondaryStyle.scss";
 import React, { Component } from 'react';
 import Container from "../../../dashboard/common/Container";
 import Input from "common/ui/Input";

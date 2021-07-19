@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../../commonStyles.scss";
+import "./otpStyle.scss";
 import { initialize } from "../../functions";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";

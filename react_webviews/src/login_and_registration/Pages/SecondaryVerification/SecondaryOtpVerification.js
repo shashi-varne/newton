@@ -3,7 +3,7 @@ import WVClickableTextElement from "../../../common/ui/ClickableTextElement/WVCl
 import Container from "../../../dashboard/common/Container";
 import { initialize } from "../../functions";
 import OtpComp from "../../Pages/Otp/reset_opt";
-import "../../commonStyles.scss";
+import "./secondaryStyle.scss";
 import { toast } from "react-toastify";
 
 export class SecondaryOtpVerification extends Component {
