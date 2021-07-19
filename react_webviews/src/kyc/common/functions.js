@@ -355,6 +355,8 @@ export function openInBrowser(url, type) {
   }
 
   const config = getConfig();
+
+  // add new key value pair with same structure
   const mapper = {
     'download_kra_form' : {
         header_title: 'Download Forms',
@@ -365,26 +367,34 @@ export function openInBrowser(url, type) {
   const mapper_data = mapper[type];
 
   if(config.Android && !config.isWebOrSdk) {
+    nativeCallback({
+      action: 'download_on_device',
+      message: {
+        url: url || '',
+        file_name: mapper_data.file_name
+      }
+    });
+  } else {
+    const data = {
+        url: url,
+        header_title: mapper_data.header_title,
+        icon: 'close'
+    };
+
+    openPdfCall(data);
+  }
+};
+
+export function openPdf(pdfLink, pdfType){
+  if (getConfig().iOS){
       nativeCallback({
-        action: 'download_on_device',
+        action: 'open_inapp_tab',
         message: {
-          url: url || '',
-          file_name: mapper_data.file_name
+            url: pdfLink  || '',
+            back_url: ''
         }
       });
   } else {
-      if (!config.Web) {
-        // this.setState({
-        //     show_loader: true
-        // })
-      }
-  
-      const data = {
-          url: url,
-          header_title: mapper_data.header_title,
-          icon: 'close'
-      };
-  
-      openPdfCall(data);
+    openInBrowser(pdfLink, pdfType);
   }
 }
