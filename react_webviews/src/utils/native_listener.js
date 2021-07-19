@@ -53,6 +53,7 @@ import { getConfig } from './functions';
     } else if (isMobile.iOS() && typeof window.webkit !== 'undefined') {
       d = data_json_str;
     }
+    console.log("data received..", d);
     for (let i = 0; i < listeners.length; i++) {
       let l = listeners[i];
       if (l.type === 'doc' && (l.doc_type === d.file_name || l.doc_type === d.doc_type)) {
