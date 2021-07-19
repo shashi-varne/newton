@@ -25,6 +25,7 @@ class Landing extends Component {
       screen_name: 'landing_screen',
       playing: false,
       unmount: true,
+      skelton: true,
     };
     this.initialize = initialize.bind(this);
   }
@@ -33,6 +34,11 @@ class Landing extends Component {
     this.initialize();
   }
 
+  componentDidMount() {
+    this.setState({
+      skelton: false
+    })
+  }
   handleClickFullscreen = () => {
     this.setState({ video_clicked: 'yes', playing: !this.state.playing })
     setTimeout(() => {
@@ -96,7 +102,7 @@ class Landing extends Component {
               <ReactPlayer
                 className="react-player"
                 ref={this.ref}
-                url="https://www.youtube.com/watch?v=PO1b1eD4-Ck&ab_channel=fisdom"
+                url="https://www.youtube.com/watch?v=7t-cJyoYFNI&ab_channel=fisdom"
                 width="100%"
                 height="100%"
                 playing={playing}
