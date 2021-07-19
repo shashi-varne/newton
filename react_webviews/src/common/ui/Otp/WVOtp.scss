@@ -1,0 +1,53 @@
+// .wv-otp-parent-container {
+// }
+.wv-otp-input-container {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0 0 0;
+}
+
+.wv-otp-input {
+  width: 33px !important;
+  height: auto;
+  border: none;
+  border-bottom: 2px solid var(--primary);
+  padding: 4px;
+  margin: 0 10px 0 0;
+  outline: none;
+  background-color: rgba(238, 238, 238, 0.3);
+  font-size: 13px;
+  text-align: center;
+  line-height: 21px;
+  color: var(--dark);
+
+  .title {
+    font-size: 20px;
+    color: var(--dark);
+    font-weight: 500;
+  }
+
+  .content {
+    margin: 20px 0px 0px;
+    font-size: 14px;
+    color: var(--steelgrey);
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .content-auth {
+    font-weight: 600;
+  }  
+}
+
+.wv-otp-error-style {
+  border-bottom: 2px solid var(--red);
+}
+
+
+.wv-otp-error-text {
+  color: var(--red);
+  margin-bottom: 25px;
+  font-size: 11px;
+  line-height: 18px;
+  margin-top: 5px;
+}
