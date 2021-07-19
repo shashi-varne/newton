@@ -11,6 +11,7 @@ import Toast from "../common/ui/Toast";
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
 const errorMessage = "Something went wrong!";
+const basePath = getBasePath();
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.emailLogin = emailLogin.bind(this);
@@ -28,10 +29,11 @@ export function initialize() {
   this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
+  this.setUserAgent = setUserAgent.bind(this);
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
-  let redirectUrl = encodeURIComponent(`${getBasePath()}/${config.searchParams}`);
+  let redirectUrl = encodeURIComponent(`${basePath}/${config.searchParams}`);
   const partners = [
     "hbl",
     "sbm",
@@ -55,8 +57,10 @@ export function initialize() {
     : "";
 
   let socialRedirectUrl = encodeURIComponent(
-    window.location.origin + "/social/callback" + rebalancingRedirectUrl
+    basePath + "/social/callback" + rebalancingRedirectUrl
   );
+
+  this.setUserAgent();
 
   let facebookUrl =
     config.base_url +
@@ -77,6 +81,14 @@ export function initialize() {
     redirectUrl: redirectUrl,
     rebalancingRedirectUrl: main_query_params.redirect_url,
   });
+}
+
+export function setUserAgent() {
+  nativeCallback({
+    action: "set_user_agent", message: {
+      user_agent: "Mozilla/5.0 AppleWebKit/537.36 Chrome/65.0.3325.181 Mobile Safari/537.36"
+    }
+  })
 }
 
 export function formCheckFields(
@@ -149,11 +161,12 @@ export function formCheckFields(
       body.whatsapp_consent = form_data["whatsapp_consent"];
       body.communicationType = loginType
       this.triggerOtpApi(body, loginType,);
-    } else {
+    } else { 
+      // eslint-disable-next-line
       body.auth_type = 'mobile',
-      body.auth_value = `${form_data["code"]}${form_data["mobile"]}`
+      body.auth_value = `${form_data["code"]}${form_data["mobile"]}`,
       body.need_key_hash = true,
-      body.user_whatsapp_consent = form_data["whatsapp_consent"]
+      body.user_whatsapp_consent = form_data["whatsapp_consent"],
       this.initiateOtpApi(body, loginType);
     }
   }
@@ -242,9 +255,8 @@ export async function triggerOtpApi(body, loginType) {
       if (body?.secondaryVerification) {
         this.navigate("secondary-otp-verification", {
           state: {
-            mobile_number: body.mobile,
+            value: body.mobile ||  body.email,
             rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
-            forgot: false,
             otp_id: result?.otp_id,
             communicationType: loginType,
           },
@@ -254,11 +266,22 @@ export async function triggerOtpApi(body, loginType) {
           state: {
             value: body.mobile || body.email,
             rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
-            forgot: false,
             otp_id: result?.otp_id,
             communicationType: loginType,
           },
         });
+      } if (this.state.referrer) {
+        let item = {
+          promo_code: this.state.referrer,
+        };
+        storageService.setObject("user_promo", item);
+      }
+
+      if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
+        let item = {
+          promo_code: this.state.form_data.referral_code,
+        };
+        storageService().setObject("user_promo", item);
       }
     } else {
       toast(result.message || result.error || errorMessage);
@@ -284,7 +307,7 @@ export async function initiateOtpApi(body, loginType) {
       this.setState({ isApiRunning: false });
       this.navigate("verify-otp", {
         state: {
-          value: body.mobile || body.email,
+          value: body.auth_value,
           rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
           communicationType: loginType,
           verify_url: result?.verify_url,
@@ -292,7 +315,7 @@ export async function initiateOtpApi(body, loginType) {
           user_whatsapp_consent: body?.user_whatsapp_consent || '',
         },
       });
-
+      toast(result?.message || result?.error || errorMessage);
     } else {
       toast(result?.message || result?.error || errorMessage);
     }
@@ -534,7 +557,7 @@ export async function otpVerification(body) {
         this.redirectAfterLogin(result, user);
       }
     } else {
-      if(result.error === "Wrong OTP is Entered"){
+      if (result.error === "Wrong OTP is Entered") {
         this.setState({ isWrongOtp: true })
       }
       toast(result.message || result.error || errorMessage);
@@ -568,7 +591,7 @@ export async function applyCode(user) {
 export async function resendOtp(otp_id) {
   this.setState({ isApiRunning: "button" });
   try {
-    const res = await Api.post(`/api/communication/resend/otp/${otp_id}`);  
+    const res = await Api.post(`/api/communication/resend/otp/${otp_id}`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
@@ -676,7 +699,7 @@ export async function getKycFromSummary() {
 export function redirectAfterLogin(data, user) {
   const kyc = storageService().getObject("kyc");
   if (data.firstLogin) {
-    this.navigate("/referral-code", { state: { goBack: "/" } });
+    this.navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment

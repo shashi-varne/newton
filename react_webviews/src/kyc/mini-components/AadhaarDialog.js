@@ -8,10 +8,13 @@ import { getBasePath } from "../../utils/functions";
 import "./mini-components.scss";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 
-const productName = getConfig().productName;
-const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
+const config = getConfig();
+const productName = config.productName;
+
+const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
   const basePath = getBasePath();
   const handleProceed = () => {
+    sendEvents('next', 'ensure_mobile_linked_to_aadhar')
     const redirect_url = encodeURIComponent(
       `${basePath}/digilocker/callback${
         getConfig().searchParams
@@ -24,7 +27,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
     };
-    if (isMobile.any() && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
+    if (!config.Web && storageService().get(STORAGE_CONSTANTS.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
           action: "show_top_bar",
@@ -32,7 +35,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
         });
       }
       nativeCallback({ action: "take_back_button_control", message: data });
-    } else if (!isMobile.any()) {
+    } else if (!config.Web) {
       const redirectData = {
         show_toolbar: false,
         icon: "back",
@@ -85,7 +88,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
       button1Props={{
         title:"PROCEED",
         onClick: handleProceed,
-        type: "primary"
+        variant: "contained",
       }}
     />
   );

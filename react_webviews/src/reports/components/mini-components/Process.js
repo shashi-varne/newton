@@ -18,13 +18,13 @@ const Process = ({ isOpen, data, close, state, type, status }) => {
       id="reports-process-dialog"
     >
       <DialogContent className="reports-process-dialog-content">
-        <header>
+        <header data-aid='reports-process-header'>
           <div>Process</div>
           <div className="close-icon">
             <CloseIcon className="icon" onClick={() => close()} />
           </div>
         </header>
-        <main>
+        <main data-aid='reports-process-main'>
           {status !== "upcoming" && type === "purchase" && (
             <>
               <div className="process-step">

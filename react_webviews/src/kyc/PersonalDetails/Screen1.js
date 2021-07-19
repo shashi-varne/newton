@@ -13,6 +13,8 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getGenderValue,
+  getFlow,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -33,7 +35,7 @@ const PersonalDetails1 = (props) => {
     title = "Edit personal details";
   }
 
-  const {kyc, user, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -54,7 +56,7 @@ const PersonalDetails1 = (props) => {
       email: kyc.identification?.meta_data?.email || "",
       mobile: mobile_number,
       country_code: country_code,
-      gender: kyc.identification?.meta_data?.gender || "",
+      gender: getGenderValue(kyc.identification?.meta_data?.gender) || "",
       marital_status: kyc.identification?.meta_data?.marital_status || "",
     };
     setFormData({ ...formData });
@@ -65,7 +67,7 @@ const PersonalDetails1 = (props) => {
   const handleClick = () => {
     let keysToCheck = ["name", "dob", "gender", "marital_status"];
     let result = validateFields(form_data, keysToCheck);
-    sendEvents("next")
+    sendEvents("next");
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -141,25 +143,29 @@ const PersonalDetails1 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "" ,
-        "screen_name": "personal_details_1",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "personal_details_1",
+        gender: form_data.gender
+          ? form_data.gender === "OTHER"
+            ? "others"
+            : form_data?.gender?.toLowerCase()
+          : "",
+        marital_status: form_data.marital_status
+          ? form_data.marital_status.toLowerCase()
+          : "",
         "name": form_data.name ? "yes" : "no",
-        "mobile": form_data.mobile_number ? "yes" : "no",
         "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "gender": form_data.gender,
-        "marital_status": form_data.marital_status,
-        "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
-        "flow": 'general'
-      }
+        "flow": getFlow(kyc) || ""
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -188,7 +194,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={isApiRunning}
+            disabled={isApiRunning || !!kyc?.pan?.meta_data?.name}
           />
           <Input
             label="Date of birth (DD/MM/YYYY)"
@@ -201,7 +207,7 @@ const PersonalDetails1 = (props) => {
             inputMode="numeric"
             type="text"
             id="dob"
-            disabled={isApiRunning}
+            disabled={isApiRunning || (!!kyc?.pan?.meta_data.dob && kyc?.pan?.meta_data_status === "approved")}
           />
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

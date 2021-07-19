@@ -18,6 +18,7 @@ const DiyDialog = ({ close, open, children, ...props }) => {
       TransitionComponent={Transition}
       aria-describedby="diy-dialog-slide-selection"
       id="diy-dialog"
+      data-aid='diy-dialog'
     >
       <DialogContent>{children}</DialogContent>
     </Dialog>

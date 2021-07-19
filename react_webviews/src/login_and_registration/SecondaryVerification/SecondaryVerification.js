@@ -1,16 +1,16 @@
-import "./Style.scss";
+import "../commonStyles.scss";
 import React, { Component } from 'react';
-import Container from "../dashboard/common/Container";
+import Container from "../../dashboard/common/Container";
 import Input from "common/ui/Input";
 import { getConfig } from 'utils/functions';
-import { countries } from "./constants";
-import { initialize } from "./function";
+import { countries } from "../constants";
+import { initialize } from "../function";
 import { validateNumber } from "utils/validators";
-import { nativeCallback } from "../utils/native_callback";
+import { nativeCallback } from "../../utils/native_callback";
 import DropDownNew from "common/ui/DropDownNew";
-import Checkbox from "../common/ui/Checkbox";
-import WVInPageSubtitle from "../common/ui/InPageHeader/WVInPageSubtitle";
-import AccountAlreadyExistDialog from "./bottomsheet/AccountAlreadyExistDialog";
+import Checkbox from "../../common/ui/Checkbox";
+import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
+import AccountAlreadyExistDialog from "../components/AccountAlreadyExistDialog";
 
 class SecondaryVerification extends Component {
 
@@ -28,10 +28,14 @@ class SecondaryVerification extends Component {
     componentWillMount() {
         this.initialize();
         const { state } = this.props.location;
+        let { form_data } = this.state;
         let loginType = state?.communicationType || "mobile";
-        this.setState({ loginType })
-        countries.map((item, idx) => {
-            item.name = "+" + item.value;
+        if(state.edit){
+         form_data[state?.communicationType] = state?.contactValue;
+        }
+        this.setState({ loginType, form_data })
+        countries.map((item) => {
+        return item.name = "+" + item.value;
         })
     }
 
@@ -119,7 +123,7 @@ class SecondaryVerification extends Component {
                 canSkip={true}
                 onSkipClick={() => this.navigate("/")}
                 showLoader={this.state.isApiRunning}
-                title={loginType === "mobile" ? "Enter Your Number to get started" : "Share your email address"}>
+                title={loginType === "mobile" ? "Share your mobile number" : "Share your email address"}>
                 <div className="form" data-aid='form'>
                     {loginType === "mobile" && (
                         <div>

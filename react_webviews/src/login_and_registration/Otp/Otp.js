@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import "../Style.scss";
+import "../commonStyles.scss";
 import { initialize } from "../function";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 // import { validateNumber } from "../../utils/validators";
 import OtpComp from "./reset_opt";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import WVButtonLayout from "../../common/ui/ButtonLayout/WVButtonLayout";
-import LoginContainer from "../LoginContainer"
+import WVButton from "../../common/ui/Button/WVButton";
+import LoginContainer from "../Login/LoginContainer"
 
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
@@ -54,7 +54,7 @@ class Otp extends Component {
   handleClick = () => {
     let body = {
       otp: this.state.otpData["otp"],
-      user_whatsapp_consent: this.state.user_whatsapp_consent,
+      user_whatsapp_consent: this.state.user_whatsapp_consent || "",
     }
     this.otpLoginVerification(this.state.verify_url, body);
   };
@@ -79,7 +79,7 @@ class Otp extends Component {
             <p>
               An OTP has been sent to{" "}
               <span style={{ fontWeight: "500", marginRight: "23px" }}>
-                {this.state.mobile_number}
+                {this.state.value}
               </span>
             </p>
           </div>
@@ -93,16 +93,18 @@ class Otp extends Component {
               resend_url={this.state.resend_url}
             />
           </div>
-          <div>
-            <WVButtonLayout.Button
-              type="primary"
-              title="CONTINUE"
+            <WVButton
+              variant='contained'
+              size='large'
+              color="secondary"
               onClick={this.handleClick}
-              disable={disabled}
+              disabled={disabled}
               showLoader={isApiRunning}
+              fullWidth
               className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button login-otp-button-web"}
-            />
-          </div>
+            >
+              CONTINUE
+            </WVButton>
           <WVClickableTextElement onClick={() => this.props.history.goBack()}>
             <p className="go-back-to-login">GO BACK TO LOGIN</p>
           </WVClickableTextElement>

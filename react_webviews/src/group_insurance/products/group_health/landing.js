@@ -21,6 +21,7 @@ import {  setLocalProviderData } from "./common_data";
 import MoreInfoAccordian from "../../../common/ui/MoreInfoAccordian";
 import GenericImageSlider from "../../../common/ui/GenericImageSlider";
 import {insuranceTypeMapper} from './constants';
+import {Imgc} from '../../../common/ui/Imgc'
 import { isEmpty } from "../../../utils/validators";
 
 const screen_name = "landing_screen";
@@ -348,7 +349,7 @@ class GroupHealthLanding extends Component {
             </div>
         </div>
             <div className="title-image">
-                <img src={require(`assets/${this.state.providerConfig.logo_card}`)} alt=""/>
+                <Imgc  className="insurance-logo-top-right" src={require(`assets/${this.state.providerConfig.logo_card}`)} alt=""/>
             </div>
         </div>
 
@@ -368,9 +369,10 @@ class GroupHealthLanding extends Component {
               <div className="rc-tile" style={{ marginBottom: 0 }}>
                 <div className="rc-tile-left">
                   <div className="">
-                    <img
+                    <Imgc
                       src={require(`assets/${this.state.providerConfig.logo_cta}`)}
                       alt=""
+                      style={{width: '50px'}}
                     />
                   </div>
                   <div className="rc-tile-premium-data">
@@ -415,8 +417,8 @@ class GroupHealthLanding extends Component {
           <div className="family-images" style={{ margin: "15px 0 15px 0", display: 'start', justifyContent: `${this.state.providerConfig.key === 'GMC' ? 'start' : 'space-between'}`}}>
             
             {this.state.providerConfig.member_assets.map((item, index) =>{
-              return <img
-              className="accident-plan-read-icon"
+              return <Imgc
+              className="imgc-box-big-img accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/${item}`)}
               alt=""
               style={{marginRight: `${this.state.providerConfig.key === 'GMC' ? '15px' : '0'}`}}
@@ -446,11 +448,13 @@ class GroupHealthLanding extends Component {
             data={this.state.whats_not_covered}
           />
           
-          <GenericImageSlider title="Key benefits" image_list={this.state.screenData.image_list[this.state.productName]}/>
+          <GenericImageSlider title="Key benefits" image_list={this.state.screenData.image_list[this.state.productName]} className={`Imgc-title-img2`}/>
 
           <HowToSteps
             style={{ margin: "20px 0px 0px 0px" }}
             baseData={this.state.stepsContentMapper}
+            classNameIcon={'imgc-box-landing'}
+            showSkelton={true}
           />
 
           <div
@@ -462,12 +466,13 @@ class GroupHealthLanding extends Component {
           <div className="generic-hr"></div>
           <div className="flex faq" onClick={() => this.openFaqs()}>
             <div>
-              <img
-                className="accident-plan-read-icon"
+              <Imgc
+                className="imgc-box-freq-img accident-plan-read-icon"
                 src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}
                 alt=""
               />
             </div>
+            <div style={{ width: "10px" }} />
             <div>Frequently asked questions</div>
           </div>
           <div className="generic-hr" style={{ margin: "0px 0 40px 0" }}></div>
@@ -477,14 +482,15 @@ class GroupHealthLanding extends Component {
             style={{ padding: 0, margin: "20px 0 16px 0" }}
             onClick={() =>this.openPdf(this.state.common.details_doc, "read_document")}
             >
-            <img
+            <Imgc
               className="accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/ic_read.svg`)}
+              style={{width: '20px', minHeight: '20px', margin: 0}}
               alt=""
             />
             <div
               className="accident-plan-read-text"
-              style={{ color: getConfig().styles.primaryColor }}
+              style={{ color: getConfig().styles.primaryColor, marginLeft: '10px' }}
             >
               Read full-policy description
             </div>

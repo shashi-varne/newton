@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { getConfig } from "utils/functions";
 import {
   PATHNAME_MAPPER,
   DOCUMENTS_MAPPER,
   REPORT_CARD_DETAILS,
-  STORAGE_CONSTANTS,
 } from "../constants";
 import ContactUs from "../../common/components/contact_us";
-import { getFlow } from "../common/functions";
+import { getFlow, getGenderValue, isDigilockerFlow } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
-import { storageService, isEmpty } from "../../utils/validators";
+import { isEmpty } from "../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Report = (props) => {
-  const flowType = props?.type || "";
-  const config = getConfig();
   const navigate = navigateFunc.bind(props);
   const [cardDetails, setCardDetails] = useState([]);
   const [openIndex, setOpenIndex] = useState(-1);
@@ -24,7 +20,6 @@ const Report = (props) => {
   const [isNri, setIsNri] = useState(false);
   const [topTitle, setTopTitle] = useState("KYC details");
   const [addressProof, setAddressProof] = useState({});
-  const [buttonTitle, setButtonTitle] = useState("OK");
   const goBackPage = props.location.state?.goBack || "";
 
   const handleTiles = (index, key) => {
@@ -51,7 +46,8 @@ const Report = (props) => {
   }, [kyc, user]);
 
   const initialize = () => {
-    let compliant = kyc.kyc_status === "compliant" ? true : true;
+    let compliant = kyc.kyc_status === "compliant";
+    const dlFlow = isDigilockerFlow(kyc);
     setIsCompliant(compliant);
     if (
       compliant &&
@@ -66,7 +62,7 @@ const Report = (props) => {
     const nri = kyc.address.meta_data.is_nri;
     if (nri) {
       address_proof = "Passport";
-      address_proof_nri = DOCUMENTS_MAPPER[kyc.address_doc_type];
+      address_proof_nri = DOCUMENTS_MAPPER[kyc.nri_address_doc_type];
     } else {
       address_proof = DOCUMENTS_MAPPER[kyc.address_doc_type];
     }
@@ -76,20 +72,16 @@ const Report = (props) => {
       address_proof_nri,
     });
 
-    if (compliant) {
-      setButtonTitle("INVEST NOW");
-    }
-
     let reportCards = [...REPORT_CARD_DETAILS];
     setIsNri(nri);
     if (compliant) {
       reportCards.splice(5, 1); //remove docs
-      if (!nri) {
-        reportCards.splice(2, 1); //remove address
-      }
+    }
+    if(dlFlow || (compliant && !nri)) {
+      reportCards.splice(2, 1); //remove address
     }
     if (kyc.nomination.nominee_optional) {
-      if (compliant && !nri) {
+      if ((compliant && !nri) || dlFlow) {
         reportCards.splice(2, 1);
       } else {
         reportCards.splice(3, 1);
@@ -98,150 +90,37 @@ const Report = (props) => {
     setCardDetails(reportCards);
   };
 
-  const handleClick = () => {
-    sendEvents('next')
-    if (isCompliant) {
-      proceed();
-    } else {
-      checkNPSAndProceed();
-    }
-  };
-
-  const proceed = () => {
-    let _event = {
-      event_name: "journey_details",
-      properties: {
-        journey: {
-          name: "kyc",
-          trigger: "cta",
-          journey_status: "complete",
-          next_journey: "mf"
-        }
-      }
-    };
-    // send event
-    if (!config.Web) {
-      window.callbackWeb.eventCallback(_event);
-    } else if (config.isIframe) {
-      window.callbackWeb.sendEvent(_event);
-    }
-    
-    if (config.Web) {
-      navigate(PATHNAME_MAPPER.invest);
-    } else {
-      if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
-        nativeCallback({ action: "exit_web" });
-      } else {
-        navigate(PATHNAME_MAPPER.landing);
-      }
-    }
-  };
-
-  const checkNPSAndProceed = () => {
-    let _event = {};
-    if (user.nps_investment) {
-      _event = {
-        event_name: "journey_details",
-        properties: {
-          journey: {
-            name: "kyc",
-            trigger: "cta",
-            journey_status: "complete",
-            next_journey: "reports",
-          },
-        },
-      };
-      // send event
-      if (!config.Web) {
-        window.callbackWeb.eventCallback(_event);
-      } else if (config.isIframe) {
-        window.callbackWeb.sendEvent(_event);
-      }
-      if (!config.isIframe) {
-        navigate(PATHNAME_MAPPER.reports);
-      }
-    } else {
-      _event = {
-        event_name: "journey_details",
-        properties: {
-          journey: {
-            name: "kyc",
-            trigger: "cta",
-            journey_status: "complete",
-            next_journey: "mf",
-          },
-        },
-      };
-
-      // send event
-      if (!config.Web) {
-        window.callbackWeb.eventCallback(_event);
-      } else if (config.isIframe) {
-        window.callbackWeb.sendEvent(_event);
-      }
-
-      if (config.Web) {
-        navigate(PATHNAME_MAPPER.invest);
-      } else {
-        if (storageService().get(STORAGE_CONSTANTS.NATIVE)) {
-          nativeCallback({ action: "exit_web" });
-        } else {
-          navigate(PATHNAME_MAPPER.landing);
-        }
-      }
-    }
-  };
-
   const personalDetails = () => {
     return (
       <>
-        <div className="unzipped-title" data-aid='kyc-unzipped-title'>{kyc.pan.meta_data.name}</div>
-        {isCompliant && (
-          <div className="unzipped-box" data-aid='kyc-email'>
-            <div className="title">Email</div>
-            <div className="subtitle">{kyc.identification.meta_data.email}</div>
-          </div>
-        )}
+        <div className="unzipped-box" data-aid="kyc-father-name">
+          <div className="title">Name</div>
+          <div className="subtitle">{kyc.pan.meta_data.name}</div>
+        </div>
         <div className="row-align">
-          {!isCompliant && (
-            <div className="unzipped-box" data-aid='kyc-gender'>
-              <div className="title">Gender</div>
-              <div className="subtitle">
-                {kyc.identification.meta_data.gender}
-              </div>
+          <div className="unzipped-box" data-aid="kyc-gender">
+            <div className="title">Gender</div>
+            <div className="subtitle">
+              {getGenderValue(kyc.identification.meta_data.gender, "name")}
             </div>
-          )}
-          <div className="unzipped-box" data-aid='kyc-dob'>
-            <div className="title">Dob</div>
-            <div className="subtitle">{kyc.pan.meta_data.dob}</div>
+          </div>
+          <div className="unzipped-box" data-aid="kyc-marital-status">
+            <div className="title">Marital Status</div>
+            <div className="subtitle">
+              {kyc.identification.meta_data.marital_status}
+            </div>
           </div>
         </div>
         {!isCompliant && (
-          <>
-            <div className="unzipped-box" data-aid='kyc-marital-status'>
-              <div className="title">Marital Status</div>
-              <div className="subtitle">
-                {kyc.identification.meta_data.marital_status}
-              </div>
-            </div>
-            <div className="unzipped-box" data-aid='kyc-father-name'>
-              <div className="title">Father’s name</div>
-              <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
-            </div>
-            <div className="unzipped-box" data-aid='kyc-mother-name'>
-              <div className="title">Mother’s name</div>
-              <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
-            </div>
-          </>
-        )}
-        {isCompliant && (
-          <div className="unzipped-box" data-aid='kyc-mobile'>
-            <div className="title">Mobile</div>
-            <div className="subtitle">
-              {kyc.identification.meta_data.mobile_number}
-            </div>
+          <div className="unzipped-box" data-aid="kyc-father-name">
+            <div className="title">Father’s name</div>
+            <div className="subtitle">{kyc.pan.meta_data.father_name}</div>
           </div>
         )}
+        <div className="unzipped-box" data-aid="kyc-mother-name">
+          <div className="title">Mother’s name</div>
+          <div className="subtitle">{kyc.pan.meta_data.mother_name}</div>
+        </div>
       </>
     );
   };
@@ -268,10 +147,10 @@ const Report = (props) => {
                   Foreign Address as per {addressProof.address_proof_nri}
                 </div>
                 <div className="subtitle">
-                  {kyc.address.meta_data.addressline},
-                  {kyc.address.meta_data.city},{kyc.address.meta_data.state},
-                  {kyc.address.meta_data.country},
-                  {kyc.address.meta_data.pincode}
+                  {kyc.nri_address.meta_data.addressline},
+                  {kyc.nri_address.meta_data.city},{kyc.nri_address.meta_data.state},
+                  {kyc.nri_address.meta_data.country},
+                  {kyc.nri_address.meta_data.pincode}
                 </div>
               </div>
             )}
@@ -366,6 +245,7 @@ const Report = (props) => {
   };
 
   const goBack = () => {
+    sendEvents("back");
     if (goBackPage) {
       navigate(goBackPage);
     } else {
@@ -375,31 +255,29 @@ const Report = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "kyc_done",
-        "flow": getFlow(kyc) || ""
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "kyc_details",
+        flow: getFlow(kyc) || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
       id="kyc-home"
       data-aid='kyc-home-screen'
       events={sendEvents("just_set_events")}
-      buttonTitle={buttonTitle}
-      handleClick={handleClick}
       title={topTitle}
       headerData={{ goBack }}
       skelton={isLoading}
-      noFooter={flowType === "compliant"}
+      noFooter
     >
       <div className="kyc-report" data-aid='kyc-report-section'>
         {cardDetails &&

@@ -11,7 +11,7 @@ const config = getConfig();
 const productName = config.productName;
 const KycVerified = (props) => {
   const navigate = navigateFunc.bind(props);
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const handleClick = () => {
     let _event = {
       event_name: "journey_details",
@@ -41,20 +41,20 @@ const KycVerified = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'premium_onboard',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "kyc_verified",
-        "initial_kyc_status": kyc.initial_kyc_status || '' ,
-        "channel": getConfig().code    
-      }
+      event_name: "premium_onboard",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "kyc_verified",
+        initial_kyc_status: kyc.initial_kyc_status || "",
+        channel: getConfig().code,
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   const handleApplicationDetailsClick = () => {
     sendEvents("application_details");
@@ -66,10 +66,10 @@ const KycVerified = (props) => {
       id="kyc-compliant-verify"
       events={sendEvents("just_set_events")}
       buttonTitle="INVEST NOW"
-      skelton={isLoading}
       handleClick={handleClick}
       title="KYC verified"
       data-aid='kyc-compliant-verify-screen'
+      skelton={isLoading}
     >
       <div className="kyc-compliant-complete" data-aid='kyc-compliant-complete'>
         <header data-aid='kyc-compliant-verify-header'>

@@ -4,15 +4,15 @@ import "./mini-components.scss";
 
 const FilterButton = (props) => {
   return (
-    <Button variant="outlined" color="primary" {...props}>
+    <Button variant="outlined" color="primary" {...props} data-aid='filter-active-btn'>
       <div className="icon">
         <svg
           version="1.1"
           viewBox="0 0 19 18"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <title>filter_by_icon</title>
-          <desc>Created with Sketch.</desc>
+          <title data-aid='filter-title'>filter_by_icon</title>
+          <desc data-aid='filter-desc'>Created with Sketch.</desc>
           <g fillRule="evenodd">
             <g
               transform="translate(-112 -1042)"
@@ -23,7 +23,7 @@ const FilterButton = (props) => {
           </g>
         </svg>
       </div>
-      <div className="title">Filter</div>
+      <div className="title" data-aid='filter-title-text'>Filter</div>
     </Button>
   )
 }

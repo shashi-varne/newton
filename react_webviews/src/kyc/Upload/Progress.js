@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
 import UploadCard from "./UploadCard";
 import { getDocuments } from "../services";
@@ -9,12 +9,14 @@ import useUserKycHook from "../common/hooks/userKycHook";
 import "./commonStyles.scss";
 import { nativeCallback } from "../../utils/native_callback";
 import { getConfig } from "../../utils/functions";
+import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 
 const productName = getConfig().productName;
 const Progress = (props) => {
-  const {kyc, isLoading} = useUserKycHook();
+  const { kyc, isLoading } = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
+  const [openConfirmBack, setOpenConfirmBack] = useState(false);
 
   let documents = [];
   let totalDocs = 0;
@@ -36,7 +38,7 @@ const Progress = (props) => {
   }
 
   const handleCards = (key, index) => {
-    sendEvents("next", key)
+    sendEvents("next", key);
     if (disableNext) return;
     const approvedCondition = (key !== "bank" && documents[index].doc_status === "approved") ||
     (key === "bank" && documents[index].doc_status === "approved" &&
@@ -63,25 +65,25 @@ const Progress = (props) => {
       props.history.goBack();
       return;
     }
-    const navigate = navigateFunc.bind(props)
-    navigate('/kyc/journey')
+    setOpenConfirmBack(true);
   }
 
   const sendEvents = (userAction, docs) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "upload_docs",
-        "docs": docs || ""
-      }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload_documents",
+        stage: docs || "",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+
 
   return (
     <Container
@@ -132,6 +134,11 @@ const Progress = (props) => {
             src={require(`assets/${productName}/trust_icons.svg`)}
           />
         </footer>
+        <ConfirmBackDialog 
+          isOpen={openConfirmBack}
+          goBack={() => navigate('/kyc/journey')}
+          close={() => setOpenConfirmBack(false)}
+        />
       </section>
     </Container>
   );

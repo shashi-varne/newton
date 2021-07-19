@@ -34,6 +34,7 @@ body[data-device="web"] .Header {
 }
 body[data-device="web"] .Footer {
   max-width: fit-content;
+  max-width: -moz-fit-content;
   position: relative !important;
   margin: 0 auto;
   margin-bottom: 20px;
@@ -146,7 +147,6 @@ body[data-device="web"] #bottom-popup .MuiDialog-paper {
   margin-bottom: 15px;
   color: #444;
   font-size: 14px;
-  font-family: "Roboto";
   font-weight: 500;
 }
 
@@ -217,7 +217,6 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-raised.MuiButton-raisedSecond
   color: #ffffff;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Roboto";
 }
 .FooterSummaryLayout_hint {
   color: #878787;
@@ -291,7 +290,6 @@ input#pan {
   padding: 20px 0;
   color: #444;
   font-size: 14px;
-  font-family: "Roboto";
   font-weight: 500;
 }
 .Accordion:last-child {
@@ -411,7 +409,6 @@ input#pan {
   color: #4a4a4a;
   margin-top: 0;
   font-size: 20px;
-  font-family: "Roboto";
   font-weight: 500;
   text-align: center;
 }
@@ -420,7 +417,6 @@ input#pan {
   margin-top: 10px;
   margin-bottom: 0;
   font-size: 16px;
-  font-family: "Roboto";
   text-align: center;
 }
 .NoInternet button {

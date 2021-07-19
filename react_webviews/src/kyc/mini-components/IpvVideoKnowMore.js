@@ -1,45 +1,35 @@
 import React from "react";
-import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
-import SVG from "react-inlinesvg";
-import { Button } from "material-ui";
 import "./mini-components.scss";
+import Button from "../../common/ui/Button";
+import WVFullscreenDialog from "../../common/ui/FullscreenDialog/WVFullscreenDialog";
 
+const config = getConfig();
+const productName = config.productName;
 const KnowMore = ({ isOpen, close }) => {
-  const config = getConfig();
-  const productName = config.productName;
-
   return (
-    <Dialog
-      open={isOpen}
-      aria-labelledby="ipv-know-dialog"
-      aria-describedby="ipv-know-more-dialog"
-      className="ipv-know-more-dialog"
-      fullScreen={config.isMobileDevice}
-      data-aid='ipv-know-more-dialog'
-    >
-      <DialogContent className="know-more-dialog-content">
-        <header onClick={close}>
-          <SVG
-            preProcessor={(code) => code.replace(/fill=".*?"/g, "fill=#8c9ba5")}
-            src={require(`assets/close_white_icon.svg`)}
-            className="close-icon"
-          />
-        </header>
-        <main data-aid='kyc-ipv-videoknowmore'>
-          <div className="title" data-aid='kyc-title'>How to make a selfie Video?</div>
+    <WVFullscreenDialog onClose={close} open={isOpen}>
+      <WVFullscreenDialog.Content onCloseClick={close}>
+        <main
+          data-aid="kyc-ipv-videoknowmore"
+          className="know-more-dialog-content"
+        >
+          <div className="title" data-aid="kyc-title">
+            How to make a selfie video?
+          </div>
           <div className="content">
-            <div className="text" data-aid='kyc-content-step-1'> 
-              <b>Step 1 - </b> Hold your PAN card and start recording.
+            <div className="text" data-aid="kyc-content-step-1">
+              Before recording ensure you are in a quiet place and your full
+              face is visible. Once ready start recording.
             </div>
             <img
               alt="start-recording"
               src={require(`assets/${productName}/start_recording.svg`)}
             />
           </div>
-          <div className="content">
-            <div className="text" data-aid='kyc-content-step-2'>
-              <b>Step 2 - </b> Say the verification code and stop recording
+          <div className="content second-step-content">
+            <div className="text" data-aid="kyc-content-step-2">
+              Say the verification code and stop recording
             </div>
             <img
               alt="start-recording"
@@ -47,11 +37,16 @@ const KnowMore = ({ isOpen, close }) => {
             />
           </div>
         </main>
-      </DialogContent>
-      <DialogActions className="action">
-        <Button data-aid='got-it-btn' onClick={close}>GOT IT!</Button>
-      </DialogActions>
-    </Dialog>
+      </WVFullscreenDialog.Content>
+      <WVFullscreenDialog.Action>
+        <Button
+          data-aid="ipv-video-button"
+          buttonTitle="OKAY"
+          classes={{ button: "kipv-knowmore-button" }}
+          onClick={close}
+        />
+      </WVFullscreenDialog.Action>
+    </WVFullscreenDialog>
   );
 };
 

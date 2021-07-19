@@ -31,6 +31,7 @@ const AddressUpload = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (type) => (file, fileBase64) => {
+    sendEvents('get_image', 'gallery', type);
     if (type === 'front') {
       setFrontDoc(file);
       setState({
@@ -46,7 +47,8 @@ const AddressUpload = (props) => {
     }
   }
 
-  const onFileSelectError = () => {
+  const onFileSelectError = (type) => () => {
+    sendEvents('get_image', 'gallery', type);
     return toast('Please select image file only');
   }
 
@@ -69,15 +71,16 @@ const AddressUpload = (props) => {
       let result;
       if (onlyFrontDocRequired) {
         result = await upload(frontDoc, 'address', {
-          address_proof_key: addressProofKey,
+          addressProofKey: addressProofKey,
         })
       } else {
         result = await upload(file, 'address', {
-          address_proof_key: addressProofKey,
+          addressProofKey: addressProofKey,
         })
       }
       updateKyc(result.kyc)
       if(isMyAccountFlow) {
+        toast("Address changed successfully");
         navigate("/my-account");
       } else {
         navigate(PATHNAME_MAPPER.uploadProgress)
@@ -146,30 +149,37 @@ const AddressUpload = (props) => {
       },
     });
   };
+
+  const onKnowMoreClick = () => {
+    sendEvents('know_more');
+    navigate("/kyc/upload-instructions", {
+      state: { document: "address" }
+    });
+  };
+
+  const sendEvents = (userAction, type, docSide) => {
+    // callbackWeb.eventCallback to be added
+    let eventObj = {
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "upload_address_proof",
+        type: type || "",
+        doc_side: docSide || "",
+        doc_type: addressProofKey,
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
   
   const title =
     isMyAccountFlow && kyc?.address?.meta_data?.is_nri
       ? "Upload Indian Address Proof"
       : "Upload address proof";
-
-  const sendEvents = (userAction, type, docSide) => {
-    let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "address_doc",
-        "type": type || "",
-        "doc_side": docSide || "",
-        "doc_type": addressProofKey
-      }
-    };
-    if (userAction === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  }
-
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -204,13 +214,16 @@ const AddressUpload = (props) => {
             />
             <KycUploadContainer.Button
               withPicker
-              showOptionsDialog
-              nativePickerMethodName="open_gallery"
-              fileName="address_proof_front"
-              customPickerId="wv-input-front"
-              onFileSelectComplete={onFileSelectComplete('front')}
-              onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_IMAGE_TYPES}
+              filePickerProps={{
+                showOptionsDialog: true,
+                shouldCompress: true,
+                nativePickerMethodName: "open_gallery",
+                fileName: "address_proof_front",
+                customPickerId: "wv-input-front",
+                onFileSelectComplete: onFileSelectComplete('front'),
+                onFileSelectError: onFileSelectError,
+                supportedFormats: SUPPORTED_IMAGE_TYPES
+              }}
             />
           </KycUploadContainer>
 
@@ -228,13 +241,16 @@ const AddressUpload = (props) => {
                 />
                 <KycUploadContainer.Button
                   withPicker
-                  showOptionsDialog
-                  nativePickerMethodName="open_gallery"
-                  fileName="address_proof_rear"
-                  customPickerId="wv-input-back"
-                  onFileSelectComplete={onFileSelectComplete('back')}
-                  onFileSelectError={onFileSelectError}
-                  supportedFormats={SUPPORTED_IMAGE_TYPES}
+                  filePickerProps={{
+                    showOptionsDialog: true,
+                    shouldCompress: true,
+                    nativePickerMethodName: "open_gallery",
+                    fileName: "address_proof_rear",
+                    customPickerId: "wv-input-back",
+                    onFileSelectComplete: onFileSelectComplete('back'),
+                    onFileSelectError: onFileSelectError,
+                    supportedFormats: SUPPORTED_IMAGE_TYPES
+                  }}
                 />
               </KycUploadContainer>
             </>
@@ -244,9 +260,7 @@ const AddressUpload = (props) => {
             <WVClickableTextElement
               color="secondary"
               className="know-more-button"
-              onClick={() => navigate("/kyc/upload-instructions", {
-                state: { document: "address" }
-              })}
+              onClick={onKnowMoreClick}
             >
               KNOW MORE
             </WVClickableTextElement>

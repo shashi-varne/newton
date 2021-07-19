@@ -6,16 +6,21 @@
   }
 }
 
-.hv-loader-box {
-  .loader {
-    // TODO: Fix oval loader
-    // border: 3px solid #f3f3f3;
-    // border-top: 3px solid #555;
-    // border-radius: 50%;
-    // width: 20px;
-    // height: 20px;
-    // animation: spin 1s linear infinite;
-    // float: left;
-    // display: none;
-  }
+//   // TODO: Fix oval loader
+// .hv-loader-box {
+//   // .loader {
+//     // border: 3px solid #f3f3f3;
+//     // border-top: 3px solid #555;
+//     // border-radius: 50%;
+//     // width: 20px;
+//     // height: 20px;
+//     // animation: spin 1s linear infinite;
+//     // float: left;
+//     // display: none;
+//   }
+// }
+
+body[data-device="web"] .wv-live-cam-fp-loader {
+  position: absolute;
+  top: 0 !important;
 }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import { getConfig } from "utils/functions";
 import { isEmpty } from "lodash";
-import "./Style.scss";
+import "./commonStyles.scss";
 
 const product = getConfig().productName;
 export class AccountAlreadyExistDialog extends Component {
@@ -15,7 +15,7 @@ export class AccountAlreadyExistDialog extends Component {
   }
 
   render() {
-    const { data, isOpen, onClose, type, next, editDetails } = this.props; console.log(type)
+    const { data, isOpen, onClose, type, next, editDetails } = this.props;
     return (
       <WVBottomSheet
         isOpen={isOpen}

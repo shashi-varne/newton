@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { kycSubmit } from "../../common/api";
 import useUserKycHook from "../../common/hooks/userKycHook";
-import { checkDocsPending, isDocSubmittedOrApproved } from "../../common/functions"
+import { checkDLPanFetchAndApprovedStatus, checkDocsPending, isDocSubmittedOrApproved } from "../../common/functions"
 import toast from "../../../common/ui/Toast";
 import { isEmpty } from "../../../utils/validators";
 import { PATHNAME_MAPPER } from "../../constants";
 import "./commonStyles.scss";
+import { nativeCallback } from "../../../utils/native_callback";
 import WVSelect from "../../../common/ui/Select/WVSelect";
 import { navigate as navigateFunc, } from "../../../utils/functions";
-import ConfirmBackDialog from "../../mini-components/ConfirmBackDialog";
 
 const TRADING_EXPERIENCE_VALUES = [
   {
@@ -34,7 +34,6 @@ const TradingExperience = (props) => {
   const [experience, setExperience] = useState("");
   const [oldState, setOldState] = useState("");
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const [goBackModal, setGoBackModal] = useState(false)
   const navigate = navigateFunc.bind(props);
   const {kyc, isLoading} = useUserKycHook();
   const [areDocsPending, setDocsPendingStatus] = useState();
@@ -53,6 +52,7 @@ const TradingExperience = (props) => {
   }
 
   const handleClick = () => {
+    sendEvents("next")
     if (oldState === experience) {
       handleNavigation();
       return;
@@ -66,7 +66,6 @@ const TradingExperience = (props) => {
       let body = {
         kyc: {
           equity_data: {
-            // "fno_required": true,
             "trading_experience": experience
           },
         },
@@ -83,14 +82,16 @@ const TradingExperience = (props) => {
   };
 
   const handleNavigation = () => {
-    if (kyc.initial_kyc_status === "compliant") {
+    const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
+    if (kyc.initial_kyc_status === "compliant" || isPanFailedAndNotApproved) {
       if (!isDocSubmittedOrApproved("equity_pan")) {
-        navigate(PATHNAME_MAPPER.uploadPan);
+        navigate(PATHNAME_MAPPER.uploadPan, {
+          state: { goBack: "/kyc/trading-experience" }
+        });
         return;
       }
     } 
-    if ((kyc?.kyc_type !== "manual" && !isDocSubmittedOrApproved("equity_identification")) ||
-      (kyc?.kyc_type === "manual" && !isDocSubmittedOrApproved("identification"))) {
+    if (!isDocSubmittedOrApproved("equity_identification")) {
         navigate(PATHNAME_MAPPER.uploadSelfie);
     } else {
       if (!isDocSubmittedOrApproved("equity_income")) {
@@ -105,34 +106,40 @@ const TradingExperience = (props) => {
     }
   }
 
+  const sendEvents = (userAction) => {
+    const experienceMapper ={
+      "0-1": "0 to 1 years",
+      "1-3":"1 to 3 years",
+      "3-5":"3 to 5 years",
+      "5+":"more than 5 years"
+    }
+    let eventObj = {
+      event_name: "trading_onboarding",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "select_trading_experience",
+        experience: experienceMapper[experience]
+      },
+    };
+    if (userAction === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
+  
   const handleChange = (selectedOption) => {
     setExperience(selectedOption.value)
   }
 
-  const closeConfirmBackDialog = () => {
-    setGoBackModal(false);
-  };
-
-  const redirectToJourney = () => {
-    navigate(PATHNAME_MAPPER.journey);
-  };
-
-  const goBack = () => {
-    if (kyc?.my_kyc_processed) {
-      setGoBackModal(true)
-    } else {
-      navigate(PATHNAME_MAPPER.journey);
-    }
-  }
-
   return (
     <Container
+      events={sendEvents("just_set_events")}
       buttonTitle="CONTINUE"
       handleClick={handleClick}
       title="Select trading experience"
       disable={isLoading}
       showLoader={isApiRunning}
-      headerData={{goBack}}
       data-aid="select-trading-experience-screen"
     >
       <div className="trading-experience" data-aid="trading-experience">
@@ -149,14 +156,6 @@ const TradingExperience = (props) => {
           value={experience}
           onChange={handleChange}
         />
-        {kyc?.mf_kyc_processed && goBackModal ?
-          <ConfirmBackDialog
-           isOpen={goBackModal}
-           close={closeConfirmBackDialog}
-           goBack={redirectToJourney}
-         />
-         : null
-        }
       </div>
     </Container>
   );

@@ -6,7 +6,17 @@ import { disableBodyTouch } from '../../../utils/validators';
 
 const noop = () => {};
 
-const WVButton = ({ showLoader, children, dataAidSuffix, onClick, ...props }) => {
+const WVButton = ({
+  dataAidSuffix,
+  contained,
+  outlined,
+  showLoader,
+  onClick,
+  children,
+  ...props
+}) => {
+  const variant = props.variant || (contained ? 'contained' : outlined ? 'outlined' : '');
+
   if (showLoader) {
     disableBodyTouch(); //disable touch
   } else {
@@ -16,6 +26,7 @@ const WVButton = ({ showLoader, children, dataAidSuffix, onClick, ...props }) =>
   return (
     <Button
       {...props}
+      variant={variant}
       onClick={showLoader ? noop : onClick}
       data-aid={`wv-button-${dataAidSuffix}`}
     >

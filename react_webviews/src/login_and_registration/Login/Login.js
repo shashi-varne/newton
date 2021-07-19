@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import "./Style.scss";
+import "./loginStyle.scss";
 import { getConfig } from "utils/functions";
-import { countries } from "./constants";
+import { countries } from "../constants";
 import Input from "common/ui/Input";
-import { initialize } from "./function";
+import { initialize } from "../function";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
-import Button from "../common/ui/Button";
-import { nativeCallback } from "../utils/native_callback";
-import Checkbox from "../common/ui/Checkbox";
+import Button from "../../common/ui/Button";
+import { nativeCallback } from "../../utils/native_callback";
+import Checkbox from "../../common/ui/Checkbox";
 import LoginContainer from "./LoginContainer"
 
 const config = getConfig();
@@ -18,7 +18,7 @@ class Login extends Component {
     this.state = {
       productName: config.productName,
       loginType: "mobile",
-      form_data: { whatsapp_consent: true,},
+      form_data: { whatsapp_consent: true, },
       isApiRunning: false,
     };
     this.initialize = initialize.bind(this);
@@ -42,19 +42,20 @@ class Login extends Component {
     let { form_data } = this.state;
     if (name === "mobile" && value && !validateNumber(value)) return;
     if (name === "mobile" && form_data.code === "91" & value.length > 10) return;
-    form_data[name] = value;console.log(form_data, value )
+    form_data[name] = value;
     if (name === "whatsapp_consent") form_data[name] = !form_data?.whatsapp_consent;
     form_data[`${name}_error`] = "";
     this.setState({ form_data: form_data });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if (loginType !== "email")
       this.sendEvents();
     if (loginType === "email") keys_to_check = ["email"];
     this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
+    event.preventDefault()
   };
 
   sendEvents = (userAction) => {
@@ -107,17 +108,19 @@ class Login extends Component {
             {loginType === "mobile" && (
               <div className="form-field">
                 <div className="country-code" data-aid='country-code'>
-                  <DropdownWithoutIcon
-                    onChange={this.handleChange("code")}
-                    error={!!form_data.code_error ? true : false}
-                    helperText={form_data.code_error || ""}
-                    options={countries}
-                    value={form_data.code || "91"}
-                    width={20}
-                    id="code"
-                    name="code"
-                    isAOB={true}
-                  />
+                  <div  className="dropdown-without-icon">
+                    <DropdownWithoutIcon
+                      onChange={this.handleChange("code")}
+                      error={!!form_data.code_error ? true : false}
+                      helperText={form_data.code_error || ""}
+                      options={countries}
+                      value={form_data.code || "91"}
+                      width={20}
+                      id="code"
+                      name="code"
+                      isAOB={true}
+                    />
+                  </div>
                 </div>
                 <Input
                   error={form_data.mobile_error ? true : false}

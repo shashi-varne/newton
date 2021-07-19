@@ -130,15 +130,16 @@ class ESignInfo extends Component {
   }
 
   sendEvents = (userAction, screenName) => {
-    const kyc = storageService().getObject("kyc");
+    // const kyc = storageService().getObject("kyc");
+    const { tradingFlow } = this.state;
     let eventObj = {
-      "event_name": 'KYC_registration',
+      event_name: tradingFlow ? 'trading_onboarding' : 'kyc_registration',
       "properties": {
         "user_action": userAction || "" ,
-        "screen_name": screenName || "",
-        "rti": "",
-        "initial_kyc_status": kyc.initial_kyc_status || "",
-        "flow": 'digi kyc'
+        "screen_name": screenName || "complete_esign",
+        // "rti": "",
+        // "initial_kyc_status": kyc.initial_kyc_status || "",
+        // "flow": 'digi kyc'
       }
     };
     if (userAction === 'just_set_events') {
@@ -217,10 +218,14 @@ class ESignInfo extends Component {
           buttonLayout="stacked"
           title="Please ensure your mobile is linked with your Aadhaar"
           subtitle=""
-          button1Props={{ title: "PROCEED", type: "primary", onClick: this.handleClick }}
+          button1Props={{
+            title: "PROCEED",
+            variant: "contained",
+            onClick: this.handleClick
+          }}
           button2Props={{
             title: "Don't have aadhaar linked mobile?",
-            type: "textOnly",
+            variant: "text",
             onClick: () => this.navigate("/kyc/manual-signature"),
           }}
           image={require(`assets/${productName}/ic_aadhaar_handy.svg`)}

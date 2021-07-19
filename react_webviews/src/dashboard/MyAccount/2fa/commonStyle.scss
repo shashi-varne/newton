@@ -1,0 +1,88 @@
+.security-settings {
+  .img-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
+    
+  .bottom-space{
+      margin-bottom: 44px;
+  }
+  .account-options {
+    border-bottom: none;
+    padding: 15px 15px 15px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #333333;
+    img {
+      width: 25px;
+      margin-right: 15px;
+      margin-top: -3px;
+    }
+  }     
+}
+
+.forgot-fisdom-pin{
+   .forgot-pin-subtitle{
+     font-size: 11px;
+     line-height: 18px;
+     color: var(--steelgrey);
+     margin: 5px 0px 15px 5px;
+   }
+
+  .login-form-field{
+     display: flex;
+     flex-direction: column;
+    .input-field{
+      height: 52px;
+      background: rgba(238, 238, 238, 0.3);
+      width: 100%;
+      margin-top: 40px;
+      .MuiInputLabel-formControl{
+        left: 10px;
+        top: 4px;
+      }
+      .MuiInput-input{
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+
+.verify-otp-container {
+  min-height: 100%;
+  max-width: 614px;
+  background-color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .img-lock{
+    width: 20px;
+    height: 20px;
+  }
+  .reset-title{
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 32px;
+    color:#000000;
+    margin-bottom: 50px;
+  };
+  .enter-pin-subtitle{
+    font-size: 13px;
+    line-height: 22px;
+    color: var(--steelgrey);
+    margin: 10px 0px 15px 5px;
+  };
+  .clickable-text-ele{
+    margin-top: 82px;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 15px;
+    letter-spacing: 1px;
+  }
+}

@@ -171,7 +171,7 @@
       .kaim-terms-info {
         margin-left: 10px;
 
-        a {
+        .terms-text {
           color: var(--primary);
           font-weight: 600;
           cursor: pointer;
@@ -361,7 +361,7 @@
   }
 
   .status-info-title {
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 700;
     line-height: 32px;
     margin: 30px 0 10px 0;

@@ -4,7 +4,7 @@ import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import { isEmpty } from "lodash";
 import { authCheckApi, generateOtp } from "../function";
-import "./Style.scss";
+import "./commonStyles.scss";
 
 const product = getConfig().productName;
 class VerifyDetailDialog extends Component {
@@ -45,7 +45,8 @@ class VerifyDetailDialog extends Component {
             },
           });
         }
-      } else if (result.is_user === true) {
+      } else if (result.is_user === true) { 
+        result.user.data = data;
         this.props.showAccountAlreadyExist(true, result.user);
       }
     }
@@ -56,6 +57,7 @@ class VerifyDetailDialog extends Component {
       state: {
         communicationType: this.props?.type,
         contactValue: this.props?.data?.contact_value,
+        edit: true,
       },
     });
   };

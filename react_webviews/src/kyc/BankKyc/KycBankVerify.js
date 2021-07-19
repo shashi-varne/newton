@@ -3,8 +3,7 @@ import Container from "../common/Container";
 import { isEmpty } from "utils/validators";
 import { navigate as navigateFunc, isTradingEnabled } from "utils/functions";
 import { PATHNAME_MAPPER } from "../constants";
-import { checkPanFetchStatus, isDigilockerFlow } from "../common/functions";
-import { getFlow } from "../common/functions";
+import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow } from "../common/functions";
 import { saveBankData, getBankStatus } from "../common/api";
 import toast from "../../common/ui/Toast";
 import PennyDialog from "../mini-components/PennyDialog";
@@ -30,7 +29,7 @@ const KycBankVerify = (props) => {
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
-  const {kyc} = useUserKycHook();
+  const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -46,11 +45,11 @@ const KycBankVerify = (props) => {
   };
 
   const handleClick = async () => {
-    sendEvents('next')// to be verified
+    sendEvents('next')
     try {
       setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bankData.bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
       if (result.code === "ERROR") {
         toast(result.message);
       } else if (kyc.address.meta_data.is_nri) {
@@ -60,6 +59,7 @@ const KycBankVerify = (props) => {
       }
     } catch (err) {
       console.log(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -88,7 +88,10 @@ const KycBankVerify = (props) => {
   const checkBankStatusStep1 = async () => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         clearInterval(countdownInterval);
         setCountdownInterval(null);
@@ -104,8 +107,13 @@ const KycBankVerify = (props) => {
           setIsPennyFailed(true);
         }
       }
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
+      clearInterval(countdownInterval);
+      setCountdownInterval(null);
+      setIsPennyOpen(false);
+      setIsPennyFailed(true);
     }
   };
 
@@ -113,7 +121,10 @@ const KycBankVerify = (props) => {
     try {
       const result = await getBankStatus({ bank_id: bankData.bank_id });
       setIsPennyOpen(false);
-      if (!result) return;
+      if (!result) throw new Error("No result. Something went wrong");
+      if (result.code === "ERROR") {
+        throw new Error(result.message);
+      }
       if (result.records.PBI_record.bank_status === "verified") {
         setIsPennySuccess(true);
       } else if (result.records.PBI_record.user_rejection_attempts === 0) {
@@ -121,20 +132,22 @@ const KycBankVerify = (props) => {
       } else {
         setIsPennyFailed(true);
       }
+      updateKyc(result.kyc);
     } catch (err) {
       console.log(err);
+      setIsPennyFailed(true);
     }
   };
 
   const checkBankDetails = () => {
-    sendEvents("check bank details", "bottom_sheet");
+    sendEvents("check_bank_details", "unable_to_add_bank");
     navigate(`/kyc/${userType}/bank-details`, {
       state: { isEdit: true }
     });
   };
 
   const uploadDocuments = () => {
-    sendEvents("upload documents", "bottom_sheet");
+    sendEvents("upload_documents", "unable_to_add_bank");
     navigate(`/kyc/${userType}/upload-documents`);
   };
 
@@ -144,9 +157,11 @@ const KycBankVerify = (props) => {
       else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else {
           navigate(PATHNAME_MAPPER.tradingExperience);
         }
@@ -155,6 +170,32 @@ const KycBankVerify = (props) => {
       }
     }
   };
+
+  // const handleSuccess = () => {
+  //   if (userType === "compliant") {
+  //     if (isEdit) goToJourney();
+  //     else {
+  //       if (kyc.sign.doc_status !== "submitted" && kyc.sign.doc_status !== "approved") {
+  //         navigate(PATHNAME_MAPPER.uploadSign, {
+  //           state: {
+  //             backToJourney: true,
+  //           },
+  //         });
+  //       } else goToJourney();
+  //     }
+  //   } else {
+  //     if (dl_flow) {
+  //       if (
+  //         (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+  //         kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+  //         kyc.all_dl_doc_statuses.pan_fetch_status === "failed") &&
+  //         kyc.pan.doc_status !== "approved"
+  //       ) {
+  //         navigate(PATHNAME_MAPPER.uploadPan);
+  //       } else navigate(PATHNAME_MAPPER.kycEsign);
+  //     } else navigate(PATHNAME_MAPPER.uploadProgress);
+  //   }
+  // };
 
   const handleSdkNavigation = () => {
     if (userType === "compliant") {
@@ -171,9 +212,11 @@ const KycBankVerify = (props) => {
       // }
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else navigate(PATHNAME_MAPPER.kycEsign);
       } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
@@ -188,7 +231,7 @@ const KycBankVerify = (props) => {
   };
 
   const goToJourney = () => {
-    sendEvents("next", "bottom_sheet");
+    sendEvents("try_later", "unable_to_add_bank");
     navigate(PATHNAME_MAPPER.journey)
   };
 
@@ -201,37 +244,33 @@ const KycBankVerify = (props) => {
 
   const sendEvents = (userAction, screen_name) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": screen_name || "verify_bank_account",
-        "initial_kyc_status": kyc.initial_kyc_status,
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: screen_name || "verify_bank_account",
         "flow": getFlow(kyc) || ""
-      }
+        // "initial_kyc_status": kyc.initial_kyc_status,
+      },
     };
-    if(screen_name === 'bottom_sheet') {
-        if(isPennySuccess)
-          eventObj.properties.status = 'bank added';
-        else if(isPennyFailed)
-          eventObj.properties.status = 'bank not added';          
-        //  else  if() // to be checked for error
-        //   eventObj.properties.status = 'error screen';         
-        else  if(isPennyExhausted)
-          eventObj.properties.status = 'unable to add bank attempts exhausted';         
-        else
-          eventObj.properties.status = '';
+    if (screen_name === "unable_to_add_bank") {
+      if (isPennySuccess) eventObj.properties.status = "bank added";
+      else if (isPennyFailed) eventObj.properties.status = "bank not added";
+      else if (isPennyExhausted)
+        eventObj.properties.status = "unable to add bank attempts exhausted";
+      else eventObj.properties.status = "";
     }
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
       buttonTitle="VERIFY BANK ACCOUNT"
       events={sendEvents("just_set_events")}
+      skelton={isLoading}
       showLoader={isApiRunning}
       noFooter={isEmpty(bankData)}
       handleClick={handleClick}

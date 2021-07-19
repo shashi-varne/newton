@@ -30,7 +30,7 @@ class RadioGrp extends Component {
       index = '';
     }
               
-    if(this.props.disabled) {
+    if(this.props.disabled || this.props.disabledWithValue) {
       return;
     }
     this.props.onChange(index);

@@ -29,6 +29,8 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
               'email',
               'occupation',
               'gross_annual_income',
+              'email_verified',
+              'mobile_number_verified',
             ],
           },
           {
@@ -82,6 +84,9 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
     if (TRADING_ENABLED) {
       journeyData = [...journeyData, ...tradingJourneyData];
     }
+    if(kyc.address.meta_data.is_nri) {
+      journeyData[1].inputsForStatus.push({name: 'nri_address', keys: ['pincode']})
+    }
   } else if (!isCompliant && show_aadhaar) {
     journeyData = [
       {
@@ -107,8 +112,15 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         inputsForStatus: [
           { name: 'pan', keys: ['name', 'father_name', 'mother_name'] },
           {
-            name: 'identification',
-            keys: ['email', 'mobile_number', 'gender', 'marital_status'],
+            name: "identification",
+            keys: [
+              "email",
+              "mobile_number",
+              "gender",
+              "marital_status",
+              "email_verified",
+              "mobile_number_verified",
+            ],
           },
           {
             name: 'nomination',
@@ -170,14 +182,20 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
             keys: ['name', 'dob', 'father_name', 'mother_name'],
           },
           {
-            name: 'identification',
-            keys: ['email', 'mobile_number', 'gender', 'marital_status'],
+            name: "identification",
+            keys: [
+              "email",
+              "mobile_number",
+              "gender",
+              "marital_status",
+              "email_verified",
+              "mobile_number_verified",
+            ],
           },
           {
             name: 'nomination',
             keys: ['name', 'dob', 'relationship'],
           },
-          // { name: "nomination", keys: ["name", "dob", "relationship"] }
         ],
       },
       {
@@ -187,7 +205,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
         isEditAllowed: true,
         inputsForStatus: [
           { name: 'address', keys: ['pincode'] },
-          { name: 'nomination', keys: ['address'] },
+          // { name: 'nomination', keys: ['address'] },
         ],
       },
       {
@@ -215,6 +233,7 @@ export const getJourneyData = (kyc, isCompliant, show_aadhaar) => {
     ]
 
     if(!isCompliant && kyc?.address?.meta_data?.is_nri) {
+      journeyData[2].inputsForStatus.push({name: 'nri_address', keys: ['pincode']})
       journeyData[3].inputsForStatus.push('nri_address')
     }
 

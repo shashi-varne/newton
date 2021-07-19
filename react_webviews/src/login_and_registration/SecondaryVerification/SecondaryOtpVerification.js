@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import WVClickableTextElement from "../common/ui/ClickableTextElement/WVClickableTextElement";
-import Container from "../dashboard/common/Container";
-import { initialize } from "./function";
-import OtpComp from "./otp/reset_opt";
-import "./Otp.scss";
+import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
+import Container from "../../dashboard/common/Container";
+import { initialize } from "../function";
+import OtpComp from "../Otp/reset_opt";
+import "../commonStyles.scss";
 import { toast } from "react-toastify";
 
 export class SecondaryOtpVerification extends Component {
@@ -47,10 +47,6 @@ export class SecondaryOtpVerification extends Component {
       otpData: { ...this.state.otpData, otp },
     });
   };
-  resendOtpVerification = () => {
-    console.log("RESEND OTP");
-  };
-
 
 
   handleClick = () => {
@@ -78,7 +74,7 @@ export class SecondaryOtpVerification extends Component {
           <div className="verify-otp-header">
             <p>
               An OTP has been sent to{" "}
-              <span style={{ fontWeight: "500", marginRight: "23px" }}>{this.state.mobile_number}</span>
+              <span style={{ fontWeight: "500", marginRight: "23px" }}>{this.state.value}</span>
             </p>
             <WVClickableTextElement onClick={() => this.navigate('/secondary-verification', {
               state: {

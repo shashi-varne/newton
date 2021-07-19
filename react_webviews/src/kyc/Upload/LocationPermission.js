@@ -25,6 +25,11 @@ const PAGE_TYPE_CONTENT_MAP = {
     title: 'Allow location access',
     subtitle: 'As per SEBI, we need to capture your location while you take the selfie',
   },
+  'verifying-location': {
+    imgElem: locationIcon,
+    title: 'Verifying location access',
+    subtitle: 'As per SEBI, we need to capture your location while you take the selfie',
+  },
   'invalid-region': {
     imgElem: foreignLocationIcon,
     title: 'You cannot proceed with KYC',
@@ -44,8 +49,9 @@ const LocationPermission = ({
   onInit, // callback to trigger (if any) for when google geocoder module is initialised
   onLocationFetchSuccess,
   onLocationFetchFailure,
+  sendEvents
 }) => {
-  const [pageType, setPageType] = useState('permission-denied');
+  const [pageType, setPageType] = useState('verifying-location');
   const [pageContent, setPageContent] = useState({});
   const [permissionWarning, setPermissionWarning] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(true);
@@ -75,6 +81,7 @@ const LocationPermission = ({
   
   const locationCallbackSuccess = async (data) => {
     if (data.location_permission_denied) {
+      setPageType('permission-denied');
       setPermissionWarning(true);
       setIsApiRunning(false);
     } else {
@@ -123,8 +130,14 @@ const LocationPermission = ({
     if (pageType === 'invalid-region') {
       onClose(pageType);
     } else {
+      sendEvents('next', 'allow_location_access');
       requestLocnPermission();
     }
+  }
+
+  const onCloseIconClick = () => {
+    sendEvents('back', 'allow_location_access');
+    onClose(pageType);
   }
 
   if (!isOpen) {
@@ -136,7 +149,7 @@ const LocationPermission = ({
       open={isOpen}
       onClose={() => onClose(pageType)}
     >
-      <WVFullscreenDialog.Content onCloseClick={() => onClose(pageType)}>
+      <WVFullscreenDialog.Content onCloseClick={onCloseIconClick}>
         <div className="kyc-loc-permission">
           <div className="kyc-loc-perm-illustration">
             {pageContent?.imgElem}

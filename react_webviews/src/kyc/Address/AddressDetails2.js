@@ -182,22 +182,27 @@ const AddressDetails2 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "address_details_2",
-        "pincode_entered":  form_data.pincode ? "yes" : "no",
-        "address_entered":  form_data.addressline ? "yes" : "no",
-        "nominee_pincode_entered":  form_data.pincode ? "yes" : "no",
-        "nominee_address_entered":  form_data.addressline ? "yes" : "no"
-        }
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "address_details_2",
+        pincode_entered: form_data.pincode ? "yes" : "no",
+        address_entered: form_data.addressline ? "yes" : "no",
+        nominee_pincode_entered: kyc?.nomination?.meta_data?.pincode
+          ? "yes"
+          : "no",
+        nominee_address_entered: kyc?.nomination?.meta_data?.addressline
+          ? "yes"
+          : "no",
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
+  
   return (
     <Container
       events={sendEvents("just_set_events")}

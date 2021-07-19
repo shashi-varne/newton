@@ -14,11 +14,12 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
-import VerifyDetailDialog from "../../../../login_and_registration/bottomsheet/VerifyDetailDialog";
-import AccountAlreadyExistDialog from "../../../../login_and_registration/bottomsheet/AccountAlreadyExistDialog";
+import VerifyDetailDialog from "../../../../login_and_registration/components/VerifyDetailDialog";
+import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
 import { generateOtp } from "../../../../login_and_registration/function";
+import { Imgc } from "../../../../common/ui/Imgc";
 
-const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout", "/verify-otp"]
+const fromLoginStates = ["/login", "/mobile/verify", "/logout", "/verify-otp"]
 const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {
@@ -92,7 +93,9 @@ class Landing extends Component {
 
   addBank = () => {
     const userKyc = this.state.userKyc || {};
-    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`, {
+      state: { goBack: "/invest" }
+    });
   };
 
   updateDocument = () => {
@@ -130,24 +133,25 @@ class Landing extends Component {
     this.setState({
       accountAlreadyExists: show,
       accountAlreadyExistsData: data,
-      verifyDetails: false
+      verifyDetails: false,
+      contact_type: data?.data?.contact_type,
+      contact_value: data?.data?.contact_value,
     })
   }
 
   continueAccountAlreadyExists = async (type, data) => {
     let body = {};
     if (type === "email") {
-      body.email = data?.email;
+      body.email = data?.data?.contact_value;
     } else {
-      body.mobile = data?.mobile;
+      body.mobile = data?.data?.contact_value
       body.whatsapp_consent = true;
-    } // by default should this be true or false in case of bottomsheet?
+    }
     const otpResponse = await this.generateOtp(body);
     if (otpResponse) {
       this.navigate("secondary-otp-verification", {
         state: {
-          mobile_number: data?.contact_value,
-          forgot: false, // flag to be checked
+          value: data?.contact_value,
           otp_id: otpResponse.pfwresponse.result.otp_id,
         },
       });
@@ -155,14 +159,15 @@ class Landing extends Component {
   };
 
   editDetailsAccountAlreadyExists = () => {
-    this.navigate("/kyc/communication-details", {
+    this.navigate("/secondary-verification", {
       state: {
         page: "landing",
         edit: true,
+        communicationType: this.state.contact_type,
+        contactValue: this.state.contact_value,
       },
     });
   };
-  // Email mobile verification end
 
 
   handleKycPremiumLanding = () => {
@@ -199,7 +204,6 @@ class Landing extends Component {
     handleCampaignRedirection(campLink);
   }
 
-  
   render() {
     const {
       isReadyToInvestBase,
@@ -216,6 +220,9 @@ class Landing extends Component {
       verifyDetails,
       accountAlreadyExists,
       stateParams,
+      tradingEnabled,
+      kycButtonLoader,
+      stocksButtonLoader
     } = this.state;
     const {
       ourRecommendations,
@@ -250,7 +257,8 @@ class Landing extends Component {
           {
             !kycStatusLoader &&
             <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
-              {isReadyToInvestBase 
+              {((!tradingEnabled && isReadyToInvestBase) ||
+-                (tradingEnabled && isEquityCompletedBase)) 
                 ? " Your KYC is verified, You’re ready to invest"
                 : "Invest in your future"}
             </div>
@@ -271,7 +279,8 @@ class Landing extends Component {
                 case "kyc":
                   return (
                     <React.Fragment key={index}>
-                      {!isReadyToInvestBase && kycStatusData && !kycStatusLoader && (
+                      {(!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
+-                      (tradingEnabled && !isEquityCompletedBase))) ? (
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
@@ -279,7 +288,7 @@ class Landing extends Component {
                             backgroundImage: `url(${require(`assets/${productName}/${kycStatusData.icon}`)})`,
                           }}
                           onClick={() =>
-                            this.clickCard("kyc", kycStatusData.title)
+                            !kycButtonLoader && !stocksButtonLoader && this.clickCard("kyc", kycStatusData.title)
                           }
                         >
                           <div className="title">{kycStatusData.title}</div>
@@ -292,9 +301,10 @@ class Landing extends Component {
                             classes={{
                               button: "invest-landing-button",
                             }}
+                            showLoader={kycButtonLoader}
                           />
                         </div>
-                      )}
+                      ): null}
                     </React.Fragment>
                   );
                 case "stocks":
@@ -302,13 +312,15 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEquityCompletedBase && (
                         <div className="invest-main-top-title" 
-                          onClick={() => this.clickCard("stocks") } 
+                          onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
                           data-aid='stocks-title'
                         >
                           <WVButton
                             variant='contained'
                             size='large'
                             color="secondary"
+                            disabled={kycStatusLoader}
+                            showLoader={stocksButtonLoader}
                             // fullWidth
                           >
                             Stocks
@@ -384,7 +396,7 @@ class Landing extends Component {
                                     src={require(`assets/${productName}/${item.icon_line}`)}
                                     alt=""
                                   />
-                                  <img
+                                  <Imgc
                                     src={require(`assets/${productName}/${item.icon}`)}
                                     alt=""
                                     className="icon"
@@ -433,10 +445,10 @@ class Landing extends Component {
                                   >
                                     <div className="content">
                                       <div className="title"  data-aid={`financial-tool-title-${data.key}`}>{data.title}</div>
-                                      <img
+                                      <Imgc
                                         src={require(`assets/${productName}/${data.icon}`)}
                                         alt=""
-                                        className="icon"
+                                        className="ft-icon"
                                       />
                                     </div>
                                     <div className="subtitle" data-aid={`financial-tool-subtitle-${data.key}`}>

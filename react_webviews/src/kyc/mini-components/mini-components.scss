@@ -42,71 +42,36 @@
   }
 }
 
-.ipv-know-more-dialog {
-  .MuiDialog-paper {
-    margin: 0 !important;
+.know-more-dialog-content {
+  color: var(--dark);
+  line-height: 1.5;
+  padding-bottom: 10px;
+
+  .title {
+    font-size: 17px;
+    color: var(--dark);
+    font-weight: 700;
   }
 
-  .know-more-dialog-content {
-    color: #333333;
-    line-height: 1.5;
-    padding: 15px 15px 10px 15px;
+  .content {
+    text-align: center;
 
-    header {
-      width: 40px;
-      padding-bottom: 40px;
-      cursor: pointer;
-
-      .close-icon {
-        width: 15px;
-        height: 15px;
-      }
-    }
-
-    main {
-      padding-bottom: 30px;
-
-      .title {
-        font-size: 20px;
-        color: #160d2e;
-        font-weight: 600;
-      }
-
-      .content {
-        text-align: center;
-
-        .text {
-          font-size: 14px;
-          color: #160d2e;
-          text-align: left;
-          padding: 15px 0 5px 0;
-
-          b {
-            font-weight: 600;
-          }
-        }
-      }
+    .text {
+      font-size: 13px;
+      color: var(--steelgrey);
+      text-align: left;
+      padding: 15px 0 5px 0;
     }
   }
-
-  .action {
-    width: 100% !important;
-    padding: 0 15px;
-    margin: 8px 0 !important;
-
-    button {
-      color: white;
-      background-color: var(--secondary);
-      width: 100%;
-      text-align: center;
-      margin: 0;
-    }
-
-    button:hover {
-      color: white;
-      background-color: var(--secondary);
-    }
+  
+  .second-step-content {
+    padding-top: 40px;
   }
+}
+
+.kipv-knowmore-button {
+  padding: 14px 0 !important;
+  width: 100% !important;
 }
 
 #kyc-journey-back {
@@ -288,7 +253,7 @@
       align-items: center;
       justify-content: flex-end;
 
-      .confirm-back-button  {
+      .confirm-back-button {
         background-color: transparent;
         width: fit-content;
         padding: 15px 0 0 !important;
@@ -371,7 +336,7 @@
   color: var(--dark);
 }
 
-.kyc-upload-container {  
+.kyc-upload-container {
   .kuc-upload {
     margin-top: 10px;
     padding: 5px;
@@ -385,7 +350,7 @@
       margin-bottom: 5px;
     }
   }
-  
+
   .kuc-action-btn {
     background-color: white !important;
     display: flex;

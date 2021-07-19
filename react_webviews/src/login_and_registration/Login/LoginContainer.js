@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./Style.scss";
+import "./loginStyle.scss";
 import { getConfig } from "utils/functions";
 
 const config = getConfig();
@@ -24,7 +24,6 @@ class LoginContainer extends Component {
           <div className="left-image">
             <img src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
           </div>
-          {/* <LoginForm /> */}
           {this.props.children}
         </div>
       </div>

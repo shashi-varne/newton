@@ -7,11 +7,10 @@ import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { upload } from '../common/api'
 import { getConfig, isTradingEnabled, navigate as navigateFunc } from '../../utils/functions'
 import toast from '../../common/ui/Toast'
-import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved, isNotManualAndNriUser } from '../common/functions'
+import { checkDocsPending, isDigilockerFlow, isDocSubmittedOrApproved } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import PanUploadStatus from "../Equity/mini-components/PanUploadStatus";
-import "./commonStyles.scss";
 import { nativeCallback } from '../../utils/native_callback'
 
 const config = getConfig();
@@ -28,6 +27,7 @@ const Pan = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
   const [areDocsPending, setDocsPendingStatus] = useState();
   const [tradingEnabled, setTradingEnabled] = useState();
+  const [isPanAvailable, setIsPanAvailable] = useState(false);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -42,36 +42,47 @@ const Pan = (props) => {
     const docStatus = await checkDocsPending(kyc);
     setDocsPendingStatus(docStatus);
     setTradingEnabled(isTradingEnabled(kyc))
+    setIsPanAvailable(isDocSubmittedOrApproved("equity_pan"));
   }
 
   const onFileSelectComplete = (newFile, fileBase64) => {
+    sendEvents("attach_document");
     setFile(newFile);
     setFileToShow(fileBase64);
   }
 
   const onFileSelectError = (error) => {
+    sendEvents("attach_document");
     toast('Please select image file only');
+  }
+
+  const commonRedirection = () => {
+    if (!isDocSubmittedOrApproved("equity_identification")) {
+      navigate(PATHNAME_MAPPER.uploadSelfie);
+    } else {
+      if (!isDocSubmittedOrApproved("equity_income")) {
+        navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
+      } else {
+        if (areDocsPending) {
+          navigate(PATHNAME_MAPPER.documentVerification);
+        } else {
+          navigate(PATHNAME_MAPPER.kycEsign);
+        }
+      }
+    }
   }
 
   const handleOtherPlatformNavigation = () => {
     if (kyc.kyc_status === 'compliant') {
-      if (!isDocSubmittedOrApproved("equity_identification")) {
-        navigate(PATHNAME_MAPPER.uploadSelfie);
-      } else {
-        if (!isDocSubmittedOrApproved("equity_income")) {
-          navigate(PATHNAME_MAPPER.uploadFnOIncomeProof);
-        } else {
-          if (areDocsPending) {
-            navigate(PATHNAME_MAPPER.documentVerification);
-          } else {
-            navigate(PATHNAME_MAPPER.kycEsign);
-          }
-        }
-      }
+      commonRedirection();
     } else {
       if (dlFlow) {
         if (kyc.equity_sign_status !== 'signed') {
-          navigate(PATHNAME_MAPPER.tradingExperience);
+          if (isPanAvailable && !kyc.equity_data.meta_data.trading_experience) {
+            navigate(PATHNAME_MAPPER.tradingExperience);
+          } else {
+            commonRedirection();
+          }
         } else {
           navigate(PATHNAME_MAPPER.journey);
         }
@@ -90,6 +101,7 @@ const Pan = (props) => {
   };
 
   const handleNavigation = () => {
+    sendEvents("next", "pan_uploaded")
     if (tradingEnabled) {
       handleOtherPlatformNavigation();
     } else {
@@ -98,7 +110,6 @@ const Pan = (props) => {
   }
 
   const handleSubmit = async () => {
-    if (isOpen) setIsOpen(false)
     sendEvents('next')
     try {
       const data = {};
@@ -119,12 +130,8 @@ const Pan = (props) => {
         if(!isEmpty(result)) {
           updateKyc(result.kyc)
         }
-        if (isNotManualAndNriUser(result.kyc)) {
-          setBottomSheetType('success');
-          setIsOpen(true);
-        } else {
-          handleNavigation();
-        }
+        setBottomSheetType('success');
+        setIsOpen(true);
       }
     } catch (err) {
       toast(err?.message)
@@ -134,13 +141,24 @@ const Pan = (props) => {
     }
   }
 
-  const sendEvents = (userAction, type) => {
+  const handleCloseBottomSheet = () => {
+    setIsOpen(false);
+  }
+
+  const handleRetryClick = () => {
+    sendEvents("next", "pan_details_mismatch");
+    handleCloseBottomSheet();
+    setFile(null);
+    setFileToShow(null);
+  }
+
+  const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
+      "event_name": tradingEnabled ? 'trading_onboarding' : 'kyc_registration',
       "properties": {
         "user_action": userAction || "",
-        "screen_name": "pan_doc",
-        "type": type || "",
+        "screen_name": screenName || "upload_pan",
+        // "type": type || "",
       }
     };
     if (userAction === 'just_set_events') {
@@ -182,12 +200,15 @@ const Pan = (props) => {
             />
             <KycUploadContainer.Button
               withPicker
-              showOptionsDialog
-              nativePickerMethodName="open_gallery"
-              fileName="pan"
-              onFileSelectComplete={onFileSelectComplete}
-              onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_IMAGE_TYPES}
+              filePickerProps={{
+                showOptionsDialog: true,
+                shouldCompress: true,
+                nativePickerMethodName: "open_gallery",
+                fileName: "pan",
+                onFileSelectComplete: onFileSelectComplete,
+                onFileSelectError: onFileSelectError,
+                supportedFormats: SUPPORTED_IMAGE_TYPES
+              }}
             />
           </KycUploadContainer>
           <div className="doc-upload-note-row" data-aid='doc-upload-note-row'>
@@ -202,20 +223,20 @@ const Pan = (props) => {
               KNOW MORE
             </WVClickableTextElement>
           </div>
-          {tradingEnabled && kyc.kyc_type !== "manual" && bottomSheetType &&
+          {bottomSheetType &&
             <PanUploadStatus
               status={bottomSheetType}
               isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
+              onClose={handleCloseBottomSheet}
               disableBackdropClick
-              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleSubmit}
+              onCtaClick={bottomSheetType === "success" ? handleNavigation : handleRetryClick}
               kyc={kyc}
             />
           }
         </section>
       )}
     </Container>
-  )
+  );
 }
 
 export default Pan

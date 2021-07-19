@@ -17,7 +17,7 @@ class MyaccountDetails extends Component {
         if (prevProp.contacts !== this.props.contacts) {
             const contacts = this.props.contacts;
             const auth_type = contacts?.auth_type;
-            const verification_done = contacts?.verification_done || false; // change This
+            const verification_done = contacts?.verification_done || false;
             let contact_value = "";
 
             if (verification_done) {
@@ -47,16 +47,6 @@ class MyaccountDetails extends Component {
             return;
         }
         else if (result?.is_user) {
-            // result = {
-            //     "message": "User found",   // REMOVE THIS
-            //     "is_user": true,
-            //     "user": {
-            //         "mobile": "9738950664",
-            //         "pan_number": "HPDPK****K",
-            //         "user_id": "4693250414739457",
-            //         "email": "op********st@yopmail.com"
-            //     }
-            // }
             result.user.from = "my-account"
             this.props.showAccountAlreadyExist(true, result.user, contact_type);
         }
@@ -85,26 +75,6 @@ class MyaccountDetails extends Component {
 
 
 const UserDetails = (props) => {
-
-    // if (props.contacts) {                                       // REMOVE THIS
-    //     props.contacts.unverified_email_contacts = [
-    //         {
-    //             contact_type: "email",
-    //             contact_value: "srikantagowda07@gmail.com",
-    //             contact_verified: true,
-    //             dt_created: "21/06/2021 07:58",
-    //             dt_updated: "21/06/2021 14:20",
-    //             id: 2055,
-    //             is_auth: true,
-    //             sms_consent: true,
-    //             sms_subscribed: true,
-    //             user_id: "6586478659371009",
-    //             whatsapp_consent: true,
-    //             whatsapp_subscribed: true,
-    //         }
-    //     ]
-    // }
-
     return (<MyaccountDetails {...props} />)
 }
 

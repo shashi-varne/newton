@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Login from './login_and_registration/Login';
-// import Register from './login_and_registration/Register';
-import Otp from './login_and_registration/otp/Otp';
-// import ForgotPassword from './login_and_registration/ForgotPassword';
-import Logout from './login_and_registration/Logout';
+import Login from './login_and_registration/Login/Login.js';
+import Otp from './login_and_registration/Otp/Otp.js';
+import Logout from './login_and_registration/Login/Logout.js';
+import PinChangedLoginAgain from './login_and_registration/2fa/PinChangedLoginAgain';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
 import WealthReport from './wealth_report';
-import SocialCallback from './login_and_registration/SocialCallback';
 
 
 import { create } from 'jss';
@@ -24,11 +22,11 @@ import DesktopLayout from './desktopLayout';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 
-import Partner from "./partner"
 import Feature from './Feature';
 import NotFound from './common/components/NotFound';
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig} from './utils/functions';
+import ComponentTest from './ComponentTest';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
 
@@ -92,13 +90,10 @@ const App = () => {
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
               <Route path='/login' component={Login} />
-              {/* <Route path='/register' component={Register} /> */}
               <Route path='/verify-otp' component={Otp} />
-              {/* <Route path='/forgot-password' component={ForgotPassword} /> */}
-              <Route path='/social/callback' component={SocialCallback} />
+              <Route path='/pin-changed-login-again' component={PinChangedLoginAgain} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
-              <Route path='/partner' component={Partner} />
               {
                 isMobileDevice ?
                 <Route component={Feature}/>:
@@ -106,6 +101,7 @@ const App = () => {
                   <Feature />
                 </DesktopLayout>
               }
+              <Route path='/component-test' component={ComponentTest} />
               <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>

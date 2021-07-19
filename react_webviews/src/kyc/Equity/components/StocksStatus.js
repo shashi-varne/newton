@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../common/ui/Button";
+import { SkeltonRect } from 'common/ui/Skelton';
 import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
 import { nativeCallback } from "../../../utils/native_callback";
-import { isEmpty } from "../../../utils/validators";
+import { isEmpty, storageService } from "../../../utils/validators";
+import { getUserKycFromSummary } from "../../common/api";
 import Container from "../../common/Container";
 import useUserKycHook from "../../common/hooks/userKycHook";
 import { getKycAppStatus } from "../../services";
 import "./commonStyles.scss";
+import Toast from "../../../common/ui/Toast";
 
 const productName = getConfig().productName;
 const STATUS_MAPPER = {
@@ -40,7 +43,13 @@ const config = getConfig();
 const StocksStatus = (props) => {
   const navigate = navigateFunc.bind(props);
   const [data, setData] = useState({});
-  const { kyc, isLoading } = useUserKycHook();
+  const [isApiRunning, setIsApiRunning] = useState(false);
+  const { kyc, isLoading, updateKyc } = useUserKycHook();
+  const stateParams = props.location?.state || {};
+
+  useEffect(() => {
+    initialize();
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -55,6 +64,24 @@ const StocksStatus = (props) => {
       }
     }
   }, [kyc]);
+
+  const initialize = async () => {
+    const landingScreens = ["/landing", "/", "/invest"]
+    if(landingScreens.includes(stateParams.fromState) && !isEmpty(kyc)) {
+      return;
+    }
+    try {
+      setIsApiRunning(true);
+      await getUserKycFromSummary();
+      let kycDetails = storageService().getObject("kyc") || {};
+      updateKyc(kycDetails);
+    } catch (ex) {
+      console.log(ex.toString());
+      Toast(ex.message || "Something went wrong");
+    } finally {
+      setIsApiRunning(false);
+    }
+  }
 
   const handleClick = () => {
     if (data.status === "incomplete") {
@@ -89,7 +116,16 @@ const StocksStatus = (props) => {
       data-aid="Stocks-screen"
       headerData={{ goBack }}
     >
-      {!isEmpty(data) && (
+      {isApiRunning && (
+        <SkeltonRect
+        style={{
+          width: '100%',
+          height: '180px',
+          marginBottom: "15px",
+        }}
+      />
+      )}
+      {!isApiRunning && !isEmpty(data) && (
         <div
           data-aid="stocks-status-card"
           className="stocks-status-card"
