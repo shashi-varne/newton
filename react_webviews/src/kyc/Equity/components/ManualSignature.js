@@ -11,7 +11,6 @@ import { getKRAForm } from "../../common/api"
 import "./commonStyles.scss";
 import { getConfig, navigate as navigateFunc } from '../../../utils/functions';
 import Toast from '../../../common/ui/Toast';
-import { open_browser_web } from '../../../utils/validators';
 import { openPdf } from '../../common/functions';
 
 const config = getConfig();
