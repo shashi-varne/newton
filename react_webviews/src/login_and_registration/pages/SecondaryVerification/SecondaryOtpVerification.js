@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import WVClickableTextElement from "../../../common/ui/ClickableTextElement/WVClickableTextElement";
 import Container from "../../../dashboard/common/Container";
 import { initialize } from "../../functions";
-import OtpComp from "../../Pages/Otp/reset_opt";
+import OtpComp from "../Otp/reset_opt";
 import "./secondaryStyle.scss";
 import { toast } from "react-toastify";
 
