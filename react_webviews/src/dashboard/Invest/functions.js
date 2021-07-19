@@ -31,6 +31,8 @@ export async function initialize() {
   this.initilizeKyc = initilizeKyc.bind(this);
   this.openKyc = openKyc.bind(this);
   this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
+  this.handleCampaign = handleCampaign.bind(this);
+  this.closeCampaignDialog = closeCampaignDialog.bind(this);
   let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
   if ( (this.state.screenName === "invest_landing" || this.state.screenName === "sdk_landing" ) && dataSettedInsideBoot) {
     storageService().set("dataSettedInsideBoot", false);
@@ -548,4 +550,36 @@ export function dateValidation(endDate, startDate) {
     return true;
   }
   return false;
+}
+
+export function handleCampaign() {
+  this.setState({show_loader : 'page', openBottomSheet : false});
+  const { bottom_sheet_dialog_data = {} } = this.state
+  const campLink = bottom_sheet_dialog_data.url;
+  if(bottom_sheet_dialog_data.campaign_name === "insurance_o2o_campaign"){
+    hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
+    return;
+  }
+  handleCampaignRedirection(campLink);
+}
+
+export async function hitFeedbackURL(url) {
+  try {
+    const res = await Api.get({ url });
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      return result;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function closeCampaignDialog() {
+  const { bottom_sheet_dialog_data = {} } = this.state
+  if(bottom_sheet_dialog_data.campaign_name === "insurance_o2o_campaign"){
+    hitFeedbackURL(bottom_sheet_dialog_data.action_buttons?.buttons[0]?.feedback_url)
+    return;
+  }
+  this.setState({ openBottomSheet: false })
 }

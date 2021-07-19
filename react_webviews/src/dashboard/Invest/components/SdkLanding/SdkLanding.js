@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize, handleCampaignNotification, handleCampaignRedirection, dateValidation } from '../../functions';
+import { initialize, handleCampaignNotification, dateValidation } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -46,7 +46,6 @@ class SdkLanding extends Component {
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
-    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -91,10 +90,6 @@ class SdkLanding extends Component {
     }
   };
 
-  closeCampaignDialog = () => {
-    this.setState({ openBottomSheet: false });
-  };
-
   handleMarketingBanner = (bannerType="") => () => {
     if(bannerType === '100_sip'){
       this.getRecommendationApi(100);
@@ -102,12 +97,6 @@ class SdkLanding extends Component {
       const path = PATHNAME_MAPPER[bannerType] || "/";
       this.navigate(path);
     }
-  }
-
-  handleCampaign = () => {
-    this.setState({show_loader : 'page', openBottomSheet : false});
-    let campLink = this.state.bottom_sheet_dialog_data.url;
-    handleCampaignRedirection(campLink);
   }
 
   addBank = () => {
