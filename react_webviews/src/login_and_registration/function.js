@@ -22,6 +22,8 @@ export function initialize() {
   this.resendVerificationLink = resendVerificationLink.bind(this);
   this.otpVerification = otpVerification.bind(this);
   this.otpLoginVerification = otpLoginVerification.bind(this);
+  this.authCheckApi = authCheckApi.bind(this);
+  this.generateOtp = generateOtp.bind(this);
   this.resendOtp = resendOtp.bind(this);
   this.resendLoginOtp = resendLoginOtp.bind(this);
   this.forgotPassword = forgotPassword.bind(this);
@@ -753,6 +755,7 @@ export async function authCheckApi(type, data) {
   try {
     this.setState({
       loading: true,
+      isApiRunning: "button"
     });
     // Checking if that id has some other account associated
     const response = await Api.get(
@@ -773,6 +776,7 @@ export async function authCheckApi(type, data) {
   } finally {
     this.setState({
       loading: false,
+      isApiRunning: false
     });
   }
 }

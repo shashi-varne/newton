@@ -31,12 +31,10 @@ export class SecondaryOtpVerification extends Component {
     }
     let { value, otp_id, communicationType } = state;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
-    let forgot = state.forgot;
     this.setState({
       value: value,
       otp_id: otp_id,
       rebalancing_redirect_url: rebalancing_redirect_url,
-      forgot: forgot,
       communicationType: communicationType
     });
     this.initialize();
