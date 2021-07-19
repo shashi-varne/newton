@@ -153,6 +153,7 @@ class Landing extends Component {
         state: {
           value: data?.contact_value,
           otp_id: otpResponse.pfwresponse.result.otp_id,
+          communicationType: type,
         },
       });
     }

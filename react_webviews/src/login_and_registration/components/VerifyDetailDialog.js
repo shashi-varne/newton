@@ -40,8 +40,9 @@ class VerifyDetailDialog extends Component {
         if (otpResponse) {
           this.props.parent.navigate("secondary-otp-verification", {
             state: {
-              mobile_number: data.contact_value,
+              value: data?.contact_value,
               otp_id: otpResponse.otp_id,
+              communicationType: type,
             },
           });
         }
