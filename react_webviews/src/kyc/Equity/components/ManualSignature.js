@@ -74,17 +74,6 @@ const ManualSignature = (props) => {
       const params = { "kyc_product_type": "equity" }
       const result = await getKRAForm(params);
       const formUrl = result?.filled_form_url;
-      // if (config.Web) {
-      //   open_browser_web(formUrl, "");
-      // } else {
-      //   nativeCallback({ 
-      //     action: 'download_on_device', 
-      //     message: { 
-      //       file_name: "KRA_Form.pdf",
-      //       url: formUrl
-      //     } 
-      //   });
-      // }
       if (config.isSdk) {
         setShowLoader(true);
       } 
