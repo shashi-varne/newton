@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { getConfig, navigate as navigateFunc } from "../../utils/functions";
-import { nativeCallback } from "../../utils/native_callback";
-import { storageService } from "../../utils/validators";
-import { logout } from "../function";
+import { getConfig, navigate as navigateFunc } from "../../../utils/functions";
+import { nativeCallback } from "../../../utils/native_callback";
+import { storageService } from "../../../utils/validators";
+import { logout } from "../../functions";
 
 const Logout = (props) => {
   const config = getConfig();

@@ -45,6 +45,7 @@ const CommunicationDetails = (props) => {
   const isEdit = stateParams.isEdit || false;
   const userType = stateParams.userType || "";
   const callHandelClick = stateParams.callHandelClick;
+  const accountAlreadyExistsData = stateParams.accountAlreadyExistsData;
   const [formData, setFormData] = useState({
     whatsappConsent: true,
   });
@@ -70,7 +71,7 @@ const CommunicationDetails = (props) => {
     if (!isEmpty(kyc) && !continueAccountAlreadyExists) {
       initialize();
     }
-    if((callHandelClick && communicationType) || continueAccountAlreadyExists) handleClick();
+    if ((callHandelClick && communicationType) || continueAccountAlreadyExists) handleClick();
   }, [kyc, communicationType, continueAccountAlreadyExists]);
 
   const initialize = async () => {
@@ -96,6 +97,13 @@ const CommunicationDetails = (props) => {
         kyc.identification.meta_data.mobile_number_verified;
       if (data.mobileNumberVerified) {
         data.contact_id = await getContactId(number);
+      };
+    }
+    if (accountAlreadyExistsData) {
+      if (type === "email") {
+        data.email = accountAlreadyExistsData?.contact_value
+      } else {
+        data.mobile = accountAlreadyExistsData?.contact_value
       }
     }
     setFormData({ ...data });
@@ -252,7 +260,7 @@ const CommunicationDetails = (props) => {
           return;
         }
         setShowLoader("button");
-        if (!continueAccountAlreadyExists) {
+        if (!continueAccountAlreadyExists && !stateParams.continueAccountAlreadyExists) {
           const result = await authCheckApi(body, communicationType);
           if (result.is_user) {
             userFound(result);
@@ -313,7 +321,7 @@ const CommunicationDetails = (props) => {
   };
 
   const handleNavigation = () => {
-    if(stateParams?.fromState === "/my-account") {
+    if (stateParams?.fromState === "/my-account") {
       navigate(stateParams?.goBack);
       return;
     }
@@ -355,11 +363,10 @@ const CommunicationDetails = (props) => {
       disable={showDotLoader}
     >
       <div
-        className={`kyc-communication-details ${
-          communicationType === "mobile" &&
+        className={`kyc-communication-details ${communicationType === "mobile" &&
           !showOtpContainer &&
           "kyc-communication-details-mobile"
-        }`}
+          }`}
       >
         <div>
           <div className="kyc-main-subtitle">
@@ -411,39 +418,39 @@ const CommunicationDetails = (props) => {
               />
             </>
           ) : (
-            <TextField
-              label="Mobile number"
-              value={formData.mobile || ""}
-              error={formData.mobile_error ? true : false}
-              helperText={formData.mobile_error}
-              onChange={handleChange("mobile")}
-              type="text"
-              disabled={showLoader || formData.mobileNumberVerified}
-              autoFocus={!formData.mobileNumberVerified}
-              className="kcd-input-field"
-              InputProps={{
-                endAdornment: showOtpContainer && (
-                  <InputAdornment position="end">
-                    <div className="kcd-input-edit" onClick={handleEdit}>
-                      EDIT
+              <TextField
+                label="Mobile number"
+                value={formData.mobile || ""}
+                error={formData.mobile_error ? true : false}
+                helperText={formData.mobile_error}
+                onChange={handleChange("mobile")}
+                type="text"
+                disabled={showLoader || formData.mobileNumberVerified}
+                autoFocus={!formData.mobileNumberVerified}
+                className="kcd-input-field"
+                InputProps={{
+                  endAdornment: showOtpContainer && (
+                    <InputAdornment position="end">
+                      <div className="kcd-input-edit" onClick={handleEdit}>
+                        EDIT
                     </div>
-                  </InputAdornment>
-                ),
-              }}
-              // eslint-disable-next-line
-              inputProps={{
-                disabled: showOtpContainer || formData.mobileNumberVerified,
-                inputMode: "numeric",
-              }}
-            />
-          )}
+                    </InputAdornment>
+                  ),
+                }}
+                // eslint-disable-next-line
+                inputProps={{
+                  disabled: showOtpContainer || formData.mobileNumberVerified,
+                  inputMode: "numeric",
+                }}
+              />
+            )}
           {!showOtpContainer && (
             <div className="kcd-email-subtext">
               {communicationType === "email"
                 ? "We'll keep you updated on your investments"
                 : !formData.mobileNumberVerified
-                ? "We’ll send an OTP to verify your mobile number"
-                : ""}
+                  ? "We’ll send an OTP to verify your mobile number"
+                  : ""}
             </div>
           )}
           {showOtpContainer && (

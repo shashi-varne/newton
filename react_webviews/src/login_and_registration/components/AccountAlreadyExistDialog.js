@@ -39,7 +39,7 @@ export class AccountAlreadyExistDialog extends Component {
       >
         <p className="text">
           Your {type === "email" ? "email address" : "mobile number"} is already
-          registered with {isEmpty(data) && <span>some other account</span>}
+          registered with {(isEmpty(data) && type === "email" ? data?.mobile : data?.email) && <span>some other account</span>}
         </p>
         <div
           style={{

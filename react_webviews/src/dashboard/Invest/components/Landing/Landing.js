@@ -16,10 +16,10 @@ import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
 import VerifyDetailDialog from "../../../../login_and_registration/components/VerifyDetailDialog";
 import AccountAlreadyExistDialog from "../../../../login_and_registration/components/AccountAlreadyExistDialog";
-import { generateOtp } from "../../../../login_and_registration/function";
+import { generateOtp } from "../../../../login_and_registration/functions";
 import { Imgc } from "../../../../common/ui/Imgc";
 
-const fromLoginStates = ["/login", "/mobile/verify", "/logout", "/verify-otp"]
+const fromLoginStates = ["/login", "/logout", "/verify-otp"]
 const isMobileDevice = getConfig().isMobileDevice;
 class Landing extends Component {
   constructor(props) {
@@ -153,6 +153,7 @@ class Landing extends Component {
         state: {
           value: data?.contact_value,
           otp_id: otpResponse.pfwresponse.result.otp_id,
+          communicationType: type,
         },
       });
     }

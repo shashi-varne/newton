@@ -2,7 +2,7 @@ import "./MyAccount.scss";
 import React, { Component } from 'react';
 import WVInPageSubtitle from "../../common/ui/InPageHeader/WVInPageSubtitle";
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
-import { authCheckApi } from "../../login_and_registration/function";
+import { authCheckApi } from "../../login_and_registration/functions";
 // import { isEmpty } from "lodash"
 
 class MyaccountDetails extends Component {
@@ -47,7 +47,8 @@ class MyaccountDetails extends Component {
             return;
         }
         else if (result?.is_user) {
-            result.user.from = "my-account"
+            result.user.from = "my-account";
+            result.user.contact_value = contact_value;
             this.props.showAccountAlreadyExist(true, result.user, contact_type);
         }
     }

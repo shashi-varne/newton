@@ -3,7 +3,7 @@ import { getConfig } from "utils/functions";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import { isEmpty } from "lodash";
-import { authCheckApi, generateOtp } from "../function";
+import { authCheckApi, generateOtp } from "../functions";
 import "./commonStyles.scss";
 
 const product = getConfig().productName;
@@ -34,14 +34,15 @@ class VerifyDetailDialog extends Component {
           body.email = data.contact_value;
         } else {
           body.mobile = data.contact_value;
-          body.whatsapp_consent = true;  // by default should this be true or false in case of bottomsheet?
+          body.whatsapp_consent = true;
         }
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {
           this.props.parent.navigate("secondary-otp-verification", {
             state: {
-              mobile_number: data.contact_value,
+              value: data?.contact_value,
               otp_id: otpResponse.otp_id,
+              communicationType: type,
             },
           });
         }

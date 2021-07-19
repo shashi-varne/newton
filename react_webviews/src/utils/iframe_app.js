@@ -41,10 +41,10 @@ export const backMapper = (state) => {
 export const checkBeforeRedirection = (props, fromState, toState) => {
   if (getConfig().isLoggedIn) {
     if (
-      toState === "/login" ||
-      toState === "/register" ||
-      toState === "/forgot-password" ||
-      toState === "/mobile/verify"
+      toState === "/login" // ||
+      // toState === "/register" ||
+      // toState === "/forgot-password" ||
+      // toState === "/mobile/verify"
     ) {
       if (!fromState) {
         return "/";

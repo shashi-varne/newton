@@ -31,12 +31,12 @@ import InvestmentProof from "./MyAccount/InvestmentProof";
 import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
-import Referral from "../login_and_registration/Referral/Referral.js"
-import SecondaryVerification from "../login_and_registration/SecondaryVerification/SecondaryVerification.js"
-import SecondaryOtpVerification from "../login_and_registration/SecondaryVerification/SecondaryOtpVerification.js"
 import SecuritySettings from "./MyAccount/2fa/SecuritySettings";
 import ForgotFisdomPin from "./MyAccount/2fa/ForgotFisdomPin"
 import ResetPin from "./MyAccount/2fa/ResetPin"
+import Referral from "../login_and_registration/pages/Referral/Referral.js";
+import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification"
+import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification"
 
 const Home = (props) => {
   const { url } = props.match;

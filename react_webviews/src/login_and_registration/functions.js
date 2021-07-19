@@ -22,6 +22,8 @@ export function initialize() {
   this.resendVerificationLink = resendVerificationLink.bind(this);
   this.otpVerification = otpVerification.bind(this);
   this.otpLoginVerification = otpLoginVerification.bind(this);
+  this.authCheckApi = authCheckApi.bind(this);
+  this.generateOtp = generateOtp.bind(this);
   this.resendOtp = resendOtp.bind(this);
   this.resendLoginOtp = resendLoginOtp.bind(this);
   this.forgotPassword = forgotPassword.bind(this);
@@ -250,7 +252,6 @@ export async function triggerOtpApi(body, loginType) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      toast("OTP is sent successfully to your mobile number.");
       this.setState({ isApiRunning: false });
       if (body?.secondaryVerification) {
         this.navigate("secondary-otp-verification", {
@@ -283,9 +284,8 @@ export async function triggerOtpApi(body, loginType) {
         };
         storageService().setObject("user_promo", item);
       }
-    } else {
-      toast(result.message || result.error || errorMessage);
     }
+     toast(result?.message || result?.error || errorMessage);
   } catch (error) {
     console.log(error);
     toast(errorMessage);
@@ -303,7 +303,6 @@ export async function initiateOtpApi(body, loginType) {
     const res = await Api.post(`/api/user/login/v4/initiate`, formData)
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      toast("OTP is sent successfully to your mobile number.");
       this.setState({ isApiRunning: false });
       this.navigate("verify-otp", {
         state: {
@@ -315,10 +314,9 @@ export async function initiateOtpApi(body, loginType) {
           user_whatsapp_consent: body?.user_whatsapp_consent || '',
         },
       });
-      toast(result?.message || result?.error || errorMessage);
-    } else {
-      toast(result?.message || result?.error || errorMessage);
-    }
+
+    } 
+    toast(result?.message || result?.error || errorMessage);
   } catch (error) {
     console.log(error);
     toast(errorMessage);
@@ -757,6 +755,7 @@ export async function authCheckApi(type, data) {
   try {
     this.setState({
       loading: true,
+      isApiRunning: "button"
     });
     // Checking if that id has some other account associated
     const response = await Api.get(
@@ -777,6 +776,7 @@ export async function authCheckApi(type, data) {
   } finally {
     this.setState({
       loading: false,
+      isApiRunning: false
     });
   }
 }

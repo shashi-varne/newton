@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import "./loginStyle.scss";
 import { getConfig } from "utils/functions";
-import { countries } from "../constants";
+import { countries } from "../../constants";
 import Input from "common/ui/Input";
-import { initialize } from "../function";
+import { initialize } from "../../functions";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
-import Button from "../../common/ui/Button";
-import { nativeCallback } from "../../utils/native_callback";
-import Checkbox from "../../common/ui/Checkbox";
+import Button from "../../../common/ui/Button";
+import { nativeCallback } from "../../../utils/native_callback";
+import Checkbox from "../../../common/ui/Checkbox";
 import LoginContainer from "./LoginContainer"
 
 const config = getConfig();
