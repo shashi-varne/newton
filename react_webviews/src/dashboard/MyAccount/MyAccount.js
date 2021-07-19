@@ -60,8 +60,9 @@ class MyAccount extends Component {
   continueAccountAlreadyExists = async () => {
     this.navigate("/kyc/communication-details", {
       state: {
-        // pass the type and data required for communication details page
+        accountAlreadyExistsData: this.state.accountAlreadyExistsData,
         callHandelClick: true,
+        continueAccountAlreadyExists: true,
       },
     });
   };
@@ -69,7 +70,7 @@ class MyAccount extends Component {
   editDetailsAccountAlreadyExists = () => {
     this.navigate("/kyc/communication-details", {
       state: {
-        // pass the type and data required for communication details page
+        accountAlreadyExistsData : this.state.accountAlreadyExistsData,
         page: "my-account",
         edit: true,
       },

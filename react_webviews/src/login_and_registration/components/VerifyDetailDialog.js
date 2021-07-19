@@ -34,7 +34,7 @@ class VerifyDetailDialog extends Component {
           body.email = data.contact_value;
         } else {
           body.mobile = data.contact_value;
-          body.whatsapp_consent = true;  // by default should this be true or false in case of bottomsheet?
+          body.whatsapp_consent = true;
         }
         const otpResponse = await this.generateOtp(body);
         if (otpResponse) {

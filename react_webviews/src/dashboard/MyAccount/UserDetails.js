@@ -47,7 +47,8 @@ class MyaccountDetails extends Component {
             return;
         }
         else if (result?.is_user) {
-            result.user.from = "my-account"
+            result.user.from = "my-account";
+            result.user.contact_value = contact_value;
             this.props.showAccountAlreadyExist(true, result.user, contact_type);
         }
     }
