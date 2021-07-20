@@ -2,6 +2,7 @@ import { isMobile, navigate as navigateFunc } from './functions';
 import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
+import { storageService } from './validators';
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let newAction = null;
@@ -289,7 +290,14 @@ export function handleNativeExit(props, data) {
       props.location?.pathname !== "/" &&
       sdkExitActions.includes(data.action))
   ) {
-    navigate("/");
+    if(storageService().get("flow-type") === "notification") {
+      storageService().remove("flow-type");
+      navigate("/notification", {
+        searchParams: `base_url=${config.base_url}`
+      });
+    } else {
+      navigate("/");
+    }
   } else {
     nativeCallback(data);
   }
