@@ -92,11 +92,11 @@ class Otp extends Component {
             disabled={disabled}
             showLoader={isApiRunning}
             fullWidth
-            className={isMobileView ? "login-button login-button-mobile" : "login-button login-button-web"}
+            className={"login-button"}
           >
             CONTINUE
             </WVButton>
-          <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "0 auto" }} onClick={() => this.props.history.goBack()}>
+          <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "0 auto", minHeight: "16px", marginTop: "40px" }} onClick={() => this.props.history.goBack()}>
             Go Back to Login
             </WVButton>
         </OtpContainer >

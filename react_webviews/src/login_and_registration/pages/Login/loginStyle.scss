@@ -26,13 +26,12 @@
       display: -ms-flexbox;
       display: flex;
       -ms-flex-pack: center;
-      justify-content: center;
+      justify-content: space-evenly;
       margin-top: 56px;
       padding-top: 40px;
   
       .ld-left {
         margin-top: 150px;
-        margin-right: 220px;
         padding: 0 20px;
       }
 
@@ -56,7 +55,7 @@
           line-height: 24px;
           text-align: center;
           letter-spacing: 3px;
-          padding: 20px 0 30px;
+          padding: 0px 0 30px;
         }
   
         .login-type {
@@ -111,12 +110,6 @@
             .input {
               width: 100%;
             }
-  
-            // .mobile-number {
-            //   .MuiInput-underline:before {
-            //     margin-bottom: 1px;
-            //   }
-            // }
           }
   
   
@@ -219,6 +212,9 @@
   @media only screen and (max-width: 1200px) {
     .login {
       .login-details {
+        .login-form {
+          width: 100%;
+        }
         .ld-left {
           margin-right: 20px;
         }
@@ -230,7 +226,6 @@
     .login {
       .login-details {
         padding-top: 0;
-
         .ld-left {
           display: none;
         }
@@ -255,7 +250,6 @@
       .login-details {
         .login-form {
           width: 100%;
-          padding: 0 20px;
   
           .header-text {
             text-align: left;
