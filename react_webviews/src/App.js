@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import PinChangedLoginAgain from './login_and_registration/2fa/PinChangedLoginAgain';
-import Login from './login_and_registration/pages/Login/Login.js';
-import Otp from './login_and_registration/pages/Login/VerifyOtp.js';
 import Logout from './login_and_registration/pages/Login/Logout.js';
 import FisdomPartnerRedirect from './fisdom_partner_redirect';
 import WealthReport from './wealth_report';
@@ -29,6 +26,7 @@ import {getConfig} from './utils/functions';
 import ComponentTest from './ComponentTest';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
+import LoginContainer from './login_and_registration/pages/Login/LoginContainer';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -89,9 +87,7 @@ const App = () => {
             <Switch>
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
-              <Route path='/login' component={Login} />
-              <Route path='/verify-otp' component={Otp} />
-              <Route path='/pin-changed-login-again' component={PinChangedLoginAgain} />
+              <Route path='/login' component={LoginContainer} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               {

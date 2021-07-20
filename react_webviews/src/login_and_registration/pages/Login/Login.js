@@ -10,6 +10,7 @@ import Button from "../../../common/ui/Button";
 import { nativeCallback } from "../../../utils/native_callback";
 import Checkbox from "../../../common/ui/Checkbox";
 import LoginContainer from "./LoginContainer"
+import { navigate } from "../../../utils/functions";
 
 const config = getConfig();
 class Login extends Component {
@@ -22,6 +23,7 @@ class Login extends Component {
       isApiRunning: false,
     };
     this.initialize = initialize.bind(this);
+    this.navigate = navigate.bind(this);
   }
 
   componentWillMount() {
@@ -77,7 +79,7 @@ class Login extends Component {
       productName,
     } = this.state;
     return (
-      <LoginContainer >
+      // <LoginContainer >
         <div className="login-form" data-aid='login-form'>
           <div className="header-text">LOGIN</div>
           <div className="login-type" data-aid='login-type'>
@@ -230,7 +232,7 @@ class Login extends Component {
               </a>
           </div>
         </div>
-      </LoginContainer>
+      // </LoginContainer>
     );
   }
 }

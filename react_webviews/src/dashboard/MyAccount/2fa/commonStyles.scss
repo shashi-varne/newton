@@ -1,0 +1,34 @@
+.clickable-text-ele{
+  margin-top: 82px;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 1px;
+}
+
+.security-settings {
+  .img-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
+    
+  .bottom-space{
+      margin-bottom: 44px;
+  }
+  .account-options {
+    border-bottom: none;
+    padding: 15px 15px 15px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #333333;
+    img {
+      width: 25px;
+      margin-right: 15px;
+      margin-top: -3px;
+    }
+  }     
+}
