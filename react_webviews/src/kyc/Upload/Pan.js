@@ -232,6 +232,7 @@ const Pan = (props) => {
               disableBackdropClick
               onCtaClick={bottomSheetType === "success" ? handleNavigation : handleRetryClick}
               kyc={kyc}
+              navigate={navigate}
             />
           }
         </section>

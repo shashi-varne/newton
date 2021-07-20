@@ -186,8 +186,11 @@ const Kyc = (props) => {
           exact
           path={[`${url}/penny-status`,
                  `${url}/pan-status`,
-                 `${url}/residence-status`,
-                 `${url}/:userType/bank-status`
+                 `${url}/selfie-status`,
+                 `${url}/fno-income-proof-status`,
+                 `${url}/upload-pan-status`,
+                 `${url}/confirm-pan`,
+                 `${url}/:userType/bank-status`,
                ]}
           component={DialogAsPage}
         />

@@ -12,7 +12,7 @@ import { nativeCallback } from "../../utils/native_callback";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { ConfirmPan } from "../Equity/mini-components/ConfirmPan";
 import CheckCompliant from "../Equity/mini-components/CheckCompliant";
-import { isDigilockerFlow } from "../common/functions";
+import { isDigilockerFlow, panUiSet } from "../common/functions";
 import internalStorage from '../common/InternalStorage';
 import isEmpty from 'lodash/isEmpty';
 
@@ -137,7 +137,7 @@ const Home = (props) => {
         } else {
           setIsUserCompliant(false);
         }
-        setOpenConfirmPan(true);
+        handleShowConfirmPan();
         return;
       }
       setShowLoader("button");
@@ -146,6 +146,26 @@ const Home = (props) => {
       toast(err.message || genericErrorMessage);
     }
   };
+
+  const handleShowConfirmPan = () => {
+    if(showPageDialog) {
+      const newData = {
+        title: 'Confirm PAN',
+        buttonOneTitle: 'EDIT PAN',
+        buttonTwoTitle: 'CONFIRM PAN',
+        twoButton: true,
+        message: `Hi${userName && ` ${userName}`}, please confirm that this PAN belongs to you: ${panUiSet(pan)}`,
+        status: 'confirmPan'
+      }
+      storageService().set('pan',pan);
+      internalStorage.setData('handleClickOne', reEnterPan);
+      internalStorage.setData('handleClickTwo', handleConfirmPan);
+      internalStorage.setData('isApiCall', true);
+      navigate('/kyc/confirm-pan',{state:{...newData}});
+    } else {
+      setOpenConfirmPan(true)
+    }
+  }
 
   const checkPanValidity = async (showConfirmPan = false) => {
     let body = {
@@ -163,7 +183,7 @@ const Home = (props) => {
       if (isEmpty(result)) return;
       setUserName(result.kyc.name);
       setIsStartKyc(true);
-      if (showConfirmPan) setOpenConfirmPan(true);
+      if (showConfirmPan) handleShowConfirmPan();
     } catch (err) {
       console.log(err);
       toast(err.message);
@@ -216,7 +236,7 @@ const Home = (props) => {
   };
 
   const reEnterPan = () => {
-    navigate('home');
+    navigate('/kyc/home');
   }
 
   const accountMerge = async () => {

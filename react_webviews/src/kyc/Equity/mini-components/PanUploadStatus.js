@@ -1,6 +1,7 @@
 import React from "react";
-import { getConfig, isTradingEnabled } from "../../../utils/functions";
+import { getConfig, isNewIframeDesktopLayout, isTradingEnabled } from "../../../utils/functions";
 import WVBottomSheet from "../../../common/ui/BottomSheet/WVBottomSheet";
+import internalStorage from "../../common/InternalStorage";
 
 const productName = getConfig().productName;
 const uploadStatus = {
@@ -18,7 +19,7 @@ const uploadStatus = {
   },
 };
 
-const PanUploadStatus = ({ status, isOpen, kyc, onClose, disableBackdropClick, onCtaClick }) => {
+const PanUploadStatus = ({ status, isOpen, kyc, onClose, disableBackdropClick, onCtaClick, navigate }) => {
   if (!status) return '';
 
   const data = uploadStatus[status] || {};
@@ -36,6 +37,17 @@ const PanUploadStatus = ({ status, isOpen, kyc, onClose, disableBackdropClick, o
       : kyc?.kyc_type === "manual" 
       ? "Great, now continue to provide other documents to complete KYC"
       : "You're almost there, now take a selfie";
+  }
+
+  if (isNewIframeDesktopLayout()) {
+    const stateParams = {
+      title: data.title,
+      buttonTitle: data.ctaText,
+      message: data.subtitle,
+      image: data.icon,
+    };
+    internalStorage.setData("handleClick", onCtaClick);
+    navigate("/kyc/upload-pan-status", { state: { ...stateParams } });
   }
 
   return (

@@ -15,7 +15,7 @@ import LocationPermDummy from "./LocationPermDummy";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import SelfieUploadStatus from "../Equity/mini-components/SelfieUploadStatus";
 import { nativeCallback } from '../../utils/native_callback'
-import { openFilePicker } from "../../utils/functions";
+import { isNewIframeDesktopLayout, openFilePicker } from "../../utils/functions";
 import ConfirmBackDialog from "../mini-components/ConfirmBackDialog";
 import { capitalize } from 'lodash';
 
@@ -69,6 +69,10 @@ const Selfie = (props) => {
 
   const handleNavigation = () => {
     if (bottomSheetType === "failed") {
+      if(isNewIframeDesktopLayout()) {
+        navigate(PATHNAME_MAPPER.uploadSelfie);
+        return;
+      }
       setOpenBottomSheet(false);
       setFile(null);
       setFileToShow(null);
@@ -319,6 +323,7 @@ const Selfie = (props) => {
             onClose={() => setOpenBottomSheet(false)}
             onCtaClick={handleNavigation}
             kyc={kyc}
+            navigate={navigate}
           />
           {goBackModal ?
             <ConfirmBackDialog
