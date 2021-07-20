@@ -3,12 +3,7 @@
   min-height: 100%;
   max-width: 614px;
   background-color: white;
-  padding: 20px;
-  .title {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 32px;
-  }
+
   .verify-otp-header {
     display: flex;
     align-items: center;
@@ -31,15 +26,16 @@
       padding: 4px;
     }
   }
-  .login-otp-button {
+  .login-button {
     margin: 20px auto;
   }
-  .login-otp-button-web{
+  .login-button-web{
     margin-top: 60px;
     width: 100%;
   }
-  .login-otp-button-mobile {
-    position: absolute;
+  .login-button-mobile {
+    position: fixed;
+    z-index: 9999;
     bottom: 0;
     left:0;
     right:0;

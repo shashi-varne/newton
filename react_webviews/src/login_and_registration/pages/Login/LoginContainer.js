@@ -21,10 +21,12 @@ class LoginContainer extends Component {
           <img src={require(`assets/${config.logo}`)} alt="logo" />
         </div>
         <div className="login-details">
-          <div className="left-image">
+          <div className="ld-left">
             <img src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
           </div>
-          {this.props.children}
+          <div className="ld-right">
+            {this.props.children}
+          </div>
         </div>
       </div>
     );

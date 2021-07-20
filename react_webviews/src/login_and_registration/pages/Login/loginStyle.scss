@@ -30,10 +30,15 @@
       margin-top: 56px;
       padding-top: 40px;
   
-      .left-image {
+      .ld-left {
         margin-top: 150px;
         margin-right: 220px;
         padding: 0 20px;
+      }
+
+      .ld-right {
+        width: 375px;
+        padding: 20px;
       }
   
       .login-left-icon {
@@ -214,7 +219,7 @@
   @media only screen and (max-width: 1200px) {
     .login {
       .login-details {
-        .left-image {
+        .ld-left {
           margin-right: 20px;
         }
       }
@@ -224,8 +229,15 @@
   @media only screen and (max-width: 960px) {
     .login {
       .login-details {
-        .left-image {
+        padding-top: 0;
+
+        .ld-left {
           display: none;
+        }
+        .ld-right {
+          width: 100%;
+          padding-top: 40px;
+          padding-bottom: 60px;
         }
       }
     }

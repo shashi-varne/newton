@@ -92,7 +92,7 @@ class Otp extends Component {
             disabled={disabled}
             showLoader={isApiRunning}
             fullWidth
-            className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button login-otp-button-web"}
+            className={isMobileView ? "login-button login-button-mobile" : "login-button login-button-web"}
           >
             CONTINUE
             </WVButton>
