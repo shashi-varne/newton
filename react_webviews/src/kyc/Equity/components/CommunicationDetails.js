@@ -44,7 +44,7 @@ const CommunicationDetails = (props) => {
   const stateParams = props.location?.state || {};
   const isEdit = stateParams.isEdit || false;
   const userType = stateParams.userType || "";
-  const callHandelClick = stateParams.callHandelClick;
+  const callHandleClick = stateParams.callHandleClick;
   const accountAlreadyExistsData = stateParams.accountAlreadyExistsData;
   const [formData, setFormData] = useState({
     whatsappConsent: true,
@@ -71,7 +71,7 @@ const CommunicationDetails = (props) => {
     if (!isEmpty(kyc) && !continueAccountAlreadyExists) {
       initialize();
     }
-    if ((callHandelClick && communicationType) || continueAccountAlreadyExists) handleClick();
+    if ((callHandleClick && communicationType) || continueAccountAlreadyExists) handleClick();
   }, [kyc, communicationType, continueAccountAlreadyExists]);
 
   const initialize = async () => {

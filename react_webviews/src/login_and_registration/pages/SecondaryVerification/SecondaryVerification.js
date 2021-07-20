@@ -1,4 +1,4 @@
-import "./secondaryStyle.scss";
+import "./secondaryVerification.scss";
 import React, { Component } from 'react';
 import Container from "../../../dashboard/common/Container";
 import Input from "common/ui/Input";
