@@ -13,6 +13,7 @@ import { storageService } from "../../utils/validators";
 import { isEmpty } from "lodash";
 import { isDigilockerFlow } from "../../kyc/common/functions";
 import { getBasePath, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
+import kycComplete from 'assets/kyc_complete.svg';
 
 class DigiStatus extends Component {
   constructor(props) {
@@ -178,7 +179,7 @@ class DigiStatus extends Component {
     }
 
   render() {
-    let { show_loader, skelton, dl_flow, show_note, kyc } = this.state;
+    let { show_loader, skelton, dl_flow, show_note, kyc, productName } = this.state;
     const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
@@ -202,23 +203,8 @@ class DigiStatus extends Component {
         headerData={headerData}
         skelton={skelton}
         hidePageTitle={status === "success" ? true : false}
+        iframeRightContent={status === "success" ? kycComplete : require(`assets/${productName}/esign_kyc_fail.svg`)}
       >
-        {/* <div className="nsdl-status">
-          <img
-            src={require(`assets/${productName}/ils_esign_${status}.svg`)}
-            style={{ width: "100%" }}
-            alt="Nsdl Status"
-          />
-          {status === "success" ?
-            <div className="nsdl-status-text">
-              You have successfully signed your KYC documents.
-            </div>
-            :
-            <div className="nsdl-status-text">
-              Sorry! the eSign verification is failed. Please try again.
-            </div>
-          }
-        </div> */}
         {status === "success" ? (
           <Complete
             navigateToReports={this.navigateToReports}

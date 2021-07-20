@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Input from 'common/ui/Input'
 import Container from '../../common/Container'
-import { isEmpty } from '../../../utils/validators'
+import { isEmpty, validateNumber } from '../../../utils/validators'
 import { verify, resend } from '../../common/Api'
 import toast from 'common/ui/Toast'
 import Button from 'common/ui/Button'
@@ -10,7 +10,10 @@ import { navigate as navigateFunc } from 'utils/functions'
 import './OtpSwitch.scss';
 import '../commonStyles.scss';
 import { nativeCallback } from '../../../utils/native_callback'
+import { getConfig } from '../../../utils/functions'
+import WVBottomSheet from '../../../common/ui/BottomSheet/WVBottomSheet'
 
+const config = getConfig();
 const OtpSwitch = (props) => {
   const navigate = navigateFunc.bind(props)
   const stateParams = props?.location?.state
@@ -18,13 +21,15 @@ const OtpSwitch = (props) => {
   const [otp, setOtp] = useState('')
   const [touched, setTouched] = useState(false)
   const [resendClicked, setResendClicked] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openPopup, setOpenPopup] = useState(false);
   
   const handleChange = (event) => {
     if (!touched) {
       setTouched(true)
     }
     const value = event.target?.value || "";
-    if(value.length > 4) {
+    if(value.length > 4 || (value && !validateNumber(value))) {
       return;
     }
     setOtp(value)
@@ -67,26 +72,51 @@ const OtpSwitch = (props) => {
       if (!isEmpty(stateParams?.verification_link) && !isEmpty(otp)) {
         result = await verify(stateParams?.verification_link, otp)
       }
-      navigate(
-        '/withdraw/otp/success',
-        {
-          state: {
-            type: stateParams?.type,
-            message: result?.message,
+
+      const _event = {
+        event_name: "journey_details",
+        properties: {
+          journey: {
+            name: "withdraw",
+            trigger: "cta",
+            journey_status: "complete",
+            next_journey: "mf",
+          },
+        },
+      };
+      // send event
+      if (!config.Web) {
+        window.callbackWeb.eventCallback(_event);
+      } else if (config.isIframe) {
+        window.callbackWeb.sendEvent(_event);
+      }
+
+      if(!config.isIframe || config.code === "moneycontrol") {
+        navigate(
+          '/withdraw/otp/success',
+          {
+            state: {
+              type: stateParams?.type,
+              message: result?.message,
+            }
           }
-        }
-      )
+        )
+      }
     } catch (err) {
-      toast(err.message)
-      navigate(
-        '/withdraw/otp/failed',
-        {
-          state:{
-            type: stateParams?.type,
-            message: err.message,
+      if(stateParams.type === "instaredeem") {
+        navigate(
+          '/withdraw/otp/failed',
+          {
+            state:{
+              type: stateParams?.type,
+              message: err.message,
+            }
           }
-        }
-      )
+        )
+      } else {
+        setErrorMessage(err.message || "Something went wrong! Please try again later");
+        setOpenPopup(true);
+      }
     } finally {
       setIsApiRunning(false)
     }
@@ -151,7 +181,15 @@ const OtpSwitch = (props) => {
           }}
         />
         </footer>
-        
+        <WVBottomSheet
+          open={openPopup}
+          subtitle={errorMessage}
+          button1Props={{
+            title: "OK",
+            variant: "contained",
+            onClick: () => setOpenPopup(false)
+          }}
+        />
       </section>
     </Container>
   )

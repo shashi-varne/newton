@@ -194,8 +194,9 @@ class Login extends Component {
                   width: "100%",
                   letterSpacing: "2px",
                   minHeight: "45px",
-                  borderRadius: `${config?.uiElements?.button?.borderRadius || "2px"
-                    }`,
+                  borderRadius: `${
+                    config?.uiElements?.button?.borderRadius || "2px"
+                  }`,
                 }}
               />
               {productName !== "finity" && (

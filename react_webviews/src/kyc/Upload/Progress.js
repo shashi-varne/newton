@@ -99,6 +99,7 @@ const Progress = (props) => {
         navigate(PATHNAME_MAPPER.journey);
       }}
       title="Upload documents"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       headerData={{goBack}}
       data-aid='kyc-progress-screen'
       hidePageTitle

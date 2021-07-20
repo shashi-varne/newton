@@ -166,7 +166,9 @@ class NpsInvestments extends Component {
       window.callbackWeb.sendEvent(_event);
     }
 
-    this.navigate('/nps/amount/one-time')
+    if(!config.isIframe) {
+      this.navigate('/nps/amount/one-time')
+    }
   }
 
   goBack = () => {

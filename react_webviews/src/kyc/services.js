@@ -190,6 +190,7 @@ async function setNpsData(result) {
 }
 
 export function getKycAppStatus(kyc) {
+  if(isEmpty(kyc)) return {};
   const TRADING_ENABLED = isTradingEnabled(kyc);
   var rejected = 0;
   var metaRejected = 0;

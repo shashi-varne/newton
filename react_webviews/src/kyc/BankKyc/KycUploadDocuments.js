@@ -6,9 +6,10 @@ import { getUrlParams, isEmpty } from "utils/validators";
 import { checkDLPanFetchAndApprovedStatus, getFlow, isDigilockerFlow, isEquityCompleted } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 import SVG from "react-inlinesvg";
-import { getConfig, isTradingEnabled, navigate as navigateFunc } from "../../utils/functions";
+import { getConfig, isTradingEnabled, navigate as navigateFunc, isNewIframeDesktopLayout } from "../../utils/functions";
 import toast from '../../common/ui/Toast'
 import { PATHNAME_MAPPER } from "../constants";
+import InternalStorage from "../common/InternalStorage";
 import "./KycUploadDocuments.scss";
 import KycUploadContainer from "../mini-components/KycUploadContainer";
 import { nativeCallback } from "../../utils/native_callback";
@@ -90,6 +91,17 @@ const KycUploadDocuments = (props) => {
     URL.revokeObjectURL(event.target.src);
   };
 
+  const bankUploadStatus = () => {
+    const bankStatus = {
+      title : 'Bank Verification Pending!',
+      message: 'We’ve added your bank account details. The verification is in progress, meanwhile you can continue with KYC.',
+      buttonTitle: 'CONTINUE WITH KYC',
+      status: 'bankVerificationPending'
+    }
+    InternalStorage.setData('handleClick',proceed);
+    navigate('bank-status',{state: bankStatus})
+  }
+
   const handleSubmit = async () => {
     sendEvents('next');
     try {
@@ -102,7 +114,11 @@ const KycUploadDocuments = (props) => {
       );
       if(!isEmpty(result))
         updateKyc(result.kyc)
-      setShowPendingModal(true);
+      if(isNewIframeDesktopLayout()) {
+        bankUploadStatus();
+      } else {
+        setShowPendingModal(true);
+      }
     } catch (err) {
       toast(err.message || "Image upload failed, please retry")
     } finally {
@@ -251,6 +267,7 @@ const KycUploadDocuments = (props) => {
       showLoader={isApiRunning}
       title="Upload documents"
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${config.productName}/add_bank.svg`)}
       data-aid='kyc-upload-documents-page'
       events={sendEvents("just_set_events")}
     >

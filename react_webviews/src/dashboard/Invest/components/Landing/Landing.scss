@@ -2,7 +2,7 @@
   padding-bottom: 20px;
 
   .generic-page-subtitle {
-    margin: -20px 0 20px 0;
+    margin: -10px 0 20px 0;
   }
 
   .kyc {
@@ -17,7 +17,7 @@
     .title {
       font-size: 20px;
       color: white;
-      font-weight: 800;
+      font-weight: 700;
       margin: 10px 0 0 0;
     }
 
@@ -29,7 +29,7 @@
   }
 
   .invest-landing-button {
-    font-weight: 800;
+    font-weight: 700;
     font-size: 11px !important;
     padding: 10px !important;
     width: 140px !important;
@@ -182,11 +182,7 @@
     color: #8d879b;
     padding: 0 10px 20px 10px;
     font-size: 10px;
-    font-weight: 800;
-
-    span {
-      color: var(--primary);
-    }
+    font-weight: 700;
   }
 }
 

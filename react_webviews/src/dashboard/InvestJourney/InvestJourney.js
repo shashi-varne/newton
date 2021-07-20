@@ -29,6 +29,7 @@ const InvestJourney = (props) => {
   });
   const {kyc: userKyc, isLoading} = useUserKycHook()
   const state = props.location.state || {};
+  const productName = getConfig().productName;
   const investment =
     JSON.parse(window.localStorage.getItem("investment")) ||
     JSON.parse(state.investment);
@@ -107,18 +108,23 @@ const InvestJourney = (props) => {
       data-aid='how-it-works-screen'
       classOverRide="pr-error-container"
       buttonTitle={ctcTitle}
+      //hidePageTitle
       title="How it works"
       classOverRideContainer="pr-container"
       handleClick={goNext}
       showLoader={isApiRunning}
       skelton={isLoading}
+      loaderData={{
+        loadingText:"Your payment is being processed. Please do not close this window or click the back button on your browser."
+      }}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
     >
       <section className="invest-journey-container" data-aid='invest-journey-page'>
         <div className="invest-journey-header" data-aid='invest-journey-header'>
           <div>
             <img alt="safe_secure_journey" src={safe_secure_journey} />
           </div>
-          <div>With fisdom, investment is easy & secure</div>
+          <div>With {productName}, investment is easy & secure</div>
         </div>
         <div className="invest-journey-steps" data-aid='invest-journey-steps'>
           <div className="invest-journey-connect">

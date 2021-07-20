@@ -142,6 +142,10 @@
       flex: 1 1 70%;
       display: flex;
       flex-direction: column;
+
+      .rf-rating-icon {
+        width: 80px;
+      }
   
       .recommendations-funds-item-name {
         font-size: 16px;

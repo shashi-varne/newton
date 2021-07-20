@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
-import Button from "@material-ui/core/Button";
+import Button from "common/ui/Button";
 import Slider from "common/ui/Slider";
 import { getPathname } from "../constants";
 import { getReportGoals } from "../common/api";
@@ -166,9 +166,14 @@ const Goals = (props) => {
                   </div>
                 </div>
                 {goal.itag.itype !== "legacy" && (
-                  <Button onClick={() => redirectToInvestType(goal)} data-aid={`reports-goals-btn-${goal.itag.id}`}>
-                    INVEST MORE
-                  </Button>
+                  <Button
+                    buttonTitle="INVEST MORE"
+                    classes={{
+                      button: "rg-invest-more-button"
+                    }} 
+                    onClick={() => redirectToInvestType(goal)} 
+                    data-aid={`reports-goals-btn-${goal.itag.id}`}
+                  />
                 )}
               </div>
             );

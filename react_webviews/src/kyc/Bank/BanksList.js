@@ -74,16 +74,14 @@ const BanksList = (props) => {
     navigate("/my-account");
   }
 
+  const showFooter = changeRequest.add_bank_enabled && ((config.Web && !config.isIframe) || !!storageService().get("native"))
   return (
     <Container
       skelton={showLoader}
       events={sendEvents("just_set_events")}
       buttonTitle="ADD ANOTHER BANK"
       handleClick={handleClick}
-      noFooter={
-        !(changeRequest.add_bank_enabled &&
-        ((config.Web && !config.isIframe) || !!storageService().get("native")))
-      }
+      noFooter={!showFooter}
       title="Bank accounts"
       type="outlined"
       data-aid='kyc-add-other-bank-screen'

@@ -178,6 +178,7 @@ const Pan = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload PAN"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-upload-pan-screen'
     >
       {!isEmpty(kyc) && (

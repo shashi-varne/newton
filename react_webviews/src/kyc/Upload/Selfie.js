@@ -248,6 +248,7 @@ const Selfie = (props) => {
       showLoader={isApiRunning}
       title="Take a selfie"
       headerData={{goBack}}
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-upload-selfie-screen'
       events={sendEvents("just_set_events")}
     >

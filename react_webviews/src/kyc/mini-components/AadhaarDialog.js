@@ -1,17 +1,16 @@
 import React from "react";
-import { getConfig, isMobile } from "utils/functions";
+import { getConfig, isMobile, getBasePath } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { storageService } from "utils/validators";
 import { updateQueryStringParameter } from "../common/functions";
 import { STORAGE_CONSTANTS } from "../constants";
-import { getBasePath } from "../../utils/functions";
 import "./mini-components.scss";
 import WVBottomSheet from "../../common/ui/BottomSheet/WVBottomSheet";
 
 const config = getConfig();
 const productName = config.productName;
 
-const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
+const AadhaarDialog = ({ id, open, close, kyc, handleIframeKyc, sendEvents, ...props }) => {
   const basePath = getBasePath();
   const handleProceed = () => {
     sendEvents('next', 'ensure_mobile_linked_to_aadhar')
@@ -20,9 +19,20 @@ const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
         getConfig().searchParams
       }&is_secure=${storageService().get("is_secure")}`
     );
+    if (config.isIframe) {
+      close();
+      handleIframeKyc(
+        updateQueryStringParameter(
+          kyc.digilocker_url,
+          "redirect_url",
+          redirect_url
+        )
+      );
+      return;
+    }
     const data = {
       url: `${basePath}/kyc/journey${
-        getConfig().searchParams
+        config.searchParams
       }&show_aadhaar=true&is_secure=
         ${storageService().get("is_secure")}`,
       message: "You are almost there, do you really want to go back?",
@@ -48,7 +58,7 @@ const AadhaarDialog = ({ id, open, close, kyc, sendEvents, ...props }) => {
               action_type: "redirect",
               redirect_url: encodeURIComponent(
                 `${basePath}/kyc/journey${
-                  getConfig().searchParams
+                  config.searchParams
                 }&show_aadhaar=true&is_secure=
                   ${storageService().get("is_secure")}`
               ),

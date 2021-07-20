@@ -167,6 +167,7 @@ const IpvVideo = (props) => {
       disable={!file}
       showLoader={isApiRunning}
       title="Upload selfie video (IPV)"
+      iframeRightContent={require(`assets/${productName}/kyc_illust.svg`)}
       data-aid='kyc-selfie-video-ipv-screen'
     >
       {!isEmpty(kyc) && (

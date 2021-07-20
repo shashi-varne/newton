@@ -201,6 +201,7 @@ export const partnerConfigs = {
     styles: {
       primaryColor: "#004164",
       secondaryColor: "#ff5928",
+      backButtonColor: "#ff5928",
     },
     uiElements: {
       bottomCta: {
@@ -436,7 +437,6 @@ export const partnerConfigs = {
     message: "",
     styles: {
       primaryColor: "#3792FC",
-      backButtonColor: "#3792FC",
     },
     uiElements: {
       header: {

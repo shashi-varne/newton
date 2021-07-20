@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 import { getConfig , isIframe, getBasePath} from 'utils/functions';
-// import Container from '../common/Container';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
 import info_icon_myway from 'assets/info_icon_myway.svg'
 import trust_icon from 'assets/trust_icons_emandate.svg';
@@ -11,6 +10,7 @@ import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
 import bank_building from 'assets/finity/bank_building.svg'
 import { storageService } from '../../utils/validators';
+import Container from '../common/Container';
 
 
 class SelectBank extends Component {
@@ -233,16 +233,16 @@ class SelectBank extends Component {
     }
   }
 
-  loadComponent() {
-    if (this.state.iframe) {
-      return require(`../commoniFrame/Container`).default;
-    } else {
-      return require(`../common/Container`).default;
-    }
-  }
+  // loadComponent() {
+  //   if (this.state.iframe) {
+  //     return require(`../commoniFrame/Container`).default;
+  //   } else {
+  //     return require(`../common/Container`).default;
+  //   }
+  // }
 
   render() {
-    const Container = this.loadComponent();
+    // const Container = this.loadComponent();
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -251,7 +251,7 @@ class SelectBank extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="AUTHORISE E-MANDATE"
-        iframeIcon={this.state.iframeIcon}
+        iframeRightContent={this.state.iframeIcon}
       >
         <div className="infocard" style={{marginTop: this.state.iframe ? '0px' : '20px'}}>
           <div className="title">

@@ -188,7 +188,7 @@ export async function authenticate() {
 }
 
 export async function exportTransactions() {
-  this.setState({ showLoader: true });
+  this.setState({ showLoader: true, openDialog: false });
   try {
     const res = await Api.get(`/api/rta/mine/getaccountsummary`);
     const { result, status_code: status } = res.pfwresponse;
