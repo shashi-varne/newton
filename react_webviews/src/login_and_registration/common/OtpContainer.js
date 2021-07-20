@@ -1,22 +1,35 @@
 import "./commonStyles.scss";
-import React from "react";
-import OtpComp from "../pages/Otp/Otp";
+import React, { useEffect, useState } from "react";
+import WVOtp from "../../common/ui/Otp/WVOtp";
+import DotDotLoader from "../../common/ui/DotDotLoader";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 
-const OtpContainer = ({
-    title,
-    otpData,
-    handleClick,
-    showDotLoader,
-    handleOtp,
-    resendOtp,
-    isWrongOtp,
-    resend_url,
-    value,
-    children,
-    classes = {},
-    handleClickText,
-}) => {
+const OtpContainer = (props) => {
+    const {
+        title,
+        otpData,
+        handleClick,
+        handleOtp,
+        showDotLoader,
+        resendOtp,
+        isWrongOtp,
+        value,
+        isDisabled,
+        children,
+        classes = {},
+        handleClickText, } = props || {};
+    const [timeAvailable, setTimeAvailable] = useState(otpData?.timeAvailable);
+    useEffect(() => {
+        var timmer = setTimeout(() => {
+            if (timeAvailable <= 0) {
+                clearTimeout(timmer);
+                return;
+            }
+            setTimeAvailable(timeAvailable - 1)
+        }, 1000);
+
+    }, [timeAvailable])
+
     return (
         <div className={`verify-otp-container ${classes.body}`}>
             {title &&
@@ -29,17 +42,43 @@ const OtpContainer = ({
                     </span>
                 </p>
                 {handleClickText &&
-                    <WVClickableTextElement onClick={() => handleClick()}>{handleClickText}</WVClickableTextElement>}
+                    <WVClickableTextElement onClick={handleClick}>{handleClickText}</WVClickableTextElement>}
             </div>
             <div className="kcd-otp-content">
-                <OtpComp
-                    otpData={otpData}
-                    showDotLoader={showDotLoader}
-                    handleOtp={handleOtp}
-                    resendOtp={resendOtp}
-                    isWrongOtp={isWrongOtp}
-                    resend_url={resend_url}
-                />
+                <div className="communication-details-otp-container">
+                    <WVOtp
+                        id="default-otp"
+                        align="left"
+                        onChange={handleOtp}
+                        hasErrored={true}
+                        placeholder="X"
+                        value={otpData.otp}
+                        isDisabled={isDisabled || false}
+                        hasError={isWrongOtp}
+                    />
+                    {isWrongOtp && <p className="invalid-otp">Invalid OTP</p>}
+                    {timeAvailable > 0 && !showDotLoader && (
+                        <div className="cd-otp-time-text">
+                            OTP should arrive within{" "}
+                            {timeAvailable < 10 ? `0${timeAvailable}` : timeAvailable}s
+                        </div>
+                    )}
+                    {(timeAvailable <= 0 || !timeAvailable) && (
+                        <div
+                            className={`cd-otp-resend-text ${props.class}`}
+                            onClick={() => {
+                                resendOtp(),
+                                setTimeAvailable(otpData?.timeAvailable)
+                            }}
+                        >
+                            {showDotLoader ? (
+                                <DotDotLoader className="cd-resend-loader" />
+                            ) : (
+                                    "RESEND OTP"
+                                )}
+                        </div>
+                    )}
+                </div>
             </div>
             {children}
         </div>
