@@ -471,13 +471,13 @@ export const partnerConfigs = {
 
 export const getPartnerData = (productType, partnerCode) => {
   // Appending base config of the productType(fisdom/finity) with the common config accross all partners
-  let partnerConfigTOReturn = {
+  let partnerConfigToReturn = {
     ...commonCardsConfig,
     ...basePartnerConfig[productType],
   };
   const partnerData = partnerConfigs[partnerCode] || partnerConfigs["fisdom"];
-  partnerConfigTOReturn = {
-    ...partnerConfigTOReturn, // taking the base config of the productType(fisdom/finity)
+  partnerConfigToReturn = {
+    ...partnerConfigToReturn, // taking the base config of the productType(fisdom/finity)
     ...partnerData, // overriding with particular partner config
     styles: {
       ...baseStylesConfig.common,
@@ -506,5 +506,5 @@ export const getPartnerData = (productType, partnerCode) => {
       ...partnerData?.typography,
     }
   };
-  return partnerConfigTOReturn;
+  return partnerConfigToReturn;
 }
