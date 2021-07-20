@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 
 import { didMount , commonRender } from '../../common/components/container_functions';
 
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 
@@ -58,11 +58,11 @@ class Container extends Component {
 
     switch (pathname) {
       case '/whatsapp/mobile-verify':
-        nativeCallback({ action: 'native_back' });
+        handleNativeExit(this. props, {action: "native_back"});
         break;
       case '/whatsapp/edit-number':
       case '/whatsapp/otp-success':
-        nativeCallback({ action: 'exit_web' });
+        handleNativeExit(this. props, {action: "exit_web"});
         break;
       default:
         this.props.history.goBack();
