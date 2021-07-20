@@ -55,8 +55,8 @@ const OtpContainer = (props) => {
                         value={otpData.otp}
                         isDisabled={isDisabled || false}
                         hasError={isWrongOtp}
+                        bottomText={isWrongOtp ? "Invalid OTP": ""}
                     />
-                    {isWrongOtp && <p className="invalid-otp">Invalid OTP</p>}
                     {timeAvailable > 0 && !showDotLoader && (
                         <div className="cd-otp-time-text">
                             OTP should arrive within{" "}

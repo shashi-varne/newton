@@ -62,7 +62,7 @@ export class SecondaryOtpVerification extends Component {
   })
 
   handleResendOtp = () => {
-    this.resendLoginOtp(this.state.otp_id)
+    this.resendOtp(this.state.otp_id)
     this.setState({
       otpData: { ...this.state.otpData, timeAvailable: 15, },
     });
@@ -92,7 +92,8 @@ export class SecondaryOtpVerification extends Component {
           handleOtp={this.handleOtp}
           resendOtp={this.handleResendOtp}
           isWrongOtp={isWrongOtp}
-          value={value}   >
+          bottomText={isWrongOtp ? "Invalid OTP": ""}
+          value={value}>
         </OtpContainer>
       </Container>
     );
