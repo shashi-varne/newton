@@ -13,11 +13,15 @@ const headerIconMapper = {
   back: back_arrow,
   close: close_icn,
 };
-const logo = getConfig().logo;
-const partnerCode = getConfig().partner_code;
-const partnerPrimaryColor = getConfig().styles.primaryColor;
-const isMobileDevice = getConfig().isMobileDevice;
-const Header = ({ classes, goBack, disableBack, headerData = {} }) => {
+
+const config = getConfig();
+const logo = config.logo;
+const partnerCode = config.partner_code;
+const partnerPrimaryColor = config.styles.primaryColor;
+const isMobileDevice = config.isMobileDevice;
+const isWeb = config.Web;
+const isSdk = config.isSdk;
+const Header = ({ classes, goBack, disableBack, headerData = {}, showIframePartnerLogo }) => {
   return (
     <AppBar
       position='fixed'
@@ -45,6 +49,22 @@ const Header = ({ classes, goBack, disableBack, headerData = {} }) => {
           )}
           {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon && (
             <Close color={isMobileDevice ? 'primary': 'default'}/>
+          )}
+          {showIframePartnerLogo && isWeb && isMobileDevice && (
+            <img
+              src={require(`assets/finity/finity_navlogo.svg`)}
+              alt='partnerLogo'
+              height={25}
+              style={{marginLeft: '15px'}}
+            />
+          )}
+          {showIframePartnerLogo && isSdk && isMobileDevice && partnerCode === 'moneycontrol' &&(
+            <img
+              src={require(`assets/moneycontrol_sdk_logo.svg`)}
+              alt='partnerLogo'
+              height={16}
+              style={{marginLeft: '15px'}}
+            />
           )}
         </div>
         {!isMobileDevice && (

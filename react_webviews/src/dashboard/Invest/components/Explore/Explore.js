@@ -122,6 +122,7 @@ const InvestExplore = (props) => {
       rightIcon="search"
       handleTopIcon={handleRightIconClick}
       disableBack={iframe && partnerCode === 'moneycontrol'}
+      showIframePartnerLogo
     >
       {
         iframe && partnerCode === 'moneycontrol' ? <IframeView exploreMFMappings={exploreMFMappings} goNext={goNext} handleRightIconClick={handleRightIconClick}/> :

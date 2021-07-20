@@ -73,7 +73,7 @@
 }
 
 .kyc-show-aadhar .action-btn:hover {
-  background-color: var(--secondary);
+  background-color: var(--on-hover-background);
   color: white;
 }
 
@@ -257,7 +257,7 @@
 
       span {
         font-size: 13px;
-        color: var(--primary);
+        color: #5AAAF6;
         margin-left: 10px;
       }
     }

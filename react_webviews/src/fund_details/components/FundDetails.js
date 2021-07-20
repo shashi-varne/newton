@@ -336,7 +336,7 @@ const FundDetails = ({ classes, history }) => {
             <Typography
               align='center'
               style={{
-                color: '#35CB5D',
+                color: getConfig().styles.secondaryGreen,
                 fontWeight: '500',
                 letterSpacing: '0.5px',
                 lineHeight: '1.5em',

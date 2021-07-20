@@ -162,6 +162,7 @@ export function commonRender(props_base) {
                         type={getConfig().productName}
                         headerData={this.props.headerData}
                         goBack={this.headerGoBack || this.historyGoBack}
+                        showIframePartnerLogo={this.props.showIframePartnerLogo}
                     />
                 :
                     <Header

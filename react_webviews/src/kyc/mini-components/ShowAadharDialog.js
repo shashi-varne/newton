@@ -38,7 +38,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
             <div className="title">No document asked</div>
           </div>
         </main>
-        <Button variant="contained" fullWidth className="action-btn" data-aid='kyc-action-btn' onClick={redirect}>
+        <Button variant="raised" fullWidth className="action-btn" data-aid='kyc-action-btn' onClick={redirect}>
           <span className="btn-text">connect digilocker</span>
         </Button>
       </section>
