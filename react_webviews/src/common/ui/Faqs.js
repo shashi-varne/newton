@@ -15,7 +15,9 @@ class FaqsClass extends Component {
 
 
     showHideSteps  = (index) => {
-
+        if (this.props.callback) {
+            this.props.callback(index)
+        }
         if(this.state.selectedIndex === index) {
             this.setState({
                 selectedIndex: -1
