@@ -165,7 +165,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             false && 
             <div>
-              <img src={require('assets/finity_navlogo.svg')} alt="productType" />
+              <img src={require('assets/finity/finity_navlogo.svg')} alt="productType" />
             </div>
           }
           </>

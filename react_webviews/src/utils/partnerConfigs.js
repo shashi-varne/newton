@@ -185,7 +185,7 @@ export const partnerConfigs = {
     navLinkOptions:{loan: true}
   },
   finity: {
-    logo: "finity_white_logo.png",
+    logo: "finity_white_logo.svg",
     code: "finity",
     mobile: "+91-9916149111",
     investSubSectionMap: {
