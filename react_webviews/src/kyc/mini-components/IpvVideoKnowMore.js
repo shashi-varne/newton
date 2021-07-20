@@ -49,7 +49,7 @@ const KnowMore = ({ isOpen, close }) => {
         </main>
       </DialogContent>
       <DialogActions className="action">
-        <Button classes={{button: "ipv-km-button"}} data-aid='got-it-btn' onClick={close} buttonTitle="GOT IT!" >GOT IT!</Button>
+        <Button classes={{button: "ipv-km-button"}} data-aid='got-it-btn' onClick={close} buttonTitle="GOT IT!" />
       </DialogActions>
     </Dialog>
   );

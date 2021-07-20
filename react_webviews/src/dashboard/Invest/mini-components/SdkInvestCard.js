@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import {SkeltonRect} from '../../../common/ui/Skelton';
 import DotLoader from 'common/ui/DotDotLoaderNew';
 import { getConfig } from '../../../utils/functions';
-const ProductName = getConfig().productName;
+const productName = getConfig().productName;
 const SdkInvestCard = ({
   title,
   subtitle,
@@ -25,7 +25,7 @@ const SdkInvestCard = ({
 }) => {
   let titleBg;
   if (titleImg) {
-    titleBg = require(`assets/${ProductName}/${titleImg}`);
+    titleBg = require(`assets/${productName}/${titleImg}`);
   }
   return (
     <div className={`card sdk-landing-card ${isLoading && 'disable-card-action'}`} style={{ height: height }} onClick={handleCard} data-aid='sdk-landing-card'>
@@ -61,7 +61,7 @@ const SdkInvestCard = ({
               </Button>
           </div>
         ) : (
-          <img src={require(`assets/${ProductName}/${img}`)} alt='helo' className='icon' />
+          <img src={require(`assets/${productName}/${img}`)} alt='helo' className='icon' />
         )}
       </div>
     </div>
