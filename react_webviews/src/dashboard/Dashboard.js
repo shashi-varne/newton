@@ -32,8 +32,8 @@ import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 import SecuritySettings from "./MyAccount/2fa/SecuritySettings";
-import ForgotFisdomPin from "./MyAccount/2fa/ForgotFisdomPin"
-import ResetPin from "./MyAccount/2fa/ResetPin"
+import ForgotPin from "./MyAccount/2fa/ForgotPin";
+import VerifyPin from "./MyAccount/2fa/VerifyPin"
 import Referral from "../login_and_registration/pages/Referral/Referral.js";
 import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification"
 import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification"
@@ -140,8 +140,9 @@ const Home = (props) => {
         />
         <Route exact path={`${url}page/invest/campaign/callback`} component={CampaignCallback} />
         <Route exact path={`${url}security-settings`} component={SecuritySettings} />
-        <Route exact path={`${url}forgot-fisdom-pin`} component={ForgotFisdomPin} />
-        <Route exact path={`${url}reset-pin`} component={ResetPin} />
+        <Route exact path={`${url}forgot-fisdom-pin`} component={ForgotPin} />
+        <Route exact path={`${url}reset-pin-verify`} component={VerifyPin} />
+        <Route exact path={`${url}reset-pin-confirm`} component={VerifyPin} />
         <Route component={NotFound} />
       </Switch>
     </Fragment>

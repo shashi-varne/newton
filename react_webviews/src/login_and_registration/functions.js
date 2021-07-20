@@ -263,7 +263,7 @@ export async function triggerOtpApi(body, loginType) {
           },
         });
       } else {
-        this.navigate("verify-otp", {
+        this.navigate("login/verify-otp", {
           state: {
             value: body.mobile || body.email,
             rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
@@ -304,7 +304,7 @@ export async function initiateOtpApi(body, loginType) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setState({ isApiRunning: false });
-      this.navigate("verify-otp", {
+      this.navigate("login/verify-otp", {
         state: {
           value: body.auth_value,
           rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
