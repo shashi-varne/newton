@@ -32,13 +32,13 @@ import Prepare from "./Invest/components/SdkLanding/Prepare";
 import Refer from "./Invest/components/SdkLanding/Refer";
 import CampaignCallback from "./Invest/components/PageCallback/CampaignCallback";
 
+const config = getConfig();
 const Home = (props) => {
   const { url } = props.match;
-  const isSdk = getConfig().isSdk;
   return (
     <Fragment>
       <Switch>
-        <Route exact path={`${url}`} component={isSdk ? SdkLanding : Invest} />
+        <Route exact path={`${url}`} component={config.isSdk && config.code !== "moneycontrol" ? SdkLanding : Invest} />
         <Route exact path={`${url}prepare`} component={Prepare} />
         <Route exact path={`${url}refer`} component={Refer} />
         <Route path={`${url}invest`} component={Invest} />
