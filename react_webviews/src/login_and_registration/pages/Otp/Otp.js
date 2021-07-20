@@ -1,117 +1,98 @@
 import React, { Component } from "react";
-import "./otpStyle.scss";
-import { initialize } from "../../functions";
-import { getConfig } from "utils/functions";
-import toast from "common/ui/Toast";
-// import { validateNumber } from "../../utils/validators";
-import OtpComp from "./reset_opt";
-import WVClickableTextElement from "../../../common/ui/ClickableTextElement/WVClickableTextElement";
-import WVButton from "../../../common/ui/Button/WVButton";
-import LoginContainer from "../Login/LoginContainer"
+import WVOtp from "../../../common/ui/Otp/WVOtp";
+import DotDotLoader from "../../../common/ui/DotDotLoader";
 
-const config = getConfig();
-const isMobileView = config.isMobileDevice;
-// const productName = config.productName;
 class Otp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      otp: "",
-      isApiRunning: false,
-      otpData: {
-        totalTime: 15,
-        timeAvailable: 15,
-      },
+      countdownInterval: null,
+      timeAvailable: this.props.otpData.timeAvailable,
+      totalTime: this.props.otpData.totalTime,
+      error: this.props.isError,
+      showDotLoader: this.props.showDotLoader,
     };
-    this.initialize = initialize.bind(this);
+
+    this.resendOtp = this.resendOtp.bind(this);
   }
 
-  componentWillMount() {
-    let { state } = this.props.location || {};
-    if (!state) {
-      toast("Mobile number not provided");
-      this.props.history.goBack();
-      return;
-    }
-    let { value, otp_id, communicationType, verify_url, resend_url, user_whatsapp_consent } = state;
-    let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
-    let forgot = state.forgot;
-    let body = {
-      value,
-      otp_id,
-      rebalancing_redirect_url,
-      forgot,
-      communicationType,
-      verify_url,
-      resend_url
-    }
-    if (user_whatsapp_consent) body.user_whatsapp_consent = true;
-
-    this.setState(body);
-    this.initialize();
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
   }
 
-  handleClick = () => {
-    let body = {
-      otp: this.state.otpData["otp"],
-      user_whatsapp_consent: this.state.user_whatsapp_consent || "",
-    }
-    this.otpLoginVerification(this.state.verify_url, body);
-  };
-
-  handleOtp = (otp) => {
+  componentDidMount() {
+    let intervalId = setInterval(this.countdown, 1000);
     this.setState({
-      otpData: { ...this.state.otpData, otp },
+      countdownInterval: intervalId,
+    });
+  }
+
+  resendOtp = async () => {
+    await this.props.resendOtp(this.props.resend_url);
+    let intervalId = setInterval(this.countdown, 1000);
+
+    this.setState({
+      timeAvailable: this.state.totalTime,
+      countdownInterval: intervalId,
     });
   };
 
+  countdown = () => {
+    if (!this.props.isError) {
+      let timeAvailable = this.state.timeAvailable;
+      timeAvailable--;
+      if (timeAvailable <= 0) {
+        timeAvailable = 0;
+        clearInterval(this.state.countdownInterval);
+      }
+
+      this.setState({
+        timeAvailable: timeAvailable,
+      });
+    } else {
+      clearInterval(this.state.countdownInterval);
+      this.setState({
+        timeAvailable: 0,
+      });
+    }
+  };
+
   render() {
-    let { isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
-    let disabled = otpData.otp?.length !== 4;
-    let loginType = communicationType === "email" ? "email" : "mobile";
-    let showDotLoader = false;
+    const { timeAvailable } = this.state;
     return (
-      <LoginContainer>
-        <div className="verify-otp-container">
-          <p className="title">{`Enter OTP to verify your ${loginType === "email" ? "email" : "number"
-            }`}</p>
-          <div className="verify-otp-header">
-            <p>
-              An OTP has been sent to{" "}
-              <span style={{ fontWeight: "500", marginRight: "23px" }}>
-                {this.state.value}
-              </span>
-            </p>
-          </div>
-          <div className="kcd-otp-content">
-            <OtpComp
-              otpData={this.state.otpData}
-              showDotLoader={showDotLoader}
-              handleOtp={this.handleOtp}
-              resendOtp={this.resendLoginOtp}
-              isWrongOtp={isWrongOtp}
-              resend_url={this.state.resend_url}
-            />
-          </div>
-          <div>
-            <WVButton
-              variant='contained'
-              size='large'
-              color="secondary"
-              onClick={this.handleClick}
-              disabled={disabled}
-              showLoader={isApiRunning}
-              fullWidth
-              className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button login-otp-button-web"}
-            >
-              CONTINUE
-            </WVButton>
-          </div>
-          <WVClickableTextElement onClick={() => this.props.history.goBack()}>
-            <p className="go-back-to-login">GO BACK TO LOGIN</p>
-          </WVClickableTextElement>
+      <div className="communication-details-otp-container">
+        <div>
+          <WVOtp
+            id="default-otp"
+            align="left"
+            onChange={this.props.handleOtp}
+            hasErrored={true}
+            placeholder="X"
+            value={this.props.otpData.otp}
+            isDisabled={this.props.isDisabled || false}
+            hasError={this.props.isWrongOtp}
+          />
         </div>
-      </LoginContainer>
+        {this.props.isWrongOtp && <p className="invalid-otp">Invalid OTP</p>}
+        {timeAvailable > 0 && !this.props.showDotLoader && (
+          <div className="cd-otp-time-text">
+            OTP should arrive within{" "}
+            {timeAvailable < 10 ? `0${timeAvailable}` : timeAvailable}s
+          </div>
+        )}
+        {(timeAvailable <= 0 || !timeAvailable) && (
+          <div
+            className={`cd-otp-resend-text ${this.props.class}`}
+            onClick={this.resendOtp}
+          >
+            {this.props.showDotLoader ? (
+              <DotDotLoader className="cd-resend-loader" />
+            ) : (
+                "RESEND OTP"
+              )}
+          </div>
+        )}
+      </div>
     );
   }
 }

@@ -1,0 +1,54 @@
+  
+  .login-form-field{
+    display: flex;
+    .country-code{
+      min-width: 85px;
+      margin-right: 15px;
+      .react-select__single-value{
+        margin-top: -3px !important;
+        color: var(--steelgrey);
+      }
+      .react-select__input{
+        margin-top: 0px !important;
+      }
+    }
+    
+    .mobile-number-login{
+      height: 52px;
+      background: rgba(238, 238, 238, 0.3);
+      width: 100%;
+      .MuiInputLabel-formControl{
+        left: 10px;
+        top: 4px;
+      }
+      .MuiInput-input{
+        margin-left: 10px;
+      }
+    }
+  }
+  
+  .declaration-container{
+    margin-left: -12px;
+    margin-top: 10px;
+    display: flex;
+    align-items: flex-start;
+    svg{
+      width: 20px;
+      height: 20px;
+    }
+    p{
+      font-size: 13px;
+      line-height: 21px;
+    }
+    .Checkbox{
+      margin-top: -2px;
+    }
+  }
+  
+  
+  @media only screen and (max-height: 900px) {
+    .whatsapp-consent{
+      position: absolute;
+      bottom: 80px;
+    }
+  }
