@@ -8,7 +8,6 @@
     font-size: 20px;
     font-weight: 700;
     line-height: 32px;
-    letter-spacing: 0px;
   }
   .verify-otp-header {
     display: flex;
@@ -17,9 +16,7 @@
     margin-top: -10px;
     p {
       font-size: 13px;
-      font-weight: 400;
       line-height: 21px;
-      letter-spacing: 0px;
       color: var(--steelgrey);
       margin: 0;
     }
@@ -51,7 +48,7 @@
     width: calc(100% - 40px);
   }
   .go-back-to-login{
-     justify-content: center !important;
+     justify-content: center;
      display: flex;
      margin-top: 40px;
      color: var(--secondary);
