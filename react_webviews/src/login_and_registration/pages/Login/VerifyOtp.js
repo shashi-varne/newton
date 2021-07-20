@@ -62,22 +62,26 @@ class Otp extends Component {
     });
   };
 
+  handleResendOtp = () => {
+    this.resendLoginOtp(this.state.resend_url)
+    this.setState({
+      otpData: { ...this.state.otpData, timeAvailable: 15, },
+    });
+  }
+
   render() {
-    let {value, isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
+    let { value, isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
     let disabled = otpData.otp?.length !== 4;
-    let loginType = communicationType === "email" ? "email" : "mobile";
     let showDotLoader = false;
     return (
       <LoginContainer>
         <OtpContainer
-         title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
-          loginType={loginType}
+          title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
           otpData={this.state.otpData}
           showDotLoader={showDotLoader}
           handleOtp={this.handleOtp}
-          resendOtp={this.resendLoginOtp}
+          resendOtp={this.handleResendOtp}
           isWrongOtp={isWrongOtp}
-          resend_url={this.state.resend_url}
           value={value}
         >
           <WVButton
