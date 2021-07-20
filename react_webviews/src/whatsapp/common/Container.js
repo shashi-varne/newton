@@ -58,11 +58,11 @@ class Container extends Component {
 
     switch (pathname) {
       case '/whatsapp/mobile-verify':
-        handleNativeExit(this. props, {action: "native_back"});
+        handleNativeExit(this.props, {action: "native_back"});
         break;
       case '/whatsapp/edit-number':
       case '/whatsapp/otp-success':
-        handleNativeExit(this. props, {action: "exit_web"});
+        handleNativeExit(this.props, {action: "exit_web"});
         break;
       default:
         this.props.history.goBack();
