@@ -296,7 +296,9 @@ export function handleNativeExit(props, data) {
         searchParams: `base_url=${config.base_url}`
       });
     } else {
-      navigate("/");
+      navigate("/", {
+        searchParams: `base_url=${config.base_url}`
+      });
     }
   } else {
     nativeCallback(data);
