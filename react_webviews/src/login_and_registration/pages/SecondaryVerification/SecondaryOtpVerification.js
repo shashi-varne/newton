@@ -62,12 +62,13 @@ export class SecondaryOtpVerification extends Component {
   })
 
   render() {
-    const { showDotLoader, communicationType, otp_id, value, isWrongOtp } = this.state;
+    const { showDotLoader, communicationType, otp_id, value, isWrongOtp, otpData } = this.state;
     return (
       <Container
         title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"
           }`}
         buttonTitle="VERIFY"
+        disable={otpData.otp?.length === 4 ? false : true}
         showLoader={this.state.isApiRunning}
         canSkip={true}
         onSkipClick={() => this.navigate("/")}
@@ -80,7 +81,7 @@ export class SecondaryOtpVerification extends Component {
           classes={{
             body: "verify-otp-container-secondary"
           }}
-          otpData={this.state.otpData}
+          otpData={otpData}
           showDotLoader={showDotLoader}
           handleOtp={this.handleOtp}
           resendOtp={this.resendOtp}
