@@ -36,12 +36,17 @@
       padding: 0 20px;
     }
 
+    .login-left-icon {
+      min-width: 480px;
+      min-height: 330px;
+    }
+
     .login-form {
       background-color: #ffffff;
       width: 380px;
 
       .header-text {
-        font-weight: bold;
+        font-weight: 500;
         font-size: 20px;
         line-height: 24px;
         text-align: center;
@@ -87,6 +92,7 @@
             width: fit-content;
             margin-bottom: -20px;
 
+            //temp fix for commit id build
             .MuiSelect-root {
               margin-bottom: 1px;
             }
@@ -198,7 +204,7 @@
       }
 
       .footer {
-        font-weight: bold;
+        font-weight: 500;
         font-size: 14px;
         line-height: 17px;
         margin-top: 40px;
@@ -380,6 +386,12 @@
 
           .underline {
             margin: 5px 0;
+          }
+        }
+
+        .form-field .country-code {
+          .MuiSelect-root {
+            margin-bottom: 1px;
           }
         }
       }

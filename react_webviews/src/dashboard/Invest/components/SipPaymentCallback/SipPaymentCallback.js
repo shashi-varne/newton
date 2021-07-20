@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { getConfig, navigate as navigateFunc } from "utils/functions";
 import Container from "../../../common/Container";
 import { Imgc } from "common/ui/Imgc";
-import { getCampaignBySection, resetRiskProfileJourney } from "../../functions";
+import { resetRiskProfileJourney } from "../../functions";
 import { getCampaign } from "../../common/api";
 import { isEmpty, storageService } from "utils/validators";
-import { initData } from "../../../../kyc/services";
+import { getCampaignBySection, initData } from "../../../../kyc/services";
 import { getBasePath } from "utils/functions";
 import "./SipPaymentCallback.scss";
 
@@ -151,10 +151,11 @@ const SipPaymentCallback = (props) => {
       title={!paymentError ? "Payment successful" : "Payment failed"}
       skelton={skelton}
       headerData={{goBack}}
+      data-aid='sip-payment-callback-screen'
     >
-      <section className="invest-sip-payment-callback">
+      <section className="invest-sip-payment-callback" data-aid='invest-sip-payment-callback'>
         {!paymentError && (
-          <div className="content">
+          <div className="content" data-aid='payment-error'>
             <Imgc
               src={require(`assets/${config.productName}/congratulations_illustration.svg`)}
               alt=""
@@ -162,7 +163,7 @@ const SipPaymentCallback = (props) => {
             />
             <h4>Order placed</h4>
             <p>You are one step closer to your financial freedom</p>
-            <div className="message">
+            <div className="message" data-aid='payment-message'>
               <img
                 src={require(`assets/eta_icon.png`)}
                 alt=""
@@ -173,13 +174,13 @@ const SipPaymentCallback = (props) => {
           </div>
         )}
         {paymentError && (
-          <div className="content">
+          <div className="content" data-aid='payment-error'>
             <Imgc
               src={require(`assets/${config.productName}/error_illustration.svg`)}
               alt=""
               className="img"
             />
-            <p>{message}</p>
+            <p data-aid='payment-message'>{message}</p>
           </div>
         )}
       </section>

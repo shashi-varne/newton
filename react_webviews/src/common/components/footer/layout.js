@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
 import Button from '../../../common/ui/Button';
-import {
-  inrFormatDecimal
-} from '../../../utils/validators';
+import { inrFormatDecimal } from '../../../utils/validators';
+import { isEmpty } from 'lodash';
 import Dialog, {
   DialogActions,
   DialogTitle,
@@ -11,7 +10,6 @@ import Dialog, {
   DialogContentText
 } from 'material-ui/Dialog';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
-
 import down_arrow from 'assets/down_arrow.svg';
 import up_arrow from 'assets/up_arrow.svg';
 import SVG from 'react-inlinesvg';
@@ -19,6 +17,7 @@ import {getConfig} from 'utils/functions';
 import logo_safegold from 'assets/logo_safegold.svg';
 import logo_mmtc from 'assets/logo_mmtc.svg';
 import WVButtonLayout from '../../ui/ButtonLayout/WVButtonLayout';
+import {Imgc} from '../../ui/Imgc'
 
 export class FooterLayoutBase extends Component {
   constructor(props) {
@@ -125,7 +124,8 @@ export class FooterLayoutBase extends Component {
         style={props.buttonData.leftStyle}>
 
           {props.buttonData.logo && <div className='image-block'>
-            <img
+            <Imgc
+              style={{width:'40px', height:'40px'}}
               alt=""
               src={require(`assets/${props.buttonData.logo}`)}
               className="FooterImage" />
@@ -287,12 +287,16 @@ export class FooterLayoutBase extends Component {
   VerticalButtonLayout = ({ button1Props, button2Props }) => {
     return(
       <WVButtonLayout layout="stacked">
-        <WVButtonLayout.Button
-          {...button1Props}
-        />
-        <WVButtonLayout.Button
-          {...button2Props}
-        />
+        {!isEmpty(button1Props) &&
+          <WVButtonLayout.Button {...button1Props}>
+            {button1Props.title}
+          </WVButtonLayout.Button>
+        }
+        {!isEmpty(button2Props) &&
+          <WVButtonLayout.Button {...button2Props}>
+            {button2Props.title}
+          </WVButtonLayout.Button>
+        }
       </WVButtonLayout>
     )
   }

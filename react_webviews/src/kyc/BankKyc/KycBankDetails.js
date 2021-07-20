@@ -11,9 +11,10 @@ import {
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import {
-  checkPanFetchStatus,
+  checkDLPanFetchAndApprovedStatus,
   isDigilockerFlow,
   validateFields,
+  skipBankDetails,
   getFlow
 } from "../common/functions";
 import PennyExhaustedDialog from "../mini-components/PennyExhaustedDialog";
@@ -66,6 +67,7 @@ const KycBankDetails = (props) => {
   const [isPennyFailed, setIsPennyFailed] = useState(false);
   const [goBackModal, setGoBackModal] = useState(false);
   const { kyc, user, isLoading } = useUserKycHook();
+  const goBackPath = props.location?.state?.goBack || "";
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -75,11 +77,7 @@ const KycBankDetails = (props) => {
 
   let initialize = async () => {
     let disableData = { ...disableFields };
-    if (
-      user.active_investment ||
-      (kyc.bank.meta_data_status === "approved" && kyc.bank.meta_data.bank_status === "verified") ||
-      kyc.bank.meta_data.bank_status === "doc_submitted"
-    ) {
+    if (skipBankDetails()) {
       disableData.skip_api_call = true;
       disableData.account_number_disabled = true;
       disableData.c_account_number_disabled = true;
@@ -123,17 +121,18 @@ const KycBankDetails = (props) => {
   };
 
   const uploadDocuments = () => {
-    sendEvents("upload documents", "bottom_sheet");
+    sendEvents("upload_documents ", "unable_to_add_bank");
     navigate(`/kyc/${kyc.kyc_status}/upload-documents`);
   };
 
   const redirect = () => {
+    sendEvents("check_bank_details", "unable_to_add_bank");
     navigate(PATHNAME_MAPPER.journey);
   };
 
   const handleClick = () => {
+    sendEvents("next");
     if (disableFields.skip_api_call) {
-      sendEvents('next')
       handleNavigation();
     } else {
       const keysToCheck = [
@@ -144,7 +143,6 @@ const KycBankDetails = (props) => {
       ];
       const formData = { ...form_data, ...bankData };
       let result = validateFields(formData, keysToCheck);
-      sendEvents('next')
       if (!result.canSubmit) {
         let data = Object.assign({}, result.formData);
         setFormData(data);
@@ -173,9 +171,11 @@ const KycBankDetails = (props) => {
       else navigate(PATHNAME_MAPPER.tradingExperience)
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved) {
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         } else {
           navigate(PATHNAME_MAPPER.tradingExperience);
         }
@@ -197,9 +197,11 @@ const KycBankDetails = (props) => {
       //   });handleSdkNavigation
     } else {
       if (dl_flow) {
-        const isPanFailedAndNotApproved = checkPanFetchStatus(kyc);
+        const isPanFailedAndNotApproved = checkDLPanFetchAndApprovedStatus(kyc);
         if (isPanFailedAndNotApproved)
-          navigate(PATHNAME_MAPPER.uploadPan);
+          navigate(PATHNAME_MAPPER.uploadPan, {
+            state: { goBack: PATHNAME_MAPPER.journey }
+          });
         else navigate(PATHNAME_MAPPER.kycEsign);
       } else navigate(PATHNAME_MAPPER.uploadProgress);
     }
@@ -245,11 +247,14 @@ const KycBankDetails = (props) => {
 
     if (name === "ifsc_code" && value && value.length > 11) return;
 
-    if (name.includes("account_number") && value && !validateNumber(value))
+    if (name.includes("account_number") && value && (!validateNumber(value) || value.length > 16))
       return;
 
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
+    if(name === "ifsc_code") {
+      value = value.toUpperCase();
+    }
     bank[name] = value;
     if (!value) {
       formData[`${name}_error`] = "This is required";
@@ -312,7 +317,7 @@ const KycBankDetails = (props) => {
   };
 
   const checkBankDetails = () => {
-    sendEvents("check bank details", "bottom_sheet");
+    sendEvents("check_bank_details", "unable_to_add_bank");
     setIsPennyFailed(false);
   };
 
@@ -321,10 +326,15 @@ const KycBankDetails = (props) => {
   };
 
   const goBackToPath = () => {
-    if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
-      navigate(PATHNAME_MAPPER.uploadProgress)
+    sendEvents("back");
+    if (goBackPath) {
+      navigate(goBackPath);
     } else {
-      navigate(PATHNAME_MAPPER.journey);
+      if (kyc?.kyc_status === "non-compliant" && (kyc?.kyc_type === "manual" || kyc?.address?.meta_data?.is_nri)) {
+        navigate(PATHNAME_MAPPER.uploadProgress)
+      } else {
+        navigate(PATHNAME_MAPPER.journey);
+      }
     }
   };
 
@@ -332,26 +342,33 @@ const KycBankDetails = (props) => {
     setGoBackModal(true)
   }
 
-  const sendEvents = (userAction, screen_name) => {
+  const sendEvents = (userAction, screenName) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": screen_name || "bank_details",
-        "account_number": bankData.account_number ? "yes" : "no",
-        "c_account_number": bankData.c_account_number ? "yes" : "no",
-        "ifsc_code": form_data.ifsc_code_error ? "invalid" : bankData.ifsc_code ? "yes" : "no",
-        "account_type": bankData.account_type ? "yes" : "no",
-        "attempt_no": kyc.bank.meta_data.user_rejection_attempts || "",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: screenName || "enter_bank_details",
+        account_number: bankData.account_number ? "yes" : "no",
+        c_account_number: bankData.c_account_number ? "yes" : "no",
+        ifsc_code: form_data.ifsc_code_error
+          ? "invalid"
+          : bankData.ifsc_code
+          ? "yes"
+          : "no",
+        attempt_no: kyc.bank.meta_data.user_rejection_attempts || "",
         "flow": getFlow(kyc) || ""
-      }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (screenName !== "unable_to_add_bank") {
+      eventObj.properties["account_type"] = bankData.account_type;
+      eventObj.properties["bank_name"] = bankData.bank_name || "";
+    }
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -408,7 +425,11 @@ const KycBankDetails = (props) => {
                     </>
                   ),
                 }}
-                disabled={isApiRunning || disableFields.ifsc_code_disabled || ifscDisabled}
+                disabled={
+                  isApiRunning ||
+                  disableFields.ifsc_code_disabled ||
+                  ifscDisabled
+                }
               />
               <Input
                 label="Account number"
@@ -430,10 +451,8 @@ const KycBankDetails = (props) => {
                 error={form_data.c_account_number_error ? true : false}
                 helperText={form_data.c_account_number_error || ""}
                 onChange={handleChange("c_account_number")}
-                maxLength={16}
-                type="text"
+                type="number"
                 InputProps={{
-                  // inputMode:"numeric",
                   endAdornment: (
                     <>
                       {bankData.account_number && bankData.account_number === bankData.c_account_number && (

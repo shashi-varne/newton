@@ -14,6 +14,7 @@ import { SkeltonRect } from 'common/ui/Skelton';
 import WVButton from "../../../../common/ui/Button/WVButton"
 import './Landing.scss';
 import isEmpty from "lodash/isEmpty";
+import { Imgc } from "../../../../common/ui/Imgc";
 
 const fromLoginStates = ["/login", "/register", "/forgot-password", "/mobile/verify", "/logout"]
 const isMobileDevice = getConfig().isMobileDevice;
@@ -55,7 +56,9 @@ class Landing extends Component {
 
   addBank = () => {
     const userKyc = this.state.userKyc || {};
-    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`, {
+      state: { goBack: "/invest" }
+    });
   };
 
   updateDocument = () => {
@@ -124,6 +127,9 @@ class Landing extends Component {
       modalData,
       openKycPremiumLanding,
       stateParams,
+      tradingEnabled,
+      kycButtonLoader,
+      stocksButtonLoader
     } = this.state;
     const {
       ourRecommendations,
@@ -158,7 +164,8 @@ class Landing extends Component {
           {
             !kycStatusLoader &&
             <div className="generic-page-subtitle" data-aid='generic-page-subtitle'>
-              {isReadyToInvestBase 
+              {((!tradingEnabled && isReadyToInvestBase) ||
+-                (tradingEnabled && isEquityCompletedBase)) 
                 ? " Your KYC is verified, You’re ready to invest"
                 : "Invest in your future"}
             </div>
@@ -179,7 +186,8 @@ class Landing extends Component {
                 case "kyc":
                   return (
                     <React.Fragment key={index}>
-                      {!isReadyToInvestBase && kycStatusData && !kycStatusLoader && (
+                      {(!kycStatusLoader && kycStatusData && ((!tradingEnabled && !isReadyToInvestBase) ||
+-                      (tradingEnabled && !isEquityCompletedBase))) ? (
                         <div
                           data-aid='kyc-invest-sections-cards'
                           className="kyc"
@@ -187,7 +195,7 @@ class Landing extends Component {
                             backgroundImage: `url(${require(`assets/${productName}/${kycStatusData.icon}`)})`,
                           }}
                           onClick={() =>
-                            this.clickCard("kyc", kycStatusData.title)
+                            !kycButtonLoader && !stocksButtonLoader && this.clickCard("kyc", kycStatusData.title)
                           }
                         >
                           <div className="title">{kycStatusData.title}</div>
@@ -200,9 +208,10 @@ class Landing extends Component {
                             classes={{
                               button: "invest-landing-button",
                             }}
+                            showLoader={kycButtonLoader}
                           />
                         </div>
-                      )}
+                      ): null}
                     </React.Fragment>
                   );
                 case "stocks":
@@ -210,13 +219,15 @@ class Landing extends Component {
                     <React.Fragment key={index}>
                       {!isEquityCompletedBase && (
                         <div className="invest-main-top-title" 
-                          onClick={() => this.clickCard("stocks") } 
+                          onClick={() => {!kycStatusLoader && !stocksButtonLoader && !kycButtonLoader && this.clickCard("stocks") }} 
                           data-aid='stocks-title'
                         >
                           <WVButton
                             variant='contained'
                             size='large'
                             color="secondary"
+                            disabled={kycStatusLoader}
+                            showLoader={stocksButtonLoader}
                             // fullWidth
                           >
                             Stocks
@@ -292,7 +303,7 @@ class Landing extends Component {
                                     src={require(`assets/${productName}/${item.icon_line}`)}
                                     alt=""
                                   />
-                                  <img
+                                  <Imgc
                                     src={require(`assets/${productName}/${item.icon}`)}
                                     alt=""
                                     className="icon"
@@ -341,10 +352,10 @@ class Landing extends Component {
                                   >
                                     <div className="content">
                                       <div className="title"  data-aid={`financial-tool-title-${data.key}`}>{data.title}</div>
-                                      <img
+                                      <Imgc
                                         src={require(`assets/${productName}/${data.icon}`)}
                                         alt=""
-                                        className="icon"
+                                        className="ft-icon"
                                       />
                                     </div>
                                     <div className="subtitle" data-aid={`financial-tool-subtitle-${data.key}`}>

@@ -12,6 +12,7 @@ import {
   validateFields,
   compareObjects,
   getTotalPagesInPersonalDetails,
+  getGenderValue,
 } from "../common/functions";
 import { navigate as navigateFunc } from "utils/functions";
 import { kycSubmit } from "../common/api";
@@ -27,7 +28,7 @@ const PersonalDetails1 = (props) => {
   const [oldState, setOldState] = useState({});
   const [totalPages, setTotalPages] = useState();
 
-  const {kyc, user, isLoading} = useUserKycHook();
+  const { kyc, user, isLoading } = useUserKycHook();
 
   let title = "Personal details";
   if (isEdit) {
@@ -51,7 +52,7 @@ const PersonalDetails1 = (props) => {
       email: kyc.identification?.meta_data?.email || "",
       mobile: mobile_number,
       country_code: country_code,
-      gender: kyc.identification?.meta_data?.gender || "",
+      gender: getGenderValue(kyc.identification?.meta_data?.gender) || "",
       marital_status: kyc.identification?.meta_data?.marital_status || "",
       father_name: kyc.pan?.meta_data?.father_name || "",
       mother_name: kyc.pan?.meta_data?.mother_name || "",
@@ -72,7 +73,7 @@ const PersonalDetails1 = (props) => {
     ];
     if (form_data.marital_status === "MARRIED") keysToCheck.push("spouse_name");
     let result = validateFields(form_data, keysToCheck);
-    sendEvents('next')
+    sendEvents("next");
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
@@ -145,25 +146,29 @@ const PersonalDetails1 = (props) => {
 
   const sendEvents = (userAction) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "personal_details_1",
-        "name": form_data.name ? "yes" : "no",
-        "mobile": form_data.mobile ? "yes" : "no",
-        "dob": form_data.dob_error ? "invalid" : form_data.dob ? "yes" : "no",
-        "gender": form_data.gender,
-        "marital_status": form_data.marital_status,
-        "email": form_data.email_error ? "invalid" : form_data.email ? "yes" : "no",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "personal_details_1",
+        gender: form_data.gender
+          ? form_data.gender === "TRANSGENDER"
+            ? "others"
+            : form_data.gender.toLowerCase()
+          : "",
+        marital_status: (form_data.marital_status || "").toLowerCase(),
+        "mother's_name": form_data.mother_name ? "yes" : "no",
+        "father's_name": form_data.father_name ? "yes" : "no",
+        spouse_name: form_data.spouse_name ? "yes" : "no",
+        name: form_data.name ? "yes" : "no",
         "flow": 'digi kyc'
-      }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
+  };
 
   return (
     <Container
@@ -193,7 +198,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={showLoader}
+            disabled={showLoader || !!kyc?.pan?.meta_data.name}
           />
           <Input
             label="Father's name"
@@ -204,7 +209,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("father_name")}
             maxLength={20}
             type="text"
-            disabled={showLoader}
+            disabled={showLoader || (!!kyc?.pan?.meta_data.father_name && kyc?.pan?.meta_data_status === "approved")}
           />
           <Input
             label="Mother's name"
@@ -214,7 +219,7 @@ const PersonalDetails1 = (props) => {
             helperText={form_data.mother_name_error || ""}
             onChange={handleChange("mother_name")}
             type="text"
-            disabled={showLoader}
+            disabled={showLoader || (!!kyc?.pan?.meta_data.mother_name && kyc?.pan?.meta_data_status === "approved")}
           />
           <div className={`input ${showLoader && `disabled`}`}>
             <RadioWithoutIcon

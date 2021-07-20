@@ -32,9 +32,11 @@ export async function initialize() {
   if (
     (isEmpty(nps_additional_details) &&
       npsAdditionalScreens.indexOf(this.state.screen_name) !== -1) ||
-    this.state.screen_name === "nps-identity"
+    this.state.screen_name === "nps-identity" || 
+    this.state.screen_name === "nps-sdk"
   ) {
-    await this.getNPSInvestmentStatus();
+    const npsData = await this.getNPSInvestmentStatus();
+    this.setState({ npsData });
   }
   nativeCallback({ action: "take_control_reset" });
 
@@ -114,9 +116,9 @@ export function formCheckUpdate(keys_to_check, form_data) {
     dob: "dob",
     mobile_no: "mobile no.",
     mother_name: "mother name",
-    spouse_name: "spouse_name",
-    nominee_name: "nominee_name",
-    nominee_dob: "nominee_dob",
+    spouse_name: "spouse name",
+    nominee_name: "nominee name",
+    nominee_dob: "nominee dob",
     relationship: "relationship",
     pincode: "pincode",
     addressline: "permanent address",

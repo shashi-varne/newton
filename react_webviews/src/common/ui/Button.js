@@ -141,6 +141,7 @@ class CustomButton extends Component {
             classes={classes}
             disabled={props.buttonDisabled || props.disable}
             onClick={props.onClick}
+            type={props.buttonType}
           >
             {!showLoader && props.buttonTitle}
             {showLoader && 

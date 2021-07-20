@@ -12,14 +12,15 @@ import PennyVerificationPending from "../../dashboard/Invest/mini-components/Pen
 import InvestError from "../../dashboard/Invest/mini-components/InvestError";
 import InvestReferralDialog from "../../dashboard/Invest/mini-components/InvestReferralDialog";
 import { getBasePath, getConfig } from "../../utils/functions";
+import { nativeCallback } from "../../utils/native_callback";
 
+const config = getConfig();
 const InvestMore = (props) => {
   const navigate = navigateFunc.bind(props);
   const params = props?.match?.params || {};
   if (isEmpty(params) || !params.mode) props.history.goBack();
   const state = props.location.state || {};
   if (isEmpty(state) || !state.recommendation) {
-    const config = getConfig();
     let _event = {
       event_name: "journey_details",
       properties: {
@@ -51,7 +52,7 @@ const InvestMore = (props) => {
   const [form_data, setFormData] = useState({ amount: "", amount_error: "" });
   const { kyc: userKyc, isLoading } = useUserKycHook();
   const [dialogStates, setDialogStates] = useState({
-    openPennyVerificationPendind: false,
+    openPennyVerificationPending: false,
     openInvestError: false,
     openInvestReferral: false,
     errorMessage: "",
@@ -131,9 +132,9 @@ const InvestMore = (props) => {
       investmentEventData: investmentEventData,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: false,
-      history: props.history,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
+      navigate: navigate,
       handleIsRedirectToPayment,
     });
   };
@@ -154,8 +155,18 @@ const InvestMore = (props) => {
     setIsReadyToPayment(result);
   };
 
+  const openInBrowser = (url) => () => {
+    nativeCallback({
+      action: 'open_browser',
+      message: {
+        url: url
+      }
+    });
+  }
+
   return (
     <Container
+      data-aid='reports-invest-more'
       hidePageTitle={true}
       buttonTitle={title}
       handleClick={() => handleClick()}
@@ -168,10 +179,10 @@ const InvestMore = (props) => {
       showLoader={isApiRunning}
       skelton={isLoading}
     >
-      <div className="reports-invest-more">
+      <div className="reports-invest-more" data-aid='reports-invest-more'>
         {!isReadyToPayment && (
           <>
-            <div className="text">I would like to invest</div>
+            <div className="text" data-aid='reports-text'>I would like to invest</div>
             <Input
               error={form_data.amount_error ? true : false}
               helperText={form_data.amount_error || ""}
@@ -182,10 +193,10 @@ const InvestMore = (props) => {
               value={formatAmountInr(form_data.amount) || ""}
               onChange={handleAmount()}
             />
-            <div className="text invest-more-margin">
+            <div className="text invest-more-margin" data-aid='reports-text-mfname'>
               As {params.mode} in {investBody.mfname}
             </div>
-            <div className="invest-more-terms invest-more-terms-padding">
+            <div className="invest-more-terms invest-more-terms-padding" data-aid='invest-more-term-condition'>
               <Checkbox
                 class="checkbox"
                 checked={termsCheck}
@@ -193,16 +204,26 @@ const InvestMore = (props) => {
               />
               <div>
                 I have read and accepted the{" "}
-                <a
-                  href="https://www.fisdom.com/terms/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  terms and conditions
-                </a>
+                {config.Web ? (
+                  <a
+                    href={config.termsLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rim-terms-text"
+                  >
+                    terms and conditions
+                  </a>
+                ) : (
+                  <span
+                    className="rim-terms-text"
+                    onClick={openInBrowser(config.termsLink)}
+                  >
+                    terms and conditions
+                  </span>
+                )}
               </div>
             </div>
-            <div className="invest-more-terms">
+            <div className="invest-more-terms" data-aid='invest-more-terms-offer-doc'>
               <Checkbox
                 class="checkbox"
                 checked={schemeCheck}
@@ -210,17 +231,27 @@ const InvestMore = (props) => {
               />
               <div>
                 I have read and understood the{" "}
-                <a
-                  href="https://www.fisdom.com/scheme-offer-documents/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  scheme offer documents
-                </a>
+                {config.Web ? (
+                  <a
+                    href={config.schemeLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rim-terms-text"
+                  >
+                    scheme offer documents
+                  </a>
+                ) : (
+                  <span
+                    className="rim-terms-text"
+                    onClick={openInBrowser(config.schemeLink)}
+                  >
+                    scheme offer documents
+                  </span>
+                )}
               </div>
             </div>
             <PennyVerificationPending
-              isOpen={dialogStates.openPennyVerificationPendind}
+              isOpen={dialogStates.openPennyVerificationPending}
               handleClick={() => navigate("/kyc/add-bank")}
             />
             <InvestError
@@ -237,13 +268,13 @@ const InvestMore = (props) => {
           </>
         )}
         {isReadyToPayment && (
-          <div className="payment-redirect">
+          <div className="payment-redirect" data-aid='reports-payment-redirect'>
             <Imgc
               src={require(`assets/payment.png`)}
               alt="Redirecting to Payment Gateway"
               className="img"
             />
-            <div className="payment-text">
+            <div className="payment-text" data-aid='reports-payment-text'>
               <h4>Redirecting to your bank...</h4>
               <p>
                 This transaction is completely safe as it is handled by your

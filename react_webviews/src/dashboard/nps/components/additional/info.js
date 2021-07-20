@@ -57,6 +57,7 @@ class NpsInfo extends Component {
     let { benefits, withdraw } = this.state;
     return (
       <Container
+        data-aid='nps-why-nps-screen'
         buttonTitle="CONTINUE"
         title="Why NPS?"
         handleClick={this.handleClick}
@@ -64,7 +65,7 @@ class NpsInfo extends Component {
           goBack: this.goBack
         }}
       >
-        <div className="nps-info">
+        <div className="nps-info" data-aid='nps-info'>
           <ul>
             <li>
               <div className="icon">
@@ -74,7 +75,7 @@ class NpsInfo extends Component {
                   width="70"
                 />
               </div>
-              <div className="text">
+              <div className="text" data-aid='nps-text-one'>
                 <div className="title">Save addtional tax</div>
                 <div className="subtitle">
                   Invest in Tier I account and save additional tax upto Rs.
@@ -90,7 +91,7 @@ class NpsInfo extends Component {
                   width="70"
                 />
               </div>
-              <div className="text">
+              <div className="text" data-aid='nps-text-two'>
                 <div className="title">Enjoy life after 60 years</div>
                 <div className="subtitle">
                   Withdraw amount after 60 years age and enjoy your retirement
@@ -106,7 +107,7 @@ class NpsInfo extends Component {
                   width="70"
                 />
               </div>
-              <div className="text">
+              <div className="text" data-aid='nps-text-three'>
                 <div className="title">Assets allocation flexibility</div>
                 <div className="subtitle">
                   Flexibility across equity, corporate bonds and government
@@ -122,7 +123,7 @@ class NpsInfo extends Component {
                   width="70"
                 />
               </div>
-              <div className="text">
+              <div className="text" data-aid='nps-text-four'>
                 <div className="title">Regulated & transparent</div>
                 <div className="subtitle">
                   Promoted & regulated by PFRDA, Government of India
@@ -134,6 +135,7 @@ class NpsInfo extends Component {
 
         {!benefits && (
           <div
+            data-aid='nps-know-more-benefits-btn'
             className="nps-know-more-header"
             onClick={() => this.handleClick("benefits")}
           >
@@ -141,7 +143,7 @@ class NpsInfo extends Component {
           </div>
         )}
         {benefits && (
-          <div className="nps-know-more" id="nps-benefits">
+          <div className="nps-know-more" id="nps-benefits" data-aid='nps-benefits'>
             <div className="detail">
               <div className="head">Exclusive tax benefits in NPS:</div>
               <div className="statement">
@@ -167,6 +169,7 @@ class NpsInfo extends Component {
 
         {!withdraw && benefits && (
           <div
+            data-aid='nps-know-more-withdraw-btn'
             className="nps-know-more-header"
             onClick={() => this.handleClick("withdraw")}
           >
@@ -174,7 +177,7 @@ class NpsInfo extends Component {
           </div>
         )}
         {withdraw && (
-          <div className="nps-know-more" id="nps-withdraw">
+          <div className="nps-know-more" id="nps-withdraw" data-aid='nps-withdraw'>
             <div className="detail">
               <div className="head">
                 Withdrawal:

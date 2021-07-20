@@ -10,6 +10,7 @@ import { getBasePath } from "../utils/functions";
 const config = getConfig();
 const isMobileView = config.isMobileDevice;
 const errorMessage = "Something went wrong!";
+const basePath = getBasePath();
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
   this.emailLogin = emailLogin.bind(this);
@@ -24,10 +25,11 @@ export function initialize() {
   this.navigate = navigateFunc.bind(this.props);
   this.getKycFromSummary = getKycFromSummary.bind(this);
   this.redirectAfterLogin = redirectAfterLogin.bind(this);
+  this.setUserAgent = setUserAgent.bind(this);
   let main_query_params = getUrlParams();
   let { referrer = "" } = main_query_params;
 
-  let redirectUrl = encodeURIComponent(`${getBasePath()}/${config.searchParams}`);
+  let redirectUrl = encodeURIComponent(`${basePath}/${config.searchParams}`);
   const partners = [
     "hbl",
     "sbm",
@@ -51,8 +53,10 @@ export function initialize() {
     : "";
 
   let socialRedirectUrl = encodeURIComponent(
-    window.location.origin + "/social/callback" + rebalancingRedirectUrl
+    basePath + "/social/callback" + rebalancingRedirectUrl
   );
+
+  this.setUserAgent();
 
   let facebookUrl =
     config.base_url +
@@ -73,6 +77,12 @@ export function initialize() {
     redirectUrl: redirectUrl,
     rebalancingRedirectUrl: main_query_params.redirect_url,
   });
+}
+
+export function setUserAgent() {
+  nativeCallback({ action: "set_user_agent", message: {
+    user_agent: "Mozilla/5.0 AppleWebKit/537.36 Chrome/65.0.3325.181 Mobile Safari/537.36"
+  }})
 }
 
 export function formCheckFields(
@@ -237,9 +247,9 @@ export async function mobileLogin(body) {
         storageService.setObject("user_promo", item);
       }
 
-      if (this.state.isPromoSuccess && this.state.referral_code !== "") {
+      if (this.state.isPromoSuccess && this.state.form_data.referral_code !== "") {
         let item = {
-          promo_code: this.state.referral_code,
+          promo_code: this.state.form_data.referral_code,
         };
         storageService().setObject("user_promo", item);
       }

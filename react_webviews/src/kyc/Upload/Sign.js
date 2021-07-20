@@ -3,14 +3,14 @@ import Container from '../common/Container'
 import { PATHNAME_MAPPER, SUPPORTED_IMAGE_TYPES } from '../constants'
 import { isEmpty } from '../../utils/validators'
 import { upload } from '../common/api'
-import { isDigilockerFlow, getFlow } from '../common/functions'
+import { isDigilockerFlow, getFlow, skipBankDetails } from '../common/functions'
 import { getConfig, navigate as navigateFunc } from 'utils/functions'
 import toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import WVInfoBubble from '../../common/ui/InfoBubble/WVInfoBubble'
-import "./commonStyles.scss";
 import KycUploadContainer from '../mini-components/KycUploadContainer'
 import { nativeCallback } from '../../utils/native_callback'
+import "./commonStyles.scss";
 
 const isWeb = getConfig().Web
 const Sign = (props) => {
@@ -23,11 +23,13 @@ const Sign = (props) => {
   const {kyc, isLoading, updateKyc} = useUserKycHook();
 
   const onFileSelectComplete = (file, fileBase64) => {
+    sendEvents("sign");
     setFile(file);
     setFileToShow(fileBase64)
   }
 
   const onFileSelectError = () => {
+    sendEvents("sign");
     toast('Please select image file only')
   }
 
@@ -35,13 +37,18 @@ const Sign = (props) => {
     sendEvents('next')
     try {
       setIsApiRunning("button")
-      const result = await upload(file, 'sign')
+      const payload = { manual_upload: isWeb }
+      const result = await upload(file, 'sign', payload)
       updateKyc(result.kyc);
       const dlFlow = isDigilockerFlow(result.kyc);
       const type = result?.kyc?.kyc_status === "compliant" ? "compliant" : "non-compliant";
 
       if (dlFlow || type === "compliant") {
-        navigate(`/kyc/${type}/bank-details`);
+        if (!skipBankDetails()) {
+          navigate(`/kyc/${type}/bank-details`);
+        } else {
+          navigate(PATHNAME_MAPPER.journey);
+        }
       } else {
         if (props?.location?.state?.backToJourney) {
           navigate(PATHNAME_MAPPER.journey);
@@ -59,22 +66,21 @@ const Sign = (props) => {
 
   const sendEvents = (userAction, type) => {
     let eventObj = {
-      "event_name": 'KYC_registration',
-      "properties": {
-        "user_action": userAction || "",
-        "screen_name": "sign_doc",
-        "type": type || "",
-        "initial_kyc_status": kyc.initial_kyc_status || "",
+      event_name: "kyc_registration",
+      properties: {
+        user_action: userAction || "",
+        screen_name: "share_signature",
+        // "type": type || "",
+        // "initial_kyc_status": kyc.initial_kyc_status || "",
         "flow": getFlow(kyc) || ""
-      }
+      },
     };
-    if (userAction === 'just_set_events') {
+    if (userAction === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
-  }
-
+  };
 
   return (
     <Container
@@ -107,11 +113,14 @@ const Sign = (props) => {
             </div>
             <KycUploadContainer.Button
               withPicker
-              nativePickerMethodName={!isWeb ? 'open_canvas' : 'open_gallery'}
-              fileName="signature"
-              onFileSelectComplete={onFileSelectComplete}
-              onFileSelectError={onFileSelectError}
-              supportedFormats={SUPPORTED_IMAGE_TYPES}
+              filePickerProps={{
+                nativePickerMethodName: !isWeb ? 'open_canvas' : 'open_gallery',
+                shouldCompress: isWeb,
+                fileName: "signature",
+                onFileSelectComplete: onFileSelectComplete,
+                onFileSelectError: onFileSelectError,
+                supportedFormats: SUPPORTED_IMAGE_TYPES
+              }}
             >
               {!file ? "SIGN" : "SIGN AGAIN"}
             </KycUploadContainer.Button>

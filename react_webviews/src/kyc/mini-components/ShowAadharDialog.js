@@ -15,7 +15,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
       image={require(`assets/${productName}/icn_aadhaar_kyc_small.svg`)}
       button1Props={{
         title: "CONNECT DIGILOCKER",
-        type: "primary",
+        variant: "contained",
         onClick: redirect,
       }}
       dataAidSuffix="kyc-show-aadhar"
