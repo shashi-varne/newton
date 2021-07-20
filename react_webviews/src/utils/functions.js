@@ -707,6 +707,8 @@ export const getConfig = () => {
     if (main_pathname.indexOf('term') >= 0) {
       project_child = 'term';
     }
+  } else if (main_pathname.indexOf('fhc') >= 0) {
+    project = 'fhc';
   } else if (main_pathname.indexOf('insurance') >= 0) {
     project = 'insurance';
   } else if (main_pathname.indexOf('risk') >= 0) {
