@@ -61,7 +61,7 @@ class MyAccount extends Component {
     this.navigate("/kyc/communication-details", {
       state: {
         accountAlreadyExistsData: this.state.accountAlreadyExistsData,
-        callHandelClick: true,
+        callHandleClick: true,
         continueAccountAlreadyExists: true,
       },
     });

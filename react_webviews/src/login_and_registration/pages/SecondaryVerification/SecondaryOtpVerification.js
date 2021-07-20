@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import WVClickableTextElement from "../../../common/ui/ClickableTextElement/WVClickableTextElement";
 import Container from "../../../dashboard/common/Container";
+import OtpContainer from "../../common/OtpContainer";
 import { initialize } from "../../functions";
-import OtpComp from "../Otp/reset_opt";
-import "./secondaryStyle.scss";
+import "./secondaryVerification.scss";
 import { toast } from "react-toastify";
 
 export class SecondaryOtpVerification extends Component {
@@ -54,43 +53,48 @@ export class SecondaryOtpVerification extends Component {
     });
   };
 
+  secondaryOtpNavigate = () => this.navigate('/secondary-verification', {
+    state: {
+      communicationType: this.state.communicationType,
+      contactValue: this.state.value,
+      edit: true,
+    }
+  })
 
+  handleResendOtp = () => {
+    this.resendOtp(this.state.otp_id)
+    this.setState({
+      otpData: { ...this.state.otpData, timeAvailable: 15, },
+    });
+  }
 
   render() {
-    const { showDotLoader, communicationType, otp_id } = this.state;
+    const { showDotLoader, communicationType, value, isWrongOtp, otpData } = this.state;
     return (
       <Container
         title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"
           }`}
         buttonTitle="VERIFY"
+        disable={otpData.otp?.length === 4 ? false : true}
         showLoader={this.state.isApiRunning}
         canSkip={true}
         onSkipClick={() => this.navigate("/")}
         handleClick={() => this.handleClick()}
       >
-        <div className="verify-otp-container verify-otp-container-secondary">
-          <div className="verify-otp-header">
-            <p>
-              An OTP has been sent to{" "}
-              <span style={{ fontWeight: "500", marginRight: "23px" }}>{this.state.value}</span>
-            </p>
-            <WVClickableTextElement onClick={() => this.navigate('/secondary-verification', {
-              state: {
-                communicationType: communicationType,
-                contactValue: this.state.mobile_number
-              }
-            })}>EDIT</WVClickableTextElement>
-          </div>
-          <div className="kcd-otp-content">
-            <OtpComp
-              otpData={this.state.otpData}
-              showDotLoader={showDotLoader}
-              handleOtp={this.handleOtp}
-              resendOtp={this.resendOtp}
-              resend_url={otp_id}
-            />
-          </div>
-        </div>
+        <OtpContainer
+          handleClickText={"EDIT"}
+          handleClick={this.secondaryOtpNavigate}
+          classes={{
+            body: "verify-otp-container-secondary"
+          }}
+          otpData={otpData}
+          showDotLoader={showDotLoader}
+          handleOtp={this.handleOtp}
+          resendOtp={this.handleResendOtp}
+          isWrongOtp={isWrongOtp}
+          bottomText={isWrongOtp ? "Invalid OTP": ""}
+          value={value}>
+        </OtpContainer>
       </Container>
     );
   }
