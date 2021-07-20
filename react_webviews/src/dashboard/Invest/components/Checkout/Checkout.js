@@ -19,6 +19,7 @@ import "./Checkout.scss";
 import { nativeCallback } from "../../../../utils/native_callback";
 
 const config = getConfig();
+const productName = config.productName;
 class Checkout extends Component {
   constructor(props) {
     super(props);
@@ -328,7 +329,7 @@ class Checkout extends Component {
                     }
                   >
                     {investType === data.value && (
-                      <img alt="" src={require(`assets/${config.productName}/${data.icon}`)} />
+                      <img alt="" src={require(`assets/${productName}/${data.icon}`)} />
                     )}
                     {investType !== data.value && (
                       <img
@@ -342,7 +343,7 @@ class Checkout extends Component {
                       <img
                         className="icon"
                         alt=""
-                        src={require(`assets/${config.productName}/${data.selected_icon}`)}
+                        src={require(`assets/${productName}/${data.selected_icon}`)}
                       />
                     )}
                   </div>

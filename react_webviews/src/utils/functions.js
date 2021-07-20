@@ -64,9 +64,7 @@ function getPartnerConfig(partner_code) {
 
   // Generating partnerData
   const partnerData = getPartnerData(productType, partner_code); 
-  let config_to_return = {
-    ...partnerData
-  };
+  let config_to_return = partnerData;
 
   if (isStaging) {
     // config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
