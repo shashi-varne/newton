@@ -1,4 +1,4 @@
-import Button from 'common/ui/Button'
+// import Button from 'common/ui/Button'
 import React, { useEffect, useState } from 'react'
 import Container from '../../common/Container'
 import { withdrawOptions } from '../../constants'
@@ -53,14 +53,14 @@ const Balance = (props) => {
     setOpen(false)
   }
 
-  const handleSwitch = () => {
-    sendEvents('next', 'switch_now')
-    setType("/withdraw/switch")
-    setAmount('');
-    setError(false)
-    setHelperText('');
-    setOpen(true)
-  }
+  // const handleSwitch = () => {
+  //   sendEvents('next', 'switch_now')
+  //   setType("/withdraw/switch")
+  //   setAmount('');
+  //   setError(false)
+  //   setHelperText('');
+  //   setOpen(true)
+  // }
 
   const validateAmount = (value) => {
     let data = { error: false, helperText: "" };
