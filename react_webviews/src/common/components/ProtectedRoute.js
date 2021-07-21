@@ -24,8 +24,8 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     try {
       await initData();
       current_user = storageService().get("currentUser");
-      user = storageService().get("user") || {};
-      kyc = storageService().get("kyc") || {};
+      user = storageService().getObject("user") || {};
+      kyc = storageService().getObject("kyc") || {};
       const userDataAvailable =
         current_user && !isEmpty(kyc) && !isEmpty(user) ? true : false;
       setIsLoginValid(userDataAvailable);
