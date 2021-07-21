@@ -70,7 +70,6 @@ class Otp extends Component {
     let loginType = communicationType === "email" ? "email" : "mobile";
     let showDotLoader = false;
     return (
-      <LoginContainer>
         <div className="verify-otp-container">
           <p className="title">{`Enter OTP to verify your ${loginType === "email" ? "email" : "number"
             }`}</p>
@@ -111,7 +110,6 @@ class Otp extends Component {
             <p className="go-back-to-login">GO BACK TO LOGIN</p>
           </WVClickableTextElement> */}
         </div>
-      </LoginContainer>
     );
   }
 }

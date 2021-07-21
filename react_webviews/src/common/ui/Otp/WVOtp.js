@@ -34,9 +34,9 @@ const WVOtp = ({
         />
       </div>
       {bottomText &&
-        <span className={hasError ? "wv-otp-error-text" : ""}>
+        <p className={hasError ? "wv-otp-error-text" : "wv-otp-text"}>
           {bottomText}
-        </span>
+        </p>
       }
     </div>
   );
