@@ -4,7 +4,7 @@ import { initialize } from "../../functions";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 // import { validateNumber } from "../../utils/validators";
-import OtpComp from "../Otp/reset_opt";
+import OtpComp from "../../common/OtpContainer";
 import WVButton from "../../../common/ui/Button/WVButton";
 import LoginContainer from "./LoginContainer"
 
