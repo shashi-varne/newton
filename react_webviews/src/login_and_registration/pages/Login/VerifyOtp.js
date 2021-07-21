@@ -1,16 +1,10 @@
 import React, { Component } from "react";
 import "./commonStyles.scss";
 import { initialize } from "../../functions";
-import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
-// import { validateNumber } from "../../utils/validators";
-import OtpComp from "../../common/OtpContainer";
 import WVButton from "../../../common/ui/Button/WVButton";
 import LoginContainer from "./LoginContainer"
-
-const config = getConfig();
-const isMobileView = config.isMobileDevice;
-// const productName = config.productName;
+import OtpContainer from "../../common/OtpContainer";
 class Otp extends Component {
   constructor(props) {
     super(props);
@@ -67,50 +61,37 @@ class Otp extends Component {
   render() {
     let { isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
     let disabled = otpData.otp?.length !== 4;
-    let loginType = communicationType === "email" ? "email" : "mobile";
     let showDotLoader = false;
     return (
       <LoginContainer>
-        <div className="verify-otp-container">
-          <p className="title">{`Enter OTP to verify your ${loginType === "email" ? "email" : "number"
-            }`}</p>
-          <div className="verify-otp-header">
-            <p>
-              An OTP has been sent to{" "}
-              <span style={{ fontWeight: "500", marginRight: "23px" }}>
-                {this.state.value}
-              </span>
-            </p>
-          </div>
-          <div className="kcd-otp-content">
-            <OtpComp
-              otpData={this.state.otpData}
-              showDotLoader={showDotLoader}
-              handleOtp={this.handleOtp}
-              resendOtp={this.resendLoginOtp}
-              isWrongOtp={isWrongOtp}
-              resend_url={this.state.resend_url}
-            />
-          </div>
-            <WVButton
-              variant='contained'
-              size='large'
-              color="secondary"
-              onClick={this.handleClick}
-              disabled={disabled}
-              showLoader={isApiRunning}
-              fullWidth
-              className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button login-otp-button-web"}
-            >
-              CONTINUE
+        <OtpContainer
+          title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
+          otpData={this.state.otpData}
+          showDotLoader={showDotLoader}
+          handleOtp={this.handleOtp}
+          resendOtp={this.handleResendOtp}
+          isWrongOtp={isWrongOtp}
+          value={this.state.otpData.otp}
+          classes={{
+            subtitle: "login-subtitle"
+          }}
+        >
+          <WVButton
+            variant='contained'
+            size='large'
+            color="secondary"
+            onClick={this.handleClick}
+            disabled={disabled}
+            showLoader={isApiRunning}
+            fullWidth
+            className="login-button"
+          >
+            CONTINUE
             </WVButton>
-            <WVButton classes={{ label: 'go-back-to-login' }}>
-              Go Back to Login
-            </WVButton>
-          {/* <WVClickableTextElement onClick={() => this.props.history.goBack()}>
-            <p className="go-back-to-login">GO BACK TO LOGIN</p>
-          </WVClickableTextElement> */}
-        </div>
+          <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "40px auto 0px" }} onClick={() => this.props.history.goBack()}>
+            Go Back to Login
+          </WVButton>
+        </OtpContainer>
       </LoginContainer>
     );
   }
