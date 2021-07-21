@@ -72,7 +72,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             </IconButton>
           }
           {
-            headerData.partnerLogo && 
+            headerData.partnerLogo && config.isMobileDevice &&
              <div className='sdk-header-partner-logo'>
                 <img src={require(`assets/${partnerLogo}`)} alt="partner logo" /> 
             </div>
