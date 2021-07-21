@@ -254,7 +254,7 @@ export async function triggerOtpApi(body, loginType) {
     if (status === 200) {
       this.setState({ isApiRunning: false });
       if (body?.secondaryVerification) {
-        this.navigate("secondary-otp-verification", {
+        this.navigate("login/secondary-otp-verification", {
           state: {
             value: body.mobile ||  body.email,
             rebalancing_redirect_url: this.state.rebalancingRedirectUrl,
@@ -697,7 +697,7 @@ export async function getKycFromSummary() {
 export function redirectAfterLogin(data, user) {
   const kyc = storageService().getObject("kyc");
   if (data.firstLogin) {
-    this.navigate("/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
+    this.navigate("login/referral-code", { state: { goBack: "/", communicationType: data?.contacts?.auth_type } });
   } else if (
     user.kyc_registration_v2 === "incomplete" &&
     user.active_investment

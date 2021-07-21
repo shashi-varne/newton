@@ -6,7 +6,7 @@ const VerifyMPin = ({
     otpProps = {}
 }) => {
     return (
-        <div className="verify-otp-container">
+        <div className="verify-otp-container" style={{alignItems: "center"}}>
             <Imgc
                 src={require(`assets/padlock1.svg`)}
                 alt=""
