@@ -6,6 +6,7 @@ import PinChangeSuccess from "../ForgotPin/PinChangeSuccess";
 import Login from "./Login";
 import VerifyLoginOtp from "./VerifyLoginOtp";
 import VerifyPin from "./VerifyPin";
+import Referral from "../Referral/Referral"
 
 const config = getConfig();
 const { productName } = config;
@@ -26,9 +27,9 @@ const LoginContainer = (props) => {
           <Switch>
             <Route path={`${url}`} exact component={Login} />
             <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
-            <Route path={`${url}/referral`} component={PinChangeSuccess} />
             <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
             <Route path={`${url}/verify-pin`} component={VerifyPin} />
+            <Route path={`${url}/referral`} component={Referral} />
             <Route path={`${url}/forgot-pin`} component={PinChangeSuccess} />
             <Route path={`${url}/reset-pin`} component={PinChangeSuccess} />
           </Switch>

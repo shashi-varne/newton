@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import "./commonStyles.scss";
 import { initialize } from "../../functions";
 import toast from "common/ui/Toast";
+import OtpContainer from "../../common/OtpContainer"
 import WVButton from "../../../common/ui/Button/WVButton";
 import OtpContainer from "../../common/OtpContainer";
 class VerifyLoginOtp extends Component {
@@ -57,8 +57,15 @@ class VerifyLoginOtp extends Component {
     });
   };
 
+  handleResendOtp = () => {
+    this.resendLoginOtp(this.state.resend_url)
+    this.setState({
+      otpData: { ...this.state.otpData, timeAvailable: 15, },
+    });
+  }
+
   render() {
-    let { isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
+    let { value, isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
     let disabled = otpData.otp?.length !== 4;
     let showDotLoader = false;
     return (
@@ -69,7 +76,7 @@ class VerifyLoginOtp extends Component {
         handleOtp={this.handleOtp}
         resendOtp={this.handleResendOtp}
         isWrongOtp={isWrongOtp}
-        value={this.state.otpData.otp}
+        value={value}
         classes={{
           subtitle: "login-subtitle"
         }}

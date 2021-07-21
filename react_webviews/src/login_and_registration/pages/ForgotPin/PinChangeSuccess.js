@@ -11,19 +11,20 @@ const PinChangeSuccess = () => {
 
   return (
     <>
-      <MPinChangeSuccess/>
-      <WVButton
-        variant='contained'
-        size='large'
-        color="secondary"
-        onClick={() => navigate("/login")}
-        disabled={false}
-        showLoader={false}
-        fullWidth
-        className={isMobileView ? "login-otp-button login-otp-button-mobile" : "login-otp-button login-otp-button-web"}
-      >
-        LOG IN again
+      <MPinChangeSuccess>
+        <WVButton
+          variant='contained'
+          size='large'
+          color="secondary"
+          onClick={() => navigate("/login")}
+          disabled={false}
+          showLoader={false}
+          fullWidth
+          className="login-otp-button"
+        >
+          LOG IN again
       </WVButton>
+      </MPinChangeSuccess>
     </>
   );
 }

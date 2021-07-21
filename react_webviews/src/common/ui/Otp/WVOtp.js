@@ -38,7 +38,7 @@ const WVOtp = ({
         />
       </div>
       {bottomText &&
-        <span
+        <p
           className={`
             wv-otp-text 
             ${hasError ? 'wv-otp-text-error' + classes.bottomTextError : ''} 
@@ -46,7 +46,7 @@ const WVOtp = ({
           `}
         >
           {bottomText}
-        </span>
+        </p>
       }
     </div>
   );

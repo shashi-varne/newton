@@ -33,7 +33,7 @@ const VerifyPin = (props) => {
           otp,
           // isDisabled:,
           // hasError:,
-          // bottomText: "Enter Fisdom PIN"
+          otpBottomText: "Enter Fisdom PIN"
         }}
       />
       <WVClickableTextElement onClick={() => navigate("/forgot-fisdom-pin")}>
