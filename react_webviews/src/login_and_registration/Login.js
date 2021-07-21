@@ -221,27 +221,27 @@ class Login extends Component {
             {productName === "finity" && (
               <div className="features" data-aid='login-features'>
                 <div className="item">
-                  <img src={require(`assets/icons-07.png`)} alt="" />
+                  <img src={require(`assets/${productName}/icons-07.svg`)} alt="" />
                   <div className="title">Bank Grade Security</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/icons-09.png`)} alt="" />
+                  <img src={require(`assets/${productName}/icons-09.svg`)} alt="" />
                   <div className="title">Track & Withdraw 24/7</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/portfolio-rebal.png`)} alt="" />
+                  <img src={require(`assets/${productName}/portfolio-rebal.svg`)} alt="" />
                   <div className="title">Portfolio Rebalancing</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/insta_switch.png`)} alt="" />
+                  <img src={require(`assets/${productName}/insta_switch.svg`)} alt="" />
                   <div className="title">Insta Switch</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/smart_reco.png`)} alt="" />
+                  <img src={require(`assets/${productName}/smart_reco.svg`)} alt="" />
                   <div className="title">Smart Recommendation Engine</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/icons-08.png`)} alt="" />
+                  <img src={require(`assets/${productName}/icons-08.svg`)} alt="" />
                   <div className="title">Paperless KYC in 5 minutes</div>
                 </div>
               </div>

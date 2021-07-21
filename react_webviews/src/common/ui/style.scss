@@ -1126,7 +1126,7 @@ body[data-device="mobile"] {
   }
   50%,
   100% {
-    background-color: #119A4B;
+    background-color: var(--on-focus-background);
     opacity: 0.7;
   }
 }

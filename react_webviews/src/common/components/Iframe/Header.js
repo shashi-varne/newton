@@ -59,7 +59,7 @@ const Header = ({ classes, goBack, disableBack, headerData = {} }) => {
         )}
         {partnerCode === 'moneycontrol' && !isMobileDevice ? (
           <div>
-            <img src={require(`assets/finity_white_logo_2.png`)} alt='' />
+            <img style={{verticalAlign: "middle"}} src={require(`assets/finity_white_logo.svg`)} height="35" alt='' />
           </div>
         ) : (
           <div />

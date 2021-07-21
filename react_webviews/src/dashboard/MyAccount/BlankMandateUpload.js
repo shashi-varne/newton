@@ -214,7 +214,7 @@ const BlankMandateUpload = (props) => {
                 className="blank-mandate-upload-button"
                 data-aid='blank-mandate-upload-btn'
               >
-                <img alt="" src={require(`assets/go_to_gallery_green.svg`)} />
+                <img alt="" src={require(`assets/${config.productName}/go_to_gallery_green.svg`)} />
                 <div className="upload-action" data-aid='blank-mandate-open-gallery-text'>Open Gallery</div>
               </button>
             </div>

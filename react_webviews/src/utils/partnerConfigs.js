@@ -105,16 +105,35 @@ export const baseStylesConfig = {
     primaryColor: "#4f2da7",
     secondaryColor: "#35cb5d",
     highlightColor: "#f6f2ff",
-    // backButtonColor: '#2E3192',
+    secondaryGreen: "#7ED321"
   },
   finity: {
     default: "#4a4a4a",
-    primaryColor: "#3792fc",
-    secondaryColor: "#35cb5d",
-    highlightColor: "#F0F7FF",
-    // backButtonColor: '#2E3192',
+    primaryColor: "#675AF6",
+    secondaryColor: "#675AF6",
+    highlightColor: "#EFEEFB",
+    secondaryGreen: "#33CF90"
   },
 };
+
+export const baseButtonConfig = {
+  common: {
+    borderRadius: 4,
+    disabledColor: '#FFFFFF',
+  },
+  fisdom: {
+    disabledBackgroundColor: "#E8ECF1",
+    focusBackgroundColor: "#119A4B",
+    hoverBackgroundColor: "#35cb5d",
+    hoverSecondaryBackgroundColor: "#FFFFFF",
+  },
+  finity: {
+    disabledBackgroundColor: "#E6E5F4",
+    focusBackgroundColor: "#4F47BA",
+    hoverBackgroundColor: "#4F47BA",
+    hoverSecondaryBackgroundColor: "#F5F4FD",
+  },
+}
 
 export const baseUIElementsConfig = {
   formLabel: {
@@ -166,7 +185,7 @@ export const partnerConfigs = {
     navLinkOptions:{loan: true}
   },
   finity: {
-    logo: "finity_white_logo.png",
+    logo: "finity_white_logo.svg",
     code: "finity",
     mobile: "+91-9916149111",
     investSubSectionMap: {
@@ -202,10 +221,10 @@ export const partnerConfigs = {
       backButtonColor: "#ff5928",
     },
     uiElements: {
-      bottomCta: {
-        disabledColor: "#ffffff",
-      },
-    },
+      button: {
+        hoverBackgroundColor: "#ff5928",
+      }
+    }
   },
   alb: {
     logo: "alb.png",
@@ -296,11 +315,7 @@ export const partnerConfigs = {
     uiElements: {
       button: {
         borderRadius: 25,
-      },
-      bottomCta: {
         disabledBackgroundColor: "#F1D5C9", // same as 'cta_disabled_background'
-        disabledColor: "#ffffff", // same as cta_disabled_color
-        borderRadius: 25,
       },
     },
   },
@@ -338,11 +353,6 @@ export const partnerConfigs = {
     styles: {
       primaryColor: "#F5821F",
       secondaryColor: "#F5821F",
-    },
-    uiElements: {
-      bottomCta: {
-        disabledColor: "#ffffff",
-      },
     },
   },
   sbm: {
@@ -433,14 +443,6 @@ export const partnerConfigs = {
     email: "moneycontrol@finity.in",
     mobile: "+91-7829228886", // check with satendra -> mobile is of fisdom
     message: "",
-    styles: {
-      primaryColor: "#3792FC",
-    },
-    uiElements: {
-      header: {
-        backgroundColor: "#FFF", // same as white_header
-      },
-    },
   },
   taxwin: {
     code: "taxwin",
@@ -460,15 +462,49 @@ export const partnerConfigs = {
   google: {
     code: "google",
     mobile: "+80-48-093070",
-    uiElements: {
-      header: {
-        backgroundColor: "#FFF", // same as white_header
-      },
-    },
   },
   quesscorp: {
     code: 'quesscorp',
     mobile: '+91-9642596425',
-    search_button: 'search.png'
   }
 };
+
+export const getPartnerData = (productType, partnerCode) => {
+  // Appending base config of the productType(fisdom/finity) with the common config accross all partners
+  let partnerConfigToReturn = {
+    ...commonCardsConfig,
+    ...basePartnerConfig[productType],
+  };
+  const partnerData = partnerConfigs[partnerCode] || partnerConfigs["fisdom"];
+  partnerConfigToReturn = {
+    ...partnerConfigToReturn, // taking the base config of the productType(fisdom/finity)
+    ...partnerData, // overriding with particular partner config
+    styles: {
+      ...baseStylesConfig.common,
+      ...baseStylesConfig[productType], //taking common base styles config
+      ...partnerData?.styles, // overriding with the partner styles
+    },
+    uiElements: {
+      formLabel: {
+        ...baseUIElementsConfig.formLabel,
+        ...partnerData.uiElements?.formLabel
+      },
+      header: {
+        ...partnerData.uiElements?.header
+      },
+      title: {
+        ...partnerData.uiElements?.title
+      },
+      button : {
+        ...baseButtonConfig.common,
+        ...baseButtonConfig[productType],
+        ...partnerData.uiElements?.button
+      }
+    },
+    typography: {
+      ...baseTypographyConfig[productType],
+      ...partnerData?.typography,
+    }
+  };
+  return partnerConfigToReturn;
+}
