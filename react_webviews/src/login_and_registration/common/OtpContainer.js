@@ -1,10 +1,9 @@
-import "./commonStyles.scss";
+import "./OtpContainer.scss";
 import React, { useEffect, useState } from "react";
 import WVOtp from "../../common/ui/Otp/WVOtp";
 import DotDotLoader from "../../common/ui/DotDotLoader";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
 import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
-import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
 
 const OtpContainer = (props) => {
     const {
@@ -35,9 +34,7 @@ const OtpContainer = (props) => {
     return (
         <div className={`verify-otp-container ${classes.body}`}>
             {title && 
-                <WVInPageHeader>
-                    <WVInPageTitle>{title}</WVInPageTitle>
-                </WVInPageHeader>
+                <WVInPageTitle>{title}</WVInPageTitle>
             }
             <div className={`verify-otp-header ${classes.subtitle}`}>
                 <p>
@@ -72,15 +69,15 @@ const OtpContainer = (props) => {
                         <div
                             className={`cd-otp-resend-text ${props.class}`}
                             onClick={() => {
-                                resendOtp(),
-                                setTimeAvailable(otpData?.timeAvailable)
+                                resendOtp();
+                                setTimeAvailable(otpData?.timeAvailable);
                             }}
                         >
                             {showDotLoader ? (
                                 <DotDotLoader className="cd-resend-loader" />
                             ) : (
-                                    "RESEND OTP"
-                                )}
+                                "RESEND OTP"
+                            )}
                         </div>
                     )}
                 </div>

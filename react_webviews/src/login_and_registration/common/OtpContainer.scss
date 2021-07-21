@@ -8,7 +8,8 @@
     display: flex;
     align-items: center;
     margin-bottom: 40px;
-    margin-top: -10px;
+    margin-top: 5px;
+
     p {
       font-size: 13px;
       line-height: 21px;
@@ -16,9 +17,7 @@
       margin: 0;
     }
   } 
-   .login-subtitle{
-    margin-top: -20px;
-  }
+  
   .default-otp-input-container {
     justify-content: start;
     margin-top: 30px;
@@ -29,33 +28,8 @@
       padding: 4px;
     }
   }
-  .login-button {
-    margin: 20px auto;
-    margin-top: 60px;
-    width: 100%;
-  }
-  .go-back-to-login{
-     justify-content: center;
-     display: flex;
-     color: var(--secondary);
-  }
 }
 .verify-otp-container-secondary{
   padding: 0 !important
-}
-
-@media only screen and (max-height: 900px) {
-  .verify-otp-container{
-    .login-button{
-      position: fixed;
-      z-index: 9999;
-      bottom: 0;
-      left:0;
-      right:0;
-      margin-left:auto;
-      margin-right:auto;
-      width: calc(100% - 40px);
-    }
-  }
 }
 //----------------------------verify-otp-CSS-END--------------------------- //

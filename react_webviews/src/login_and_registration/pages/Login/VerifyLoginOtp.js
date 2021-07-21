@@ -1,9 +1,9 @@
+import './commonStyles.scss';
 import React, { Component } from "react";
 import { initialize } from "../../functions";
 import toast from "common/ui/Toast";
 import OtpContainer from "../../common/OtpContainer"
 import WVButton from "../../../common/ui/Button/WVButton";
-import OtpContainer from "../../common/OtpContainer";
 class VerifyLoginOtp extends Component {
   constructor(props) {
     super(props);
@@ -82,18 +82,21 @@ class VerifyLoginOtp extends Component {
         }}
       >
         <WVButton
-          variant='contained'
-          size='large'
+          contained
+          fullWidth
           color="secondary"
           onClick={this.handleClick}
           disabled={disabled}
           showLoader={isApiRunning}
-          fullWidth
-          className="login-button"
+          classes={{ root: "login-button" }}
         >
           CONTINUE
-          </WVButton>
-        <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "40px auto 0px" }} onClick={() => this.props.history.goBack()}>
+        </WVButton>
+        <WVButton
+          color="secondary"
+          classes={{ root: 'go-back-to-login' }}
+          onClick={() => this.props.history.goBack()}
+        >
           Go Back to Login
         </WVButton>
       </OtpContainer>
