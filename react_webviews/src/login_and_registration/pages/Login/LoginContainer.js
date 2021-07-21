@@ -1,9 +1,11 @@
-import "./loginStyle.scss";
+import "./LoginContainer.scss";
 import React from "react";
 import { getConfig } from "utils/functions";
 import { Route, Switch } from "react-router-dom";
 import PinChangeSuccess from "../ForgotPin/PinChangeSuccess";
 import Login from "./Login";
+import VerifyLoginOtp from "./VerifyLoginOtp";
+import VerifyPin from "./VerifyPin";
 
 const config = getConfig();
 const { productName } = config;
@@ -25,7 +27,8 @@ const LoginContainer = (props) => {
             <Route path={`${url}`} exact component={Login} />
             <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
             <Route path={`${url}/referral`} component={PinChangeSuccess} />
-            <Route path={`${url}/verify-otp`} component={PinChangeSuccess} />
+            <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
+            <Route path={`${url}/verify-pin`} component={VerifyPin} />
             <Route path={`${url}/forgot-pin`} component={PinChangeSuccess} />
             <Route path={`${url}/reset-pin`} component={PinChangeSuccess} />
           </Switch>

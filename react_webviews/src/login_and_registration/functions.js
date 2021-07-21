@@ -436,12 +436,16 @@ export async function otpLoginVerification(verify_url, body) {
     const res = await Api.post(verify_url, formData);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      storageService().setObject("user", result.user);
+      if (result.user.pin_status === 'pin_setup_complete') {
+        return this.navigate('login/verify-pin');
+      }
+      // TODO: When to trigger these events
       let eventObj = {
         event_name: "user loggedin",
       };
       nativeCallback({ events: eventObj });
       applyCode(result.user);
-      storageService().setObject("user", result.user);
       storageService().set("currentUser", true);
       if (this.state.rebalancing_redirect_url) {
         window.location.href = this.state.rebalancing_redirect_url;
