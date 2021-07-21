@@ -150,7 +150,7 @@ const SipPaymentCallback = (props) => {
       buttonTitle={buttonTitle}
       showLoader={isApiRunning}
       handleClick={() => handleClick()}
-      iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'payment_failed' : 'payment_success'}.svg`)}
+      iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'error_illustration' : 'congratulations_illustration'}.svg`)}
       title={!paymentError ? "Payment successful" : "Payment failed"}
       skelton={skelton}
       headerData={{goBack}}

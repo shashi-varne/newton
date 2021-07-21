@@ -91,7 +91,7 @@ const PaymentCallback = (props) => {
       handleClick={handleClick}
       headerData={{goBack}}
       skelton={isLoading}
-      iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'payment_failed' : 'payment_success'}.svg`)}
+      iframeRightContent={require(`assets/${config.productName}/${paymentError ? 'error_illustration' : 'congratulations_illustration'}.svg`)}
     >
       <section className="invest-payment-callback" data-aid='invest-payment-callback'>
         {!paymentError && (
