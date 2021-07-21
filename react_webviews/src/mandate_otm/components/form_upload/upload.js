@@ -4,6 +4,7 @@ import qs from 'qs';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import camera_green from 'assets/take_pic_green.svg';
+import camera_finity from 'assets/finity/take_pic_finity.svg';
 import camera_grey from 'assets/take_pic_grey.svg';
 import gallery_green from 'assets/go_to_gallery_green.svg';
 import gallery_grey from 'assets/go_to_gallery_grey.svg';
@@ -30,7 +31,8 @@ class Upload extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       openDialog: false,
       fileUploaded: false,
-      openDialogOldClient: false
+      openDialogOldClient: false,
+      productName: getConfig().productName
     }
     this.handleContinue = this.handleContinue.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -378,8 +380,8 @@ class Upload extends Component {
               textAlign: 'center',
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
-              <img src={camera_green} alt="OTM"></img>
-              <div style={{ color: '#28b24d' }}>Click here to upload</div>
+              <img src={this.state.productName !== 'fisdom' ? camera_finity : camera_green} alt="OTM"></img>
+              <div style={{ color: getConfig().secondary }}>Click here to upload</div>
             </div>
           </div>
         </div>}
@@ -396,7 +398,7 @@ class Upload extends Component {
             }}>
               <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
               <img src={camera_grey} alt="OTM"></img>
-              <div style={{ color: '#b4b4b4' }}>Click here to upload</div>
+              <div style={{color: getConfig().secondary }}>Click here to upload</div>
             </div>
           </div>
         </div>}
@@ -418,7 +420,7 @@ class Upload extends Component {
               textAlign: 'center', borderRight: '1px solid #e1e1e1'
 
             }}>
-              <img src={camera_green} alt="OTM"></img>
+              <img src={this.state.productName !== 'fisdom' ? camera_finity : camera_green} alt="OTM"></img>
               <div style={{ color: '#28b24d' }}>Open Camera</div>
             </div>
             <div onClick={() => this.startUpload('open_gallery', 'otm', 'otm.jpg')} style={{ textAlign: 'center' }}>
@@ -597,7 +599,7 @@ class Upload extends Component {
             <div style={{ color: '#4a4a4a', fontSize: 14, fontWeight: 600 }}>
               Didn’t recieve my OTM form?
             </div>
-            <div onClick={() => this.navigate('send-email')} style={{ color: '#28b24d', fontSize: 14, fontWeight: 500, marginTop: 10 }}>
+            <div onClick={() => this.navigate('send-email')} style={{ color: getConfig().secondary, fontSize: 14, fontWeight: 500, marginTop: 10 }}>
               Send me again.
           </div>
           </div>

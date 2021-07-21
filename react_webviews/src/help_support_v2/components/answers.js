@@ -5,6 +5,12 @@ import ReactHtmlParser from "react-html-parser";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { MyQueries, CustomSkelton } from "../common/mini_components";
+import fisdomBack from 'assets/back_nav_bar_icon.svg';
+import fisdomNext from 'assets/next_nav_bar_icon.svg';
+import finityBack from 'assets/finity/back_nav_bar_icon_finity.svg';
+import finityNext from 'assets/finity/next_nav_bar_icon_finity.svg';
+import { getConfig } from "../../utils/functions";
+
 class Answers extends Component {
   constructor(props) {
     super(props);
@@ -328,7 +334,7 @@ class Answers extends Component {
                 onClick={() => this.handleClick("prev")}
                 style={{ opacity: this.state.index === 0 ? 0.5 : 1 }}
               >
-                <img src={require(`assets/back_nav_bar_icon.svg`)} alt="" />
+                <img src={getConfig().productName !== 'fisdom' ? finityBack : fisdomBack} alt="" />
                 Prev
               </div>
               <div
@@ -342,7 +348,7 @@ class Answers extends Component {
                 }}
               >
                 Next
-                <img src={require(`assets/next_nav_bar_icon.svg`)} alt="" />
+                <img src={getConfig().productName !== 'fisdom' ? finityNext : fisdomNext} alt="" />
               </div>
             </div>
           </div>

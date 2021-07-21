@@ -5,7 +5,6 @@ import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
-import icon from 'assets/mandate_pending_icon.svg';
 import { nativeCallback } from 'utils/native_callback';
 
 const aboutQuestions = [
@@ -37,7 +36,8 @@ class About extends Component {
     this.state = {
       show_loader: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      questionIndex: -1
+      questionIndex: -1,
+      productName: getConfig().productName
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -124,7 +124,7 @@ class About extends Component {
         events={this.sendEvents('just_set_events')}
       >
         <div style={{ textAlign: 'center' }}>
-          <img width={100} src={icon} alt="OTM" />
+          <img width={100} src={require(`assets/${this.state.productName}/mandate_pending_icon.svg`)} alt="OTM" />
         </div>
         <div style={{
           color: getConfig().default, margin: '10px 0px 10px 0px',

@@ -432,8 +432,8 @@ button {
   text-align: center;
 }
 
-.FlexButtonGenericColor{
-  background-color: rgb(53, 203, 93);
+.FlexButtonGenericColor button{
+  background-color: var(--secondary);
   color: white;
   border-radius: 6px;
 }
