@@ -13,6 +13,9 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 import './common/theme/Style.scss';
 import "./common/ui/style.scss";
 import { getConfig } from './utils/functions';
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
+
 $(document).ready(function () {
   if (isMobile.Android()) {
     window.addEventListener('resize', function () {
@@ -46,5 +49,23 @@ $(document).ready(function () {
     }, false);
   }
 });
+
+if(getConfig().productName === "fisdom" && getConfig().isProdEnv)
+{
+  Sentry.init({
+    dsn: "https://38815adc8fd842e78c2145a583d26351@o60572.ingest.sentry.io/5726998",
+    integrations: [new Integrations.BrowserTracing()],
+    allowUrls:["wv.fisdom.com"],
+    tracesSampleRate: 1.0,
+  });
+}
+else if(getConfig().productName === "finity" && getConfig().isProdEnv){
+  Sentry.init({
+    dsn: "https://84e342a0046748bab6860aafcf7e86da@o60572.ingest.sentry.io/5727007",
+    integrations: [new Integrations.BrowserTracing()],
+    allowUrls:["wv.mywaywealth.com", "wv.finity.in"],
+    tracesSampleRate: 1.0,
+  });
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));

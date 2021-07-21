@@ -908,13 +908,20 @@ export const getConfig = () => {
     searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
     searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
-
+  let isProdEnv = false;
+  if (
+    base_url.indexOf("my.fisdom.com") >= 0 ||
+    base_url.indexOf("api.mywaywealth.com") >= 0 ||
+    base_url.indexOf("api.finity.in") >= 0
+  ) {
+    isProdEnv = true;
+  }
   // should be last
   returnConfig.current_params = main_query_params;
   returnConfig.base_url = base_url;
   returnConfig.searchParams = searchParams;
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
-
+  returnConfig.isProdEnv = isProdEnv
   returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
 
   return returnConfig;
