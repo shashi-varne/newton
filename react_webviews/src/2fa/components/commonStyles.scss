@@ -25,31 +25,29 @@
   }
 }
 
-.verify-otp-container {
-  min-height: 100%;
-  max-width: 614px;
-  background-color: white;
-  padding: 20px;
+.verify-mpin {
   display: flex;
   flex-direction: column;
   align-items: center;
-  .img-lock{
-    width: 20px;
-    height: 20px;
-  }
-  .reset-title{
+  
+  .vm-title {
     font-weight: 500;
     font-size: 15px;
     line-height: 32px;
-    color:#000000;
+    color: var(--dark);
     margin-bottom: 50px;
-  };
-  .enter-pin-subtitle{
+  }
+
+  .vm-subtitle {
+    margin-top: 10px;
     font-size: 13px;
     line-height: 22px;
     color: var(--steelgrey);
-    margin: 10px 0px 15px 5px;
-  };
+  }
+
+  .vm-otp-container {
+    margin-top: 20px;
+  }
 }
 
 .twofa-mpin-change-success{
