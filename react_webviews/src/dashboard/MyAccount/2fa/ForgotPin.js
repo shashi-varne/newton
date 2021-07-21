@@ -20,9 +20,9 @@ const ForgotPin = (props) => {
       handleClick={handleClick}
     >
       <ForgotMPin
-        primaryAuthType={stateParams.authType}
-        primaryAuthValue={stateParams.authValue}
-        isPANRequired={stateParams.isPanRequired}
+        primaryAuthType={stateParams?.authType}
+        primaryAuthValue={stateParams?.authValue}
+        isPANRequired={stateParams?.isPanRequired}
         // PANError={}
       />
     </Container>

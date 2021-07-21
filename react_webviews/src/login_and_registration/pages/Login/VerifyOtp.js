@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import "./commonStyles.scss";
 import { initialize } from "../../functions";
 import toast from "common/ui/Toast";
+import OtpContainer from "../../common/OtpContainer"
 import WVButton from "../../../common/ui/Button/WVButton";
-import LoginContainer from "./LoginContainer"
-import OtpContainer from "../../common/OtpContainer";
 class Otp extends Component {
   constructor(props) {
     super(props);
@@ -58,12 +56,18 @@ class Otp extends Component {
     });
   };
 
+  handleResendOtp = () => {
+    this.resendLoginOtp(this.state.resend_url)
+    this.setState({
+      otpData: { ...this.state.otpData, timeAvailable: 15, },
+    });
+  }
+
   render() {
-    let { isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
+    let { value, isApiRunning, otpData, isWrongOtp, communicationType } = this.state;
     let disabled = otpData.otp?.length !== 4;
     let showDotLoader = false;
     return (
-      <LoginContainer>
         <OtpContainer
           title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
           otpData={this.state.otpData}
@@ -71,7 +75,7 @@ class Otp extends Component {
           handleOtp={this.handleOtp}
           resendOtp={this.handleResendOtp}
           isWrongOtp={isWrongOtp}
-          value={this.state.otpData.otp}
+          value={value}
           classes={{
             subtitle: "login-subtitle"
           }}
@@ -90,9 +94,8 @@ class Otp extends Component {
             </WVButton>
           <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "40px auto 0px" }} onClick={() => this.props.history.goBack()}>
             Go Back to Login
-          </WVButton>
-        </OtpContainer>
-      </LoginContainer>
+            </WVButton>
+        </OtpContainer >
     );
   }
 }
