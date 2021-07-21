@@ -24,12 +24,12 @@ const LoginContainer = (props) => {
         </div>
         <div className="ld-right">
           <Switch>
-          <Route path={`${url}`} exact component={Login} />
-          <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
-          <Route path={`${url}/referral`} component={Referral} />
-          <Route path={`${url}/verify-otp`} component={Otp} />
-          <Route path={`${url}/forgot-pin`} component={PinChangeSuccess} />
-          <Route path={`${url}/reset-pin`} component={PinChangeSuccess} />
+            <Route path={`${url}`} exact component={Login} />
+            <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
+            <Route path={`${url}/referral`} component={Referral} />
+            <Route path={`${url}/verify-otp`} component={Otp} />
+            <Route path={`${url}/forgot-pin`} component={PinChangeSuccess} />
+            <Route path={`${url}/reset-pin`} component={PinChangeSuccess} />
           </Switch>
         </div>
       </div>
