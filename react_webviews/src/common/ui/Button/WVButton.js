@@ -15,7 +15,7 @@ const WVButton = ({
   children,
   ...props
 }) => {
-  const variant = props.variant || (contained ? 'contained' : outlined ? 'outlined' : '');
+  const variant = props.variant || (contained ? 'contained' : outlined ? 'outlined' : 'text');
 
   if (showLoader) {
     disableBodyTouch(); //disable touch
