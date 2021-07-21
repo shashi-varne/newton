@@ -219,7 +219,7 @@ const Container = (props) => {
       )}
 
       {props.skelton &&
-        <div className="Loader" style={{paddingTop: "56px"}}>
+        <div className="Loader" style={!config.isMobileDevice ? {top: "120px"} : {top: "56px"}}>
           <UiSkelton type={props.skelton} />
         </div>
       }
