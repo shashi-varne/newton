@@ -37,30 +37,29 @@ import 'common/theme/Style.scss';
 const Feature = () => {
   return (
     <Switch>
-      <Route path='/insurance' component={Insurance} />
-      <Route path='/group-insurance' component={GroupInsurance} />
-      <Route path='/referral' component={Referral} />
-      <Route path='/gold' component={Gold} />
-      <Route path='/fhc' component={Fhc} />
-      <Route path='/mandate' component={Mandate} />
-      <Route path='/mandate-otm' component={Mandate_OTM} />
-      <Route path='/e-mandate' component={EMandate} />
-      <Route path='/risk' component={RiskProfiler} />
-      <Route path='/hni/' component={HNI} />
-      <Route path='/isip' component={IsipBIller} />
-      {/* outside the feature component */}
-      <Route path='/help' component={HelpSupport} />
-      <Route path='/loan' component={Loan} />
-      <Route path='/pg' component={Payment} />
-      <Route path='/kyc-esign' component={KycEsign} />
-      <Route path='/whatsapp/' component={Whatsapp} />
-      <Route path='/webview/:main_module/:sub_module' component={CommonLanding} />
-      <Route path='/webview/:main_module' component={CommonLanding} />
-      {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
-      <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
-      <Route path='/fund-details' component={FundDetails} />
-      <Route path='/feedback' component={FeedBack} />
-      <Route path='/partner' component={Partner} />
+      <ProtectedRoute path='/insurance' component={Insurance} />
+      <ProtectedRoute path='/group-insurance' component={GroupInsurance} />
+      <ProtectedRoute path='/referral' component={Referral} />
+      <ProtectedRoute path='/gold' component={Gold} />
+      <ProtectedRoute path='/fhc' component={Fhc} />
+      <ProtectedRoute path='/mandate' component={Mandate} />
+      <ProtectedRoute path='/mandate-otm' component={Mandate_OTM} />
+      <ProtectedRoute path='/e-mandate' component={EMandate} />
+      <ProtectedRoute path='/risk' component={RiskProfiler} />
+      <ProtectedRoute path='/hni/' component={HNI} />
+      <ProtectedRoute path='/isip' component={IsipBIller} />
+      <ProtectedRoute path='/help' component={HelpSupport} />
+      <ProtectedRoute path='/loan' component={Loan} />
+      <ProtectedRoute path='/pg' component={Payment} />
+      <ProtectedRoute path='/kyc-esign' component={KycEsign} />
+      <ProtectedRoute path='/whatsapp/' component={Whatsapp} />
+      <ProtectedRoute path='/webview/:main_module/:sub_module' component={CommonLanding} />
+      <ProtectedRoute path='/webview/:main_module' component={CommonLanding} />
+      {/* <ProtectedRoute path="/common/render-faqs" component={CommonRenderFaqs} /> */}
+      <ProtectedRoute path='/portfolio-rebalancing' component={PortfolioRebalancing} />
+      <ProtectedRoute path='/fund-details' component={FundDetails} />
+      <ProtectedRoute path='/feedback' component={FeedBack} />
+      <ProtectedRoute path='/partner' component={Partner} />
 
       <ProtectedRoute path='/withdraw' component={Withdraw} />
       <ProtectedRoute path='/reports' component={Report} />

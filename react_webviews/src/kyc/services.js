@@ -33,7 +33,7 @@ export async function getAccountSummary(params = {}) {
       !response.pfwresponse ||
       isEmpty(response.pfwresponse)
     ) {
-      throw new Error( response?.pfwmessage || "Something went wrong!");
+      throw new Error(response?.pfwmessage || "Something went wrong!");
     }
     if (response?.pfwresponse?.status_code === 200) {
       return response?.pfwresponse?.result;
