@@ -1,4 +1,4 @@
-import "./commonStyle.scss"
+import "./commonStyles.scss"
 import React, { useState } from 'react';
 import { validateNumber } from "utils/validators";
 import Input from "common/ui/Input";
