@@ -3,7 +3,7 @@ import qs from 'qs';
 import { getConfig , isIframe, getBasePath} from 'utils/functions';
 // import Container from '../common/Container';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
-import info_icon_myway from 'assets/info_icon_myway.svg'
+import info_icon_myway from 'assets/finity/info_icon_myway.svg'
 import trust_icon from 'assets/trust_icons_emandate.svg';
 import select_icon from 'assets/completed_step.svg';
 import toast from '../../common/ui/Toast';

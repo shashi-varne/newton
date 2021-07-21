@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import Header from './Header';
 import Footer from './footer';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+import loader_myway from 'assets/finity/loader_gif.gif';
 import { nativeCallback } from 'utils/native_callback';
 import Button from '@material-ui/core/Button';
 import {

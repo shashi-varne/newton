@@ -46,8 +46,9 @@ const Header = ({ classes, width, goBack, resetpage, handleReset, disableBack })
             />
             {
               <img
-                src={require(`assets/finity_white_logo_2.png`)}
+                src={require(`assets/finity/finity_logo_white_moneycontrol.svg`)}
                 style={{ paddingRight: '40px', marginTop: '32px', marginBottom: '32px' }}
+                height="35"
                 alt=''
               />
             }
@@ -89,7 +90,7 @@ const styles = function () {
         height: '80px',
       },
       topBar: {
-        backgroundColor: '#3792FC',
+        backgroundColor: getConfig().primary,
         width: '100%',
         height: '80px',
         display: 'flex',

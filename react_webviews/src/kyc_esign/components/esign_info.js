@@ -4,6 +4,14 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig, getBasePath } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
+import otp_img_finity from 'assets/finity/ic_verify_otp_finity.svg';
+import esign_otp_img_finity from 'assets/finity/ic_esign_otp_finity.svg';
+import done_img_finity from  'assets/finity/ic_esign_done_finity.svg';
+import otp_img_fisdom from 'assets/fisdom/ic_verify_otp_fisdom.svg';
+import esign_otp_img_fisdom from 'assets/fisdom/ic_esign_otp_fisdom.svg';
+import done_img_fisdom from  'assets/fisdom/ic_esign_done_fisdom.svg';
+
+
 
 class ESignInfo extends Component {
   constructor(props) {
@@ -86,7 +94,7 @@ class ESignInfo extends Component {
         <div className="esign-steps">
           <div className="step">
             <div className="icon-container">
-              <img src={require(`assets/ic_verify_otp_${productName}.svg`)} alt="Verify OTP" />
+              <img src={getConfig().productName !== 'fisdom' ? otp_img_finity :otp_img_fisdom} alt="Verify OTP" />
             </div>
             <div className="step-text">
               1. Verify mobile and enter Aadhaar number
@@ -94,7 +102,7 @@ class ESignInfo extends Component {
           </div>
           <div className="step">
             <div className="icon-container">
-              <img src={require(`assets/ic_esign_otp_${productName}.svg`)} alt="Esign OTP icon" />
+              <img src={getConfig().productName !== 'fisdom' ? esign_otp_img_finity :esign_otp_img_fisdom} alt="Esign OTP icon" />
             </div>
             <div className="step-text">
               2. Enter OTP recieved on your Aadhaar linked mobile number
@@ -102,7 +110,7 @@ class ESignInfo extends Component {
           </div>
           <div className="step">
             <div className="icon-container">
-              <img src={require(`assets/ic_esign_done_${productName}.svg`)} alt="Esign Done icon" />
+              <img src={getConfig().productName !== 'fisdom' ? done_img_finity :done_img_fisdom} alt="Esign Done icon" />
             </div>
             <div className="step-text">
               3. e-Sign is successfully done
