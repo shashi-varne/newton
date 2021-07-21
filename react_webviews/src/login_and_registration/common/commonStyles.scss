@@ -1,18 +1,13 @@
 //----------------------------verify-otp-container--------------------------- //
 .verify-otp-container {
   min-height: 100%;
-  max-width: 614px;
+  // max-width: 614px;
   background-color: white;
-  padding: 20px;
-  .title {
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 32px;
-  }
+
   .verify-otp-header {
     display: flex;
     align-items: center;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     margin-top: -10px;
     p {
       font-size: 13px;
@@ -20,6 +15,9 @@
       color: var(--steelgrey);
       margin: 0;
     }
+  } 
+   .login-subtitle{
+    margin-top: -20px;
   }
   .default-otp-input-container {
     justify-content: start;
@@ -31,30 +29,33 @@
       padding: 4px;
     }
   }
-  .login-otp-button {
+  .login-button {
     margin: 20px auto;
-  }
-  .login-otp-button-web{
     margin-top: 60px;
     width: 100%;
-  }
-  .login-otp-button-mobile {
-    position: absolute;
-    bottom: 0;
-    left:0;
-    right:0;
-    margin-left:auto;
-    margin-right:auto;
-    width: calc(100% - 40px);
   }
   .go-back-to-login{
      justify-content: center;
      display: flex;
-     margin-top: 40px;
      color: var(--secondary);
   }
 }
 .verify-otp-container-secondary{
   padding: 0 !important
+}
+
+@media only screen and (max-height: 900px) {
+  .verify-otp-container{
+    .login-button{
+      position: fixed;
+      z-index: 9999;
+      bottom: 0;
+      left:0;
+      right:0;
+      margin-left:auto;
+      margin-right:auto;
+      width: calc(100% - 40px);
+    }
+  }
 }
 //----------------------------verify-otp-CSS-END--------------------------- //

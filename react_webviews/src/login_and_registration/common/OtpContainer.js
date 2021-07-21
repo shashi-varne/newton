@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import WVOtp from "../../common/ui/Otp/WVOtp";
 import DotDotLoader from "../../common/ui/DotDotLoader";
 import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
+import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
+import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
 
 const OtpContainer = (props) => {
     const {
@@ -32,9 +34,12 @@ const OtpContainer = (props) => {
 
     return (
         <div className={`verify-otp-container ${classes.body}`}>
-            {title &&
-                <p className={`title ${classes.title}`}>{title}</p>}
-            <div className={`verify-otp-header ${classes.title}`}>
+            {title && 
+                <WVInPageHeader>
+                    <WVInPageTitle>{title}</WVInPageTitle>
+                </WVInPageHeader>
+            }
+            <div className={`verify-otp-header ${classes.subtitle}`}>
                 <p>
                     An OTP has been sent to{" "}
                     <span style={{ fontWeight: "500", marginRight: "23px" }}>
