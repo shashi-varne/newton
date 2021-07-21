@@ -17,18 +17,19 @@ const LoginContainer = (props) => {
         <img src={require(`assets/${config.logo}`)} alt="logo" />
       </div>
       <div className="login-details">
-        <div className="left-image">
+        <div className="ld-left">
           <img src={require(`assets/${productName}/ils_login.svg`)} alt="login" />
         </div>
-        <Switch>
-          <Route path={`${url}`} exact component={Login} />
-          <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
-          <Route path={`${url}/referral`} component={PinChangeSuccess} />
-          <Route path={`${url}/verify-otp`} component={PinChangeSuccess} />
-          <Route path={`${url}/forgot-pin`} component={PinChangeSuccess} />
-          <Route path={`${url}/reset-pin`} component={PinChangeSuccess} />
-        </Switch>
-        {props.children}
+        <div className="ld-right">
+          <Switch>
+            <Route path={`${url}`} exact component={Login} />
+            <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
+            <Route path={`${url}/referral`} component={PinChangeSuccess} />
+            <Route path={`${url}/verify-otp`} component={PinChangeSuccess} />
+            <Route path={`${url}/forgot-pin`} component={PinChangeSuccess} />
+            <Route path={`${url}/reset-pin`} component={PinChangeSuccess} />
+          </Switch>
+        </div>
       </div>
     </div>
   );
