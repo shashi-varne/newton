@@ -4,11 +4,14 @@ import EnterMPin from '../../../2fa/components/EnterMPin';
 import { Imgc } from '../../../common/ui/Imgc';
 import { storageService } from '../../../utils/validators';
 import WVClickableTextElement from '../../../common/ui/ClickableTextElement/WVClickableTextElement';
+import { navigate as navigateFunc } from '../../../utils/functions';
 
-const VerifyPin = () => {
+const VerifyPin = (props) => {
   const { name } = storageService().getObject('user') || {};
   const [otpError, setOtpError] = useState(false);
   const [otp, setOtp] = useState('');
+
+  const navigate = navigateFunc.bind(props);
 
   const onOtpChange = (val) => {
     console.log(val);
@@ -40,7 +43,7 @@ const VerifyPin = () => {
         <WVClickableTextElement>
           Switch Account
         </WVClickableTextElement>
-        <WVClickableTextElement>
+        <WVClickableTextElement onClick={() => navigate('/forgot-pin')}>
           Forgot PIN?
         </WVClickableTextElement>
       </div>
