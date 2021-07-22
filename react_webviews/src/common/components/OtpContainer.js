@@ -1,9 +1,9 @@
 import "./OtpContainer.scss";
 import React, { useEffect, useState } from "react";
-import WVOtp from "../../common/ui/Otp/WVOtp";
-import DotDotLoader from "../../common/ui/DotDotLoader";
-import WVClickableTextElement from "../../common/ui/ClickableTextElement/WVClickableTextElement";
-import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
+import WVInPageTitle from "../ui/InPageHeader/WVInPageTitle";
+import WVClickableTextElement from "../ui/ClickableTextElement/WVClickableTextElement";
+import WVOtp from "../ui/Otp/WVOtp";
+import DotDotLoader from "../ui/DotDotLoaderNew";
 
 const OtpContainer = (props) => {
     const {

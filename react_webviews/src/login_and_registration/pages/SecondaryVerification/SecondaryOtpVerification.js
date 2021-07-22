@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Container from "../../../dashboard/common/Container";
-import OtpContainer from "../../common/OtpContainer";
 import { initialize } from "../../functions";
 import "./secondaryVerification.scss";
 import { toast } from "react-toastify";
+import OtpContainer from "../../../common/components/OtpContainer";
 
 export class SecondaryOtpVerification extends Component {
   constructor(props) {

@@ -2,8 +2,9 @@ import './commonStyles.scss';
 import React, { Component } from "react";
 import { initialize } from "../../functions";
 import toast from "common/ui/Toast";
-import OtpContainer from "../../common/OtpContainer"
 import WVButton from "../../../common/ui/Button/WVButton";
+import OtpContainer from '../../../common/components/OtpContainer';
+
 class VerifyLoginOtp extends Component {
   constructor(props) {
     super(props);
