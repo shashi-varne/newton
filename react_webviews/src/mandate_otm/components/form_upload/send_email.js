@@ -155,7 +155,7 @@ upload the signed copy of it:
             </div>}
           </div>
           {!this.state.change_email && <div style={{
-            fontSize: 13, color: getConfig().secondary, position: 'relative',
+            fontSize: 13, color: getConfig().styles.secondaryColor, position: 'relative',
             marginTop: 10, fontWeight: 500
           }} onClick={() => this.changeEmail()}>
             Change

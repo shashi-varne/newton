@@ -115,8 +115,8 @@ export const baseStylesConfig = {
     secondaryColor: "#675AF6",
     highlightColor: "#EFEEFB",
     secondaryGreen: "#33CF90",
-    primaryVariant1: "#F0F7FF",
-    primaryVariant4: "#68AEFF"
+    primaryVariant1: "#C6C2F9",
+    primaryVariant4: "#8279F8"
   },
 };
 

@@ -140,5 +140,5 @@
     border-bottom-right-radius: 4px;
 }
 .biller-netbnak-copy:hover{
-  background-color: var(--on-hover);
+  background-color: var(--on-hover-background);
 }
