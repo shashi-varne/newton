@@ -1,3 +1,5 @@
+@import './utils.scss';
+
 .configPrimaryColorClass {
   color: var(--primary) !important;
 }
@@ -724,7 +726,7 @@ button {
   text-align: center;
 }
 
-.FlexButtonGenericColor{
+.FlexButtonGenericColor button{
   background-color: var(--secondary);
   color: white;
 }

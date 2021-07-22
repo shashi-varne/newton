@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 // import Footer from './footer';
 // import Banner from '../../common/ui/Banner';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+import loader_myway from 'assets/finity/loader_gif.gif';
 import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listener';
 import {didMount ,commonRender} from '../../common/components/container_functions';

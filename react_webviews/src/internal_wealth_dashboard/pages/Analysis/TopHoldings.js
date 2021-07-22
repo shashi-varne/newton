@@ -2,7 +2,7 @@ import React from 'react';
 import IwdCard from '../../mini-components/IwdCard';
 import { isEmpty } from 'utils/validators';
 import { formatPercentVal } from '../../common/commonFunctions';
-const TopHoldings = ({ topHoldings }) => {
+const TopHoldings = ({ topHoldings = [] }) => {
   return (
     <div className='iwd-scroll-child' data-pgno='2'>
       <IwdCard

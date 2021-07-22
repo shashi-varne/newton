@@ -1,0 +1,42 @@
+.tax-filing-landing .wv-card {
+  background: var(--primary);
+}
+
+.tax-filing-faq-section {
+  border-top: 1px solid var(--linkwater);
+  border-bottom: 1px solid var(--linkwater);
+  padding: 18px 0;
+}
+
+.tax-filing-faq-section svg {
+  fill: var(--primary);
+}
+
+.tax-filing-faq-subtitle {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--dark);
+}
+
+.tax-filing-faq-icon-text {
+  color: var(--primary);
+}
+
+.tax-filing-landing
+  .wv-menulist-products
+  .wv-menu-list-dropdown
+  .wv-menu-title {
+  font-weight: 600;
+  color: var(--gunmetal);
+  font-size: 15px;
+}
+
+.tax-filing-landing-features {
+  margin-top: 60px;
+}
+
+.tax-filing-landing .my-itr-icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+}

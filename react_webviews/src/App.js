@@ -27,6 +27,7 @@ import DesktopLayout from './desktopLayout';
 import Feature from './Feature';
 
 import NotFound from './common/components/NotFound';
+import TaxFiling from './tax_filing'
 import Tooltip from 'common/ui/Tooltip';
 import {getConfig, isIframe} from './utils/functions';
 import 'common/theme/Style.scss';
@@ -104,6 +105,7 @@ const App = () => {
                   <Feature />
                 </DesktopLayout>
               }
+              <Route path='/tax-filing' component={TaxFiling} />
               <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>
