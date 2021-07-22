@@ -5,20 +5,20 @@ import WVClickableTextElement from "../ui/ClickableTextElement/WVClickableTextEl
 import WVOtp from "../ui/Otp/WVOtp";
 import DotDotLoader from "../ui/DotDotLoaderNew";
 
-const OtpContainer = (props) => {
-    const {
-        title,
-        otpData,
-        handleClick,
-        handleOtp,
-        showDotLoader,
-        resendOtp,
-        isWrongOtp,
-        value,
-        isDisabled,
-        children,
-        classes = {},
-        handleClickText, } = props || {};
+const OtpContainer = ({
+    title,
+    otpData,
+    handleClick,
+    handleOtp,
+    showDotLoader,
+    resendOtp,
+    isWrongOtp,
+    value,
+    isDisabled,
+    children,
+    classes = {},
+    handleClickText,
+}) => {
     const [timeAvailable, setTimeAvailable] = useState(otpData?.timeAvailable);
     useEffect(() => {
         var timmer = setTimeout(() => {
@@ -67,7 +67,7 @@ const OtpContainer = (props) => {
                     )}
                     {(timeAvailable <= 0 || !timeAvailable) && (
                         <div
-                            className={`cd-otp-resend-text ${props.class}`}
+                            className={`cd-otp-resend-text ${classes.resendText}`}
                             onClick={() => {
                                 resendOtp();
                                 setTimeAvailable(otpData?.timeAvailable);

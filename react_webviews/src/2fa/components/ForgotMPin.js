@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { validateNumber } from "utils/validators";
 import Input from "common/ui/Input";
 import WVInPageSubtitle from "common/ui/InPageHeader/WVInPageSubtitle";
+import WVInPageHeader from "../../common/ui/InPageHeader/WVInPageHeader";
+import WVInPageTitle from "../../common/ui/InPageHeader/WVInPageTitle";
 
 const ForgotMPin = ({
     primaryAuthType,
@@ -23,7 +25,10 @@ const ForgotMPin = ({
     
     return (
         <div className="forgot-fisdom-pin">
-            <WVInPageSubtitle children={"OTP will be sent to your registered mobile number"} />
+            <WVInPageHeader>
+                <WVInPageTitle>Forgot fisdom PIN</WVInPageTitle>
+                <WVInPageSubtitle>OTP will be sent to your registered mobile number</WVInPageSubtitle>
+            </WVInPageHeader>   
 
             <div className="login-form-field">
                 <span className="input-field">
@@ -59,7 +64,6 @@ const ForgotMPin = ({
                     />
                     <WVInPageSubtitle className="forgot-pin-subtitle" children={"Enter PAN number to confirm your account"} />
                 </span>
-
             </div>
         </div>
     );

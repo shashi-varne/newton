@@ -1,6 +1,6 @@
 export const FISDOM_DISCLAMER = [
     {
-        src: "fisdom_logo_coloured.png",
+        src: "fisdom_logo_coloured.png", //TODO: Get SVG from design team
     },
     {
         key: "NSE member code",
