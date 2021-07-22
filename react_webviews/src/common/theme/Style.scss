@@ -726,9 +726,14 @@ button {
   text-align: center;
 }
 
-.FlexButtonGenericColor button{
-  background-color: var(--secondary);
-  color: white;
+.FlexButtonGenericColor {
+  border-radius: var(--border-radius);
+
+  button{
+    background-color: var(--secondary);
+    color: white;
+    border-radius: var(--border-radius);
+  }
 }
 
 .FooterTwoButtonLayout button.borderButton {

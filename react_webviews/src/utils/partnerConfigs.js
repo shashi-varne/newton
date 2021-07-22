@@ -128,8 +128,6 @@ export const baseButtonConfig = {
   fisdom: {
     disabledBackgroundColor: "#E8ECF1",
     focusBackgroundColor: "#119A4B",
-    hoverBackgroundColor: "#35cb5d",
-    hoverSecondaryBackgroundColor: "#35cb5d",
   },
   finity: {
     disabledBackgroundColor: "#E6E5F4",
