@@ -9,6 +9,7 @@ const SecuritySettings = (props) => {
     const navigate = navigateFunc.bind(props);
     const [showLoader, setShowLoader] = useState(false);
     const [pinText, setPinText] = useState("Set fisdom PIN")
+    const navigatePath  = pinText === "Reset fisdom PIN" ? "/reset-pin-verify" : "/set-fisdom-pin"
 
     useEffect(() => {
         let user = storageService().getObject("user") || {};
@@ -33,7 +34,8 @@ const SecuritySettings = (props) => {
                 <div
                     data-aid='security-setting'
                     className="account-options"
-                    onClick={() => navigate("/reset-pin-verify")}
+                    // onClick={() => navigate("/reset-pin-verify")}
+                    onClick={() => navigate(navigatePath)}
                 >
                     <Imgc
                         src={require(`assets/padlock1.svg`)}

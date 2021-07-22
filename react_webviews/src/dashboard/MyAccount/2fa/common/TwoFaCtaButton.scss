@@ -1,0 +1,16 @@
+.two-fa-cta-btn {
+  margin: 360px auto 20px !important;
+  min-width: 320px !important;
+}
+
+@media only screen and (max-width: 767px) {
+   .two-fa-cta-btn{
+     position: fixed !important;
+     z-index: 9999;
+     bottom: 0;
+     left:0;
+     right:0;
+     margin: 0px auto 20px !important;
+     width: calc(100% - 40px) !important;
+   }
+}
