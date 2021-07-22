@@ -1,9 +1,10 @@
+import './commonStyles.scss';
 import React, { Component } from "react";
 import { initialize } from "../../functions";
 import toast from "common/ui/Toast";
 import OtpContainer from "../../common/OtpContainer"
 import WVButton from "../../../common/ui/Button/WVButton";
-class Otp extends Component {
+class VerifyLoginOtp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,36 +69,39 @@ class Otp extends Component {
     let disabled = otpData.otp?.length !== 4;
     let showDotLoader = false;
     return (
-        <OtpContainer
-          title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
-          otpData={this.state.otpData}
-          showDotLoader={showDotLoader}
-          handleOtp={this.handleOtp}
-          resendOtp={this.handleResendOtp}
-          isWrongOtp={isWrongOtp}
-          value={value}
-          classes={{
-            subtitle: "login-subtitle"
-          }}
+      <OtpContainer
+        title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
+        otpData={this.state.otpData}
+        showDotLoader={showDotLoader}
+        handleOtp={this.handleOtp}
+        resendOtp={this.handleResendOtp}
+        isWrongOtp={isWrongOtp}
+        value={value}
+        classes={{
+          subtitle: "login-subtitle"
+        }}
+      >
+        <WVButton
+          contained
+          fullWidth
+          color="secondary"
+          onClick={this.handleClick}
+          disabled={disabled}
+          showLoader={isApiRunning}
+          classes={{ root: "login-button" }}
         >
-          <WVButton
-            variant='contained'
-            size='large'
-            color="secondary"
-            onClick={this.handleClick}
-            disabled={disabled}
-            showLoader={isApiRunning}
-            fullWidth
-            className="login-button"
-          >
-            CONTINUE
-            </WVButton>
-          <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "40px auto 0px" }} onClick={() => this.props.history.goBack()}>
-            Go Back to Login
-            </WVButton>
-        </OtpContainer >
+          CONTINUE
+        </WVButton>
+        <WVButton
+          color="secondary"
+          classes={{ root: 'go-back-to-login' }}
+          onClick={() => this.props.history.goBack()}
+        >
+          Go Back to Login
+        </WVButton>
+      </OtpContainer>
     );
   }
 }
 
-export default Otp;
+export default VerifyLoginOtp;

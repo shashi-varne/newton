@@ -2,7 +2,7 @@ import "./commonStyles.scss";
 import React, { useState } from 'react';
 import WVClickableTextElement from "common/ui/ClickableTextElement/WVClickableTextElement"
 import Container from "../../common/Container";
-import VerifyMPin from "../../../2fa/components/VerifyMPin";
+import EnterMPin from "../../../2fa/components/EnterMPin";
 import { navigate as navigateFunc } from "../../../utils/functions";
 
 const VerifyPin = (props) => {
@@ -27,7 +27,7 @@ const VerifyPin = (props) => {
       skelton={showLoader}
       handleClick={handleClick}
     > 
-      <VerifyMPin
+      <EnterMPin
         otpProps={{
           handleChange: handleOtp,
           otp,

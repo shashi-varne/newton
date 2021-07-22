@@ -1,5 +1,93 @@
+ .form {
+  margin-bottom: 20px;
+
+  .form-field {
+    background-color: #f8f8f8;
+    padding: 8px 0 0 5px;
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 20px;
+
+    .country-code {
+      width: fit-content;
+      margin-bottom: -20px;
+
+      .dropdown-without-icon{
+        position: relative;
+        top: -7px;
+        left: 2px;
+
+        .MuiSelect-root {
+          margin-bottom: 8px;
+        }
+      }
+    }
+
+    .input {
+      width: 100%;
+    }
+  }
+
+
+  .referral-code {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+
+    .checkbox {
+      left: -12px !important;
+    }
+  }
+}
+
 .go-back-to-login {
-  font-weight: 300;
-  text-transform: uppercase;
-  color: var(--secondary);
+  margin: 40px auto 0px !important;
+
+  .MuiButton-label {
+    font-weight: 400;
+  }
+}
+
+.login-verify-pin {
+  margin-top: 110px;
+  
+  .lvp-title {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 32px;
+    color: var(--dark);
+  }
+  
+  .lvp-username {
+    font-size: 15px;
+    line-height: 32px;
+    letter-spacing: 1px;
+    color: var(--dark);
+  }
+  
+  .lvp-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+  }
+}
+
+.login-button {
+  margin: 60px auto 20px !important;
+  width: 100% !important;
+}
+
+@media only screen and (max-width: 767px) {
+  .verify-otp-container{
+    .login-button{
+      position: fixed;
+      z-index: 9999;
+      bottom: 0;
+      left:0;
+      right:0;
+      margin: 0px auto 20px !important;
+      width: calc(100% - 40px) !important;
+    }
+  }
 }
