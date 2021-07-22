@@ -6,7 +6,8 @@ import PinChangeSuccess from "../ForgotPin/PinChangeSuccess";
 import Login from "./Login";
 import VerifyLoginOtp from "./VerifyLoginOtp";
 import VerifyPin from "./VerifyPin";
-import Referral from "../Referral/Referral"
+import Referral from "../Referral/Referral";
+import { FISDOM_DISCLAMER } from "./constants";
 
 const config = getConfig();
 const { productName } = config;
@@ -35,8 +36,25 @@ const LoginContainer = (props) => {
           </Switch>
         </div>
       </div>
+      <FooterTitle/>
     </div>
   );
 }
 
 export default LoginContainer;
+
+const FooterTitle = () => {
+  return (
+    <div className="login-footer">
+      {FISDOM_DISCLAMER.map((item) => (
+        <>
+          {item.src ? <img src={require(`assets/${productName}/${item.src}`)} alt="logo" className="brand-logo" /> :
+            <div className="title-text">
+              {item.key}{" "}-{" "}
+              <strong>{item.value}</strong>
+            </div>}
+        </>
+      ))}
+    </div>
+  );
+};

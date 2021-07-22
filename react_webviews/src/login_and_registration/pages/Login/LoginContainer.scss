@@ -46,6 +46,35 @@
       min-height: 330px;
     }
   }
+
+// ---------------------- login footer css start-----------------------//
+  .login-footer {
+    position: absolute;
+    bottom: 0; 
+    min-height: 160px;
+    background-color: #F8F8F8;
+    width: 100%;
+    padding: 30px 0px 28px 86px;
+
+    div:nth-of-type(2) {
+      margin-bottom: 5px;
+    }
+
+    .title-text {
+      font-size: 11px;
+      line-height: 18px;
+      color: var(--steelgrey);
+    }
+  }
+
+  .brand-logo {
+    height: 22px;
+    width: 64px;
+    margin-bottom: 15px;
+  }
+// ---------------------- login footer css end-----------------------//
+
+
 }
 
 @media only screen and (max-width: 1200px) {
@@ -71,6 +100,9 @@
         padding-bottom: 60px;
       }
     }
+    .login-footer {
+      display: none;
+   }
   }
 }
   

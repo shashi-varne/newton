@@ -1,12 +1,21 @@
 import "./commonStyles.scss";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from "../../common/Container";
 import { Imgc } from '../../../common/ui/Imgc';
+import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "../../../utils/functions";
 
 const SecuritySettings = (props) => {
     const navigate = navigateFunc.bind(props);
     const [showLoader, setShowLoader] = useState(false);
+    const [pinText, setPinText] = useState("Set fisdom PIN")
+
+    useEffect(() => {
+        let user = storageService().getObject("user") || {};
+        if (user.pin_status === 'pin_setup_complete') {
+            setPinText("Reset fisdom PIN")
+        }
+    }, []);
 
     return (
         <Container
@@ -30,7 +39,7 @@ const SecuritySettings = (props) => {
                         src={require(`assets/padlock1.svg`)}
                         alt=""
                     />
-                    <div>Set Fisdom PIN</div>
+                    <div>{pinText}</div>
                 </div>
             </div>
 
