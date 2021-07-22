@@ -87,7 +87,13 @@ const App = () => {
             <Switch>
               <Route path="/iw-dashboard" component={InternalWealthDashboard} />
               <Route path='/w-report' component={WealthReport} />
-              <Route path='/login' component={LoginContainer} />
+              <Route
+                path={[
+                  '/login',
+                  '/forgot-pin'
+                ]}
+                component={LoginContainer}
+              />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route path='/logout' component={Logout} />
               <Route path='/component-test' component={ComponentTest} />
