@@ -183,7 +183,7 @@
   }
 
   .cta-button:hover {
-    background-color: var(--secondary);
+    background-color: var(--on-hover-background);
   }
   
   .cta-button .cta-button-text {
@@ -253,6 +253,9 @@
   .proceed-btn {
     background-color: var(--secondary);
   }
+  .proceed-btn:hover {
+    background-color: var(--on-hover-background);
+  }
 }
 
 #withdraw-know-more {
@@ -277,6 +280,10 @@
   .MuiButton-containedSecondary {
     background-color: var(--secondary);
     padding: 16px;
+  }
+
+  .action-btn:hover {
+    background-color: var(--on-hover-background);
   }
 }
 

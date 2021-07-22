@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
 
-import account_icon from "assets/account_icon.png";
-import bse_icon from "assets/bse_icon.png";
-import fund_house_icon from "assets/fund_house_icon.png";
-import safe_secure_journey from "assets/safe_secure_journey.png";
-
 import "./InvestJourney.scss";
 import {
   canDoInvestment,
@@ -19,6 +14,10 @@ import InvestReferralDialog from "../Invest/mini-components/InvestReferralDialog
 import useUserKycHook from "../../kyc/common/hooks/userKycHook";
 import { formatAmountInr } from "../../utils/validators";
 
+const imageSuffix = {
+  fisdom: "png",
+  finity: "svg"
+}
 const InvestJourney = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const navigate = navigateFunc.bind(props);
@@ -107,7 +106,6 @@ const InvestJourney = (props) => {
       data-aid='how-it-works-screen'
       classOverRide="pr-error-container"
       buttonTitle={ctcTitle}
-      //hidePageTitle
       title="How it works"
       classOverRideContainer="pr-container"
       handleClick={goNext}
@@ -121,7 +119,7 @@ const InvestJourney = (props) => {
       <section className="invest-journey-container" data-aid='invest-journey-page'>
         <div className="invest-journey-header" data-aid='invest-journey-header'>
           <div>
-            <img alt="safe_secure_journey" src={safe_secure_journey} />
+            <img alt="safe_secure_journey" src={require(`assets/${productName}/safe_secure_journey.${imageSuffix[productName]}`)} />
           </div>
           <div>With {productName}, investment is easy & secure</div>
         </div>
@@ -129,7 +127,7 @@ const InvestJourney = (props) => {
           <div className="invest-journey-connect">
             <div className="invest-journey-connect-content" data-aid='invest-journey-step-1'>
               <div className="invest-journey-connect-icon">
-                <img alt="account_icon" src={account_icon} />
+                <img alt="account_icon" src={require(`assets/${productName}/account_icon.${imageSuffix[productName]}`)} />
               </div>
               <div className="invest-journey-connect-step">
                 <p>Step - 1</p>
@@ -141,7 +139,7 @@ const InvestJourney = (props) => {
             </div>
             <div className="invest-journey-connect-content" data-aid='invest-journey-step-2'>
               <div className="invest-journey-connect-icon">
-                <img alt="bse_icon" src={bse_icon} />
+                <img alt="bse_icon" src={require(`assets/${productName}/bse_icon.${imageSuffix[productName]}`)} />
               </div>
               <div className="invest-journey-connect-step">
                 <p>Step - 2</p>
@@ -151,7 +149,7 @@ const InvestJourney = (props) => {
             </div>
             <div className="invest-journey-connect-content" data-aid='invest-journey-step-3'>
               <div className="invest-journey-connect-icon">
-                <img alt="fund_house_icon" src={fund_house_icon} />
+                <img alt="fund_house_icon" src={require(`assets/${productName}/fund_house_icon.${imageSuffix[productName]}`)} />
               </div>
               <div className="invest-journey-connect-step">
                 <p>Step - 3</p>

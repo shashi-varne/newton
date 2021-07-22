@@ -27,7 +27,7 @@ const CompliantHelpDialog = ({ close, isOpen, pan }) => {
           <div>|</div>
           <div data-aid='kyc-email-id'>{config.email}</div>
         </div>
-        <Button data-aid='ok-btn' onClick={() => close()}>OK</Button>
+        <Button className="kphd-button" data-aid='ok-btn' onClick={close}>OK</Button>
       </DialogContent>
     </Dialog>
   );

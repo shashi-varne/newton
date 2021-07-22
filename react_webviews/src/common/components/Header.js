@@ -72,7 +72,7 @@ const Header = ({ classes, title, count, total, current, goBack,
             </IconButton>
           }
           {
-            headerData.partnerLogo && 
+            headerData.partnerLogo && config.isMobileDevice &&
              <div className='sdk-header-partner-logo'>
                 <img src={require(`assets/${partnerLogo}`)} alt="partner logo" /> 
             </div>
@@ -165,7 +165,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           {
             false && 
             <div>
-              <img src={require('assets/finity_navlogo.png')} alt="productType" />
+              <img src={require('assets/finity/finity_navlogo.svg')} alt="productType" />
             </div>
           }
           </>

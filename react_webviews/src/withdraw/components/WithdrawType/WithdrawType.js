@@ -306,7 +306,7 @@ const InstaRedeemFailed = () => {
     <div className="pr-error-container withdraw-insta-failed" data-aid='withdraw-insta-failed'>
       <section className="image-cover">
         <img
-          src={require(`assets/${product_name}/server_error_page.svg`)}
+          src={require(`assets/${product_name}/error_illustration.svg`)}
           alt="Server Error"
           className="error-page"
         />

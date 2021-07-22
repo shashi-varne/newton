@@ -73,7 +73,7 @@
 }
 
 .kyc-show-aadhar .action-btn:hover {
-  background-color: var(--secondary);
+  background-color: var(--on-hover-background);
   color: white;
 }
 
@@ -142,6 +142,10 @@
     .cancel:hover {
       background-color: rgba(158, 158, 158, 0.2);
     }
+
+    .aadhar:hover {
+      background-color: var(--on-hover-background);
+    }
   }
 }
 
@@ -197,17 +201,8 @@
     padding: 0 15px;
     margin: 8px 0 !important;
 
-    button {
-      color: white;
-      background-color: var(--secondary);
+    .ipv-km-button {
       width: 100%;
-      text-align: center;
-      margin: 0;
-    }
-
-    button:hover {
-      color: white;
-      background-color: var(--secondary);
     }
   }
 }
@@ -262,7 +257,7 @@
 
       span {
         font-size: 13px;
-        color: var(--primary);
+        color: #5AAAF6;
         margin-left: 10px;
       }
     }
@@ -333,6 +328,10 @@
       background-color: var(--secondary);
     }
 
+    .bg-full:hover {
+      background-color: var(--on-hover-background);
+    }
+
     .bottom-margin {
       margin-bottom: 30px;
     }
@@ -378,7 +377,7 @@
       font-weight: 500;
     }
 
-    button {
+    .kphd-button {
       margin: 10px 0 5px 0;
       width: 100%;
       color: white;
@@ -386,8 +385,8 @@
       min-height: 40px;
     }
 
-    button:hover {
-      background-color: var(--secondary);
+    .kphd-button:hover {
+      background-color: var(--on-hover-background);
     }
   }
 }
@@ -442,6 +441,10 @@
         background-color: var(--secondary);
       }
 
+      .bg-full:hover {
+        background-color: var(--on-hover-background);
+      }
+  
       .no-bg {
         background-color: white;
         color: #878787;

@@ -21,7 +21,7 @@ const AccountMerge = ({ isOpen, close, data, handleClick }) => {
         <div className="title" data-aid='account-merger-title'>
           <div className="text">{data.title}</div>
           <img
-            src={require(`assets/${productName}/popup_kyc_pending.svg`)}
+            src={require(`assets/${productName}/ic_popup_kyc_pending.svg`)}
             alt=""
             className="img"
           />

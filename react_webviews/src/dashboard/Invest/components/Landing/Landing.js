@@ -140,7 +140,7 @@ class Landing extends Component {
         title="Start Investing"
         data-aid='start-investing-screen'
         showLoader={this.state.showPageLoader}
-        noBackIcon={fromLoginStates.includes(stateParams.fromState)}
+        noBackIcon={!config.isSdk}
         background={
           isMobileDevice &&
           fromLoginStates.includes(stateParams.fromState) &&
@@ -154,7 +154,7 @@ class Landing extends Component {
             : "invest-landing-header")
         }
         headerData={{
-          partnerLogo: fromLoginStates.includes(stateParams.fromState)
+          partnerLogo: !config.isSdk && config.isMobileDevice
         }}
       >
         <div className="invest-landing" data-aid='invest-landing'>
@@ -201,8 +201,9 @@ class Landing extends Component {
                             dataAid='kyc-btn'
                             buttonTitle={kycStatusData.button_text}
                             classes={{
-                              button: "invest-landing-button",
+                              button: "invest-landing-button invest-kyc-button",
                             }}
+                            type={productName === "finity" ? "outlined" : ""}
                           />
                         </div>
                       )}

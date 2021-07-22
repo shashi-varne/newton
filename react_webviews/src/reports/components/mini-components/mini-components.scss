@@ -25,6 +25,10 @@
       background-color: white;
       color: var(--primary);
     }
+
+    .bg-full:hover {
+      background-color: var(--on-hover-background);
+    }
   }
 }
 
@@ -45,7 +49,6 @@
       column-gap: 10px;
 
       .close-icon {
-        color: #878787;
         padding: 15px 0 15px 15px;
         cursor: pointer;
 
@@ -81,7 +84,7 @@
         }
 
         .completed {
-          background-color: var(--secondary);
+          background-color: var(--secondary-green);
         }
 
         .text {
@@ -121,7 +124,7 @@
         }
 
         .selected {
-          border-color: var(--secondary);
+          border-color: var(--secondary-green);
         }
       }
 

@@ -31,6 +31,18 @@
   .generic-page-subtitle{
     margin-top: -20px;
   }
+
+  .invest-contact-us {
+    text-align: center;
+    color: var(--steelgrey);
+    padding: 0 10px 20px 10px;
+    font-size: 10px;
+    font-weight: 600;
+
+    span {
+      color: var(--primary);
+    }
+  }
 }
 
 .sdk-background{

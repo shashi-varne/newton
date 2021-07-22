@@ -246,7 +246,7 @@
     margin-bottom: 10px;
     font-size: 16px;
     letter-spacing: 0.5px;
-    color: rgb(53, 203, 93);
+    color: var(--secondary);
     cursor: pointer;
   }
 }
@@ -283,7 +283,7 @@
     .edit {
       font-size: 16px;
       letter-spacing: 0.5px;
-      color: rgb(53, 203, 93);
+      color: var(--secondary);
     }
   }
 
@@ -744,7 +744,7 @@
 
       .recommended {
         font-size: 12px;
-        background-color: #5cb849;
+        background-color: var(--secondary-green);
         border-radius: 3px;
         padding: 3px 7px;
         color: #fff;
