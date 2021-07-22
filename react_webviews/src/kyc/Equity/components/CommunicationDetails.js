@@ -169,6 +169,7 @@ const CommunicationDetails = (props) => {
   };
 
   const handleOtp = (otp) => {
+    if(otp && !validateNumber(otp)) return;
     setOtpData({ ...otpData, otp });
   };
 
