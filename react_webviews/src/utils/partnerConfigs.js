@@ -105,14 +105,18 @@ export const baseStylesConfig = {
     primaryColor: "#4f2da7",
     secondaryColor: "#35cb5d",
     highlightColor: "#f6f2ff",
-    secondaryGreen: "#7ED321"
+    secondaryGreen: "#7ED321",
+    primaryVariant1: "#DFD8EF",
+    primaryVariant4: "#482998"
   },
   finity: {
     default: "#4a4a4a",
     primaryColor: "#675AF6",
     secondaryColor: "#675AF6",
     highlightColor: "#EFEEFB",
-    secondaryGreen: "#33CF90"
+    secondaryGreen: "#33CF90",
+    primaryVariant1: "#F0F7FF",
+    primaryVariant4: "#68AEFF"
   },
 };
 
