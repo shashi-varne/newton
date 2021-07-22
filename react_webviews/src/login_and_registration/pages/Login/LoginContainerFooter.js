@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DISCLAiMER = ({
+const DISCLAIMER = ({
     props = {},
     title = '',
     subtitle = '',
@@ -29,12 +29,12 @@ const Title = ({ children, ...props }) => {
     return <div {...props}>{children}</div>
 };
 
-DISCLAiMER.Title = Title;
+DISCLAIMER.Title = Title;
 
 const Subtitle = ({ children, ...props }) => {
     return <div {...props}>{children}</div>
 };
 
-DISCLAiMER.Subtitle = Subtitle;
+DISCLAIMER.Subtitle = Subtitle;
 
-export default DISCLAiMER;
+export default DISCLAIMER;

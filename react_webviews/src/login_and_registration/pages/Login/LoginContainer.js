@@ -7,7 +7,7 @@ import Login from "./Login";
 import VerifyLoginOtp from "./VerifyLoginOtp";
 import VerifyPin from "./VerifyPin";
 import Referral from "../Referral/Referral";
-import DISCLAiMER from "./LoginContainerFooter"
+import DISCLAIMER from "./LoginContainerFooter"
 import { FISDOM_DISCLAMER } from "./constants";
 
 const config = getConfig();
@@ -37,7 +37,7 @@ const LoginContainer = (props) => {
           </Switch>
         </div>
       </div>
-      <DISCLAiMER
+      <DISCLAIMER
         title={<FooterTitle data={FISDOM_DISCLAMER} />}
       />
     </div>
