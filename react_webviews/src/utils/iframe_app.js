@@ -140,8 +140,8 @@ export const backButtonHandlerWeb = (props, fromState, currentState, params) => 
     //   // navigate kyc home
     //   break;
     default:
-      const landingScreens = ["/", "/invest", "/landing"]
-      if(landingScreens.includes(currentState) && config?.code === 'moneycontrol') {
+      const closeIframeStates = ["/", "/invest", "/landing", "/reports", "/withdraw"]
+      if(closeIframeStates.includes(currentState) && config?.code === 'moneycontrol') {
         let message = JSON.stringify({
           type: "iframe_close"
         });
