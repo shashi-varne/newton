@@ -37,9 +37,9 @@
     }
 
     .sip-green-text {
-      color: #71bf1c;
+      color: var(--secondary-green);
       .dot {
-        background-color: #71bf1c;
+        background-color: var(--secondary-green);
       }
     }
 
@@ -115,9 +115,9 @@
   }
 
   .sip-green-text {
-    color: #71bf1c;
+    color: var(--secondary-green);
     .dot {
-      background-color: #71bf1c;
+      background-color: var(--secondary-green);
     }
   }
 
