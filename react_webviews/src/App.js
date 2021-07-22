@@ -31,6 +31,7 @@ import Tooltip from 'common/ui/Tooltip';
 import {getConfig, isIframe} from './utils/functions';
 import 'common/theme/Style.scss';
 import { storageService } from './utils/validators';
+import PartnerAuthentication from './login_and_registration/Authentication';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -94,6 +95,7 @@ const App = () => {
               <Route path='/forgot-password' component={ForgotPassword} />
               <Route path='/social/callback' component={SocialCallback} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
+              <Route path="/partner-authentication/:partnerCode" component={PartnerAuthentication} />
               <Route path='/logout' component={Logout} />
               {
                 isMobileDevice || iframe ?
