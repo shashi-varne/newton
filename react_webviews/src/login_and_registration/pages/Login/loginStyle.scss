@@ -26,12 +26,13 @@
       display: -ms-flexbox;
       display: flex;
       -ms-flex-pack: center;
-      justify-content: space-evenly;
+      justify-content: center;
       margin-top: 56px;
       padding-top: 40px;
   
       .ld-left {
         margin-top: 150px;
+        margin-right: 220px;
         padding: 0 20px;
       }
 
@@ -253,6 +254,7 @@
   
           .header-text {
             text-align: left;
+            padding-bottom: 10px;
           }
   
           .login-type {

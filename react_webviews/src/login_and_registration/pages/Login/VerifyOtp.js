@@ -1,14 +1,9 @@
 import React, { Component } from "react";
 import { initialize } from "../../functions";
-import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import OtpContainer from "../../common/OtpContainer"
 import WVButton from "../../../common/ui/Button/WVButton";
 import LoginContainer from "./LoginContainer"
-
-const config = getConfig();
-const isMobileView = config.isMobileDevice;
-
 class Otp extends Component {
   constructor(props) {
     super(props);
@@ -83,6 +78,9 @@ class Otp extends Component {
           resendOtp={this.handleResendOtp}
           isWrongOtp={isWrongOtp}
           value={value}
+          classes={{
+            subtitle: "login-subtitle"
+          }}
         >
           <WVButton
             variant='contained'
@@ -92,11 +90,11 @@ class Otp extends Component {
             disabled={disabled}
             showLoader={isApiRunning}
             fullWidth
-            className={"login-button"}
+            className="login-button"
           >
             CONTINUE
             </WVButton>
-          <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "0 auto", minHeight: "16px", marginTop: "40px" }} onClick={() => this.props.history.goBack()}>
+          <WVButton classes={{ label: 'go-back-to-login', }} style={{ margin: "40px auto 0px" }} onClick={() => this.props.history.goBack()}>
             Go Back to Login
             </WVButton>
         </OtpContainer >

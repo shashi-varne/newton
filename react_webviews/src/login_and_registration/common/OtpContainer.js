@@ -39,7 +39,7 @@ const OtpContainer = (props) => {
                     <WVInPageTitle>{title}</WVInPageTitle>
                 </WVInPageHeader>
             }
-            <div className={`verify-otp-header ${classes.title}`}>
+            <div className={`verify-otp-header ${classes.subtitle}`}>
                 <p>
                     An OTP has been sent to{" "}
                     <span style={{ fontWeight: "500", marginRight: "23px" }}>
