@@ -44,7 +44,7 @@ const AccountLinked = (props) => {
             <Imgc
               alt=""
               className="img"
-              src={require(`assets/${productName}/acconts_linked.svg`)}
+              src={require(`assets/${productName}/account_linked.svg`)}
             />
           </div>
           <h3 data-aid="account-linked">Accounts Linked</h3>
