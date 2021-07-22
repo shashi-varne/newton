@@ -12,7 +12,7 @@ const EnterMPin = ({
         <div className="verify-mpin">
             {title &&
                 <Title className="vm-title">
-                    {title || 'Enter your current fisdom PIN'}
+                    {title}
                 </Title>
             }
             {subtitle &&
