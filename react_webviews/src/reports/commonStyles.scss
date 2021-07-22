@@ -1,5 +1,4 @@
 .report-goals {
-  margin-top: -20px;
   line-height: 1.5;
   color: #333333;
 
@@ -52,7 +51,7 @@
           }
 
           .goals-green-text {
-            color: #71bf1c;
+            color: var(--secondary-green);
           }
 
           .goals-red-text {
@@ -95,7 +94,6 @@
 }
 
 .reports-funds {
-  margin-top: -20px;
   line-height: 1.5;
   color: #333333;
 
@@ -159,7 +157,7 @@
         }
 
         .funds-green-text {
-          color: #71bf1c;
+          color: var(--secondary-green);
         }
 
         .funds-red-text {
@@ -540,11 +538,10 @@
           }
         }
 
-        button {
-          width: fit-content;
-          background-color: var(--secondary);
-          color: white;
+        .reports-switch-fund-btn {
+          width: 130px;
           border-radius: 8px;
+          padding: 10px !important;
         }
       }
     }
@@ -572,7 +569,7 @@
       margin: 0 15px;
 
       .name {
-        color: black;
+        color: var(--dark);
         font-weight: 500;
         font-size: 14px;
       }
@@ -616,7 +613,7 @@
         font-size: 16px;
 
         .text {
-          color: black;
+          color: var(--dark);
         }
       }
 
