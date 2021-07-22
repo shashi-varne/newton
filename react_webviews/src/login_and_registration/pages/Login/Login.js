@@ -108,7 +108,7 @@ class Login extends Component {
           {loginType === "mobile" && (
             <div className="form-field">
               <div className="country-code" data-aid='country-code'>
-                <div  className="dropdown-without-icon">
+                <div className="dropdown-without-icon">
                   <DropdownWithoutIcon
                     onChange={this.handleChange("code")}
                     error={!!form_data.code_error ? true : false}
