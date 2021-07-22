@@ -58,6 +58,11 @@ class Api {
         if (response.data._encr_payload) {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
         }
+
+        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
+          storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
+        }
+
         if (response.data.pfwresponse.status_code !== 200) {
           var errorMsg = response.data.pfwresponse.result.error || response.data.pfwresponse.result.message || "Something went wrong";
           var main_pathname=window.location.pathname
@@ -74,11 +79,6 @@ class Api {
           SentryError.name= `${project} ${main_pathname}`
           Sentry.captureException(SentryError)
         }
-
-        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
-          storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
-        }
-
         let force_error_api = window.sessionStorage.getItem('force_error_api');
         if(force_error_api) {
           response.data.pfwresponse.status_code = 410;

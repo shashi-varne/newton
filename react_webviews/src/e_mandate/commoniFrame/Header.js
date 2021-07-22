@@ -58,12 +58,12 @@ const Header = ({ classes, width, goBack, resetpage, handleReset, disableBack })
         <div onClick={goBack}>
           {disableBack || disableBack === 'summary' ? (
             <SVG
-              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=#3792FC')}
+              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
               src={close_icn}
             />
           ) : (
             <SVG
-              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=#3792FC')}
+              preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
               src={back_arrow}
             />
           )}
