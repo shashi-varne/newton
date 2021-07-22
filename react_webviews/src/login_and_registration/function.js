@@ -589,3 +589,22 @@ export const logout = async () => {
     toast(e);
   }
 };
+
+export const partnerAuthentication = async (data) => {
+  const res = await Api.post(`/api/partner/${data.partnerCode}/redirect?token=${data.token}&view=${data.view}`);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw new Error(res?.pfwmessage || errorMessage);
+  }
+
+  const { result, status_code: status } = res.pfwresponse;
+
+  if (status === 200) {
+    return result;
+  } else {
+    throw new Error(result.error || result.message || errorMessage);
+  }
+} 

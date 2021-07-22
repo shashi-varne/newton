@@ -47,7 +47,8 @@ export const checkAfterRedirection = (props, fromState, toState) => {
       toState !== "/login" &&
       toState !== "/register" &&
       toState !== "/forgot-password" &&
-      toState !== "/mobile/verify"
+      toState !== "/mobile/verify" &&
+      !toState.includes("/partner-authentication")
     ) {
       if (!getConfig().isLoggedIn) {
         navigate("/login");

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
 import NotFound from './common/components/NotFound';
 import Insurance from './insurance';
@@ -36,6 +36,14 @@ import Kyc from './kyc';
 import 'common/theme/Style.scss';
 
 const Feature = () => {
+  // old # route support added
+  // start
+  const history = useHistory()
+  if (window.location.hash.startsWith('#!/')) {
+    history.push(window.location.hash.replace('#!', ''))
+  }
+  // end
+
   return (
     <Switch>
       <Route path='/insurance' component={Insurance} />

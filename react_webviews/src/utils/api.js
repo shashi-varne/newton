@@ -5,9 +5,10 @@ import { storageService } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions';
 
-let base_url = getConfig().base_url;
+const config = getConfig();
+let base_url = config.base_url;
 
-let sdk_capabilities = getConfig().sdk_capabilities;
+let sdk_capabilities = config.sdk_capabilities;
 let is_secure = false;
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
@@ -41,6 +42,9 @@ class Api {
     if (sdk_capabilities) {
       axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
+    if(route.includes("/api/") && storageService().get("x-plutus-auth") && config.isIframe) {
+      axios.defaults.headers.common["X-Plutus-Auth"] = storageService().get("x-plutus-auth")
+    }
     let options = Object.assign({
       method: verb,
       url: route,
@@ -70,6 +74,11 @@ class Api {
           SentryError.name= `${project} ${main_pathname}`
           Sentry.captureException(SentryError)
         }
+
+        if (response.config.url.includes("/api/") && response.headers["x-plutus-auth"] && config.isIframe) {
+          storageService().set("x-plutus-auth", response.headers["x-plutus-auth"])
+        }
+
         let force_error_api = window.sessionStorage.getItem('force_error_api');
         if(force_error_api) {
           response.data.pfwresponse.status_code = 410;
