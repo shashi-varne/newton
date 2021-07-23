@@ -23,7 +23,7 @@ const VerifyPin = (props) => {
   return (
     <Container
       data-aid='my-account-screen'
-      skelton={showLoader}
+      showLoader={showLoader}
       handleClick={handleClick}
       buttonTitle="Continue"
     > 

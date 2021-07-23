@@ -23,7 +23,7 @@ const SetPin = (props) => {
   return (
     <Container
       data-aid='my-account-screen'
-      skelton={showLoader}
+      showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
       fullWidthButton

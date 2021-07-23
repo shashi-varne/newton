@@ -7,7 +7,6 @@ import { navigate as navigateFunc } from "../../../utils/functions";
 
 const confirmResetPin = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [otp, setOtp] = useState('');
 
@@ -24,7 +23,7 @@ const confirmResetPin = (props) => {
   return (
     <Container
       data-aid='my-account-screen'
-      skelton={showLoader}
+      showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
     >

@@ -22,7 +22,7 @@ const SecuritySettings = (props) => {
         <Container
             data-aid='my-account-screen'
             noFooter={true}
-            skelton={showLoader}
+            showLoader={showLoader}
         >
             <div className="security-settings">
                 <>

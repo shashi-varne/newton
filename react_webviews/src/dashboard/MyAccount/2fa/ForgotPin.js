@@ -34,16 +34,10 @@ const ForgotPin = (props) => {
 
   const handleClick = async () => {
     try {
-      const response = {
-        "resend_url": "{{plutus_url}}/api/iam/mpin/v2/otp/resend/{{session_id}}",
-        "verify_url": "{{plutus_url}}/api/iam/mpin/v2/otp/verify/{{session_id}}",
-        "obscured_auth": "du******@yo*********",
-        "obscured_auth_type": "own"
-      }
-      // setIsApiRunning(true);
-      // const response = await forgotPinOtpTrigger(pan ? { pan } : '');
-      // setIsApiRunning(false);
-      navigate('2fa-verify-pin-otp', {  // "TODO Path name need to be Re-named"
+      setIsApiRunning("button");
+      const response = await forgotPinOtpTrigger(pan ? { pan } : '');
+      setIsApiRunning(false);
+      navigate('verify-pin-otp', {
         params: response
       });
     } catch (err) {
@@ -58,10 +52,11 @@ const ForgotPin = (props) => {
   return (
     <Container
       data-aid='myaccount-forgot-pin'
-      title="Forgot Fisdom PIN"
-      skelton={showLoader}
+      showLoader={isApiRunning}
       handleClick={handleClick}
       buttonTitle="Continue"
+      hideInPageTitle
+      hidePageTitle
     >
       <ForgotMPin
         primaryAuthType={stateParams?.authType}
