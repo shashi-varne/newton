@@ -158,12 +158,20 @@ class Checkout extends Component {
     return funds.filter((data) => data.allow_purchase[investType]);
   };
 
+  goBack = () => {
+    if(config.code === "moneycontrol") {
+      this.navigate("/");
+    } else {
+      this.props.history.goBack();
+    }
+  }
+
   handleClick = () => {
     this.sendEvents('next')
     let { fundsData, type, investType } = this.state;
     let allowedFunds = this.getAllowedFunds(fundsData, investType);
     if (fundsData.length === 0 || allowedFunds.length === 0) {
-      this.props.history.goBack();
+      this.goBack();
       return;
     }
     let submit = true;
