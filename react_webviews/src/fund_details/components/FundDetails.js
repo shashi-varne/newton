@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useParams} from 'react-router-dom';
 import Container from '../common/Container';
 import { fetch_fund_details, fetch_fund_graph } from '../common/ApiCalls';
 import Typography from '@material-ui/core/Typography';
@@ -43,8 +44,8 @@ const FundDetails = ({ classes, history }) => {
   const [graph, setGraph] = useState(null);
   const [selectedIsin, setSelectedIsin] = useState(0);
   const productType = getConfig().productName;
-
-  const { isins, selected_isin, type } = getUrlParams();
+  const {isin} = useParams();
+  let { isins, selected_isin, type } = getUrlParams();
   const EMPTY_CART = 'EMPTY_CART';
   const FUND_ADDED = 'FUND_ADDED';
   const ADD_CART = '+ Add to Cart';
@@ -130,6 +131,9 @@ const FundDetails = ({ classes, history }) => {
     (async () => {
       try {
         setLoading(true);
+        if(isin){
+          isins = isin;
+        }
         const response = await fetch_fund_details(isins);
         let index = response?.text_report?.findIndex((el) => el.isin === selected_isin);
         if(isins === selected_isin){

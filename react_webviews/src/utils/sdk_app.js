@@ -126,7 +126,7 @@ export const backButtonHandler = (props, fromState, currentState, params) => {
       if (isNpsOutsideSdk(fromState, currentState)) {
         nativeCallback({ action: "clear_history" });
       }
-      navigate("/nps/sdk");
+      navigate("/nps");
       return true;
     } else {
       navigate("/");

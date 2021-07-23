@@ -539,7 +539,7 @@ export function isNpsOutsideSdk(fromState, toState) {
     return false;
   }
 
-  if (fromState === "/nps/sdk" ||
+  if (fromState === "/nps" ||
     ((fromState.indexOf("/nps/amount") !== -1) && toState === "/nps/info") ||
     ((fromState.indexOf("/nps/payment/callback") !== -1) &&
       ((toState.indexOf("/nps/amount") !== -1) || toState === "/nps/investments" ||
