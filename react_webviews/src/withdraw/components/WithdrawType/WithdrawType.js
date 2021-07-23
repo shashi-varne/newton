@@ -222,7 +222,7 @@ const Landing = (props) => {
       skelton={isEmpty(recommendedFunds) && showSkeltonLoader}
       buttonData={{
         leftTitle: "Withdraw amount",
-        leftSubtitle: formatAmountInr(totalAmount),
+        leftSubtitle: formatAmountInr(totalAmount || 0),
       }}
       type={type !== 'insta-redeem' ? "withProvider" : ''}
       title={getTitle()}
