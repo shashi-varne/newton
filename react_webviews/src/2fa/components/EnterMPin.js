@@ -1,6 +1,8 @@
 import './commonStyles.scss';
 import React from 'react';
 import WVOtp from '../../common/ui/Otp/WVOtp';
+import WVInPageTitle from '../../common/ui/InPageHeader/WVInPageTitle';
+import WVInPageSubtitle from '../../common/ui/InPageHeader/WVInPageSubtitle';
 
 const EnterMPin = ({
     otpProps = {},
@@ -11,12 +13,12 @@ const EnterMPin = ({
     return (
         <div className="verify-mpin">
             {title &&
-                <Title className="vm-title">
+                <Title>
                     {title}
                 </Title>
             }
             {subtitle &&
-                <Subtitle className="vm-subtitle">
+                <Subtitle style={{ margin: '20px 0 60px' }}>
                     {subtitle}
                 </Subtitle>
             }
@@ -34,12 +36,12 @@ const EnterMPin = ({
 }
 
 const Title = ({ children, ...props }) => {
-    return <div {...props}>{children}</div>
+    return <WVInPageTitle {...props}>{children}</WVInPageTitle>
 }
 EnterMPin.Title = Title;
 
 const Subtitle = ({ children, ...props }) => {
-    return <div {...props}>{children}</div>
+    return <WVInPageSubtitle {...props}>{children}</WVInPageSubtitle>
 }
 EnterMPin.Subtitle = Subtitle;
 
