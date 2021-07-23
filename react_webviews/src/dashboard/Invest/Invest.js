@@ -60,7 +60,7 @@ const Invest = (props) => {
       />
       <Route
         exact
-        path={`${url}/explore`}
+        path={[`${url}/explore`,`${url}/doityourself/direct`]}
         component={ExploreFunds}
       />
       <Route

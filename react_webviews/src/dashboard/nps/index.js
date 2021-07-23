@@ -46,7 +46,7 @@ const Nps = (props) => {
       <Route exact path={`${url}/payment/callback/:type/:amount/:id`} component={NpsPaymentCallback} />
       <Route exact path={`${url}/payment/callback/:type/:amount/:id/:status`} component={NpsPaymentCallback} />
       <Route exact path={`${url}/payment/callback/:type/:amount/:id/:status/:message`} component={NpsPaymentCallback} />
-      <Route exact path={`${url}/sdk`} component={NpsSdk} />
+      <Route exact path={`${url}`} component={NpsSdk} />
       <Route component={NotFound} />
     </Switch>
   );
