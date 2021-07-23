@@ -4,17 +4,22 @@ import OtpContainer from '../../../common/components/OtpContainer';
 import WVButton from '../../../common/ui/Button/WVButton';
 import { navigate as navigateFunc } from '../../../utils/functions';
 import LoginButton from '../../common/LoginButton';
+import Toast from 'common/ui/Toast';
+import { otpApiCall } from '../../../2fa/common/ApiCalls';
 
 const VerifyForgotOtp = (props) => {
-  const communicationType = ''; //TODO: change name
-  const communicationValue = '';
+  const routeParams = props.location.params || {};
+  // TODO: handle direct landing on this page gracefully => routeParams is empty
+  const authType = routeParams.obscured_auth_type === 'mobile' ? 'mobile' : 'email';
+  const authValue = routeParams.obscured_auth;
   const otpData = {
     totalTime: 15,
     timeAvailable: 15,
   };
-  const [isWrongOtp, setIsWrongOtp] = useState(false);
   const [otp, setOtp] = useState('');
-  const [isApiRunning, setIsApiRunning] = useState('');
+  const [otpError, setOtpError] = useState('');
+  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [isResendApiRunning, setIsResendApiRunning] = useState(false);
 
   const navigate = navigateFunc.bind(props);
 
@@ -22,25 +27,44 @@ const VerifyForgotOtp = (props) => {
     setOtp(otp);
   }
 
-  const handleResendOtp = () => {
-    // Call Resend API here
+  const handleResendOtp = async () => {
+    try {
+      setIsResendApiRunning(true);
+      await otpApiCall(routeParams?.resend_url);
+    } catch(err) {
+      console.log(err);
+      Toast(err);
+    } finally {
+      setIsResendApiRunning(false);
+    }
   }
 
-  const handleClick = () => {
-    navigate('new-pin');
-    // Call Verify API here
+  const handleClick = async () => {
+    try {
+      setIsApiRunning(true);
+      const result = await otpApiCall(routeParams?.verify_url, otp);
+      setIsApiRunning(false);
+      navigate('new-pin', {
+        params: { modify_url: result.modify_url }
+      });
+    } catch(err) {
+      console.log(err);
+      setOtpError(err);
+    } finally {
+      setIsApiRunning(false);
+    }
   }
 
   
   return (
     <OtpContainer
-      title={`Enter OTP to verify your ${communicationType === "email" ? "email" : "number"}`}
+      title={`Enter OTP to verify your ${authType === "email" ? "email" : "number"}`}
       otpData={{ ...otpData, otp }}
-      // showDotLoader={showDotLoader}
+      showDotLoader={isResendApiRunning}
       handleOtp={handleOtp}
       resendOtp={handleResendOtp}
-      isWrongOtp={isWrongOtp}
-      value={communicationValue}
+      isWrongOtp={!!otpError}
+      value={authValue}
       classes={{
         subtitle: "login-subtitle"
       }}

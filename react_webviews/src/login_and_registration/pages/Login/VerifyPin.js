@@ -1,30 +1,51 @@
 import './commonStyles.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EnterMPin from '../../../2fa/components/EnterMPin';
 import { Imgc } from '../../../common/ui/Imgc';
 import { storageService } from '../../../utils/validators';
 import WVClickableTextElement from '../../../common/ui/ClickableTextElement/WVClickableTextElement';
 import { navigate as navigateFunc } from '../../../utils/functions';
+import LoginButton from '../../common/LoginButton';
+import { verifyPin } from '../../../2fa/common/ApiCalls';
 
 const VerifyPin = (props) => {
   const { name } = storageService().getObject('user') || {};
-  const [otpError, setOtpError] = useState(false);
-  const [otp, setOtp] = useState('');
+  const [mpinError, setMpinError] = useState(false);
+  const [mpin, setMpin] = useState('');
+  const [isApiRunning, setIsApiRunning] = useState(false);
 
   const navigate = navigateFunc.bind(props);
 
   const onOtpChange = (val) => {
-    console.log(val);
+    setMpin(val);
+  }
+
+  useEffect(() => {
+    if (mpin.length === 4) {
+      handleClick();
+    }
+  }, [mpin])
+
+  const handleClick = async () => {
+    try {
+      setIsApiRunning(true);
+      await verifyPin({ mpin });
+    } catch(err) {
+      console.log(err);
+      setMpinError(err);
+    } finally {
+      setIsApiRunning(false);
+    }
   }
 
   return (
     <div className="login-verify-pin">
       <EnterMPin
         otpProps={{
-          otp,
+          otp: mpin,
           handleOtp: onOtpChange,
-          hasError: otpError,
-          bottomText: otpError ? '' : 'Enter Fisdom PIN'
+          hasError: !!mpinError,
+          bottomText: mpinError || 'Enter Fisdom PIN'
         }}
       >
         <Imgc
@@ -39,8 +60,10 @@ const VerifyPin = (props) => {
           {name}
         </EnterMPin.Subtitle>
       </EnterMPin>
+      <LoginButton showLoader={isApiRunning} onClick={handleClick}>Continue</LoginButton>
+      {/* TODO: Check with Design team ^ */}
       <div className="lvp-footer">
-        <WVClickableTextElement>
+        <WVClickableTextElement onClick={() => navigate('/login')}>
           Switch Account
         </WVClickableTextElement>
         <WVClickableTextElement onClick={() => navigate('/forgot-pin')}>

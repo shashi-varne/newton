@@ -58,6 +58,7 @@ const OtpContainer = ({
                         isDisabled={isDisabled || false}
                         hasError={isWrongOtp}
                         bottomText={isWrongOtp ? "Invalid OTP": ""}
+                        // TODO: Support custom bottomText ^
                     />
                     {timeAvailable > 0 && !showDotLoader && (
                         <div className="cd-otp-time-text">

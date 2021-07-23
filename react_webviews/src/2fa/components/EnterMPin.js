@@ -22,7 +22,7 @@ const EnterMPin = ({
             }
             {children}
             <WVOtp
-                handleOtp={otpProps.handleOtp}
+                onChange={otpProps.handleOtp}
                 value={otpProps.otp}
                 isDisabled={otpProps.isDisabled}
                 hasError={otpProps.hasError}
