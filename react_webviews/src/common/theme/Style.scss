@@ -1413,7 +1413,7 @@ $header-title-font-size: 20px;
 
 .main-top-title-header-old {
   @include main-top-title-header-base();
-  color: white;
+  color: var(--primary);
 }
 
 .slide-fade {

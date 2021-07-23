@@ -52,7 +52,7 @@ const Header = ({ classes, title, count, total, current, goBack,
     };
     return (
       <AppBar position="fixed" color="primary" data-aid='app-bar'
-      className={`Header transition ${classes.root} ${(inPageTitle || new_header) && !headerData.partnerLogo ? 'header-topbar-white' : 'header-topbar-primary'} ${className || ''}`}
+      className={`Header transition ${classes.root} ${!headerData.partnerLogo ? 'header-topbar-white' : 'header-topbar-primary'} ${className || ''}`}
       style={style}
       >
         <Toolbar>
@@ -63,7 +63,7 @@ const Header = ({ classes, title, count, total, current, goBack,
               goBack}>
               {!disableBack && !headerData.hide_icon &&
               <SVG
-              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backButtonColor ?  backButtonColor : new_header && !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
+              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backButtonColor ?  backButtonColor : !headerData.partnerLogo ? getConfig().styles.primaryColor : 'white'))}
               src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
               />
               }
@@ -132,7 +132,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                 <SVG
                 style={{marginLeft: 'auto', width:20}}
                 onClick={handleReset}
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor))}
                 src={restart}
               />
               }
@@ -140,7 +140,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                 <SVG
                 style={{marginLeft: '20px', width:25, cursor:'pointer'}}
                 onClick={handleTopIcon}
-                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (backgroundColor ?  getConfig().styles.secondaryColor : new_header ? getConfig().styles.primaryColor : 'white'))}
+                preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header && backgroundColor ?  getConfig().styles.secondaryColor : getConfig().styles.primaryColor))}
                 src={rightIcon}
               />
               }
@@ -155,7 +155,7 @@ const Header = ({ classes, title, count, total, current, goBack,
               {isMobileDevice && isWeb && !config.isIframe &&
                 <div className='mobile-navbar-menu'>
                   <IconButton onClick={handleMobileViewDrawer}>
-                    <MenuIcon style={{color: backgroundColor ?  getConfig().styles.secondaryColor : new_header ? (noBackIcon ? 'white' : getConfig().styles.primaryColor) : 'white'}}/>
+                    <MenuIcon style={{color: new_header && backgroundColor ?  getConfig().styles.secondaryColor : headerData.partnerLogo ? 'white' : getConfig().styles.primaryColor}}/>
                   </IconButton>
                   <Drawer mobileViewDrawer={mobileViewDrawer} handleMobileViewDrawer={handleMobileViewDrawer} handleReferModal={handleReferModal} />
                 </div>
