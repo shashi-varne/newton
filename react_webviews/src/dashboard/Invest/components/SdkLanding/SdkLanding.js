@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
-import { initialize, handleCampaignNotification, handleCampaignRedirection } from '../../functions';
+import { initialize, handleCampaignNotification, dateValidation } from '../../functions';
 import { SkeltonRect } from 'common/ui/Skelton';
 import SdkInvestCard from '../../mini-components/SdkInvestCard';
 import { storageService } from 'utils/validators';
@@ -13,8 +13,15 @@ import './SdkLanding.scss';
 import VerificationFailedDialog from '../../mini-components/VerificationFailedDialog';
 import KycStatusDialog from '../../mini-components/KycStatusDialog';
 import { nativeCallback } from '../../../../utils/native_callback';
+import { Imgc } from '../../../../common/ui/Imgc';
 
 const config = getConfig();
+const PATHNAME_MAPPER = {
+  nfo: "/advanced-investing/new-fund-offers/info",
+  diy: "/invest/explore",
+  buildwealth: "/invest/buildwealth",
+  instaredeem: "/invest/instaredeem",
+}
 class SdkLanding extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +29,7 @@ class SdkLanding extends Component {
       show_loader: false,
       kycStatusLoader: false,
       productName: config.productName,
-      partner: config.partner,
+      landingMarketingBanners: config.landingMarketingBanners,
       screenName: 'sdk_landing',
       isWeb: config.Web,
       invest_show_data: {},
@@ -39,7 +46,6 @@ class SdkLanding extends Component {
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
-    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -84,22 +90,13 @@ class SdkLanding extends Component {
     }
   };
 
-  closeCampaignDialog = () => {
-    this.setState({ openBottomSheet: false });
-  };
-
-  handleMarketingBanner = (path) => () => {
-    if(path === '/invest/recommendations'){
+  handleMarketingBanner = (bannerType="") => () => {
+    if(bannerType === '100_sip'){
       this.getRecommendationApi(100);
     } else {
+      const path = PATHNAME_MAPPER[bannerType] || "/";
       this.navigate(path);
     }
-  }
-
-  handleCampaign = () => {
-    this.setState({showPageLoader : 'page', openBottomSheet : false});
-    let campLink = this.state.bottom_sheet_dialog_data.url;
-    handleCampaignRedirection(campLink);
   }
 
   addBank = () => {
@@ -140,7 +137,7 @@ class SdkLanding extends Component {
     let {
       isReadyToInvestBase,
       kycStatusLoader,
-      partner,
+      landingMarketingBanners,
       dotLoader,
       referral,
       kycJourneyStatusMapperData,
@@ -177,23 +174,45 @@ class SdkLanding extends Component {
           )}
 
           {/* Marketing Banners */}
-          {!isEmpty(partner?.landing_marketing_banners) && (
+          {!isEmpty(landingMarketingBanners) && (
             <div className='landing-marketing-banners' data-aid='landing-marketing-banners'>
-              {partner?.landing_marketing_banners?.length === 1 ? (
+              {landingMarketingBanners?.length === 1 ? (
                 <div className='single-marketing-banner'>
-                  <img
-                    src={require(`assets/${partner?.landing_marketing_banners[0].image}`)}
-                    alt=''
-                    style={{ width: '100%' }}
-                  />
+                  {dateValidation(
+                    landingMarketingBanners[0]?.endDate,
+                    landingMarketingBanners[0]?.startDate
+                  ) && (
+                    <Imgc
+                      src={require(`assets/${landingMarketingBanners[0].image}`)}
+                      alt=""
+                      style={{ width: "100%", minHeight: "120px" }}
+                      onClick={this.handleMarketingBanner(
+                        landingMarketingBanners[0]?.type
+                      )}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className='marketing-banners-list' data-aid='marketing-banners-list'>
-                  {partner?.landing_marketing_banners.map((el, idx) => (
-                    <div className='marketing-banner-icon-wrapper' key={idx} onClick={this.handleMarkettingBanner(el?.path)}>
-                      <img src={require(`assets/${el.image}`)} alt='' style={{ width: '100%' }} />
-                    </div>
-                  ))}
+                  {landingMarketingBanners?.map((el, idx) => {
+                    return (
+                      <>
+                        {dateValidation(el?.endDate, el?.startDate) && (
+                          <div
+                            className="marketing-banner-icon-wrapper"
+                            key={idx}
+                            onClick={this.handleMarketingBanner(el?.type)}
+                          >
+                            <Imgc
+                              src={require(`assets/${el.image}`)}
+                              alt=""
+                              style={{ width: "100%" }}
+                            />
+                          </div>
+                        )}
+                      </>
+                    );
+                  })}
                 </div>
               )}
             </div>

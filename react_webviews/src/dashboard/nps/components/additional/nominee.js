@@ -7,7 +7,7 @@ import SelectWithoutIcon from "common/ui/SelectWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
 import { storageService, capitalize } from "utils/validators";
 import { formatDate } from "utils/validators";
-import { dobFormatTest, validateAlphabets } from "../../../../utils/validators";
+import { dobFormatTest, isEmpty, validateAlphabets } from "../../../../utils/validators";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
@@ -31,16 +31,16 @@ class NpsNominee extends Component {
   onload = async () => {
     let nps_additional_details = storageService().getObject(
       "nps_additional_details"
-    );
-    if (!nps_additional_details) {
+    ) || {};
+    if (!isEmpty(nps_additional_details)) {
       await this.getNPSInvestmentStatus();
       storageService().set("nps_additional_details_required", true);
+      nps_additional_details = storageService().getObject(
+        "nps_additional_details"
+      ) || {};
     }
-    nps_additional_details = storageService().getObject(
-      "nps_additional_details"
-    );
 
-    let { nps_details } = nps_additional_details;
+    let { nps_details={} } = nps_additional_details;
 
     let { form_data } = this.state;
     let { nomination } = nps_details;

@@ -1,5 +1,5 @@
 // import colors from '../common/theme/Style.scss';
-import { checkValidString, getUrlParams, storageService } from './validators';
+import { checkValidString, getUrlParams, isEmpty, storageService } from './validators';
 import $ from 'jquery';
 import {  getPartnerData  } from './partnerConfigs';
 
@@ -574,4 +574,21 @@ export const popupWindowCenter = (w, h, url) => {
 export const isNewIframeDesktopLayout = () => {
   const config = getConfig();
   return config.code === "moneycontrol" && !config.isMobileDevice && config.isIframe
+}
+
+export const getInvestCards = (keysToCheck=[]) => {
+  const config = getConfig();
+  const investSections = config.investSections || [];
+  const investSubSectionMap = config.investSubSectionMap;
+  const cardsToShow = {};
+  investSections.forEach(section => {
+    if(!isEmpty(investSubSectionMap[section])) {
+      investSubSectionMap[section].forEach(subSections => {
+        if (keysToCheck.includes(subSections)) {
+          cardsToShow[subSections] = true;
+        }
+      })
+    }
+  })
+  return cardsToShow;
 }

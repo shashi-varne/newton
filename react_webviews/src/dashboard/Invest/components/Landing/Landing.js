@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import Button from "common/ui/Button";
-import { initialize, handleCampaignNotification, handleCampaignRedirection } from "../../functions";
+import { initialize, handleCampaignNotification } from "../../functions";
 import InvestCard from "../../mini-components/InvestCard";
 import SecureInvest from "../../mini-components/SecureInvest";
 import VerificationFailedDialog from "../../mini-components/VerificationFailedDialog";
@@ -39,7 +39,6 @@ class Landing extends Component {
     };
     this.initialize = initialize.bind(this);
     this.handleCampaignNotification = handleCampaignNotification.bind(this);
-    this.handleCampaignRedirection = handleCampaignRedirection.bind(this);
   }
 
   componentWillMount() {
@@ -100,16 +99,6 @@ class Landing extends Component {
       });
     }
   };
-
-  closeCampaignDialog = () => {
-    this.setState({ openBottomSheet: false });
-  };
-
-  handleCampaign = () => {
-    this.setState({showPageLoader : 'page', openBottomSheet : false});
-    let campLink = this.state.bottom_sheet_dialog_data.url;
-    handleCampaignRedirection(campLink);
-  }
 
   render() {
     const {

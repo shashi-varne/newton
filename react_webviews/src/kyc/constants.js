@@ -246,7 +246,6 @@ export const ADDRESS_PROOF_OPTIONS = [
   { name: "Aadhaar card", value: "AADHAAR" },
   { name: "Voter ID", value: "VOTER_ID_CARD" },
   { name: "Gas receipt", value: "UTILITY_BILL" },
-  { name: "Passbook", value: "LAT_BANK_PB" }
 ];
 
 export const NRI_ADDRESS_PROOF_OPTIONS = [

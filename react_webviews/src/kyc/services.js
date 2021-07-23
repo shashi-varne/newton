@@ -116,7 +116,7 @@ export async function setSummaryData(result) {
     consent_required = result.data.partner.partner.data.consent_required;
   }
   storageService().set("consent_required", consent_required);
-  const subBrokerCodePartersList = ["hbl", "sbm", "flexi", "medlife", "life99"]
+  const subBrokerCodePartersList = ["hbl", "sbm", "flexi", "medlife", "life99", "taxwin", "ippb", "quesscorp", "sahaj", "mspl"]
   if (partner === "bfdl") {
     storageService().set("partner", "bfdlmobile");
   } else if (partner === "obcweb") {

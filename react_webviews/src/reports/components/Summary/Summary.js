@@ -13,6 +13,7 @@ import { getSummaryV2 } from "../../common/api";
 import useUserKycHook from "../../../kyc/common/hooks/userKycHook";
 import "./commonStyles.scss";
 import CheckInvestment from "../mini-components/CheckInvestment";
+import { getInvestCards } from "../../../utils/functions";
 
 const config = getConfig();
 const productName = config.productName;
@@ -28,30 +29,16 @@ const Summary = (props) => {
   });
   const [data, setData] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
-  const [investCards, setInvestCards] = useState({});
   const [isAmountSliderUsed, setIsAmountSliderUsed] = useState(false);
   const [isYearSliderUsed, setIsYearSliderUsed] = useState(false);
   const { user: currentUser, isLoading } = useUserKycHook();
+  const investCards = getInvestCards(["nps", "insurance", "gold"]);
 
   useEffect(() => {
     initialize();
   }, []);
 
   const initialize = async () => {
-    const investSections = config.investSections;
-    const investSubSectionMap = config.investSubSectionMap;
-    const keysToCheck = ["nps", "insurance", "gold"];
-    const cardsToShow = {};
-    for (let section of investSections) {
-      if (!isEmpty(investSubSectionMap[section])) {
-        for (let subSections of investSubSectionMap[section]) {
-          if (keysToCheck.includes(subSections)) {
-            cardsToShow[subSections] = true;
-          }
-        }
-      }
-    }
-    setInvestCards(cardsToShow);
     const result = await getSummaryV2();
     if (!result) {
       setShowSkelton(false);

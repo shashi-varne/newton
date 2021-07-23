@@ -171,7 +171,7 @@ const BankDetails = (props) => {
                             }`}
                             data-aid='kyc-mapped-mandate-status'
                           >
-                            {mandate.mapped_mandate_status}
+                            {mandate.friendly_status_V2}
                           </div>
                         </div>
                       </div>
