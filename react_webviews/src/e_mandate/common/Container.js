@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 
 import { didMount, commonRender } from '../../common/components/container_functions';
 
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import '../../utils/native_listener';
 import { getConfig } from 'utils/functions';
 
@@ -74,7 +74,8 @@ class Container extends Component {
     }
 
     if ((params && params.disableBack) || this.props.disableBack) {
-      nativeCallback({ action: 'exit', events: this.getEvents('exit') });
+      nativeCallback({ events: this.getEvents('exit') });
+      handleNativeExit(this.props, { action: "exit" });
       return;
     }
 
@@ -84,7 +85,8 @@ class Container extends Component {
       case "/e-mandate/enps/about":
       case "/e-mandate/enps/success":
       case "/e-mandate/enps/failure":
-        nativeCallback({ action: 'exit', events: this.getEvents('exit') });
+        nativeCallback({ events: this.getEvents('exit') });
+        handleNativeExit(this.props, { action: "exit" });
         break;
       default:
         if (this.getEvents('back')) {
@@ -99,7 +101,7 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: this.state.callbackType });
+    handleNativeExit(this.props, { action: this.state.callbackType });
 
   }
 

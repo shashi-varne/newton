@@ -1,7 +1,7 @@
 import React, { Component , Fragment } from 'react';
 import { withRouter } from 'react-router';
 
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
 
 import {didMount ,commonRender} from '../../common/components/container_functions';
@@ -25,7 +25,7 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
     switch (pathname) {
       case "/referral":
-        nativeCallback({ action: 'native_back' });
+        handleNativeExit(this.props, {action: "native_back"});
         break;
       default:
         if (navigator.onLine) {

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 
 import { didMount, commonRender } from "common/components/container_functions";
-import { nativeCallback } from "utils/native_callback";
+import { nativeCallback, handleNativeExit } from "utils/native_callback";
 import "../../utils/native_listner";
 import { getConfig } from "../../utils/functions";
 
@@ -52,7 +52,8 @@ class Container extends Component {
 
     switch (pathname) {
       case "/help":
-        nativeCallback({ action: "exit", events: this.getEvents() });
+        nativeCallback({ events: this.getEvents() });
+        handleNativeExit(this.props, {action: "exit"});
         break;
       default:
         this.props.history.goBack();

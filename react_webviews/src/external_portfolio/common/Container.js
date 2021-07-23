@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import Header from "./Header";
 import Footer from "./footer";
 
-import { nativeCallback } from "utils/native_callback";
+import { nativeCallback, handleNativeExit } from "utils/native_callback";
 import Button from "material-ui/Button";
 import Dialog, {
   DialogActions,
@@ -71,7 +71,7 @@ class Container extends Component {
     let { params } = this.props.location;
     
     if (params && params.disableBack) {
-      nativeCallback({ action: 'exit' });
+      handleNativeExit(this.props, { action: "exit"});
       return;
     }
 
@@ -122,7 +122,8 @@ class Container extends Component {
       openPopup: false
     });
 
-    nativeCallback({ action: "native_back", events: this.getEvents("back") });
+    nativeCallback({ events: this.getEvents("back") });
+    handleNativeExit(this.props, { action: "native_back"});
   };
 
   renderPopup = () => {
