@@ -58,6 +58,10 @@ export const basePartnerConfig = {
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "fisdom.com",
     riskEnabledFunnels: false,
+    referralConfig: {
+      applyRefferal: true, // same as hide_apply_referral but with opposite value
+      shareRefferal: true, // same as hide_share_referral but with opposite value
+    },
   },
   finity: {
     productName: "finity",
@@ -72,6 +76,10 @@ export const basePartnerConfig = {
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "finity.in",
     riskEnabledFunnels: true,
+    referralConfig: {
+      applyRefferal: false,
+      shareRefferal: false,
+    },
   },
 };
 
@@ -253,6 +261,7 @@ export const partnerConfigs = {
       primaryColor: "#8C0094",
     },
     referralConfig: {
+      applyRefferal: true,
       shareRefferal: false,
     },
   },
@@ -403,6 +412,7 @@ export const partnerConfigs = {
       ourRecommendations: ["buildwealth", "savetax", "nps"],
     },
     referralConfig: {
+      applyRefferal: true,
       shareRefferal: false, // same as hide_share_referral but with opposite value
     },
     styles: {

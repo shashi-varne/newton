@@ -1,5 +1,5 @@
 // import colors from '../common/theme/Style.scss';
-import { checkValidString, getUrlParams, isEmpty, storageService } from './validators';
+import { checkValidString, getUrlParams, storageService } from './validators';
 import $ from 'jquery';
 import { 
   basePartnerConfig, 
@@ -9,6 +9,7 @@ import {
   commonCardsConfig, 
   partnerConfigs 
 } from './partnerConfigs';
+import isEmpty from "lodash/isEmpty";
 
 export const getHost = (pathname) => {
   return window.location.origin + pathname;

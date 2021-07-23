@@ -5,9 +5,8 @@ import nominee from "assets/nominee.png";
 import calendar from "assets/calendar2.png";
 import SelectWithoutIcon from "common/ui/SelectWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
-import { storageService, capitalize } from "utils/validators";
-import { formatDate } from "utils/validators";
-import { dobFormatTest, isEmpty, validateAlphabets } from "../../../../utils/validators";
+import {storageService, capitalize, formatDate, dobFormatTest, validateAlphabets } from "../../../../utils/validators";
+import isEmpty from "lodash/isEmpty";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
