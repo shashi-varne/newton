@@ -48,7 +48,7 @@ const Feature = () => {
       <Route path='/insurance' component={Insurance} />
       <Route path='/group-insurance' component={GroupInsurance} />
       <Route path='/referral' component={Referral} />
-      <Route path='/gold' component={Gold} />
+      <Route path={['/gold','/direct/gold']} component={Gold} />
       <Route path='/fhc' component={Fhc} />
       <Route path='/mandate' component={Mandate} />
       <Route path='/mandate-otm' component={Mandate_OTM} />
