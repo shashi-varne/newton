@@ -50,7 +50,7 @@
 }
 
 .login-verify-pin {
-  margin-top: 110px;
+  // margin-top: 110px;
   
   .lvp-title {
     font-weight: 500;
@@ -64,30 +64,13 @@
     line-height: 32px;
     letter-spacing: 1px;
     color: var(--dark);
+    margin-top: 0;
+    margin-bottom: 20px;
   }
   
   .lvp-footer {
     display: flex;
     justify-content: space-between;
     margin-top: 40px;
-  }
-}
-
-.login-button {
-  margin: 60px auto 20px !important;
-  width: 100% !important;
-}
-
-@media only screen and (max-width: 767px) {
-  .verify-otp-container{
-    .login-button{
-      position: fixed;
-      z-index: 9999;
-      bottom: 0;
-      left:0;
-      right:0;
-      margin: 0px auto 20px !important;
-      width: calc(100% - 40px) !important;
-    }
   }
 }

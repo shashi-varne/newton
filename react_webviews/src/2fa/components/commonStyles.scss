@@ -1,19 +1,20 @@
-.forgot-fisdom-pin{
-   .forgot-pin-subtitle{
+.forgot-fisdom-pin {
+   .forgot-pin-subtitle {
      font-size: 11px;
      line-height: 18px;
      color: var(--steelgrey);
      margin: 5px 0px 15px 5px;
    }
 
-  .login-form-field{
-     display: flex;
-     flex-direction: column;
-    .input-field{
+  .login-form-field {
+    display: flex;
+    flex-direction: column;
+
+    .input-field {
       height: 52px;
       background: rgba(238, 238, 238, 0.3);
       width: 100%;
-      margin-top: 40px;
+      
       .MuiInputLabel-formControl{
         left: 10px;
         top: 4px;
@@ -22,6 +23,10 @@
         margin-left: 10px;
       }
     }
+
+    .input-field + .input-field {
+      margin-top: 40px;
+    }
   }
 }
 
@@ -29,25 +34,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  .vm-title {
-    font-weight: 700;
-    font-size: 20px;
-    // font-weight: 500;
-    // font-size: 15px;
-    line-height: 32px;
-    color: var(--dark);
-    margin-bottom: 10px;
-  }
-
-  .vm-subtitle {
-    // margin-top: 10px;
-    font-size: 13px;
-    line-height: 22px;
-    color: var(--steelgrey);
-    margin-bottom: 50px;
-    text-align: center;   // TO center Align the subtitle text in mobile view
-    width: 300px;
-  }
 
   .vm-otp-container {
     margin-top: 20px;
@@ -68,38 +54,10 @@
     margin: 45px 0px 30px 0px;
   }
 
-  .login-otp-button {
-    margin: 20px auto;
-    margin-top: 115px;
-    width: 100%;
-  }
 }
 
 @media only screen and (min-height: 900px) {
   .twofa-mpin-change-success{
     min-width: 350px;
-  }
-}
-  
-@media only screen and (max-height: 900px) {
-  .verify-mpin {
-    .vm-subtitle{
-      width: 100%;
-    }
-  }
-}
-
-@media only screen and (max-height: 900px) {
-  .twofa-mpin-change-success{
-    .login-otp-button{
-      position: fixed;
-      z-index: 9999;
-      bottom: 0;
-      left:0;
-      right:0;
-      margin-left:auto;
-      margin-right:auto;
-      width: calc(100% - 40px);
-    }
   }
 }

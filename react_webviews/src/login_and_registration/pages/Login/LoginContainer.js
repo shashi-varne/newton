@@ -2,19 +2,26 @@ import "./LoginContainer.scss";
 import React from "react";
 import { getConfig } from "utils/functions";
 import { Route, Switch } from "react-router-dom";
-import PinChangeSuccess from "../ForgotPin/PinChangeSuccess";
+import PinChangeSuccess from "../ForgotPin/ForgotPinSuccess";
 import Login from "./Login";
 import VerifyLoginOtp from "./VerifyLoginOtp";
 import VerifyPin from "./VerifyPin";
 import Referral from "../Referral/Referral";
 import { FISDOM_DISCLAMER } from "./constants";
+import VerifyForgotOtp from "../ForgotPin/VerifyForgotOtp";
+import EnterNewPin from "../ForgotPin/EnterNewPin";
+import ConfirmNewPin from "../ForgotPin/ConfirmNewPin";
+import ForgotPinSuccess from "../ForgotPin/ForgotPinSuccess";
+import ForgotPin from "../ForgotPin/ForgotPin";
 
 const config = getConfig();
 const { productName } = config;
 
 const LoginContainer = (props) => {
-  let { url } = props.match;
-  console.log(url);
+  const { url } = props.match;
+  const pathName = url.split('/')[1];
+  console.log(pathName);
+
   return (
     <div className="login" data-aid='login'>
       <div className="header">
@@ -26,13 +33,24 @@ const LoginContainer = (props) => {
         </div>
         <div className="ld-right">
           <Switch>
-            <Route path={`${url}`} exact component={Login} />
-            <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
-            <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
-            <Route path={`${url}/verify-pin`} component={VerifyPin} />
-            <Route path={`${url}/referral`} component={Referral} />
-            <Route path={`${url}/forgot-pin`} component={PinChangeSuccess} />
-            <Route path={`${url}/reset-pin`} component={PinChangeSuccess} />
+            {pathName === 'login' &&
+              <>
+                <Route path={`${url}`} exact component={Login} />
+                <Route path={`${url}/pin-change-success`} component={PinChangeSuccess} />
+                <Route path={`${url}/verify-otp`} component={VerifyLoginOtp} />
+                <Route path={`${url}/verify-pin`} component={VerifyPin} />
+                <Route path={`${url}/referral`} component={Referral} />
+              </>
+            }
+            {pathName === 'forgot-pin' &&
+              <>
+                <Route path={`${url}`} exact component={ForgotPin} />
+                <Route path={`${url}/verify-otp`} component={VerifyForgotOtp} />
+                <Route path={`${url}/new-pin`} component={EnterNewPin} />
+                <Route path={`${url}/confirm-pin`} component={ConfirmNewPin} />
+                <Route path={`${url}/success`} component={ForgotPinSuccess} />
+              </>
+            }
           </Switch>
         </div>
       </div>

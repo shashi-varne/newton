@@ -41,7 +41,7 @@ const WVOtp = ({
         <p
           className={`
             wv-otp-text 
-            ${hasError ? 'wv-otp-text-error' + classes.bottomTextError : ''} 
+            ${hasError ? `wv-otp-text-error ${classes.bottomTextError}` : ''} 
             ${classes.bottomText}
           `}
         >

@@ -4,6 +4,7 @@ import { initialize } from "../../functions";
 import toast from "common/ui/Toast";
 import WVButton from "../../../common/ui/Button/WVButton";
 import OtpContainer from '../../../common/components/OtpContainer';
+import LoginButton from '../../common/LoginButton';
 
 class VerifyLoginOtp extends Component {
   constructor(props) {
@@ -82,17 +83,13 @@ class VerifyLoginOtp extends Component {
           subtitle: "login-subtitle"
         }}
       >
-        <WVButton
-          contained
-          fullWidth
-          color="secondary"
+        <LoginButton
           onClick={this.handleClick}
           disabled={disabled}
           showLoader={isApiRunning}
-          classes={{ root: "login-button" }}
         >
           CONTINUE
-        </WVButton>
+        </LoginButton>
         <WVButton
           color="secondary"
           classes={{ root: 'go-back-to-login' }}
