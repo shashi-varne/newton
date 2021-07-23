@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import {didMount, commonRender} from "../../common/components/container_functions";
 import { renderPageLoader, renderGenericError } from '../../common/components/container_functions';
 
-import { nativeCallback } from "utils/native_callback";
+import { nativeCallback, handleNativeExit } from "utils/native_callback";
 import "../../utils/native_listener";
 import { goBackMap } from "../constants";
 
@@ -55,7 +55,7 @@ class Container extends Component {
 
     switch (pathname) {
       case "/loan/home":
-        nativeCallback({ action: "native_back" });
+        handleNativeExit(this.props, {action: "native_back"});
         break;
       default:
         this.props.history.goBack();

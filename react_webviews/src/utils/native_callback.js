@@ -1,7 +1,8 @@
-import { isMobile } from './functions';
+import { isMobile, navigate as navigateFunc } from './functions';
 import { getConfig, getBasePath } from './functions';
 import { open_browser_web, renameObjectKeys } from 'utils/validators';
 import Api from 'utils/api';
+import { storageService } from './validators';
 
 export const nativeCallback = async ({ action = null, message = null, events = null, action_path = null } = {}) => {
   let newAction = null;
@@ -209,21 +210,26 @@ export function openNativeModule(moduleName) {
   });
 }
 
-export function openModule(moduleName) {
+export function openModule(moduleName, props) {
 
   if (getConfig().isWebOrSdk) {
 
     let module_mapper = {
-      'app/portfolio': 'reports',
-      'app/profile': 'my-account',
-      'invest/save_tax': 'invest',
-      'invest/nps': 'nps/info',
+      'app/portfolio': '/reports',
+      'app/profile': '/my-account',
+      'invest/save_tax': '/invest',
+      'invest/nps': '/nps/info',
+    }
+    
+    let moduleNameWeb = module_mapper[moduleName] || '/';
+    if(props) {
+      const navigate = navigateFunc.bind(props);
+      navigate(moduleNameWeb)
+    } else {
+      let module_url = `${getBasePath()}${moduleNameWeb}${getConfig().searchParams}`;
+      window.location.href = module_url;
     }
 
-    let moduleNameWeb = module_mapper[moduleName] || '';
-    let module_url = `${getBasePath()}/${moduleNameWeb}${getConfig().searchParams}`;
-
-    window.location.href = module_url;
   } else {
     openNativeModule(moduleName);
   }
@@ -271,4 +277,30 @@ export function openPdfCall(data = {}) {
 
 export function redirectToLanding() {
   return `${getBasePath()}/${getConfig().searchParams}`;
+}
+
+export function handleNativeExit(props, data) {
+  const config = getConfig();
+  const navigate = navigateFunc.bind(props);
+  const nativeExitActions = ["native_back", "exit"];
+  const sdkExitActions = ["exit_web", "exit_module", "open_module"];
+  if (
+    (nativeExitActions.includes(data.action) && !config.isNative) ||
+    (config.isSdk &&
+      props.location?.pathname !== "/" &&
+      sdkExitActions.includes(data.action))
+  ) {
+    if(storageService().get("flow-type") === "notification") {
+      storageService().remove("flow-type");
+      navigate("/notification", {
+        searchParams: `base_url=${config.base_url}`
+      });
+    } else {
+      navigate("/", {
+        searchParams: `base_url=${config.base_url}`
+      });
+    }
+  } else {
+    nativeCallback(data);
+  }
 }

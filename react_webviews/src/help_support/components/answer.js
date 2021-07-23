@@ -292,7 +292,7 @@ class Answer extends Component {
     };
     nativeCallback({ events: eventObj });
 
-    openModule(this.props.location.state.answer.action_path);
+    openModule(this.props.location.state.answer.action_path, this.props);
 
   }
 

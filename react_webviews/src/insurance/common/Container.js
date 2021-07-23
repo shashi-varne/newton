@@ -6,7 +6,7 @@ import { getConfig } from 'utils/functions';
 // import Banner from '../../common/ui/Banner';
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/finity/loader_gif.gif';
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback, handleNativeExit } from 'utils/native_callback';
 import '../../utils/native_listener';
 import {didMount ,commonRender} from '../../common/components/container_functions';
 class Container extends Component {
@@ -65,7 +65,7 @@ class Container extends Component {
 
   historyGoBack = () => {
     // let insurance_v2 = getConfig().insurance_v2;
-    nativeCallback({ action: 'native_back' });
+    handleNativeExit(this.props, { action: "native_back"})
   }
 
   handleClose = () => {
