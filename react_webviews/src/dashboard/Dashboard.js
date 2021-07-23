@@ -149,11 +149,13 @@ const Home = (props) => {
         <Route exact path={`${url}reset-pin-verify`} component={VerifyPin} />
         <Route exact path={`${url}reset-pin-confirm`} component={VerifyPin} />
 
-        <Route exact path={`${url}2fa-verify-pin-otp`} component={VerifyPinOtp} />   {/*Route Path Name To Be Changed*/}
         <Route exact path={`${url}set-fisdom-pin`} component={SetPin} />
-        <Route exact path={`${url}confirm-set-fisdom-pin`} component={ConfirmSetPin} />
         <Route exact path={`${url}reset-fisdom-pin`} component={ResetPin} />
+        <Route exact path={`${url}confirm-set-fisdom-pin`} component={ConfirmSetPin} />
         <Route exact path={`${url}comfirm-reset-fisdom-pin`} component={confirmResetPin} />
+        <Route exact path={`${url}verify-pin-otp`} component={VerifyPinOtp} />
+
+
         <Route component={NotFound} />
       </Switch>
     </Fragment>

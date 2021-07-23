@@ -58,16 +58,13 @@ const VerifyForgotOtp = (props) => {
 
     return (
         <Container
-            title={<Title authType={authType} />}
+            title={`Enter OTP to verify your ${authType === "email" ? "email" : "number"}`}
             buttonTitle="VERIFY"
             showLoader={isApiRunning}
             handleClick={handleClick}
-            disable={otpData.otp?.length === 4 ? false : true}
+            disable={otp?.length === 4 ? false : true}
         >
             <OtpContainer
-                classes={{
-                    body: "verify-otp-pin-container"
-                }}
                 otpData={{ ...otpData, otp }}
                 showDotLoader={isApiRunning}
                 handleOtp={handleOtp}
@@ -81,8 +78,3 @@ const VerifyForgotOtp = (props) => {
 };
 
 export default VerifyForgotOtp;
-
-const Title = (props) =>
-    <div className="verify-otp-pin-container">
-        {`Enter OTP to verify your ${props.authType === "email" ? "email" : "number"}`}
-    </div>
