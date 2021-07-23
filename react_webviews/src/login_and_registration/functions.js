@@ -438,7 +438,7 @@ export async function otpLoginVerification(verify_url, body) {
     if (status === 200) {
       storageService().setObject("user", result.user);
       if (result.user.pin_status === 'pin_setup_complete') {
-        return this.navigate('login/verify-pin');
+        return this.navigate('verify-pin');
       }
       // TODO: When to trigger these events
       let eventObj = {
