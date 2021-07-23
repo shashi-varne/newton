@@ -75,6 +75,7 @@ export const basePartnerConfig = {
     configPrimaryColorClass: 'configPrimaryColorClass',
     configPrimaryBackgroundColorClass: 'fisdomBackColor',
     emailDomain: "finity.in",
+    message: "",
     riskEnabledFunnels: true,
     referralConfig: {
       applyRefferal: false,
@@ -157,6 +158,7 @@ export const partnerConfigs = {
     code: "obc",
     email: "obc@fisdom.com",
     mobile: "+91-7829228887",
+    message: getPartnerMessage("OBC m-pay"),
     styles: {
       primaryColor: "#4DB848",
     },
@@ -165,6 +167,7 @@ export const partnerConfigs = {
     logo: "lvb.png",
     code: "lvb",
     email: "lvb@fisdom.com",
+    message: getPartnerMessage("LVB Mobile"),
     styles: {
       primaryColor: "#CC0E00",
     },
@@ -209,7 +212,6 @@ export const partnerConfigs = {
     code: "bfdlmobile",
     email: "bajajfinserv@finity.in",
     mobile: "+91-7829331118",
-    message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["100_sip", "buildwealth", "savetax"],
@@ -240,7 +242,7 @@ export const partnerConfigs = {
     logo: "alb.png",
     code: "alb",
     email: "alb@fisdom.com",
-    message: "",
+    message: getPartnerMessage("emPower", "emPower http://onelink.to/uuxsss"),
     mobile: "+91-7829733111",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
@@ -265,7 +267,7 @@ export const partnerConfigs = {
     logo: "tvs.png",
     code: "tvscredit",
     email: "tvscredit@fisdom.com",
-    message: "",
+    message: getPartnerMessage("Tvs Credit"),
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["100_sip", "instaredeem", "buildwealth", "savetax"],
@@ -277,7 +279,6 @@ export const partnerConfigs = {
   ktb: {
     code: "ktb",
     email: "kbl@fisdom.com",
-    message: "",
     mobile: "+91-7829229997",
     styles: {
       primaryColor: "#8C0094",
@@ -291,7 +292,6 @@ export const partnerConfigs = {
     logo: "cub.png",
     code: "cub",
     email: "cub@fisdom.com",
-    message: "",
     styles: {
       primaryColor: "#000180",
     },
@@ -301,7 +301,6 @@ export const partnerConfigs = {
     code: "fpg",
     mobile: "1800-212-5997",
     email: "care.futuremoney@fisdom.com",
-    message: "",
     landingMarketingBanners: [
       { image: "nfo.svg", type: "nfo", endDate: '07/21/2021' },
       { image: "fpg_mb_insta.svg", type: "instaredeem" },
@@ -342,7 +341,6 @@ export const partnerConfigs = {
   hbl: {
     logo: "hbl.png",
     code: "hbl",
-    message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: [
@@ -363,7 +361,6 @@ export const partnerConfigs = {
     code: "subh",
     email: "support@shubhloans.com",
     mobile: "+91-9019900199",
-    message: "",
     investSections: ["kyc", "ourRecommendations", "diy"],
     investSubSectionMap: {
       ourRecommendations: ["100_sip", "300_sip", "instaredeem"],
@@ -378,7 +375,6 @@ export const partnerConfigs = {
     logo: "sbm.svg",
     code: "sbm",
     email: "sbm@fisdom.com",
-    message: "",
     styles: {
       primaryColor: "#1e3769",
     },
@@ -399,7 +395,6 @@ export const partnerConfigs = {
   },
   medlife: {
     code: "medlife",
-    message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: [
@@ -414,12 +409,10 @@ export const partnerConfigs = {
   },
   life99: {
     code: "life99",
-    message: "",
   },
   indb: {
     code: "indb",
     mobile: "+80-48-093070",
-    message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax", "nps"],
@@ -438,7 +431,6 @@ export const partnerConfigs = {
     code: "finshell",
     email: "finshellpay@fisdom.com",
     mobile: "+80-48-093070",
-    message: "",
     investSubSectionMap: {
       ...commonCardsConfig.investSubSectionMap,
       ourRecommendations: ["buildwealth", "savetax", "nps"],
@@ -450,7 +442,6 @@ export const partnerConfigs = {
   },
   ippb: {
     code: "ippb",
-    message: "",
     styles: {
       primaryColor: "#3F1027",
     },
@@ -459,12 +450,10 @@ export const partnerConfigs = {
     logo: "moneycontrol_logo.svg",
     code: "moneycontrol",
     email: "moneycontrol@finity.in",
-    message: "",
   },
   taxwin: {
     code: "taxwin",
     logo: "taxwin.png",
-    message: "",
     investSections: ["kyc", "ourRecommendations"],
     investSubSectionMap: {
       ourRecommendations: [
@@ -519,6 +508,7 @@ export const getPartnerData = (productType, partnerCode) => {
   };
   const partnerData = partnerConfigs[partnerCode] || partnerConfigs["fisdom"];
   partnerConfigToReturn = {
+    message: getPartnerMessage(partnerData.code.toUpperCase()),
     ...partnerConfigToReturn, // taking the base config of the productType(fisdom/finity)
     ...partnerData, // overriding with particular partner config
     styles: {
@@ -549,4 +539,8 @@ export const getPartnerData = (productType, partnerCode) => {
     }
   };
   return partnerConfigToReturn;
+}
+
+export function getPartnerMessage(partnerApp, appLink="fisdom http:m.onelink.me/32660e84") {
+  return `Make smart investments with zero paper work, use ${partnerApp} app if you're a registered user on ${partnerApp} app or download ${appLink}. Use my referral code `
 }

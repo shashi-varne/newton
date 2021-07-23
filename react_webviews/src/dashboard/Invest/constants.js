@@ -459,7 +459,7 @@ export const sdkInvestCardMapper = [
     title: 'Refer & Earn',
     subtitle: 'Refer to your friends & earn rewards',
     img: 'ic_db_refer.svg',
-    path: '/referral'
+    path: '/refer'
   },
   {
     key: 'help',

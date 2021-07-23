@@ -290,14 +290,15 @@ export function handleNativeExit(props, data) {
       props.location?.pathname !== "/" &&
       sdkExitActions.includes(data.action))
   ) {
+    const searchParams = `base_url=${config.base_url}&partner_code=${config.code}`;
     if(storageService().get("flow-type") === "notification") {
       storageService().remove("flow-type");
       navigate("/notification", {
-        searchParams: `base_url=${config.base_url}`
+        searchParams: searchParams
       });
     } else {
       navigate("/", {
-        searchParams: `base_url=${config.base_url}`
+        searchParams: searchParams
       });
     }
   } else {

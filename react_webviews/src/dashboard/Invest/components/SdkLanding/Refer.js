@@ -9,11 +9,12 @@ import { nativeCallback } from "../../../../utils/native_callback";
 const config = getConfig();
 const Refer = (props) => {
   const referralData = storageService().getObject("referral") || {};
-  const referral = referralData.p2p.data || {};
+  const referral = referralData.p2p?.data || {};
 
   const handleClick = () => {
     const message = config.message + referral.referral_code;
-    nativeCallback({ action: "share_text", message });
+    const data = {message: message};
+    nativeCallback({ action: "share_text", message: data });
     // handle clever tap events
   };
 
