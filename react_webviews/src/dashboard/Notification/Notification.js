@@ -99,6 +99,7 @@ class Notification extends Component {
       target.url,
       showRedirectUrl
     );
+    storageService().set("flow-type", "notification");
     window.location.href = campLink;
   };
 
