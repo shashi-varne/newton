@@ -64,10 +64,10 @@ export const forgotPinOtpTrigger = async (params = {}) => {
   }
 }
 
-export const otpApiCall = async (url, otp) => {
-  // Can be reused by both resend as well as verify
+export const twofaPostApi = async (url, params) => {
+  // Generic function to make a POST API call
   try {
-    const res = await Api.post(url, { otp });
+    const res = await Api.post(url, { ...params });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;

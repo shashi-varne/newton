@@ -59,6 +59,16 @@ class UiSkeltonClass extends Component {
         )
     }
 
+    inputs = () => {
+        return (
+            <div className="two-inputs">
+                <SkeltonRect className="input-skeleton" />
+                <SkeltonRect className="input-skeleton" />
+                <SkeltonRect className="input-skeleton" />
+            </div>
+        )
+    }
+
     productsSkelton() {
         return (
             <div className="products-listing">
@@ -107,12 +117,15 @@ class UiSkeltonClass extends Component {
             type = 'g';
         }
 
+        if (type === 'inputs') {
+            return this.inputs();
+        }
+
         return (
             <div className="generic-skelton">
 
                 {type === 'p' && this.productsSkelton()}
                 {type === 'g' && this.genericSkelton()}
-
             </div>
         );
     }

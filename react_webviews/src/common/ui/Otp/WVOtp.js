@@ -37,17 +37,15 @@ const WVOtp = ({
           {...additionalOtpProps}
         />
       </div>
-      {bottomText &&
-        <p
-          className={`
-            wv-otp-text 
-            ${hasError ? `wv-otp-text-error ${classes.bottomTextError}` : ''} 
-            ${classes.bottomText}
-          `}
-        >
-          {bottomText}
-        </p>
-      }
+      <p
+        className={`
+          wv-otp-text 
+          ${hasError ? `wv-otp-text-error ${classes.bottomTextError}` : ''} 
+          ${classes.bottomText}
+        `}
+      >
+        {bottomText}
+      </p>
     </div>
   );
 }

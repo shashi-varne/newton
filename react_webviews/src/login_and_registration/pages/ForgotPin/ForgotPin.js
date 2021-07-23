@@ -11,6 +11,7 @@ const ForgotPin = (props) => {
   const [pan, setPan] = useState('');
   const [panError, setPanError] = useState('');
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [isFetchApiRunning, setIsFetchApiRunning] = useState(false);
 
   const navigate = navigateFunc.bind(props);
 
@@ -20,24 +21,21 @@ const ForgotPin = (props) => {
 
   const fetchAuthDetails = async () => {
     try {
+      setIsFetchApiRunning(true);
       const response = await obscuredAuthGetter();
       setAuthDetails(response);
     } catch(err) {
       console.log(err);
+    } finally {
+      setIsFetchApiRunning(false);
     }
   }
 
   const handleClick = async () => {
     try {
-      const response = {
-        "resend_url": "{{plutus_url}}/api/iam/mpin/v2/otp/resend/{{session_id}}",
-        "verify_url": "{{plutus_url}}/api/iam/mpin/v2/otp/verify/{{session_id}}",
-        "obscured_auth": "du******@yo*********",
-        "obscured_auth_type": "own"
-      }
-      // setIsApiRunning(true);
-      // const response = await forgotPinOtpTrigger(pan ? { pan } : '');
-      // setIsApiRunning(false);
+      setIsApiRunning(true);
+      const response = await forgotPinOtpTrigger(pan ? { pan } : '');
+      setIsApiRunning(false);
       navigate('forgot-pin/verify-otp', {
         params: response
       });
@@ -52,27 +50,32 @@ const ForgotPin = (props) => {
   useEffect(() => {
     fetchAuthDetails();
   }, []);
-
+  
   return (
     <>
       <ForgotMPin
         primaryAuthType={authDetails.obscured_auth_type === 'mobile' ? 'mobile' : 'email'}
         primaryAuthValue={authDetails.obscured_auth}
+        isLoading={isFetchApiRunning}
         isPanRequired={authDetails.is_pan_verified}
         pan={pan}
         panError={panError}
         onPanInputChange={handlePanInput}
       />
-      <LoginButton onClick={handleClick} showLoader={isApiRunning}>
-        Continue
-      </LoginButton>
-      <WVButton
-        color="secondary"
-        classes={{ root: 'go-back-to-login' }}
-        onClick={() => navigate('/login')}
-      >
-        Go Back to Login
-      </WVButton>
+      {!isFetchApiRunning &&
+        <>
+          <LoginButton onClick={handleClick} showLoader={isApiRunning}>
+            Continue
+          </LoginButton>
+          <WVButton
+            color="secondary"
+            classes={{ root: 'go-back-to-login' }}
+            onClick={() => navigate('/login')}
+          >
+            Go Back to Login
+          </WVButton>
+        </>
+      }
     </>
   );
 }
