@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Container from "../../common/Container";
 import Toast from "../../../common/ui/Toast";
 import OtpContainer from "../../../common/components/OtpContainer";
-import TwoFaCtaButton from "./common/TwoFaCtaButton";
+
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { otpApiCall } from '../../../2fa/common/ApiCalls';
 
@@ -61,7 +61,8 @@ const VerifyForgotOtp = (props) => {
             title={<Title authType={authType} />}
             buttonTitle="VERIFY"
             showLoader={isApiRunning}
-            noFooter={true}
+            handleClick={handleClick}
+            disable={otpData.otp?.length === 4 ? false : true}
         >
             <OtpContainer
                 classes={{
@@ -75,15 +76,6 @@ const VerifyForgotOtp = (props) => {
                 bottomText={!!otpError ? "Invalid OTP" : ""}
                 value={authValue}>
             </OtpContainer>
-            <TwoFaCtaButton
-                onClick={handleClick}
-                disable={otpData.otp?.length === 4 ? false : true}
-                // disabled={!otp}
-                showLoader={isApiRunning}
-                className="two-fa-cta-btn"
-            >
-                Continue
-            </TwoFaCtaButton>
         </Container>
     )
 };

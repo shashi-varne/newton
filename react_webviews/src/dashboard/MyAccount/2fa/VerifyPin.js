@@ -23,9 +23,9 @@ const VerifyPin = (props) => {
   return (
     <Container
       data-aid='my-account-screen'
-      noFooter={true}
       skelton={showLoader}
       handleClick={handleClick}
+      buttonTitle="Continue"
     > 
       <EnterMPin
         otpProps={{

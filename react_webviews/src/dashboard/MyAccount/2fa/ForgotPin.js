@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ForgotMPin from '../../../2fa/components/ForgotMPin';
 import Container from '../../common/Container';
-import TwoFaCtaButton from "./common/TwoFaCtaButton";
+
 import { navigate as navigateFunc } from "../../../utils/functions";
 import { forgotPinOtpTrigger, obscuredAuthGetter } from '../../../2fa/common/ApiCalls';
 
@@ -60,7 +60,8 @@ const ForgotPin = (props) => {
       data-aid='myaccount-forgot-pin'
       title="Forgot Fisdom PIN"
       skelton={showLoader}
-      noFooter={true}
+      handleClick={handleClick}
+      buttonTitle="Continue"
     >
       <ForgotMPin
         primaryAuthType={stateParams?.authType}
@@ -70,14 +71,6 @@ const ForgotPin = (props) => {
         panError={panError}
         onPanInputChange={handlePanInput}
       />
-      <TwoFaCtaButton
-        onClick={handleClick}
-        // disabled={!otp}
-        showLoader={isApiRunning}
-        className="two-fa-cta-btn"
-      >
-        Continue
-     </TwoFaCtaButton>
     </Container>
   );
 }

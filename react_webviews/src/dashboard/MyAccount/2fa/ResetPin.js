@@ -2,7 +2,7 @@ import "./commonStyles.scss";
 import React, { useState } from 'react';
 import Container from "../../common/Container";
 import EnterMPin from "../../../2fa/components/EnterMPin";
-import TwoFaCtaButton from "./common/TwoFaCtaButton";
+
 import { navigate as navigateFunc } from "../../../utils/functions";
 
 const ResetPin = (props) => {
@@ -26,7 +26,7 @@ const ResetPin = (props) => {
       data-aid='my-account-screen'
       skelton={showLoader}
       handleClick={handleClick}
-      noFooter={true}
+      buttonTitle="Continue"
     >
       <EnterMPin
         title="Enter new fisdom PIN"
@@ -40,14 +40,6 @@ const ResetPin = (props) => {
           bottomText: ""
         }}
       />
-      <TwoFaCtaButton
-        onClick={handleClick}
-        // disabled={!otp}
-        showLoader={isApiRunning}
-        className="two-fa-cta-btn"
-      >
-        Continue
-     </TwoFaCtaButton>
     </Container>
   )
 };
