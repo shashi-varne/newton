@@ -38,7 +38,7 @@ import SetPin from "./MyAccount/2fa/SetPin";
 import ResetPin from "./MyAccount/2fa/ResetPin";
 import ConfirmSetPin from "./MyAccount/2fa/ConfirmSetPin";
 import confirmResetPin from "./MyAccount/2fa/ConfirmResetPin";
-import VerifyPinOtp from "./MyAccount/2fa/VerifyPinOtp";
+import VerifyPinOtp from "./MyAccount/2fa/VerifyForgotOtp";
 import Referral from "../login_and_registration/pages/Referral/Referral.js";
 import SecondaryVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryVerification";
 import SecondaryOtpVerification from "../login_and_registration/pages/SecondaryVerification/SecondaryOtpVerification";
